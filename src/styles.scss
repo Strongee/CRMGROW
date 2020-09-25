@@ -1,1 +1,139 @@
 /* You can add global styles to this file, and also import other style files */
+$color-dark: #101336;
+$color-blue: #0000ff;
+$color-silver: #dadadd;
+
+/* Material Theme Basic Setting  */
+html, body { height: 100%; }
+body { margin: 0; font-family: "Nunito", sans-serif!important; }
+:root {
+  --silver: #dadadd; 
+}
+
+.bg-blue {
+  background-color: #0000ff;
+}
+.bg-dark {
+  background-color: #101336;
+}
+.bg-orange {
+  background-color: #f26419;
+}
+.bg-yellow {
+  background-color: #ffcc00;
+}
+.bg-red-pink {
+  background-color: #f5325b;
+}
+.bg-pink-red {
+  background-color: #ff045f;
+}
+.bg-azure {
+  background-color: #00a9ff;
+}
+.bg-blue-grey {
+  background-color: #dae0f2;
+}
+.bg-grey-blue {
+  background-color: #86bbd8;
+}
+.bg-blue-green {
+  background-color: #0d5c63;
+}
+.bg-teal {
+  background-color: #00916e;
+}
+.bg-leafy-green {
+  background-color: #4ac236;
+}
+.bg-pale {
+  background-color: #f6f5ff;
+}
+.c-blue {
+  background-color: #0000ff;
+}
+.c-dark {
+  background-color: #101336;
+}
+.c-orange {
+  background-color: #f26419;
+}
+.c-yellow {
+  background-color: #ffcc00;
+}
+.c-red-pink {
+  background-color: #f5325b;
+}
+.c-pink-red {
+  background-color: #ff045f;
+}
+.c-azure {
+  background-color: #00a9ff;
+}
+.c-blue-grey {
+  background-color: #dae0f2;
+}
+.c-grey-blue {
+  background-color: #86bbd8;
+}
+.c-blue-green {
+  background-color: #0d5c63;
+}
+.c-teal {
+  background-color: #00916e;
+}
+.c-leafy-green {
+  background-color: #4ac236;
+}
+.c-pale {
+  background-color: #f6f5ff;
+}
+
+
+body{
+  .topbar {
+    position: fixed;
+    z-index: 997;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 50px;
+  }
+  .navbar {
+    position: fixed;
+    z-index: 997;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 63px;
+    box-shadow: 0 1px 0 0 var(--silver);
+    background: white;
+  }
+  .sidebar {
+    position: fixed;
+    z-index: 996;
+    left: 0px;
+    top: 0px;
+    width: 160px;
+    padding-top: 50px;
+    height: 100vh;
+  }
+  .page {
+    position: static;
+    height: 200vh;
+    padding-top: 63px;
+    margin-left: 160px;
+  }
+
+  &.has-topbar {
+    .navbar {
+      top: 50px;
+    }
+    .sidebar{
+      padding-top: 113px;
+    }
+    .page {
+      padding-top: 113px;
+    }
+  }
+}
