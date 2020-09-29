@@ -1,19 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TasksComponent } from './tasks.component';
+import { SlideTabComponent } from './slide-tab.component';
 
-describe('TasksComponent', () => {
-  let component: TasksComponent;
-  let fixture: ComponentFixture<TasksComponent>;
+describe('SlideTabComponent', () => {
+  let component: SlideTabComponent;
+  let fixture: ComponentFixture<SlideTabComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TasksComponent]
-    }).compileComponents();
+      declarations: [ SlideTabComponent ]
+    })
+    .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TasksComponent);
+    fixture = TestBed.createComponent(SlideTabComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

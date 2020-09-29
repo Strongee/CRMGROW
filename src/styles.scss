@@ -2,12 +2,16 @@
 $color-dark: #101336;
 $color-blue: #0000ff;
 $color-silver: #dadadd;
+$color-blue-weak: #5050fd;
 
 /* Material Theme Basic Setting  */
 html, body { height: 100%; }
-body { margin: 0; font-family: "Nunito", sans-serif!important; }
+body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dark; }
 :root {
-  --silver: #dadadd; 
+  --silver: #dadadd;
+  --dark: #101336;
+  --blue: #0000ff;
+  --dark-trans1: #10133614;
 }
 
 .bg-blue {
@@ -50,44 +54,75 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; }
   background-color: #f6f5ff;
 }
 .c-blue {
-  background-color: #0000ff;
+  color: #0000ff;
 }
 .c-dark {
-  background-color: #101336;
+  color: #101336;
 }
 .c-orange {
-  background-color: #f26419;
+  color: #f26419;
 }
 .c-yellow {
-  background-color: #ffcc00;
+  color: #ffcc00;
 }
 .c-red-pink {
-  background-color: #f5325b;
+  color: #f5325b;
 }
 .c-pink-red {
-  background-color: #ff045f;
+  color: #ff045f;
 }
 .c-azure {
-  background-color: #00a9ff;
+  color: #00a9ff;
 }
 .c-blue-grey {
-  background-color: #dae0f2;
+  color: #dae0f2;
 }
 .c-grey-blue {
-  background-color: #86bbd8;
+  color: #86bbd8;
 }
 .c-blue-green {
-  background-color: #0d5c63;
+  color: #0d5c63;
 }
 .c-teal {
-  background-color: #00916e;
+  color: #00916e;
 }
 .c-leafy-green {
-  background-color: #4ac236;
+  color: #4ac236;
 }
 .c-pale {
-  background-color: #f6f5ff;
+  color: #f6f5ff;
 }
+.f-2{
+  font-size: 12px;
+}
+.f-3{
+  font-size: 13px;
+}
+.f-4{
+  font-size: 14px;
+}
+.f-6{
+  font-size: 16px;
+}
+.btn-blue {
+  background-color: $color-blue;
+  border-color: $color-blue;
+  color: white;
+
+  &:hover {
+    background-color: $color-blue;
+    border-color: $color-blue;
+  }
+  &:focus {
+    background-color: $color-blue-weak;
+    border-color: $color-blue-weak;
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 255, 0.5);
+  }
+  &:active {
+    background-color: $color-blue-weak;
+    border-color: $color-blue-weak;
+  }
+} 
 
 
 body{
@@ -116,7 +151,9 @@ body{
     top: 0px;
     width: 160px;
     padding-top: 50px;
+    padding-bottom: 16px;
     height: 100vh;
+    overflow-y: auto;
   }
   .page {
     position: static;

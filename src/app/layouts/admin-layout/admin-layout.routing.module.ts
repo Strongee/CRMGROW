@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
+import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 
 export const AdminLayoutRoutes: Routes = [
@@ -21,6 +23,20 @@ export const AdminLayoutRoutes: Routes = [
     component: TasksComponent,
     data: {
       title: 'Tasks'
+    }
+  },
+  {
+    path: 'contacts',
+    component: ContactsComponent,
+    data: {
+      title: 'Contacts'
+    }
+  },
+  {
+    path: 'materials',
+    component: MaterialsComponent,
+    data: {
+      title: 'Materials'
     }
   }
 ];

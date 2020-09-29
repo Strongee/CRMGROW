@@ -1,0 +1,11 @@
+<div class="tab-container-wrapper d-inline-block">
+  <div class="tab-container" #container>
+    <div class="tab-indicator" #indicator></div>
+    <ng-container *ngFor="let tab of tabs;">
+      <div class="tab" [ngClass]="{'active': tab.id === selected.id}" (click)="changeTab($event, tab)">
+        <i class="tab-icon {{tab.icon}}"></i>
+        <span class="tab-label">{{tab.label}}</span>
+      </div>
+    </ng-container>
+  </div>
+</div>

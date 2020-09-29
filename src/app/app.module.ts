@@ -1,13 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
@@ -26,14 +26,14 @@ import { TestComponent } from './pages/test/test.component';
     TestComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     RouterModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
-    NoopAnimationsModule,
-    NgbModule
+    NgbModule,
+    ComponentsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,3 +1,23 @@
 <div class="sidebar">
-  SIDEBAR
+  <div class="sidebar-content">
+    <ul class="sidebar-nav">
+      <ng-container *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
+        <li *ngIf="!menuItem.role || menuItem.protectedRole.indexOf(profile.role) === -1">
+          <a routerLinkActive="active" [routerLink]="[menuItem.path]" class="nav-link c-dark">
+              <i class="{{menuItem.icon}}"></i>
+              <span>{{menuItem.title}}</span>
+              <ng-container *ngIf="menuItem.beta">
+                <span class="{{menuItem.betaClass}}">
+                  {{menuItem.betaLabel}}
+                </span>
+              </ng-container>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+    <div class="widget mx-3 bg-pale text-center p-3 rounded">
+      <p class="f-3 font-weight-bold">Affiliate<br/>Program</p>
+      <a class="btn btn-blue f-3 d-block mx-2 font-weight-bold text-white">Join</a>
+    </div>
+  </div>
 </div>
