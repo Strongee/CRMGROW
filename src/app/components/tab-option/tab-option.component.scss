@@ -1,0 +1,16 @@
+.tab-options {
+  border: 1px solid var(--blue);
+  height: 40px;
+
+  .tab-option {
+    padding: 0.625rem;
+    color: var(--blue);
+    transition: all .2s;
+    cursor: pointer;
+
+    &.active {
+      background-color: var(--blue);
+      color: white;
+    }
+  }
+}

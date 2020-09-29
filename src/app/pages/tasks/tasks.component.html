@@ -1,7 +1,12 @@
 <div class="page-content">
-  <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
-  </app-slide-tab>
+  <div class="d-inline-block">
+    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+    </app-slide-tab>
+  </div>
+  <app-tab-option [options]="options" [selected]="selectedOption" (onChange)="selectedOption = $event">
+  </app-tab-option>
 </div>
 <div class="right-sidebar">
 </div>
 Tasks Page
+<div class="icon-test"></div>

@@ -104,6 +104,91 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .f-6{
   font-size: 16px;
 }
+.i-icon{
+  mask-position: center;
+  mask-size: contain;
+}
+.i-automation{
+  mask-image: url('./assets/img/automation.svg');
+}
+.i-broadcasts{
+  mask-image: url('./assets/img/Broadcasts.svg');
+}
+.i-calendar{
+  mask-image: url('./assets/img/calendar.svg');
+}
+.i-copy{
+  mask-image: url('./assets/img/Copy.svg');
+}
+.i-deadline{
+  mask-image: url('./assets/img/Deadline.svg');
+}
+.i-download{
+  mask-image: url('./assets/img/download.svg');
+}
+.i-edit{
+  mask-image: url('./assets/img/Edit.svg');
+}
+.i-follow{
+  mask-image: url('./assets/img/Follow.svg');
+}
+.i-list{
+  mask-image: url('./assets/img/List.svg');
+}
+.i-location{
+  mask-image: url('./assets/img/Location.svg');
+}
+.i-lunch{
+  mask-image: url('./assets/img/Lunch.svg');
+}
+.i-message{
+  mask-image: url('./assets/img/Message.svg');
+}
+.i-label{
+  mask-image: url('./assets/img/label.svg');
+}
+.i-notification{
+  mask-image: url('./assets/img/notification.svg');
+}
+.i-pdf{
+  mask-image: url('./assets/img/PDF.svg');
+}
+.i-phone{
+  mask-image: url('./assets/img/Phone.svg');
+}
+.i-pdf-email{
+  mask-image: url('./assets/img/pdf_email.svg');
+}
+.i-sent{
+  mask-image: url('./assets/img/Sent.svg');
+}
+.i-setting{
+  mask-image: url('./assets/img/setting.svg');
+}
+.i-share{
+  mask-image: url('./assets/img/Share.svg');
+}
+.i-sms-sent{
+  mask-image: url('./assets/img/sms_sent.svg');
+}
+.i-task{
+  mask-image: url('./assets/img/Task.svg');
+}
+.i-template{
+  mask-image: url('./assets/img/Template.svg');
+}
+.i-trash{
+  mask-image: url('./assets/img/Trash.svg');
+}
+.i-webpage{
+  mask-image: url('./assets/img/Webpage.svg');
+}
+.i-video{
+  mask-image: url('./assets/img/automation.svg');
+}
+
+
+
 .btn-blue {
   background-color: $color-blue;
   border-color: $color-blue;

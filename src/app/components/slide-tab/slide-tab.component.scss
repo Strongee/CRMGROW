@@ -17,6 +17,12 @@
     letter-spacing: 2px;
     font-weight: bold;
     cursor: pointer;
+
+    .tab-icon {
+      width: 18px;
+      height: 18px;
+      background-color: var(--dark);
+    }
     
     * {
       position: relative;
@@ -25,6 +31,9 @@
     &.active {
       span {
         color: var(--blue);
+      }
+      .tab-icon {
+        background-color: var(--blue);
       }
     }
   }

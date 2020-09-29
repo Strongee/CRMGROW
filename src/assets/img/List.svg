@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons / List</title>
+    <g id="Icons-/-List" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-5" transform="translate(0.000000, 1.000000)" fill="#0000FF">
+            <circle id="Oval" cx="1" cy="1" r="1"></circle>
+            <circle id="Oval-Copy" cx="1" cy="7" r="1"></circle>
+            <circle id="Oval-Copy-2" cx="1" cy="13" r="1"></circle>
+            <rect id="Rectangle" x="3.99998942" y="0" width="11" height="2" rx="1"></rect>
+            <rect id="Rectangle-Copy" x="3.99998942" y="6" width="11" height="2" rx="1"></rect>
+            <rect id="Rectangle-Copy-2" x="3.99998942" y="12" width="11" height="2" rx="1"></rect>
+        </g>
+    </g>
+</svg>
