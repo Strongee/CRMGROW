@@ -16,7 +16,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'home',
     title: 'Tasks',
-    icon: '',
+    icon: 'i-task bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -26,7 +26,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'contacts',
     title: 'Contacts',
-    icon: '',
+    icon: 'i-lunch bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -36,7 +36,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'materials',
     title: 'Materials',
-    icon: '',
+    icon: 'i-video bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -46,7 +46,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'compaigns',
     title: 'Compaign',
-    icon: '',
+    icon: 'i-broadcasts bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -56,7 +56,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'automations',
     title: 'Automations',
-    icon: '',
+    icon: 'i-automation bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -66,7 +66,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'settings',
     title: 'Settings',
-    icon: '',
+    icon: 'i-setting bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -76,7 +76,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'teams',
     title: 'Teams',
-    icon: '',
+    icon: 'i-lunch bgc-dark',
     class: '',
     beta: false,
     betaClass: '',

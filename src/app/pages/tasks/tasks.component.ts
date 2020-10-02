@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 import { TabItem, TabOption } from '../../utils/data.types';
 @Component({
   selector: 'app-tasks',
@@ -18,14 +19,17 @@ export class TasksComponent implements OnInit {
   ];
   selectedOption = this.options[0].value;
 
-  constructor() {}
+  username = {};
+
+  constructor(public userService: UserService) {
+    this.username = this.userService.sharedData;
+  }
 
   ngOnInit(): void {}
 
   changeTab(event: TabItem): void {
     this.selectedTab = event;
-  }
-  changeOption(event: string): void {
-    console.log('select option', event);
+    // this.userService.changeShareData(event);
+    this.userService.sharedData['event'] = event;
   }
 }

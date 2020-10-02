@@ -1,11 +1,23 @@
-<div class="sidebar">
-  <div class="sidebar-content">
+<a class="navbar-toggler" type="button" (click)="isCollapsed=!isCollapsed"
+  aria-controls="sidenav-collapse-main">
+  <span class="i-icon i-menu bgc-dark d-block"></span>
+</a>
+<div class="sidebar" [ngClass]="{show: !isCollapsed}">
+  <div class="sidebar-content d-flex flex-column">
+    <div class="sidebar-header v-center border-bottom">
+      <a class="navbar-brand m-0 p-0" routerLinkActive="active" [routerLink]="['/home']">
+        <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">
+      </a>
+      <a class="navbar-close ml-auto c-pointer" (click)="isCollapsed = true">
+        <i class="i-icon i-close bgc-dark d-block"></i>
+      </a>
+    </div>
     <ul class="sidebar-nav">
       <ng-container *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
         <li *ngIf="!menuItem.role || menuItem.protectedRole.indexOf(profile.role) === -1">
-          <a routerLinkActive="active" [routerLink]="[menuItem.path]" class="nav-link c-dark">
-              <i class="{{menuItem.icon}}"></i>
-              <span>{{menuItem.title}}</span>
+          <a routerLinkActive="active" [routerLink]="[menuItem.path]" class="nav-link c-dark v-center">
+              <i class="i-icon {{menuItem.icon}} d-lg-none d-block mr-2"></i>
+              <span class="menu-label">{{menuItem.title}}</span>
               <ng-container *ngIf="menuItem.beta">
                 <span class="{{menuItem.betaClass}}">
                   {{menuItem.betaLabel}}
@@ -15,9 +27,15 @@
         </li>
       </ng-container>
     </ul>
-    <div class="widget mx-3 bg-pale text-center p-3 rounded">
-      <p class="f-3 font-weight-bold">Affiliate<br/>Program</p>
+    <div class="widget mx-3 bgc-pale text-center p-3 rounded d-lg-block d-none mt-auto mb-2">
+      <i class="i-icon i-automation d-block bgc-blue mx-auto mb-3"></i>
+      <p class="f-3 font-weight-bold">Affiliate <br/>Program</p>
       <a class="btn btn-blue f-3 d-block mx-2 font-weight-bold text-white">Join</a>
+    </div>
+    <div class="widget d-lg-none d-block mt-auto mb-2">
+      <a class="btn btn-blue mx-2 font-weight-bold text-white">
+        <i class="i-icon i-automation d-block bg-white mx-auto"></i>
+      </a>
     </div>
   </div>
 </div>

@@ -1,8 +1,10 @@
+@import  "src/variables.scss";
+
 .tab-container {
   display: flex;
   align-items: center;
   height: 48px;
-  background: var(--dark-trans1);
+  background: $color-trans08;
   padding: 4px;
   border-radius: 24px;
   position: relative;
@@ -21,7 +23,7 @@
     .tab-icon {
       width: 18px;
       height: 18px;
-      background-color: var(--dark);
+      background-color: $color-dark;
     }
     
     * {
@@ -30,10 +32,10 @@
 
     &.active {
       span {
-        color: var(--blue);
+        color: $color-blue;
       }
       .tab-icon {
-        background-color: var(--blue);
+        background-color: $color-blue;
       }
     }
   }

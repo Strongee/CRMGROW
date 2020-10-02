@@ -1,15 +1,17 @@
+@import "src/variables.scss";
+
 .tab-options {
-  border: 1px solid var(--blue);
+  border: 1px solid $color-blue;
   height: 40px;
 
   .tab-option {
     padding: 0.625rem;
-    color: var(--blue);
+    color: $color-blue;
     transition: all .2s;
     cursor: pointer;
 
     &.active {
-      background-color: var(--blue);
+      background-color: $color-blue;
       color: white;
     }
   }

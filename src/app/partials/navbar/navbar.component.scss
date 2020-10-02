@@ -1,0 +1,132 @@
+@import 'src/variables.scss';
+
+.navbar {
+  display: grid;
+  grid-template-columns: 10rem 2rem 1fr auto;
+  grid-column-gap: 16px;
+}
+
+/* Brand Style */
+.navbar-brand-img {
+  width: 120px;
+}
+
+/* New Actions Wrapper Style*/
+.new-actions-wrapper {
+  .dropdown-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 0px;
+    transition: all .3s;
+  }
+  &.show .dropdown-toggle {
+    background-color: $color-dark;
+    transform: rotate(45deg);
+  }
+  .dropdown-menu {
+    top: 125%;
+    border-radius: 8px;
+    min-width: 216px;
+  
+    .dropdown-item:hover, .dropdown-item:focus{
+      background-color: #ececef;
+      color: $color-dark!important;
+  
+      i {
+        background-color: $color-dark!important;
+      }
+    }
+  }
+}
+/* Search Form Wrapper Style */
+.search-form-wrapper {
+  .input-group {
+    max-width: 400px;
+  }
+}
+
+/* Main Nav Bar Wrapper Style*/
+.navbar-nav {
+  flex-direction: row;
+  
+  .nav-item {
+    margin: 0.5rem;
+  }
+}
+
+// Detail Wrapper Dropdown Global Style
+.detail-wrapper {
+  .dropdown-menu {
+    min-width: 280px;
+    top: 0.75rem!important;
+    left: -0.5rem!important;
+    min-height: 50px;
+    box-shadow: -4px 0 24px -5px rgba(16,19,54,0.24);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0px;
+      right: -13px;
+      border-top: 20px solid white;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      transform: rotate(-45deg);
+    }
+  }
+}
+// Chat Message Wrapper
+.chat-messages-wrapper {
+  .dropdown-menu {
+
+  }
+}
+// Notifications Wrapper
+// Integrations Wrapper
+// Send Status Wrapper
+// Profile Wrapper Style
+.profile-wrapper {
+  .dropdown-toggle {
+    img {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+    }
+  }
+}
+
+
+
+// Mobile Responsive : Tablet
+@media screen and (max-width: 992px) {
+  .navbar {
+    grid-template-columns: 2rem 1fr auto;
+
+    .navbar-brand {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .navbar {
+    grid-template-columns: 2rem 1fr;
+    grid-template-rows: auto auto;
+    grid-column-gap: 16px;
+
+    .new-actions-wrapper {
+      grid-row: 2/3;
+    }
+    .search-form-wrapper {
+      grid-row: 2/3;
+
+      .input-group {
+        max-width: unset;
+      }
+    }
+    .navbar-nav {
+      grid-row: 1/2;
+      grid-column: 2/3;
+    }
+  }
+}
