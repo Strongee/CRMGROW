@@ -25,3 +25,42 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Project Structure
+
+- App Module + App Routing Module (This is the Top Parent Module of the project)
+- App Module has App components and Two main Components (Admin-Layout, Auth-Layout)
+- App Module consists of two Sub Module (Admin-Layout Module, Auth-Layout Module)
+- All Components would be defined in Components Module
+- SharedModule is included in three modules (Admin Layout Module, Auth Layout Module, ComponetsModule)
+
+## How to create component
+
+- ng g c components/[component-name]
+- Add new component in exports array in ComponentsModule
+
+## How to create Page
+
+- ng g c pages/[page-name] --module=[parent-module-folder]/[parent-module-name]  
+ex: ng g c pages/settings --module=layouts/admin-layout
+
+- Add route in admin-layout.routing.module.ts
+
+## Create Pipe / Services / Directives / ..
+
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+## Which Main Module is imported.
+
+- Angular CLI Version (10.0.6)
+- Add Angular material
+ng add @angular/material
+- Add Bootstrap
+ng add @ng-bootstrap
+
+## How to run the project
+
+- Angular Cli Version (10.0.6)
+- npm install ( package install )
+- npm run start ( ng serve --port=4201 )
+

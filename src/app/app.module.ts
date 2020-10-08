@@ -1,10 +1,12 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ComponentsModule } from 'src/app/components/components.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -14,6 +16,12 @@ import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
 import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
 import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
 import { TestComponent } from './pages/test/test.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient);
+}
 
 @NgModule({
   declarations: [
@@ -28,12 +36,20 @@ import { TestComponent } from './pages/test/test.component';
   imports: [
     BrowserAnimationsModule,
     RouterModule,
+    FormsModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
     NgbModule,
-    ComponentsModule
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

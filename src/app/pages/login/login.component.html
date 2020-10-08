@@ -1,1 +1,40 @@
-LOGIN PAGE
+<div class="card border-0 rounded-lg p-5">
+  <div class="mx-3 my-2">
+    <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
+    <h4 class="text-center font-weight-bold mb-4">Welcome back!</h4>
+    <p class="f-3 text-center">Doesn't have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/signup']">Sign Up</a></p>
+    <button type="button" class="social-btn btn border-primary d-block w-100 mt-4 font-weight-bold">
+      <span>Sign In with Google</span>
+    </button>
+    <button type="button" class="social-btn btn border-primary d-block w-100 mt-2 font-weight-bold">
+      <span>Sign In with Outlook</span>
+    </button>
+    <div class="v-center my-3">
+      <hr class="flex-grow-1"/>
+      <span class="mx-3">or</span>
+      <hr class="flex-grow-1"/>
+    </div>
+    <form #signForm="ngForm" (ngSubmit)="signForm.form.valid ? login() : false">
+      <div class="form-group" [ngClass]="{invalid: signForm.submitted && email.invalid && (email.dirty || email.touched || signForm.submitted)}">
+        <label for="email">E-Mail</label>
+        <input type="email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
+        <span class="error" *ngIf="email.errors">
+          <ng-container *ngIf="email.errors.required">E-Mail is required!</ng-container>
+          <ng-container *ngIf="email.errors.pattern">E-Mail is invalid!</ng-container>
+        </span>
+      </div>
+      <div class="form-group" [ngClass]="{invalid: signForm.submitted && password.invalid && (password.dirty || password.touched || signForm.submitted)}">
+        <div class="d-flex">
+          <label for="password">Password</label>
+          <a class="f-3 ml-auto font-weight-bold" [routerLink]="['/forgot-password']">Forgot Password?</a>
+        </div>
+        <input type="password" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="8" #password="ngModel"/>
+        <span class="error" *ngIf="password.errors">
+          <ng-container *ngIf="password.errors.required">Password is required!</ng-container>
+          <ng-container *ngIf="password.errors.minlength">Password must be at least 8 characters long!</ng-container>
+        </span>
+      </div>
+      <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Sign In</button>
+    </form>
+  </div>
+</div>

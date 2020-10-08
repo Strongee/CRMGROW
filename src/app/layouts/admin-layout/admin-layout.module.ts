@@ -9,13 +9,15 @@ import { AdminLayoutRoutes } from './admin-layout.routing.module';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
 import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [TasksComponent, ContactsComponent, MaterialsComponent],
   imports: [
     CommonModule,
     SharedModule,
     ComponentsModule,
-    RouterModule.forChild(AdminLayoutRoutes)
+    RouterModule.forChild(AdminLayoutRoutes),
+    TranslateModule.forChild({ extend: true })
   ],
   schemas: []
 })

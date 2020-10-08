@@ -17,10 +17,10 @@
         <li *ngIf="!menuItem.role || menuItem.protectedRole.indexOf(profile.role) === -1">
           <a routerLinkActive="active" [routerLink]="[menuItem.path]" class="nav-link c-dark v-center">
               <i class="i-icon {{menuItem.icon}} d-lg-none d-block mr-2"></i>
-              <span class="menu-label">{{menuItem.title}}</span>
+              <span class="menu-label">{{menuItem.title | translate}}</span>
               <ng-container *ngIf="menuItem.beta">
                 <span class="{{menuItem.betaClass}}">
-                  {{menuItem.betaLabel}}
+                  {{menuItem.betaLabel | translate}}
                 </span>
               </ng-container>
           </a>

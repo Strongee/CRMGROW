@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { filter, map } from 'rxjs/operators';
 
 @Component({
@@ -10,12 +11,20 @@ import { filter, map } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   title = 'CRMGrow';
+  langs = ['en', 'fr'];
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private titleService: Title
-  ) {}
+    private titleService: Title,
+    private translateService: TranslateService
+  ) {
+    this.translateService.addLangs(this.langs);
+    this.translateService.setDefaultLang('en');
+
+    const browserLang = this.translateService.getBrowserLang();
+    this.translateService.use(browserLang.match(/en|fr/) ? browserLang : 'fr');
+  }
 
   ngOnInit(): void {
     this.titleHandle();

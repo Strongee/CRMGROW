@@ -1,0 +1,15 @@
+.avatar-wrapper {
+  width: 95px;
+  height: 95px;
+  position: relative;
+  .avatar {
+    width: 95px;
+    height: 95px;
+  }
+  
+  .btn-icon {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+  }
+}

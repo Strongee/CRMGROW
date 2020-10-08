@@ -1,10 +1,24 @@
+/* custom Bootstrap variable override */
+$input-focus-border-color: #0000ff;
+$primary: #0000ff;
+$grid-gutter-width: 16px;
+$custom-control-indicator-size: 1.25rem;
+$custom-control-indicator-border-width: 2px;
+$custom-control-indicator-border-color: rgba(16 19 54/0.4);
+$custom-checkbox-indicator-border-radius: 3px;
+
+@import "~bootstrap/scss/bootstrap.scss";
+
 /* You can add global styles to this file, and also import other style files */
 $color-dark: #101336;
 $color-blue: #0000ff;
 $color-silver: #dadadd;
+$color-red: #E02020;
 $color-blue-weak: #5050fd;
 $color-trans08: rgba(16 19 54/0.08);
 $color-trans75: rgba(16 19 54/0.75);
+
+
 
 /* Material Theme Basic Setting  */
 html, body { height: 100%; }
@@ -107,6 +121,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .f-0{
   font-size: 10px;
 }
+.f-1{
+  font-size: 11px;
+}
 .f-2{
   font-size: 12px;
 }
@@ -115,6 +132,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .f-4{
   font-size: 14px;
+}
+.f-5{
+  font-size: 15px;
 }
 .f-6{
   font-size: 16px;
@@ -236,10 +256,11 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
     transform: translate(-50%, -50%);
   }
 }
+// Shadow
 .shadow-1 {
   box-shadow: 0 5px 16px -5px rgba(16, 19, 54, 0.35);
 }
-
+// Align and Cursor, Text Utility Style
 .v-center {
   display: flex;
   align-items: center;
@@ -250,8 +271,11 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .c-default {
   cursor: default;
 }
+.td-underline {
+  text-decoration: underline!important;
+}
 
-
+// Button Style
 .btn-blue {
   background-color: $color-blue;
   border-color: $color-blue;
@@ -271,11 +295,91 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
     border-color: $color-blue-weak;
   }
 }
+.btn {
+  &:focus {
+    box-shadow: none!important;
+  }
+  &.c-blue {
+    color: $color-blue!important;
+  }
+}
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  padding: 6px;
 
+  .i-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Form Control Style
+.form-group {
+  label {
+    font-size: 11px;
+    color: $color-dark;
+    opacity: 0.4;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .form-control {
+    height: 40px;
+    box-shadow: none!important;
+  }
+  .error {
+    font-size: 11px;
+    font-weight: bold;
+    color: $color-red;
+  }
+  &:not(.invalid) {
+    .error {
+      display: none;
+    }
+  }
+  &.invalid {
+    .form-control {
+      border-color: $color-red;
+      color: $color-red;
+    }
+  }
+
+  select.form-control {
+    background-image:
+      linear-gradient(45deg, transparent 50%, blue 50%),
+      linear-gradient(135deg, blue 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - 2.5em) 0.5em;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em;
+    background-repeat: no-repeat;
+    background-color: white;
+    padding: 0.5em 3em 0.5em 1em;
+    /* reset */
+    margin: 0;      
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+}
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: none;
+}
+.custom-control-input.invalid ~ .custom-control-label::before {
+  border-color: $color-red;
+}
 .fc-control {
   height: 40px;
 }
+.phone-form .iti {
+  display: block;
+}
 
+// DropDown Style
 .dropdown-menu {
   box-shadow: 0 5px 24px -5px rgba(16, 19, 54, 0.24);
   border: none;
@@ -301,6 +405,7 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 
 
+// Body Style
 body{
   .topbar {
     position: fixed;
@@ -405,3 +510,4 @@ body{
     }
   }
 }
+

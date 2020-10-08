@@ -19,17 +19,11 @@ export class TasksComponent implements OnInit {
   ];
   selectedOption = this.options[0].value;
 
-  username = {};
-
-  constructor(public userService: UserService) {
-    this.username = this.userService.sharedData;
-  }
+  constructor(public userService: UserService) {}
 
   ngOnInit(): void {}
 
   changeTab(event: TabItem): void {
     this.selectedTab = event;
-    // this.userService.changeShareData(event);
-    this.userService.sharedData['event'] = event;
   }
 }

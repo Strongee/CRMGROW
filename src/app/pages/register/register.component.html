@@ -1,1 +1,246 @@
-<p>register works!</p>
+<div class="card border-0 rounded-lg p-5">
+  <ng-container [ngSwitch]="step">
+    <!-- Basic Profile Information Step -->
+    <div class="mx-3 my-2" *ngSwitchCase="1">
+      <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
+      <h4 class="text-center font-weight-bold mb-4">Sign Up!</h4>
+      <p class="f-3 text-center">Please complete your basic information <br/> for your account</p>
+      <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
+      <button type="button" class="social-btn btn border-primary d-block w-100 mt-4 font-weight-bold">
+        <span>Sign Up with Google</span>
+      </button>
+      <button type="button" class="social-btn btn border-primary d-block w-100 mt-2 font-weight-bold">
+        <span>Sign Up with Outlook</span>
+      </button>
+      <div class="v-center my-3">
+        <hr class="flex-grow-1"/>
+        <span class="mx-3">or</span>
+        <hr class="flex-grow-1"/>
+      </div>
+      <form #basicForm="ngForm" (ngSubmit)="basicForm.form.valid ? fillBasic() : false">
+        <div class="form-group" [ngClass]="{invalid: basicForm.submitted && username.invalid && (username.dirty || username.touched || basicForm.submitted)}">
+          <div class="d-flex">
+            <label for="username" class="mr-auto">Full Name</label>
+            <span class="error" *ngIf="username.errors">
+              <ng-container *ngIf="username.errors.required">Required!</ng-container>
+            </span>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="user.user_name" name="username" id="username" required #username="ngModel"/>
+        </div>
+        <div class="form-group" [ngClass]="{invalid: basicForm.submitted && email.invalid && (email.dirty || email.touched || basicForm.submitted)}">
+          <div class="d-flex">
+            <label for="email" class="mr-auto">E-Mail</label>
+            <span class="error" *ngIf="email.errors">
+              <ng-container *ngIf="email.errors.required">Required!</ng-container>
+              <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
+            </span>
+          </div>
+          <input type="email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
+        </div>
+        <div class="form-group" [ngClass]="{invalid: basicForm.submitted && password.invalid && (password.dirty || password.touched || basicForm.submitted)}">
+          <div class="d-flex">
+            <label for="password" class="mr-auto">Password</label>
+            <span class="error" *ngIf="password.errors">
+              <ng-container *ngIf="password.errors.required">Required!</ng-container>
+              <ng-container *ngIf="password.errors.minlength">At least 8 characters!</ng-container>
+            </span>
+          </div>
+          <input type="password" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="8" #password="ngModel"/>
+        </div>
+        <div class="form-group" [ngClass]="{invalid: basicForm.submitted && ((confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched || basicForm.submitted)) || confirm_password != user.password)}">
+          <div class="d-flex">
+            <label for="confirmPassword" class="mr-auto">Confirm Password</label>
+            <span class="error" *ngIf="confirmPassword.errors; else misMatch">
+              <ng-container *ngIf="confirmPassword.errors.required">Confirm!</ng-container>
+              <ng-container *ngIf="confirmPassword.errors.minlength">At least 8 characters!</ng-container>
+            </span>
+            <ng-template #misMatch>
+              <span class="error" *ngIf="confirm_password != user.password">
+                No match!
+              </span>
+            </ng-template>
+          </div>
+          <input type="password" class="form-control" [(ngModel)]="confirm_password" name="confirmPassword" id="confirmPassword" required minlength="8" #confirmPassword="ngModel"/>
+        </div>
+        <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Continue</button>
+      </form>
+    </div>
+    <!-- End Basic Profile Information Step -->
+    
+    <!-- Main Profile Information Step -->
+    <div class="mx-3 my-2" *ngSwitchCase="2">
+      <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
+      <h4 class="text-center font-weight-bold mb-4">Complete Profile</h4>
+      <p class="f-3 text-center">Please fill out the appropriate information <br/> for your account</p>
+      <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
+      <form #profileForm="ngForm" (ngSubmit)="profileForm.form.valid ? fillProfile() : false" class="mt-4">
+        <div class="form-group" [ngClass]="{invalid: profileForm.submitted && learnMore.invalid && (learnMore.dirty || learnMore.touched || profileForm.submitted)}">
+          <div class="d-flex">
+            <label for="learnMore" class="mr-auto">exp realty career website</label>
+            <span class="error" *ngIf="learnMore.errors">
+              <ng-container *ngIf="learnMore.errors.required">Required!</ng-container>
+            </span>
+          </div>
+          <input type="url" class="form-control" [(ngModel)]="user.learn_more" name="learnMore" id="learnMore" required #learnMore="ngModel"/>
+        </div>
+        <div class="form-group phone-form" [ngClass]="{invalid: profileForm.submitted && phone.invalid && (phone.dirty || phone.touched || profileForm.submitted)}">
+          <div class="d-flex">
+            <label for="phone" class="mr-auto">your cell number</label>
+            <span class="error" *ngIf="phone.errors">
+              <ng-container *ngIf="phone.errors.required; else phoneFormat">Required!</ng-container>
+              <ng-template #phoneFormat>Wrong cell-phone!</ng-template>
+            </span>
+          </div>
+          <ngx-intl-tel-input
+            [cssClass]="'form-control phone-form'"
+            [onlyCountries]="countries"
+            [enableAutoCountrySelect]="true"
+            [enablePlaceholder]="false"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="CountryISO.UnitedStates"
+            [maxLength]="15"
+            [phoneValidation]="true"
+            [separateDialCode]="true"
+            name="phone" 
+            #phone="ngModel"
+            [(ngModel)]="user.phone"
+            (ngModelChange)="phone.errors ? false : confirmPhone();"
+            required>
+          </ngx-intl-tel-input>
+        </div>
+        <div class="form-group" [ngClass]="{invalid: profileForm.submitted && timezone.invalid && (timezone.dirty || timezone.touched || profileForm.submitted)}">
+          <div class="d-flex">
+            <label for="timezone" class="mr-auto">your time zone</label>
+            <span class="error" *ngIf="timezone.errors">
+              <ng-container *ngIf="timezone.errors.required">Required!</ng-container>
+            </span>
+          </div>
+          <select class="form-control" [(ngModel)]="user.time_zone_info" name="timezone" id="timezone" required #timezone="ngModel">
+            <optgroup *ngFor="let timezone_group of timezones" label="{{timezone_group.country}}">
+              <option *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
+                {{timezone.name}}
+              </option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>profile photo</label>
+          <div class="avatar-wrapper mx-auto">
+            <img [src]="user.picture_profile || '../../../assets/img/user_avatar.svg'" class="avatar"/>
+            <button type="button" class="bgc-blue btn rounded-circle btn-icon" (click)="openProfilePhoto()">
+              <i class="i-icon i-plus bg-white d-block"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-6">
+            <button type="button" class="btn border-primary c-blue d-block font-weight-bold w-100" (click)="step = 1">Back</button>
+          </div>
+          <div class="col-6">
+            <button type="submit" class="btn btn-primary d-block flex-grow-1 font-weight-bold w-100">Next</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- End main Profile Information Step -->
+
+    <!-- Billing Information Step -->
+    <div class="mx-3 my-2" *ngSwitchCase="3">
+      <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
+      <h4 class="text-center font-weight-bold mb-4">Billing Information</h4>
+      <p class="f-3 text-center">Please fill out the appropriate information <br/> for billing</p>
+      <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
+      <form #billForm="ngForm" (ngSubmit)="billForm.form.valid ? fillBilling() : false" class="mt-4">
+        <div class="form-group" [ngClass]="{invalid: billForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || billForm.submitted)}">
+          <label for="cardname">name on card</label>
+          <input type="text" class="form-control" [(ngModel)]="payment.name" name="cardname" id="cardname" required #cardname="ngModel"/>
+          <span class="error" *ngIf="cardname.errors">
+            <ng-container *ngIf="cardname.errors.required">Required!</ng-container>
+          </span>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="form-group" [ngClass]="{invalid: billForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || billForm.submitted)}">
+              <label for="cardnumber">card number</label>
+              <input type="text" class="form-control" [(ngModel)]="payment.number" name="cardnumber" id="cardnumber" required #cardnumber="ngModel" minlength="{{cardNumberLen}}" [cleave]="creditCardInput"/>
+              <span class="error" *ngIf="cardnumber.errors">
+                <ng-container *ngIf="cardnumber.errors.required">Required!</ng-container>
+                <ng-container *ngIf="cardnumber.errors.minlength">Invalid!</ng-container>
+              </span>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group" [ngClass]="{invalid: billForm.submitted && cardcvc.invalid && (cardcvc.dirty || cardcvc.touched || billForm.submitted)}">
+              <label for="cardcvc">card cvc</label>
+              <input type="text" class="form-control" [(ngModel)]="payment.cvc" name="cardcvc" id="cardcvc" required #cardcvc="ngModel" minlength="3" maxlength="5" [cleave]="credCvcInput"/>
+              <span class="error" *ngIf="cardcvc.errors">
+                <ng-container *ngIf="cardcvc.errors.required">Required!</ng-container>
+                <ng-container *ngIf="cardcvc.errors.minlength || cardcvc.errors.maxlength">Invalid!</ng-container>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group" [ngClass]="{invalid: billForm.submitted && expmonth.invalid && (expmonth.dirty || expmonth.touched || billForm.submitted)}">
+              <label for="expmonth">exp month</label>
+              <select class="form-control f-5" [(ngModel)]="payment.exp_month" name="expmonth" id="expmonth" required #expmonth="ngModel">
+                <option value="" selected disabled>Select Month</option>
+                <option value="1">Jan</option>
+                <option value="2">Feb</option>
+                <option value="3">Mar</option>
+                <option value="4">Apr</option>
+                <option value="5">May</option>
+                <option value="6">Jun</option>
+                <option value="7">Jul</option>
+                <option value="8">Aug</option>
+                <option value="9">Sep</option>
+                <option value="10">Oct</option>
+                <option value="11">Nov</option>
+                <option value="12">Dec</option>
+              </select>
+              <span class="error" *ngIf="expmonth.errors">
+                <ng-container *ngIf="expmonth.errors.required">Required!</ng-container>
+              </span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group" [ngClass]="{invalid: billForm.submitted && expyear.invalid && (expyear.dirty || expyear.touched || billForm.submitted)}">
+              <label for="expyear">exp year</label>
+              <select class="form-control f-5" [(ngModel)]="payment.exp_year" name="expyear" id="expyear" required #expyear="ngModel">
+                <option value="" selected disabled>Select Year</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+              </select>
+              <span class="error" *ngIf="expyear.errors">
+                <ng-container *ngIf="expyear.errors.required">Required!</ng-container>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="terms" name="termsCheck" #termsCheck="ngModel" [(ngModel)]="termsChecked" required [ngClass]="{invalid: billForm.submitted && termsCheck.invalid && (termsCheck.dirty || termsCheck.touched || billForm.submitted)}">
+          <label class="custom-control-label f-3" for="terms">Please accept to our <a class="c-blue td-underline font-weight-bold">Terms of Service</a> and <a class="c-blue td-underline font-weight-bold">Privacy Policy</a></label>
+        </div>
+        <div class="row mt-4">
+          <div class="col-6">
+            <button type="button" class="btn border-primary c-blue d-block font-weight-bold w-100" (click)="step = 2">Back</button>
+          </div>
+          <div class="col-6">
+            <button type="submit" class="btn btn-primary d-block font-weight-bold w-100">Sign Up</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- End Billing Information Step -->
+  </ng-container>
+</div>

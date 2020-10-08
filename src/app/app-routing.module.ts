@@ -4,6 +4,7 @@ import { AuthLayoutComponent } from 'src/app/layouts/auth-layout/auth-layout.com
 import { AdminLayoutComponent } from 'src/app/layouts/admin-layout/admin-layout.component';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -22,7 +23,8 @@ const routes: Routes = [
             (m) => m.AuthLayoutModule
           )
       }
-    ]
+    ],
+    canActivate: [AuthGuard]
   },
   {
     path: '',
@@ -35,7 +37,8 @@ const routes: Routes = [
             (m) => m.AdminLayoutModule
           )
       }
-    ]
+    ],
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
