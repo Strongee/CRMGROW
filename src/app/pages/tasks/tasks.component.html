@@ -5,4 +5,14 @@
   </div>
   <app-tab-option [options]="options" [selected]="selectedOption" (onChange)="selectedOption = $event">
   </app-tab-option>
+  {{taskService.taskEmail$ | async | json}}
+  {{taskService.taskContent$ | async | json}}
+
+  <button type="button" (click)="toggleEnabled()">
+    Enable gender component
+</button>
+<ng-container *ngIf="enabled">
+  {{taskService.taskContent$ | async | json}}
+</ng-container>
+
 </div>

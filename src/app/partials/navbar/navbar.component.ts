@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/models/user.model';
+import { TaskService } from 'src/app/services/task.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,11 +26,16 @@ export class NavbarComponent implements OnInit {
   ];
   currentSearchType: any = this.searchDataTypes[0];
 
-  profile: any = {};
+  constructor(
+    public userService: UserService,
+    public taskService: TaskService
+  ) {
+    console.log(new User());
+  }
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.taskService.loadData();
+  }
 
   runAction(action): void {
     // Open New modal that corresponds to action

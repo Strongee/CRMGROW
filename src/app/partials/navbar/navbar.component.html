@@ -84,7 +84,7 @@
     <div class="nav-item">
       <div class="profile-wrapper" ngbDropdown display="dynamic">
         <div class="v-center c-pointer" ngbDropdownToggle>
-          <img [src]="profile.profile_picture" onerror="( this.src = './assets/img/user_avatar.svg' );"/>
+          <img [src]="(userService.profile$ | async).picture_profile" onerror="( this.src = './assets/img/user_avatar.svg' );"/>
           <span class="f-3 fw-600 ml-2 d-sm-block d-none">username</span>
         </div>
         <div ngbDropdownMenu>
@@ -108,4 +108,10 @@
       </div>
     </div>
   </div>
+</div>
+<div class="">
+  <!-- {{taskService.taskload$ | async | json}} -->
+  <!-- {{taskService.taskload$ | async | json}} -->
+  {{taskService.taskContent$ | async | json}}
+  {{taskService.taskAvatar$ | async | json}}
 </div>

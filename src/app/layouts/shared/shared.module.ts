@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { MatDialogModule } from '@angular/material/dialog';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [],
@@ -13,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule
@@ -21,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule
