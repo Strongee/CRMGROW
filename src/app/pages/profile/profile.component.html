@@ -1,4 +1,26 @@
-<form #profileForm="ngForm">
-  <input type="text" [(ngModel)]="profile" name="image" #image="ngModel">
-</form>
-<button class="btn btn-primary" (click)="updateProfile()">Update</button>
+<div class="page-content pt-0 pt-sm-3 px-2 px-sm-4c">
+  <h6 class="font-weight-bold mt-2 mt-sm-4 mb-4">PROFILE</h6>
+  <div class="d-flex">
+    <div class="sub-sidebar">
+      <ul class="m-0 p-0">
+        <ng-container *ngFor="let menuItem of menuItems" class="nav-item">
+          <li>
+            <a class="d-flex nav-link c-dark c-pointer px-0" [ngClass]="{active: currentPage === menuItem.id}" (click)="changeMenu(menuItem)">
+              <i class="i-icon bgc-dark {{menuItem.icon}} mr-2"></i>
+              <span class="f-3 menu-label font-weight-bold">{{menuItem.label | translate}}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <div class="sub-container pl-4 flex-grow-1">
+      <ng-container [ngSwitch]="currentPage">
+        <app-general-profile *ngSwitchCase="'general'"></app-general-profile>
+        <app-signature *ngSwitchCase="'signature'"></app-signature>
+        <app-security *ngSwitchCase="'security'"></app-security>
+        <app-integration *ngSwitchCase="'integration'"></app-integration>
+        <app-payment *ngSwitchCase="'payment'"></app-payment>
+      </ng-container>
+    </div>
+  </div>
+</div>

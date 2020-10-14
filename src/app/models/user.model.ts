@@ -25,7 +25,7 @@ export class User implements Deserializable {
     is_released: false;
   };
   picture_profile =
-    'https://lh3.googleusercontent.com/proxy/NRpN3V5W9fIvDBNRLe91DDGJxLDCwHYHiy02xKO6K7TsfHqN2u5Qb3A_FPasYEbIgQN0qqPqAUySLJZJHdYHCYv9lDa0dw';
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQVbekPCpDJMuCuIYc7rdb4rxojgBCVXm_wlQ&usqp=CAU';
   learn_more: string;
   role: string;
   outlook_refresh_token: string;

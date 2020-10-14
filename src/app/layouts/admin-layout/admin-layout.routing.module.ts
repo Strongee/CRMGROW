@@ -46,5 +46,12 @@ export const AdminLayoutRoutes: Routes = [
     data: {
       title: 'Profile'
     }
+  },
+  {
+    path: 'profile/:page',
+    component: ProfileComponent,
+    data: {
+      title: 'Profile'
+    }
   }
 ];

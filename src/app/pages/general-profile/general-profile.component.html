@@ -1,0 +1,107 @@
+<div class="avatar-wrapper mb-4">
+  <img [src]="user.picture_profile || '../../../assets/img/user_avatar.svg'" class="avatar"/>
+  <button type="button" class="bgc-blue btn rounded-circle btn-icon" (click)="openProfilePhoto()">
+    <i class="i-icon i-plus bg-white d-block"></i>
+  </button>
+</div>
+<form #profileForm="ngForm" (ngSubmit)="profileForm.form.valid ? updateProfile() : false;" style="max-width: 620px;">
+  <div class="row">
+    <div class="col-sm-6 col-12">
+      <div class="form-group" [ngClass]="{invalid: profileForm.submitted && username.invalid && (username.dirty || username.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="username" class="mr-auto">full name</label>
+          <span class="error" *ngIf="username.errors">
+            <ng-container *ngIf="username.errors.required">Required!</ng-container>
+          </span>
+        </div>
+        <input type="text" class="form-control" [(ngModel)]="user.user_name" id="username" name="username" #username="ngModel" required>
+      </div>
+    </div>
+    <div class="col-sm-6 col-12">
+      <div class="form-group" [ngClass]="{invalid: profileForm.submitted && email.invalid && (email.dirty || email.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="email" class="mr-auto">e-mail</label>
+          <span class="error" *ngIf="email.errors">
+            <ng-container *ngIf="email.errors.required">Required!</ng-container>
+            <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
+          </span>
+        </div>
+        <input type="text" class="form-control" [(ngModel)]="user.email" id="email" name="email" #email="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 col-12">
+      <div class="form-group phone-form" [ngClass]="{invalid: profileForm.submitted && phone.invalid && (phone.dirty || phone.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="phone" class="mr-auto">your cell number</label>
+          <span class="error" *ngIf="phone.errors">
+            <ng-container *ngIf="phone.errors.required; else phoneFormat">Required!</ng-container>
+            <ng-template #phoneFormat>Wrong cell-phone!</ng-template>
+          </span>
+        </div>
+        <ngx-intl-tel-input
+          [cssClass]="'form-control phone-form'"
+          [onlyCountries]="countries"
+          [enableAutoCountrySelect]="true"
+          [enablePlaceholder]="false"
+          [selectFirstCountry]="false"
+          [selectedCountryISO]="CountryISO.UnitedStates"
+          [maxLength]="15"
+          [phoneValidation]="true"
+          [separateDialCode]="true"
+          name="phone" 
+          #phone="ngModel"
+          [(ngModel)]="user.phone"
+          (ngModelChange)="phone.errors ? false : confirmPhone();"
+          required>
+        </ngx-intl-tel-input>
+      </div>
+    </div>
+    <div class="col-sm-6 col-12">
+      <!-- <div class="form-group" [ngClass]="{invalid: profileForm.submitted && company.invalid && (company.dirty || company.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="email" class="mr-auto">your company</label>
+          <span class="error" *ngIf="email.errors">
+            <ng-container *ngIf="email.errors.required">Required!</ng-container>
+            <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
+          </span>
+        </div>
+        <input type="text" class="form-control" [(ngModel)]="user.email" name="email" #email="ngModel" required>
+      </div> -->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 col-12">
+      <div class="form-group" [ngClass]="{invalid: profileForm.submitted && learnMore.invalid && (learnMore.dirty || learnMore.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="learnMore" class="mr-auto">your company career website</label>
+          <span class="error" *ngIf="learnMore.errors">
+            <ng-container *ngIf="learnMore.errors.required">Required!</ng-container>
+          </span>
+        </div>
+        <input type="text" class="form-control" [(ngModel)]="user.learn_more" id="learnMore" name="learnMore" #learnMore="ngModel" required>
+      </div>
+    </div>
+    <div class="col-sm-6 col-12">
+      <div class="form-group" [ngClass]="{invalid: profileForm.submitted && timezone.invalid && (timezone.dirty || timezone.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="timezone" class="mr-auto">time zone</label>
+          <span class="error" *ngIf="timezone.errors">
+            <ng-container *ngIf="timezone.errors.required">Required!</ng-container>
+          </span>
+        </div>
+        <select class="form-control c-blue f-5" [(ngModel)]="user.time_zone_info" name="timezone" id="timezone" required #timezone="ngModel">
+          <optgroup *ngFor="let timezone_group of timezones" label="{{timezone_group.country}}">
+            <option *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
+              {{timezone.name}}
+            </option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <button type="submit" class="btn btn-primary font-weight-bold ml-auto mr-2 mt-4">Save changes</button>
+  </div>
+</form>

@@ -1,0 +1,25 @@
+.email-templates {
+  width: 100%;
+  max-width: 520px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  .template {
+    height: 80px;
+    border: 1px solid gainsboro;
+    border-radius: 4px;
+    width: calc(20% - 8px);
+    min-width: 76px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+
+    &.active {
+      border-color: blue;
+      background-color: blue;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    justify-content: flex-start;
+  }
+}

@@ -1,0 +1,15 @@
+.integration-card{
+  display: flex;
+  flex-direction: column;
+
+  img {
+    width: 28px;
+    height: 28px;
+    margin-right: 5px;
+  }
+
+  .connect-status {
+    margin-top: -8px;
+    word-break: break-all;
+  }
+}

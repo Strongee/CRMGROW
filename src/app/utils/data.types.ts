@@ -1,3 +1,8 @@
+export interface PageMenuItem {
+  icon: string;
+  label: string;
+  id: string;
+}
 export interface TabItem {
   icon: string;
   label: string;
