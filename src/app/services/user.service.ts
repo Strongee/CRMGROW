@@ -100,9 +100,10 @@ export class UserService extends HttpService {
   public updateProfileImpl(data: any): void {
     const profile = this.profile.getValue();
     this.profile.next({ ...profile, ...data });
+    return;
   }
   public setGarbage(garbage: Garbage): void {
     this.garbage.next(garbage);
+    return;
   }
-
 }

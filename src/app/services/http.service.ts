@@ -7,7 +7,7 @@ import { ErrorService } from './error.service';
   providedIn: 'root'
 })
 export class HttpService {
-  private server = environment.api;
+  public server = environment.api;
   constructor(private errorService: ErrorService) {}
 
   handleError<T>(operation = 'Server Connection', result?: T) {

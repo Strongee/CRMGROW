@@ -82,6 +82,16 @@ export const ROUTES: RouteInfo[] = [
     betaClass: '',
     betaLabel: '',
     protectedRole: null
+  },
+  {
+    path: 'templates',
+    title: 'Templates',
+    icon: 'i-lunch bgc-dark',
+    class: '',
+    beta: false,
+    betaClass: '',
+    betaLabel: '',
+    protectedRole: null
   }
 ];
 

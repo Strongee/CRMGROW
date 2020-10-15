@@ -140,8 +140,17 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .f-6{
   font-size: 16px;
 }
+.f-8{
+  font-size: 18px;
+}
 .fw-600 {
   font-weight: 600;
+}
+.ls-1{
+  letter-spacing: 1px;
+}
+.ls-2{
+  letter-spacing: 2px;
 }
 
 .i-icon{
@@ -604,6 +613,10 @@ body{
       padding-top: 113px;
     }
   }
+  
+  .page-content {
+    padding: 2rem;
+  }
 }
 
 @media screen and (max-width: 992px) and (min-width: 681px) {
@@ -620,6 +633,10 @@ body{
     }
     .page {
       margin-left: 60px;
+    }
+
+    .page-content {
+      padding: 2rem 0.5rem;
     }
   }
 }
@@ -645,18 +662,28 @@ body{
       padding-top: 0px!important;
     }
     .page {
-      padding-top: 113px;
+      padding-top: 100px;
       margin-left: 0px;
     }
 
     &.has-topbar {
       .page {
-        padding-top: 163px;
+        padding-top: 150px;
       }
       .navbar-toggler {
         top: 68px;
       }
     }
+
+    .page-content {
+      padding: 1rem 1rem;
+    }
+  }
+}
+
+@media screen and (max-width: 575px) {
+  body .page .page-content {
+    padding: 1rem 0.5rem;
   }
 }
 

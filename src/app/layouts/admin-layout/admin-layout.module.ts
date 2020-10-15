@@ -16,6 +16,14 @@ import { SignatureComponent } from '../../pages/signature/signature.component';
 import { SecurityComponent } from '../../pages/security/security.component';
 import { IntegrationComponent } from '../../pages/integration/integration.component';
 import { PaymentComponent } from '../../pages/payment/payment.component';
+import { ActivitiesComponent } from '../../pages/activities/activities.component';
+import { HomeComponent } from '../../pages/home/home.component';
+import { AffiliateComponent } from '../../pages/affiliate/affiliate.component';
+import { CompaignsComponent } from '../../pages/compaigns/compaigns.component';
+import { AutomationsComponent } from '../../pages/automations/automations.component';
+import { SettingsComponent } from '../../pages/settings/settings.component';
+import { TeamsComponent } from '../../pages/teams/teams.component';
+import { TemplatesComponent } from '../../pages/templates/templates.component';
 @NgModule({
   declarations: [
     TasksComponent,
@@ -26,7 +34,15 @@ import { PaymentComponent } from '../../pages/payment/payment.component';
     SignatureComponent,
     SecurityComponent,
     IntegrationComponent,
-    PaymentComponent
+    PaymentComponent,
+    ActivitiesComponent,
+    HomeComponent,
+    AffiliateComponent,
+    CompaignsComponent,
+    AutomationsComponent,
+    SettingsComponent,
+    TeamsComponent,
+    TemplatesComponent
   ],
   imports: [
     CommonModule,

@@ -30,7 +30,8 @@ export const VIDEO = {
   CREATE: 'video/create',
   READ: 'video/',
   UPDATE: 'video/',
-  DELETE: 'video/'
+  DELETE: 'video/',
+  LOAD: 'video'
 };
 export const PDF = {
   CREATE: 'pdf',

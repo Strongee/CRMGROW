@@ -1,27 +1,34 @@
 import { Routes } from '@angular/router';
+import { AffiliateComponent } from 'src/app/pages/affiliate/affiliate.component';
+import { AutomationsComponent } from 'src/app/pages/automations/automations.component';
+import { CompaignsComponent } from 'src/app/pages/compaigns/compaigns.component';
 import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
+import { HomeComponent } from 'src/app/pages/home/home.component';
 import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
 import { ProfileComponent } from 'src/app/pages/profile/profile.component';
+import { SettingsComponent } from 'src/app/pages/settings/settings.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
+import { TeamsComponent } from 'src/app/pages/teams/teams.component';
+import { TemplatesComponent } from 'src/app/pages/templates/templates.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
     path: 'home',
-    component: TasksComponent,
+    component: HomeComponent,
     data: {
       title: 'Tasks'
     }
   },
   {
     path: 'activities',
-    component: TasksComponent,
+    component: HomeComponent,
     data: {
       title: 'Activities'
     }
   },
   {
     path: 'tasks',
-    component: TasksComponent,
+    component: HomeComponent,
     data: {
       title: 'Tasks'
     }
@@ -41,6 +48,41 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'compaigns',
+    component: CompaignsComponent,
+    data: {
+      title: 'Compaigns'
+    }
+  },
+  {
+    path: 'automations',
+    component: AutomationsComponent,
+    data: {
+      title: 'Automations'
+    }
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    data: {
+      title: 'Settings'
+    }
+  },
+  {
+    path: 'teams',
+    component: TeamsComponent,
+    data: {
+      title: 'Teams'
+    }
+  },
+  {
+    path: 'templates',
+    component: TemplatesComponent,
+    data: {
+      title: 'Templates'
+    }
+  },
+  {
     path: 'profile',
     component: ProfileComponent,
     data: {
@@ -52,6 +94,13 @@ export const AdminLayoutRoutes: Routes = [
     component: ProfileComponent,
     data: {
       title: 'Profile'
+    }
+  },
+  {
+    path: 'affiliate',
+    component: AffiliateComponent,
+    data: {
+      title: 'Affiliate'
     }
   }
 ];

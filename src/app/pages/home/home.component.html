@@ -1,9 +1,4 @@
 <div class="page-content">
   <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
   </app-slide-tab>
-  <ul>
-    <li *ngFor="let video of (storeService.videos$ | async)">
-      {{video | json}}
-    </li>
-  </ul>
 </div>
