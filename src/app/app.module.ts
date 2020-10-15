@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -16,8 +16,12 @@ import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
 import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
 import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
 import { TestComponent } from './pages/test/test.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS
+} from '@angular/common/http';
+import { ApiInterceptor } from 'src/app/interceptors/api.interceptor';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -43,6 +47,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     }),
     NgbModule,
     HttpClientModule,
+    ToastrModule.forRoot({}),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -51,7 +56,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       }
     })
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

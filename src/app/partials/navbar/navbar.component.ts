@@ -29,9 +29,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     public userService: UserService,
     public taskService: TaskService
-  ) {
-    console.log(new User());
-  }
+  ) {}
 
   ngOnInit(): void {
     this.taskService.loadData();

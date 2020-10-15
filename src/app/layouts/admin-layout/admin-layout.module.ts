@@ -17,7 +17,17 @@ import { SecurityComponent } from '../../pages/security/security.component';
 import { IntegrationComponent } from '../../pages/integration/integration.component';
 import { PaymentComponent } from '../../pages/payment/payment.component';
 @NgModule({
-  declarations: [TasksComponent, ContactsComponent, MaterialsComponent, ProfileComponent, GeneralProfileComponent, SignatureComponent, SecurityComponent, IntegrationComponent, PaymentComponent],
+  declarations: [
+    TasksComponent,
+    ContactsComponent,
+    MaterialsComponent,
+    ProfileComponent,
+    GeneralProfileComponent,
+    SignatureComponent,
+    SecurityComponent,
+    IntegrationComponent,
+    PaymentComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,

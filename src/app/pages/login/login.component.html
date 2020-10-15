@@ -17,7 +17,7 @@
     <form #signForm="ngForm" (ngSubmit)="signForm.form.valid ? login() : false">
       <div class="form-group" [ngClass]="{invalid: signForm.submitted && email.invalid && (email.dirty || email.touched || signForm.submitted)}">
         <label for="email">E-Mail</label>
-        <input type="email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
+        <input type="email" tabindex="1" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
         <span class="error" *ngIf="email.errors">
           <ng-container *ngIf="email.errors.required">E-Mail is required!</ng-container>
           <ng-container *ngIf="email.errors.pattern">E-Mail is invalid!</ng-container>
@@ -28,7 +28,7 @@
           <label for="password">Password</label>
           <a class="f-3 ml-auto font-weight-bold" [routerLink]="['/forgot-password']">Forgot Password?</a>
         </div>
-        <input type="password" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="8" #password="ngModel"/>
+        <input type="password"  tabindex="2" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="8" #password="ngModel"/>
         <span class="error" *ngIf="password.errors">
           <ng-container *ngIf="password.errors.required">Password is required!</ng-container>
           <ng-container *ngIf="password.errors.minlength">Password must be at least 8 characters long!</ng-container>

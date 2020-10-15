@@ -11,7 +11,7 @@ import { Observable, throwError, pipe } from 'rxjs';
 import { UserService } from '../services/user.service';
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class ApiInterceptor implements HttpInterceptor {
   private role = '';
   constructor(private userService: UserService) {
     this.userService.profile$.subscribe((user) => {
@@ -29,6 +29,9 @@ export class TokenInterceptor implements HttpInterceptor {
     ) {
       return next.handle(req);
     } else {
+      if (req.url.indexOf('/assets/i18n') !== -1) {
+        return next.handle(req);
+      }
       if (!req.headers.has('Content-Type')) {
         req = req.clone({
           headers: req.headers.set('Content-Type', 'application/json')

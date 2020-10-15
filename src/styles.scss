@@ -8,6 +8,7 @@ $custom-control-indicator-border-color: rgba(16 19 54/0.4);
 $custom-checkbox-indicator-border-radius: 3px;
 
 @import "~bootstrap/scss/bootstrap.scss";
+@import '~ngx-toastr/toastr-bs4-alert';
 
 /* You can add global styles to this file, and also import other style files */
 $color-dark: #101336;

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { TIMEZONE } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-general-profile',
@@ -19,13 +20,21 @@ export class GeneralProfileComponent implements OnInit {
   ];
   CountryISO = CountryISO;
 
-  constructor() {}
+  constructor(private userService: UserService) {
+    this.userService.profile.subscribe((profile) => {
+      this.user = new User().deserialize({ ...profile });
+    });
+  }
 
   ngOnInit(): void {}
 
   openProfilePhoto(): void {}
 
-  updateProfile(): void {}
+  updateProfile(form: any): void {
+    this.userService.updateProfile(form).subscribe((data) => {
+      this.userService.updateProfileImpl(data);
+    });
+  }
 
   confirmPhone(): void {}
 }

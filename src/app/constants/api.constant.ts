@@ -1,15 +1,18 @@
 export const AUTH = {
-  SIGNIN: '',
-  SIGNUP: '',
-  FORGOT_PASSWORD: '',
-  RESET_PASSWORD: '',
-  SOCIAL_SIGNIN: '',
-  SOCIAL_SIGNUP: '',
+  SIGNIN: 'user/login',
+  SIGNUP: 'user',
+  FORGOT_PASSWORD: 'user/forgot-password',
+  RESET_PASSWORD: 'user/reset-password',
+  SOCIAL_SIGNIN: 'user/social-login',
+  SOCIAL_SIGNUP: 'user/social-signup',
   OAUTH_REQUEST: '',
   OUTLOOK_PROFILE_REQUEST: '',
   GOOGLE_PROFILE_REQUEST: ''
 };
-export const USER = {};
+export const USER = {
+  PROFILE: 'user/me',
+  UPDATE_PROFILE: 'user/me'
+};
 export const TASK = {
   CREATE: 'follow/',
   UPDATE: 'follow/'

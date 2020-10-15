@@ -21,25 +21,7 @@ export class ProfileComponent implements OnInit {
   defaultPage = 'general';
   currentPage: string;
 
-  constructor(
-    private userService: UserService,
-    private location: Location,
-    private route: ActivatedRoute
-  ) {
-    this.userService.profile.subscribe((res) => {
-      console.log('profile', res);
-    });
-    const observe = this.userService.profile.asObservable();
-    observe.subscribe((res) => {
-      console.log('profile111', res);
-    });
-    observe.subscribe((res) => {
-      console.log('profile222', res);
-    });
-    this.userService.profile.subscribe((res) => {
-      console.log('profile333', res);
-    });
-  }
+  constructor(private location: Location, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.currentPage = this.route.snapshot.params['page'] || this.defaultPage;
@@ -48,6 +30,4 @@ export class ProfileComponent implements OnInit {
     this.currentPage = menu.id;
     this.location.replaceState(`profile/${menu.id}`);
   }
-
-  updateProfile() {}
 }
