@@ -1,0 +1,132 @@
+@import '../../../styles';
+
+.d-grid {
+  display: grid;
+  grid-gap: 10px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+
+  thead th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-top: none;
+    border-bottom: 2px solid #e9ecef;
+    color: #101336;
+    opacity: 0.6;
+    padding: 5px 10px;
+    vertical-align: middle;
+  }
+
+  td {
+    padding: 5px 10px;
+    vertical-align: middle;
+    font-size: 0.8rem;
+    border-top: none;
+  }
+
+}
+
+@media screen and (max-width: 576px) {
+  .affiliate-table {
+    th:nth-child(2), td:nth-child(2) {
+      display: none;
+    }
+  }
+}
+
+.form-group {
+  max-width: 1024px;
+
+  .form-control {
+
+    &.link {
+      color: $color-blue;
+      border-color: $color-blue;
+    }
+  }
+
+  button {
+    width: 80px;
+  }
+}
+
+.cards {
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+
+  .card-item {
+    border: 1px solid $color-blue-weak;
+    border-radius: 5px;
+    max-height: 200px;
+    width: 100%;
+    padding: 20px 15px;
+    text-transform: uppercase;
+
+    p {
+      opacity: 0.6;
+      margin: 0;
+    }
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .card-value {
+    font-size: 34px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .cards {
+    grid-template-columns: repeat(1, 1fr);
+    width: 100%;
+  }
+}
+
+.avatar-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+    background-color: $color-dark;
+    color: #ffffff;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+}
+.status {
+  color: #ffffff;
+  width: 70px;
+  height: 24px;
+  text-align: center;
+  border-radius: 5px;
+  padding: 3px 5px;
+  font-size: 12px;
+
+  &.Active {
+    background-color: #4ac236;
+  }
+
+  &.Pending {
+    background-color: #f26419;
+  }
+}
