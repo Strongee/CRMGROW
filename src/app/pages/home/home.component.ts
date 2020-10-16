@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { TabItem } from 'src/app/utils/data.types';
 
@@ -13,7 +14,12 @@ export class HomeComponent implements OnInit {
   ];
   selectedTab: TabItem = this.tabs[0];
 
-  constructor() {}
+  constructor(private location: Location) {}
 
   ngOnInit(): void {}
+
+  changeTab(tab: TabItem): void {
+    this.selectedTab = tab;
+    this.location.replaceState(tab.id);
+  }
 }
