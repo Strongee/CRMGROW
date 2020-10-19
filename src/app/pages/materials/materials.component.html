@@ -1,9 +1,261 @@
 <div class="page-content">
-  <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
-  </app-slide-tab>
-  <ul>
-    <li *ngFor="let video of (storeService.videos$ | async)">
-      {{video | json}}
-    </li>
-  </ul>
+  <div class="v-center justify-content-between">
+    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+    </app-slide-tab>
+    <div class="v-center">
+      <button class="v-center btn btn-blue text-white">
+        <i class="bg-white i-icon i-record mr-2"></i>
+        Record new video
+      </button>
+      <div ngbDropdown class="ml-3 actions-groups">
+        <a class="c-pointer" ngbDropdownToggle>
+          Add new
+        </a>
+        <div ngbDropdownMenu>
+          <div class="v-center ml-3 c-pointer">
+            <i class="i-icon i-upload tab-icon" aria-hidden="true"></i>
+            <a class="dropdown-item">New file upload</a>
+          </div>
+          <div class="v-center ml-3 c-pointer">
+            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+            <a class="dropdown-item">New folder</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="material-folders mt-4">
+    <h6 class="f-6 font-weight-bold c-dark mb-4">Folders</h6>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="v-center justify-content-between p-3 material-folder">
+          <div class="v-center">
+            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+            <span class="f-3 ml-2">Provided Material</span>
+          </div>
+          <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="v-center justify-content-between p-3 material-folder">
+          <div class="v-center">
+            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+            <span class="f-3 ml-2">Own Material</span>
+          </div>
+          <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="v-center justify-content-between p-3 material-folder">
+          <div class="v-center">
+            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+            <span class="f-3 ml-2">Team Dynasty</span>
+          </div>
+          <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="selectedTab.label == 'ALL' || selectedTab.label == 'VIDEO'">
+    <div class="table-wrapper">
+      <div class="materials mt-3">
+        <h6 class="f-6 font-weight-bold c-dark">Video</h6>
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="checkbox-col border-top-0">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectAllVideos"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="selectAllVideos"
+                  ></label>
+                </div>
+              </th>
+              <th class="thumbnail-col border-top-0">
+                <span class="f-1">NAME</span>
+              </th>
+              <th class="name-col border-top-0">
+                
+              </th>
+              <th class="view-col border-top-0 text-right">
+                <span class="f-1">VIEWS</span>
+              </th>
+              <th class="time-col border-top-0">
+                <span class="f-1">ADDED</span>
+              </th>
+              <th class="capture-col border-top-0">
+                <span class="f-1">LEAD CAPTURE</span>
+              </th>
+              <th class="actions-col border-top-0">
+                
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let video of (storeService.videos$ | async)">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="video-{{video._id}}">
+                  <label class="custom-control-label" for="video-{{video._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
+                  </div>
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
+                  </div>
+                </a>
+                <h5 class="f-3 font-weight-bold c-dark m-0">{{video.title}}</h5>
+                <span class="f-1 c-dark">{{video.description | slice: 0:120}}</span>
+                <div class="f-3 c-dark view-field">
+                  {{video.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-3 c-dark py-2">
+                  {{video.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-3 c-dark">
+                <div class="v-centerf-3 c-dark py-2">
+                  {{video.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="capture-switch-{{video._id}}">
+                  <label class="custom-control-label" for="capture-switch-{{video._id}}"></label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bg-white border-0 py-2">
+                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bg-white border-0 py-2">
+                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bg-white border-0 py-2">
+                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch py-2">
+                    <input type="checkbox" class="custom-control-input" id="switch-{{video._id}}">
+                    <label class="custom-control-label" for="switch-{{video._id}}"></label>
+                  </div>
+                  <button class="v-center bg-white border-0">
+                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="selectedTab.label == 'ALL' || selectedTab.label == 'PDF'">
+    <div class="table-wrapper">
+      <div class="materials mt-3">
+        <h6 class="f-6 font-weight-bold c-dark">PDF</h6>
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="checkbox-col border-top-0">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectAllPdfs"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="selectAllPdfs"
+                  ></label>
+                </div>
+              </th>
+              <th class="thumbnail-col border-top-0">
+                <span class="f-1">NAME</span>
+              </th>
+              <th class="name-col border-top-0">
+                
+              </th>
+              <th class="view-col border-top-0 text-right">
+                <span class="f-1">VIEWS</span>
+              </th>
+              <th class="time-col border-top-0">
+                <span class="f-1">ADDED</span>
+              </th>
+              <th class="capture-col border-top-0">
+                <span class="f-1">LEAD CAPTURE</span>
+              </th>
+              <th class="actions-col border-top-0">
+                
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="selectedTab.label == 'ALL' || selectedTab.label == 'IMAGE'">
+    <div class="table-wrapper">
+      <div class="materials mt-3">
+        <h6 class="f-6 font-weight-bold c-dark">Image</h6>
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="checkbox-col border-top-0">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectAllPdfs"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="selectAllPdfs"
+                  ></label>
+                </div>
+              </th>
+              <th class="thumbnail-col border-top-0">
+                <span class="f-1">NAME</span>
+              </th>
+              <th class="name-col border-top-0">
+                
+              </th>
+              <th class="view-col border-top-0 text-right">
+                <span class="f-1">VIEWS</span>
+              </th>
+              <th class="time-col border-top-0">
+                <span class="f-1">ADDED</span>
+              </th>
+              <th class="capture-col border-top-0">
+                <span class="f-1">LEAD CAPTURE</span>
+              </th>
+              <th class="actions-col border-top-0">
+                
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </ng-container>
 </div>
