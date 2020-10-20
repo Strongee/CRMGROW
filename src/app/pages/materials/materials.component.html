@@ -3,22 +3,28 @@
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
     <div class="v-center">
-      <button class="v-center btn btn-blue text-white">
+      <button class="v-center btn btn-blue f-6 font-weight-bold text-white">
         <i class="bg-white i-icon i-record mr-2"></i>
         Record new video
       </button>
       <div ngbDropdown class="ml-3 actions-groups">
-        <a class="c-pointer" ngbDropdownToggle>
+        <a class="f-6 font-weight-bold c-dark c-pointer button-add" ngbDropdownToggle>
           Add new
         </a>
         <div ngbDropdownMenu>
-          <div class="v-center ml-3 c-pointer">
-            <i class="i-icon i-upload tab-icon" aria-hidden="true"></i>
-            <a class="dropdown-item">New file upload</a>
+          <div class="d-flex c-pointer">
+            <i class="i-icon i-upload tab-icon mt-1" aria-hidden="true"></i>
+            <div class="ml-1 p-2 dropdown-items rounded">
+              <a class="dropdown-item f-6 c-dark font-weight-bold p-0">New file upload</a>
+              <span class="f-1 c-dark sm-menu-title">You can upload Video, PDF or Image</span>
+            </div>
           </div>
-          <div class="v-center ml-3 c-pointer">
-            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
-            <a class="dropdown-item">New folder</a>
+          <div class="d-flex c-pointer">
+            <i class="i-icon i-notification tab-icon mt-1" aria-hidden="true"></i>
+            <div class="ml-1 p-2 dropdown-items rounded">
+              <a class="dropdown-item f-6 c-dark font-weight-bold p-0">New folder</a>
+              <span class="f-1 c-dark sm-menu-title">Add new folder to organize your files</span>
+            </div>
           </div>
         </div>
       </div>
@@ -28,28 +34,28 @@
     <h6 class="f-6 font-weight-bold c-dark mb-4">Folders</h6>
     <div class="row">
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 material-folder">
+        <div class="v-center justify-content-between p-3 material-folder rounded">
           <div class="v-center">
             <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
-            <span class="f-3 ml-2">Provided Material</span>
+            <span class="f-4 c-dark font-weight-bold ml-2">Provided Material</span>
           </div>
           <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 material-folder">
+        <div class="v-center justify-content-between p-3 material-folder rounded">
           <div class="v-center">
             <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
-            <span class="f-3 ml-2">Own Material</span>
+            <span class="f-4 c-dark font-weight-bold ml-2">Own Material</span>
           </div>
           <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 material-folder">
+        <div class="v-center justify-content-between p-3 material-folder rounded">
           <div class="v-center">
             <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
-            <span class="f-3 ml-2">Team Dynasty</span>
+            <span class="f-4 c-dark font-weight-bold ml-2">Team Dynasty</span>
           </div>
           <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
         </div>
@@ -77,19 +83,19 @@
                 </div>
               </th>
               <th class="thumbnail-col border-top-0">
-                <span class="f-1">NAME</span>
+                <span class="f-1 c-dark">NAME</span>
               </th>
               <th class="name-col border-top-0">
                 
               </th>
               <th class="view-col border-top-0 text-right">
-                <span class="f-1">VIEWS</span>
+                <span class="f-1 c-dark">VIEWS</span>
               </th>
               <th class="time-col border-top-0">
-                <span class="f-1">ADDED</span>
+                <span class="f-1 c-dark">ADDED</span>
               </th>
-              <th class="capture-col border-top-0">
-                <span class="f-1">LEAD CAPTURE</span>
+              <th class="capture-col border-top-0 px-0">
+                <span class="f-1 c-dark">LEAD CAPTURE</span>
               </th>
               <th class="actions-col border-top-0">
                 
@@ -107,61 +113,85 @@
               <td class="thumbnail-col">
                 <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
                   <div class="thumb-prev-wrapper">
-                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
-                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
                   </div>
                 </a>
               </td>
               <td class="name-col">
                 <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
                   <div class="thumb-prev-wrapper">
-                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
-                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );"/>
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
                   </div>
                 </a>
-                <h5 class="f-3 font-weight-bold c-dark m-0">{{video.title}}</h5>
+                <h5 class="f-4 font-weight-bold c-dark m-0">{{video.title}}</h5>
                 <span class="f-1 c-dark">{{video.description | slice: 0:120}}</span>
-                <div class="f-3 c-dark view-field">
+                <div class="f-4 c-dark view-field">
                   {{video.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
                 </div>
               </td>
               <td class="view-col">
-                <div class="v-center justify-content-end f-3 c-dark py-2">
+                <div class="v-center justify-content-end f-4 c-dark py-2">
                   {{video.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
                 </div>
               </td>
-              <td class="time-col f-3 c-dark">
-                <div class="v-centerf-3 c-dark py-2">
+              <td class="time-col f-4 c-dark">
+                <div class="v-centerf-4 c-dark py-2">
                   {{video.created_at | date : 'mediumDate'}}
                 </div>
               </td>
               <td class="capture-col text-right">
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="capture-switch-{{video._id}}">
-                  <label class="custom-control-label" for="capture-switch-{{video._id}}"></label>
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input type="checkbox">
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
                 </div>
               </td>
               <td class="actions-col">
                 <div class="v-center justify-content-between actions-wrapper">
-                  <button class="v-center bg-white border-0 py-2">
-                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Send</span>
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-sent tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Send</span>
                   </button>
-                  <button class="v-center bg-white border-0 py-2">
-                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-copy tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bg-white border-0 py-2">
-                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Share</span>
                   </button>
-                  <div class="custom-control custom-switch py-2">
-                    <input type="checkbox" class="custom-control-input" id="switch-{{video._id}}">
-                    <label class="custom-control-label" for="switch-{{video._id}}"></label>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
                   </div>
-                  <button class="v-center bg-white border-0">
-                    <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
-                  </button>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-template tab-icon" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="p-3">
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-edit tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-template tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-trash tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -202,7 +232,7 @@
               <th class="time-col border-top-0">
                 <span class="f-1">ADDED</span>
               </th>
-              <th class="capture-col border-top-0">
+              <th class="capture-col border-top-0 px-0">
                 <span class="f-1">LEAD CAPTURE</span>
               </th>
               <th class="actions-col border-top-0">
@@ -246,7 +276,7 @@
               <th class="time-col border-top-0">
                 <span class="f-1">ADDED</span>
               </th>
-              <th class="capture-col border-top-0">
+              <th class="capture-col border-top-0 px-0">
                 <span class="f-1">LEAD CAPTURE</span>
               </th>
               <th class="actions-col border-top-0">
