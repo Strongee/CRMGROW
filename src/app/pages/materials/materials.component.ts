@@ -26,7 +26,9 @@ export class MaterialsComponent implements OnInit {
 
   ngOnInit(): void {
     this.materialService.loadVideos();
-    console.log('###', this.storeService.videos$);
+    this.materialService.loadPdfs();
+    this.materialService.loadImages();
+    console.log('###', this.storeService.images$);
   }
 
   changeTab(tab: TabItem): void {

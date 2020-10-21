@@ -240,6 +240,94 @@
               </th>
             </tr>
           </thead>
+          <tbody>
+            <tr *ngFor="let pdf of (storeService.pdfs$ | async)">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="pdf-{{pdf._id}}">
+                  <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-4 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
+                <span class="f-1 c-dark">{{pdf.description | slice: 0:120}}</span>
+                <div class="f-4 c-dark view-field">
+                  {{pdf.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-4 c-dark py-2">
+                  {{pdf.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-4 c-dark">
+                <div class="v-centerf-4 c-dark py-2">
+                  {{pdf.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input type="checkbox">
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-sent tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-copy tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-template tab-icon" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="p-3">
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-edit tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-template tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-trash tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -256,11 +344,11 @@
                   <input
                     type="checkbox"
                     class="custom-control-input"
-                    id="selectAllPdfs"
+                    id="selectAllImages"
                   />
                   <label
                     class="custom-control-label"
-                    for="selectAllPdfs"
+                    for="selectAllImages"
                   ></label>
                 </div>
               </th>
@@ -284,6 +372,94 @@
               </th>
             </tr>
           </thead>
+          <tbody>
+            <tr *ngFor="let image of (storeService.images$ | async)">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="image-{{image._id}}">
+                  <label class="custom-control-label" for="image-{{image._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-4 font-weight-bold c-dark m-0">{{image.title}}</h5>
+                <span class="f-1 c-dark">{{image.description | slice: 0:120}}</span>
+                <div class="f-4 c-dark view-field">
+                  {{image.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-4 c-dark py-2">
+                  {{image.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-4 c-dark">
+                <div class="v-centerf-4 c-dark py-2">
+                  {{image.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input type="checkbox">
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-sent tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-copy tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bg-white border-0 py-2 rounded">
+                    <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-template tab-icon" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="p-3">
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-edit tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-template tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-trash tab-icon ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>

@@ -84,12 +84,23 @@ table.table th {
     top: 0px;
     background-color: white;
     z-index: 11;
-    opacity: 0.56;
 }
 
 th, td {
     vertical-align: middle !important;
     background-color: white;
+    &.checkbox-col {
+        opacity: 1;
+    }
+    .custom-control-input {
+        &:focus {
+            ~ .custom-control-label {
+                &::before {
+                    border: rgba(16, 19, 54, 0.4) solid 2px;
+                }
+            }
+        }
+    }
 }
 .checkbox-col {
     width: 36px;
