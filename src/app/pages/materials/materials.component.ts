@@ -28,7 +28,6 @@ export class MaterialsComponent implements OnInit {
     this.materialService.loadVideos();
     this.materialService.loadPdfs();
     this.materialService.loadImages();
-    console.log('###', this.storeService.images$);
   }
 
   changeTab(tab: TabItem): void {
