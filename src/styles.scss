@@ -82,6 +82,15 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .bgc-trans {
   background-color: transparent;
 }
+.op-08 {
+  opacity: 0.08;
+}
+.op-56 {
+  opacity: 0.56;
+}
+.op-75 {
+  opacity: 0.75;
+}
 .c-blue {
   color: #0000ff;
 }
@@ -185,7 +194,7 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   mask-image: url('./assets/img/download.svg');
 }
 .i-edit{
-  mask-image: url('./assets/img/Edit.svg');
+  mask-image: url('./assets/img/edit.svg');
 }
 .i-follow{
   mask-image: url('./assets/img/Follow.svg');
@@ -273,6 +282,12 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .i-social {
   mask-image: url('./assets/img/close.svg');
+}
+.i-folder {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-menu-more {
+  mask-image: url('./assets/img/more_menu.svg');
 }
 .i-record{
   mask-image: url('./assets/img/record.svg');
@@ -434,6 +449,11 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 
 // Button Style
+button {
+  &:focus {
+      outline: none;
+  }
+}
 .btn-blue {
   background-color: $color-blue;
   border-color: $color-blue;
@@ -565,7 +585,14 @@ ul {
   padding-left: 1rem;
   padding-right: 1rem;
 }
+.dropdown-menu.light .dropdown-item:active {
+  color: #fff!important;
+  background-color: $color-blue;
 
+  .i-icon {
+    background-color: #fff!important;
+  }
+}
 
 // Body Style
 body{

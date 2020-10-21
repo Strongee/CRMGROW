@@ -7,23 +7,23 @@
         <i class="bg-white i-icon i-record mr-2"></i>
         Record new video
       </button>
-      <div ngbDropdown class="ml-3 actions-groups">
-        <a class="f-6 font-weight-bold c-dark c-pointer button-add" ngbDropdownToggle>
+      <div ngbDropdown class="ml-3 actions-groups rounded-pill py-1">
+        <div class="f-6 font-weight-bold c-dark c-pointer px-3 py-2 button-add" ngbDropdownToggle>
           Add new
-        </a>
-        <div ngbDropdownMenu>
-          <div class="d-flex c-pointer">
-            <i class="i-icon i-upload tab-icon mt-1" aria-hidden="true"></i>
-            <div class="ml-1 p-2 dropdown-items rounded">
-              <a class="dropdown-item f-6 c-dark font-weight-bold p-0">New file upload</a>
-              <span class="f-1 c-dark sm-menu-title">You can upload Video, PDF or Image</span>
+        </div>
+        <div ngbDropdownMenu class="light">
+          <div class="d-flex c-dark dropdown-item py-2">
+            <i class="i-icon i-upload bg-dark mt-1" aria-hidden="true"></i>
+            <div class="ml-1 px-2">
+              <div class="f-6 font-weight-bold">New file upload</div>
+              <div class="f-1 op-56">You can upload Video, PDF or Image</div>
             </div>
           </div>
-          <div class="d-flex c-pointer">
-            <i class="i-icon i-notification tab-icon mt-1" aria-hidden="true"></i>
-            <div class="ml-1 p-2 dropdown-items rounded">
-              <a class="dropdown-item f-6 c-dark font-weight-bold p-0">New folder</a>
-              <span class="f-1 c-dark sm-menu-title">Add new folder to organize your files</span>
+          <div class="d-flex c-dark dropdown-item py-2">
+            <i class="i-icon i-folder bg-dark mt-1" aria-hidden="true"></i>
+            <div class="ml-1 px-2">
+              <div class="f-6 font-weight-bold">New folder</div>
+              <div class="f-1 op-56">Add new folder to organize your files</div>
             </div>
           </div>
         </div>
@@ -34,30 +34,30 @@
     <h6 class="f-6 font-weight-bold c-dark mb-4">Folders</h6>
     <div class="row">
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 material-folder rounded">
+        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
           <div class="v-center">
-            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+            <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
             <span class="f-4 c-dark font-weight-bold ml-2">Provided Material</span>
           </div>
-          <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 material-folder rounded">
+        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
           <div class="v-center">
-            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+            <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
             <span class="f-4 c-dark font-weight-bold ml-2">Own Material</span>
           </div>
-          <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 material-folder rounded">
+        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
           <div class="v-center">
-            <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+            <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
             <span class="f-4 c-dark font-weight-bold ml-2">Team Dynasty</span>
           </div>
-          <i class="i-icon i-notification tab-icon" aria-hidden="true"></i>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
         </div>
       </div>
     </div>
@@ -128,12 +128,12 @@
                 <h5 class="f-4 font-weight-bold c-dark m-0">{{video.title}}</h5>
                 <span class="f-1 c-dark">{{video.description | slice: 0:120}}</span>
                 <div class="f-4 c-dark view-field">
-                  {{video.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                  {{video.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>
               </td>
               <td class="view-col">
                 <div class="v-center justify-content-end f-4 c-dark py-2">
-                  {{video.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                  {{video.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>
               </td>
               <td class="time-col f-4 c-dark">
@@ -152,15 +152,15 @@
               <td class="actions-col">
                 <div class="v-center justify-content-between actions-wrapper">
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-sent tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-sent bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Send</span>
                   </button>
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-copy tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-copy bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Copy link</span>
                   </button>
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Share</span>
                   </button>
                   <div class="custom-control custom-switch p-0">
@@ -171,24 +171,24 @@
                   </div>
                   <div ngbDropdown class="button-more p-2 rounded">
                     <a class="d-flex c-pointer" ngbDropdownToggle>
-                      <i class="i-icon i-template tab-icon" aria-hidden="true"></i>
+                      <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                     </a>
-                    <div ngbDropdownMenu class="p-3">
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-edit tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit</span>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit</span>
                       </button>
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-template tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit template</span>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-template bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Duplicate</span>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-trash tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Delete</span>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Delete</span>
                       </button>
                     </div>
                   </div>
@@ -260,12 +260,12 @@
                 <h5 class="f-4 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
                 <span class="f-1 c-dark">{{pdf.description | slice: 0:120}}</span>
                 <div class="f-4 c-dark view-field">
-                  {{pdf.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                  {{pdf.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>
               </td>
               <td class="view-col">
                 <div class="v-center justify-content-end f-4 c-dark py-2">
-                  {{pdf.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                  {{pdf.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>
               </td>
               <td class="time-col f-4 c-dark">
@@ -284,15 +284,15 @@
               <td class="actions-col">
                 <div class="v-center justify-content-between actions-wrapper">
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-sent tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-sent bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Send</span>
                   </button>
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-copy tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-copy bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Copy link</span>
                   </button>
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Share</span>
                   </button>
                   <div class="custom-control custom-switch p-0">
@@ -303,23 +303,23 @@
                   </div>
                   <div ngbDropdown class="button-more p-2 rounded">
                     <a class="d-flex c-pointer" ngbDropdownToggle>
-                      <i class="i-icon i-template tab-icon" aria-hidden="true"></i>
+                      <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="p-3">
                       <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-edit tab-icon ml-1" aria-hidden="true"></i>
+                        <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-4 c-dark font-weight-bold">Edit</span>
                       </button>
                       <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-template tab-icon ml-1" aria-hidden="true"></i>
+                        <i class="i-icon i-template bg-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-4 c-dark font-weight-bold">Edit template</span>
                       </button>
                       <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                        <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-4 c-dark font-weight-bold">Duplicate</span>
                       </button>
                       <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-trash tab-icon ml-1" aria-hidden="true"></i>
+                        <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-4 c-dark font-weight-bold">Delete</span>
                       </button>
                     </div>
@@ -392,12 +392,12 @@
                 <h5 class="f-4 font-weight-bold c-dark m-0">{{image.title}}</h5>
                 <span class="f-1 c-dark">{{image.description | slice: 0:120}}</span>
                 <div class="f-4 c-dark view-field">
-                  {{image.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                  {{image.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>
               </td>
               <td class="view-col">
                 <div class="v-center justify-content-end f-4 c-dark py-2">
-                  {{image.views}} <i class="i-icon i-notification tab-icon ml-1" aria-hidden="true"></i>
+                  {{image.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>
               </td>
               <td class="time-col f-4 c-dark">
@@ -416,15 +416,15 @@
               <td class="actions-col">
                 <div class="v-center justify-content-between actions-wrapper">
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-sent tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-sent bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Send</span>
                   </button>
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-copy tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-copy bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Copy link</span>
                   </button>
                   <button class="v-center bg-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
+                    <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-4 c-dark">Share</span>
                   </button>
                   <div class="custom-control custom-switch p-0">
@@ -435,24 +435,24 @@
                   </div>
                   <div ngbDropdown class="button-more p-2 rounded">
                     <a class="d-flex c-pointer" ngbDropdownToggle>
-                      <i class="i-icon i-template tab-icon" aria-hidden="true"></i>
+                      <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                     </a>
-                    <div ngbDropdownMenu class="p-3">
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-edit tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit</span>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit</span>
                       </button>
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-template tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit template</span>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-template bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-share tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Duplicate</span>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
-                        <i class="i-icon i-trash tab-icon ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4 c-dark font-weight-bold">Delete</span>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Delete</span>
                       </button>
                     </div>
                   </div>
