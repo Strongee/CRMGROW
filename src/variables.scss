@@ -5,3 +5,13 @@ $color-red: #E02020;
 $color-blue-weak: #5050fd;
 $color-trans08: rgba(16 19 54/0.08);
 $color-trans75: rgba(16 19 54/0.75);
+$color-white: #FFFFFF;
+$color-black: #000000;
+
+// Custom toggle
+
+$custom-toggle-width:           45px !default;
+$custom-toggle-slider-bg:       $color-silver !default;
+$custom-toggle-checked-bg:      $color-blue !default;
+
+$input-transition: all .3s ease-in-out;

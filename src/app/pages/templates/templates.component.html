@@ -1,1 +1,82 @@
-<p>templates works!</p>
+<div class="page-content">
+  <div class="my-2">
+    <div class="d-flex justify-content-between">
+      <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Templates</h6>
+      <a class="btn btn-primary btn-sm br-default mb-2" [routerLink]="['/templates/new']">+ New template</a>
+    </div>
+    <div class="my-3">
+      <ng-container *ngIf="isLoading">
+        <p>Loading</p>
+      </ng-container>
+      <ng-container *ngIf="!isLoading && !count">
+        <p>There is no template data</p>
+      </ng-container>
+      <ng-container *ngIf="!isLoading && count">
+        <div class="d-flex justify-content-end align-items-center my-2">
+          <div class="call-request-count" *ngIf="count">{{count}} template(s)</div>
+          <div class="ml-3 pagination-wrapper" *ngIf="count">
+            <pagination-controls (pageChange)="setPageTemplate($event)" id="templateTable" maxSize="10" previousLabel=""
+                                 nextLabel=""></pagination-controls>
+          </div>
+        </div>
+        <table class="table template-table">
+          <thead>
+          <th>Title</th>
+          <th>Owner</th>
+          <th>Template</th>
+          <th>Type</th>
+          <th>Default</th>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let template of templates
+              | paginate : {id: 'templateTable', itemsPerPage: 10, currentPage: currentTemplatePage, totalItems: count}
+            ">
+              <td class="template-title">
+                <a [routerLink]="['/templates/' + template._id]"
+                   class="hover-bottom font-weight-bold f-4">{{template.title}}</a>
+              </td>
+              <td class="template-auth">
+                <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
+              </td>
+              <td class="template-content">
+                <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripe | slice:0:40}}</h5>
+                <span [innerHTML]="template.content | stripe | slice:0:80"></span>
+              </td>
+              <td class="text-capitalize">
+                <div class="v-center">
+                  <ng-container *ngIf="template.type=='text'; else emailType">
+                    <i class="i-icon bgc-dark i-phone mr-2"></i>
+                    <span class="f-4 menu-label font-weight-bold ml-1">{{template.type}}</span>
+                  </ng-container>
+                  <ng-template #emailType>
+                    <i class="i-icon bgc-dark i-message mr-2"></i>
+                    <span class="f-4 menu-label font-weight-bold ml-1">E-mail</span>
+                  </ng-template>
+                </div>
+              </td>
+              <td class="template-action">
+                <div class="v-center">
+                  <label class="custom-toggle mb-0" placement="top" ngbTooltip="Set as {{template.type == 'email' ? 'Default Email' : 'Default Text'}}">
+                    <input type="checkbox" [checked]="template._id == emailDefault || template._id == smsDefault" (change)="setDefault(template)">
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                  <div class="v-center ml-4">
+                    <ng-container *ngIf="template.role != 'admin' && template.user == userId">
+                      <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" [class.disabled]="template.role == 'admin'">
+                        <i class="i-icon bgc-dark i-edit"></i>
+                      </div>
+                      <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)" [class.disabled]="template.role == 'admin'">
+                        <i class="i-icon bgc-dark i-trash ml-2"></i>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,7 @@ import { SettingsComponent } from 'src/app/pages/settings/settings.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 import { TeamsComponent } from 'src/app/pages/teams/teams.component';
 import { TemplatesComponent } from 'src/app/pages/templates/templates.component';
+import { TemplateComponent } from 'src/app/pages/template/template.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -101,6 +102,20 @@ export const AdminLayoutRoutes: Routes = [
     component: AffiliateComponent,
     data: {
       title: 'Affiliate'
+    }
+  },
+  {
+    path: 'templates/new',
+    component: TemplateComponent,
+    data: {
+      title: 'Template'
+    }
+  },
+  {
+    path: 'templates/:id',
+    component: TemplateComponent,
+    data: {
+      title: 'Template'
     }
   }
 ];

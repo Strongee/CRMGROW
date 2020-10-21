@@ -92,7 +92,8 @@ export const ROUTES: RouteInfo[] = [
     betaClass: '',
     betaLabel: '',
     protectedRole: null
-  }
+  },
+
 ];
 
 @Component({

@@ -1,6 +1,7 @@
 import { Deserializable } from './deserialize.model';
 
 export class User implements Deserializable {
+  _id?: string;
   user_name?: string;
   nick_name?: string;
   email?: string;

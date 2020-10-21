@@ -6,9 +6,11 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
+import { StripePipe } from '../../pipes/stripe.pipe';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-  declarations: [],
+  declarations: [StripePipe],
   imports: [
     CommonModule,
     NgbModule,
@@ -17,7 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
-    MatDialogModule
+    MatDialogModule,
+    QuillModule.forRoot()
   ],
   exports: [
     NgbModule,
@@ -26,7 +29,9 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
-    MatDialogModule
+    MatDialogModule,
+    StripePipe,
+    QuillModule
   ]
 })
 export class SharedModule {}

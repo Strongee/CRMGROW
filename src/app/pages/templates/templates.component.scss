@@ -1,0 +1,50 @@
+@import '../../../variables';
+
+.role{
+  font-size: 10px;
+  font-weight: bold;
+  padding: 3px 8px;
+  background: #f28422;
+  border-radius: 3px;
+  width: fit-content;
+  color: white;
+  line-height: 14px;
+  &.admin {
+    background-color: $color-blue;
+  }
+  &.team {
+    background-color: #1ca57a;
+  }
+  &.shared {
+    background-color: #b72ad8;
+  }
+  &::after {
+    content: "OWN"
+  }
+  &.admin::after {
+    content: "ADMIN"
+  }
+  &.team::after {
+    content: "TEAM"
+  }
+  &.shared::after {
+    content: 'SHARED'
+  }
+}
+
+.template-table {
+  tr td {
+    height: 70px;
+  }
+}
+
+.icon-button {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+}

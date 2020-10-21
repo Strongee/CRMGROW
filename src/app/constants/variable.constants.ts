@@ -70,3 +70,19 @@ export const TIMEZONE = [
     ]
   }
 ];
+
+export const QuillEditor = {
+  toolbar: {
+    container: [
+      [{ font: [] }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ header: 1 }, { header: 2 }],
+      [{ color: [] }, { background: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ align: [] }],
+      ['link', 'image']
+    ]
+  },
+  imageResize: true
+};

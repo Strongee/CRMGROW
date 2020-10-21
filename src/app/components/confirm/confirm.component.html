@@ -1,0 +1,10 @@
+<h2 class="d-flex mx-0 title" mat-dialog-title *ngIf="data['title']">
+  {{data['title']}}
+</h2>
+<mat-dialog-content class="description">
+  {{data['message']}}
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="mx-0">
+  <button class="cancel btn btn-primary bg-white c-blue btn-sm br-default mr-2 mb-2 f-5 font-weight-bold" [mat-dialog-close]="false">{{data['cancelLabel'] || 'Cancel'}}</button>
+  <button class="btn btn-primary btn-sm br-default mb-2 f-5 font-weight-bold" [mat-dialog-close]="true" cdkFocusInitial>{{data['confirmLabel'] || 'OK'}}</button>
+</mat-dialog-actions>

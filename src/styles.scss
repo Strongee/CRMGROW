@@ -9,6 +9,9 @@ $custom-checkbox-indicator-border-radius: 3px;
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import '~ngx-toastr/toastr-bs4-alert';
+@import "./variables";
+@import "src/assets/scss/custom-toggle";
+@import "src/assets/scss/custom-radio";
 
 /* You can add global styles to this file, and also import other style files */
 $color-dark: #101336;
@@ -118,6 +121,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .c-pale {
   color: #f6f5ff;
+}
+.c-black {
+  color: #000000;
 }
 .f-0{
   font-size: 10px;
@@ -298,7 +304,7 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   padding-bottom: 2rem!important;
 }
 .p-4c{
-  padding: 2rem!important;  
+  padding: 2rem!important;
 }
 .px-4c{
   padding-left: 2rem!important;
@@ -322,7 +328,7 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
     padding-bottom: 2rem!important;
   }
   .p-sm-4c{
-    padding: 2rem!important;  
+    padding: 2rem!important;
   }
   .px-sm-4c{
     padding-left: 2rem!important;
@@ -347,7 +353,7 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
     padding-bottom: 2rem!important;
   }
   .p-md-4c{
-    padding: 2rem!important;  
+    padding: 2rem!important;
   }
   .px-md-4c{
     padding-left: 2rem!important;
@@ -372,7 +378,7 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
     padding-bottom: 2rem!important;
   }
   .p-lg-4c{
-    padding: 2rem!important;  
+    padding: 2rem!important;
   }
   .px-lg-4c{
     padding-left: 2rem!important;
@@ -397,7 +403,7 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
     padding-bottom: 2rem!important;
   }
   .p-xl-4c{
-    padding: 2rem!important;  
+    padding: 2rem!important;
   }
   .px-xl-4c{
     padding-left: 2rem!important;
@@ -413,6 +419,11 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .shadow-1 {
   box-shadow: 0 5px 16px -5px rgba(16, 19, 54, 0.35);
 }
+
+.shadow-2 {
+  box-shadow: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+}
+
 // Align and Cursor, Text Utility Style
 .v-center {
   display: flex;
@@ -517,7 +528,7 @@ ul {
     background-color: white;
     padding: 0.5em 3em 0.5em 1em;
     /* reset */
-    margin: 0;      
+    margin: 0;
     box-sizing: border-box;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -599,7 +610,7 @@ body{
     padding-top: 63px;
     margin-left: 160px;
     min-height: 100vh;
-    padding-bottom: 16px;
+    padding-bottom: 0px;
   }
 
   &.has-topbar {
@@ -613,7 +624,7 @@ body{
       padding-top: 113px;
     }
   }
-  
+
   .page-content {
     padding: 2rem;
   }
@@ -697,7 +708,7 @@ body{
     object-fit: cover;
     border-radius: 50%;
   }
-  
+
   .btn-icon {
     position: absolute;
     bottom: 0px;
@@ -707,4 +718,35 @@ body{
       min-width: 14px;
     }
   }
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+
+  thead th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-top: none;
+    border-bottom: 2px solid #e9ecef;
+    color: #101336;
+    opacity: 0.6;
+    font-weight: bold;
+    padding: 5px 10px;
+    vertical-align: middle;
+  }
+
+  td {
+    padding: 5px 10px;
+    vertical-align: middle;
+    font-size: 0.8rem;
+    border-top: none;
+  }
+
 }
