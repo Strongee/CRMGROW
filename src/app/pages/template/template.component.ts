@@ -24,7 +24,8 @@ export class TemplateComponent implements OnInit, OnDestroy {
   };
   isNew = true;
   type = true;
-  templateType = 'email';
+  emailType = 'checked';
+  textType = '';
   typeFlag = true;
   role = '';
   id = '';
@@ -46,6 +47,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
   smsContentCursorStart = 0;
   smsContentCursorEnd = 0;
   smsContent = '';
+  focusEditor = '';
 
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
@@ -70,8 +72,14 @@ export class TemplateComponent implements OnInit, OnDestroy {
   }
 
   changeType(type): void {
-    this.templateType = this.templateType == 'email' ? 'text' : 'email';
-    this.type = this.templateType == 'email' ? true : false;
+    if (type === 'email') {
+      this.emailType = 'checked';
+      this.textType = '';
+    } else {
+      this.textType = 'checked';
+      this.emailType = '';
+    }
+    this.type = type === 'email' ? true : false;
   }
 
   saveTemplate(): void {
@@ -116,6 +124,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.loadSubcription && this.loadSubcription.unsubscribe();
     this.loadSubcription = this.templatesService.read(id).subscribe(
       (res) => {
+        console.log("load template ===============>", res);
         this.id = id;
         this.isLoading = false;
         this.template.title = res.title;
@@ -123,7 +132,13 @@ export class TemplateComponent implements OnInit, OnDestroy {
         this.template.content = res.content;
         this.role = res.role;
         this.type = res.type === 'email';
-        this.templateType = res.type ? 'email' : 'text';
+        if (res.type === 'email') {
+          this.emailType = 'checked';
+          this.textType = '';
+        } else {
+          this.textType = 'checked';
+          this.emailType = '';
+        }
         if (this.type) {
           this.subject = this.template.subject;
         } else {
@@ -145,6 +160,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
    * @param field : Input text field of the subject
    */
   getSubjectCursorPost(field): void {
+    this.setFocusField('subject');
     if (field.selectionStart || field.selectionStart === '0') {
       this.subjectCursorStart = field.selectionStart;
     }
@@ -152,7 +168,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       this.subjectCursorEnd = field.selectionEnd;
     }
   }
-  insertSubjectValue(value, field): void {
+  insertSubjectValue(value): void {
     this.subject =
       this.subject.substr(0, this.subjectCursorStart) +
       value +
@@ -162,7 +178,6 @@ export class TemplateComponent implements OnInit, OnDestroy {
       );
     this.subjectCursorStart = this.subjectCursorStart + value.length;
     this.subjectCursorEnd = this.subjectCursorStart;
-    field.focus();
   }
   getEditorInstance(editorInstance: any): void {
     this.quillEditorRef = editorInstance;
@@ -184,8 +199,17 @@ export class TemplateComponent implements OnInit, OnDestroy {
       'user'
     );
   }
-
+  insertValue(value): void {
+    if (this.focusEditor === 'subject') {
+      this.insertSubjectValue(value);
+    } else if (this.focusEditor === 'content-email') {
+      this.insertEmailContentValue(value);
+    } else if (this.focusEditor === 'content-text') {
+      this.insertSmsContentValue(value);
+    }
+  }
   getSmsContentCursor(field): void {
+    this.setFocusField('content-text');
     if (field.selectionStart || field.selectionStart === '0') {
       this.smsContentCursorStart = field.selectionStart;
     }
@@ -194,7 +218,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
     }
   }
 
-  insertSmsContentValue(value, field): void {
+  insertSmsContentValue(value): void {
     this.smsContent =
       this.smsContent.substr(0, this.smsContentCursorStart) +
       value +
@@ -204,7 +228,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       );
     this.smsContentCursorStart = this.smsContentCursorStart + value.length;
     this.smsContentCursorEnd = this.smsContentCursorStart;
-    field.focus();
+    // field.focus();
   }
 
   initImageHandler = () => {
@@ -230,5 +254,8 @@ export class TemplateComponent implements OnInit, OnDestroy {
     // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
     this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
     this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
+  }
+  setFocusField(editorType): void {
+    this.focusEditor = editorType;
   }
 }

@@ -8,14 +8,15 @@
         <ng-template #editTemplate>
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Edit template</h6>
         </ng-template>
+
       </div>
       <div class="v-center mt-3">
         <div class="custom-radio-container">
-          <input class="custom-radio" type="radio" id="template-type-email" name="template-type" [(ngModel)]="templateType" [value]="'email'" (click)="changeType($event)">
+          <input class="custom-radio" type="radio" id="template-type-email" name="template-type" [checked]="emailType"  (click)="changeType('email')">
           <label class="f-6 font-weight-bold" for="template-type-email">E-mail</label>
         </div>
         <div class="custom-radio-container">
-          <input class="custom-radio" type="radio" id="template-type-text" name="template-type" [(ngModel)]="templateType" [value]="'text'" (click)="changeType($event)">
+          <input class="custom-radio" type="radio" id="template-type-text" name="template-type" [checked]="textType" (click)="changeType('text')">
           <label class="f-6 font-weight-bold" for="template-type-text">Text</label>
         </div>
       </div>
@@ -49,68 +50,6 @@
         <ng-container *ngIf="type; else textTemplate">
           <div class="form-group">
             <label>Subject</label>
-            <div class="d-flex flex-wrap field-actions mb-2">
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{user_name}', subjectField)"
-              >
-                Your Name
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{user_email}', subjectField)"
-              >
-                Your Email
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{user_phone}', subjectField)"
-              >
-                Your Phone
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSubjectValue('{contact_first_name}', subjectField)
-              "
-              >
-                Contact Firstname
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSubjectValue('{contact_last_name}', subjectField)
-              "
-              >
-                Contact Lastname
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{contact_email}', subjectField)"
-              >
-                Contact Email
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{contact_phone}', subjectField)"
-              >
-                Contact Phone
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{material_title}', subjectField)"
-              >
-                Material Title
-              </button>
-            </div>
             <input
               type="text"
               class="form-control"
@@ -134,57 +73,6 @@
           </div>
           <div class="form-group">
             <label>Content</label>
-            <div class="d-flex flex-wrap field-actions mb-2">
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{user_name}')"
-              >
-                Your Name
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{user_email}')"
-              >
-                Your Email
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{user_phone}')"
-              >
-                Your Phone
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_first_name}')"
-              >
-                Contact Firstname
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_last_name}')"
-              >
-                Contact Lastname
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_email}')"
-              >
-                Contact Email
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_phone}')"
-              >
-                Contact Phone
-              </button>
-            </div>
             <quill-editor
               image-resize="true"
               placeholder="Enter Text"
@@ -195,6 +83,7 @@
               #mailContent="ngModel"
               required
               (onEditorCreated)="getEditorInstance($event)"
+              (click)="setFocusField('content-email')"
               class="rounded"
               [class.has-error]="
               mailContent.errors &&
@@ -219,77 +108,6 @@
           <div></div>
           <div class="form-group">
             <label>Content</label>
-            <div class="d-flex flex-wrap field-actions mb-2">
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSmsContentValue('{user_name}', smsContentField)
-              "
-              >
-                Your Name
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSmsContentValue('{user_email}', smsContentField)
-              "
-              >
-                Your Email
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSmsContentValue('{user_phone}', smsContentField)
-              "
-              >
-                Your Phone
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSmsContentValue(
-                  '{contact_first_name}',
-                  smsContentField
-                )
-              "
-              >
-                Contact Firstname
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSmsContentValue(
-                  '{contact_last_name}',
-                  smsContentField
-                )
-              "
-              >
-                Contact Lastname
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSmsContentValue('{contact_email}', smsContentField)
-              "
-              >
-                Contact Email
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                (click)="
-                insertSmsContentValue('{contact_phone}', smsContentField)
-              "
-              >
-                Contact Phone
-              </button>
-            </div>
             <textarea
               rows="10"
               class="form-control"
@@ -314,8 +132,8 @@
         </ng-template>
 
         <div class="d-flex mt-auto">
-          <a class="btn btn-light" [routerLink]="['/canned-message']">Back</a>
-          <button class="btn btn-primary" *ngIf="!isSaving">Save</button>
+          <a class="btn btn-light" [routerLink]="['/templates']">Cancel</a>
+          <button class="btn btn-primary ml-2" *ngIf="!isSaving">Save</button>
           <app-loading-button
             [class]="'btn btn-primary'"
             [title]="'Saving...'"
@@ -324,6 +142,68 @@
         </div>
       </form>
     </div>
-    <div class="variable-button-group shadow-2"></div>
+    <div class="variable-button-group shadow-2">
+      <h5 class="f-4 font-weight-bold upper-text mb-3">Insert Variables</h5>
+      <button
+        type="button"
+        class="btn btn-sm btn-blue my-3"
+        (click)="insertValue('{user_name}')"
+      >
+        Your Name
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-blue my-3"
+        (click)="insertValue('{user_email}')"
+      >
+        Your email
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-blue my-3"
+        (click)="insertValue('{user_phone}')"
+      >
+        Your Phone
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-orange my-3"
+        (click)="insertValue('{contact_email}')"
+      >
+        Contact E-mail
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-orange my-3"
+        (click)="insertValue('{material_title}')"
+      >
+        Material Title
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-orange my-3"
+        (click)="insertValue('{contact_phone}')"
+      >
+        Contact Phone
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-orange my-3"
+        (click)="
+              insertValue('{contact_first_name}')
+            "
+      >
+        Contact Firstname
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-orange my-3"
+        (click)="
+              insertValue('{contact_last_name}')
+            "
+      >
+        Contact Lastname
+      </button>
+    </div>
   </div>
 </div>

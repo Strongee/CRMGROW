@@ -36,6 +36,25 @@
   tr td {
     height: 70px;
   }
+  .template-type {
+    min-width: 100px
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .template-table {
+    .template-content {
+      display: none;
+    }
+
+    .template-type {
+      min-width: 40px;
+
+      .menu-label {
+        display: none;
+      }
+    }
+  }
 }
 
 .icon-button {

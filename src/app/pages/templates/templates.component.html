@@ -21,11 +21,11 @@
         </div>
         <table class="table template-table">
           <thead>
-          <th>Title</th>
-          <th>Owner</th>
-          <th>Template</th>
-          <th>Type</th>
-          <th>Default</th>
+          <th class="template-title">Title</th>
+          <th class="template-auth">Owner</th>
+          <th class="template-content">Template</th>
+          <th class="template-type">Type</th>
+          <th class="template-action">Default</th>
           </thead>
           <tbody>
             <tr
@@ -43,7 +43,7 @@
                 <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripe | slice:0:40}}</h5>
                 <span [innerHTML]="template.content | stripe | slice:0:80"></span>
               </td>
-              <td class="text-capitalize">
+              <td class="template-type">
                 <div class="v-center">
                   <ng-container *ngIf="template.type=='text'; else emailType">
                     <i class="i-icon bgc-dark i-phone mr-2"></i>
