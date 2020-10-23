@@ -7,13 +7,15 @@ import { ActionsBarComponent } from './actions-bar/actions-bar.component';
 import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
+import { VideoCreateComponent } from './video-create/video-create.component';
 
 @NgModule({
   declarations: [
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
-    AvatarEditorComponent
+    AvatarEditorComponent,
+    VideoCreateComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,101 @@
+.upload-step {
+    .small-label {
+        opacity: 0.5;
+    }
+    button, a {
+        &:hover, &:active {
+            box-shadow: 0 5px 16px -5px rgba(16, 19, 54, 0.35);
+        }
+    }
+    .btn-outline-primary {
+        &:hover {
+            background-color: #fff;
+        }
+        &:active {
+            background-color: #fff;
+        }
+    }
+    .step-bar {
+        max-width: 40px;
+        input {
+            display: none;
+        }
+        label {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            color: #101336;
+            background-color: #ECECEC;
+            margin-bottom: 0;
+            &.active {
+                background-color: #0000FF;
+                color: #fff;
+            }
+        }
+        .line {
+            width: 2px;
+            height: 60px;
+            background-color: #ECECEC;
+            &.active {
+                background-color: #0000FF;
+            }
+        }
+    }
+    .step-body-1, .step-body-2, .step-body-3, .step-body-4 {
+        width: 400px;
+        display: none;
+        &.active {
+            display: block;
+        }
+        .web-video {
+            img {
+                width: 64px;
+                height: 27px;
+            }
+        }
+        .large-text {
+            font-size: 24px;
+        }
+        .local-video {
+            border: 1px dashed rgba(16,19,54,0.24);
+            border-radius: 3px;
+            background-color: #F9FAFB;
+            .description {
+                width: 200px;
+                opacity: 0.56;
+            }
+        }
+        .video-default {
+            img {
+                width: 220px;
+                height: 120px;
+            }
+        }
+    }
+
+    .step-body-2, .step-body-3 {
+        width: 600px;
+    }
+    .themes {
+        max-height: 600px;
+        overflow-y: auto;
+        .theme {
+            border-radius: 5px;
+            .theme-thumb {
+                height: 120px;
+            }
+            .theme-name {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            &.selected {
+                background: #0700FF;
+                border-radius: 5px;
+                box-shadow: 3px 3px 10px #888;
+                .theme-name {
+                    color: white;
+                }
+            }
+        }
+    }
+}

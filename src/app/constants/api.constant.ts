@@ -48,3 +48,11 @@ export const IMAGE = {
 export const TEMPLATE = {
   CREATE: 'template/create'
 };
+export const FILE = {
+  UPLOAD_IMAGE: 'file/upload?resize=true'
+};
+
+export const THEME = {
+  GET_THEME: 'theme/',
+  SET_THEME: 'theme/set-video'
+};

@@ -1,0 +1,214 @@
+<div class="page-content">
+    <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">upload new video</h6>
+    <div class="d-flex mt-4 upload-step">
+        <div class="step-bar mr-4">
+            <span class="f-1 font-weight-bold text-uppercase small-label">steps</span>
+            <input type="checkbox" name="stepper" id="step-1">
+            <label
+                class="v-center justify-content-center f-4 font-weight-bold ml-1"
+                for="step-bar-1"
+                [class.active]="isActive1"
+            >
+                1
+            </label>
+            <div class="line ml-3" for="step-2" [class.active]="isActive2"></div>
+            <input type="checkbox" name="stepper" id="step-2">
+            <label
+                class="v-center justify-content-center f-4 font-weight-bold ml-1"
+                for="step-bar-2"
+                [class.active]="isActive2"
+            >
+                2
+            </label>
+            <div class="line ml-3" for="step-3" [class.active]="isActive3"></div>
+            <input type="checkbox" name="stepper" id="step-3">
+            <label
+                class="v-center justify-content-center f-4 font-weight-bold ml-1"
+                for="step-bar-3"
+                [class.active]="isActive3"
+            >
+                3
+            </label>
+            <div class="line ml-3" for="step-4" [class.active]="isStep4"></div>
+            <input type="checkbox" name="stepper" id="step-4">
+            <label
+                class="v-center justify-content-center f-4 font-weight-bold ml-1"
+                for="step-bar-4"
+                [class.active]="isActive4"
+            >
+                4
+            </label>
+        </div>
+        <div class="step-body-1 ml-5" [class.active]="isStep1">
+            <form
+                #uploadForm="ngForm"
+                (ngSubmit)="submitted = true;
+                uploadForm.form.valid ? uploadVideo() : false"
+                [class.was-validated]="submitted"
+            >
+                <span class="f-4 font-weight-bold text-c-dark">Copy and paste web link to the video below</span>
+                <div class="web-video my-3">
+                    <img src="./assets/img/youtube.png">
+                    <span class="f-4 font-weight-bold text-c-dark mx-2">or</span>
+                    <img src="./assets/img/vimeo.svg">
+                </div>
+                <div class="form-group has-feedback mb-4">
+                    <input class="f-2 form-control" type="text"
+                        id="step-1-link" name="video_link"
+                        placeholder="eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        required [(ngModel)]="videoLink" #video_link="ngModel"
+                    >
+                </div>
+                <span class="font-weight-bold text-c-dark large-text">or</span>
+                <div class="local-video text-center mt-4">
+                    <div class="f-4 font-weight-bold text-c-dark my-4">
+                        Upload your video
+                    </div>
+                    <img src="./assets/img/upload.png">
+                    <p class="f-1 text-c-dark description mx-auto my-4">Drag and drop your video in the area or click to select it from your local device</p>
+                </div>
+                <span class="d-flex f-1 text-c-dark mt-3">You can upload only MP4 and MOV file types!</span>
+                <div class="v-center justify-content-end mt-4">
+                    <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-2">
+                        Next
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="step-body-2 ml-5" [class.active]="isStep2">
+            <form 
+                #detailForm="ngForm" 
+                (ngSubmit)="submitted = true; detailForm.form.valid ? saveDetail() : false"
+                [class.was-validated]="submitted"
+            >
+                <div class="form-group has-feedback mb-4">
+                    <label class="f-1 font-weight-bold text-uppercase small-label" for="step-2-link">video link</label>
+                    <input class="f-2 form-control" type="text" id="step-2-link" name="video_link"
+                        required [(ngModel)]="videoLink" #video_link="ngModel"
+                    >
+                </div>
+                <div class="video-default mb-5">
+                    <span class="f-1 font-weight-bold text-uppercase small-label">original title</span>
+                    <span class="d-flex f-6 font-weight-bold text-c-dark mb-4">Introduction to eXp Realty</span>
+                    <img src="./assets/img/video_thumb.jpg">
+                </div>
+                <div class="form-group has-feedback mb-4">
+                    <label class="f-1 font-weight-bold text-uppercase small-label" for="title">custom title</label>
+                    <input class="f-2 form-control" type="text" id="title" name="video_title"
+                        placeholder="Type a title for this video"
+                        required [(ngModel)]="videoTitle" #video_title="ngModel"
+                    >
+                </div>
+                <div class="video-description">
+                    <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
+                    <quill-editor
+                        image-resize="true"
+                        placeholder="Enter Text"
+                        [(ngModel)]="description"
+                        [modules]="config"
+                        name="mailContent"
+                        [styles]="{ height: '200px' }"
+                        #mailContent="ngModel"
+                        required
+                        (onEditorCreated)="getEditorInstance($event)"
+                        (click)="setFocusField('content-email')"
+                        class="rounded"
+                        [class.has-error]="
+                        mailContent.errors &&
+                        (mailContent.touched || mailContent.dirty || submitted) &&
+                        submitted
+                        "
+                        #emailEditor
+                    >
+                    </quill-editor>
+                </div>
+                <div class="v-center mt-4">
+                    <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-3">
+                        Custom Thumbnail
+                    </button>
+                    <div class="ml-3">
+                        <div><span class="f-4 small-label">Maxium file size is 2 mb.</span></div>
+                        <div><span class="f-4 small-label">Acceptable types: JPG, PNG</span></div>
+                    </div>
+                </div>
+                <div class="v-center justify-content-end mt-4">
+                    <a class="btn f-6 font-weight-bold text-primary px-4 py-2 mr-3" (click)="backUpload()">
+                        Back
+                    </a>
+                    <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-2" type="submit">
+                        Next
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="step-body-3 ml-5" [class.active]="isStep3">
+            <form 
+                #selectThemeForm="ngForm" 
+                (ngSubmit)="submitted = true; selectThemeForm.form.valid ? selectTheme() : false"
+                [class.was-validated]="submitted"
+            >
+                <span class="f-4 font-weight-bold text-c-dark">Select material theme</span>
+                <div class="row mt-3 themes">
+                    <div class="col-md-4 py-3 theme" *ngFor="let theme of themes" (click)="setVideoTheme(theme)" [class.selected]="selectedTheme.id == theme.id">
+                      <img src="{{theme.thumbnail}}" class="w-100 theme-thumb" />
+                      <div class="f-1 text-center text-c-dark pt-3 theme-name">{{theme.name}}</div>
+                    </div>
+                </div>
+                <div class="v-center justify-content-end mt-4">
+                    <a class="btn f-6 font-weight-bold text-primary px-4 py-2" (click)="backDetail()">
+                        Back
+                    </a>
+                    <a class="btn btn-outline-primary f-6 font-weight-bold text-primary px-4 py-2 mx-3" (click)="themePreview(selectedTheme.id)">
+                        Preview
+                    </a>
+                    <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-2" type="submit">
+                        Next
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="step-body-4 ml-5" [class.active]="isStep4">
+            <form
+                #finishUploadForm="ngForm" 
+                (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload() : false"
+                [class.was-validated]="submitted"
+            >
+                <span class="f-4 font-weight-bold text-c-dark">Final Review</span>
+                <div class="my-4">
+                    <img class="w-100" src="./assets/img/video_thumb.jpg">
+                </div>
+                <div class="mt-3">
+                    <label class="f-1 font-weight-bold text-uppercase small-label">title</label>
+                    <span class="v-center f-4 font-weight-bold text-c-dark">{{videoTitle}}</span>
+                </div>
+                <div class="mt-3">
+                    <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
+                    <span class="v-center f-4 font-weight-bold text-c-dark">{{description | stripe}}</span>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="f-1 font-weight-bold text-uppercase small-label">theme</label>
+                        <span class="v-center f-4 font-weight-bold text-c-dark">{{selectedTheme.name}}</span>
+                        <img class="w-100 mt-2" src="{{selectedTheme.thumbnail}}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="f-1 font-weight-bold text-uppercase small-label">preview duration</label>
+                        <span class="v-center f-4 font-weight-bold text-c-dark">5 seconds</span>
+                        <span class="v-center f-1 small-label mt-2">Chooses default of preview video played while hovering on thumbnail.</span>
+                    </div>
+                </div>
+                <div class="v-center justify-content-end mt-4">
+                    <a class="btn f-6 font-weight-bold text-primary px-4 py-2" (click)="backSelectTheme()">
+                        Back
+                    </a>
+                    <a class="btn btn-outline-primary f-6 font-weight-bold text-primary px-4 py-2 mx-2" (click)="preivew()">
+                        Preview
+                    </a>
+                    <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-2" type="submit">
+                        Finish
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
