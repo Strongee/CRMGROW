@@ -1,3 +1,118 @@
 <div class="page-content">
   <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Affiliate</h6>
+  <div class="form-group">
+    <p class="f-4 my-4">Take advantage of our affiliate program and receive
+      <span class="f-5 font-weight-bold">20%</span> residual per month for any users you refer.
+    </p>
+    <div class="referral-link">
+      <label>Referral Link</label>
+      <div class="v-center">
+        <input class="form-control link" type="text" [(ngModel)]="affiliate['share_link']" disabled>
+        <button class="form-control btn-blue ml-2" [disabled]="loadingMain || creating"
+          (click)="openShare()">Share</button>
+        <button class="form-control btn-blue ml-1" [disabled]="loadingMain || creating"
+          (click)="copyLink()">Copy</button>
+      </div>
+    </div>
+    <p class="f-4 mt-4 mb-2">Add the PayPal address you'd like commissions paid to
+      - this is the only way we can pay you.
+    </p>
+    <div class="v-center">
+      <img class="paypal-logo" src="../../../assets/img/paypal.svg" alt="PayPal">
+      <input class="form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
+      <button class="form-control btn-blue ml-2" *ngIf="!updating" [disabled]="loadingMain || creating"
+        (click)="update()">Update</button>
+    </div>
+    <ng-container *ngIf="!loadingMain && !creating">
+      <h6 class="f-6 font-weight-bold mt-5 mb-2">Commisions</h6>
+      <div class="v-center">
+        <div class="cards d-grid">
+          <div class="card-item">
+            <p class="f-3 c-dark font-weight-bold">Unpaid commision</p>
+            <div class="v-center mt-2">
+              <p class="f-8 c-dark font-weight-bold">$</p>
+              <h3 class="card-value c-blue ml-2">0</h3>
+            </div>
+          </div>
+          <div class="card-item">
+            <p class="f-3 c-dark font-weight-bold">Paid commision</p>
+            <div class="v-center mt-2">
+              <p class="f-8 c-dark font-weight-bold">$</p>
+              <h3 class="card-value c-blue ml-2">5.80</h3>
+            </div>
+          </div>
+          <div class="card-item">
+            <p class="f-3 c-dark font-weight-bold">Total commision</p>
+            <div class="v-center mt-2">
+              <p class="f-8 c-dark font-weight-bold">$</p>
+              <h3 class="card-value c-blue ml-2">5.80</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h6 class="f-6 font-weight-bold mt-5 mb-2">Refferals</h6>
+      <div class="v-center">
+        <div class="cards d-grid">
+          <div class="card-item">
+            <p class="f-3 c-dark font-weight-bold">Visitors</p>
+            <div class="v-center mt-2">
+              <h3 class="card-value c-blue ml-2">16</h3>
+            </div>
+          </div>
+          <div class="card-item">
+            <p class="f-3 c-dark font-weight-bold">Sign ups</p>
+            <div class="v-center mt-2">
+              <h3 class="card-value c-blue ml-2">0</h3>
+            </div>
+          </div>
+          <div class="card-item">
+            <p class="f-3 c-dark font-weight-bold">Conversions</p>
+            <div class="v-center mt-2">
+              <h3 class="card-value c-blue ml-2">0</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h6 class="f-6 font-weight-bold mt-5 mb-3">Active Referred Subscribers</h6>
+      <table class="table affiliate-table">
+        <thead>
+        <th>Name</th>
+        <th>E-mail</th>
+        <th>Status</th>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let user of users">
+            <tr *ngIf="user.customer && user.customer.email">
+              <td>
+                <div class="avatar-wrapper">
+                  <div class="avatar" *ngIf="user.customer.name">{{user.customer.name[0]}}</div>
+                  <div class="name">{{user.customer.name}}</div>
+                </div>
+              </td>
+              <td>
+                {{user.customer.email}}
+              </td>
+              <td>
+                <div class="status" [class]="user.customer.status">
+                  {{user.customer.status}}
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="!users.length">
+            <tr>
+              <td colspan="3">
+                <p class="text-center my-2" *ngIf="!loadingUsers" style="font-size: 14px;">
+                  There is no active users that signed up with your affiliate invitation.
+                </p>
+                <p class="text-center my-2" *ngIf="loadingUsers" style="font-size: 14px;">
+                  Loading Referral users...
+                </p>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
 </div>

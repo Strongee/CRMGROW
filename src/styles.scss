@@ -11,12 +11,15 @@ $custom-checkbox-indicator-border-radius: 3px;
 @import '~ngx-toastr/toastr-bs4-alert';
 @import "./variables";
 @import "src/assets/scss/custom-toggle";
+@import "src/assets/scss/custom-radio";
 
 /* You can add global styles to this file, and also import other style files */
 $color-dark: #101336;
 $color-blue: #0000ff;
 $color-silver: #dadadd;
 $color-red: #E02020;
+$color-orange: #f26419;
+$color-orange-weak: #FFAA2A;
 $color-blue-weak: #5050fd;
 $color-trans08: rgba(16 19 54/0.08);
 $color-trans75: rgba(16 19 54/0.75);
@@ -433,6 +436,11 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .shadow-1 {
   box-shadow: 0 5px 16px -5px rgba(16, 19, 54, 0.35);
 }
+
+.shadow-2 {
+  box-shadow: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+}
+
 // Align and Cursor, Text Utility Style
 .v-center {
   display: flex;
@@ -473,6 +481,26 @@ button {
     border-color: $color-blue-weak;
   }
 }
+.btn-orange {
+  background-color: $color-orange;
+  border-color: $color-orange;
+  color: white;
+
+  &:hover {
+    background-color: $color-orange;
+    border-color: $color-orange;
+  }
+  &:focus {
+    background-color: $color-orange-weak;
+    border-color: $color-orange-weak;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 170, 0.5);
+  }
+  &:active {
+    background-color: $color-orange-weak;
+    border-color: $color-orange-weak;
+  }
+}
+
 .btn {
   &:focus {
     box-shadow: none!important;
@@ -631,7 +659,7 @@ body{
     padding-top: 63px;
     margin-left: 160px;
     min-height: 100vh;
-    padding-bottom: 16px;
+    padding-bottom: 0px;
   }
 
   &.has-topbar {
