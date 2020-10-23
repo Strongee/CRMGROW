@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TabItem } from 'src/app/utils/data.types';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-materials',
@@ -11,11 +12,12 @@ import { TabItem } from 'src/app/utils/data.types';
 export class MaterialsComponent implements OnInit {
   tabs: TabItem[] = [
     { icon: '', label: 'ALL', id: 'all' },
-    { icon: 'i-icon i-notification', label: 'VIDEO', id: 'videos' },
-    { icon: 'i-icon i-notification', label: 'PDF', id: 'pdfs' },
+    { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
+    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
     { icon: 'i-icon i-notification', label: 'IMAGE', id: 'images' }
   ];
   selectedTab: TabItem = this.tabs[0];
+  siteUrl = environment.website;
 
   constructor(
     public storeService: StoreService,
@@ -24,6 +26,8 @@ export class MaterialsComponent implements OnInit {
 
   ngOnInit(): void {
     this.materialService.loadVideos();
+    this.materialService.loadPdfs();
+    this.materialService.loadImages();
   }
 
   changeTab(tab: TabItem): void {

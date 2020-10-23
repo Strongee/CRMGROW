@@ -22,6 +22,10 @@ export class Video implements Deserializable {
   default_edited: boolean;
   default_video: string;
   priority: number;
+  created_at: Date;
+  updated_at: Date;
+  views: number;
+  _id: string;
 
   deserialize(input: any): this {
     return Object.assign(this, input);
