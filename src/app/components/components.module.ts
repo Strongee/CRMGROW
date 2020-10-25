@@ -8,6 +8,7 @@ import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
 import { ConfirmComponent } from './confirm/confirm.component';
+import { InputContactsComponent } from './input-contacts/input-contacts.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ConfirmComponent } from './confirm/confirm.component';
     TabOptionComponent,
     ActionsBarComponent,
     AvatarEditorComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    InputContactsComponent
   ],
   imports: [
     CommonModule,

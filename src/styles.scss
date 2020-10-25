@@ -182,16 +182,16 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   mask-image: url('./assets/img/automation.svg');
 }
 .i-broadcasts{
-  mask-image: url('./assets/img/Broadcasts.svg');
+  mask-image: url('./assets/img/broadcasts.svg');
 }
 .i-calendar{
   mask-image: url('./assets/img/calendar.svg');
 }
 .i-copy{
-  mask-image: url('./assets/img/Copy.svg');
+  mask-image: url('./assets/img/copy.svg');
 }
 .i-deadline{
-  mask-image: url('./assets/img/Deadline.svg');
+  mask-image: url('./assets/img/deadline.svg');
 }
 .i-download{
   mask-image: url('./assets/img/download.svg');
@@ -200,19 +200,19 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   mask-image: url('./assets/img/edit.svg');
 }
 .i-follow{
-  mask-image: url('./assets/img/Follow.svg');
+  mask-image: url('./assets/img/follow.svg');
 }
 .i-list{
-  mask-image: url('./assets/img/List.svg');
+  mask-image: url('./assets/img/list.svg');
 }
 .i-location{
-  mask-image: url('./assets/img/Location.svg');
+  mask-image: url('./assets/img/location.svg');
 }
 .i-lunch{
-  mask-image: url('./assets/img/Lunch.svg');
+  mask-image: url('./assets/img/lunch.svg');
 }
 .i-message{
-  mask-image: url('./assets/img/Message.svg');
+  mask-image: url('./assets/img/message.svg');
 }
 .i-label{
   mask-image: url('./assets/img/label.svg');
@@ -224,37 +224,37 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   mask-image: url('./assets/img/PDF.svg');
 }
 .i-phone{
-  mask-image: url('./assets/img/Phone.svg');
+  mask-image: url('./assets/img/phone.svg');
 }
 .i-pdf-email{
   mask-image: url('./assets/img/pdf_email.svg');
 }
 .i-sent{
-  mask-image: url('./assets/img/Sent.svg');
+  mask-image: url('./assets/img/sent.svg');
 }
 .i-setting{
   mask-image: url('./assets/img/setting.svg');
 }
 .i-share{
-  mask-image: url('./assets/img/Share.svg');
+  mask-image: url('./assets/img/share.svg');
 }
 .i-sms-sent{
   mask-image: url('./assets/img/sms_sent.svg');
 }
 .i-task{
-  mask-image: url('./assets/img/Task.svg');
+  mask-image: url('./assets/img/task.svg');
 }
 .i-template{
-  mask-image: url('./assets/img/Template.svg');
+  mask-image: url('./assets/img/template.svg');
 }
 .i-trash{
-  mask-image: url('./assets/img/Trash.svg');
+  mask-image: url('./assets/img/trash.svg');
 }
 .i-webpage{
-  mask-image: url('./assets/img/Webpage.svg');
+  mask-image: url('./assets/img/webpage.svg');
 }
 .i-video{
-  mask-image: url('./assets/img/Video.svg');
+  mask-image: url('./assets/img/video.svg');
 }
 .i-upload {
   mask-image: url('./assets/img/upload.svg');
@@ -269,28 +269,37 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   mask-image: url('./assets/img/close.svg');
 }
 .i-general {
-  mask-image: url('./assets/img/close.svg');
+  mask-image: url('./assets/img/general.svg');
 }
 .i-signature {
-  mask-image: url('./assets/img/close.svg');
+  mask-image: url('./assets/img/signature.svg');
 }
 .i-security {
-  mask-image: url('./assets/img/close.svg');
+  mask-image: url('./assets/img/security.svg');
 }
 .i-integration {
-  mask-image: url('./assets/img/close.svg');
+  mask-image: url('./assets/img/integration.svg');
 }
 .i-payment {
-  mask-image: url('./assets/img/close.svg');
+  mask-image: url('./assets/img/payment.svg');
 }
 .i-social {
-  mask-image: url('./assets/img/close.svg');
+  mask-image: url('./assets/img/social.svg');
 }
 .i-folder {
-  mask-image: url('./assets/img/close.svg');
+  mask-image: url('./assets/img/folder.svg');
 }
 .i-menu-more {
   mask-image: url('./assets/img/more_menu.svg');
+}
+.i-assistant {
+  mask-image: url('./assets/img/assistant.svg');
+}
+.i-lead-capture {
+  mask-image: url('./assets/img/lead_capture.svg');
+}
+.i-tag-manager {
+  mask-image: url('./assets/img/tag_manager.svg');
 }
 .i-record{
   mask-image: url('./assets/img/record.svg');
@@ -744,6 +753,45 @@ body{
 @media screen and (max-width: 575px) {
   body .page .page-content {
     padding: 1rem 0.5rem;
+  }
+}
+
+.sub-sidebar {
+  width: 112px;
+  z-index: 2;
+
+  a.active {
+    color: blue;
+    i {
+      background-color: blue;
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    width: 20px;
+    a.nav-link {
+      padding-right: 0px;
+      span {
+        display: none;
+      }
+      i {
+        margin-right: 0px;
+      }
+
+      &:hover {
+        position: relative;
+        span {
+          display: block;
+          position: absolute;
+          right: 0px;
+          transform: translateX(100%);
+          background-color: white;
+          padding: 2px 8px;
+          border-radius: 2px;
+          box-shadow: 0px 0px 4px #ccc;
+        }
+      }
+    }
   }
 }
 

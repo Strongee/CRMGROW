@@ -70,6 +70,13 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'settings/:page',
+    component: SettingsComponent,
+    data: {
+      title: 'Settings'
+    }
+  },
+  {
     path: 'teams',
     component: TeamsComponent,
     data: {
