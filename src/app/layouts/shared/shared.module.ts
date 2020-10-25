@@ -8,6 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { StripePipe } from '../../pipes/stripe.pipe';
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [StripePipe],
@@ -20,7 +21,8 @@ import { StripePipe } from '../../pipes/stripe.pipe';
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    FileUploadModule
   ],
   exports: [
     NgbModule,
@@ -31,7 +33,8 @@ import { StripePipe } from '../../pipes/stripe.pipe';
     NgxCleaveDirectiveModule,
     MatDialogModule,
     QuillModule,
-    StripePipe
+    StripePipe,
+    FileUploadModule
   ]
 })
 export class SharedModule {}
