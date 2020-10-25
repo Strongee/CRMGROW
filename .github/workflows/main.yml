@@ -14,16 +14,19 @@ jobs:
       - name: Project Checkout
         uses: actions/checkout@v2
         
-      - name: Install NPM v8.11
+      - name: Install NPM v12.18.3
         uses: actions/setup-node@v1
         with:
-          node-version: '12.16.2'   
+          node-version: '12.18.3'
+
+      - name: Install Angular
+        run: npm install -g @angular/cli@7.3.1      
         
       - name: NPM install...
         run: npm install 
 
       - name: Build frontend
-        run: npm run build
+        run: node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --prod
     
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -34,14 +37,7 @@ jobs:
   
       - name: Upload to AWS
         run: |
-          output=$(aws cloudfront get-distribution-config  --id EFW5LJQM4RH8B | jq -r  .DistributionConfig.Origins.Items[0].DomainName)
-          echo $output
-          if [[ $output ==  'teamgrow-staticsite-blue.s3-website-us-west-1.amazonaws.com' ]]
-          then
           aws s3 rm s3://teamgrow-staticsite-green/ --recursive 
           aws s3 cp dist s3://teamgrow-staticsite-green/ --recursive --acl public-read
-          elif [[ $output ==  'teamgrow-staticsite-green.s3-website-us-west-1.amazonaws.com' ]]
-          then
-          aws s3 rm s3://teamgrow-staticsite-blue/ --recursive 
-          aws s3 cp dist s3://teamgrow-staticsite-blue/ --recursive --acl public-read
-          fi 
+
+        
