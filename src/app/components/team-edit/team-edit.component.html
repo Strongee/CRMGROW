@@ -17,15 +17,9 @@
       </div>
     </div>
   </div>
-  <div mat-dialog-actions class="v-center justify-content-between mx-0">
-    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteTeam(team)">
-      <i class="i-icon i-trash bgc-red" aria-hidden="true"></i>
-      <span class="ml-2 f-4 c-red font-weight-bold">Delete team</span>
-    </button>
-    <div>
-      <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
-      <button class="btn btn-blue text-white f-6 font-weight-bold" *ngIf="!updating" type="submit">Save</button>
-      <app-loading-button [class]="'btn btn-blue text-white f-6 font-weight-bold'" title="Saving..." *ngIf="updating"></app-loading-button>
-    </div>
+  <div mat-dialog-actions class="mx-0" align="end">
+    <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
+    <button class="btn btn-blue text-white f-6 font-weight-bold" *ngIf="!updating" type="submit">Save</button>
+    <app-loading-button [class]="'btn btn-blue text-white f-6 font-weight-bold'" title="Saving..." *ngIf="updating"></app-loading-button>
   </div>
 </form>

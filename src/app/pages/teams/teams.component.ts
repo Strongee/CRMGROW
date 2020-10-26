@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
-import { TeamDeleteComponent} from '../../components/team-delete/team-delete.component';
+import { TeamDeleteComponent } from '../../components/team-delete/team-delete.component';
 
 @Component({
   selector: 'app-teams',
@@ -78,7 +78,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
           }
         }
         this.teams = [...this.ownTeams, ...this.anotherTeams];
-        console.log("teams =================>", this.teams);
+        console.log('teams =================>', this.teams);
       });
     });
   }
@@ -109,6 +109,15 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        if (res) {
+          this.ownTeams.some((e) => {
+            if (e._id === team._id) {
+              e.name = res.name;
+              return true;
+            }
+          });
+          this.teams = [...this.ownTeams, ...this.anotherTeams];
+        }
       });
   }
   deleteTeam(team): void {
