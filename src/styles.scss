@@ -18,6 +18,7 @@ $color-dark: #101336;
 $color-blue: #0000ff;
 $color-silver: #dadadd;
 $color-red: #E02020;
+$color-red-pink: #f5325b;
 $color-orange: #f26419;
 $color-orange-weak: #FFAA2A;
 $color-blue-weak: #5050fd;
@@ -48,6 +49,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .bgc-yellow {
   background-color: #ffcc00;
+}
+.bgc-red {
+  background-color: $color-red;
 }
 .bgc-red-pink {
   background-color: #f5325b;
@@ -85,6 +89,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .bgc-trans {
   background-color: transparent;
 }
+.bgc-black {
+  background-color: #000000;
+}
 .op-08 {
   opacity: 0.08;
 }
@@ -105,6 +112,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .c-yellow {
   color: #ffcc00;
+}
+.c-red {
+  color: $color-red
 }
 .c-red-pink {
   color: #f5325b;
@@ -135,6 +145,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .c-black {
   color: #000000;
+}
+.c-white {
+  color: #ffffff;
 }
 .f-0{
   font-size: 10px;
@@ -307,6 +320,15 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
     left: 50%;
     transform: translate(-50%, -50%);
   }
+}
+.i-teams {
+  mask-image: url('./assets/img/teams.svg');
+}
+.i-group-call {
+  mask-image: url('./assets/img/group_call.svg');
+}
+.i-block {
+  mask-image: url('./assets/img/block.svg');
 }
 .pl-4c{
   padding-left: 2rem!important;
@@ -498,6 +520,33 @@ button {
   &:active {
     background-color: $color-orange-weak;
     border-color: $color-orange-weak;
+  }
+}
+.btn-red {
+  background-color: $color-red;
+  border-color: $color-red;
+  color: white;
+
+  &:hover {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+  &:focus {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+  &:active {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+}
+.btn-white {
+  background-color: $color-white;
+  color: $color-blue;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-blue;
   }
 }
 

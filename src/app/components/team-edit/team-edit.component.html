@@ -1,0 +1,31 @@
+<form #teamForm="ngForm" (ngSubmit)="submitted = true; teamForm.form.valid ? update() : false"
+  [class.was-validated]="submitted" class="team-edit-form">
+  <div class="v-center justify-content-between mx-0">
+    <h4 class="f-22 font-weight-bold c-black">Edit team</h4>
+    <button class="v-center border-0 bgc-trans dropdown-item" mat-dialog-close>
+      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div mat-dialog-content class="my-2">
+    <div class="content">
+      <div class="form-group">
+        <label>Team Name</label>
+        <input class="form-control" [(ngModel)]="name" placeholder="Team Name" required name="teamName" #teamName="ngModel" />
+        <span class="invalid-feedback"
+          *ngIf="teamName.errors && (teamName.touched || teamName.dirty || submitted) &&submitted">Team name is
+          required</span>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions class="v-center justify-content-between mx-0">
+    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteTeam(team)">
+      <i class="i-icon i-trash bgc-red" aria-hidden="true"></i>
+      <span class="ml-2 f-4 c-red font-weight-bold">Delete team</span>
+    </button>
+    <div>
+      <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
+      <button class="btn btn-blue text-white f-6 font-weight-bold" *ngIf="!updating" type="submit">Save</button>
+      <app-loading-button [class]="'btn btn-blue text-white f-6 font-weight-bold'" title="Saving..." *ngIf="updating"></app-loading-button>
+    </div>
+  </div>
+</form>

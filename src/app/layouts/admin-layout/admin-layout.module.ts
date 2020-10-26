@@ -27,6 +27,7 @@ import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
 import { TemplateConditionalComplexityRule } from 'codelyzer';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { TemplateConditionalComplexityRule } from 'codelyzer';
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
     NgxPaginationModule,
+    NgxSpinnerModule
   ],
   schemas: []
 })

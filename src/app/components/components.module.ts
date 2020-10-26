@@ -8,6 +8,8 @@ import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
 import { ConfirmComponent } from './confirm/confirm.component';
+import { TeamEditComponent } from './team-edit/team-edit.component';
+import { TeamDeleteComponent } from './team-delete/team-delete.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { ConfirmComponent } from './confirm/confirm.component';
     TabOptionComponent,
     ActionsBarComponent,
     AvatarEditorComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    TeamEditComponent,
+    TeamDeleteComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +27,13 @@ import { ConfirmComponent } from './confirm/confirm.component';
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule
   ],
-  exports: [SlideTabComponent, TabOptionComponent, ConfirmComponent],
+  exports: [
+    SlideTabComponent,
+    TabOptionComponent,
+    ConfirmComponent,
+    TeamEditComponent,
+    TeamDeleteComponent
+  ],
   bootstrap: [AvatarEditorComponent]
 })
 export class ComponentsModule {}

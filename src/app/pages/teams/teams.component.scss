@@ -1,0 +1,83 @@
+.owners {
+  display: flex;
+  margin-right: 20px;
+
+  .owner {
+    margin-left: -15px;
+
+    img.owner-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .owner-name-avatar {
+      background: gainsboro;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      line-height: 42px;
+      text-align: center;
+      font-size: 36px;
+    }
+
+    &.remain-number {
+      .owner-name-avatar {
+        font-size: 26px;
+        font-weight: bold;
+      }
+    }
+
+    .additional-user-count {
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #000000;
+    }
+  }
+
+  .owner:first-child {
+    margin-left: 0px;
+  }
+}
+
+.teams-table {
+
+  td {
+    padding: 10px;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  .team-status {
+    .status {
+      padding: 3px 5px;
+      border-radius: 5px;
+      width: 60px;
+      text-align: center;
+      &.Owner {
+        background-color: #F1305E;
+      }
+      &.Viewer {
+        background-color: #308BF1;
+      }
+      &.Editor {
+        background-color: #08CE97;
+      }
+    }
+  }
+
+  .team-actions {
+    text-align: right;
+
+    .button-more {
+      a {
+        &::after {
+          content: none;
+        }
+      }
+    }
+  }
+}
