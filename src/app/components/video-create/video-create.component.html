@@ -47,7 +47,12 @@
                 >
             </div>
             <span class="font-weight-bold text-c-dark large-text">or</span>
-            <div class="local-video text-center mt-4" (click)="openFileDialog()">
+            <div class="local-video text-center mt-4"
+                [ngClass]="{'file-over': fileOver}"
+                ng2FileDrop [uploader]="uploader"
+                (click)="openFileDialog()"
+                (fileOver)="fileDrop($event)"
+            >
                 <input type="file" style="display: none;" ng2FileSelect [uploader]="uploader" accept=".mp4, .mov"
                     (change)="fileChange($event)" #videoFile />
                 <div class="f-4 font-weight-bold text-c-dark my-4">
@@ -104,15 +109,6 @@
                     >
                     </quill-editor>
                 </div>
-                <div class="v-center mt-4">
-                    <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-3">
-                        Custom Thumbnail
-                    </button>
-                    <div class="ml-3">
-                        <div><span class="f-4 small-label">Maxium file size is 2 mb.</span></div>
-                        <div><span class="f-4 small-label">Acceptable types: JPG, PNG</span></div>
-                    </div>
-                </div>
                 <div class="v-center justify-content-end mt-4">
                     <a class="btn f-6 font-weight-bold text-primary px-4 py-2 mr-3" (click)="backUpload()">
                         Back
@@ -139,9 +135,6 @@
                 <div class="v-center justify-content-end mt-4">
                     <a class="btn f-6 font-weight-bold text-primary px-4 py-2" (click)="backDetail()">
                         Back
-                    </a>
-                    <a class="btn btn-outline-primary f-6 font-weight-bold text-primary px-4 py-2 mx-3" (click)="themePreview(selectedTheme.id)">
-                        Preview
                     </a>
                     <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-2" type="submit">
                         Next
@@ -182,9 +175,6 @@
                 <div class="v-center justify-content-end mt-4">
                     <a class="btn f-6 font-weight-bold text-primary px-4 py-2" (click)="backSelectTheme()">
                         Back
-                    </a>
-                    <a class="btn btn-outline-primary f-6 font-weight-bold text-primary px-4 py-2 mx-2" (click)="preivew()">
-                        Preview
                     </a>
                     <button class="btn btn-blue f-6 font-weight-bold text-white px-4 py-2" type="submit">
                         Finish

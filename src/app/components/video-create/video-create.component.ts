@@ -52,6 +52,7 @@ export class VideoCreateComponent implements OnInit {
   videoId = '';
   loadedData = false;
   videoType = '';
+  fileOver = false;
 
   themes = [
     {
@@ -126,6 +127,7 @@ export class VideoCreateComponent implements OnInit {
       thumbnail: '',
       description: ''
     };
+    this.clearUploader();
   }
 
   selectTheme(): void {
@@ -144,20 +146,58 @@ export class VideoCreateComponent implements OnInit {
     this.isActive3 = false;
   }
 
-  themePreview(id) {}
-
   backSelectTheme(): void {
     this.isStep3 = true;
     this.isStep4 = false;
     this.isActive4 = false;
   }
 
-  preivew(): void {}
-
   finishUpload(): void {}
 
   openFileDialog(): void {
     this.fileInput.nativeElement.click();
+  }
+
+  fileDrop(evt) {
+    this.fileOver = evt;
+    if (this.fileOver == false) {
+      const file = this.uploader.queue[0]._file;
+      if (!file) {
+        return false;
+      }
+      if (
+        !(
+          file.name.toLowerCase().endsWith('.mp4') ||
+          file.name.toLowerCase().endsWith('.mov')
+        )
+      ) {
+        this.toast.warning('Unsupported File Selected.');
+        return false;
+      }
+      this.helperService
+        .generateThumbnail(file)
+        .then((data) => {
+          this.video.thumbnail = data.image;
+          this.video.duration = data.duration;
+          const imageBlob = this.helperService.b64toBlob(data.image);
+          this.helperService
+            .generateImageThumbnail(imageBlob, 'video_play')
+            .then((image) => {
+              this.video['site_image'] = image;
+            })
+            .catch((err) => {
+              console.log('Video Meta Image Load', err);
+            });
+          this.videoType = 'local';
+          this.uploadVideo();
+        })
+        .catch((err) => {
+          console.log('error', err);
+          this.toast.warning(
+            'Cannot read this file. Please try with standard file.'
+          );
+        });
+    }
   }
 
   fileChange(evt) {
@@ -197,6 +237,11 @@ export class VideoCreateComponent implements OnInit {
           'Cannot read this file. Please try with standard file.'
         );
       });
+  }
+
+  clearUploader(): void {
+    this.uploader.cancelAll();
+    this.uploader.clearQueue();
   }
 
   checkVideoUrl(): void {
