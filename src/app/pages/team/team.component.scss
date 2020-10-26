@@ -15,3 +15,156 @@
     margin-top: 15px;
   }
 }
+
+.avatar {
+
+}
+
+.owners {
+  display: flex;
+  margin-right: 20px;
+
+  .owner {
+    margin-left: -15px;
+
+    &.remain-number {
+      .owner-name-avatar {
+        font-size: 26px;
+        font-weight: bold;
+      }
+    }
+
+    .additional-user-count {
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #000000;
+    }
+  }
+
+  .owner:first-child {
+    margin-left: 0px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .owner-names {
+    display: none;
+  }
+}
+
+.f-30 {
+  font-size: 30px;
+}
+
+.team-info-container {
+
+  flex-wrap: wrap;
+
+  .tabs {
+    width: 310px;
+  }
+
+  .status {
+    padding: 3px 5px;
+    border-radius: 5px;
+    width: 60px;
+    text-align: center;
+    &.Owner {
+      background-color: #F1305E;
+    }
+    &.Viewer {
+      background-color: #308BF1;
+    }
+    &.Editor {
+      background-color: #08CE97;
+    }
+  }
+
+  label {
+    height: 20px;
+    margin: 0;
+  }
+
+  .value {
+    height: 50px;
+  }
+}
+
+.members-table-container {
+  .check-cell {
+    width: 40px;
+  }
+
+  .label-cell{
+    select {
+      border: none;
+      max-width: 80px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: block;
+      height: 22px;
+    }
+    select:focus {
+      border: none;
+      outline: none;
+    }
+  }
+
+  .status-cell {
+    .status {
+
+      select {
+        width: 70px;
+        padding: 0px 3px;
+      }
+
+      .Owner {
+        background-color: #F1305E;
+      }
+
+      .Viewer {
+        background-color: #308BF1;
+      }
+
+      .Editor {
+        background-color: #08CE97;
+      }
+
+      .Invite {
+        width: 70px;
+        height: 22px;
+        padding: 2px;
+        border-radius: 5px;
+        background-color: #FFAA2A;
+      }
+    }
+
+    .remind {
+      border-radius: 5px;
+      padding: 1px 5px;
+      height: 22px;
+      border-width: 1px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .members-table-container {
+    button .button-label {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .members-table-container {
+    .added-cell, .phone-cell {
+      display: none;
+    }
+
+    .avatar, .name-avatar {
+      display: none;
+    }
+  }
+}

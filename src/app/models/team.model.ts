@@ -10,7 +10,7 @@ export class Team implements Deserializable {
   highlights: string[];
   brands: string[];
   members: any[];
-  inivites: any[];
+  invites: any[];
   requests: any[];
   referrals: any[];
   editors: any[];

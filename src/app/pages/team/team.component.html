@@ -1,27 +1,206 @@
 <div class="page-content">
   <div class="p-md-3 p-2">
-    <ng-container *ngIf="loading; else loadedTemplate">
-      <div class="loading-screen position-relative">
+    <ng-container *ngIf="loading">
+      <div class="loading-screen">
         <ngx-spinner name="sp5" bdColor="rgba(50,50,50,0)" size="medium" color="#888" type="square-jelly-box"
                      [fullScreen]="false">
           <p class="text-dark loading-text mt-7" style="font-weight: 400;">Loading team details...</p>
         </ngx-spinner>
       </div>
     </ng-container>
-    <ng-template #loadedTemplate>
-      <ng-container *ngIf="loadError; else loadSuccessTemplate">
-        <div class="error-result">
-          <img [src]="'../../../assets/img/error.png'" />
-          <p>
-            Something went go wrong. If your team information is correct, please reach our support team.
-          </p>
+    <ng-container *ngIf="loadError">
+      <div class="error-result">
+        <img [src]="'../../../assets/img/error.png'" />
+        <p>
+          Something went go wrong. If your team information is correct, please reach our support team.
+        </p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && !loadError && team">
+      <div class="teams-label f-8 font-weight-bold">
+        My Teams / {{team.name}}
+      </div>
+      <div class="team-info-container form-group v-center justify-content-between mt-5">
+        <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 v-center">
+          <div class="owner">
+            <label>Owner</label>
+            <div class="v-center value">
+              <div class="owners">
+                <ng-container *ngIf="team.owner">
+                  <ng-container *ngIf="team.owner.length < 5; else overTemplate">
+                    <div class="owner" *ngFor="let own of team.owner">
+                      <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
+                        <img [src]="own.picture_profile" class="avatar" />
+                      </ng-container>
+                      <ng-template #ownNamePlaceholder>
+                        <div class="name-avatar">{{own.user_name[0]}}</div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                  <ng-template #overTemplate>
+                    <div class="owner" *ngFor="let mIndex of [0,1,2,3]">
+                      <ng-container *ngIf="team.owner[mIndex].picture_profile; else ownNamePlaceholder">
+                        <img [src]="team.owner[mIndex].picture_profile" class="avatar" />
+                      </ng-container>
+                      <ng-template #ownNamePlaceholder>
+                        <div class="name-avatar">{{team.owner[mIndex].username[0]}}</div>
+                      </ng-template>
+                    </div>
+                    <div class="owner remain-number">
+                      <div class="name-avatar">+{{team.owner.length - 4}}</div>
+                    </div>
+                  </ng-template>
+                </ng-container>
+              </div>
+              <div class="owner-names">
+                <ng-container *ngIf="team.owner">
+                  <ng-container *ngIf="team.owner.length < 2; else overNameTemplate">
+                    <div class="owner-main-name font-weight-bold">{{team.owner[0].user_name}}</div>
+                  </ng-container>
+                  <ng-template #overNameTemplate>
+                    <div class="owner-main-name font-weight-bold">{{team.owner[0].user_name}}</div>
+                    <div class="owner-remain-count f-2">(+ {{team.owner.length - 1}} Owners)</div>
+                  </ng-template>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="members ml-5">
+            <label>Members</label>
+            <div class="value f-30 font-weight-bold">{{team.members.length}}</div>
+          </div>
+          <div class="ml-5">
+            <label>Your Status</label>
+            <div class="value v-center">
+              <div class="status font-weight-bold f-2 c-white" [class] = "status(team)">{{status(team)}}</div>
+            </div>
+          </div>
         </div>
-      </ng-container>
-      <ng-template #loadSuccessTemplate>
-        <div class="teams-label">
-          My Teams / {{team.name}}
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
+          <div class="tabs">
+            <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+            </app-slide-tab>
+          </div>
         </div>
-      </ng-template>
-    </ng-template>
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
+          <div class="button-group v-center">
+            <button class="v-center btn btn-blue f-4 text-white ml-2">
+              <i class="bgc-white i-icon i-plus mr-2"></i>
+              Invite member
+            </button>
+            <button class="v-center btn btn-white-blue f-4 ml-2">
+              <i class="bgc-blue i-icon i-edit mr-2"></i>
+              Edit team
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="members-table-container mt-5" *ngIf="selectedTab.id === 'members'">
+        <table class="table members-table">
+          <thead>
+          <tr>
+            <th class="check-cell border-top-0">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="selectAllMembers" (change)="selectAllPage()" [checked]="isSelectedPage()">
+                <label class="custom-control-label" for="selectAllMembers"></label>
+              </div>
+            </th>
+            <th class="name-cell border-top-0">Members</th>
+            <th class="status-cell border-top-0">Status</th>
+            <th class="added-cell border-top-0">Added</th>
+            <th class="phone-cell border-top-0">Phone No</th>
+            <th class="action-cell border-top-0"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="team.members.length">
+            <tr *ngFor="let member of team.members">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="member-{{member._id}}" (change)="selectedMembers.toggle(member._id)" [checked]="selectedMembers.isSelected(member._id)">
+                  <label class="custom-control-label" for="member-{{member._id}}"></label>
+                </div>
+              </td>
+              <td class="name-cell">
+                <div class="v-center">
+                  <ng-container *ngIf="member.picture_profile; else memberNamePlaceholder">
+                    <img [src]="member.picture_profile" class="avatar mr-3" />
+                  </ng-container>
+                  <ng-template #memberNamePlaceholder>
+                    <div class="name-avatar mr-3">{{member.user_name[0]}}</div>
+                  </ng-template>
+                  <div class="font-weight-bold">{{member.user_name}}</div>
+                </div>
+              </td>
+              <td class="status-cell">
+                <div class="label-cell status ml-auto">
+                  <select (change)="toggleMember(member)"
+                          class="c-white f-2"
+                          [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
+                    <option [value]="'Viewer'" class="Viewer c-white f-2" [selected]="team.editors.indexOf(member._id) === -1">
+                      Viewer
+                    </option>
+                    <option [value]="'Editor'" class="Editor c-white f-2" [selected]="team.editors.indexOf(member._id) !== -1">
+                      Editor
+                    </option>
+                  </select>
+                </div>
+              </td>
+              <td class="added-cell">
+                {{member.created_at | date: 'dd.MM.yyyy'}}
+              </td>
+              <td class="phone-cell">
+                {{member.cell_phone}}
+              </td>
+              <td class="action-cell">
+                <button class="v-center btn bgc-white c-dark f-4 ml-2" (click)="removeMember(member)">
+                  <i class="bgc-dark i-icon i-trash mr-2"></i>
+                  <span class="button-label">Remove</span>
+                </button>
+              </td>
+            </tr>
+            <tr *ngFor="let invite of team.invites">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="invite-{{invite._id}}" (change)="selectedMembers.toggle(invite._id)" [checked]="selectedMembers.isSelected(invite._id)">
+                  <label class="custom-control-label" for="invite-{{invite._id}}"></label>
+                </div>
+              </td>
+              <td class="name-cell">
+                <div class="v-center">
+                  <ng-container *ngIf="invite.picture_profile; else inviteNamePlaceholder">
+                    <img [src]="invite.picture_profile" class="avatar mr-3" />
+                  </ng-container>
+                  <ng-template #inviteNamePlaceholder>
+                    <div class="name-avatar mr-3">{{invite.user_name[0]}}</div>
+                  </ng-template>
+                  <div class="font-weight-bold">{{invite.user_name}}</div>
+                </div>
+              </td>
+              <td class="status-cell">
+                <div class="v-center">
+                  <div class="status">
+                    <div class="Invite c-white text-center f-2">Invite sent</div>
+                  </div>
+                  <div class="ml-2 btn-white-blue remind f-2">Remind</div>
+                </div>
+              </td>
+              <td class="added-cell">
+                {{invite.created_at | date: 'dd.MM.yyyy'}}
+              </td>
+              <td class="phone-cell">
+                {{invite.cell_phone}}
+              </td>
+              <td class="action-cell">
+                <button class="v-center btn bgc-white c-dark f-4 ml-2" (click)="cancelInvite(invite)">
+                  <i class="bgc-dark i-icon i-trash mr-2"></i>
+                  <span class="button-label">Cancel invitation</span>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </table>
+      </div>
+    </ng-container>
   </div>
 </div>

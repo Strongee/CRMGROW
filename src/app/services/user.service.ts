@@ -106,4 +106,18 @@ export class UserService extends HttpService {
     this.garbage.next(garbage);
     return;
   }
+  public loadAffiliate(): Observable<any> {
+    return this.httpClient.get(environment.api + USER.LOAD_AFFILIATE).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('GET USER AFFILIATE'))
+    );
+  }
+  public createAffiliate(): Observable<any> {
+    return this.httpClient
+      .post(environment.api + USER.CREATE_AFFILIATE, {})
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('CREATE AFFILIATE'))
+      );
+  }
 }
