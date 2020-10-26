@@ -19,14 +19,14 @@ jobs:
         with:
           node-version: '12.18.3'
         
-      - name: NPM install node-sass...
-        run: npm install node-sass
-        
       - name: NPM install...
         run: npm install 
+        
+      - name: NPM install node-sass...
+        run: npm install node-sass
 
       - name: Build frontend
-        run: node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build
+        run: node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --prod
     
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
