@@ -109,7 +109,6 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        console.log("edit team ===========>");
       });
   }
   deleteTeam(team): void {
