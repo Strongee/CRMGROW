@@ -23,7 +23,6 @@
             border-radius: 50%;
             color: #101336;
             background-color: #ECECEC;
-            margin-bottom: 0;
             &.active {
                 background-color: #0000FF;
                 color: #fff;
@@ -35,6 +34,14 @@
             background-color: #ECECEC;
             &.active {
                 background-color: #0000FF;
+            }
+        }
+        @media screen and (max-width: 576px) {
+            align-items: center;
+            max-width: 100%;
+            .line {
+                width: 40px;
+                height: 2px;
             }
         }
     }
@@ -72,10 +79,16 @@
                 }
             }
         }
+        @media screen and (max-width: 576px) {
+            width: 100%;
+        }
     }
 
     .step-body-2, .step-body-3 {
         width: 600px;
+        @media screen and (max-width: 576px) {
+            width: 100%;
+        }
     }
     .themes {
         .theme {
