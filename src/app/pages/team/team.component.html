@@ -1,0 +1,27 @@
+<div class="page-content">
+  <div class="p-md-3 p-2">
+    <ng-container *ngIf="loading; else loadedTemplate">
+      <div class="loading-screen position-relative">
+        <ngx-spinner name="sp5" bdColor="rgba(50,50,50,0)" size="medium" color="#888" type="square-jelly-box"
+                     [fullScreen]="false">
+          <p class="text-dark loading-text mt-7" style="font-weight: 400;">Loading team details...</p>
+        </ngx-spinner>
+      </div>
+    </ng-container>
+    <ng-template #loadedTemplate>
+      <ng-container *ngIf="loadError; else loadSuccessTemplate">
+        <div class="error-result">
+          <img [src]="'../../../assets/img/error.png'" />
+          <p>
+            Something went go wrong. If your team information is correct, please reach our support team.
+          </p>
+        </div>
+      </ng-container>
+      <ng-template #loadSuccessTemplate>
+        <div class="teams-label">
+          My Teams / {{team.name}}
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

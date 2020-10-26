@@ -11,6 +11,7 @@ import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 import { TeamsComponent } from 'src/app/pages/teams/teams.component';
 import { TemplatesComponent } from 'src/app/pages/templates/templates.component';
 import { TemplateComponent } from 'src/app/pages/template/template.component';
+import { TeamComponent } from '../../pages/team/team.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -73,7 +74,14 @@ export const AdminLayoutRoutes: Routes = [
     path: 'teams',
     component: TeamsComponent,
     data: {
-      title: 'Teams'
+      title: 'Your Teams'
+    }
+  },
+  {
+    path: 'teams/:id',
+    component: TeamComponent,
+    data: {
+      title: 'Team Detail'
     }
   },
   {

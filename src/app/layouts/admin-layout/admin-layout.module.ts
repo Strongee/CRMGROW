@@ -28,6 +28,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
 import { TemplateConditionalComplexityRule } from 'codelyzer';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { TeamComponent } from '../../pages/team/team.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     SettingsComponent,
     TeamsComponent,
     TemplatesComponent,
-    TemplateComponent
+    TemplateComponent,
+    TeamComponent
   ],
   imports: [
     CommonModule,

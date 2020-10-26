@@ -1,8 +1,8 @@
 <div class="page-content">
-  <div class="v-center justify-content-between">
+  <div class="teams-tab-container">
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
-    <div class="v-center" *ngIf="teams.length + invitedTeams.length && selectedTab.id === 'teams'">
+    <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="teams.length + invitedTeams.length && selectedTab.id === 'teams'">
       <button class="btn btn-blue text-white f-6">Join team</button>
       <button class="v-center btn btn-blue f-6 text-white ml-2">
         <i class="bg-white i-icon i-plus mr-2"></i>
@@ -33,7 +33,7 @@
               <tbody>
               <tr *ngFor="let team of teams">
                 <td class="team-name">
-                  <a class="item-detail-link f-6 font-weight-bold" [routerLink]="['/team/' + team._id]">{{team.name}}</a>
+                  <a class="item-detail-link f-6 font-weight-bold" [routerLink]="['/teams/' + team._id]">{{team.name}}</a>
                 </td>
                 <td class="team-members">
                   <div class="f-6 font-weight-bold">{{team.members.length}}</div>
