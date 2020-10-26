@@ -67,6 +67,9 @@
             img {
                 width: 220px;
                 height: 120px;
+                @media screen and (max-width: 576px) {
+                    width: 200px;
+                }
             }
         }
     }
@@ -75,13 +78,8 @@
         width: 600px;
     }
     .themes {
-        max-height: 600px;
-        overflow-y: auto;
         .theme {
             border-radius: 5px;
-            .theme-thumb {
-                height: 120px;
-            }
             .theme-name {
                 font-size: 14px;
                 font-weight: 600;

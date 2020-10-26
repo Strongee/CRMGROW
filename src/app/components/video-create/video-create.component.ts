@@ -21,14 +21,8 @@ Quill.register('modules/imageResize', ImageResize);
 })
 export class VideoCreateComponent implements OnInit {
   submitted = false;
-  isStep1 = true;
-  isActive1 = true;
-  isStep2 = false;
-  isActive2 = false;
-  isStep3 = false;
-  isActive3 = false;
-  isStep4 = false;
-  isActive4 = false;
+  isStep = 1;
+  isActive = 1;
   selectedTheme = {
     name: '',
     thumbnail: '',
@@ -101,24 +95,21 @@ export class VideoCreateComponent implements OnInit {
   ngOnInit(): void {}
 
   uploadVideo(): void {
-    this.isStep1 = false;
-    this.isStep2 = true;
-    this.isActive2 = true;
+    this.isStep++;
+    this.isActive++;
   }
 
   saveDetail(): void {
-    this.isStep2 = false;
-    this.isStep3 = true;
-    this.isActive3 = true;
+    this.isStep++;
+    this.isActive++;
     if (this.customTitle) {
       this.video.title = this.customTitle;
     }
   }
 
   backUpload(): void {
-    this.isStep1 = true;
-    this.isStep2 = false;
-    this.isActive2 = false;
+    this.isStep--;
+    this.isActive--;
     this.videoType = '';
     this.video = {
       link: '',
@@ -127,13 +118,11 @@ export class VideoCreateComponent implements OnInit {
       thumbnail: '',
       description: ''
     };
-    this.clearUploader();
   }
 
   selectTheme(): void {
-    this.isStep3 = false;
-    this.isStep4 = true;
-    this.isActive4 = true;
+    this.isStep++;
+    this.isActive++;
   }
 
   setVideoTheme(theme) {
@@ -141,15 +130,13 @@ export class VideoCreateComponent implements OnInit {
   }
 
   backDetail(): void {
-    this.isStep2 = true;
-    this.isStep3 = false;
-    this.isActive3 = false;
+    this.isStep--;
+    this.isActive--;
   }
 
   backSelectTheme(): void {
-    this.isStep3 = true;
-    this.isStep4 = false;
-    this.isActive4 = false;
+    this.isStep--;
+    this.isActive--;
   }
 
   finishUpload(): void {}
@@ -237,11 +224,6 @@ export class VideoCreateComponent implements OnInit {
           'Cannot read this file. Please try with standard file.'
         );
       });
-  }
-
-  clearUploader(): void {
-    this.uploader.cancelAll();
-    this.uploader.clearQueue();
   }
 
   checkVideoUrl(): void {

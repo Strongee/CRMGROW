@@ -1,37 +1,37 @@
-<div class="page-content">
+<div class="page-content p-3">
     <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">upload new video</h6>
     <div class="d-flex mt-4 upload-step">
         <div class="step-bar mr-4">
             <span class="f-1 font-weight-bold text-uppercase small-label">steps</span>
             <label
                 class="v-center justify-content-center f-4 font-weight-bold ml-1"
-                [class.active]="isActive1"
+                [class.active]="isActive >= 1"
             >
                 1
             </label>
-            <div class="line ml-3" for="step-2" [class.active]="isActive2"></div>
+            <div class="line ml-3" for="step-2" [class.active]="isActive >= 2"></div>
             <label
                 class="v-center justify-content-center f-4 font-weight-bold ml-1"
-                [class.active]="isActive2"
+                [class.active]="isActive >= 2"
             >
                 2
             </label>
-            <div class="line ml-3" for="step-3" [class.active]="isActive3"></div>
+            <div class="line ml-3" for="step-3" [class.active]="isActive >= 3"></div>
             <label
                 class="v-center justify-content-center f-4 font-weight-bold ml-1"
-                [class.active]="isActive3"
+                [class.active]="isActive >= 3"
             >
                 3
             </label>
-            <div class="line ml-3" for="step-4" [class.active]="isStep4"></div>
+            <div class="line ml-3" for="step-4" [class.active]="isActive == 4"></div>
             <label
                 class="v-center justify-content-center f-4 font-weight-bold ml-1"
-                [class.active]="isActive4"
+                [class.active]="isActive == 4"
             >
                 4
             </label>
         </div>
-        <div class="step-body-1 ml-5" [class.active]="isStep1">
+        <div class="step-body-1 ml-sm-5 ml-2" [class.active]="isStep == 1">
             <span class="f-4 font-weight-bold text-c-dark">Copy and paste web link to the video below</span>
             <div class="web-video my-3">
                 <img src="./assets/img/youtube.png">
@@ -63,7 +63,7 @@
             </div>
             <span class="d-flex f-1 text-c-dark mt-3">You can upload only MP4 and MOV file types!</span>
         </div>
-        <div class="step-body-2 ml-5" [class.active]="isStep2">
+        <div class="step-body-2 ml-sm-5 ml-2" [class.active]="isStep == 2">
             <form 
                 #detailForm="ngForm" 
                 (ngSubmit)="submitted = true; detailForm.form.valid ? saveDetail() : false"
@@ -75,7 +75,7 @@
                         required [(ngModel)]="video.link" #video_link="ngModel"
                     >
                 </div>
-                <div class="video-default mb-5">
+                <div class="video-default mb-4">
                     <span class="f-1 font-weight-bold text-uppercase small-label" *ngIf="videoType == 'web'">original title</span>
                     <span class="d-flex f-6 font-weight-bold text-c-dark mb-4" *ngIf="videoType == 'web'">{{video.title}}</span>
                     <img [src]="video.thumbnail">
@@ -95,7 +95,7 @@
                         [(ngModel)]="video.description"
                         [modules]="config"
                         name="mailContent"
-                        [styles]="{ height: '200px' }"
+                        [styles]="{ height: '150px' }"
                         #mailContent="ngModel"
                         (onEditorCreated)="getEditorInstance($event)"
                         (click)="setFocusField('content-email')"
@@ -119,15 +119,15 @@
                 </div>
             </form>
         </div>
-        <div class="step-body-3 ml-5" [class.active]="isStep3">
+        <div class="step-body-3 ml-sm-5 ml-2" [class.active]="isStep == 3">
             <form 
                 #selectThemeForm="ngForm" 
                 (ngSubmit)="submitted = true; selectThemeForm.form.valid ? selectTheme() : false"
                 [class.was-validated]="submitted"
             >
                 <span class="f-4 font-weight-bold text-c-dark">Select material theme</span>
-                <div class="row mt-3 themes">
-                    <div class="col-md-4 py-3 theme" *ngFor="let theme of themes" (click)="setVideoTheme(theme)" [class.selected]="selectedTheme.id == theme.id">
+                <div class="row mx-0 mt-3 themes">
+                    <div class="col-sm-4 py-3 theme" *ngFor="let theme of themes" (click)="setVideoTheme(theme)" [class.selected]="selectedTheme.id == theme.id">
                       <img src="{{theme.thumbnail}}" class="w-100 theme-thumb" />
                       <div class="f-1 text-center text-c-dark pt-3 theme-name">{{theme.name}}</div>
                     </div>
@@ -142,7 +142,7 @@
                 </div>
             </form>
         </div>
-        <div class="step-body-4 ml-5" [class.active]="isStep4">
+        <div class="step-body-4 ml-sm-5 ml-2" [class.active]="isStep == 4">
             <form
                 #finishUploadForm="ngForm" 
                 (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload() : false"
