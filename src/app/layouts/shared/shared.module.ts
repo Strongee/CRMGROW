@@ -9,12 +9,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { StripePipe } from '../../pipes/stripe.pipe';
 import { QuillModule } from 'ngx-quill';
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
+import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [StripePipe, LoadingButtonComponent],
+  declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
   imports: [
     CommonModule,
     NgbModule,
@@ -43,6 +44,7 @@ import { MatIconModule } from '@angular/material/icon';
     StripePipe,
     QuillModule,
     LoadingButtonComponent,
+    LoadingOverlayComponent,
     CalendarModule
   ]
 })
