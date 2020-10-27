@@ -5,6 +5,57 @@
         height: 35px;
         width: 35px;
     }
+    mwl-calendar-month-view-header {
+        .cal-header-cell {
+            float: left;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            &.mobile {
+                display: none;
+            }
+            @media screen and (max-width: 576px) {
+                &.desktop {
+                    display: none;
+                }
+                &.mobile {
+                    display: block;
+                }
+            }
+        }
+    }
+    mwl-calendar-week-view-header{
+        .cal-day-headers {
+            .cal-header {
+                &.cal-today {
+                    background-color: #0000FF;
+                    color: #ffffff;
+                }
+                &.cal-weekend {
+                    span {
+                        color: #FF0000;
+                    }
+                }
+                span {
+                    opacity: 1;
+                    font-size: 14px;
+                }
+                .mobile {
+                    display: none;
+                }
+                @media screen and (max-width: 576px) {
+                    .desktop {
+                        display: none;
+                    }
+                    .mobile {
+                        display: block;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
     mwl-calendar-month-cell {
         &.cal-cell.cal-day-cell {
             min-height: 140px;
@@ -12,7 +63,7 @@
             &.cal-today {
                 background-color: white;
                 .cal-day-number {
-                    background-color: #1a73e8;
+                    background-color: #0000FF;
                     color: white;
                     border-radius: 50%;
                     font-size: 12px;
@@ -67,53 +118,61 @@
     font-size: 22px;
 }
 
-.calendar-header {
-    .calendar-time {
-        .btn {
-            i {
-                width: 12px;
-                height: 12px;
-                min-width: 12px;
-            }
+.calendar-time {
+    .btn {
+        i {
+            width: 12px;
+            height: 12px;
+            min-width: 12px;
         }
-        .small-button {
+    }
+    .small-button {
+        display: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        i {
+            width: 12px;
+            height: 12px;
+            min-width: 12px;
+        }
+    }
+    .dropdown-menu {
+        min-width: 7rem;
+    }
+    .date {
+        width: 300px;
+        font-size: 20px;
+        letter-spacing: 0;
+        line-height: 32px;
+        .mobile {
             display: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            i {
-                width: 12px;
-                height: 12px;
-                min-width: 12px;
-            }
-        }
-        .dropdown-menu {
-            min-width: 7rem;
-        }
-        .date {
-            width: 250px;
-            font-size: 20px;
-            letter-spacing: 0;
-            line-height: 32px;
         }
         @media screen and (max-width: 576px) {
-            justify-content: center !important;
-            .btn {
+            .desktop {
                 display: none;
             }
-            .small-button {
-                display: flex;
-                justify-content: center;
+            .mobile {
+                display: block;
             }
-            .dropdown-menu {
-                right: 0;
-                left: unset !important;
-            }
-            .date {
-                width: 200px;
-                font-size: 16px;
-                font-weight: bold;
-            }
+        }
+    }
+    @media screen and (max-width: 576px) {
+        .btn {
+            display: none;
+        }
+        .small-button {
+            display: flex;
+            justify-content: center;
+        }
+        .dropdown-menu {
+            right: 0;
+            left: unset !important;
+        }
+        .date {
+            width: 140px;
+            font-size: 16px;
+            font-weight: bold;
         }
     }
 }

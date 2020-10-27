@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-// import { AppointmentService } from 'src/app/services/appointment.service';
+import { AppointmentService } from 'src/app/services/appointment.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 // import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { startOfWeek } from 'date-fns';
-// import { UserService } from 'src/app/services/user.service';
+import { startOfWeek, endOfWeek } from 'date-fns';
+import { UserService } from 'src/app/services/user.service';
 // import { CalendarConnectDialogComponent } from 'src/app/components/calendar-connect-dialog/calendar-connect-dialog.component';
 
 @Component({
@@ -25,28 +25,29 @@ export class CalendarComponent implements OnInit {
     picture_profile: '',
     connect_calendar: Boolean
   };
+  weekStart;
+  weekEnd;
 
   constructor(
     private dialog: MatDialog,
-    // private appointmentService: AppointmentService,
-    // private userService: UserService,
+    private appointmentService: AppointmentService,
+    private userService: UserService,
     private router: ActivatedRoute,
     private location: Location,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    // this.userService.getProfile().subscribe(
-    //   (res) => {
-    //     if (res['status']) {
-    //       delete res['data']['google_refresh_token'];
-    //       delete res['data']['outlook_refresh_token'];
-    //       this.user = res['data'];
-    //       this.userService.setUser(this.user);
-    //     }
-    //   },
-    //   (err) => {}
-    // );
+    this.userService.loadProfile().subscribe(
+      (res) => {
+        if (res['status']) {
+          delete res['data']['google_refresh_token'];
+          delete res['data']['outlook_refresh_token'];
+          this.user = res['data'];
+        }
+      },
+      (err) => {}
+    );
     let mode, year, month, day;
     mode = this.router.snapshot.params['mode'];
     if (mode) {
@@ -74,6 +75,8 @@ export class CalendarComponent implements OnInit {
             startOfWeek(this.viewDate).getMonth() + 1
           }/${startOfWeek(this.viewDate).getDate()}`
         );
+        this.weekStart = startOfWeek(this.viewDate).getDate();
+        this.weekEnd = endOfWeek(this.viewDate).getDate();
         break;
       case 'day':
         this.location.replaceState(
@@ -84,30 +87,30 @@ export class CalendarComponent implements OnInit {
         break;
     }
     const date = this.viewDate.toISOString();
-    // this.appointmentService.getEvents(date, mode).subscribe((res) => {
-    //   if (res['status'] == true) {
-    //     this.events = res['data'].map((item) => {
-    //       return {
-    //         title: item.title,
-    //         start: new Date(item.due_start),
-    //         end: new Date(item.due_end),
-    //         meta: {
-    //           contacts: item.contacts,
-    //           calendar_id: item.calendar_id,
-    //           description: item.description,
-    //           location: item.location,
-    //           type: item.type,
-    //           guests: item.guests,
-    //           event_id: item.event_id,
-    //           recurrence: item.recurrence,
-    //           recurrence_id: item.recurrence_id,
-    //           is_organizer: item.is_organizer
-    //         }
-    //       };
-    //     });
-    //     this.isLoading = false;
-    //   }
-    // });
+    this.appointmentService.getEvents(date, mode).subscribe((res) => {
+      if (res['status'] == true) {
+        this.events = res['data'].map((item) => {
+          return {
+            title: item.title,
+            start: new Date(item.due_start),
+            end: new Date(item.due_end),
+            meta: {
+              contacts: item.contacts,
+              calendar_id: item.calendar_id,
+              description: item.description,
+              location: item.location,
+              type: item.type,
+              guests: item.guests,
+              event_id: item.event_id,
+              recurrence: item.recurrence,
+              recurrence_id: item.recurrence_id,
+              is_organizer: item.is_organizer
+            }
+          };
+        });
+        this.isLoading = false;
+      }
+    });
   }
 
   // connectCalendar() {
@@ -285,6 +288,8 @@ export class CalendarComponent implements OnInit {
             startOfWeek(this.viewDate).getMonth() + 1
           }/${startOfWeek(this.viewDate).getDate()}`
         );
+        this.weekStart = startOfWeek(this.viewDate).getDate();
+        this.weekEnd = endOfWeek(this.viewDate).getDate();
         break;
       case 'day':
         this.location.replaceState(
@@ -295,30 +300,30 @@ export class CalendarComponent implements OnInit {
         break;
     }
     const date = this.viewDate.toISOString();
-    // this.appointmentService.getEvents(date, this.view).subscribe((res) => {
-    //   if (res['status'] == true) {
-    //     this.events = res['data'].map((item) => {
-    //       return {
-    //         title: item.title,
-    //         start: new Date(item.due_start),
-    //         end: new Date(item.due_end),
-    //         meta: {
-    //           contacts: item.contacts,
-    //           calendar_id: item.calendar_id,
-    //           description: item.description,
-    //           location: item.location,
-    //           type: item.type,
-    //           guests: item.guests,
-    //           event_id: item.event_id,
-    //           recurrence: item.recurrence,
-    //           recurrence_id: item.recurrence_id,
-    //           is_organizer: item.is_organizer
-    //         }
-    //       };
-    //     });
-    //     this.isLoading = false;
-    //   }
-    // });
+    this.appointmentService.getEvents(date, this.view).subscribe((res) => {
+      if (res['status'] == true) {
+        this.events = res['data'].map((item) => {
+          return {
+            title: item.title,
+            start: new Date(item.due_start),
+            end: new Date(item.due_end),
+            meta: {
+              contacts: item.contacts,
+              calendar_id: item.calendar_id,
+              description: item.description,
+              location: item.location,
+              type: item.type,
+              guests: item.guests,
+              event_id: item.event_id,
+              recurrence: item.recurrence,
+              recurrence_id: item.recurrence_id,
+              is_organizer: item.is_organizer
+            }
+          };
+        });
+        this.isLoading = false;
+      }
+    });
   }
 
   calendarChange(value: string): void {
@@ -340,6 +345,8 @@ export class CalendarComponent implements OnInit {
           }/${startOfWeek(this.viewDate).getDate()}`
         );
         this.view = CalendarView.Week;
+        this.weekStart = startOfWeek(this.viewDate).getDate();
+        this.weekEnd = endOfWeek(this.viewDate).getDate();
         break;
       case 'day':
         this.location.replaceState(
@@ -351,29 +358,29 @@ export class CalendarComponent implements OnInit {
         break;
     }
     const date = this.viewDate.toISOString();
-    // this.appointmentService.getEvents(date, this.view).subscribe((res) => {
-    //   if (res['status'] == true) {
-    //     this.events = res['data'].map((item) => {
-    //       return {
-    //         title: item.title,
-    //         start: new Date(item.due_start),
-    //         end: new Date(item.due_end),
-    //         meta: {
-    //           contacts: item.contacts,
-    //           calendar_id: item.calendar_id,
-    //           description: item.description,
-    //           location: item.location,
-    //           type: item.type,
-    //           guests: item.guests,
-    //           event_id: item.event_id,
-    //           recurrence: item.recurrence,
-    //           recurrence_id: item.recurrence_id,
-    //           is_organizer: item.is_organizer
-    //         }
-    //       };
-    //     });
-    //     this.isLoading = false;
-    //   }
-    // });
+    this.appointmentService.getEvents(date, this.view).subscribe((res) => {
+      if (res['status'] == true) {
+        this.events = res['data'].map((item) => {
+          return {
+            title: item.title,
+            start: new Date(item.due_start),
+            end: new Date(item.due_end),
+            meta: {
+              contacts: item.contacts,
+              calendar_id: item.calendar_id,
+              description: item.description,
+              location: item.location,
+              type: item.type,
+              guests: item.guests,
+              event_id: item.event_id,
+              recurrence: item.recurrence,
+              recurrence_id: item.recurrence_id,
+              is_organizer: item.is_organizer
+            }
+          };
+        });
+        this.isLoading = false;
+      }
+    });
   }
 }
