@@ -1,0 +1,82 @@
+:host ::ng-deep {
+    // mat-icon {
+    //     cursor: pointer;
+    //     font-size: 45px;
+    //     height: 45px;
+    //     width: 45px;
+    // }
+    mwl-calendar-month-cell {
+        &.cal-cell.cal-day-cell {
+            min-height: 140px;
+            background-color: white;
+            &.cal-today {
+                background-color: white;
+                .cal-day-number {
+                    background-color: #1a73e8;
+                    color: white;
+                    border-radius: 50%;
+                    font-size: 12px;
+                }
+            }
+            &:hover {
+                background-color: white;
+            }
+        }
+        .cal-cell-top {
+            min-height: 0;
+            flex: none;
+            text-align: center;
+            .cal-day-number {
+                font-size: 12px;
+                width: 25px;
+                height: 25px;
+                display: inline-block;
+                padding-top: 4px;
+                margin: 0;
+                float: none;
+                opacity: 1;
+            }
+        }
+        .cal-events {
+            .cal-events-header {
+                color: rgb(11, 128, 67);
+                border-radius: 8px;
+                border: 3px solid;
+                height: 0;
+                width: 0;
+            }
+            .cal-events-body {
+                font-size: 12px;
+                font-weight: 600;
+                color: #3c4043;
+                white-space: nowrap;
+                font-family: Roboto,Helvetica,Arial,sans-serif;
+                width: 10px;
+                .cal-events-time {
+                    font-weight: lighter;
+                }
+            }
+            &:hover {
+                background-color: #ededed;
+            }
+        }
+    }
+}
+
+.date {
+    width: 270px;
+}
+
+.connect-calendar {
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #32325d;
+    a {
+        cursor: pointer;
+    }
+}
+
+.form-control {
+    width: 100px;
+}

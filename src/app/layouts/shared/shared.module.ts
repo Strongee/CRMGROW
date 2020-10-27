@@ -9,6 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { StripePipe } from '../../pipes/stripe.pipe';
 import { QuillModule } from 'ngx-quill';
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
   declarations: [StripePipe, LoadingButtonComponent],
@@ -21,7 +23,11 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    })
   ],
   exports: [
     NgbModule,
@@ -33,7 +39,8 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     MatDialogModule,
     StripePipe,
     QuillModule,
-    LoadingButtonComponent
+    LoadingButtonComponent,
+    CalendarModule
   ]
 })
 export class SharedModule {}
