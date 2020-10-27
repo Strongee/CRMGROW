@@ -11,6 +11,7 @@ import { QuillModule } from 'ngx-quill';
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [StripePipe, LoadingButtonComponent],
@@ -23,6 +24,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule,
+    MatIconModule,
     QuillModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
@@ -37,6 +39,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule,
+    MatIconModule,
     StripePipe,
     QuillModule,
     LoadingButtonComponent,

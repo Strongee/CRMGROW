@@ -1,10 +1,10 @@
 :host ::ng-deep {
-    // mat-icon {
-    //     cursor: pointer;
-    //     font-size: 45px;
-    //     height: 45px;
-    //     width: 45px;
-    // }
+    mat-icon {
+        cursor: pointer;
+        font-size: 35px;
+        height: 35px;
+        width: 35px;
+    }
     mwl-calendar-month-cell {
         &.cal-cell.cal-day-cell {
             min-height: 140px;
@@ -63,8 +63,59 @@
     }
 }
 
-.date {
-    width: 270px;
+.page-title {
+    font-size: 22px;
+}
+
+.calendar-header {
+    .calendar-time {
+        .btn {
+            i {
+                width: 12px;
+                height: 12px;
+                min-width: 12px;
+            }
+        }
+        .small-button {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            i {
+                width: 12px;
+                height: 12px;
+                min-width: 12px;
+            }
+        }
+        .dropdown-menu {
+            min-width: 7rem;
+        }
+        .date {
+            width: 250px;
+            font-size: 20px;
+            letter-spacing: 0;
+            line-height: 32px;
+        }
+        @media screen and (max-width: 576px) {
+            justify-content: center !important;
+            .btn {
+                display: none;
+            }
+            .small-button {
+                display: flex;
+                justify-content: center;
+            }
+            .dropdown-menu {
+                right: 0;
+                left: unset !important;
+            }
+            .date {
+                width: 200px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+        }
+    }
 }
 
 .connect-calendar {
@@ -75,8 +126,4 @@
     a {
         cursor: pointer;
     }
-}
-
-.form-control {
-    width: 100px;
 }

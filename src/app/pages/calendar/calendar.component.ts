@@ -322,6 +322,7 @@ export class CalendarComponent implements OnInit {
   }
 
   calendarChange(value: string): void {
+    console.log('##', value);
     this.isLoading = true;
     switch (value) {
       case 'month':
@@ -330,6 +331,7 @@ export class CalendarComponent implements OnInit {
             this.viewDate.getMonth() + 1
           }/1`
         );
+        this.view = CalendarView.Month;
         break;
       case 'week':
         this.location.replaceState(
@@ -337,6 +339,7 @@ export class CalendarComponent implements OnInit {
             startOfWeek(this.viewDate).getMonth() + 1
           }/${startOfWeek(this.viewDate).getDate()}`
         );
+        this.view = CalendarView.Week;
         break;
       case 'day':
         this.location.replaceState(
@@ -344,6 +347,7 @@ export class CalendarComponent implements OnInit {
             this.viewDate.getMonth() + 1
           }/${this.viewDate.getDate()}`
         );
+        this.view = CalendarView.Day;
         break;
     }
     const date = this.viewDate.toISOString();

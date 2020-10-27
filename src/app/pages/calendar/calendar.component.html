@@ -1,110 +1,110 @@
-<div class="container-fluid page-wrapper">
-    <div class="p-0 pt-3 p-sm-3">
-      <div class="text-center">
+<div class="page-content">
+    <div class="text-center">
         <!-- <h3 *ngIf="!user.connect_calendar" class="bg-white px-3 py-2 connect-calendar">
             Click <a class="text-primary font-weight-bold" (click)="connectCalendar()">here</a> to connect your calendar
         </h3> -->
-      </div>
-      <div class="d-flex mb-2">
-        <h2 class="mr-auto mb-0">Calendar</h2>
-      </div>
-      <div class="card p-0 p-sm-2">
-        <div class="d-flex justify-content-end">
-          <div class="btn-group my-auto">
-            <!-- <mat-icon
-              class="text-primary"
-              mwlCalendarPreviousView
-              [view]="view"
-              [(viewDate)]="viewDate"
-              (viewDateChange)="calendarDateChange()"
-            >
-              keyboard_arrow_left
-            </mat-icon> 
-            <mat-icon
-              class="text-primary"
-              mwlCalendarNextView
-              [view]="view"
-              [(viewDate)]="viewDate"
-              (viewDateChange)="calendarDateChange()"
-            >
-              keyboard_arrow_right
-            </mat-icon> -->
-          </div>
-          <div class="date mr-3 my-auto">
-            <h3 class="my-auto text-center">{{ viewDate | calendarDate: view + 'ViewTitle':locale }}</h3>
-          </div>
-          <div class="form-group m-0">
-            <select class="form-control" [(ngModel)]="view" (change)="calendarChange($event.target.value)">
-              <option
-                [value]="CalendarView.Month"
-              >
-                Month
-              </option>
-              <option
-                [value]="CalendarView.Week"
-              >
-                Week
-              </option>
-              <option
-                [value]="CalendarView.Day"
-              >
-                Day
-              </option>
-            </select>
-          </div>
-        </div>
-        <br />
-        <ng-template #customCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
-          <div class="cal-cell-top mt-1 mb-2">
-            <span class="cal-day-number"
-              >{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span
-            >
-          </div>
-          <div *ngIf="day.events.length > 0">
-            <div  *ngFor="let event of day.events">
-              <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" (mwlClick)="eventClicked.emit({event: event})">
-                <div class="cal-events-header mr-1">
-                </div>
-                <div class="d-flex cal-events-body">
-                  <span class="cal-events-time mr-1">{{event.start | date:'shortTime'}}</span>
-                  <span class="cal-events-title">{{event.title}}</span>
-                </div>
-              </div>
+    </div>
+    <div class="c-dark font-weight-bold page-title">
+        Calendar
+    </div>
+    <div class="v-center justify-content-end my-3 calendar-header">
+        <div class="v-center justify-content-end mt-sm-0 mt-2 calendar-time">
+            <button class="v-center btn btn-blue f-4 font-weight-bold text-white mr-sm-3">
+                <i class="i-icon i-plus bg-white d-block mr-2"></i>
+                New meeting
+            </button>
+            <button class="v-center btn-blue text-white small-button">
+                <i class="i-icon i-plus bg-white d-block"></i>
+            </button>
+            <div class="v-center">
+                <mat-icon
+                class="text-primary"
+                mwlCalendarPreviousView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                (viewDateChange)="calendarDateChange()"
+                >
+                keyboard_arrow_left
+                </mat-icon>
+                <mat-icon
+                class="text-primary"
+                mwlCalendarNextView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                (viewDateChange)="calendarDateChange()"
+                >
+                keyboard_arrow_right
+                </mat-icon>
             </div>
-          </div>
-        </ng-template>
-        <div [ngSwitch]="view">
-          <mwl-calendar-month-view
-            *ngSwitchCase="CalendarView.Month"
-            [viewDate]="viewDate"
-            [events]="events"
-            (dayClicked)="dayClicked($event.day)"
-            [cellTemplate]="customCellTemplate"
-            (eventClicked)="handleEvent($event.event)"
-          >
-          </mwl-calendar-month-view>
-          <mwl-calendar-week-view
-            *ngSwitchCase="CalendarView.Week"
-            [viewDate]="viewDate"
-            [events]="events"
-            (hourSegmentClicked)="hourClicked($event.date)"
-          >
-          </mwl-calendar-week-view>
-          <mwl-calendar-day-view
-            *ngSwitchCase="CalendarView.Day"
-            [viewDate]="viewDate"
-            [events]="events"
-            (hourSegmentClicked)="hourClicked($event.date)"
-          >
-          </mwl-calendar-day-view>
+            <div class="v-center mr-2 justify-content-center c-dark date">
+                {{ viewDate | calendarDate: view + 'ViewTitle':locale }}
+            </div>
+            <div class="v-center text-primary" ngbDropdown>
+                <div ngbDropdownToggle>
+                </div>
+                <div ngbDropdownMenu class="light">
+                    <div class="dropdown-item c-dark" (click)="calendarChange('month')">
+                        Month
+                    </div>
+                    <div class="dropdown-item c-dark" (click)="calendarChange('week')">
+                        Week
+                    </div>
+                    <div class="dropdown-item c-dark" (click)="calendarChange('day')">
+                        Day
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
+    <ng-template #customCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
+        <div class="cal-cell-top mt-1 mb-2">
+        <span class="cal-day-number"
+            >{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span
+        >
+        </div>
+        <div *ngIf="day.events.length > 0">
+        <div  *ngFor="let event of day.events">
+            <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" (mwlClick)="eventClicked.emit({event: event})">
+            <div class="cal-events-header mr-1">
+            </div>
+            <div class="d-flex cal-events-body">
+                <span class="cal-events-time mr-1">{{event.start | date:'shortTime'}}</span>
+                <span class="cal-events-title">{{event.title}}</span>
+            </div>
+            </div>
+        </div>
+        </div>
+    </ng-template>
+    <div [ngSwitch]="view">
+        <mwl-calendar-month-view
+        *ngSwitchCase="CalendarView.Month"
+        [viewDate]="viewDate"
+        [events]="events"
+        (dayClicked)="dayClicked($event.day)"
+        [cellTemplate]="customCellTemplate"
+        (eventClicked)="handleEvent($event.event)"
+        >
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view
+        *ngSwitchCase="CalendarView.Week"
+        [viewDate]="viewDate"
+        [events]="events"
+        (hourSegmentClicked)="hourClicked($event.date)"
+        >
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view
+        *ngSwitchCase="CalendarView.Day"
+        [viewDate]="viewDate"
+        [events]="events"
+        (hourSegmentClicked)="hourClicked($event.date)"
+        >
+        </mwl-calendar-day-view>
     </div>
     <!-- <ng-container *ngIf="isLoading">
-      <div class="px-3 pb-3">
+    <div class="px-3 pb-3">
         <div class="bg-white rounded">
-          <app-loading-overlay [type]="'screen'"></app-loading-overlay>
+        <app-loading-overlay [type]="'screen'"></app-loading-overlay>
         </div>
-      </div>
+    </div>
     </ng-container> -->
-  </div>
+</div>
