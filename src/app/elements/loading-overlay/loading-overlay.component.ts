@@ -6,9 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./loading-overlay.component.scss']
 })
 export class LoadingOverlayComponent implements OnInit {
-
-  @Input('status') status: string = '';
-  @Input('type') type: string = '';
+  @Input('status') status = '';
+  @Input('type') type = '';
 
   defaultPage = {
     title: '',
@@ -17,13 +16,11 @@ export class LoadingOverlayComponent implements OnInit {
       description: '',
       image: ''
     }
-  }
+  };
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  smallItems = [0, 1,2,3,4,5,6,7,8,9]
-
+  smallItems = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 }
