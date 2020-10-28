@@ -43,29 +43,29 @@
                 </td>
                 <td class="team-owner">
                   <div class="v-center">
-                    <div class="owners">
+                    <div class="owners v-center">
                       <ng-container *ngIf="team.owner">
                         <ng-container *ngIf="team.owner.length < 5; else overTemplate">
                           <div class="owner" *ngFor="let own of team.owner">
                             <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
-                              <img [src]="own.picture_profile" class="owner-avatar" />
+                              <img [src]="own.picture_profile" class="avatar" />
                             </ng-container>
                             <ng-template #ownNamePlaceholder>
-                              <div class="owner-name-avatar">{{own.user_name[0]}}</div>
+                              <div class="name-avatar">{{own.user_name[0]}}</div>
                             </ng-template>
                           </div>
                         </ng-container>
                         <ng-template #overTemplate>
                           <div class="owner" *ngFor="let mIndex of [0,1,2,3]">
                             <ng-container *ngIf="team.owner[mIndex].picture_profile; else ownNamePlaceholder">
-                              <img [src]="team.owner[mIndex].picture_profile" class="owner-avatar" />
+                              <img [src]="team.owner[mIndex].picture_profile" class="avatar" />
                             </ng-container>
                             <ng-template #ownNamePlaceholder>
-                              <div class="owner-name-avatar">{{team.owner[mIndex].username[0]}}</div>
+                              <div class="name-avatar">{{team.owner[mIndex].username[0]}}</div>
                             </ng-template>
                           </div>
                           <div class="owner remain-number">
-                            <div class="owner-name-avatar">+{{team.owner.length - 4}}</div>
+                            <div class="name-avatar">+{{team.owner.length - 4}}</div>
                           </div>
                         </ng-template>
                       </ng-container>
