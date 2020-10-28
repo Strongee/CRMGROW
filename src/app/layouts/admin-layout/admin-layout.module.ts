@@ -27,6 +27,7 @@ import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
 import { TemplateConditionalComplexityRule } from 'codelyzer';
+import { CalendarComponent } from '../../pages/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { TemplateConditionalComplexityRule } from 'codelyzer';
     SettingsComponent,
     TeamsComponent,
     TemplatesComponent,
-    TemplateComponent
+    TemplateComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,
