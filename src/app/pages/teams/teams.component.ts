@@ -76,6 +76,10 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   isLeader = false;
 
+  inquiryExpanded = true;
+  plannedExpanded = true;
+  finishedExpanded = true;
+
   constructor(
     private teamService: TeamService,
     private dialog: MatDialog,
@@ -103,7 +107,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      const callId = this.route.snapshot.params['id'];
+      const callId = this.route.snapshot.params.id;
       if (callId) {
         this.teamService.getInquiry(callId).subscribe((res) => {
           const inquiry = res;
@@ -168,13 +172,12 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       .getPageInquiries(skip)
       .subscribe(
         (res) => {
-          console.log("inquiry call =============>", res);
           this.isInquiryLoading = false;
           this.isInquiryTableLoading = false;
-          this.inquiriesData = res['data'];
-          this.pageInquiriesData = res['data'];
-          this.totalInquiries = res['total'];
-          this.inquiriesCount = res['total'];
+          this.inquiriesData = res.data;
+          this.pageInquiriesData = res.data;
+          this.totalInquiries = res.total;
+          this.inquiriesCount = res.total;
         },
         (err) => {
           this.isInquiryTableLoading = false;
@@ -198,10 +201,10 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       (res) => {
         this.isPlannedLoading = false;
         this.isPlannedTableLoading = false;
-        this.plannedData = res['data'];
-        this.pagePlannedData = res['data'];
-        this.totalPlanned = res['total'];
-        this.plannedCount = res['total'];
+        this.plannedData = res.data;
+        this.pagePlannedData = res.data;
+        this.totalPlanned = res.total;
+        this.plannedCount = res.total;
       },
       (err) => {
         this.isPlannedTableLoading = false;
@@ -227,10 +230,10 @@ export class TeamsComponent implements OnInit, AfterViewInit {
         (res) => {
           this.isFinishedLoading = false;
           this.isFinishedTableLoading = false;
-          this.finishedData = res['data'];
-          this.pageFinishedData = res['data'];
-          this.totalFinished = res['total'];
-          this.finishedCount = res['total'];
+          this.finishedData = res.data;
+          this.pageFinishedData = res.data;
+          this.totalFinished = res.total;
+          this.finishedCount = res.total;
         },
         (err) => {
           this.isFinishedTableLoading = false;
@@ -539,6 +542,13 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   joinForm(): void {}
 
+  getDuration(duration): string {
+    if (duration === 60) {
+      return '1 hour';
+    }
+    return `${duration} mins`;
+  }
+
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
   }
@@ -562,4 +572,14 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   confirmRequest(inquiry): void {}
   joinCallRequest(): void {}
+
+  changeExpanded(accordionType): void {
+    if (accordionType === 'inquiry') {
+      this.inquiryExpanded = !this.inquiryExpanded;
+    } else if (accordionType === 'planned') {
+      this.plannedExpanded = !this.plannedExpanded;
+    } else if (accordionType === 'finished') {
+      this.finishedExpanded = !this.finishedExpanded;
+    }
+  }
 }

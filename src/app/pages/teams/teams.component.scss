@@ -46,26 +46,29 @@
       border-radius: 5px;
       width: 60px;
       text-align: center;
+
       &.Owner {
         background-color: #F1305E;
       }
+
       &.Viewer {
         background-color: #308BF1;
       }
+
       &.Editor {
         background-color: #08CE97;
       }
     }
   }
+}
 
-  .team-actions {
-    text-align: right;
+.team-actions {
+  text-align: right;
 
-    .button-more {
-      a {
-        &::after {
-          content: none;
-        }
+  .button-more {
+    a {
+      &::after {
+        content: none;
       }
     }
   }
@@ -98,6 +101,75 @@
           order: 2;
         }
       }
+    }
+  }
+
+  .call-request-table {
+    td {
+      padding: 10px 0px;
+
+      &.guests {
+        text-align: center;
+      }
+    }
+  }
+
+  .expand {
+    .i-icon {
+      transition: all .3s;
+      width: 10px;
+      height: 10px;
+
+      &.expand {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  .subscribe-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+
+    &.like {
+      background-color: #04b800;
+    }
+
+    &.unlike {
+      background-color: #d92121;
+      transform: rotate(180deg);
+    }
+  }
+
+  .status {
+    color: #FFFFFF;
+    width: 60px;
+    text-align: center;
+    font-size: 11px;
+    cursor: pointer;
+
+    .pending {
+      background-color: #0000FF;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .canceled {
+      background-color: #d92121;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .planned {
+      background-color: #f28422;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .finished {
+      background-color: #04b800;
+      border-radius: 5px;
+      padding: 3px 5px;
     }
   }
 

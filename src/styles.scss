@@ -340,6 +340,15 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .i-check {
   mask-image: url('./assets/img/check.svg');
 }
+.i-question {
+  mask-image: url('./assets/img/question-sign-in-circles.svg');
+}
+.i-like {
+  mask-image: url('./assets/img/like.svg');
+}
+.i-triangle-right {
+  mask-image: url('./assets/img/triangle-right.svg');
+}
 .pl-4c{
   padding-left: 2rem!important;
 }
@@ -894,4 +903,14 @@ table {
 
 .opacity-6 {
   opacity: 0.6;
+}
+
+// Pagination Style
+ul.ngx-pagination {
+  margin-bottom: 0px;
+  padding-left: 0px;
+  .current {
+    border-radius: 3px;
+    background-color: #337abc;
+  }
 }
