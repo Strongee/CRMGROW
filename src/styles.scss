@@ -9,6 +9,7 @@ $custom-checkbox-indicator-border-radius: 3px;
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import '~ngx-toastr/toastr-bs4-alert';
+@import '~ngx-sharebuttons/themes/default/default-theme';
 @import "./variables";
 @import "src/assets/scss/custom-toggle";
 @import "src/assets/scss/custom-radio";
@@ -332,6 +333,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .i-block {
   mask-image: url('./assets/img/block.svg');
+}
+.i-triangle-up {
+  mask-image: url('./assets/img/up-triangle.svg');
 }
 .pl-4c{
   padding-left: 2rem!important;
@@ -883,4 +887,8 @@ table {
   height: 40px;
   border-radius: 50%;
   box-shadow: -2px 2px 4px #ccc;
+}
+
+.opacity-6 {
+  opacity: 0.6;
 }

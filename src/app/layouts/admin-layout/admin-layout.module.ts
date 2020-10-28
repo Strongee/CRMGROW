@@ -29,6 +29,8 @@ import { TemplateComponent } from '../../pages/template/template.component';
 import { TemplateConditionalComplexityRule } from 'codelyzer';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { TeamComponent } from '../../pages/team/team.component';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { TeamComponent } from '../../pages/team/team.component';
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
     NgxPaginationModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    ShareButtonsModule,
+    ShareIconsModule
   ],
   schemas: []
 })

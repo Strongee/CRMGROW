@@ -9,6 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { StripePipe } from '../../pipes/stripe.pipe';
 import { QuillModule } from 'ngx-quill';
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
+import { MatTabsModule } from '@angular/material/tabs';
+
 
 @NgModule({
   declarations: [StripePipe, LoadingButtonComponent],
@@ -21,7 +23,8 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    MatTabsModule
   ],
   exports: [
     NgbModule,
@@ -33,7 +36,8 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     MatDialogModule,
     StripePipe,
     QuillModule,
-    LoadingButtonComponent
+    LoadingButtonComponent,
+    MatTabsModule
   ]
 })
 export class SharedModule {}

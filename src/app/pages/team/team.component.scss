@@ -15,11 +15,10 @@
     margin-top: 15px;
   }
 }
-
-.avatar {
-
+.i-small-icon {
+  width: 10px;
+  height: 10px;
 }
-
 .owners {
   display: flex;
   margin-right: 20px;
@@ -91,6 +90,14 @@
   }
 }
 
+@media screen and (max-width: 576px) {
+  .team-info-container {
+    .tabs {
+      width: 295px;
+    }
+  }
+}
+
 .members-table-container {
   .check-cell {
     width: 40px;
@@ -120,6 +127,10 @@
       }
 
       .Owner {
+        width: 70px;
+        height: 22px;
+        padding: 2px;
+        border-radius: 5px;
         background-color: #F1305E;
       }
 
@@ -164,6 +175,144 @@
     }
 
     .avatar, .name-avatar {
+      display: none;
+    }
+  }
+}
+
+.empty-members {
+  max-width: 400px;
+  text-align: center;
+  margin: auto;
+
+  img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+}
+
+
+.empty-videos {
+  max-width: 400px;
+  text-align: center;
+  margin: auto;
+
+  img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+}
+
+.empty-pdfs {
+  max-width: 400px;
+  text-align: center;
+  margin: auto;
+
+  img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+}
+
+
+.empty-images {
+  max-width: 400px;
+  text-align: center;
+  margin: auto;
+
+  img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+}
+
+h4 {
+  margin-top: 30px;
+  border-bottom: 1px solid gainsboro;
+  padding-bottom: 5px;
+  padding-left: 10px;
+}
+
+.member-list {
+  padding: 15px;
+  background-color: white;
+  box-shadow: 2px 2px 4px #ddd, -2px -2px 4px #eee;
+  border-radius: 4px;
+
+  @media screen and (max-width: 1200px) {
+    padding: 15px 4px;
+  }
+}
+
+.material-share-table {
+
+  td {
+    margin: 5px 0px;
+    vertical-align: center;
+  }
+
+  .check-cell {
+    width: 40px;
+  }
+
+  .material-name {
+    .thumbnail img {
+      width: 100px;
+      height: 58px;
+      object-fit: cover;
+    }
+    .info {
+
+    }
+  }
+
+  .material-actions {
+    .dropdown-menu {
+      width: 190px;
+    }
+  }
+
+  &.template-table,
+  &.automation-table, {
+    td {
+      margin: 15px 0px;
+    }
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .material-share-table {
+    .material-name .info {
+      display: none;
+    }
+
+    .material-actions {
+      .button-label {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .material-share-table {
+    .material-name {
+      .thumbnail img {
+        width: 50px;
+        height: 29px;
+      }
+
+      .info {
+        display: none;
+      }
+    }
+
+    .material-view, .material-added {
       display: none;
     }
   }

@@ -67,7 +67,7 @@
           </div>
           <div class="members ml-5">
             <label>Members</label>
-            <div class="value f-30 font-weight-bold">{{team.members.length}}</div>
+            <div class="value f-30 font-weight-bold">{{team.owner.length + team.members.length}}</div>
           </div>
           <div class="ml-5">
             <label>Your Status</label>
@@ -113,7 +113,39 @@
           </tr>
           </thead>
           <tbody>
-          <ng-container *ngIf="team.members.length">
+          <ng-container *ngIf="team.members.length + team.owner.length + team.invites.length">
+            <tr *ngFor="let own of team.owner">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="own-{{own._id}}" (change)="selectedMembers.toggle(own._id)" [checked]="selectedMembers.isSelected(own._id)">
+                  <label class="custom-control-label" for="own-{{own._id}}"></label>
+                </div>
+              </td>
+              <td class="name-cell">
+                <div class="v-center">
+                  <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
+                    <img [src]="own.picture_profile" class="avatar mr-3" />
+                  </ng-container>
+                  <ng-template #ownNamePlaceholder>
+                    <div class="name-avatar mr-3">{{own.user_name[0]}}</div>
+                  </ng-template>
+                  <div class="font-weight-bold">{{own.user_name}}</div>
+                </div>
+              </td>
+              <td class="status-cell">
+                <div class="status">
+                  <div class="Owner c-white text-center f-2">Owner</div>
+                </div>
+              </td>
+              <td class="added-cell">
+                {{own.created_at | date: 'dd.MM.yyyy'}}
+              </td>
+              <td class="phone-cell">
+                {{own.cell_phone}}
+              </td>
+              <td class="action-cell">
+              </td>
+            </tr>
             <tr *ngFor="let member of team.members">
               <td class="check-cell">
                 <div class="custom-control custom-checkbox">
@@ -200,6 +232,449 @@
             </tr>
           </ng-container>
         </table>
+      </div>
+      <div class="share-table-container mt-5" *ngIf="selectedTab.id === 'shared'">
+        <div class="material-tabs">
+          <mat-tab-group animationDuration="0ms">
+            <mat-tab label="videos">
+              <ng-template mat-tab-label>
+                Videos
+              </ng-template>
+              <div class="video-list-wrapper tab-panel">
+                <ng-container *ngIf="team.videos.length; else emptyVideoListTemplate">
+                  <ng-container *ngIf="role=='editor' || role == 'owner'">
+                    <div class="d-flex my-3">
+                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createTeamVideo()">ADD
+                        VIDEO</button>
+                    </div>
+                    <table class="table material-share-table">
+                      <thead>
+                        <th class="check-cell">
+                          <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="selectAllVideos" (change)="selectAllVideos()" [checked]="isSelectedVideos()">
+                            <label class="custom-control-label" for="selectAllVideos"></label>
+                          </div>
+                        </th>
+                        <th class="material-name">Name</th>
+                        <th class="material-view">Views</th>
+                        <th class="material-added">Added</th>
+                        <th class="material-actions"></th>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngIf="team.videos.length">
+                          <tr *ngFor="let video of team.videos">
+                            <td class="check-cell">
+                              <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="video-{{video._id}}" (change)="selectedVideos.toggle(video._id)" [checked]="selectedVideos.isSelected(video._id)">
+                                <label class="custom-control-label" for="video-{{video._id}}"></label>
+                              </div>
+                            </td>
+                            <td class="material-name v-center">
+                              <div class="thumbnail">
+                                <a href="{{ siteUrl }}/video?video={{ video._id }}&user={{userId}}&team={{teamId}}" target="_blank">
+                                  <img [src]="video.preview || video.thumbnail" />
+                                </a>
+                              </div>
+                              <div class="info ml-2">
+                                <div class="title f-4 font-weight-bold">
+                                  {{video.title}}
+                                </div>
+                                <div class="description f-2 opacity-6 c-dark">
+                                  {{video.description | stripe | slice:0:80}}
+                                </div>
+                              </div>
+                            </td>
+                            <td class="material-view">0</td>
+                            <td class="material-added">{{video.created_at | date: 'MMM dd, yyyy'}}</td>
+                            <td class="material-actions v-center">
+                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('video', 'text', video)">
+                                <i class="bgc-dark i-icon i-sent mr-2"></i>
+                                <span class="button-label">Send</span>
+                              </button>
+                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="copyLink(video, 'video')">
+                                <i class="bgc-dark i-icon i-task mr-2"></i>
+                                <span class="button-label">Copy link</span>
+                              </button>
+                              <div ngbDropdown class="material-action">
+                                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-4 mr-2">
+                                  <i class="bgc-dark i-icon i-share mr-2"></i>
+                                  <span class="button-label">Share</span>
+                                </a>
+                                <div ngbDropdownMenu>
+                                  <share-buttons [theme]="'circle-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                                 [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ video._id }}&user={{userId}}"
+                                                 [autoSetMeta]="false"></share-buttons>
+                                </div>
+                              </div>
+                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="editMaterial('video', video)">
+                                <i class="bgc-dark i-icon i-template mr-2"></i>
+                                <span class="button-label">Edit template</span>
+                              </button>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                </ng-container>
+                <ng-template #emptyVideoListTemplate>
+                  <div class="empty-videos mt-3">
+                    <img src="../../../assets/img/file_empty.png" />
+                    <ng-container *ngIf="role === 'owner' || role === 'editor'; else onlyMemberVideoEmpty">
+                      <p class="desc">There is no team videos yet. Please create video to share with your team.
+                      </p>
+                      <div class="action">
+                        <button class="btn btn-primary btn-sm text-white" (click)="createTeamVideo()">CREATE VIDEO</button>
+                      </div>
+                    </ng-container>
+                    <ng-template #onlyMemberVideoEmpty>
+                      <p class="desc">There is no team videos yet. Please wait for a while.</p>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </div>
+            </mat-tab>
+            <mat-tab label="pdfs">
+              <ng-template mat-tab-label>
+                Pdfs
+              </ng-template>
+              <div class="pdf-list-wrapper tab-panel">
+                <ng-container *ngIf="team.pdfs.length; else emptyPdfListTemplate">
+                  <ng-container *ngIf="role=='editor' || role == 'owner'">
+                    <div class="d-flex my-3">
+                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createTeamPdf()">ADD
+                        PDF</button>
+                    </div>
+                    <table class="table material-share-table">
+                      <thead>
+                      <th class="check-cell">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="selectAllPdfs" (change)="selectAllPdfs()" [checked]="isSelectedPdfs()">
+                          <label class="custom-control-label" for="selectAllPdfs"></label>
+                        </div>
+                      </th>
+                      <th class="material-name">Name</th>
+                      <th class="material-view">Views</th>
+                      <th class="material-added">Added</th>
+                      <th class="material-actions"></th>
+                      </thead>
+                      <tbody>
+                      <ng-container *ngIf="team.pdfs.length">
+                        <tr *ngFor="let pdf of team.pdfs">
+                          <td class="check-cell">
+                            <div class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="pdf-{{pdf._id}}" (change)="selectedPdfs.toggle(pdf._id)" [checked]="selectedPdfs.isSelected(pdf._id)">
+                              <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
+                            </div>
+                          </td>
+                          <td class="material-name v-center">
+                            <div class="thumbnail mr-3">
+                              <a href="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{userId}}&team={{teamId}}" target="_blank">
+                                <img [src]="pdf.preview || pdf.thumbnail" />
+                              </a>
+                            </div>
+                            <div class="info">
+                              <div class="title f-4 font-weight-bold">
+                                {{pdf.title}}
+                              </div>
+                              <div class="description f-2 opacity-6 c-dark">
+                                {{pdf.description | stripe | slice:0:80}}
+                              </div>
+                            </div>
+                          </td>
+                          <td class="material-view">0</td>
+                          <td class="material-added">{{pdf.created_at | date: 'MMM dd, yyyy'}}</td>
+                          <td class="material-actions v-center">
+                            <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('pdf', 'text', pdf)">
+                              <i class="bgc-dark i-icon i-sent mr-2"></i>
+                              <span class="button-label">Send</span>
+                            </button>
+                            <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="copyLink(pdf, 'pdf')">
+                              <i class="bgc-dark i-icon i-task mr-2"></i>
+                              <span class="button-label">Copy link</span>
+                            </button>
+                            <div ngbDropdown class="material-action">
+                              <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-4 mr-2">
+                                <i class="bgc-dark i-icon i-share mr-2"></i>
+                                <span class="button-label">Share</span>
+                              </a>
+                              <div ngbDropdownMenu>
+                                <share-buttons [theme]="'circle-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                               [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{userId}}"
+                                               [autoSetMeta]="false"></share-buttons>
+                              </div>
+                            </div>
+                            <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="editMaterial('pdf', pdf)">
+                              <i class="bgc-dark i-icon i-template mr-2"></i>
+                              <span class="button-label">Edit template</span>
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                </ng-container>
+                <ng-template #emptyPdfListTemplate>
+                  <div class="empty-videos mt-3">
+                    <img src="../../../assets/img/file_empty.png" />
+                    <ng-container *ngIf="role === 'owner' || role === 'editor'; else onlyMemberPdfEmpty">
+                      <p class="desc">There is no team pdfs yet. Please create pdf to share with your team.
+                      </p>
+                      <div class="action">
+                        <button class="btn btn-primary btn-sm text-white" (click)="createTeamPdf()">CREATE PDF</button>
+                      </div>
+                    </ng-container>
+                    <ng-template #onlyMemberPdfEmpty>
+                      <p class="desc">There is no team pdfs yet. Please wait for a while.</p>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </div>
+            </mat-tab>
+            <mat-tab label="images">
+              <ng-template mat-tab-label>
+                Images
+              </ng-template>
+              <div class="image-list-wrapper tab-panel">
+                <ng-container *ngIf="team.images.length; else emptyImageListTemplate">
+                  <ng-container *ngIf="role=='editor' || role == 'owner'">
+                    <div class="d-flex my-3">
+                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createTeamImage()">ADD
+                        IMAGE</button>
+                    </div>
+                    <table class="table material-share-table">
+                      <thead>
+                      <th class="check-cell">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="selectAllImages" (change)="selectAllImages()" [checked]="isSelectedImages()">
+                          <label class="custom-control-label" for="selectAllImages"></label>
+                        </div>
+                      </th>
+                      <th class="material-name">Name</th>
+                      <th class="material-view">Views</th>
+                      <th class="material-added">Added</th>
+                      <th class="material-actions"></th>
+                      </thead>
+                      <tbody>
+                      <ng-container *ngIf="team.images.length">
+                        <tr *ngFor="let image of team.images">
+                          <td class="check-cell">
+                            <div class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="image-{{image._id}}" (change)="selectedImages.toggle(image._id)" [checked]="selectedImages.isSelected(image._id)">
+                              <label class="custom-control-label" for="image-{{image._id}}"></label>
+                            </div>
+                          </td>
+                          <td class="material-name v-center">
+                            <div class="thumbnail mr-3">
+                              <a href="{{ siteUrl }}/image?image={{ image._id }}&user={{userId}}&team={{teamId}}" target="_blank">
+                                <img [src]="image.preview || image.thumbnail" />
+                              </a>
+                            </div>
+                            <div class="info">
+                              <div class="title f-4 font-weight-bold">
+                                {{image.title}}
+                              </div>
+                              <div class="description f-2 opacity-6 c-dark">
+                                {{image.description | stripe | slice:0:80}}
+                              </div>
+                            </div>
+                          </td>
+                          <td class="material-view">0</td>
+                          <td class="material-added">{{image.created_at | date: 'MMM dd, yyyy'}}</td>
+                          <td class="material-actions v-center">
+                            <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('image', 'text', image)">
+                              <i class="bgc-dark i-icon i-sent mr-2"></i>
+                              <span class="button-label">Send</span>
+                            </button>
+                            <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="copyLink(image, 'image')">
+                              <i class="bgc-dark i-icon i-task mr-2"></i>
+                              <span class="button-label">Copy link</span>
+                            </button>
+                            <div ngbDropdown class="material-action">
+                              <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-4 mr-2">
+                                <i class="bgc-dark i-icon i-share mr-2"></i>
+                                <span class="button-label">Share</span>
+                              </a>
+                              <div ngbDropdownMenu>
+                                <share-buttons [theme]="'circle-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                               [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{userId}}"
+                                               [autoSetMeta]="false"></share-buttons>
+                              </div>
+                            </div>
+                            <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="editMaterial('image', image)">
+                              <i class="bgc-dark i-icon i-template mr-2"></i>
+                              <span class="button-label">Edit template</span>
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                </ng-container>
+                <ng-template #emptyImageListTemplate>
+                  <div class="empty-videos mt-3">
+                    <img src="../../../assets/img/file_empty.png" />
+                    <ng-container *ngIf="role === 'owner' || role === 'editor'; else onlyMemberImageEmpty">
+                      <p class="desc">There is no team images yet. Please create image to share with your team.
+                      </p>
+                      <div class="action">
+                        <button class="btn btn-primary btn-sm text-white" (click)="createTeamImage()">CREATE IMAGE</button>
+                      </div>
+                    </ng-container>
+                    <ng-template #onlyMemberImageEmpty>
+                      <p class="desc">There is no team images yet. Please wait for a while.</p>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </div>
+            </mat-tab>
+            <mat-tab label="Templates">
+              <ng-template mat-tab-label>
+                Templates
+              </ng-template>
+              <div class="template-list-wrapper tab-panel">
+                <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
+                  <ng-container *ngIf="role=='editor' || role == 'owner'">
+                    <div class="d-flex my-3">
+                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createEmailTemplate()">ADD
+                        TEMPLATE</button>
+                    </div>
+                    <table class="table material-share-table template-table">
+                      <thead>
+                      <th class="material-name">Title</th>
+                      <th class="material-template">Template</th>
+                      <th class="material-type">Type</th>
+                      </thead>
+                      <tbody>
+                      <ng-container *ngIf="team.email_templates.length">
+                        <tr *ngFor="let template of team.email_templates">
+                          <td class="material-name v-center">
+                            <div class="title f-5 c-blue font-weight-bold">
+                              {{template.title}}
+                            </div>
+                          </td>
+                          <td class="material-template">
+                            <div class="template-content">
+                              <div class="f-4 c-black font-weight-bold">
+                                {{template.subject}}
+                              </div>
+                              <div class="f-2 c-dark opacity-6">
+                                {{template.content | stripe | slice: 0: 120}}
+                              </div>
+                            </div>
+                          </td>
+                          <td class="material-type">
+                            <ng-container *ngIf="template.type === 'text'">
+                              <div class="v-center f-4">
+                                <i class="bgc-dark i-icon i-phone mr-2"></i>
+                                <span class="button-label">Text</span>
+                              </div>
+                            </ng-container>
+                            <ng-container *ngIf="template.type === 'email'">
+                              <div class="v-center f-4">
+                                <i class="bgc-dark i-icon i-message mr-2"></i>
+                                <span class="button-label">Email</span>
+                              </div>
+                            </ng-container>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                </ng-container>
+                <ng-template #emptyTemplateListTemplate>
+                  <div class="empty-videos mt-3">
+                    <img src="../../../assets/img/file_empty.png" />
+                    <ng-container *ngIf="role === 'owner' || role === 'editor'; else onlyMemberTemplateEmpty">
+                      <p class="desc">There is no team templates yet. Please create template to share with your team.
+                      </p>
+                      <div class="action">
+                        <button class="btn btn-primary btn-sm text-white" (click)="createEmailTemplate()">CREATE TEMPLATE</button>
+                      </div>
+                    </ng-container>
+                    <ng-template #onlyMemberTemplateEmpty>
+                      <p class="desc">There is no team templates yet. Please wait for a while.</p>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </div>
+            </mat-tab>
+            <mat-tab label="Automation">
+              <ng-template mat-tab-label>
+                Automations
+              </ng-template>
+              <div class="automation-list-wrapper tab-panel">
+                <ng-container *ngIf="team.automations.length; else emptyAutomationListTemplate">
+                  <ng-container *ngIf="role=='editor' || role == 'owner'">
+                    <div class="d-flex my-3">
+                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createAutomation()">ADD
+                        AUTOMATION</button>
+                    </div>
+                    <table class="table material-share-table automation-table">
+                      <thead>
+                      <th class="material-name">Title</th>
+                      <th class="material-actions">Actions</th>
+                      <th class="material-contacts">Contacts</th>
+                      <th class="material-created">Created</th>
+                      <th class="material-assign"></th>
+                      </thead>
+                      <tbody>
+                      <ng-container *ngIf="team.automations.length">
+                        <tr *ngFor="let automation of team.automations">
+                          <td class="material-name">
+                            <div class="title f-5 c-blue font-weight-bold">
+                              {{automation.title}}
+                            </div>
+                          </td>
+                          <td class="material-actions f-6 font-weight-bold">
+                            {{automation.automations.length}}
+                          </td>
+                          <td class="material-contacts">
+                            <span class="f-2 opacity-6 text-uppercase mr-2">Show</span>
+                            <span class="f-6 c-blue font-weight-bold">3</span>
+                          </td>
+                          <td class="material-created">
+                            {{automation.created_at | date: 'MMM dd, yyyy'}}
+                          </td>
+                          <td class="material-assign">
+                            <div class="v-center">
+                              <button class="btn btn-white f-2 c-blue font-weight-bold mr-2" (click)="assignContact(automation)">
+                                Assign to contact
+                              </button>
+                              <button class="btn btn-white v-center f-2">
+                                <i class="bgc-dark i-icon i-small-icon i-triangle-up mr-2"></i>
+                              </button>
+                            </div>
+
+                          </td>
+                        </tr>
+                      </ng-container>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                </ng-container>
+                <ng-template #emptyAutomationListTemplate>
+                  <div class="empty-videos mt-3">
+                    <img src="../../../assets/img/file_empty.png" />
+                    <ng-container *ngIf="role === 'owner' || role === 'editor'; else onlyMemberAutomationEmpty">
+                      <p class="desc">There is no team automations yet. Please create automation to share with your team.
+                      </p>
+                      <div class="action">
+                        <button class="btn btn-primary btn-sm text-white" (click)="createAutomation()">CREATE AUTOMATION</button>
+                      </div>
+                    </ng-container>
+                    <ng-template #onlyMemberAutomationEmpty>
+                      <p class="desc">There is no team automations yet. Please wait for a while.</p>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
       </div>
     </ng-container>
   </div>

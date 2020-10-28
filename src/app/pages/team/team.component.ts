@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TabItem } from '../../utils/data.types';
+import { VideoShareComponent } from '../../components/video-share/video-share.component';
 
 @Component({
   selector: 'app-team',
@@ -47,6 +48,11 @@ export class TeamComponent implements OnInit {
     { icon: 'i-icon i-group-call', label: 'SHARED', id: 'shared' }
   ];
   selectedTab: TabItem = this.tabs[0];
+  sharedTabs: TabItem[] = [
+    { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
+    { icon: 'i-icon i-group-call', label: 'SHARED', id: 'shared' }
+  ];
+  selectedSharedTab: TabItem = this.sharedTabs[0];
   constructor(
     private teamService: TeamService,
     private userService: UserService,
@@ -198,57 +204,58 @@ export class TeamComponent implements OnInit {
     //   });
   }
   createTeamVideo(): void {
-    // this.dialog
-    //   .open(VideoShareComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: '70vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.teamId
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       if (res.materials) {
-    //         this.team.videos = [...this.team.videos, ...res.materials];
-    //       } else if (res.command === 'create_new') {
-    //         this.dialog
-    //           .open(VideoCreateV2Component, {
-    //             width: '96vw',
-    //             maxWidth: '500px',
-    //             height: 'calc(100vh - 50px)',
-    //             maxHeight: '690px',
-    //             disableClose: true,
-    //             data: {
-    //               team_id: this.teamId
-    //             }
-    //           })
-    //           .afterClosed()
-    //           .subscribe((response) => {
-    //             if (response) {
-    //               if (response._id) {
-    //                 this.creating = true;
-    //                 this.createubscription &&
-    //                   this.createubscription.unsubscribe();
-    //                 this.createubscription = this.teamService
-    //                   .shareVideos(this.teamId, [response._id])
-    //                   .subscribe(
-    //                     (result) => {
-    //                       this.creating = false;
-    //                       this.team.videos.push(result['data'][0]);
-    //                     },
-    //                     (err) => {
-    //                       this.creating = false;
-    //                     }
-    //                   );
-    //               }
-    //             }
-    //           });
-    //       }
-    //     }
-    //   });
+    this.dialog
+      .open(VideoShareComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        height: '70vh',
+        disableClose: true,
+        data: {
+          team_id: this.teamId
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.materials) {
+            this.team.videos = [...this.team.videos, ...res.materials];
+          }
+          // else if (res.command === 'create_new') {
+          //   this.dialog
+          //     .open(VideoCreateV2Component, {
+          //       width: '96vw',
+          //       maxWidth: '500px',
+          //       height: 'calc(100vh - 50px)',
+          //       maxHeight: '690px',
+          //       disableClose: true,
+          //       data: {
+          //         team_id: this.teamId
+          //       }
+          //     })
+          //     .afterClosed()
+          //     .subscribe((response) => {
+          //       if (response) {
+          //         if (response._id) {
+          //           this.creating = true;
+          //           this.createubscription &&
+          //             this.createubscription.unsubscribe();
+          //           this.createubscription = this.teamService
+          //             .shareVideos(this.teamId, [response._id])
+          //             .subscribe(
+          //               (result) => {
+          //                 this.creating = false;
+          //                 this.team.videos.push(result['data'][0]);
+          //               },
+          //               (err) => {
+          //                 this.creating = false;
+          //               }
+          //             );
+          //         }
+          //       }
+          //     });
+          // }
+        }
+      });
   }
   createTeamPdf(): void {
     // this.dialog
@@ -719,6 +726,7 @@ export class TeamComponent implements OnInit {
     //   }
     // });
   }
+  editMaterial(mediaType, material): void {}
   copyLink(material, type): void {
     let url;
 
@@ -761,6 +769,7 @@ export class TeamComponent implements OnInit {
     document.body.removeChild(el);
     this.toast.success('Copied the link to clipboard');
   }
+  assignContact(automation): void {}
   showLoader(): void {
     this.spinner.show('sp5');
   }
@@ -797,6 +806,11 @@ export class TeamComponent implements OnInit {
           this.selectedMembers.deselect(e._id);
         }
       });
+      this.team.owner.forEach((e) => {
+        if (this.selectedMembers.isSelected(e._id)) {
+          this.selectedMembers.deselect(e._id);
+        }
+      });
     } else {
       this.team.members.forEach((e) => {
         if (!this.selectedMembers.isSelected(e._id)) {
@@ -804,6 +818,11 @@ export class TeamComponent implements OnInit {
         }
       });
       this.team.invites.forEach((e) => {
+        if (!this.selectedMembers.isSelected(e._id)) {
+          this.selectedMembers.select(e._id);
+        }
+      });
+      this.team.owner.forEach((e) => {
         if (!this.selectedMembers.isSelected(e._id)) {
           this.selectedMembers.select(e._id);
         }
@@ -818,16 +837,24 @@ export class TeamComponent implements OnInit {
           return false;
         }
       }
-      if (this.team.invites.length) {
-        for (let i = 0; i < this.team.invites.length; i++) {
-          const e = this.team.invites[i];
-          if (!this.selectedMembers.isSelected(e._id)) {
-            return false;
-          }
+    }
+    if (this.team.owner.lenght) {
+      for (let i = 0; i < this.team.owner.length; i++) {
+        const e = this.team.owner[i];
+        if (!this.selectedMembers.isSelected(e._id)) {
+          return false;
         }
       }
-      return true;
     }
+    if (this.team.invites.length) {
+      for (let i = 0; i < this.team.invites.length; i++) {
+        const e = this.team.invites[i];
+        if (!this.selectedMembers.isSelected(e._id)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
   memberStatus(member): any {
     if (this.team.editors.indexOf(member._id) === -1) {
@@ -835,5 +862,83 @@ export class TeamComponent implements OnInit {
     } else {
       return 'Editor';
     }
+  }
+  selectAllVideos(): void {
+    if (this.isSelectedVideos()) {
+      this.team.videos.forEach((e) => {
+        if (this.selectedVideos.isSelected(e._id)) {
+          this.selectedVideos.deselect(e._id);
+        }
+      });
+    } else {
+      this.team.videos.forEach((e) => {
+        if (!this.selectedVideos.isSelected(e._id)) {
+          this.selectedVideos.select(e._id);
+        }
+      });
+    }
+  }
+  isSelectedVideos(): any {
+    if (this.team.videos.length) {
+      for (let i = 0; i < this.team.videos.length; i++) {
+        const e = this.team.videos[i];
+        if (!this.selectedVideos.isSelected(e._id)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  selectAllPdfs(): void {
+    if (this.isSelectedPdfs()) {
+      this.team.pdfs.forEach((e) => {
+        if (this.selectedPdfs.isSelected(e._id)) {
+          this.selectedPdfs.deselect(e._id);
+        }
+      });
+    } else {
+      this.team.pdfs.forEach((e) => {
+        if (!this.selectedPdfs.isSelected(e._id)) {
+          this.selectedPdfs.select(e._id);
+        }
+      });
+    }
+  }
+  isSelectedPdfs(): any {
+    if (this.team.pdfs.length) {
+      for (let i = 0; i < this.team.pdfs.length; i++) {
+        const e = this.team.pdfs[i];
+        if (!this.selectedPdfs.isSelected(e._id)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  selectAllImages(): void {
+    if (this.isSelectedImages()) {
+      this.team.images.forEach((e) => {
+        if (this.selectedImages.isSelected(e._id)) {
+          this.selectedImages.deselect(e._id);
+        }
+      });
+    } else {
+      this.team.images.forEach((e) => {
+        if (!this.selectedImages.isSelected(e._id)) {
+          this.selectedImages.select(e._id);
+        }
+      });
+    }
+  }
+  isSelectedImages(): any {
+    if (this.team.images.length) {
+      for (let i = 0; i < this.team.images.length; i++) {
+        const e = this.team.images[i];
+        if (!this.selectedImages.isSelected(e._id)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }

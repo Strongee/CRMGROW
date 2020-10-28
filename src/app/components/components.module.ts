@@ -10,6 +10,7 @@ import { SharedModule } from '../layouts/shared/shared.module';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { TeamEditComponent } from './team-edit/team-edit.component';
 import { TeamDeleteComponent } from './team-delete/team-delete.component';
+import { VideoShareComponent } from './video-share/video-share.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { TeamDeleteComponent } from './team-delete/team-delete.component';
     AvatarEditorComponent,
     ConfirmComponent,
     TeamEditComponent,
-    TeamDeleteComponent
+    TeamDeleteComponent,
+    VideoShareComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +36,9 @@ import { TeamDeleteComponent } from './team-delete/team-delete.component';
     TeamEditComponent,
     TeamDeleteComponent
   ],
-  bootstrap: [AvatarEditorComponent]
+  bootstrap: [
+    AvatarEditorComponent,
+    VideoShareComponent,
+  ]
 })
 export class ComponentsModule {}
