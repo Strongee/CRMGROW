@@ -7,6 +7,7 @@ import { ActionsBarComponent } from './actions-bar/actions-bar.component';
 import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
+import { VideoCreateComponent } from './video-create/video-create.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { InputContactsComponent } from './input-contacts/input-contacts.component';
 
@@ -16,6 +17,7 @@ import { InputContactsComponent } from './input-contacts/input-contacts.componen
     TabOptionComponent,
     ActionsBarComponent,
     AvatarEditorComponent,
+    VideoCreateComponent
     ConfirmComponent,
     InputContactsComponent
   ],
