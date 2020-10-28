@@ -17,6 +17,7 @@ export class User implements Deserializable {
   payment?: string;
   time_zone_info?: string;
   time_zone?: string;
+  location: string;
   email_signature?: string;
   proxy_number?: string;
   proxy_number_id?: string;

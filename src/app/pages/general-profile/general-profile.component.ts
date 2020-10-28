@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
-import { TIMEZONE } from 'src/app/constants/variable.constants';
+import { TIMEZONE, COMPANIES } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 export class GeneralProfileComponent implements OnInit {
   user: User = new User();
   timezones = TIMEZONE;
+  companies = COMPANIES;
   countries: CountryISO[] = [
     CountryISO.UnitedStates,
     CountryISO.UnitedKingdom,
@@ -23,6 +24,7 @@ export class GeneralProfileComponent implements OnInit {
   constructor(private userService: UserService) {
     this.userService.profile.subscribe((profile) => {
       this.user = new User().deserialize({ ...profile });
+      console.log('###', this.user);
     });
   }
 
@@ -34,6 +36,10 @@ export class GeneralProfileComponent implements OnInit {
     this.userService.updateProfile(form).subscribe((data) => {
       this.userService.updateProfileImpl(data);
     });
+  }
+
+  handleAddressChange(evt) {
+    this.user.location = evt.formatted_address;
   }
 
   confirmPhone(): void {}
