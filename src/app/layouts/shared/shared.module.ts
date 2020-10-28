@@ -35,7 +35,7 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     MatDialogModule,
     QuillModule,
     StripePipe,
-    FileUploadModule
+    FileUploadModule,
     QuillModule,
     LoadingButtonComponent
   ]

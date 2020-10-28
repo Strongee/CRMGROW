@@ -17,7 +17,7 @@ import { InputContactsComponent } from './input-contacts/input-contacts.componen
     TabOptionComponent,
     ActionsBarComponent,
     AvatarEditorComponent,
-    VideoCreateComponent
+    VideoCreateComponent,
     ConfirmComponent,
     InputContactsComponent
   ],
