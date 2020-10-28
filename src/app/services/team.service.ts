@@ -7,7 +7,7 @@ import { Team } from '../models/team.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import { StoreService } from './store.service';
-import { TeamCall } from '../models/team-call.moel';
+import { TeamCall } from '../models/team-call.model';
 
 @Injectable({
   providedIn: 'root'
