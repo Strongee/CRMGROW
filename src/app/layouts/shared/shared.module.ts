@@ -6,8 +6,9 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
-import { StripePipe } from '../../pipes/stripe.pipe';
 import { QuillModule } from 'ngx-quill';
+import { StripePipe } from '../../pipes/stripe.pipe';
+import { FileUploadModule } from 'ng2-file-upload';
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 
 @NgModule({
@@ -21,7 +22,8 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    FileUploadModule
   ],
   exports: [
     NgbModule,
@@ -31,7 +33,9 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
     MatDialogModule,
+    QuillModule,
     StripePipe,
+    FileUploadModule
     QuillModule,
     LoadingButtonComponent
   ]

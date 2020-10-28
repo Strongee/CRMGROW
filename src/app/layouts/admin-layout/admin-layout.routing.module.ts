@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { VideoCreateComponent } from 'src/app/components/video-create/video-create.component';
 import { AffiliateComponent } from 'src/app/pages/affiliate/affiliate.component';
 import { AutomationsComponent } from 'src/app/pages/automations/automations.component';
 import { CompaignsComponent } from 'src/app/pages/compaigns/compaigns.component';
@@ -44,6 +45,13 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: 'materials',
     component: MaterialsComponent,
+    data: {
+      title: 'Materials'
+    }
+  },
+  {
+    path: 'materials/create',
+    component: VideoCreateComponent,
     data: {
       title: 'Materials'
     }

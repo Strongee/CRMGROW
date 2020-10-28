@@ -66,3 +66,11 @@ export const GARBAGE = {
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'
 };
+export const FILE = {
+  UPLOAD_IMAGE: 'file/upload?resize=true'
+};
+
+export const THEME = {
+  GET_THEME: 'theme/',
+  SET_THEME: 'theme/set-video'
+};
