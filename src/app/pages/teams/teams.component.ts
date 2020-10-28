@@ -34,6 +34,48 @@ export class TeamsComponent implements OnInit, AfterViewInit {
   ownTeams: any[] = [];
   anotherTeams: any[] = [];
   teams: any[] = [];
+
+  inquiriesData: any[] = [];
+  pageInquiriesData: any[] = [];
+  totalInquiries: any;
+  inquiriesCount: any;
+  currentInquiriesPage: any = 1;
+  inquiriesCurrentPage;
+  inquiriesSubscription;
+  isInquiryLoading = false;
+  isInquiryTableLoading = false;
+
+  plannedData: any[] = [];
+  pagePlannedData: any[] = [];
+  totalPlanned: any;
+  plannedCount: any;
+  currentPlannedPage: any = 1;
+  plannedCurrentPage;
+  plannedSubscription;
+  isPlannedLoading = false;
+  isPlannedTableLoading = false;
+
+  finishedData: any[] = [];
+  pageFinishedData: any[] = [];
+  totalFinished: any;
+  finishedCount: any;
+  currentFinishedPage: any = 1;
+  finishedCurrentPage;
+  finishedSubscription;
+  isFinishedLoading = false;
+  isFinishedTableLoading = false;
+
+  inquiryCreateHandleSubscription;
+  inquiryUpdateHandleSubscription;
+
+  plannedCreateHandleSubscription;
+  plannedUpdateHandleSubscription;
+
+  finishedCreateHandleSubscription;
+  finishedUpdateHandleSubscription;
+
+  isLeader = false;
+
   constructor(
     private teamService: TeamService,
     private dialog: MatDialog,
@@ -45,13 +87,35 @@ export class TeamsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.isInquiryLoading = true;
+    this.isPlannedLoading = true;
+    this.isFinishedLoading = true;
     this.userService.loadProfile().subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
       this.load();
+      this.initSignalHandlers();
+      this.loadInquiriesPage(1);
+      this.loadPlannedPage(1);
+      this.loadFinishedPage(1);
     });
   }
-  ngAfterViewInit(): void {}
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const callId = this.route.snapshot.params['id'];
+      if (callId) {
+        this.teamService.getInquiry(callId).subscribe((res) => {
+          const inquiry = res;
+          if (inquiry) {
+            this.selectedTab = this.tabs[1];
+            // this.confirmRequest(inquiry);
+          }
+        });
+      }
+    }, 1000);
+  }
+
   load(): void {
     this.loading = true;
     this.spinner.show('sp5');
@@ -81,7 +145,333 @@ export class TeamsComponent implements OnInit, AfterViewInit {
         console.log('teams =================>', this.teams);
       });
     });
+    this.loadInviteSubscription = this.teamService
+      .loadInvitedStatus()
+      .subscribe((res) => {
+        this.invitedTeams = res;
+      });
   }
+
+  loadInquiriesPage(page): void {
+    let skip = 0;
+    if (page) {
+      this.inquiriesCurrentPage = page;
+      skip = (page - 1) * 8;
+    } else {
+      this.inquiriesCurrentPage = 1;
+      skip = 0;
+    }
+
+    this.isInquiryTableLoading = true;
+    this.inquiriesSubscription && this.inquiriesSubscription.unsubscribe();
+    this.inquiriesSubscription = this.teamService
+      .getPageInquiries(skip)
+      .subscribe(
+        (res) => {
+          console.log("inquiry call =============>", res);
+          this.isInquiryLoading = false;
+          this.isInquiryTableLoading = false;
+          this.inquiriesData = res['data'];
+          this.pageInquiriesData = res['data'];
+          this.totalInquiries = res['total'];
+          this.inquiriesCount = res['total'];
+        },
+        (err) => {
+          this.isInquiryTableLoading = false;
+        }
+      );
+  }
+
+  loadPlannedPage(page): void {
+    let skip = 0;
+    if (page) {
+      this.plannedCurrentPage = page;
+      skip = (page - 1) * 8;
+    } else {
+      this.plannedCurrentPage = 1;
+      skip = 0;
+    }
+
+    this.isPlannedTableLoading = true;
+    this.plannedSubscription && this.plannedSubscription.unsubscribe();
+    this.plannedSubscription = this.teamService.getPagePlanned(skip).subscribe(
+      (res) => {
+        this.isPlannedLoading = false;
+        this.isPlannedTableLoading = false;
+        this.plannedData = res['data'];
+        this.pagePlannedData = res['data'];
+        this.totalPlanned = res['total'];
+        this.plannedCount = res['total'];
+      },
+      (err) => {
+        this.isPlannedTableLoading = false;
+      }
+    );
+  }
+
+  loadFinishedPage(page): void {
+    let skip = 0;
+    if (page) {
+      this.finishedCurrentPage = page;
+      skip = (page - 1) * 8;
+    } else {
+      this.finishedCurrentPage = 1;
+      skip = 0;
+    }
+
+    this.isFinishedTableLoading = true;
+    this.finishedSubscription && this.finishedSubscription.unsubscribe();
+    this.finishedSubscription = this.teamService
+      .getPageFinished(skip)
+      .subscribe(
+        (res) => {
+          this.isFinishedLoading = false;
+          this.isFinishedTableLoading = false;
+          this.finishedData = res['data'];
+          this.pageFinishedData = res['data'];
+          this.totalFinished = res['total'];
+          this.finishedCount = res['total'];
+        },
+        (err) => {
+          this.isFinishedTableLoading = false;
+        }
+      );
+  }
+
+  setPageInquiries(page): void {
+    this.loadInquiriesPage(page);
+    const start = (page - 1) * 8;
+    const end = page * 8;
+    this.pageInquiriesData = this.inquiriesData.slice(start, end);
+    this.currentInquiriesPage = page;
+  }
+
+  setPagePlanned(page): void {
+    this.loadPlannedPage(page);
+    const start = (page - 1) * 8;
+    const end = page * 8;
+    this.pagePlannedData = this.pagePlannedData.slice(start, end);
+    this.currentPlannedPage = page;
+  }
+
+  setPageFinished(page): void {
+    this.loadFinishedPage(page);
+    const start = (page - 1) * 8;
+    const end = page * 8;
+    this.pageFinishedData = this.finishedData.slice(start, end);
+    this.currentFinishedPage = page;
+  }
+
+  initSignalHandlers(): void {
+    // Add activity
+    // this.inquiryCreateHandleSubscription = this.signalService
+    //   .inquiryCreateHandle()
+    //   .subscribe((res) => {
+    //     this.totalInquiries++;
+    //     this.inquiriesCount++;
+    //     this.loadInquiriesPage(this.currentInquiriesPage);
+    //   });
+    //
+    // // Update Contact Handle
+    // this.inquiryUpdateHandleSubscription = this.signalService
+    //   .inquiryUpdateHandle()
+    //   .subscribe((res) => {
+    //     this.inquiriesData.forEach((inquiry) => {
+    //       if (inquiry._id == res.inquiry_id) {
+    //         this.totalInquiries--;
+    //         this.inquiriesCount--;
+    //         this.loadInquiriesPage(this.currentInquiriesPage);
+    //
+    //         if (res.status == 'planned') {
+    //           this.totalPlanned++;
+    //           this.plannedCount++;
+    //           const last_page = Math.floor(this.totalPlanned / 8);
+    //           this.loadPlannedPage(last_page);
+    //         } else if (res.status == 'finished' || res.status == 'canceled') {
+    //           this.totalFinished++;
+    //           this.finishedCount++;
+    //           const last_page = Math.floor(this.totalFinished / 8);
+    //           this.loadFinishedPage(last_page);
+    //         }
+    //       }
+    //     });
+    //   });
+    //
+    // // Add activity
+    // this.plannedCreateHandleSubscription = this.signalService
+    //   .plannedCreateHandle()
+    //   .subscribe((res) => {
+    //     this.totalPlanned++;
+    //     this.plannedCount++;
+    //     this.loadPlannedPage(this.currentPlannedPage);
+    //   });
+    //
+    // // Update Contact Handle
+    // this.plannedUpdateHandleSubscription = this.signalService
+    //   .plannedUpdateHandle()
+    //   .subscribe((res) => {
+    //     this.plannedData.forEach((plan) => {
+    //       if (plan._id == res.plan_id) {
+    //         this.totalPlanned--;
+    //         this.plannedCount--;
+    //         this.loadPlannedPage(this.currentPlannedPage);
+    //
+    //         if (res.status != 'deleted') {
+    //           this.totalFinished++;
+    //           this.finishedCount++;
+    //           const last_page = Math.floor(this.totalFinished / 8);
+    //           this.loadFinishedPage(last_page);
+    //         }
+    //       }
+    //     });
+    //   });
+    //
+    // this.finishedCreateHandleSubscription = this.signalService
+    //   .finishedCreateHandle()
+    //   .subscribe((res) => {
+    //     this.totalFinished++;
+    //     this.finishedCount++;
+    //     this.loadFinishedPage(this.currentFinishedPage);
+    //   });
+    //
+    // // Update Contact Handle
+    // this.finishedUpdateHandleSubscription = this.signalService
+    //   .finishedUpdateHandle()
+    //   .subscribe((res) => {
+    //     this.loadFinishedPage(this.currentFinishedPage);
+    //   });
+  }
+
+  finishedInquiry(inquiry): void {
+    this.isInquiryTableLoading = true;
+    inquiry.status = 'finished';
+    this.teamService.updateCall(inquiry._id, inquiry).subscribe(
+      (res) => {
+        this.isInquiryTableLoading = false;
+        if (res) {
+          const result = {
+            inquiry_id: inquiry._id,
+            status: 'finished'
+          };
+
+          // this.signalService.inquiryUpdateSignal(result)
+        }
+      },
+      (error) => {
+        this.isInquiryTableLoading = false;
+      }
+    );
+  }
+
+  deleteInquiry(inquiry): void {
+    this.isInquiryTableLoading = true;
+    inquiry.status = 'deleted';
+    this.teamService.deleteCall(inquiry._id).subscribe(
+      (res) => {
+        this.isInquiryTableLoading = false;
+        if (res) {
+          const result = {
+            inquiry_id: inquiry._id,
+            status: 'canceled'
+          };
+
+          // this.signalService.inquiryUpdateSignal(result)
+        }
+      },
+      (error) => {
+        this.isInquiryTableLoading = false;
+      }
+    );
+  }
+
+  cancelInquiry(inquiry): void {
+    this.isInquiryTableLoading = true;
+    inquiry.status = 'canceled';
+    this.teamService.updateCall(inquiry._id, inquiry).subscribe(
+      (res) => {
+        this.isInquiryTableLoading = false;
+        if (res) {
+          const result = {
+            inquiry_id: inquiry._id,
+            status: 'canceled'
+          };
+
+          // this.signalService.inquiryUpdateSignal(result)
+        }
+      },
+      (error) => {
+        this.isInquiryTableLoading = false;
+      }
+    );
+  }
+
+  finishedPlan(plan): void {
+    this.isPlannedTableLoading = true;
+    plan.status = 'finished';
+    this.teamService.updateCall(plan._id, plan).subscribe(
+      (res) => {
+        this.isPlannedTableLoading = false;
+        if (res) {
+          const result = {
+            plan_id: plan._id,
+            status: 'finished'
+          };
+
+          // this.signalService.plannedUpdateSignal(result)
+        }
+      },
+      (error) => {
+        this.isPlannedTableLoading = false;
+      }
+    );
+  }
+
+  cancelPlan(plan): void {
+    this.isPlannedTableLoading = true;
+    plan.status = 'canceled';
+    this.teamService.updateCall(plan._id, plan).subscribe(
+      (res) => {
+        this.isPlannedTableLoading = false;
+        if (res) {
+          const result = {
+            plan_id: plan._id,
+            status: 'canceled'
+          };
+
+          // this.signalService.plannedUpdateSignal(result);
+        }
+      },
+      (error) => {
+        this.isPlannedTableLoading = false;
+      }
+    );
+  }
+
+  deletePlan(plan): void {
+    this.isPlannedTableLoading = true;
+    plan.status = 'deleted';
+    this.teamService.deleteCall(plan._id).subscribe(
+      (res) => {
+        this.isPlannedTableLoading = false;
+        if (res) {
+          const result = {
+            plan_id: plan._id,
+            status: 'deleted'
+          };
+
+          // this.signalService.inquiryUpdateSignal(result);
+        }
+      },
+      (error) => {
+        this.isPlannedTableLoading = false;
+      }
+    );
+  }
+
+  selectCall(inquiry): void {
+    this.isLeader = this.userId === inquiry.leader._id;
+  }
+
   status(team): any {
     let index;
     if (team.owner.length) {
@@ -97,6 +487,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
   editTeam(team): void {
     this.dialog
       .open(TeamEditComponent, {
@@ -120,6 +511,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
         }
       });
   }
+
   deleteTeam(team): void {
     this.dialog
       .open(TeamDeleteComponent, {
@@ -140,10 +532,34 @@ export class TeamsComponent implements OnInit, AfterViewInit {
         }
       });
   }
+
   leaveTeam(team): void {}
+
   openForm(): void {}
+
   joinForm(): void {}
+
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
   }
+
+  acceptInvitation(team): void {
+    this.teamService.acceptInvitation(team._id).subscribe((res) => {
+      team.invites.some((e, index) => {
+        if (e === this.userId) {
+          team.invites.splice(index, 1);
+          return true;
+        }
+      });
+      team.members.push(this.userId);
+      this.anotherTeams.push(team);
+      this.teams = [...this.ownTeams, ...this.anotherTeams];
+      _.remove(this.invitedTeams, (e) => {
+        return e._id === team._id;
+      });
+    });
+  }
+
+  confirmRequest(inquiry): void {}
+  joinCallRequest(): void {}
 }

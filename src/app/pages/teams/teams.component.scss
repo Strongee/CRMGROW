@@ -30,6 +30,8 @@
 
 .teams-table {
 
+  margin-bottom: 50px;
+
   td {
     padding: 10px;
   }
@@ -81,3 +83,41 @@
     }
   }
 }
+
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.group-call-container {
+  .mat-accordion {
+    .mat-expansion-panel {
+      box-shadow: none;
+
+      .mat-expansion-panel-header {
+        .mat-content {
+          order: 2;
+        }
+      }
+    }
+  }
+
+  .pagination-wrapper {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    bottom: 8px;
+  }
+
+  :host ::ng-deep {
+    .pagination-wrapper {
+      pagination-controls {
+        background: #f8f8f8;
+        padding: 3px 5px;
+        border: 1px solid gainsboro;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+

@@ -10,10 +10,10 @@ import { StripePipe } from '../../pipes/stripe.pipe';
 import { QuillModule } from 'ngx-quill';
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
 
 @NgModule({
-  declarations: [StripePipe, LoadingButtonComponent],
+  declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
   imports: [
     CommonModule,
     NgbModule,
@@ -37,7 +37,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     StripePipe,
     QuillModule,
     LoadingButtonComponent,
-    MatTabsModule
+    MatTabsModule,
+    LoadingOverlayComponent
   ]
 })
 export class SharedModule {}

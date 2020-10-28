@@ -7,7 +7,7 @@ import { Team } from '../models/team.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import { StoreService } from './store.service';
-import { Template } from '../models/template.model';
+import { TeamCall } from '../models/team-call.moel';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +37,12 @@ export class TeamService extends HttpService {
     return this.httpClient.delete(this.server + TEAM.DELETE + id).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('DELETE TEAM', []))
+    );
+  }
+  loadInvitedStatus(): Observable<Team[]> {
+    return this.httpClient.get(this.server + TEAM.LOAD_INVITED).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('LOAD INVITED TEAM', []))
     );
   }
   acceptInvitation(teamId): Observable<any> {
@@ -134,5 +140,40 @@ export class TeamService extends HttpService {
         catchError(this.handleError('UPDATE TEAM', []))
       );
   }
-
+  getInquiry(id): Observable<any> {
+    return this.httpClient.get(this.server + TEAM.CALL + id).pipe(
+      map((res) => res),
+      catchError(this.handleError('LOAD INQUIRY CALL', []))
+    );
+  }
+  getPageInquiries(page): Observable<any> {
+    return this.httpClient.get(this.server + TEAM.INQUIRY + page).pipe(
+      map((res) => res),
+      catchError(this.handleError('LOAD PAGE INQUIRIES CALL', []))
+    );
+  }
+  getPagePlanned(page): Observable<any> {
+    return this.httpClient.get(this.server + TEAM.PLANNED + page).pipe(
+      map((res) => res),
+      catchError(this.handleError('LOAD PAGE PLANNED CALL', []))
+    );
+  }
+  getPageFinished(page): Observable<any> {
+    return this.httpClient.get(this.server + TEAM.FINISHED + page).pipe(
+      map((res) => res),
+      catchError(this.handleError('LOAD PAGE FINISHED CALL', []))
+    );
+  }
+  updateCall(id, data): Observable<TeamCall[]> {
+    return this.httpClient.put(this.server + TEAM.UPDATE_CALL + id, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('UPDATE TEAM CALL', []))
+    );
+  }
+  deleteCall(id): Observable<TeamCall[]> {
+    return this.httpClient.delete(this.server + TEAM.DELETE_CALL + id).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('DELETE TEAM CALL', []))
+    );
+  }
 }

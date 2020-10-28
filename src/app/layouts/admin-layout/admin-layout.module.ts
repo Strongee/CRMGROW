@@ -31,6 +31,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { TeamComponent } from '../../pages/team/team.component';
 import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
     NgxPaginationModule,
     NgxSpinnerModule,
     ShareButtonsModule,
-    ShareIconsModule
+    ShareIconsModule,
+    MatExpansionModule
   ],
   schemas: []
 })
