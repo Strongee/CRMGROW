@@ -71,7 +71,7 @@ export const APPOINTMENT = {
   GET_EVENT: 'appointment',
   UPDATE_EVENT: 'appointment/',
   DELETE_EVENT: 'appointment/delete'
-}
+};
 
 export const THEME = {
   GET_THEME: 'theme/',

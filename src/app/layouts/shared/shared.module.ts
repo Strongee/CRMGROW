@@ -31,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
     FileUploadModule
   ],
   exports: [
