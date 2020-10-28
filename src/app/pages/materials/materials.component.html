@@ -1,9 +1,467 @@
 <div class="page-content">
-  <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
-  </app-slide-tab>
-  <ul>
-    <li *ngFor="let video of (storeService.videos$ | async)">
-      {{video | json}}
-    </li>
-  </ul>
+  <div class="v-center justify-content-between">
+    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+    </app-slide-tab>
+    <div class="v-center">
+      <button class="v-center btn btn-blue f-6 font-weight-bold text-white">
+        <i class="bg-white i-icon i-record mr-2"></i>
+        Record new video
+      </button>
+      <div ngbDropdown class="ml-3 actions-groups rounded-pill py-1">
+        <div class="f-6 font-weight-bold c-dark c-pointer px-3 py-2 button-add" ngbDropdownToggle>
+          Add new
+        </div>
+        <div ngbDropdownMenu class="light">
+          <div class="d-flex c-dark dropdown-item py-2">
+            <i class="i-icon i-upload bg-dark mt-1" aria-hidden="true"></i>
+            <div class="ml-1 px-2">
+              <div class="f-6 font-weight-bold">New file upload</div>
+              <div class="f-1 op-56">You can upload Video, PDF or Image</div>
+            </div>
+          </div>
+          <div class="d-flex c-dark dropdown-item py-2">
+            <i class="i-icon i-folder bg-dark mt-1" aria-hidden="true"></i>
+            <div class="ml-1 px-2">
+              <div class="f-6 font-weight-bold">New folder</div>
+              <div class="f-1 op-56">Add new folder to organize your files</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="material-folders mt-4">
+    <h6 class="f-6 font-weight-bold c-dark mb-4">Folders</h6>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
+          <div class="v-center">
+            <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
+            <span class="f-4 c-dark font-weight-bold ml-2">Provided Material</span>
+          </div>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
+          <div class="v-center">
+            <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
+            <span class="f-4 c-dark font-weight-bold ml-2">Own Material</span>
+          </div>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
+          <div class="v-center">
+            <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
+            <span class="f-4 c-dark font-weight-bold ml-2">Team Dynasty</span>
+          </div>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="selectedTab.label == 'ALL' || selectedTab.label == 'VIDEO'">
+    <div class="table-wrapper">
+      <div class="materials mt-3">
+        <h6 class="f-6 font-weight-bold c-dark">Video</h6>
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="checkbox-col border-top-0">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectAllVideos"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="selectAllVideos"
+                  ></label>
+                </div>
+              </th>
+              <th class="thumbnail-col border-top-0">
+                <span class="f-1 c-dark">NAME</span>
+              </th>
+              <th class="name-col border-top-0">
+                
+              </th>
+              <th class="view-col border-top-0 text-right">
+                <span class="f-1 c-dark">VIEWS</span>
+              </th>
+              <th class="time-col border-top-0">
+                <span class="f-1 c-dark">ADDED</span>
+              </th>
+              <th class="capture-col border-top-0 px-0">
+                <span class="f-1 c-dark">LEAD CAPTURE</span>
+              </th>
+              <th class="actions-col border-top-0">
+                
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let video of (storeService.videos$ | async)">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="video-{{video._id}}">
+                  <label class="custom-control-label" for="video-{{video._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                  </div>
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                  </div>
+                </a>
+                <h5 class="f-4 font-weight-bold c-dark m-0">{{video.title}}</h5>
+                <span class="f-1 c-dark">{{video.description | slice: 0:120}}</span>
+                <div class="f-4 c-dark view-field">
+                  {{video.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-4 c-dark py-2">
+                  {{video.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-4 c-dark">
+                <div class="v-centerf-4 c-dark py-2">
+                  {{video.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input type="checkbox">
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-copy bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-template bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="selectedTab.label == 'ALL' || selectedTab.label == 'PDF'">
+    <div class="table-wrapper">
+      <div class="materials mt-3">
+        <h6 class="f-6 font-weight-bold c-dark">PDF</h6>
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="checkbox-col border-top-0">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectAllPdfs"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="selectAllPdfs"
+                  ></label>
+                </div>
+              </th>
+              <th class="thumbnail-col border-top-0">
+                <span class="f-1">NAME</span>
+              </th>
+              <th class="name-col border-top-0">
+                
+              </th>
+              <th class="view-col border-top-0 text-right">
+                <span class="f-1">VIEWS</span>
+              </th>
+              <th class="time-col border-top-0">
+                <span class="f-1">ADDED</span>
+              </th>
+              <th class="capture-col border-top-0 px-0">
+                <span class="f-1">LEAD CAPTURE</span>
+              </th>
+              <th class="actions-col border-top-0">
+                
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pdf of (storeService.pdfs$ | async)">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="pdf-{{pdf._id}}">
+                  <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-4 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
+                <span class="f-1 c-dark">{{pdf.description | slice: 0:120}}</span>
+                <div class="f-4 c-dark view-field">
+                  {{pdf.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-4 c-dark py-2">
+                  {{pdf.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-4 c-dark">
+                <div class="v-centerf-4 c-dark py-2">
+                  {{pdf.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input type="checkbox">
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-copy bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="p-3">
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-template bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center bg-white border-0 py-2 w-100 mb-1 rounded">
+                        <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 c-dark font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="selectedTab.label == 'ALL' || selectedTab.label == 'IMAGE'">
+    <div class="table-wrapper">
+      <div class="materials mt-3">
+        <h6 class="f-6 font-weight-bold c-dark">Image</h6>
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="checkbox-col border-top-0">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectAllImages"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="selectAllImages"
+                  ></label>
+                </div>
+              </th>
+              <th class="thumbnail-col border-top-0">
+                <span class="f-1">NAME</span>
+              </th>
+              <th class="name-col border-top-0">
+                
+              </th>
+              <th class="view-col border-top-0 text-right">
+                <span class="f-1">VIEWS</span>
+              </th>
+              <th class="time-col border-top-0">
+                <span class="f-1">ADDED</span>
+              </th>
+              <th class="capture-col border-top-0 px-0">
+                <span class="f-1">LEAD CAPTURE</span>
+              </th>
+              <th class="actions-col border-top-0">
+                
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let image of (storeService.images$ | async)">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="image-{{image._id}}">
+                  <label class="custom-control-label" for="image-{{image._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-4 font-weight-bold c-dark m-0">{{image.title}}</h5>
+                <span class="f-1 c-dark">{{image.description | slice: 0:120}}</span>
+                <div class="f-4 c-dark view-field">
+                  {{image.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-4 c-dark py-2">
+                  {{image.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-4 c-dark">
+                <div class="v-centerf-4 c-dark py-2">
+                  {{image.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input type="checkbox">
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-copy bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bg-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-4 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-template bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-share bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                        <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-4 font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
 </div>

@@ -13,7 +13,7 @@ import {
   combineAll
 } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { VIDEO } from '../constants/api.constant';
+import { VIDEO, PDF, IMAGE } from '../constants/api.constant';
 import { Image } from '../models/image.model';
 import { Pdf } from '../models/pdf.model';
 import { Video } from '../models/video.model';
@@ -40,13 +40,13 @@ export class MaterialService extends HttpService {
     );
   }
   loadPdfsImpl(): Observable<Pdf[]> {
-    return this.httpClient.get(this.server + VIDEO.LOAD).pipe(
+    return this.httpClient.get(this.server + PDF.CREATE).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD PDFS', []))
     );
   }
   loadImagesImpl(): Observable<Image[]> {
-    return this.httpClient.get(this.server + VIDEO.LOAD).pipe(
+    return this.httpClient.get(this.server + IMAGE.CREATE).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD IMAGES', []))
     );

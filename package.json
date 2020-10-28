@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
     "e2e": "ng e2e"
@@ -38,8 +38,9 @@
     "ngx-cleave-directive": "^1.1.3",
     "ngx-cropperjs-wrapper": "^0.1.6",
     "ngx-intl-tel-input": "^3.0.3",
-    "ngx-quill": "^12.0.1",
+    "ngx-pagination": "^5.0.0",
     "ngx-toastr": "^13.1.0",
+    "ngx-quill": "7.2.0",
     "quill": "^1.3.7",
     "quill-image-drop-module": "^1.0.3",
     "quill-image-resize-module": "^3.0.0",

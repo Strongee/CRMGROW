@@ -8,6 +8,8 @@ import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
 import { VideoCreateComponent } from './video-create/video-create.component';
+import { ConfirmComponent } from './confirm/confirm.component';
+import { InputContactsComponent } from './input-contacts/input-contacts.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { VideoCreateComponent } from './video-create/video-create.component';
     ActionsBarComponent,
     AvatarEditorComponent,
     VideoCreateComponent
+    ConfirmComponent,
+    InputContactsComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +27,7 @@ import { VideoCreateComponent } from './video-create/video-create.component';
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule
   ],
-  exports: [SlideTabComponent, TabOptionComponent],
+  exports: [SlideTabComponent, TabOptionComponent, ConfirmComponent],
   bootstrap: [AvatarEditorComponent]
 })
 export class ComponentsModule {}

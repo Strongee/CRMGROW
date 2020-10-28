@@ -24,6 +24,10 @@ import { AutomationsComponent } from '../../pages/automations/automations.compon
 import { SettingsComponent } from '../../pages/settings/settings.component';
 import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { TemplateComponent } from '../../pages/template/template.component';
+import { TemplateConditionalComplexityRule } from 'codelyzer';
+
 @NgModule({
   declarations: [
     TasksComponent,
@@ -42,14 +46,16 @@ import { TemplatesComponent } from '../../pages/templates/templates.component';
     AutomationsComponent,
     SettingsComponent,
     TeamsComponent,
-    TemplatesComponent
+    TemplatesComponent,
+    TemplateComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     ComponentsModule,
     RouterModule.forChild(AdminLayoutRoutes),
-    TranslateModule.forChild({ extend: true })
+    TranslateModule.forChild({ extend: true }),
+    NgxPaginationModule,
   ],
   schemas: []
 })

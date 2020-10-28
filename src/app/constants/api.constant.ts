@@ -46,7 +46,25 @@ export const IMAGE = {
   DELETE: 'image/'
 };
 export const TEMPLATE = {
-  CREATE: 'template/create'
+  CREATE: 'template/create',
+  READ: 'template/',
+  UPDATE: 'template/',
+  DELETE: 'template/',
+  BULK_DELETE: 'template/delete',
+  LOAD: 'template/list/',
+  SEARCH: 'template/search',
+  OWNSEARCH: 'template/search-own',
+  LOAD_OWN: 'template/list/own',
+  LOAD_ALL: 'template/'
+};
+
+export const GARBAGE = {
+  SET: 'garbage',
+  UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
+};
+
+export const FILE = {
+  UPLOAD_IMAGE: 'file/upload?resize=true'
 };
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'

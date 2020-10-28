@@ -9,9 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { StripePipe } from '../../pipes/stripe.pipe';
 import { FileUploadModule } from 'ng2-file-upload';
+import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 
 @NgModule({
-  declarations: [StripePipe],
+  declarations: [StripePipe, LoadingButtonComponent],
   imports: [
     CommonModule,
     NgbModule,
@@ -35,6 +36,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     QuillModule,
     StripePipe,
     FileUploadModule
+    QuillModule,
+    LoadingButtonComponent
   ]
 })
 export class SharedModule {}
