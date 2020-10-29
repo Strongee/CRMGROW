@@ -11,7 +11,8 @@ export const AUTH = {
 };
 export const USER = {
   PROFILE: 'user/me',
-  UPDATE_PROFILE: 'user/me'
+  UPDATE_PROFILE: 'user/me',
+  UPDATE_PASSWORD: 'user/new-password'
 };
 export const TASK = {
   CREATE: 'follow/',

@@ -3,14 +3,14 @@
     <div class="col-md-6 col-12 mb-3">
       <div class="integration-card border rounded py-3 px-3 my-2 h-100">
         <div class="f-4 font-weight-bold mb-2">Google Mail Sync</div>
-        <div class="f-2 connect-status">
-          Connected with <span class="font-weight-bold c-blue">gsteve@gmail.com</span>
+        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='gmail' && user.primary_connected">
+          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
         </div>
         <div class="d-flex mt-auto mb-2">
           <img src="../../../assets/img/google.svg">
           <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
         </div>
-        <button type="button" class="social-btn btn border-dark d-block w-100 font-weight-bold">
+        <button type="button" class="social-btn btn border-dark d-block w-100 font-weight-bold" (click)="connectMail('gmail')">
           <span class="f-4">Sign in with Google</span>
         </button>
       </div>
@@ -18,8 +18,8 @@
     <div class="col-md-6 col-12 mb-3">
       <div class="integration-card border rounded py-3 px-3 my-2 h-100">
         <div class="f-4 font-weight-bold mb-2">Outlook Mail Sync</div>
-        <div class="f-2 connect-status">
-          Connected with <span class="font-weight-bold c-blue">gsteve@gmail.com</span>
+        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='outlook' && user.primary_connected">
+          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
         </div>
         <div class="d-flex mt-auto mb-2">
           <img src="../../../assets/img/outlook.svg">
@@ -35,8 +35,8 @@
     <div class="col-md-6 col-12 mb-3">
       <div class="integration-card border rounded py-3 px-3 my-2 h-100">
         <div class="f-4 font-weight-bold mb-2">Calendly Sync</div>
-        <div class="f-2 connect-status">
-          Connected with <span class="font-weight-bold c-blue">gsteve@gmail.com</span>
+        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='calendly' && user.primary_connected">
+          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
         </div>
         <div class="d-flex mt-auto mb-2">
           <img src="../../../assets/img/calendly.svg">
@@ -50,11 +50,11 @@
     <div class="col-md-6 col-12 mb-3">
       <div class="integration-card border rounded py-3 px-3 my-2 h-100">
         <div class="f-4 font-weight-bold mb-2">Zapier Sync</div>
-        <div class="f-2 connect-status">
-          Connected with <span class="font-weight-bold c-blue">gsteve@gmail.com</span>
+        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='zapier' && user.primary_connected">
+          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
         </div>
         <div class="d-flex mt-auto mb-2">
-          <img src="../../../assets/img/outlook.svg">
+          <img src="../../../assets/img/zapier.svg">
           <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
         </div>
         <button type="button" class="social-btn btn border-dark d-block w-100 font-weight-bold">

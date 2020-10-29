@@ -33,7 +33,6 @@ export class GeneralProfileComponent implements OnInit {
   openProfilePhoto(): void {}
 
   updateProfile(form: any): void {
-    console.log('#####', form);
     this.userService.updateProfile(form).subscribe((data) => {
       this.userService.updateProfileImpl(data);
     });

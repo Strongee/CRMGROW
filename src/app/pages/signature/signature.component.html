@@ -1,10 +1,33 @@
 <h6 class="mb-1">Signature layouts</h6>
 <p class="f-2" style="opacity: 0.8">Load premade template made of your profile info</p>
-<div class="d-flex email-templates">
+<div class="d-flex justify-content-start email-templates">
   <div class="template" *ngFor="let template of templates" [ngClass]="{active: currentTemplate === template.layout}" (click)="changeTemplate(template)">
     <img >
   </div>
-  <div class="template">
-    
+</div>
+<div class="email-editor">
+  <quill-editor
+    image-resize="true"
+    placeholder="Enter Text"
+    format="html"
+    [(ngModel)]="signature"
+    [modules]="config"
+    name="mailContent"
+    [styles]="{ height: '250px' }"
+    #mailContent="ngModel"
+    (onEditorCreated)="getEditorInstance($event)"
+    (click)="setFocusField('content-email')"
+    class="rounded"
+    [class.has-error]="
+    mailContent.errors &&
+    (mailContent.touched || mailContent.dirty || submitted) &&
+    submitted
+    "
+    #emailEditor
+  >
+  </quill-editor>
+  <div class="row">
+    <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4">Cancel</a>
+    <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" (click)="update()">Save changes</button>
   </div>
 </div>

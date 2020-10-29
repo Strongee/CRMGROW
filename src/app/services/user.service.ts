@@ -91,11 +91,21 @@ export class UserService extends HttpService {
         catchError(this.handleError('UPDATE PROFILE'))
       );
   }
+  public updatePassword(oldPwd: string, newPwd: string): Observable<any> {
+    const data = {
+      old_password: oldPwd,
+      new_password: newPwd
+    };
+    return this.httpClient.post(
+      this.server + USER.UPDATE_PASSWORD,
+      JSON.stringify(data)
+    );
+  }
   public setToken(token: string): void {
     localStorage.setItem('token', token);
   }
   public getToken() {
-    return localStorage.getItem('token')
+    return localStorage.getItem('token');
   }
   public setProfile(profile: User): void {
     this.profile.next(profile);
