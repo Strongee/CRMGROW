@@ -65,8 +65,4 @@ export class MaterialService extends HttpService {
       this.storeService.images.next(images);
     });
   }
-
-  checkVideosCount = this.storeService.videos$.pipe(
-    filter((val) => val.length > 100)
-  );
 }

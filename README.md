@@ -64,3 +64,31 @@ ng add @ng-bootstrap
 - npm install ( package install )
 - npm run start ( ng serve --port=4201 )
 
+
+## Components
+
+### Contact Select Component (Contact Search Component)
+
+```
+Usage:   
+<app-select-contact [resultItem]="result" (onSelect)="changeContact($event)">
+  <ng-template #result let-data>
+    <div>{{data | json}}</div>
+  </ng-template>
+</app-select-contact>
+
+<app-select-contact (onSelect)="changeContact($event)">
+</app-select-contact>
+
+
+Input: 
+  placeholder: String (form)
+  formPlaceholder: String (for dropdown search form)
+  mustField: string (indicate the field name that the searched contact must include)
+  resultItem: ngTemplate (Please reference above first code example -> You can define the style of the selected contact)
+```
+
+### Contact Input Component (Contact Multiple Select Component)
+```
+
+```

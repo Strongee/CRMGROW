@@ -12,6 +12,7 @@ $custom-checkbox-indicator-border-radius: 3px;
 @import "./variables";
 @import "src/assets/scss/custom-toggle";
 @import "src/assets/scss/custom-radio";
+@import "src/assets/scss/custom-mat-field";
 
 /* You can add global styles to this file, and also import other style files */
 $color-dark: #101336;
@@ -24,11 +25,23 @@ $color-blue-weak: #5050fd;
 $color-trans08: rgba(16 19 54/0.08);
 $color-trans75: rgba(16 19 54/0.75);
 
-
-
 /* Material Theme Basic Setting  */
 html, body { height: 100%; }
 body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dark; }
+* {
+  scrollbar-color: $color-blue20 transparent ;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: $color-blue20;
+  border-radius: 20px;
+}
+
 :root {
   --silver: #dadadd;
   --dark: #101336;
@@ -767,6 +780,19 @@ body{
       min-width: 14px;
     }
   }
+}
+
+
+// Custom Material Style
+.chip .avatar {
+  width: 26px;
+  height: 26px;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 6px 0px;
+  font-size: 14px;
+  line-height: 1;
 }
 
 table {

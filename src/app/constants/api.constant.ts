@@ -24,7 +24,9 @@ export const ACTIVITY = {
 };
 export const CONTACT = {
   LOAD_ALL: 'contact',
-  LOAD_PAGE: 'contact/last'
+  LOAD_PAGE: 'contact/last',
+  QUICK_SEARCH: 'contact/search-easy',
+  LATEST_CONTACTS: 'video/latest-sent'
 };
 export const VIDEO = {
   CREATE: 'video/create',

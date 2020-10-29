@@ -26,7 +26,7 @@ import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
-import { TemplateConditionalComplexityRule } from 'codelyzer';
+import { TestComponent } from '../../pages/test/test.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +47,8 @@ import { TemplateConditionalComplexityRule } from 'codelyzer';
     SettingsComponent,
     TeamsComponent,
     TemplatesComponent,
-    TemplateComponent
+    TemplateComponent,
+    TestComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +56,7 @@ import { TemplateConditionalComplexityRule } from 'codelyzer';
     ComponentsModule,
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
-    NgxPaginationModule,
+    NgxPaginationModule
   ],
   schemas: []
 })

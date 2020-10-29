@@ -1,4 +1,17 @@
 <div class="page-content">
   <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
   </app-slide-tab>
+
+  <app-input-contacts></app-input-contacts>
+  <app-select-contact [resultItem]="result">
+    <ng-template #result let-data>
+      <div class="chip d-flex align-items-center">
+        <div class="avatar rounded-circle bg-dark mr-1">{{data.avatarName}}</div>
+        <div class="info">
+          <div class="f-4">{{data.fullName}}</div>
+        </div>
+      </div>
+    </ng-template>
+  </app-select-contact>
+  <app-select-contact></app-select-contact>
 </div>
