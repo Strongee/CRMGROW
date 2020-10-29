@@ -10,7 +10,7 @@
       </button>
     </div>
     <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="selectedTab.id === 'calls'">
-      <button class="v-center btn btn-blue f-4 text-white ml-2">
+      <button class="v-center btn btn-blue f-4 text-white ml-2" (click)="joinCallRequest()">
         <i class="bgc-white i-icon i-plus mr-2"></i>
         New group call inquiry
       </button>

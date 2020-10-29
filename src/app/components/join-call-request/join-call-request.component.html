@@ -1,0 +1,92 @@
+<form #actionForm="ngForm" class="dialog-container form-group" (ngSubmit)="assignCallRequest()">
+  <div class="v-center justify-content-between mx-0">
+    <h4 class="f-22 font-weight-bold c-black">New group call inquiry</h4>
+    <button class="v-center border-0 bgc-trans close-button" mat-dialog-close>
+      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
+    </button>
+  </div>
+  <mat-dialog-content class="content-section">
+    <ng-container>
+      <div class="my-3">
+        <label>Subject</label>
+        <div clas="contact-input">
+          <input type="text" class="form-control" [(ngModel)]="subject" name="callSubject" #callSubject="ngModel">
+        </div>
+      </div>
+      <div class="my-3">
+        <label>Select group call leader</label>
+        <app-select-contact [resultItem]="result" [placeholder]="'Add Leader'" (onSelect)="changeLeader($event)">
+          <ng-template #result let-data>
+            <div class="chip d-flex align-items-center">
+              <div class="avatar rounded-circle bg-dark mr-1">{{data.avatarName}}</div>
+              <div class="info">
+                <div class="f-4">{{data.fullName}}({{data.email}})</div>
+              </div>
+            </div>
+          </ng-template>
+        </app-select-contact>
+      </div>
+      <div class="my-3">
+        <label>Invite contacts & guests</label>
+        <app-input-contacts
+          [placeholder]="'Search your contacts or add an email'"
+          [selectedContacts]="contacts"
+        >
+        </app-input-contacts>
+      </div>
+      <div class="my-3">
+        <label>Propose date & time</label>
+        <ng-container *ngFor="let dateTime of callDateTimes">
+          <div class="v-center mb-2">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+              </div>
+              <input class="form-control datepicker" placeholder="Select date" name="due_from" #due_from="ngModel" [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>
+            </div>
+            <div class="input-group ml-2">
+              <select class="form-control" [(ngModel)]="dateTime.time" name="fromTime" #fromTime="ngModel">
+                <option value="" disabled>From Time</option>
+                <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
+              </select>
+            </div>
+            <button class="v-center border-0 bgc-white py-2 ml-2" (click)="removeCallDateTime(dateTime)">
+              <i class="i-icon i-close bgc-dark" aria-hidden="true"></i>
+            </button>
+          </div>
+        </ng-container>
+        <div class="d-flex justify-content-end mt-2 mr-3">
+          <button class="v-center border-0 bgc-trans" (click)="addCallDateTime()">
+            <i class="i-icon i-plus bgc-blue" aria-hidden="true"></i>
+            <span class="ml-2 f-4 c-blue font-weight-bold">Add another proposed date & time</span>
+          </button>
+        </div>
+      </div>
+      <div class="my-3">
+        <label>Duration</label>
+        <div class="input-group w-50">
+          <select class="form-control" [(ngModel)]="duration" name="callDuration" #callDuration="ngModel">
+            <option *ngFor="let time of durations" value="{{time}}">{{time}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="my-3">
+        <label>Description (Optional)</label>
+        <quill-editor placeholder="Enter Text" [(ngModel)]="description" [modules]="config" name="descriptionContent"
+                      [styles]="{height: '120px'}" #descriptionContent="ngModel" required (onEditorCreated)="getEditorInstance($event)"
+                      [class.has-error]="descriptionContent.errors && (descriptionContent.touched || descriptionContent.dirty )" class="rounded" #descriptionEditor>
+        </quill-editor>
+      </div>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions class="justify-content-end mx-0">
+    <button type="button" mat-dialog-close class="btn btn-white f-6 font-weight-bold ml-2">
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-primary font-weight-bold f-6" *ngIf="!isLoading">
+      Send
+    </button>
+    <app-loading-button [class]="'bgc-blue text-white font-weight-bold f-6'" [title]="'Sending...'" *ngIf="isLoading">
+    </app-loading-button>
+  </mat-dialog-actions>
+</form>

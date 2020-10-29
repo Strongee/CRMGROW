@@ -92,28 +92,28 @@ export class TeamComponent implements OnInit {
     });
     this.loadAffiliateSubscription &&
       this.loadAffiliateSubscription.unsubscribe();
-    this.loadAffiliateSubscription = this.userService
-      .loadAffiliate()
-      .subscribe((res) => {
-        let affiliate = {};
-        if (res) {
-          affiliate = res;
-        }
-        if (affiliate['id']) {
-          this.shareUrl = affiliate['links'][0]['url'];
-        } else {
-          this.createAffiliateSubscription &&
-            this.createAffiliateSubscription.unsubscribe();
-          this.createAffiliateSubscription = this.userService
-            .createAffiliate()
-            .subscribe((response) => {
-              if (response) {
-                affiliate = response;
-                this.shareUrl = affiliate['links'][0]['url'];
-              }
-            });
-        }
-      });
+    // this.loadAffiliateSubscription = this.userService
+    //   .loadAffiliate()
+    //   .subscribe((res) => {
+    //     let affiliate = {};
+    //     if (res) {
+    //       affiliate = res;
+    //     }
+    //     if (affiliate['id']) {
+    //       this.shareUrl = affiliate['links'][0]['url'];
+    //     } else {
+    //       this.createAffiliateSubscription &&
+    //         this.createAffiliateSubscription.unsubscribe();
+    //       this.createAffiliateSubscription = this.userService
+    //         .createAffiliate()
+    //         .subscribe((response) => {
+    //           if (response) {
+    //             affiliate = response;
+    //             this.shareUrl = affiliate['links'][0]['url'];
+    //           }
+    //         });
+    //     }
+    //   });
   }
   acceptInvitation(): void {
     this.accepting = true;

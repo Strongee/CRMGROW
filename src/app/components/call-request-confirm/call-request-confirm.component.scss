@@ -1,0 +1,23 @@
+.dialog-container {
+  .text-wrapper {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 5px;
+  }
+
+  .custom-radio-container {
+    width: 40px;
+
+    label {
+      opacity: 1;
+
+      &:before {
+        top: -8px;
+      }
+
+      &:after {
+        top: -4px;
+      }
+    }
+  }
+}

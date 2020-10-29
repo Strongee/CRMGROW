@@ -176,4 +176,22 @@ export class TeamService extends HttpService {
       catchError(this.handleError('DELETE TEAM CALL', []))
     );
   }
+  requestCall(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.REQUEST_CALL, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('REQUEST CALL', []))
+    );
+  }
+  acceptCall(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.ACCEPT_CALL, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('ACCEPT CALL', []))
+    );
+  }
+  rejectCall(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.REJECT_CALL, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('REJECT CALL', []))
+    );
+  }
 }

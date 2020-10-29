@@ -99,6 +99,12 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .bgc-white {
   background-color: #ffffff;
 }
+.bgc-silver {
+  background-color: $color-silver;
+}
+.bgc-orange-light {
+  background-color: $color-orange-light;
+}
 .op-08 {
   opacity: 0.08;
 }
@@ -562,6 +568,41 @@ button {
     border-color: $color-red-pink;
   }
 }
+.btn-decline {
+  background-color: $color-white;
+  border-color: $color-red;
+  color: $color-red;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-red;
+  }
+  &:focus {
+    background-color: $color-white;
+    color: $color-red;
+  }
+  &:active {
+    background-color: $color-white;
+    color: $color-red;
+  }
+}
+.btn-accept {
+  background-color: #04B800;
+  color: $color-white;
+
+  &:hover {
+    background-color: #04B800;
+    color: $color-white;
+  }
+  &:focus {
+    background-color: #04B800;
+    color: $color-white;
+  }
+  &:active {
+    background-color: #04B800;
+    color: $color-white;
+  }
+}
 .btn-white {
   background-color: $color-white;
   color: $color-blue;
@@ -903,6 +944,7 @@ body{
   padding: 6px 0px;
   font-size: 14px;
   line-height: 1;
+  border: none;
 }
 
 table {
@@ -940,7 +982,7 @@ table {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 4px solid white;
+  border: 2px solid white;
   box-shadow: -2px 2px 4px #ccc;
 }
 
@@ -949,7 +991,7 @@ table {
   line-height: 36px;
   text-align: center;
   font-size: 26px;
-  border: 3px solid white;
+  border: 2px solid white;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -967,5 +1009,52 @@ ul.ngx-pagination {
   .current {
     border-radius: 3px;
     background-color: #337abc;
+  }
+}
+
+// DatePicker Style
+
+.datepicker {
+  & + ngb-datepicker {
+    padding: 0px !important;
+    left: unset !important;
+    right: 0px !important;
+
+    .ngb-dp-months ngb-datepicker-month-view .ngb-dp-week .ngb-dp-day {
+      width: 32px;
+      height: 32px;
+    }
+    .ngb-dp-months ngb-datepicker-month-view .ngb-dp-week .ngb-dp-weekday {
+      width: 32px;
+      height: 32px;
+    }
+    .ngb-dp-months ngb-datepicker-month-view .ngb-dp-week .small {
+      font-size: 13px;
+    }
+  }
+
+  &.left + ngb-datepicker {
+    padding: 0px !important;
+    left: 0px !important;
+    right: unset !important;
+  }
+}
+
+.dialog-container{
+  padding: 1.5rem 1rem;
+
+  .close-button {
+    width: auto;
+    padding: 0;
+
+    &:focus, &:hover {
+      color: #000000;
+      background-color: transparent;
+    }
+
+    .i-icon {
+      width: 24px;
+      height: 24px;
+    }
   }
 }

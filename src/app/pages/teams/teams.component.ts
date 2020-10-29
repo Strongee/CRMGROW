@@ -11,6 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
 import { TeamDeleteComponent } from '../../components/team-delete/team-delete.component';
+import { JoinCallRequestComponent } from '../../components/join-call-request/join-call-request.component';
+import { CallRequestConfirmComponent } from '../../components/call-request-confirm/call-request-confirm.component';
 
 @Component({
   selector: 'app-teams',
@@ -570,8 +572,37 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  confirmRequest(inquiry): void {}
-  joinCallRequest(): void {}
+  confirmRequest(inquiry): void {
+    // this.location.replaceState('/teams/call/' + inquiry._id);
+    this.dialog
+      .open(CallRequestConfirmComponent, {
+        width: '96vw',
+        maxWidth: '600px',
+        height: 'auto',
+        disableClose: true,
+        data: {
+          inquiry
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+      });
+  }
+  joinCallRequest(): void {
+    this.dialog
+      .open(JoinCallRequestComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        height: 'auto',
+        disableClose: true,
+        data: {
+          teams: this.teams
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+      });
+  }
 
   changeExpanded(accordionType): void {
     if (accordionType === 'inquiry') {
