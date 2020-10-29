@@ -1,4 +1,7 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PageMenuItem } from 'src/app/utils/data.types';
 
 @Component({
   selector: 'app-settings',
@@ -6,10 +9,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+  menuItems: PageMenuItem[] = [
+    { id: 'notifications', icon: 'i-notification', label: 'Notifications' },
+    { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
+    { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
+    { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' }
+  ];
+  defaultPage = 'notifications';
+  currentPage: string;
 
-  constructor() { }
+  constructor(private location: Location, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.currentPage = this.route.snapshot.params['page'] || this.defaultPage;
   }
-
+  changeMenu(menu: PageMenuItem): void {
+    this.currentPage = menu.id;
+    this.location.replaceState(`settings/${menu.id}`);
+  }
 }

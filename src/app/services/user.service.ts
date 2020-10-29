@@ -94,6 +94,9 @@ export class UserService extends HttpService {
   public setToken(token: string): void {
     localStorage.setItem('token', token);
   }
+  public getToken() {
+    return localStorage.getItem('token')
+  }
   public setProfile(profile: User): void {
     this.profile.next(profile);
   }

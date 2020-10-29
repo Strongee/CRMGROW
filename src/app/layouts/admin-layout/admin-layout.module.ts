@@ -26,12 +26,12 @@ import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
-import { TemplateConditionalComplexityRule } from 'codelyzer';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { TeamComponent } from '../../pages/team/team.component';
 import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { CalendarComponent } from '../../pages/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
-    TeamComponent
+    TeamComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +66,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     NgxSpinnerModule,
     ShareButtonsModule,
     ShareIconsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgxPaginationModule
   ],
   schemas: []
 })

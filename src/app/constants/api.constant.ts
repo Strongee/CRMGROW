@@ -9,11 +9,10 @@ export const AUTH = {
   OUTLOOK_PROFILE_REQUEST: '',
   GOOGLE_PROFILE_REQUEST: ''
 };
+
 export const USER = {
   PROFILE: 'user/me',
-  UPDATE_PROFILE: 'user/me',
-  LOAD_AFFILIATE: 'affiliate',
-  CREATE_AFFILIATE: 'affiliate'
+  UPDATE_PROFILE: 'user/me'
 };
 export const TASK = {
   CREATE: 'follow/',
@@ -26,7 +25,9 @@ export const ACTIVITY = {
 };
 export const CONTACT = {
   LOAD_ALL: 'contact',
-  LOAD_PAGE: 'contact/last'
+  LOAD_PAGE: 'contact/last',
+  QUICK_SEARCH: 'contact/search-easy',
+  LATEST_CONTACTS: 'video/latest-sent'
 };
 export const VIDEO = {
   CREATE: 'video/create',
@@ -59,13 +60,27 @@ export const TEMPLATE = {
   LOAD_OWN: 'template/list/own',
   LOAD_ALL: 'template/'
 };
+
 export const GARBAGE = {
   SET: 'garbage',
   UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
 };
+
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'
 };
+
+export const APPOINTMENT = {
+  GET_EVENT: 'appointment',
+  UPDATE_EVENT: 'appointment/',
+  DELETE_EVENT: 'appointment/delete'
+};
+
+export const THEME = {
+  GET_THEME: 'theme/',
+  SET_THEME: 'theme/set-video'
+};
+
 export const TEAM = {
   LOAD: 'team/load',
   LOAD_INVITED: 'team/load-invited',

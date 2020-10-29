@@ -4,13 +4,11 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'stripe'
 })
 export class StripePipe implements PipeTransform {
-
   transform(value: any, args?: any): any {
-    if(value) {
+    if (value) {
       return value.replace(/<.*?>/g, '');
     } else {
-      return ''
+      return '';
     }
   }
-
 }

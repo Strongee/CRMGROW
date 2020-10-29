@@ -93,7 +93,16 @@ export const ROUTES: RouteInfo[] = [
     betaLabel: '',
     protectedRole: null
   },
-
+  {
+    path: 'calendar',
+    title: 'Calendar',
+    icon: 'i-calendar bgc-dark',
+    class: '',
+    beta: false,
+    betaClass: '',
+    betaLabel: '',
+    protectedRole: null
+  }
 ];
 
 @Component({

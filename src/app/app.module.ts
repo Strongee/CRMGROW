@@ -15,7 +15,6 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
 import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
 import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
-import { TestComponent } from './pages/test/test.component';
 import {
   HttpClient,
   HttpClientModule,
@@ -34,8 +33,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AdminLayoutComponent,
     TopbarComponent,
     NavbarComponent,
-    SidebarComponent,
-    TestComponent
+    SidebarComponent
   ],
   imports: [
     BrowserAnimationsModule,

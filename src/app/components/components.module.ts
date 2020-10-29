@@ -7,11 +7,17 @@ import { ActionsBarComponent } from './actions-bar/actions-bar.component';
 import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
+import { VideoCreateComponent } from './video-create/video-create.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { TeamEditComponent } from './team-edit/team-edit.component';
 import { TeamDeleteComponent } from './team-delete/team-delete.component';
 import { VideoShareComponent } from './video-share/video-share.component';
-
+import { InputContactsComponent } from './input-contacts/input-contacts.component';
+import { SelectContactComponent } from './select-contact/select-contact.component';
+import { InputAutomationComponent } from './input-automation/input-automation.component';
+import { InputTemplateComponent } from './input-template/input-template.component';
+import { InputTeamComponent } from './input-team/input-team.component';
+import { SelectUserComponent } from './select-user/select-user.component';
 @NgModule({
   declarations: [
     SlideTabComponent,
@@ -22,6 +28,14 @@ import { VideoShareComponent } from './video-share/video-share.component';
     TeamEditComponent,
     TeamDeleteComponent,
     VideoShareComponent,
+    InputContactsComponent,
+    SelectContactComponent,
+    InputAutomationComponent,
+    InputTemplateComponent,
+    InputTeamComponent,
+    SelectUserComponent,
+    VideoCreateComponent,
+    ConfirmComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +48,13 @@ import { VideoShareComponent } from './video-share/video-share.component';
     TabOptionComponent,
     ConfirmComponent,
     TeamEditComponent,
-    TeamDeleteComponent
+    TeamDeleteComponent,
+    InputContactsComponent,
+    SelectContactComponent,
+    InputTemplateComponent,
+    InputAutomationComponent,
+    InputTeamComponent,
+    SelectUserComponent
   ],
   bootstrap: [
     AvatarEditorComponent,

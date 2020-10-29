@@ -4,39 +4,42 @@ $primary: #0000ff;
 $grid-gutter-width: 16px;
 $custom-control-indicator-size: 1.25rem;
 $custom-control-indicator-border-width: 2px;
-$custom-control-indicator-border-color: rgba(16 19 54/0.4);
+$custom-control-indicator-border-color: rgba(16, 19, 54, 0.4);
 $custom-checkbox-indicator-border-radius: 3px;
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import '~ngx-toastr/toastr-bs4-alert';
 @import '~ngx-sharebuttons/themes/default/default-theme';
 @import "./variables";
+@import "./icons";
 @import "src/assets/scss/custom-toggle";
 @import "src/assets/scss/custom-radio";
-
-/* You can add global styles to this file, and also import other style files */
-$color-dark: #101336;
-$color-blue: #0000ff;
-$color-silver: #dadadd;
-$color-red: #E02020;
-$color-red-pink: #f5325b;
-$color-orange: #f26419;
-$color-orange-weak: #FFAA2A;
-$color-blue-weak: #5050fd;
-$color-trans08: rgba(16 19 54/0.08);
-$color-trans75: rgba(16 19 54/0.75);
-
-
+@import "src/assets/scss/custom-mat-field";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 /* Material Theme Basic Setting  */
 html, body { height: 100%; }
 body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dark; }
+* {
+  scrollbar-color: $color-blue20 transparent ;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: $color-blue20;
+  border-radius: 20px;
+}
+
 :root {
   --silver: #dadadd;
   --dark: #101336;
   --blue: #0000ff;
-  --dark-trans1: rgba(16 19 54/0.08);
-  --dark-trans2: rgba(16 19 54/0.75);
+  --dark-trans1: rgba(16, 19, 54, 0.08);
+  --dark-trans2: rgba(16, 19, 54, 0.75);
 }
 
 .bgc-blue {
@@ -828,6 +831,45 @@ body{
   }
 }
 
+.sub-sidebar {
+  width: 112px;
+  z-index: 2;
+
+  a.active {
+    color: blue;
+    i {
+      background-color: blue;
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    width: 20px;
+    a.nav-link {
+      padding-right: 0px;
+      span {
+        display: none;
+      }
+      i {
+        margin-right: 0px;
+      }
+
+      &:hover {
+        position: relative;
+        span {
+          display: block;
+          position: absolute;
+          right: 0px;
+          transform: translateX(100%);
+          background-color: white;
+          padding: 2px 8px;
+          border-radius: 2px;
+          box-shadow: 0px 0px 4px #ccc;
+        }
+      }
+    }
+  }
+}
+
 .avatar-wrapper {
   width: 94px;
   height: 94px;
@@ -848,6 +890,19 @@ body{
       min-width: 14px;
     }
   }
+}
+
+
+// Custom Material Style
+.chip .avatar {
+  width: 26px;
+  height: 26px;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 6px 0px;
+  font-size: 14px;
+  line-height: 1;
 }
 
 table {
