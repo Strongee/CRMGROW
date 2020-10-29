@@ -9,6 +9,7 @@ $custom-checkbox-indicator-border-radius: 3px;
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import '~ngx-toastr/toastr-bs4-alert';
+@import '~ngx-sharebuttons/themes/default/default-theme';
 @import "./variables";
 @import "./icons";
 @import "src/assets/scss/custom-toggle";
@@ -53,6 +54,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .bgc-yellow {
   background-color: #ffcc00;
 }
+.bgc-red {
+  background-color: $color-red;
+}
 .bgc-red-pink {
   background-color: #f5325b;
 }
@@ -89,6 +93,12 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .bgc-trans {
   background-color: transparent;
 }
+.bgc-black {
+  background-color: #000000;
+}
+.bgc-white {
+  background-color: #ffffff;
+}
 .op-08 {
   opacity: 0.08;
 }
@@ -109,6 +119,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .c-yellow {
   color: #ffcc00;
+}
+.c-red {
+  color: $color-red
 }
 .c-red-pink {
   color: #f5325b;
@@ -139,6 +152,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .c-black {
   color: #000000;
+}
+.c-white {
+  color: #ffffff;
 }
 .f-0{
   font-size: 10px;
@@ -181,6 +197,160 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   width: 18px;
   height: 18px;
   min-width: 18px;
+}
+.i-automation{
+  mask-image: url('./assets/img/automation.svg');
+}
+.i-broadcasts{
+  mask-image: url('./assets/img/Broadcasts.svg');
+}
+.i-calendar{
+  mask-image: url('./assets/img/calendar.svg');
+}
+.i-copy{
+  mask-image: url('./assets/img/Copy.svg');
+}
+.i-deadline{
+  mask-image: url('./assets/img/Deadline.svg');
+}
+.i-download{
+  mask-image: url('./assets/img/download.svg');
+}
+.i-edit{
+  mask-image: url('./assets/img/edit.svg');
+}
+.i-follow{
+  mask-image: url('./assets/img/Follow.svg');
+}
+.i-list{
+  mask-image: url('./assets/img/List.svg');
+}
+.i-location{
+  mask-image: url('./assets/img/Location.svg');
+}
+.i-lunch{
+  mask-image: url('./assets/img/Lunch.svg');
+}
+.i-message{
+  mask-image: url('./assets/img/Message.svg');
+}
+.i-label{
+  mask-image: url('./assets/img/label.svg');
+}
+.i-notification{
+  mask-image: url('./assets/img/notification.svg');
+}
+.i-pdf{
+  mask-image: url('./assets/img/PDF.svg');
+}
+.i-phone{
+  mask-image: url('./assets/img/Phone.svg');
+}
+.i-pdf-email{
+  mask-image: url('./assets/img/pdf_email.svg');
+}
+.i-sent{
+  mask-image: url('./assets/img/Sent.svg');
+}
+.i-setting{
+  mask-image: url('./assets/img/setting.svg');
+}
+.i-share{
+  mask-image: url('./assets/img/Share.svg');
+}
+.i-sms-sent{
+  mask-image: url('./assets/img/sms_sent.svg');
+}
+.i-task{
+  mask-image: url('./assets/img/Task.svg');
+}
+.i-template{
+  mask-image: url('./assets/img/Template.svg');
+}
+.i-trash{
+  mask-image: url('./assets/img/Trash.svg');
+}
+.i-webpage{
+  mask-image: url('./assets/img/Webpage.svg');
+}
+.i-video{
+  mask-image: url('./assets/img/Video.svg');
+}
+.i-upload {
+  mask-image: url('./assets/img/upload.svg');
+}
+.i-plus {
+  mask-image: url('./assets/img/plus.svg');
+}
+.i-menu {
+  mask-image: url('./assets/img/menu.svg');
+}
+.i-close {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-general {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-signature {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-security {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-integration {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-payment {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-social {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-folder {
+  mask-image: url('./assets/img/close.svg');
+}
+.i-menu-more {
+  mask-image: url('./assets/img/more_menu.svg');
+}
+.i-record{
+  mask-image: url('./assets/img/record.svg');
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: red;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+.i-teams {
+  mask-image: url('./assets/img/teams.svg');
+}
+.i-group-call {
+  mask-image: url('./assets/img/group_call.svg');
+}
+.i-block {
+  mask-image: url('./assets/img/block.svg');
+}
+.i-triangle-up {
+  mask-image: url('./assets/img/up-triangle.svg');
+}
+.i-check {
+  mask-image: url('./assets/img/check.svg');
+}
+.i-question {
+  mask-image: url('./assets/img/question-sign-in-circles.svg');
+}
+.i-like {
+  mask-image: url('./assets/img/like.svg');
+}
+.i-triangle-right {
+  mask-image: url('./assets/img/triangle-right.svg');
 }
 .pl-4c{
   padding-left: 2rem!important;
@@ -374,7 +544,47 @@ button {
     border-color: $color-orange-weak;
   }
 }
+.btn-red {
+  background-color: $color-red;
+  border-color: $color-red;
+  color: white;
 
+  &:hover {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+  &:focus {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+  &:active {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+}
+.btn-white {
+  background-color: $color-white;
+  color: $color-blue;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-blue;
+  }
+}
+.btn-white-blue {
+  background-color: $color-white;
+  color: $color-blue;
+  border: 2px solid $color-blue;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-blue;
+    border: 2px solid $color-blue;
+  }
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 255, 0.5);
+  }
+}
 .btn {
   &:focus {
     box-shadow: none!important;
@@ -724,4 +934,38 @@ table {
     border-top: none;
   }
 
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: -2px 2px 4px #ccc;
+}
+
+.name-avatar {
+  background: gainsboro;
+  line-height: 36px;
+  text-align: center;
+  font-size: 26px;
+  border: 3px solid white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: -2px 2px 4px #ccc;
+}
+
+.opacity-6 {
+  opacity: 0.6;
+}
+
+// Pagination Style
+ul.ngx-pagination {
+  margin-bottom: 0px;
+  padding-left: 0px;
+  .current {
+    border-radius: 3px;
+    background-color: #337abc;
+  }
 }

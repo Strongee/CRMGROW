@@ -42,8 +42,8 @@ export class TemplatesComponent implements OnInit {
       const cannedTemplate = garbage && garbage.canned_message;
       this.emailDefault = cannedTemplate && cannedTemplate.email;
       this.smsDefault = cannedTemplate && cannedTemplate.sms;
+      this.loadAllTemplates();
     });
-    this.loadAllTemplates();
   }
 
   loadAllTemplates(): void {

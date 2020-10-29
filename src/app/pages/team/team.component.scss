@@ -1,0 +1,245 @@
+.error-result {
+  text-align: center;
+  width: 400px;
+  margin: 125px auto 50px auto;
+
+  img {
+    width: 100px;
+  }
+}
+.i-small-icon {
+  width: 10px;
+  height: 10px;
+}
+.owners {
+
+  .owner {
+    margin-left: -15px;
+  }
+
+  .owner:first-child {
+    margin-left: 0px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .owner-names {
+    display: none;
+  }
+}
+
+.f-30 {
+  font-size: 30px;
+}
+
+.team-info-container {
+
+  flex-wrap: wrap;
+
+  .tabs {
+    width: 310px;
+  }
+
+  .status {
+    padding: 3px 5px;
+    border-radius: 5px;
+    width: 60px;
+    text-align: center;
+    &.Owner {
+      background-color: #F1305E;
+    }
+    &.Viewer {
+      background-color: #308BF1;
+    }
+    &.Editor {
+      background-color: #08CE97;
+    }
+  }
+
+  label {
+    height: 20px;
+    margin: 0;
+  }
+
+  .value {
+    height: 50px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .team-info-container {
+    .tabs {
+      width: 295px;
+    }
+  }
+}
+
+.members-table-container {
+  .check-cell {
+    width: 40px;
+  }
+
+  .label-cell{
+    select {
+      border: none;
+      max-width: 80px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: block;
+      height: 22px;
+    }
+    select:focus {
+      border: none;
+      outline: none;
+    }
+  }
+
+  .status-cell {
+    .status {
+
+      select {
+        width: 70px;
+        padding: 0px 3px;
+      }
+
+      .Owner {
+        width: 70px;
+        height: 22px;
+        padding: 2px;
+        border-radius: 5px;
+        background-color: #F1305E;
+      }
+
+      .Viewer {
+        background-color: #308BF1;
+      }
+
+      .Editor {
+        background-color: #08CE97;
+      }
+
+      .Invite {
+        width: 70px;
+        height: 22px;
+        padding: 2px;
+        border-radius: 5px;
+        background-color: #FFAA2A;
+      }
+    }
+
+    .remind {
+      border-radius: 5px;
+      padding: 1px 5px;
+      height: 22px;
+      border-width: 1px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .members-table-container {
+    button .button-label {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .members-table-container {
+    .added-cell, .phone-cell {
+      display: none;
+    }
+
+    .avatar, .name-avatar {
+      display: none;
+    }
+  }
+}
+
+.empty-materials {
+  max-width: 400px;
+  text-align: center;
+  margin: auto;
+
+  img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+}
+
+.material-share-table {
+
+  td {
+    margin: 5px 0px;
+    vertical-align: center;
+  }
+
+  .check-cell {
+    width: 40px;
+  }
+
+  .material-name {
+    .thumbnail img {
+      width: 100px;
+      height: 58px;
+      object-fit: cover;
+    }
+  }
+
+  .material-actions {
+    .dropdown-menu {
+      width: 190px;
+    }
+  }
+
+  &.template-table,
+  &.automation-table, {
+    td {
+      margin: 15px 0px;
+    }
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .material-share-table {
+    .material-name .info {
+      display: none;
+    }
+
+    .material-actions {
+      .button-label {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .material-share-table {
+    .material-name {
+      .thumbnail img {
+        width: 50px;
+        height: 29px;
+      }
+
+      .info {
+        display: none;
+      }
+    }
+
+    .material-view,
+    .material-added,
+    .material-contacts,
+    .material-created {
+      display: none;
+    }
+
+    .material-actions {
+      .btn {
+        padding: 0.375rem;
+      }
+    }
+  }
+}

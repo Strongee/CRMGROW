@@ -26,6 +26,11 @@ import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { TeamComponent } from '../../pages/team/team.component';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
 
 @NgModule({
@@ -48,6 +53,7 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
+    TeamComponent,
     CalendarComponent
   ],
   imports: [
@@ -56,6 +62,11 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
     ComponentsModule,
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
+    NgxPaginationModule,
+    NgxSpinnerModule,
+    ShareButtonsModule,
+    ShareIconsModule,
+    MatExpansionModule,
     NgxPaginationModule
   ],
   schemas: []
