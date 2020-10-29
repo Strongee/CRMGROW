@@ -12,7 +12,9 @@ export const AUTH = {
 
 export const USER = {
   PROFILE: 'user/me',
-  UPDATE_PROFILE: 'user/me'
+  UPDATE_PROFILE: 'user/me',
+  LOAD_AFFILIATE: '',
+  CREATE_AFFILIATE: ''
 };
 export const TASK = {
   CREATE: 'follow/',
