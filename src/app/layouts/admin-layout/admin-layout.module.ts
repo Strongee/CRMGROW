@@ -26,7 +26,7 @@ import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
-import { TestComponent } from '../../pages/test/test.component';
+import { CalendarComponent } from '../../pages/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,7 @@ import { TestComponent } from '../../pages/test/test.component';
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
-    TestComponent
+    CalendarComponent
   ],
   imports: [
     CommonModule,

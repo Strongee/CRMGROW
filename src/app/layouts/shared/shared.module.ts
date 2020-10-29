@@ -12,12 +12,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { HttpClientModule } from '@angular/common/http';
-import { StripePipe } from '../../pipes/stripe.pipe';
 import { QuillModule } from 'ngx-quill';
+import { StripePipe } from '../../pipes/stripe.pipe';
+import { FileUploadModule } from 'ng2-file-upload';
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
+import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
-  declarations: [StripePipe, LoadingButtonComponent],
+  declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
   imports: [
     CommonModule,
     NgbModule,
@@ -33,7 +37,12 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     MatIconModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+    FileUploadModule
   ],
   exports: [
     NgbModule,
@@ -51,7 +60,11 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
     NgxMatSelectSearchModule,
     LoadingButtonComponent,
     StripePipe,
-    QuillModule
+    QuillModule,
+    FileUploadModule,
+    LoadingButtonComponent,
+    LoadingOverlayComponent,
+    CalendarModule
   ]
 })
 export class SharedModule {}

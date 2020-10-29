@@ -9,6 +9,7 @@ export const AUTH = {
   OUTLOOK_PROFILE_REQUEST: '',
   GOOGLE_PROFILE_REQUEST: ''
 };
+
 export const USER = {
   PROFILE: 'user/me',
   UPDATE_PROFILE: 'user/me'
@@ -67,4 +68,15 @@ export const GARBAGE = {
 
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'
+};
+
+export const APPOINTMENT = {
+  GET_EVENT: 'appointment',
+  UPDATE_EVENT: 'appointment/',
+  DELETE_EVENT: 'appointment/delete'
+};
+
+export const THEME = {
+  GET_THEME: 'theme/',
+  SET_THEME: 'theme/set-video'
 };

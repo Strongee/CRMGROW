@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons / Setting / Video</title>
+    <g id="Icons-/-Setting-/-Video" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M1.23957889,4.40740366 C1.46196889,2.70890905 2.72233444,1.42490754 4.39584,1.21651766 C5.38816778,1.09295217 6.59996889,1 8,1 C9.47824444,1 10.7465667,1.10362328 11.7683333,1.23749431 C13.3608333,1.44614086 14.5538667,2.63915798 14.7624667,4.23164932 C14.8964,5.25339986 15,6.52176804 15,8 C15,9.47824751 14.8964,10.746569 14.7624667,11.7683351 C14.5538667,13.3608342 13.3608333,14.5538669 11.7683333,14.7624668 C10.7465667,14.8964001 9.47824444,15 8,15 C6.59996889,15 5.38816778,14.9070556 4.39584,14.7834668 C2.72233444,14.5751002 1.46196889,13.2910676 1.23957889,11.5925574 C1.10417556,10.5585025 1,9.33008093 1,8 C1,6.66988018 1.10417556,5.4414742 1.23957889,4.40740366 Z" id="Path" stroke="#66687F" stroke-width="2" fill-rule="nonzero"></path>
+        <line x1="7" y1="5" x2="10" y2="8" id="Line-7" stroke="#797B8F" stroke-width="2" stroke-linecap="round"></line>
+        <line x1="7" y1="8" x2="10" y2="11" id="Line-7-Copy" stroke="#797B8F" stroke-width="2" stroke-linecap="round" transform="translate(8.500000, 9.500000) scale(-1, 1) translate(-8.500000, -9.500000) "></line>
+    </g>
+</svg>

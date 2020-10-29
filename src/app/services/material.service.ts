@@ -12,6 +12,7 @@ import {
   repeat,
   combineAll
 } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { VIDEO, PDF, IMAGE } from '../constants/api.constant';
 import { Image } from '../models/image.model';
 import { Pdf } from '../models/pdf.model';
@@ -65,4 +66,18 @@ export class MaterialService extends HttpService {
       this.storeService.images.next(images);
     });
   }
+ 
+  getVimeoMeta(id) {
+    return this.httpClient.get(`https://vimeo.com/api/v2/video/${id}.json`);
+  }
+
+  getYoutubeMeta(id) {
+    return this.httpClient.get(
+      `https://www.googleapis.com/youtube/v3/videos?id=${id}&key=${environment.API_KEY.Youtube}&part=snippet,contentDetails`
+    );
+  }
+
+  checkVideosCount = this.storeService.videos$.pipe(
+    filter((val) => val.length > 100)
+  );
 }

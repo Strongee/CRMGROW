@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { VideoCreateComponent } from 'src/app/components/video-create/video-create.component';
 import { AffiliateComponent } from 'src/app/pages/affiliate/affiliate.component';
 import { AutomationsComponent } from 'src/app/pages/automations/automations.component';
 import { CompaignsComponent } from 'src/app/pages/compaigns/compaigns.component';
@@ -11,6 +12,7 @@ import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 import { TeamsComponent } from 'src/app/pages/teams/teams.component';
 import { TemplatesComponent } from 'src/app/pages/templates/templates.component';
 import { TemplateComponent } from 'src/app/pages/template/template.component';
+import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -49,6 +51,13 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'materials/create',
+    component: VideoCreateComponent,
+    data: {
+      title: 'Materials'
+    }
+  },
+  {
     path: 'compaigns',
     component: CompaignsComponent,
     data: {
@@ -64,6 +73,13 @@ export const AdminLayoutRoutes: Routes = [
   },
   {
     path: 'settings',
+    component: SettingsComponent,
+    data: {
+      title: 'Settings'
+    }
+  },
+  {
+    path: 'settings/:page',
     component: SettingsComponent,
     data: {
       title: 'Settings'
@@ -116,6 +132,20 @@ export const AdminLayoutRoutes: Routes = [
     component: TemplateComponent,
     data: {
       title: 'Template'
+    }
+  },
+  {
+    path: 'calendar',
+    component: CalendarComponent,
+    data: {
+      title: 'Calendar'
+    }
+  },
+  {
+    path: 'calendar/:mode/:year/:month/:day',
+    component: CalendarComponent,
+    data: {
+      title: 'Calendar'
     }
   }
 ];
