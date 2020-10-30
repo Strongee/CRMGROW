@@ -114,5 +114,6 @@ export const TEAM = {
   REJECT_CALL: '/team/reject-call/',
   ACCEPT_CALL: '/team/accept-call/',
   UPDATE_CALL: '/team/call/',
-  DELETE_CALL: '/team/call/'
+  DELETE_CALL: '/team/call/',
+  LOAD_LEADERS: 'team/load-leaders'
 };

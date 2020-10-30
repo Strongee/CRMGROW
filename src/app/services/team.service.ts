@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { interval, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { TEAM, TEMPLATE } from '../constants/api.constant';
+import { TEAM } from '../constants/api.constant';
 import { Team } from '../models/team.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import { StoreService } from './store.service';
 import { TeamCall } from '../models/team-call.model';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,14 @@ export class TeamService extends HttpService {
     return this.httpClient.get(this.server + TEAM.LOAD).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD TEAM', []))
+    );
+  }
+  loadLeaders(): Observable<User[]> {
+    return this.httpClient.get(this.server + TEAM.LOAD_LEADERS).pipe(
+      map((res) =>
+        (res['data'] || []).map((data) => new User().deserialize(data))
+      ),
+      catchError(this.handleError('LOAD LEADERS', []))
     );
   }
   update(id, data): Observable<Team[]> {

@@ -20,6 +20,7 @@ import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { JoinCallRequestComponent } from './join-call-request/join-call-request.component';
 import { CallRequestConfirmComponent } from './call-request-confirm/call-request-confirm.component';
+import { SelectLeaderComponent } from './select-leader/select-leader.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { CallRequestConfirmComponent } from './call-request-confirm/call-request
     SelectUserComponent,
     VideoCreateComponent,
     JoinCallRequestComponent,
-    CallRequestConfirmComponent
+    CallRequestConfirmComponent,
+    SelectLeaderComponent
   ],
   imports: [
     CommonModule,
@@ -58,7 +60,8 @@ import { CallRequestConfirmComponent } from './call-request-confirm/call-request
     InputTemplateComponent,
     InputAutomationComponent,
     InputTeamComponent,
-    SelectUserComponent
+    SelectUserComponent,
+    SelectLeaderComponent
   ],
   bootstrap: [
     AvatarEditorComponent,

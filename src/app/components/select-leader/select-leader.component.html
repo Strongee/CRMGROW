@@ -7,9 +7,12 @@
           </ng-container>
           <ng-template #defaultResult>
             <div class="chip d-flex align-items-center">
-              <div class="form-avatar rounded-circle bg-dark mr-1">{{formControl.value.avatarName}}</div>
+              <img *ngIf="formControl.value.picture_profile; else avatarNameTemplate" [src]="formControl.value.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+              <ng-template #avatarNameTemplate>
+                <div class="form-avatar rounded-circle bg-dark mr-1">{{formControl.value.avatarName}}</div>
+              </ng-template>
               <div class="info">
-                <div class="f-4">{{formControl.value.fullName}}</div>
+                <div class="f-4">{{formControl.value.user_name}}</div>
               </div>
             </div>
           </ng-template>
@@ -26,9 +29,12 @@
       </mat-option>
       <mat-option *ngFor="let item of filteredResults | async" [value]="item" style="height: unset; line-height: unset;">
         <div class="d-flex chip py-2">
-          <div class="form-avatar rounded-circle bg-dark mr-3 mt-1">{{item.avatarName}}</div>
+          <img *ngIf="item.picture_profile; else avatarNameTemplate" [src]="item.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+          <ng-template #avatarNameTemplate>
+            <div class="form-avatar rounded-circle bg-dark mr-1">{{item.avatarName}}</div>
+          </ng-template>
           <div class="info">
-            <div class="f-5 font-weight-bold">{{item.fullName}}</div>
+            <div class="f-5 font-weight-bold">{{item.user_name}}</div>
             <div class="f-2">{{item['email'] || 'Undefined'}}</div>
             <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
           </div>

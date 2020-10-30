@@ -88,4 +88,12 @@ export class User implements Deserializable {
   deserialize(input: any): this {
     return Object.assign(this, input);
   }
+  get avatarName(): string {
+    const names = this.user_name.split(' ');
+    if (names.length > 1) {
+      return names[0][0] + names[1][0];
+    } else {
+      return names[0][0];
+    }
+  }
 }

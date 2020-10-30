@@ -935,16 +935,23 @@ body{
 
 
 // Custom Material Style
-.chip .avatar {
+.form-avatar {
   width: 26px;
   height: 26px;
   color: white;
   text-align: center;
   text-transform: uppercase;
-  padding: 6px 0px;
+  padding: 0px 0px;
   font-size: 14px;
-  line-height: 1;
+  line-height: 26px;
+  overflow: hidden;
   border: none;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 table {
