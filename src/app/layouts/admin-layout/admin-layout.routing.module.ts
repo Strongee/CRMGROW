@@ -102,7 +102,7 @@ export const AdminLayoutRoutes: Routes = [
   },
   {
     path: 'teams/call/:id',
-    component: TeamComponent,
+    component: TeamsComponent,
     data: {
       title: 'Group Call'
     }

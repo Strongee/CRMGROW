@@ -113,6 +113,10 @@
         text-align: center;
       }
     }
+
+    &.loading {
+      filter: blur(1px);
+    }
   }
 
   .expand {

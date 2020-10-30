@@ -1,0 +1,28 @@
+<form #actionForm="ngForm" class="dialog-container form-group">
+  <div class="v-center justify-content-between mx-0">
+    <h4 class="f-22 font-weight-bold c-black">Cancelling call</h4>
+    <button class="v-center border-0 bgc-trans close-button" mat-dialog-close>
+      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
+    </button>
+  </div>
+  <mat-dialog-content class="content-section">
+    <div class="my-3 f-5">Inform organizer why you are cancelling this call</div>
+    <div class="my-3">
+      <label>Message</label>
+      <quill-editor placeholder="Enter Text" [(ngModel)]="message" [modules]="config" name="messageContent"
+                    [styles]="{height: '120px'}" #messageContent="ngModel" required (onEditorCreated)="getEditorInstance($event)"
+                    [class.has-error]="messageContent.errors && (messageContent.touched || messageContent.dirty )" class="rounded" #messageEditor>
+      </quill-editor>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="justify-content-end mx-0 mr-2">
+    <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="closeDialog()">
+      Skip
+    </button>
+    <button class="btn btn-primary font-weight-bold" *ngIf="!isSending" (click)="sendMessage()">
+      Send
+    </button>
+    <app-loading-button [class]="'btn btn-primary font-weight-bold'" [title]="'Sending...'" *ngIf="isSending">
+    </app-loading-button>
+  </mat-dialog-actions>
+</form>

@@ -15,16 +15,7 @@
       </div>
       <div class="my-3">
         <label>Select group call leader</label>
-        <app-select-contact [resultItem]="result" [placeholder]="'Add Leader'" (onSelect)="changeLeader($event)">
-          <ng-template #result let-data>
-            <div class="chip d-flex align-items-center">
-              <div class="avatar rounded-circle bg-dark mr-1">{{data.avatarName}}</div>
-              <div class="info">
-                <div class="f-4">{{data.fullName}}({{data.email}})</div>
-              </div>
-            </div>
-          </ng-template>
-        </app-select-contact>
+        <app-select-leader (onSelect)="changeLeader($event)"></app-select-leader>
       </div>
       <div class="my-3">
         <label>Invite contacts & guests</label>
@@ -36,16 +27,35 @@
       </div>
       <div class="my-3">
         <label>Propose date & time</label>
+<!--        <ng-container *ngFor="let dateTime of callDateTimes">-->
+<!--          <div class="v-center mb-2">-->
+<!--            <div class="input-group">-->
+<!--              <div class="input-group-prepend">-->
+<!--                <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>-->
+<!--              </div>-->
+<!--              <input class="form-control datepicker" [id]="'date'-dateTime.id" placeholder="Select date" [name]="'date'-dateTime.id" [value]="dateTime.date.year+'-'+dateTime.date.month+'-'+dateTime.date.day" [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>-->
+<!--            </div>-->
+<!--            <div class="input-group ml-2">-->
+<!--              <select class="form-control" [(ngModel)]="dateTime.time" [id]="'time'-dateTime.id">-->
+<!--                <option value="" disabled>From Time</option>-->
+<!--                <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <button class="v-center border-0 bgc-white py-2 ml-2" (click)="removeCallDateTime(dateTime)">-->
+<!--              <i class="i-icon i-close bgc-dark" aria-hidden="true"></i>-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </ng-container>-->
         <ng-container *ngFor="let dateTime of callDateTimes">
           <div class="v-center mb-2">
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
               </div>
-              <input class="form-control datepicker" [id]="'date'-dateTime.id" placeholder="Select date" [name]="'date'-dateTime.id" [value]="dateTime.date.year+'-'+dateTime.date.month+'-'+dateTime.date.day" [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>
+              <input class="form-control datepicker" placeholder="Select date" name="due_from" #due_from="ngModel" [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>
             </div>
             <div class="input-group ml-2">
-              <select class="form-control" [(ngModel)]="dateTime.time" [id]="'time'-dateTime.id">
+              <select class="form-control" [(ngModel)]="dateTime.time" name="fromTime" #fromTime="ngModel">
                 <option value="" disabled>From Time</option>
                 <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
               </select>

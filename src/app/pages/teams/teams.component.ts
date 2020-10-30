@@ -13,6 +13,7 @@ import { TeamEditComponent } from '../../components/team-edit/team-edit.componen
 import { TeamDeleteComponent } from '../../components/team-delete/team-delete.component';
 import { JoinCallRequestComponent } from '../../components/join-call-request/join-call-request.component';
 import { CallRequestConfirmComponent } from '../../components/call-request-confirm/call-request-confirm.component';
+import { CallRequestCancelComponent } from '../../components/call-request-cancel/call-request-cancel.component';
 
 @Component({
   selector: 'app-teams',
@@ -96,7 +97,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.isInquiryLoading = true;
     this.isPlannedLoading = true;
     this.isFinishedLoading = true;
-    this.userService.loadProfile().subscribe((res) => {
+    this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
       this.load();
@@ -109,20 +110,21 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      const callId = this.route.snapshot.params.id;
+      const callId = this.route.snapshot.params['id'];
       if (callId) {
         this.teamService.getInquiry(callId).subscribe((res) => {
           const inquiry = res;
           if (inquiry) {
-            this.selectedTab = this.tabs[1];
-            // this.confirmRequest(inquiry);
+            this.changeTab(this.tabs[1]);
+            this.confirmRequest(inquiry);
           }
         });
       }
-    }, 1000);
+    }, 2000);
   }
 
   load(): void {
+    console.log("load teams ==============>");
     this.loading = true;
     this.spinner.show('sp5');
     this.loadSubscription && this.loadSubscription.unsubscribe();
@@ -174,6 +176,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       .getPageInquiries(skip)
       .subscribe(
         (res) => {
+          console.log("inquiry data =============>", res);
           this.isInquiryLoading = false;
           this.isInquiryTableLoading = false;
           this.inquiriesData = res.data;
@@ -201,6 +204,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.plannedSubscription && this.plannedSubscription.unsubscribe();
     this.plannedSubscription = this.teamService.getPagePlanned(skip).subscribe(
       (res) => {
+        console.log("planned data ============>", res);
         this.isPlannedLoading = false;
         this.isPlannedTableLoading = false;
         this.plannedData = res.data;
@@ -230,6 +234,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       .getPageFinished(skip)
       .subscribe(
         (res) => {
+          console.log("finished data =============>", res);
           this.isFinishedLoading = false;
           this.isFinishedTableLoading = false;
           this.finishedData = res.data;
@@ -358,8 +363,8 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             inquiry_id: inquiry._id,
             status: 'finished'
           };
-
-          // this.signalService.inquiryUpdateSignal(result)
+          this.loadInquiriesPage(this.currentInquiriesPage);
+          this.loadFinishedPage(this.currentFinishedPage);
         }
       },
       (error) => {
@@ -379,7 +384,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             inquiry_id: inquiry._id,
             status: 'canceled'
           };
-
+          this.loadInquiriesPage(this.currentInquiriesPage);
           // this.signalService.inquiryUpdateSignal(result)
         }
       },
@@ -401,6 +406,24 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             status: 'canceled'
           };
 
+          this.dialog
+            .open(CallRequestCancelComponent, {
+              width: '96vw',
+              maxWidth: '600px',
+              height: 'auto',
+              disableClose: true,
+              data: {
+                inquiry
+              }
+            })
+            .afterClosed()
+            .subscribe((response) => {
+              this.loadInquiriesPage(this.currentInquiriesPage);
+              this.loadFinishedPage(this.currentFinishedPage);
+            });
+
+          this.loadInquiriesPage(this.currentInquiriesPage);
+          this.loadFinishedPage(this.currentFinishedPage);
           // this.signalService.inquiryUpdateSignal(result)
         }
       },
@@ -421,7 +444,8 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             plan_id: plan._id,
             status: 'finished'
           };
-
+          this.loadPlannedPage(this.currentPlannedPage);
+          this.loadFinishedPage(this.currentFinishedPage);
           // this.signalService.plannedUpdateSignal(result)
         }
       },
@@ -442,7 +466,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             plan_id: plan._id,
             status: 'canceled'
           };
-
+          this.loadPlannedPage(this.currentPlannedPage);
           // this.signalService.plannedUpdateSignal(result);
         }
       },
@@ -463,12 +487,33 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             plan_id: plan._id,
             status: 'deleted'
           };
-
+          this.loadPlannedPage(this.currentPlannedPage);
           // this.signalService.inquiryUpdateSignal(result);
         }
       },
       (error) => {
         this.isPlannedTableLoading = false;
+      }
+    );
+  }
+
+  deleteFinished(finished): void {
+    this.isFinishedTableLoading = true;
+    finished.status = 'deleted';
+    this.teamService.deleteCall(finished._id).subscribe(
+      (res) => {
+        this.isPlannedTableLoading = false;
+        if (res) {
+          const result = {
+            finished_id: finished._id,
+            status: 'deleted'
+          };
+          this.loadFinishedPage(this.currentFinishedPage);
+          // this.signalService.inquiryUpdateSignal(result);
+        }
+      },
+      (error) => {
+        this.isFinishedTableLoading = false;
       }
     );
   }
@@ -573,7 +618,8 @@ export class TeamsComponent implements OnInit, AfterViewInit {
   }
 
   confirmRequest(inquiry): void {
-    // this.location.replaceState('/teams/call/' + inquiry._id);
+    this.location.replaceState('/teams/call/' + inquiry._id);
+    const status = inquiry.status;
     this.dialog
       .open(CallRequestConfirmComponent, {
         width: '96vw',
@@ -586,6 +632,33 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        if (res) {
+          if (res.data.status === 'planned') {
+            this.loadInquiriesPage(this.currentInquiriesPage);
+            this.loadPlannedPage(this.currentPlannedPage);
+          } else if (res.data.status === 'canceled') {
+            if (status === 'pending') {
+              this.dialog
+                .open(CallRequestCancelComponent, {
+                  width: '96vw',
+                  maxWidth: '600px',
+                  height: 'auto',
+                  disableClose: true,
+                  data: {
+                    inquiry
+                  }
+                })
+                .afterClosed()
+                .subscribe((response) => {
+                  this.loadInquiriesPage(this.currentInquiriesPage);
+                  this.loadFinishedPage(this.currentFinishedPage);
+                });
+            }
+            this.loadInquiriesPage(this.currentInquiriesPage);
+            this.loadFinishedPage(this.currentFinishedPage);
+          }
+        }
+        this.location.replaceState('/teams');
       });
   }
   joinCallRequest(): void {
@@ -601,6 +674,9 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        if (res) {
+          this.loadInquiriesPage(this.currentInquiriesPage);
+        }
       });
   }
 

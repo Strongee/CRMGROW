@@ -21,6 +21,8 @@ import { SelectUserComponent } from './select-user/select-user.component';
 import { JoinCallRequestComponent } from './join-call-request/join-call-request.component';
 import { CallRequestConfirmComponent } from './call-request-confirm/call-request-confirm.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
+import { DataEmptyComponent } from './data-empty/data-empty.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     VideoCreateComponent,
     JoinCallRequestComponent,
     CallRequestConfirmComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    CallRequestCancelComponent,
+    DataEmptyComponent
   ],
   imports: [
     CommonModule,
@@ -61,13 +65,15 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     InputAutomationComponent,
     InputTeamComponent,
     SelectUserComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    DataEmptyComponent
   ],
   bootstrap: [
     AvatarEditorComponent,
     VideoShareComponent,
     JoinCallRequestComponent,
-    CallRequestConfirmComponent
+    CallRequestConfirmComponent,
+    CallRequestCancelComponent
   ]
 })
 export class ComponentsModule {}

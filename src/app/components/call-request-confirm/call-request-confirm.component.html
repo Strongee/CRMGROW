@@ -67,11 +67,11 @@
       </div>
       <div class="my-3">
         <label>Select Suiting Date</label>
-        <div class="date-container" *ngFor="let suiteDate of callDates">
+        <div class="date-container" *ngFor="let suiteDate of formData.proposed_at; let i=index">
           <div class="v-center mb-2">
             <div class="custom-radio-container" (click)="selectSuiteDate(suiteDate)">
-              <input class="custom-radio" type="radio" id="suite-date" [name]="suiteDate" [checked]="isSelectedDate(suiteDate)">
-              <label class="f-6 font-weight-bold" [htmlFor]="suiteDate"> </label>
+              <input class="custom-radio" type="radio" [id]="'suite-date-' + i" [name]="'suite-date-' + i" [checked]="isSelectedDate(suiteDate)">
+              <label class="f-6 font-weight-bold" [htmlFor]="'suite-date-' + i"> </label>
             </div>
             <button class="v-center border-0 bgc-trans ml-1" (click)="selectSuiteDate(suiteDate)">
               <i class="i-icon i-calendar bgc-dark" aria-hidden="true"></i>

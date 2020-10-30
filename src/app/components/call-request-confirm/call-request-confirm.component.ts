@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subscription, Observable } from 'rxjs';
 import { TeamService } from '../../services/team.service';
 import { UserService } from '../../services/user.service';
 import { NoteQuillEditor } from '../../constants/variable.constants';
@@ -25,7 +24,6 @@ export class CallRequestConfirmComponent implements OnInit {
   config = NoteQuillEditor;
   quillEditorRef;
   isAddNoteLoading = false;
-  callDates = [];
   selectedDate;
 
   constructor(
@@ -43,9 +41,7 @@ export class CallRequestConfirmComponent implements OnInit {
   }
   load(): void {
     this.formData = this.data.inquiry;
-    this.callDates.push(this.data.inquiry.due_start);
-    this.callDates.push(this.data.inquiry.due_end);
-    this.selectedDate = this.data.inquiry.due_start;
+    this.selectedDate = this.formData.proposed_at[0];
     this.userService.profile$.subscribe((res) => {
       if (this.formData) {
         if (this.formData.leader) {
@@ -54,7 +50,7 @@ export class CallRequestConfirmComponent implements OnInit {
         this.isOrganizer = this.formData.user._id === res._id;
       }
       this.duration =
-        this.formData.duration === '60'
+        this.formData.duration === 60
           ? '1 hour'
           : this.formData.duration + ' mins';
       this.note = this.formData.note;
@@ -79,20 +75,23 @@ export class CallRequestConfirmComponent implements OnInit {
     this.isAcceptLoading = true;
     const data = {
       call_id: this.formData._id,
-      note: this.note
+      note: this.note,
+      proposed_at: this.selectedDate
     };
     this.teamService.acceptCall(data).subscribe(
       (res) => {
+        console.log("accept call =============>", res);
         this.isAcceptLoading = false;
         const result = {
           inquiry_id: this.formData._id,
           status: 'planned'
         };
+        this.location.replaceState('/teams');
         this.dialogRef.close({ data: result });
       },
       (error) => {
         this.isAcceptLoading = false;
-        this.dialogRef.close();
+        this.closeDialog();
       }
     );
   }
@@ -108,11 +107,12 @@ export class CallRequestConfirmComponent implements OnInit {
           inquiry_id: this.formData._id,
           status: 'canceled'
         };
+        this.location.replaceState('/teams');
         this.dialogRef.close({ data: result });
       },
       (error) => {
         this.isCancelLoading = false;
-        this.dialogRef.close();
+        this.closeDialog();
       }
     );
   }
@@ -130,11 +130,11 @@ export class CallRequestConfirmComponent implements OnInit {
       (res) => {
         this.isAddNoteLoading = false;
         this.formData.note = this.note;
-        this.dialogRef.close();
+        this.closeDialog();
       },
       (error) => {
         this.isAddNoteLoading = false;
-        this.dialogRef.close();
+        this.closeDialog();
       }
     );
   }

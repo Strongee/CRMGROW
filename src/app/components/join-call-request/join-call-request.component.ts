@@ -181,7 +181,7 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       this.teamService.requestCall(data).subscribe((response) => {
         console.log('request call response ==============>', response);
         this.isLoading = false;
-        this.dialogRef.close();
+        this.dialogRef.close({ data: response });
       });
     });
   }
