@@ -12,10 +12,9 @@ export class IntegrationComponent implements OnInit {
   user: User = new User();
   connectingMail = '';
 
-  constructor(private userService: UserService, private toast: ToastrService,) {
-    this.userService.profile.subscribe((profile) => {
-      this.user = new User().deserialize({ ...profile });
-      console.log('###', this.user);
+  constructor(private userService: UserService, private toast: ToastrService) {
+    this.userService.profile$.subscribe((profile) => {
+      this.user = profile;
     });
   }
 

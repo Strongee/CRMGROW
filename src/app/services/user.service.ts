@@ -91,6 +91,11 @@ export class UserService extends HttpService {
         catchError(this.handleError('UPDATE PROFILE'))
       );
   }
+  public updateUser(field, value) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    user[field] = value;
+    localStorage.setItem('user', JSON.stringify(user));
+  }
   public updatePassword(oldPwd: string, newPwd: string): Observable<any> {
     const data = {
       old_password: oldPwd,
@@ -100,6 +105,9 @@ export class UserService extends HttpService {
       this.server + USER.UPDATE_PASSWORD,
       JSON.stringify(data)
     );
+  }
+  public getPayment(id: string): Observable<any> {
+    return this.httpClient.get(this.server + USER.PAYMENT + id);
   }
   public setToken(token: string): void {
     localStorage.setItem('token', token);
@@ -118,5 +126,13 @@ export class UserService extends HttpService {
   public setGarbage(garbage: Garbage): void {
     this.garbage.next(garbage);
     return;
+  }
+  public requestSyncUrl(type: string): Observable<any> {
+    switch (type) {
+      case 'gmail':
+        return this.httpClient.get(environment.api + USER.SYNC_GMAIL);
+      case 'outlook':
+        return this.httpClient.get(environment.api + USER.SYNC_OUTLOOK);
+    }
   }
 }

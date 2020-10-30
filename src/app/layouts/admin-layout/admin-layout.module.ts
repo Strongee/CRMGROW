@@ -28,6 +28,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
 import { TemplateConditionalComplexityRule } from 'codelyzer';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
+import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
-    CalendarComponent
+    CalendarComponent,
+    SocialProfileComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +59,7 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
     ComponentsModule,
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
-    NgxPaginationModule,
+    NgxPaginationModule
   ],
   schemas: []
 })

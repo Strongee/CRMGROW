@@ -22,9 +22,8 @@ export class GeneralProfileComponent implements OnInit {
   CountryISO = CountryISO;
 
   constructor(private userService: UserService) {
-    this.userService.profile.subscribe((profile) => {
-      this.user = new User().deserialize({ ...profile });
-      console.log('###', this.user);
+    this.userService.profile$.subscribe((profile) => {
+      this.user = profile;
     });
   }
 

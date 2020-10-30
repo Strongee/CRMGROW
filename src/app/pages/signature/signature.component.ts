@@ -34,14 +34,13 @@ export class SignatureComponent implements OnInit {
     private userService: UserService,
     private fileService: FileService
   ) {
-    this.userService.profile.subscribe((profile) => {
+    this.userService.profile$.subscribe((profile) => {
       if (profile.email_signature == '') {
         this.signature = `
-        <div>${profile.user_name}</div>
-        <div>${profile.company}</div>
-        <div>${profile.email}</div>
-        <div>${profile.phone.internationalNumber}</div>
-        <div><img src="${profile.picture_profile}"></div>
+        <div id="editor-container">
+        <div class="detail">Hello</div>
+        <div class="image">Goodbye</div>
+        </div>
         `;
       } else {
         this.signature = profile.email_signature;
@@ -64,20 +63,20 @@ export class SignatureComponent implements OnInit {
     class DetailBlot extends Block {
       static create(url) {
         const node = super.create();
-        node.setAttribute('class', 'detail');
         return node;
       }
     }
     DetailBlot.blotName = 'detail';
+    DetailBlot.className = 'detail';
     DetailBlot.tagName = 'div';
     class ImageBlot extends Block {
       static create(url) {
         const node = super.create();
-        node.setAttribute('class', 'image');
         return node;
       }
     }
     ImageBlot.blotName = 'image';
+    ImageBlot.className = 'image';
     ImageBlot.tagName = 'div';
     Quill.register(ImageBlot);
     Quill.register(DetailBlot);
