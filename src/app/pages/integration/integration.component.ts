@@ -43,6 +43,6 @@ export class IntegrationComponent implements OnInit {
   }
 
   showError(msg) {
-    this.toast.error(msg)
+    this.toast.error(msg);
   }
 }

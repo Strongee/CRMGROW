@@ -83,7 +83,7 @@ export class UserService extends HttpService {
       catchError(this.handleError('GET PROFILE'))
     );
   }
-  public updateProfile(profile): Observable<any> {
+  public updateProfile(profile: any): Observable<any> {
     return this.httpClient
       .put(environment.api + USER.UPDATE_PROFILE, profile)
       .pipe(

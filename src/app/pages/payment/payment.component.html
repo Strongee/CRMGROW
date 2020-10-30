@@ -1,7 +1,7 @@
 <form #paymentForm="ngForm" (ngSubmit)="paymentSubmitted=true; paymentForm.form.valid ? createBill() : false;">
     <span class="f-4 font-weight-bold mb-1">Detail information</span>
     <div class="row">
-        <div class="col-sm-3 form-group">
+        <div class="col-lg-3 col-md-8 form-group">
             <label for="payment-method" class="font-weight-bold mr-auto">payment method</label>
             <div class="payment-card">
                 <div class="f-1 font-weight-bold p-3">
@@ -28,7 +28,7 @@
             </div>
             <div class="f-1 text-center mt-4 px-5 unsubscribe">If you want to unsubscribe your payment method click here.</div>
         </div>
-        <div class="col-sm-4 ml-3">
+        <div class="col-lg-4 col-md-8 ml-lg-3 ml-md-0">
             <div class="form-group" [ngClass]="{invalid: paymentForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || paymentForm.submitted)}">
                 <div class="d-flex">
                     <label for="card_name">name on card</label>
