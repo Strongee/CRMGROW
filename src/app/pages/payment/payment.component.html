@@ -8,7 +8,14 @@
                     CREDIT CARD
                 </div>
                 <div class="card-type px-3 pt-4">
-                    <img src="../../../assets/img/visa.svg" alt="">
+                    <ng-container [ngSwitch]="payment.card_brand">
+                        <img src="../../../assets/img/visa.svg" *ngSwitchCase="'Visa'">
+                        <img src="../../../assets/img/amex.svg" *ngSwitchCase="'Amex'">
+                        <img src="../../../assets/img/master.svg" *ngSwitchCase="'Mastercard'">
+                        <img src="../../../assets/img/jcb.svg" *ngSwitchCase="'Jcb'">
+                        <img src="../../../assets/img/discover.svg" *ngSwitchCase="'Discover'">
+                        <img src="../../../assets/img/diners.svg" *ngSwitchCase="'Diners'">
+                    </ng-container>
                 </div>
                 <div class="v-center justify-content-between px-3 pb-3">
                     <div class="f-4 font-weight-bold">
