@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="my-3" *ngIf="formData.description !== 'undefined' || formData.description !== ''">
+      <div class="my-3" *ngIf="formData.description">
         <label>Description</label>
         <div class="text-wrapper description bgc-silver f-4">{{formData.description | stripe | slice:0:80}}</div>
       </div>
@@ -87,7 +87,7 @@
           <span class="ml-2 f-4 c-blue font-weight-bold">Pick your own date & time</span>
         </button>
       </div>
-      <ng-container>
+      <ng-container *ngIf="isNoteEditable">
         <div class="my-3">
           <label>Note</label>
           <quill-editor placeholder="Enter Text" [(ngModel)]="note" [modules]="config" name="noteContent"
@@ -100,26 +100,29 @@
   </mat-dialog-content>
   <ng-container *ngIf="formData.status != 'pending'">
     <ng-container *ngIf="isNoteEditable; else backButton">
-      <mat-dialog-actions class="justify-content-end mx-0">
+      <mat-dialog-actions class="justify-content-between ">
         <button type="button" class="btn bgc-trans c-blue" (click)="addNote()">
           Back
+        </button>
+        <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="sendMessage()">
+          Send organizer a message
         </button>
       </mat-dialog-actions>
     </ng-container>
     <ng-template #backButton>
-      <mat-dialog-actions class="justify-content-end mx-0">
+      <mat-dialog-actions class="justify-content-between">
         <button type="button" class="btn bgc-trans c-blue" (click)="closeDialog()">
           Back
         </button>
+        <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="sendMessage()">
+          Send organizer a message
+        </button>
       </mat-dialog-actions>
     </ng-template>
-    <button type="button" class="btn bgc-trans font-weight-bold c-blue">
-      Send organizer a message
-    </button>
   </ng-container>
   <ng-container *ngIf="formData.status == 'pending' || isCancelLoading || isAcceptLoading">
     <mat-dialog-actions class="justify-content-between mx-0">
-      <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="closeDialog()">
+      <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="addNote()">
         Back
       </button>
       <div>
@@ -129,15 +132,14 @@
         <button type="button" class="btn btn-decline font-weight-bold mr-2" *ngIf="(isLeader || isOrganizer) && !isCancelLoading" (click)="cancelRequest()">
           {{"Decline"}}
         </button>
-        <app-loading-button [class]="'btn btn-decline font-weight-bold mr-2'" [title]="isLeader ? 'Rejecting' : 'Canceling'" *ngIf="(isLeader || isOrganizer) && isCancelLoading">
+        <app-loading-button [class]="'btn btn-decline font-weight-bold mr-2'" [title]="'Declining...'" *ngIf="(isLeader || isOrganizer) && isCancelLoading">
         </app-loading-button>
         <button class="btn btn-accept font-weight-bold" *ngIf="isLeader && !isAcceptLoading" (click)="acceptRequest()">
           Accept
         </button>
-        <app-loading-button [class]="'btn btn-accept font-weight-bold'" [title]="'Accepting'" *ngIf="isLeader && isAcceptLoading">
+        <app-loading-button [class]="'btn btn-accept font-weight-bold'" [title]="'Accepting...'" *ngIf="isLeader && isAcceptLoading">
         </app-loading-button>
       </div>
-
     </mat-dialog-actions>
   </ng-container>
 </form>

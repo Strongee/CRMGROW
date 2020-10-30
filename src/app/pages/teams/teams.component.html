@@ -449,11 +449,11 @@
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
                         <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="finishedInquiry(plan)">
+                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editGroupCall(plan)">
                             <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4">Edit group call</span>
                           </button>
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="cancelInquiry(plan)">
+                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="addToCalendar(plan)">
                             <i class="i-icon i-calendar bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4">Add to calendar</span>
                           </button>
@@ -575,14 +575,6 @@
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
                         <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="finishedInquiry(finished)">
-                            <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4">Edit group call</span>
-                          </button>
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="cancelInquiry(finished)">
-                            <i class="i-icon i-calendar bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4">Add to calendar</span>
-                          </button>
                           <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteInquiry(finished)">
                             <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4">Delete</span>

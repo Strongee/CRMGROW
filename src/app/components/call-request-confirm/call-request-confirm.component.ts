@@ -46,7 +46,7 @@ export class CallRequestConfirmComponent implements OnInit {
     this.callDates.push(this.data.inquiry.due_start);
     this.callDates.push(this.data.inquiry.due_end);
     this.selectedDate = this.data.inquiry.due_start;
-    this.userService.loadProfile().subscribe((res) => {
+    this.userService.profile$.subscribe((res) => {
       if (this.formData) {
         if (this.formData.leader) {
           this.isLeader = this.formData.leader._id === res._id;
@@ -59,6 +59,7 @@ export class CallRequestConfirmComponent implements OnInit {
           : this.formData.duration + ' mins';
       this.note = this.formData.note;
       this.isNoteEditable = this.isLeader && this.formData.status !== 'pending';
+      console.log("call inquiry data ==============>", this.formData);
     });
   }
   getEditorInstance(editorInstance: any): void {
@@ -116,6 +117,10 @@ export class CallRequestConfirmComponent implements OnInit {
     );
   }
   addNote(): void {
+    if (this.note === this.formData.note) {
+      this.dialogRef.close();
+      return;
+    }
     this.isAddNoteLoading = true;
     const data = {
       ...this.formData,
@@ -133,10 +138,10 @@ export class CallRequestConfirmComponent implements OnInit {
       }
     );
   }
-
   closeDialog(): void {
     this.isLoading = false;
     this.location.replaceState('/teams');
     this.dialogRef.close();
   }
+  sendMessage(): void {}
 }

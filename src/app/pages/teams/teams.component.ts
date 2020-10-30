@@ -613,4 +613,6 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       this.finishedExpanded = !this.finishedExpanded;
     }
   }
+  editGroupCall(plan): void {}
+  addToCalendar(plan): void {}
 }

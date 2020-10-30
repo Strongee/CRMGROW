@@ -150,14 +150,14 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
 
     const status = 'pending';
     const contacts = [];
-    for (let contact of this.contacts) {
+    for (const contact of this.contacts) {
       contacts.push(contact._id);
     }
 
-    this.userService.loadProfile().subscribe((res) => {
+    this.userService.profile$.subscribe((res) => {
       const timezone = res['time_zone'];
       const dueDateTimes = [];
-      for (let dateTime of this.callDateTimes) {
+      for (const dateTime of this.callDateTimes) {
         dueDateTimes.push(
           new Date(
             `${dateTime.date.year}-${this.numPad(
@@ -174,12 +174,12 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
         description,
         duration,
         status,
-        prospected_at: dueDateTimes
+        proposed_at: dueDateTimes
       };
 
-      console.log("request data =============>", data);
+      console.log('request data =============>', data);
       this.teamService.requestCall(data).subscribe((response) => {
-        console.log("request call response ==============>", response);
+        console.log('request call response ==============>', response);
         this.isLoading = false;
         this.dialogRef.close();
       });
