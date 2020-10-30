@@ -7,7 +7,7 @@
         [removable]="true"
         (removed)="remove(contact)">
         <div class="d-flex chip p-1">
-          <div class="avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
+          <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
           <div class="info">
             <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
             <div class="f-1">{{contact[display]}}</div>
@@ -31,7 +31,7 @@
     >
       <mat-option *ngFor="let item of filteredResults | async" [value]="item">
         <div class="d-flex chip py-2">
-          <div class="avatar rounded-circle bg-dark mr-3 mt-1">{{item.avatarName}}</div>
+          <div class="form-avatar rounded-circle bg-dark mr-3 mt-1">{{item.avatarName}}</div>
           <div class="info">
             <div class="f-5 font-weight-bold">{{item.fullName}}</div>
             <div class="f-2">{{item['email'] || 'Undefined'}}</div>

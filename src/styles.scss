@@ -740,15 +740,22 @@ body{
 
 
 // Custom Material Style
-.chip .avatar {
+.form-avatar {
   width: 26px;
   height: 26px;
   color: white;
   text-align: center;
   text-transform: uppercase;
-  padding: 6px 0px;
+  padding: 0px 0px;
   font-size: 14px;
-  line-height: 1;
+  line-height: 26px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 table {
@@ -786,7 +793,7 @@ table {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 4px solid white;
+  border: 2px solid white;
   box-shadow: -2px 2px 4px #ccc;
 }
 

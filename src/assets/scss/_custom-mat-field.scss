@@ -48,6 +48,12 @@
       transform: none;
     }
   }
+
+  &.mat-select-wrapper {
+    .mat-form-field-infix {
+      height: 42px;
+    }
+  }
 }
 
 .mat-autocomplete-panel {

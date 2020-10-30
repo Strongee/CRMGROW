@@ -85,6 +85,7 @@ export const THEME = {
 
 export const TEAM = {
   LOAD: 'team/load',
+  LOAD_LEADERS: 'team/load-leaders',
   LOAD_INVITED: 'team/load-invited',
   CREATE: 'team',
   READ: 'team/',

@@ -18,6 +18,7 @@ import { InputAutomationComponent } from './input-automation/input-automation.co
 import { InputTemplateComponent } from './input-template/input-template.component';
 import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
+import { SelectLeaderComponent } from './select-leader/select-leader.component';
 @NgModule({
   declarations: [
     SlideTabComponent,
@@ -36,6 +37,7 @@ import { SelectUserComponent } from './select-user/select-user.component';
     SelectUserComponent,
     VideoCreateComponent,
     ConfirmComponent,
+    SelectLeaderComponent
   ],
   imports: [
     CommonModule,
@@ -54,11 +56,9 @@ import { SelectUserComponent } from './select-user/select-user.component';
     InputTemplateComponent,
     InputAutomationComponent,
     InputTeamComponent,
-    SelectUserComponent
+    SelectUserComponent,
+    SelectLeaderComponent
   ],
-  bootstrap: [
-    AvatarEditorComponent,
-    VideoShareComponent,
-  ]
+  bootstrap: [AvatarEditorComponent, VideoShareComponent]
 })
 export class ComponentsModule {}
