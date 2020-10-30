@@ -156,13 +156,16 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
 
     this.userService.loadProfile().subscribe((res) => {
       const timezone = res['time_zone'];
-      const dueStart = new Date(
-        `${this.callDateTimes[0].date.year}-${this.numPad(
-          this.callDateTimes[0].date.month
-        )}-${this.numPad(this.callDateTimes[0].date.day)}T${
-          this.callDateTimes[0].time
-        }${timezone}`
-      ).toISOString();
+      const dueDateTimes = [];
+      for (let dateTime of this.callDateTimes) {
+        dueDateTimes.push(
+          new Date(
+            `${dateTime.date.year}-${this.numPad(
+              dateTime.date.month
+            )}-${this.numPad(dateTime.date.day)}T${dateTime.time}${timezone}`
+          ).toISOString()
+        );
+      }
       const data = {
         user: res._id,
         leader: this.leader._id,
@@ -171,7 +174,7 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
         description,
         duration,
         status,
-        due_start: dueStart
+        prospected_at: dueDateTimes
       };
 
       console.log("request data =============>", data);
