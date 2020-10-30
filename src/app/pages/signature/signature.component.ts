@@ -54,9 +54,7 @@ export class SignatureComponent implements OnInit {
     this.currentTemplate = template.layout;
   }
 
-  update(): void {
-    console.log('###', this.signature);
-  }
+  update(): void {}
 
   getEditorInstance(editorInstance: any): void {
     const Block = Quill.import('blots/block');

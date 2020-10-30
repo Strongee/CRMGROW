@@ -63,7 +63,6 @@ export class PaymentComponent implements OnInit {
           (res) => {
             if (res['status']) {
               this.payment = res['data'];
-              console.log('##', this.payment);
             }
           },
           (err) => {}
