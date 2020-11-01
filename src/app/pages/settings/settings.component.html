@@ -15,11 +15,10 @@
     </div>
     <div class="sub-container pl-4 flex-grow-1">
       <ng-container [ngSwitch]="currentPage">
-        <app-general-profile *ngSwitchCase="'general'"></app-general-profile>
-        <app-signature *ngSwitchCase="'signature'"></app-signature>
-        <app-security *ngSwitchCase="'security'"></app-security>
-        <app-integration *ngSwitchCase="'integration'"></app-integration>
-        <app-payment *ngSwitchCase="'payment'"></app-payment>
+        <app-notifications *ngSwitchCase="'notifications'"></app-notifications>
+        <app-assistant *ngSwitchCase="'assistant'"></app-assistant>
+        <app-lead-capture *ngSwitchCase="'lead-capture'"></app-lead-capture>
+        <app-tag-manager *ngSwitchCase="'tag-manager'"></app-tag-manager>
       </ng-container>
     </div>
   </div>

@@ -86,3 +86,12 @@ export const QuillEditor = {
   },
   imageResize: true
 };
+
+export const REMINDER = [
+  { id: '10', text: '10 min' },
+  { id: '20', text: '20 min' },
+  { id: '30', text: '30 min' },
+  { id: '40', text: '40 min' },
+  { id: '50', text: '50 min' },
+  { id: '60', text: '1 hour' }
+];

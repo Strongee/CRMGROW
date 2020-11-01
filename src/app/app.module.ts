@@ -33,7 +33,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AdminLayoutComponent,
     TopbarComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -1,0 +1,30 @@
+.page-content {
+    width: 100%;
+    max-width: 550px;
+    table.table th {
+        position: sticky;
+        top: 0px;
+        background-color: white;
+        z-index: 11;
+        opacity: 1;
+        font-size: 14px;
+    }
+    
+    th, td {
+        padding: 10px 10px;
+        vertical-align: middle !important;
+        background-color: white;
+        border-bottom: 1px solid #e9ecef;
+        text-transform: capitalize;
+        &.checkbox-col {
+            opacity: 1;
+        }
+    }
+    .checkbox-col {
+        width: 36px;
+        text-align: center;
+    }
+    .form-control {
+        width: 100px;
+    }
+}

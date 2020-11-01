@@ -32,6 +32,10 @@ import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
+import { NotificationsComponent } from '../../pages/notifications/notifications.component';
+import { AssistantComponent } from '../../pages/assistant/assistant.component';
+import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.component';
+import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +58,11 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
     TemplatesComponent,
     TemplateComponent,
     TeamComponent,
-    CalendarComponent
+    CalendarComponent,
+    NotificationsComponent,
+    AssistantComponent,
+    LeadCaptureComponent,
+    TagManagerComponent
   ],
   imports: [
     CommonModule,

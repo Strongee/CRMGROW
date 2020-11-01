@@ -1,0 +1,52 @@
+<div class="page-content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="f-4 border-bottom-0 pl-0">type</th>
+                <th class="checkbox-col font-weight-bold border-bottom-0">desktop</th>
+                <th class="checkbox-col font-weight-bold border-bottom-0">text</th>
+                <th class="checkbox-col font-weight-bold border-bottom-0">email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let type of types">
+                <td class="f-4 c-dark pl-0">{{type}}</td>
+                <td class="checkbox-col">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="desktop-{{type}}">
+                      <label class="custom-control-label" for="desktop-{{type}}"></label>
+                    </div>
+                </td>
+                <td class="checkbox-col">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="text-{{type}}">
+                      <label class="custom-control-label" for="text-{{type}}"></label>
+                    </div>
+                </td>
+                <td class="checkbox-col">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="email-{{type}}">
+                      <label class="custom-control-label" for="email-{{type}}"></label>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="reminder mt-4">
+        <div class="f-4 font-weight-bold">Follow up reminder</div>
+        <div class="form-group mb-2">
+            <label class="f-1">Set the reminder prior to follow up due time</label>
+        </div>
+        <div class="form-group mt-2">
+            <select class="form-control c-blue f-5" [(ngModel)]="reminder_time" name="reminder" id="reminder" required #reminder="ngModel">
+                <option *ngFor="let reminder of reminders" value="{{reminder.id}}">
+                  {{reminder.text}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-white font-weight-bold mr-2 mt-4">Cancel</button>
+        <button class="btn btn-blue font-weight-bold mr-2 mt-4">Save changes</button>
+    </div>
+</div>
