@@ -1,1 +1,30 @@
-<p>lead-capture works!</p>
+<div class="page-content p-0">
+    <div class="form-group mb-4">
+        <h6 class="f-3 font-weight-bold mb-1">Delay time</h6>
+        <label class="f-1 mb-3">Delay time till when the dialog will be shown</label>
+        <select class="form-control c-blue f-5" [(ngModel)]="delay_time" name="delay" id="delay" required #delay="ngModel">
+            <option *ngFor="let time of times" value="{{time.id}}">
+              {{time.text}}
+            </option>
+        </select>
+    </div>
+    <div class="form-group">
+        <h6 class="f-3 font-weight-bold mb-1">Required fields</h6>
+        <label class="f-1 mb-3">Informations required from your visitors</label>
+        <div class="v-center justify-content-between required-field mb-2" *ngFor="let field of required_fields">
+            <div class="f-3">{{field}}</div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="{{field}}">
+                <label class="custom-control-label" for="{{field}}"></label>
+            </div>
+        </div>
+        <button class="v-center btn btn-blue f-4 font-weight-bold text-white mt-3 add-button">
+            <i class="i-icon i-plus bg-white d-block mr-2"></i>
+            Add custom field
+        </button>
+    </div>
+    <div>
+        <button class="btn btn-white font-weight-bold mr-2 mt-4">Cancel</button>
+        <button class="btn btn-blue font-weight-bold mr-2 mt-4" (click)="saveDelay()">Save changes</button>
+    </div>
+</div>

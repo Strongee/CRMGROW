@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DELAY } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-lead-capture',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./lead-capture.component.scss']
 })
 export class LeadCaptureComponent implements OnInit {
+  times = DELAY;
+  delay_time = '';
+  required_fields = ['Name', 'Text', 'Email'];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
+  saveDelay(): void {}
 }

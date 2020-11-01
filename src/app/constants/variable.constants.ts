@@ -95,3 +95,17 @@ export const REMINDER = [
   { id: '50', text: '50 min' },
   { id: '60', text: '1 hour' }
 ];
+
+export const DELAY = [
+  { id: '', text: 'Immediately' },
+  { id: '1', text: '1 min' },
+  { id: '2', text: '2 min' },
+  { id: '3', text: '3 min' },
+  { id: '4', text: '4 min' },
+  { id: '5', text: '5 min' },
+  { id: '6', text: '6 min' },
+  { id: '7', text: '7 min' },
+  { id: '8', text: '8 min' },
+  { id: '9', text: '9 min' },
+  { id: '10', text: '10 min' }
+];
