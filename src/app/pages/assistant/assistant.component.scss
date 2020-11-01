@@ -1,0 +1,31 @@
+.page-content {
+    width: 100%;
+    max-width: 550px;
+    table.table th {
+        position: sticky;
+        top: 0px;
+        background-color: white;
+        letter-spacing: 0px;
+        z-index: 11;
+    }
+    
+    th, td {
+        padding: 10px 10px;
+        vertical-align: middle !important;
+        background-color: white;
+        &.checkbox-col {
+            opacity: 1;
+        }
+    }
+    .password-col {
+        width: 120px;
+    }
+    .toggle-col, .delete-col {
+        width: 60px;
+    }
+    .dark-label {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+}
