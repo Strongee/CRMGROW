@@ -52,10 +52,10 @@
               <div class="input-group-prepend">
                 <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
               </div>
-              <input class="form-control datepicker" placeholder="Select date" name="due_from" #due_from="ngModel" [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>
+              <input class="form-control datepicker" placeholder="Select date" [name]="dateTime.id"  [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>
             </div>
             <div class="input-group ml-2">
-              <select class="form-control" [(ngModel)]="dateTime.time" name="fromTime" #fromTime="ngModel">
+              <select class="form-control" [(ngModel)]="dateTime.time" [name]="dateTime.id + '-time'">
                 <option value="" disabled>From Time</option>
                 <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
               </select>

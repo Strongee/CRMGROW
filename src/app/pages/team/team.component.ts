@@ -161,7 +161,6 @@ export class TeamComponent implements OnInit {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
-        console.log("team =============>", this.team);
         this.loading = false;
         const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
         if (ownerIndex !== -1) {

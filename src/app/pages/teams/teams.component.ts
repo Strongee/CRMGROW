@@ -124,7 +124,6 @@ export class TeamsComponent implements OnInit, AfterViewInit {
   }
 
   load(): void {
-    console.log("load teams ==============>");
     this.loading = true;
     this.spinner.show('sp5');
     this.loadSubscription && this.loadSubscription.unsubscribe();
@@ -150,7 +149,6 @@ export class TeamsComponent implements OnInit, AfterViewInit {
           }
         }
         this.teams = [...this.ownTeams, ...this.anotherTeams];
-        console.log('teams =================>', this.teams);
       });
     });
     this.loadInviteSubscription = this.teamService
@@ -176,7 +174,6 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       .getPageInquiries(skip)
       .subscribe(
         (res) => {
-          console.log("inquiry data =============>", res);
           this.isInquiryLoading = false;
           this.isInquiryTableLoading = false;
           this.inquiriesData = res.data;
@@ -204,7 +201,6 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.plannedSubscription && this.plannedSubscription.unsubscribe();
     this.plannedSubscription = this.teamService.getPagePlanned(skip).subscribe(
       (res) => {
-        console.log("planned data ============>", res);
         this.isPlannedLoading = false;
         this.isPlannedTableLoading = false;
         this.plannedData = res.data;
@@ -234,7 +230,6 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       .getPageFinished(skip)
       .subscribe(
         (res) => {
-          console.log("finished data =============>", res);
           this.isFinishedLoading = false;
           this.isFinishedTableLoading = false;
           this.finishedData = res.data;

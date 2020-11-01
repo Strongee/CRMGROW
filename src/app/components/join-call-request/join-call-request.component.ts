@@ -176,10 +176,7 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
         status,
         proposed_at: dueDateTimes
       };
-
-      console.log('request data =============>', data);
       this.teamService.requestCall(data).subscribe((response) => {
-        console.log('request call response ==============>', response);
         this.isLoading = false;
         this.dialogRef.close({ data: response });
       });

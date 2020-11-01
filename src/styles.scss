@@ -1065,3 +1065,26 @@ ul.ngx-pagination {
     }
   }
 }
+
+@media screen and (max-width: 576px) {
+  .dialog-container{
+    padding: 0;
+  }
+}
+
+//mat-accordion style
+@media screen and (max-width: 576px) {
+  .mat-accordion {
+    .mat-expansion-panel-header {
+      padding: 0;
+    }
+
+    .mat-expansion-panel-content {
+      padding: 0;
+
+      .mat-expansion-panel-body {
+        padding: 0;
+      }
+    }
+  }
+}

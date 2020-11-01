@@ -8,6 +8,10 @@
   .teams-tab-container {
     display: block;
   }
+
+  .tab-container {
+    width: 350px;
+  }
 }
 
 .owners {
@@ -116,6 +120,44 @@
 
     &.loading {
       filter: blur(1px);
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .call-request-table {
+
+      thead th {
+        font-size: 0.6rem;
+        line-height: 0.8rem;
+      }
+
+      .avatar {
+        display: none;
+      }
+
+      .name-avatar {
+        display: none;
+      }
+
+      .guests {
+        display: none;
+      }
+
+      .organizer {
+        display: none;
+      }
+    }
+
+    .scheduled-call-table {
+      .leader {
+        display: none;
+      }
+    }
+
+    .completed-call-table {
+      .leader {
+        display: none;
+      }
     }
   }
 

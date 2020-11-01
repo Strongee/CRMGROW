@@ -376,7 +376,7 @@
             </div>
             <div class="bg-white rounded position-relative">
               <ng-container *ngIf="totalPlanned">
-                <table class="table call-request-table" [class.loading]="isPlannedTableLoading">
+                <table class="table call-request-table scheduled-call-table" [class.loading]="isPlannedTableLoading">
                   <thead>
                   <tr>
                     <th class="subject">Subject & Description</th>
@@ -510,7 +510,7 @@
             </div>
             <div class="bg-white rounded position-relative">
               <ng-container *ngIf="totalFinished">
-                <table class="table call-request-table" [class.loading]="isFinishedTableLoading">
+                <table class="table call-request-table completed-call-table" [class.loading]="isFinishedTableLoading">
                   <thead>
                   <tr>
                     <th class="subject">Subject & Description</th>
