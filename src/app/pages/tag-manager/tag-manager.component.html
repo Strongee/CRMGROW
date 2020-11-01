@@ -1,1 +1,97 @@
-<p>tag-manager works!</p>
+<div class="page-content">
+    <div class="v-center justify-content-between mb-3">
+        <h6 class="f-3 font-weight-bold mb-0">Tag manager</h6>
+        <button class="v-center btn btn-blue f-3 font-weight-bold text-white add-tag">
+            <i class="i-icon i-plus bg-white d-block mr-2"></i>
+            New tag
+        </button>
+    </div>
+    <div class="table">
+        <div class="v-center pt-3 pb-2 table-header">
+            <div class="f-1 tag-col">
+                tag name
+            </div>
+            <div class="f-1 edit-col text-center">
+                edit
+            </div>
+            <div class="f-1 time-col text-right">
+                times used
+            </div>
+            <div class="f-1 delete-col text-right">
+                delete
+            </div>
+        </div>
+        <div class="table-body">
+            <div *ngFor="let tag of tags">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="tag-col">
+                                    <span class="f-3 bgc-pale px-2 py-1 tag-label">{{tag.label}}</span>
+                                </div>
+                                <div class="edit-col text-center">
+                                    <i class="d-block mx-auto i-icon i-edit bgc-dark"></i>
+                                </div>
+                                <div class="f-3 font-weight-bold text-primary text-right time-col">
+                                    {{tag.names.length}}
+                                </div>
+                                <div class="delete-col text-right">
+                                    <i class="d-block mx-auto i-icon i-trash bgc-red"></i>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="v-center" *ngFor="let name of tag.names">
+                            <div class="v-center py-2 avatar-wrapper">
+                                <div class="v-center justify-content-center f-4 font-weight-bold text-white avatar">
+                                    {{name.short}}
+                                </div>
+                                <div class="f-3 font-weight-bold text-primary name">
+                                    {{name.full}}
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+    </div>
+    <!-- <table class="table">
+        <thead>
+            <tr>
+                <th class="f-1 pl-0">tag name</th>
+                <th class="f-1 edit-col">edit</th>
+                <th class="f-1 text-right times-col">times used</th>
+                <th class="f-1 pr-0 delete-col">delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tag of tags">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <td class="pl-0">
+                                    <span class="f-3 bgc-pale px-2 py-1 tag-label">{{tag.label}}</span>
+                                </td>
+                                <td class="edit-col">
+                                    <i class="d-block mx-auto i-icon i-edit bgc-dark"></i>
+                                </td>
+                                <td class="text-right times-col">{{tag.names.length}}</td>
+                                <td class="delete-col">
+                                    <i class="d-block mx-auto i-icon i-trash bgc-red"></i>
+                                </td>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="v-center" *ngFor="let name of tag.names">
+                            <div class="avatar-wrapper">
+                                <div class="avatar">GS</div>
+                                
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </tr>
+        </tbody>
+    </table> -->
+</div>

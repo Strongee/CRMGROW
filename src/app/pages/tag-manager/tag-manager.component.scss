@@ -1,0 +1,76 @@
+@import '../../../variables';
+
+:host ::ng-deep{
+    mat-expansion-panel {
+        box-shadow: none !important;
+        overflow: hidden;
+        border-bottom: 1px solid #e9ecef;
+        mat-expansion-panel-header {
+            padding: 0;
+            &:hover {
+                background-color: #f6f5ff !important;
+            }
+            .tag-col {
+                width: 290px;
+            }
+            .edit-col {
+                width: 45px;
+            }
+            .time-col {
+                width: 90px;
+            }
+            .delete-col {
+                width: 60px;
+            }
+        }
+        .mat-expansion-panel-content {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .avatar-wrapper {
+            width: 100%;
+            height: 100%;
+            .avatar {
+              width: 40px;
+              min-width: 40px;
+              height: 40px;
+              min-height: 40px;
+              background-color: $color-dark;
+              margin-right: 10px;
+            }
+        }
+    }
+}
+.page-content {
+    width: 100%;
+    max-width: 550px;
+    .add-tag {
+        i {
+            width: 12px;
+            height: 12px;
+            min-width: 12px;
+        }
+    }
+    .table {
+        .table-header {
+            border-bottom: 1px solid #e9ecef;
+            text-transform: uppercase;
+            opacity: 0.6;
+            .tag-col {
+                width: 290px;
+            }
+            .edit-col {
+                width: 45px;
+            }
+            .time-col {
+                width: 90px;
+            }
+            .delete-col {
+                width: 60px;
+            }
+        }
+    }
+    .tag-label {
+        border-radius: 6px;
+    }
+}
