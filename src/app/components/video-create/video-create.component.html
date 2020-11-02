@@ -42,7 +42,7 @@
                 <input class="f-2 form-control" type="text"
                     id="step-1-link" name="video_link"
                     placeholder="eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                    required [(ngModel)]="video.link" #video_link="ngModel"
+                    required [(ngModel)]="video.url" #video_link="ngModel"
                     (ngModelChange)="checkVideoUrl()"
                 >
             </div>
@@ -72,7 +72,7 @@
                 <div class="form-group has-feedback mb-4" *ngIf="videoType == 'web'">
                     <label class="f-1 font-weight-bold text-uppercase small-label" for="step-2-link">video link</label>
                     <input class="f-2 form-control" type="text" id="step-2-link" name="video_link"
-                        required [(ngModel)]="video.link" #video_link="ngModel"
+                        required [(ngModel)]="video.url" #video_link="ngModel"
                     >
                 </div>
                 <div class="video-default mb-4">
@@ -183,4 +183,11 @@
             </form>
         </div>
     </div>
+    <ng-container *ngIf="uploading">
+        <div class="px-3 pb-3">
+            <div class="bg-white rounded">
+                <app-loading-overlay [type]="'screen'"></app-loading-overlay>
+            </div>
+        </div>
+    </ng-container>
   </div>
