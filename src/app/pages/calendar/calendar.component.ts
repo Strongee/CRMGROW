@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { UserService } from 'src/app/services/user.service';
+import { TabItem } from 'src/app/utils/data.types';
 // import { CalendarConnectDialogComponent } from 'src/app/components/calendar-connect-dialog/calendar-connect-dialog.component';
 
 @Component({
@@ -27,6 +28,13 @@ export class CalendarComponent implements OnInit {
   };
   weekStart;
   weekEnd;
+
+  tabs: TabItem[] = [
+    { icon: '', label: 'DAY', id: 'day' },
+    { icon: '', label: 'WEEK', id: 'week' },
+    { icon: '', label: 'MONTH', id: 'month' }
+  ];
+  selectedTab: TabItem = this.tabs[0];
 
   constructor(
     private dialog: MatDialog,
@@ -68,6 +76,7 @@ export class CalendarComponent implements OnInit {
             this.viewDate.getMonth() + 1
           }/1`
         );
+        this.selectedTab = this.tabs[2];
         break;
       case 'week':
         this.location.replaceState(
@@ -77,6 +86,7 @@ export class CalendarComponent implements OnInit {
         );
         this.weekStart = startOfWeek(this.viewDate).getDate();
         this.weekEnd = endOfWeek(this.viewDate).getDate();
+        this.selectedTab = this.tabs[1];
         break;
       case 'day':
         this.location.replaceState(
@@ -84,6 +94,7 @@ export class CalendarComponent implements OnInit {
             this.viewDate.getMonth() + 1
           }/${this.viewDate.getDate()}`
         );
+        this.selectedTab = this.tabs[0];
         break;
     }
     const date = this.viewDate.toISOString();
@@ -272,15 +283,17 @@ export class CalendarComponent implements OnInit {
     //   });
   }
 
-  calendarDateChange(): void {
+  changeTab(tab: TabItem): void {
+    this.selectedTab = tab;
     this.isLoading = true;
-    switch (this.view) {
+    switch (this.selectedTab.id) {
       case 'month':
         this.location.replaceState(
           `/calendar/month/${this.viewDate.getFullYear()}/${
             this.viewDate.getMonth() + 1
           }/1`
         );
+        this.view = CalendarView.Month;
         break;
       case 'week':
         this.location.replaceState(
@@ -288,6 +301,7 @@ export class CalendarComponent implements OnInit {
             startOfWeek(this.viewDate).getMonth() + 1
           }/${startOfWeek(this.viewDate).getDate()}`
         );
+        this.view = CalendarView.Week;
         this.weekStart = startOfWeek(this.viewDate).getDate();
         this.weekEnd = endOfWeek(this.viewDate).getDate();
         break;
@@ -297,6 +311,7 @@ export class CalendarComponent implements OnInit {
             this.viewDate.getMonth() + 1
           }/${this.viewDate.getDate()}`
         );
+        this.view = CalendarView.Day;
         break;
     }
     const date = this.viewDate.toISOString();
@@ -326,17 +341,15 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  calendarChange(value: string): void {
-    console.log('##', value);
+  calendarDateChange(): void {
     this.isLoading = true;
-    switch (value) {
+    switch (this.view) {
       case 'month':
         this.location.replaceState(
           `/calendar/month/${this.viewDate.getFullYear()}/${
             this.viewDate.getMonth() + 1
           }/1`
         );
-        this.view = CalendarView.Month;
         break;
       case 'week':
         this.location.replaceState(
@@ -344,7 +357,6 @@ export class CalendarComponent implements OnInit {
             startOfWeek(this.viewDate).getMonth() + 1
           }/${startOfWeek(this.viewDate).getDate()}`
         );
-        this.view = CalendarView.Week;
         this.weekStart = startOfWeek(this.viewDate).getDate();
         this.weekEnd = endOfWeek(this.viewDate).getDate();
         break;
@@ -354,7 +366,6 @@ export class CalendarComponent implements OnInit {
             this.viewDate.getMonth() + 1
           }/${this.viewDate.getDate()}`
         );
-        this.view = CalendarView.Day;
         break;
     }
     const date = this.viewDate.toISOString();
