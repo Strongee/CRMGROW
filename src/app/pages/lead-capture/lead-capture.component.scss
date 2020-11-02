@@ -12,11 +12,19 @@
                 min-width: 12px;
             }
         }
+        label {
+            text-transform: unset;
+        }
         .custom-control-label {
             opacity: 1;
         }
         .required-field {
             width: 150px;
+        }
+    }
+    .btn-blue {
+        &:hover {
+            color: white;
         }
     }
 }

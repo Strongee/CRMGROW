@@ -8,6 +8,7 @@
         z-index: 11;
         opacity: 1;
         font-size: 14px;
+        letter-spacing: 0;
     }
     
     th, td {
@@ -26,5 +27,17 @@
     }
     .form-control {
         width: 120px;
+    }
+    .reminder {
+        .form-group {
+            label {
+                text-transform: unset;
+            }
+        }
+    }
+    .btn-blue {
+        &:hover {
+            color: white;
+        }
     }
 }

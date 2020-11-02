@@ -36,6 +36,7 @@ import { NotificationsComponent } from '../../pages/notifications/notifications.
 import { AssistantComponent } from '../../pages/assistant/assistant.component';
 import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.component';
 import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.component';
+import { StatusAutomationComponent } from '../../pages/status-automation/status-automation.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.compone
     NotificationsComponent,
     AssistantComponent,
     LeadCaptureComponent,
-    TagManagerComponent
+    TagManagerComponent,
+    StatusAutomationComponent
   ],
   imports: [
     CommonModule,
