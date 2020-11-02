@@ -11,11 +11,75 @@
         <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
         </app-slide-tab>
         <div class="v-center justify-content-end">
-            <div class="p-2" ngbDropdown>
+            <div class="form-group p-2 m-0" ngbDropdown>
                 <i class="d-block i-icon i-calendar bgc-blue" ngbDropdownToggle></i>
-                <div ngbDropdownMenu class="light">
-                    <div class="v-center">
-                        
+                <div ngbDropdownMenu class="light px-3">
+                    <div class="first-calendar">
+                        <div class="v-center justify-content-between">
+                            <label class="f-1 font-weight-bold m-0">gsteve@gmail.com</label>
+                            <button class="btn btn-white f-3 font-weight-bold p-0">Hide</button>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="first-calendar-1"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="first-calendar-1"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 1</span>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="first-calendar-2"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="first-calendar-2"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 2</span>
+                        </div>
+                    </div>
+                    <div class="second-calendar mt-2">
+                        <div class="v-center justify-content-between">
+                            <label class="f-1 font-weight-bold m-0">gsteve@yahoo.com</label>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="second-calendar-1"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="second-calendar-1"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 1</span>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="second-calendar-2"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="second-calendar-2"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 2</span>
+                        </div>
                     </div>
                 </div>
             </div>

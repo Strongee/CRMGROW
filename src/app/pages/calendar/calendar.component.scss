@@ -137,8 +137,15 @@
             min-width: 12px;
         }
     }
-    .dropdown-menu {
-        min-width: 7rem;
+    .dropdown {
+        &:hover, &:active, &:focus {
+            box-shadow: 0 5px 24px -5px rgba(16, 19, 54, 0.24);
+        }
+        .dropdown-menu {
+            min-width: 14rem;
+            left: unset !important;
+            right: 8px;
+        }
     }
     .date {
         width: 300px;
