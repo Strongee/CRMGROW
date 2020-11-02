@@ -26,11 +26,11 @@
                     </div>
                 </div>
             </div>
-            <div class="f-1 text-center mt-4 px-5 unsubscribe">If you want to unsubscribe your payment method click here.</div>
+            <div class="f-1 text-center mt-4 px-5 unsubscribe">If you want to unsubscribe your payment method click <a class="c-dark c-pointer">here</a>.</div>
         </div>
         <div class="col-lg-4 col-md-8 ml-lg-3 ml-md-0">
             <div class="form-group" [ngClass]="{invalid: paymentForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || paymentForm.submitted)}">
-                <div class="d-flex">
+                <div class="d-flex justify-content-between">
                     <label for="card_name">name on card</label>
                     <span class="error" *ngIf="cardname.errors">
                         <ng-container *ngIf="cardname.errors.required">Required!</ng-container>
@@ -38,8 +38,8 @@
                 </div>
                 <input type="text" class="form-control" [(ngModel)]="card.name" id="cardname" name="cardname" #cardname="ngModel" required>
             </div>
-            <div class="form-group mt-3" [ngClass]="{invalid: paymentForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || paymentForm.submitted)}">
-                <div class="d-flex">
+            <div class="form-group mt-4" [ngClass]="{invalid: paymentForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || paymentForm.submitted)}">
+                <div class="d-flex justify-content-between">
                     <label for="card_number">card number</label>
                     <span class="error" *ngIf="cardnumber.errors">
                         <ng-container *ngIf="cardnumber.errors.required">Required!</ng-container>
@@ -59,33 +59,40 @@
                     [cleave]="creditCardInput"
                 >
             </div>
-            <div class="form-group mt-3" [ngClass]="{invalid: paymentForm.submitted && cardcvc.invalid && (cardcvc.dirty || cardcvc.touched || paymentForm.submitted)}">
-                <div class="d-flex">
-                    <label for="card_cvc">card cvc</label>
-                    <span class="error" *ngIf="cardcvc.errors">
-                        <ng-container *ngIf="cardcvc.errors.required">Required!</ng-container>
-                        <ng-container *ngIf="cardcvc.errors.minlength || cardcvc.errors.maxlength">Invalid!</ng-container>
-                    </span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group" [ngClass]="{invalid: paymentForm.submitted && cardcvc.invalid && (cardcvc.dirty || cardcvc.touched || paymentForm.submitted)}">
+                        <div class="v-center justify-content-between">
+                            <div class="v-center">
+                                <label for="card_cvc" class="mt-3 mr-2">card cvc</label>
+                                <div class="v-center justify-content-center f-3 font-weight-bold text-white bgc-blue cvc-icon">i</div>
+                            </div>
+                            <span class="error mt-2" *ngIf="cardcvc.errors">
+                                <ng-container *ngIf="cardcvc.errors.required">Required!</ng-container>
+                                <ng-container *ngIf="cardcvc.errors.minlength || cardcvc.errors.maxlength">Invalid!</ng-container>
+                            </span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="eg. 512"
+                            class="form-control"
+                            [(ngModel)]="card.cvc"
+                            id="cardcvc"
+                            name="cardcvc"
+                            #cardcvc="ngModel"
+                            required
+                            minlength="3"
+                            maxlength="5"
+                            [cleave]="credCvcInput"
+                        >
+                    </div>
                 </div>
-                <input
-                    type="text"
-                    placeholder="eg. 512"
-                    class="form-control"
-                    [(ngModel)]="card.cvc"
-                    id="cardcvc"
-                    name="cardcvc"
-                    #cardcvc="ngModel"
-                    required
-                    minlength="3"
-                    maxlength="5"
-                    [cleave]="credCvcInput"
-                >
             </div>
             <div class="row">
                 <div class="col-md-6 pr-md-1">
                   <div class="form-group" [class.has-error]="expMonth.errors && (expMonth.touched || expMonth.dirty || paymentSubmitted ) && paymentSubmitted">
                     <label for="expMonth">Exp Month</label>
-                    <select class="form-control br-default" id="expMonth" [(ngModel)]="card.exp_month" required name="expMonth" #expMonth="ngModel">
+                    <select class="form-control br-default f-3 font-weight-bold text-primary" id="expMonth" [(ngModel)]="card.exp_month" required name="expMonth" #expMonth="ngModel">
                       <option value="" selected disabled>Select Month</option>
                       <option *ngFor="let month of months" [value]="month.id">{{month.text}}</option>
                     </select>
@@ -97,7 +104,7 @@
                 <div class="col-md-6 pl-md-1">
                   <div class="form-group" [class.has-error]="expYear.errors && (expYear.touched || expYear.dirty || paymentSubmitted ) && paymentSubmitted">
                     <label for="expYear">Exp Year</label>
-                    <select class="form-control br-default" id="expYear" [(ngModel)]="card.exp_year" required name="expYear" #expYear="ngModel">
+                    <select class="form-control br-default f-3 font-weight-bold text-primary" id="expYear" [(ngModel)]="card.exp_year" required name="expYear" #expYear="ngModel">
                       <option value="" selected disabled>Select Year</option>
                       <option *ngFor="let year of years" [value]="year.id">{{year.text}}</option>
                     </select>
@@ -114,7 +121,7 @@
         <table class="table mt-2">
             <thead>
                 <tr>
-                    <th class="checkbox-col border-top-0">
+                    <th class="checkbox-col border-top-0 pl-0">
                         <div class="custom-control custom-checkbox">
                             <input
                             type="checkbox"
@@ -130,35 +137,35 @@
                     <th class="number-col border-top-0">
                         <span class="f-1 c-dark">number</span>
                     </th>
-                    <th class="payment-col border-top-0">
-                        <span class="f-1 c-dark">payment date</span>
+                    <th class="paymeny-col border-top-0">
+                        <span class="f-1 c-dark">paymeny date</span>
                     </th>
                     <th class="issue-col border-top-0">
                         <span class="f-1 c-dark">date of issue</span>
                     </th>
-                    <th class="gross-col border-top-0 text-right">
+                    <th class="gross-col border-top-0 text-right pr-0">
                         <span class="f-1 c-dark">gross value</span>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let invoice of invoices; let index;">
-                    <td class="checkbox-col">
-                        <div class="custom-control custom-checkbox">
+                <tr *ngFor="let invoice of invoices; let index=index;">
+                    <td class="checkbox-col pl-0 pb-0">
+                        <div class="custom-control custom-checkbox mt-2">
                           <input type="checkbox" class="custom-control-input" id="invoice-{{index}}">
                           <label class="custom-control-label" for="invoice-{{index}}"></label>
                         </div>
                     </td>
-                    <td class="number-col f-4 font-weight-bold text-primary">
+                    <td class="number-col f-4 font-weight-bold text-primary pt-3 pb-0">
                         {{invoice.number}}
                     </td>
-                    <td class="payment-col f-4 font-weight-bold">
+                    <td class="paymeny-col f-4 font-weight-bold pt-3 pb-0">
                         {{invoice.payment_date}}
                     </td>
-                    <td class="issue-col f-4 font-weight-bold">
+                    <td class="issue-col f-4 font-weight-bold pt-3 pb-0">
                         {{invoice.issue_date}}
                     </td>
-                    <td class="gross-col f-4 font-weight-bold text-right">
+                    <td class="gross-col f-4 font-weight-bold text-right pr-0  pt-3 pb-0">
                         {{invoice.gross}}
                     </td>
                 </tr>

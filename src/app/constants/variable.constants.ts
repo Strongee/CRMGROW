@@ -90,18 +90,18 @@ export const QuillEditor = {
 export const COMPANIES = ['eXp Realty'];
 
 export const MONTH = [
-  { id: '1', text: 'Jan' },
-  { id: '2', text: 'Feb' },
-  { id: '3', text: 'Mar' },
-  { id: '4', text: 'Apr' },
+  { id: '1', text: 'January' },
+  { id: '2', text: 'February' },
+  { id: '3', text: 'March' },
+  { id: '4', text: 'April' },
   { id: '5', text: 'May' },
-  { id: '6', text: 'Jun' },
-  { id: '7', text: 'Jul' },
-  { id: '8', text: 'Aug' },
-  { id: '9', text: 'Sep' },
-  { id: '10', text: 'Oct' },
-  { id: '11', text: 'Nov' },
-  { id: '12', text: 'Dec' }
+  { id: '6', text: 'June' },
+  { id: '7', text: 'July' },
+  { id: '8', text: 'Augus' },
+  { id: '9', text: 'September' },
+  { id: '10', text: 'October' },
+  { id: '11', text: 'November' },
+  { id: '12', text: 'December' }
 ];
 
 export const YEAR = [
