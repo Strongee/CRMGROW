@@ -1,0 +1,99 @@
+<div class="container-fluid page-wrapper campaign-page">
+  <div class="p-3">
+    <mat-tab-group animationDuration="0ms" class="vertical-tab" (selectedTabChange)="changeTab($event)"
+                   [selectedIndex]="selectedTab">
+      <mat-tab label="List" [disabled]="true">
+        <ng-template mat-tab-label>
+          <div class="d-flex">
+            <div>
+              <h2 class="f-8 font-weight-bold c-black text-uppercase mt-4">Campaign</h2>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="List">
+        <ng-template mat-tab-label>
+          <div class="v-center f-5 ml-2">
+            <i class="i-icon i-list-text mr-3"></i>
+            <span class="tab-title">Lists</span>
+          </div>
+        </ng-template>
+          <div class="px-2 pt-5">
+            <div class="col-12">
+              <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-4"></h2>
+                <div>
+                  <button class="btn c-dark font-weight-bold" (click)="bulkImport()">Edit List Settings</button>
+                  <button class="btn btn-white-blue font-weight-bold ml-2" (click)="importCSV()">Import csv</button>
+                  <input type="file" accept=".csv" #file (change)="readFile($event)" style="display: none;"/>
+                  <button class="btn btn-primary ml-2" (click)="addContact()">+ Add contacts</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <table class="table campaign-list">
+                <thead>
+                <tr>
+                  <th class="check-cell border-top-0">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="selectcontacts" (change)="selectAllPage()" [checked]="isSelectedPage()">
+                      <label class="custom-control-label" for="selectcontacts"></label>
+                    </div>
+                  </th>
+                  <th class="email">Email</th>
+                  <th class="last-name">Last Name</th>
+                  <th class="first-name">First Name</th>
+                  <th class="phone">Phone No</th>
+                  <th class="subscription">Subscription Date</th>
+                  <th class="unsubscription">Unsubscription Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngIf="contacts">
+                  <tr *ngFor="let contact of contacts">
+                    <td class="check-cell">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="contact-{{contact._id}}" (change)="selectedContacts.toggle(contact._id)" [checked]="selectedContacts.isSelected(contact._id)">
+                        <label class="custom-control-label" for="contact-{{contact._id}}"></label>
+                      </div>
+                    </td>
+                    <td class="email">
+                      <div class="c-blue f-4 font-weight-bold">{{contact.email}}</div>
+                    </td>
+                    <td class="last-name">
+                      <div class="c-dark f-4">{{contact.last_name}}</div>
+                    </td>
+                    <td class="first-name">
+                      <div class="c-dark f-4">{{contact.first_name}}</div>
+                    </td>
+                    <td class="phone">
+                      <div class="c-dark f-4">{{contact.cell_phone}}</div>
+                    </td>
+                    <td class="subscription text-center">
+                      <div class="c-dark f-4">0</div>
+                    </td>
+                    <td class="unsubscription text-center">
+                      <div class="c-dark f-4">0</div>
+                    </td>
+                  </tr>
+                </ng-container>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+      <mat-tab label="Bulk Mailing">
+        <ng-template mat-tab-label>
+          <div class="v-center f-5 ml-2">
+            <i class="i-icon i-bulk mr-3"></i>
+            <span class="tab-title">Bulk Mailing</span>
+          </div>
+        </ng-template>
+        <div class="px-2 pt-5">
+          <div class="col-12">
+            <h2 class="f-8">Bulk Mailing</h2>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

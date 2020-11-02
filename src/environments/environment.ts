@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  api: 'http://192.168.1.62:3000/api/',
-  server: 'http://192.168.1.62:3000',
-  website: 'http://192.168.1.62:3000',
+  api: 'http://localhost:3000/api/',
+  server: 'http://localhost:3000',
+  website: 'http://localhost:3000',
   ClientId: {
     Google:
       '630484366982-m6e66b06vlo0g6ebg9h2q5t7nrk2rimr.apps.googleusercontent.com',

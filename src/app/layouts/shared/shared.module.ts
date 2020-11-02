@@ -20,9 +20,20 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgxPaginationModule } from 'ngx-pagination';
+import {
+  TimeagoModule,
+  TimeagoIntl,
+  TimeagoFormatter,
+  TimeagoCustomFormatter
+} from 'ngx-timeago';
 
 @NgModule({
-  declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
+  declarations: [
+    StripePipe,
+    LoadingButtonComponent,
+    LoadingOverlayComponent,
+  ],
   imports: [
     CommonModule,
     NgbModule,
@@ -44,7 +55,9 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FileUploadModule
+    FileUploadModule,
+    NgxPaginationModule,
+    TimeagoModule.forRoot()
   ],
   exports: [
     NgbModule,
@@ -68,7 +81,9 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     FileUploadModule,
     LoadingButtonComponent,
     LoadingOverlayComponent,
-    CalendarModule
+    CalendarModule,
+    NgxPaginationModule,
+    TimeagoModule
   ]
 })
 export class SharedModule {}

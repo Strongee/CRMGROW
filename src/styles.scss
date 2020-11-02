@@ -809,6 +809,19 @@ table {
   box-shadow: -2px 2px 4px #ccc;
 }
 
+.contact-avatar {
+  background: #101336;
+  color: $color-white;
+  line-height: 32px;
+  text-align: center;
+  font-size: 14px;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: -2px 2px 4px #ccc;
+}
+
 .opacity-6 {
   opacity: 0.6;
 }

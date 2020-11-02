@@ -19,6 +19,10 @@ import { InputTemplateComponent } from './input-template/input-template.componen
 import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { CampaignAddListComponent } from './campaign-add-list/campaign-add-list.component';
+import { CampaignListComponent } from '../pages/campaign-list/campaign-list.component';
+import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add-contact.component';
+
 @NgModule({
   declarations: [
     SlideTabComponent,
@@ -37,7 +41,10 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     SelectUserComponent,
     VideoCreateComponent,
     ConfirmComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    CampaignAddListComponent,
+    CampaignListComponent,
+    CampaignAddContactComponent,
   ],
   imports: [
     CommonModule,
@@ -57,7 +64,10 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     InputAutomationComponent,
     InputTeamComponent,
     SelectUserComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    CampaignAddListComponent,
+    CampaignListComponent,
+    CampaignAddContactComponent
   ],
   bootstrap: [AvatarEditorComponent, VideoShareComponent]
 })

@@ -86,3 +86,5 @@ export const QuillEditor = {
   },
   imageResize: true
 };
+
+export const ContactPageSize = 50;

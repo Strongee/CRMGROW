@@ -1,0 +1,96 @@
+<div class="container-fluid page-wrapper campaign-page">
+  <div class="p-3">
+    <mat-tab-group animationDuration="0ms" class="vertical-tab" (selectedTabChange)="changeTab($event)"
+                   [selectedIndex]="selectedTab">
+      <mat-tab label="List" [disabled]="true">
+        <ng-template mat-tab-label>
+          <div class="d-flex">
+            <div>
+              <h2 class="f-8 font-weight-bold c-black text-uppercase mt-4">Campaign</h2>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="List">
+        <ng-template mat-tab-label>
+          <div class="v-center f-5 ml-2">
+            <i class="i-icon i-list-text mr-3"></i>
+            <span class="tab-title">Lists</span>
+          </div>
+        </ng-template>
+        <div class="px-2 pt-5">
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="mb-4"></h2>
+              <div>
+                <button class="btn btn-primary f-5 ml-auto" (click)="addList()">+ Add a list</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <table class="table campaign-list">
+              <thead>
+                <tr>
+                  <th class="check-cell border-top-0">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="selectAllLists" (change)="selectAllPage()" [checked]="isSelectedPage()">
+                      <label class="custom-control-label" for="selectAllLists"></label>
+                    </div>
+                  </th>
+                  <th class="label-cell border-top-0">List</th>
+                  <th class="label-cell border-top-0">Subscribers</th>
+                  <th class="label-cell border-top-0">Unsbuscribes</th>
+                  <th class="label-cell border-top-0">Delivery issues</th>
+                  <th class="label-cell border-top-0">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="lists">
+                  <tr *ngFor="let list of lists | paginate: {id: 'searchContacts', itemsPerPage: 10, currentPage: currentListPage, totalItems: listCount}">
+                    <td class="check-cell">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="list-{{list._id}}" (change)="selectedLists.toggle(list._id)" [checked]="selectedLists.isSelected(list._id)">
+                        <label class="custom-control-label" for="list-{{list._id}}"></label>
+                      </div>
+                    </td>
+                    <td class="name-cell">
+                      <a [routerLink]="['/campaign/list/' + list._id]" class="font-weight-bold">{{list.name}}</a>
+                    </td>
+                    <td class="name-cell text-center">
+                      {{list.subscribers}}
+                    </td>
+                    <td class="name-cell text-center">
+                      {{list.unsubscribers}}
+                    </td>
+                    <td class="name-cell text-center">
+                      {{list.deliveryissues}}
+                    </td>
+                    <td class="contact-action">
+                      <div class="d-sm-flex d-none">
+                        <button class="btn btn-sm bg-white text-gray" (click)="editList(list)">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
+            </table>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Bulk Mailing">
+        <ng-template mat-tab-label>
+          <div class="v-center f-5 ml-2">
+            <i class="i-icon i-bulk mr-3"></i>
+            <span class="tab-title">Bulk Mailing</span>
+          </div>
+        </ng-template>
+        <div class="px-2 pt-5">
+          <div class="col-12">
+            <h2 class="f-8">Bulk Mailing</h2>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
