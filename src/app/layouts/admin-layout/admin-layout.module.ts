@@ -37,6 +37,7 @@ import { AssistantComponent } from '../../pages/assistant/assistant.component';
 import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.component';
 import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.component';
 import { StatusAutomationComponent } from '../../pages/status-automation/status-automation.component';
+import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { StatusAutomationComponent } from '../../pages/status-automation/status-
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
+    SocialProfileComponent
     TeamComponent,
     CalendarComponent,
     NotificationsComponent,
@@ -77,7 +79,6 @@ import { StatusAutomationComponent } from '../../pages/status-automation/status-
     ShareButtonsModule,
     ShareIconsModule,
     MatExpansionModule,
-    NgxPaginationModule
   ],
   schemas: []
 })

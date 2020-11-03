@@ -19,9 +19,6 @@ jobs:
         with:
           node-version: '12.18.3'
 
-      - name: NPM install node-sass...
-        run: npm install node-sass
-
       - name: NPM install...
         run: npm install
 
@@ -38,4 +35,4 @@ jobs:
       - name: Upload to AWS
         run: |
           aws s3 rm s3://teamgrow-staticsite-green/ --recursive
-          aws s3 cp dist s3://teamgrow-staticsite-green/ --recursive --acl public-read
+          aws s3 cp dist/crmgrow s3://teamgrow-staticsite-green/ --recursive --acl public-read

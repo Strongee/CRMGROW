@@ -34,7 +34,7 @@
           <ng-container *ngIf="password.errors.minlength">Password must be at least 8 characters long!</ng-container>
         </span>
       </div>
-      <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Sign In</button>
+      <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4" [ngClass]="{loading: submitting}">Sign In</button>
     </form>
   </div>
 </div>

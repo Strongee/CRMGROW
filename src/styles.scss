@@ -49,22 +49,22 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   background-color: #101336;
 }
 .bgc-orange {
-  background-color: #f26419;
+  background-color: $color-orange;
 }
 .bgc-yellow {
-  background-color: #ffcc00;
+  background-color: $color-yellow;
 }
 .bgc-red {
   background-color: $color-red;
 }
 .bgc-red-pink {
-  background-color: #f5325b;
+  background-color: $color-red-pink;
 }
 .bgc-pink-red {
-  background-color: #ff045f;
+  background-color: $color-pink-red;
 }
 .bgc-azure {
-  background-color: #00a9ff;
+  background-color: $color-azure;
 }
 .bgc-blue-grey {
   background-color: #dae0f2;
@@ -197,6 +197,12 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   width: 18px;
   height: 18px;
   min-width: 18px;
+
+  &.sm {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+  }
 }
 .pl-4c{
   padding-left: 2rem!important;
@@ -349,7 +355,15 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 // Button Style
 button {
   &:focus {
-      outline: none;
+    outline: none;
+  }
+  &.loading {
+    color: transparent!important;
+    background-image: url('/assets/img/spinner.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
   }
 }
 .btn-blue {
@@ -713,6 +727,40 @@ body{
         }
       }
     }
+  }
+}
+
+// Badge
+.c-badge {
+  &.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+  }
+  &.rect {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    background-color: blue;
+  }
+  &.admin {
+    background-color: blue;
+  }
+  &.own {
+    background-color: $color-red;
+  }
+  &.team {
+    background-color: $color-azure;
+  }
+  &.email {
+    background-color: $color-orange;
+  }
+  &.text {
+    background-color: $color-yellow;
   }
 }
 

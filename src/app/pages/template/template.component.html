@@ -133,12 +133,7 @@
 
         <div class="d-flex mt-auto">
           <a class="btn btn-light" [routerLink]="['/templates']">Cancel</a>
-          <button class="btn btn-primary ml-2" *ngIf="!isSaving">Save</button>
-          <app-loading-button
-            [class]="'btn btn-primary'"
-            [title]="'Saving...'"
-            *ngIf="isSaving"
-          ></app-loading-button>
+          <button class="btn btn-primary ml-2" [ngClass]="{loading: isSaving}">Save</button>
         </div>
       </form>
     </div>

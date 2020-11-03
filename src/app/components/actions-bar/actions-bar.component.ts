@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActionItem } from 'src/app/utils/data.types';
 
 @Component({
   selector: 'app-actions-bar',
@@ -6,7 +7,41 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./actions-bar.component.scss']
 })
 export class ActionsBarComponent implements OnInit {
+  isActiveFlag = false;
+  isShow = true;
+  @Input('actions') actions: ActionItem[] = [];
+  @Input()
+  public set isActive(val: number) {
+    if (val) {
+      this.isActiveFlag = true;
+    } else {
+      this.isActiveFlag = false;
+      this.isShow = true;
+    }
+  }
+  @Output() doCommand = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}
+
+  /**
+   * Hide action bar
+   */
+  hide(): void {
+    this.isShow = false;
+  }
+  /**
+   * Show action bar
+   */
+  show(): void {
+    this.isShow = true;
+  }
+
+  /**
+   * Emit the event to run the command
+   * @param command: Command Name
+   */
+  runCommand(command: any): void {
+    this.doCommand.emit(command);
+  }
 }

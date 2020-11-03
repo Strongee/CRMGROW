@@ -12,6 +12,11 @@ export const AUTH = {
 
 export const USER = {
   PROFILE: 'user/me',
+  PAYMENT: 'payment/',
+  UPDATE_PROFILE: 'user/me',
+  UPDATE_PASSWORD: 'user/new-password',
+  SYNC_GMAIL: 'user/sync-gmail',
+  SYNC_OUTLOOK: 'user/sync-outlook',
   UPDATE_PROFILE: 'user/me',
   LOAD_AFFILIATE: '',
   CREATE_AFFILIATE: ''
@@ -35,6 +40,7 @@ export const VIDEO = {
   CREATE: 'video/create',
   READ: 'video/',
   UPDATE: 'video/',
+  UPDATE_VIDEO_DETAIL: 'video/detail/',
   DELETE: 'video/',
   LOAD: 'video'
 };
@@ -118,4 +124,8 @@ export const TEAM = {
   ACCEPT_CALL: '/team/accept-call/',
   UPDATE_CALL: '/team/call/',
   DELETE_CALL: '/team/call/'
+};
+
+export const AUTOMATION = {
+  SEARCH: 'automation/search'
 };

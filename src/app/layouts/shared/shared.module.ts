@@ -15,11 +15,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { StripePipe } from '../../pipes/stripe.pipe';
 import { FileUploadModule } from 'ng2-file-upload';
-import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
+import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { MatIconModule } from '@angular/material/icon';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
   declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
@@ -39,12 +42,14 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     MatIconModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
+    NgPipesModule,
     QuillModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FileUploadModule
+    FileUploadModule,
+    GooglePlaceModule
   ],
   exports: [
     NgbModule,
@@ -60,6 +65,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     MatSelectModule,
     MatIconModule,
     NgxMatSelectSearchModule,
+    NgPipesModule,
     LoadingButtonComponent,
     StripePipe,
     QuillModule,
@@ -68,7 +74,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     FileUploadModule,
     LoadingButtonComponent,
     LoadingOverlayComponent,
-    CalendarModule
+    CalendarModule,
+    GooglePlaceModule
   ]
 })
 export class SharedModule {}
