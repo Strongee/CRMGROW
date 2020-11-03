@@ -28,8 +28,8 @@
   }
 }
 
-.f-30 {
-  font-size: 30px;
+.f-37 {
+  font-size: 37px;
 }
 
 .team-info-container {
@@ -128,10 +128,11 @@
     }
 
     .remind {
-      border-radius: 5px;
-      padding: 1px 5px;
-      height: 22px;
+      border-radius: 4px;
+      padding: 3px 5px;
+      height: 23px;
       border-width: 1px;
+      font-size: 11px
     }
   }
 }
@@ -185,6 +186,22 @@
       height: 58px;
       object-fit: cover;
     }
+  }
+
+  .material-view {
+    width: 60px;
+    padding-right: 30px;
+  }
+
+  .material-actions-count,
+  .material-contacts {
+    width: 100px;
+    padding-right: 30px;
+  }
+
+  .material-created {
+    width: 120px;
+    padding-right: 30px;
   }
 
   .material-actions {
@@ -243,3 +260,21 @@
     }
   }
 }
+
+:host ::ng-deep {
+  .mat-ink-bar {
+    border-radius: 20px;
+    height: 5px;
+  }
+
+  .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: blue;
+  }
+
+  .mat-tab-label .mat-tab-label-content {
+    font-size: 16px;
+    font-weight: bold;
+    color: blue;
+  }
+}
+

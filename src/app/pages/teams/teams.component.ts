@@ -531,6 +531,12 @@ export class TeamsComponent implements OnInit, AfterViewInit {
         return 'Editor';
       }
     }
+    if (team.members.length) {
+      index = team.members.filter((item) => item._id === this.userId).length;
+      if (index > 0) {
+        return 'Viewer';
+      }
+    }
   }
 
   editTeam(team): void {
