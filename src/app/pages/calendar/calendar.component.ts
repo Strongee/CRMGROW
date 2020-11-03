@@ -2,12 +2,13 @@ import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
-// import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
+import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { UserService } from 'src/app/services/user.service';
 import { TabItem } from 'src/app/utils/data.types';
+import { CalendarEventComponent } from 'src/app/components/calendar-event/calendar-event.component';
 // import { CalendarConnectDialogComponent } from 'src/app/components/calendar-connect-dialog/calendar-connect-dialog.component';
 
 @Component({
@@ -133,102 +134,108 @@ export class CalendarComponent implements OnInit {
   // }
 
   dayClicked({ date }: { date: Date }): void {
-    // this.dialog
-    //   .open(CalendarDialogComponent, {
-    //     position: { top: '100px' },
-    //     width: '100vw',
-    //     maxWidth: '600px',
-    //     disableClose: true,
-    //     data: {
-    //       start_date: date,
-    //       type: 'month'
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.isLoading = true;
-    //       let eventDate = this.viewDate.toISOString();
-    //       this.appointmentService
-    //         .getEvents(eventDate, this.view)
-    //         .subscribe((res) => {
-    //           if (res['status'] == true) {
-    //             this.events = res['data'].map((item) => {
-    //               return {
-    //                 title: item.title,
-    //                 start: new Date(item.due_start),
-    //                 end: new Date(item.due_end),
-    //                 meta: {
-    //                   contacts: item.contacts,
-    //                   calendar_id: item.calendar_id,
-    //                   description: item.description,
-    //                   location: item.location,
-    //                   type: item.type,
-    //                   guests: item.guests,
-    //                   event_id: item.event_id,
-    //                   recurrence: item.recurrence,
-    //                   recurrence_id: item.recurrence_id,
-    //                   is_organizer: item.is_organizer
-    //                 }
-    //               };
-    //             });
-    //             this.isLoading = false;
-    //           }
-    //         });
-    //       this.changeDetectorRef.detectChanges();
-    //     }
-    //   });
+    this.dialog
+      .open(CalendarDialogComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '500px',
+        data: {
+          start_date: date,
+          type: 'month'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.isLoading = true;
+          const eventDate = this.viewDate.toISOString();
+          this.appointmentService
+            .getEvents(eventDate, this.view)
+            .subscribe((res) => {
+              if (res['status'] == true) {
+                this.events = res['data'].map((item) => {
+                  return {
+                    title: item.title,
+                    start: new Date(item.due_start),
+                    end: new Date(item.due_end),
+                    meta: {
+                      contacts: item.contacts,
+                      calendar_id: item.calendar_id,
+                      description: item.description,
+                      location: item.location,
+                      type: item.type,
+                      guests: item.guests,
+                      event_id: item.event_id,
+                      recurrence: item.recurrence,
+                      recurrence_id: item.recurrence_id,
+                      is_organizer: item.is_organizer
+                    }
+                  };
+                });
+                this.isLoading = false;
+              }
+            });
+          this.changeDetectorRef.detectChanges();
+        }
+      });
   }
 
   hourClicked(date): void {
-    // this.dialog
-    //   .open(CalendarDialogComponent, {
-    //     position: { top: '100px' },
-    //     width: '100vw',
-    //     maxWidth: '600px',
-    //     disableClose: true,
-    //     data: {
-    //       start_date: date,
-    //       type: 'week'
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.isLoading = true;
-    //       let eventDate = this.viewDate.toISOString();
-    //       this.appointmentService
-    //         .getEvents(eventDate, this.view)
-    //         .subscribe((res) => {
-    //           if (res['status'] == true) {
-    //             this.events = res['data'].map((item) => {
-    //               return {
-    //                 title: item.title,
-    //                 start: new Date(item.due_start),
-    //                 end: new Date(item.due_end),
-    //                 meta: {
-    //                   contacts: item.contacts,
-    //                   calendar_id: item.calendar_id,
-    //                   description: item.description,
-    //                   location: item.location,
-    //                   type: item.type,
-    //                   guests: item.guests,
-    //                   event_id: item.event_id,
-    //                   recurrence: item.recurrence,
-    //                   recurrence_id: item.recurrence_id,
-    //                   is_organizer: item.is_organizer
-    //                 }
-    //               };
-    //             });
-    //             this.isLoading = false;
-    //           }
-    //         });
-    //       this.changeDetectorRef.detectChanges();
-    //     }
-    //   });
+    this.dialog
+      .open(CalendarDialogComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '500px',
+        data: {
+          start_date: date,
+          type: 'week'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.isLoading = true;
+          const eventDate = this.viewDate.toISOString();
+          this.appointmentService
+            .getEvents(eventDate, this.view)
+            .subscribe((res) => {
+              if (res['status'] == true) {
+                this.events = res['data'].map((item) => {
+                  return {
+                    title: item.title,
+                    start: new Date(item.due_start),
+                    end: new Date(item.due_end),
+                    meta: {
+                      contacts: item.contacts,
+                      calendar_id: item.calendar_id,
+                      description: item.description,
+                      location: item.location,
+                      type: item.type,
+                      guests: item.guests,
+                      event_id: item.event_id,
+                      recurrence: item.recurrence,
+                      recurrence_id: item.recurrence_id,
+                      is_organizer: item.is_organizer
+                    }
+                  };
+                });
+                this.isLoading = false;
+              }
+            });
+          this.changeDetectorRef.detectChanges();
+        }
+      });
   }
 
   handleEvent(event): void {
+    this.dialog.open(CalendarEventComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '400px',
+      data: {
+        event: event
+      }
+    });
     // this.dialog
     //   .open(CalendarDialogComponent, {
     //     position: { top: '100px' },

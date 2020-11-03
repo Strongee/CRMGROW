@@ -19,6 +19,10 @@ import { InputTemplateComponent } from './input-template/input-template.componen
 import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog.component';
+import { CalendarContactsComponent } from './calendar-contacts/calendar-contacts.component';
+import { CalendarEventComponent } from './calendar-event/calendar-event.component';
+import { CalendarRecurringDialogComponent } from './calendar-recurring-dialog/calendar-recurring-dialog.component';
 @NgModule({
   declarations: [
     SlideTabComponent,
@@ -37,7 +41,11 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     SelectUserComponent,
     VideoCreateComponent,
     ConfirmComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    CalendarDialogComponent,
+    CalendarContactsComponent,
+    CalendarEventComponent,
+    CalendarRecurringDialogComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +65,8 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     InputAutomationComponent,
     InputTeamComponent,
     SelectUserComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    CalendarDialogComponent
   ],
   bootstrap: [AvatarEditorComponent, VideoShareComponent]
 })

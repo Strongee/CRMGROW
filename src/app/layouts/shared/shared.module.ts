@@ -20,6 +20,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 
 @NgModule({
   declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
@@ -44,7 +45,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FileUploadModule
+    FileUploadModule,
+    GooglePlaceModule
   ],
   exports: [
     NgbModule,
@@ -68,7 +70,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     FileUploadModule,
     LoadingButtonComponent,
     LoadingOverlayComponent,
-    CalendarModule
+    CalendarModule,
+    GooglePlaceModule
   ]
 })
 export class SharedModule {}

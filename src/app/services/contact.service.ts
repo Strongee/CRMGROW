@@ -44,4 +44,9 @@ export class ContactService extends HttpService {
         catchError(this.handleError('GET LATEST CONTACTS', []))
       );
   }
+  getNormalSearch(str: string): any {
+    return this.httpClient.post(this.server + CONTACT.NORMAL_SEARCH, {
+      search: str
+    });
+  }
 }
