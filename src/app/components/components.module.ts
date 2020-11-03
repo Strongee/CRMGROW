@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { SlideTabComponent } from './slide-tab/slide-tab.component';
 import { TabOptionComponent } from './tab-option/tab-option.component';
@@ -42,12 +43,14 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
   imports: [
     CommonModule,
     SharedModule,
+    RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule
   ],
   exports: [
     SlideTabComponent,
     TabOptionComponent,
+    ActionsBarComponent,
     ConfirmComponent,
     TeamEditComponent,
     TeamDeleteComponent,

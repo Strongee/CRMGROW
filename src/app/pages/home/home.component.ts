@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { TabItem } from 'src/app/utils/data.types';
+import { ActionItem, TabItem } from 'src/app/utils/data.types';
 
 @Component({
   selector: 'app-home',
@@ -22,4 +22,30 @@ export class HomeComponent implements OnInit {
     this.selectedTab = tab;
     this.location.replaceState(tab.id);
   }
+
+  actions: ActionItem[] = [
+    {
+      label: 'Bulk status set',
+      type: 'dropdown',
+      items: [
+        {
+          class: 'text-green',
+          label: 'Editor'
+        },
+        {
+          class: 'text-blue',
+          label: 'Viewer'
+        }
+      ]
+    },
+    {
+      label: 'Remove member',
+      type: 'button',
+      icon: 'i-trash'
+    },
+    {
+      label: 'Lead Capture',
+      type: 'toggle'
+    }
+  ];
 }

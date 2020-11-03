@@ -120,3 +120,7 @@ export const TEAM = {
   UPDATE_CALL: '/team/call/',
   DELETE_CALL: '/team/call/'
 };
+
+export const AUTOMATION = {
+  SEARCH: 'automation/search'
+};

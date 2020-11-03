@@ -46,6 +46,7 @@
     "ngx-intl-tel-input": "^3.0.3",
     "ngx-mat-select-search": "^3.1.2",
     "ngx-pagination": "^5.0.0",
+    "ngx-pipes": "^2.7.5",
     "ngx-quill": "7.2.0",
     "ngx-sharebuttons": "^8.0.1",
     "ngx-spinner": "^7.2.0",

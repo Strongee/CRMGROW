@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActionItem } from 'src/app/utils/data.types';
 
 @Component({
   selector: 'app-actions-bar',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./actions-bar.component.scss']
 })
 export class ActionsBarComponent implements OnInit {
+  @Input('actions') actions: ActionItem[] = [];
   constructor() {}
 
   ngOnInit(): void {}

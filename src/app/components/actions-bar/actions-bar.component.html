@@ -1,1 +1,26 @@
-<p>actions-bar works!</p>
+<div class="bgc-blue text-white d-flex action-items">
+  <ng-container *ngFor="let action of actions" [ngSwitch]="action.type">
+      <div *ngSwitchCase="'button'" class="action-item c-pointer">
+        <i class="i-icon" [class]="action.icon" *ngIf="action.icon"></i>
+        <span class="ml-2 f-3 fw-600">{{action.label}}</span>
+      </div>
+      <div *ngSwitchCase="'toggle'" class="v-center action-item c-pointer">
+        <label class="custom-toggle mb-0" placement="top">
+          <input type="checkbox">
+          <span class="custom-toggle-slider rounded-circle"></span>
+        </label>
+        <span class="ml-2 f-3 fw-600">{{action.label}}</span>
+      </div>
+      <div *ngSwitchCase="'dropdown'" class="action-item c-pointer" ngbDropdown>
+        <div ngbDropdownToggle>
+          <i class="i-icon" [class]="action.icon" *ngIf="action.icon"></i>
+          <span class="ml-2 f-3 fw-600">{{action.label}}</span>
+        </div>
+        <div ngbDropdownMenu class="light">
+          <div class="dropdown-item c-dark" *ngFor="let item of action.items" [class]="item.class">
+            {{item.label}}
+          </div>
+        </div>
+      </div>
+  </ng-container>
+</div>
