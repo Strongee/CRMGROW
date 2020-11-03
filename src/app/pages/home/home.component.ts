@@ -30,11 +30,13 @@ export class HomeComponent implements OnInit {
       items: [
         {
           class: 'text-green',
-          label: 'Editor'
+          label: 'Editor',
+          command: 'editor'
         },
         {
           class: 'text-blue',
-          label: 'Viewer'
+          label: 'Viewer',
+          command: 'editor'
         }
       ]
     },
@@ -46,6 +48,53 @@ export class HomeComponent implements OnInit {
     {
       label: 'Lead Capture',
       type: 'toggle'
+    },
+    {
+      icon: 'i-message',
+      label: 'Lead Capture',
+      type: 'button'
+    },
+    {
+      icon: 'i-message',
+      label: 'Add tasks',
+      type: 'button'
+    },
+    {
+      icon: 'i-message',
+      label: 'Send messages',
+      type: 'button'
+    },
+    {
+      icon: 'i-message',
+      label: 'Add Automation',
+      type: 'button'
+    },
+    {
+      spliter: true,
+      label: 'Select All',
+      type: 'button'
+    },
+    {
+      label: 'Deselect',
+      type: 'button'
     }
   ];
+
+  selected = 1;
+  increase(): void {
+    this.selected++;
+  }
+  decrease(): void {
+    this.selected--;
+  }
+  reset(): void {
+    this.selected = 0;
+  }
+  /**
+   * Do Action
+   * @param action: Action Data (ActionItem | ActionSubItem)
+   */
+  doAction(action: any): void {
+    console.log('action', action);
+  }
 }
