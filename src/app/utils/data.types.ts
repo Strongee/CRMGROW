@@ -13,3 +13,13 @@ export interface TabOption {
   label: string;
   value: string;
 }
+
+export interface ActionItem {
+  label: string;
+  icon?: string;
+  type: string;
+  items?: { class: string; label: string; command: string }[];
+  status?: boolean;
+  spliter?: boolean;
+  command?: string;
+}

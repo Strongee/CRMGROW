@@ -12,7 +12,7 @@
           Add new
         </div>
         <div ngbDropdownMenu class="light">
-          <div class="d-flex c-dark dropdown-item py-2">
+          <div class="d-flex c-dark dropdown-item py-2" (click)="createVideo()">
             <i class="i-icon i-upload bg-dark mt-1" aria-hidden="true"></i>
             <div class="ml-1 px-2">
               <div class="f-6 font-weight-bold">New file upload</div>
@@ -126,7 +126,7 @@
                   </div>
                 </a>
                 <h5 class="f-4 font-weight-bold c-dark m-0">{{video.title}}</h5>
-                <span class="f-1 c-dark">{{video.description | slice: 0:120}}</span>
+                <span class="f-1 c-dark">{{video.description | stripe | slice: 0:120}}</span>
                 <div class="f-4 c-dark view-field">
                   {{video.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>

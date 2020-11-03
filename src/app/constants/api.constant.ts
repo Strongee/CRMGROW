@@ -9,13 +9,17 @@ export const AUTH = {
   OUTLOOK_PROFILE_REQUEST: '',
   GOOGLE_PROFILE_REQUEST: ''
 };
+
 export const USER = {
   PROFILE: 'user/me',
   PAYMENT: 'payment/',
   UPDATE_PROFILE: 'user/me',
   UPDATE_PASSWORD: 'user/new-password',
   SYNC_GMAIL: 'user/sync-gmail',
-  SYNC_OUTLOOK: 'user/sync-outlook'
+  SYNC_OUTLOOK: 'user/sync-outlook',
+  UPDATE_PROFILE: 'user/me',
+  LOAD_AFFILIATE: '',
+  CREATE_AFFILIATE: ''
 };
 export const TASK = {
   CREATE: 'follow/',
@@ -28,12 +32,15 @@ export const ACTIVITY = {
 };
 export const CONTACT = {
   LOAD_ALL: 'contact',
-  LOAD_PAGE: 'contact/last'
+  LOAD_PAGE: 'contact/last',
+  QUICK_SEARCH: 'contact/search-easy',
+  LATEST_CONTACTS: 'video/latest-sent'
 };
 export const VIDEO = {
   CREATE: 'video/create',
   READ: 'video/',
   UPDATE: 'video/',
+  UPDATE_VIDEO_DETAIL: 'video/detail/',
   DELETE: 'video/',
   LOAD: 'video'
 };
@@ -80,4 +87,45 @@ export const APPOINTMENT = {
 export const THEME = {
   GET_THEME: 'theme/',
   SET_THEME: 'theme/set-video'
+};
+
+export const TEAM = {
+  LOAD: 'team/load',
+  LOAD_LEADERS: 'team/load-leaders',
+  LOAD_INVITED: 'team/load-invited',
+  CREATE: 'team',
+  READ: 'team/',
+  UPDATE: 'team/',
+  DELETE: 'team/',
+  SEARCH_USER: 'team/search-user',
+  SEARCH_LEADER: 'team/search-leader',
+  INVITE_USERS: 'team/bulk-invite/',
+  SHARE_VIDEOS: 'team/share-videos',
+  SHARE_PDFS: 'team/share-pdfs',
+  SHARE_IMAGES: 'team/share-images',
+  SHARE_TEMPLATES: 'team/share-templates',
+  SHARE_AUTOMATIONS: 'team/share-automations',
+  ACCEPT_INVITATION: 'team/accept/',
+  SEARCH_TEAM: 'team/user/',
+  JOIN_REQUEST: 'team/request',
+  ACCEPT_REQUEST: 'team/admin-accept',
+  UPDATE_TEAM: 'team/update',
+  REMOVE_VIDEO: 'team/remove-videos/',
+  REMOVE_PDF: 'team/remove-pdfs/',
+  REMOVE_IMAGE: 'team/remove-images/',
+  REMOVE_TEMPLATE: 'team/remove-templates/',
+  REMOVE_AUTOMATION: 'team/remove-automations/',
+  REQUEST_CALL: 'team/request-call/',
+  INQUIRY: 'team/nth-call/',
+  CALL: 'team/call/',
+  PLANNED: 'team/call-planned/',
+  FINISHED: 'team/call-finished/',
+  REJECT_CALL: '/team/reject-call/',
+  ACCEPT_CALL: '/team/accept-call/',
+  UPDATE_CALL: '/team/call/',
+  DELETE_CALL: '/team/call/'
+};
+
+export const AUTOMATION = {
+  SEARCH: 'automation/search'
 };

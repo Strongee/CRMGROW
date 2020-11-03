@@ -26,7 +26,11 @@ import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TemplateComponent } from '../../pages/template/template.component';
-import { TemplateConditionalComplexityRule } from 'codelyzer';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { TeamComponent } from '../../pages/team/team.component';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
 import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
 
@@ -50,8 +54,9 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
-    CalendarComponent,
     SocialProfileComponent
+    TeamComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,
@@ -59,7 +64,11 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     ComponentsModule,
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgxSpinnerModule,
+    ShareButtonsModule,
+    ShareIconsModule,
+    MatExpansionModule,
   ],
   schemas: []
 })

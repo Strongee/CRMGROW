@@ -1,0 +1,17 @@
+<div class="team-delete-form">
+  <div class="v-center justify-content-between mx-0">
+    <h4 class="f-22 font-weight-bold c-black">Delete custom field</h4>
+    <button class="v-center border-0 bgc-trans dropdown-item" mat-dialog-close>
+      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div mat-dialog-content class="font-weight-bold my-4 mx-5">
+    Do you want to delete <span class="c-blue font-weight-bold">{{team.name}}</span> team?
+  </div>
+  <div mat-dialog-actions class="mx-0" align="end">
+    <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
+    <button class="btn btn-red text-white f-6 font-weight-bold" *ngIf="!updating" type="submit" (click)="deleteTeam()">Delete</button>
+    <app-loading-button [class]="'btn btn-red text-white f-6 font-weight-bold'" title="Deleting..." *ngIf="updating"></app-loading-button>
+  </div>
+</div>
+

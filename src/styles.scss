@@ -9,15 +9,31 @@ $custom-checkbox-indicator-border-radius: 3px;
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import '~ngx-toastr/toastr-bs4-alert';
+@import '~ngx-sharebuttons/themes/default/default-theme';
 @import "./variables";
 @import "./icons";
 @import "src/assets/scss/custom-toggle";
 @import "src/assets/scss/custom-radio";
+@import "src/assets/scss/custom-mat-field";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 /* Material Theme Basic Setting  */
 html, body { height: 100%; }
 body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dark; }
+* {
+  scrollbar-color: $color-blue20 transparent ;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: $color-blue20;
+  border-radius: 20px;
+}
+
 :root {
   --silver: #dadadd;
   --dark: #101336;
@@ -33,19 +49,22 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   background-color: #101336;
 }
 .bgc-orange {
-  background-color: #f26419;
+  background-color: $color-orange;
 }
 .bgc-yellow {
-  background-color: #ffcc00;
+  background-color: $color-yellow;
+}
+.bgc-red {
+  background-color: $color-red;
 }
 .bgc-red-pink {
-  background-color: #f5325b;
+  background-color: $color-red-pink;
 }
 .bgc-pink-red {
-  background-color: #ff045f;
+  background-color: $color-pink-red;
 }
 .bgc-azure {
-  background-color: #00a9ff;
+  background-color: $color-azure;
 }
 .bgc-blue-grey {
   background-color: #dae0f2;
@@ -74,6 +93,12 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 .bgc-trans {
   background-color: transparent;
 }
+.bgc-black {
+  background-color: #000000;
+}
+.bgc-white {
+  background-color: #ffffff;
+}
 .op-08 {
   opacity: 0.08;
 }
@@ -94,6 +119,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .c-yellow {
   color: #ffcc00;
+}
+.c-red {
+  color: $color-red
 }
 .c-red-pink {
   color: #f5325b;
@@ -124,6 +152,9 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 }
 .c-black {
   color: #000000;
+}
+.c-white {
+  color: #ffffff;
 }
 .f-0{
   font-size: 10px;
@@ -166,6 +197,12 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   width: 18px;
   height: 18px;
   min-width: 18px;
+
+  &.sm {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+  }
 }
 .pl-4c{
   padding-left: 2rem!important;
@@ -318,7 +355,15 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 // Button Style
 button {
   &:focus {
-      outline: none;
+    outline: none;
+  }
+  &.loading {
+    color: transparent!important;
+    background-image: url('/assets/img/spinner.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
   }
 }
 .btn-blue {
@@ -359,7 +404,47 @@ button {
     border-color: $color-orange-weak;
   }
 }
+.btn-red {
+  background-color: $color-red;
+  border-color: $color-red;
+  color: white;
 
+  &:hover {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+  &:focus {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+  &:active {
+    background-color: $color-red-pink;
+    border-color: $color-red-pink;
+  }
+}
+.btn-white {
+  background-color: $color-white;
+  color: $color-blue;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-blue;
+  }
+}
+.btn-white-blue {
+  background-color: $color-white;
+  color: $color-blue;
+  border: 2px solid $color-blue;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-blue;
+    border: 2px solid $color-blue;
+  }
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 255, 0.5);
+  }
+}
 .btn {
   &:focus {
     box-shadow: none!important;
@@ -645,6 +730,40 @@ body{
   }
 }
 
+// Badge
+.c-badge {
+  &.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+  }
+  &.rect {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    background-color: blue;
+  }
+  &.admin {
+    background-color: blue;
+  }
+  &.own {
+    background-color: $color-red;
+  }
+  &.team {
+    background-color: $color-azure;
+  }
+  &.email {
+    background-color: $color-orange;
+  }
+  &.text {
+    background-color: $color-yellow;
+  }
+}
+
 .avatar-wrapper {
   width: 94px;
   height: 94px;
@@ -664,6 +783,26 @@ body{
     i{
       min-width: 14px;
     }
+  }
+}
+
+
+// Custom Material Style
+.form-avatar {
+  width: 26px;
+  height: 26px;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 0px 0px;
+  font-size: 14px;
+  line-height: 26px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -696,4 +835,38 @@ table {
     border-top: none;
   }
 
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: -2px 2px 4px #ccc;
+}
+
+.name-avatar {
+  background: gainsboro;
+  line-height: 36px;
+  text-align: center;
+  font-size: 26px;
+  border: 3px solid white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: -2px 2px 4px #ccc;
+}
+
+.opacity-6 {
+  opacity: 0.6;
+}
+
+// Pagination Style
+ul.ngx-pagination {
+  margin-bottom: 0px;
+  padding-left: 0px;
+  .current {
+    border-radius: 3px;
+    background-color: #337abc;
+  }
 }

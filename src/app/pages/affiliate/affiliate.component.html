@@ -8,9 +8,9 @@
       <label>Referral Link</label>
       <div class="v-center">
         <input class="form-control link" type="text" [(ngModel)]="affiliate['share_link']" disabled>
-        <button class="form-control btn-blue ml-2" [disabled]="loadingMain || creating"
+        <button class="form-control btn-blue text-white ml-2" [disabled]="loadingMain || creating"
           (click)="openShare()">Share</button>
-        <button class="form-control btn-blue ml-1" [disabled]="loadingMain || creating"
+        <button class="form-control btn-blue text-white ml-1" [disabled]="loadingMain || creating"
           (click)="copyLink()">Copy</button>
       </div>
     </div>
@@ -20,7 +20,7 @@
     <div class="v-center">
       <img class="paypal-logo" src="../../../assets/img/paypal.svg" alt="PayPal">
       <input class="form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
-      <button class="form-control btn-blue ml-2" *ngIf="!updating" [disabled]="loadingMain || creating"
+      <button class="form-control btn-blue text-white ml-2" *ngIf="!updating" [disabled]="loadingMain || creating"
         (click)="update()">Update</button>
     </div>
     <ng-container *ngIf="!loadingMain && !creating">

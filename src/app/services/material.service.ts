@@ -67,11 +67,22 @@ export class MaterialService extends HttpService {
     });
   }
 
-  getVimeoMeta(id) {
+  createVideo(video: any): any {
+    return this.httpClient.post(this.server + VIDEO.CREATE, video);
+  }
+
+  uploadVideoDetail(id: string, video: any): any {
+    return this.httpClient.put(
+      this.server + VIDEO.UPDATE_VIDEO_DETAIL + id,
+      video
+    );
+  }
+
+  getVimeoMeta(id: string): any {
     return this.httpClient.get(`https://vimeo.com/api/v2/video/${id}.json`);
   }
 
-  getYoutubeMeta(id) {
+  getYoutubeMeta(id: string): any {
     return this.httpClient.get(
       `https://www.googleapis.com/youtube/v3/videos?id=${id}&key=${environment.API_KEY.Youtube}&part=snippet,contentDetails`
     );

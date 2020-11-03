@@ -1,0 +1,91 @@
+.custom-mat-field {
+  .mat-form-field-appearance-outline {
+    .mat-form-field-wrapper {
+      margin: 0px;
+      padding-bottom: 0px;
+    }
+    .mat-form-field-flex {
+      margin-top: 0px;
+      outline: none!important;
+    }
+    .mat-form-field-outline {
+      top: 0px;
+
+      &:not(.mat-form-field-outline-thick) {
+        opacity: 1!important;
+      }
+
+      &.mat-form-field-outline-thick {
+        opacity: 0!important;
+      }
+    }
+    .mat-form-field-infix {
+      border-top: none;
+      padding: 0.5rem 0;
+
+      .mat-chip-list-wrapper {
+        input.mat-input-element {
+          margin: 8px 4px;
+        }
+      }
+
+      .mat-select-trigger {
+        height: 1.625em;
+
+        .selected-value {
+          height: 1.625rem;
+        }
+
+        .mat-select-placeholder {
+          line-height: 1.625rem;
+        }
+      }
+    }
+
+    &.mat-focused {
+      .mat-form-field-outline > div {
+        border-color: $color-blue;
+      }
+    }
+
+    .mat-select-arrow-wrapper {
+      transform: none;
+    }
+  }
+
+  &.mat-select-wrapper {
+    .mat-form-field-infix {
+      height: 42px;
+    }
+  }
+}
+
+.mat-autocomplete-panel {
+  border: 1px solid $color-trans28;
+  border-radius: 6px;
+  top: 4px;
+
+  .mat-option {
+    line-height: unset;
+    height: unset;
+
+    &.mat-active {
+      background-color: $color-blue06;
+    }
+  }
+
+  .mat-option:hover:not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled) {
+    background-color: $color-blue06;
+  }
+}
+
+.mat-autocomplete-panel-above {
+  .mat-autocomplete-panel {
+    bottom: 4px;
+  }
+}
+
+.cdk-overlay-pane .mat-select-search-panel {
+  transform: translate(4px, 12px)!important;
+  min-width: calc(100% + 24px)!important;
+}

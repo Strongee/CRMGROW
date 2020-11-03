@@ -86,7 +86,6 @@ export class RegisterComponent implements OnInit {
   confirmPhone(): void {}
 
   openProfilePhoto(): void {
-    console.log('OPEN PROFILE VOAO');
     this.dialog.open(AvatarEditorComponent);
   }
 }

@@ -8,7 +8,7 @@
   padding: 4px;
   border-radius: 24px;
   position: relative;
-    
+
   .tab {
     display: flex;
     align-items: center;
@@ -25,7 +25,7 @@
       height: 18px;
       background-color: $color-dark;
     }
-    
+
     * {
       position: relative;
     }
@@ -49,5 +49,13 @@
     border-radius: 20px;
     box-shadow: 0 3px 16px -3px rgba(16, 19, 54, 0.4);
     transition: all .3s;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .tab-container {
+    .tab .tab-label {
+      font-size: 14px;
+    }
   }
 }
