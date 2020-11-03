@@ -4,6 +4,15 @@
   justify-content: space-between;
 }
 
+.teams-table {
+  th, td {
+    &.team-members,
+    &.team-materials {
+      width: 90px;
+      padding-right: 30px;
+    }
+  }
+}
 @media screen and (max-width: 576px) {
   .teams-tab-container {
     display: block;

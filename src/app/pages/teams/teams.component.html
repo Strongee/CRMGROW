@@ -41,10 +41,10 @@
                 <td class="team-name">
                   <a class="item-detail-link f-6 font-weight-bold" [routerLink]="['/teams/' + team._id]">{{team.name}}</a>
                 </td>
-                <td class="team-members">
+                <td class="team-members text-right">
                   <div class="f-6 font-weight-bold">{{team.members.length}}</div>
                 </td>
-                <td class="team-materials">
+                <td class="team-materials text-right">
                   <div class="f-6 font-weight-bold">{{team.videos.length + team.images.length + team.pdfs.length}}</div>
                 </td>
                 <td class="team-owner">
@@ -54,20 +54,20 @@
                         <ng-container *ngIf="team.owner.length < 5; else overTemplate">
                           <div class="owner" *ngFor="let own of team.owner">
                             <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
-                              <img [src]="own.picture_profile" class="avatar" />
+                              <img [src]="own.picture_profile" class="avatar" [class.shadow-avatar]="team.owner.length > 1"/>
                             </ng-container>
                             <ng-template #ownNamePlaceholder>
-                              <div class="name-avatar">{{own.user_name[0]}}</div>
+                              <div class="name-avatar" [class.shadow-avatar]="team.owner.length > 1">{{own.user_name[0]}}</div>
                             </ng-template>
                           </div>
                         </ng-container>
                         <ng-template #overTemplate>
                           <div class="owner" *ngFor="let mIndex of [0,1,2,3]">
                             <ng-container *ngIf="team.owner[mIndex].picture_profile; else ownNamePlaceholder">
-                              <img [src]="team.owner[mIndex].picture_profile" class="avatar" />
+                              <img [src]="team.owner[mIndex].picture_profile" class="avatar shadow-avatar" />
                             </ng-container>
                             <ng-template #ownNamePlaceholder>
-                              <div class="name-avatar">{{team.owner[mIndex].username[0]}}</div>
+                              <div class="name-avatar shadow-avatar">{{team.owner[mIndex].username[0]}}</div>
                             </ng-template>
                           </div>
                           <div class="owner remain-number">
@@ -140,10 +140,10 @@
                   <td class="team-name">
                     <a class="item-detail-link f-6 font-weight-bold" [routerLink]="['/teams/' + team._id]">{{team.name}}</a>
                   </td>
-                  <td class="team-members">
+                  <td class="team-members text-right">
                     <div class="f-6 font-weight-bold">{{team.members.length}}</div>
                   </td>
-                  <td class="team-materials">
+                  <td class="team-materials text-right">
                     <div class="f-6 font-weight-bold">{{team.videos.length + team.images.length + team.pdfs.length}}</div>
                   </td>
                   <td class="team-owner">
@@ -153,20 +153,20 @@
                           <ng-container *ngIf="team.owner.length < 5; else overTemplate">
                             <div class="owner" *ngFor="let own of team.owner">
                               <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
-                                <img [src]="own.picture_profile" class="avatar" />
+                                <img [src]="own.picture_profile" class="avatar" [class.shadow-avatar]="team.owner.length > 1"/>
                               </ng-container>
                               <ng-template #ownNamePlaceholder>
-                                <div class="name-avatar">{{own.user_name[0]}}</div>
+                                <div class="name-avatar" [class.shadow-avatar]="team.owner.length > 1">{{own.user_name[0]}}</div>
                               </ng-template>
                             </div>
                           </ng-container>
                           <ng-template #overTemplate>
                             <div class="owner" *ngFor="let mIndex of [0,1,2,3]">
                               <ng-container *ngIf="team.owner[mIndex].picture_profile; else ownNamePlaceholder">
-                                <img [src]="team.owner[mIndex].picture_profile" class="avatar" />
+                                <img [src]="team.owner[mIndex].picture_profile" class="avatar shadow-avatar"/>
                               </ng-container>
                               <ng-template #ownNamePlaceholder>
-                                <div class="name-avatar">{{team.owner[mIndex].username[0]}}</div>
+                                <div class="name-avatar shadow-avatar">{{team.owner[mIndex].username[0]}}</div>
                               </ng-template>
                             </div>
                             <div class="owner remain-number">
