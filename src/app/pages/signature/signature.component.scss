@@ -1,7 +1,6 @@
 .email-templates {
   width: 100%;
   max-width: 520px;
-  justify-content: space-between;
   flex-wrap: wrap;
 
   .template {
@@ -18,8 +17,8 @@
       background-color: blue;
     }
   }
-
-  @media screen and (max-width: 480px) {
-    justify-content: flex-start;
-  }
+}
+.email-editor {
+  width: 100%;
+  max-width: 520px;
 }

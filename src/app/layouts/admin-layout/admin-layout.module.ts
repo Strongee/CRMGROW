@@ -32,6 +32,7 @@ import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
+import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
+    SocialProfileComponent
     TeamComponent,
     CalendarComponent
   ],
@@ -67,7 +69,6 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
     ShareButtonsModule,
     ShareIconsModule,
     MatExpansionModule,
-    NgxPaginationModule
   ],
   schemas: []
 })
