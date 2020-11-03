@@ -20,7 +20,6 @@ import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { MatIconModule } from '@angular/material/icon';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { NgPipesModule } from 'ngx-pipes';
 

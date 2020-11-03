@@ -108,6 +108,8 @@ export const DELAY = [
   { id: '8', text: '8 min' },
   { id: '9', text: '9 min' },
   { id: '10', text: '10 min' }
+];
+
 export const COMPANIES = ['eXp Realty'];
 
 export const MONTH = [

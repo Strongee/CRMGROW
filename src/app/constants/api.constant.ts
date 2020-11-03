@@ -17,7 +17,6 @@ export const USER = {
   UPDATE_PASSWORD: 'user/new-password',
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
-  UPDATE_PROFILE: 'user/me',
   LOAD_AFFILIATE: '',
   CREATE_AFFILIATE: ''
 };

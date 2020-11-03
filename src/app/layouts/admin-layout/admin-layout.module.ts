@@ -59,7 +59,7 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
-    SocialProfileComponent
+    SocialProfileComponent,
     TeamComponent,
     CalendarComponent,
     NotificationsComponent,
