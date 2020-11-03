@@ -1,0 +1,214 @@
+<div class="dialog-container">
+  <div class="v-center justify-content-between mx-0">
+    <ng-container *ngIf="step == 1">
+      <div class="f-22 font-weight-bold c-black">Upload CSV - Select CSV file (*.csv)</div>
+    </ng-container>
+    <ng-container *ngIf="step == 2">
+      <div class="f-22 font-weight-bold c-black">Import contacts</div>
+    </ng-container>
+    <ng-container *ngIf="step == 3">
+      <div class="f-22 font-weight-bold c-black">Duplicates</div>
+    </ng-container>
+    <ng-container *ngIf="step == 4">
+      <div class="f-22 font-weight-bold c-black">Review contacts to import</div>
+    </ng-container>
+    <button class="v-center border-0 bgc-trans close-button" mat-dialog-close>
+      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
+    </button>
+  </div>
+  <mat-dialog-content class="mt-3">
+    <ng-container *ngIf="step == 1">
+      <div class="row">
+        <div class="col-12 text-center">
+          <div class="f-6">This is screenshot of the sample CSV template.</div>
+          <img src="../../../assets/img/csv_screenshot.png" class="template-screenshot my-3"/>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step == 2">
+      <div class="f-3 font-weight-bold my-3">Map columns in your file to contact properties.</div>
+      <table class="table">
+        <thead>
+          <th class="matched">Matched</th>
+          <th class="column-file">Column Header From File</th>
+          <th class="preview">Preview Information</th>
+          <th class="crmgrow-property">Crmgrow Property</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let column of columns; let i = index">
+            <td class="matched">
+              <div class="v-center" *ngIf="updateColumn[column]" >
+                <i class="i-icon i-round-check mr-2 round-check"></i>
+              </div>
+            </td>
+            <td class="column-file">
+              <div class="f-4 font-weight-bold">{{column}}</div>
+            </td>
+            <td class="preview">
+              <div class="example-data">
+                {{ lines && lines[0] && (lines[0][i] || '..') }}
+              </div>
+            </td>
+            <td class="crmgrow-property">
+              <select class="form-control" [(ngModel)]="updateColumn[column]">
+                <option value="">Select Property</option>
+                <option *ngFor="let field of fields" value="{{field.value}}">{{field.label}}</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <ng-container *ngIf="step == 3">
+      <div class="duplicate-wrapper">
+        <div class="dups-container" *ngIf="sameEmails.length">
+          <div class="f-4 font-weight-bold my-3">
+            There were <span class="f-8 c-blue">{{sameEmails.length}}</span> record duplicates found in your .csv file! Select primary data.
+          </div>
+          <table class="table duplicate-check-table">
+            <thead>
+            <tr>
+              <ng-container *ngFor="let column of columns">
+                <th *ngIf="updateColumn[column]">
+                  {{updateColumn[column]}}
+                </th>
+              </ng-container>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container  *ngFor="let dupItem of sameEmails; let dupIndex = index;">
+              <tr class="duplicate-row" *ngFor="let contact of dupItem.values; let row = index;"
+                [class.last-row]="row == dupItem.values.length - 1 ? true : false"
+              >
+                <ng-container *ngFor="let column of columns; let i = index;">
+                  <td *ngIf="updateColumn[column]"
+                      class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
+                  >
+                    {{contact[updateColumn[column]]}}
+                  </td>
+                </ng-container>
+                <td>
+                  <div class="custom-control custom-radio ml-auto">
+                    <input type="radio" class="custom-control-input" id="dep-{{contact.id}}" name="dep-{{dupIndex}}"
+                           [(ngModel)]="dupItem.primary" [value]="contact.id">
+                    <label class="custom-control-label f-4 font-weight-bold" for="dep-{{contact.id}}">{{dupItem.primary == contact.id ? 'Primary' : ''}}</label>
+                  </div>
+                </td>
+              </tr>
+              <tr class="blank-row"></tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step == 4">
+      <table class="table">
+        <thead>
+        <tr>
+          <th class="check-cell border-top-0">
+            <div class="custom-control custom-checkbox" (click)="selectAllContacts()">
+              <input type="checkbox" class="custom-control-input" id="selectcontacts" (change)="selectAllContacts()" [checked]="isSelectedContacts()">
+              <label class="custom-control-label" for="selectcontacts"></label>
+            </div>
+          </th>
+          <ng-container *ngFor="let column of columns">
+            <th *ngIf="updateColumn[column]">
+              {{updateColumn[column]}}
+            </th>
+          </ng-container>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let record of contactsToUpload; let row = index;">
+          <td class="check-cell">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="record-{{record.id}}" (change)="selectedContacts.toggle(record.id)" [checked]="selectedContacts.isSelected(record.id)">
+              <label class="custom-control-label" for="record-{{record.id}}"></label>
+            </div>
+          </td>
+          <ng-container *ngFor="let column of columns; let i = index;">
+            <td *ngIf="updateColumn[column]" class="{{updateColumn[column]}}-cell f-3 font-weight-bold">
+              {{record[updateColumn[column]]}}
+            </td>
+          </ng-container>
+        </tr>
+        </tbody>
+      </table>
+    </ng-container>
+<!--    <ng-container *ngIf="step == 5">-->
+<!--      <p class="p-2 text-white alert-warning">-->
+<!--        {{failedRecords.length}} of {{contactsToUpload.length}} contact(s) are failed in uploading because of duplication with Current Contact List.-->
+<!--        You can overwrite following contacts.-->
+<!--      </p>-->
+<!--      <div class="stick-header-table">-->
+<!--        <table class="table">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th>-->
+<!--              <div class="custom-control custom-checkbox">-->
+<!--                <input class="custom-control-input" id="ufc-all" type="checkbox"-->
+<!--                       [checked]="overwriteContacts.selected.length == failedRecords.length" (change)="$event ? toggleAllFailedRecords() : null">-->
+<!--                <label class="custom-control-label" for="ufc-all"></label>-->
+<!--              </div>-->
+<!--            </th>-->
+<!--            <ng-container *ngFor="let column of columns">-->
+<!--              <th *ngIf="updateColumn[column]">-->
+<!--                {{updateColumn[column]}}-->
+<!--              </th>-->
+<!--            </ng-container>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr *ngFor="let contact of failedRecords">-->
+<!--            <td>-->
+<!--              <div class="custom-control custom-checkbox">-->
+<!--                <input class="custom-control-input" id="ufc-{{contact.id}}" type="checkbox"-->
+<!--                       [checked]="overwriteContacts.isSelected(contact)" (change)="$event ? toggleFailedRecord(contact) : null">-->
+<!--                <label class="custom-control-label" for="ufc-{{contact.id}}"></label>-->
+<!--              </div>-->
+<!--            </td>-->
+<!--            <ng-container *ngFor="let column of columns">-->
+<!--              <td *ngIf="updateColumn[column]" class="{{updateColumn[column]}}-cell">-->
+<!--                {{contact[updateColumn[column]]}}-->
+<!--              </td>-->
+<!--            </ng-container>-->
+<!--          </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+<!--      </div>-->
+<!--    </ng-container>-->
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <ng-container *ngIf="step == 1">
+      <div class="v-center justify-content-center">
+        <a class="mt-3 mr-2 btn btn-white c-blue font-weight-bold" href="../../../assets/csv_template.csv" download="csv_template.csv">
+          Download Template
+        </a>
+        <button class="mt-3 btn btn-primary rounded" (click)="openFileDialog()">
+          Choose
+        </button>
+        <input type="file" accept=".csv" #file (change)="readFile($event)" style="display: none;"/>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step == 2">
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
+        <button class="btn btn-primary" type="button" (click)="review()">Next</button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step == 3">
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
+        <button class="btn btn-primary" type="button" (click)="goToReview()">Merge & Review</button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step == 4">
+      <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
+      <button class="btn btn-primary" (click)="upload()" *ngIf="!uploading">Import</button>
+      <app-loading-button [class]="'btn btn-primary'" [title]="'Importing...'" *ngIf="uploading"></app-loading-button>
+    </ng-container>
+  </mat-dialog-actions>
+</div>
+

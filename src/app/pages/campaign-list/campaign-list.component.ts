@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CampaignAddContactComponent } from '../../components/campaign-add-contact/campaign-add-contact.component';
+import { UploadContactsComponent } from '../../components/upload-contacts/upload-contacts.component';
 
 @Component({
   selector: 'app-campaign-list',
@@ -76,73 +77,38 @@ export class CampaignListComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           const contacts = res.contacts;
-          console.log("response contacts =============>", res);
-          for( let i = 0; i < contacts.length; i++ ){
-            if (this.contacts.length) {
-              const isExist = this.contacts.filter(
-                (contact) => contact.email === contacts[i].email
-              ).length;
-              if (!isExist) {
-                this.contacts.push(contacts[i]);
-              }
-            } else {
-              this.contacts.push(contacts[i]);
-            }
-          }
+          this.addUniqueContacts(contacts);
         }
       });
   }
 
-  importCSV(): void {
-    // this.file.nativeElement.click();
+  addUniqueContacts(contacts): void {
+    for( let i = 0; i < contacts.length; i++ ){
+      if (this.contacts.length) {
+        const isExist = this.contacts.filter(
+          (contact) => contact.email === contacts[i].email
+        ).length;
+        if (!isExist) {
+          this.contacts.push(contacts[i]);
+        }
+      } else {
+        this.contacts.push(contacts[i]);
+      }
+    }
   }
 
-  readFile(evt): void {
-    // const file = evt.target.files[0];
-    // if (!file) {
-    //   return false;
-    // }
-    // if (!file.name.toLowerCase().endsWith('.csv')) {
-    //   this.dialog.open(NotifyComponent, {
-    //     width: '300px',
-    //     data: {
-    //       message: 'Please select the CSV file.'
-    //     }
-    //   });
-    //   return false;
-    // }
-    // const fileReader = new FileReader();
-    // fileReader.onload = (e) => {
-    //   const text = fileReader.result + '';
-    //   this.papa.parse(text, {
-    //     skipEmptyLines: true,
-    //     complete: (results, file) => {
-    //       this.csvColumns = results.data[0];
-    //       this.csvLines = results.data.slice(1);
-    //       this.dataText = this.papa.unparse(this.csvLines);
-    //
-    //       const firstNameIndex = this.csvColumns.indexOf('first_name');
-    //       const lastNameIndex = this.csvColumns.indexOf('last_name');
-    //       const emailIndex = this.csvColumns.indexOf('email');
-    //       const phoneIndex = this.csvColumns.indexOf('phone');
-    //
-    //       for (let i = 0; i < this.csvLines.length; i++) {
-    //         const cvsLine = this.csvLines[i];
-    //         const contact = {
-    //           first_name: cvsLine[firstNameIndex],
-    //           last_name: cvsLine[lastNameIndex],
-    //           email: cvsLine[emailIndex],
-    //           cell_phone: cvsLine[phoneIndex]
-    //         };
-    //         const isExist = this.contacts.filter(
-    //           (item) => item.email == contact.email
-    //         ).length;
-    //         if (!isExist) this.contacts.push(contact);
-    //       }
-    //     }
-    //   });
-    // };
-    // fileReader.readAsText(evt.target.files[0]);
+  importCSV(): void {
+    this.dialog
+      .open(UploadContactsComponent, {
+        width: '100vw',
+        maxWidth: '1024px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        const csvContacts = res.data;
+        this.addUniqueContacts(csvContacts);
+      });
   }
 
   bulkImport(): void {

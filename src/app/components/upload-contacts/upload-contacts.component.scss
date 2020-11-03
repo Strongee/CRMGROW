@@ -1,0 +1,160 @@
+.dialog-container{
+  padding: 1.5rem 1rem;
+
+  .f-22 {
+    font-size: 22px;
+  }
+
+  .close-button {
+    width: auto;
+    padding: 0;
+
+    &:focus, &:hover {
+      color: #000000;
+      background-color: transparent;
+    }
+
+    .i-icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .table {
+    td {
+      padding: 10px;
+    }
+  }
+  .round-check {
+    background-color: #00916E;
+  }
+}
+
+
+.custom-control {
+  display: flex;
+
+  label {
+    text-align: left;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #0000ff;
+    font-weight: bold;
+  }
+}
+
+.columns-container {
+  max-height: calc(100vh - 400px);
+  overflow-y: auto;
+  .column-list {
+    background-color: white;
+    border-right: 1px solid gainsboro;
+
+    .column-item {
+      min-height: 36px;
+      padding: 5px 10px;
+      border-top: 1px solid #d9e1e8;
+      cursor: pointer;
+
+      &.selected {
+        background-color: #d3edff;
+      }
+
+      &:hover {
+        background-color: #eaf7ff;
+      }
+    }
+  }
+}
+
+.example-data {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 24px;
+  white-space: nowrap;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.duplicate-wrapper {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.dialog-header{
+  position: relative;
+  padding-right: 30px;
+  .close-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+  }
+}
+
+.template-screenshot {
+  width: 100%;
+}
+
+.duplicate-check-table {
+
+  th {
+    border-bottom: none;
+  }
+
+  .duplicate-row {
+    background-color: #f5f6fd;
+    border-bottom: 2px solid #e9ecef;
+
+    &.last-row {
+      border-bottom: none;
+    }
+  }
+
+  .blank-row {
+    background-color: #ffffff;
+    height: 10px;
+  }
+
+  td {
+    padding: 15px 10px;
+  }
+}
+
+:host ::ng-deep {
+  .custom-radio:checked, .custom-radio:not(:checked) {
+    position: relative;
+    left: 0;
+  }
+
+  .custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #0000ff;
+    background-color: #ffffff;
+    left: 60px;
+  }
+
+  .custom-control label {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .custom-radio .custom-control-label::before {
+    border-radius: 50%;
+    left: 60px;
+  }
+
+  .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: none;
+    background-color: #0000ff;
+    border-radius: 50%;
+    left: 64px;
+  }
+
+  .custom-control-label::after {
+    top: 0.4rem;
+    left: 64px;
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+}

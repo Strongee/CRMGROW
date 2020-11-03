@@ -22,6 +22,7 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CampaignAddListComponent } from './campaign-add-list/campaign-add-list.component';
 import { CampaignListComponent } from '../pages/campaign-list/campaign-list.component';
 import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add-contact.component';
+import { UploadContactsComponent } from './upload-contacts/upload-contacts.component';
 
 @NgModule({
   declarations: [
@@ -45,12 +46,13 @@ import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add
     CampaignAddListComponent,
     CampaignListComponent,
     CampaignAddContactComponent,
+    UploadContactsComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     TranslateModule.forChild({ extend: true }),
-    NgxCropperJsModule
+    NgxCropperJsModule,
   ],
   exports: [
     SlideTabComponent,
@@ -67,7 +69,8 @@ import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add
     SelectLeaderComponent,
     CampaignAddListComponent,
     CampaignListComponent,
-    CampaignAddContactComponent
+    CampaignAddContactComponent,
+    UploadContactsComponent
   ],
   bootstrap: [AvatarEditorComponent, VideoShareComponent]
 })
