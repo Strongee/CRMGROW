@@ -276,14 +276,11 @@ export class VideoCreateComponent implements OnInit {
             .then((image) => {
               this.video['site_image'] = image;
             })
-            .catch((err) => {
-              console.log('Video Meta Image Load', err);
-            });
+            .catch((err) => {});
           this.videoType = 'local';
           this.uploadVideo();
         })
         .catch((err) => {
-          console.log('error', err);
           this.toast.warning(
             'Cannot read this file. Please try with standard file.'
           );
