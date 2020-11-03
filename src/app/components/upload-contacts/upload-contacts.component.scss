@@ -123,38 +123,40 @@
 }
 
 :host ::ng-deep {
-  .custom-radio:checked, .custom-radio:not(:checked) {
-    position: relative;
-    left: 0;
-  }
+  .duplicate-check-table {
+    .custom-radio:checked, .custom-radio:not(:checked) {
+      position: relative;
+      left: 0;
+    }
 
-  .custom-control-input:checked ~ .custom-control-label::before {
-    border-color: #0000ff;
-    background-color: #ffffff;
-    left: 60px;
-  }
+    .custom-control-input:checked ~ .custom-control-label::before {
+      border-color: #0000ff;
+      background-color: #ffffff;
+      left: 60px;
+    }
 
-  .custom-control label {
-    font-size: 14px;
-    font-weight: bold;
-  }
+    .custom-control label {
+      font-size: 14px;
+      font-weight: bold;
+    }
 
-  .custom-radio .custom-control-label::before {
-    border-radius: 50%;
-    left: 60px;
-  }
+    .custom-radio .custom-control-label::before {
+      border-radius: 50%;
+      left: 60px;
+    }
 
-  .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
-    background-image: none;
-    background-color: #0000ff;
-    border-radius: 50%;
-    left: 64px;
-  }
+    .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+      background-image: none;
+      background-color: #0000ff;
+      border-radius: 50%;
+      left: 64px;
+    }
 
-  .custom-control-label::after {
-    top: 0.4rem;
-    left: 64px;
-    width: 0.75rem;
-    height: 0.75rem;
+    .custom-control-label::after {
+      top: 0.4rem;
+      left: 64px;
+      width: 0.75rem;
+      height: 0.75rem;
+    }
   }
 }
