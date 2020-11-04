@@ -10,7 +10,7 @@
       </button>
     </div>
     <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="selectedTab.id === 'calls'">
-      <button class="v-center btn btn-blue f-4 text-white ml-2">
+      <button class="v-center btn btn-blue f-4 text-white ml-2" (click)="joinCallRequest()">
         <i class="bgc-white i-icon i-plus mr-2"></i>
         New group call inquiry
       </button>
@@ -71,7 +71,7 @@
                             </ng-template>
                           </div>
                           <div class="owner remain-number">
-                            <div class="name-avatar">+{{team.owner.length - 4}}</div>
+                            <div class="name-avatar shadow-avatar">+{{team.owner.length - 4}}</div>
                           </div>
                         </ng-template>
                       </ng-container>
@@ -170,7 +170,7 @@
                               </ng-template>
                             </div>
                             <div class="owner remain-number">
-                              <div class="name-avatar">+{{team.owner.length - 4}}</div>
+                              <div class="name-avatar shadow-avatar">+{{team.owner.length - 4}}</div>
                             </div>
                           </ng-template>
                         </ng-container>
@@ -246,6 +246,9 @@
                 </div>
               </div>
             </ng-container>
+            <ng-container *ngIf="!totalInquiries && !isInquiryLoading">
+              <app-data-empty [type]="'inquiry'"></app-data-empty>
+            </ng-container>
             <div class="d-flex justify-content-end align-items-center">
               <div class="f-5 font-weight-bold mb-2" *ngIf="inquiriesCount">{{inquiriesCount}} inquirie(s)</div>
               <div class="ml-3 pagination-wrapper" *ngIf="inquiriesCount">
@@ -268,7 +271,7 @@
                   </thead>
                   <tbody>
                   <tr *ngFor="let inquiry of inquiriesData | paginate : { id: 'new_inquiries', itemsPerPage: 8, currentPage: currentInquiriesPage, totalItems: totalInquiries }">
-                    <td class="subject" [routerLink]="['/call/' + inquiry._id]">
+                    <td class="subject" (click)="confirmRequest(inquiry)">
                       <div class="c-blue f-5 font-weight-bold">{{inquiry.subject}}</div>
                       <div class="c-dark opacity-6 f-2">{{inquiry.description | stripe | slice:0:40}}</div>
                     </td>
@@ -309,7 +312,10 @@
                     </td>
                     <td>
                       <div class="f-4">
-                        {{inquiry.due_start | date: 'MMM dd yyyy, h:mm a'}}
+                        {{inquiry.proposed_at[0] | date: 'MMM dd yyyy, h:mm a'}}
+                      </div>
+                      <div class="f-2 c-dark opacity-6" *ngIf="inquiry.proposed_at.length > 1">
+                        +{{inquiry.proposed_at.length - 1}} call suggested
                       </div>
                     </td>
                     <td class="team-actions">
@@ -358,6 +364,9 @@
                 </div>
               </div>
             </ng-container>
+            <ng-container *ngIf="!totalPlanned && !isPlannedLoading">
+              <app-data-empty [type]="'plan'"></app-data-empty>
+            </ng-container>
             <div class="d-flex justify-content-end align-items-center">
               <div class="f-5 font-weight-bold mb-2" *ngIf="plannedCount">{{plannedCount}} scheduled calls(s)</div>
               <div class="ml-3 pagination-wrapper" *ngIf="plannedCount">
@@ -367,7 +376,7 @@
             </div>
             <div class="bg-white rounded position-relative">
               <ng-container *ngIf="totalPlanned">
-                <table class="table call-request-table" [class.loading]="isPlannedTableLoading">
+                <table class="table call-request-table scheduled-call-table" [class.loading]="isPlannedTableLoading">
                   <thead>
                   <tr>
                     <th class="subject">Subject & Description</th>
@@ -427,7 +436,7 @@
                     </td>
                     <td>
                       <div class="f-4">
-                        {{plan.due_start | date: 'MMM dd yyyy, h:mm a'}}
+                        {{plan.proposed_at[0] | date: 'MMM dd yyyy, h:mm a'}}
                       </div>
                       <div class="f-2 opacity-6">
                         {{getDuration(plan.duration)}}
@@ -435,10 +444,10 @@
                     </td>
                     <td class="status">
                       <div class="v-center">
-                        <div class="subscribe-button like v-center justify-content-center">
+                        <div class="subscribe-button like v-center justify-content-center" (click)="finishedPlan(plan)">
                           <i class="i-icon i-like bgc-white" aria-hidden="true"></i>
                         </div>
-                        <div class="subscribe-button unlike v-center justify-content-center ml-1">
+                        <div class="subscribe-button unlike v-center justify-content-center ml-1" (click)="cancelPlan(plan)">
                           <i class="i-icon i-like bgc-white" aria-hidden="true"></i>
                         </div>
                       </div>
@@ -449,15 +458,15 @@
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
                         <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="finishedInquiry(plan)">
+                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editGroupCall(plan)">
                             <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4">Edit group call</span>
                           </button>
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="cancelInquiry(plan)">
+                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="addToCalendar(plan)">
                             <i class="i-icon i-calendar bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4">Add to calendar</span>
                           </button>
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteInquiry(plan)">
+                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deletePlan(plan)">
                             <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4">Delete</span>
                           </button>
@@ -489,6 +498,9 @@
                 </div>
               </div>
             </ng-container>
+            <ng-container *ngIf="!totalFinished && !isFinishedLoading">
+              <app-data-empty [type]="'finish'"></app-data-empty>
+            </ng-container>
             <div class="d-flex justify-content-end align-items-center">
               <div class="f-5 font-weight-bold mb-2" *ngIf="finishedCount">{{finishedCount}} completed & cancelled calls(s)</div>
               <div class="ml-3 pagination-wrapper" *ngIf="finishedCount">
@@ -498,7 +510,7 @@
             </div>
             <div class="bg-white rounded position-relative">
               <ng-container *ngIf="totalFinished">
-                <table class="table call-request-table" [class.loading]="isFinishedTableLoading">
+                <table class="table call-request-table completed-call-table" [class.loading]="isFinishedTableLoading">
                   <thead>
                   <tr>
                     <th class="subject">Subject & Description</th>
@@ -558,7 +570,7 @@
                     </td>
                     <td>
                       <div class="f-4">
-                        {{finished.due_start | date: 'MMM dd yyyy, h:mm a'}}
+                        {{finished.proposed_at[0] | date: 'MMM dd yyyy, h:mm a'}}
                       </div>
                       <div class="f-2 opacity-6">
                         {{getDuration(finished.duration)}}
@@ -575,15 +587,7 @@
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
                         <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="finishedInquiry(finished)">
-                            <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4">Edit group call</span>
-                          </button>
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="cancelInquiry(finished)">
-                            <i class="i-icon i-calendar bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4">Add to calendar</span>
-                          </button>
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteInquiry(finished)">
+                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteFinished(finished)">
                             <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4">Delete</span>
                           </button>

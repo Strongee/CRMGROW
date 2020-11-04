@@ -17,6 +17,10 @@
   .teams-tab-container {
     display: block;
   }
+
+  .tab-container {
+    width: 350px;
+  }
 }
 
 .owners {
@@ -116,9 +120,52 @@
   .call-request-table {
     td {
       padding: 10px 0px;
+      cursor: pointer;
 
       &.guests {
         text-align: center;
+      }
+    }
+
+    &.loading {
+      filter: blur(1px);
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .call-request-table {
+
+      thead th {
+        font-size: 0.6rem;
+        line-height: 0.8rem;
+      }
+
+      .avatar {
+        display: none;
+      }
+
+      .name-avatar {
+        display: none;
+      }
+
+      .guests {
+        display: none;
+      }
+
+      .organizer {
+        display: none;
+      }
+    }
+
+    .scheduled-call-table {
+      .leader {
+        display: none;
+      }
+    }
+
+    .completed-call-table {
+      .leader {
+        display: none;
       }
     }
   }
@@ -136,9 +183,9 @@
   }
 
   .subscribe-button {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
 
     &.like {
       background-color: #04b800;
@@ -150,6 +197,38 @@
     }
   }
 
+  .status {
+    color: #FFFFFF;
+    width: 60px;
+    text-align: center;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+
+    .pending {
+      background-color: #0000FF;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .canceled {
+      background-color: #d92121;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .planned {
+      background-color: #f28422;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .finished {
+      background-color: #04b800;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+  }
   .pagination-wrapper {
     margin-bottom: 10px;
     display: flex;
