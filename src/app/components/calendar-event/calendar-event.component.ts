@@ -7,6 +7,7 @@ import {
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
+import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
 
 @Component({
   selector: 'app-calendar-event',
@@ -33,6 +34,7 @@ export class CalendarEventComponent implements OnInit {
   };
   zoom_link =
     'https://us02web.zoom.us/j/85352609457?pwd=ZVh1Q3JtL3hja2lCamZiMG5Sbld5dz09';
+
   constructor(
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarEventComponent>,
@@ -45,7 +47,17 @@ export class CalendarEventComponent implements OnInit {
     this.event = this.data.event;
   }
 
-  update(): void {}
+  update(): void {
+    this.dialog.open(CalendarDialogComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      disableClose: true,
+      data: {
+        event: this.data.event
+      }
+    });
+  }
 
   remove(): void {
     if (this.event.meta.recurrence_id) {

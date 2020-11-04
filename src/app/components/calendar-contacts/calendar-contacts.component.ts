@@ -141,23 +141,6 @@ export class CalendarContactsComponent implements OnInit {
       });
   }
 
-  getMaterialLatestContact(): void {
-    this.contactService
-      .latestContacts(this.material['_id'])
-      .subscribe((res) => {
-        const searchedContacts = [];
-        const searchedContactIds = [];
-        res.forEach((activity) => {
-          const contact = activity.contacts[0];
-          if (searchedContactIds.indexOf(contact._id) === -1) {
-            searchedContactIds.push(contact._id);
-            searchedContacts.push(contact);
-          }
-        });
-        this.filteredResults.next(searchedContacts);
-      });
-  }
-
   remove(contact: Contact): void {
     _.remove(this.selectedContacts, (e) => {
       if (contact._id) {

@@ -228,66 +228,57 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEvent(event): void {
-    this.dialog.open(CalendarEventComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '400px',
-      data: {
-        event: event
-      }
-    });
-    // this.dialog
-    //   .open(CalendarDialogComponent, {
-    //     position: { top: '100px' },
-    //     width: '100vw',
-    //     maxWidth: '600px',
-    //     disableClose: true,
-    //     data: {
-    //       event: event
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       if (res.id) {
-    //         let events = this.events.filter(
-    //           (item) => item.meta.event_id != res.id
-    //         );
-    //         this.events = [];
-    //         this.events = events;
-    //       } else {
-    //         this.isLoading = true;
-    //         let eventDate = this.viewDate.toISOString();
-    //         this.appointmentService
-    //           .getEvents(eventDate, this.view)
-    //           .subscribe((res) => {
-    //             if (res['status'] == true) {
-    //               this.events = res['data'].map((item) => {
-    //                 return {
-    //                   title: item.title,
-    //                   start: new Date(item.due_start),
-    //                   end: new Date(item.due_end),
-    //                   meta: {
-    //                     contacts: item.contacts,
-    //                     calendar_id: item.calendar_id,
-    //                     description: item.description,
-    //                     location: item.location,
-    //                     type: item.type,
-    //                     guests: item.guests,
-    //                     event_id: item.event_id,
-    //                     recurrence: item.recurrence,
-    //                     recurrence_id: item.recurrence_id,
-    //                     is_organizer: item.is_organizer
-    //                   }
-    //                 };
-    //               });
-    //               this.isLoading = false;
-    //             }
-    //           });
-    //       }
-    //     }
-    //     this.changeDetectorRef.detectChanges();
-    //   });
+    this.dialog
+      .open(CalendarEventComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '350px',
+        data: {
+          event: event
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.id) {
+            const events = this.events.filter(
+              (item) => item.meta.event_id != res.id
+            );
+            this.events = [];
+            this.events = events;
+          } else {
+            this.isLoading = true;
+            const eventDate = this.viewDate.toISOString();
+            this.appointmentService
+              .getEvents(eventDate, this.view)
+              .subscribe((res) => {
+                if (res['status'] == true) {
+                  this.events = res['data'].map((item) => {
+                    return {
+                      title: item.title,
+                      start: new Date(item.due_start),
+                      end: new Date(item.due_end),
+                      meta: {
+                        contacts: item.contacts,
+                        calendar_id: item.calendar_id,
+                        description: item.description,
+                        location: item.location,
+                        type: item.type,
+                        guests: item.guests,
+                        event_id: item.event_id,
+                        recurrence: item.recurrence,
+                        recurrence_id: item.recurrence_id,
+                        is_organizer: item.is_organizer
+                      }
+                    };
+                  });
+                  this.isLoading = false;
+                }
+              });
+          }
+        }
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   changeTab(tab: TabItem): void {
