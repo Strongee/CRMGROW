@@ -72,7 +72,7 @@ export class CalendarEventComponent implements OnInit {
         .subscribe((res) => {
           if (res) {
             if (res.type == 'own') {
-              delete this.event['recurrence_id'];
+              delete this.event.meta['recurrence_id'];
             }
             this.appointmentService
               .removeEvents(
