@@ -971,6 +971,8 @@ ul.ngx-pagination {
     padding: 3px 5px;
     text-align: center;
     font-size: 11px;
+  }
+}
 // DatePicker Style
 
 .datepicker {
@@ -1026,17 +1028,17 @@ ul.ngx-pagination {
 
 //mat-accordion style
 @media screen and (max-width: 576px) {
-  .mat-accordion {
-    .mat-expansion-panel-header {
-      padding: 0;
-    }
+  // .mat-accordion {
+  //   .mat-expansion-panel-header {
+  //     padding: 0;
+  //   }
 
-    .mat-expansion-panel-content {
-      padding: 0;
+  //   .mat-expansion-panel-content {
+  //     padding: 0;
 
-      .mat-expansion-panel-body {
-        padding: 0;
-      }
-    }
-  }
+  //     .mat-expansion-panel-body {
+  //       padding: 0;
+  //     }
+  //   }
+  // }
 }

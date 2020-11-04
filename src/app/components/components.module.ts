@@ -27,7 +27,6 @@ import { CallRequestConfirmComponent } from './call-request-confirm/call-request
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
 import { DataEmptyComponent } from './data-empty/data-empty.component';
-import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CampaignAddListComponent } from './campaign-add-list/campaign-add-list.component';
 import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add-contact.component';
 import { UploadContactsComponent } from './upload-contacts/upload-contacts.component';
