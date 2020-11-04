@@ -189,3 +189,23 @@
     border-bottom: none;
   }
 }
+
+.campaign-list-table {
+  th, td {
+    text-align: right;
+
+    &.name, &.check-cell {
+      text-align: left;
+    }
+  }
+}
+
+.bulk-list-table {
+  th, td {
+    text-align: right;
+
+    &.check-cell, &.broadcast {
+      text-align: left;
+    }
+  }
+}

@@ -15,6 +15,7 @@ import { TeamComponent } from '../../pages/team/team.component';
 import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
 import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
+import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -67,10 +68,24 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'campaign/list',
+    component: CampaignListComponent,
+    data: {
+      title: 'Campaign List'
+    }
+  },
+  {
+    path: 'campaign/bulk',
+    component: CampaignBulkMailingComponent,
+    data: {
+      title: 'Campaign Bulk'
+    }
+  },
+  {
     path: 'campaign/list/:id',
     component: CampaignListComponent,
     data: {
-      title: 'Campaign'
+      title: 'Campaign List'
     }
   },
   {

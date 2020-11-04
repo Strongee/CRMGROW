@@ -1,0 +1,36 @@
+<div class="container-fluid page-wrapper campaign-page">
+  <div class="p-3">
+    <mat-tab-group animationDuration="0ms" class="vertical-tab" (selectedTabChange)="changeTab($event)"
+                   [selectedIndex]="selectedTab">
+      <mat-tab label="List" [disabled]="true">
+        <ng-template mat-tab-label>
+          <div class="d-flex">
+            <div>
+              <h2 class="f-8 font-weight-bold c-black text-uppercase mt-4">Campaign</h2>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="List">
+        <ng-template mat-tab-label>
+          <div class="v-center f-5 ml-2">
+            <i class="i-icon i-list-text mr-3"></i>
+            <span class="tab-title">Lists</span>
+          </div>
+        </ng-template>
+        <div class="px-2 pt-5">
+        </div>
+      </mat-tab>
+      <mat-tab label="Bulk Mailing">
+        <ng-template mat-tab-label>
+          <div class="v-center f-5 ml-2">
+            <i class="i-icon i-bulk mr-3"></i>
+            <span class="tab-title">Bulk Mailing</span>
+          </div>
+        </ng-template>
+        <div class="px-2 pt-5">
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

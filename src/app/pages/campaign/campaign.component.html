@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="col-12 mt-3">
-            <table class="table campaign-list">
+            <table class="table campaign-list-table">
               <thead>
                 <tr>
                   <th class="check-cell border-top-0">
@@ -37,11 +37,11 @@
                       <label class="custom-control-label" for="selectAllLists"></label>
                     </div>
                   </th>
-                  <th class="label-cell border-top-0">List</th>
-                  <th class="label-cell border-top-0">Subscribers</th>
-                  <th class="label-cell border-top-0">Unsbuscribes</th>
-                  <th class="label-cell border-top-0">Delivery issues</th>
-                  <th class="label-cell border-top-0">Action</th>
+                  <th class="name">List</th>
+                  <th class="subscribers">Subscribers</th>
+                  <th class="unsubscribers">Unsbuscribes</th>
+                  <th class="delivery-issues">Delivery issues</th>
+                  <th class="action">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -53,22 +53,21 @@
                         <label class="custom-control-label" for="list-{{list._id}}"></label>
                       </div>
                     </td>
-                    <td class="name-cell">
-                      <a [routerLink]="['/campaign/list/' + list._id]" class="font-weight-bold">{{list.name}}</a>
+                    <td class="name">
+                      <a [routerLink]="['/campaign/list/' + list._id]" class="c-blue f-8 font-weight-bold">{{list.name}}</a>
                     </td>
-                    <td class="name-cell text-center">
-                      {{list.subscribers}}
+                    <td class="subscribers">
+                      <div class="f-6 font-weight-bold">{{list.subscribers}}</div>
                     </td>
-                    <td class="name-cell text-center">
-                      {{list.unsubscribers}}
+                    <td class="unsubscribers">
+                      <div class="f-6 font-weight-bold">{{list.unsubscribers}}</div>
                     </td>
-                    <td class="name-cell text-center">
-                      {{list.deliveryissues}}
+                    <td class="delivery-issues">
+                      <div class="f-6 font-weight-bold">{{list.deliveryissues}}</div>
                     </td>
-                    <td class="contact-action">
+                    <td class="action">
                       <div class="d-sm-flex d-none">
                         <button class="btn btn-sm bg-white text-gray" (click)="editList(list)">
-                          <i class="fas fa-edit"></i>
                         </button>
                       </div>
                     </td>
@@ -87,7 +86,61 @@
         </ng-template>
         <div class="px-2 pt-5">
           <div class="col-12">
-            <h2 class="f-8">Bulk Mailing</h2>
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="mb-4"></h2>
+              <div>
+                <button class="btn btn-primary ml-2" (click)="addBroadcast()">+ Add Broadcast</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <table class="table bulk-list-table">
+              <thead>
+              <tr>
+                <th class="check-cell border-top-0">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="selectbulks" (change)="selectAllBulkPage()" [checked]="isSelectedBulkPage()">
+                    <label class="custom-control-label" for="selectbulks"></label>
+                  </div>
+                </th>
+                <th class="broadcast">Broadcast</th>
+                <th class="status">Status</th>
+                <th class="send-time">Send Time</th>
+                <th class="delivered">Delivered</th>
+                <th class="opened">Opened</th>
+                <th class="clicked">Clicked</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngIf="bulkLists.length">
+                <tr *ngFor="let bulk of bulkLists">
+                  <td class="check-cell">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="bulk-{{bulk._id}}" (change)="selectedBulkLists.toggle(bulk._id)" [checked]="selectedBulkLists.isSelected(bulk._id)">
+                      <label class="custom-control-label" for="bulk-{{bulk._id}}"></label>
+                    </div>
+                  </td>
+                  <td class="broadcast">
+                    <div class="c-blue f-8 font-weight-bold">{{bulk.name}}</div>
+                  </td>
+                  <td class="status">
+                    <div [class]="bulk.status" class="font-weight-bold c-white">{{bulk.status}}</div>
+                  </td>
+                  <td class="send-time">
+                    <div class="c-dark f-6">{{bulk.send_time | date : 'dd MMM h:mm a'}}</div>
+                  </td>
+                  <td class="delivered">
+                    <div class="c-dark f-6">{{bulk.delivered}}</div>
+                  </td>
+                  <td class="opened">
+                    <div class="c-dark f-6">{{bulk.opened}}</div>
+                  </td>
+                  <td class="clicked">
+                    <div class="c-dark f-6">{{bulk.opened / bulk.delivered * 100 }}%</div>
+                  </td>
+                </tr>
+              </ng-container>
+            </table>
           </div>
         </div>
       </mat-tab>

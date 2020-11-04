@@ -20,7 +20,6 @@ import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CampaignAddListComponent } from './campaign-add-list/campaign-add-list.component';
-import { CampaignListComponent } from '../pages/campaign-list/campaign-list.component';
 import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add-contact.component';
 import { UploadContactsComponent } from './upload-contacts/upload-contacts.component';
 
@@ -44,7 +43,6 @@ import { UploadContactsComponent } from './upload-contacts/upload-contacts.compo
     ConfirmComponent,
     SelectLeaderComponent,
     CampaignAddListComponent,
-    CampaignListComponent,
     CampaignAddContactComponent,
     UploadContactsComponent
   ],
@@ -68,7 +66,6 @@ import { UploadContactsComponent } from './upload-contacts/upload-contacts.compo
     SelectUserComponent,
     SelectLeaderComponent,
     CampaignAddListComponent,
-    CampaignListComponent,
     CampaignAddContactComponent,
     UploadContactsComponent
   ],

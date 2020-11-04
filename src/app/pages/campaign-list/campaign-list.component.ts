@@ -33,7 +33,7 @@ export class CampaignListComponent implements OnInit {
 
   changeTab(event): void {
     this.selectedTab = event.index;
-    this.location.replaceState('/campaign/' + this.tabUrls[this.selectedTab]);
+    this.location.replaceState('/campaign/' + this.tabUrls[this.selectedTab - 1]);
   }
 
   selectAllPage(): void {
@@ -64,6 +64,7 @@ export class CampaignListComponent implements OnInit {
     }
     return true;
   }
+
 
   addContact(): void {
     this.dialog
@@ -111,31 +112,6 @@ export class CampaignListComponent implements OnInit {
       });
   }
 
-  bulkImport(): void {
-    // this.dialog
-    //   .open(CampaignAddBulkContactComponent, {
-    //     width: '80vw',
-    //     maxWidth: '80vw',
-    //     height: 'auto',
-    //     disableClose: true
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       const contacts = res.contacts;
-    //       for (let i = 0; i < contacts.length; i++) {
-    //         if (this.contacts.length) {
-    //           const isExist = this.contacts.filter(
-    //             (contact) => contact.email == contacts[i].email
-    //           ).length;
-    //           if (!isExist) {
-    //             this.contacts.push(contacts[i]);
-    //           }
-    //         } else {
-    //           this.contacts.push(contacts[i]);
-    //         }
-    //       }
-    //     }
-    //   });
-  }
+  bulkImport(): void {}
+  addBroadcast(): void {}
 }

@@ -32,6 +32,8 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
 import { CampaignComponent } from '../../pages/campaign/campaign.component';
+import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
+import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { CampaignComponent } from '../../pages/campaign/campaign.component';
     TemplateComponent,
     TeamComponent,
     CalendarComponent,
-    CampaignComponent
+    CampaignComponent,
+    CampaignListComponent,
+    CampaignBulkMailingComponent
   ],
   imports: [
     CommonModule,

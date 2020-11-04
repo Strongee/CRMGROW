@@ -16,8 +16,9 @@ export class CampaignComponent implements OnInit, OnDestroy {
   lists: any[] = [];
   currentListPage = 1;
   listCount;
+  bulkLists = [];
   selectedLists = new SelectionModel<any>(true, []);
-
+  selectedBulkLists = new SelectionModel<any>(true, []);
   constructor(private location: Location, private dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -37,11 +38,22 @@ export class CampaignComponent implements OnInit, OnDestroy {
       };
       this.lists.push(list);
     }
+    for (let i = 1; i < 5; i++) {
+      const bulk = {
+        _id: i,
+        name: 'bulk' + i,
+        status: 'SENT',
+        send_time: Date.now(),
+        delivered: 8,
+        opened: 5
+      };
+      this.bulkLists.push(bulk);
+    }
   }
 
   changeTab(event): void {
     this.selectedTab = event.index;
-    this.location.replaceState('/campaign/' + this.tabUrls[this.selectedTab]);
+    // this.location.replaceState('/campaign/' + this.tabUrls[this.selectedTab - 1]);
   }
 
   isSelectedPage(): any {
@@ -100,4 +112,34 @@ export class CampaignComponent implements OnInit, OnDestroy {
   }
 
   editList(list): void {}
+
+  selectAllBulkPage(): void {
+    if (this.isSelectedBulkPage()) {
+      this.bulkLists.forEach((e) => {
+        if (this.selectedBulkLists.isSelected(e._id)) {
+          this.selectedBulkLists.deselect(e._id);
+        }
+      });
+    } else {
+      this.bulkLists.forEach((e) => {
+        if (!this.selectedBulkLists.isSelected(e._id)) {
+          this.selectedBulkLists.select(e._id);
+        }
+      });
+    }
+  }
+  isSelectedBulkPage(): any {
+    if (this.bulkLists.length) {
+      for (let i = 0; i < this.bulkLists.length; i++) {
+        const e = this.bulkLists[i];
+        if (!this.selectedBulkLists.isSelected(e._id)) {
+          return false;
+        }
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
+  addBroadcast(): void {}
 }

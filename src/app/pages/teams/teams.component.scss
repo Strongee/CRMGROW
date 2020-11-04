@@ -150,38 +150,6 @@
     }
   }
 
-  .status {
-    color: #FFFFFF;
-    width: 60px;
-    text-align: center;
-    font-size: 11px;
-    cursor: pointer;
-
-    .pending {
-      background-color: #0000FF;
-      border-radius: 5px;
-      padding: 3px 5px;
-    }
-
-    .canceled {
-      background-color: #d92121;
-      border-radius: 5px;
-      padding: 3px 5px;
-    }
-
-    .planned {
-      background-color: #f28422;
-      border-radius: 5px;
-      padding: 3px 5px;
-    }
-
-    .finished {
-      background-color: #04b800;
-      border-radius: 5px;
-      padding: 3px 5px;
-    }
-  }
-
   .pagination-wrapper {
     margin-bottom: 10px;
     display: flex;
