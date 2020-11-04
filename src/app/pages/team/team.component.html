@@ -30,24 +30,24 @@
                   <ng-container *ngIf="team.owner.length < 5; else overTemplate">
                     <div class="owner" *ngFor="let own of team.owner">
                       <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
-                        <img [src]="own.picture_profile" class="avatar" />
+                        <img [src]="own.picture_profile" class="avatar" [class.shadow-avatar]="team.owner.length > 1"/>
                       </ng-container>
                       <ng-template #ownNamePlaceholder>
-                        <div class="name-avatar">{{own.user_name[0]}}</div>
+                        <div class="name-avatar" [class.shadow-avatar]="team.owner.length > 1">{{own.user_name[0]}}</div>
                       </ng-template>
                     </div>
                   </ng-container>
                   <ng-template #overTemplate>
                     <div class="owner" *ngFor="let mIndex of [0,1,2,3]">
                       <ng-container *ngIf="team.owner[mIndex].picture_profile; else ownNamePlaceholder">
-                        <img [src]="team.owner[mIndex].picture_profile" class="avatar" />
+                        <img [src]="team.owner[mIndex].picture_profile" class="avatar shadow-avatar" />
                       </ng-container>
                       <ng-template #ownNamePlaceholder>
-                        <div class="name-avatar">{{team.owner[mIndex].username[0]}}</div>
+                        <div class="name-avatar shadow-avatar">{{team.owner[mIndex].username[0]}}</div>
                       </ng-template>
                     </div>
                     <div class="owner remain-number">
-                      <div class="name-avatar">+{{team.owner.length - 4}}</div>
+                      <div class="name-avatar shadow-avatar">+{{team.owner.length - 4}}</div>
                     </div>
                   </ng-template>
                 </ng-container>
@@ -67,7 +67,7 @@
           </div>
           <div class="members ml-5">
             <label>Members</label>
-            <div class="value f-30 font-weight-bold">{{team.owner.length + team.members.length}}</div>
+            <div class="value f-37 font-weight-bold">{{team.owner.length + team.members.length}}</div>
           </div>
           <div class="ml-5">
             <label>Your Status</label>
@@ -82,13 +82,13 @@
             </app-slide-tab>
           </div>
         </div>
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
           <div class="button-group v-center">
-            <button class="v-center btn btn-blue f-4 text-white ml-2">
+            <button class="v-center btn btn-blue f-4 font-weight-bold text-white ml-2">
               <i class="bgc-white i-icon i-plus mr-2"></i>
               Invite member
             </button>
-            <button class="v-center btn btn-white-blue f-4 ml-2">
+            <button class="v-center btn btn-white-blue f-4 font-weight-bold ml-2">
               <i class="bgc-blue i-icon i-edit mr-2"></i>
               Edit team
             </button>
@@ -129,7 +129,7 @@
                   <ng-template #ownNamePlaceholder>
                     <div class="name-avatar mr-3">{{own.user_name[0]}}</div>
                   </ng-template>
-                  <div class="font-weight-bold">{{own.user_name}}</div>
+                  <div class="f-3 font-weight-bold">{{own.user_name}}</div>
                 </div>
               </td>
               <td class="status-cell">
@@ -137,10 +137,10 @@
                   <div class="Owner c-white text-center f-2">Owner</div>
                 </div>
               </td>
-              <td class="added-cell">
+              <td class="added-cell f-3">
                 {{own.created_at | date: 'dd.MM.yyyy'}}
               </td>
-              <td class="phone-cell">
+              <td class="phone-cell f-3">
                 {{own.cell_phone}}
               </td>
               <td class="action-cell">
@@ -185,7 +185,7 @@
                 {{member.cell_phone}}
               </td>
               <td class="action-cell">
-                <button class="v-center btn bgc-white c-dark f-4 ml-2" (click)="removeMember(member)">
+                <button class="v-center btn bgc-white c-dark f-4 ml-2 opacity-3" (click)="removeMember(member)">
                   <i class="bgc-dark i-icon i-trash mr-2"></i>
                   <span class="button-label">Remove</span>
                 </button>
@@ -224,7 +224,7 @@
                 {{invite.cell_phone}}
               </td>
               <td class="action-cell">
-                <button class="v-center btn bgc-white c-dark f-4 ml-2" (click)="cancelInvite(invite)">
+                <button class="v-center btn bgc-white c-dark f-4 opacity-3 ml-2" (click)="cancelInvite(invite)">
                   <i class="bgc-dark i-icon i-trash mr-2"></i>
                   <span class="button-label">Cancel invitation</span>
                 </button>
@@ -286,8 +286,8 @@
                                 </div>
                               </div>
                             </td>
-                            <td class="material-view">0</td>
-                            <td class="material-added">{{video.created_at | date: 'MMM dd, yyyy'}}</td>
+                            <td class="material-view f-4 text-right">0</td>
+                            <td class="material-added f-4">{{video.created_at | date: 'MMM dd, yyyy'}}</td>
                             <td class="material-actions">
                               <div class="v-center">
                                 <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('video', 'text', video)">
@@ -388,8 +388,8 @@
                               </div>
                             </div>
                           </td>
-                          <td class="material-view">0</td>
-                          <td class="material-added">{{pdf.created_at | date: 'MMM dd, yyyy'}}</td>
+                          <td class="material-view f-4 text-right">0</td>
+                          <td class="material-added f-4">{{pdf.created_at | date: 'MMM dd, yyyy'}}</td>
                           <td class="material-actions">
                             <div class="v-center">
                               <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('pdf', 'text', pdf)">
@@ -490,8 +490,8 @@
                               </div>
                             </div>
                           </td>
-                          <td class="material-view">0</td>
-                          <td class="material-added">{{image.created_at | date: 'MMM dd, yyyy'}}</td>
+                          <td class="material-view f-4 text-right">0</td>
+                          <td class="material-added f-4">{{image.created_at | date: 'MMM dd, yyyy'}}</td>
                           <td class="material-actions">
                             <div class="v-center">
                               <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('image', 'text', image)">
@@ -628,7 +628,7 @@
                     <table class="table material-share-table automation-table">
                       <thead>
                       <th class="material-name">Title</th>
-                      <th class="material-actions">Actions</th>
+                      <th class="material-actions-count">Actions</th>
                       <th class="material-contacts">Contacts</th>
                       <th class="material-created">Created</th>
                       <th class="material-assign"></th>
@@ -641,23 +641,23 @@
                               {{automation.title}}
                             </div>
                           </td>
-                          <td class="material-actions f-6 font-weight-bold">
+                          <td class="material-actions-count f-6 font-weight-bold text-right">
                             {{automation.automations.length}}
                           </td>
-                          <td class="material-contacts">
+                          <td class="material-contacts text-right">
                             <span class="f-2 opacity-6 text-uppercase mr-2">Show</span>
                             <span class="f-6 c-blue font-weight-bold">3</span>
                           </td>
-                          <td class="material-created">
+                          <td class="material-created text-right">
                             {{automation.created_at | date: 'MMM dd, yyyy'}}
                           </td>
                           <td class="material-assign">
-                            <div class="v-center">
+                            <div class="v-center justify-content-end">
                               <button class="btn btn-white f-2 c-blue font-weight-bold mr-2" (click)="assignContact(automation)">
                                 Assign to contact
                               </button>
                               <button class="btn btn-white v-center f-2">
-                                <i class="bgc-dark i-icon i-small-icon i-triangle-up mr-2"></i>
+                                <i class="bgc-dark i-icon i-small-icon i-triangle-up"></i>
                               </button>
                             </div>
                           </td>

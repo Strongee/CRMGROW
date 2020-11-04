@@ -22,6 +22,11 @@ import { InputAutomationComponent } from './input-automation/input-automation.co
 import { InputTemplateComponent } from './input-template/input-template.component';
 import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
+import { JoinCallRequestComponent } from './join-call-request/join-call-request.component';
+import { CallRequestConfirmComponent } from './call-request-confirm/call-request-confirm.component';
+import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
+import { DataEmptyComponent } from './data-empty/data-empty.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { ContactCreateComponent } from './contact-create/contact-create.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
@@ -46,6 +51,11 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     InputTeamComponent,
     SelectUserComponent,
     VideoCreateComponent,
+    JoinCallRequestComponent,
+    CallRequestConfirmComponent,
+    SelectLeaderComponent,
+    CallRequestCancelComponent,
+    DataEmptyComponent,
     ConfirmComponent,
     SelectLeaderComponent,
     ContactCreateComponent,
@@ -75,11 +85,17 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     InputAutomationComponent,
     InputTeamComponent,
     SelectUserComponent,
+    SelectLeaderComponent,
+    DataEmptyComponent,
     SelectLeaderComponent
   ],
   bootstrap: [
     ContactCreateComponent,
     AvatarEditorComponent,
+    VideoShareComponent,
+    JoinCallRequestComponent,
+    CallRequestConfirmComponent,
+    CallRequestCancelComponent,
     VideoShareComponent
   ]
 })
