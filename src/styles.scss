@@ -359,6 +359,17 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   text-decoration: underline!important;
 }
 
+// Loading Div Style
+.loader {
+  background-image: url('/assets/img/spinner-dark.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+}
+
 // Button Style
 button {
   &:focus {
@@ -828,7 +839,15 @@ body{
   }
 }
 
+.team-avatar {
+  width: 48px;
+  height: 48px;
 
+  &.md {
+    width: 36px;
+    height: 36px;
+  }
+}
 // Custom Material Style
 .form-avatar {
   width: 26px;
@@ -848,6 +867,8 @@ body{
     height: 100%;
   }
 }
+
+// Table Style
 
 table {
   border-collapse: collapse;
@@ -1028,17 +1049,24 @@ ul.ngx-pagination {
 
 //mat-accordion style
 @media screen and (max-width: 576px) {
-  // .mat-accordion {
-  //   .mat-expansion-panel-header {
-  //     padding: 0;
-  //   }
+  .mat-accordion {
+    .mat-expansion-panel-header {
+      padding: 0;
+    }
 
-  //   .mat-expansion-panel-content {
-  //     padding: 0;
+    .mat-expansion-panel-content {
+      padding: 0;
 
-  //     .mat-expansion-panel-body {
-  //       padding: 0;
-  //     }
-  //   }
-  // }
+      .mat-expansion-panel-body {
+        padding: 0;
+      }
+    }
+  }
+}
+
+
+
+// Style
+.status-description {
+  max-width: 300px;
 }

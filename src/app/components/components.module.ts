@@ -38,6 +38,7 @@ import { ContactCreateComponent } from './contact-create/contact-create.componen
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { NoteCreateComponent } from './note-create/note-create.component';
 import { TeamJoinComponent } from './team-join/team-join.component';
+import { JoinTeamComponent } from './join-team/join-team.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { TeamJoinComponent } from './team-join/team-join.component';
     ContactCreateComponent,
     TaskCreateComponent,
     NoteCreateComponent,
-    TeamJoinComponent
+    TeamJoinComponent,
+    JoinTeamComponent
   ],
   imports: [
     CommonModule,

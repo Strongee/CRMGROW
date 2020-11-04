@@ -371,5 +371,9 @@ export const DialogSettings = {
   CONTACT: {
     width: '98vw',
     maxWidth: '600px'
+  },
+  JOIN_TEAM: {
+    width: '98vw',
+    maxWidth: '600px'
   }
 };
