@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
+import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
+import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
 import { SlideTabComponent } from './slide-tab/slide-tab.component';
 import { TabOptionComponent } from './tab-option/tab-option.component';
 import { ActionsBarComponent } from './actions-bar/actions-bar.component';
@@ -22,9 +26,14 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CampaignAddListComponent } from './campaign-add-list/campaign-add-list.component';
 import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add-contact.component';
 import { UploadContactsComponent } from './upload-contacts/upload-contacts.component';
-
+import { ContactCreateComponent } from './contact-create/contact-create.component';
+import { TaskCreateComponent } from './task-create/task-create.component';
+import { NoteCreateComponent } from './note-create/note-create.component';
 @NgModule({
   declarations: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
@@ -44,17 +53,25 @@ import { UploadContactsComponent } from './upload-contacts/upload-contacts.compo
     SelectLeaderComponent,
     CampaignAddListComponent,
     CampaignAddContactComponent,
-    UploadContactsComponent
+    UploadContactsComponent,
+    ContactCreateComponent,
+    TaskCreateComponent,
+    NoteCreateComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
+    RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule,
   ],
   exports: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
+    ActionsBarComponent,
     ConfirmComponent,
     TeamEditComponent,
     TeamDeleteComponent,
@@ -69,6 +86,10 @@ import { UploadContactsComponent } from './upload-contacts/upload-contacts.compo
     CampaignAddContactComponent,
     UploadContactsComponent
   ],
-  bootstrap: [AvatarEditorComponent, VideoShareComponent]
+  bootstrap: [
+    ContactCreateComponent,
+    AvatarEditorComponent,
+    VideoShareComponent
+  ]
 })
 export class ComponentsModule {}

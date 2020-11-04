@@ -12,7 +12,11 @@ export const AUTH = {
 
 export const USER = {
   PROFILE: 'user/me',
+  PAYMENT: 'payment/',
   UPDATE_PROFILE: 'user/me',
+  UPDATE_PASSWORD: 'user/new-password',
+  SYNC_GMAIL: 'user/sync-gmail',
+  SYNC_OUTLOOK: 'user/sync-outlook',
   LOAD_AFFILIATE: '',
   CREATE_AFFILIATE: ''
 };
@@ -38,6 +42,7 @@ export const VIDEO = {
   CREATE: 'video/create',
   READ: 'video/',
   UPDATE: 'video/',
+  UPDATE_VIDEO_DETAIL: 'video/detail/',
   DELETE: 'video/',
   LOAD: 'video'
 };
@@ -129,3 +134,7 @@ export const LABEL = {
   BULK_CREATE: 'label/create',
   DELETE: 'label/'
 }
+
+export const AUTOMATION = {
+  SEARCH: 'automation/search'
+};

@@ -19,9 +19,6 @@ jobs:
         with:
           node-version: '12.18.3'
 
-      - name: NPM install node-sass...
-        run: npm install node-sass
-
       - name: NPM install...
         run: npm install
 

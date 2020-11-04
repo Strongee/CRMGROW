@@ -20,7 +20,7 @@
     <div class="col-sm-6 col-12">
       <div class="form-group" [ngClass]="{invalid: profileForm.submitted && email.invalid && (email.dirty || email.touched || profileForm.submitted)}">
         <div class="d-flex">
-          <label for="email" class="mr-auto">e-mail</label>
+          <label for="email" class="mr-auto">email</label>
           <span class="error" *ngIf="email.errors">
             <ng-container *ngIf="email.errors.required">Required!</ng-container>
             <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
@@ -34,7 +34,7 @@
     <div class="col-sm-6 col-12">
       <div class="form-group phone-form" [ngClass]="{invalid: profileForm.submitted && phone.invalid && (phone.dirty || phone.touched || profileForm.submitted)}">
         <div class="d-flex">
-          <label for="phone" class="mr-auto">your cell number</label>
+          <label for="phone" class="mr-auto">phone</label>
           <span class="error" *ngIf="phone.errors">
             <ng-container *ngIf="phone.errors.required; else phoneFormat">Required!</ng-container>
             <ng-template #phoneFormat>Wrong cell-phone!</ng-template>
@@ -59,16 +59,19 @@
       </div>
     </div>
     <div class="col-sm-6 col-12">
-      <!-- <div class="form-group" [ngClass]="{invalid: profileForm.submitted && company.invalid && (company.dirty || company.touched || profileForm.submitted)}">
+      <div class="form-group" [ngClass]="{invalid: profileForm.submitted && company.invalid && (company.dirty || company.touched || profileForm.submitted)}">
         <div class="d-flex">
-          <label for="email" class="mr-auto">your company</label>
-          <span class="error" *ngIf="email.errors">
-            <ng-container *ngIf="email.errors.required">Required!</ng-container>
-            <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
+          <label for="company_info" class="mr-auto">your company</label>
+          <span class="error" *ngIf="company.errors">
+            <ng-container *ngIf="company.errors.required">Required!</ng-container>
           </span>
         </div>
-        <input type="text" class="form-control" [(ngModel)]="user.email" name="email" #email="ngModel" required>
-      </div> -->
+        <select class="form-control c-blue f-5" [(ngModel)]="user.company" name="company" id="company" required #company="ngModel">
+          <option *ngFor="let company_info of companies" value="{{company_info}}">
+            {{company_info}}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -102,6 +105,24 @@
     </div>
   </div>
   <div class="row">
-    <button type="submit" class="btn btn-primary font-weight-bold ml-auto mr-2 mt-4"  [disabled]="!profileForm.dirty">Save changes</button>
+    <div class="col-sm-6 col-12">
+      <div class="form-group" [ngClass]="{invalid: profileForm.submitted && location.invalid && (location.dirty || location.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="location" class="mr-auto">location</label>
+          <span class="error" *ngIf="location.errors">
+            <ng-container *ngIf="location.errors.required">Required!</ng-container>
+          </span>
+        </div>
+        <input class="form-control" placeholder="Add location" [(ngModel)]="user.location" name="location"
+            #location="ngModel" ngx-google-places-autocomplete #addressplacesRef="ngx-places" [options]="{
+              types: [],
+              componentRestrictions: { country: 'US' }
+            }" (onAddressChange)="handleAddressChange($event)" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4">Cancel</a>
+    <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" [disabled]="!profileForm.dirty">Save changes</button>
   </div>
 </form>

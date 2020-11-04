@@ -15,9 +15,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { StripePipe } from '../../pipes/stripe.pipe';
 import { FileUploadModule } from 'ng2-file-upload';
-import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
+import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -27,6 +27,8 @@ import {
   TimeagoFormatter,
   TimeagoCustomFormatter
 } from 'ngx-timeago';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import {
     MatIconModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
+    NgPipesModule,
     QuillModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
@@ -57,7 +60,8 @@ import {
     }),
     FileUploadModule,
     NgxPaginationModule,
-    TimeagoModule.forRoot()
+    TimeagoModule.forRoot(),
+    GooglePlaceModule
   ],
   exports: [
     NgbModule,
@@ -73,6 +77,7 @@ import {
     MatSelectModule,
     MatIconModule,
     NgxMatSelectSearchModule,
+    NgPipesModule,
     LoadingButtonComponent,
     StripePipe,
     QuillModule,
@@ -83,7 +88,8 @@ import {
     LoadingOverlayComponent,
     CalendarModule,
     NgxPaginationModule,
-    TimeagoModule
+    TimeagoModule,
+    GooglePlaceModule
   ]
 })
 export class SharedModule {}

@@ -32,6 +32,10 @@
       .mat-select-trigger {
         height: 1.625em;
 
+        .selected-value {
+          height: 1.625rem;
+        }
+
         .mat-select-placeholder {
           line-height: 1.625rem;
         }

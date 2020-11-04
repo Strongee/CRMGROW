@@ -34,6 +34,12 @@ import { CalendarComponent } from '../../pages/calendar/calendar.component';
 import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
 import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
+import { NotificationsComponent } from '../../pages/notifications/notifications.component';
+import { AssistantComponent } from '../../pages/assistant/assistant.component';
+import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.component';
+import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.component';
+import { StatusAutomationComponent } from '../../pages/status-automation/status-automation.component';
+import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
 
 @NgModule({
   declarations: [
@@ -54,11 +60,17 @@ import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/
     TeamsComponent,
     TemplatesComponent,
     TemplateComponent,
+    SocialProfileComponent,
     TeamComponent,
     CalendarComponent,
     CampaignComponent,
     CampaignListComponent,
-    CampaignBulkMailingComponent
+    CampaignBulkMailingComponent,
+    NotificationsComponent,
+    AssistantComponent,
+    LeadCaptureComponent,
+    TagManagerComponent,
+    StatusAutomationComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,30 @@
+.page-content {
+    width: 100%;
+    max-width: 400px;
+    .form-control {
+        width: 150px;
+    }
+    .form-group {
+        .add-button {
+            i {
+                width: 12px;
+                height: 12px;
+                min-width: 12px;
+            }
+        }
+        label {
+            text-transform: unset;
+        }
+        .custom-control-label {
+            opacity: 1;
+        }
+        .required-field {
+            width: 150px;
+        }
+    }
+    .btn-blue {
+        &:hover {
+            color: white;
+        }
+    }
+}

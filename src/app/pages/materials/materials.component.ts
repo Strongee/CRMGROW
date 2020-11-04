@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TabItem } from 'src/app/utils/data.types';
@@ -21,7 +22,8 @@ export class MaterialsComponent implements OnInit {
 
   constructor(
     public storeService: StoreService,
-    public materialService: MaterialService
+    public materialService: MaterialService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -32,5 +34,9 @@ export class MaterialsComponent implements OnInit {
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+  }
+
+  createVideo(): void {
+    this.router.navigate(['./materials/create']);
   }
 }

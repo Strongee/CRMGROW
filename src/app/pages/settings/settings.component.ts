@@ -13,7 +13,12 @@ export class SettingsComponent implements OnInit {
     { id: 'notifications', icon: 'i-notification', label: 'Notifications' },
     { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
     { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
-    { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' }
+    { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
+    {
+      id: 'status-automation',
+      icon: 'i-tag-manager',
+      label: 'Status Automation'
+    }
   ];
   defaultPage = 'notifications';
   currentPage: string;
