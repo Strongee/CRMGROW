@@ -12,7 +12,13 @@ export const AUTH = {
 
 export const USER = {
   PROFILE: 'user/me',
-  UPDATE_PROFILE: 'user/me'
+  PAYMENT: 'payment/',
+  UPDATE_PROFILE: 'user/me',
+  UPDATE_PASSWORD: 'user/new-password',
+  SYNC_GMAIL: 'user/sync-gmail',
+  SYNC_OUTLOOK: 'user/sync-outlook',
+  LOAD_AFFILIATE: '',
+  CREATE_AFFILIATE: ''
 };
 export const TASK = {
   CREATE: 'follow/',
@@ -33,6 +39,7 @@ export const VIDEO = {
   CREATE: 'video/create',
   READ: 'video/',
   UPDATE: 'video/',
+  UPDATE_VIDEO_DETAIL: 'video/detail/',
   DELETE: 'video/',
   LOAD: 'video'
 };
@@ -83,6 +90,7 @@ export const THEME = {
 
 export const TEAM = {
   LOAD: 'team/load',
+  LOAD_LEADERS: 'team/load-leaders',
   LOAD_INVITED: 'team/load-invited',
   CREATE: 'team',
   READ: 'team/',
@@ -116,4 +124,8 @@ export const TEAM = {
   UPDATE_CALL: '/team/call/',
   DELETE_CALL: '/team/call/',
   LOAD_LEADERS: 'team/load-leaders'
+};
+
+export const AUTOMATION = {
+  SEARCH: 'automation/search'
 };

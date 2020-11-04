@@ -15,6 +15,7 @@ $custom-checkbox-indicator-border-radius: 3px;
 @import "src/assets/scss/custom-toggle";
 @import "src/assets/scss/custom-radio";
 @import "src/assets/scss/custom-mat-field";
+@import "src/assets/scss/custom-mat-dialog";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 /* Material Theme Basic Setting  */
@@ -49,22 +50,22 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   background-color: #101336;
 }
 .bgc-orange {
-  background-color: #f26419;
+  background-color: $color-orange;
 }
 .bgc-yellow {
-  background-color: #ffcc00;
+  background-color: $color-yellow;
 }
 .bgc-red {
   background-color: $color-red;
 }
 .bgc-red-pink {
-  background-color: #f5325b;
+  background-color: $color-red-pink;
 }
 .bgc-pink-red {
-  background-color: #ff045f;
+  background-color: $color-pink-red;
 }
 .bgc-azure {
-  background-color: #00a9ff;
+  background-color: $color-azure;
 }
 .bgc-blue-grey {
   background-color: #dae0f2;
@@ -203,160 +204,12 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
   width: 18px;
   height: 18px;
   min-width: 18px;
-}
-.i-automation{
-  mask-image: url('./assets/img/automation.svg');
-}
-.i-broadcasts{
-  mask-image: url('./assets/img/Broadcasts.svg');
-}
-.i-calendar{
-  mask-image: url('./assets/img/calendar.svg');
-}
-.i-copy{
-  mask-image: url('./assets/img/Copy.svg');
-}
-.i-deadline{
-  mask-image: url('./assets/img/Deadline.svg');
-}
-.i-download{
-  mask-image: url('./assets/img/download.svg');
-}
-.i-edit{
-  mask-image: url('./assets/img/edit.svg');
-}
-.i-follow{
-  mask-image: url('./assets/img/Follow.svg');
-}
-.i-list{
-  mask-image: url('./assets/img/List.svg');
-}
-.i-location{
-  mask-image: url('./assets/img/Location.svg');
-}
-.i-lunch{
-  mask-image: url('./assets/img/Lunch.svg');
-}
-.i-message{
-  mask-image: url('./assets/img/Message.svg');
-}
-.i-label{
-  mask-image: url('./assets/img/label.svg');
-}
-.i-notification{
-  mask-image: url('./assets/img/notification.svg');
-}
-.i-pdf{
-  mask-image: url('./assets/img/PDF.svg');
-}
-.i-phone{
-  mask-image: url('./assets/img/Phone.svg');
-}
-.i-pdf-email{
-  mask-image: url('./assets/img/pdf_email.svg');
-}
-.i-sent{
-  mask-image: url('./assets/img/Sent.svg');
-}
-.i-setting{
-  mask-image: url('./assets/img/setting.svg');
-}
-.i-share{
-  mask-image: url('./assets/img/Share.svg');
-}
-.i-sms-sent{
-  mask-image: url('./assets/img/sms_sent.svg');
-}
-.i-task{
-  mask-image: url('./assets/img/Task.svg');
-}
-.i-template{
-  mask-image: url('./assets/img/Template.svg');
-}
-.i-trash{
-  mask-image: url('./assets/img/Trash.svg');
-}
-.i-webpage{
-  mask-image: url('./assets/img/Webpage.svg');
-}
-.i-video{
-  mask-image: url('./assets/img/Video.svg');
-}
-.i-upload {
-  mask-image: url('./assets/img/upload.svg');
-}
-.i-plus {
-  mask-image: url('./assets/img/plus.svg');
-}
-.i-menu {
-  mask-image: url('./assets/img/menu.svg');
-}
-.i-close {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-general {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-signature {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-security {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-integration {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-payment {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-social {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-folder {
-  mask-image: url('./assets/img/close.svg');
-}
-.i-menu-more {
-  mask-image: url('./assets/img/more_menu.svg');
-}
-.i-record{
-  mask-image: url('./assets/img/record.svg');
-  position: relative;
-  &:after {
-    content: '';
-    position: absolute;
-    display: block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: red;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+
+  &.sm {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
   }
-}
-.i-teams {
-  mask-image: url('./assets/img/teams.svg');
-}
-.i-group-call {
-  mask-image: url('./assets/img/group_call.svg');
-}
-.i-block {
-  mask-image: url('./assets/img/block.svg');
-}
-.i-triangle-up {
-  mask-image: url('./assets/img/up-triangle.svg');
-}
-.i-check {
-  mask-image: url('./assets/img/check.svg');
-}
-.i-question {
-  mask-image: url('./assets/img/question-sign-in-circles.svg');
-}
-.i-like {
-  mask-image: url('./assets/img/like.svg');
-}
-.i-triangle-right {
-  mask-image: url('./assets/img/triangle-right.svg');
 }
 .pl-4c{
   padding-left: 2rem!important;
@@ -509,7 +362,15 @@ body { margin: 0; font-family: "Nunito", sans-serif!important; color: $color-dar
 // Button Style
 button {
   &:focus {
-      outline: none;
+    outline: none;
+  }
+  &.loading {
+    color: transparent!important;
+    background-image: url('/assets/img/spinner.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
   }
 }
 .btn-blue {
@@ -908,6 +769,40 @@ body{
         }
       }
     }
+  }
+}
+
+// Badge
+.c-badge {
+  &.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+  }
+  &.rect {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    background-color: blue;
+  }
+  &.admin {
+    background-color: blue;
+  }
+  &.own {
+    background-color: $color-red;
+  }
+  &.team {
+    background-color: $color-azure;
+  }
+  &.email {
+    background-color: $color-orange;
+  }
+  &.text {
+    background-color: $color-yellow;
   }
 }
 

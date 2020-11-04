@@ -17,6 +17,7 @@ export class User implements Deserializable {
   payment?: string;
   time_zone_info?: string;
   time_zone?: string;
+  location: string;
   email_signature?: string;
   proxy_number?: string;
   proxy_number_id?: string;
@@ -88,6 +89,7 @@ export class User implements Deserializable {
   deserialize(input: any): this {
     return Object.assign(this, input);
   }
+
   get avatarName(): string {
     const names = this.user_name.split(' ');
     if (names.length > 1) {

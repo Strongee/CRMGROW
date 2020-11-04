@@ -327,7 +327,6 @@ export class CalendarComponent implements OnInit {
   }
 
   calendarChange(value: string): void {
-    console.log('##', value);
     this.isLoading = true;
     switch (value) {
       case 'month':

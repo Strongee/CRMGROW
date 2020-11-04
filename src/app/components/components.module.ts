@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
+import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
+import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
 import { SlideTabComponent } from './slide-tab/slide-tab.component';
 import { TabOptionComponent } from './tab-option/tab-option.component';
 import { ActionsBarComponent } from './actions-bar/actions-bar.component';
@@ -23,9 +27,15 @@ import { CallRequestConfirmComponent } from './call-request-confirm/call-request
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
 import { DataEmptyComponent } from './data-empty/data-empty.component';
-
+import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { ContactCreateComponent } from './contact-create/contact-create.component';
+import { TaskCreateComponent } from './task-create/task-create.component';
+import { NoteCreateComponent } from './note-create/note-create.component';
 @NgModule({
   declarations: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
@@ -45,17 +55,27 @@ import { DataEmptyComponent } from './data-empty/data-empty.component';
     CallRequestConfirmComponent,
     SelectLeaderComponent,
     CallRequestCancelComponent,
-    DataEmptyComponent
+    DataEmptyComponent,
+    ConfirmComponent,
+    SelectLeaderComponent,
+    ContactCreateComponent,
+    TaskCreateComponent,
+    NoteCreateComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
+    RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule
   ],
   exports: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
+    ActionsBarComponent,
     ConfirmComponent,
     TeamEditComponent,
     TeamDeleteComponent,
@@ -66,14 +86,17 @@ import { DataEmptyComponent } from './data-empty/data-empty.component';
     InputTeamComponent,
     SelectUserComponent,
     SelectLeaderComponent,
-    DataEmptyComponent
+    DataEmptyComponent,
+    SelectLeaderComponent
   ],
   bootstrap: [
+    ContactCreateComponent,
     AvatarEditorComponent,
     VideoShareComponent,
     JoinCallRequestComponent,
     CallRequestConfirmComponent,
-    CallRequestCancelComponent
+    CallRequestCancelComponent,
+    VideoShareComponent
   ]
 })
 export class ComponentsModule {}

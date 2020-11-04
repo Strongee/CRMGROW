@@ -2,7 +2,7 @@
   <div class="mx-3 my-2">
     <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
     <h4 class="text-center font-weight-bold mb-4">Welcome back!</h4>
-    <p class="f-3 text-center">Doesn't have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/signup']">Sign Up</a></p>
+    <p class="f-3 text-center">Don't have an account yet? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/signup']">Sign Up</a></p>
     <button type="button" class="social-btn btn border-primary d-block w-100 mt-4 font-weight-bold">
       <span>Sign In with Google</span>
     </button>
@@ -34,7 +34,7 @@
           <ng-container *ngIf="password.errors.minlength">Password must be at least 8 characters long!</ng-container>
         </span>
       </div>
-      <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Sign In</button>
+      <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4" [ngClass]="{loading: submitting}">Sign In</button>
     </form>
   </div>
 </div>
