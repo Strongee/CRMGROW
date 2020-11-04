@@ -28,6 +28,9 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
 import { DataEmptyComponent } from './data-empty/data-empty.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { CampaignAddListComponent } from './campaign-add-list/campaign-add-list.component';
+import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add-contact.component';
+import { UploadContactsComponent } from './upload-contacts/upload-contacts.component';
 import { ContactCreateComponent } from './contact-create/contact-create.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { NoteCreateComponent } from './note-create/note-create.component';
@@ -58,6 +61,9 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     DataEmptyComponent,
     ConfirmComponent,
     SelectLeaderComponent,
+    CampaignAddListComponent,
+    CampaignAddContactComponent,
+    UploadContactsComponent,
     ContactCreateComponent,
     TaskCreateComponent,
     NoteCreateComponent
@@ -67,7 +73,7 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     SharedModule,
     RouterModule,
     TranslateModule.forChild({ extend: true }),
-    NgxCropperJsModule
+    NgxCropperJsModule,
   ],
   exports: [
     TopbarComponent,
@@ -86,6 +92,9 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     InputTeamComponent,
     SelectUserComponent,
     SelectLeaderComponent,
+    CampaignAddListComponent,
+    CampaignAddContactComponent,
+    UploadContactsComponent,
     DataEmptyComponent,
     SelectLeaderComponent
   ],

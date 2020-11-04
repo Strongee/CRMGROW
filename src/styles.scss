@@ -903,6 +903,19 @@ table {
   border-radius: 50%;
 }
 
+.contact-avatar {
+  background: #101336;
+  color: $color-white;
+  line-height: 32px;
+  text-align: center;
+  font-size: 14px;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: -2px 2px 4px #ccc;
+}
+
 .opacity-6 {
   opacity: 0.6;
 }
@@ -921,6 +934,43 @@ ul.ngx-pagination {
   }
 }
 
+.status {
+  color: #FFFFFF;
+  width: 60px;
+  text-align: center;
+  font-size: 11px;
+  cursor: pointer;
+
+  .pending {
+    background-color: #0000FF;
+    border-radius: 5px;
+    padding: 3px 5px;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .canceled {
+    background-color: #d92121;
+    border-radius: 5px;
+    padding: 3px 5px;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .planned {
+    background-color: #f28422;
+    border-radius: 5px;
+    padding: 3px 5px;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .finished, .SENT {
+    background-color: #04b800;
+    border-radius: 5px;
+    padding: 3px 5px;
+    text-align: center;
+    font-size: 11px;
 // DatePicker Style
 
 .datepicker {

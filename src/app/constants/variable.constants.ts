@@ -1,3 +1,5 @@
+
+export const ContactPageSize = 50;
 export const TIMES = [
   { id: '00:00:00.000', text: '12:00 AM' },
   { id: '00:30:00.000', text: '12:30 AM' },

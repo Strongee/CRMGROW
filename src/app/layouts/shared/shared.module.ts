@@ -20,11 +20,22 @@ import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-
 import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgxPaginationModule } from 'ngx-pagination';
+import {
+  TimeagoModule,
+  TimeagoIntl,
+  TimeagoFormatter,
+  TimeagoCustomFormatter
+} from 'ngx-timeago';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
-  declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
+  declarations: [
+    StripePipe,
+    LoadingButtonComponent,
+    LoadingOverlayComponent,
+  ],
   imports: [
     CommonModule,
     NgbModule,
@@ -48,6 +59,8 @@ import { NgPipesModule } from 'ngx-pipes';
       useFactory: adapterFactory
     }),
     FileUploadModule,
+    NgxPaginationModule,
+    TimeagoModule.forRoot(),
     GooglePlaceModule
   ],
   exports: [
@@ -74,6 +87,8 @@ import { NgPipesModule } from 'ngx-pipes';
     LoadingButtonComponent,
     LoadingOverlayComponent,
     CalendarModule,
+    NgxPaginationModule,
+    TimeagoModule,
     GooglePlaceModule
   ]
 })

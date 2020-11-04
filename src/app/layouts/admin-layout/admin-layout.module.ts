@@ -19,12 +19,11 @@ import { PaymentComponent } from '../../pages/payment/payment.component';
 import { ActivitiesComponent } from '../../pages/activities/activities.component';
 import { HomeComponent } from '../../pages/home/home.component';
 import { AffiliateComponent } from '../../pages/affiliate/affiliate.component';
-import { CompaignsComponent } from '../../pages/compaigns/compaigns.component';
 import { AutomationsComponent } from '../../pages/automations/automations.component';
 import { SettingsComponent } from '../../pages/settings/settings.component';
 import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
-import { NgxPaginationModule } from 'ngx-pagination';
+
 import { TemplateComponent } from '../../pages/template/template.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { TeamComponent } from '../../pages/team/team.component';
@@ -32,6 +31,9 @@ import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
+import { CampaignComponent } from '../../pages/campaign/campaign.component';
+import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
+import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 import { NotificationsComponent } from '../../pages/notifications/notifications.component';
 import { AssistantComponent } from '../../pages/assistant/assistant.component';
 import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.component';
@@ -53,7 +55,6 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     ActivitiesComponent,
     HomeComponent,
     AffiliateComponent,
-    CompaignsComponent,
     AutomationsComponent,
     SettingsComponent,
     TeamsComponent,
@@ -62,6 +63,9 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     SocialProfileComponent,
     TeamComponent,
     CalendarComponent,
+    CampaignComponent,
+    CampaignListComponent,
+    CampaignBulkMailingComponent,
     NotificationsComponent,
     AssistantComponent,
     LeadCaptureComponent,
@@ -74,11 +78,10 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     ComponentsModule,
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
-    NgxPaginationModule,
     NgxSpinnerModule,
     ShareButtonsModule,
     ShareIconsModule,
-    MatExpansionModule,
+    MatExpansionModule
   ],
   schemas: []
 })

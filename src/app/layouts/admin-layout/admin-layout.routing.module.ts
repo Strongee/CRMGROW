@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { VideoCreateComponent } from 'src/app/components/video-create/video-create.component';
 import { AffiliateComponent } from 'src/app/pages/affiliate/affiliate.component';
 import { AutomationsComponent } from 'src/app/pages/automations/automations.component';
-import { CompaignsComponent } from 'src/app/pages/compaigns/compaigns.component';
 import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
 import { HomeComponent } from 'src/app/pages/home/home.component';
 import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
@@ -14,6 +13,9 @@ import { TemplatesComponent } from 'src/app/pages/templates/templates.component'
 import { TemplateComponent } from 'src/app/pages/template/template.component';
 import { TeamComponent } from '../../pages/team/team.component';
 import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
+import { CampaignComponent } from '../../pages/campaign/campaign.component';
+import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
+import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -59,10 +61,31 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'compaigns',
-    component: CompaignsComponent,
+    path: 'campaign',
+    component: CampaignComponent,
     data: {
-      title: 'Compaigns'
+      title: 'Campaign'
+    }
+  },
+  {
+    path: 'campaign/list',
+    component: CampaignListComponent,
+    data: {
+      title: 'Campaign List'
+    }
+  },
+  {
+    path: 'campaign/bulk',
+    component: CampaignBulkMailingComponent,
+    data: {
+      title: 'Campaign Bulk'
+    }
+  },
+  {
+    path: 'campaign/list/:id',
+    component: CampaignListComponent,
+    data: {
+      title: 'Campaign List'
     }
   },
   {

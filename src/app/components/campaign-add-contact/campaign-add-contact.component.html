@@ -1,0 +1,142 @@
+<form #actionForm="ngForm" class="dialog-container form-group" (ngSubmit)="addContacts()">
+  <div class="v-center justify-content-between mx-0">
+    <h4 class="f-22 font-weight-bold c-black">Add Contacts</h4>
+    <div class="v-center">
+      <button class="btn btn-white font-weight-bold f-4">Advanced Filter</button>
+      <button class="v-center border-0 bgc-trans close-button ml-2" mat-dialog-close>
+        <i class="i-icon i-close bgc-black" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+  <mat-dialog-content class="content-section">
+    <ng-container>
+      <div class="my-3">
+        <label>Search</label>
+        <div clas="contact-input">
+          <input type="text" class="form-control" [(ngModel)]="searchedName" name="searchContact" (keypress)="searchContacts()"
+                 placeholder="Start typing contact info to search">
+        </div>
+      </div>
+      <div class="d-flex justify-content-end align-items-center mt-5">
+        <div class="f-5 font-weight-bold mb-2" *ngIf="contactCount">{{contactCount}} contact(s)</div>
+        <div class="ml-3 pagination-wrapper" *ngIf="contactCount">
+          <pagination-controls (pageChange)="setPageContacts($event)" id="searchContacts" maxSize="5" previousLabel=""
+                               nextLabel=""></pagination-controls>
+        </div>
+      </div>
+      <div class="v-center justify-content-center my-3" *ngIf="pageContacts.length && isSelectedPage() && !isLoading">
+        <div class="f-6 font-weight-bold">{{selectedContacts.selected.length}} contacts on this page is selected.</div>
+        <button class="btn btn-white-blue ml-4" (click)="selectAllContact()" *ngIf="selectedContacts.selected.length != contactCount">Select All {{contactCount}} Contacts</button>
+        <button class="btn btn-white-blue ml-2" (click)="clearAllSelected()">Clear Selected</button>
+      </div>
+      <ng-container *ngIf="isLoading">
+        <div class="px-3 pb-3">
+          <div class="bg-white rounded">
+            <app-loading-overlay [type]="'table'"></app-loading-overlay>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isLoading && contactCount">
+        <table class="table campaign-add-contact-table" [class.loading]="submitted" [class.searching]="isSearchLoading">
+          <thead>
+          <tr>
+            <th class="check-cell border-top-0">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="select-all-contacts" (change)="selectAllPage()" [checked]="isSelectedPage()">
+                <label class="custom-control-label" for="select-all-contacts"></label>
+              </div>
+            </th>
+            <th class="name">Contact Name</th>
+            <th class="label">Label</th>
+            <th class="last-activity">Last Activity</th>
+            <th class="tags">Tags</th>
+            <th class="email-address">Email address</th>
+            <th class="phone-number">Phone number</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="contacts">
+            <tr *ngFor="let contact of contacts | paginate: {id: 'searchContacts', itemsPerPage: 50, currentPage: currentPage, totalItems: contactCount}">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="contact-{{contact._id}}" (change)="selectedContacts.toggle(contact._id)" [checked]="selectedContacts.isSelected(contact._id)">
+                  <label class="custom-control-label" for="contact-{{contact._id}}"></label>
+                </div>
+              </td>
+              <td class="name">
+                <div class="v-center">
+                  <div>
+                    <div class="contact-avatar">
+                      <ng-container *ngIf="!contact.first_name && !contact.last_name; else hasNamedAvatar">
+                        UC
+                      </ng-container>
+                      <ng-template #hasNamedAvatar>
+                        <ng-container *ngIf="contact.first_name != ''; else lastnameAvatar">
+                          {{contact.first_name.length > 1 ? contact.first_name[0] + contact.first_name[1] : contact.first_name[0]}}
+                        </ng-container>
+                        <ng-template #lastnameAvatar>
+                          <ng-container *ngIf="contact.last_name != ''">
+                            {{contact.last_name[0].length > 1 ? contact.last_name[0] + contact.last_name[1] : contact.last_name[0] }}
+                          </ng-container>
+                        </ng-template>
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="f-4 ml-2" *ngIf="!contact.first_name && !contact.last_name">Unnamed Contact</div>
+                  <div class="f-4 ml-2" *ngIf="contact.first_name || contact.last_name">{{contact.first_name + ' ' + contact.last_name}}</div>
+                </div>
+              </td>
+              <td class="label">
+                <div class="v-center">
+                  <div class="label-container">
+                    <div class="label-rectangle" [ngStyle]="{'background-color': getLabelById(contact.label).color}"></div>
+                    <div class="label-circle" [ngStyle]="{'background-color': getLabelById(contact.label).color}"></div>
+                  </div>
+                  <span class="f-3 font-weight-bold ml-2">{{getLabelById(contact.label).name}}</span>
+                </div>
+              </td>
+              <td class="last-activity">
+                <div class="v-center">
+                  <div class="v-center icon-button mr-2">
+                    <i class="i-icon bgc-dark i-activity"></i>
+                  </div>
+                  <div class="activity">
+                    <div class="f-4 font-weight-bold">{{contact.last_activity && contact.last_activity.content}}</div>
+                    <div class="f-2 c-black opacity-6">{{(contact.last_activity && contact.last_activity.updated_at) | timeago }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="tags">
+                <ng-container *ngIf="contact.tags.length">
+                  <ng-container *ngIf="contact.tags?.length > 1; else oneTag">
+                    <div class="tag f-3 font-weight-bold">{{contact.tags[0]}}</div>
+                    <div class="f-2 c-black opacity-6 ml-1">+ {{contact.tags.length - 1}} more</div>
+                  </ng-container>
+                  <ng-template #oneTag>
+                    <div class="tag f-4 font-weight-bold">{{contact.tags[0]}}</div>
+                  </ng-template>
+                </ng-container>
+              </td>
+              <td class="email-address">
+                <div class="f-3 font-weight-bold">{{contact.email}}</div>
+              </td>
+              <td class="phone-number">
+                <div class="f-3 c-blue font-weight-bold">{{contact.cell_phone}}</div>
+              </td>
+            </tr>
+          </ng-container>
+        </table>
+      </ng-container>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions class="justify-content-end mx-0">
+    <button type="button" mat-dialog-close class="btn btn-white f-6 font-weight-bold ml-2">
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-primary font-weight-bold f-6" *ngIf="!submitted">
+      Create
+    </button>
+    <app-loading-button [class]="'bgc-blue text-white font-weight-bold f-6'" [title]="'Creating...'" *ngIf="submitted">
+    </app-loading-button>
+  </mat-dialog-actions>
+</form>

@@ -163,7 +163,7 @@
                           <ng-template #overTemplate>
                             <div class="owner" *ngFor="let mIndex of [0,1,2,3]">
                               <ng-container *ngIf="team.owner[mIndex].picture_profile; else ownNamePlaceholder">
-                                <img [src]="team.owner[mIndex].picture_profile" class="avatar shadow-avatar" />
+                                <img [src]="team.owner[mIndex].picture_profile" class="avatar shadow-avatar"/>
                               </ng-container>
                               <ng-template #ownNamePlaceholder>
                                 <div class="name-avatar shadow-avatar">{{team.owner[mIndex].username[0]}}</div>

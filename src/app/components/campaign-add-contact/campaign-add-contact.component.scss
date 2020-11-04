@@ -1,0 +1,58 @@
+.dialog-container{
+  padding: 1.5rem 1rem;
+
+  .close-button {
+    width: auto;
+    padding: 0;
+
+    &:focus, &:hover {
+      color: #000000;
+      background-color: transparent;
+    }
+
+    .i-icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.campaign-add-contact-table {
+  .label-container {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+
+    .label-rectangle {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      opacity: 0.2;
+    }
+
+    .label-circle {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+  }
+
+  .icon-button {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.submitted {
+    filter: blur(1px);
+    pointer-events: none;
+  }
+
+  &.searching {
+    filter: blur(1px);
+    pointer-events: none;
+  }
+}

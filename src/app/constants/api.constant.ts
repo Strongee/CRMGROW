@@ -31,9 +31,12 @@ export const ACTIVITY = {
 };
 export const CONTACT = {
   LOAD_ALL: 'contact',
-  LOAD_PAGE: 'contact/last',
+  LOAD_PAGE: 'contact/last/',
   QUICK_SEARCH: 'contact/search-easy',
-  LATEST_CONTACTS: 'video/latest-sent'
+  LATEST_CONTACTS: 'video/latest-sent',
+  SELECT_ALL: 'contact/select-all',
+  LOAD_SERACH: 'contact/advance-search',
+  LOAD_BY_IDS: 'contact/get'
 };
 export const VIDEO = {
   CREATE: 'video/create',
@@ -125,6 +128,13 @@ export const TEAM = {
   DELETE_CALL: '/team/call/',
   LOAD_LEADERS: 'team/load-leaders'
 };
+export const LABEL = {
+  CREATE: 'label',
+  PUT: 'label/',
+  GET: 'label',
+  BULK_CREATE: 'label/create',
+  DELETE: 'label/'
+}
 
 export const AUTOMATION = {
   SEARCH: 'automation/search'

@@ -44,4 +44,32 @@ export class ContactService extends HttpService {
         catchError(this.handleError('GET LATEST CONTACTS', []))
       );
   }
+  getPageContacts(page, sort): Observable<any> {
+    return this.httpClient
+      .post(this.server + CONTACT.LOAD_PAGE + page, sort)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('LOAD CONTACTS', []))
+      );
+  }
+  selectAll(): Observable<any> {
+    return this.httpClient.get(this.server + CONTACT.SELECT_ALL).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('SELECT ALL CONTACTS', []))
+    );
+  }
+  getSearchedContacts(query): Observable<any> {
+    return this.httpClient.post(this.server + CONTACT.LOAD_SERACH, query).pipe(
+      map((res) => res),
+      catchError(this.handleError('SEARCH CONTACTS', []))
+    );
+  }
+  getContactsByIds(ids): Observable<any> {
+    return this.httpClient
+      .post(this.server + CONTACT.LOAD_BY_IDS, { ids })
+      .pipe(
+        map((res) => res['data'] || [] ),
+        catchError(this.handleError('SEARCH CONTACTS', []))
+      );
+  }
 }
