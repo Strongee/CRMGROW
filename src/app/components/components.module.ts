@@ -25,6 +25,10 @@ import { SelectUserComponent } from './select-user/select-user.component';
 import { JoinCallRequestComponent } from './join-call-request/join-call-request.component';
 import { CallRequestConfirmComponent } from './call-request-confirm/call-request-confirm.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog.component';
+import { CalendarContactsComponent } from './calendar-contacts/calendar-contacts.component';
+import { CalendarEventComponent } from './calendar-event/calendar-event.component';
+import { CalendarRecurringDialogComponent } from './calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
 import { DataEmptyComponent } from './data-empty/data-empty.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
@@ -61,6 +65,10 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     DataEmptyComponent,
     ConfirmComponent,
     SelectLeaderComponent,
+    CalendarDialogComponent,
+    CalendarContactsComponent,
+    CalendarEventComponent,
+    CalendarRecurringDialogComponent,
     CampaignAddListComponent,
     CampaignAddContactComponent,
     UploadContactsComponent,
@@ -92,6 +100,7 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     InputTeamComponent,
     SelectUserComponent,
     SelectLeaderComponent,
+    CalendarDialogComponent,
     CampaignAddListComponent,
     CampaignAddContactComponent,
     UploadContactsComponent,
