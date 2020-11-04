@@ -34,6 +34,7 @@ export const CONTACT = {
   LOAD_PAGE: 'contact/last/',
   QUICK_SEARCH: 'contact/search-easy',
   LATEST_CONTACTS: 'video/latest-sent',
+  NORMAL_SEARCH: 'contact/search',
   SELECT_ALL: 'contact/select-all',
   LOAD_SERACH: 'contact/advance-search',
   LOAD_BY_IDS: 'contact/get'

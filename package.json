@@ -40,6 +40,7 @@
     "google-libphonenumber": "^3.2.13",
     "intl-tel-input": "^17.0.5",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "ng2-file-upload": "^1.4.0",
     "ngx-bootstrap": "^6.1.0",
     "ngx-cleave-directive": "^1.1.3",

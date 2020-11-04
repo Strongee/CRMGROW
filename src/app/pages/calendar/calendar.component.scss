@@ -137,8 +137,61 @@
             min-width: 12px;
         }
     }
-    .dropdown-menu {
-        min-width: 7rem;
+    .dropdown {
+        &:hover, &:active, &:focus {
+            box-shadow: 0 5px 24px -5px rgba(16, 19, 54, 0.24);
+        }
+        .dropdown-menu {
+            min-width: 14rem;
+            left: unset !important;
+            right: 8px;
+            .first-calendar {
+                .custom-control-input {
+                    &:checked ~ .custom-control-label {
+                        &:before {
+                            border-color: #04B800;
+                            background-color:#04B800;
+                        }
+                    }
+                    &:focus ~ .custom-control-label {
+                        &:before {
+                            border-color: #04B800;
+                        }
+                    }
+                    &:active ~ .custom-control-label {
+                        &:before {
+                            border-color: #04B800;
+                        }
+                    }
+                }
+                .custom-control-label {
+                    opacity: 1;
+                }
+            }
+            .second-calendar {
+                .custom-control-input {
+                    &:checked ~ .custom-control-label {
+                        &:before {
+                            border-color: #F7B500;
+                            background-color:#F7B500;
+                        }
+                    }
+                    &:focus ~ .custom-control-label {
+                        &:before {
+                            border-color: #F7B500;
+                        }
+                    }
+                    &:active ~ .custom-control-label {
+                        &:before {
+                            border-color: #F7B500;
+                        }
+                    }
+                }
+                .custom-control-label {
+                    opacity: 1;
+                }
+            }
+        }
     }
     .date {
         width: 300px;

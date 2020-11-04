@@ -7,69 +7,136 @@
     <div class="c-dark font-weight-bold page-title">
         Calendar
     </div>
-    <div class="v-center justify-content-end my-3 calendar-time">
-        <button class="v-center btn btn-blue f-4 font-weight-bold text-white mr-2">
-            <i class="i-icon i-plus bg-white d-block mr-2"></i>
-            New meeting
-        </button>
-        <button class="v-center btn-blue text-white small-button mr-2">
-            <i class="i-icon i-plus bg-white d-block"></i>
-        </button>
-        <div class="v-center">
-            <mat-icon
-            class="text-primary"
-            mwlCalendarPreviousView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="calendarDateChange()"
-            >
-            keyboard_arrow_left
-            </mat-icon>
-            <mat-icon
-            class="text-primary"
-            mwlCalendarNextView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="calendarDateChange()"
-            >
-            keyboard_arrow_right
-            </mat-icon>
-        </div>
-        <div class="v-center mr-2 justify-content-center c-dark date">
-            <!-- {{ viewDate | calendarDate: view + 'ViewTitle':locale }} -->
-            <span class="desktop" *ngIf="view == 'month'">
-                {{viewDate | date:'MMMM y'}}
-            </span>
-            <span class="desktop" *ngIf="view == 'week'">
-                {{weekStart}} - {{weekEnd}} {{viewDate | date:'MMMM y'}}
-            </span>
-            <span class="desktop" *ngIf="view == 'day'">
-                {{viewDate | date:'EEEE, MMMM d y'}}
-            </span>
-            <span class="mobile" *ngIf="view == 'month'">
-                {{viewDate | date:'MMM y'}}
-            </span>
-            <span class="mobile" *ngIf="view == 'week'">
-                {{weekStart}} - {{weekEnd}} {{viewDate | date:'MMM y'}}
-            </span>
-            <span class="mobile" *ngIf="view == 'day'">
-                {{viewDate | date:'EEE, MMM d y'}}
-            </span>
-        </div>
-        <div class="v-center text-primary" ngbDropdown>
-            <div ngbDropdownToggle>
+    <div class="v-center justify-content-between my-3 calendar-time">
+        <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+        </app-slide-tab>
+        <div class="v-center justify-content-end">
+            <div class="form-group p-2 m-0" ngbDropdown>
+                <i class="d-block i-icon i-calendar bgc-blue" ngbDropdownToggle></i>
+                <div ngbDropdownMenu class="light px-3">
+                    <div class="first-calendar">
+                        <div class="v-center justify-content-between">
+                            <label class="f-1 font-weight-bold m-0">gsteve@gmail.com</label>
+                            <button class="btn btn-white f-3 font-weight-bold p-0">Hide</button>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="first-calendar-1"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="first-calendar-1"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 1</span>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="first-calendar-2"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="first-calendar-2"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 2</span>
+                        </div>
+                    </div>
+                    <div class="second-calendar mt-2">
+                        <div class="v-center justify-content-between">
+                            <label class="f-1 font-weight-bold m-0">gsteve@yahoo.com</label>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="second-calendar-1"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="second-calendar-1"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 1</span>
+                        </div>
+                        <div class="v-center mt-1">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="second-calendar-2"
+                                />
+                                <label
+                                  class="custom-control-label"
+                                  for="second-calendar-2"
+                                ></label>
+                            </div>
+                            <span class="f-3 font-weight-bold">Calendar 2</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div ngbDropdownMenu class="light">
-                <div class="dropdown-item c-dark" (click)="calendarChange('month')">
-                    Month
+            <div class="v-center">
+                <mat-icon
+                class="text-primary"
+                mwlCalendarPreviousView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                (viewDateChange)="calendarDateChange()"
+                >
+                keyboard_arrow_left
+                </mat-icon>
+                <div
+                    class="text-primary font-weight-bold c-pointer px-2"
+                    mwlCalendarToday
+                    [(viewDate)]="viewDate"
+                >
+                    Go to today
                 </div>
-                <div class="dropdown-item c-dark" (click)="calendarChange('week')">
-                    Week
-                </div>
-                <div class="dropdown-item c-dark" (click)="calendarChange('day')">
-                    Day
-                </div>
+                <mat-icon
+                class="text-primary"
+                mwlCalendarNextView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                (viewDateChange)="calendarDateChange()"
+                >
+                keyboard_arrow_right
+                </mat-icon>
             </div>
+            <div class="v-center mr-2 justify-content-center c-dark date">
+                <span class="desktop" *ngIf="view == 'month'">
+                    {{viewDate | date:'MMMM y'}}
+                </span>
+                <span class="desktop" *ngIf="view == 'week'">
+                    {{weekStart}} - {{weekEnd}} {{viewDate | date:'MMMM y'}}
+                </span>
+                <span class="desktop" *ngIf="view == 'day'">
+                    {{viewDate | date:'EEEE, MMMM d y'}}
+                </span>
+                <span class="mobile" *ngIf="view == 'month'">
+                    {{viewDate | date:'MMM y'}}
+                </span>
+                <span class="mobile" *ngIf="view == 'week'">
+                    {{weekStart}} - {{weekEnd}} {{viewDate | date:'MMM y'}}
+                </span>
+                <span class="mobile" *ngIf="view == 'day'">
+                    {{viewDate | date:'EEE, MMM d y'}}
+                </span>
+            </div>
+            <button class="v-center btn btn-blue f-4 font-weight-bold text-white ml-2">
+                <i class="i-icon i-plus bg-white d-block mr-2"></i>
+                New meeting
+            </button>
+            <button class="v-center btn-blue text-white small-button ml-2">
+                <i class="i-icon i-plus bg-white d-block"></i>
+            </button>
         </div>
     </div>
     <ng-template #customCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
