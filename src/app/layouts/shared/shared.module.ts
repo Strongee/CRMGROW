@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { StripePipe } from '../../pipes/stripe.pipe';
@@ -48,6 +49,7 @@ import { NgPipesModule } from 'ngx-pipes';
     MatIconModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
+    ClipboardModule,
     NgPipesModule,
     QuillModule.forRoot(),
     CalendarModule.forRoot({
@@ -73,6 +75,7 @@ import { NgPipesModule } from 'ngx-pipes';
     MatSelectModule,
     MatIconModule,
     NgxMatSelectSearchModule,
+    ClipboardModule,
     NgPipesModule,
     LoadingButtonComponent,
     StripePipe,

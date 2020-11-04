@@ -1,0 +1,56 @@
+<h1 mat-dialog-title>Invite member to team</h1>
+<mat-dialog-content>
+  <div class="form-group">
+    <label>search for user</label>
+    <app-search-user
+      [placeholder]="'Start typing user name or email'"
+      [isNewAvailable]="true"
+      [primaryField]="'email'"
+      (onSelect)="addMember($event)">
+    </app-search-user>
+  </div>
+  <div class="new-list">
+    <label class="f-1">MEMBERS TO SEND INVITATION</label>
+    <hr class="my-0">
+    <div class="list-content py-1">
+      <div class="new-member v-center py-2" *ngFor="let member of newMembers">
+        <img *ngIf="member.picture_profile; else avatarNameTemplate" [src]="member.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+        <ng-template #avatarNameTemplate>
+          <div class="form-avatar rounded-circle bg-dark mr-3">{{member.avatarName}}</div>
+        </ng-template>
+        <div class="info">
+          <div class="f-5">{{member.user_name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="old-list">
+    <lable class="f-1">INVITATION IN PROGRESS</lable>
+    <hr class="my-0">
+    <div class="list-content py-1">
+      <div class="old-member v-center" *ngFor="let member of oldMembers">
+        <img *ngIf="member.picture_profile; else avatarNameTemplate" [src]="member.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+        <ng-template #avatarNameTemplate>
+          <div class="form-avatar rounded-circle bg-dark mr-3">{{member.avatarName}}</div>
+        </ng-template>
+        <div class="info">
+          <div class="f-5">{{member.user_name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="external-info">
+    <div class="form-group">
+      <label>invite external contact</label>
+      <input type="url" disabled name="team_link" #team_link="ngModel" class="form-control c-blue" [(ngModel)]="teamLink">
+    </div>
+    <div class="text-center f-3">
+      <a class="font-weight-bold" [cdkCopyToClipboard]="teamLink">Copy link</a>
+      <span> above and send to invite a new user to platform and your team</span>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn c-blue" mat-dialog-cancel>Cancel</button>
+  <button class="btn btn-primary">Save</button>
+</mat-dialog-actions>

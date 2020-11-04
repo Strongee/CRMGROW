@@ -37,8 +37,9 @@ import { UploadContactsComponent } from './upload-contacts/upload-contacts.compo
 import { ContactCreateComponent } from './contact-create/contact-create.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { NoteCreateComponent } from './note-create/note-create.component';
-import { TeamJoinComponent } from './team-join/team-join.component';
 import { JoinTeamComponent } from './join-team/join-team.component';
+import { InviteTeamComponent } from './invite-team/invite-team.component';
+import { SearchUserComponent } from './search-user/search-user.component';
 
 @NgModule({
   declarations: [
@@ -77,15 +78,16 @@ import { JoinTeamComponent } from './join-team/join-team.component';
     ContactCreateComponent,
     TaskCreateComponent,
     NoteCreateComponent,
-    TeamJoinComponent,
-    JoinTeamComponent
+    JoinTeamComponent,
+    InviteTeamComponent,
+    SearchUserComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule,
     TranslateModule.forChild({ extend: true }),
-    NgxCropperJsModule,
+    NgxCropperJsModule
   ],
   exports: [
     TopbarComponent,

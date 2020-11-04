@@ -63,7 +63,20 @@ export class TeamService extends HttpService {
         catchError(this.handleError('SEARCH TEAMS BY USER', []))
       );
   }
-
+  /**
+   * Search user -> This is part of the team and user search
+   * @param keyword: string to search users
+   */
+  searchUser(keyword: string): Observable<User[]> {
+    return this.httpClient
+      .post(this.server + TEAM.SEARCH_TEAM_USER, { search: keyword })
+      .pipe(
+        map((res) =>
+          (res['user_array'] || []).map((e) => new User().deserialize(e))
+        ),
+        catchError(this.handleError('SEARCH USERS', {}))
+      );
+  }
   /**
    * Send the request to join
    * @param request: request object to join (searchedUser: user_id array || undefined, team_id: id of team)
