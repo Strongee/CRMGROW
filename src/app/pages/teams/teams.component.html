@@ -3,7 +3,7 @@
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
     <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="teams.length + invitedTeams.length && selectedTab.id === 'teams'">
-      <button class="btn btn-blue text-white f-4">Join team</button>
+      <button class="btn btn-blue text-white f-4" (click)="joinForm()">Join team</button>
       <button class="v-center btn btn-blue f-4 text-white ml-2">
         <i class="bgc-white i-icon i-plus mr-2"></i>
         Create new team

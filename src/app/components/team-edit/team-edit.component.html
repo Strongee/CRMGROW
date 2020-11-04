@@ -17,9 +17,17 @@
       </div>
     </div>
   </div>
-  <div mat-dialog-actions class="mx-0" align="end">
-    <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
-    <button class="btn btn-blue text-white f-6 font-weight-bold" *ngIf="!updating" type="submit">Save</button>
-    <app-loading-button [class]="'btn btn-blue text-white f-6 font-weight-bold'" title="Saving..." *ngIf="updating"></app-loading-button>
+  <div mat-dialog-actions class="v-center justify-content-between">
+    <div>
+      <button class="v-center btn c-red f-6 font-weight-bold" (click)="deleteTeam()">
+        <i class="i-icon i-trash bgc-red d-block mr-2"></i>
+        <span class="c-red">Delete Team</span>
+      </button>
+    </div>
+    <div>
+      <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
+      <button class="btn btn-blue text-white f-6 font-weight-bold" *ngIf="!updating" type="submit">Save</button>
+      <app-loading-button [class]="'btn btn-blue text-white f-6 font-weight-bold'" title="Saving..." *ngIf="updating"></app-loading-button>
+    </div>
   </div>
 </form>

@@ -14,6 +14,7 @@ import { TeamDeleteComponent } from '../../components/team-delete/team-delete.co
 import { JoinCallRequestComponent } from '../../components/join-call-request/join-call-request.component';
 import { CallRequestConfirmComponent } from '../../components/call-request-confirm/call-request-confirm.component';
 import { CallRequestCancelComponent } from '../../components/call-request-cancel/call-request-cancel.component';
+import { TeamJoinComponent } from '../../components/team-join/team-join.component';
 
 @Component({
   selector: 'app-teams',
@@ -588,7 +589,21 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   openForm(): void {}
 
-  joinForm(): void {}
+  joinForm(): void {
+    console.log("join team =============>");
+    this.dialog
+      .open(TeamJoinComponent, {
+        width: '96vw',
+        maxWidth: '600px',
+        height: 'auto',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+        }
+      });
+  }
 
   getDuration(duration): string {
     if (duration === 60) {

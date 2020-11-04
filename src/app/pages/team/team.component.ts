@@ -13,6 +13,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TabItem } from '../../utils/data.types';
 import { VideoShareComponent } from '../../components/video-share/video-share.component';
+import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
 
 @Component({
   selector: 'app-team',
@@ -939,5 +940,22 @@ export class TeamComponent implements OnInit {
       }
     }
     return true;
+  }
+  editTeam(): void {
+    this.dialog
+      .open(TeamEditComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          team: this.team
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.team = res;
+        }
+      });
   }
 }

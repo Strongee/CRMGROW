@@ -37,6 +37,8 @@ import { UploadContactsComponent } from './upload-contacts/upload-contacts.compo
 import { ContactCreateComponent } from './contact-create/contact-create.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { NoteCreateComponent } from './note-create/note-create.component';
+import { TeamJoinComponent } from './team-join/team-join.component';
+
 @NgModule({
   declarations: [
     TopbarComponent,
@@ -73,7 +75,8 @@ import { NoteCreateComponent } from './note-create/note-create.component';
     UploadContactsComponent,
     ContactCreateComponent,
     TaskCreateComponent,
-    NoteCreateComponent
+    NoteCreateComponent,
+    TeamJoinComponent
   ],
   imports: [
     CommonModule,

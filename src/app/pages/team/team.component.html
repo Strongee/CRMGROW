@@ -88,7 +88,7 @@
               <i class="bgc-white i-icon i-plus mr-2"></i>
               Invite member
             </button>
-            <button class="v-center btn btn-white-blue f-4 font-weight-bold ml-2">
+            <button class="v-center btn btn-white-blue f-4 font-weight-bold ml-2" (click)="editTeam()">
               <i class="bgc-blue i-icon i-edit mr-2"></i>
               Edit team
             </button>
@@ -165,7 +165,7 @@
                 </div>
               </td>
               <td class="status-cell">
-                <div class="label-cell status ml-auto">
+                <div class="label-cell status">
                   <select (change)="toggleMember(member)"
                           class="c-white f-2"
                           [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
@@ -211,10 +211,10 @@
               </td>
               <td class="status-cell">
                 <div class="v-center">
-                  <div class="status">
+                  <div class="status mr-3">
                     <div class="Invite c-white text-center f-2">Invite sent</div>
                   </div>
-                  <div class="ml-2 btn-white-blue remind f-2">Remind</div>
+                  <div class="btn-white-blue remind f-2">Remind</div>
                 </div>
               </td>
               <td class="added-cell">
