@@ -71,20 +71,84 @@ export const TIMEZONE = [
   }
 ];
 
-export const QuillEditor = {
-  toolbar: {
-    container: [
-      [{ font: [] }],
-      [{ size: ['small', false, 'large', 'huge'] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ header: 1 }, { header: 2 }],
-      [{ color: [] }, { background: [] }],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ align: [] }],
-      ['link', 'image']
-    ]
+export const COUNTRIES = [
+  {
+    code: 'US',
+    name: 'United States'
   },
-  imageResize: true
+  {
+    code: 'CA',
+    name: 'Canada'
+  }
+];
+export const REGIONS = {
+  US: [
+    'Alabama',
+    'Alaska',
+    'Arizona',
+    'Arkansas',
+    'California',
+    'Colorado',
+    'Connecticut',
+    'Delaware',
+    'Florida',
+    'Georgia',
+    'Guam',
+    'Hawaii',
+    'Idaho',
+    'Illinois',
+    'Indiana',
+    'Iowa',
+    'Kansas',
+    'Kentucky',
+    'Louisiana',
+    'Maine',
+    'Maryland',
+    'Massachusetts',
+    'Michigan',
+    'Minnesota',
+    'Mississippi',
+    'Missouri',
+    'Montana',
+    'Nebraska',
+    'Nevada',
+    'New Hampshire',
+    'New Jersey',
+    'New Mexico',
+    'New York',
+    'North Carolina',
+    'North Dakota',
+    'Ohio',
+    'Oklahoma',
+    'Oregon',
+    'Palau',
+    'Pennsylvania',
+    'Puerto Rico',
+    'Rhode Island',
+    'South Carolina',
+    'South Dakota',
+    'Tennessee',
+    'Texas',
+    'Utah',
+    'Vermont',
+    'Virginia',
+    'Washington',
+    'West Virginia',
+    'Wisconsin',
+    'Wyoming'
+  ],
+  CA: [
+    'Alberta',
+    'British Columbia',
+    'Manitoba',
+    'New Brunswick',
+    'Newfoundland and Labrador',
+    'Nova Scotia',
+    'Ontario',
+    'Prince Edward Island',
+    'Quebec',
+    'Saskatchewan'
+  ]
 };
 
 export const REMINDER = [
@@ -147,6 +211,22 @@ export const YEAR = [
   { id: '2035', text: '2035' }
 ];
 
+export const QuillEditor = {
+  toolbar: {
+    container: [
+      [{ font: [] }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ header: 1 }, { header: 2 }],
+      [{ color: [] }, { background: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ align: [] }],
+      ['link', 'image']
+    ]
+  },
+  imageResize: true
+};
+
 export const INVOICES = [
   {
     number: 'CRMgrow #124577',
@@ -167,3 +247,10 @@ export const INVOICES = [
     gross: '$ 6000'
   }
 ];
+
+export const DialogSettings = {
+  CONTACT: {
+    width: '98vw',
+    maxWidth: '600px'
+  }
+};

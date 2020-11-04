@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
+import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
+import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
 import { SlideTabComponent } from './slide-tab/slide-tab.component';
 import { TabOptionComponent } from './tab-option/tab-option.component';
 import { ActionsBarComponent } from './actions-bar/actions-bar.component';
@@ -20,8 +23,14 @@ import { InputTemplateComponent } from './input-template/input-template.componen
 import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { ContactCreateComponent } from './contact-create/contact-create.component';
+import { TaskCreateComponent } from './task-create/task-create.component';
+import { NoteCreateComponent } from './note-create/note-create.component';
 @NgModule({
   declarations: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
@@ -38,7 +47,10 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     SelectUserComponent,
     VideoCreateComponent,
     ConfirmComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    ContactCreateComponent,
+    TaskCreateComponent,
+    NoteCreateComponent
   ],
   imports: [
     CommonModule,
@@ -48,6 +60,9 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     NgxCropperJsModule
   ],
   exports: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
@@ -62,6 +77,10 @@ import { SelectLeaderComponent } from './select-leader/select-leader.component';
     SelectUserComponent,
     SelectLeaderComponent
   ],
-  bootstrap: [AvatarEditorComponent, VideoShareComponent]
+  bootstrap: [
+    ContactCreateComponent,
+    AvatarEditorComponent,
+    VideoShareComponent
+  ]
 })
 export class ComponentsModule {}

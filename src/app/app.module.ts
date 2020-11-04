@@ -12,29 +12,20 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
-import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
-import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
 import {
   HttpClient,
   HttpClientModule,
   HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import { ApiInterceptor } from 'src/app/interceptors/api.interceptor';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AuthLayoutComponent,
-    AdminLayoutComponent,
-    TopbarComponent,
-    NavbarComponent,
-    SidebarComponent
-  ],
+  declarations: [AppComponent, AuthLayoutComponent, AdminLayoutComponent],
   imports: [
     BrowserAnimationsModule,
     RouterModule,
@@ -52,7 +43,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    ComponentsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }
