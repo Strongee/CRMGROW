@@ -134,7 +134,7 @@ export const LABEL = {
   GET: 'label',
   BULK_CREATE: 'label/create',
   DELETE: 'label/'
-}
+};
 
 export const AUTOMATION = {
   SEARCH: 'automation/search'
