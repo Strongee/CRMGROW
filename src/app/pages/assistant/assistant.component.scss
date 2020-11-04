@@ -1,0 +1,49 @@
+@import '../../../variables';
+
+.page-content {
+    width: 100%;
+    max-width: 550px;
+    table.table th {
+        position: sticky;
+        top: 0px;
+        background-color: white;
+        letter-spacing: 0px;
+        z-index: 11;
+    }
+    
+    th, td {
+        padding: 10px 10px;
+        vertical-align: middle !important;
+        background-color: white;
+        &.checkbox-col {
+            opacity: 1;
+        }
+    }
+    .password-col {
+        width: 120px;
+    }
+    .toggle-col, .delete-col {
+        width: 60px;
+    }
+    .avatar-wrapper {
+        display: flex;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+      
+        .avatar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          min-width: 40px;
+          height: 40px;
+          min-height: 40px;
+          background-color: $color-dark;
+          color: #ffffff;
+          font-size: 16px;
+          margin-right: 10px;
+          box-shadow: unset;
+        }
+    }
+}

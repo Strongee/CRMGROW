@@ -151,7 +151,7 @@ export class TeamService extends HttpService {
   }
   getInquiry(id): Observable<any> {
     return this.httpClient.get(this.server + TEAM.CALL + id).pipe(
-      map((res) => res),
+      map((res) => res['data'] || []),
       catchError(this.handleError('LOAD INQUIRY CALL', []))
     );
   }
@@ -183,6 +183,24 @@ export class TeamService extends HttpService {
     return this.httpClient.delete(this.server + TEAM.DELETE_CALL + id).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('DELETE TEAM CALL', []))
+    );
+  }
+  requestCall(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.REQUEST_CALL, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('REQUEST CALL', []))
+    );
+  }
+  acceptCall(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.ACCEPT_CALL, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('ACCEPT CALL', []))
+    );
+  }
+  rejectCall(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.REJECT_CALL, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('REJECT CALL', []))
     );
   }
 }

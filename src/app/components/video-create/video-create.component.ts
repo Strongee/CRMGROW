@@ -11,7 +11,8 @@ import { environment } from 'src/environments/environment';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
+import { Router } from '@angular/router';
 Quill.register('modules/imageResize', ImageResize);
 
 @Component({
@@ -29,7 +30,7 @@ export class VideoCreateComponent implements OnInit {
     id: ''
   };
   video = {
-    link: '',
+    url: '',
     title: 'Introduction to eXp Realty',
     duration: 0,
     thumbnail: '',
@@ -47,6 +48,11 @@ export class VideoCreateComponent implements OnInit {
   loadedData = false;
   videoType = '';
   fileOver = false;
+
+  uploading = false;
+  uploadTimer: any;
+  uploadTimeSubscriber: any;
+  uploaded_time = 0;
 
   themes = [
     {
@@ -89,10 +95,45 @@ export class VideoCreateComponent implements OnInit {
     private materialService: MaterialService,
     private userService: UserService,
     private toast: ToastrService,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.uploader.onAfterAddingFile = (file) => {
+      file.withCredentials = false;
+      if (this.uploader.queue.length > 1) {
+        this.uploader.queue.splice(0, 1);
+      }
+    };
+    this.uploader.onCompleteItem = (
+      item: any,
+      response: any,
+      status: any,
+      headers: any
+    ) => {
+      window['confirmReload'] = false;
+      try {
+        response = JSON.parse(response);
+        if (response['status']) {
+          const video = { ...response['data'] };
+          this.updateVideo(video);
+        } else {
+          this.toast.error('Video uploading is failed.');
+        }
+      } catch (e) {
+        console.log('Error', e);
+        this.toast.error('Video uploading is failed. Response error');
+      }
+    };
+  }
+
+  ngOnDestroy(): void {
+    this.vimeoVideoMetaSubscription &&
+      this.vimeoVideoMetaSubscription.unsubscribe();
+    this.youtubeVideoMetaSubscription &&
+      this.youtubeVideoMetaSubscription.unsubscribe();
+  }
 
   uploadVideo(): void {
     this.isStep++;
@@ -112,7 +153,7 @@ export class VideoCreateComponent implements OnInit {
     this.isActive--;
     this.videoType = '';
     this.video = {
-      link: '',
+      url: '',
       title: 'Introduction to eXp Realty',
       duration: 0,
       thumbnail: '',
@@ -139,7 +180,70 @@ export class VideoCreateComponent implements OnInit {
     this.isActive--;
   }
 
-  finishUpload(): void {}
+  finishUpload(): void {
+    if (this.videoType == 'web') {
+      this.uploading = true;
+      if (!this.video.duration) {
+        this.toast.error("Can't read video's detail information.");
+        return;
+      }
+      this.materialService
+        .createVideo({
+          ...this.video,
+          duration: this.video.duration * 1000
+        })
+        .subscribe((res) => {
+          this.uploading = false;
+          this.toast.success('Video is uploaded successfully.');
+          this.router.navigate(['/materials']);
+        });
+    } else {
+      this.uploading = true;
+      this.uploader.uploadAll();
+      // Window Reload Confirm
+      window['confirmReload'] = true;
+      this.uploadTimer = timer(0, 500);
+      this.uploadTimeSubscriber = this.uploadTimer.subscribe((timer) => {
+        if (this.uploaded_time < 60) {
+          this.uploaded_time += 0.2;
+        } else if (this.uploaded_time >= 60 && this.uploaded_time <= 80) {
+          this.uploaded_time += 0.1;
+        } else if (this.uploaded_time > 80 && this.uploaded_time <= 95) {
+          this.uploaded_time += 0.05;
+        }
+      });
+    }
+  }
+
+  updateVideo(video): void {
+    const videoId = video._id;
+    const newVideo = { ...video };
+    delete newVideo.created_at;
+    delete newVideo._v;
+    delete newVideo.user;
+    delete newVideo._id;
+    newVideo.title = this.video.title;
+    newVideo.description = this.video.description;
+    newVideo.duration = this.video.duration * 1000;
+    newVideo.thumbnail = this.video.thumbnail;
+    newVideo.site_image = this.video['site_image'];
+    newVideo.custom_thumbnail = this.video['custom_thumbnail'];
+    this.video['url'] = video.url;
+    this.materialService.uploadVideoDetail(videoId, newVideo).subscribe(
+      (res) => {
+        this.uploading = false;
+        this.toast.success('Video is uploaded successfully.');
+        this.router.navigate(['/materials']);
+      },
+      (err) => {
+        this.uploading = false;
+        this.toast.success(
+          'Video is uploaded. But the video information is not saved.'
+        );
+        this.router.navigate(['/materials']);
+      }
+    );
+  }
 
   openFileDialog(): void {
     this.fileInput.nativeElement.click();
@@ -172,14 +276,11 @@ export class VideoCreateComponent implements OnInit {
             .then((image) => {
               this.video['site_image'] = image;
             })
-            .catch((err) => {
-              console.log('Video Meta Image Load', err);
-            });
+            .catch((err) => {});
           this.videoType = 'local';
           this.uploadVideo();
         })
         .catch((err) => {
-          console.log('error', err);
           this.toast.warning(
             'Cannot read this file. Please try with standard file.'
           );
@@ -227,14 +328,14 @@ export class VideoCreateComponent implements OnInit {
   }
 
   checkVideoUrl(): void {
-    if (this.video.link.toLowerCase().indexOf('youtube.com') > -1) {
+    if (this.video.url.toLowerCase().indexOf('youtube.com') > -1) {
       this.getYoutubeId();
       if (this.loadedData == true) {
         this.videoType = 'web';
         this.uploadVideo();
       }
     }
-    if (this.video.link.toLowerCase().indexOf('vimeo.com') > -1) {
+    if (this.video.url.toLowerCase().indexOf('vimeo.com') > -1) {
       this.getVimeoId();
       if (this.loadedData == true) {
         this.videoType = 'web';
@@ -244,8 +345,8 @@ export class VideoCreateComponent implements OnInit {
   }
 
   getYoutubeId() {
-    if (this.video.link.toLowerCase().indexOf('youtube.com/watch') !== -1) {
-      const matches = this.video.link.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+    if (this.video.url.toLowerCase().indexOf('youtube.com/watch') !== -1) {
+      const matches = this.video.url.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
       if (matches) {
         this.urlChecked = true;
         this.videoId = matches[1];
@@ -253,17 +354,17 @@ export class VideoCreateComponent implements OnInit {
         return;
       }
     } else if (
-      this.video.link.toLowerCase().indexOf('youtube.com/embed') !== -1
+      this.video.url.toLowerCase().indexOf('youtube.com/embed') !== -1
     ) {
-      const matches = this.video.link.match(/embed\/([a-zA-Z0-9\-_]+)/);
+      const matches = this.video.url.match(/embed\/([a-zA-Z0-9\-_]+)/);
       if (matches) {
         this.urlChecked = true;
         this.videoId = matches[1];
         this.getMetaFromYoutube();
         return;
       }
-    } else if (this.video.link.toLowerCase().indexOf('youtu.be/') !== -1) {
-      const matches = this.video.link.match(/youtu.be\/([a-zA-Z0-9\-_]+)/);
+    } else if (this.video.url.toLowerCase().indexOf('youtu.be/') !== -1) {
+      const matches = this.video.url.match(/youtu.be\/([a-zA-Z0-9\-_]+)/);
       if (matches) {
         this.urlChecked = true;
         this.videoId = matches[1];
@@ -276,16 +377,16 @@ export class VideoCreateComponent implements OnInit {
   }
 
   getVimeoId() {
-    if (this.video.link.toLowerCase().indexOf('vimeo.com/video') !== -1) {
-      const matches = this.video.link.match(/video\/([0-9]+)/);
+    if (this.video.url.toLowerCase().indexOf('vimeo.com/video') !== -1) {
+      const matches = this.video.url.match(/video\/([0-9]+)/);
       if (matches) {
         this.urlChecked = true;
         this.videoId = matches[1];
         this.getThumbnailFromVimeo();
         return;
       }
-    } else if (this.video.link.toLowerCase().indexOf('vimeo.com/') !== -1) {
-      const matches = this.video.link.match(/vimeo.com\/([0-9]+)/);
+    } else if (this.video.url.toLowerCase().indexOf('vimeo.com/') !== -1) {
+      const matches = this.video.url.match(/vimeo.com\/([0-9]+)/);
       if (matches) {
         this.urlChecked = true;
         this.videoId = matches[1];

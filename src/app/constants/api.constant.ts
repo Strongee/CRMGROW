@@ -12,7 +12,11 @@ export const AUTH = {
 
 export const USER = {
   PROFILE: 'user/me',
+  PAYMENT: 'payment/',
   UPDATE_PROFILE: 'user/me',
+  UPDATE_PASSWORD: 'user/new-password',
+  SYNC_GMAIL: 'user/sync-gmail',
+  SYNC_OUTLOOK: 'user/sync-outlook',
   LOAD_AFFILIATE: '',
   CREATE_AFFILIATE: ''
 };
@@ -27,15 +31,19 @@ export const ACTIVITY = {
 };
 export const CONTACT = {
   LOAD_ALL: 'contact',
-  LOAD_PAGE: 'contact/last',
+  LOAD_PAGE: 'contact/last/',
   QUICK_SEARCH: 'contact/search-easy',
   LATEST_CONTACTS: 'video/latest-sent',
-  NORMAL_SEARCH: 'contact/search'
+  NORMAL_SEARCH: 'contact/search',
+  SELECT_ALL: 'contact/select-all',
+  LOAD_SERACH: 'contact/advance-search',
+  LOAD_BY_IDS: 'contact/get'
 };
 export const VIDEO = {
   CREATE: 'video/create',
   READ: 'video/',
   UPDATE: 'video/',
+  UPDATE_VIDEO_DETAIL: 'video/detail/',
   DELETE: 'video/',
   LOAD: 'video'
 };
@@ -118,5 +126,17 @@ export const TEAM = {
   REJECT_CALL: '/team/reject-call/',
   ACCEPT_CALL: '/team/accept-call/',
   UPDATE_CALL: '/team/call/',
-  DELETE_CALL: '/team/call/'
+  DELETE_CALL: '/team/call/',
+  LOAD_LEADERS: 'team/load-leaders'
+};
+export const LABEL = {
+  CREATE: 'label',
+  PUT: 'label/',
+  GET: 'label',
+  BULK_CREATE: 'label/create',
+  DELETE: 'label/'
+}
+
+export const AUTOMATION = {
+  SEARCH: 'automation/search'
 };

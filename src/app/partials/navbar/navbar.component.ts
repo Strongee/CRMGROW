@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
+import { DialogSettings } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { TaskService } from 'src/app/services/task.service';
 import { UserService } from 'src/app/services/user.service';
@@ -28,15 +31,36 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     public userService: UserService,
-    public taskService: TaskService
+    public taskService: TaskService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.taskService.loadData();
   }
 
-  runAction(action): void {
+  runAction(action: string): void {
     // Open New modal that corresponds to action
+    switch (action) {
+      case 'contact':
+        this.dialog
+          .open(ContactCreateComponent, DialogSettings.CONTACT)
+          .afterClosed()
+          .subscribe((res) => {
+            console.log('Create Component');
+          });
+        break;
+      case 'task':
+        break;
+      case 'note':
+        break;
+      case 'message':
+        break;
+      case 'record':
+        break;
+      case 'video':
+        break;
+    }
   }
   logout(event: PointerEvent): void {
     // Logout Logic

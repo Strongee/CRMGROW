@@ -15,15 +15,28 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { StripePipe } from '../../pipes/stripe.pipe';
 import { FileUploadModule } from 'ng2-file-upload';
-import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
+import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import { NgxPaginationModule } from 'ngx-pagination';
+import {
+  TimeagoModule,
+  TimeagoIntl,
+  TimeagoFormatter,
+  TimeagoCustomFormatter
+} from 'ngx-timeago';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
-  declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
+  declarations: [
+    StripePipe,
+    LoadingButtonComponent,
+    LoadingOverlayComponent,
+  ],
   imports: [
     CommonModule,
     NgbModule,
@@ -40,12 +53,15 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
     MatIconModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
+    NgPipesModule,
     QuillModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
     FileUploadModule,
+    NgxPaginationModule,
+    TimeagoModule.forRoot(),
     GooglePlaceModule
   ],
   exports: [
@@ -62,6 +78,7 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
     MatSelectModule,
     MatIconModule,
     NgxMatSelectSearchModule,
+    NgPipesModule,
     LoadingButtonComponent,
     StripePipe,
     QuillModule,
@@ -71,6 +88,8 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
     LoadingButtonComponent,
     LoadingOverlayComponent,
     CalendarModule,
+    NgxPaginationModule,
+    TimeagoModule,
     GooglePlaceModule
   ]
 })

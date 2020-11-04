@@ -44,8 +44,8 @@ export const ROUTES: RouteInfo[] = [
     protectedRole: null
   },
   {
-    path: 'compaigns',
-    title: 'Compaign',
+    path: 'campaign',
+    title: 'Campaign',
     icon: 'i-broadcasts bgc-dark',
     class: '',
     beta: false,

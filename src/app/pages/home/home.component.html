@@ -15,4 +15,10 @@
   </app-select-contact>
   <app-select-contact></app-select-contact>
   <app-select-leader></app-select-leader>
+  <app-input-automation></app-input-automation>
+  <app-input-template></app-input-template>
+  <!-- <button (click)="increase()">+</button>
+  <button (click)="decrease()">-</button>
+  <button (click)="reset()">Reset</button> -->
+  <app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar>
 </div>

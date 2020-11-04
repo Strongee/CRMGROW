@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { TopbarComponent } from 'src/app/partials/topbar/topbar.component';
+import { NavbarComponent } from 'src/app/partials/navbar/navbar.component';
+import { SidebarComponent } from 'src/app/partials/sidebar/sidebar.component';
 import { SlideTabComponent } from './slide-tab/slide-tab.component';
 import { TabOptionComponent } from './tab-option/tab-option.component';
 import { ActionsBarComponent } from './actions-bar/actions-bar.component';
@@ -18,13 +22,27 @@ import { InputAutomationComponent } from './input-automation/input-automation.co
 import { InputTemplateComponent } from './input-template/input-template.component';
 import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
+import { JoinCallRequestComponent } from './join-call-request/join-call-request.component';
+import { CallRequestConfirmComponent } from './call-request-confirm/call-request-confirm.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog.component';
 import { CalendarContactsComponent } from './calendar-contacts/calendar-contacts.component';
 import { CalendarEventComponent } from './calendar-event/calendar-event.component';
 import { CalendarRecurringDialogComponent } from './calendar-recurring-dialog/calendar-recurring-dialog.component';
+import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
+import { DataEmptyComponent } from './data-empty/data-empty.component';
+import { SelectLeaderComponent } from './select-leader/select-leader.component';
+import { CampaignAddListComponent } from './campaign-add-list/campaign-add-list.component';
+import { CampaignAddContactComponent } from './campaign-add-contact/campaign-add-contact.component';
+import { UploadContactsComponent } from './upload-contacts/upload-contacts.component';
+import { ContactCreateComponent } from './contact-create/contact-create.component';
+import { TaskCreateComponent } from './task-create/task-create.component';
+import { NoteCreateComponent } from './note-create/note-create.component';
 @NgModule({
   declarations: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
@@ -40,22 +58,38 @@ import { CalendarRecurringDialogComponent } from './calendar-recurring-dialog/ca
     InputTeamComponent,
     SelectUserComponent,
     VideoCreateComponent,
+    JoinCallRequestComponent,
+    CallRequestConfirmComponent,
+    SelectLeaderComponent,
+    CallRequestCancelComponent,
+    DataEmptyComponent,
     ConfirmComponent,
     SelectLeaderComponent,
     CalendarDialogComponent,
     CalendarContactsComponent,
     CalendarEventComponent,
-    CalendarRecurringDialogComponent
+    CalendarRecurringDialogComponent,
+    CampaignAddListComponent,
+    CampaignAddContactComponent,
+    UploadContactsComponent,
+    ContactCreateComponent,
+    TaskCreateComponent,
+    NoteCreateComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
+    RouterModule,
     TranslateModule.forChild({ extend: true }),
-    NgxCropperJsModule
+    NgxCropperJsModule,
   ],
   exports: [
+    TopbarComponent,
+    NavbarComponent,
+    SidebarComponent,
     SlideTabComponent,
     TabOptionComponent,
+    ActionsBarComponent,
     ConfirmComponent,
     TeamEditComponent,
     TeamDeleteComponent,
@@ -66,8 +100,21 @@ import { CalendarRecurringDialogComponent } from './calendar-recurring-dialog/ca
     InputTeamComponent,
     SelectUserComponent,
     SelectLeaderComponent,
-    CalendarDialogComponent
+    CalendarDialogComponent,
+    CampaignAddListComponent,
+    CampaignAddContactComponent,
+    UploadContactsComponent,
+    DataEmptyComponent,
+    SelectLeaderComponent
   ],
-  bootstrap: [AvatarEditorComponent, VideoShareComponent]
+  bootstrap: [
+    ContactCreateComponent,
+    AvatarEditorComponent,
+    VideoShareComponent,
+    JoinCallRequestComponent,
+    CallRequestConfirmComponent,
+    CallRequestCancelComponent,
+    VideoShareComponent
+  ]
 })
 export class ComponentsModule {}

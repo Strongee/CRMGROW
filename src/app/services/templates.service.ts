@@ -70,4 +70,21 @@ export class TemplatesService extends HttpService {
       catchError(this.handleError('READ TEMPLATES', []))
     );
   }
+
+  search(keyword: string, option: any): Observable<Template[]> {
+    const optionData = {};
+    for (const key in option) {
+      if (option[key]) {
+        optionData[key] = option[key];
+      }
+    }
+    return this.httpClient
+      .post(`${this.server + TEMPLATE.SEARCH}?q=${keyword}`, optionData)
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new Template().deserialize(e))
+        ),
+        catchError(this.handleError('SEARCH TEMPLATES', []))
+      );
+  }
 }
