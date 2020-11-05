@@ -1,0 +1,56 @@
+.columns {
+    flex-wrap: nowrap;
+    max-width: calc(100vw-160px);
+    .column {
+        width: 225px;
+        min-width: 225px;
+        .column-title {
+            border: 1px solid #D9D9DF;
+            height: 80px;
+        }
+        &:first-child {
+            .column-title {
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+            }
+        }
+        &:last-child {
+            .column-title {
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+        }
+        .tasks-container {
+            height: 700px;
+            .task {
+                border: 1px solid #D9D9DF;
+                border-radius: 5px;
+                box-shadow: 5px 5px 20px 1px rgba(0,0,0,0.05);
+            }
+        }
+    }
+    .add-column {
+        border-radius: 5px;
+        border: 1px solid #0000FF;
+        height: 80px;
+    }
+}
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tasks-container.cdk-drop-list-dragging .task:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

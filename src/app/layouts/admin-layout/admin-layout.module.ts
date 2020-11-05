@@ -41,6 +41,8 @@ import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.compone
 import { StatusAutomationComponent } from '../../pages/status-automation/status-automation.component';
 import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
 import { DealsComponent } from '../../pages/deals/deals.component';
+import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,8 @@ import { DealsComponent } from '../../pages/deals/deals.component';
     LeadCaptureComponent,
     TagManagerComponent,
     StatusAutomationComponent,
-    DealsComponent
+    DealsComponent,
+    DealsDetailComponent
   ],
   imports: [
     CommonModule,
@@ -83,7 +86,8 @@ import { DealsComponent } from '../../pages/deals/deals.component';
     NgxSpinnerModule,
     ShareButtonsModule,
     ShareIconsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    DragDropModule
   ],
   schemas: []
 })

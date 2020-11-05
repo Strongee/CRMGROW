@@ -17,6 +17,7 @@ import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
 import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 import { DealsComponent } from 'src/app/pages/deals/deals.component';
+import { DealsDetailComponent } from 'src/app/pages/deals-detail/deals-detail.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -30,7 +31,14 @@ export const AdminLayoutRoutes: Routes = [
     path: 'deals',
     component: DealsComponent,
     data: {
-      title: 'Tasks'
+      title: 'Deals'
+    }
+  },
+  {
+    path: 'deals/detail',
+    component: DealsDetailComponent,
+    data: {
+      title: 'Deals'
     }
   },
   {
