@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calendar-decline.component.scss']
 })
 export class CalendarDeclineComponent implements OnInit {
+  decline_message = '';
   constructor() {}
 
   ngOnInit(): void {}
