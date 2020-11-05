@@ -1,4 +1,8 @@
 .list-content {
   height: calc(32vh - 145px);
+  min-height: 46px;
   overflow: auto;
+}
+hr {
+  border-top-width: 2px;
 }

@@ -379,6 +379,6 @@ export const DialogSettings = {
   INVITE_TEAM: {
     width: '98vw',
     maxWidth: '600px',
-    height: 'calc(65vh + 114px)'
+    height: 'calc(65vh + 120px)'
   }
 };

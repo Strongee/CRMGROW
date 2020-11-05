@@ -14,7 +14,6 @@ import { TeamDeleteComponent } from '../../components/team-delete/team-delete.co
 import { JoinCallRequestComponent } from '../../components/join-call-request/join-call-request.component';
 import { CallRequestConfirmComponent } from '../../components/call-request-confirm/call-request-confirm.component';
 import { CallRequestCancelComponent } from '../../components/call-request-cancel/call-request-cancel.component';
-import { TeamJoinComponent } from '../../components/team-join/team-join.component';
 import { JoinTeamComponent } from 'src/app/components/join-team/join-team.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
 

@@ -89,6 +89,27 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM JOIN REQUST', null))
       );
   }
+  /**
+   * Send invitation to the internal users and external users (internal users are identified by user ids, external users are identified by emails)
+   * @param id : _id of Team
+   * @param invitations : _id array of internal users
+   * @param referrals : email array of external users
+   */
+  inviteUsers(
+    id: string,
+    invitations: string[],
+    referrals: string[]
+  ): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.INVITE_USERS + id, {
+        invites: invitations,
+        referrals
+      })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('SEND INVITATION', {}))
+      );
+  }
   update(id, data): Observable<Team[]> {
     return this.httpClient.put(this.server + TEAM.UPDATE + id, data).pipe(
       map((res) => res['data'] || []),

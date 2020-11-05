@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from 'src/app/models/user.model';
 import { TeamService } from 'src/app/services/team.service';
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-invite-team',
@@ -13,17 +14,28 @@ export class InviteTeamComponent implements OnInit {
   newMembers: User[] = [];
   oldMembers: User[] = [];
   teamLink = '';
+  teamId = '';
+
+  inviteSubscription: Subscription;
+  inviting = false;
+  resentSubscription: Subscription[];
+  resendingMembers: string[] = []; // user id | referral emails
+  cancelSubscription: Subscription[];
+  cancelingMembers: string[] = []; // userid | referral email
 
   constructor(
     private dialogRef: MatDialogRef<InviteTeamComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private teamService: TeamService
   ) {
+    if (this.data._id) {
+      this.teamId = this.data._id;
+    }
     if (this.data.teamLink) {
       this.teamLink = this.data.teamLink;
     }
-    if (this.data.invitation) {
-      this.data.invitation.forEach((e) => {
+    if (this.data.invites) {
+      this.data.invites.forEach((e) => {
         this.oldMembers.push(new User().deserialize(e));
       });
     }
@@ -54,6 +66,10 @@ export class InviteTeamComponent implements OnInit {
       searchQ = { _id: event._id };
     } else {
       searchQ = { email: event.email };
+    }
+    const positionInOld = _.findIndex(this.oldMembers, searchQ);
+    if (positionInOld !== -1) {
+      return;
     }
     const position = _.findIndex(this.newMembers, searchQ);
     if (position === -1) {
@@ -103,6 +119,33 @@ export class InviteTeamComponent implements OnInit {
   }
 
   /**
+   * Check if the current user is resending
+   * @param member : Confirm User
+   */
+  isResending(member: User): boolean {
+    const identifier = member._id || member.email;
+    const position = this.resendingMembers.indexOf(identifier);
+    if (position !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  /**
+   * Check if the current user is canceling
+   * @param member
+   */
+  isCanceling(member: User): boolean {
+    const identifier = member._id || member.email;
+    const position = this.cancelingMembers.indexOf(identifier);
+    if (position !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Send Invitation to the new members
    */
   sendInvitation(): void {
@@ -111,6 +154,34 @@ export class InviteTeamComponent implements OnInit {
       return;
     } else {
       // Send Invitation
+      const invitations = [];
+      const referrals = [];
+      const invitationIds = [];
+      const referralEmails = [];
+      this.newMembers.forEach((e) => {
+        if (e._id) {
+          invitationIds.push(e._id);
+          invitations.push(e);
+        } else {
+          referralEmails.push(e.email);
+          referrals.push(e);
+        }
+      });
+      this.inviting = true;
+      this.inviteSubscription = this.teamService
+        .inviteUsers(this.teamId, invitationIds, referrals)
+        .subscribe(
+          () => {
+            this.inviting = false;
+            this.dialogRef.close({
+              invitations,
+              referrals
+            });
+          },
+          () => {
+            this.inviting = false;
+          }
+        );
     }
   }
 }
