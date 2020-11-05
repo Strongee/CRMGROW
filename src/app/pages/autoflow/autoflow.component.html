@@ -24,7 +24,7 @@
       <div class="card-body">
         <button class="d-none" (click)="clearAllNodes()">Clear</button>
         <!-- <div class="" draggable="true" (dragstart)="dragAction($event)">DRAG</div> -->
-        <div class="flows-container" #wrapper>
+        <!-- <div class="flows-container" #wrapper>
           <ng-container *ngIf="!nodes.length; else flowTemplate">
             <div class="init-graph-container">
               <ngx-graph class="chart-container init-container" [links]="initEdges" [nodes]="initNodes"
@@ -77,7 +77,7 @@
               </ng-template>
 
               <ng-template #nodeTemplate let-node>
-                <svg:g class="node" *ngIf="node.category === 'NORMAL'"  (click)="editAction($event, node)">
+                <svg:g class="node normal_node" *ngIf="node.category === 'NORMAL'"  (click)="editAction($event, node)">
                   <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.leaf ? 200 : 110"
                     fill="transparent" />
                   <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110">
@@ -156,8 +156,37 @@
             </ngx-graph>
           </ng-template>
 
-          <!--  -->
-        </div>
+        </div> -->
+        <ngx-graph
+        class="chart-container"
+        [view]="[500, 200]"
+        [links]="[
+          {
+            id: 'a',
+            source: 'first',
+          target: 'second',
+            label: 'is parent of'
+          }, {
+            id: 'b',
+            source: 'first',
+            target: 'third',
+            label: 'custom label'
+          }
+        ]"
+        [nodes]="[
+          {
+            id: 'first',
+            label: 'A'
+          }, {
+            id: 'second',
+            label: 'B'
+          }, {
+            id: 'third',
+            label: 'C'
+          }
+        ]"
+      >
+      </ngx-graph>
       </div>
     </div>
   </div>

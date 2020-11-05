@@ -37,6 +37,7 @@
     "cleave.js": "^1.6.0",
     "cropperjs": "^1.5.9",
     "d3-collection": "^1.0.7",
+    "dagre": "^0.8.5",
     "date-fns": "^2.16.1",
     "google-libphonenumber": "^3.2.13",
     "intl-tel-input": "^17.0.5",

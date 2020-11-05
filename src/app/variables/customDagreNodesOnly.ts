@@ -63,7 +63,7 @@ export class DagreNodesOnlyLayout implements Layout {
 
     for (const dagreNodeId in this.dagreGraph._nodes) {
       const dagreNode = this.dagreGraph._nodes[dagreNodeId];
-      const node = graph.nodes.find(n => n.id === dagreNode.id);
+      const node = graph.nodes.find((n) => n.id === dagreNode.id);
       node.position = {
         x: dagreNode.x,
         y: dagreNode.y
@@ -81,23 +81,32 @@ export class DagreNodesOnlyLayout implements Layout {
   }
 
   public updateEdge(graph: Graph, edge: Edge): Graph {
-    const sourceNode = graph.nodes.find(n => n.id === edge.source);
-    const targetNode = graph.nodes.find(n => n.id === edge.target);
-    const rankAxis: 'x' | 'y' = this.settings.orientation === 'BT' || this.settings.orientation === 'TB' ? 'y' : 'x';
+    const sourceNode = graph.nodes.find((n) => n.id === edge.source);
+    const targetNode = graph.nodes.find((n) => n.id === edge.target);
+    const rankAxis: 'x' | 'y' =
+      this.settings.orientation === 'BT' || this.settings.orientation === 'TB'
+        ? 'y'
+        : 'x';
     const orderAxis: 'x' | 'y' = rankAxis === 'y' ? 'x' : 'y';
     const rankDimension = rankAxis === 'y' ? 'height' : 'width';
     // determine new arrow position
-    const dir = sourceNode.position[rankAxis] <= targetNode.position[rankAxis] ? -1 : 1;
+    const dir =
+      sourceNode.position[rankAxis] <= targetNode.position[rankAxis] ? -1 : 1;
     const startingPoint = {
       [orderAxis]: sourceNode.position[orderAxis],
-      [rankAxis]: sourceNode.position[rankAxis] - dir * (sourceNode.dimension[rankDimension] / 2)
+      [rankAxis]:
+        sourceNode.position[rankAxis] -
+        dir * (sourceNode.dimension[rankDimension] / 2)
     };
     const endingPoint = {
       [orderAxis]: targetNode.position[orderAxis],
-      [rankAxis]: targetNode.position[rankAxis] + dir * (targetNode.dimension[rankDimension] / 2)
+      [rankAxis]:
+        targetNode.position[rankAxis] +
+        dir * (targetNode.dimension[rankDimension] / 2)
     };
 
-    const curveDistance = this.settings.curveDistance || this.defaultSettings.curveDistance;
+    const curveDistance =
+      this.settings.curveDistance || this.defaultSettings.curveDistance;
     // generate new points
     edge.points = [startingPoint, endingPoint];
     const edgeLabelId = `${edge.source}${EDGE_KEY_DELIM}${edge.target}${EDGE_KEY_DELIM}${DEFAULT_EDGE_NAME}`;
@@ -110,7 +119,10 @@ export class DagreNodesOnlyLayout implements Layout {
 
   public createDagreGraph(graph: Graph): any {
     const settings = Object.assign({}, this.defaultSettings, this.settings);
-    this.dagreGraph = new dagre.graphlib.Graph({ compound: settings.compound, multigraph: settings.multigraph });
+    this.dagreGraph = new dagre.graphlib.Graph({
+      compound: settings.compound,
+      multigraph: settings.multigraph
+    });
     this.dagreGraph.setGraph({
       rankdir: settings.orientation,
       marginx: settings.marginX,
@@ -132,7 +144,7 @@ export class DagreNodesOnlyLayout implements Layout {
       };
     });
 
-    this.dagreNodes = graph.nodes.map(n => {
+    this.dagreNodes = graph.nodes.map((n) => {
       const node: any = Object.assign({}, n);
       node.width = n.dimension.width;
       node.height = n.dimension.height;
@@ -141,8 +153,8 @@ export class DagreNodesOnlyLayout implements Layout {
       return node;
     });
 
-    this.dagreEdges = graph.edges.map(l => {
-      let linkId: number = 1;
+    this.dagreEdges = graph.edges.map((l) => {
+      let linkId = 1;
       const newLink: any = Object.assign({}, l);
       if (!newLink.id) {
         newLink.id = 'a' + linkId.toString();

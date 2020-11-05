@@ -14,8 +14,7 @@ Step.prototype = {
     this._x = this._y = NaN;
     this._point = 0;
   },
-  lineEnd() {
-  },
+  lineEnd() {},
   point(x, y) {
     x = +x;
     y = +y;
@@ -27,8 +26,10 @@ Step.prototype = {
       case 1:
         this._point = 2; // proceed
       default: {
-        const y0 = this._y > y ? this._y * 0.67 + y * 0.33 : this._y * 0.33 + y * 0.67;
-        const y1 = this._y > y ?  this._y * 0.33 + y * 0.67 : this._y * 0.67 + y * 0.33;
+        const y0 =
+          this._y > y ? this._y * 0.67 + y * 0.33 : this._y * 0.33 + y * 0.67;
+        const y1 =
+          this._y > y ? this._y * 0.33 + y * 0.67 : this._y * 0.67 + y * 0.33;
         this._context.bezierCurveTo(this._x, y0, x, y1, x, y);
         break;
       }

@@ -17,7 +17,7 @@ import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
 import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
-import { CanDeactivateGuard } from '../../variables/can-deactivate.guard';
+import { PageExitGuard } from 'src/app/guards/page-exit.guard';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -102,8 +102,7 @@ export const AdminLayoutRoutes: Routes = [
     component: AutoflowComponent,
     data: {
       title: 'Automations'
-    },
-    canDeactivate: [CanDeactivateGuard]
+    }
   },
   {
     path: 'autoflow/:mode/:id',
@@ -111,7 +110,7 @@ export const AdminLayoutRoutes: Routes = [
     data: {
       title: 'Automation'
     },
-    canDeactivate: [CanDeactivateGuard]
+    canDeactivate: [PageExitGuard]
   },
   {
     path: 'settings',
