@@ -229,7 +229,7 @@ export class CalendarComponent implements OnInit {
       .open(CalendarEventComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '350px',
+        maxWidth: '300px',
         data: {
           event: event
         }

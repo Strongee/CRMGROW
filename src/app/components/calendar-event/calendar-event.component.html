@@ -1,13 +1,17 @@
 <div class="event-container">
-    <div class="v-center form-group" *ngIf="event.meta.is_organizer">
-        <button class="btn btn-accept">Accept</button>
-        <button class="btn btn-red">Decline</button>
+    <div class="row mb-3" *ngIf="event.meta.is_organizer">
+        <div class="col-6">
+            <button class="btn btn-accept f-1 font-weight-bold w-100 py-2" (click)="accept()">Accept</button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-red f-1 font-weight-bold w-100 py-2" (click)="decline()">Decline</button>
+        </div>
     </div>
     <div class="v-center justify-content-between form-group">
         <div class="f-3 font-weight-bold">
             {{event.title}}
         </div>
-        <div class="v-center">
+        <div class="v-center" *ngIf="event.meta.is_organizer">
             <span class="mr-2 c-pointer" (click)="update()"><i class="i-icon i-edit d-block bgc-blue"></i></span>
             <span class="c-pointer" (click)="remove()"><i class="i-icon i-trash d-block bgc-red"></i></span>
         </div>
