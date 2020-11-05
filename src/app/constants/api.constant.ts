@@ -137,5 +137,12 @@ export const LABEL = {
 };
 
 export const AUTOMATION = {
-  SEARCH: 'automation/search'
+  SEARCH: 'automation/search',
+  LOAD_PAGE: 'automation/list/',
+  LOAD_ALL: 'automation/',
+  DETAIL: 'automation/detail/',
+  DELETE: 'automation/',
+  READ: 'automation/',
+  UPDATE: 'automation/',
+  CREATE: 'automation'
 };

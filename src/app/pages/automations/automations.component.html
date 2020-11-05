@@ -1,1 +1,62 @@
-<p>automations works!</p>
+<div class="page-content">
+  <div class="my-2">
+    <div class="d-flex justify-content-between">
+      <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Automations</h6>
+      <a class="btn btn-primary btn-sm br-default mb-2" [routerLink]="['/templates/new']">+ Create template</a>
+    </div>
+  </div>
+  <div class="my-3">
+    <ng-container *ngIf="isLoading">
+      <app-loading-overlay [type]="'table'"></app-loading-overlay>
+    </ng-container>
+    <ng-container *ngIf="!isLoading && !count">
+      <app-data-empty [type]="'automation'"></app-data-empty>
+    </ng-container>
+    <ng-container *ngIf="!isLoading && count">
+      <table class="table automation-table">
+        <thead>
+          <th class="title">Title</th>
+          <th class="auth">Owner</th>
+          <th class="action-count">Actions</th>
+          <th class="contacts">Contacts</th>
+          <th class="created">Created</th>
+          <th class="actions"></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let automation of automations">
+            <td class="title">
+              <div class="f-4 font-weight-bold">{{automation.title}}</div>
+            </td>
+            <td class="auth">
+              <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === user_id" [class.shared]="automation.role === 'team' && automation.user !== user_id"></div>
+            </td>
+            <td class="action-count">
+              <div class="f-5">{{automation.automations && automation.automations.length}}</div>
+            </td>
+            <td class="contacts">
+              <div class="f-5">{{automation.contacts.length}}</div>
+            </td>
+            <td class="created">
+              <div class="f-5">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
+            </td>
+            <td class="actions">
+              <div class="v-center">
+                <button class="btn btn-white f-3 font-weight-bold" (click)="assignAutomation($event, automation)">
+                  Assign
+                </button>
+<!--                <ng-container *ngIf="automation.role != 'admin' && automation.user == user_id">-->
+                  <div class="icon-button v-center justify-content-center ml-3" (click)="openAutomation($event, automation)">
+                    <i class="i-icon bgc-black i-edit"></i>
+                  </div>
+                  <div class="icon-button v-center justify-content-center ml-3">
+                    <i class="i-icon bgc-black i-triangle-up"></i>
+                  </div>
+<!--                </ng-container>-->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+</div>

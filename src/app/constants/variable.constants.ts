@@ -379,6 +379,29 @@ export const DialogSettings = {
   INVITE_TEAM: {
     width: '98vw',
     maxWidth: '600px',
-    height: 'calc(65vh + 120px)'
+    height: 'calc(65vh + 114px)'
   }
+};
+
+export const ActionName = {
+  note: 'Note',
+  email: 'Send Email',
+  send_email_video: 'Send Video Email',
+  send_text_video: 'Send Video Text',
+  send_email_pdf: 'Send PDF Email',
+  send_text_pdf: 'Send PDF Text',
+  send_email_image: 'Send Image Email',
+  send_text_image: 'Send Image Text',
+  follow_up: 'Follow up',
+  watched_video: 'Watched Video',
+  watched_pdf: 'Watched PDF',
+  watched_image: 'Watched Image',
+  opened_email: 'Opened Email',
+  update_contact: 'Update Contact'
+};
+
+export const ACTION_CAT = {
+  START: 'START',
+  NORMAL: 'NORMAL',
+  CONDITION: 'CONDITION'
 };

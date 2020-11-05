@@ -16,6 +16,8 @@ import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
 import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
 import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
+import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
+import { CanDeactivateGuard } from '../../variables/can-deactivate.guard';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -94,6 +96,22 @@ export const AdminLayoutRoutes: Routes = [
     data: {
       title: 'Automations'
     }
+  },
+  {
+    path: 'autoflow/new',
+    component: AutoflowComponent,
+    data: {
+      title: 'Automations'
+    },
+    canDeactivate: [CanDeactivateGuard]
+  },
+  {
+    path: 'autoflow/:mode/:id',
+    component: AutoflowComponent,
+    data: {
+      title: 'Automation'
+    },
+    canDeactivate: [CanDeactivateGuard]
   },
   {
     path: 'settings',
