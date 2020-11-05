@@ -1,5 +1,5 @@
 <div class="event-container">
-    <div class="row mb-3" *ngIf="event.meta.is_organizer">
+    <div class="row mb-3" *ngIf="!event.meta.is_organizer">
         <div class="col-6">
             <button class="btn btn-accept f-1 font-weight-bold w-100 py-2" (click)="accept()">Accept</button>
         </div>
