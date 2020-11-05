@@ -16,11 +16,19 @@ import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
 import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
 import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
+import { DealsComponent } from 'src/app/pages/deals/deals.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    data: {
+      title: 'Tasks'
+    }
+  },
+  {
+    path: 'deals',
+    component: DealsComponent,
     data: {
       title: 'Tasks'
     }

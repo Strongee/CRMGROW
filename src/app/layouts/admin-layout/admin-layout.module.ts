@@ -40,6 +40,7 @@ import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.comp
 import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.component';
 import { StatusAutomationComponent } from '../../pages/status-automation/status-automation.component';
 import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
+import { DealsComponent } from '../../pages/deals/deals.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     AssistantComponent,
     LeadCaptureComponent,
     TagManagerComponent,
-    StatusAutomationComponent
+    StatusAutomationComponent,
+    DealsComponent
   ],
   imports: [
     CommonModule,

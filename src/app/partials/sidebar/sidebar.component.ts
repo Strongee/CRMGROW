@@ -24,6 +24,16 @@ export const ROUTES: RouteInfo[] = [
     protectedRole: null
   },
   {
+    path: 'deals',
+    title: 'Deals',
+    icon: '',
+    class: '',
+    beta: false,
+    betaClass: '',
+    betaLabel: '',
+    protectedRole: null
+  },
+  {
     path: 'contacts',
     title: 'Contacts',
     icon: 'i-lunch bgc-dark',
