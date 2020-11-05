@@ -1064,9 +1064,39 @@ ul.ngx-pagination {
   }
 }
 
-
-
 // Style
 .status-description {
   max-width: 300px;
+}
+
+.role{
+  font-size: 10px;
+  font-weight: bold;
+  padding: 3px 8px;
+  background: #f28422;
+  border-radius: 3px;
+  width: fit-content;
+  color: white;
+  line-height: 14px;
+  &.admin {
+    background-color: #0000ff;
+  }
+  &.team {
+    background-color: #1ca57a;
+  }
+  &.shared {
+    background-color: #b72ad8;
+  }
+  &::after {
+    content: "OWN"
+  }
+  &.admin::after {
+    content: "ADMIN"
+  }
+  &.team::after {
+    content: "TEAM"
+  }
+  &.shared::after {
+    content: 'SHARED'
+  }
 }

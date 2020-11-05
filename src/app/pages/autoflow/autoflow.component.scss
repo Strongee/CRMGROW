@@ -13,13 +13,13 @@
   margin: auto;
 
   input {
-      max-width: 350px;
-      margin-right: 5px;
-      height: 36px;
+    max-width: 350px;
+    margin-right: 5px;
+    height: 36px;
   }
 
   button {
-      background-color: gainsboro;
+    background-color: gainsboro;
   }
 }
 
@@ -41,10 +41,10 @@
   overflow: hidden;
 }
 
- .init-graph-container {
-   width: 210px;
-   margin: auto;
- }
+.init-graph-container {
+  width: 210px;
+  margin: auto;
+}
 
 .btn-wrapper {
   margin-bottom: 0px;
@@ -138,4 +138,60 @@
   margin: 0px;
   top: 2px;
   right: 2px;
+}
+
+.automation-container {
+  padding: 3rem 1rem 3rem 3rem;
+}
+
+.h-40 {
+  height: 40px;
+}
+
+.status {
+  padding: 3px 5px;
+  border-radius: 5px;
+  width: 80px;
+  text-align: center;
+  background: #f28422;
+  color: white;
+  border: none;
+  outline: none;
+
+  &.admin {
+    background-color: #0000ff;
+  }
+  &.admin:hover {
+    background-color: #0000ff;
+  }
+
+  &.team {
+    background-color: #1ca57a;
+  }
+
+  &.shared {
+    background-color: #b72ad8;
+  }
+}
+
+.zoom-button-wrapper {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+
+  button {
+    display: block;
+    margin: 5px 0px;
+    padding: 2px;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    line-height: 0px;
+
+    &.disabled {
+      color: #3c4043;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
 }

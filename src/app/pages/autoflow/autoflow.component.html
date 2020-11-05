@@ -1,52 +1,94 @@
 <div class="container-fluid page-wrapper">
-  <div class="p-3">
-    <div class="card">
-      <div class="card-header">
-        <form #automationForm="ngForm" (ngSubmit)="submitted=true; automationForm.form.valid ? storeData() : false;"
+  <div class="automation-container">
+    <form #automationForm="ngForm" (ngSubmit)="submitted=true; automationForm.form.valid ? storeData() : false;"
           [class.was-validated]="submitted">
-          <div class="d-flex align-items-top automation-name-wrapper">
-            <div class="form-group mb-0 flex-grow-1 automation-title-wrapper">
-              <label class="automation-title">Automation Name</label>
-              <input class="form-control" id="automation-title" [(ngModel)]="automation_title" type="text"
-                name="automationTitle" #automationTitle="ngModel" required>
-              <span class="invalid-feedback"
-                *ngIf="automationTitle.errors&&(automationTitle.touched||automationTitle.dirty||submitted)&&submitted">Automation
-                name is required.</span>
-            </div>
-            <div class="form-group btn-wrapper">
-              <button class="btn btn-primary br-default" *ngIf="!isSaving" type="submit">Save</button>
-              <app-loading-button [class]="'btn-primary br-default'" *ngIf="isSaving" [title]="'Saving...'">
-              </app-loading-button>
+      <div class="f-8 font-weight-bold text-uppercase">Automations</div>
+      <div class="align-items-top automation-name-wrapper mt-3">
+        <div class="row">
+          <div class="col-7">
+            <div class="form-group v-center">
+              <div class="title w-100">
+                <label for="automation-title">Title</label>
+                <input class="form-control" id="automation-title" [(ngModel)]="automation_title" type="text"
+                       name="automationTitle" #automationTitle="ngModel" required>
+                <span class="invalid-feedback"
+                      *ngIf="automationTitle.errors&&(automationTitle.touched||automationTitle.dirty||submitted)&&submitted">Automation
+            name is required.</span>
+              </div>
+              <div class="btn-wrapper">
+                <button class="btn btn-primary br-default" *ngIf="!isSaving" type="submit">Save</button>
+                <app-loading-button [class]="'btn-primary br-default'" *ngIf="isSaving" [title]="'Saving...'">
+                </app-loading-button>
+              </div>
             </div>
           </div>
-        </form>
+          <div class="col-5">
+            <div class="form-group v-center justify-content-end">
+              <div class="auth">
+                <label>Owner</label>
+                <div class="h-40 v-center">
+<!--                  <select (change)="toggleAuth(auth)"-->
+<!--                          class="status"-->
+<!--                          [class.admin]="automation.role == 'admin'"-->
+<!--                          [class.team]="automation.role === 'team' && automation.user === user_id"-->
+<!--                          [class.shared]="automation.role === 'team' && automation.user !== user_id"-->
+<!--                  >-->
+<!--                    <option [value]="'admin'" class="status admin c-white f-2" [selected]="automation.role == 'admin'">-->
+<!--                      ADMIN-->
+<!--                    </option>-->
+<!--                    <option [value]="'team'" class="status team c-white f-2" [selected]="automation.role === 'team' && automation.user === user_id">-->
+<!--                      TEAM-->
+<!--                    </option>-->
+<!--                    <option [value]="'shared'" class="status shared c-white f-2" [selected]="automation.role === 'team' && automation.user !== user_id">-->
+<!--                      SHARED-->
+<!--                    </option>-->
+<!--                  </select>-->
+                  <div class="role" [class]="auth"></div>
+                </div>
+              </div>
+              <div class="created ml-4" align="end">
+                <label>Created</label>
+                <div class="h-40 v-center">
+                  <div class="f-4 font-weight-bold">
+                    {{created_at | date: 'dd/MM/yyyy'}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-        <button class="d-none" (click)="clearAllNodes()">Clear</button>
-        <!-- <div class="" draggable="true" (dragstart)="dragAction($event)">DRAG</div> -->
-        <!-- <div class="flows-container" #wrapper>
-          <ng-container *ngIf="!nodes.length; else flowTemplate">
-            <div class="init-graph-container">
-              <ngx-graph class="chart-container init-container" [links]="initEdges" [nodes]="initNodes"
-              [layoutSettings]="layoutSettings" [layout]="layout" [curve]="curve" [draggingEnabled]="false"
-              [autoCenter]="false" [enableZoom]="false" [panOffsetY]="0" [view]="[210, 200]">
+    </form>
+    <div class="card-body">
+      <button class="d-none" (click)="clearAllNodes()">Clear</button>
+      <!-- <div class="" draggable="true" (dragstart)="dragAction($event)">DRAG</div> -->
+      <div class="flows-container" #wrapper>
+        <div class="zoom-button-wrapper">
+          <button class="btn btn-white font-weight-bold" [class.disabled]="zoomLevel > 3" (click)="zoomIn()">+</button>
+          <button class="btn btn-white font-weight-bold" [class.disabled]="zoomLevel === 0" (click)="zoomOut()">-</button>
+        </div>
+        <ng-container *ngIf="!nodes.length; else flowTemplate">
+          <div class="init-graph-container">
+            <ngx-graph class="chart-container init-container" [links]="initEdges" [nodes]="initNodes"
+                       [layoutSettings]="layoutSettings" [layout]="layout" [curve]="curve" [draggingEnabled]="false"
+                       [autoCenter]="false" [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" [panOffsetY]="0" [view]="[210, 200]">
               <ng-template #nodeTemplate let-node>
                 <svg:g class="node">
                   <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height"
-                    fill="transparent" />
+                            fill="transparent" />
                   <svg:foreignObject width="200" height="132">
                     <xhtml:div xmlns="http://www.w3.org/1999/xhtml" (click)="addAction()" (drop)="startDrop($event)"
-                      (dragover)="allowStartDrop($event, node)" (dragleave)="disableStartArea($event, node)"
-                      (dragenter)="enableStartArea($event, node)" [class.droppable]="node.droppable"
-                      class="drop-target">
+                               (dragover)="allowStartDrop($event, node)" (dragleave)="disableStartArea($event, node)"
+                               (dragenter)="enableStartArea($event, node)" [class.droppable]="node.droppable"
+                               class="drop-target">
                       <xhtml:div class="cardContainer" style="margin-bottom: 5px; margin-top: 10px; text-align: center;"
-                        xmlns="http://www.w3.org/1999/xhtml">
-                        <img [attr.src]="'./assets/img/icons/start_button.png'" x="75" y="0" height="50px"
-                          width="50px" />
+                                 xmlns="http://www.w3.org/1999/xhtml">
+                        <img [attr.src]="'./assets/img/start_button.png'" x="75" y="0" height="50px"
+                             width="50px" />
                       </xhtml:div>
                       <xhtml:div class="cardContainer"
-                        style="background-color: transparent; padding: 5px 8px; text-align: center; width: 150px; margin-left: 25px; margin-right: 25px;"
-                        xmlns="http://www.w3.org/1999/xhtml">
+                                 style="background-color: transparent; padding: 5px 8px; text-align: center; width: 150px; margin-left: 25px; margin-right: 25px;"
+                                 xmlns="http://www.w3.org/1999/xhtml">
                         <label class="name" style="margin: 0; font-size: 13px;">Start</label>
                         <label class="name" style="margin: 0; font-size: 10px; color: #aaa;">
                           DRAG'N'DROP ACTION OR CLICK HERE
@@ -57,136 +99,106 @@
                 </svg:g>
               </ng-template>
             </ngx-graph>
-            </div>
-          </ng-container>
-          
-          <ng-template #flowTemplate>
-              <ngx-graph class="chart-container" [links]="edges" [nodes]="nodes" [layoutSettings]="layoutSettings"
-              [autoCenter]="true" [layout]="layout" [curve]="curve" [center$]="center$" [draggingEnabled]="false" 
-              [enableZoom]="false" #graphWrapper>
-              <ng-template #defsTemplate>
-                <svg:marker id="arrow" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="8" markerHeight="8"
-                  orient="auto">
-                  <circle cx="10" cy="10" r="10" stroke="green" stroke-width="0" fill="gray" />
-                </svg:marker>
-                <svg:pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
-                  <svg:path d="M-1,1 l2,-2
-                         M0,4 l4,-4
-                         M3,5 l2,-2" style="stroke:#eee; stroke-width:1" />
-                </svg:pattern>
-              </ng-template>
+          </div>
+        </ng-container>
 
-              <ng-template #nodeTemplate let-node>
-                <svg:g class="node normal_node" *ngIf="node.category === 'NORMAL'"  (click)="editAction($event, node)">
-                  <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.leaf ? 200 : 110"
-                    fill="transparent" />
-                  <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110">
-                    <xhtml:div class="cardContainer" style="text-align: center;"
-                      xmlns="http://www.w3.org/1999/xhtml">
-                      <img [attr.src]="ICONS[node.type]" x="75" y="0" height="50px" width="50px" />
-                      <label class="remove-action" (click)="removeAction(node)">&times;</label>
-                    </xhtml:div>
-                    <xhtml:div class="cardContainer"
-                      style="background-color: transparent; padding: 5px 8px 20px 8px; margin-bottom: 15px; text-align: center;"
-                      xmlns="http://www.w3.org/1999/xhtml">
-                      <label class="name" style="margin: 0; font-size: 14px; font-weight: bold;">{{node.label}}</label>
-                      <label class="name" style="margin: 0; font-size: 11px; color: #f28422; display: block;">{{node.period | duration}}</label>
-                    </xhtml:div>
-                    <ng-container *ngIf="node.leaf">
-                      <xhtml:div
-                        style="background-color: transparent; border-left: 2px dashed #aaa; width: 2px; height: 30px; margin-top: -15px; margin-left: auto; margin-right: auto;"
-                        xmlns="http://www.w3.org/1999/xhtml">
-                      </xhtml:div>
-                      <xhtml:div class="v-leaf" (click)="addAction(node)"
-                        style="background-color: transparent; height: 50px; width: 70px; border: 2px dashed #aaa; margin: auto;"
-                        xmlns="http://www.w3.org/1999/xhtml" >
-                      </xhtml:div>
-                    </ng-container>
-                  </svg:foreignObject>
-                </svg:g>
-                <svg:g class="node" *ngIf="node.category === 'CONDITION'">
-                  <svg:rect [attr.width]="node.dimension.width" [attr.height]="40"
-                    fill="transparent" />
-                  <svg:foreignObject width="140" [attr.height]="40" style="overflow: visible">
-                    <xhtml:div [class.trueCase]="node.condition.answer" [class.falseCase]="!node.condition.answer"
-                      xmlns="http://www.w3.org/1999/xhtml">
-                      <label class="name" style="margin: 0; font-size: 12px; font-weight: bold;">{{node.label}}</label>
-                    </xhtml:div>
-                    <ng-container *ngIf="node.leaf">
-                      <xhtml:div
-                        style="background-color: transparent; border-left: 2px dashed #aaa; width: 2px; height: 30px; margin-top: -15px; margin-left: auto; margin-right: auto;"
-                        xmlns="http://www.w3.org/1999/xhtml">
-                      </xhtml:div>
-                      <xhtml:div class="v-leaf" (click)="addAction(node)"
-                        style="background-color: transparent; height: 50px; width: 70px; border: 2px dashed #aaa; margin: auto;"
-                        xmlns="http://www.w3.org/1999/xhtml" >
-                      </xhtml:div>
-                    </ng-container>
-                  </svg:foreignObject>
-                </svg:g>
-              </ng-template>
-              <ng-template #linkTemplate let-link>
-                <svg:g class="edge">
-                  <svg:path class="line" stroke="#aaa" stroke-width="1" marker-start="url(#arrow)">
-                  </svg:path>
-                </svg:g>
-                <svg:g class="linkMidpoint" *ngIf="link.midPoint && !link.category"
-                  [attr.transform]="'translate(' + (link.midPoint.x) + ',' + (link.midPoint.y) + ')'"
-                  (click)="insertAction(link)">
-                  <ellipse rx="10" ry="10" fill='white' stroke='black' strokeWidth='2' />
-                  <svg:foreignObject width="20" height="20" x="-10" y="-10">
-                    <xhtml:div xmlns="http://www.w3.org/1999/xhtml" style="height: 20px; text-align: center;">
-                      <label style="margin: 0; font-size: 24px; line-height: 18px;">+</label>
-                    </xhtml:div>
-                  </svg:foreignObject>
-                </svg:g>
-                <svg:g class="label" *ngIf="link.hasLabel && link.points && link.points[0]" [attr.transform]="'translate(' + (link.points[0].x - 40) + ',' + (link.points[0].y + 40) + ')'">
-                  <svg:rect [attr.width]="90" [attr.height]="60"
-                    fill="transparent" />
-                  <svg:foreignObject width="90" [attr.height]="60">
-                    <xhtml:div class="caseLabel"
-                      style="background-color: transparent; text-align: center;"
-                      xmlns="http://www.w3.org/1999/xhtml">
-                      <label class="name" style="margin-top: 20px; margin-bottom: 0px; font-size: 14px;">{{CASE_ACTIONS[link.type]}}</label>
-                      <label class="remove-link" (click)="removeCase(link)">&times;</label>
-                    </xhtml:div>
-                  </svg:foreignObject>
-                </svg:g>
-              </ng-template>
-            </ngx-graph>
-          </ng-template>
+        <ng-template #flowTemplate>
+          <ngx-graph class="chart-container" [links]="edges" [nodes]="nodes" [layoutSettings]="layoutSettings"
+                     [autoCenter]="true" [layout]="layout" [curve]="curve" [center$]="center$" [draggingEnabled]="false"
+                     [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" #graphWrapper>
+            <ng-template #defsTemplate>
+              <svg:marker id="arrow" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="8" markerHeight="8"
+                          orient="auto">
+                <circle cx="10" cy="10" r="10" stroke="green" stroke-width="0" fill="gray" />
+              </svg:marker>
+              <svg:pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
+                <svg:path d="M-1,1 l2,-2
+                       M0,4 l4,-4
+                       M3,5 l2,-2" style="stroke:#eee; stroke-width:1" />
+              </svg:pattern>
+            </ng-template>
 
-        </div> -->
-        <ngx-graph
-        class="chart-container"
-        [view]="[500, 200]"
-        [links]="[
-          {
-            id: 'a',
-            source: 'first',
-          target: 'second',
-            label: 'is parent of'
-          }, {
-            id: 'b',
-            source: 'first',
-            target: 'third',
-            label: 'custom label'
-          }
-        ]"
-        [nodes]="[
-          {
-            id: 'first',
-            label: 'A'
-          }, {
-            id: 'second',
-            label: 'B'
-          }, {
-            id: 'third',
-            label: 'C'
-          }
-        ]"
-      >
-      </ngx-graph>
+            <ng-template #nodeTemplate let-node>
+              <svg:g class="node" *ngIf="node.category === 'NORMAL'"  (click)="editAction($event, node)">
+                <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.leaf ? 200 : 110"
+                          fill="transparent" />
+                <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110">
+                  <xhtml:div class="cardContainer" style="text-align: center;"
+                             xmlns="http://www.w3.org/1999/xhtml">
+                    <img [attr.src]="ICONS[node.type]" x="75" y="0" height="50px" width="50px" />
+                    <label class="remove-action" (click)="removeAction(node)">&times;</label>
+                  </xhtml:div>
+                  <xhtml:div class="cardContainer"
+                             style="background-color: transparent; padding: 5px 8px 20px 8px; margin-bottom: 15px; text-align: center;"
+                             xmlns="http://www.w3.org/1999/xhtml">
+                    <label class="name" style="margin: 0; font-size: 14px; font-weight: bold;">{{node.label}}</label>
+                    <label class="name" style="margin: 0; font-size: 11px; color: #f28422; display: block;">{{node.period | duration}}</label>
+                  </xhtml:div>
+                  <ng-container *ngIf="node.leaf">
+                    <xhtml:div
+                      style="background-color: transparent; border-left: 2px dashed #aaa; width: 2px; height: 30px; margin-top: -15px; margin-left: auto; margin-right: auto;"
+                      xmlns="http://www.w3.org/1999/xhtml">
+                    </xhtml:div>
+                    <xhtml:div class="v-leaf" (click)="addAction(node)"
+                               style="background-color: transparent; height: 50px; width: 70px; border: 2px dashed #aaa; margin: auto;"
+                               xmlns="http://www.w3.org/1999/xhtml" >
+                    </xhtml:div>
+                  </ng-container>
+                </svg:foreignObject>
+              </svg:g>
+              <svg:g class="node" *ngIf="node.category === 'CONDITION'">
+                <svg:rect [attr.width]="node.dimension.width" [attr.height]="40"
+                          fill="transparent" />
+                <svg:foreignObject width="140" [attr.height]="40" style="overflow: visible">
+                  <xhtml:div [class.trueCase]="node.condition.answer" [class.falseCase]="!node.condition.answer"
+                             xmlns="http://www.w3.org/1999/xhtml">
+                    <label class="name" style="margin: 0; font-size: 12px; font-weight: bold;">{{node.label}}</label>
+                  </xhtml:div>
+                  <ng-container *ngIf="node.leaf">
+                    <xhtml:div
+                      style="background-color: transparent; border-left: 2px dashed #aaa; width: 2px; height: 30px; margin-top: -15px; margin-left: auto; margin-right: auto;"
+                      xmlns="http://www.w3.org/1999/xhtml">
+                    </xhtml:div>
+                    <xhtml:div class="v-leaf" (click)="addAction(node)"
+                               style="background-color: transparent; height: 50px; width: 70px; border: 2px dashed #aaa; margin: auto;"
+                               xmlns="http://www.w3.org/1999/xhtml" >
+                    </xhtml:div>
+                  </ng-container>
+                </svg:foreignObject>
+              </svg:g>
+            </ng-template>
+            <ng-template #linkTemplate let-link>
+              <svg:g class="edge">
+                <svg:path class="line" stroke="#aaa" stroke-width="1" marker-start="url(#arrow)">
+                </svg:path>
+              </svg:g>
+              <svg:g class="linkMidpoint" *ngIf="link.midPoint && !link.category"
+                     [attr.transform]="'translate(' + (link.midPoint.x) + ',' + (link.midPoint.y) + ')'"
+                     (click)="insertAction(link)">
+                <ellipse rx="10" ry="10" fill='white' stroke='black' strokeWidth='2' />
+                <svg:foreignObject width="20" height="20" x="-10" y="-10">
+                  <xhtml:div xmlns="http://www.w3.org/1999/xhtml" style="height: 20px; text-align: center;">
+                    <label style="margin: 0; font-size: 24px; line-height: 18px;">+</label>
+                  </xhtml:div>
+                </svg:foreignObject>
+              </svg:g>
+              <svg:g class="label" *ngIf="link.hasLabel && link.points && link.points[0]" [attr.transform]="'translate(' + (link.points[0].x - 40) + ',' + (link.points[0].y + 40) + ')'">
+                <svg:rect [attr.width]="90" [attr.height]="60"
+                          fill="transparent" />
+                <svg:foreignObject width="90" [attr.height]="60">
+                  <xhtml:div class="caseLabel"
+                             style="background-color: transparent; text-align: center;"
+                             xmlns="http://www.w3.org/1999/xhtml">
+                    <label class="name" style="margin-top: 20px; margin-bottom: 0px; font-size: 14px;">{{CASE_ACTIONS[link.type]}}</label>
+                    <label class="remove-link" (click)="removeCase(link)">&times;</label>
+                  </xhtml:div>
+                </svg:foreignObject>
+              </svg:g>
+            </ng-template>
+          </ngx-graph>
+        </ng-template>
+
+        <!--  -->
       </div>
     </div>
   </div>
