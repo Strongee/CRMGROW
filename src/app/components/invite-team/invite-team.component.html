@@ -13,7 +13,7 @@
     <label class="f-1">MEMBERS TO SEND INVITATION</label>
     <hr class="my-0">
     <div class="list-content py-1">
-      <div class="status-description text-center f-3 mx-auto mt-sm-3" *ngIf="!newMembers.length; else newMemberList">
+      <div class="status-description text-center f-2 mx-auto mt-sm-3" *ngIf="!newMembers.length; else newMemberList">
         There are no members to send invitation. Please add by searching above.
       </div>
       <ng-template #newMemberList>
@@ -33,7 +33,7 @@
     <label class="f-1">INVITATION IN PROGRESS</label>
     <hr class="my-0">
     <div class="list-content py-1">
-      <div class="status-description text-center f-3 mx-auto mt-sm-3" *ngIf="!oldMembers.length; else oldMemberList">
+      <div class="status-description text-center f-2 mx-auto mt-sm-3" *ngIf="!oldMembers.length; else oldMemberList">
         There are no invitations in progress.
       </div>
       <ng-template #oldMemberList>
@@ -63,6 +63,6 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button class="btn c-blue" mat-dialog-cancel>Cancel</button>
+  <button class="btn c-blue" mat-dialog-close>Cancel</button>
   <button class="btn btn-primary" [ngClass]="{loading: inviting}" (click)="sendInvitation()">Save</button>
 </mat-dialog-actions>
