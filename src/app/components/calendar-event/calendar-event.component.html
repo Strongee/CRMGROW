@@ -1,4 +1,8 @@
 <div class="event-container">
+    <div class="v-center form-group" *ngIf="event.meta.is_organizer">
+        <button class="btn btn-accept">Accept</button>
+        <button class="btn btn-red">Decline</button>
+    </div>
     <div class="v-center justify-content-between form-group">
         <div class="f-3 font-weight-bold">
             {{event.title}}
