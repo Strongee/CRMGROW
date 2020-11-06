@@ -27,4 +27,10 @@ export class LabelService extends HttpService {
       catchError(this.handleError('GET LABELS', []))
     );
   }
+  createLabel(label): Observable<Label[]> {
+    return this.httpClient.post(this.server + LABEL.CREATE, label).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('CREATE LABEL', []))
+    );
+  }
 }

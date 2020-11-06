@@ -1,0 +1,18 @@
+.desc {
+  font-weight: 400;
+}
+
+.case {
+  margin: 8px 0px;
+  border: 1px solid #aaa;
+  padding: 5px;
+  border-radius: 6px;
+
+  .title {
+    font-weight: 600;
+  }
+
+  &.selected {
+    background: #eee;
+  }
+}

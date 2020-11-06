@@ -405,3 +405,42 @@ export const ACTION_CAT = {
   NORMAL: 'NORMAL',
   CONDITION: 'CONDITION'
 };
+
+export const DefaultMessage = {
+  AUTO_VIDEO_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the video we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEO_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the video we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEO_EMAIL:
+    '<div>Hi {contact_first_name},</div><div><br/></div><div>This is {user_name} with eXp Realty. Here is the link to the video we discussed:</div>',
+  AUTO_PDF_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the PDF we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDF_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the PDF we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDF_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here is the link to the PDF we discussed:</div>',
+  AUTO_IMAGE_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the Image we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGE_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the Image we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGE_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here is the link to the Image we discussed:</div>',
+  AUTO_VIDEOS_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the links to the videos we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEOS_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the links to the videos we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEOS_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here are the links to the videos we discussed:</div>',
+  AUTO_PDFS_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the PDFs we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDFS_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the PDFs we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDFS_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here are the links to the PDFs we discussed:</div>',
+  AUTO_IMAGES_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the Images we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGES_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the Images we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGES_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here are the links to the Images we discussed:</div>'
+};
