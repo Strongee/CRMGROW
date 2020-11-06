@@ -16,6 +16,7 @@ $custom-checkbox-indicator-border-radius: 3px;
 @import "src/assets/scss/custom-radio";
 @import "src/assets/scss/custom-mat-field";
 @import "src/assets/scss/custom-mat-dialog";
+@import "src/assets/scss/custom-mat-calendar";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 /* Material Theme Basic Setting  */
@@ -1099,4 +1100,10 @@ ul.ngx-pagination {
   &.shared::after {
     content: 'SHARED'
   }
+}
+
+
+// No Shadow
+.no-shadow {
+  box-shadow: none!important;
 }

@@ -380,6 +380,10 @@ export const DialogSettings = {
     width: '98vw',
     maxWidth: '600px',
     height: 'calc(65vh + 114px)'
+  },
+  TASK: {
+    width: '98vw',
+    maxWidth: '394px'
   }
 };
 
@@ -405,3 +409,18 @@ export const ACTION_CAT = {
   NORMAL: 'NORMAL',
   CONDITION: 'CONDITION'
 };
+
+export const REPEAT_DURATIONS = [
+  {
+    value: 1,
+    label: 'Daily'
+  },
+  {
+    value: 7,
+    label: 'Weekly'
+  },
+  {
+    value: 30,
+    label: 'Monthly'
+  }
+];

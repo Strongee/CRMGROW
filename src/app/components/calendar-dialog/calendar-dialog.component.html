@@ -1,171 +1,254 @@
-<form #eventForm="ngForm" (ngSubmit)="submitted = true; changeMode == 'update' ? (eventForm.form.valid ? update() : false) : (eventForm.form.valid ? create() : false)">
-    <div mat-dialog-content>
-        <div class="form-group mx-2">
+<form
+  #eventForm="ngForm"
+  (ngSubmit)="
+    submitted = true;
+    changeMode == 'update'
+      ? eventForm.form.valid
+        ? update()
+        : false
+      : eventForm.form.valid
+      ? create()
+      : false
+  "
+>
+  <div mat-dialog-content>
+    <div class="form-group mx-2">
+      <input
+        class="form-control f-1 font-weight-bold border-primary"
+        type="text"
+        placeholder="Add appointment title"
+        name="title"
+        #title="ngModel"
+        [(ngModel)]="event.title"
+        required
+      />
+      <span
+        class="invalid-feedback"
+        *ngIf="
+          title.errors &&
+          (title.touched || title.dirty || submitted) &&
+          submitted
+        "
+      >
+        Title is required
+      </span>
+    </div>
+    <div class="row mx-0 date-time">
+      <div class="col-5">
+        <div class="form-group">
+          <label class="calendar-label">date</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text bgc-blue">
+                <i class="i-icon i-calendar bgc-white"></i>
+              </span>
+            </div>
             <input
-                class="form-control f-1 font-weight-bold border-primary" 
-                type="text" 
-                placeholder="Add appointment title" 
-                name="title" 
-                #title="ngModel"
-                [(ngModel)]="event.title" 
-                required
+              class="form-control f-1 font-weight-bold datepicker"
+              placeholder="Select date"
+              name="dp"
+              #dp="ngModel"
+              [minDate]="minDate"
+              [(ngModel)]="due_date"
+              ngbDatepicker
+              #d="ngbDatepicker"
+              (click)="d.toggle()"
+              [firstDayOfWeek]="7"
+              type="text"
+              required
+            />
+          </div>
+          <span
+            class="invalid-feedback"
+            *ngIf="
+              dp.errors && (dp.touched || dp.dirty || submitted) && submitted
+            "
+          >
+            Due date is required.
+          </span>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="form-group">
+          <label class="calendar-label">time</label>
+          <select
+            class="form-control f-1 font-weight-bold"
+            [(ngModel)]="due_time"
+            name="time"
+            #time="ngModel"
+            required
+          >
+            <option value="" disabled>Due Time</option>
+            <option *ngFor="let time of times" value="{{ time.id }}">
+              {{ time.text }}
+            </option>
+          </select>
+          <span
+            class="invalid-feedback"
+            *ngIf="
+              time.errors &&
+              (time.touched || time.dirty || submitted) &&
+              submitted
+            "
+          >
+            Due time is required.
+          </span>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="form-group">
+          <label class="calendar-label">duration</label>
+          <select
+            class="form-control f-1 font-weight-bold"
+            [(ngModel)]="duration"
+            name="period"
+            #period="ngModel"
+          >
+            <option
+              *ngFor="let calendar_duration of calendar_durations"
+              value="{{ calendar_duration.value }}"
             >
-            <span
-                class="invalid-feedback"
-                *ngIf="title.errors && ( title.touched || title.dirty || submitted ) && submitted"
+              {{ calendar_duration.text }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-12">
+        <div class="form-group">
+          <label class="calendar-label">ASSIGN GUESTS</label>
+          <app-calendar-contacts [selectedContacts]="contacts">
+          </app-calendar-contacts>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-4 form-group">
+        <label class="calendar-label">video conference</label>
+        <div class="form-group mb-0">
+          <button class="btn btn-blue text-white f-1 font-weight-bold w-100">
+            Add Zoom Link
+          </button>
+        </div>
+      </div>
+      <div class="col-8 form-group">
+        <label class="calendar-label">location</label>
+        <div class="form-group mb-0">
+          <input
+            class="form-control f-1 font-weight-bold"
+            placeholder="Add location"
+            [(ngModel)]="event.location"
+            name="address"
+            #address="ngModel"
+            ngx-google-places-autocomplete
+            #addressplacesRef="ngx-places"
+            [options]="{
+              types: [],
+              componentRestrictions: { country: 'US' }
+            }"
+            (onAddressChange)="handleAddressChange($event)"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-12 form-group mb-0">
+        <label class="calendar-label">DESCRIPTION</label>
+        <quill-editor
+          image-resize="true"
+          placeholder="Add description"
+          [(ngModel)]="event.description"
+          [modules]="config"
+          name="mailContent"
+          [styles]="{ height: '90px' }"
+          #mailContent="ngModel"
+          (onEditorCreated)="getEditorInstance($event)"
+          (click)="setFocusField('content-email')"
+          class="rounded"
+          [class.has-error]="
+            mailContent.errors &&
+            (mailContent.touched || mailContent.dirty || submitted) &&
+            submitted
+          "
+          #emailEditor
+        >
+        </quill-editor>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-12 v-center justify-content-between">
+        <div class="custom-control custom-checkbox my-auto">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="customControlInline"
+            [checked]="isRepeat"
+            (change)="setRepeatEvent()"
+            [disabled]="changeMode == 'update'"
+          />
+          <label
+            class="custom-control-label f-1 font-weight-bold pt-1"
+            for="customControlInline"
+            >Set as recurring event</label
+          >
+        </div>
+        <div class="form-group mt-3 ml-3">
+          <select
+            class="form-control f-1 font-weight-bold text-primary"
+            [(ngModel)]="event.recurrence"
+            name="repeat"
+            #repeat="ngModel"
+            [disabled]="!isRepeat"
+          >
+            <option
+              *ngFor="let recurring of recurrings"
+              value="{{ recurring.value }}"
             >
-                Title is required
-            </span>
+              {{ recurring.text }}
+            </option>
+          </select>
         </div>
-        <div class="row mx-0 date-time">
-            <div class="col-5">
-                <div class="form-group">
-                    <label class="calendar-label">date</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bgc-blue">
-                                <i class="i-icon i-calendar bgc-white"></i>
-                            </span>
-                        </div>
-                        <input
-                            class="form-control f-1 font-weight-bold datepicker"
-                            placeholder="Select date"
-                            name="dp"
-                            #dp="ngModel"
-                            [minDate]="minDate" 
-                            [(ngModel)]="due_date"
-                            ngbDatepicker #d="ngbDatepicker"
-                            (click)="d.toggle()"
-                            [firstDayOfWeek]="7"
-                            type="text"
-                            required
-                        />
-                    </div>
-                    <span
-                            class="invalid-feedback"
-                            *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted) &&submitted"
-                        >
-                            Due date is required.
-                        </span>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="form-group">
-                    <label class="calendar-label">time</label>
-                    <select class="form-control f-1 font-weight-bold" [(ngModel)]="due_time" name="time" #time="ngModel" required>
-                        <option value="" disabled>Due Time</option>
-                        <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
-                    </select>
-                    <span
-                        class="invalid-feedback"
-                        *ngIf="time.errors && (time.touched||time.dirty||submitted)&&submitted"
-                    >
-                        Due time is required.
-                    </span>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label class="calendar-label">duration</label>
-                    <select class="form-control f-1 font-weight-bold" [(ngModel)]="duration" name="period" #period="ngModel">
-                        <option *ngFor="let calendar_duration of calendar_durations" value="{{calendar_duration.value}}">{{calendar_duration.text}}</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="row mx-0">
-            <div class="col-12">
-                <div class="form-group">
-                    <label class="calendar-label">ASSIGN GUESTS</label>
-                    <app-calendar-contacts
-                        [selectedContacts]="contacts"
-                    >
-                    </app-calendar-contacts>
-                </div>
-            </div>
-        </div>
-        <div class="row mx-0">
-            <div class="col-4 form-group">
-                <label class="calendar-label">video conference</label>
-                <div class="form-group mb-0">
-                    <button class="btn btn-blue text-white f-1 font-weight-bold w-100">Add Zoom Link</button>
-                </div>
-            </div>
-            <div class="col-8 form-group">
-                <label class="calendar-label">location</label>
-                <div class="form-group mb-0">
-                    <input
-                        class="form-control f-1 font-weight-bold"
-                        placeholder="Add location"
-                        [(ngModel)]="event.location"
-                        name="address"
-                        #address="ngModel"
-                        ngx-google-places-autocomplete
-                        #addressplacesRef="ngx-places"
-                        [options]="{
-                            types: [],
-                            componentRestrictions: { country: 'US' }
-                        }"
-                        (onAddressChange)="handleAddressChange($event)"
-                    />
-                </div>
-            </div>
-        </div>
-        <div class="row mx-0">
-            <div class="col-12 form-group mb-0">
-                <label class="calendar-label">DESCRIPTION</label>
-                <quill-editor
-                    image-resize="true"
-                    placeholder="Add description"
-                    [(ngModel)]="event.description"
-                    [modules]="config"
-                    name="mailContent"
-                    [styles]="{ height: '90px' }"
-                    #mailContent="ngModel"
-                    (onEditorCreated)="getEditorInstance($event)"
-                    (click)="setFocusField('content-email')"
-                    class="rounded"
-                    [class.has-error]="
-                    mailContent.errors &&
-                    (mailContent.touched || mailContent.dirty || submitted) &&
-                    submitted
-                    "
-                    #emailEditor
-                >
-                </quill-editor>
-            </div>
-        </div>
-        <div class="row mx-0">
-            <div class="col-12 v-center justify-content-between">
-                <div class="custom-control custom-checkbox my-auto">
-                    <input type="checkbox" class="custom-control-input" id="customControlInline" [checked]="isRepeat" (change)="setRepeatEvent()" [disabled]="changeMode == 'update'">
-                    <label class="custom-control-label f-1 font-weight-bold pt-1" for="customControlInline">Set as recurring event</label>  
-                </div>
-                <div class="form-group mt-3 ml-3">
-                    <select class="form-control f-1 font-weight-bold text-primary" [(ngModel)]="event.recurrence" name="repeat" #repeat="ngModel" [disabled]="!isRepeat">
-                        <option *ngFor="let recurring of recurrings" value="{{recurring.value}}">{{recurring.text}}</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-    <div mat-dialog-actions align="end">
-        <div class="row mx-0">
-            <div class="col-12 mb-3">
-                <button type="button" mat-dialog-close class="btn btn-white py-2 f-1 font-weight-bold">
-                    Cancel
-                </button>
-                <button type="submit" class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold" *ngIf="!isLoading && changeMode == 'create'">
-                    Create
-                </button>
-                <button type="submit" class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold" *ngIf="!isLoading && changeMode == 'update'">
-                    Update
-                </button>
-                <app-loading-button [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'" [title]="'Creating'" *ngIf="isLoading && changeMode == 'create'">
-                </app-loading-button>
-                <app-loading-button [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'" [title]="'Updating'" *ngIf="isLoading && changeMode == 'update'">
-                </app-loading-button>
-            </div>
-        </div>
+  </div>
+  <div mat-dialog-actions align="end">
+    <div class="row mx-0">
+      <div class="col-12 mb-3">
+        <button
+          type="button"
+          mat-dialog-close
+          class="btn btn-white py-2 f-1 font-weight-bold"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold"
+          *ngIf="!isLoading && changeMode == 'create'"
+        >
+          Create
+        </button>
+        <button
+          type="submit"
+          class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold"
+          *ngIf="!isLoading && changeMode == 'update'"
+        >
+          Update
+        </button>
+        <app-loading-button
+          [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'"
+          [title]="'Creating'"
+          *ngIf="isLoading && changeMode == 'create'"
+        >
+        </app-loading-button>
+        <app-loading-button
+          [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'"
+          [title]="'Updating'"
+          *ngIf="isLoading && changeMode == 'update'"
+        >
+        </app-loading-button>
+      </div>
     </div>
+  </div>
 </form>
