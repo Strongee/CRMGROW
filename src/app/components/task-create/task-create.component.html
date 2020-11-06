@@ -1,1 +1,111 @@
-<p>task-create works!</p>
+<form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false">
+  <h1 mat-dialog-title>Add new task</h1>
+  <mat-dialog-content>
+    <div class="form-group">
+      <label>type of the task</label>
+      <div>
+        <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="task.type">
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="radio" name="options" value="task" ngbButton>
+            <i class="i-icon i-task d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="radio" name="options" value="call" ngbButton>
+            <i class="i-icon i-phone d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="radio" name="options" value="meeting" ngbButton>
+            <i class="i-icon i-lunch d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="radio" name="options" value="email" ngbButton>
+            <i class="i-icon i-message d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="radio" name="options" value="material" ngbButton>
+            <i class="i-icon i-video d-block bgc-dark"></i>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="content_tc">task regarding</label>
+      <input type="text" class="form-control" id="content_tc" name="content" #content="ngModel" [(ngModel)]="task.content" required>
+      <span class="error" *ngIf="content.errors">
+        <ng-container *ngIf="content.errors.required">Required!</ng-container>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="contact_tc">assign to contact</label>
+      <app-select-contact></app-select-contact>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-12">
+        <div class="form-group">
+          <label for="date_tc">date</label>
+          <div class="input-group bgc-dark-trans08 rounded">
+            <div class="input-group-prepend rounded" (click)="d.toggle()">
+              <span class="input-group-text bgc-blue border-0">
+                <i class="i-icon i-calendar bgc-white"></i>
+              </span>
+            </div>
+            <input
+              type="text"
+              id="date_tc"
+              class="form-control datepicker"
+              placeholder="Select date"
+              name="due_date"
+              #due_date="ngModel"
+              [minDate]="MIN_DATE"
+              [(ngModel)]="date"
+              ngbDatepicker
+              #d="ngbDatepicker"
+              [firstDayOfWeek]="7"
+              required
+              (click)="d.toggle()"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-12">
+        <div class="form-group">
+          <label for="time_tc">time</label>
+          <select class="form-control" name="due_time" #due_time="ngModel" [(ngModel)]="time">
+            <option *ngFor="let time of TIMES" [value]="time.id">
+              {{time.text}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3 mb-3">
+      <div class="col-12 v-center">
+        <div class="custom-control custom-checkbox mr-3">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="repeat_tc"
+            [checked]="task.is_repeat"
+            (change)="toggleRepeatSetting()"
+          />
+          <label
+            class="custom-control-label f-3 fw-600 pt-1"
+            for="repeat_tc"
+            >Set as recurring event</label
+          >
+        </div>
+        <div class="form-group ml-auto mb-0">
+          <select class="form-control c-blue font-weight-bold" [(ngModel)]="task.repeat_duration" name="duration" #duration="ngModel" [disabled]="!task.is_repeat">
+            <option *ngFor="let type of REPEAT_DURATIONS" [value]="type.value">
+              {{type.label}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button class="btn c-blue" mat-dialog-close>Cancel</button>
+    <button class="btn btn-primary">Create</button>
+  </mat-dialog-actions>
+</form>

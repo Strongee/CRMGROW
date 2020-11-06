@@ -12,4 +12,5 @@ export class NoteCreateComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  submit(): void {}
 }

@@ -380,6 +380,10 @@ export const DialogSettings = {
     width: '98vw',
     maxWidth: '600px',
     height: 'calc(65vh + 114px)'
+  },
+  TASK: {
+    width: '98vw',
+    maxWidth: '394px'
   }
 };
 
@@ -444,3 +448,17 @@ export const DefaultMessage = {
   AUTO_IMAGES_EMAIL:
     '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here are the links to the Images we discussed:</div>'
 };
+export const REPEAT_DURATIONS = [
+  {
+    value: 1,
+    label: 'Daily'
+  },
+  {
+    value: 7,
+    label: 'Weekly'
+  },
+  {
+    value: 30,
+    label: 'Monthly'
+  }
+];

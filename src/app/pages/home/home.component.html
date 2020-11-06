@@ -21,4 +21,8 @@
   <button (click)="decrease()">-</button>
   <button (click)="reset()">Reset</button> -->
   <app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar>
+  <!-- <div class="custom-mat">
+    <input matInput [matDatepicker]="picker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  </div> -->
 </div>
