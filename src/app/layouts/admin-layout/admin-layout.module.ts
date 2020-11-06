@@ -43,6 +43,8 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
 import { DealsComponent } from '../../pages/deals/deals.component';
 import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     TagManagerComponent,
     StatusAutomationComponent,
     DealsComponent,
-    DealsDetailComponent
+    DealsDetailComponent,
+    AutoflowComponent
   ],
   imports: [
     CommonModule,
@@ -87,7 +90,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ShareButtonsModule,
     ShareIconsModule,
     MatExpansionModule,
-    DragDropModule
+    DragDropModule,
+    NgxGraphModule
   ],
   schemas: []
 })

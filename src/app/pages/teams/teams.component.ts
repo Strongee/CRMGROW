@@ -100,6 +100,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.isPlannedLoading = true;
     this.isFinishedLoading = true;
     this.userService.profile$.subscribe((res) => {
+      console.log("user profile =============>", res);
       this.currentUser = res;
       this.userId = res._id;
       this.load();

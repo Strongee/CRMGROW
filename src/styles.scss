@@ -16,6 +16,7 @@ $custom-checkbox-indicator-border-radius: 3px;
 @import "src/assets/scss/custom-radio";
 @import "src/assets/scss/custom-mat-field";
 @import "src/assets/scss/custom-mat-dialog";
+@import "src/assets/scss/custom-mat-calendar";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 /* Material Theme Basic Setting  */
@@ -498,6 +499,18 @@ button {
     box-shadow: 0 0 0 0.2rem rgba(0, 0, 255, 0.5);
   }
 }
+.btn-white-gray {
+  background-color: #ECEDEF;
+  color: #101336;
+  border-radius: 3px;
+  height: 21px;
+  border: none;
+
+  &:hover {
+    background-color: #ECEDEF;
+    color: #101336;
+  }
+}
 .btn {
   &:focus {
     box-shadow: none!important;
@@ -533,6 +546,31 @@ ul {
   .form-control {
     height: 40px;
     box-shadow: none!important;
+  }
+  textarea {
+    &.form-control {
+      height: auto;
+    }
+
+    &::-webkit-input-placeholder {
+      color: rgba(0,0,0,.42);
+    }
+
+    &:-moz-placeholder { /* Firefox 18- */
+      color: rgba(0,0,0,.42);
+    }
+
+    &::-moz-placeholder {  /* Firefox 19+ */
+      color: rgba(0,0,0,.42);
+    }
+
+    &:-ms-input-placeholder {
+      color: rgba(0,0,0,.42);
+    }
+
+    &::placeholder {
+      color: rgba(0,0,0,.42);
+    }
   }
   .error {
     font-size: 11px;
@@ -1064,9 +1102,155 @@ ul.ngx-pagination {
   }
 }
 
-
-
 // Style
 .status-description {
   max-width: 300px;
+}
+
+.role{
+  font-size: 10px;
+  font-weight: bold;
+  padding: 3px 8px;
+  background: #f28422;
+  border-radius: 3px;
+  width: fit-content;
+  color: white;
+  line-height: 14px;
+  &.admin {
+    background-color: #0000ff;
+  }
+  &.team {
+    background-color: #1ca57a;
+  }
+  &.shared {
+    background-color: #b72ad8;
+  }
+  &::after {
+    content: "OWN"
+  }
+  &.admin::after {
+    content: "ADMIN"
+  }
+  &.team::after {
+    content: "TEAM"
+  }
+  &.shared::after {
+    content: 'SHARED'
+  }
+}
+
+
+.in-automation.template-role.shared {
+  font-size: 10px;
+  height: 12px;
+  line-height: 12px !important;
+  margin-bottom: 3px;
+  display: block;
+  background: #1ca57a;
+  width: fit-content;
+  padding: 0px 2px;
+  border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  position: absolute;
+  top: 2px;
+  padding: 0px 5px;
+}
+
+
+
+select.theme-control {
+  background-image:
+    linear-gradient(45deg, transparent 50%, blue 50%),
+    linear-gradient(135deg, blue 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px),
+    calc(100% - 2.5em) 0.5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+}
+select.theme-control {
+  /* styling */
+  background-color: white;
+  border-radius: 4px;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.5em 3.5em 0.5em 1em;
+  /* reset */
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 100%;
+  color: blue!important;
+  font-weight: 600;
+  font-size: 14px;
+}
+.theme-control {
+  height: 2.5rem!important;
+}
+.theme-label {
+  margin-bottom: 0.3rem;
+  font-size: 12px;
+  color: gray;
+  font-weight: 400;
+
+  .description {
+    display: contents;
+    font-size: 10px;
+    color: #aaa;
+  }
+}
+.theme-radios {
+  width: 100%;
+  display: flex;
+  height: 2.5rem!important;
+  background: white;
+
+  .theme-radio {
+    flex: 1;
+    border: 1px solid blue;
+    border-left: none;
+    text-align: center;
+    font-weight: bold;
+    color: blue;
+    overflow: hidden;
+
+    &:first-child {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      border-left: 1px solid blue;
+    }
+    &:last-child {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .custom-theme-label {
+      font-weight: bold;
+      margin: 0px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    input:checked ~ .custom-theme-label {
+      background-color: blue;
+      color: white;
+    }
+  }
+}
+
+// No Shadow
+.no-shadow {
+  box-shadow: none!important;
 }
