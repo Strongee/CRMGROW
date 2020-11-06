@@ -1,3 +1,112 @@
+@import '../../../variables';
+
+:host ::ng-deep{
+    mat-expansion-panel {
+        box-shadow: none !important;
+        mat-expansion-panel-header {
+            &:hover {
+                background-color: #ffffff !important;
+            }
+        }
+        .avatar-wrapper {
+            display: flex;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+          
+            .avatar {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 40px;
+              min-width: 40px;
+              height: 40px;
+              min-height: 40px;
+              background-color: $color-dark;
+              color: #ffffff;
+              font-size: 16px;
+              margin-right: 10px;
+              box-shadow: unset;
+            }
+        }
+        .mat-expansion-panel-body {
+            padding: 0;
+        }
+    }
+}
 .title {
     font-size: 24px;
+}
+.stages {
+    .stage {
+        width: 20vw;
+        padding: 10px 0px 10px 20px;
+        position: relative;
+        &::before:not(:first-child) {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 0;
+            width: 0;
+            border-bottom: 10px solid #fff;
+            border-top: 30px solid transparent;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+        &::after:not(:last-child) {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 0;
+            width: 0;
+            border-bottom: 10px solid #04B800;
+            border-bottom-color: #04B800;
+            border-top: 30px solid transparent;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            -webkit-transform: rotate(90deg) translateY(-40px);
+            transform: rotate(90deg) translateY(-40px);
+        }
+        &:first-child {
+            background-color: #04B800;
+            color: white;
+            margin-left: 0 !important;
+            &::after {
+                content: "";
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                height: 0;
+                width: 0;
+                border-bottom: 10px solid #04B800;
+                border-bottom-color: #04B800;
+                border-top: 30px solid transparent;
+                border-left: 20px solid transparent;
+                border-right: 20px solid transparent;
+                -webkit-transform: rotate(90deg) translateY(-40px);
+                transform: rotate(90deg) translateY(-40px);
+            }
+        }
+        &:last-child {
+            margin-right: 0 !important;
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 0;
+                width: 0;
+                border-bottom: 10px solid #fff;
+                border-top: 30px solid transparent;
+                border-left: 20px solid transparent;
+                border-right: 20px solid transparent;
+                -webkit-transform: rotate(90deg);
+                transform: rotate(90deg);
+            }
+        }
+    }
 }

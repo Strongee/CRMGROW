@@ -14,6 +14,8 @@ export class DealsDetailComponent implements OnInit {
     'ICA Completed',
     'Join Company'
   ];
+  contacts = [];
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

@@ -30,10 +30,108 @@
             <button class="btn btn-red f-6 font-weight-bold">Lost</button>
         </div>
     </div>
-    <div class="v-center form-group mt-3">
+    <div class="form-group mt-3">
         <label for="stage">stage</label>
-        <div class="f-4 font-weight-bold" *ngFor="let stage of stages">
-            {{stage}}
+        <div class="v-center stages">
+            <div class="f-4 font-weight-bold mx-2 stage" *ngFor="let stage of stages">
+                {{stage}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="main-contact">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header class="p-0">
+                            <mat-panel-title>
+                                <div class="v-center f-6 font-weight-bold">
+                                    <mat-icon class="op-56 mr-2">arrow_drop_down</mat-icon> Main contact
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="contact-detail ml-1">
+                            <div class="v-center mb-3">
+                                <div class="v-center">
+                                    <div class="avatar-wrapper">
+                                        <div class="avatar">AJ</div>
+                                    </div>
+                                    <div class="ml-3">
+                                        <div class="f-6 font-weight-bold text-primary">Andrew Johnson</div>
+                                        <div class="f-3 op-56">Last Communication a day ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="primary">primary contacts</label>
+                                <div class="v-center f-6">
+                                    <i class="i-icon i-phone d-block bgc-dark mr-2"></i>
+                                    +1 (202) 555 0168
+                                </div>
+                                <div class="v-center f-6 mt-2">
+                                    <i class="i-icon i-email d-block bgc-dark mr-2"></i>
+                                    +1 (202) 555 0168
+                                </div>
+                                <div class="v-center f-6 mt-2">
+                                    <i class="i-icon i-location d-block bgc-dark mr-2"></i>
+                                    +1 (202) 555 0168
+                                </div>
+                                <div class="v-center f-6 mt-2">
+                                    <i class="i-icon i-task d-block bgc-dark mr-2"></i>
+                                    +1 (202) 555 0168
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="secondary">secondary contacts</label>
+                                <div class="v-center f-6">
+                                    <i class="i-icon i-phone d-block bgc-dark mr-2"></i>
+                                    +1 (202) 555 0168
+                                </div>
+                                <div class="v-center f-6 mt-2">
+                                    <i class="i-icon i-email d-block bgc-dark mr-2"></i>
+                                    +1 (202) 555 0168
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+            <div class="participant">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header class="p-0">
+                            <mat-panel-title>
+                                <div class="v-center f-6 font-weight-bold">
+                                    <mat-icon class="op-56 mr-2">arrow_drop_down</mat-icon> Participants
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="participant-detail ml-1">
+                            <div class="form-group">
+                                <label for="contacts">add additional contacts & guest</label>
+                                <app-input-contacts
+                                    [selectedContacts]="contacts"
+                                >
+                                </app-input-contacts>
+                            </div>
+                            <div class="form-group">
+                                <label for="leader">add leader</label>
+                                <app-input-contacts
+                                    [selectedContacts]="contacts"
+                                >
+                                </app-input-contacts>
+                            </div>
+                            <div class="form-group">
+                                <label for="team">add teams</label>
+                                <app-input-contacts
+                                    [selectedContacts]="contacts"
+                                >
+                                </app-input-contacts>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
         </div>
     </div>
 </div>
