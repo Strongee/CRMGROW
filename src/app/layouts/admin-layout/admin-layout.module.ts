@@ -40,6 +40,8 @@ import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.comp
 import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.component';
 import { StatusAutomationComponent } from '../../pages/status-automation/status-automation.component';
 import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
+import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
   declarations: [
@@ -70,7 +72,8 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     AssistantComponent,
     LeadCaptureComponent,
     TagManagerComponent,
-    StatusAutomationComponent
+    StatusAutomationComponent,
+    AutoflowComponent
   ],
   imports: [
     CommonModule,
@@ -81,7 +84,8 @@ import { SocialProfileComponent } from '../../pages/social-profile/social-profil
     NgxSpinnerModule,
     ShareButtonsModule,
     ShareIconsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgxGraphModule
   ],
   schemas: []
 })

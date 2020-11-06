@@ -1,0 +1,15 @@
+.automation-table {
+  td {
+    padding: 10px;
+  }
+
+  .action-count,
+  .contacts,
+  .created {
+    text-align: right;
+  }
+
+  .icon-button {
+    cursor: pointer;
+  }
+}
