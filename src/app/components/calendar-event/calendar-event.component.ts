@@ -8,6 +8,7 @@ import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/c
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
+import { CalendarDeclineComponent } from '../calendar-decline/calendar-decline.component';
 
 @Component({
   selector: 'app-calendar-event',
@@ -72,7 +73,7 @@ export class CalendarEventComponent implements OnInit {
         .subscribe((res) => {
           if (res) {
             if (res.type == 'own') {
-              delete this.event['recurrence_id'];
+              delete this.event.meta['recurrence_id'];
             }
             this.appointmentService
               .removeEvents(
@@ -120,5 +121,15 @@ export class CalendarEventComponent implements OnInit {
           }
         );
     }
+  }
+
+  accept(): void {}
+
+  decline(): void {
+    this.dialog.open(CalendarDeclineComponent, {
+      position: { top: '40vh' },
+      width: '100vw',
+      maxWidth: '300px'
+    });
   }
 }
