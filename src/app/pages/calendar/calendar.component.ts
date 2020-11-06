@@ -46,7 +46,6 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
-      console.log('##', this.user);
     });
     let mode, year, month, day;
     mode = this.router.snapshot.params['mode'];
@@ -93,7 +92,6 @@ export class CalendarComponent implements OnInit {
     this.appointmentService.getEvents(date, mode).subscribe(
       (res) => {
         if (res['status'] == true) {
-          console.log('####', res);
           this.events = res['data'].map((item) => {
             return {
               title: item.title,
