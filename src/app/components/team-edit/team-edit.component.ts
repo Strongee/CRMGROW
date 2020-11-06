@@ -54,4 +54,17 @@ export class TeamEditComponent implements OnInit {
         }
       );
   }
+  deleteTeam(): void {
+    const team = this.team;
+    this.dialogRef.close();
+    this.dialog
+      .open(TeamDeleteComponent, {
+        data: {
+          team
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+      });
+  }
 }

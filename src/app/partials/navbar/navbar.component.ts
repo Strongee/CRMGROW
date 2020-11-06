@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
+import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { TaskService } from 'src/app/services/task.service';
@@ -43,14 +44,10 @@ export class NavbarComponent implements OnInit {
     // Open New modal that corresponds to action
     switch (action) {
       case 'contact':
-        this.dialog
-          .open(ContactCreateComponent, DialogSettings.CONTACT)
-          .afterClosed()
-          .subscribe((res) => {
-            console.log('Create Component');
-          });
+        this.dialog.open(ContactCreateComponent, DialogSettings.CONTACT);
         break;
       case 'task':
+        this.dialog.open(TaskCreateComponent, DialogSettings.TASK);
         break;
       case 'note':
         break;

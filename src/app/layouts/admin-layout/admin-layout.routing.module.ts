@@ -16,6 +16,10 @@ import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
 import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
 import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
+import { DealsComponent } from 'src/app/pages/deals/deals.component';
+import { DealsDetailComponent } from 'src/app/pages/deals-detail/deals-detail.component';
+import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
+import { PageExitGuard } from 'src/app/guards/page-exit.guard';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -23,6 +27,20 @@ export const AdminLayoutRoutes: Routes = [
     component: HomeComponent,
     data: {
       title: 'Tasks'
+    }
+  },
+  {
+    path: 'deals',
+    component: DealsComponent,
+    data: {
+      title: 'Deals'
+    }
+  },
+  {
+    path: 'deals/detail',
+    component: DealsDetailComponent,
+    data: {
+      title: 'Deals'
     }
   },
   {
@@ -94,6 +112,21 @@ export const AdminLayoutRoutes: Routes = [
     data: {
       title: 'Automations'
     }
+  },
+  {
+    path: 'autoflow/new',
+    component: AutoflowComponent,
+    data: {
+      title: 'Automations'
+    }
+  },
+  {
+    path: 'autoflow/:mode/:id',
+    component: AutoflowComponent,
+    data: {
+      title: 'Automation'
+    },
+    canDeactivate: [PageExitGuard]
   },
   {
     path: 'settings',

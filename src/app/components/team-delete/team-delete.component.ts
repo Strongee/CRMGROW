@@ -7,6 +7,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialog
 } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-team-delete',
@@ -21,6 +22,7 @@ export class TeamDeleteComponent implements OnInit {
     private toast: ToastrService,
     private dialogRef: MatDialogRef<TeamDeleteComponent>,
     private dialog: MatDialog,
+    private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.team) {
@@ -34,6 +36,7 @@ export class TeamDeleteComponent implements OnInit {
     this.teamService.delete(this.team._id).subscribe(
       (res) => {
         this.updating = false;
+        this.router.navigate(['/teams']);
         this.dialogRef.close(res);
       },
       (err) => {

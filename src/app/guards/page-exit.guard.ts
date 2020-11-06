@@ -1,21 +1,6 @@
-import { Injectable, HostListener } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-
-export abstract class ComponentCanDeactivate {
-  abstract canDeactivate(): boolean;
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any): void {
-    if (!this.canDeactivate()) {
-      $event.returnValue = true;
-    }
-  }
-}
-export abstract class PageCanDeactivate extends ComponentCanDeactivate {
-  abstract saved: boolean = false;
-  canDeactivate(): boolean {
-    return this.saved;
-  }
-}
+import { ComponentCanDeactivate } from '../variables/abstractors';
 
 @Injectable()
 export class PageExitGuard implements CanDeactivate<ComponentCanDeactivate> {

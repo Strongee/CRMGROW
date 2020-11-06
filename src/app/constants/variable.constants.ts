@@ -371,5 +371,94 @@ export const DialogSettings = {
   CONTACT: {
     width: '98vw',
     maxWidth: '600px'
+  },
+  JOIN_TEAM: {
+    width: '98vw',
+    maxWidth: '600px'
+  },
+  INVITE_TEAM: {
+    width: '98vw',
+    maxWidth: '600px',
+    height: 'calc(65vh + 114px)'
+  },
+  TASK: {
+    width: '98vw',
+    maxWidth: '394px'
   }
 };
+
+export const ActionName = {
+  note: 'Note',
+  email: 'Send Email',
+  send_email_video: 'Send Video Email',
+  send_text_video: 'Send Video Text',
+  send_email_pdf: 'Send PDF Email',
+  send_text_pdf: 'Send PDF Text',
+  send_email_image: 'Send Image Email',
+  send_text_image: 'Send Image Text',
+  follow_up: 'Follow up',
+  watched_video: 'Watched Video',
+  watched_pdf: 'Watched PDF',
+  watched_image: 'Watched Image',
+  opened_email: 'Opened Email',
+  update_contact: 'Update Contact'
+};
+
+export const ACTION_CAT = {
+  START: 'START',
+  NORMAL: 'NORMAL',
+  CONDITION: 'CONDITION'
+};
+
+export const DefaultMessage = {
+  AUTO_VIDEO_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the video we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEO_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the video we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEO_EMAIL:
+    '<div>Hi {contact_first_name},</div><div><br/></div><div>This is {user_name} with eXp Realty. Here is the link to the video we discussed:</div>',
+  AUTO_PDF_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the PDF we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDF_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the PDF we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDF_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here is the link to the PDF we discussed:</div>',
+  AUTO_IMAGE_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the Image we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGE_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here is the link to the Image we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGE_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here is the link to the Image we discussed:</div>',
+  AUTO_VIDEOS_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the links to the videos we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEOS_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the links to the videos we discussed. Please call/text me back at {user_phone}.',
+  AUTO_VIDEOS_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here are the links to the videos we discussed:</div>',
+  AUTO_PDFS_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the PDFs we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDFS_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the PDFs we discussed. Please call/text me back at {user_phone}.',
+  AUTO_PDFS_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here are the links to the PDFs we discussed:</div>',
+  AUTO_IMAGES_TEXT:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the Images we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGES_TEXT1:
+    'Hi {contact_first_name}, \n\nThis is {user_name} with eXp Realty. Here are the link to the Images we discussed. Please call/text me back at {user_phone}.',
+  AUTO_IMAGES_EMAIL:
+    '<div>Hi {contact_first_name},</div> <div><br/></div><div>This is {user_name} with eXp Realty. Here are the links to the Images we discussed:</div>'
+};
+export const REPEAT_DURATIONS = [
+  {
+    value: 1,
+    label: 'Daily'
+  },
+  {
+    value: 7,
+    label: 'Weekly'
+  },
+  {
+    value: 30,
+    label: 'Monthly'
+  }
+];

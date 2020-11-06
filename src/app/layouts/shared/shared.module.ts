@@ -4,13 +4,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { StripePipe } from '../../pipes/stripe.pipe';
@@ -21,6 +24,7 @@ import { LoadingButtonComponent } from '../../elements/loading-button/loading-bu
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DurationPipe } from '../../pipes/duration.pipe';
 import {
   TimeagoModule,
   TimeagoIntl,
@@ -31,7 +35,12 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
-  declarations: [StripePipe, LoadingButtonComponent, LoadingOverlayComponent],
+  declarations: [
+    StripePipe,
+    LoadingButtonComponent,
+    LoadingOverlayComponent,
+    DurationPipe
+  ],
   imports: [
     CommonModule,
     NgbModule,
@@ -47,7 +56,10 @@ import { NgPipesModule } from 'ngx-pipes';
     MatChipsModule,
     MatIconModule,
     MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgxMatSelectSearchModule,
+    ClipboardModule,
     NgPipesModule,
     QuillModule.forRoot(),
     CalendarModule.forRoot({
@@ -72,7 +84,10 @@ import { NgPipesModule } from 'ngx-pipes';
     MatChipsModule,
     MatSelectModule,
     MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgxMatSelectSearchModule,
+    ClipboardModule,
     NgPipesModule,
     LoadingButtonComponent,
     StripePipe,
@@ -85,7 +100,8 @@ import { NgPipesModule } from 'ngx-pipes';
     CalendarModule,
     NgxPaginationModule,
     TimeagoModule,
-    GooglePlaceModule
+    GooglePlaceModule,
+    DurationPipe
   ]
 })
 export class SharedModule {}

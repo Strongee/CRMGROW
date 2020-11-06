@@ -1,0 +1,14 @@
+import { Deserializable } from './deserialize.model';
+
+export class Note implements Deserializable {
+  _id: string;
+  user: string;
+  content: string;
+  contact: string;
+  updated_at: Date;
+  created_at: Date;
+
+  deserialize(input: any): this {
+    return Object.assign(this, input);
+  }
+}

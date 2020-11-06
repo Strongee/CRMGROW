@@ -14,6 +14,8 @@ import { TeamDeleteComponent } from '../../components/team-delete/team-delete.co
 import { JoinCallRequestComponent } from '../../components/join-call-request/join-call-request.component';
 import { CallRequestConfirmComponent } from '../../components/call-request-confirm/call-request-confirm.component';
 import { CallRequestCancelComponent } from '../../components/call-request-cancel/call-request-cancel.component';
+import { JoinTeamComponent } from 'src/app/components/join-team/join-team.component';
+import { DialogSettings } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-teams',
@@ -98,6 +100,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.isPlannedLoading = true;
     this.isFinishedLoading = true;
     this.userService.profile$.subscribe((res) => {
+      console.log("user profile =============>", res);
       this.currentUser = res;
       this.userId = res._id;
       this.load();
@@ -588,7 +591,9 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   openForm(): void {}
 
-  joinForm(): void {}
+  joinForm(): void {
+    this.dialog.open(JoinTeamComponent, DialogSettings.JOIN_TEAM);
+  }
 
   getDuration(duration): string {
     if (duration === 60) {

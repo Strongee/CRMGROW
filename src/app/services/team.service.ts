@@ -9,6 +9,7 @@ import { HttpService } from './http.service';
 import { StoreService } from './store.service';
 import { TeamCall } from '../models/team-call.model';
 import { User } from '../models/user.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,79 @@ export class TeamService extends HttpService {
       ),
       catchError(this.handleError('LOAD LEADERS', []))
     );
+  }
+  /**
+   * Search team or user by keyword
+   * Response Data: {status, team_array, user_array}
+   * @param keyword : keyword to search
+   */
+  searchTeamUser(keyword: string): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.SEARCH_TEAM_USER, { search: keyword })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('SEARCH TEAM AND USERS', {}))
+      );
+  }
+  /**
+   * search the teams by id of the user that is included.
+   * Response Data: Team array observable
+   * @param id : id of the user that included team
+   */
+  searchTeamByUser(id: string): Observable<Team[]> {
+    return this.httpClient
+      .get(this.server + TEAM.SEARCH_TEAM_BY_USER + id)
+      .pipe(
+        map((res) => (res['data'] || []).map((e) => new Team().deserialize(e))),
+        catchError(this.handleError('SEARCH TEAMS BY USER', []))
+      );
+  }
+  /**
+   * Search user -> This is part of the team and user search
+   * @param keyword: string to search users
+   */
+  searchUser(keyword: string): Observable<User[]> {
+    return this.httpClient
+      .post(this.server + TEAM.SEARCH_TEAM_USER, { search: keyword })
+      .pipe(
+        map((res) =>
+          (res['user_array'] || []).map((e) => new User().deserialize(e))
+        ),
+        catchError(this.handleError('SEARCH USERS', {}))
+      );
+  }
+  /**
+   * Send the request to join
+   * @param request: request object to join (searchedUser: user_id array || undefined, team_id: id of team)
+   */
+  requestJoin(request: any): Observable<any> {
+    return this.httpClient
+      .post(environment.api + TEAM.JOIN_REQUEST, request)
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('TEAM JOIN REQUST', null))
+      );
+  }
+  /**
+   * Send invitation to the internal users and external users (internal users are identified by user ids, external users are identified by emails)
+   * @param id : _id of Team
+   * @param invitations : _id array of internal users
+   * @param referrals : email array of external users
+   */
+  inviteUsers(
+    id: string,
+    invitations: string[],
+    referrals: string[]
+  ): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.INVITE_USERS + id, {
+        invites: invitations,
+        referrals
+      })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('SEND INVITATION', {}))
+      );
   }
   update(id, data): Observable<Team[]> {
     return this.httpClient.put(this.server + TEAM.UPDATE + id, data).pipe(

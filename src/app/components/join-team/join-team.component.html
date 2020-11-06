@@ -1,0 +1,90 @@
+<h1 mat-dialog-title>Request to join the team</h1>
+<mat-dialog-content>
+  <div class="form-group" [ngClass]="{invalid: (error$ | async)}">
+    <label for="search-to-join">SEARCH</label>
+    <div class="custom-mat-field">
+      <mat-form-field appearance="outline" floatLabel="never" class="d-block">
+        <mat-chip-list aria-label="Team Selection" #teamList>
+          <input
+            [placeholder]="placeholder"
+            #inputField
+            [formControl]="inputControl"
+            [matChipInputFor]="teamList"
+            [matAutocomplete]="auto"
+            [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+            id="search-to-join"
+          >
+        </mat-chip-list>
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="onSelectOption($event)"
+          [autoActiveFirstOption]="true"
+        >
+          <mat-option *ngFor="let item of filteredTeams | async" [value]="item">
+            <div class="v-center chip py-3">
+              <img class="team-avatar md rounded mr-2" [src]="item.picture" onerror="(this.src = './assets/img/team_placeholder.png')" />
+              <div class="font-weight-bold f-5">{{item.name}}</div>
+              <div class="bgc-azure c-badge rect f-1 ml-auto">Team</div>
+            </div>
+          </mat-option>
+          <mat-option *ngFor="let item of filteredUsers | async" [value]="item">
+            <div class="d-flex chip py-2">
+              <img *ngIf="item.picture_profile; else avatarNameTemplate" [src]="item.picture_profile" onerror="(this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+              <ng-template #avatarNameTemplate>
+                <div class="form-avatar rounded-circle bg-dark mr-1">{{item.avatarName}}</div>
+              </ng-template>
+              <div class="info">
+                <div class="f-5 font-weight-bold">{{item.user_name}}</div>
+                <div class="f-2">{{item['email'] || 'Undefined'}}</div>
+                <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
+              </div>
+            </div>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <span class="error pl-1" *ngIf="error$ | async">
+      Please select team.
+    </span>
+  </div>
+  <div class="searched-results">
+    <ng-container *ngIf="(selectedUser && selectedUser.length) || selectedTeam">
+      <ng-container *ngIf="teamSearching; else searchedTemplate">
+        <div class="loader"></div>
+        <p class="text-center f-4 status-description mx-auto">Searching teams that includs the selected user</p>
+      </ng-container>
+      <ng-template #searchedTemplate>
+        <div *ngIf="!searchedTeams.length; else teamListTemplate" >
+          <p class="text-center f-4 status-description mx-auto">There are no teams that includs the following user</p>
+        </div>
+      </ng-template>
+      <ng-template #teamListTemplate>
+        <div class="team v-center p-3 rounded c-pointer" *ngFor="let team of searchedTeams" [ngClass]="{selected: team._id === selectedTeam?._id}" (click)="selectTeam($event, team)">
+          <img class="team-avatar rounded mr-2" [src]="team.picture" onerror="(this.src = './assets/img/team_placeholder.png')"/>
+          <div class="team-info mr-2">
+            <div class="f-6 font-weight-bold">{{team.name}}</div>
+            <div class="d-flex">
+              <div class="f-1 mr-2">{{team.memberCount}} Members</div>
+              <div class="f-1">{{team.materialCount}} materials</div>
+            </div>
+          </div>
+          <div class="v-center">
+            <label class="f-1 mr-2 mb-0">OWNER</label>
+            <div class="v-center">
+              <img *ngIf="team.owner[0].picture_profile; else ownerAvatarNameTemplate" [src]="team.owner[0].picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-2" />
+              <ng-template #ownerAvatarNameTemplate>
+                <div class="form-avatar rounded-circle bg-dark mr-1">{{"UN"}}</div>
+              </ng-template>
+              <div class="fw-600">{{team.owner[0].user_name}}</div>
+            </div>
+          </div>
+          <i class="i-icon i-close bg-dark ml-auto deselect" (click)="deselectTeam()"></i>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn c-blue" mat-dialog-close>Cancel</button>
+  <button class="btn btn-primary" [ngClass]="{loading: requesting}" (click)="requestJoin()">Request</button>
+</mat-dialog-actions>

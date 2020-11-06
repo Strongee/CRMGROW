@@ -19,6 +19,7 @@ import {
 } from '@angular/common/http';
 import { ApiInterceptor } from 'src/app/interceptors/api.interceptor';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { PageExitGuard } from './guards/page-exit.guard';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -47,7 +48,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ComponentsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
+    PageExitGuard
   ],
   bootstrap: [AppComponent]
 })

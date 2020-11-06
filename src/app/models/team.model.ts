@@ -4,6 +4,7 @@ export class Team implements Deserializable {
   _id: string;
   owner: any[];
   name: string;
+  picture: string;
   description: string;
   email: string;
   cell_phone: string;
@@ -24,5 +25,12 @@ export class Team implements Deserializable {
   updated_at: string;
   deserialize(input: any): this {
     return Object.assign(this, input);
+  }
+
+  get memberCount(): number {
+    return this.editors.length + this.members.length;
+  }
+  get materialCount(): number {
+    return this.videos.length + this.pdfs.length + this.images.length;
   }
 }

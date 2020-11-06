@@ -100,7 +100,7 @@ export const TEAM = {
   READ: 'team/',
   UPDATE: 'team/',
   DELETE: 'team/',
-  SEARCH_USER: 'team/search-user',
+  SEARCH_TEAM_USER: 'team/search-user',
   SEARCH_LEADER: 'team/search-leader',
   INVITE_USERS: 'team/bulk-invite/',
   SHARE_VIDEOS: 'team/share-videos',
@@ -109,7 +109,7 @@ export const TEAM = {
   SHARE_TEMPLATES: 'team/share-templates',
   SHARE_AUTOMATIONS: 'team/share-automations',
   ACCEPT_INVITATION: 'team/accept/',
-  SEARCH_TEAM: 'team/user/',
+  SEARCH_TEAM_BY_USER: 'team/user/',
   JOIN_REQUEST: 'team/request',
   ACCEPT_REQUEST: 'team/admin-accept',
   UPDATE_TEAM: 'team/update',
@@ -137,5 +137,12 @@ export const LABEL = {
 };
 
 export const AUTOMATION = {
-  SEARCH: 'automation/search'
+  SEARCH: 'automation/search',
+  LOAD_PAGE: 'automation/list/',
+  LOAD_ALL: 'automation/',
+  DETAIL: 'automation/detail/',
+  DELETE: 'automation/',
+  READ: 'automation/',
+  UPDATE: 'automation/',
+  CREATE: 'automation'
 };

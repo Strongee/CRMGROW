@@ -38,6 +38,13 @@ import { ContactCreateComponent } from './contact-create/contact-create.componen
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { NoteCreateComponent } from './note-create/note-create.component';
 import { CalendarDeclineComponent } from './calendar-decline/calendar-decline.component';
+import { JoinTeamComponent } from './join-team/join-team.component';
+import { InviteTeamComponent } from './invite-team/invite-team.component';
+import { SearchUserComponent } from './search-user/search-user.component';
+import { LabelComponent } from './label/label.component';
+import { ActionDialogComponent } from './action-dialog/action-dialog.component';
+import { ActionEditComponent } from './action-edit/action-edit.component';
+import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
 @NgModule({
   declarations: [
     TopbarComponent,
@@ -75,14 +82,21 @@ import { CalendarDeclineComponent } from './calendar-decline/calendar-decline.co
     ContactCreateComponent,
     TaskCreateComponent,
     NoteCreateComponent,
-    CalendarDeclineComponent
+    CalendarDeclineComponent,
+    JoinTeamComponent,
+    InviteTeamComponent,
+    SearchUserComponent,
+    LabelComponent,
+    ActionDialogComponent,
+    ActionEditComponent,
+    CaseConfirmComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule,
     TranslateModule.forChild({ extend: true }),
-    NgxCropperJsModule,
+    NgxCropperJsModule
   ],
   exports: [
     TopbarComponent,

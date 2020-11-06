@@ -1,0 +1,15 @@
+@import 'src/variables.scss';
+
+.searched-results {
+  max-height: calc(65vh - 75px);
+  overflow: auto;
+}
+.team.selected {
+  background-color: $color-trans08;
+}
+.team {
+  background-color: $color-trans04;
+}
+.team:not(.selected) .deselect {
+  display: none;
+}

@@ -13,6 +13,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TabItem } from '../../utils/data.types';
 import { VideoShareComponent } from '../../components/video-share/video-share.component';
+import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
+import { InviteTeamComponent } from 'src/app/components/invite-team/invite-team.component';
+import { DialogSettings } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-team',
@@ -175,32 +178,6 @@ export class TeamComponent implements OnInit {
         // this.loadError = true;
       }
     );
-  }
-  inviteMember(): void {
-    // this.dialog
-    //   .open(InviteUserComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: '70vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.teamId,
-    //       share_url: this.shareUrl
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res['invites']) {
-    //       this.team.invites = [...res['invites'], ...this.team.invites];
-    //     }
-    //     if (res['referrals']) {
-    //       if (this.team.referrals && this.team.referrals.length) {
-    //         this.team.referrals = [...res['referrals'], ...this.team.referrals];
-    //       } else {
-    //         this.team.referrals = [...res['referrals']];
-    //       }
-    //     }
-    //   });
   }
   createTeamVideo(): void {
     this.dialog
@@ -558,7 +535,7 @@ export class TeamComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          let newInvites = [];
+          const newInvites = [];
           this.team.invites.forEach((e) => {
             if (e._id != member._id) {
               newInvites.push(e._id);
@@ -571,7 +548,7 @@ export class TeamComponent implements OnInit {
               (response) => {
                 this.updating = false;
                 this.team.invites.some((e, index) => {
-                  if(e._id === member._id) {
+                  if (e._id === member._id) {
                     this.team.invites.splice(index, 1);
                     return true;
                   }
@@ -939,5 +916,58 @@ export class TeamComponent implements OnInit {
       }
     }
     return true;
+  }
+  editTeam(): void {
+    this.dialog
+      .open(TeamEditComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          team: this.team
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.team = res;
+        }
+      });
+  }
+
+  /**
+   * Open Invite member modal and do action
+   */
+  inviteMember(): void {
+    this.dialog.open(InviteTeamComponent, {
+      ...DialogSettings.INVITE_TEAM,
+      data: { ...this.team }
+    });
+  }
+  inviteMemberOld(): void {
+    // this.dialog
+    //   .open(InviteUserComponent, {
+    //     width: '96vw',
+    //     maxWidth: '500px',
+    //     height: '70vh',
+    //     disableClose: true,
+    //     data: {
+    //       team_id: this.teamId,
+    //       share_url: this.shareUrl
+    //     }
+    //   })
+    //   .afterClosed()
+    //   .subscribe((res) => {
+    //     if (res['invites']) {
+    //       this.team.invites = [...res['invites'], ...this.team.invites];
+    //     }
+    //     if (res['referrals']) {
+    //       if (this.team.referrals && this.team.referrals.length) {
+    //         this.team.referrals = [...res['referrals'], ...this.team.referrals];
+    //       } else {
+    //         this.team.referrals = [...res['referrals']];
+    //       }
+    //     }
+    //   });
   }
 }

@@ -101,8 +101,8 @@ export class InputContactsComponent implements OnInit {
                     const email = this.keyword;
                     this.filteredResults.next([
                       new Contact().deserialize({
-                        first_name: first_name,
-                        email: email
+                        first_name,
+                        email
                       })
                     ]);
                   }
