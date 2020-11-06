@@ -58,7 +58,7 @@
                     {{video.title}}
                   </div>
                   <div class="f-2 c-dark">
-                    {{video.description | stripe | slice :0:80}}
+                    {{video.description | stripTags | shorten: 80: '...'}}
                   </div>
                 </div>
               </ng-container>
@@ -75,7 +75,7 @@
                     {{pdf.title}}
                   </div>
                   <div class="f-2 c-dark">
-                    {{pdf.description | stripe | slice :0:80}}
+                    {{pdf.description | stripTags | shorten: 80: '...'}}
                   </div>
                 </div>
               </ng-container>
@@ -92,7 +92,7 @@
                     {{image.title}}
                   </div>
                   <div class="f-2 c-dark">
-                    {{image.description | stripe | slice :0:80}}
+                    {{image.description | stripTags | shorten: 80: '...'}}
                   </div>
                 </div>
               </ng-container>

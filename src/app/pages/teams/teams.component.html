@@ -273,7 +273,7 @@
                   <tr *ngFor="let inquiry of inquiriesData | paginate : { id: 'new_inquiries', itemsPerPage: 8, currentPage: currentInquiriesPage, totalItems: totalInquiries }">
                     <td class="subject" (click)="confirmRequest(inquiry)">
                       <div class="c-blue f-5 font-weight-bold">{{inquiry.subject}}</div>
-                      <div class="c-dark opacity-6 f-2">{{inquiry.description | stripe | slice:0:40}}</div>
+                      <div class="c-dark opacity-6 f-2">{{inquiry.description | stripTags | shorten: 40: '...'}}</div>
                     </td>
                     <td class="organizer" (click)="confirmRequest(inquiry)">
                       <div class="v-center">
@@ -397,7 +397,7 @@
                   <tr *ngFor="let plan of plannedData | paginate : { id: 'plannedTable', itemsPerPage: 8, currentPage: currentPlannedPage, totalItems: totalPlanned }">
                     <td class="subject" (click)="confirmRequest(plan)">
                       <div class="c-blue f-5 font-weight-bold">{{plan.subject}}</div>
-                      <div class="c-dark opacity-6 f-2">{{plan.description | stripe | slice:0:40}}</div>
+                      <div class="c-dark opacity-6 f-2">{{plan.description | stripTags | shorten: 40: '...'}}</div>
                     </td>
                     <td class="organizer" (click)="confirmRequest(plan)">
                       <div class="v-center">
@@ -531,7 +531,7 @@
                   <tr *ngFor="let finished of finishedData | paginate : { id: 'finishedTable', itemsPerPage: 8, currentPage: currentFinishedPage, totalItems: totalFinished }">
                     <td class="subject" (click)="confirmRequest(finished)">
                       <div class="c-blue f-5 font-weight-bold">{{finished.subject}}</div>
-                      <div class="c-dark opacity-6 f-2">{{finished.description | stripe | slice:0:40}}</div>
+                      <div class="c-dark opacity-6 f-2">{{finished.description | stripTags | shorten: 40: '...'}}</div>
                     </td>
                     <td class="organizer" (click)="confirmRequest(finished)">
                       <div class="v-center">

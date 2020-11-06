@@ -126,7 +126,7 @@
                   </div>
                 </a>
                 <h5 class="f-4 font-weight-bold c-dark m-0">{{video.title}}</h5>
-                <span class="f-1 c-dark">{{video.description | stripe | slice: 0:120}}</span>
+                <span class="f-1 c-dark">{{video.description | stripTags | shorten: 120: '...'}}</span>
                 <div class="f-4 c-dark view-field">
                   {{video.views}} <i class="i-icon i-notification bg-dark ml-1" aria-hidden="true"></i>
                 </div>

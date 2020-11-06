@@ -59,7 +59,7 @@
       </div>
       <div class="my-3" *ngIf="formData.description">
         <label>Description</label>
-        <div class="text-wrapper description bgc-silver f-4">{{formData.description | stripe | slice:0:80}}</div>
+        <div class="text-wrapper description bgc-silver f-4">{{formData.description | stripTags | shorten: 80: '...'}}</div>
       </div>
       <div class="my-3">
         <label>Duration</label>

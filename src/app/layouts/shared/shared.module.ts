@@ -16,7 +16,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
-import { StripePipe } from '../../pipes/stripe.pipe';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
@@ -35,12 +34,7 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
-  declarations: [
-    StripePipe,
-    LoadingButtonComponent,
-    LoadingOverlayComponent,
-    DurationPipe
-  ],
+  declarations: [LoadingButtonComponent, LoadingOverlayComponent, DurationPipe],
   imports: [
     CommonModule,
     NgbModule,
@@ -90,7 +84,6 @@ import { NgPipesModule } from 'ngx-pipes';
     ClipboardModule,
     NgPipesModule,
     LoadingButtonComponent,
-    StripePipe,
     QuillModule,
     LoadingButtonComponent,
     MatTabsModule,

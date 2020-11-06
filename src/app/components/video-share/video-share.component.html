@@ -22,7 +22,7 @@
                 {{material.title}}
               </div>
               <div class="f-2 c-dark opacity-6">
-                {{material.description | stripe | slice:0:80}}
+                {{material.description | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </div>

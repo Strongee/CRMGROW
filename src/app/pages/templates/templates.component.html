@@ -40,8 +40,8 @@
                 <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
               </td>
               <td class="template-content">
-                <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripe | slice:0:40}}</h5>
-                <span [innerHTML]="template.content | stripe | slice:0:80"></span>
+                <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripTags | shorten: 40: '...'}}</h5>
+                <span [innerHTML]="template.content | stripTags | shorten: 80: '...'"></span>
               </td>
               <td class="template-type">
                 <div class="v-center">
