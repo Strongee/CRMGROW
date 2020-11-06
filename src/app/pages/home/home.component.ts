@@ -79,7 +79,6 @@ export class HomeComponent implements OnInit {
       type: 'button'
     }
   ];
-
   selected = 1;
   increase(): void {
     this.selected++;

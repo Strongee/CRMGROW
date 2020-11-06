@@ -19,10 +19,8 @@
     <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="closeDialog()">
       Skip
     </button>
-    <button class="btn btn-primary font-weight-bold" *ngIf="!isSending" (click)="sendMessage()">
+    <button class="btn btn-primary font-weight-bold" [class.loading]="isSending" (click)="sendMessage()">
       Send
     </button>
-    <app-loading-button [class]="'btn btn-primary font-weight-bold'" [title]="'Sending...'" *ngIf="isSending">
-    </app-loading-button>
   </mat-dialog-actions>
 </form>

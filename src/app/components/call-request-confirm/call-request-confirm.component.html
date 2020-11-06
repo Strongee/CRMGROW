@@ -129,16 +129,12 @@
         <button type="button" class="btn bgc-trans font-weight-bold c-blue">
           Send organizer a message
         </button>
-        <button type="button" class="btn btn-decline font-weight-bold mr-2" *ngIf="(isLeader || isOrganizer) && !isCancelLoading" (click)="cancelRequest()">
+        <button type="button" class="btn btn-decline font-weight-bold mr-2" [class.loading]="(isLeader || isOrganizer) && isCancelLoading" (click)="cancelRequest()">
           {{"Decline"}}
         </button>
-        <app-loading-button [class]="'btn btn-decline font-weight-bold mr-2'" [title]="'Declining...'" *ngIf="(isLeader || isOrganizer) && isCancelLoading">
-        </app-loading-button>
-        <button class="btn btn-accept font-weight-bold" *ngIf="isLeader && !isAcceptLoading" (click)="acceptRequest()">
+        <button class="btn btn-accept font-weight-bold" [class.loading]="isLeader && isAcceptLoading" (click)="acceptRequest()">
           Accept
         </button>
-        <app-loading-button [class]="'btn btn-accept font-weight-bold'" [title]="'Accepting...'" *ngIf="isLeader && isAcceptLoading">
-        </app-loading-button>
       </div>
     </mat-dialog-actions>
   </ng-container>

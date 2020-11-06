@@ -16,9 +16,7 @@
             name is required.</span>
               </div>
               <div class="btn-wrapper">
-                <button class="btn btn-primary br-default" *ngIf="!isSaving" type="submit">Save</button>
-                <app-loading-button [class]="'btn-primary br-default'" *ngIf="isSaving" [title]="'Saving...'">
-                </app-loading-button>
+                <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">Save</button>
               </div>
             </div>
           </div>

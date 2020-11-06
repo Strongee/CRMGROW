@@ -9,7 +9,6 @@ export const AUTH = {
   OUTLOOK_PROFILE_REQUEST: '',
   GOOGLE_PROFILE_REQUEST: ''
 };
-
 export const USER = {
   PROFILE: 'user/me',
   PAYMENT: 'payment/',
@@ -19,6 +18,13 @@ export const USER = {
   SYNC_OUTLOOK: 'user/sync-outlook',
   LOAD_AFFILIATE: '',
   CREATE_AFFILIATE: ''
+};
+export const GARBAGE = {
+  SET: 'garbage',
+  UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
+};
+export const FILE = {
+  UPLOAD_IMAGE: 'file/upload?resize=true'
 };
 export const TASK = {
   CREATE: 'follow/',
@@ -71,27 +77,6 @@ export const TEMPLATE = {
   LOAD_OWN: 'template/list/own',
   LOAD_ALL: 'template/'
 };
-
-export const GARBAGE = {
-  SET: 'garbage',
-  UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
-};
-
-export const FILE = {
-  UPLOAD_IMAGE: 'file/upload?resize=true'
-};
-
-export const APPOINTMENT = {
-  GET_EVENT: 'appointment',
-  UPDATE_EVENT: 'appointment/',
-  DELETE_EVENT: 'appointment/delete'
-};
-
-export const THEME = {
-  GET_THEME: 'theme/',
-  SET_THEME: 'theme/set-video'
-};
-
 export const TEAM = {
   LOAD: 'team/load',
   LOAD_LEADERS: 'team/load-leaders',
@@ -128,14 +113,6 @@ export const TEAM = {
   UPDATE_CALL: '/team/call/',
   DELETE_CALL: '/team/call/'
 };
-export const LABEL = {
-  CREATE: 'label',
-  PUT: 'label/',
-  GET: 'label',
-  BULK_CREATE: 'label/create',
-  DELETE: 'label/'
-};
-
 export const AUTOMATION = {
   SEARCH: 'automation/search',
   LOAD_PAGE: 'automation/list/',
@@ -145,4 +122,20 @@ export const AUTOMATION = {
   READ: 'automation/',
   UPDATE: 'automation/',
   CREATE: 'automation'
+};
+export const APPOINTMENT = {
+  GET_EVENT: 'appointment',
+  UPDATE_EVENT: 'appointment/',
+  DELETE_EVENT: 'appointment/delete'
+};
+export const THEME = {
+  GET_THEME: 'theme/',
+  SET_THEME: 'theme/set-video'
+};
+export const LABEL = {
+  CREATE: 'label',
+  PUT: 'label/',
+  GET: 'label',
+  BULK_CREATE: 'label/create',
+  DELETE: 'label/'
 };
