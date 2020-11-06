@@ -1,0 +1,34 @@
+<div class="page-content">
+    <div class="d-flex columns" cdkDropListGroup>
+        <div class="column" *ngFor="let column of board.columns">
+            <div class="column-title bgc-pale p-3">
+                <div class="f-4 font-weight-bold">
+                    {{column.name}}
+                </div>
+                <div class="f-6 font-weight-bold text-primary">
+                    {{column.tasks.length}} <span class="f-1 font-weight-bold c-dark op-56 text-uppercase">Deals</span>
+                </div>
+            </div>
+            <div
+                class="tasks-container mt-4"
+                cdkDropList
+                [cdkDropListData]="column.tasks"
+                (cdkDropListDropped)="drop($event)"
+            >
+                <div
+                    class="task f-6 font-weight-bold bgc-white mt-3 mr-3 p-3"
+                    *ngFor="let item of column.tasks" cdkDrag
+                    (click)="taskDetail(item)"
+                >
+                    {{ item }}
+                </div>
+                <div class="v-center justify-content-center add-task mt-3 mr-3">
+                    <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addTasks(column.tasks)"></i>
+                </div>
+            </div>
+        </div>
+        <div class="v-center justify-content-center c-pointer add-column p-3" (click)="addColumns()">
+            <i class="i-icon i-plus d-block bgc-blue"></i>
+        </div>
+    </div>
+</div>

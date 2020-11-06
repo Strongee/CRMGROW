@@ -40,6 +40,9 @@ import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.comp
 import { TagManagerComponent } from '../../pages/tag-manager/tag-manager.component';
 import { StatusAutomationComponent } from '../../pages/status-automation/status-automation.component';
 import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
+import { DealsComponent } from '../../pages/deals/deals.component';
+import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 
@@ -73,6 +76,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     LeadCaptureComponent,
     TagManagerComponent,
     StatusAutomationComponent,
+    DealsComponent,
+    DealsDetailComponent,
     AutoflowComponent
   ],
   imports: [
@@ -85,6 +90,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     ShareButtonsModule,
     ShareIconsModule,
     MatExpansionModule,
+    DragDropModule,
     NgxGraphModule
   ],
   schemas: []
