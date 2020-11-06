@@ -1,29 +1,42 @@
 import { Routes } from '@angular/router';
-import { VideoCreateComponent } from 'src/app/components/video-create/video-create.component';
-import { AffiliateComponent } from 'src/app/pages/affiliate/affiliate.component';
-import { AutomationsComponent } from 'src/app/pages/automations/automations.component';
-import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
+import { PageExitGuard } from 'src/app/guards/page-exit.guard';
 import { HomeComponent } from 'src/app/pages/home/home.component';
-import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
 import { ProfileComponent } from 'src/app/pages/profile/profile.component';
+import { DealsComponent } from 'src/app/pages/deals/deals.component';
+import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
+import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
+import { CampaignListComponent } from 'src/app/pages/campaign-list/campaign-list.component';
+import { AutomationsComponent } from 'src/app/pages/automations/automations.component';
 import { SettingsComponent } from 'src/app/pages/settings/settings.component';
-import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
+import { AffiliateComponent } from 'src/app/pages/affiliate/affiliate.component';
 import { TeamsComponent } from 'src/app/pages/teams/teams.component';
 import { TemplatesComponent } from 'src/app/pages/templates/templates.component';
-import { TemplateComponent } from 'src/app/pages/template/template.component';
-import { TeamComponent } from '../../pages/team/team.component';
 import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
-import { CampaignComponent } from '../../pages/campaign/campaign.component';
-import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
-import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
-import { DealsComponent } from 'src/app/pages/deals/deals.component';
 import { DealsDetailComponent } from 'src/app/pages/deals-detail/deals-detail.component';
-import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
-import { PageExitGuard } from 'src/app/guards/page-exit.guard';
+import { VideoCreateComponent } from 'src/app/pages/video-create/video-create.component';
+import { CampaignComponent } from 'src/app/pages/campaign/campaign.component';
+import { AutoflowComponent } from 'src/app/pages/autoflow/autoflow.component';
+import { TeamComponent } from 'src/app/pages/team/team.component';
+import { TemplateComponent } from 'src/app/pages/template/template.component';
+import { CampaignBulkMailingComponent } from 'src/app/pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
     path: 'home',
+    component: HomeComponent,
+    data: {
+      title: 'Tasks'
+    }
+  },
+  {
+    path: 'activities',
+    component: HomeComponent,
+    data: {
+      title: 'Activities'
+    }
+  },
+  {
+    path: 'tasks',
     component: HomeComponent,
     data: {
       title: 'Tasks'
@@ -41,20 +54,6 @@ export const AdminLayoutRoutes: Routes = [
     component: DealsDetailComponent,
     data: {
       title: 'Deals'
-    }
-  },
-  {
-    path: 'activities',
-    component: HomeComponent,
-    data: {
-      title: 'Activities'
-    }
-  },
-  {
-    path: 'tasks',
-    component: HomeComponent,
-    data: {
-      title: 'Tasks'
     }
   },
   {

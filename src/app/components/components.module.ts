@@ -11,7 +11,6 @@ import { ActionsBarComponent } from './actions-bar/actions-bar.component';
 import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
-import { VideoCreateComponent } from './video-create/video-create.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { TeamEditComponent } from './team-edit/team-edit.component';
 import { TeamDeleteComponent } from './team-delete/team-delete.component';
@@ -64,7 +63,6 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
     InputTemplateComponent,
     InputTeamComponent,
     SelectUserComponent,
-    VideoCreateComponent,
     JoinCallRequestComponent,
     CallRequestConfirmComponent,
     SelectLeaderComponent,

@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -13,36 +15,34 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { ClipboardModule } from '@angular/cdk/clipboard';
-import { HttpClientModule } from '@angular/common/http';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NgPipesModule } from 'ngx-pipes';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { QuillModule } from 'ngx-quill';
 import { FileUploadModule } from 'ng2-file-upload';
-import { MatTabsModule } from '@angular/material/tabs';
-import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
-import { LoadingButtonComponent } from '../../elements/loading-button/loading-button.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { DurationPipe } from '../../pipes/duration.pipe';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import {
   TimeagoModule,
   TimeagoIntl,
   TimeagoFormatter,
   TimeagoCustomFormatter
 } from 'ngx-timeago';
-import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
-import { NgPipesModule } from 'ngx-pipes';
+import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
+import { DurationPipe } from '../../pipes/duration.pipe';
 
 @NgModule({
-  declarations: [LoadingButtonComponent, LoadingOverlayComponent, DurationPipe],
+  declarations: [LoadingOverlayComponent, DurationPipe],
   imports: [
     CommonModule,
-    NgbModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgbModule,
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
+    ClipboardModule,
     MatDialogModule,
     MatTabsModule,
     MatFormFieldModule,
@@ -53,8 +53,8 @@ import { NgPipesModule } from 'ngx-pipes';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMatSelectSearchModule,
-    ClipboardModule,
     NgPipesModule,
+    GooglePlaceModule,
     QuillModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
@@ -62,16 +62,16 @@ import { NgPipesModule } from 'ngx-pipes';
     }),
     FileUploadModule,
     NgxPaginationModule,
-    TimeagoModule.forRoot(),
-    GooglePlaceModule
+    TimeagoModule.forRoot()
   ],
   exports: [
-    NgbModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgbModule,
     NgxIntlTelInputModule,
     NgxCleaveDirectiveModule,
+    ClipboardModule,
     MatDialogModule,
     MatFormFieldModule,
     MatAutocompleteModule,
@@ -80,20 +80,16 @@ import { NgPipesModule } from 'ngx-pipes';
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMatSelectSearchModule,
-    ClipboardModule,
-    NgPipesModule,
-    LoadingButtonComponent,
-    QuillModule,
-    LoadingButtonComponent,
     MatTabsModule,
+    NgxMatSelectSearchModule,
+    GooglePlaceModule,
+    NgPipesModule,
+    QuillModule,
     FileUploadModule,
-    LoadingButtonComponent,
-    LoadingOverlayComponent,
     CalendarModule,
     NgxPaginationModule,
     TimeagoModule,
-    GooglePlaceModule,
+    LoadingOverlayComponent,
     DurationPipe
   ]
 })

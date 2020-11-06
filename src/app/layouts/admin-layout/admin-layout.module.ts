@@ -1,15 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../shared/shared.module';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ComponentsModule } from '../../components/components.module';
-
 import { AdminLayoutRoutes } from './admin-layout.routing.module';
+
+import { HomeComponent } from '../../pages/home/home.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
 import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
-import { TranslateModule } from '@ngx-translate/core';
 import { ProfileComponent } from '../../pages/profile/profile.component';
 import { GeneralProfileComponent } from '../../pages/general-profile/general-profile.component';
 import { SignatureComponent } from '../../pages/signature/signature.component';
@@ -17,19 +23,13 @@ import { SecurityComponent } from '../../pages/security/security.component';
 import { IntegrationComponent } from '../../pages/integration/integration.component';
 import { PaymentComponent } from '../../pages/payment/payment.component';
 import { ActivitiesComponent } from '../../pages/activities/activities.component';
-import { HomeComponent } from '../../pages/home/home.component';
 import { AffiliateComponent } from '../../pages/affiliate/affiliate.component';
 import { AutomationsComponent } from '../../pages/automations/automations.component';
 import { SettingsComponent } from '../../pages/settings/settings.component';
 import { TeamsComponent } from '../../pages/teams/teams.component';
 import { TemplatesComponent } from '../../pages/templates/templates.component';
-
 import { TemplateComponent } from '../../pages/template/template.component';
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { TeamComponent } from '../../pages/team/team.component';
-import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
-import { ShareIconsModule } from 'ngx-sharebuttons/icons';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
 import { CampaignComponent } from '../../pages/campaign/campaign.component';
 import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
@@ -42,9 +42,8 @@ import { StatusAutomationComponent } from '../../pages/status-automation/status-
 import { SocialProfileComponent } from '../../pages/social-profile/social-profile.component';
 import { DealsComponent } from '../../pages/deals/deals.component';
 import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
-import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +77,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     StatusAutomationComponent,
     DealsComponent,
     DealsDetailComponent,
-    AutoflowComponent
+    AutoflowComponent,
+    VideoCreateComponent
   ],
   imports: [
     CommonModule,
