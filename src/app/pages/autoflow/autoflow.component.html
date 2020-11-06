@@ -27,23 +27,12 @@
               <div class="auth">
                 <label>Owner</label>
                 <div class="h-40 v-center">
-<!--                  <select (change)="toggleAuth(auth)"-->
-<!--                          class="status"-->
-<!--                          [class.admin]="automation.role == 'admin'"-->
-<!--                          [class.team]="automation.role === 'team' && automation.user === user_id"-->
-<!--                          [class.shared]="automation.role === 'team' && automation.user !== user_id"-->
-<!--                  >-->
-<!--                    <option [value]="'admin'" class="status admin c-white f-2" [selected]="automation.role == 'admin'">-->
-<!--                      ADMIN-->
-<!--                    </option>-->
-<!--                    <option [value]="'team'" class="status team c-white f-2" [selected]="automation.role === 'team' && automation.user === user_id">-->
-<!--                      TEAM-->
-<!--                    </option>-->
-<!--                    <option [value]="'shared'" class="status shared c-white f-2" [selected]="automation.role === 'team' && automation.user !== user_id">-->
-<!--                      SHARED-->
-<!--                    </option>-->
-<!--                  </select>-->
-                  <div class="role" [class]="auth"></div>
+                  <ng-container *ngIf="automation; else newAutomation">
+                    <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === user_id" [class.shared]="automation.role === 'team' && automation.user !== user_id"></div>
+                  </ng-container>
+                  <ng-template #newAutomation>
+                    <div class="role own"></div>
+                  </ng-template>
                 </div>
               </div>
               <div class="created ml-4" align="end">

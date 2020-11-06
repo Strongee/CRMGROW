@@ -11,12 +11,12 @@ import { Subject } from 'rxjs';
 import { DagreNodesOnlyLayout } from '../../variables/customDagreNodesOnly';
 import { stepRound } from '../../variables/customStepCurved';
 import { Layout, Edge, Node } from '@swimlane/ngx-graph';
-// import { ActionDialogComponent } from 'src/app/components/action-dialog/action-dialog.component';
+import { ActionDialogComponent } from 'src/app/components/action-dialog/action-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ACTION_CAT } from 'src/app/constants/variable.constants';
-// import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
+import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
-// import { CaseConfirmComponent } from 'src/app/components/case-confirm/case-confirm.component';
+import { CaseConfirmComponent } from 'src/app/components/case-confirm/case-confirm.component';
 import { AutomationService } from 'src/app/services/automation.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
@@ -137,13 +137,13 @@ export class AutoflowComponent
 
   composeGraph(actions): void {
     let maxId = 0;
-    let ids = [];
+    const ids = [];
     let missedIds = [];
-    let currentIds = [];
-    let nodes = [];
-    let edges = [];
-    let caseNodes = {}; // Case nodes pair : Parent -> Sub case actions
-    let edgesBranches = []; // Edge Branches
+    const currentIds = [];
+    const nodes = [];
+    const edges = [];
+    const caseNodes = {}; // Case nodes pair : Parent -> Sub case actions
+    const edgesBranches = []; // Edge Branches
     actions.forEach((e) => {
       const idStr = (e.id + '').replace('a_', '');
       const id = parseInt(idStr);
@@ -364,208 +364,215 @@ export class AutoflowComponent
   }
 
   insertAction(link = null): void {
-    console.log("insertAction ===========>", link);
-    // if (link) {
-    //   let source = link.source;
-    //   let target = link.target;
-    //   let lastIndex = this.identity;
-    //   let newId = 'a_' + (lastIndex + 1);
-    //
-    //   let parents = this.getParents(source);
-    //   let prevFollowUps = []
-    //   this.nodes.forEach(e => {
-    //     if(e.type === 'follow_up' && parents.indexOf(e.id) !== -1) {
-    //       prevFollowUps.push(e);
-    //     }
-    //   });
-    //
-    //    let actionDlg = this.dialog.open(ActionDialogComponent, {
-    //     maxWidth: '450px',
-    //     width: '96vw',
-    //     minHeight: '300px',
-    //     data: {
-    //       follows: prevFollowUps
-    //     }
-    //   });
-    //   actionDlg.afterClosed().subscribe(res => {
-    //     if (res) {
-    //       let nodes = this.nodes;
-    //       nodes.push({...res, id: newId, index: lastIndex + 1, label: this.ACTIONS[res.type]});
-    //       let edges = this.edges;
-    //       edges.some((e, index) => {
-    //         if(e.id === link.id) {
-    //           edges.splice(index, 1);
-    //           return true;
-    //         }
-    //       })
-    //       edges.push({id: source + '_' + newId, source, target: newId});
-    //       edges.push({id: newId + '_' + target, source: newId, target});
-    //       this.identity++;
-    //       this.nodes = [...nodes];
-    //       this.edges = [...edges];
-    //       this.saved = false;
-    //     }
-    //   });
-    // }
+    console.log('insertAction ===========>', link);
+    if (link) {
+      const source = link.source;
+      const target = link.target;
+      const lastIndex = this.identity;
+      const newId = 'a_' + (lastIndex + 1);
+
+      const parents = this.getParents(source);
+      const prevFollowUps = [];
+      this.nodes.forEach((e) => {
+        if (e.type === 'follow_up' && parents.indexOf(e.id) !== -1) {
+          prevFollowUps.push(e);
+        }
+      });
+
+      const actionDlg = this.dialog.open(ActionDialogComponent, {
+        minWidth: '500px',
+        minHeight: '300px',
+        data: {
+          follows: prevFollowUps
+        }
+      });
+      actionDlg.afterClosed().subscribe((res) => {
+        if (res) {
+          const nodes = this.nodes;
+          nodes.push({
+            ...res,
+            id: newId,
+            index: lastIndex + 1,
+            label: this.ACTIONS[res.type]
+          });
+          const edges = this.edges;
+          edges.some((e, index) => {
+            if (e.id === link.id) {
+              edges.splice(index, 1);
+              return true;
+            }
+          });
+          edges.push({ id: source + '_' + newId, source, target: newId });
+          edges.push({ id: newId + '_' + target, source: newId, target });
+          this.identity++;
+          this.nodes = [...nodes];
+          this.edges = [...edges];
+          this.saved = false;
+        }
+      });
+    }
   }
   addAction(node = null): void {
-    // if (node) {
-    //   const parents = this.getParents(node.id);
-    //   const prevFollowUps = [];
-    //   this.nodes.forEach((e) => {
-    //     if (e.type === 'follow_up' && parents.indexOf(e.id) !== -1) {
-    //       prevFollowUps.push(e);
-    //     }
-    //   });
-    //   const currentId = node.id;
-    //   const lastIndex = this.identity;
-    //   let newId = 'a_' + (lastIndex + 1);
-    //   // CONDITION ACTION HANDLER
-    //   let conditionHandler = '';
-    //   if (node.condition) {
-    //     if (node.condition.answer) {
-    //       conditionHandler = 'trueCase';
-    //     } else {
-    //       conditionHandler = 'falseCase';
-    //     }
-    //   }
-    //   const actionDlg = this.dialog.open(ActionDialogComponent, {
-    //     maxWidth: '450px',
-    //     width: '96vw',
-    //     minHeight: '300px',
-    //     data: {
-    //       currentAction: node.type,
-    //       conditionHandler,
-    //       follows: prevFollowUps
-    //     }
-    //   });
-    //   actionDlg.afterClosed().subscribe((res) => {
-    //     if (res) {
-    //       if (res.category === ACTION_CAT.NORMAL) {
-    //         node.leaf = false;
-    //         const nodes = this.nodes;
-    //         nodes.push({
-    //           ...res,
-    //           id: newId,
-    //           index: lastIndex + 1,
-    //           label: this.ACTIONS[res.type],
-    //           leaf: true
-    //         });
-    //         const edges = this.edges;
-    //         edges.push({
-    //           id: currentId + '_' + newId,
-    //           source: currentId,
-    //           target: newId
-    //         });
-    //         this.identity += 1;
-    //         this.nodes = [...nodes];
-    //         this.edges = [...edges];
-    //       } else {
-    //         node.leaf = false;
-    //         const nodes = this.nodes;
-    //         nodes.push({
-    //           ...res,
-    //           id: newId,
-    //           index: lastIndex + 1,
-    //           label: 'YES',
-    //           leaf: true,
-    //           condition: { case: res.type, answer: true }
-    //         });
-    //         const edges = this.edges;
-    //         edges.push({
-    //           id: currentId + '_' + newId,
-    //           source: currentId,
-    //           target: newId,
-    //           category: 'case',
-    //           answer: 'yes'
-    //         });
-    //         newId = 'a_' + (lastIndex + 2);
-    //         nodes.push({
-    //           ...res,
-    //           id: newId,
-    //           index: lastIndex + 2,
-    //           label: 'NO',
-    //           leaf: true,
-    //           condition: { case: res.type, answer: false }
-    //         });
-    //         edges.push({
-    //           id: currentId + '_' + newId,
-    //           source: currentId,
-    //           target: newId,
-    //           category: 'case',
-    //           type: res.type,
-    //           hasLabel: true,
-    //           answer: 'no'
-    //         });
-    //         this.identity += 2;
-    //         this.nodes = [...nodes];
-    //         this.edges = [...edges];
-    //       }
-    //       this.saved = false;
-    //     }
-    //   });
-    // } else {
-    //   const actionDlg = this.dialog.open(ActionDialogComponent, {
-    //     maxWidth: '450px',
-    //     width: '96vw',
-    //     minHeight: '300px',
-    //     data: {}
-    //   });
-    //   actionDlg.afterClosed().subscribe((res) => {
-    //     if (res) {
-    //       this.nodes.push({
-    //         ...res,
-    //         id: 'a_' + this.identity,
-    //         index: this.identity,
-    //         label: this.ACTIONS[res.type],
-    //         leaf: true
-    //       });
-    //       this.saved = false;
-    //     }
-    //   });
-    // }
+    if (node) {
+      const parents = this.getParents(node.id);
+      const prevFollowUps = [];
+      this.nodes.forEach((e) => {
+        if (e.type === 'follow_up' && parents.indexOf(e.id) !== -1) {
+          prevFollowUps.push(e);
+        }
+      });
+      const currentId = node.id;
+      const lastIndex = this.identity;
+      let newId = 'a_' + (lastIndex + 1);
+      // CONDITION ACTION HANDLER
+      let conditionHandler = '';
+      if (node.condition) {
+        if (node.condition.answer) {
+          conditionHandler = 'trueCase';
+        } else {
+          conditionHandler = 'falseCase';
+        }
+      }
+      const actionDlg = this.dialog.open(ActionDialogComponent, {
+        minWidth: '500px',
+        minHeight: '300px',
+        data: {
+          currentAction: node.type,
+          conditionHandler,
+          follows: prevFollowUps
+        }
+      });
+      actionDlg.afterClosed().subscribe((res) => {
+        if (res) {
+          if (res.category === ACTION_CAT.NORMAL) {
+            node.leaf = false;
+            const nodes = this.nodes;
+            nodes.push({
+              ...res,
+              id: newId,
+              index: lastIndex + 1,
+              label: this.ACTIONS[res.type],
+              leaf: true
+            });
+            const edges = this.edges;
+            edges.push({
+              id: currentId + '_' + newId,
+              source: currentId,
+              target: newId
+            });
+            this.identity += 1;
+            this.nodes = [...nodes];
+            this.edges = [...edges];
+          } else {
+            node.leaf = false;
+            const nodes = this.nodes;
+            nodes.push({
+              ...res,
+              id: newId,
+              index: lastIndex + 1,
+              label: 'YES',
+              leaf: true,
+              condition: { case: res.type, answer: true }
+            });
+            const edges = this.edges;
+            edges.push({
+              id: currentId + '_' + newId,
+              source: currentId,
+              target: newId,
+              category: 'case',
+              answer: 'yes'
+            });
+            newId = 'a_' + (lastIndex + 2);
+            nodes.push({
+              ...res,
+              id: newId,
+              index: lastIndex + 2,
+              label: 'NO',
+              leaf: true,
+              condition: { case: res.type, answer: false }
+            });
+            edges.push({
+              id: currentId + '_' + newId,
+              source: currentId,
+              target: newId,
+              category: 'case',
+              type: res.type,
+              hasLabel: true,
+              answer: 'no'
+            });
+            this.identity += 2;
+            this.nodes = [...nodes];
+            this.edges = [...edges];
+          }
+          this.saved = false;
+        }
+      });
+    } else {
+      const actionDlg = this.dialog.open(ActionDialogComponent, {
+        minWidth: '500px',
+        minHeight: '300px',
+        data: {}
+      });
+      actionDlg.afterClosed().subscribe((res) => {
+        if (res) {
+          this.nodes.push({
+            ...res,
+            id: 'a_' + this.identity,
+            index: this.identity,
+            label: this.ACTIONS[res.type],
+            leaf: true
+          });
+          this.saved = false;
+        }
+      });
+    }
   }
   editAction(event, node): void {
-    // if (event.target.classList.contains('v-leaf') || event.target.classList.contains('remove-action')) {
-    //   return;
-    // }
-    // let edge = _.find(this.edges, {target: node.id});
-    // let conditionHandler = ""
-    // if(edge) {
-    //   let parentNode = _.find(this.nodes, {id: edge.source});
-    //   if(parentNode && parentNode.condition) {
-    //     if(parentNode.condition.answer) {
-    //       conditionHandler = 'trueCase';
-    //     } else {
-    //       conditionHandler = 'falseCase';
-    //     }
-    //   }
-    // }
-    //
-    // let parents = this.getParents(node.id);
-    // let prevFollowUps = []
-    // this.nodes.forEach(e => {
-    //   if(e.type === 'follow_up' && parents.indexOf(e.id) !== -1) {
-    //     prevFollowUps.push(e);
-    //   }
-    // });
-    //
-    // this.dialog.open(ActionEditComponent, {
-    //   maxWidth: '450px',
-    //   width: '96vw',
-    //   data: {
-    //     action: node,
-    //     conditionHandler,
-    //     follows: prevFollowUps
-    //   }
-    // }).afterClosed().subscribe(res => {
-    //   if(res) {
-    //     for(let key in res) {
-    //       node[key] = res[key]
-    //     }
-    //     this.saved = false;
-    //   }
-    // })
+    if (
+      event.target.classList.contains('v-leaf') ||
+      event.target.classList.contains('remove-action')
+    ) {
+      return;
+    }
+    const edge = _.find(this.edges, { target: node.id });
+    let conditionHandler = '';
+    if (edge) {
+      const parentNode = _.find(this.nodes, { id: edge.source });
+      if (parentNode && parentNode.condition) {
+        if (parentNode.condition.answer) {
+          conditionHandler = 'trueCase';
+        } else {
+          conditionHandler = 'falseCase';
+        }
+      }
+    }
+
+    const parents = this.getParents(node.id);
+    const prevFollowUps = [];
+    this.nodes.forEach((e) => {
+      if (e.type === 'follow_up' && parents.indexOf(e.id) !== -1) {
+        prevFollowUps.push(e);
+      }
+    });
+
+    this.dialog
+      .open(ActionEditComponent, {
+        minWidth: '500px',
+        data: {
+          action: node,
+          conditionHandler,
+          follows: prevFollowUps
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          for (const key in res) {
+            node[key] = res[key];
+          }
+          this.saved = false;
+        }
+      });
   }
   removeAction(node): void {
     // Decide the node type => root | leaf | middle | middle with case | case
@@ -648,388 +655,468 @@ export class AutoflowComponent
       });
   }
   removeRoot(node): void {
-    // let options = [
-    //   {title: 'Remove only node', description: 'This option removes only current node.', id: 'only'},
-    //   {title: 'Remove all nodes', description: 'This option removes all nodes.', id: 'child'},
-    // ];
-    // this.dialog.open(CaseConfirmComponent, {
-    //   maxWidth: '360px',
-    //   width: '96vw',
-    //   data: {
-    //     message: 'Are you sure to remove this item? If yes, please select the remove method.',
-    //     cancelLabel: 'No',
-    //     confirmLabel: 'Remove',
-    //     cases: options
-    //   }
-    // }).afterClosed().subscribe(res => {
-    //   if(res) {
-    //     if(res.id === 'only') {
-    //       let nodes = this.nodes;
-    //       nodes.some((e, index) => {
-    //         if (e.id === node.id) {
-    //           nodes.splice(index, 1);
-    //           return true;
-    //         }
-    //       });
-    //       let edges = this.edges;
-    //       edges.some((e, index) => {
-    //         if (e.source === node.id) {
-    //           edges.splice(index, 1);
-    //           return true;
-    //         }
-    //       });
-    //       this.nodes = [...nodes];
-    //       this.edges = [...edges];
-    //     } else {
-    //       this.nodes = [];
-    //       this.edges = [];
-    //     }
-    //     this.saved = false;
-    //   }
-    // });
+    const options = [
+      {
+        title: 'Remove only node',
+        description: 'This option removes only current node.',
+        id: 'only'
+      },
+      {
+        title: 'Remove all nodes',
+        description: 'This option removes all nodes.',
+        id: 'child'
+      }
+    ];
+    this.dialog
+      .open(CaseConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          message:
+            'Are you sure to remove this item? If yes, please select the remove method.',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove',
+          cases: options
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.id === 'only') {
+            const nodes = this.nodes;
+            nodes.some((e, index) => {
+              if (e.id === node.id) {
+                nodes.splice(index, 1);
+                return true;
+              }
+            });
+            const edges = this.edges;
+            edges.some((e, index) => {
+              if (e.source === node.id) {
+                edges.splice(index, 1);
+                return true;
+              }
+            });
+            this.nodes = [...nodes];
+            this.edges = [...edges];
+          } else {
+            this.nodes = [];
+            this.edges = [];
+          }
+          this.saved = false;
+        }
+      });
   }
   removeMiddleNode(node, nSource, nTarget): void {
-    // let options = [
-    //   {title: 'Remove only node', description: 'This option removes only current node.', id: 'only'},
-    //   {title: 'Remove child nodes', description: 'This option removes related child nodes as well.', id: 'child'},
-    // ];
-    // this.dialog.open(CaseConfirmComponent, {
-    //   maxWidth: '360px',
-    //   width: '96vw',
-    //   data: {
-    //     message: 'Are you sure to remove this item? If yes, please select the remove method.',
-    //     cancelLabel: 'No',
-    //     confirmLabel: 'Remove',
-    //     cases: options
-    //   }
-    // }).afterClosed().subscribe(res => {
-    //   if(res) {
-    //     if(res.id === 'only') {
-    //       let nodes = this.nodes;
-    //       nodes.some((e, index) => {
-    //         if (e.id === node.id) {
-    //           nodes.splice(index, 1);
-    //           return true;
-    //         }
-    //       });
-    //       let edges = this.edges;
-    //       let newSource;
-    //       let newTarget;
-    //       for(let i = edges.length - 1; i >= 0 ; i--) {
-    //         let e = edges[i];
-    //         if (e.target === node.id) {
-    //           newSource = e.source;
-    //           edges.splice(i, 1);
-    //         }
-    //         if (e.source === node.id) {
-    //           newTarget = e.target
-    //           edges.splice(i, 1);
-    //         }
-    //         if(newSource && newTarget) {
-    //           break;
-    //         }
-    //       }
-    //       edges.push({id: nSource + '_' + nTarget, source: nSource, target: nTarget});
-    //       this.nodes = [...nodes];
-    //       this.edges = [...edges];
-    //       this.saved = false;
-    //     } else {
-    //       this.removeChildNodes(node, nSource);
-    //     }
-    //   }
-    // });
+    const options = [
+      {
+        title: 'Remove only node',
+        description: 'This option removes only current node.',
+        id: 'only'
+      },
+      {
+        title: 'Remove child nodes',
+        description: 'This option removes related child nodes as well.',
+        id: 'child'
+      }
+    ];
+    this.dialog
+      .open(CaseConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          message:
+            'Are you sure to remove this item? If yes, please select the remove method.',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove',
+          cases: options
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.id === 'only') {
+            const nodes = this.nodes;
+            nodes.some((e, index) => {
+              if (e.id === node.id) {
+                nodes.splice(index, 1);
+                return true;
+              }
+            });
+            const edges = this.edges;
+            let newSource;
+            let newTarget;
+            for (let i = edges.length - 1; i >= 0; i--) {
+              const e = edges[i];
+              if (e.target === node.id) {
+                newSource = e.source;
+                edges.splice(i, 1);
+              }
+              if (e.source === node.id) {
+                newTarget = e.target;
+                edges.splice(i, 1);
+              }
+              if (newSource && newTarget) {
+                break;
+              }
+            }
+            edges.push({
+              id: nSource + '_' + nTarget,
+              source: nSource,
+              target: nTarget
+            });
+            this.nodes = [...nodes];
+            this.edges = [...edges];
+            this.saved = false;
+          } else {
+            this.removeChildNodes(node, nSource);
+          }
+        }
+      });
   }
   removeWithCaseNode(node, nSource): void {
-    // let options = [
-    //   {title: 'Remove Yes case nodes', description: 'This option removes Yes case nodes and connect parent node with No case nodes.', id: 'falseNodes'},
-    //   {title: 'Remove No case nodes', description: 'This option removes No case nodes and connect parent node with Yes case nodes.', id: 'trueNodes'},
-    //   {title: 'Remove all child nodes', description: 'This option removes all related child nodes.', id: 'child'},
-    // ];
-    // this.dialog.open(CaseConfirmComponent, {
-    //   maxWidth: '360px',
-    //   width: '96vw',
-    //   data: {
-    //     message: 'Are you sure to remove this item? If yes, please select the remove method.',
-    //     cancelLabel: 'No',
-    //     confirmLabel: 'Remove',
-    //     cases: options
-    //   }
-    // }).afterClosed().subscribe(res => {
-    //   if(res) {
-    //     if (res.id === 'child') {
-    //       this.removeChildNodes(node, nSource);
-    //     } else {
-    //       let yesCase; // "Yes" node id
-    //       let noCase;  // "No" node id
-    //       let yesNextNode; // Node behind "Yes"
-    //       let noNextNode;  // Node behind "No"
-    //       let edges = this.edges;
-    //       let nodes = this.nodes;
-    //       for(let i = edges.length - 1; i >= 0 ; i--) {
-    //         let e = edges[i];
-    //         if (e.source === node.id && e.answer === 'yes') {
-    //           yesCase = e.target
-    //         }
-    //         if(e.source === node.id && e.answer === 'no') {
-    //           noCase = e.target;
-    //         }
-    //         if(yesCase && noCase) {
-    //           break;
-    //         }
-    //       }
-    //       for(let i = edges.length - 1; i >= 0 ; i--) {
-    //         let e = edges[i];
-    //         if (e.source === yesCase) {
-    //           yesNextNode = e.target
-    //         }
-    //         if(e.source === noCase) {
-    //           noNextNode = e.target
-    //         }
-    //         if(yesNextNode && noNextNode) {
-    //           break;
-    //         }
-    //       }
-    //
-    //       if (res.id === 'trueNodes') {
-    //         let deleteNodes = [noCase];
-    //         edges.forEach(e => {
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             deleteNodes.push(e.target);
-    //           }
-    //         });
-    //         deleteNodes.push(node.id);
-    //         deleteNodes.push(yesCase);
-    //         for(let i = edges.length -1; i>= 0; i--) {
-    //           let e = edges[i];
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             edges.splice(i, 1);
-    //           }
-    //           if(e.target === node.id) {
-    //             edges.splice(i, 1);
-    //           }
-    //         }
-    //
-    //         for(let i = nodes.length - 1; i >= 0 ; i--) {
-    //           let e = nodes[i];
-    //           if(deleteNodes.indexOf(e.id) !== -1) {
-    //             nodes.splice(i, 1);
-    //           }
-    //         }
-    //         if(yesNextNode) {
-    //           edges.push({id: nSource + '_' + yesNextNode, source: nSource, target: yesNextNode})
-    //         } else {
-    //           nodes.some(e => {
-    //             if(e.id === nSource) {
-    //               e.leaf = true;
-    //               return true;
-    //             }
-    //           })
-    //         }
-    //         this.nodes = [...nodes];
-    //         this.edges = [...edges];
-    //         this.saved = false;
-    //       } else if (res.id === 'falseNodes') {
-    //         let deleteNodes = [yesCase];
-    //         edges.forEach(e => {
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             deleteNodes.push(e.target);
-    //           }
-    //         });
-    //         deleteNodes.push(node.id);
-    //         deleteNodes.push(noCase);
-    //         for(let i = edges.length -1; i>= 0; i--) {
-    //           let e = edges[i];
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             edges.splice(i, 1);
-    //           }
-    //           if(e.target === node.id) {
-    //             edges.splice(i, 1);
-    //           }
-    //         }
-    //
-    //         for(let i = nodes.length - 1; i >= 0 ; i--) {
-    //           let e = nodes[i];
-    //           if(deleteNodes.indexOf(e.id) !== -1) {
-    //             nodes.splice(i, 1);
-    //           }
-    //         }
-    //         if(noNextNode) {
-    //           edges.push({id: nSource + '_' + noNextNode, source: nSource, target: noNextNode})
-    //         } else {
-    //           nodes.some(e => {
-    //             if(e.id === nSource) {
-    //               e.leaf = true;
-    //               return true;
-    //             }
-    //           })
-    //         }
-    //         this.nodes = [...nodes];
-    //         this.edges = [...edges];
-    //         this.saved = false;
-    //       }
-    //     }
-    //   }
-    // })
+    const options = [
+      {
+        title: 'Remove Yes case nodes',
+        description:
+          'This option removes Yes case nodes and connect parent node with No case nodes.',
+        id: 'falseNodes'
+      },
+      {
+        title: 'Remove No case nodes',
+        description:
+          'This option removes No case nodes and connect parent node with Yes case nodes.',
+        id: 'trueNodes'
+      },
+      {
+        title: 'Remove all child nodes',
+        description: 'This option removes all related child nodes.',
+        id: 'child'
+      }
+    ];
+    this.dialog
+      .open(CaseConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          message:
+            'Are you sure to remove this item? If yes, please select the remove method.',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove',
+          cases: options
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.id === 'child') {
+            this.removeChildNodes(node, nSource);
+          } else {
+            let yesCase; // "Yes" node id
+            let noCase; // "No" node id
+            let yesNextNode; // Node behind "Yes"
+            let noNextNode; // Node behind "No"
+            const edges = this.edges;
+            const nodes = this.nodes;
+            for (let i = edges.length - 1; i >= 0; i--) {
+              const e = edges[i];
+              if (e.source === node.id && e.answer === 'yes') {
+                yesCase = e.target;
+              }
+              if (e.source === node.id && e.answer === 'no') {
+                noCase = e.target;
+              }
+              if (yesCase && noCase) {
+                break;
+              }
+            }
+            for (let i = edges.length - 1; i >= 0; i--) {
+              const e = edges[i];
+              if (e.source === yesCase) {
+                yesNextNode = e.target;
+              }
+              if (e.source === noCase) {
+                noNextNode = e.target;
+              }
+              if (yesNextNode && noNextNode) {
+                break;
+              }
+            }
+
+            if (res.id === 'trueNodes') {
+              const deleteNodes = [noCase];
+              edges.forEach((e) => {
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  deleteNodes.push(e.target);
+                }
+              });
+              deleteNodes.push(node.id);
+              deleteNodes.push(yesCase);
+              for (let i = edges.length - 1; i >= 0; i--) {
+                const e = edges[i];
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  edges.splice(i, 1);
+                }
+                if (e.target === node.id) {
+                  edges.splice(i, 1);
+                }
+              }
+
+              for (let i = nodes.length - 1; i >= 0; i--) {
+                const e = nodes[i];
+                if (deleteNodes.indexOf(e.id) !== -1) {
+                  nodes.splice(i, 1);
+                }
+              }
+              if (yesNextNode) {
+                edges.push({
+                  id: nSource + '_' + yesNextNode,
+                  source: nSource,
+                  target: yesNextNode
+                });
+              } else {
+                nodes.some((e) => {
+                  if (e.id === nSource) {
+                    e.leaf = true;
+                    return true;
+                  }
+                });
+              }
+              this.nodes = [...nodes];
+              this.edges = [...edges];
+              this.saved = false;
+            } else if (res.id === 'falseNodes') {
+              const deleteNodes = [yesCase];
+              edges.forEach((e) => {
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  deleteNodes.push(e.target);
+                }
+              });
+              deleteNodes.push(node.id);
+              deleteNodes.push(noCase);
+              for (let i = edges.length - 1; i >= 0; i--) {
+                const e = edges[i];
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  edges.splice(i, 1);
+                }
+                if (e.target === node.id) {
+                  edges.splice(i, 1);
+                }
+              }
+
+              for (let i = nodes.length - 1; i >= 0; i--) {
+                const e = nodes[i];
+                if (deleteNodes.indexOf(e.id) !== -1) {
+                  nodes.splice(i, 1);
+                }
+              }
+              if (noNextNode) {
+                edges.push({
+                  id: nSource + '_' + noNextNode,
+                  source: nSource,
+                  target: noNextNode
+                });
+              } else {
+                nodes.some((e) => {
+                  if (e.id === nSource) {
+                    e.leaf = true;
+                    return true;
+                  }
+                });
+              }
+              this.nodes = [...nodes];
+              this.edges = [...edges];
+              this.saved = false;
+            }
+          }
+        }
+      });
   }
   removeCase(link): void {
-    // let options = [
-    //   {title: 'Remove Yes case nodes', description: 'This option removes Yes case nodes and connect parent node with No case nodes.', id: 'falseNodes'},
-    //   {title: 'Remove No case nodes', description: 'This option removes No case nodes and connect parent node with Yes case nodes.', id: 'trueNodes'},
-    //   {title: 'Remove all child nodes', description: 'This option removes all related child nodes.', id: 'child'},
-    // ];
-    // this.dialog.open(CaseConfirmComponent, {
-    //   maxWidth: '360px',
-    //   width: '96vw',
-    //   data: {
-    //     message: 'Are you sure to remove this case? If yes, please select the remove method.',
-    //     cancelLabel: 'No',
-    //     confirmLabel: 'Remove',
-    //     cases: options
-    //   }
-    // }).afterClosed().subscribe(res => {
-    //   if(res) {
-    //     let newSource = link.source;
-    //     let yesCase; // "Yes" node id
-    //     let noCase;  // "No" node id
-    //     let yesNextNode; // Node behind "Yes"
-    //     let noNextNode;  // Node behind "No"
-    //     let edges = this.edges;
-    //     let nodes = this.nodes;
-    //     for(let i = edges.length - 1; i >= 0 ; i--) {
-    //       let e = edges[i];
-    //       if (e.source === newSource && e.answer === 'yes') {
-    //         yesCase = e.target
-    //       }
-    //       if(e.source === newSource && e.answer === 'no') {
-    //         noCase = e.target;
-    //       }
-    //       if(yesCase && noCase) {
-    //         break;
-    //       }
-    //     }
-    //     if (res.id === 'child') {
-    //       let deleteNodes = [yesCase, noCase];
-    //       edges.forEach(e => {
-    //         if(deleteNodes.indexOf(e.source) !== -1) {
-    //           deleteNodes.push(e.target);
-    //         }
-    //       });
-    //       for(let i = edges.length - 1; i>= 0; i--) {
-    //         let e = edges[i];
-    //         if(deleteNodes.indexOf(e.source) !== -1) {
-    //           edges.splice(i, 1);
-    //         }
-    //         if(e.source === newSource) {
-    //           edges.splice(i, 1);
-    //         }
-    //       }
-    //       for(let i = nodes.length - 1; i >= 0 ; i--) {
-    //         let e = nodes[i];
-    //         if(deleteNodes.indexOf(e.id) !== -1) {
-    //           nodes.splice(i, 1);
-    //         }
-    //       }
-    //       nodes.some(e => {
-    //         if(e.id === newSource) {
-    //           e.leaf = true;
-    //           return true;
-    //         }
-    //       })
-    //       this.nodes = [...nodes];
-    //       this.edges = [...edges];
-    //       this.saved = false;
-    //     } else {
-    //       for(let i = edges.length - 1; i >= 0 ; i--) {
-    //         let e = edges[i];
-    //         if (e.source === yesCase) {
-    //           yesNextNode = e.target
-    //         }
-    //         if(e.source === noCase) {
-    //           noNextNode = e.target
-    //         }
-    //         if(yesNextNode && noNextNode) {
-    //           break;
-    //         }
-    //       }
-    //
-    //       if (res.id === 'trueNodes') {
-    //         let deleteNodes = [noCase];
-    //         edges.forEach(e => {
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             deleteNodes.push(e.target);
-    //           }
-    //         });
-    //         deleteNodes.push(yesCase);
-    //         for(let i = edges.length -1; i>= 0; i--) {
-    //           let e = edges[i];
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             edges.splice(i, 1);
-    //           }
-    //           if(e.source === newSource) {
-    //             edges.splice(i, 1);
-    //           }
-    //         }
-    //
-    //         for(let i = nodes.length - 1; i >= 0 ; i--) {
-    //           let e = nodes[i];
-    //           if(deleteNodes.indexOf(e.id) !== -1) {
-    //             nodes.splice(i, 1);
-    //           }
-    //         }
-    //         if(yesNextNode) {
-    //           edges.push({id: newSource + '_' + yesNextNode, source: newSource, target: yesNextNode})
-    //         } else {
-    //           nodes.some(e => {
-    //             if(e.id === newSource) {
-    //               e.leaf = true;
-    //               return true;
-    //             }
-    //           })
-    //         }
-    //         this.nodes = [...nodes];
-    //         this.edges = [...edges];
-    //         this.saved = false;
-    //       } else if (res.id === 'falseNodes') {
-    //         let deleteNodes = [yesCase];
-    //         edges.forEach(e => {
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             deleteNodes.push(e.target);
-    //           }
-    //         });
-    //         deleteNodes.push(noCase);
-    //         for(let i = edges.length -1; i>= 0; i--) {
-    //           let e = edges[i];
-    //           if(deleteNodes.indexOf(e.source) !== -1) {
-    //             edges.splice(i, 1);
-    //           }
-    //           if(e.source === newSource) {
-    //             edges.splice(i, 1);
-    //           }
-    //         }
-    //
-    //         for(let i = nodes.length - 1; i >= 0 ; i--) {
-    //           let e = nodes[i];
-    //           if(deleteNodes.indexOf(e.id) !== -1) {
-    //             nodes.splice(i, 1);
-    //           }
-    //         }
-    //         if(noNextNode) {
-    //           edges.push({id: newSource + '_' + noNextNode, source: newSource, target: noNextNode})
-    //         } else {
-    //           nodes.some(e => {
-    //             if(e.id === newSource) {
-    //               e.leaf = true;
-    //               return true;
-    //             }
-    //           })
-    //         }
-    //         this.nodes = [...nodes];
-    //         this.edges = [...edges];
-    //         this.saved = false;
-    //       }
-    //     }
-    //   }
-    // })
+    const options = [
+      {
+        title: 'Remove Yes case nodes',
+        description:
+          'This option removes Yes case nodes and connect parent node with No case nodes.',
+        id: 'falseNodes'
+      },
+      {
+        title: 'Remove No case nodes',
+        description:
+          'This option removes No case nodes and connect parent node with Yes case nodes.',
+        id: 'trueNodes'
+      },
+      {
+        title: 'Remove all child nodes',
+        description: 'This option removes all related child nodes.',
+        id: 'child'
+      }
+    ];
+    this.dialog
+      .open(CaseConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          message:
+            'Are you sure to remove this case? If yes, please select the remove method.',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove',
+          cases: options
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const newSource = link.source;
+          let yesCase; // "Yes" node id
+          let noCase; // "No" node id
+          let yesNextNode; // Node behind "Yes"
+          let noNextNode; // Node behind "No"
+          const edges = this.edges;
+          const nodes = this.nodes;
+          for (let i = edges.length - 1; i >= 0; i--) {
+            const e = edges[i];
+            if (e.source === newSource && e.answer === 'yes') {
+              yesCase = e.target;
+            }
+            if (e.source === newSource && e.answer === 'no') {
+              noCase = e.target;
+            }
+            if (yesCase && noCase) {
+              break;
+            }
+          }
+          if (res.id === 'child') {
+            const deleteNodes = [yesCase, noCase];
+            edges.forEach((e) => {
+              if (deleteNodes.indexOf(e.source) !== -1) {
+                deleteNodes.push(e.target);
+              }
+            });
+            for (let i = edges.length - 1; i >= 0; i--) {
+              const e = edges[i];
+              if (deleteNodes.indexOf(e.source) !== -1) {
+                edges.splice(i, 1);
+              }
+              if (e.source === newSource) {
+                edges.splice(i, 1);
+              }
+            }
+            for (let i = nodes.length - 1; i >= 0; i--) {
+              const e = nodes[i];
+              if (deleteNodes.indexOf(e.id) !== -1) {
+                nodes.splice(i, 1);
+              }
+            }
+            nodes.some((e) => {
+              if (e.id === newSource) {
+                e.leaf = true;
+                return true;
+              }
+            });
+            this.nodes = [...nodes];
+            this.edges = [...edges];
+            this.saved = false;
+          } else {
+            for (let i = edges.length - 1; i >= 0; i--) {
+              const e = edges[i];
+              if (e.source === yesCase) {
+                yesNextNode = e.target;
+              }
+              if (e.source === noCase) {
+                noNextNode = e.target;
+              }
+              if (yesNextNode && noNextNode) {
+                break;
+              }
+            }
+
+            if (res.id === 'trueNodes') {
+              const deleteNodes = [noCase];
+              edges.forEach((e) => {
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  deleteNodes.push(e.target);
+                }
+              });
+              deleteNodes.push(yesCase);
+              for (let i = edges.length - 1; i >= 0; i--) {
+                const e = edges[i];
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  edges.splice(i, 1);
+                }
+                if (e.source === newSource) {
+                  edges.splice(i, 1);
+                }
+              }
+
+              for (let i = nodes.length - 1; i >= 0; i--) {
+                const e = nodes[i];
+                if (deleteNodes.indexOf(e.id) !== -1) {
+                  nodes.splice(i, 1);
+                }
+              }
+              if (yesNextNode) {
+                edges.push({
+                  id: newSource + '_' + yesNextNode,
+                  source: newSource,
+                  target: yesNextNode
+                });
+              } else {
+                nodes.some((e) => {
+                  if (e.id === newSource) {
+                    e.leaf = true;
+                    return true;
+                  }
+                });
+              }
+              this.nodes = [...nodes];
+              this.edges = [...edges];
+              this.saved = false;
+            } else if (res.id === 'falseNodes') {
+              const deleteNodes = [yesCase];
+              edges.forEach((e) => {
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  deleteNodes.push(e.target);
+                }
+              });
+              deleteNodes.push(noCase);
+              for (let i = edges.length - 1; i >= 0; i--) {
+                const e = edges[i];
+                if (deleteNodes.indexOf(e.source) !== -1) {
+                  edges.splice(i, 1);
+                }
+                if (e.source === newSource) {
+                  edges.splice(i, 1);
+                }
+              }
+
+              for (let i = nodes.length - 1; i >= 0; i--) {
+                const e = nodes[i];
+                if (deleteNodes.indexOf(e.id) !== -1) {
+                  nodes.splice(i, 1);
+                }
+              }
+              if (noNextNode) {
+                edges.push({
+                  id: newSource + '_' + noNextNode,
+                  source: newSource,
+                  target: noNextNode
+                });
+              } else {
+                nodes.some((e) => {
+                  if (e.id === newSource) {
+                    e.leaf = true;
+                    return true;
+                  }
+                });
+              }
+              this.nodes = [...nodes];
+              this.edges = [...edges];
+              this.saved = false;
+            }
+          }
+        }
+      });
   }
   removeChildNodes(node, nSource): void {
     const deleteNodes = [node.id];
@@ -1045,7 +1132,7 @@ export class AutoflowComponent
       if (deleteNodes.indexOf(e.id) !== -1) {
         nodes.splice(i, 1);
       }
-      if (nSource == e.id) {
+      if (nSource === e.id) {
         e.leaf = true;
       }
     }
@@ -1241,10 +1328,6 @@ export class AutoflowComponent
     this.identity = 1;
   }
 
-  toggleAuth(auth): void {
-    this.auth = auth;
-  }
-
   zoomIn(): void {
     if (this.zoomLevel < 3) {
       this.autoZoom = false;
@@ -1306,5 +1389,4 @@ export class AutoflowComponent
     'send_email_image',
     'send_text_image'
   ];
-
 }

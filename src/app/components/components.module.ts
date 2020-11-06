@@ -40,6 +40,10 @@ import { NoteCreateComponent } from './note-create/note-create.component';
 import { JoinTeamComponent } from './join-team/join-team.component';
 import { InviteTeamComponent } from './invite-team/invite-team.component';
 import { SearchUserComponent } from './search-user/search-user.component';
+import { LabelComponent } from './label/label.component';
+import { ActionDialogComponent } from './action-dialog/action-dialog.component';
+import { ActionEditComponent } from './action-edit/action-edit.component';
+import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +84,11 @@ import { SearchUserComponent } from './search-user/search-user.component';
     NoteCreateComponent,
     JoinTeamComponent,
     InviteTeamComponent,
-    SearchUserComponent
+    SearchUserComponent,
+    LabelComponent,
+    ActionDialogComponent,
+    ActionEditComponent,
+    CaseConfirmComponent
   ],
   imports: [
     CommonModule,
