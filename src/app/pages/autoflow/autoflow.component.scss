@@ -42,8 +42,9 @@
 }
 
 .init-graph-container {
-  width: 210px;
+  width: 300px;
   margin: auto;
+  position: relative;
 }
 
 .btn-wrapper {
@@ -192,6 +193,43 @@
       color: #3c4043;
       cursor: default;
       pointer-events: none;
+    }
+  }
+}
+
+.count-container {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  text-align: center;
+
+  .content {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+
+    &.actions {
+      border: 1px solid #1300FF;
+    }
+
+    &.contacts {
+      border: 1px solid #FF4600;
+    }
+
+    p {
+      font-size: 24px;
+      padding: 11px 0px;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .content {
+      width: 40px;
+      height: 40px;
+
+      p {
+        padding: 2px 0px;
+      }
     }
   }
 }

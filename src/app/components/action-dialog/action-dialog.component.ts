@@ -34,6 +34,7 @@ export class ActionDialogComponent implements OnInit {
   submitted = false; // SUBMITTING FALSE
 
   conditionAction; // Condition Case Action corresponds the prev action
+  material_type = '';
 
   videos = [];
   videosLoading = false;
@@ -238,25 +239,24 @@ export class ActionDialogComponent implements OnInit {
       this.update_due_duration = 0;
     }
     if (
-      (this.type === 'send_text_video' || this.type === 'send_email_video') &&
-      !this.videos.length
+      (action.type === 'send_text_material' ||
+        action.type === 'send_email_material') &&
+      !this.videos.length &&
+      !this.pdfs.length &&
+      !this.images.length
     ) {
+      if (action.type === 'send_text_material') {
+        this.type = 'send_text_video';
+        this.material_type = 'text';
+      } else {
+        this.type = 'send_email_video';
+        this.material_type = 'email';
+      }
       this.loadVideos();
       this.loadPdfs();
       this.loadImages();
     }
-    if (
-      (this.type === 'send_text_pdf' || this.type === 'send_email_pdf') &&
-      !this.pdfs.length
-    ) {
-      this.loadPdfs();
-    }
-    if (
-      (this.type === 'send_text_image' || this.type === 'send_email_image') &&
-      !this.images.length
-    ) {
-      this.loadImages();
-    }
+
     this.loadTemplates();
   }
 
@@ -267,7 +267,7 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.videosLoading = false;
         this.videos = res;
-        console.log("material videos ===========>", res);
+        console.log('material videos ===========>', res);
       },
       (err) => {
         this.videosLoading = false;
@@ -282,7 +282,7 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.pdfsLoading = false;
         this.pdfs = res;
-        console.log("material pdfs ===========>", res);
+        console.log('material pdfs ===========>', res);
       },
       (err) => {
         this.pdfsLoading = false;
@@ -297,7 +297,7 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.imagesLoading = false;
         this.images = res;
-        console.log("material images ===========>", res);
+        console.log('material images ===========>', res);
       },
       (err) => {
         this.imagesLoading = false;
@@ -720,6 +720,58 @@ export class ActionDialogComponent implements OnInit {
     );
   }
 
+  DisplayActions = [
+    {
+      type: 'follow_up',
+      title: 'Follow Up',
+      description: '',
+      icon: '../../../assets/img/follow-step.png',
+      category: ACTION_CAT.NORMAL
+    },
+    {
+      type: 'update_follow_up',
+      title: 'Update Follow up',
+      description: '',
+      icon: '../../../assets/img/follow-step.png',
+      category: ACTION_CAT.NORMAL
+    },
+    {
+      type: 'note',
+      title: 'Create Note',
+      description: '',
+      icon: '../../../assets/img/note-step.png',
+      category: ACTION_CAT.NORMAL
+    },
+    {
+      type: 'email',
+      title: 'Send E-mail',
+      description: '',
+      icon: '../../../assets/img/email-step.png',
+      category: ACTION_CAT.NORMAL
+    },
+    {
+      type: 'send_email_material',
+      title: 'Send Material E-mail',
+      description: '',
+      icon: '../../../assets/img/video_email_step.png',
+      category: ACTION_CAT.NORMAL
+    },
+    {
+      type: 'send_text_material',
+      title: 'Send Material Text',
+      description: '',
+      icon: '../../../assets/img/video_sms.png',
+      category: ACTION_CAT.NORMAL
+    },
+    {
+      type: 'update_contact',
+      title: 'Contact Update',
+      description: '',
+      icon: '../../../assets/img/update_contact.png',
+      category: ACTION_CAT.NORMAL
+    }
+  ];
+
   ActionTypes = [
     {
       type: 'follow_up',
@@ -890,6 +942,23 @@ export class ActionDialogComponent implements OnInit {
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+    if (this.material_type === 'email') {
+      if (tab.id === 'videos') {
+        this.type = 'send_email_video';
+      } else if (tab.id === 'pdfs') {
+        this.type = 'send_email_pdf';
+      } else if (tab.id === 'images') {
+        this.type = 'send_email_image';
+      }
+    } else if (this.material_type === 'text') {
+      if (tab.id === 'videos') {
+        this.type = 'send_text_video';
+      } else if (tab.id === 'pdfs') {
+        this.type = 'send_text_pdf';
+      } else if (tab.id === 'images') {
+        this.type = 'send_text_image';
+      }
+    }
   }
 
   minDate;

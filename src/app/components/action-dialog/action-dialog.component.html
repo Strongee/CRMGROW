@@ -18,7 +18,7 @@
             </li>
           </ng-container>
         </ng-container>
-        <ng-container *ngFor="let action_type of ActionTypes">
+        <ng-container *ngFor="let action_type of DisplayActions">
           <li class="action-type" (click)="fillContent(action_type)" *ngIf="action_type.type !== 'update_follow_up'; else updateFollowUp">
             <img src="{{action_type.icon}}">
             <div class="action_type_desc">
@@ -38,26 +38,27 @@
         </ng-container>
       </ul>
     </div>
-    <div class="action-setting" [class.enable]="stepIndex===2">
+    <div class="action-setting mt-3" [class.enable]="stepIndex===2">
       <ng-container
         *ngIf="type == 'send_email_video' || type == 'send_text_video'
                || type == 'send_email_pdf' || type == 'send_text_pdf'
                || type == 'send_email_image' || type == 'send_text_image'
       ">
-        <div class="template-container mr-3">
+        <div class="template-container mr-lg-3 mr-md-0">
           <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
           </app-slide-tab>
           <ng-container *ngIf="selectedTab.label == 'VIDEO'">
-            <div class="material-container">
+            <div class="material-container mt-2">
               <ng-container *ngFor="let video of videos">
-                <div class="material-item">
+                <div class="material-item" (click)="toggleVideo(video)" [class.active]="action['video'] == video">
+                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['video'] == video">
                   <div class="thumb-wrapper">
-                    <img src="{{video.thumbnail || video.preview}}" alt="{{video.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
+                    <img class="thumbnail" src="{{video.thumbnail || video.preview}}" alt="{{video.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
                   </div>
-                  <div class="f-4 font-weight-bold">
+                  <div class="material-title f-3 font-weight-bold">
                     {{video.title}}
                   </div>
-                  <div class="f-2 c-dark">
+                  <div class="material-description f-3 c-dark">
                     {{video.description | stripe | slice :0:80}}
                   </div>
                 </div>
@@ -65,16 +66,17 @@
             </div>
           </ng-container>
           <ng-container *ngIf="selectedTab.label == 'PDF'">
-            <div class="material-container">
+            <div class="material-container mt-2">
               <ng-container *ngFor="let pdf of pdfs">
-                <div class="material-item">
+                <div class="material-item" (click)="togglePdf(pdf)" [class.active]="action['pdf'] == pdf">
+                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['pdf'] == pdf">
                   <div class="thumb-wrapper">
-                    <img src="{{pdf.thumbnail || pdf.preview}}" alt="{{pdf.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
+                    <img class="thumbnail" src="{{pdf.thumbnail || pdf.preview}}" alt="{{pdf.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
                   </div>
-                  <div class="f-4 font-weight-bold">
+                  <div class="material-title f-3 font-weight-bold">
                     {{pdf.title}}
                   </div>
-                  <div class="f-2 c-dark">
+                  <div class="material-description f-3 c-dark">
                     {{pdf.description | stripe | slice :0:80}}
                   </div>
                 </div>
@@ -82,16 +84,17 @@
             </div>
           </ng-container>
           <ng-container *ngIf="selectedTab.label == 'IMAGE'">
-            <div class="material-container">
+            <div class="material-container mt-2">
               <ng-container *ngFor="let image of images">
-                <div class="material-item">
+                <div class="material-item" (click)="toggleImage(image)" [class.active]="action['image'] == image">
+                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['image'] == image">
                   <div class="thumb-wrapper">
-                    <img src="{{image.thumbnail || image.preview}}" alt="{{image.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
+                    <img class="thumbnail" src="{{image.thumbnail || image.preview}}" alt="{{image.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
                   </div>
-                  <div class="f-4 font-weight-bold">
+                  <div class="material-title f-3 font-weight-bold">
                     {{image.title}}
                   </div>
-                  <div class="f-2 c-dark">
+                  <div class="material-description f-3 c-dark">
                     {{image.description | stripe | slice :0:80}}
                   </div>
                 </div>
@@ -101,10 +104,11 @@
         </div>
       </ng-container>
       <!--  *ngIf="!(data.action.condition && data.editFlag)" -->
-      <div class="contents-container w-100">
-        <ng-container>
+      <div class="contents-container w-100 mt-lg-0 mt-md-3">
+        <ng-container
+          *ngIf="!(type == 'follow_up' || type == 'update_follow_up' || type == 'note')">
           <div class="row">
-            <div class="col-md-12 mt-2">
+            <div class="col-md-12">
               <div class="form-group has-feedback">
                 <ng-container *ngIf="!data.conditionHandler; else conditionLimitTemplate">
                   <ng-container *ngIf="NoLimitActions.indexOf(type) === -1">
@@ -281,10 +285,19 @@
                 <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_name}', smsContentField)">Your Name</button>
                 <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_email}', smsContentField)">Your Email</button>
                 <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_phone}', smsContentField)">Your Phone</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{contact_first_name}', smsContentField)">Contact Firstname</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{contact_last_name}', smsContentField)">Contact Lastname</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{contact_email}', smsContentField)">Contact Email</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{contact_phone}', smsContentField)">Contact Phone</button>
+                <div ngbDropdown class="d-flex justify-content-end button-more rounded">
+                  <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                    <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                  </a>
+                  <div ngbDropdownMenu class="button-more-container light">
+                    <div class="actions ml-auto">
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_first_name}', smsContentField)">Contact Firstname</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_last_name}', smsContentField)">Contact Lastname</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_email}', smsContentField)">Contact Email</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_phone}', smsContentField)">Contact Phone</button>
+                    </div>
+                  </div>
+                </div>
               </div>
               <textarea [(ngModel)]="action.content" class="form-control" placeholder="Please type in sms content."
                         name="content" #content="ngModel" rows="6" required #smsContentField (click)="getSmsContentCursor(smsContentField)"
@@ -518,7 +531,7 @@
             </ng-container>
           </ng-container>
         </ng-container>
-        <ng-container *ngIf="stepIndex === 2 && type.indexOf('send')!==-1 || type.indexOf('email')!==-1">
+        <ng-container *ngIf="type.indexOf('send')!==-1 || type.indexOf('email')!==-1">
           <div class="templates-wrapper form-group mb-2">
             <ng-container *ngIf="type.indexOf('email')!==-1; else textTemplate">
               <label>Template</label>
@@ -544,9 +557,9 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end" class="v-center mx-0">
-    <button class="btn btn-white ml-1 mr-0" type="button" mat-dialog-close>Close</button>
-    <button *ngIf="stepIndex === 2" class="btn btn-white-blue ml-1 mr-0" type="button"
-            (click)="prevStep()">Prev</button>
+    <button class="btn btn-white-blue ml-1 mr-0" type="button" mat-dialog-close>Close</button>
+<!--    <button *ngIf="stepIndex === 2" class="btn btn-white-blue ml-1 mr-0" type="button"-->
+<!--            (click)="prevStep()">Prev</button>-->
     <button class="btn btn-primary ml-1 mr-0" type="submit">Insert</button>
   </mat-dialog-actions>
 </form>

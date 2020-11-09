@@ -25,7 +25,7 @@
         <tbody>
           <tr *ngFor="let automation of automations">
             <td class="title">
-              <div class="f-4 font-weight-bold">{{automation.title}}</div>
+              <div class="f-3 font-weight-bold">{{automation.title}}</div>
             </td>
             <td class="auth">
               <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === user_id" [class.shared]="automation.role === 'team' && automation.user !== user_id"></div>

@@ -55,7 +55,11 @@
 .action-setting {
   display: none;
   &.enable {
-      display: flex;
+    display: flex;
+
+    @media screen and (max-width: 768px) {
+      display: block;
+    }
   }
 }
 
@@ -80,10 +84,6 @@
   flex-shrink: 0;
   padding: 0px 5px;
 
-  @media screen and (max-width: 600px) {
-      width: 100%;
-  }
-
   .thumb-wrapper {
       width: 100%;
       margin-bottom: 8px;
@@ -92,8 +92,6 @@
       position: relative;
 
       img {
-          width: 100%;
-          height: 100%;
           position: absolute;
           top: 0px;
           left: 0px;
@@ -198,6 +196,11 @@ button:disabled {
 
 .content-section {
   min-height: 300px;
+  min-width: 500px;
+
+  @media screen and (max-width: 575px) {
+    min-width: calc( 100vw - 80px );
+  }
 }
 
 :host ::ng-deep {
@@ -280,11 +283,82 @@ button:disabled {
   }
 }
 
+.contents-container {
+  min-width: 400px;
+}
+
 .material-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   grid-row-gap: 20px;
+  max-height: calc( 65vh - 100px );
+  overflow: auto;
+  width: 450px;
+  padding-right: 20px;
+
+  @media screen and (max-width: 768px) {
+    width: auto;
+    max-height: 400px;
+  }
+
+  @media screen and (max-width: 576px) {
+    grid-template-columns: repeat(1, 1fr);
+
+    .material-item {
+      margin: 0 auto;
+    }
+  }
+
+  .material-item {
+    width: 200px;
+    position: relative;
+
+    .confirm {
+      position: absolute;
+      top: 10px;
+      right: 5px;
+      width: 16px;
+      height: 16px;
+      object-fit: cover;
+      z-index: 11;
+    }
+
+    .thumbnail {
+      width: 200px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0px 0px 8px #ccc;
+    }
+
+    .material-title {
+      line-height: 16px;
+    }
+
+    .material-description {
+      line-height: 14px;
+      word-break: break-all;
+    }
+
+    &.active {
+      .thumbnail {
+        border: 5px solid #0000ff;
+      }
+
+      .thumb-wrapper::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100px;
+        border-radius: 8px;
+        background: rgba(0, 0, 255, 0.4);
+        z-index: 10;
+        content: '';
+      }
+    }
+  }
 }
 
 :host ::ng-deep {
