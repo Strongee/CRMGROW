@@ -300,6 +300,7 @@ export const REPEAT_DURATIONS = [
     label: 'Monthly'
   }
 ];
+export const STATISTICS_DURATION = ['monthly', 'weekly', 'yearly'];
 
 export const REMINDER = [
   { id: '10', text: '10 min' },
@@ -430,4 +431,168 @@ export const DialogSettings = {
     width: '98vw',
     maxWidth: '394px'
   }
+};
+
+export const BulkActions = {
+  Tasks: [
+    {
+      label: 'Edit tasks',
+      type: 'button',
+      icon: 'i-edit',
+      command: 'edit'
+    },
+    {
+      label: 'Complete tasks',
+      type: 'button',
+      icon: 'i-check',
+      command: 'complete'
+    },
+    {
+      label: 'Delete tasks',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete'
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select'
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect'
+    }
+  ],
+  Contacts: [
+    {
+      label: 'Add tasks',
+      type: 'button',
+      icon: 'i-edit',
+      command: 'add_task'
+    },
+    {
+      label: 'Add notes',
+      type: 'button',
+      icon: 'i-note',
+      command: 'add_note'
+    },
+    {
+      label: 'Send messages',
+      type: 'button',
+      icon: 'i-message',
+      command: 'message'
+    },
+    {
+      label: 'Download',
+      type: 'button',
+      icon: 'i-download',
+      command: 'download'
+    },
+    {
+      label: 'Edit',
+      type: 'button',
+      icon: 'i-edit',
+      command: 'edit'
+    },
+    {
+      label: 'Delete',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete'
+    },
+    {
+      label: 'Add automation',
+      type: 'button',
+      icon: 'i-automation',
+      command: 'automation'
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select'
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect'
+    }
+  ],
+  Materials: [
+    {
+      label: 'Send via e-mail',
+      type: 'button',
+      icon: 'i-message',
+      command: 'email'
+    },
+    {
+      label: 'Add tasks',
+      type: 'button',
+      icon: 'i-text',
+      command: 'text'
+    },
+    {
+      label: 'Lead Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture'
+    },
+    {
+      label: 'Delete',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete'
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select'
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect'
+    }
+  ],
+  Compaigns: [],
+  CompaignContacts: [],
+  BulkMailng: [],
+  TeamMember: [
+    {
+      label: 'Bulk status set',
+      type: 'dropdown',
+      items: [
+        {
+          class: 'c-green',
+          label: 'Editor',
+          command: 'set_editor'
+        },
+        {
+          class: 'c-azure',
+          label: 'Viewer',
+          command: 'set_viewer'
+        }
+      ]
+    },
+    {
+      label: 'Remove member',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete'
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select'
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect'
+    }
+  ]
 };

@@ -14,6 +14,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgPipesModule } from 'ngx-pipes';
@@ -52,6 +54,8 @@ import { DurationPipe } from '../../pipes/duration.pipe';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTableModule,
+    MatCheckboxModule,
     NgxMatSelectSearchModule,
     NgPipesModule,
     GooglePlaceModule,
@@ -81,6 +85,8 @@ import { DurationPipe } from '../../pipes/duration.pipe';
     MatDatepickerModule,
     MatNativeDateModule,
     MatTabsModule,
+    MatTableModule,
+    MatCheckboxModule,
     NgxMatSelectSearchModule,
     GooglePlaceModule,
     NgPipesModule,

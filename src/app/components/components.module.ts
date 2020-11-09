@@ -44,6 +44,7 @@ import { LabelComponent } from './label/label.component';
 import { ActionDialogComponent } from './action-dialog/action-dialog.component';
 import { ActionEditComponent } from './action-edit/action-edit.component';
 import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
+import { LabelSelectComponent } from './label-select/label-select.component';
 @NgModule({
   declarations: [
     TopbarComponent,
@@ -87,7 +88,8 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
     LabelComponent,
     ActionDialogComponent,
     ActionEditComponent,
-    CaseConfirmComponent
+    CaseConfirmComponent,
+    LabelSelectComponent
   ],
   imports: [
     CommonModule,
@@ -118,7 +120,8 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
     CampaignAddContactComponent,
     UploadContactsComponent,
     DataEmptyComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    LabelSelectComponent
   ],
   bootstrap: [
     ContactCreateComponent,

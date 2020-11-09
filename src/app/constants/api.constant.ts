@@ -28,7 +28,13 @@ export const FILE = {
 };
 export const TASK = {
   CREATE: 'follow/',
-  UPDATE: 'follow/'
+  UPDATE: 'follow/',
+  TODAY: 'follow/date?due_date=today',
+  TOMORROW: 'follow/date?due_date=tomorrow',
+  NEXT_WEEK: 'follow/date?due_date=next_week',
+  FUTURE: 'follow/date?due_date=future',
+  OVERDUE: 'follow/date?due_date=overdue',
+  ALL: 'follow/load/'
 };
 export const ACTIVITY = {
   LOAD: 'activity/',

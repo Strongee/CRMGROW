@@ -1,35 +1,47 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
+import { Task, TaskDetail } from 'src/app/models/task.model';
+import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
-import { UserService } from 'src/app/services/user.service';
-import { TabItem, TabOption } from '../../utils/data.types';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit {
-  tabs: TabItem[] = [
-    { icon: 'i-icon i-task', label: 'Tasks', id: 'tasks' },
-    { icon: 'i-icon i-notification', label: 'Activity', id: 'activities' }
+  DISPLAY_COLUMNS = [
+    'select',
+    'contact_name',
+    'contact_label',
+    'subject',
+    'contact_phone',
+    'deadline',
+    'action'
   ];
-  selectedTab: TabItem = this.tabs[0];
+  TASK_ICONS = {
+    task: 'i-task',
+    call: 'i-phone',
+    meeting: 'i-lunch',
+    email: 'i-message',
+    material: 'i-video'
+  };
 
-  options: TabOption[] = [
-    { label: 'Set Date', value: 'date' },
-    { label: 'Set Duration', value: 'duration' }
-  ];
-  selectedOption = this.options[0].value;
-
+  selection = new SelectionModel<TaskDetail>(true, []);
   constructor(
-    public userService: UserService,
-    public taskService: TaskService
+    public taskService: TaskService,
+    public storeService: StoreService
   ) {}
 
-  ngOnInit(): void {}
-
-  changeTab(event: TabItem): void {
-    this.selectedTab = event;
+  ngOnInit(): void {
+    this.loadTasks();
   }
 
-  toggleEnabled(): void {}
+  loadTasks(): void {
+    this.taskService.loadToday();
+  }
+  /**
+   * Do Action
+   * @param action: Action Data (ActionItem | ActionSubItem)
+   */
+  doAction(action: any): void {}
 }

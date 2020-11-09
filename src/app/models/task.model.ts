@@ -1,3 +1,4 @@
+import { Contact } from './contact.model';
 import { Deserializable } from './deserialize.model';
 
 export class Task implements Deserializable {
@@ -19,5 +20,26 @@ export class Task implements Deserializable {
   }
   constructor() {
     this.type = 'task';
+  }
+}
+
+export class TaskDetail implements Deserializable {
+  _id: string;
+  user: string;
+  due_date: Date;
+  content: string;
+  contact: Contact;
+  status: number;
+  reminder: number;
+  reminder_type: string;
+  type: string;
+  is_repeat: boolean;
+  repeat_duration: number;
+  created_at: Date;
+  updated_at: Date;
+  deserialize(input: any): this {
+    Object.assign(this, input);
+    this.contact = new Contact().deserialize(input.contact);
+    return this;
   }
 }

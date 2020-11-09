@@ -89,3 +89,38 @@
   transform: translate(4px, 12px)!important;
   min-width: calc(100% + 24px)!important;
 }
+
+
+// Label Selector Style
+.label-select-wrapper {
+  .mat-form-field-appearance-outline {
+    .mat-form-field-infix {
+      padding: 0.25rem 0;
+    }
+    .mat-form-field-outline > div {
+      opacity: 0;
+    }
+    .mat-select-arrow-wrapper {
+      opacity: 0;
+    }
+    &.mat-focused {
+      .mat-form-field-outline > div {
+        opacity: 1;
+        border-color: $color-trans28;
+      }
+      .mat-select-arrow-wrapper {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.cdk-overlay-pane .mat-select-panel.label-panel {
+  min-width: 152px!important;
+  width: 152px!important;
+  transform: translate(6px, 4px)!important;
+
+  .mat-option {
+    padding: 0px 8px;
+  }
+}
