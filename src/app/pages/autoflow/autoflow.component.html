@@ -15,8 +15,8 @@
                       *ngIf="automationTitle.errors&&(automationTitle.touched||automationTitle.dirty||submitted)&&submitted">Automation
             name is required.</span>
               </div>
-              <div class="btn-wrapper ml-2">
-                <button type="submit" class="btn btn-primary br-default" [ngClass]="{loading: isSaving}">Save</button>
+              <div class="btn-wrapper">
+                <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">Save</button>
               </div>
             </div>
           </div>

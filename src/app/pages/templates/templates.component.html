@@ -2,7 +2,10 @@
   <div class="my-2">
     <div class="d-flex justify-content-between">
       <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Templates</h6>
-      <a class="btn btn-primary btn-sm br-default mb-2" [routerLink]="['/templates/new']">+ New template</a>
+      <a class="btn btn-primary br-default shadow py-2 v-center mb-2 border-0" [routerLink]="['/templates/new']">
+        <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
+        <span class="fw-600 f-3">New Template</span>
+      </a>
     </div>
     <div class="my-3">
       <ng-container *ngIf="isLoading">
@@ -40,8 +43,8 @@
                 <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
               </td>
               <td class="template-content">
-                <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripe | slice:0:40}}</h5>
-                <span [innerHTML]="template.content | stripe | slice:0:80"></span>
+                <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripTags | shorten: 40: '...'}}</h5>
+                <span [innerHTML]="template.content | stripTags | shorten: 80: '...'"></span>
               </td>
               <td class="template-type">
                 <div class="v-center">

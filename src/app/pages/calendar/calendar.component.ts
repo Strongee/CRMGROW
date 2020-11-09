@@ -23,10 +23,7 @@ export class CalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
   isLoading = true;
   @Input() locale = 'en';
-  public user = {
-    picture_profile: '',
-    connect_calendar: Boolean
-  };
+  public user: any = {};
   weekStart;
   weekEnd;
 
@@ -47,16 +44,9 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userService.loadProfile().subscribe(
-      (res) => {
-        if (res['status']) {
-          delete res['data']['google_refresh_token'];
-          delete res['data']['outlook_refresh_token'];
-          this.user = res['data'];
-        }
-      },
-      (err) => {}
-    );
+    this.userService.profile$.subscribe((profile) => {
+      this.user = profile;
+    });
     let mode, year, month, day;
     mode = this.router.snapshot.params['mode'];
     if (mode) {
@@ -99,30 +89,35 @@ export class CalendarComponent implements OnInit {
         break;
     }
     const date = this.viewDate.toISOString();
-    this.appointmentService.getEvents(date, mode).subscribe((res) => {
-      if (res['status'] == true) {
-        this.events = res['data'].map((item) => {
-          return {
-            title: item.title,
-            start: new Date(item.due_start),
-            end: new Date(item.due_end),
-            meta: {
-              contacts: item.contacts,
-              calendar_id: item.calendar_id,
-              description: item.description,
-              location: item.location,
-              type: item.type,
-              guests: item.guests,
-              event_id: item.event_id,
-              recurrence: item.recurrence,
-              recurrence_id: item.recurrence_id,
-              is_organizer: item.is_organizer
-            }
-          };
-        });
+    this.appointmentService.getEvents(date, mode).subscribe(
+      (res) => {
+        if (res['status'] == true) {
+          this.events = res['data'].map((item) => {
+            return {
+              title: item.title,
+              start: new Date(item.due_start),
+              end: new Date(item.due_end),
+              meta: {
+                contacts: item.contacts,
+                calendar_id: item.calendar_id,
+                description: item.description,
+                location: item.location,
+                type: item.type,
+                guests: item.guests,
+                event_id: item.event_id,
+                recurrence: item.recurrence,
+                recurrence_id: item.recurrence_id,
+                is_organizer: item.is_organizer
+              }
+            };
+          });
+          this.isLoading = false;
+        }
+      },
+      (err) => {
         this.isLoading = false;
       }
-    });
+    );
   }
 
   // connectCalendar() {
@@ -232,7 +227,7 @@ export class CalendarComponent implements OnInit {
       .open(CalendarEventComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '350px',
+        maxWidth: '300px',
         data: {
           event: event
         }

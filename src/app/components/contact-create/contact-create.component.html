@@ -90,6 +90,6 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button type="button" mat-dialog-close class="btn c-blue">Cancel</button>
-    <button type="submit" class="btn btn-primary" [ngClass]="{loading: creating}">Add</button>
+    <button type="submit" class="btn btn-primary" [class.loading]="creating">Add</button>
   </mat-dialog-actions>
 </form>

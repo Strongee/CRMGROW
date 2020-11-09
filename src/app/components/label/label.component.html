@@ -30,8 +30,6 @@
     </div>
     <div mat-dialog-actions align="end">
         <button type="button" mat-dialog-close class="btn br-default py-2">Cancel</button>
-        <button type="submit" class="btn bg-green-c text-white br-default py-2" *ngIf="!isLoading">Create</button>
-        <app-loading-button [class]="'bg-green-c text-white br-default py-2'" [title]="'Creating'" *ngIf="isLoading">
-        </app-loading-button>
+        <button type="submit" class="btn bg-green-c text-white br-default py-2" [class.loading]="isLoading">Create</button>
     </div>
 </form>

@@ -1,0 +1,33 @@
+<div class="custom-mat-field label-select-wrapper">
+  <mat-form-field style="display: block;" appearance="outline">
+    <mat-select #selector [disableOptionCentering]="true" panelClass="label-panel" [formControl]="formControl" >
+      <mat-select-trigger>
+        <ng-container *ngIf="formControl.value; else emptyLabel">
+          <div class="v-center py-1">
+            <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="formControl.value.color === '#FFF' ? '#000' : formControl.value.color"></i>
+            <span>{{formControl.value.name}}</span>
+          </div>  
+        </ng-container>
+        <ng-template #emptyLabel>
+          <div class="v-center py-1">
+            <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
+            <span>No Label</span>
+          </div>
+        </ng-template>
+      </mat-select-trigger>
+      <mat-option style="height: unset; line-height: unset;" [disabled]="true">
+        <a class="py-2 text-primary f-2 v-center border rounded mt-2 mb-2 px-2 td-none c-pointer" style="pointer-events: auto;">
+          <i class="i-icon i-setting bgc-blue mr-1 sm"></i>
+          <span class="c-blue">Manage Labels</span>
+        </a>
+      </mat-option>
+      <mat-option *ngFor="let item of labelService.labels$ | async" [value]="item"
+        style="height: unset; line-height: unset;">
+        <div class="v-center py-1">
+          <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>
+          <span>{{item.name}}</span>
+        </div>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

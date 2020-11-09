@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MONTH, YEAR, INVOICES } from '../../constants/variable.constants';
+import { MONTH, YEAR } from '../../constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -53,7 +53,26 @@ export class PaymentComponent implements OnInit {
   paymentSubmitted = false;
   months = MONTH;
   years = YEAR;
-  invoices = INVOICES;
+  invoices = [
+    {
+      number: 'CRMgrow #124577',
+      payment_date: '16.06.2020',
+      issue_date: '02.06.2020',
+      gross: '$ 5000'
+    },
+    {
+      number: 'CRMgrow #163346',
+      payment_date: '08.07.2020',
+      issue_date: '22.06.2020',
+      gross: '$ 6000'
+    },
+    {
+      number: 'CRMgrow 02/06/2020',
+      payment_date: '16.06.2020',
+      issue_date: '22.06.2020',
+      gross: '$ 6000'
+    }
+  ];
 
   constructor(private userService: UserService) {
     this.userService.profile$.subscribe((profile) => {

@@ -3,16 +3,16 @@
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
     <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="teams.length + invitedTeams.length && selectedTab.id === 'teams'">
-      <button class="btn btn-blue text-white f-4" (click)="joinForm()">Join team</button>
-      <button class="v-center btn btn-blue f-4 text-white ml-2">
-        <i class="bgc-white i-icon i-plus mr-2"></i>
-        Create new team
+      <button class="btn btn-blue text-white f-3 py-2 fw-600 shadow border-0" (click)="joinForm()">Join team</button>
+      <button class="v-center btn btn-blue text-white py-2 ml-2 shadow border-0">
+        <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
+        <span class="fw-600 f-3">Create new team</span>
       </button>
     </div>
     <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="selectedTab.id === 'calls'">
-      <button class="v-center btn btn-blue f-4 text-white ml-2" (click)="joinCallRequest()">
-        <i class="bgc-white i-icon i-plus mr-2"></i>
-        New group call inquiry
+      <button class="btn btn-primary br-default shadow py-2 v-center border-0" (click)="joinCallRequest()">
+        <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
+        <span class="fw-600 f-3">New group call inquiry</span>
       </button>
     </div>
   </div>
@@ -103,17 +103,17 @@
                       <div class="actions ml-auto" *ngIf="team.own; else leaveActions">
                         <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTeam(team)">
                           <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-4 font-weight-bold">Edit</span>
+                          <span class="ml-3 f-3 font-weight-bold">Edit</span>
                         </button>
                         <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteTeam(team)">
                           <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-4 font-weight-bold">Delete</span>
+                          <span class="ml-3 f-3 font-weight-bold">Delete</span>
                         </button>
                       </div>
                       <ng-template #leaveActions>
                         <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="leaveTeam(team)">
                           <i class="i-icon i-block bg-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-4 font-weight-bold">Block</span>
+                          <span class="ml-3 f-3 font-weight-bold">Block</span>
                         </button>
                       </ng-template>
                     </div>
@@ -273,7 +273,7 @@
                   <tr *ngFor="let inquiry of inquiriesData | paginate : { id: 'new_inquiries', itemsPerPage: 8, currentPage: currentInquiriesPage, totalItems: totalInquiries }">
                     <td class="subject" (click)="confirmRequest(inquiry)">
                       <div class="c-blue f-5 font-weight-bold">{{inquiry.subject}}</div>
-                      <div class="c-dark opacity-6 f-2">{{inquiry.description | stripe | slice:0:40}}</div>
+                      <div class="c-dark opacity-6 f-2">{{inquiry.description | stripTags | shorten: 40: '...'}}</div>
                     </td>
                     <td class="organizer" (click)="confirmRequest(inquiry)">
                       <div class="v-center">
@@ -397,7 +397,7 @@
                   <tr *ngFor="let plan of plannedData | paginate : { id: 'plannedTable', itemsPerPage: 8, currentPage: currentPlannedPage, totalItems: totalPlanned }">
                     <td class="subject" (click)="confirmRequest(plan)">
                       <div class="c-blue f-5 font-weight-bold">{{plan.subject}}</div>
-                      <div class="c-dark opacity-6 f-2">{{plan.description | stripe | slice:0:40}}</div>
+                      <div class="c-dark opacity-6 f-2">{{plan.description | stripTags | shorten: 40: '...'}}</div>
                     </td>
                     <td class="organizer" (click)="confirmRequest(plan)">
                       <div class="v-center">
@@ -531,7 +531,7 @@
                   <tr *ngFor="let finished of finishedData | paginate : { id: 'finishedTable', itemsPerPage: 8, currentPage: currentFinishedPage, totalItems: totalFinished }">
                     <td class="subject" (click)="confirmRequest(finished)">
                       <div class="c-blue f-5 font-weight-bold">{{finished.subject}}</div>
-                      <div class="c-dark opacity-6 f-2">{{finished.description | stripe | slice:0:40}}</div>
+                      <div class="c-dark opacity-6 f-2">{{finished.description | stripTags | shorten: 40: '...'}}</div>
                     </td>
                     <td class="organizer" (click)="confirmRequest(finished)">
                       <div class="v-center">

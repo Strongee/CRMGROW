@@ -11,7 +11,6 @@ import { ActionsBarComponent } from './actions-bar/actions-bar.component';
 import { AvatarEditorComponent } from './avatar-editor/avatar-editor.component';
 import { NgxCropperJsModule } from 'ngx-cropperjs-wrapper';
 import { SharedModule } from '../layouts/shared/shared.module';
-import { VideoCreateComponent } from './video-create/video-create.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { TeamEditComponent } from './team-edit/team-edit.component';
 import { TeamDeleteComponent } from './team-delete/team-delete.component';
@@ -37,6 +36,7 @@ import { UploadContactsComponent } from './upload-contacts/upload-contacts.compo
 import { ContactCreateComponent } from './contact-create/contact-create.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { NoteCreateComponent } from './note-create/note-create.component';
+import { CalendarDeclineComponent } from './calendar-decline/calendar-decline.component';
 import { JoinTeamComponent } from './join-team/join-team.component';
 import { InviteTeamComponent } from './invite-team/invite-team.component';
 import { SearchUserComponent } from './search-user/search-user.component';
@@ -44,7 +44,7 @@ import { LabelComponent } from './label/label.component';
 import { ActionDialogComponent } from './action-dialog/action-dialog.component';
 import { ActionEditComponent } from './action-edit/action-edit.component';
 import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
-
+import { LabelSelectComponent } from './label-select/label-select.component';
 @NgModule({
   declarations: [
     TopbarComponent,
@@ -64,7 +64,6 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
     InputTemplateComponent,
     InputTeamComponent,
     SelectUserComponent,
-    VideoCreateComponent,
     JoinCallRequestComponent,
     CallRequestConfirmComponent,
     SelectLeaderComponent,
@@ -82,13 +81,15 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
     ContactCreateComponent,
     TaskCreateComponent,
     NoteCreateComponent,
+    CalendarDeclineComponent,
     JoinTeamComponent,
     InviteTeamComponent,
     SearchUserComponent,
     LabelComponent,
     ActionDialogComponent,
     ActionEditComponent,
-    CaseConfirmComponent
+    CaseConfirmComponent,
+    LabelSelectComponent
   ],
   imports: [
     CommonModule,
@@ -119,7 +120,8 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
     CampaignAddContactComponent,
     UploadContactsComponent,
     DataEmptyComponent,
-    SelectLeaderComponent
+    SelectLeaderComponent,
+    LabelSelectComponent
   ],
   bootstrap: [
     ContactCreateComponent,

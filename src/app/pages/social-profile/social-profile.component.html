@@ -15,17 +15,10 @@
         <button
             type="submit"
             class="btn btn-primary font-weight-bold ml-auto mr-2 mt-4"
-            *ngIf="!socialProfileSaving"
+            [class.loading]="socialProfileSaving"
             (click)="saveChange()"
         >
             Save changes
         </button>
-        <app-loading-button
-            class="ml-auto"
-            [class]="'btn btn-primary font-weight-bold ml-auto mr-2 mt-4'"
-            [title]="'Saving...'"
-            *ngIf="socialProfileSaving"
-        >
-        </app-loading-button>
     </div>
 </div>

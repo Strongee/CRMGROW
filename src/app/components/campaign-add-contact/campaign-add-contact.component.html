@@ -133,10 +133,8 @@
     <button type="button" mat-dialog-close class="btn btn-white f-6 font-weight-bold ml-2">
       Cancel
     </button>
-    <button type="submit" class="btn btn-primary font-weight-bold f-6" *ngIf="!submitted">
+    <button type="submit" class="btn btn-primary font-weight-bold f-6" [class.loading]="submitted">
       Create
     </button>
-    <app-loading-button [class]="'bgc-blue text-white font-weight-bold f-6'" [title]="'Creating...'" *ngIf="submitted">
-    </app-loading-button>
   </mat-dialog-actions>
 </form>

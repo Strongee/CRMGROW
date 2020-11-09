@@ -225,29 +225,19 @@
         <button
           type="submit"
           class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold"
-          *ngIf="!isLoading && changeMode == 'create'"
+          *ngIf="changeMode == 'create'"
+          [class.loading]="isLoading"
         >
           Create
         </button>
         <button
           type="submit"
           class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold"
-          *ngIf="!isLoading && changeMode == 'update'"
+          *ngIf="changeMode == 'update'"
+          [class.loading]="isLoading"
         >
           Update
         </button>
-        <app-loading-button
-          [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'"
-          [title]="'Creating'"
-          *ngIf="isLoading && changeMode == 'create'"
-        >
-        </app-loading-button>
-        <app-loading-button
-          [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'"
-          [title]="'Updating'"
-          *ngIf="isLoading && changeMode == 'update'"
-        >
-        </app-loading-button>
       </div>
     </div>
   </div>

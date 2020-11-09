@@ -10,8 +10,7 @@
   </div>
   <div mat-dialog-actions class="mx-0" align="end">
     <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
-    <button class="btn btn-red text-white f-6 font-weight-bold" *ngIf="!updating" type="submit" (click)="deleteTeam()">Delete</button>
-    <app-loading-button [class]="'btn btn-red text-white f-6 font-weight-bold'" title="Deleting..." *ngIf="updating"></app-loading-button>
+    <button class="btn btn-red text-white f-6 font-weight-bold" [class.loading]="updating" type="submit" (click)="deleteTeam()">Delete</button>
   </div>
 </div>
 

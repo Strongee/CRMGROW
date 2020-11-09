@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { StoreService } from './store.service';
 import { Observable } from 'rxjs';
 import { CONTACT } from '../constants/api.constant';
-import { Contact } from '../models/contact.model';
+import { Contact, ContactActivity } from '../models/contact.model';
 import { ActivityDetail } from '../models/activity.model';
 import { map, catchError } from 'rxjs/operators';
 
@@ -25,7 +25,34 @@ export class ContactService extends HttpService {
   read(_id: string): void {}
   update(_id: string): void {}
   delete(_id: string): void {}
-  load() {}
+  /**
+   * Load Contacts and update the store
+   * @param page : Contact Page Number
+   */
+  load(page: number): void {
+    this.loadImpl(page).subscribe((contacts) => {
+      this.storeService.contacts.next(contacts);
+    });
+  }
+  /**
+   * Call API & Load Contacts
+   * @param page
+   */
+  loadImpl(page: number): Observable<ContactActivity[]> {
+    return this.httpClient
+      .post(this.server + CONTACT.LOAD_PAGE + page, {
+        field: 'name',
+        dir: true
+      })
+      .pipe(
+        map((res) =>
+          (res['data']['contacts'] || []).map((e) =>
+            new ContactActivity().deserialize(e)
+          )
+        ),
+        catchError(this.handleError('LOAD CONTACTS', []))
+      );
+  }
   easySearch(keyword: string): Observable<Contact[]> {
     return this.httpClient
       .post(this.server + CONTACT.QUICK_SEARCH, { search: keyword })
@@ -73,7 +100,7 @@ export class ContactService extends HttpService {
     return this.httpClient
       .post(this.server + CONTACT.LOAD_BY_IDS, { ids })
       .pipe(
-        map((res) => res['data'] || [] ),
+        map((res) => res['data'] || []),
         catchError(this.handleError('SEARCH CONTACTS', []))
       );
   }

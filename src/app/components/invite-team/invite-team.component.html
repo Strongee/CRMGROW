@@ -64,5 +64,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn c-blue" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary" [ngClass]="{loading: inviting}" (click)="sendInvitation()">Save</button>
+  <button class="btn btn-primary" [class.loading]="inviting" (click)="sendInvitation()">Save</button>
 </mat-dialog-actions>

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Team } from '../models/team.model';
 import { ErrorService } from './error.service';
@@ -13,17 +13,21 @@ import { LABEL } from '../constants/api.constant';
   providedIn: 'root'
 })
 export class LabelService extends HttpService {
-  constructor(
-    errorService: ErrorService,
-    private httpClient: HttpClient,
-    private storeService: StoreService
-  ) {
+  labels: BehaviorSubject<Label[]> = new BehaviorSubject([]);
+  labels$ = this.labels.asObservable();
+  constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
+  }
+
+  loadLabels(): void {
+    this.getLabels().subscribe((labels) => {
+      this.labels.next(labels);
+    });
   }
 
   getLabels(): Observable<Label[]> {
     return this.httpClient.get(this.server + LABEL.GET).pipe(
-      map((res) => res['data'] || []),
+      map((res) => (res['data'] || []).map((e) => new Label().deserialize(e))),
       catchError(this.handleError('GET LABELS', []))
     );
   }

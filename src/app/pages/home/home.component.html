@@ -1,8 +1,71 @@
 <div class="page-content">
-  <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
-  </app-slide-tab>
+  <div class="page-header v-center">
+    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+    </app-slide-tab>
+    <div class="statistics-wrapper mb-3 d-flex flex-column mx-2">
+      <div class="small ml-auto mr-1 c-pointer" ngbDropdown>
+        <div class="text-uppercase opacity-8 f-1" ngbDropdownToggle>
+          {{duration}}
+        </div>
+        <div ngbDropdownMenu aria-labelledby="actionsDropdown" class="py-1">
+          <div ngbDropdownItem *ngFor="let duration of STATISTICS_DURATION" (click)="changeDuration(duration)">
+            <span class="f-1 text-uppercase">{{duration}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="statistics d-flex">
+        <div class="statistic border border-primary rounded v-center px-3 py-2 mx-1">
+         <div class="value c-blue f-28 mr-3">
+          16
+         </div>
+         <div class="description c-dark f-1 font-weight-bold text-uppercase">
+          materials sent
+         </div>
+        </div>
+        <div class="statistic border border-primary rounded v-center px-3 py-2 mx-1">
+          <div class="value c-blue f-28 mr-3">
+           16
+          </div>
+          <div class="description c-dark f-1 font-weight-bold text-uppercase">
+           materials reviewed
+          </div>
+        </div>
+        <div class="statistic border border-primary rounded v-center px-3 py-2 mx-1">
+        <div class="value c-blue f-28 mr-3">
+          16
+        </div>
+        <div class="description c-dark f-1 font-weight-bold text-uppercase">
+          contacts added
+        </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="selectedTab.id === 'tasks'">
+      <div class="shadow-dropdown ml-auto" ngbDropdown>
+        <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
+          <span class="pr-2">Sort by deadline</span>
+        </div>
+        <div ngbDropdownMenu aria-labelledby="taskSortTypes">
+          <div class="py-2" ngbDropdownItem *ngFor="let type of DEADLINE_TYPES" (click)="changeDeadlineType(type)">
+            <span class="f-3 v-center" [class.font-weight-bold]="type.id === deadline.id">
+              {{type.label}}
+              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1" *ngIf="type.id === deadline.id"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="border-left px-3 py-2 text-center mx-3">
+        <a class="ml-3 f-3 font-weight-bold" (click)="openFilter()">Filters</a>
+      </div>
+    </ng-container>
+  </div>
+  <div>
+    <app-tasks [class.d-none]="selectedTab.id !== 'tasks'"></app-tasks>
+    <app-activities [class.d-none]="selectedTab.id === 'tasks'"></app-activities>
+  </div>
 
-  <app-input-contacts></app-input-contacts>
+
+  <!-- <app-input-contacts></app-input-contacts>
   <app-select-contact [resultItem]="result">
     <ng-template #result let-data>
       <div class="chip d-flex align-items-center">
@@ -17,12 +80,5 @@
   <app-select-leader></app-select-leader>
   <app-input-automation></app-input-automation>
   <app-input-template></app-input-template>
-  <!-- <button (click)="increase()">+</button>
-  <button (click)="decrease()">-</button>
-  <button (click)="reset()">Reset</button> -->
-  <app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar>
-  <!-- <div class="custom-mat">
-    <input matInput [matDatepicker]="picker">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  </div> -->
+  <app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar> -->
 </div>
