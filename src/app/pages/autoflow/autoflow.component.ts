@@ -123,7 +123,6 @@ export class AutoflowComponent
     this.automationService.get(id).subscribe(
       (res) => {
         this.automation = res;
-        console.log("automation ===============>", this.automation);
         const mode = this.route.snapshot.params['mode'];
         if (mode === 'edit') {
           this.automation_id = res['_id'];
@@ -381,6 +380,7 @@ export class AutoflowComponent
       });
 
       const actionDlg = this.dialog.open(ActionDialogComponent, {
+        maxWidth: '90vw',
         minHeight: '300px',
         data: {
           follows: prevFollowUps
@@ -434,6 +434,7 @@ export class AutoflowComponent
         }
       }
       const actionDlg = this.dialog.open(ActionDialogComponent, {
+        maxWidth: '90vw',
         minHeight: '300px',
         data: {
           currentAction: node.type,
@@ -508,6 +509,7 @@ export class AutoflowComponent
       });
     } else {
       const actionDlg = this.dialog.open(ActionDialogComponent, {
+        maxWidth: '90vw',
         minHeight: '300px',
         data: {}
       });
@@ -555,7 +557,6 @@ export class AutoflowComponent
 
     this.dialog
       .open(ActionEditComponent, {
-        minWidth: '500px',
         data: {
           action: node,
           conditionHandler,

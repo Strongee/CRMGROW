@@ -44,21 +44,21 @@
                || type == 'send_email_pdf' || type == 'send_text_pdf'
                || type == 'send_email_image' || type == 'send_text_image'
       ">
-        <div class="template-container mr-lg-3 mr-md-0">
+        <div class="template-container mr-lg-5 mr-md-0">
           <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
           </app-slide-tab>
           <ng-container *ngIf="selectedTab.label == 'VIDEO'">
-            <div class="material-container mt-2">
+            <div class="material-container mt-3">
               <ng-container *ngFor="let video of videos">
                 <div class="material-item" (click)="toggleVideo(video)" [class.active]="action['video'] == video">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['video'] == video">
                   <div class="thumb-wrapper">
                     <img class="thumbnail" src="{{video.thumbnail || video.preview}}" alt="{{video.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
                   </div>
-                  <div class="material-title f-3 font-weight-bold">
+                  <div class="material-title f-1 font-weight-bold mt-3">
                     {{video.title}}
                   </div>
-                  <div class="material-description f-3 c-dark">
+                  <div class="material-description f-1 mt-2">
                     {{video.description | stripe | slice :0:80}}
                   </div>
                 </div>
@@ -66,17 +66,17 @@
             </div>
           </ng-container>
           <ng-container *ngIf="selectedTab.label == 'PDF'">
-            <div class="material-container mt-2">
+            <div class="material-container mt-3">
               <ng-container *ngFor="let pdf of pdfs">
                 <div class="material-item" (click)="togglePdf(pdf)" [class.active]="action['pdf'] == pdf">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['pdf'] == pdf">
                   <div class="thumb-wrapper">
                     <img class="thumbnail" src="{{pdf.thumbnail || pdf.preview}}" alt="{{pdf.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
                   </div>
-                  <div class="material-title f-3 font-weight-bold">
+                  <div class="material-title f-1 font-weight-bold mt-3">
                     {{pdf.title}}
                   </div>
-                  <div class="material-description f-3 c-dark">
+                  <div class="material-description f-1 mt-2">
                     {{pdf.description | stripe | slice :0:80}}
                   </div>
                 </div>
@@ -84,17 +84,17 @@
             </div>
           </ng-container>
           <ng-container *ngIf="selectedTab.label == 'IMAGE'">
-            <div class="material-container mt-2">
+            <div class="material-container mt-3">
               <ng-container *ngFor="let image of images">
                 <div class="material-item" (click)="toggleImage(image)" [class.active]="action['image'] == image">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['image'] == image">
                   <div class="thumb-wrapper">
                     <img class="thumbnail" src="{{image.thumbnail || image.preview}}" alt="{{image.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
                   </div>
-                  <div class="material-title f-3 font-weight-bold">
+                  <div class="material-title f-1 font-weight-bold mt-3">
                     {{image.title}}
                   </div>
-                  <div class="material-description f-3 c-dark">
+                  <div class="material-description f-1 mt-2">
                     {{image.description | stripe | slice :0:80}}
                   </div>
                 </div>
@@ -280,25 +280,51 @@
           <div class="action-form">
             <div class="form-group has-feedback"
                  [class.has-error]="content.errors && (content.touched || content.dirty|| submitted) && submitted">
-              <label class="theme-label">CONTENT</label>
-              <div class="d-flex flex-wrap field-actions mb-2">
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_name}', smsContentField)">Your Name</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_email}', smsContentField)">Your Email</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_phone}', smsContentField)">Your Phone</button>
-                <div ngbDropdown class="d-flex justify-content-end button-more rounded">
-                  <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                    <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
-                  </a>
-                  <div ngbDropdownMenu class="button-more-container light">
-                    <div class="actions ml-auto">
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_first_name}', smsContentField)">Contact Firstname</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_last_name}', smsContentField)">Contact Lastname</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_email}', smsContentField)">Contact Email</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_phone}', smsContentField)">Contact Phone</button>
+              <ng-container *ngIf="type == 'send_email_video' || type == 'send_text_video'
+                                   || type == 'send_email_pdf' || type == 'send_text_pdf'
+                                   || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
+                <div class="v-center label-group">
+                  <label class="theme-label">CONTENT</label>
+                  <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
+                  <div ngbDropdown class="justify-content-end field-actions button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{user_name}', smsContentField)">Your Name</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{user_email}', smsContentField)">Your Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{user_phone}', smsContentField)">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_first_name}', smsContentField)">Contact Firstname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_last_name}', smsContentField)">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_email}', smsContentField)">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_phone}', smsContentField)">Contact Phone</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
+              <ng-template #noMaterial>
+                <label class="theme-label">CONTENT</label>
+                <div class="d-flex flex-wrap field-actions mb-2">
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_name}', smsContentField)">Your Name</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_email}', smsContentField)">Your Email</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSmsContentValue('{user_phone}', smsContentField)">Your Phone</button>
+                  <div ngbDropdown class="d-flex justify-content-end button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_first_name}', smsContentField)">Contact Firstname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_last_name}', smsContentField)">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_email}', smsContentField)">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSmsContentValue('{contact_phone}', smsContentField)">Contact Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
               <textarea [(ngModel)]="action.content" class="form-control" placeholder="Please type in sms content."
                         name="content" #content="ngModel" rows="6" required #smsContentField (click)="getSmsContentCursor(smsContentField)"
                         (keyup)="getSmsContentCursor(smsContentField)"></textarea>
@@ -312,27 +338,55 @@
           <div class="action-form">
             <div class="form-group has-feedback"
                  [class.has-error]="subject.errors && (subject.touched || subject.dirty || submitted) && submitted">
-              <label class="theme-label">SUBJECT</label>
-              <div class="d-flex flex-wrap field-actions mb-2">
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSubjectValue('{user_name}', subjectField)">Your Name</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSubjectValue('{contact_first_name}', subjectField)">Contact Firstname</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSubjectValue('{material_title}', subjectField)">Material Title</button>
-                <div ngbDropdown class="d-flex justify-content-end button-more rounded">
-                  <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                    <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
-                  </a>
-                  <div ngbDropdownMenu class="button-more-container light">
-                    <div class="actions ml-auto">
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_email}', subjectField)">Your Email</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_last_name}', subjectField)">Contact Lastname</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_email}', subjectField)">Contact Email</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_phone}', subjectField)">Contact Phone</button>
+              <ng-container *ngIf="type == 'send_email_video' || type == 'send_text_video'
+                                   || type == 'send_email_pdf' || type == 'send_text_pdf'
+                                   || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
+                <div class="v-center label-group">
+                  <label class="theme-label">SUBJECT</label>
+                  <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
+                  <div ngbDropdown class="field-actions button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_name}', subjectField)">Your Name</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_first_name}', subjectField)">Contact Firstname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{material_title}', subjectField)">Material Title</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_email}', subjectField)">Your Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_last_name}', subjectField)">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_email}', subjectField)">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_phone}', subjectField)">Contact Phone</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
+              <ng-template #noMaterial>
+                <label class="theme-label">SUBJECT</label>
+                <div class="d-flex flex-wrap field-actions mb-2">
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSubjectValue('{user_name}', subjectField)">Your Name</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSubjectValue('{contact_first_name}', subjectField)">Contact Firstname</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertSubjectValue('{material_title}', subjectField)">Material Title</button>
+                  <div ngbDropdown class="d-flex justify-content-end button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_email}', subjectField)">Your Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_last_name}', subjectField)">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_email}', subjectField)">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertSubjectValue('{contact_phone}', subjectField)">Contact Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
               <input type="text" class="form-control" [(ngModel)]="action.subject" placeholder="Email Subject"
                      name="subject" #subject="ngModel" required #subjectField (click)="getSubjectCursorPost(subjectField)" (keyup)="getSubjectCursorPost(subjectField)"/>
               <span class="invalid-feedback"
@@ -340,25 +394,51 @@
               required.</span>
             </div>
             <div class="form-group has-feedback" [class.has-error]="!action.content && submitted">
-              <label class="theme-label">CONTENT</label>
-              <div class="d-flex flex-wrap field-actions mb-2">
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertEmailContentValue('{user_name}')">Your Name</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
-                <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertEmailContentValue('{user_email}')">Your Email</button>
-                <div ngbDropdown class="d-flex justify-content-end button-more rounded">
-                  <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                    <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
-                  </a>
-                  <div ngbDropdownMenu class="button-more-container light">
-                    <div class="actions ml-auto">
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
-                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
+              <ng-container *ngIf="type == 'send_email_video' || type == 'send_text_video'
+                                   || type == 'send_email_pdf' || type == 'send_text_pdf'
+                                   || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
+                <div class="v-center label-group">
+                  <label class="theme-label">CONTENT</label>
+                  <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
+                  <div ngbDropdown class="justify-content-end field-actions button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_name}')">Your Name</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_email}')">Your Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
+              <ng-template #noMaterial>
+                <label class="theme-label">CONTENT</label>
+                <div class="d-flex flex-wrap field-actions mb-2">
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertEmailContentValue('{user_name}')">Your Name</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertEmailContentValue('{user_email}')">Your Email</button>
+                  <div ngbDropdown class="d-flex justify-content-end button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
               <quill-editor placeholder="Enter mail content" [(ngModel)]="action.content" [modules]="config"
                             name="mailContent" [styles]="{height: '240px'}" #mailContent="ngModel" required
                             (onEditorCreated)="getEditorInstance($event)"
@@ -534,7 +614,7 @@
         <ng-container *ngIf="type.indexOf('send')!==-1 || type.indexOf('email')!==-1">
           <div class="templates-wrapper form-group mb-2">
             <ng-container *ngIf="type.indexOf('email')!==-1; else textTemplate">
-              <label>Template</label>
+              <label class="theme-label">Template</label>
               <app-input-template
                 [value]="selectedTemplate"
                 [type]="'email'"
@@ -543,7 +623,7 @@
               </app-input-template>
             </ng-container>
             <ng-template #textTemplate>
-              <label>Template</label>
+              <label class="theme-label">Template</label>
               <app-input-template
                 [value]="selectedTemplate"
                 [type]="'email'"

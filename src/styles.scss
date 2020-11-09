@@ -1241,6 +1241,10 @@ select.theme-control {
       align-items: center;
       justify-content: center;
       cursor: pointer;
+
+      @media screen and (max-width: 576px) {
+        font-size: 14px;
+      }
     }
 
     input:checked ~ .custom-theme-label {

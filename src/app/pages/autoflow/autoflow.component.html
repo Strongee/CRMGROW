@@ -51,8 +51,12 @@
       <!-- <div class="" draggable="true" (dragstart)="dragAction($event)">DRAG</div> -->
       <div class="flows-container" #wrapper>
         <div class="zoom-button-wrapper">
-          <button class="btn btn-white font-weight-bold" [class.disabled]="zoomLevel > 3" (click)="zoomIn()">+</button>
-          <button class="btn btn-white font-weight-bold" [class.disabled]="zoomLevel === 0" (click)="zoomOut()">-</button>
+          <button class="v-center justify-content-center btn btn-white font-weight-bold mb-2" [class.disabled]="zoomLevel > 3" (click)="zoomIn()">
+            <i class="bgc-blue i-icon i-plus"></i>
+          </button>
+          <button class="v-center justify-content-center btn btn-white font-weight-bold" [class.disabled]="zoomLevel === 0" (click)="zoomOut()">
+            <i class="bgc-blue i-icon i-remove"></i>
+          </button>
         </div>
         <div class="count-container">
           <div class="actions-count">

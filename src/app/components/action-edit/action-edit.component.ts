@@ -364,10 +364,12 @@ export class ActionEditComponent implements OnInit {
   }
 
   toggleMaterial(material): void {
-    if (material._id !== this.material._id) {
-      this.material = material;
-    } else {
-      this.material = undefined;
+    if (material) {
+      if (material._id !== this.material._id) {
+        this.material = material;
+      } else {
+        this.material = undefined;
+      }
     }
   }
 
