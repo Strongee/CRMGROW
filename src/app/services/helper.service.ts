@@ -143,4 +143,20 @@ export class HelperService {
       fileReader.readAsDataURL(imageFile);
     });
   }
+
+  promptForFiles(accept: string, multiple = false): Promise<FileList> {
+    return new Promise<FileList>((resolve, reject) => {
+      const fileInput: HTMLInputElement = this.document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = accept;
+      fileInput.multiple = multiple;
+      fileInput.addEventListener('error', (event) => {
+        reject(event.error);
+      });
+      fileInput.addEventListener('change', () => {
+        resolve(fileInput.files);
+      });
+      fileInput.click();
+    });
+  }
 }
