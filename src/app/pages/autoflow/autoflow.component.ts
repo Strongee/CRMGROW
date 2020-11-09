@@ -380,7 +380,7 @@ export class AutoflowComponent
       });
 
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        minWidth: '500px',
+        maxWidth: '90vw',
         minHeight: '300px',
         data: {
           follows: prevFollowUps
@@ -434,7 +434,7 @@ export class AutoflowComponent
         }
       }
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        minWidth: '500px',
+        maxWidth: '90vw',
         minHeight: '300px',
         data: {
           currentAction: node.type,
@@ -509,7 +509,7 @@ export class AutoflowComponent
       });
     } else {
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        minWidth: '500px',
+        maxWidth: '90vw',
         minHeight: '300px',
         data: {}
       });
@@ -557,7 +557,6 @@ export class AutoflowComponent
 
     this.dialog
       .open(ActionEditComponent, {
-        minWidth: '500px',
         data: {
           action: node,
           conditionHandler,

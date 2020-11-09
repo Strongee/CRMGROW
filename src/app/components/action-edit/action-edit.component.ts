@@ -221,17 +221,17 @@ export class ActionEditComponent implements OnInit {
 
     if (
       !(
-        this.action['period'] === 0.17 ||
-        this.action['period'] === 0.5 ||
-        this.action['period'] === 1 ||
-        this.action['period'] === 6 ||
-        this.action['period'] === 12 ||
-        this.action['period'] === 24 ||
-        this.action['period'] === 48 ||
-        this.action['period'] === 72 ||
-        this.action['period'] === 168 ||
-        this.action['period'] === 336 ||
-        this.action['period'] === 0
+        this.action['period'] === '0.17' ||
+        this.action['period'] === '0.5' ||
+        this.action['period'] === '1' ||
+        this.action['period'] === '6' ||
+        this.action['period'] === '12' ||
+        this.action['period'] === '24' ||
+        this.action['period'] === '48' ||
+        this.action['period'] === '72' ||
+        this.action['period'] === '168' ||
+        this.action['period'] === '336' ||
+        this.action['period'] === '0'
       )
     ) {
       let period = this.action['period'];
@@ -249,6 +249,7 @@ export class ActionEditComponent implements OnInit {
     if (this.mediaType) {
       this.loadTemplates();
     }
+
   }
 
   loadMaterials(): void {
@@ -363,10 +364,12 @@ export class ActionEditComponent implements OnInit {
   }
 
   toggleMaterial(material): void {
-    if (material._id !== this.material._id) {
-      this.material = material;
-    } else {
-      this.material = undefined;
+    if (material) {
+      if (material._id !== this.material._id) {
+        this.material = material;
+      } else {
+        this.material = undefined;
+      }
     }
   }
 
@@ -395,6 +398,7 @@ export class ActionEditComponent implements OnInit {
       } else {
         this.action[this.materialType] = this.material;
       }
+      console.log("update ============>", this.material, this.materialType, this.action);
     }
     if (this.type === 'follow_up') {
       if (this.followDueOption === 'date') {
