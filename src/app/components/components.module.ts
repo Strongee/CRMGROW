@@ -45,6 +45,9 @@ import { ActionDialogComponent } from './action-dialog/action-dialog.component';
 import { ActionEditComponent } from './action-edit/action-edit.component';
 import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
 import { LabelSelectComponent } from './label-select/label-select.component';
+import { CampaignAddBroadcastComponent } from './campaign-add-broadcast/campaign-add-broadcast.component';
+import { MailListComponent } from './mail-list/mail-list.component';
+
 @NgModule({
   declarations: [
     TopbarComponent,
@@ -89,7 +92,9 @@ import { LabelSelectComponent } from './label-select/label-select.component';
     ActionDialogComponent,
     ActionEditComponent,
     CaseConfirmComponent,
-    LabelSelectComponent
+    LabelSelectComponent,
+    CampaignAddBroadcastComponent,
+    MailListComponent,
   ],
   imports: [
     CommonModule,
@@ -121,7 +126,8 @@ import { LabelSelectComponent } from './label-select/label-select.component';
     UploadContactsComponent,
     DataEmptyComponent,
     SelectLeaderComponent,
-    LabelSelectComponent
+    LabelSelectComponent,
+    MailListComponent,
   ],
   bootstrap: [
     ContactCreateComponent,

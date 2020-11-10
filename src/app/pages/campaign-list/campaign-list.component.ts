@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CampaignAddContactComponent } from '../../components/campaign-add-contact/campaign-add-contact.component';
 import { UploadContactsComponent } from '../../components/upload-contacts/upload-contacts.component';
+import { MailListService } from '../../services/maillist.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-campaign-list',
@@ -27,7 +29,11 @@ export class CampaignListComponent implements OnInit {
   csvColumns = [];
 
   @ViewChild('file') file: any;
-  constructor(private location: Location, private dialog: MatDialog) {}
+  constructor(
+    private location: Location,
+    private dialog: MatDialog,
+    private mailListService: MailListService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -65,7 +71,6 @@ export class CampaignListComponent implements OnInit {
     return true;
   }
 
-
   addContact(): void {
     this.dialog
       .open(CampaignAddContactComponent, {
@@ -79,6 +84,16 @@ export class CampaignListComponent implements OnInit {
         if (res) {
           const contacts = res.contacts;
           this.addUniqueContacts(contacts);
+          if (contacts.length) {
+            const title = 'test list';
+            this.mailListService.createList(title, contacts).subscribe(
+              (response) => {
+                console.log("create mail list response ==========>", response);
+              },
+              (err) => {
+              }
+            );
+          }
         }
       });
   }
@@ -107,8 +122,10 @@ export class CampaignListComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        const csvContacts = res.data;
-        this.addUniqueContacts(csvContacts);
+        if (res) {
+          const csvContacts = res.data;
+          this.addUniqueContacts(csvContacts);
+        }
       });
   }
 

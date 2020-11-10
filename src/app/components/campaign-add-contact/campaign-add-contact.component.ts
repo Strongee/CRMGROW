@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ContactService } from '../../services/contact.service';
 import { LabelService } from '../../services/label.service';
+import { ContactPageSize } from '../../constants/variable.constants';
 
 @Component({
   selector: 'app-campaign-add-contact',

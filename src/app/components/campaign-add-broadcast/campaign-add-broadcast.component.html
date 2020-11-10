@@ -1,0 +1,94 @@
+<h1 mat-dialog-title>Add broadcast</h1>
+<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? addBroadcast() : false"
+      [class.was-validated]="submitted">
+  <mat-dialog-content>
+    <div class="form-group">
+      <div>
+        <label>Name</label>
+        <input class="form-control" name="broadcast_name" #broadcast_name="ngModel"
+               [(ngModel)]="name" type="text" required/>
+        <span class="invalid-feedback"
+              *ngIf="!name">Broadcast name is required.</span>
+      </div>
+      <div class="mt-3">
+        <label>Recipient list</label>
+        <app-mail-list></app-mail-list>
+      </div>
+      <div class="mt-3">
+        <label>Email Template</label>
+        <app-input-template
+          [type]="'email'"
+          [placeholder]="'Search templates'"
+          (onSelect)="selectTemplate($event)">
+        </app-input-template>
+      </div>
+      <div class="mt-3">
+        <label>Send Time</label>
+        <div class="row">
+          <div class="col-md-7 col-sm-12">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text bgc-blue border-dark"><i class="bgc-white i-icon i-calendar"></i></span>
+              </div>
+              <div ngbDropdown display="dynamic">
+                <input class="form-control datepicker" placeholder="Select date time" name="send_date_time" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
+                <div ngbDropdownMenu class="date-time-picker mb-3">
+                  <div class="picker-header v-center justify-content-between mt-2">
+                    <div class="f-6 font-weight-bold">Send time</div>
+                    <div class="f-6 c-blue font-weight-bold">{{ getDateTime() | date : 'd MMM yyyy hh:mm a'}}</div>
+                  </div>
+                  <hr class="mt-3 mb-1">
+                  <div class="picker-body v-center justify-content-between">
+                    <div classs="date-picker">
+                      <ngb-datepicker name="select_date" #dp [(ngModel)]="date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
+                    </div>
+                    <div class="time-picker ml-3">
+                      <ngb-timepicker name="select_time" [(ngModel)]="time" [meridian]="'ON'"></ngb-timepicker>
+                      <div class="action-button mt-4" align="end">
+                        <button class="btn btn-white" type="button" ngbDropdownToggle>Cancel</button>
+                        <div class="btn btn-primary ml-2" (click)="setDateTime()" ngbDropdownToggle>Set</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 col-sm-12 v-center check-group">
+              <p class="f-3 mr-3">or</p>
+              <div class="custom-control custom-checkbox v-center">
+                <input type="checkbox" class="custom-control-input" id="check-adding" (change)="toggle($event)" [checked]="sendAdding">
+                <label class="custom-control-label f-3" for="check-adding">Send upon adding</label>
+              </div>
+          </div>
+        </div>
+      </div>
+      <p class="f-3 warning-text mt-4">Warning: Due to receiver limits you can only send 2000 mailings at one session.</p>
+      <div class="mt-3">
+        <table class="table">
+          <thead>
+          <th class="sending-session">Sending Session</th>
+          <th class="count-mailing">Number of Mailings</th>
+          <th class="date">Date</th>
+          </thead>
+          <tbody>
+          <tr >
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-3">
+        <label>Recipient list</label>
+        <app-mail-list></app-mail-list>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="v-center justify-content-between mx-0">
+    <button class="btn btn-white-blue" type="button" mat-dialog-close>Send material</button>
+    <div>
+      <button class="btn btn-white" type="button" mat-dialog-close>Close</button>
+      <button class="btn btn-primary ml-2" type="submit">Add</button>
+    </div>
+  </mat-dialog-actions>
+</form>

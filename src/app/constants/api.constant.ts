@@ -145,3 +145,8 @@ export const LABEL = {
   BULK_CREATE: 'label/create',
   DELETE: 'label/'
 };
+
+export const MAILLIST = {
+  CREATE: 'mail-list',
+  GET: 'mail-list/'
+};
