@@ -45,6 +45,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   create(): void {}
 
   handleAddressChange(evt: any): void {
+    console.log('evt.address_components', evt.address_components);
     this.contact.address = '';
     for (const component of evt.address_components) {
       if (!component['types']) {
@@ -67,6 +68,9 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       }
       if (component['types'].indexOf('postal_code') > -1) {
         this.contact.zip = component['long_name'];
+      }
+      if (component['types'].indexOf('country') > -1) {
+        this.contact.country = component['short_name'];
       }
     }
   }

@@ -1,7 +1,25 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid? submit() : false;">
   <h1 mat-dialog-title>Add new note</h1>
   <mat-dialog-content>
-
+    <ng-container *ngIf="isSelected; else selectContactTemplate">
+      <div class="f-6">
+        adding to 
+        <span class="f-6 c-blue font-weight-bold">{{contacts[0].fullName}}</span>
+        <ng-container *ngIf="contacts.length > 1">
+          and <span class="f-6 c-blue font-weight-bold">{{contacts.length - 1}}</span>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-template #selectContactTemplate>
+      <div class="form-group">
+        <label>contact</label>
+        <app-select-contact></app-select-contact>
+      </div>
+    </ng-template>
+    <div class="form-group">
+      <label for="noteContent">content</label>
+      <textarea id="noteContent" class="form-control" name="content" #content="ngModel" [(ngModel)]="note.content" rows="7" required></textarea>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button class="btn c-blue" mat-dialog-close>Cancel</button>
