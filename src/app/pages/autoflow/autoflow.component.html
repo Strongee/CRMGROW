@@ -5,8 +5,8 @@
       <div class="f-8 font-weight-bold text-uppercase">Automations</div>
       <div class="align-items-top automation-name-wrapper mt-3">
         <div class="row">
-          <div class="col-7">
-            <div class="form-group v-center">
+          <div class="col-md-7 col-sm-12">
+            <div class="form-group d-flex align-items-end">
               <div class="title w-100">
                 <label for="automation-title">Title</label>
                 <input class="form-control" id="automation-title" [(ngModel)]="automation_title" type="text"
@@ -16,13 +16,11 @@
             name is required.</span>
               </div>
               <div class="btn-wrapper">
-                <button class="btn btn-primary br-default" *ngIf="!isSaving" type="submit">Save</button>
-                <app-loading-button [class]="'btn-primary br-default'" *ngIf="isSaving" [title]="'Saving...'">
-                </app-loading-button>
+                <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">Save</button>
               </div>
             </div>
           </div>
-          <div class="col-5">
+          <div class="col-md-5 col-sm-12 mt-md-0 mt-sm-3">
             <div class="form-group v-center justify-content-end">
               <div class="auth">
                 <label>Owner</label>
@@ -38,7 +36,7 @@
               <div class="created ml-4" align="end">
                 <label>Created</label>
                 <div class="h-40 v-center">
-                  <div class="f-4 font-weight-bold">
+                  <div class="f-3 font-weight-bold">
                     {{created_at | date: 'dd/MM/yyyy'}}
                   </div>
                 </div>
@@ -53,14 +51,33 @@
       <!-- <div class="" draggable="true" (dragstart)="dragAction($event)">DRAG</div> -->
       <div class="flows-container" #wrapper>
         <div class="zoom-button-wrapper">
-          <button class="btn btn-white font-weight-bold" [class.disabled]="zoomLevel > 3" (click)="zoomIn()">+</button>
-          <button class="btn btn-white font-weight-bold" [class.disabled]="zoomLevel === 0" (click)="zoomOut()">-</button>
+          <button class="v-center justify-content-center btn btn-white font-weight-bold mb-2" [class.disabled]="zoomLevel > 3" (click)="zoomIn()">
+            <i class="bgc-blue i-icon i-plus"></i>
+          </button>
+          <button class="v-center justify-content-center btn btn-white font-weight-bold" [class.disabled]="zoomLevel === 0" (click)="zoomOut()">
+            <i class="bgc-blue i-icon i-remove"></i>
+          </button>
+        </div>
+        <div class="count-container">
+          <div class="actions-count">
+            <label class="f-1 text-uppercase">Actions</label>
+            <div class="content actions">
+              <p class="count font-weight-bold">{{automation && automation.automations.length ? automation.automations.length : 0}}</p>
+            </div>
+          </div>
+          <div class="contacts-count mt-3">
+            <label class="f-1 text-uppercase">Contacts</label>
+            <div class="content contacts">
+              <p class="count font-weight-bold">0</p>
+            </div>
+          </div>
         </div>
         <ng-container *ngIf="!nodes.length; else flowTemplate">
           <div class="init-graph-container">
             <ngx-graph class="chart-container init-container" [links]="initEdges" [nodes]="initNodes"
                        [layoutSettings]="layoutSettings" [layout]="layout" [curve]="curve" [draggingEnabled]="false"
-                       [autoCenter]="false" [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" [panOffsetY]="0" [view]="[210, 200]">
+                       [autoCenter]="false" [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" [panOffsetY]="0"
+                       [view]="[300, 200]">
               <ng-template #nodeTemplate let-node>
                 <svg:g class="node">
                   <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height"
@@ -94,7 +111,7 @@
         <ng-template #flowTemplate>
           <ngx-graph class="chart-container" [links]="edges" [nodes]="nodes" [layoutSettings]="layoutSettings"
                      [autoCenter]="true" [layout]="layout" [curve]="curve" [center$]="center$" [draggingEnabled]="false"
-                     [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" #graphWrapper>
+                     [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" [showMiniMap]="true" #graphWrapper>
             <ng-template #defsTemplate>
               <svg:marker id="arrow" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="8" markerHeight="8"
                           orient="auto">

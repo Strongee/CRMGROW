@@ -84,6 +84,16 @@ export const ROUTES: RouteInfo[] = [
     protectedRole: null
   },
   {
+    path: 'affiliate',
+    title: 'Affiliate',
+    icon: 'i-automation bgc-dark',
+    class: '',
+    beta: false,
+    betaClass: '',
+    betaLabel: '',
+    protectedRole: null
+  },
+  {
     path: 'teams',
     title: 'Teams',
     icon: 'i-lunch bgc-dark',

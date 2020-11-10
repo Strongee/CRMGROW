@@ -22,7 +22,7 @@
                 {{material.title}}
               </div>
               <div class="f-2 c-dark opacity-6">
-                {{material.description | stripe | slice:0:80}}
+                {{material.description | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </div>
@@ -43,6 +43,5 @@
 </div>
 <div mat-dialog-actions class="mx-0" align="end">
   <button class="btn btn-white text-blue btn-sm mr-2" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary btn-sm" *ngIf="!sharing" [disabled]="!selectedMaterials.length" (click)="shareMaterials()">Share</button>
-  <app-loading-button [class]="'btn btn-primary btn-sm'" title="Sharing..." *ngIf="sharing"></app-loading-button>
+  <button class="btn btn-primary btn-sm" [class.loading]="sharing" [disabled]="!selectedMaterials.length" (click)="shareMaterials()">Share</button>
 </div>

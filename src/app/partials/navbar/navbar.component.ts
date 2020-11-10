@@ -30,15 +30,9 @@ export class NavbarComponent implements OnInit {
   ];
   currentSearchType: any = this.searchDataTypes[0];
 
-  constructor(
-    public userService: UserService,
-    public taskService: TaskService,
-    private dialog: MatDialog
-  ) {}
+  constructor(public userService: UserService, private dialog: MatDialog) {}
 
-  ngOnInit(): void {
-    this.taskService.loadData();
-  }
+  ngOnInit(): void {}
 
   runAction(action: string): void {
     // Open New modal that corresponds to action

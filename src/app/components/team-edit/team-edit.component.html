@@ -26,8 +26,7 @@
     </div>
     <div>
       <button class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
-      <button class="btn btn-blue text-white f-6 font-weight-bold" *ngIf="!updating" type="submit">Save</button>
-      <app-loading-button [class]="'btn btn-blue text-white f-6 font-weight-bold'" title="Saving..." *ngIf="updating"></app-loading-button>
+      <button class="btn btn-blue text-white f-6 font-weight-bold" [class.loading]="updating" type="submit">Save</button>
     </div>
   </div>
 </form>

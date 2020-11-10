@@ -206,8 +206,7 @@
     </ng-container>
     <ng-container *ngIf="step == 4">
       <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-      <button class="btn btn-primary" (click)="upload()" *ngIf="!uploading">Import</button>
-      <app-loading-button [class]="'btn btn-primary'" [title]="'Importing...'" *ngIf="uploading"></app-loading-button>
+      <button class="btn btn-primary" (click)="upload()" [class.loading]="uploading">Import</button>
     </ng-container>
   </mat-dialog-actions>
 </div>

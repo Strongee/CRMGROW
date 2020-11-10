@@ -59,7 +59,7 @@
                   </ng-container>
                   <ng-template #overNameTemplate>
                     <div class="owner-main-name font-weight-bold">{{team.owner[0].user_name}}</div>
-                    <div class="owner-remain-count f-2">(+ {{team.owner.length - 1}} Owners)</div>
+                    <div class="owner-remain-count f-3">(+ {{team.owner.length - 1}} Owners)</div>
                   </ng-template>
                 </ng-container>
               </div>
@@ -72,7 +72,7 @@
           <div class="ml-5">
             <label>Your Status</label>
             <div class="value v-center">
-              <div class="status font-weight-bold f-2 c-white" [class] = "status(team)">{{status(team)}}</div>
+              <div class="status font-weight-bold f-3 c-white" [class] = "status(team)">{{status(team)}}</div>
             </div>
           </div>
         </div>
@@ -84,12 +84,12 @@
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
           <div class="button-group v-center">
-            <button class="v-center btn btn-blue f-4 font-weight-bold text-white ml-2" (click)="inviteMember()">
-              <i class="bgc-white i-icon i-plus mr-2"></i>
+            <button class="v-center btn btn-blue f-3 font-weight-bold text-white ml-2 py-2 border-0" (click)="inviteMember()">
+              <i class="bgc-white i-icon i-plus sm mr-2"></i>
               Invite member
             </button>
-            <button class="v-center btn btn-white-blue f-4 font-weight-bold ml-2" (click)="editTeam()">
-              <i class="bgc-blue i-icon i-edit mr-2"></i>
+            <button class="v-center btn btn-white-blue f-3 font-weight-bold ml-2" (click)="editTeam()">
+              <i class="bgc-blue i-icon i-edit sm mr-2"></i>
               Edit team
             </button>
           </div>
@@ -134,7 +134,7 @@
               </td>
               <td class="status-cell">
                 <div class="status">
-                  <div class="Owner c-white text-center f-2">Owner</div>
+                  <div class="Owner c-white text-center f-3">Owner</div>
                 </div>
               </td>
               <td class="added-cell f-3">
@@ -167,12 +167,12 @@
               <td class="status-cell">
                 <div class="label-cell status">
                   <select (change)="toggleMember(member)"
-                          class="c-white f-2"
+                          class="c-white f-3"
                           [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
-                    <option [value]="'Viewer'" class="Viewer c-white f-2" [selected]="team.editors.indexOf(member._id) === -1">
+                    <option [value]="'Viewer'" class="Viewer c-white f-3" [selected]="team.editors.indexOf(member._id) === -1">
                       Viewer
                     </option>
-                    <option [value]="'Editor'" class="Editor c-white f-2" [selected]="team.editors.indexOf(member._id) !== -1">
+                    <option [value]="'Editor'" class="Editor c-white f-3" [selected]="team.editors.indexOf(member._id) !== -1">
                       Editor
                     </option>
                   </select>
@@ -185,7 +185,7 @@
                 {{member.cell_phone}}
               </td>
               <td class="action-cell">
-                <button class="v-center btn bgc-white c-dark f-4 ml-2 opacity-3" (click)="removeMember(member)">
+                <button class="v-center btn bgc-white c-dark f-3 ml-2 opacity-3" (click)="removeMember(member)">
                   <i class="bgc-dark i-icon i-trash mr-2"></i>
                   <span class="button-label">Remove</span>
                 </button>
@@ -212,9 +212,9 @@
               <td class="status-cell">
                 <div class="v-center">
                   <div class="status mr-3">
-                    <div class="Invite c-white text-center f-2">Invite sent</div>
+                    <div class="Invite c-white text-center f-3">Invite sent</div>
                   </div>
-                  <div class="btn-white-blue remind f-2">Remind</div>
+                  <div class="btn-white-blue remind f-3">Remind</div>
                 </div>
               </td>
               <td class="added-cell">
@@ -224,7 +224,7 @@
                 {{invite.cell_phone}}
               </td>
               <td class="action-cell">
-                <button class="v-center btn bgc-white c-dark f-4 opacity-3 ml-2" (click)="cancelInvite(invite)">
+                <button class="v-center btn bgc-white c-dark f-3 opacity-3 ml-2" (click)="cancelInvite(invite)">
                   <i class="bgc-dark i-icon i-trash mr-2"></i>
                   <span class="button-label">Cancel invitation</span>
                 </button>
@@ -244,7 +244,7 @@
                 <ng-container *ngIf="team.videos.length; else emptyVideoListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <div class="d-flex my-3">
-                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createTeamVideo()">ADD
+                      <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createTeamVideo()">ADD
                         VIDEO</button>
                     </div>
                     <table class="table material-share-table">
@@ -277,29 +277,29 @@
                                   </a>
                                 </div>
                                 <div class="info ml-2">
-                                  <div class="title f-4 font-weight-bold">
+                                  <div class="title f-3 font-weight-bold">
                                     {{video.title}}
                                   </div>
-                                  <div class="description f-2 opacity-6 c-dark">
-                                    {{video.description | stripe | slice:0:80}}
+                                  <div class="description f-3 opacity-6 c-dark">
+                                    {{video.description | stripTags | shorten: 80: '...'}}
                                   </div>
                                 </div>
                               </div>
                             </td>
-                            <td class="material-view f-4 text-right">0</td>
-                            <td class="material-added f-4">{{video.created_at | date: 'MMM dd, yyyy'}}</td>
+                            <td class="material-view f-3 text-right">0</td>
+                            <td class="material-added f-3">{{video.created_at | date: 'MMM dd, yyyy'}}</td>
                             <td class="material-actions">
                               <div class="v-center">
-                                <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('video', 'text', video)">
+                                <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="sendMaterials('video', 'text', video)">
                                   <i class="bgc-dark i-icon i-sent mr-2"></i>
                                   <span class="button-label">Send</span>
                                 </button>
-                                <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="copyLink(video, 'video')">
+                                <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="copyLink(video, 'video')">
                                   <i class="bgc-dark i-icon i-task mr-2"></i>
                                   <span class="button-label">Copy link</span>
                                 </button>
                                 <div ngbDropdown class="material-action">
-                                  <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-4 mr-2">
+                                  <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 mr-2">
                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                     <span class="button-label">Share</span>
                                   </a>
@@ -309,7 +309,7 @@
                                                    [autoSetMeta]="false"></share-buttons>
                                   </div>
                                 </div>
-                                <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="editMaterial('video', video)">
+                                <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="editMaterial('video', video)">
                                   <i class="bgc-dark i-icon i-template mr-2"></i>
                                   <span class="button-label">Edit template</span>
                                 </button>
@@ -346,7 +346,7 @@
                 <ng-container *ngIf="team.pdfs.length; else emptyPdfListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <div class="d-flex my-3">
-                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createTeamPdf()">ADD
+                      <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createTeamPdf()">ADD
                         PDF</button>
                     </div>
                     <table class="table material-share-table">
@@ -379,29 +379,29 @@
                                 </a>
                               </div>
                               <div class="info">
-                                <div class="title f-4 font-weight-bold">
+                                <div class="title f-3 font-weight-bold">
                                   {{pdf.title}}
                                 </div>
-                                <div class="description f-2 opacity-6 c-dark">
-                                  {{pdf.description | stripe | slice:0:80}}
+                                <div class="description f-3 opacity-6 c-dark">
+                                  {{pdf.description | stripTags | shorten: 80: '...'}}
                                 </div>
                               </div>
                             </div>
                           </td>
-                          <td class="material-view f-4 text-right">0</td>
-                          <td class="material-added f-4">{{pdf.created_at | date: 'MMM dd, yyyy'}}</td>
+                          <td class="material-view f-3 text-right">0</td>
+                          <td class="material-added f-3">{{pdf.created_at | date: 'MMM dd, yyyy'}}</td>
                           <td class="material-actions">
                             <div class="v-center">
-                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('pdf', 'text', pdf)">
+                              <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="sendMaterials('pdf', 'text', pdf)">
                                 <i class="bgc-dark i-icon i-sent mr-2"></i>
                                 <span class="button-label">Send</span>
                               </button>
-                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="copyLink(pdf, 'pdf')">
+                              <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="copyLink(pdf, 'pdf')">
                                 <i class="bgc-dark i-icon i-task mr-2"></i>
                                 <span class="button-label">Copy link</span>
                               </button>
                               <div ngbDropdown class="material-action">
-                                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-4 mr-2">
+                                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 mr-2">
                                   <i class="bgc-dark i-icon i-share mr-2"></i>
                                   <span class="button-label">Share</span>
                                 </a>
@@ -411,7 +411,7 @@
                                                  [autoSetMeta]="false"></share-buttons>
                                 </div>
                               </div>
-                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="editMaterial('pdf', pdf)">
+                              <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="editMaterial('pdf', pdf)">
                                 <i class="bgc-dark i-icon i-template mr-2"></i>
                                 <span class="button-label">Edit template</span>
                               </button>
@@ -448,7 +448,7 @@
                 <ng-container *ngIf="team.images.length; else emptyImageListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <div class="d-flex my-3">
-                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createTeamImage()">ADD
+                      <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createTeamImage()">ADD
                         IMAGE</button>
                     </div>
                     <table class="table material-share-table">
@@ -481,29 +481,29 @@
                                 </a>
                               </div>
                               <div class="info">
-                                <div class="title f-4 font-weight-bold">
+                                <div class="title f-3 font-weight-bold">
                                   {{image.title}}
                                 </div>
-                                <div class="description f-2 opacity-6 c-dark">
-                                  {{image.description | stripe | slice:0:80}}
+                                <div class="description f-3 opacity-6 c-dark">
+                                  {{image.description | stripTags | shorten: 80: '...'}}
                                 </div>
                               </div>
                             </div>
                           </td>
-                          <td class="material-view f-4 text-right">0</td>
-                          <td class="material-added f-4">{{image.created_at | date: 'MMM dd, yyyy'}}</td>
+                          <td class="material-view f-3 text-right">0</td>
+                          <td class="material-added f-3">{{image.created_at | date: 'MMM dd, yyyy'}}</td>
                           <td class="material-actions">
                             <div class="v-center">
-                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="sendMaterials('image', 'text', image)">
+                              <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="sendMaterials('image', 'text', image)">
                                 <i class="bgc-dark i-icon i-sent mr-2"></i>
                                 <span class="button-label">Send</span>
                               </button>
-                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="copyLink(image, 'image')">
+                              <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="copyLink(image, 'image')">
                                 <i class="bgc-dark i-icon i-task mr-2"></i>
                                 <span class="button-label">Copy link</span>
                               </button>
                               <div ngbDropdown class="material-action">
-                                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-4 mr-2">
+                                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 mr-2">
                                   <i class="bgc-dark i-icon i-share mr-2"></i>
                                   <span class="button-label">Share</span>
                                 </a>
@@ -513,7 +513,7 @@
                                                  [autoSetMeta]="false"></share-buttons>
                                 </div>
                               </div>
-                              <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="editMaterial('image', image)">
+                              <button class="v-center btn bgc-white c-dark f-3 mr-2" (click)="editMaterial('image', image)">
                                 <i class="bgc-dark i-icon i-template mr-2"></i>
                                 <span class="button-label">Edit template</span>
                               </button>
@@ -550,7 +550,7 @@
                 <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <div class="d-flex my-3">
-                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createEmailTemplate()">ADD
+                      <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createEmailTemplate()">ADD
                         TEMPLATE</button>
                     </div>
                     <table class="table material-share-table template-table">
@@ -569,23 +569,23 @@
                           </td>
                           <td class="material-template">
                             <div class="template-content">
-                              <div class="f-4 c-black font-weight-bold">
+                              <div class="f-3 c-black font-weight-bold">
                                 {{template.subject}}
                               </div>
-                              <div class="f-2 c-dark opacity-6">
-                                {{template.content | stripe | slice: 0: 120}}
+                              <div class="f-3 c-dark opacity-6">
+                                {{template.content | stripTags | shorten: 80: '...'}}
                               </div>
                             </div>
                           </td>
                           <td class="material-type">
                             <ng-container *ngIf="template.type === 'text'">
-                              <div class="v-center f-4">
+                              <div class="v-center f-3">
                                 <i class="bgc-dark i-icon i-phone mr-2"></i>
                                 <span class="button-label">Text</span>
                               </div>
                             </ng-container>
                             <ng-container *ngIf="template.type === 'email'">
-                              <div class="v-center f-4">
+                              <div class="v-center f-3">
                                 <i class="bgc-dark i-icon i-message mr-2"></i>
                                 <span class="button-label">Email</span>
                               </div>
@@ -622,7 +622,7 @@
                 <ng-container *ngIf="team.automations.length; else emptyAutomationListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <div class="d-flex my-3">
-                      <button class="btn btn-sm btn-primary f-2 ml-auto" (click)="createAutomation()">ADD
+                      <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createAutomation()">ADD
                         AUTOMATION</button>
                     </div>
                     <table class="table material-share-table automation-table">
@@ -645,7 +645,7 @@
                             {{automation.automations.length}}
                           </td>
                           <td class="material-contacts text-right">
-                            <span class="f-2 opacity-6 text-uppercase mr-2">Show</span>
+                            <span class="f-3 opacity-6 text-uppercase mr-2">Show</span>
                             <span class="f-6 c-blue font-weight-bold">3</span>
                           </td>
                           <td class="material-created text-right">
@@ -653,10 +653,10 @@
                           </td>
                           <td class="material-assign">
                             <div class="v-center justify-content-end">
-                              <button class="btn btn-white f-2 c-blue font-weight-bold mr-2" (click)="assignContact(automation)">
+                              <button class="btn btn-white f-3 c-blue font-weight-bold mr-2" (click)="assignContact(automation)">
                                 Assign to contact
                               </button>
-                              <button class="btn btn-white v-center f-2">
+                              <button class="btn btn-white v-center f-3">
                                 <i class="bgc-dark i-icon i-small-icon i-triangle-up"></i>
                               </button>
                             </div>

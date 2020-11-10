@@ -86,5 +86,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn c-blue" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary" [ngClass]="{loading: requesting}" (click)="requestJoin()">Request</button>
+  <button class="btn btn-primary" [class.loading]="requesting" (click)="requestJoin()">Request</button>
 </mat-dialog-actions>

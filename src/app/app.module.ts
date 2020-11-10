@@ -2,24 +2,24 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { ToastrModule } from 'ngx-toastr';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import {
   HttpClient,
   HttpClientModule,
   HTTP_INTERCEPTORS
 } from '@angular/common/http';
-import { ApiInterceptor } from 'src/app/interceptors/api.interceptor';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrModule } from 'ngx-toastr';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { AppRoutingModule } from './app-routing.module';
+import { ApiInterceptor } from 'src/app/interceptors/api.interceptor';
 import { PageExitGuard } from './guards/page-exit.guard';
+import { AppComponent } from './app.component';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { environment } from '../environments/environment';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -35,9 +35,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
-    NgbModule,
     HttpClientModule,
-    ToastrModule.forRoot({}),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -45,7 +43,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    ComponentsModule
+    NgbModule,
+    ComponentsModule,
+    ToastrModule.forRoot({})
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

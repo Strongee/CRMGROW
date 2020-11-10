@@ -1,13 +1,15 @@
 <div class="page-content">
   <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Affiliate</h6>
-  <div class="form-group">
+  <div class="affiliate-page">
     <p class="f-4 my-4">Take advantage of our affiliate program and receive
       <span class="f-5 font-weight-bold">20%</span> residual per month for any users you refer.
     </p>
     <div class="referral-link">
       <label>Referral Link</label>
       <div class="v-center">
-        <input class="form-control link" type="text" [(ngModel)]="affiliate['share_link']" disabled>
+        <div class="form-group mb-0 flex-grow-1">
+          <input class="form-control bg-white border-primary c-blue" type="text" [(ngModel)]="affiliate['share_link']" disabled>
+        </div>
         <button class="form-control btn-blue text-white ml-2" [disabled]="loadingMain || creating"
           (click)="openShare()">Share</button>
         <button class="form-control btn-blue text-white ml-1" [disabled]="loadingMain || creating"
@@ -27,25 +29,25 @@
       <h6 class="f-6 font-weight-bold mt-5 mb-2">Commisions</h6>
       <div class="v-center">
         <div class="cards d-grid">
-          <div class="card-item">
-            <p class="f-3 c-dark font-weight-bold">Unpaid commision</p>
+          <div class="card-item rounded p-3">
+            <span class="f-3 c-dark font-weight-bold mt-1 op-40">Unpaid commision</span>
             <div class="v-center mt-2">
-              <p class="f-8 c-dark font-weight-bold">$</p>
-              <h3 class="card-value c-blue ml-2">0</h3>
+              <span class="f-8 c-dark font-weight-bold op-40">$</span>
+              <h3 class="card-value c-blue ml-2 mb-0">0</h3>
             </div>
           </div>
-          <div class="card-item">
-            <p class="f-3 c-dark font-weight-bold">Paid commision</p>
+          <div class="card-item rounded p-3">
+            <span class="f-3 c-dark font-weight-bold mt-1 op-40">Paid commision</span>
             <div class="v-center mt-2">
-              <p class="f-8 c-dark font-weight-bold">$</p>
-              <h3 class="card-value c-blue ml-2">5.80</h3>
+              <span class="f-8 c-dark font-weight-bold op-40">$</span>
+              <h3 class="card-value c-blue ml-2 mb-0">5.80</h3>
             </div>
           </div>
-          <div class="card-item">
-            <p class="f-3 c-dark font-weight-bold">Total commision</p>
+          <div class="card-item rounded p-3">
+            <span class="f-3 c-dark font-weight-bold mt-1 op-40">Total commision</span>
             <div class="v-center mt-2">
-              <p class="f-8 c-dark font-weight-bold">$</p>
-              <h3 class="card-value c-blue ml-2">5.80</h3>
+              <span class="f-8 c-dark font-weight-bold op-40">$</span>
+              <h3 class="card-value c-blue ml-2 mb-0">5.80</h3>
             </div>
           </div>
         </div>
@@ -53,22 +55,22 @@
       <h6 class="f-6 font-weight-bold mt-5 mb-2">Refferals</h6>
       <div class="v-center">
         <div class="cards d-grid">
-          <div class="card-item">
-            <p class="f-3 c-dark font-weight-bold">Visitors</p>
+          <div class="card-item rounded p-3">
+            <span class="f-3 c-dark font-weight-bold op-40 mt-1">Visitors</span>
             <div class="v-center mt-2">
-              <h3 class="card-value c-blue ml-2">16</h3>
+              <h3 class="card-value c-blue mb-0">16</h3>
             </div>
           </div>
-          <div class="card-item">
-            <p class="f-3 c-dark font-weight-bold">Sign ups</p>
+          <div class="card-item rounded p-3">
+            <span class="f-3 c-dark font-weight-bold op-40 mt-1">Sign ups</span>
             <div class="v-center mt-2">
-              <h3 class="card-value c-blue ml-2">0</h3>
+              <h3 class="card-value c-blue mb-0">0</h3>
             </div>
           </div>
-          <div class="card-item">
-            <p class="f-3 c-dark font-weight-bold">Conversions</p>
+          <div class="card-item rounded p-3">
+            <span class="f-3 c-dark font-weight-bold op-40 mt-1">Conversions</span>
             <div class="v-center mt-2">
-              <h3 class="card-value c-blue ml-2">0</h3>
+              <h3 class="card-value c-blue mb-0">0</h3>
             </div>
           </div>
         </div>
@@ -76,16 +78,16 @@
       <h6 class="f-6 font-weight-bold mt-5 mb-3">Active Referred Subscribers</h6>
       <table class="table affiliate-table">
         <thead>
-        <th>Name</th>
+        <th class="pl-0">Name</th>
         <th>E-mail</th>
         <th>Status</th>
         </thead>
         <tbody>
           <ng-container *ngFor="let user of users">
             <tr *ngIf="user.customer && user.customer.email">
-              <td>
-                <div class="avatar-wrapper">
-                  <div class="avatar" *ngIf="user.customer.name">{{user.customer.name[0]}}</div>
+              <td class="pl-0">
+                <div class="v-center">
+                  <div class="name-avatar font-weight-bold mr-2" *ngIf="user.customer.name">{{user.customer.name[0]}}</div>
                   <div class="name">{{user.customer.name}}</div>
                 </div>
               </td>

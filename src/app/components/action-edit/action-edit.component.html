@@ -10,45 +10,40 @@
         <ng-container *ngIf="materialsLoading">
           <app-loading-overlay [type]="'material_1'"></app-loading-overlay>
         </ng-container>
-        <ng-container *ngIf="!materialsLoading">
-          <app-data-empty [type]="'material'" *ngIf="!materials.length"></app-data-empty>
-          <ng-container *ngIf="materials.length">
-            <app-carousel [materials]="materials" [value]="material ? material['_id'] : ''" (select)="toggleMaterial($event)"></app-carousel>
+        <div class="temlate-container mr-lg-5 mr-md-0">
+          <ng-container *ngIf="!materialsLoading">
+            <app-data-empty [type]="'material'" *ngIf="!materials.length"></app-data-empty>
+            <div class="material-container mt-2">
+              <ng-container *ngFor="let materialItem of materials">
+                <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material._id == materialItem._id">
+                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material._id == materialItem._id">
+                  <div class="thumb-wrapper">
+                    <img class="thumbnail" src="{{materialItem.thumbnail || materialItem.preview}}" alt="{{materialItem.title}}"/>
+                  </div>
+                  <div class="material-title f-1 font-weight-bold mt-3">
+                    {{materialItem.title}}
+                  </div>
+                  <div class="material-description f-1 mt-2">
+                    {{materialItem.description | stripe | slice :0:80}}
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <!--          <ng-container *ngIf="materials.length">-->
+            <!--            <app-carousel [materials]="materials" [value]="material ? material['_id'] : ''" (select)="toggleMaterial($event)"></app-carousel>-->
+            <!--          </ng-container>-->
           </ng-container>
-        </ng-container>
+        </div>
       </ng-container>
       <div class="text-danger error" *ngIf="materialError">{{materialError}}</div>
-      <ng-container *ngIf="!action['condition']">
-        <div class="row">
-          <div class="col-12">
-            <div class="form-group mb-0 has-feedback">
-              <ng-container *ngIf="!data.conditionHandler; else conditionLimitTemplate">
-                <ng-container *ngIf="NoLimitActions.indexOf(type) === -1">
-                  <label class="theme-label">TIME DELAY <span class="description">(DURATION SINCE PREVIOUS ACTION)</span></label>
-                  <select class="form-control theme-control" [(ngModel)]="action['period']" name="period" #period="ngModel" [required]="type && type.indexOf('watched') === -1">
-                    <option value="0">Immediately</option>
-                    <option value="0.17">10 mins</option>
-                    <option value="0.5">30 mins</option>
-                    <option value="1">1 hour</option>
-                    <option value="6">6 hours</option>
-                    <option value="12">12 hours</option>
-                    <option value="24">1 day</option>
-                    <option value="48">2 days</option>
-                    <option value="72">3 days</option>
-                    <option value="168">1 week</option>
-                    <option value="336">2 weeks</option>
-                    <option value="custom_date">Custom Time Delay</option>
-                  </select>
-                  <span class="invalid-feedback"
-                    *ngIf="period.errors && (period.touched || period.dirty || submitted) && submitted">
-                    Period is required
-                  </span>
-                </ng-container>
-              </ng-container>
-              <ng-template #conditionLimitTemplate>
-                <ng-container *ngIf="data.conditionHandler === 'trueCase'; else falseCaseTimeTemplate">
+      <div class="contents-container w-100 mt-lg-0 mt-md-3 mt-sm-3 mt-3">
+        <ng-container *ngIf="!action['condition']">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group mb-0 has-feedback">
+                <ng-container *ngIf="!data.conditionHandler; else conditionLimitTemplate">
                   <ng-container *ngIf="NoLimitActions.indexOf(type) === -1">
-                    <label class="theme-label">TIME DELAY <span class="description">(DURATION SINCE AFTER WATCHED)</span></label>
+                    <label class="theme-label">TIME DELAY <span class="description">(DURATION SINCE PREVIOUS ACTION)</span></label>
                     <select class="form-control theme-control" [(ngModel)]="action['period']" name="period" #period="ngModel" [required]="type && type.indexOf('watched') === -1">
                       <option value="0">Immediately</option>
                       <option value="0.17">10 mins</option>
@@ -64,407 +59,529 @@
                       <option value="custom_date">Custom Time Delay</option>
                     </select>
                     <span class="invalid-feedback"
-                      *ngIf="period.errors && (period.touched || period.dirty || submitted) && submitted">
-                      Period is required
-                    </span>
-                  </ng-container>
-                </ng-container>
-                <ng-template #falseCaseTimeTemplate>
-                  <label class="theme-label">
-                    TIME DELAY <span class="description">(DURATION OF NO ACTION)</span>
-                  </label>
-                  <select class="form-control theme-control" [(ngModel)]="action['period']" name="period" #period="ngModel" [required]="type && type.indexOf('watched') === -1">
-                    <option value="0">Immediately</option>
-                    <option value="0.17">10 mins</option>
-                    <option value="0.5">30 mins</option>
-                    <option value="1">1 hour</option>
-                    <option value="6">6 hours</option>
-                    <option value="12">12 hours</option>
-                    <option value="24">1 day</option>
-                    <option value="48">2 days</option>
-                    <option value="72">3 days</option>
-                    <option value="168">1 week</option>
-                    <option value="336">2 weeks</option>
-                    <option value="custom_date">Custom Time Delay</option>
-                  </select>
-                  <span class="invalid-feedback"
-                    *ngIf="period.errors && (period.touched || period.dirty || submitted) && submitted">
+                          *ngIf="period.errors && (period.touched || period.dirty || submitted) && submitted">
                     Period is required
                   </span>
+                  </ng-container>
+                </ng-container>
+                <ng-template #conditionLimitTemplate>
+                  <ng-container *ngIf="data.conditionHandler === 'trueCase'; else falseCaseTimeTemplate">
+                    <ng-container *ngIf="NoLimitActions.indexOf(type) === -1">
+                      <label class="theme-label">TIME DELAY <span class="description">(DURATION SINCE AFTER WATCHED)</span></label>
+                      <select class="form-control theme-control" [(ngModel)]="action['period']" name="period" #period="ngModel" [required]="type && type.indexOf('watched') === -1">
+                        <option value="0">Immediately</option>
+                        <option value="0.17">10 mins</option>
+                        <option value="0.5">30 mins</option>
+                        <option value="1">1 hour</option>
+                        <option value="6">6 hours</option>
+                        <option value="12">12 hours</option>
+                        <option value="24">1 day</option>
+                        <option value="48">2 days</option>
+                        <option value="72">3 days</option>
+                        <option value="168">1 week</option>
+                        <option value="336">2 weeks</option>
+                        <option value="custom_date">Custom Time Delay</option>
+                      </select>
+                      <span class="invalid-feedback"
+                            *ngIf="period.errors && (period.touched || period.dirty || submitted) && submitted">
+                      Period is required
+                    </span>
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #falseCaseTimeTemplate>
+                    <label class="theme-label">
+                      TIME DELAY <span class="description">(DURATION OF NO ACTION)</span>
+                    </label>
+                    <select class="form-control theme-control" [(ngModel)]="action['period']" name="period" #period="ngModel" [required]="type && type.indexOf('watched') === -1">
+                      <option value="0">Immediately</option>
+                      <option value="0.17">10 mins</option>
+                      <option value="0.5">30 mins</option>
+                      <option value="1">1 hour</option>
+                      <option value="6">6 hours</option>
+                      <option value="12">12 hours</option>
+                      <option value="24">1 day</option>
+                      <option value="48">2 days</option>
+                      <option value="72">3 days</option>
+                      <option value="168">1 week</option>
+                      <option value="336">2 weeks</option>
+                      <option value="custom_date">Custom Time Delay</option>
+                    </select>
+                    <span class="invalid-feedback"
+                          *ngIf="period.errors && (period.touched || period.dirty || submitted) && submitted">
+                    Period is required
+                  </span>
+                  </ng-template>
                 </ng-template>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="action['period'] == 'custom_date'">
+              <div class="d-flex m-0">
+                <div class="form-group mb-0">
+                  <label class="theme-label">CUSTOM TIME DELAY <span class="description">(IN DAYS)</span></label>
+                  <input type="number" step="1" class="form-control" name="planTimeDay" [required]="action['period'] == 'custom_date'" [(ngModel)]="plan_time['day']" />
+                </div>
+                <span class="error text-danger ml-2"
+                      *ngIf="action['period']=='custom_date' && !plan_time['day'] && !plan_time['hour'] && !plan_time['min'] && submitted">Plan time is required.</span>
+              </div>
+              <span class="error text-danger ml-2"
+                    *ngIf="action['period']=='custom_date' && !plan_time['day'] && !plan_time['hour'] && !plan_time['min'] && submitted">Plan
+              time is required.</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="type==='follow_up'">
+          <div class="action-form">
+            <div class="form-group has-feedback"
+                 [class.has-error]="followUpContent.errors && (followUpContent.touched || followUpContent.dirty|| submitted) && submitted">
+              <label class="theme-label">FOLLOW UP NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
+              <input type="text" class="form-control" placeholder="Type of Follow up note" [(ngModel)]="action['content']"
+                     name="followUpContent" #followUpContent="ngModel" autocomplete="off" required />
+              <span class="invalid-feedback"
+                    *ngIf="followUpContent.errors && (followUpContent.dirty || followUpContent.touched || submitted) && submitted">Follow
+              up content is required.</span>
+            </div>
+            <label class="theme-label">FOLLOW UP TIME</label>
+            <div class="row">
+              <div class="col-12">
+                <div class="theme-radios">
+                  <div class="theme-radio">
+                    <input type="radio" class="custom-control-input" id="due_date_option" name="follow_due_option"
+                           [(ngModel)]="followDueOption" #follow_due_option="ngModel" value="date">
+                    <label class="custom-theme-label" for="due_date_option">Set Date</label>
+                  </div>
+                  <div class="theme-radio">
+                    <input type="radio" class="custom-control-input" id="due_delay_option" name="follow_due_option"
+                           [(ngModel)]="followDueOption" #follow_due_option="ngModel" value="delay">
+                    <label class="custom-theme-label" for="due_delay_option">Set Duration</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mt-2" *ngIf="followDueOption === 'date'; else followTimeDelay">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="form-group has-feedback calendar position-relative"
+                         [class.has-error]="!action['due_date'] && submitted">
+                      <label class="theme-label">FOLLOW UP DATE</label>
+                      <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
+                             [(ngModel)]="due_date" ngbDatepicker #d="ngbDatepicker" [firstDayOfWeek]="7" (click)="d.toggle()" type="text"
+                             [required]="followDueOption === 'date'" [disabled]="followDueOption !== 'date'" />
+                      <span class="invalid-feedback"
+                            *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group has-feedback" [class.has-error]="!due_time && submitted">
+                      <label class="theme-label">FOLLOW UP TIME</label>
+                      <select class="form-control theme-control" [(ngModel)]="due_time" name="time" #time="ngModel"
+                              [required]="followDueOption === 'date'" [disabled]="followDueOption !== 'date'">
+                        <option value="" disabled>Due Time</option>
+                        <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
+                      </select>
+                      <span class="invalid-feedback"
+                            *ngIf="time.errors && (time.touched||time.dirty||submitted)&&submitted">Due time is required.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ng-template #followTimeDelay>
+                <div class="col-12">
+                  <div class="form-group has-feedback">
+                    <label class="theme-label">TIME UNTIL FOLLOW UP IS DO <span class="description">(IN HOURS)</span></label>
+                    <input type="number" class="form-control theme-control" [(ngModel)]="due_duration" name="duration" #duration="ngModel"
+                           [required]="followDueOption === 'delay'" [disabled]="followDueOption !== 'delay'" />
+                    <span class="invalid-feedback"
+                          *ngIf="duration.errors && (duration.touched||duration.dirty||submitted)&&submitted">Due time is
+                    required.</span>
+                  </div>
+                </div>
               </ng-template>
             </div>
           </div>
-          <div class="col-12" *ngIf="action.period === 'custom_date'">
-            <div class="d-flex m-0">
-              <div class="form-group mb-0">
-                <label for="plan_time_day" class="theme-label">CUSTOM TIME DELAY <span class="description">(IN DAYS)</span></label>
-                <input type="number" step="1" class="form-control" name="planTimeDay" [required]="action.period == 'custom_date'" [(ngModel)]="plan_time['day']" />
-              </div>
-              <span class="error text-danger ml-2"
-                  *ngIf="action.period=='custom_date' && !plan_time['day'] && !plan_time['hour'] && !plan_time['min'] && submitted">Plan time is required.</span>
-            </div>
-            <span class="error text-danger ml-2"
-              *ngIf="action.period=='custom_date' && !plan_time['day'] && !plan_time['hour'] && !plan_time['min'] && submitted">Plan
-              time is required.</span>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="type==='follow_up'">
-        <div class="action-form">
-          <div class="form-group has-feedback"
-            [class.has-error]="followUpContent.errors && (followUpContent.touched || followUpContent.dirty|| submitted) && submitted">
-            <label class="theme-label">FOLLOW UP NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
-            <input type="text" class="form-control" placeholder="Type of Follow up note" [(ngModel)]="action['content']"
-              name="followUpContent" #followUpContent="ngModel" autocomplete="off" required />
-            <span class="invalid-feedback"
-              *ngIf="followUpContent.errors && (followUpContent.dirty || followUpContent.touched || submitted) && submitted">Follow
-              up content is required.</span>
-          </div>
-          <label class="theme-label">FOLLOW UP TIME</label>
-          <div class="row">
-            <div class="col-12">
-              <div class="theme-radios">
-                <div class="theme-radio">
-                  <input type="radio" class="custom-control-input" id="due_date_option" name="follow_due_option"
-                    [(ngModel)]="followDueOption" #follow_due_option="ngModel" value="date">
-                  <label class="custom-theme-label" for="due_date_option">Set Date</label>
-                </div>
-                <div class="theme-radio">
-                  <input type="radio" class="custom-control-input" id="due_delay_option" name="follow_due_option"
-                    [(ngModel)]="followDueOption" #follow_due_option="ngModel" value="delay">
-                  <label class="custom-theme-label" for="due_delay_option">Set Duration</label>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 mt-2" *ngIf="followDueOption === 'date'; else followTimeDelay">
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group has-feedback calendar position-relative"
-                  [class.has-error]="!action['due_date'] && submitted">
-                    <label class="theme-label">FOLLOW UP DATE</label>
-                    <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
-                      [(ngModel)]="due_date" ngbDatepicker #d="ngbDatepicker" [firstDayOfWeek]="7" (click)="d.toggle()" type="text"
-                      [required]="followDueOption === 'date'" [disabled]="followDueOption !== 'date'" />
-                    <span class="invalid-feedback"
-                      *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="form-group has-feedback" [class.has-error]="!due_time && submitted">
-                    <label class="theme-label">FOLLOW UP TIME</label>
-                    <select class="form-control theme-control" [(ngModel)]="due_time" name="time" #time="ngModel"
-                      [required]="followDueOption === 'date'" [disabled]="followDueOption !== 'date'">
-                      <option value="" disabled>Due Time</option>
-                      <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
-                    </select>
-                    <span class="invalid-feedback"
-                      *ngIf="time.errors && (time.touched||time.dirty||submitted)&&submitted">Due time is required.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <ng-template #followTimeDelay>
-              <div class="col-12">
-                <div class="form-group has-feedback">
-                  <label class="theme-label">TIME UNTIL FOLLOW UP IS DO <span class="description">(IN HOURS)</span></label>
-                  <input type="number" class="form-control theme-control" [(ngModel)]="due_duration" name="duration" #duration="ngModel"
-                    [required]="followDueOption === 'delay'" [disabled]="followDueOption !== 'delay'" />
-                  <span class="invalid-feedback"
-                    *ngIf="duration.errors && (duration.touched||duration.dirty||submitted)&&submitted">Due time is
-                    required.</span>
-                </div>
-              </div>
-            </ng-template>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="type==='note'">
-        <div class="action-form">
-          <div class="form-group has-feedback"
-            [class.has-error]="note.errors && (note.touched || note.dirty|| submitted) && submitted">
-            <label class="theme-label">NOTE CONTENT</label>
-            <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in note."
-              name="note" #note="ngModel" rows="6" required></textarea>
-            <span class="invalid-feedback"
-              *ngIf="note.errors && (note.dirty || note.touched || submitted) && submitted">Note
+        </ng-container>
+        <ng-container *ngIf="type==='note'">
+          <div class="action-form">
+            <div class="form-group has-feedback"
+                 [class.has-error]="note.errors && (note.touched || note.dirty|| submitted) && submitted">
+              <label class="theme-label">NOTE CONTENT</label>
+              <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in note."
+                        name="note" #note="ngModel" rows="6" required></textarea>
+              <span class="invalid-feedback"
+                    *ngIf="note.errors && (note.dirty || note.touched || submitted) && submitted">Note
               content is required.</span>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="type==='send_text_video' || type === 'send_text_pdf' || type === 'send_text_image'">
-        <div class="action-form">
-          <div class="form-group has-feedback"
-            [class.has-error]="content.errors && (content.touched || content.dirty|| submitted) && submitted">
-            <label class="theme-label">CONTENT</label>
-            <div class="d-flex flex-wrap field-actions mb-2">
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSmsContentValue('{user_name}', smsContentField)">Your Name</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSmsContentValue('{user_email}', smsContentField)">Your Email</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSmsContentValue('{user_phone}', smsContentField)">Your Phone</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSmsContentValue('{contact_first_name}', smsContentField)">Contact Firstname</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSmsContentValue('{contact_last_name}', smsContentField)">Contact Lastname</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSmsContentValue('{contact_email}', smsContentField)">Contact Email</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSmsContentValue('{contact_phone}', smsContentField)">Contact Phone</button>
-            </div>
-            <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in sms content."
-              name="content" #content="ngModel" rows="6" required #smsContentField
-              (click)="getSmsContentCursor(smsContentField)" (keyup)="getSmsContentCursor(smsContentField)"></textarea>
-            <span class="text-danger"
-              *ngIf="content.errors && (content.dirty || content.touched || submitted) && submitted">Content content is
-              required.</span>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container
-        *ngIf="type==='email' || type==='send_email_video' || type === 'send_email_pdf' || type === 'send_email_image'">
-        <div class="action-form">
-          <div class="form-group has-feedback"
-            [class.has-error]="subject.errors && (subject.touched || subject.dirty || submitted) && submitted">
-            <label class="theme-label">SUBJECT</label>
-            <div class="d-flex flex-wrap field-actions mb-2">
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{user_name}', subjectField)">Your Name</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{user_email}', subjectField)">Your Email</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{contact_first_name}', subjectField)">Contact Firstname</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{contact_last_name}', subjectField)">Contact Lastname</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{contact_email}', subjectField)">Contact Email</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{contact_phone}', subjectField)">Contact Phone</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertSubjectValue('{material_title}', subjectField)">Material Title</button>
-            </div>
-            <input type="text" class="form-control" [(ngModel)]="action['subject']" placeholder="Email Subject"
-              name="subject" #subject="ngModel" required #subjectField (click)="getSubjectCursorPost(subjectField)"
-              (keyup)="getSubjectCursorPost(subjectField)" />
-            <span class="text-danger"
-              *ngIf="subject.errors && (subject.dirty || subject.touched || submitted) && submitted">Subject is
-              required.</span>
-          </div>
-          <div class="form-group has-feedback" [class.has-error]="!action['content'] && submitted">
-            <label class="theme-label">CONTENT</label>
-            <div class="d-flex flex-wrap field-actions mb-2">
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{user_name}')">Your Name</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{user_email}')">Your Email</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
-              <button type="button" class="btn btn-sm btn-secondary"
-                (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
-            </div>
-            <quill-editor placeholder="Enter mail content" [(ngModel)]="action['content']" [modules]="config"
-              name="mailContent" [styles]="{height: '240px'}" #mailContent="ngModel" required
-              (onEditorCreated)="getEditorInstance($event)"
-              [class.has-error]="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted"
-              class="rounded" #emailEditor>
-            </quill-editor>
-            <span class="error text-danger"
-              *ngIf="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted">Content
-              is required</span>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="type === 'update_contact'">
-        <label class="theme-label mt-3">UPDATE TYPE</label>
-        <div class="theme-radios">
-          <div class="theme-radio">
-            <input type="radio" class="custom-control-input" id="contact_label_update_option" name="contact_update_option"
-              [(ngModel)]="contactUpdateOption" #contact_update_option="ngModel" value="update_label" (ngModelChange)="removeError()">
-            <label class="custom-theme-label" for="contact_label_update_option">Update label</label>
-          </div>
-          <div class="theme-radio">
-            <input type="radio" class="custom-control-input" id="contact_tag_push_option" name="contact_update_option"
-              [(ngModel)]="contactUpdateOption" #contact_update_option="ngModel" value="push_tag" (ngModelChange)="removeError()">
-            <label class="custom-theme-label" for="contact_tag_push_option">Insert tags</label>
-          </div>
-          <div class="theme-radio">
-            <input type="radio" class="custom-control-input" id="contact_tag_pull_option" name="contact_update_option"
-              [(ngModel)]="contactUpdateOption" #contact_update_option="ngModel" value="pull_tag" (ngModelChange)="removeError()">
-            <label class="custom-theme-label" for="contact_tag_pull_option">Remove tags</label>
-          </div>
-        </div>
-        <ng-container [ngSwitch]="contactUpdateOption">
-          <div *ngSwitchCase="'update_label'">
-            <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(NEW LABEL)</span></label>
-            <select class="form-control theme-control" (change)="changeLabel($event.target.value)"
-              [ngStyle]="{'background-color': getLabelById(commandLabel).color, 'color': getLabelById(commandLabel).font_color}">
-              <option selected *ngFor="let label of labels" [selected]="commandLabel === label._id"
-                [value]="label._id" class="c-label"
-                [ngStyle]="{'background-color': label.color, 'color': label.font_color}">{{label.name}}
-              </option>
-              <option class="c-label" [ngStyle]="{'background-color': 'white', 'color': 'black'}" value="createlabel">
-                Create New Label</option>
-            </select>
-          </div>
-          <div *ngSwitchCase="'push_tag'">
-            <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO INSERT)</span></label>
-            <div class="tag-input-wrapper br-default">
-              <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"
-                [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">
-                <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"
-                  [displayBy]="'value'">
-                </tag-input-dropdown>
-              </tag-input>
-            </div>
-          </div>
-          <div *ngSwitchCase="'pull_tag'">
-            <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO REMOVE)</span></label>
-            <div class="tag-input-wrapper br-default">
-              <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"
-                [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">
-                <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"
-                  [displayBy]="'value'">
-                </tag-input-dropdown>
-              </tag-input>
             </div>
           </div>
         </ng-container>
-        <div class="text-danger error" *ngIf="error">{{error}}</div>
-      </ng-container>
-      <ng-container *ngIf="type === 'update_follow_up'">
-        <label class="theme-label mt-3">SELECT THE FOLLOW UP <span class="description">(CREATED IN PREVIOUS ACTIONS)</span></label>
-        <mat-form-field appearance="fill" class="mat-custom-select">
-          <mat-select [(value)]="selectedFollow" (selectionChange)="selectFollow($event)">
-            <mat-select-trigger>
-              <div class="template-item selected" *ngIf="selectedFollow">
-                <div class="name">{{selectedFollow.content}}</div>
+        <ng-container *ngIf="type==='send_text_video' || type === 'send_text_pdf' || type === 'send_text_image'">
+          <div class="action-form">
+            <div class="form-group has-feedback"
+                 [class.has-error]="content.errors && (content.touched || content.dirty|| submitted) && submitted">
+              <div class="v-center label-group mt-3">
+                <label class="theme-label">CONTENT</label>
+                <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
+                <div ngbDropdown class="justify-content-end field-actions button-more rounded">
+                  <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                    <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                  </a>
+                  <div ngbDropdownMenu class="button-more-container light">
+                    <div class="actions ml-auto">
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                              (click)="insertSmsContentValue('{user_name}', smsContentField)">Your Name</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                              (click)="insertSmsContentValue('{user_email}', smsContentField)">Your Email</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                              (click)="insertSmsContentValue('{user_phone}', smsContentField)">Your Phone</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                              (click)="insertSmsContentValue('{contact_first_name}', smsContentField)">Contact Firstname</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                              (click)="insertSmsContentValue('{contact_last_name}', smsContentField)">Contact Lastname</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                              (click)="insertSmsContentValue('{contact_email}', smsContentField)">Contact Email</button>
+                      <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                              (click)="insertSmsContentValue('{contact_phone}', smsContentField)">Contact Phone</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </mat-select-trigger>
-            <mat-option [value]="follow" *ngFor="let follow of data.follows" class="follow-item">
-              <div class="content">{{follow.content}}</div>
-              <div class="time">
-                <span class="label">{{follow.due_time ? 'REMINDER TIME' : 'DURATION FROM CREATED TO REMINDER' }}</span>
-                <span class="value" *ngIf="follow.due_time; else durationValueTemplate">{{ follow.due_time | date  }}</span>
-                <ng-template #durationValueTemplate><span class="value">{{follow.due_duration + ' Hours'}}</span></ng-template>
-              </div>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <ng-container *ngIf="selectedFollow">
+              <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in sms content."
+                        name="content" #content="ngModel" rows="6" required #smsContentField
+                        (click)="getSmsContentCursor(smsContentField)" (keyup)="getSmsContentCursor(smsContentField)"></textarea>
+              <span class="text-danger"
+                    *ngIf="content.errors && (content.dirty || content.touched || submitted) && submitted">Content content is
+              required.</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container
+          *ngIf="type==='email' || type==='send_email_video' || type === 'send_email_pdf' || type === 'send_email_image'">
+          <div class="action-form mt-3">
+            <div class="form-group has-feedback"
+                 [class.has-error]="subject.errors && (subject.touched || subject.dirty || submitted) && submitted">
+              <ng-container *ngIf="type == 'send_email_video' || type == 'send_text_video'
+                                   || type == 'send_email_pdf' || type == 'send_text_pdf'
+                                   || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
+                <div class="v-center label-group">
+                  <label class="theme-label">SUBJECT</label>
+                  <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
+                  <div ngbDropdown class="justify-content-end field-actions button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{user_name}', subjectField)">Your Name</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{contact_first_name}', subjectField)">Contact Firstname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{material_title}', subjectField)">Material Title</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{user_email}', subjectField)">Your Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{contact_last_name}', subjectField)">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{contact_email}', subjectField)">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{contact_phone}', subjectField)">Contact Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noMaterial>
+                <label class="theme-label">SUBJECT</label>
+                <div class="d-flex flex-wrap field-actions mb-2">
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
+                          (click)="insertSubjectValue('{user_name}', subjectField)">Your Name</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
+                          (click)="insertSubjectValue('{contact_first_name}', subjectField)">Contact Firstname</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
+                          (click)="insertSubjectValue('{material_title}', subjectField)">Material Title</button>
+                  <div ngbDropdown class="d-flex justify-content-end button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{user_email}', subjectField)">Your Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{user_phone}', subjectField)">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{contact_last_name}', subjectField)">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{contact_email}', subjectField)">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertSubjectValue('{contact_phone}', subjectField)">Contact Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+              <input type="text" class="form-control" [(ngModel)]="action['subject']" placeholder="Email Subject"
+                     name="subject" #subject="ngModel" required #subjectField (click)="getSubjectCursorPost(subjectField)"
+                     (keyup)="getSubjectCursorPost(subjectField)" />
+              <span class="text-danger"
+                    *ngIf="subject.errors && (subject.dirty || subject.touched || submitted) && submitted">Subject is
+              required.</span>
+            </div>
+            <div class="form-group has-feedback" [class.has-error]="!action['content'] && submitted">
+              <ng-container *ngIf="type == 'send_email_video' || type == 'send_text_video'
+                                   || type == 'send_email_pdf' || type == 'send_text_pdf'
+                                   || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
+                <div class="v-center label-group">
+                  <label class="theme-label">CONTENT</label>
+                  <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
+                  <div ngbDropdown class="justify-content-end field-actions button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{user_name}')">Your Name</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{user_email}')">Your Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noMaterial>
+                <label class="theme-label">CONTENT</label>
+                <div class="d-flex flex-wrap field-actions mb-2">
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
+                          (click)="insertEmailContentValue('{user_name}')">Your Name</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
+                          (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
+                          (click)="insertEmailContentValue('{user_email}')">Your Email</button>
+                  <div ngbDropdown class="d-flex justify-content-end button-more rounded">
+                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="button-more-container light">
+                      <div class="actions ml-auto">
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
+                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
+                                (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+              <quill-editor placeholder="Enter mail content" [(ngModel)]="action['content']" [modules]="config"
+                            name="mailContent" [styles]="{height: '240px'}" #mailContent="ngModel" required
+                            (onEditorCreated)="getEditorInstance($event)"
+                            [class.has-error]="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted"
+                            class="rounded" #emailEditor>
+              </quill-editor>
+              <span class="error text-danger"
+                    *ngIf="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted">Content
+              is required</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="type === 'update_contact'">
+          <label class="theme-label mt-3">UPDATE TYPE</label>
           <div class="theme-radios">
             <div class="theme-radio">
-              <input type="radio" class="custom-control-input" id="follow_up_update" name="follow_up_update_option"
-                [(ngModel)]="followUpdateOption" #follow_up_update_option="ngModel" value="update_follow_up" (ngModelChange)="removeError()">
-              <label class="custom-theme-label" for="follow_up_update">Update Follow up</label>
+              <input type="radio" class="custom-control-input" id="contact_label_update_option" name="contact_update_option"
+                     [(ngModel)]="contactUpdateOption" #contact_update_option="ngModel" value="update_label" (ngModelChange)="removeError()">
+              <label class="custom-theme-label" for="contact_label_update_option">Update label</label>
             </div>
             <div class="theme-radio">
-              <input type="radio" class="custom-control-input" id="follow_up_complete" name="follow_up_update_option"
-                [(ngModel)]="followUpdateOption" #follow_up_update_option="ngModel" value="complete_follow_up" (ngModelChange)="removeError()">
-              <label class="custom-theme-label" for="follow_up_complete">Complete Follow up</label>
+              <input type="radio" class="custom-control-input" id="contact_tag_push_option" name="contact_update_option"
+                     [(ngModel)]="contactUpdateOption" #contact_update_option="ngModel" value="push_tag" (ngModelChange)="removeError()">
+              <label class="custom-theme-label" for="contact_tag_push_option">Insert tags</label>
+            </div>
+            <div class="theme-radio">
+              <input type="radio" class="custom-control-input" id="contact_tag_pull_option" name="contact_update_option"
+                     [(ngModel)]="contactUpdateOption" #contact_update_option="ngModel" value="pull_tag" (ngModelChange)="removeError()">
+              <label class="custom-theme-label" for="contact_tag_pull_option">Remove tags</label>
             </div>
           </div>
-  
-          <ng-container [ngSwitch]="followUpdateOption">
-            <div *ngSwitchCase="'update_follow_up'">
-              <div class="action-form">
-                <div class="form-group has-feedback mt-2"
-                  [class.has-error]="followUpdateContent.errors && (followUpdateContent.touched || followUpdateContent.dirty|| submitted) && submitted">
-                  <label class="theme-label">FOLLOW UP NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
-                  <input type="text" class="form-control theme-control" placeholder="Type new content for this Follow up" [(ngModel)]="action.content"
-                    name="followUpdateContent" #followUpdateContent="ngModel" autocomplete="off" required />
-                  <span class="invalid-feedback"
-                    *ngIf="followUpdateContent.errors && (followUpdateContent.dirty || followUpdateContent.touched || submitted) && submitted">Follow
-                    up content is required.</span>
+          <ng-container [ngSwitch]="contactUpdateOption">
+            <div *ngSwitchCase="'update_label'">
+              <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(NEW LABEL)</span></label>
+              <select class="form-control theme-control" (change)="changeLabel($event.target.value)"
+                      [ngStyle]="{'background-color': getLabelById(commandLabel).color, 'color': getLabelById(commandLabel).font_color}">
+                <option selected *ngFor="let label of labels" [selected]="commandLabel === label._id"
+                        [value]="label._id" class="c-label"
+                        [ngStyle]="{'background-color': label.color, 'color': label.font_color}">{{label.name}}
+                </option>
+                <option class="c-label" [ngStyle]="{'background-color': 'white', 'color': 'black'}" value="createlabel">
+                  Create New Label</option>
+              </select>
+            </div>
+            <div *ngSwitchCase="'push_tag'">
+              <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO INSERT)</span></label>
+              <div class="tag-input-wrapper br-default">
+                <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"
+                           [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">
+                  <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"
+                                      [displayBy]="'value'">
+                  </tag-input-dropdown>
+                </tag-input>
+              </div>
+            </div>
+            <div *ngSwitchCase="'pull_tag'">
+              <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO REMOVE)</span></label>
+              <div class="tag-input-wrapper br-default">
+                <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"
+                           [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">
+                  <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"
+                                      [displayBy]="'value'">
+                  </tag-input-dropdown>
+                </tag-input>
+              </div>
+            </div>
+          </ng-container>
+          <div class="text-danger error" *ngIf="error">{{error}}</div>
+        </ng-container>
+        <ng-container *ngIf="type === 'update_follow_up'">
+          <label class="theme-label mt-3">SELECT THE FOLLOW UP <span class="description">(CREATED IN PREVIOUS ACTIONS)</span></label>
+          <mat-form-field appearance="fill" class="mat-custom-select">
+            <mat-select [(value)]="selectedFollow" (selectionChange)="selectFollow($event)">
+              <mat-select-trigger>
+                <div class="template-item selected" *ngIf="selectedFollow">
+                  <div class="name">{{selectedFollow.content}}</div>
                 </div>
-                <label class="theme-label">FOLLOW UP TIME</label>
-                <div class="row">
-                  <div class="col-12">
-                    <select class="form-control theme-control" [(ngModel)]="updateFollowDueOption" name="updateFollowUpDueOption" #updateFollowUpDueOption="ngModel" required>
-                      <option value="no_update">No Update</option>
-                      <option value="update_due_date">Update Due Date</option>
-                      <option value="update_due_duration">Update Due Duration</option>
-                    </select>
+              </mat-select-trigger>
+              <mat-option [value]="follow" *ngFor="let follow of data.follows" class="follow-item">
+                <div class="content">{{follow.content}}</div>
+                <div class="time">
+                  <span class="label">{{follow.due_time ? 'REMINDER TIME' : 'DURATION FROM CREATED TO REMINDER' }}</span>
+                  <span class="value" *ngIf="follow.due_time; else durationValueTemplate">{{ follow.due_time | date  }}</span>
+                  <ng-template #durationValueTemplate><span class="value">{{follow.due_duration + ' Hours'}}</span></ng-template>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <ng-container *ngIf="selectedFollow">
+            <div class="theme-radios">
+              <div class="theme-radio">
+                <input type="radio" class="custom-control-input" id="follow_up_update" name="follow_up_update_option"
+                       [(ngModel)]="followUpdateOption" #follow_up_update_option="ngModel" value="update_follow_up" (ngModelChange)="removeError()">
+                <label class="custom-theme-label" for="follow_up_update">Update Follow up</label>
+              </div>
+              <div class="theme-radio">
+                <input type="radio" class="custom-control-input" id="follow_up_complete" name="follow_up_update_option"
+                       [(ngModel)]="followUpdateOption" #follow_up_update_option="ngModel" value="complete_follow_up" (ngModelChange)="removeError()">
+                <label class="custom-theme-label" for="follow_up_complete">Complete Follow up</label>
+              </div>
+            </div>
+
+            <ng-container [ngSwitch]="followUpdateOption">
+              <div *ngSwitchCase="'update_follow_up'">
+                <div class="action-form">
+                  <div class="form-group has-feedback mt-2"
+                       [class.has-error]="followUpdateContent.errors && (followUpdateContent.touched || followUpdateContent.dirty|| submitted) && submitted">
+                    <label class="theme-label">FOLLOW UP NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
+                    <input type="text" class="form-control theme-control" placeholder="Type new content for this Follow up" [(ngModel)]="action.content"
+                           name="followUpdateContent" #followUpdateContent="ngModel" autocomplete="off" required />
+                    <span class="invalid-feedback"
+                          *ngIf="followUpdateContent.errors && (followUpdateContent.dirty || followUpdateContent.touched || submitted) && submitted">Follow
+                    up content is required.</span>
                   </div>
-                  <div class="col-12 mt-2" *ngIf="updateFollowDueOption === 'update_due_date'">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="form-group has-feedback calendar position-relative"
-                        [class.has-error]="!action.due_date && submitted">
-                        <label class="theme-label">FOLLOW UP DATE</label>
-                        <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
-                          [(ngModel)]="update_due_date" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"
-                          required [firstDayOfWeek]="7"/>
-                        <span class="invalid-feedback"
-                          *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
+                  <label class="theme-label">FOLLOW UP TIME</label>
+                  <div class="row">
+                    <div class="col-12">
+                      <select class="form-control theme-control" [(ngModel)]="updateFollowDueOption" name="updateFollowUpDueOption" #updateFollowUpDueOption="ngModel" required>
+                        <option value="no_update">No Update</option>
+                        <option value="update_due_date">Update Due Date</option>
+                        <option value="update_due_duration">Update Due Duration</option>
+                      </select>
+                    </div>
+                    <div class="col-12 mt-2" *ngIf="updateFollowDueOption === 'update_due_date'">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group has-feedback calendar position-relative"
+                               [class.has-error]="!action.due_date && submitted">
+                            <label class="theme-label">FOLLOW UP DATE</label>
+                            <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
+                                   [(ngModel)]="update_due_date" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"
+                                   required [firstDayOfWeek]="7"/>
+                            <span class="invalid-feedback"
+                                  *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="form-group has-feedback" [class.has-error]="!due_time && submitted">
-                          <label class="theme-label">FOLLOW UP TIME</label>
-                          <select class="form-control theme-control" [(ngModel)]="update_due_time" name="time" #time="ngModel"
-                            [required]="followDueOption === 'date'">
-                            <option value="" disabled>Due Time</option>
-                            <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
-                          </select>
-                          <span class="invalid-feedback"
-                            *ngIf="time.errors && (time.touched||time.dirty||submitted)&&submitted">Due time is required.</span>
+                        <div class="col-6">
+                          <div class="form-group has-feedback" [class.has-error]="!due_time && submitted">
+                            <label class="theme-label">FOLLOW UP TIME</label>
+                            <select class="form-control theme-control" [(ngModel)]="update_due_time" name="time" #time="ngModel"
+                                    [required]="followDueOption === 'date'">
+                              <option value="" disabled>Due Time</option>
+                              <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
+                            </select>
+                            <span class="invalid-feedback"
+                                  *ngIf="time.errors && (time.touched||time.dirty||submitted)&&submitted">Due time is required.</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-12 mt-2" *ngIf="updateFollowDueOption === 'update_due_duration'">
-                    <div class="form-group has-feedback">
-                      <label class="theme-label">TIME UNTIL FOLLOW UP IS DO <span class="description">(IN HOURS)</span></label>
-                      <input type="number" class="form-control theme-control" [(ngModel)]="update_due_duration" name="duration" #duration="ngModel"
-                        [required]="followDueOption === 'delay'" min="0" />
-                      <span class="invalid-feedback"
-                        *ngIf="duration.errors && (duration.touched||duration.dirty||submitted)&&submitted">Due time is
+                    <div class="col-12 mt-2" *ngIf="updateFollowDueOption === 'update_due_duration'">
+                      <div class="form-group has-feedback">
+                        <label class="theme-label">TIME UNTIL FOLLOW UP IS DO <span class="description">(IN HOURS)</span></label>
+                        <input type="number" class="form-control theme-control" [(ngModel)]="update_due_duration" name="duration" #duration="ngModel"
+                               [required]="followDueOption === 'delay'" min="0" />
+                        <span class="invalid-feedback"
+                              *ngIf="duration.errors && (duration.touched||duration.dirty||submitted)&&submitted">Due time is
                         required.</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div *ngSwitchCase="'complete_follow_up'">
-              <div class="action-guide">Complete the selected follow up.</div>
-            </div>
+              <div *ngSwitchCase="'complete_follow_up'">
+                <div class="action-guide">Complete the selected follow up.</div>
+              </div>
+            </ng-container>
           </ng-container>
         </ng-container>
-      </ng-container>
+        <ng-container *ngIf="type.indexOf('send')!==-1 || type.indexOf('email')!==-1">
+          <div class="templates-wrapper form-group mb-2">
+            <ng-container *ngIf="type.indexOf('email')!==-1; else textTemplate">
+              <label class="theme-label">Template</label>
+              <app-input-template
+                [value]="selectedTemplate"
+                [type]="'email'"
+                [placeholder]="'Search templates'"
+                (onSelect)="selectTemplate($event)">
+              </app-input-template>
+            </ng-container>
+            <ng-template #textTemplate>
+              <label class="theme-label">Template</label>
+              <app-input-template
+                [value]="selectedTemplate"
+                [type]="'email'"
+                [placeholder]="'Search templates'"
+                (onSelect)="selectTemplate($event)">
+              </app-input-template>
+            </ng-template>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end" class="mx-0">
-    <ng-container *ngIf="type.indexOf('send')!==-1 || type.indexOf('email')!==-1">
-      <div class="templates-wrapper form-group mb-0">
-        <ng-container *ngIf="type.indexOf('email')!==-1; else textTemplate">
-          <app-template-input
-            [value]="selectedTemplate"
-            [option]="{type: 'email'}"
-            [placeholder]="'Search templates'"
-            (onSelect)="selectTemplate($event)"
-          ></app-template-input>
-        </ng-container>
-        <ng-template #textTemplate>
-          <app-template-input
-            [value]="selectedTemplate"
-            [option]="{type: 'text'}"
-            [placeholder]="'Search templates'"
-            (onSelect)="selectTemplate($event)"
-          ></app-template-input>
-        </ng-template>
-      </div>
-    </ng-container>
-    <button class="btn br-default btn-sm ml-1 mr-0" type="submit">Update</button>
-    <button class="btn br-default btn-sm ml-1 mr-0" type="button" mat-dialog-close>Close</button>
+    <button class="btn btn-white-blue ml-1 mr-0" type="button" mat-dialog-close>Close</button>
+    <button class="btn btn-primary ml-1 mr-0" type="submit">Update</button>
   </mat-dialog-actions>
 </form>
