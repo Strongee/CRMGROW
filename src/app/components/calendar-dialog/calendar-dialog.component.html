@@ -222,32 +222,8 @@
         >
           Cancel
         </button>
-        <button
-          type="submit"
-          class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold"
-          *ngIf="!isLoading && changeMode == 'create'"
-        >
-          Create
-        </button>
-        <button
-          type="submit"
-          class="btn btn-blue text-white br-default py-2 f-1 font-weight-bold"
-          *ngIf="!isLoading && changeMode == 'update'"
-        >
-          Update
-        </button>
-        <app-loading-button
-          [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'"
-          [title]="'Creating'"
-          *ngIf="isLoading && changeMode == 'create'"
-        >
-        </app-loading-button>
-        <app-loading-button
-          [class]="'bgc-blue text-white br-default py-2 f-1 font-weight-bold'"
-          [title]="'Updating'"
-          *ngIf="isLoading && changeMode == 'update'"
-        >
-        </app-loading-button>
+        <button type="submit" class="btn btn-primary py-2 f-1 font-weight-bold" [ngClass]="{loading: isLoading && changeMode == 'create'}">Create</button>
+        <button type="submit" class="btn btn-primary py-2 f-1 font-weight-bold" [ngClass]="{loading: isLoading && changeMode == 'update'}">Update</button>
       </div>
     </div>
   </div>
