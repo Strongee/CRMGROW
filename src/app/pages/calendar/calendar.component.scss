@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 :host ::ng-deep {
     mat-icon {
         cursor: pointer;
@@ -29,17 +31,39 @@
         .cal-day-headers {
             .cal-header {
                 &.cal-today {
-                    background-color: #0000FF;
-                    color: #ffffff;
+                    background-color: $color-white;
+                    color: $color-blue;
+                    .avatar-wrapper {
+                        .avatar {
+                          background-color: $color-blue;
+                          color: #ffffff;
+                        }
+                    }
                 }
                 &.cal-weekend {
                     span {
                         color: #FF0000;
                     }
                 }
+                &:hover {
+                    background-color: $color-white;
+                }
+                .avatar-wrapper {
+                    width: 100%;
+                    height: 38px;
+                  
+                    .avatar {
+                      width: 38px;
+                      min-width: 38px;
+                      height: 38px;
+                      min-height: 38px;
+                      background-color: $color-white;
+                      color: $color-dark;
+                      box-shadow: unset;
+                    }
+                }
                 span {
                     opacity: 1;
-                    font-size: 14px;
                 }
                 .mobile {
                     display: none;
@@ -50,8 +74,21 @@
                     }
                     .mobile {
                         display: block;
-                        font-size: 12px;
                     }
+                }
+            }
+        }
+    }
+    mwl-calendar-week-view {
+        .cal-week-view {
+            .cal-hour {
+                &:not(:last-child) {
+                    .cal-hour-segment {
+                        border-bottom: 1px solid #e1e1e1;
+                    }
+                }
+                &.cal-hour-odd {
+                    background-color: $color-white;
                 }
             }
         }

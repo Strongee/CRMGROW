@@ -3,6 +3,8 @@ import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CampaignAddListComponent } from '../../components/campaign-add-list/campaign-add-list.component';
+import { ActionItem } from '../../utils/data.types';
+import { CampaignAddBroadcastComponent } from '../../components/campaign-add-broadcast/campaign-add-broadcast.component';
 
 @Component({
   selector: 'app-campaign',
@@ -17,17 +19,19 @@ export class CampaignComponent implements OnInit, OnDestroy {
   currentListPage = 1;
   listCount;
   bulkLists = [];
+  selected = 1;
   selectedLists = new SelectionModel<any>(true, []);
   selectedBulkLists = new SelectionModel<any>(true, []);
   constructor(private location: Location, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.init();
+    this.loadList();
+    this.loadBulk();
   }
 
   ngOnDestroy(): void {}
 
-  init(): void {
+  loadList(): void {
     for (let i = 1; i < 5; i++) {
       const list = {
         _id: i,
@@ -38,6 +42,8 @@ export class CampaignComponent implements OnInit, OnDestroy {
       };
       this.lists.push(list);
     }
+  }
+  loadBulk(): void {
     for (let i = 1; i < 5; i++) {
       const bulk = {
         _id: i,
@@ -141,5 +147,44 @@ export class CampaignComponent implements OnInit, OnDestroy {
     }
     return true;
   }
-  addBroadcast(): void {}
+  addBroadcast(): void {
+    this.dialog
+      .open(CampaignAddBroadcastComponent, {
+        width: '96vw',
+        maxWidth: '600px',
+        height: 'auto',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+
+        }
+      });
+  }
+  doAction(action: any): void {
+    console.log('action', action);
+  }
+
+  actions: ActionItem[] = [
+    {
+      icon: 'i-message',
+      label: 'Merge list',
+      type: 'button'
+    },
+    {
+      icon: 'i-message',
+      label: 'Delete list',
+      type: 'button'
+    },
+    {
+      spliter: true,
+      label: 'Select All',
+      type: 'button'
+    },
+    {
+      label: 'Deselect',
+      type: 'button'
+    }
+  ];
 }

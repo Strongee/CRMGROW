@@ -23,10 +23,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <h2 class="mb-4"></h2>
               <div>
-                <button class="btn btn-primary br-default shadow py-2 v-center mb-2 border-0" (click)="addList()">
-                  <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
-                  <span class="fw-600 f-3">Add a list</span>
-                </button>
+                <button class="btn btn-primary f-5 ml-auto" (click)="addList()">+ Add a list</button>
               </div>
             </div>
           </div>
@@ -69,9 +66,8 @@
                       <div class="f-6 font-weight-bold">{{list.deliveryissues}}</div>
                     </td>
                     <td class="action">
-                      <div class="d-sm-flex d-none">
-                        <button class="btn btn-sm bg-white text-gray" (click)="editList(list)">
-                        </button>
+                      <div class="v-center justify-content-end btn bg-white" (click)="editList(list)">
+                        <i class="bgc-dark opacity-3 i-icon i-edit"></i>
                       </div>
                     </td>
                   </tr>
@@ -79,6 +75,7 @@
             </table>
           </div>
         </div>
+        <app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar>
       </mat-tab>
       <mat-tab label="Bulk Mailing">
         <ng-template mat-tab-label>

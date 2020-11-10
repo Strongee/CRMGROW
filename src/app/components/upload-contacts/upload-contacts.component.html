@@ -109,8 +109,8 @@
         <tr>
           <th class="check-cell border-top-0">
             <div class="custom-control custom-checkbox" (click)="selectAllContacts()">
-              <input type="checkbox" class="custom-control-input" id="selectcontacts" (change)="selectAllContacts()" [checked]="isSelectedContacts()">
-              <label class="custom-control-label" for="selectcontacts"></label>
+              <input type="checkbox" class="custom-control-input" id="select_import_contacts" (change)="selectAllContacts()" [checked]="isSelectedContacts()">
+              <label class="custom-control-label" for="select_import_contacts"></label>
             </div>
           </th>
           <ng-container *ngFor="let column of columns">
@@ -124,7 +124,7 @@
         <tr *ngFor="let record of contactsToUpload; let row = index;">
           <td class="check-cell">
             <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="record-{{record.id}}" (change)="selectedContacts.toggle(record.id)" [checked]="selectedContacts.isSelected(record.id)">
+              <input type="checkbox" class="custom-control-input" id="record-{{record.id}}" (change)="selectedImportContacts.toggle(record.id)" [checked]="selectedImportContacts.isSelected(record.id)">
               <label class="custom-control-label" for="record-{{record.id}}"></label>
             </div>
           </td>
@@ -206,7 +206,8 @@
     </ng-container>
     <ng-container *ngIf="step == 4">
       <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-      <button class="btn btn-primary" (click)="upload()" [class.loading]="uploading">Import</button>
+      <button class="btn btn-primary" (click)="upload()" *ngIf="!uploading">Import</button>
+      <app-loading-button [class]="'btn btn-primary'" [title]="'Importing...'" *ngIf="uploading"></app-loading-button>
     </ng-container>
   </mat-dialog-actions>
 </div>

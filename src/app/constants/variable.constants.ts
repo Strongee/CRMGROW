@@ -600,3 +600,5 @@ export const BulkActions = {
     }
   ]
 };
+
+export const ContactPageSize = 50;

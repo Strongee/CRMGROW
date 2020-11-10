@@ -39,6 +39,7 @@ export class CalendarDialogComponent implements OnInit {
     month: '',
     day: ''
   };
+  selectedDateTime;
   minDate: any;
   event = {
     title: '',
@@ -238,6 +239,33 @@ export class CalendarDialogComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  getDateTime(): any {
+    // if (this.date.day) {
+    //   return (
+    //     this.date.year +
+    //     '-' +
+    //     this.date.month +
+    //     '-' +
+    //     this.date.day +
+    //     ' ' +
+    //     this.time.hour +
+    //     ':' +
+    //     this.time.minute
+    //   );
+    // }
+    // return (
+    //   this.date.year +
+    //   '-' +
+    //   this.date.month +
+    //   '-' +
+    //   this.minDate.day +
+    //   ' ' +
+    //   this.time.hour +
+    //   ':' +
+    //   this.time.minute
+    // );
   }
 
   handleAddressChange(evt: any): void {

@@ -334,7 +334,7 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  calendarChange(value: string): void {
+  calendarDateChange(): void {
     this.isLoading = true;
     switch (this.view) {
       case 'month':
@@ -387,6 +387,4 @@ export class CalendarComponent implements OnInit {
       }
     });
   }
-
-  calendarDateChange() {}
 }
