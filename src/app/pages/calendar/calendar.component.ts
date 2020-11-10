@@ -133,7 +133,7 @@ export class CalendarComponent implements OnInit {
       .open(CalendarDialogComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '500px',
+        maxWidth: '600px',
         data: {
           start_date: date,
           type: 'month'
@@ -180,7 +180,7 @@ export class CalendarComponent implements OnInit {
       .open(CalendarDialogComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '500px',
+        maxWidth: '600px',
         data: {
           start_date: date,
           type: 'week'

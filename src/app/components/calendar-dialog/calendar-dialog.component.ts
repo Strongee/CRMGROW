@@ -93,6 +93,13 @@ export class CalendarDialogComponent implements OnInit {
         this.due_date.year = this.data.start_date.getFullYear();
         this.due_date.month = this.data.start_date.getMonth() + 1;
         this.due_date.day = this.data.start_date.getDate();
+        this.selectedDateTime = moment(
+          this.due_date.year +
+            '-' +
+            this.due_date.month +
+            '-' +
+            this.due_date.day
+        ).format('YYYY-MM-DD');
         if (this.data.type != 'month') {
           let hour: string, minute: string;
           if (this.data.start_date.getHours().toString().length == 1) {
@@ -198,7 +205,7 @@ export class CalendarDialogComponent implements OnInit {
     this.isLoading = true;
     this.event.contacts = [];
     this.event.guests = [];
-    const due_date = moment(
+    const date = moment(
       this.due_date.year +
         '-' +
         this.due_date.month +
@@ -207,10 +214,10 @@ export class CalendarDialogComponent implements OnInit {
         ' ' +
         this.due_time
     ).format();
-    const duration = moment(due_date)
+    const duration = moment(date)
       .add(this.duration * 60, 'minutes')
       .format();
-    this.event.due_start = due_date;
+    this.event.due_start = date;
     this.event.due_end = duration;
     if (this.contacts.length > 0) {
       this.contacts.forEach((contact) => {
@@ -242,30 +249,19 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   getDateTime(): any {
-    // if (this.date.day) {
-    //   return (
-    //     this.date.year +
-    //     '-' +
-    //     this.date.month +
-    //     '-' +
-    //     this.date.day +
-    //     ' ' +
-    //     this.time.hour +
-    //     ':' +
-    //     this.time.minute
-    //   );
-    // }
-    // return (
-    //   this.date.year +
-    //   '-' +
-    //   this.date.month +
-    //   '-' +
-    //   this.minDate.day +
-    //   ' ' +
-    //   this.time.hour +
-    //   ':' +
-    //   this.time.minute
-    // );
+    if (this.due_date.day) {
+      return (
+        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+      );
+    }
+    return (
+      this.due_date.year + '-' + this.due_date.month + '-' + this.minDate.day
+    );
+  }
+
+  setDateTime(): void {
+    this.selectedDateTime = moment(this.getDateTime()).format('YYYY-MM-DD');
+    close();
   }
 
   handleAddressChange(evt: any): void {
