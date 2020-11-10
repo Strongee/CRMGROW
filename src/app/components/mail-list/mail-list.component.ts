@@ -61,18 +61,18 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(
         (api) => {
           api.subscribe((res) => {
-            const maillists = [];
-            for(let i = 1; i < 5; i++ ){
-              const maillist = {
-                _id: i,
-                title: 'maillist' + i,
-                contacts: i
-              };
-              maillists.push(maillist);
-            }
+            // const maillists = [];
+            // for(let i = 1; i < 5; i++ ){
+            //   const maillist = {
+            //     _id: i,
+            //     title: 'maillist' + i,
+            //     contacts: i
+            //   };
+            //   maillists.push(maillist);
+            // }
             this.searching = false;
-            // this.filteredResults.next(res);
-            this.filteredResults.next(maillists);
+            this.filteredResults.next(res);
+            // this.filteredResults.next(maillists);
           });
         },
         () => {
