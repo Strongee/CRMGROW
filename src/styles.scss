@@ -710,6 +710,16 @@ button {
   }
 }
 
+.mail-list {
+  .c-badge.rect {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    padding: 4px;
+  }
+}
+
 /** ==== Body Layout === */
 body{
   .topbar {
@@ -1018,7 +1028,7 @@ table {
     border: 2px solid white;
   }
   &.sm {
-    
+
   }
 }
 

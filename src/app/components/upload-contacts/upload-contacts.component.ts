@@ -60,7 +60,7 @@ export class UploadContactsComponent implements OnInit {
 
   previewEmails = []; // Emails to merge contacts
   previewPhones = []; // Phones to merge contacts
-  selectedContacts = new SelectionModel<any>(true, []);
+  selectedImportContacts = new SelectionModel<any>(true, []);
   overwriteContacts = new SelectionModel(true, []); // Contacts to overwrite
   overwriting = false;
 
@@ -499,11 +499,11 @@ export class UploadContactsComponent implements OnInit {
   selectAllContacts(): void {
     if (this.isSelectedContacts()) {
       this.contactsToUpload.forEach((e) => {
-        this.selectedContacts.deselect(e.id);
+        this.selectedImportContacts.deselect(e.id);
       });
     } else {
       this.contactsToUpload.forEach((e) => {
-        this.selectedContacts.select(e.id);
+        this.selectedImportContacts.select(e.id);
       });
     }
   }
@@ -511,7 +511,7 @@ export class UploadContactsComponent implements OnInit {
     if (this.contactsToUpload.length) {
       for (let i = 0; i < this.contactsToUpload.length; i++) {
         const e = this.contactsToUpload[i];
-        if (!this.selectedContacts.isSelected(e.id)) {
+        if (!this.selectedImportContacts.isSelected(e.id)) {
           return false;
         }
       }

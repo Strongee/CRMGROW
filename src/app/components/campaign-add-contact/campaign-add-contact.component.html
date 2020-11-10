@@ -71,19 +71,23 @@
                         UC
                       </ng-container>
                       <ng-template #hasNamedAvatar>
-                        <ng-container *ngIf="contact.first_name != ''; else lastnameAvatar">
+                        <ng-container *ngIf="contact.first_name != '' && contact.first_name; else lastnameAvatar">
                           {{contact.first_name.length > 1 ? contact.first_name[0] + contact.first_name[1] : contact.first_name[0]}}
                         </ng-container>
                         <ng-template #lastnameAvatar>
-                          <ng-container *ngIf="contact.last_name != ''">
+                          <ng-container *ngIf="contact.last_name && contact.last_name != ''">
                             {{contact.last_name[0].length > 1 ? contact.last_name[0] + contact.last_name[1] : contact.last_name[0] }}
                           </ng-container>
                         </ng-template>
                       </ng-template>
                     </div>
                   </div>
-                  <div class="f-4 ml-2" *ngIf="!contact.first_name && !contact.last_name">Unnamed Contact</div>
-                  <div class="f-4 ml-2" *ngIf="contact.first_name || contact.last_name">{{contact.first_name + ' ' + contact.last_name}}</div>
+                  <div class="f-4 ml-2">
+                    <div *ngIf="!contact.first_name && !contact.last_name">Unnamed Contact</div>
+                    <div *ngIf="contact.first_name || contact.last_name">
+                      {{contact.first_name || ''}} {{contact.last_name || ''}}
+                    </div>
+                  </div>
                 </div>
               </td>
               <td class="label">
@@ -133,8 +137,10 @@
     <button type="button" mat-dialog-close class="btn btn-white f-6 font-weight-bold ml-2">
       Cancel
     </button>
-    <button type="submit" class="btn btn-primary font-weight-bold f-6" [class.loading]="submitted">
+    <button type="submit" class="btn btn-primary font-weight-bold f-6" *ngIf="!submitted">
       Create
     </button>
+    <app-loading-button [class]="'bgc-blue text-white font-weight-bold f-6'" [title]="'Creating...'" *ngIf="submitted">
+    </app-loading-button>
   </mat-dialog-actions>
 </form>
