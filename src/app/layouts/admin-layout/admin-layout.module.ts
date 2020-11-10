@@ -44,6 +44,8 @@ import { DealsComponent } from '../../pages/deals/deals.component';
 import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.component';
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
+import { AutoResendVideoComponent } from '../../pages/auto-resend-video/auto-resend-video.component';
+import { AutoFollowUpComponent } from '../../pages/auto-follow-up/auto-follow-up.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,8 @@ import { VideoCreateComponent } from '../../pages/video-create/video-create.comp
     LeadCaptureComponent,
     TagManagerComponent,
     StatusAutomationComponent,
+    AutoResendVideoComponent,
+    AutoFollowUpComponent,
     DealsComponent,
     DealsDetailComponent,
     AutoflowComponent,

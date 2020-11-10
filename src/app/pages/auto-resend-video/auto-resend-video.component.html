@@ -1,0 +1,122 @@
+<div class="page-content p-2">
+    <div class="video-finish">
+        <div class="v-center justify-content-between">
+            <div class="f-3 font-weight-bold">
+                Resend video when they didn't finish to the end
+            </div>
+            <div class="v-center custom-control custom-switch">
+                <label class="custom-toggle mb-0" placement="top">
+                  <input type="checkbox">
+                  <span class="custom-toggle-slider rounded-circle"></span>
+                </label>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="f-3 font-weight-bold">
+                    Content
+                </div>
+                <div class="f-1 op-64 mt-1">
+                    Choose the message copy of the resent video
+                </div>
+            </div>
+            <div class="col-md-8 form-group">
+                <div class="search-email">
+                    <div class="f-1 op-64 text-right">
+                        Search email template
+                    </div>
+                    <select class="form-control f-3 mt-2" [(ngModel)]="finish_email_template" name="email" id="finish-email" required #email="ngModel">
+                        <option value="">Click here to assign an email template</option>
+                    </select>
+                </div>
+                <div class="search-sms mt-3">
+                    <div class="f-1 op-64 text-right">
+                        Search SMS template
+                    </div>
+                    <select class="form-control f-3 mt-2" [(ngModel)]="finish_sms_template" name="sms" id="finish-sms" required #sms="ngModel">
+                        <option value="">Click here to assign an sms template</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="v-center justify-content-between mt-3">
+            <div class="form-group">
+                <div class="f-3 font-weight-bold">
+                    Delay time
+                </div>
+                <div class="f-1 op-64 mt-1">
+                    The time delay of when you want the system to automatically resend the video
+                </div>
+            </div>
+            <div class="form-group">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="finish_delay_time" name="delay" id="delay" required #delay="ngModel">
+                    <option *ngFor="let delay of delays" value="{{delay.id}}">
+                        {{delay.text}}
+                      </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="video-watch mt-3">
+        <div class="v-center justify-content-between">
+            <div class="f-3 font-weight-bold">
+                Resend video when they didn't watch video at all
+            </div>
+            <div class="v-center custom-control custom-switch">
+                <label class="custom-toggle mb-0" placement="top">
+                  <input type="checkbox">
+                  <span class="custom-toggle-slider rounded-circle"></span>
+                </label>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="f-3 font-weight-bold">
+                    Content
+                </div>
+                <div class="f-1 op-64 mt-1">
+                    Choose the message copy of the resent video
+                </div>
+            </div>
+            <div class="col-md-8 form-group">
+                <div class="search-email">
+                    <div class="f-1 op-64 text-right">
+                        Search email template
+                    </div>
+                    <select class="form-control f-3 mt-2" [(ngModel)]="watch_email_template" name="email" id="watch-email" required #email="ngModel">
+                        <option value="">Click here to assign an email template</option>
+                    </select>
+                </div>
+                <div class="search-sms mt-3">
+                    <div class="f-1 op-64 text-right">
+                        Search SMS template
+                    </div>
+                    <select class="form-control f-3 mt-2" [(ngModel)]="watch_sms_template" name="sms" id="watch-sms" required #sms="ngModel">
+                        <option value="">Click here to assign an sms template</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="v-center justify-content-between mt-3">
+            <div class="form-group">
+                <div class="f-3 font-weight-bold">
+                    Delay time
+                </div>
+                <div class="f-1 op-64 mt-1">
+                    The time delay of when you want the system to automatically resend the video
+                </div>
+            </div>
+            <div class="form-group">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="watch_delay_time" name="delay" id="delay" required #delay="ngModel">
+                    <option *ngFor="let delay of delays" value="{{delay.id}}">
+                        {{delay.text}}
+                      </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="v-center justify-content-end mt-3">
+        <button class="btn btn-white f-6 font-weight-bold mr-2">Cancel</button>
+        <button class="btn btn-blue f-6 font-weight-bold">Save changes</button>
+    </div>
+</div>
