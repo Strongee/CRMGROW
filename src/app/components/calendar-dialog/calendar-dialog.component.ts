@@ -24,6 +24,7 @@ import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
 import { Subscription } from 'rxjs';
+import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 Quill.register('modules/imageResize', ImageResize);
 
 @Component({
@@ -73,6 +74,7 @@ export class CalendarDialogComponent implements OnInit {
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
   constructor(
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarDialogComponent>,
     private fileService: FileService,
     private userService: UserService,
@@ -199,7 +201,104 @@ export class CalendarDialogComponent implements OnInit {
     }
   }
 
-  update(): void {}
+  update(): void {
+    this.isLoading = true;
+    const due_date = moment(
+      this.due_date.year +
+        '-' +
+        this.due_date.month +
+        '-' +
+        this.due_date.day +
+        ' ' +
+        this.due_time
+    ).format();
+    this.selectedDateTime = moment(
+      this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+    ).format('YYYY-MM-DD');
+    const duration = moment(due_date)
+      .add(this.duration * 60, 'minutes')
+      .format();
+    this.event.due_start = due_date;
+    this.event.due_end = duration;
+    if (this.contacts.length > 0) {
+      this.event.contacts.forEach((eventContact) => {
+        this.contacts.forEach((selectContact) => {
+          if (Object.values(selectContact).indexOf(eventContact._id) == -1) {
+            this.event.remove_contacts.push(eventContact._id);
+          }
+        });
+      });
+      this.event.contacts = [];
+      this.event.guests = [];
+      this.contacts.forEach((contact) => {
+        if (contact._id) {
+          const data = {
+            email: contact.email,
+            _id: contact._id
+          };
+          this.event.contacts.push(data);
+        }
+        this.event.guests.push(contact.email);
+      });
+    }
+    if (this.event.recurrence_id) {
+      this.dialog
+        .open(CalendarRecurringDialogComponent, {
+          position: { top: '40vh' },
+          width: '100vw',
+          maxWidth: '320px',
+          disableClose: true
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            if (res.type == 'own') {
+              delete this.event['recurrence_id'];
+            }
+            this.appointmentService
+              .updateEvents(this.event, this.event.event_id)
+              .subscribe(
+                (res) => {
+                  if (res['status'] == true) {
+                    this.isLoading = false;
+                    const data = {
+                      recurrence_id: this.event.recurrence_id
+                    };
+                    this.toast.success('Event is updated successfully');
+                    this.dialogRef.close(data);
+                  }
+                },
+                (err) => {
+                  this.isLoading = false;
+                  this.dialogRef.close();
+                }
+              );
+          } else {
+            this.isLoading = false;
+          }
+        });
+    } else {
+      delete this.event['recurrence_id'];
+      this.appointmentService
+        .updateEvents(this.event, this.event.event_id)
+        .subscribe(
+          (res) => {
+            if (res['status'] == true) {
+              this.isLoading = false;
+              const data = {
+                recurrence_id: this.event.recurrence_id
+              };
+              this.toast.success('Event is updated successfully');
+              this.dialogRef.close(data);
+            }
+          },
+          (err) => {
+            this.isLoading = false;
+            this.dialogRef.close();
+          }
+        );
+    }
+  }
 
   create(): void {
     this.isLoading = true;
