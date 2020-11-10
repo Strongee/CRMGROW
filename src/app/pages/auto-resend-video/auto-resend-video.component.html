@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <select class="form-control f-3 font-weight-bold" [(ngModel)]="finish_delay_time" name="delay" id="delay" required #delay="ngModel">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="finish_delay_time" name="delay" id="finish-delay" required #delay="ngModel">
                     <option *ngFor="let delay of delays" value="{{delay.id}}">
                         {{delay.text}}
                       </option>
@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <select class="form-control f-3 font-weight-bold" [(ngModel)]="watch_delay_time" name="delay" id="delay" required #delay="ngModel">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="watch_delay_time" name="delay" id="watch-delay" required #delay="ngModel">
                     <option *ngFor="let delay of delays" value="{{delay.id}}">
                         {{delay.text}}
                       </option>
