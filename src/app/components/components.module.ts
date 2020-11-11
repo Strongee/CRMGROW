@@ -47,6 +47,8 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
 import { LabelSelectComponent } from './label-select/label-select.component';
 import { CampaignAddBroadcastComponent } from './campaign-add-broadcast/campaign-add-broadcast.component';
 import { MailListComponent } from './mail-list/mail-list.component';
+import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.component';
+import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
 import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
 import { MaterialAddComponent } from "./material-add/material-add.component";
 
@@ -97,6 +99,8 @@ import { MaterialAddComponent } from "./material-add/material-add.component";
     LabelSelectComponent,
     CampaignAddBroadcastComponent,
     MailListComponent,
+    CustomFieldAddComponent,
+    CustomFieldDeleteComponent,
     AutomationAssignComponent,
     MaterialAddComponent
   ],
@@ -132,6 +136,8 @@ import { MaterialAddComponent } from "./material-add/material-add.component";
     SelectLeaderComponent,
     LabelSelectComponent,
     MailListComponent,
+    CustomFieldAddComponent,
+    CustomFieldDeleteComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -7,10 +7,10 @@ import { DELAY } from '../../constants/variable.constants';
   styleUrls: ['./auto-resend-video.component.scss']
 })
 export class AutoResendVideoComponent implements OnInit {
-  finish_email_template = '';
-  finish_sms_template = '';
-  watch_email_template = '';
-  watch_sms_template = '';
+  finishEmailTemplate = { subject: '', content: '' };
+  finishSmsTemplate = { subject: '', content: '' };
+  watchEmailTemplate = { subject: '', content: '' };
+  watchSmsTemplate = { subject: '', content: '' };
   finish_delay_time = '';
   watch_delay_time = '';
   delays;
@@ -18,5 +18,21 @@ export class AutoResendVideoComponent implements OnInit {
 
   ngOnInit(): void {
     this.delays = DELAY;
+  }
+
+  selectFinishEmailTemplate(event): void {
+    this.finishEmailTemplate = event;
+  }
+
+  selectFinishSmsTemplate(event): void {
+    this.finishSmsTemplate = event;
+  }
+
+  selectWatchEmailTemplate(event): void {
+    this.watchEmailTemplate = event;
+  }
+
+  selectWatchSmsTemplate(event): void {
+    this.watchSmsTemplate = event;
   }
 }

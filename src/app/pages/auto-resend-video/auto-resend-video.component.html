@@ -22,20 +22,24 @@
             </div>
             <div class="col-md-8 form-group">
                 <div class="search-email">
-                    <div class="f-1 op-64 text-right">
+                    <div class="f-1 op-64 text-right mb-2">
                         Search email template
                     </div>
-                    <select class="form-control f-3 mt-2" [(ngModel)]="finish_email_template" name="email" id="finish-email" required #email="ngModel">
-                        <option value="">Click here to assign an email template</option>
-                    </select>
+                    <app-input-template
+                        [type]="'email'"
+                        [placeholder]="'Click here to assign an email template'"
+                        (onSelect)="selectFinishEmailTemplate($event)">
+                    </app-input-template>
                 </div>
                 <div class="search-sms mt-3">
-                    <div class="f-1 op-64 text-right">
+                    <div class="f-1 op-64 text-right mb-2">
                         Search SMS template
                     </div>
-                    <select class="form-control f-3 mt-2" [(ngModel)]="finish_sms_template" name="sms" id="finish-sms" required #sms="ngModel">
-                        <option value="">Click here to assign an sms template</option>
-                    </select>
+                    <app-input-template
+                        [type]="'text'"
+                        [placeholder]="'Click here to assign an sms template'"
+                        (onSelect)="selectFinishSmsTemplate($event)">
+                    </app-input-template>
                 </div>
             </div>
         </div>
@@ -80,20 +84,24 @@
             </div>
             <div class="col-md-8 form-group">
                 <div class="search-email">
-                    <div class="f-1 op-64 text-right">
+                    <div class="f-1 op-64 text-right mb-2">
                         Search email template
                     </div>
-                    <select class="form-control f-3 mt-2" [(ngModel)]="watch_email_template" name="email" id="watch-email" required #email="ngModel">
-                        <option value="">Click here to assign an email template</option>
-                    </select>
+                    <app-input-template
+                        [type]="'email'"
+                        [placeholder]="'Click here to assign an email template'"
+                        (onSelect)="selectWatchEmailTemplate($event)">
+                    </app-input-template>
                 </div>
                 <div class="search-sms mt-3">
-                    <div class="f-1 op-64 text-right">
+                    <div class="f-1 op-64 text-right mb-2">
                         Search SMS template
                     </div>
-                    <select class="form-control f-3 mt-2" [(ngModel)]="watch_sms_template" name="sms" id="watch-sms" required #sms="ngModel">
-                        <option value="">Click here to assign an sms template</option>
-                    </select>
+                    <app-input-template
+                        [type]="'text'"
+                        [placeholder]="'Click here to assign an sms template'"
+                        (onSelect)="selectWatchSmsTemplate($event)">
+                    </app-input-template>
                 </div>
             </div>
         </div>
