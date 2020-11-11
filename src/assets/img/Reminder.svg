@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25.409" height="22.705" viewBox="0 0 25.409 22.705">
+  <defs>
+    <ellipse id="ellipse-1" cx="12.705" cy="14.705" rx="7" ry="7"/>
+  </defs>
+  <g>
+    <g>
+      <use fill="rgb(0,0,255)" fill-opacity=".1" xlink:href="#ellipse-1"/>
+      <use fill-opacity="0" stroke="rgb(0,0,255)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#ellipse-1"/>
+    </g>
+    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M16.7046301 4.7046301c1.4977.67528 2.8666 1.66145 4 2.92989"/>
+    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M8.7046301 4.8310401c-1.49767.67527-2.86662 1.66144-4 2.92988"/>
+    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M12.7046301 16.7050601v-4"/>
+    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M14.7046301 14.7050601h-4"/>
+  </g>
+</svg>

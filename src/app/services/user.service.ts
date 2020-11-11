@@ -115,16 +115,46 @@ export class UserService extends HttpService {
   public getToken() {
     return localStorage.getItem('token');
   }
+
+  /**
+   * Init the User data from API call
+   * @param profile: User
+   */
   public setProfile(profile: User): void {
     this.profile.next(profile);
   }
+  /**
+   * Update the profile and submit the subject
+   * @param data: Update Profile Imple
+   */
   public updateProfileImpl(data: any): void {
     const profile = this.profile.getValue();
     this.profile.next({ ...profile, ...data });
     return;
   }
+  /**
+   * Init the Garbage from API call
+   * @param garbage: Garbage
+   */
   public setGarbage(garbage: Garbage): void {
     this.garbage.next(garbage);
+    return;
+  }
+  public updateGarbage(garbage: any): Observable<any> {
+    return this.httpClient
+      .put(environment.api + USER.UPDATE_GARBAGE, garbage)
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('UPDATE GARBAGE'))
+      );
+  }
+  /**
+   * Update the Garbage
+   * @param garbage : Garbage
+   */
+  public updateGarbageImpl(data: any): void {
+    const garbage = this.garbage.getValue();
+    this.garbage.next({ ...garbage, ...data });
     return;
   }
   public requestSyncUrl(type: string): Observable<any> {

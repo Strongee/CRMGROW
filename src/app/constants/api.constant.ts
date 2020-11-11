@@ -17,7 +17,8 @@ export const USER = {
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
   LOAD_AFFILIATE: '',
-  CREATE_AFFILIATE: ''
+  CREATE_AFFILIATE: '',
+  UPDATE_GARBAGE: 'garbage'
 };
 export const GARBAGE = {
   SET: 'garbage',

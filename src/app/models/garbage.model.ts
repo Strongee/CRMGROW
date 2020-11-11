@@ -72,6 +72,57 @@ export class Garbage implements Deserializable {
   };
 
   deserialize(input: any): this {
+    Object.entries(input).forEach(([key, value]) => {
+      if (!value && typeof this[key] === 'object') {
+        input[key] = this[key];
+        return;
+      }
+    });
     return Object.assign(this, input);
+  }
+
+  notification_fields = [
+    'material',
+    'email',
+    'follow_up',
+    'lead_capture',
+    'unsubscription'
+  ];
+
+  get entire_desktop_notification(): number {
+    if (!this.desktop_notification) {
+      return -1;
+    }
+    let all_checked = true;
+    let some_checked = false;
+    this.notification_fields.forEach((e) => {
+      all_checked = all_checked && this.desktop_notification[e];
+      some_checked = some_checked || this.desktop_notification[e];
+    });
+    return all_checked ? 1 : some_checked ? 0 : -1;
+  }
+  get entire_text_notification(): number {
+    if (!this.text_notification) {
+      return -1;
+    }
+    let all_checked = true;
+    let some_checked = false;
+    this.notification_fields.forEach((e) => {
+      all_checked = all_checked && this.text_notification[e];
+      some_checked = some_checked || this.text_notification[e];
+    });
+    return all_checked ? 1 : some_checked ? 0 : -1;
+  }
+  get entire_email_notification(): number {
+    if (!this.email_notification) {
+      return -1;
+    }
+    let all_checked = true;
+    let some_checked = false;
+    this.notification_fields.forEach((e) => {
+      all_checked = all_checked && this.email_notification[e];
+      some_checked = some_checked || this.email_notification[e];
+    });
+    return all_checked ? 1 : some_checked ? 0 : -1;
   }
 }
