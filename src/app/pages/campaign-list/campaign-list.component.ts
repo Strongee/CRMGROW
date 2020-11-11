@@ -117,7 +117,7 @@ export class CampaignListComponent implements OnInit {
     this.dialog
       .open(UploadContactsComponent, {
         width: '100vw',
-        maxWidth: '1024px',
+        maxWidth: '768px',
         disableClose: true
       })
       .afterClosed()
