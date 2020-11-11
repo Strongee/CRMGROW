@@ -1,4 +1,4 @@
-export const COMPANIES = ['eXp Realty'];
+export const COMPANIES = ['eXp Realty', 'other'];
 export const MONTH = [
   { id: '1', text: 'January' },
   { id: '2', text: 'February' },
@@ -432,6 +432,14 @@ export const DialogSettings = {
     maxWidth: '394px'
   },
   NOTE: {
+    width: '98vw',
+    maxWidth: '394px'
+  },
+  CONFIRM: {
+    width: '98vw',
+    maxWidth: '400px'
+  },
+  ASSISTANT: {
     width: '98vw',
     maxWidth: '394px'
   }

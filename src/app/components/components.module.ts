@@ -51,6 +51,9 @@ import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.com
 import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
 import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
 import { MaterialAddComponent } from "./material-add/material-add.component";
+import { AssistantCreateComponent } from './assistant-create/assistant-create.component';
+import { AssistantPasswordComponent } from './assistant-password/assistant-password.component';
+import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +105,10 @@ import { MaterialAddComponent } from "./material-add/material-add.component";
     CustomFieldAddComponent,
     CustomFieldDeleteComponent,
     AutomationAssignComponent,
-    MaterialAddComponent
+    MaterialAddComponent,
+    AssistantCreateComponent,
+    AssistantPasswordComponent,
+    AssistantRemoveComponent
   ],
   imports: [
     CommonModule,

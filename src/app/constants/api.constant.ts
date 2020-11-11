@@ -20,6 +20,12 @@ export const USER = {
   CREATE_AFFILIATE: '',
   UPDATE_GARBAGE: 'garbage'
 };
+export const GUEST = {
+  LOAD: 'guest/load',
+  CREATE: 'guest',
+  DELETE: 'guest/',
+  EDIT: 'guest/'
+};
 export const GARBAGE = {
   SET: 'garbage',
   UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
@@ -129,7 +135,7 @@ export const AUTOMATION = {
   READ: 'automation/',
   UPDATE: 'automation/',
   CREATE: 'automation',
-  ASSIGN: 'timeline/create',
+  ASSIGN: 'timeline/create'
 };
 export const APPOINTMENT = {
   GET_EVENT: 'appointment',
