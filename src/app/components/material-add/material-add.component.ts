@@ -187,7 +187,7 @@ export class MaterialAddComponent implements OnInit {
     if (material.type) {
       if (material.type === 'application/pdf') {
         return 'PDF';
-      } else {
+      } else if (material.type.includes('image')) {
         return 'Image';
       }
     }
