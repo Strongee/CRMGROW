@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ActionName } from '../../constants/variable.constants';
 import { Location } from '@angular/common';
 import { UserService } from '../../services/user.service';
+import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 
 @Component({
   selector: 'app-automations',
@@ -39,9 +40,7 @@ export class AutomationsComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private userService: UserService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.userService.profile$.subscribe((res) => {
@@ -94,7 +93,7 @@ export class AutomationsComponent implements OnInit {
           }
         });
         this.count = this.automations.length;
-        console.log("automations =========>", automations);
+        console.log('automations =========>', automations);
       },
       (err) => {
         this.isLoading = false;
@@ -164,18 +163,20 @@ export class AutomationsComponent implements OnInit {
   }
 
   assignAutomation(event, automation): void {
-    // event.stopPropagation();
-    // this.dialog.open(AutomationAssignComponent, {
-    //   width: '100vw',
-    //   maxWidth: '360px',
-    //   data: {
-    //     automation,
-    //   }
-    // }).afterClosed().subscribe(res => {
-    //   if(res) {
-    //
-    //   }
-    // })
+    event.stopPropagation();
+    this.dialog
+      .open(AutomationAssignComponent, {
+        width: '100vw',
+        maxWidth: '500px',
+        data: {
+          automation
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+        }
+      });
   }
 
   deleteAutomation(event, automation): void {

@@ -47,6 +47,8 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
 import { LabelSelectComponent } from './label-select/label-select.component';
 import { CampaignAddBroadcastComponent } from './campaign-add-broadcast/campaign-add-broadcast.component';
 import { MailListComponent } from './mail-list/mail-list.component';
+import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
+import { MaterialAddComponent } from "./material-add/material-add.component";
 
 @NgModule({
   declarations: [
@@ -95,6 +97,8 @@ import { MailListComponent } from './mail-list/mail-list.component';
     LabelSelectComponent,
     CampaignAddBroadcastComponent,
     MailListComponent,
+    AutomationAssignComponent,
+    MaterialAddComponent
   ],
   imports: [
     CommonModule,

@@ -25,6 +25,40 @@ p {
   padding: 1rem;
 }
 
+.send-materials {
+  .thumbnail {
+    width: 96px;
+    height: 54px;
+    object-fit: cover;
+  }
+
+  .material-item {
+    margin: 10px 0px;
+
+    .delete-button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .material-detail {
+      width: calc(100% - 96px - 32px);
+      padding: 0px 15px;
+
+      .material-title {
+        line-height: 15px;
+        color: #101336;
+      }
+
+      .material-description {
+        line-height: 15px;
+        word-break: break-all;
+        color: #101336;
+      }
+    }
+  }
+}
+
 :host ::ng-deep {
   .date-time-picker {
     .time-picker {

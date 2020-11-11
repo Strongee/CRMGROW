@@ -58,6 +58,10 @@ export class UploadContactsComponent implements OnInit {
   sameEmails = [];
   samePhones = [];
 
+  filePlaceholder = 'Drag your csv files here or click in this area.';
+  isCSVFile = false;
+  fileSize;
+
   previewEmails = []; // Emails to merge contacts
   previewPhones = []; // Phones to merge contacts
   selectedImportContacts = new SelectionModel<any>(true, []);
@@ -141,15 +145,17 @@ export class UploadContactsComponent implements OnInit {
     if (!file) {
       return false;
     }
+    console.log('csv file ===========>', file.name.toLowerCase());
     if (!file.name.toLowerCase().endsWith('.csv')) {
-      // this.dialog.open(NotifyComponent, {
-      //   width: '300px',
-      //   data: {
-      //     message: 'Please select the CSV file.'
-      //   }
-      // });
-      // return false;
+      this.isCSVFile = false;
+      this.filePlaceholder =
+        'File is not matched. \n Drag your csv files here or click in this area.';
+      return false;
     }
+
+    this.isCSVFile = true;
+    this.filePlaceholder = 'File uploaded "' + file.name.toLowerCase() + '".';
+    this.fileSize = this.humanFileSize(file.size);
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       const text = fileReader.result + '';
@@ -174,12 +180,34 @@ export class UploadContactsComponent implements OnInit {
 
           this.selectedColumn = this.columns[0];
           this.selectedColumnIndex = 0;
-
-          this.step = 2;
         }
       });
     };
     fileReader.readAsText(evt.target.files[0]);
+  }
+
+  humanFileSize(bytes, si = true, dp = 1): any {
+    const thresh = si ? 1000 : 1024;
+
+    if (Math.abs(bytes) < thresh) {
+      return bytes + ' B';
+    }
+
+    const units = si
+      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    let u = -1;
+    const r = 10 ** dp;
+
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (
+      Math.round(Math.abs(bytes) * r) / r >= thresh &&
+      u < units.length - 1
+    );
+
+    return bytes.toFixed(dp) + ' ' + units[u];
   }
 
   nextStep(): void {
@@ -196,6 +224,17 @@ export class UploadContactsComponent implements OnInit {
   selectColumn(column): void {
     this.selectedColumn = column;
     this.selectedColumnIndex = this.columns.indexOf(column);
+  }
+
+  selectField(): void {
+    if (this.isCSVFile) {
+      this.step = 2;
+    }
+  }
+
+  initImport(): void {
+    this.isCSVFile = false;
+    this.filePlaceholder = 'Drag your csv files here or click in this area.';
   }
 
   review(): void {
@@ -227,7 +266,11 @@ export class UploadContactsComponent implements OnInit {
         this.contacts.push({ ...contact, id: this.contacts.length });
       });
       const dupTest = this.checkDuplicate();
-      console.log("duplicate email ================>", dupTest, this.sameEmails);
+      console.log(
+        'duplicate email ================>',
+        dupTest,
+        this.sameEmails
+      );
       if (dupTest) {
         this.step = 3;
       } else {
@@ -253,7 +296,7 @@ export class UploadContactsComponent implements OnInit {
     if (emailKey) {
       const groupsByEmail = d3
         .nest()
-        .key(function(d) {
+        .key(function (d) {
           return d.email;
         })
         .entries(this.contacts);
@@ -274,7 +317,7 @@ export class UploadContactsComponent implements OnInit {
     if (phoneKey) {
       const groupsByPhone = d3
         .nest()
-        .key(function(d) {
+        .key(function (d) {
           return d.phone;
         })
         .entries(this.contacts);
@@ -582,5 +625,4 @@ export class UploadContactsComponent implements OnInit {
       label: 'Label'
     }
   ];
-
 }
