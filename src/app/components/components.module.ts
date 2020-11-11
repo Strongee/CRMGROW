@@ -47,6 +47,8 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
 import { LabelSelectComponent } from './label-select/label-select.component';
 import { CampaignAddBroadcastComponent } from './campaign-add-broadcast/campaign-add-broadcast.component';
 import { MailListComponent } from './mail-list/mail-list.component';
+import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.component';
+import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +97,8 @@ import { MailListComponent } from './mail-list/mail-list.component';
     LabelSelectComponent,
     CampaignAddBroadcastComponent,
     MailListComponent,
+    CustomFieldAddComponent,
+    CustomFieldDeleteComponent
   ],
   imports: [
     CommonModule,
@@ -128,6 +132,8 @@ import { MailListComponent } from './mail-list/mail-list.component';
     SelectLeaderComponent,
     LabelSelectComponent,
     MailListComponent,
+    CustomFieldAddComponent,
+    CustomFieldDeleteComponent
   ],
   bootstrap: [
     ContactCreateComponent,

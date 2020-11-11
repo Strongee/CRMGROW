@@ -7,7 +7,6 @@ import * as moment from 'moment';
   styleUrls: ['./campaign-add-broadcast.component.scss']
 })
 export class CampaignAddBroadcastComponent implements OnInit {
-
   name = '';
   selectedTemplate = { subject: '', content: '' };
   date;
@@ -79,7 +78,9 @@ export class CampaignAddBroadcastComponent implements OnInit {
   }
 
   setDateTime(): void {
-    this.selectedDateTime = moment(this.getDateTime()).format('YYYY-MM-DD hh:mm A');
+    this.selectedDateTime = moment(this.getDateTime()).format(
+      'YYYY-MM-DD hh:mm A'
+    );
     close();
   }
 
