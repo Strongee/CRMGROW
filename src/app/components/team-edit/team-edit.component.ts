@@ -56,7 +56,6 @@ export class TeamEditComponent implements OnInit {
   }
   deleteTeam(): void {
     const team = this.team;
-    this.dialogRef.close();
     this.dialog
       .open(TeamDeleteComponent, {
         data: {
@@ -64,7 +63,6 @@ export class TeamEditComponent implements OnInit {
         }
       })
       .afterClosed()
-      .subscribe((res) => {
-      });
+      .subscribe((res) => {});
   }
 }

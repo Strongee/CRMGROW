@@ -127,7 +127,8 @@ export const AUTOMATION = {
   DELETE: 'automation/',
   READ: 'automation/',
   UPDATE: 'automation/',
-  CREATE: 'automation'
+  CREATE: 'automation',
+  ASSIGN: 'timeline/create',
 };
 export const APPOINTMENT = {
   GET_EVENT: 'appointment',

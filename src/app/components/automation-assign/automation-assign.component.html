@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Assign Automation</h1>
+<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? assignAutomation() : false"
+      [class.was-validated]="submitted">
+  <mat-dialog-content>
+    <div class="form-group">
+      <div class="my-3">
+        <label>Invite contacts & guests</label>
+        <app-input-contacts
+          [placeholder]="'Search your contacts or add an email'"
+          [selectedContacts]="contacts"
+        >
+        </app-input-contacts>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button class="btn btn-white" type="button" mat-dialog-close>Close</button>
+    <button class="btn btn-primary ml-2" type="submit">Assign</button>
+  </mat-dialog-actions>
+</form>
