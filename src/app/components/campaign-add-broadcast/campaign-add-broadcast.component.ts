@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { MatDialog } from '@angular/material/dialog';
+import { MaterialAddComponent } from '../material-add/material-add.component';
 
 @Component({
   selector: 'app-campaign-add-broadcast',
@@ -17,8 +19,9 @@ export class CampaignAddBroadcastComponent implements OnInit {
   sessions = [];
   submitted = false;
   selectedDateTime;
+  materials = [];
 
-  constructor() {
+  constructor(private dialog: MatDialog) {
     const current = new Date();
     this.minDate = {
       year: current.getFullYear(),
@@ -84,5 +87,26 @@ export class CampaignAddBroadcastComponent implements OnInit {
     close();
   }
 
+  deleteMaterial(material): void {
+    const index = this.materials.findIndex((item) => item._id === material._id);
+    if (index >= 0) {
+      this.materials.splice(index, 1);
+    }
+  }
+
+  attachMaterials(): void {
+    this.dialog
+      .open(MaterialAddComponent, {
+        width: '98vw',
+        maxWidth: '500px',
+        data: this.materials
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.materials = res.materials;
+        }
+      });
+  }
   addBroadcast(): void {}
 }

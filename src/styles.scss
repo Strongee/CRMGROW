@@ -570,6 +570,7 @@ button {
   }
   .form-control {
     height: 40px;
+    font-size: 14px;
     box-shadow: none!important;
   }
   textarea {
@@ -926,6 +927,9 @@ table {
 }
 
 /** ==== Material Component Style === */
+*[class*="mat"]:not(mat-icon){
+  font-family: "Nunito", sans-serif!important;
+}
 //* Material Accordion Mobile Style
 @media screen and (max-width: 576px) {
   .mat-accordion {

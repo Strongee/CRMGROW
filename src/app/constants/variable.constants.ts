@@ -430,6 +430,10 @@ export const DialogSettings = {
   TASK: {
     width: '98vw',
     maxWidth: '394px'
+  },
+  NOTE: {
+    width: '98vw',
+    maxWidth: '394px'
   }
 };
 

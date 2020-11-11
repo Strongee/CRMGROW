@@ -94,13 +94,11 @@
 // Label Selector Style
 .label-select-wrapper {
   .mat-form-field-appearance-outline {
+    cursor: pointer;
     .mat-form-field-infix {
-      padding: 0.25rem 0;
+      padding: 0.5rem 0;
     }
     .mat-form-field-outline > div {
-      opacity: 0;
-    }
-    .mat-select-arrow-wrapper {
       opacity: 0;
     }
     &.mat-focused {
@@ -108,19 +106,44 @@
         opacity: 1;
         border-color: $color-trans28;
       }
-      .mat-select-arrow-wrapper {
-        opacity: 1;
-      }
     }
+    .mat-chip {
+      pointer-events: none;
+      cursor: pointer;
+    }
+  }
+  input {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
-.cdk-overlay-pane .mat-select-panel.label-panel {
-  min-width: 152px!important;
-  width: 152px!important;
-  transform: translate(6px, 4px)!important;
+.cdk-overlay-pane {
+  .mat-autocomplete-panel.label-panel {
+    min-width: 152px!important;
+    width: 152px!important;
+    transform: translateY(-7px);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  
+    .mat-option {
+      padding: 0px 8px;
+    }
+  }
 
-  .mat-option {
-    padding: 0px 8px;
+  &.mat-autocomplete-panel-above {
+    .mat-autocomplete-panel.label-panel {
+      min-width: 152px!important;
+      width: 152px!important;
+      transform: translateY(0px);
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      box-shadow: 0 -10px 16px -5px rgba(16, 19, 54, 0.12);
+    }  
   }
 }

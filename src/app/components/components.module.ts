@@ -49,6 +49,8 @@ import { CampaignAddBroadcastComponent } from './campaign-add-broadcast/campaign
 import { MailListComponent } from './mail-list/mail-list.component';
 import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.component';
 import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
+import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
+import { MaterialAddComponent } from "./material-add/material-add.component";
 
 @NgModule({
   declarations: [
@@ -98,7 +100,9 @@ import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-d
     CampaignAddBroadcastComponent,
     MailListComponent,
     CustomFieldAddComponent,
-    CustomFieldDeleteComponent
+    CustomFieldDeleteComponent,
+    AutomationAssignComponent,
+    MaterialAddComponent
   ],
   imports: [
     CommonModule,

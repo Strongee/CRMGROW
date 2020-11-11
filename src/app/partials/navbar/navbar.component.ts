@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
@@ -44,6 +45,7 @@ export class NavbarComponent implements OnInit {
         this.dialog.open(TaskCreateComponent, DialogSettings.TASK);
         break;
       case 'note':
+        this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
         break;
       case 'message':
         break;

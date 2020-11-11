@@ -66,8 +66,17 @@ export class AutomationService extends HttpService {
       );
   }
   create(body): Observable<Automation[]> {
+    return this.httpClient.post(this.server + AUTOMATION.CREATE, body).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET AUTOMATION STATUS', []))
+    );
+  }
+  bulkAssign(contacts, automation): Observable<Automation[]> {
     return this.httpClient
-      .post(this.server + AUTOMATION.CREATE, body)
+      .post(this.server + AUTOMATION.ASSIGN, {
+        contacts,
+        automation_id: automation
+      })
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('GET AUTOMATION STATUS', []))
