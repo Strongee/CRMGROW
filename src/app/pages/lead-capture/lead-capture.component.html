@@ -18,7 +18,7 @@
                 <label class="custom-control-label" for="{{field.field_name}}"></label>
             </div>
             <div class="v-center" *ngIf="field.type == 'isNew'">
-                <i class="d-block i-icon i-edit bgc-blue ml-3 c-pointer" (click)="editField()"></i>
+                <i class="d-block i-icon i-edit bgc-blue ml-3 c-pointer" (click)="editField(field)"></i>
                 <i class="d-block i-icon i-trash bgc-red ml-3 c-pointer" (click)="deleteField(field)"></i>
             </div>
         </div>

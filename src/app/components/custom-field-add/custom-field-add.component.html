@@ -1,7 +1,12 @@
 <div class="v-center justify-content-between">
-    <h1 class="m-0" mat-dialog-title>
+    <h1 class="m-0" mat-dialog-title *ngIf="customFieldType == 'create'; else editCustomField">
         Add custom field
     </h1>
+    <ng-template #editCustomField>
+        <h1 class="m-0" mat-dialog-title>
+            Edit custom field
+        </h1>
+    </ng-template>
     <i class="d-block i-icon i-close bgc-dark" mat-dialog-close></i>
 </div>
 <mat-dialog-content>

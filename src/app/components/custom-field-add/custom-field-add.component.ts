@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-custom-field-add',
@@ -12,9 +12,22 @@ export class CustomFieldAddComponent implements OnInit {
   suggestion = '';
   option_id = 1;
   options = [{ name: 'Select 1', id: 'option1' }];
-  constructor(private dialogRef: MatDialogRef<CustomFieldAddComponent>) {}
+  customFieldType = '';
+  constructor(
+    private dialogRef: MatDialogRef<CustomFieldAddComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.data) {
+      this.customFieldType = 'update';
+      console.log('###', this.data);
+      this.fieldName = this.data.field.field_name;
+      this.suggestion = this.data.field.placeholder;
+    } else {
+      this.customFieldType = 'create';
+    }
+  }
 
   addField(): void {
     if (this.typeOption == 'text') {
