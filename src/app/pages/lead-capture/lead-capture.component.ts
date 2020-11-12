@@ -3,6 +3,8 @@ import { DELAY } from 'src/app/constants/variable.constants';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/custom-field-add.component';
 import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-delete/custom-field-delete.component';
+import { Garbage } from 'src/app/models/garbage.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-lead-capture',
@@ -17,8 +19,15 @@ export class LeadCaptureComponent implements OnInit {
     { field_name: 'Text', placeholder: '', options: [], type: 'admin' },
     { field_name: 'Eamil', placeholder: '', options: [], type: 'admin' }
   ];
+  garbage: Garbage = new Garbage();
+  saving = false;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, public userService: UserService) {
+    this.userService.garbage$.subscribe((res) => {
+      this.garbage = new Garbage().deserialize(res);
+      console.log('this.garbage', this.garbage);
+    });
+  }
 
   ngOnInit(): void {}
 
