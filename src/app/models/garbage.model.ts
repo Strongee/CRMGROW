@@ -54,7 +54,18 @@ export class Garbage implements Deserializable {
     period: 0,
     content: ''
   };
-  auto_resent = {
+  auto_resend = {
+    enabled: false,
+    period: 24,
+    sms_canned_message: '',
+    email_canned_message: ''
+  };
+  auto_follow_up2 = {
+    enabled: false,
+    period: 0,
+    content: ''
+  };
+  auto_resend2 = {
     enabled: false,
     period: 24,
     sms_canned_message: '',
@@ -70,6 +81,14 @@ export class Garbage implements Deserializable {
     email: string;
     link: string;
   };
+  additional_fields: {
+    id: string;
+    type: string;
+    name: string;
+    placeholder: string;
+    status: boolean;
+    options: { value: string; label: string }[];
+  }[];
 
   deserialize(input: any): this {
     Object.entries(input).forEach(([key, value]) => {
