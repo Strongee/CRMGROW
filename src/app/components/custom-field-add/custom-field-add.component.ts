@@ -80,13 +80,12 @@ export class CustomFieldAddComponent implements OnInit {
   }
 
   optionChange(evt: any): void {
-    if (
-      this.options.length !=
-      this.options.filter((option) => option.name == evt).length
-    ) {
-      this.isSame = false;
-    } else {
-      this.isSame = true;
+    if (this.options.length > 1) {
+      if (this.options.filter((option) => option.name == evt).length > 1) {
+        this.isSame = true;
+      } else {
+        this.isSame = false;
+      }
     }
   }
 }
