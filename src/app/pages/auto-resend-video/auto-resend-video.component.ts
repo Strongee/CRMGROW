@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DELAY } from '../../constants/variable.constants';
+import { AUTO_RESEND_DELAY } from '../../constants/variable.constants';
 
 @Component({
   selector: 'app-auto-resend-video',
@@ -17,7 +17,7 @@ export class AutoResendVideoComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.delays = DELAY;
+    this.delays = AUTO_RESEND_DELAY;
   }
 
   selectFinishEmailTemplate(event): void {
