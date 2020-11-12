@@ -74,13 +74,14 @@
                                     <input
                                         class="form-control"
                                         type="text"
-                                        name="dropdown_option_{{option.id}}"
-                                        [(ngModel)]="option.name"
-                                        (ngModelChange)="optionChange($event)"
+                                        name="option-{{option.value}}"
+                                        [(ngModel)]="option.label"
+                                        (ngModelChange)="optionNameChange($event)"
+                                        (change)="optionValueChange(option)"
                                         required
                                     />
                                 </div>
-                                <span class="f-1 font-weightb-bold c-blue ml-3 c-pointer" (click)="deleteOption(option.id)">Delete</span>
+                                <span class="f-1 font-weightb-bold c-blue ml-3 c-pointer" (click)="deleteOption(option.label)">Delete</span>
                             </div>
                             <span class="invalid-option mt-1" *ngIf="isSame">
                                 Duplicated options is existing.

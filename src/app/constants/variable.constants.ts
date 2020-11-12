@@ -311,7 +311,7 @@ export const REMINDER = [
   { id: '60', text: '1 hour' }
 ];
 export const DELAY = [
-  { id: '', text: 'Immediately' },
+  { id: '0', text: 'Immediately' },
   { id: '1', text: '1 min' },
   { id: '2', text: '2 min' },
   { id: '3', text: '3 min' },
@@ -324,7 +324,7 @@ export const DELAY = [
   { id: '10', text: '10 min' }
 ];
 export const AUTO_FOLLOW_DELAY = [
-  { id: '', text: 'Immediately' },
+  { id: '0', text: 'Immediately' },
   { id: '1', text: '1 hour' },
   { id: '6', text: '6 hours' },
   { id: '12', text: '12 hours' },
@@ -335,7 +335,7 @@ export const AUTO_FOLLOW_DELAY = [
   { id: '336', text: '2 weeks' }
 ];
 export const AUTO_RESEND_DELAY = [
-  { id: '', text: 'Immediately' },
+  { id: '0', text: 'Immediately' },
   { id: '0.5', text: '12 hours' },
   { id: '1', text: '1 day' },
   { id: '2', text: '2 days' },
