@@ -43,14 +43,22 @@ export class LeadCaptureComponent implements OnInit {
   }
 
   editField(editData: any): void {
-    this.dialog.open(CustomFieldAddComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '400px',
-      data: {
-        field: editData
-      }
-    });
+    this.dialog
+      .open(CustomFieldAddComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          field: editData
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res.mode == 'text') {
+          editData.field_name = res.field;
+          editData.placeholder = res.placeholder;
+        }
+      });
   }
 
   deleteField(deleteData: any): void {
