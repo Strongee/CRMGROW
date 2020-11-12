@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { TagEditComponent } from 'src/app/components/tag-edit/tag-edit.component';
 
 @Component({
   selector: 'app-tag-manager',
@@ -46,7 +48,25 @@ export class TagManagerComponent implements OnInit {
     }
   ];
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {}
+
+  editTag(editData: any): void {
+    this.dialog
+      .open(TagEditComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          tagName: editData.label
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          editData.label = res;
+        }
+      });
+  }
 }

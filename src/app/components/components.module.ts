@@ -50,10 +50,11 @@ import { MailListComponent } from './mail-list/mail-list.component';
 import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.component';
 import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
 import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
-import { MaterialAddComponent } from "./material-add/material-add.component";
+import { MaterialAddComponent } from './material-add/material-add.component';
 import { AssistantCreateComponent } from './assistant-create/assistant-create.component';
 import { AssistantPasswordComponent } from './assistant-password/assistant-password.component';
 import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
+import { TagEditComponent } from './tag-edit/tag-edit.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +109,8 @@ import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.co
     MaterialAddComponent,
     AssistantCreateComponent,
     AssistantPasswordComponent,
-    AssistantRemoveComponent
+    AssistantRemoveComponent,
+    TagEditComponent
   ],
   imports: [
     CommonModule,
@@ -143,7 +145,8 @@ import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.co
     LabelSelectComponent,
     MailListComponent,
     CustomFieldAddComponent,
-    CustomFieldDeleteComponent
+    CustomFieldDeleteComponent,
+    TagEditComponent
   ],
   bootstrap: [
     ContactCreateComponent,
