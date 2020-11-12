@@ -19,7 +19,9 @@
             opacity: 1;
         }
         .required-field {
-            width: 150px;
+            .field-name {
+                width: 150px;
+            }
         }
     }
     .btn-blue {
