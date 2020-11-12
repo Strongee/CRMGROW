@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DELAY } from '../../constants/variable.constants';
+import { AUTO_FOLLOW_DELAY } from '../../constants/variable.constants';
 
 @Component({
   selector: 'app-auto-follow-up',
@@ -15,6 +15,6 @@ export class AutoFollowUpComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.delays = DELAY;
+    this.delays = AUTO_FOLLOW_DELAY;
   }
 }

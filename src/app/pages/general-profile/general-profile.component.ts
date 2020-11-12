@@ -74,6 +74,7 @@ export class GeneralProfileComponent implements OnInit {
   }
 
   updateProfile(form: any): void {
+    console.log('###', form);
     this.userService.updateProfile(form).subscribe((data) => {
       this.userService.updateProfileImpl(data);
     });

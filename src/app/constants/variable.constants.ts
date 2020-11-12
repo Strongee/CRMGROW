@@ -323,6 +323,26 @@ export const DELAY = [
   { id: '9', text: '9 min' },
   { id: '10', text: '10 min' }
 ];
+export const AUTO_FOLLOW_DELAY = [
+  { id: '', text: 'Immediately' },
+  { id: '1', text: '1 hour' },
+  { id: '6', text: '6 hours' },
+  { id: '12', text: '12 hours' },
+  { id: '24', text: '1 day' },
+  { id: '48', text: '2 days' },
+  { id: '72', text: '3 days' },
+  { id: '168', text: '1 week' },
+  { id: '336', text: '2 weeks' }
+];
+export const AUTO_RESEND_DELAY = [
+  { id: '', text: 'Immediately' },
+  { id: '0.5', text: '12 hours' },
+  { id: '1', text: '1 day' },
+  { id: '2', text: '2 days' },
+  { id: '3', text: '3 days' },
+  { id: '7', text: '1 week' },
+  { id: '14', text: '2 weeks' }
+];
 export const CALL_REQUEST_DURATION = [
   '15 mins',
   '30 mins',
