@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <label for="option">options</label>
                             <div class="v-center mb-3" *ngFor="let option of options">
-                                <div class="dropdown-option">
+                                <div class="dropdown-option w-100">
                                     <input
                                         class="form-control"
                                         type="text"
@@ -78,6 +78,7 @@
                                         #dropdown_option_{{option.id}}="ngModel"
                                         [(ngModel)]="option.name"
                                         (ngModelChange)="optionChange($event)"
+                                        [required]="isSame"
                                     />
                                     <span class="invalid-feedback" *ngIf="isSame">
                                         This option is already exist.

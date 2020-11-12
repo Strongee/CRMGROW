@@ -80,10 +80,8 @@ export class CustomFieldAddComponent implements OnInit {
   }
 
   optionChange(evt: any): void {
-    const state = this.options.filter((option) => option.name == evt);
-    console.log('###', state);
     if (
-      this.options.length !==
+      this.options.length !=
       this.options.filter((option) => option.name == evt).length
     ) {
       this.isSame = false;
