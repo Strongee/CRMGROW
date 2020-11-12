@@ -48,7 +48,10 @@ import { LabelSelectComponent } from './label-select/label-select.component';
 import { CampaignAddBroadcastComponent } from './campaign-add-broadcast/campaign-add-broadcast.component';
 import { MailListComponent } from './mail-list/mail-list.component';
 import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
-import { MaterialAddComponent } from "./material-add/material-add.component";
+import { MaterialAddComponent } from './material-add/material-add.component';
+import { NotifyComponent } from './notify/notify.component';
+import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
+import { ShareSiteComponent } from './share-site/share-site.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +101,10 @@ import { MaterialAddComponent } from "./material-add/material-add.component";
     CampaignAddBroadcastComponent,
     MailListComponent,
     AutomationAssignComponent,
-    MaterialAddComponent
+    MaterialAddComponent,
+    NotifyComponent,
+    SafeHtmlPipe,
+    ShareSiteComponent
   ],
   imports: [
     CommonModule,

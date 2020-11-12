@@ -598,3 +598,48 @@ export const BulkActions = {
 };
 
 export const ContactPageSize = 50;
+
+export const Labels = [
+  {
+    id: '',
+    text: 'No Label'
+  },
+  {
+    id: 'New',
+    text: 'New'
+  },
+  {
+    id: 'Cold',
+    text: 'Cold'
+  },
+  {
+    id: 'Warm',
+    text: 'Warm'
+  },
+  {
+    id: 'Hot',
+    text: 'Hot'
+  },
+  {
+    id: 'Team',
+    text: 'Team'
+  },
+  {
+    id: 'Trash',
+    text: 'Trash'
+  },
+  {
+    id: 'Appt set',
+    text: 'Appt set'
+  },
+  {
+    id: 'Appt Missed',
+    text: 'Appt Missed'
+  },
+  {
+    id: 'Lead',
+    text: 'Lead'
+  }
+];
+
+export const TeamLabel = '5f16d58d0af09220208b6e0b';

@@ -44,6 +44,7 @@ import { DealsComponent } from '../../pages/deals/deals.component';
 import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.component';
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
+import { MoneyPipe } from '../../pipes/money.pipe';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { VideoCreateComponent } from '../../pages/video-create/video-create.comp
     DealsComponent,
     DealsDetailComponent,
     AutoflowComponent,
-    VideoCreateComponent
+    VideoCreateComponent,
+    MoneyPipe
   ],
   imports: [
     CommonModule,
