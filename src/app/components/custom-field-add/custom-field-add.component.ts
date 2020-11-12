@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -11,10 +11,14 @@ export class CustomFieldAddComponent implements OnInit {
   typeOption = 'text';
   suggestion = '';
   option_id = 1;
-  options = [{ name: 'Select 1', id: 'option1' }];
+  options = [{ name: '', id: 'option1' }];
   customFieldType = '';
+  submitted = false;
+  isSame = false;
+
   constructor(
     private dialogRef: MatDialogRef<CustomFieldAddComponent>,
+    private changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -59,7 +63,7 @@ export class CustomFieldAddComponent implements OnInit {
   addOption(): void {
     this.option_id++;
     const data = {
-      name: 'Select 1',
+      name: '',
       id: 'option' + this.option_id
     };
     this.options.push(data);
@@ -69,5 +73,22 @@ export class CustomFieldAddComponent implements OnInit {
     const options = this.options.filter((option) => option.id != optionId);
     this.options = [];
     this.options = options;
+  }
+
+  close(): void {
+    this.dialogRef.close();
+  }
+
+  optionChange(evt: any): void {
+    const state = this.options.filter((option) => option.name == evt);
+    console.log('###', state);
+    if (
+      this.options.length !==
+      this.options.filter((option) => option.name == evt).length
+    ) {
+      this.isSame = false;
+    } else {
+      this.isSame = true;
+    }
   }
 }

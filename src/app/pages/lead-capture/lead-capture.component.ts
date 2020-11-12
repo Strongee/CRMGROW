@@ -31,22 +31,24 @@ export class LeadCaptureComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res.mode == 'text') {
-          const data = {
-            field_name: res.field,
-            placeholder: res.placeholder,
-            options: [],
-            type: 'isNew'
-          };
-          this.required_fields.push(data);
-        } else {
-          const data = {
-            field_name: res.field,
-            placeholder: '',
-            options: res.options,
-            type: 'isNew'
-          };
-          this.required_fields.push(data);
+        if (res) {
+          if (res.mode == 'text') {
+            const data = {
+              field_name: res.field,
+              placeholder: res.placeholder,
+              options: [],
+              type: 'isNew'
+            };
+            this.required_fields.push(data);
+          } else {
+            const data = {
+              field_name: res.field,
+              placeholder: '',
+              options: res.options,
+              type: 'isNew'
+            };
+            this.required_fields.push(data);
+          }
         }
       });
   }
