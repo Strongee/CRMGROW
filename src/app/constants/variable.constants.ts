@@ -336,12 +336,12 @@ export const AUTO_FOLLOW_DELAY = [
 ];
 export const AUTO_RESEND_DELAY = [
   { id: '0', text: 'Immediately' },
-  { id: '0.5', text: '12 hours' },
-  { id: '1', text: '1 day' },
-  { id: '2', text: '2 days' },
-  { id: '3', text: '3 days' },
-  { id: '7', text: '1 week' },
-  { id: '14', text: '2 weeks' }
+  { id: '12', text: '12 hours' },
+  { id: '24', text: '1 day' },
+  { id: '48', text: '2 days' },
+  { id: '72', text: '3 days' },
+  { id: '168', text: '1 week' },
+  { id: '336', text: '2 weeks' }
 ];
 export const CALL_REQUEST_DURATION = [
   '15 mins',
