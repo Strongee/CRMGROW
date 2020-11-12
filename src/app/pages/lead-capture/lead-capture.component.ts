@@ -13,9 +13,9 @@ export class LeadCaptureComponent implements OnInit {
   times = DELAY;
   delay_time = '';
   required_fields = [
-    { field_name: 'Name', placeholder: '', type: 'admin' },
-    { field_name: 'Text', placeholder: '', type: 'admin' },
-    { field_name: 'Eamil', placeholder: '', type: 'admin' }
+    { field_name: 'Name', placeholder: '', options: [], type: 'admin' },
+    { field_name: 'Text', placeholder: '', options: [], type: 'admin' },
+    { field_name: 'Eamil', placeholder: '', options: [], type: 'admin' }
   ];
 
   constructor(private dialog: MatDialog) {}
@@ -35,6 +35,15 @@ export class LeadCaptureComponent implements OnInit {
           const data = {
             field_name: res.field,
             placeholder: res.placeholder,
+            options: [],
+            type: 'isNew'
+          };
+          this.required_fields.push(data);
+        } else {
+          const data = {
+            field_name: res.field,
+            placeholder: '',
+            options: res.options,
             type: 'isNew'
           };
           this.required_fields.push(data);

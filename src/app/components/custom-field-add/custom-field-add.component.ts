@@ -22,6 +22,16 @@ export class CustomFieldAddComponent implements OnInit {
     if (this.data) {
       this.customFieldType = 'update';
       this.fieldName = this.data.field.field_name;
+      if (this.data.field.placeholder) {
+        this.suggestion = this.data.field.placeholder;
+        this.typeOption = 'text';
+      }
+      if (this.data.field.options) {
+        this.options = this.data.field.options;
+        this.typeOption = 'dropdown';
+      }
+      this.customFieldType = 'update';
+      this.fieldName = this.data.field.field_name;
       this.suggestion = this.data.field.placeholder;
     } else {
       this.customFieldType = 'create';
@@ -38,6 +48,7 @@ export class CustomFieldAddComponent implements OnInit {
       this.dialogRef.close(data);
     } else {
       const data = {
+        field: this.fieldName,
         options: this.options,
         mode: 'dropdown'
       };
