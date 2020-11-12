@@ -1,34 +1,34 @@
-<form #paymentForm="ngForm" (ngSubmit)="paymentSubmitted=true; paymentForm.form.valid ? createBill() : false;">
+<form #paymentForm="ngForm" (ngSubmit)="paymentForm.form.valid ? createBill() : false;">
     <span class="f-4 font-weight-bold mb-1">Detail information</span>
-    <div class="row">
-        <div class="col-lg-3 col-md-8 form-group">
+    <div class="row payment-form px-2">
+        <div class="form-group payment-card-img">
             <label for="payment-method" class="font-weight-bold mr-auto">payment method</label>
-            <div class="payment-card">
+            <div class="payment-card d-flex flex-column">
                 <div class="f-1 font-weight-bold p-3">
                     CREDIT CARD
                 </div>
-                <div class="card-type px-3 pt-4">
-                    <ng-container [ngSwitch]="payment.card_brand">
-                        <img src="../../../assets/img/visa.svg" *ngSwitchCase="'Visa'">
-                        <img src="../../../assets/img/amex.svg" *ngSwitchCase="'Amex'">
-                        <img src="../../../assets/img/master.svg" *ngSwitchCase="'Mastercard'">
-                        <img src="../../../assets/img/jcb.svg" *ngSwitchCase="'Jcb'">
-                        <img src="../../../assets/img/discover.svg" *ngSwitchCase="'Discover'">
-                        <img src="../../../assets/img/diners.svg" *ngSwitchCase="'Diners'">
+                <div class="card-type px-3 pt-4 mt-auto">
+                    <ng-container [ngSwitch]="card.card_brand">
+                        <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'visa'">
+                        <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">
+                        <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">
+                        <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">
+                        <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">
+                        <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">
                     </ng-container>
                 </div>
                 <div class="v-center justify-content-between px-3 pb-3">
                     <div class="f-4 font-weight-bold">
-                        {{payment.exp_month}}/{{payment.exp_year}}
+                        {{card.exp_month}}/{{card.exp_year}}
                     </div>
                     <div class="f-4 font-weight-bold">
-                        ****{{payment.last4}}
+                        ****{{card.last4}}
                     </div>
                 </div>
             </div>
             <div class="f-1 text-center mt-4 px-5 unsubscribe">If you want to unsubscribe your payment method click <a class="c-dark c-pointer">here</a>.</div>
         </div>
-        <div class="col-lg-4 col-md-8 ml-lg-3 ml-md-0">
+        <div class="ml-lg-3 ml-md-0 pyament-card-form">
             <div class="form-group" [ngClass]="{invalid: paymentForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || paymentForm.submitted)}">
                 <div class="d-flex justify-content-between">
                     <label for="card_name">name on card</label>
@@ -57,6 +57,7 @@
                     required
                     minlength="{{cardNumberLen}}"
                     [cleave]="creditCardInput"
+                    (ngModelChange)="changeLast4Code()"
                 >
             </div>
             <div class="row">
@@ -65,7 +66,8 @@
                         <div class="v-center justify-content-between">
                             <div class="v-center">
                                 <label for="card_cvc" class="mt-3 mr-2">card cvc</label>
-                                <div class="v-center justify-content-center f-3 font-weight-bold text-white bgc-blue cvc-icon">i</div>
+                                <div class="v-center justify-content-center f-3 font-weight-bold text-white bgc-blue cvc-icon c-pointer" placement="right"
+                                ngbPopover="This is the 3 digit code found on the back of your card. If you have an American Express credit card, this is the 4 digit code on the front of your card.">i</div>
                             </div>
                             <span class="error mt-2" *ngIf="cardcvc.errors">
                                 <ng-container *ngIf="cardcvc.errors.required">Required!</ng-container>
@@ -89,26 +91,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 pr-md-1">
-                  <div class="form-group" [class.has-error]="expMonth.errors && (expMonth.touched || expMonth.dirty || paymentSubmitted ) && paymentSubmitted">
+                <div class="col-sm-6 pr-md-1">
+                  <div class="form-group" [class.has-error]="expMonth.errors && (expMonth.touched || expMonth.dirty || paymentForm.submitted ) && paymentForm.submitted">
                     <label for="expMonth">Exp Month</label>
                     <select class="form-control br-default f-3 font-weight-bold text-primary" id="expMonth" [(ngModel)]="card.exp_month" required name="expMonth" #expMonth="ngModel">
                       <option value="" selected disabled>Select Month</option>
-                      <option *ngFor="let month of months" [value]="month.id">{{month.text}}</option>
+                      <option *ngFor="let month of MONTHS" [value]="month.id">{{month.text}}</option>
                     </select>
-                    <span class="invalid-feedback" *ngIf="expMonth.errors && (expMonth.touched || expMonth.dirty || paymentSubmitted ) && paymentSubmitted">
+                    <span class="invalid-feedback" *ngIf="expMonth.errors && (expMonth.touched || expMonth.dirty || paymentForm.submitted ) && paymentForm.submitted">
                       Expiry month is invalid.
                     </span>
                   </div>
                 </div>
-                <div class="col-md-6 pl-md-1">
-                  <div class="form-group" [class.has-error]="expYear.errors && (expYear.touched || expYear.dirty || paymentSubmitted ) && paymentSubmitted">
+                <div class="col-sm-6 pl-md-1">
+                  <div class="form-group" [class.has-error]="expYear.errors && (expYear.touched || expYear.dirty || paymentForm.submitted ) && paymentForm.submitted">
                     <label for="expYear">Exp Year</label>
                     <select class="form-control br-default f-3 font-weight-bold text-primary" id="expYear" [(ngModel)]="card.exp_year" required name="expYear" #expYear="ngModel">
                       <option value="" selected disabled>Select Year</option>
-                      <option *ngFor="let year of years" [value]="year.id">{{year.text}}</option>
+                      <option *ngFor="let year of YEARS" [value]="year.id">{{year.text}}</option>
                     </select>
-                    <span class="invalid-feedback" *ngIf="expYear.errors && (expYear.touched || expYear.dirty || paymentSubmitted ) && paymentSubmitted">
+                    <span class="invalid-feedback" *ngIf="expYear.errors && (expYear.touched || expYear.dirty || paymentForm.submitted ) && paymentForm.submitted">
                       Expiry Year is invalid.
                     </span>
                   </div>
@@ -173,7 +175,7 @@
         </table>
     </div>
     <div class="row">
-        <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4">Cancel</a>
+        <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4" (click)="cancelBill()">Cancel</a>
         <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4">Save changes</button>
     </div>
 </form>

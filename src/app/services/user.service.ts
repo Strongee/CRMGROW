@@ -106,8 +106,15 @@ export class UserService extends HttpService {
       JSON.stringify(data)
     );
   }
+  /**
+   * Load the User Payment Informationi
+   * @param id : Payment Information Id
+   */
   public getPayment(id: string): Observable<any> {
-    return this.httpClient.get(this.server + USER.PAYMENT + id);
+    return this.httpClient.get(this.server + USER.PAYMENT + id).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('LOAD PAYMENT'), {})
+    );
   }
   public setToken(token: string): void {
     localStorage.setItem('token', token);

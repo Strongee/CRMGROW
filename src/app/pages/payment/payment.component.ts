@@ -9,24 +9,34 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./payment.component.scss']
 })
 export class PaymentComponent implements OnInit {
-  user: User = new User();
+  // UI Variables;
+  MONTHS = MONTH;
+  YEARS = YEAR;
+  loading = false;
+  // New Card Information
   card = {
     name: '',
     number: '',
     cvc: '',
     exp_year: '',
-    exp_month: ''
+    exp_month: '',
+    card_brand: '',
+    last4: ''
   };
+  // Current Payment Information
   payment = {
     card_brand: '',
     exp_month: '',
     exp_year: '',
     last4: ''
   };
+  // Card Number Length
   cardNumberLen = 16;
+  // Card Number Input Setting
   creditCardInput = {
     creditCard: true,
     onCreditCardTypeChanged: (type) => {
+      this.card.card_brand = type;
       switch (type) {
         case 'amex':
           this.cardNumberLen = 15;
@@ -45,14 +55,12 @@ export class PaymentComponent implements OnInit {
       }
     }
   };
+  // Card CVC Input Setting
   credCvcInput = {
     numeral: true,
     numeralThousandsGroupStyle: 'wan'
   };
 
-  paymentSubmitted = false;
-  months = MONTH;
-  years = YEAR;
   invoices = [
     {
       number: 'CRMgrow #124577',
@@ -75,22 +83,41 @@ export class PaymentComponent implements OnInit {
   ];
 
   constructor(private userService: UserService) {
+    this.loading = true;
     this.userService.profile$.subscribe((profile) => {
-      this.user = profile;
-      if (this.user.payment) {
-        this.userService.getPayment(this.user.payment).subscribe(
+      if (profile.payment) {
+        this.userService.getPayment(profile.payment).subscribe(
           (res) => {
-            if (res['status']) {
-              this.payment = res['data'];
-            }
+            this.loading = false;
+            this.payment = res;
+            this.card = {
+              ...res,
+              number: this.payment.last4
+            };
           },
-          (err) => {}
+          () => {
+            this.loading = false;
+          }
         );
+      } else {
+        this.loading = false;
       }
     });
   }
 
   ngOnInit(): void {}
 
+  changeLast4Code(): void {
+    const number = this.card.number.replace(' ', '');
+    this.card.last4 = number.substr(number.length - 4, 4);
+  }
   createBill(): void {}
+
+  cancelBill(): void {
+    this.card.number = this.payment.last4;
+    this.card.card_brand = this.payment.card_brand;
+    this.card.exp_month = this.card.exp_month;
+    this.card.exp_year = this.card.exp_year;
+    this.card.cvc = '';
+  }
 }
