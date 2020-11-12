@@ -1,9 +1,100 @@
-<h1 mat-dialog-title>
-    Add custom field
-</h1>
-<mat-dialog-content>
-    <div class="form-group">
-        <label for="field-name">name</label>
-        <input class="form-control" type="text" name="field-name" id="name" [(ngModel)]="fieldName">
-    </div>
-</mat-dialog-content>
+<div class="v-center justify-content-between">
+    <h1 class="m-0" mat-dialog-title *ngIf="customFieldType == 'create'; else editCustomField">
+        Add custom field
+    </h1>
+    <ng-template #editCustomField>
+        <h1 class="m-0" mat-dialog-title>
+            Edit custom field
+        </h1>
+    </ng-template>
+    <i class="d-block i-icon i-close bgc-dark" (click)="close()"></i>
+</div>
+<form
+    #actionForm="ngForm"
+    (ngSubmit)="submitted = true; actionForm.form.valid ? addField() : false"
+    [class.was-validated]="submitted"
+>
+    <mat-dialog-content>
+        <div class="form-group">
+            <label for="field-name">name</label>
+            <input
+                class="form-control"
+                type="text"
+                placeholder="Type in name of your custom field"
+                name="field_name"
+                #field_name="ngModel"
+                id="name"
+                [(ngModel)]="fieldName"
+                required
+            />
+            <span
+                class="invalid-feedback"
+                *ngIf="field_name.errors && (field_name.touched || field_name.dirty || submitted) && submitted"
+            >
+                Field name is required
+            </span>
+        </div>
+        <div class="action-form">
+            <label class="f-1 c-dark op-40 text-uppercase type-label" for="type">type</label>
+            <div class="row">
+                <div class="col-12">
+                    <div class="theme-radios">
+                        <div class="theme-radio">
+                        <input type="radio" class="custom-control-input" id="text_field" name="field_option"
+                                [(ngModel)]="typeOption" #field_option="ngModel" value="text">
+                        <label class="f-3 font-weight-bold custom-theme-label" for="text_field">Text Field</label>
+                        </div>
+                        <div class="theme-radio">
+                        <input type="radio" class="custom-control-input" id="dropdown_field" name="field_option"
+                                [(ngModel)]="typeOption" #field_option="ngModel" value="dropdown">
+                        <label class="f-3 font-weight-bold custom-theme-label" for="dropdown_field">Dropdown</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-2" *ngIf="typeOption === 'text'; else typeDropdown">
+                    <div class="form-group">
+                        <label for="placeholder">placeholder</label>
+                        <input
+                            class="form-control"
+                            type="text"
+                            placeholder="Input suggestion text"
+                            name="suggestion_text"
+                            id="placeholder"
+                            #suggestion_text="ngModel"
+                            [(ngModel)]="suggestion"
+                        />
+                    </div>
+                </div>
+                <ng-template #typeDropdown>
+                    <div class="col-12 mt-2">
+                        <div class="form-group">
+                            <label for="option">options</label>
+                            <div class="v-center mb-3" *ngFor="let option of options">
+                                <div class="dropdown-option w-100">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        name="dropdown_option_{{option.id}}"
+                                        #dropdown_option_{{option.id}}="ngModel"
+                                        [(ngModel)]="option.name"
+                                        (ngModelChange)="optionChange($event)"
+                                        [required]="isSame"
+                                    />
+                                    <span class="invalid-option" *ngIf="isSame">
+                                        This option is already exist.
+                                    </span>
+                                </div>
+                                <span class="f-1 font-weightb-bold c-blue ml-3 c-pointer" (click)="deleteOption(option.id)">Delete</span>
+                            </div>
+                            <a class="v-center justify-content-center btn btn-white-blue w-100 py-2" (click)="addOption()"><i class="d-block i-icon i-plus bgc-blue"></i></a>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <a class="btn btn-white f-6 font-weight-bold c-blue mr-2" (click)="close()">Cancel</a>
+        <button class="btn btn-primary f-6 font-weight-bold" type="submit">Add</button>
+    </mat-dialog-actions>
+</form>

@@ -113,13 +113,13 @@ export class UserService extends HttpService {
   public getPayment(id: string): Observable<any> {
     return this.httpClient.get(this.server + USER.PAYMENT + id).pipe(
       map((res) => res['data']),
-      catchError(this.handleError('LOAD PAYMENT'), {})
+      catchError(this.handleError('LOAD PAYMENT'))
     );
   }
   public setToken(token: string): void {
     localStorage.setItem('token', token);
   }
-  public getToken() {
+  public getToken(): any {
     return localStorage.getItem('token');
   }
 

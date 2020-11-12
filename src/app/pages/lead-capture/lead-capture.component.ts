@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DELAY } from 'src/app/constants/variable.constants';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/custom-field-add.component';
+import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-delete/custom-field-delete.component';
 
 @Component({
   selector: 'app-lead-capture',
@@ -11,18 +12,86 @@ import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/cus
 export class LeadCaptureComponent implements OnInit {
   times = DELAY;
   delay_time = '';
-  required_fields = ['Name', 'Text', 'Email'];
+  required_fields = [
+    { field_name: 'Name', placeholder: '', options: [], type: 'admin' },
+    { field_name: 'Text', placeholder: '', options: [], type: 'admin' },
+    { field_name: 'Eamil', placeholder: '', options: [], type: 'admin' }
+  ];
 
   constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
   addField(): void {
-    this.dialog.open(CustomFieldAddComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '400px'
-    });
+    this.dialog
+      .open(CustomFieldAddComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.mode == 'text') {
+            const data = {
+              field_name: res.field,
+              placeholder: res.placeholder,
+              options: [],
+              type: 'isNew'
+            };
+            this.required_fields.push(data);
+          } else {
+            const data = {
+              field_name: res.field,
+              placeholder: '',
+              options: res.options,
+              type: 'isNew'
+            };
+            this.required_fields.push(data);
+          }
+        }
+      });
+  }
+
+  editField(editData: any): void {
+    this.dialog
+      .open(CustomFieldAddComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          field: editData
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res.mode == 'text') {
+          editData.field_name = res.field;
+          editData.placeholder = res.placeholder;
+        }
+      });
+  }
+
+  deleteField(deleteData: any): void {
+    this.dialog
+      .open(CustomFieldDeleteComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          field: deleteData
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res == true) {
+          const required_fields = this.required_fields.filter(
+            (field) => field.field_name != deleteData.field_name
+          );
+          this.required_fields = [];
+          this.required_fields = required_fields;
+        }
+      });
   }
 
   saveDelay(): void {}
