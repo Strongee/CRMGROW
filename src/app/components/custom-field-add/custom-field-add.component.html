@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 mt-2" *ngIf="typeOption === 'text'; else typeDropdown">
+                <div class="col-12 mt-3" *ngIf="typeOption === 'text'; else typeDropdown">
                     <div class="form-group">
                         <label for="placeholder">placeholder</label>
                         <input
@@ -66,27 +66,26 @@
                     </div>
                 </div>
                 <ng-template #typeDropdown>
-                    <div class="col-12 mt-2">
+                    <div class="col-12 mt-3">
                         <div class="form-group">
-                            <label for="option">options</label>
-                            <div class="v-center mb-3" *ngFor="let option of options">
+                            <label for="option" class="mb-0">options</label>
+                            <div class="v-center mt-3 dropdown-options" *ngFor="let option of options">
                                 <div class="dropdown-option w-100">
                                     <input
                                         class="form-control"
                                         type="text"
                                         name="dropdown_option_{{option.id}}"
-                                        #dropdown_option_{{option.id}}="ngModel"
                                         [(ngModel)]="option.name"
                                         (ngModelChange)="optionChange($event)"
-                                        [required]="isSame"
+                                        required
                                     />
-                                    <span class="invalid-option" *ngIf="isSame">
-                                        This option is already exist.
-                                    </span>
                                 </div>
                                 <span class="f-1 font-weightb-bold c-blue ml-3 c-pointer" (click)="deleteOption(option.id)">Delete</span>
                             </div>
-                            <a class="v-center justify-content-center btn btn-white-blue w-100 py-2" (click)="addOption()"><i class="d-block i-icon i-plus bgc-blue"></i></a>
+                            <span class="invalid-option mt-1" *ngIf="isSame">
+                                Duplicated options is existing.
+                            </span>
+                            <a class="v-center justify-content-center btn btn-white-blue w-100 py-2 mt-3" (click)="addOption()"><i class="d-block i-icon i-plus bgc-blue"></i></a>
                         </div>
                     </div>
                 </ng-template>
