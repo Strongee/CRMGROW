@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TagService } from '../../services/tag.service';
 
 @Component({
   selector: 'app-tag-edit',
@@ -11,7 +12,8 @@ export class TagEditComponent implements OnInit {
   submitted = false;
   constructor(
     private dialogRef: MatDialogRef<TagEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private tagService: TagService
   ) {}
 
   ngOnInit(): void {
@@ -19,6 +21,12 @@ export class TagEditComponent implements OnInit {
   }
 
   updateTag(): void {
-    this.dialogRef.close(this.tagName);
+    this.tagService
+      .tagUpdate(this.data.tagName, this.tagName)
+      .subscribe((res) => {
+        if (res['status'] == true) {
+          this.dialogRef.close(this.tagName);
+        }
+      });
   }
 }

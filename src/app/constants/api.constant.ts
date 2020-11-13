@@ -158,3 +158,9 @@ export const MAILLIST = {
   CREATE: 'mail-list',
   GET: 'mail-list/'
 };
+
+export const TAG = {
+  GET: 'tag/load',
+  UPDATE: 'tag/update',
+  DELETe: 'tag/delete'
+}
