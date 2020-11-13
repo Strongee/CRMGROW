@@ -163,14 +163,20 @@
       </ul>
     </div>
     <div class="sub-container pl-4 flex-grow-1">
-      <ng-container *ngIf="currentPage && !currentId; else itemPage">
-        <app-campaign-list *ngIf="currentPage == 'list'"></app-campaign-list>
-        <app-campaign-bulk-mailing *ngIf="currentPage == 'bulk'"></app-campaign-bulk-mailing>
+      <ng-container [ngSwitch]="currentPageType">
+        <ng-container *ngSwitchCase="'list'">
+          <app-campaign-list *ngIf="!detailID.list; else detailListTemplate" (onDetail)="changePage('list', $event)"></app-campaign-list>
+          <ng-template #detailListTemplate>
+            <app-campaign-list-item></app-campaign-list-item>
+          </ng-template>
+        </ng-container>
+        <ng-container *ngSwitchCase="'bulk'">
+          <app-campaign-bulk-mailing *ngIf="!detailID.list; else detailBulkTemplate"></app-campaign-bulk-mailing>
+          <ng-template #detailBulkTemplate>
+            <app-campaign-list-item></app-campaign-list-item>
+          </ng-template>
+        </ng-container>
       </ng-container>
-      <ng-template #itemPage>
-        <app-campaign-list-item *ngIf="currentPage == 'list'"></app-campaign-list-item>
-        <app-campaign-bulk-mailing *ngIf="currentPage == 'bulk'"></app-campaign-bulk-mailing>
-      </ng-template>
     </div>
   </div>
 </div>

@@ -13,28 +13,43 @@ export class CampaignComponent implements OnInit, AfterViewInit {
     { id: 'bulk', icon: 'i-bulk', label: 'Bulk Mailing' }
   ];
   defaultPage = 'list';
-  currentPage: string;
-  currentId: string;
+  currentPageType: string;
+  detailID = {
+    list: null,
+    bulk: null
+  };
 
   constructor(private location: Location, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.currentPage = this.route.snapshot.params['page'] || this.defaultPage;
-    this.currentId = this.route.snapshot.params['id'];
+    this.currentPageType =
+      this.route.snapshot.params['page'] || this.defaultPage;
+    this.detailID[this.currentPageType] = this.route.snapshot.params['id'];
   }
+  /**
+   * Change the Page Type and Reset the Current List Id
+   * Replace the Routing
+   * @param menu: Page Sub Menu Item
+   */
   changeMenu(menu: PageMenuItem): void {
-    this.currentPage = menu.id;
-    console.log('page ==========>', this.currentPage);
-    console.log('id ===========>', this.currentId);
     this.location.replaceState(`campaign/${menu.id}`);
-    this.currentId = null;
+    this.currentPageType = menu.id;
+    this.detailID = {
+      list: null,
+      bulk: null
+    };
   }
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.currentPage = this.route.snapshot.params['page'];
-      this.currentId = this.route.snapshot.params['id'];
-    }, 300);
+  /**
+   * Change the Page type and go to detail page
+   * @param type : Page List Type
+   * @param id : Detail Page Id
+   */
+  changePage(type: string, id: string): void {
+    this.location.replaceState(`campaign/${type}/${id}`);
+    this.currentPageType = type;
+    this.detailID[type] = id;
   }
+  ngAfterViewInit(): void {}
   // listCount;
   // bulkLists = [];
   // selected = 1;

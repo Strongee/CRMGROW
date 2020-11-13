@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  EventEmitter
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -15,6 +22,8 @@ export class CampaignListComponent implements OnInit {
   listCount;
   selected = 1;
   selectedLists = new SelectionModel<any>(true, []);
+
+  @Output() onDetail: EventEmitter<string> = new EventEmitter();
   constructor(private location: Location, private dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -34,8 +43,12 @@ export class CampaignListComponent implements OnInit {
     }
   }
 
-  routingToItem(id): void {
-    this.location.replaceState('/campaign/list/' + id);
+  /**
+   * Emit the Parent Event to go to detail page
+   * @param id : list ID
+   */
+  goToDetailPage(id: string): void {
+    this.onDetail.emit(id);
   }
 
   isSelectedPage(): any {
