@@ -11,7 +11,7 @@ export class CustomFieldAddComponent implements OnInit {
   typeOption = 'text';
   suggestion = '';
   option_id = 1;
-  options = [{ name: '', id: 'option1' }];
+  options = [{ label: '', value: 'option-1' }];
   customFieldType = '';
   submitted = false;
   isSame = false;
@@ -63,14 +63,16 @@ export class CustomFieldAddComponent implements OnInit {
   addOption(): void {
     this.option_id++;
     const data = {
-      name: '',
-      id: 'option' + this.option_id
+      label: '',
+      value: 'option-' + this.option_id
     };
     this.options.push(data);
   }
 
-  deleteOption(optionId: string): void {
-    const options = this.options.filter((option) => option.id != optionId);
+  deleteOption(optionLabel: string): void {
+    const options = this.options.filter(
+      (option) => option.label != optionLabel
+    );
     this.options = [];
     this.options = options;
   }
@@ -79,13 +81,17 @@ export class CustomFieldAddComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  optionChange(evt: any): void {
+  optionNameChange(evt: any): void {
     if (this.options.length > 1) {
-      if (this.options.filter((option) => option.name == evt).length > 1) {
+      if (this.options.filter((option) => option.label == evt).length > 1) {
         this.isSame = true;
       } else {
         this.isSame = false;
       }
     }
+  }
+
+  optionValueChange(option: any): void {
+    option.value = option.label.replace(' ', '-');
   }
 }

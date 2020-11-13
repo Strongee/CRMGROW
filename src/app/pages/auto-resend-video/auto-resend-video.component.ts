@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DELAY } from '../../constants/variable.constants';
+import { AUTO_RESEND_DELAY } from '../../constants/variable.constants';
+import { Garbage } from 'src/app/models/garbage.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-auto-resend-video',
@@ -7,32 +9,42 @@ import { DELAY } from '../../constants/variable.constants';
   styleUrls: ['./auto-resend-video.component.scss']
 })
 export class AutoResendVideoComponent implements OnInit {
-  finishEmailTemplate = { subject: '', content: '' };
-  finishSmsTemplate = { subject: '', content: '' };
-  watchEmailTemplate = { subject: '', content: '' };
-  watchSmsTemplate = { subject: '', content: '' };
-  finish_delay_time = '';
-  watch_delay_time = '';
   delays;
-  constructor() {}
+  garbage: Garbage = new Garbage();
+  saving = false;
+  constructor(public userService: UserService) {
+    this.userService.garbage$.subscribe((res) => {
+      this.garbage = new Garbage().deserialize(res);
+    });
+  }
 
   ngOnInit(): void {
-    this.delays = DELAY;
+    this.delays = AUTO_RESEND_DELAY;
   }
 
-  selectFinishEmailTemplate(event): void {
-    this.finishEmailTemplate = event;
+  selectTemplate(event: any, resend_data: any, type: string): void {
+    if (type == 'email') {
+      resend_data.email_canned_message = event.title;
+    }
+    if (type == 'sms') {
+      resend_data.sms_canned_message = event.title;
+    }
   }
 
-  selectFinishSmsTemplate(event): void {
-    this.finishSmsTemplate = event;
+  changeToggle(evt: any, resend_data: any): void {
+    resend_data.enabled = evt.target.checked;
   }
 
-  selectWatchEmailTemplate(event): void {
-    this.watchEmailTemplate = event;
-  }
-
-  selectWatchSmsTemplate(event): void {
-    this.watchSmsTemplate = event;
+  save(): void {
+    this.saving = true;
+    this.userService.updateGarbage(this.garbage).subscribe(
+      () => {
+        this.saving = false;
+        this.userService.updateGarbageImpl(this.garbage);
+      },
+      () => {
+        this.saving = false;
+      }
+    );
   }
 }

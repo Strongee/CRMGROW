@@ -6,7 +6,7 @@
             </div>
             <div class="v-center custom-control custom-switch">
                 <label class="custom-toggle mb-0" placement="top">
-                  <input type="checkbox">
+                  <input type="checkbox" [checked]="garbage.auto_resend.enabled" (change)="changeToggle($event, garbage.auto_resend)">
                   <span class="custom-toggle-slider rounded-circle"></span>
                 </label>
             </div>
@@ -28,7 +28,7 @@
                     <app-input-template
                         [type]="'email'"
                         [placeholder]="'Click here to assign an email template'"
-                        (onSelect)="selectFinishEmailTemplate($event)">
+                        (onSelect)="selectTemplate($event, garbage.auto_resend, 'email')">
                     </app-input-template>
                 </div>
                 <div class="search-sms mt-3">
@@ -38,7 +38,7 @@
                     <app-input-template
                         [type]="'text'"
                         [placeholder]="'Click here to assign an sms template'"
-                        (onSelect)="selectFinishSmsTemplate($event)">
+                        (onSelect)="selectTemplate($event, garbage.auto_resend, 'sms')">
                     </app-input-template>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <select class="form-control f-3 font-weight-bold" [(ngModel)]="finish_delay_time" name="delay" id="finish-delay" required #delay="ngModel">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="garbage.auto_resend.period" name="delay" id="finish-delay" required #delay="ngModel">
                     <option *ngFor="let delay of delays" value="{{delay.id}}">
                         {{delay.text}}
                       </option>
@@ -68,7 +68,7 @@
             </div>
             <div class="v-center custom-control custom-switch">
                 <label class="custom-toggle mb-0" placement="top">
-                  <input type="checkbox">
+                  <input type="checkbox" [checked]="garbage.auto_resend2.enabled" (change)="changeToggle($event, garbage.auto_resend2)">
                   <span class="custom-toggle-slider rounded-circle"></span>
                 </label>
             </div>
@@ -90,7 +90,7 @@
                     <app-input-template
                         [type]="'email'"
                         [placeholder]="'Click here to assign an email template'"
-                        (onSelect)="selectWatchEmailTemplate($event)">
+                        (onSelect)="selectTemplate($event, garbage.auto_resend2, 'email')">
                     </app-input-template>
                 </div>
                 <div class="search-sms mt-3">
@@ -100,7 +100,7 @@
                     <app-input-template
                         [type]="'text'"
                         [placeholder]="'Click here to assign an sms template'"
-                        (onSelect)="selectWatchSmsTemplate($event)">
+                        (onSelect)="selectTemplate($event, garbage.auto_resend2, 'sms')">
                     </app-input-template>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <select class="form-control f-3 font-weight-bold" [(ngModel)]="watch_delay_time" name="delay" id="watch-delay" required #delay="ngModel">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="garbage.auto_resend2.period" name="delay" id="watch-delay" required #delay="ngModel">
                     <option *ngFor="let delay of delays" value="{{delay.id}}">
                         {{delay.text}}
                       </option>
@@ -125,6 +125,6 @@
     </div>
     <div class="v-center justify-content-end mt-3">
         <button class="btn btn-white f-6 font-weight-bold mr-2">Cancel</button>
-        <button class="btn btn-blue f-6 font-weight-bold">Save changes</button>
+        <button class="btn btn-blue f-6 font-weight-bold" (click)="save()" [class.loading]="saving">Save changes</button>
     </div>
 </div>

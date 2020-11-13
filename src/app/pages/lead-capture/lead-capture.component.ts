@@ -3,6 +3,8 @@ import { DELAY } from 'src/app/constants/variable.constants';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/custom-field-add.component';
 import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-delete/custom-field-delete.component';
+import { Garbage } from 'src/app/models/garbage.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-lead-capture',
@@ -11,14 +13,14 @@ import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-dele
 })
 export class LeadCaptureComponent implements OnInit {
   times = DELAY;
-  delay_time = '';
-  required_fields = [
-    { field_name: 'Name', placeholder: '', options: [], type: 'admin' },
-    { field_name: 'Text', placeholder: '', options: [], type: 'admin' },
-    { field_name: 'Eamil', placeholder: '', options: [], type: 'admin' }
-  ];
+  garbage: Garbage = new Garbage();
+  saving = false;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, public userService: UserService) {
+    this.userService.garbage$.subscribe((res) => {
+      this.garbage = new Garbage().deserialize(res);
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -34,20 +36,24 @@ export class LeadCaptureComponent implements OnInit {
         if (res) {
           if (res.mode == 'text') {
             const data = {
-              field_name: res.field,
+              id: '',
+              name: res.field,
               placeholder: res.placeholder,
               options: [],
-              type: 'isNew'
+              type: res.mode,
+              status: false
             };
-            this.required_fields.push(data);
+            this.garbage.additional_fields.push(data);
           } else {
             const data = {
-              field_name: res.field,
+              id: '',
+              name: res.field,
               placeholder: '',
               options: res.options,
-              type: 'isNew'
+              type: res.mode,
+              status: false
             };
-            this.required_fields.push(data);
+            this.garbage.additional_fields.push(data);
           }
         }
       });
@@ -85,14 +91,29 @@ export class LeadCaptureComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res == true) {
-          const required_fields = this.required_fields.filter(
-            (field) => field.field_name != deleteData.field_name
+          const required_fields = this.garbage.additional_fields.filter(
+            (field) => field.name != deleteData.name
           );
-          this.required_fields = [];
-          this.required_fields = required_fields;
+          this.garbage.additional_fields = [];
+          this.garbage.additional_fields = required_fields;
         }
       });
   }
 
-  saveDelay(): void {}
+  statusChange(evt: any, field: any): void {
+    field.status = evt.target.checked;
+  }
+
+  saveDelay(): void {
+    this.saving = true;
+    this.userService.updateGarbage(this.garbage).subscribe(
+      () => {
+        this.saving = false;
+        this.userService.updateGarbageImpl(this.garbage);
+      },
+      () => {
+        this.saving = false;
+      }
+    );
+  }
 }

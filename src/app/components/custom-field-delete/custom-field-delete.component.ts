@@ -8,14 +8,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CustomFieldDeleteComponent implements OnInit {
   field;
+
   constructor(
     private dialogRef: MatDialogRef<CustomFieldDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.field = this.data.field;
   }
+
+  ngOnInit(): void {}
 
   deleteField(): void {
     this.dialogRef.close(true);
