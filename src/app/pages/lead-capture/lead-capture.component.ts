@@ -16,13 +16,13 @@ export class LeadCaptureComponent implements OnInit {
   garbage: Garbage = new Garbage();
   saving = false;
 
-  constructor(private dialog: MatDialog, public userService: UserService) {
+  constructor(private dialog: MatDialog, public userService: UserService) {}
+
+  ngOnInit(): void {
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
     });
   }
-
-  ngOnInit(): void {}
 
   addField(): void {
     this.dialog
