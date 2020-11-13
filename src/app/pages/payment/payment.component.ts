@@ -81,6 +81,7 @@ export class PaymentComponent implements OnInit {
       gross: '$ 6000'
     }
   ];
+  saving = false;
 
   constructor(private userService: UserService) {
     this.loading = true;

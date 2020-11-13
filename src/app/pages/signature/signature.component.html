@@ -11,29 +11,26 @@
     </div>
   </div>
 </div>
-<div class="email-editor">
+<div class="email-editor mt-3">
   <quill-editor
     image-resize="true"
     placeholder="Enter Text"
     format="html"
-    [(ngModel)]="signature"
+    [(ngModel)]="user.email_signature"
     [modules]="config"
     name="mailContent"
     [styles]="{ height: '250px' }"
-    #mailContent="ngModel"
+    id="mailContent"
+    [sanitize]="true"
     (onEditorCreated)="getEditorInstance($event)"
+    (onContentChanged)="updateEditor($event)"
     (click)="setFocusField('content-email')"
     class="rounded"
-    [class.has-error]="
-    mailContent.errors &&
-    (mailContent.touched || mailContent.dirty || submitted) &&
-    submitted
-    "
     #emailEditor
   >
   </quill-editor>
   <div class="row">
     <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4">Cancel</a>
-    <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" (click)="update()">Save changes</button>
+    <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" (click)="update()" [class.loading]="saving">Save changes</button>
   </div>
 </div>
