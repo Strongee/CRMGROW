@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { MONTH, YEAR } from '../../constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-payment',
@@ -28,7 +29,8 @@ export class PaymentComponent implements OnInit {
     card_brand: '',
     exp_month: '',
     exp_year: '',
-    last4: ''
+    last4: '',
+    plan_id: ''
   };
   // Card Number Length
   cardNumberLen = 16;
@@ -83,7 +85,11 @@ export class PaymentComponent implements OnInit {
   ];
   saving = false;
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private ngZone: NgZone,
+    private toast: ToastrService
+  ) {
     this.loading = true;
     this.userService.profile$.subscribe((profile) => {
       if (profile.payment) {
@@ -95,6 +101,7 @@ export class PaymentComponent implements OnInit {
               ...res,
               number: this.payment.last4
             };
+            console.log('###', this.payment);
           },
           () => {
             this.loading = false;
@@ -112,7 +119,41 @@ export class PaymentComponent implements OnInit {
     const number = this.card.number.replace(' ', '');
     this.card.last4 = number.substr(number.length - 4, 4);
   }
-  createBill(): void {}
+  createBill(): void {
+    this.saving = true;
+    (<any>window).Stripe.card.createToken(
+      this.card,
+      (status: number, response: any) => {
+        if (status === 200) {
+          this.ngZone.run(() => {
+            this.userService
+              .updatePayment({
+                token: { ...response, card_name: this.payment.card_brand },
+                plan_id: this.payment.plan_id
+              })
+              .subscribe(
+                (res) => {
+                  this.saving = false;
+                  this.toast.success(
+                    'Your Billing Information is updated successfully.'
+                  );
+                },
+                (err) => {
+                  this.saving = false;
+                }
+              );
+          });
+        } else {
+          this.ngZone.run(() => {
+            this.saving = false;
+            this.toast.error(
+              'Your card information is not correct. Please try again.'
+            );
+          });
+        }
+      }
+    );
+  }
 
   cancelBill(): void {
     this.card.number = this.payment.last4;

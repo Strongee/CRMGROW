@@ -14,6 +14,7 @@ export const USER = {
   PROFILE: 'user/me',
   PAYMENT: 'payment/',
   UPDATE_PROFILE: 'user/me',
+  UPDATE_PAYMENT: 'payment',
   UPDATE_PASSWORD: 'user/new-password',
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',

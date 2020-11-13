@@ -131,6 +131,9 @@ export class UserService extends HttpService {
       catchError(this.handleError('LOAD PAYMENT'))
     );
   }
+  public updatePayment(payment: any): any {
+    return this.httpClient.post(this.server + USER.UPDATE_PAYMENT, payment);
+  }
   public setToken(token: string): void {
     localStorage.setItem('token', token);
   }
