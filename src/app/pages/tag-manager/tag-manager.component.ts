@@ -23,12 +23,16 @@ export class TagManagerComponent implements OnInit {
           for (let j = 0; j < this.tags[i].contacts.length; j++) {
             if (this.tags[i].contacts[j].first_name == '') {
               data = {
-                shortName: this.tags[i].contacts[j].last_name.substring(0, 2)
+                shortName: this.tags[i].contacts[j].last_name
+                  .substring(0, 2)
+                  .toUpperCase()
               };
             }
             if (this.tags[i].contacts[j].last_name == '') {
               data = {
-                shortName: this.tags[i].contacts[j].first_name.substring(0, 2)
+                shortName: this.tags[i].contacts[j].first_name
+                  .substring(0, 2)
+                  .toUpperCase()
               };
             }
             if (
@@ -36,9 +40,10 @@ export class TagManagerComponent implements OnInit {
               this.tags[i].contacts[j].last_name != ''
             ) {
               data = {
-                shortName:
+                shortName: (
                   this.tags[i].contacts[j].first_name.charAt(0) +
                   this.tags[i].contacts[j].last_name.charAt(0)
+                ).toUpperCase()
               };
             }
             this.tags[i].contacts[j] = { ...this.tags[i].contacts[j], ...data };
