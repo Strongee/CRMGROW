@@ -23,7 +23,7 @@ export class UserService extends HttpService {
     super(errorService);
   }
 
-  public register() {}
+  public register(): any {}
   public login(user: { email: string; password: string }): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -83,9 +83,9 @@ export class UserService extends HttpService {
       { headers: reqHeader }
     );
   }
-  public checkEmail() {}
-  public checkNickName() {}
-  public checkPhone() {}
+  public checkEmail(): void {}
+  public checkNickName(): void {}
+  public checkPhone(): void {}
   public isAuthenticated(): boolean {
     if (localStorage.getItem('token') != null) {
       return true;
@@ -106,7 +106,7 @@ export class UserService extends HttpService {
       catchError(this.handleError('UPDATE PROFILE'))
     );
   }
-  public updateUser(field, value) {
+  public updateUser(field, value): void {
     const user = JSON.parse(localStorage.getItem('user'));
     user[field] = value;
     localStorage.setItem('user', JSON.stringify(user));
@@ -144,7 +144,6 @@ export class UserService extends HttpService {
    */
   public setProfile(profile: User): void {
     this.profile.next(profile);
-    console.log(profile);
   }
   /**
    * Update the profile and submit the subject
