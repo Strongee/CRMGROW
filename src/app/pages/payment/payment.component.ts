@@ -101,7 +101,6 @@ export class PaymentComponent implements OnInit {
               ...res,
               number: this.payment.last4
             };
-            console.log('###', this.payment);
           },
           () => {
             this.loading = false;

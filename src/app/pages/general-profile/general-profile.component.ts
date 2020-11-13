@@ -34,7 +34,6 @@ export class GeneralProfileComponent implements OnInit {
   ) {
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
-      console.log('##3', this.user);
     });
   }
 
