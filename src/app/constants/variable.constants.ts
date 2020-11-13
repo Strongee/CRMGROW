@@ -82,6 +82,12 @@ export const TIMES = [
   { id: '23:00:00.000', text: '11:00 PM' },
   { id: '23:30:00.000', text: '11:30 PM' }
 ];
+export const COUNTRY_CODES = {
+  USA: 'US',
+  CAN: 'CA',
+  GBR: 'GB',
+  ZAF: 'ZA'
+};
 export const COUNTRIES = [
   {
     code: 'US',

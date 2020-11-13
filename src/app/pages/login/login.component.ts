@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -38,7 +39,6 @@ export class LoginComponent implements OnInit {
       } else {
         // Save the user token and profile information
         this.userService.setToken(res['data']['token']);
-        this.userService.setProfile(res['data']['user']);
         this.router.navigate([this.returnUrl]);
       }
     });

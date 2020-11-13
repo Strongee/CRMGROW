@@ -25,7 +25,6 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-
 import {
   TimeagoModule,
   TimeagoIntl,
@@ -34,9 +33,10 @@ import {
 } from 'ngx-timeago';
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
 import { DurationPipe } from '../../pipes/duration.pipe';
+import { PhonePipe } from '../../pipes/phone.pipe';
 
 @NgModule({
-  declarations: [LoadingOverlayComponent, DurationPipe],
+  declarations: [LoadingOverlayComponent, DurationPipe, PhonePipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -97,7 +97,8 @@ import { DurationPipe } from '../../pipes/duration.pipe';
     NgxPaginationModule,
     TimeagoModule,
     LoadingOverlayComponent,
-    DurationPipe
+    DurationPipe,
+    PhonePipe
   ]
 })
 export class SharedModule {}

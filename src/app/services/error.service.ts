@@ -38,11 +38,16 @@ export class ErrorService {
           this.toast.error(errorObj.message, Strings.LOGIN);
         } else {
           this.toast.error(errorObj.message, Strings.AUTHENTICATION);
-          this.router.navigate(['']);
+          this.clearData();
+          this.router.navigate(['/']);
         }
         break;
       default:
         this.errorSubject.next([errorObj, ...this.errorSubject.getValue()]);
     }
+  }
+
+  clearData(): void {
+    localStorage.removeItem('token');
   }
 }

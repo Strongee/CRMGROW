@@ -7,7 +7,8 @@ export const AUTH = {
   SOCIAL_SIGNUP: 'user/social-signup',
   OAUTH_REQUEST: '',
   OUTLOOK_PROFILE_REQUEST: '',
-  GOOGLE_PROFILE_REQUEST: ''
+  GOOGLE_PROFILE_REQUEST: '',
+  LOG_OUT: 'user/logout'
 };
 export const USER = {
   PROFILE: 'user/me',

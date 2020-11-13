@@ -24,23 +24,40 @@ export class UserService extends HttpService {
   }
 
   public register() {}
-  public login(user): Observable<any> {
+  public login(user: { email: string; password: string }): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'No-Auth': 'True'
     });
     return this.httpClient
-      .post(environment.api + AUTH.SIGNIN, JSON.stringify(user), {
+      .post(this.server + AUTH.SIGNIN, JSON.stringify(user), {
         headers: reqHeader
       })
       .pipe(catchError(this.handleError('SIGNIN REQUEST')));
+  }
+  /**
+   * LOG OUT -> CALL API
+   */
+  public logout(): Observable<boolean> {
+    return this.httpClient.post(this.server + AUTH.LOG_OUT, {}).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('LOG OUT', false))
+    );
+  }
+  /**
+   * LOG OUT -> Clear Token And profile Informations
+   */
+  public logoutImpl(): void {
+    localStorage.removeItem('token');
+    this.profile.next(new User());
+    this.garbage.next(new Garbage());
   }
   public requestOAuthUrl(type: string): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'No-Auth': 'True'
     });
-    return this.httpClient.get(environment.api + AUTH.OAUTH_REQUEST + type, {
+    return this.httpClient.get(this.server + AUTH.OAUTH_REQUEST + type, {
       headers: reqHeader
     });
   }
@@ -51,7 +68,7 @@ export class UserService extends HttpService {
       'No-Auth': 'True'
     });
     return this.httpClient.get(
-      environment.api + AUTH.OUTLOOK_PROFILE_REQUEST + code,
+      this.server + AUTH.OUTLOOK_PROFILE_REQUEST + code,
       { headers: reqHeader }
     );
   }
@@ -62,7 +79,7 @@ export class UserService extends HttpService {
       'No-Auth': 'True'
     });
     return this.httpClient.get(
-      environment.api + AUTH.GOOGLE_PROFILE_REQUEST + code,
+      this.server + AUTH.GOOGLE_PROFILE_REQUEST + code,
       { headers: reqHeader }
     );
   }
@@ -78,18 +95,16 @@ export class UserService extends HttpService {
   }
 
   public loadProfile(): Observable<any> {
-    return this.httpClient.get(environment.api + USER.PROFILE).pipe(
+    return this.httpClient.get(this.server + USER.PROFILE).pipe(
       map((res) => res['data']),
       catchError(this.handleError('GET PROFILE'))
     );
   }
   public updateProfile(profile: any): Observable<any> {
-    return this.httpClient
-      .put(environment.api + USER.UPDATE_PROFILE, profile)
-      .pipe(
-        map((res) => res['data']),
-        catchError(this.handleError('UPDATE PROFILE'))
-      );
+    return this.httpClient.put(this.server + USER.UPDATE_PROFILE, profile).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('UPDATE PROFILE'))
+    );
   }
   public updateUser(field, value) {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -129,6 +144,7 @@ export class UserService extends HttpService {
    */
   public setProfile(profile: User): void {
     this.profile.next(profile);
+    console.log(profile);
   }
   /**
    * Update the profile and submit the subject
@@ -148,12 +164,10 @@ export class UserService extends HttpService {
     return;
   }
   public updateGarbage(garbage: any): Observable<any> {
-    return this.httpClient
-      .put(environment.api + USER.UPDATE_GARBAGE, garbage)
-      .pipe(
-        map((res) => res['data']),
-        catchError(this.handleError('UPDATE GARBAGE'))
-      );
+    return this.httpClient.put(this.server + USER.UPDATE_GARBAGE, garbage).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('UPDATE GARBAGE'))
+    );
   }
   /**
    * Update the Garbage
@@ -167,23 +181,21 @@ export class UserService extends HttpService {
   public requestSyncUrl(type: string): Observable<any> {
     switch (type) {
       case 'gmail':
-        return this.httpClient.get(environment.api + USER.SYNC_GMAIL);
+        return this.httpClient.get(this.server + USER.SYNC_GMAIL);
       case 'outlook':
-        return this.httpClient.get(environment.api + USER.SYNC_OUTLOOK);
+        return this.httpClient.get(this.server + USER.SYNC_OUTLOOK);
     }
   }
   public loadAffiliate(): Observable<any> {
-    return this.httpClient.get(environment.api + USER.LOAD_AFFILIATE).pipe(
+    return this.httpClient.get(this.server + USER.LOAD_AFFILIATE).pipe(
       map((res) => res['data']),
       catchError(this.handleError('GET USER AFFILIATE'))
     );
   }
   public createAffiliate(): Observable<any> {
-    return this.httpClient
-      .post(environment.api + USER.CREATE_AFFILIATE, {})
-      .pipe(
-        map((res) => res['data']),
-        catchError(this.handleError('CREATE AFFILIATE'))
-      );
+    return this.httpClient.post(this.server + USER.CREATE_AFFILIATE, {}).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('CREATE AFFILIATE'))
+    );
   }
 }
