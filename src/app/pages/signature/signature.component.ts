@@ -16,10 +16,10 @@ Quill.register('modules/imageResize', ImageResize);
 })
 export class SignatureComponent implements OnInit {
   templates = [
-    { layout: 'img_text_hor', icon: '' },
-    { layout: 'text_img_hor', icon: '' },
-    { layout: 'text_img_ver', icon: '' },
-    { layout: 'img_text_ver', icon: '' }
+    { layout: 'img_text_hor', icon: 'i-signature-1' },
+    { layout: 'text_img_hor', icon: 'i-signature-2' },
+    { layout: 'text_img_ver', icon: 'i-signature-3' },
+    { layout: 'img_text_ver', icon: 'i-signature-4' }
   ];
   currentTemplate = '';
   signature = '';

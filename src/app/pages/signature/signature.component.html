@@ -1,8 +1,14 @@
 <h6 class="mb-1">Signature layouts</h6>
 <p class="f-2" style="opacity: 0.8">Load premade template made of your profile info</p>
 <div class="d-flex justify-content-start email-templates">
-  <div class="template" *ngFor="let template of templates" [ngClass]="{active: currentTemplate === template.layout}" (click)="changeTemplate(template)">
-    <img >
+  <div class="v-center justify-content-center template" *ngFor="let template of templates" [ngClass]="{active: currentTemplate === template.layout}" (click)="changeTemplate(template)">
+    <i class="d-block {{template.icon}} bgc-dark" *ngIf="currentTemplate !== template.layout; else whiteIcon"></i>
+    <ng-template #whiteIcon>
+      <i class="d-block {{template.icon}}-white bgc-white"></i>
+    </ng-template>
+    <div class="v-center justify-content-center bgc-white select-icon" *ngIf="currentTemplate === template.layout">
+      <i class="d-block i-icon i-check bgc-blue"></i>
+    </div>
   </div>
 </div>
 <div class="email-editor">

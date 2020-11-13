@@ -4,7 +4,8 @@
   flex-wrap: wrap;
 
   .template {
-    height: 80px;
+    position: relative;
+    height: 90px;
     border: 1px solid gainsboro;
     border-radius: 4px;
     width: calc(20% - 8px);
@@ -15,6 +16,19 @@
     &.active {
       border-color: blue;
       background-color: blue;
+    }
+    .select-icon {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      top: 5px;
+      right: 5px;
+      .i-icon {
+        width: 12px;
+        height: 12px;
+        min-width: 12px;
+      }
     }
   }
 }
