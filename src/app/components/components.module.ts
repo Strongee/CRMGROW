@@ -55,6 +55,7 @@ import { AssistantCreateComponent } from './assistant-create/assistant-create.co
 import { AssistantPasswordComponent } from './assistant-password/assistant-password.component';
 import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
+import { TagDeleteComponent } from './tag-delete/tag-delete.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { TagEditComponent } from './tag-edit/tag-edit.component';
     AssistantCreateComponent,
     AssistantPasswordComponent,
     AssistantRemoveComponent,
-    TagEditComponent
+    TagEditComponent,
+    TagDeleteComponent
   ],
   imports: [
     CommonModule,
@@ -146,7 +148,8 @@ import { TagEditComponent } from './tag-edit/tag-edit.component';
     MailListComponent,
     CustomFieldAddComponent,
     CustomFieldDeleteComponent,
-    TagEditComponent
+    TagEditComponent,
+    TagDeleteComponent
   ],
   bootstrap: [
     ContactCreateComponent,

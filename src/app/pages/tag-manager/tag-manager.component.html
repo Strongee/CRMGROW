@@ -36,7 +36,7 @@
                                 <div class="f-3 font-weight-bold text-primary text-right time-col">
                                     {{tag.count}}
                                 </div>
-                                <div class="delete-col text-right">
+                                <div class="delete-col text-right" (click)="deleteTag(tag)">
                                     <i class="d-block mx-auto i-icon i-trash bgc-red"></i>
                                 </div>
                             </mat-panel-title>

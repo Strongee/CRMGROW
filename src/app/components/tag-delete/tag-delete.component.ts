@@ -3,28 +3,27 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TagService } from '../../services/tag.service';
 
 @Component({
-  selector: 'app-tag-edit',
-  templateUrl: './tag-edit.component.html',
-  styleUrls: ['./tag-edit.component.scss']
+  selector: 'app-tag-delete',
+  templateUrl: './tag-delete.component.html',
+  styleUrls: ['./tag-delete.component.scss']
 })
-export class TagEditComponent implements OnInit {
+export class TagDeleteComponent implements OnInit {
   tagName = '';
-  submitted = false;
   saving = false;
 
   constructor(
-    private dialogRef: MatDialogRef<TagEditComponent>,
+    private dialogRef: MatDialogRef<TagDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private tagService: TagService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.tagName = this.data.tagName;
   }
 
-  updateTag(): void {
+  ngOnInit(): void {}
+
+  deleteField(): void {
     this.saving = true;
-    this.tagService.tagUpdate(this.data.tagName, this.tagName).subscribe(
+    this.tagService.tagDelete(this.tagName).subscribe(
       (res) => {
         if (res['status'] == true) {
           this.saving = false;

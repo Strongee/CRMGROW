@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { TagDeleteComponent } from 'src/app/components/tag-delete/tag-delete.component';
 import { TagEditComponent } from 'src/app/components/tag-edit/tag-edit.component';
 import { TagService } from '../../services/tag.service';
 
@@ -47,23 +48,39 @@ export class TagManagerComponent implements OnInit {
     });
   }
 
-  editTag(editData: any): void {
+  editTag(editTag: any): void {
     this.dialog
       .open(TagEditComponent, {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '400px',
         data: {
-          tagName: editData._id
+          tagName: editTag._id
         }
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          editData._id = res;
+          editTag._id = res;
         }
       });
   }
 
-  deleteTag(): void {}
+  deleteTag(deleteTag: any): void {
+    this.dialog
+      .open(TagDeleteComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          tagName: deleteTag._id
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        const tags = this.tags.filter((tag) => tag._id != res);
+        this.tags = [];
+        this.tags = tags;
+      });
+  }
 }

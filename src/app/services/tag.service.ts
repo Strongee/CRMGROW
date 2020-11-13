@@ -24,7 +24,10 @@ export class TagService extends HttpService {
     return this.httpClient.post(this.server + TAG.UPDATE, data);
   }
 
-  public tagDelete(data: any): any {
+  public tagDelete(tagName: string): any {
+    const data = {
+      tag: tagName
+    };
     return this.httpClient.post(this.server + TAG.DELETe, data);
   }
 }
