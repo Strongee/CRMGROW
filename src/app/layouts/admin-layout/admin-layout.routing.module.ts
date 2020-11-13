@@ -5,7 +5,6 @@ import { ProfileComponent } from 'src/app/pages/profile/profile.component';
 import { DealsComponent } from 'src/app/pages/deals/deals.component';
 import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
 import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
-import { CampaignListComponent } from 'src/app/pages/campaign-list/campaign-list.component';
 import { AutomationsComponent } from 'src/app/pages/automations/automations.component';
 import { SettingsComponent } from 'src/app/pages/settings/settings.component';
 import { AffiliateComponent } from 'src/app/pages/affiliate/affiliate.component';
@@ -18,7 +17,6 @@ import { CampaignComponent } from 'src/app/pages/campaign/campaign.component';
 import { AutoflowComponent } from 'src/app/pages/autoflow/autoflow.component';
 import { TeamComponent } from 'src/app/pages/team/team.component';
 import { TemplateComponent } from 'src/app/pages/template/template.component';
-import { CampaignBulkMailingComponent } from 'src/app/pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -85,24 +83,17 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'campaign/list',
-    component: CampaignListComponent,
+    path: 'campaign/:page',
+    component: CampaignComponent,
     data: {
-      title: 'Campaign List'
+      title: 'Campaign'
     }
   },
   {
-    path: 'campaign/bulk',
-    component: CampaignBulkMailingComponent,
+    path: 'campaign/:page/:id',
+    component: CampaignComponent,
     data: {
-      title: 'Campaign Bulk'
-    }
-  },
-  {
-    path: 'campaign/list/:id',
-    component: CampaignListComponent,
-    data: {
-      title: 'Campaign List'
+      title: 'Campaign'
     }
   },
   {

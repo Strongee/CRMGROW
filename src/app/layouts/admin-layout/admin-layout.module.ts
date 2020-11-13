@@ -45,6 +45,7 @@ import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.comp
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
 import { MoneyPipe } from '../../pipes/money.pipe';
+import { CampaignListItemComponent } from '../../pages/campaign-list-item/campaign-list-item.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { MoneyPipe } from '../../pipes/money.pipe';
     DealsDetailComponent,
     AutoflowComponent,
     VideoCreateComponent,
-    MoneyPipe
+    MoneyPipe,
+    CampaignListItemComponent
   ],
   imports: [
     CommonModule,

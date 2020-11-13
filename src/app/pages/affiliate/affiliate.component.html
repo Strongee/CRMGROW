@@ -24,6 +24,13 @@
       <input class="form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
       <button class="btn btn-blue text-white font-weight-bold ml-2" (click)="update()" [disabled]="loadingMain || creating" [class.loading]="updating">Update</button>
     </div>
+    <ng-container *ngIf="loadingMain || creating">
+        <ngx-spinner name="sp5" bdColor="rgba(50,50,50,0)" size="medium" color="#888" type="square-jelly-box"
+                     [fullScreen]="false">
+          <p class="text-dark loading-text" *ngIf="loadingMain">Loading Affiliate Information...</p>
+          <p class="text-dark loading-text" *ngIf="creating">Creating Affiliate...</p>
+        </ngx-spinner>
+    </ng-container>
     <ng-container *ngIf="!loadingMain && !creating">
       <h6 class="f-6 font-weight-bold mt-5 mb-2">Commisions</h6>
       <div class="v-center">
@@ -92,8 +99,7 @@
                 <td class="pl-0">
                   <div class="v-center">
                     <div class="name-avatar font-weight-bold mr-2">
-                      {{user.customer.name ?
-                        (user.customer.name.length > 1 ? user.customer.name[0] + user.customer.name[1] : user.customer.name[0]) : 'UN'}}
+                      {{user.customer.name ? getAvatarName(user.customer.name) : 'UN'}}
                     </div>
                     <div class="name">{{user.customer?.name || 'Unnamed'}}</div>
                   </div>
@@ -119,9 +125,9 @@
                   <p class="text-center my-2" *ngIf="!loadingUsers" style="font-size: 14px;">
                     There is no active users that signed up with your affiliate invitation.
                   </p>
-                  <p class="text-center my-2" *ngIf="loadingUsers" style="font-size: 14px;">
-                    Loading Referral users...
-                  </p>
+                  <ng-container *ngIf="loadingUsers">
+                    <app-loading-overlay [type]="'table'"></app-loading-overlay>
+                  </ng-container>
                 </td>
               </tr>
             </ng-container>

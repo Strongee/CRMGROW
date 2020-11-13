@@ -76,7 +76,6 @@ export class AffiliateComponent implements OnInit {
       (res) => {
         this.loadingMain = false;
         this.hideLoader();
-        console.log("load affiliate =============>", res);
         // Load the Main Info
         if (res['data']) {
           this.affiliate = res['data'];
@@ -188,5 +187,14 @@ export class AffiliateComponent implements OnInit {
   }
   hideLoader(): void {
     this.spinner.hide('sp5');
+  }
+
+  getAvatarName(name): any {
+    const names = name.split(' ');
+    if (names.length > 1) {
+      return names[0][0] + names[1][0];
+    } else {
+      return names[0][0];
+    }
   }
 }
