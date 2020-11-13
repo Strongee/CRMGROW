@@ -6,7 +6,7 @@
             </div>
             <div class="v-center custom-control custom-switch">
                 <label class="custom-toggle mb-0" placement="top">
-                  <input type="checkbox">
+                  <input type="checkbox" [checked]="garbage.auto_follow_up.enabled" (change)="changeToggle($event, garbage.auto_follow_up)">
                   <span class="custom-toggle-slider rounded-circle"></span>
                 </label>
             </div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="form-group mb-4">
-                <select class="form-control f-3 font-weight-bold" [(ngModel)]="watch_delay" name="delay" id="watch-delay" required #delay="ngModel">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="garbage.auto_follow_up.period" name="delay" id="watch-delay" required #delay="ngModel">
                     <option *ngFor="let delay of delays" value="{{delay.id}}">
                         {{delay.text}}
                       </option>
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="col-sm-8 form-group">
-                <input class="f-3 form-control" placeholder="Type in follow up text" [(ngModel)]="watch_content">
+                <input class="f-3 form-control" placeholder="Type in follow up text" [(ngModel)]="garbage.auto_follow_up.content">
             </div>
         </div>
     </div>
@@ -49,7 +49,7 @@
             </div>
             <div class="v-center custom-control custom-switch">
                 <label class="custom-toggle mb-0" placement="top">
-                  <input type="checkbox">
+                  <input type="checkbox" [checked]="garbage.auto_follow_up2.enabled" (change)="changeToggle($event, garbage.auto_follow_up2)">
                   <span class="custom-toggle-slider rounded-circle"></span>
                 </label>
             </div>
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="form-group mb-4">
-                <select class="form-control f-3 font-weight-bold" [(ngModel)]="notwatch_delay" name="delay" id="notwatch-delay" required #delay="ngModel">
+                <select class="form-control f-3 font-weight-bold" [(ngModel)]="garbage.auto_follow_up2.period" name="delay" id="notwatch-delay" required #delay="ngModel">
                     <option *ngFor="let delay of delays" value="{{delay.id}}">
                         {{delay.text}}
                       </option>
@@ -81,12 +81,12 @@
                 </div>
             </div>
             <div class="col-md-8 form-group">
-                <input class="f-3 form-control" placeholder="Type in follow up text" [(ngModel)]="notwatch_content">
+                <input class="f-3 form-control" placeholder="Type in follow up text" [(ngModel)]="garbage.auto_follow_up2.content">
             </div>
         </div>
     </div>
     <div class="v-center justify-content-end mt-3">
         <button class="btn btn-white f-6 font-weight-bold mr-2">Cancel</button>
-        <button class="btn btn-blue f-6 font-weight-bold">Save changes</button>
+        <button class="btn btn-blue f-6 font-weight-bold" (click)="save()" [class.loading]="saving">Save changes</button>
     </div>
 </div>
