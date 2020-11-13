@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -29,6 +29,8 @@ export class CampaignListItemComponent implements OnInit {
   csvColumns = [];
 
   @ViewChild('file') file: any;
+
+  @Input('id') id: string;
   constructor(
     private location: Location,
     private dialog: MatDialog,

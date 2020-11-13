@@ -167,7 +167,7 @@
         <ng-container *ngSwitchCase="'list'">
           <app-campaign-list *ngIf="!detailID.list; else detailListTemplate" (onDetail)="changePage('list', $event)"></app-campaign-list>
           <ng-template #detailListTemplate>
-            <app-campaign-list-item></app-campaign-list-item>
+            <app-campaign-list-item [id]="detailID.list"></app-campaign-list-item>
           </ng-template>
         </ng-container>
         <ng-container *ngSwitchCase="'bulk'">
