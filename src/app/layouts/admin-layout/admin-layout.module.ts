@@ -46,6 +46,7 @@ import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
 import { MoneyPipe } from '../../pipes/money.pipe';
 import { CampaignListItemComponent } from '../../pages/campaign-list-item/campaign-list-item.component';
+import { CampaignBulkMailingItemComponent } from "../../pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component";
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { CampaignListItemComponent } from '../../pages/campaign-list-item/campai
     AutoflowComponent,
     VideoCreateComponent,
     MoneyPipe,
-    CampaignListItemComponent
+    CampaignListItemComponent,
+    CampaignBulkMailingItemComponent
   ],
   imports: [
     CommonModule,

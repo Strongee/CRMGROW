@@ -1,11 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CampaignAddContactComponent } from '../../components/campaign-add-contact/campaign-add-contact.component';
 import { UploadContactsComponent } from '../../components/upload-contacts/upload-contacts.component';
 import { MailListService } from '../../services/maillist.service';
-import { catchError } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-campaign-list-item',
@@ -18,9 +18,6 @@ export class CampaignListItemComponent implements OnInit {
   selectedCSVColumn;
   selectedCSVColumnIndex;
 
-  selectedTab = 1;
-  tabs = ['List', 'Bulk Mailing'];
-  tabUrls = ['list', 'bulk'];
   contacts: any[] = [];
   currentContactPage = 1;
   contactCount;
@@ -28,20 +25,15 @@ export class CampaignListItemComponent implements OnInit {
 
   csvColumns = [];
 
-  @ViewChild('file') file: any;
-
   @Input('id') id: string;
   constructor(
     private location: Location,
     private dialog: MatDialog,
-    private mailListService: MailListService
+    private mailListService: MailListService,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {}
-
-  changeTab(event): void {
-    this.selectedTab = event.index;
-    this.location.replaceState('/campaign/' + this.tabUrls[this.selectedTab - 1]);
+  ngOnInit(): void {
   }
 
   selectAllPage(): void {
