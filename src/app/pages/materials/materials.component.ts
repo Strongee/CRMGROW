@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { BulkActions } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
-import { TabItem } from 'src/app/utils/data.types';
+import { ActionItem, TabItem } from 'src/app/utils/data.types';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -40,5 +40,9 @@ export class MaterialsComponent implements OnInit {
 
   createVideo(): void {
     this.router.navigate(['./materials/create']);
+  }
+
+  doAction(command: any): void {
+    // Action Item
   }
 }
