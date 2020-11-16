@@ -24,10 +24,10 @@ export class AutoResendVideoComponent implements OnInit {
 
   selectTemplate(event: any, resend_data: any, type: string): void {
     if (type == 'email') {
-      resend_data.email_canned_message = event.title;
+      resend_data.email_canned_message = event._id;
     }
     if (type == 'sms') {
-      resend_data.sms_canned_message = event.title;
+      resend_data.sms_canned_message = event._id;
     }
   }
 

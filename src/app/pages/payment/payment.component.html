@@ -176,6 +176,6 @@
     </div>
     <div class="row">
         <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4" (click)="cancelBill()">Cancel</a>
-        <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4">Save changes</button>
+        <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" [class.loading]="saving">Save changes</button>
     </div>
 </form>

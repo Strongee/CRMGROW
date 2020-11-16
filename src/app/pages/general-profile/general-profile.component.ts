@@ -24,6 +24,7 @@ export class GeneralProfileComponent implements OnInit {
     CountryISO.SouthAfrica
   ];
   CountryISO = CountryISO;
+  saving = false;
 
   constructor(
     private userService: UserService,
@@ -74,9 +75,10 @@ export class GeneralProfileComponent implements OnInit {
   }
 
   updateProfile(form: any): void {
-    console.log('###', form);
+    this.saving = true;
     this.userService.updateProfile(form).subscribe((data) => {
       this.userService.updateProfileImpl(data);
+      this.saving = false;
     });
   }
 
