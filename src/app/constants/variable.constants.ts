@@ -566,9 +566,9 @@ export const BulkActions = {
       command: 'email'
     },
     {
-      label: 'Add tasks',
+      label: 'Send via SMS',
       type: 'button',
-      icon: 'i-text',
+      icon: 'i-sms-sent',
       command: 'text'
     },
     {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BulkActions } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TabItem } from 'src/app/utils/data.types';
@@ -11,6 +12,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./materials.component.scss']
 })
 export class MaterialsComponent implements OnInit {
+  BULK_ACTIONS = BulkActions.Materials;
   tabs: TabItem[] = [
     { icon: '', label: 'ALL', id: 'all' },
     { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },

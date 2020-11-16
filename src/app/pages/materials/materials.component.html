@@ -467,4 +467,5 @@
       </div>
     </div>
   </ng-container>
+  <app-actions-bar [actions]="BULK_ACTIONS" [isActive]="true" (doCommand)="doAction($event)"></app-actions-bar>
 </div>

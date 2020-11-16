@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { ContactDetail } from 'src/app/models/contact.model';
+import { ContactService } from 'src/app/services/contact.service';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-contact',
@@ -6,15 +11,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
-  constructor() {}
+  contact: ContactDetail = new ContactDetail();
+  _id = '';
+  next: string = null;
+  prev: string = null;
+  constructor(
+    private location: Location,
+    private route: ActivatedRoute,
+    private contactService: ContactService,
+    private storeService: StoreService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._id = this.route.snapshot.params['id'];
+    this.loadContact(this._id);
+
+    this.storeService.selectedContact$.subscribe((res) => {
+      this.contact = res;
+    });
+  }
 
   /**
    * Load Contact Detail information
    * @param _id: Contact id to load
    */
-  loadContact(_id: string): void {}
+  loadContact(_id: string): void {
+    this.contactService.read(_id);
+  }
 
   /**
    * Go to Contact List Page
@@ -70,6 +93,4 @@ export class ContactComponent implements OnInit {
    * Create Note
    */
   createNote(): void {}
-
-  
 }

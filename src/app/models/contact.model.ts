@@ -1,5 +1,7 @@
-import { PureActivity } from './activity.model';
+import { DetailActivity, PureActivity } from './activity.model';
 import { Deserializable } from './deserialize.model';
+import { Task } from './task.model';
+import { Timeline } from './timeline.model';
 
 export class Contact implements Deserializable {
   _id: string;
@@ -134,9 +136,12 @@ export class ContactActivity implements Deserializable {
 
 export class ContactDetail extends Contact {
   activity: any[];
-  automation: any;
-  follow_up: any[];
-  time_lines: any[];
+  automation: {
+    _id: string;
+    title: string;
+  };
+  follow_up: Task[];
+  time_lines: Timeline[];
   next: string;
   prev: string;
 
@@ -144,6 +149,10 @@ export class ContactDetail extends Contact {
   updated_at: Date;
 
   deserialize(input: any): this {
-    return Object.assign(this, input);
+    Object.assign(this, input);
+    this.activity = input.activity.map((e) =>
+      new DetailActivity().deserialize(e)
+    );
+    return this;
   }
 }

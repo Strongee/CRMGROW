@@ -25,6 +25,8 @@ export class PureActivity implements Deserializable {
   send_type: number;
   subject: string;
   description: string;
+  created_at: Date;
+  updated_at: Date;
 
   deserialize(input: any): this {
     Object.assign(this, input);
@@ -55,6 +57,8 @@ export class Activity implements Deserializable {
   send_type: number;
   subject: string;
   description: string;
+  created_at: Date;
+  updated_at: Date;
 
   deserialize(input: any): this {
     Object.assign(this, input);
@@ -90,5 +94,15 @@ export class ActivityDetail implements Deserializable {
 
   deserialize(input: any): this {
     return Object.assign(this, input);
+  }
+}
+
+export class DetailActivity extends PureActivity {
+  activity_detail: any[];
+
+  deserialize(input: any): this {
+    Object.assign(this, input);
+    this.activity_detail = input.activity_detail;
+    return this;
   }
 }

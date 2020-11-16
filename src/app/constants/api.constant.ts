@@ -60,7 +60,8 @@ export const CONTACT = {
   SELECT_ALL: 'contact/select-all',
   LOAD_SERACH: 'contact/advance-search',
   LOAD_BY_IDS: 'contact/get',
-  FILTER: 'contact/filter'
+  FILTER: 'contact/filter',
+  READ: 'contact/'
 };
 export const VIDEO = {
   CREATE: 'video/create',
