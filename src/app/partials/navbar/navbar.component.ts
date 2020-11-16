@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
+import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -30,7 +33,12 @@ export class NavbarComponent implements OnInit {
   ];
   currentSearchType: any = this.searchDataTypes[0];
 
-  constructor(public userService: UserService, private dialog: MatDialog) {}
+  constructor(
+    public userService: UserService,
+    private dialog: MatDialog,
+    private storeService: StoreService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -44,6 +52,7 @@ export class NavbarComponent implements OnInit {
         this.dialog.open(TaskCreateComponent, DialogSettings.TASK);
         break;
       case 'note':
+        this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
         break;
       case 'message':
         break;
@@ -53,8 +62,19 @@ export class NavbarComponent implements OnInit {
         break;
     }
   }
-  logout(event: PointerEvent): void {
+  logout(event: Event): void {
     // Logout Logic
+    event.preventDefault();
+    this.userService.logout().subscribe(
+      () => {
+        this.userService.logoutImpl();
+        this.storeService.clearData();
+        this.router.navigate(['/']);
+      },
+      () => {
+        console.log('LOG OUT FAILURE');
+      }
+    );
   }
 
   changeType(type: any): void {

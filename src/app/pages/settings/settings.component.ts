@@ -16,9 +16,15 @@ export class SettingsComponent implements OnInit {
     { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
     {
       id: 'status-automation',
-      icon: 'i-tag-manager',
+      icon: 'i-status',
       label: 'Status Automation'
-    }
+    },
+    {
+      id: 'auto-resend-video',
+      icon: 'i-auto-video',
+      label: 'Auto Resend Video'
+    },
+    { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' }
   ];
   defaultPage = 'notifications';
   currentPage: string;

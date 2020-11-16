@@ -1,0 +1,30 @@
+.action-form {
+    .type-label {
+        font-weight: 600;
+    }
+    .theme-radios {
+        .theme-radio {
+            &:first-child {
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+            }
+            &:last-child {
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+        }
+    }
+    .form-group {
+        .dropdown-options {
+            &:first-of-type {
+                margin-top: 0.25rem !important;
+            }
+        }
+    }
+    .invalid-option {
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
+}

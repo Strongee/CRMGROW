@@ -7,7 +7,8 @@ export const AUTH = {
   SOCIAL_SIGNUP: 'user/social-signup',
   OAUTH_REQUEST: '',
   OUTLOOK_PROFILE_REQUEST: '',
-  GOOGLE_PROFILE_REQUEST: ''
+  GOOGLE_PROFILE_REQUEST: '',
+  LOG_OUT: 'user/logout'
 };
 export const USER = {
   PROFILE: 'user/me',
@@ -18,7 +19,14 @@ export const USER = {
   SYNC_OUTLOOK: 'user/sync-outlook',
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: '',
-  LOAD_REFERRALS: 'affiliate/referrals/'
+  LOAD_REFERRALS: 'affiliate/referrals/',
+  UPDATE_GARBAGE: 'garbage'
+};
+export const GUEST = {
+  LOAD: 'guest/load',
+  CREATE: 'guest',
+  DELETE: 'guest/',
+  EDIT: 'guest/'
 };
 export const GARBAGE = {
   SET: 'garbage',
@@ -130,7 +138,7 @@ export const AUTOMATION = {
   READ: 'automation/',
   UPDATE: 'automation/',
   CREATE: 'automation',
-  ASSIGN: 'timeline/create',
+  ASSIGN: 'timeline/create'
 };
 export const APPOINTMENT = {
   GET_EVENT: 'appointment',
@@ -153,7 +161,6 @@ export const MAILLIST = {
   CREATE: 'mail-list',
   GET: 'mail-list/'
 };
-
 export const SEND = {
   VIDEO_EMAIL: 'video/bulk-email',
   VIDEO_GMAIL: 'video/bulk-gmail',
@@ -173,3 +180,8 @@ export const SEND = {
   TEXT: '',
   SHARE: 'email/share-platform'
 };
+export const TAG = {
+  GET: 'tag/load',
+  UPDATE: 'tag/update',
+  DELETe: 'tag/delete'
+}

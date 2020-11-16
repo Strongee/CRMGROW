@@ -15,7 +15,7 @@ export class ProfileComponent implements OnInit {
     { id: 'security', icon: 'i-security', label: 'Security' },
     { id: 'integration', icon: 'i-integration', label: 'Integration' },
     { id: 'social', icon: 'i-social', label: 'Social Profile' },
-    { id: 'payment', icon: 'i-payment', label: 'Payment' }
+    { id: 'billing', icon: 'i-payment', label: 'Billing' }
   ];
   defaultPage = 'general';
   currentPage: string;

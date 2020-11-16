@@ -24,23 +24,40 @@ export class UserService extends HttpService {
   }
 
   public register() {}
-  public login(user): Observable<any> {
+  public login(user: { email: string; password: string }): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'No-Auth': 'True'
     });
     return this.httpClient
-      .post(environment.api + AUTH.SIGNIN, JSON.stringify(user), {
+      .post(this.server + AUTH.SIGNIN, JSON.stringify(user), {
         headers: reqHeader
       })
       .pipe(catchError(this.handleError('SIGNIN REQUEST')));
+  }
+  /**
+   * LOG OUT -> CALL API
+   */
+  public logout(): Observable<boolean> {
+    return this.httpClient.post(this.server + AUTH.LOG_OUT, {}).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('LOG OUT', false))
+    );
+  }
+  /**
+   * LOG OUT -> Clear Token And profile Informations
+   */
+  public logoutImpl(): void {
+    localStorage.removeItem('token');
+    this.profile.next(new User());
+    this.garbage.next(new Garbage());
   }
   public requestOAuthUrl(type: string): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'No-Auth': 'True'
     });
-    return this.httpClient.get(environment.api + AUTH.OAUTH_REQUEST + type, {
+    return this.httpClient.get(this.server + AUTH.OAUTH_REQUEST + type, {
       headers: reqHeader
     });
   }
@@ -51,7 +68,7 @@ export class UserService extends HttpService {
       'No-Auth': 'True'
     });
     return this.httpClient.get(
-      environment.api + AUTH.OUTLOOK_PROFILE_REQUEST + code,
+      this.server + AUTH.OUTLOOK_PROFILE_REQUEST + code,
       { headers: reqHeader }
     );
   }
@@ -62,7 +79,7 @@ export class UserService extends HttpService {
       'No-Auth': 'True'
     });
     return this.httpClient.get(
-      environment.api + AUTH.GOOGLE_PROFILE_REQUEST + code,
+      this.server + AUTH.GOOGLE_PROFILE_REQUEST + code,
       { headers: reqHeader }
     );
   }
@@ -104,25 +121,61 @@ export class UserService extends HttpService {
       JSON.stringify(data)
     );
   }
+  /**
+   * Load the User Payment Informationi
+   * @param id : Payment Information Id
+   */
   public getPayment(id: string): Observable<any> {
-    return this.httpClient.get(this.server + USER.PAYMENT + id);
+    return this.httpClient.get(this.server + USER.PAYMENT + id).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('LOAD PAYMENT'))
+    );
   }
   public setToken(token: string): void {
     localStorage.setItem('token', token);
   }
-  public getToken() {
+  public getToken(): any {
     return localStorage.getItem('token');
   }
+
+  /**
+   * Init the User data from API call
+   * @param profile: User
+   */
   public setProfile(profile: User): void {
     this.profile.next(profile);
+    console.log(profile);
   }
+  /**
+   * Update the profile and submit the subject
+   * @param data: Update Profile Imple
+   */
   public updateProfileImpl(data: any): void {
     const profile = this.profile.getValue();
     this.profile.next({ ...profile, ...data });
     return;
   }
+  /**
+   * Init the Garbage from API call
+   * @param garbage: Garbage
+   */
   public setGarbage(garbage: Garbage): void {
     this.garbage.next(garbage);
+    return;
+  }
+  public updateGarbage(garbage: any): Observable<any> {
+    return this.httpClient.put(this.server + USER.UPDATE_GARBAGE, garbage).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('UPDATE GARBAGE'))
+    );
+  }
+  /**
+   * Update the Garbage
+   * @param garbage : Garbage
+   */
+  public updateGarbageImpl(data: any): void {
+    const garbage = this.garbage.getValue();
+    this.garbage.next({ ...garbage, ...data });
     return;
   }
   public requestSyncUrl(type: string): Observable<any> {

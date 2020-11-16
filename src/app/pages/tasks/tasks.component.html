@@ -68,7 +68,7 @@
     <ng-container matColumnDef="contact_phone">
       <th mat-header-cell *matHeaderCellDef> phone number </th>
       <td mat-cell *matCellDef="let element">
-        <span class="c-blue font-weight-bold">{{element.contact.cell_phone}}</span>
+        <span class="c-blue font-weight-bold">{{element.contact.cell_phone | phone_format}}</span>
       </td>
     </ng-container>
 

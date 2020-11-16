@@ -1,4 +1,19 @@
+.payment-form {
+    display: grid;
+    grid-template-columns: 260px auto;
+    grid-column-gap: 40px;
+
+    @media screen and (max-width: 920px) {
+        grid-template-columns: auto;
+    }
+
+    .pyament-card-form {
+        max-width: 380px;
+    }
+}
+
 .unsubscribe {
+    max-width: 260px;
     opacity: 0.25;
     a {
         text-decoration: underline;
@@ -9,6 +24,8 @@
     border-radius: 16px;
     background: linear-gradient(135.48deg, #F5F6F9 0%, #DADDE5 100%);
     box-shadow: 0px 0px 20px 0 rgba(11, 24, 58, 0.1);
+    max-width: 260px;
+    height: 150px;
     .card-type {
         img {
             width: 40px;

@@ -1,3 +1,9 @@
+@import 'src/variables.scss';
 .custom-mat-field {
   width: 152px;
+}
+
+.manage-label {
+  border-color: $color-dark;
+  background-color: #eee;
 }

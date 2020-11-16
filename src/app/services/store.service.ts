@@ -34,5 +34,19 @@ export class StoreService {
   images$ = this.pdfs.asObservable();
   templates$ = this.templates.asObservable();
 
+  /**
+   * Clear All Data
+   */
+  clearData(): void {
+    this.tags.next([]);
+    this.tasks.next([]);
+    this.activities.next([]);
+    this.contacts.next([]);
+    this.videos.next([]);
+    this.pdfs.next([]);
+    this.images.next([]);
+    this.templates.next([]);
+  }
+
   constructor() {}
 }

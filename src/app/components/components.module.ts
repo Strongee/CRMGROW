@@ -47,11 +47,18 @@ import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
 import { LabelSelectComponent } from './label-select/label-select.component';
 import { CampaignAddBroadcastComponent } from './campaign-add-broadcast/campaign-add-broadcast.component';
 import { MailListComponent } from './mail-list/mail-list.component';
+import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.component';
+import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
 import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
 import { MaterialAddComponent } from './material-add/material-add.component';
 import { NotifyComponent } from './notify/notify.component';
 import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
 import { ShareSiteComponent } from './share-site/share-site.component';
+import { AssistantCreateComponent } from './assistant-create/assistant-create.component';
+import { AssistantPasswordComponent } from './assistant-password/assistant-password.component';
+import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
+import { TagEditComponent } from './tag-edit/tag-edit.component';
+import { TagDeleteComponent } from './tag-delete/tag-delete.component';
 
 @NgModule({
   declarations: [
@@ -100,11 +107,18 @@ import { ShareSiteComponent } from './share-site/share-site.component';
     LabelSelectComponent,
     CampaignAddBroadcastComponent,
     MailListComponent,
+    CustomFieldAddComponent,
+    CustomFieldDeleteComponent,
     AutomationAssignComponent,
     MaterialAddComponent,
     NotifyComponent,
     SafeHtmlPipe,
-    ShareSiteComponent
+    ShareSiteComponent,
+    AssistantCreateComponent,
+    AssistantPasswordComponent,
+    AssistantRemoveComponent,
+    TagEditComponent,
+    TagDeleteComponent
   ],
   imports: [
     CommonModule,
@@ -138,6 +152,10 @@ import { ShareSiteComponent } from './share-site/share-site.component';
     SelectLeaderComponent,
     LabelSelectComponent,
     MailListComponent,
+    CustomFieldAddComponent,
+    CustomFieldDeleteComponent,
+    TagEditComponent,
+    TagDeleteComponent
   ],
   bootstrap: [
     ContactCreateComponent,

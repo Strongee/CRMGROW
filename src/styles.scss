@@ -116,6 +116,9 @@ ul {
 .op-56 {
   opacity: 0.56;
 }
+.op-64 {
+  opacity: 0.64;
+}
 .op-75 {
   opacity: 0.75;
 }
@@ -133,6 +136,9 @@ ul {
 }
 .c-red {
   color: $color-red
+}
+.c-green {
+  color: #00DA42;
 }
 .c-red-pink {
   color: #f5325b;
@@ -567,6 +573,7 @@ button {
   }
   .form-control {
     height: 40px;
+    font-size: 14px;
     box-shadow: none!important;
   }
   textarea {
@@ -862,6 +869,14 @@ body{
     }
   }
 
+  a:not(.active) {
+    opacity: 0.75;
+  }
+
+  a {
+    padding-bottom: 12px;
+  }
+
   @media screen and (max-width: 360px) {
     width: 20px;
     a.nav-link {
@@ -923,6 +938,9 @@ table {
 }
 
 /** ==== Material Component Style === */
+*[class*="mat"]:not(mat-icon){
+  font-family: "Nunito", sans-serif!important;
+}
 //* Material Accordion Mobile Style
 @media screen and (max-width: 576px) {
   .mat-accordion {

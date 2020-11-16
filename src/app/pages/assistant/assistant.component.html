@@ -9,33 +9,56 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    <div class="v-center">
-                        <div class="avatar-wrapper">
-                            <div class="avatar">GS</div>
+            <ng-container *ngIf="loading; else listTemplate">
+                <tr>
+                    <td colspan="4">
+                        <div class="loader"></div>
+                    </td>
+                </tr>
+            </ng-container>
+            <ng-template #listTemplate>
+                <ng-container *ngIf="guests.length; else emptyTemplate">
+                    <tr>
+                        <td>
+                            <div class="v-center">
+                                <div class="avatar-wrapper">
+                                    <div class="avatar">{{guests[0].avatarName}}</div>
+                                </div>
+                                <div class="ml-3">
+                                    <div class="f-4 font-weight-bold">{{guests[0].name}}</div>
+                                    <div class="f-1">{{guests[0].email}}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="v-center justify-content-end password-col py-4">
+                            <i class="i-icon i-edit bgc-dark d-block" (click)="openPasswordEditDialog()"></i>
+                        </td>
+                        <td class="toggle-col">
+                            <div class="v-center custom-control custom-switch pl-0">
+                                <label class="custom-toggle mb-0" placement="top">
+                                  <input type="checkbox" [checked]="!guests[0].disabled" (change)="toggleAssistant()">
+                                  <span class="custom-toggle-slider rounded-circle"></span>
+                                </label>
+                            </div>
+                        </td>
+                        <td class="v-center justify-content-center delete-col">
+                            <i class="i-icon i-trash bgc-red d-block" (click)="openDeleteDialog()"></i>
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-template>
+            <ng-template #emptyTemplate>
+                <tr>
+                    <td colspan="4" class="text-center">
+                        <div class="status-description f-3 text-center mx-auto mt-3">
+                            There is no assistants. Please add assitant to help your business.
                         </div>
-                        <div class="ml-3">
-                            <div class="f-4 font-weight-bold">Garry Stevie</div>
-                            <div class="f-1">garrett@garrettsteve.com</div>
-                        </div>
-                    </div>
-                </td>
-                <td class="v-center justify-content-end password-col py-4">
-                    <i class="i-icon i-edit bgc-dark d-block"></i>
-                </td>
-                <td class="toggle-col">
-                    <div class="v-center custom-control custom-switch pl-0">
-                        <label class="custom-toggle mb-0" placement="top">
-                          <input type="checkbox">
-                          <span class="custom-toggle-slider rounded-circle"></span>
-                        </label>
-                    </div>
-                </td>
-                <td class="v-center justify-content-center delete-col">
-                    <i class="i-icon i-trash bgc-red d-block"></i>
-                </td>
-            </tr>
+                        <button class="btn btn-primary text-white f-3 mt-4" (click)="openCreateDialog()">
+                            Create Assistant
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
         </tbody>
     </table>
 </div>
