@@ -24,6 +24,7 @@ import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
 import { Subscription } from 'rxjs';
+import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 Quill.register('modules/imageResize', ImageResize);
 
 @Component({
@@ -73,6 +74,7 @@ export class CalendarDialogComponent implements OnInit {
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
   constructor(
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarDialogComponent>,
     private fileService: FileService,
     private userService: UserService,
@@ -93,6 +95,13 @@ export class CalendarDialogComponent implements OnInit {
         this.due_date.year = this.data.start_date.getFullYear();
         this.due_date.month = this.data.start_date.getMonth() + 1;
         this.due_date.day = this.data.start_date.getDate();
+        this.selectedDateTime = moment(
+          this.due_date.year +
+            '-' +
+            this.due_date.month +
+            '-' +
+            this.due_date.day
+        ).format('YYYY-MM-DD');
         if (this.data.type != 'month') {
           let hour: string, minute: string;
           if (this.data.start_date.getHours().toString().length == 1) {
@@ -192,12 +201,8 @@ export class CalendarDialogComponent implements OnInit {
     }
   }
 
-  update(): void {}
-
-  create(): void {
+  update(): void {
     this.isLoading = true;
-    this.event.contacts = [];
-    this.event.guests = [];
     const due_date = moment(
       this.due_date.year +
         '-' +
@@ -207,10 +212,111 @@ export class CalendarDialogComponent implements OnInit {
         ' ' +
         this.due_time
     ).format();
+    this.selectedDateTime = moment(
+      this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+    ).format('YYYY-MM-DD');
     const duration = moment(due_date)
       .add(this.duration * 60, 'minutes')
       .format();
     this.event.due_start = due_date;
+    this.event.due_end = duration;
+    if (this.contacts.length > 0) {
+      this.event.contacts.forEach((eventContact) => {
+        this.contacts.forEach((selectContact) => {
+          if (Object.values(selectContact).indexOf(eventContact._id) == -1) {
+            this.event.remove_contacts.push(eventContact._id);
+          }
+        });
+      });
+      this.event.contacts = [];
+      this.event.guests = [];
+      this.contacts.forEach((contact) => {
+        if (contact._id) {
+          const data = {
+            email: contact.email,
+            _id: contact._id
+          };
+          this.event.contacts.push(data);
+        }
+        this.event.guests.push(contact.email);
+      });
+    }
+    if (this.event.recurrence_id) {
+      this.dialog
+        .open(CalendarRecurringDialogComponent, {
+          position: { top: '40vh' },
+          width: '100vw',
+          maxWidth: '320px',
+          disableClose: true
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            if (res.type == 'own') {
+              delete this.event['recurrence_id'];
+            }
+            this.appointmentService
+              .updateEvents(this.event, this.event.event_id)
+              .subscribe(
+                (res) => {
+                  if (res['status'] == true) {
+                    this.isLoading = false;
+                    const data = {
+                      recurrence_id: this.event.recurrence_id
+                    };
+                    this.toast.success('Event is updated successfully');
+                    this.dialogRef.close(data);
+                  }
+                },
+                (err) => {
+                  this.isLoading = false;
+                  this.dialogRef.close();
+                }
+              );
+          } else {
+            this.isLoading = false;
+          }
+        });
+    } else {
+      delete this.event['recurrence_id'];
+      this.appointmentService
+        .updateEvents(this.event, this.event.event_id)
+        .subscribe(
+          (res) => {
+            if (res['status'] == true) {
+              this.isLoading = false;
+              const data = {
+                recurrence_id: this.event.recurrence_id
+              };
+              this.toast.success('Event is updated successfully');
+              this.dialogRef.close(data);
+            }
+          },
+          (err) => {
+            this.isLoading = false;
+            this.dialogRef.close();
+          }
+        );
+    }
+  }
+
+  create(): void {
+    this.isLoading = true;
+    this.event.contacts = [];
+    this.event.guests = [];
+    const date = moment(
+      this.due_date.year +
+        '-' +
+        this.due_date.month +
+        '-' +
+        this.due_date.day +
+        ' ' +
+        this.due_time
+    ).format();
+    const duration = moment(date)
+      .add(this.duration * 60, 'minutes')
+      .format();
+    this.event.due_start = date;
     this.event.due_end = duration;
     if (this.contacts.length > 0) {
       this.contacts.forEach((contact) => {
@@ -242,30 +348,19 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   getDateTime(): any {
-    // if (this.date.day) {
-    //   return (
-    //     this.date.year +
-    //     '-' +
-    //     this.date.month +
-    //     '-' +
-    //     this.date.day +
-    //     ' ' +
-    //     this.time.hour +
-    //     ':' +
-    //     this.time.minute
-    //   );
-    // }
-    // return (
-    //   this.date.year +
-    //   '-' +
-    //   this.date.month +
-    //   '-' +
-    //   this.minDate.day +
-    //   ' ' +
-    //   this.time.hour +
-    //   ':' +
-    //   this.time.minute
-    // );
+    if (this.due_date.day) {
+      return (
+        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+      );
+    }
+    return (
+      this.due_date.year + '-' + this.due_date.month + '-' + this.minDate.day
+    );
+  }
+
+  setDateTime(): void {
+    this.selectedDateTime = moment(this.getDateTime()).format('YYYY-MM-DD');
+    close();
   }
 
   handleAddressChange(evt: any): void {
