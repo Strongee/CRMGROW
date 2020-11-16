@@ -41,4 +41,6 @@ export class MaterialsComponent implements OnInit {
   createVideo(): void {
     this.router.navigate(['./materials/create']);
   }
+
+  doAction(evt: any): void {}
 }

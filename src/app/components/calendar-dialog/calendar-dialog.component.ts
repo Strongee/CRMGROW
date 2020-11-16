@@ -161,19 +161,17 @@ export class CalendarDialogComponent implements OnInit {
         this.due_date.year = this.data.event.start.getFullYear();
         this.due_date.month = this.data.event.start.getMonth() + 1;
         this.due_date.day = this.data.event.start.getDate();
-        const due_date = moment(
+        this.selectedDateTime = moment(
           this.due_date.year +
             '-' +
             this.due_date.month +
             '-' +
-            this.due_date.day +
-            ' ' +
-            this.due_time
-        ).format();
-        const duration = moment(due_date)
+            this.due_date.day
+        ).format('YYYY-MM-DD');
+        const duration = moment(this.selectedDateTime)
           .add(this.duration * 60, 'minutes')
           .format();
-        this.event.due_start = due_date;
+        this.event.due_start = this.selectedDateTime;
         this.event.due_end = duration;
         let hour, minute;
         if (this.data.event.start.getHours().toString().length == 1) {
@@ -348,14 +346,11 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   getDateTime(): any {
-    if (this.due_date.day) {
+    if (this.due_date.day != '') {
       return (
         this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
       );
     }
-    return (
-      this.due_date.year + '-' + this.due_date.month + '-' + this.minDate.day
-    );
   }
 
   setDateTime(): void {
@@ -373,7 +368,7 @@ export class CalendarDialogComponent implements OnInit {
     toolbar.addHandler('image', this.initImageHandler);
   }
 
-  initImageHandler = () => {
+  initImageHandler = (): void => {
     const imageInput = document.createElement('input');
     imageInput.setAttribute('type', 'file');
     imageInput.setAttribute('accept', 'image/*');

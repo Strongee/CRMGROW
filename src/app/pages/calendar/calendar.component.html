@@ -4,9 +4,6 @@
             Click <a class="text-primary font-weight-bold" (click)="connectCalendar()">here</a> to connect your calendar
         </h3> -->
     </div>
-    <div class="c-dark font-weight-bold page-title">
-        Calendar
-    </div>
     <div class="v-center justify-content-between my-3 calendar-time">
         <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
         </app-slide-tab>
@@ -131,7 +128,7 @@
                     {{viewDate | date:'EEE, MMM d y'}}
                 </span>
             </div>
-            <button class="v-center btn btn-blue f-4 font-weight-bold text-white ml-2">
+            <button class="v-center btn btn-blue f-4 font-weight-bold text-white ml-2" (click)="newEvent()">
                 <i class="i-icon i-plus bg-white d-block mr-2"></i>
                 New meeting
             </button>
@@ -140,85 +137,107 @@
             </button>
         </div>
     </div>
-    <ng-template #customCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
-        <div class="cal-cell-top mt-1 mb-2">
-        <span class="cal-day-number">
-            {{ day.date | calendarDate:'monthViewDayNumber':locale }}
-        </span>
-        </div>
-        <div *ngIf="day.events.length > 0">
-            <div *ngFor="let event of day.events">
-                <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" (mwlClick)="eventClicked.emit({event: event})">
-                <div class="cal-events-header mr-1">
-                </div>
-                <div class="d-flex cal-events-body">
-                    <span class="cal-events-time mr-1">{{event.start | date:'shortTime'}}</span>
-                    <span class="cal-events-title">{{event.title}}</span>
-                </div>
-                </div>
-            </div>
-        </div>
-    </ng-template>
-    <ng-template #monthHeaderTemplate let-days="days" let-locale="locale">
-        <div class="v-center cal-header py-2">
-            <div class="cal-header-cell desktop" *ngFor="let day of days">
-                <span>{{ day.date | date:'EEEE' }}</span>
-            </div>
-            <div class="cal-header-cell mobile" *ngFor="let day of days">
-                <span>{{ day.date | date:'EEE' }}</span>
-            </div>
-        </div>
-    </ng-template>
-    <ng-template #weekHeaderTemplate let-days="days" let-locale="locale" let-dayHeaderClicked="dayHeaderClicked">
-        <div class="cal-day-headers">
-            <div
-                class="cal-header"
-                *ngFor="let day of days"
-                mwlDroppable
-                (mwlClick)="dayHeaderClicked.emit({ day: day, sourceEvent: $event })"
-                [class.cal-today]="day.isToday"
-                [class.cal-weekend]="day.isWeekend"
-            >
-                <div class="v-center justify-content-center avatar-wrapper mb-1">
-                    <div class="v-center justify-content-center f-8 font-weight-bold avatar">{{ day.date | date:'d' }}</div>
-                </div>
-                <span class="desktop f-1 font-weight-bold text-uppercase">
-                    {{ day.date | date:'EEEE' }}
-                </span>
-                <span class="mobile f-1 font-weight-bold text-uppercase">
-                    {{ day.date | date:'EEE' }}
-                </span>
-            </div>
-        </div>
-    </ng-template>
     <div [ngSwitch]="view">
-        <mwl-calendar-month-view
-        *ngSwitchCase="CalendarView.Month"
-        [viewDate]="viewDate"
-        [events]="events"
-        (dayClicked)="dayClicked($event.day)"
-        [cellTemplate]="customCellTemplate"
-        [headerTemplate]="monthHeaderTemplate"
-        (eventClicked)="handleEvent($event.event)"
-        >
-        </mwl-calendar-month-view>
-        <mwl-calendar-week-view
-        *ngSwitchCase="CalendarView.Week"
-        [viewDate]="viewDate"
-        [events]="events"
-        [headerTemplate]="weekHeaderTemplate"
-        (hourSegmentClicked)="hourClicked($event.date)"
-        (eventClicked)="handleEvent($event.event)"
-        >
-        </mwl-calendar-week-view>
-        <mwl-calendar-day-view
-        *ngSwitchCase="CalendarView.Day"
-        [viewDate]="viewDate"
-        [events]="events"
-        (hourSegmentClicked)="hourClicked($event.date)"
-        (eventClicked)="handleEvent($event.event)"
-        >
-        </mwl-calendar-day-view>
+        <div *ngSwitchCase="'month'">
+            <mwl-calendar-month-view
+                *ngSwitchCase="CalendarView.Month"
+                [viewDate]="viewDate"
+                [events]="events"
+                (dayClicked)="dayClicked($event.day)"
+                [cellTemplate]="monthCellTemplate"
+                [headerTemplate]="monthHeaderTemplate"
+                (eventClicked)="handleEvent($event.event)"
+            >
+            </mwl-calendar-month-view>
+            <ng-template #monthCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
+                <div class="cal-cell-top mt-1 mb-2">
+                <span class="cal-day-number">
+                    {{ day.date | calendarDate:'monthViewDayNumber':locale }}
+                </span>
+                </div>
+                <div *ngIf="day.events.length > 0">
+                    <div *ngFor="let event of day.events">
+                        <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" (mwlClick)="eventClicked.emit({event: event})">
+                        <div class="cal-events-header mr-1">
+                        </div>
+                        <div class="d-flex cal-events-body">
+                            <span class="cal-events-time mr-1">{{event.start | date:'shortTime'}}</span>
+                            <span class="cal-events-title">{{event.title}}</span>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #monthHeaderTemplate let-days="days" let-locale="locale">
+                <div class="v-center cal-header py-2">
+                    <div class="cal-header-cell desktop" *ngFor="let day of days">
+                        <span>{{ day.date | date:'EEEE' }}</span>
+                    </div>
+                    <div class="cal-header-cell mobile" *ngFor="let day of days">
+                        <span>{{ day.date | date:'EEE' }}</span>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngSwitchCase="'week'">
+            <mwl-calendar-week-view
+                *ngSwitchCase="CalendarView.Week"
+                [viewDate]="viewDate"
+                [events]="events"
+                [headerTemplate]="weekHeaderTemplate"
+                [hourSegmentHeight]="60"
+                [hourSegments]="1"
+                [hourSegmentTemplate]="weekHourTemplate"
+                (hourSegmentClicked)="hourClicked($event.date)"
+                (eventClicked)="handleEvent($event.event)"
+            >
+            </mwl-calendar-week-view>
+            <ng-template #weekHourTemplate let-segment="segment" let-locale="locale" let-isTimeLabel="isTimeLabel">
+                <div *ngIf="isTimeLabel">
+                    <div class="cal-hour-segment">
+                        <span class="cal-time f-1 font-weight-bold op-64">
+                            {{ segment.date | calendarDate:'dayViewHour':locale }}
+                        </span>
+                        <div class="time-line">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #weekHeaderTemplate let-days="days" let-locale="locale" let-weekHeaderClicked="weekHeaderClicked">
+                <div class="cal-day-headers">
+                    <div
+                        class="cal-header"
+                        *ngFor="let day of days"
+                        mwlDroppable
+                        (mwlClick)="weekHeaderClicked.emit({ day: day, sourceEvent: $event })"
+                        [class.cal-today]="day.isToday"
+                    >
+                        <div class="v-center justify-content-center avatar-wrapper mb-1">
+                            <div class="v-center justify-content-center f-8 font-weight-bold avatar">{{ day.date | date:'d' }}</div>
+                        </div>
+                        <span class="desktop f-1 font-weight-bold text-uppercase">
+                            {{ day.date | date:'EEEE' }}
+                        </span>
+                        <span class="mobile f-1 font-weight-bold text-uppercase">
+                            {{ day.date | date:'EEE' }}
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngSwitchCase="'day'">
+            <mwl-calendar-day-view
+                *ngSwitchCase="CalendarView.Day"
+                [viewDate]="viewDate"
+                [events]="events"
+                (hourSegmentClicked)="hourClicked($event.date)"
+                (eventClicked)="handleEvent($event.event)"
+            >
+            </mwl-calendar-day-view>
+        </div>
     </div>
     <ng-container *ngIf="isLoading">
         <div class="px-3 pb-3">
