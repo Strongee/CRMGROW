@@ -34,21 +34,24 @@
     <h6 class="f-6 font-weight-bold c-dark mb-4">Folders</h6>
     <div class="row">
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
+        <div ngbDropdown class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
           <div class="v-center">
             <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
             <span class="f-4 c-dark font-weight-bold ml-2">Provided Material</span>
           </div>
-          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true" ngbDropdownToggle></i>
+          <div ngbDropdownMenu class="light">
+            <button class="btn btn-primary">Close</button>
+          </div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
+        <div ngbDropdown class="v-center justify-content-between p-3 bgc-dark-trans08 rounded">
           <div class="v-center">
             <i class="i-icon i-folder bg-dark" aria-hidden="true"></i>
             <span class="f-4 c-dark font-weight-bold ml-2">Own Material</span>
           </div>
-          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+          <i class="i-icon i-menu-more bg-dark" aria-hidden="true" ngbDropdownToggle></i>
         </div>
       </div>
       <div class="col-md-4">
