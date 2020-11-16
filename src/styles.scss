@@ -199,6 +199,9 @@ ul {
 .f-8{
   font-size: 18px;
 }
+.f-20 {
+  font-size: 20px;
+}
 .f-28{
   font-size: 28px;
 }
@@ -957,7 +960,9 @@ table {
     }
   }
 }
-
+.general-panels .mat-expanded .toggle-icon {
+  transform: rotate(90deg);
+}
 /** ==== Avatar Style === */
 //* Profile Avatar
 .avatar-wrapper {
@@ -1034,6 +1039,13 @@ table {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+
+  &.lg {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    line-height: 48px;
+  }
 }
 
 .avatar {

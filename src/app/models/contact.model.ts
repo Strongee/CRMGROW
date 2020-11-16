@@ -63,6 +63,14 @@ export class Contact implements Deserializable {
       return 'Unnamed';
     }
   }
+
+  get fullAddress(): string {
+    return `${this.address ? this.address + ' ' : ''}${
+      this.city ? this.city + ' ' : ''
+    }${this.state ? this.state + ' ' : ''}${
+      this.country ? this.country + ' ' : ''
+    }${this.zip ? this.zip + ' ' : ''}`;
+  }
 }
 
 export class ContactActivity implements Deserializable {
@@ -135,7 +143,7 @@ export class ContactActivity implements Deserializable {
 }
 
 export class ContactDetail extends Contact {
-  activity: any[];
+  activity: DetailActivity[];
   automation: {
     _id: string;
     title: string;
@@ -154,5 +162,13 @@ export class ContactDetail extends Contact {
       new DetailActivity().deserialize(e)
     );
     return this;
+  }
+
+  get last_activity_time(): Date {
+    if (!this.activity || !this.activity.length) {
+      return new Date();
+    }
+    const last_activity = this.activity.slice(-1)[0];
+    return last_activity.created_at;
   }
 }

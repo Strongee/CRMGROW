@@ -11,10 +11,43 @@ import { StoreService } from 'src/app/services/store.service';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
+  TYPES = [
+    {
+      id: 'all',
+      label: 'All actions'
+    },
+    {
+      id: 'note',
+      label: 'Notes'
+    },
+    {
+      id: 'message',
+      label: 'Messages'
+    },
+    {
+      id: 'appointment',
+      label: 'Appointments'
+    },
+    {
+      id: 'group_call',
+      label: 'Group Calls'
+    },
+    {
+      id: 'task',
+      label: 'Tasks'
+    },
+    {
+      id: 'deal',
+      label: 'Deals'
+    }
+  ];
   contact: ContactDetail = new ContactDetail();
   _id = '';
   next: string = null;
   prev: string = null;
+
+  mainAction = 'send_message';
+  activeHistory = 'all';
   constructor(
     private location: Location,
     private route: ActivatedRoute,

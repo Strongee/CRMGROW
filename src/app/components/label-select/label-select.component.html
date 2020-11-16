@@ -32,7 +32,7 @@
   </mat-form-field>
 </div> -->
 
-<div class="custom-mat-field label-select-wrapper">
+<div class="custom-mat-field label-select-wrapper" [class.label_form]="type === 'form'">
   <mat-form-field style="display: block;" appearance="outline" (click)="focusField()">
     <mat-chip-list aria-label="Contact Selection" #contactList>
       <mat-basic-chip >
@@ -59,7 +59,7 @@
     <mat-autocomplete
       #auto="matAutocomplete"
       (optionSelected)="onChangeLabel($event)"
-      class="label-panel"
+      [class]="(type === 'form' ? 'form-' : '') + 'label-panel'"
     >
       <mat-option style="height: unset; line-height: unset;" [disabled]="true">
         <a class="py-2 text-primary f-2 v-center border rounded mt-2 mb-2 px-2 td-none c-pointer manage-label">

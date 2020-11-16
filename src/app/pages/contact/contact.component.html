@@ -1,5 +1,5 @@
 <div class="page-content">
-  <div class="v-center page-header">
+  <div class="v-center page-header pb-4c">
     <div class="">
       <span>Back to all contacts</span>
     </div>
@@ -7,20 +7,226 @@
       <span>Person 1 of 20</span>
     </div>
   </div>
-  <div class="contact-panel">
-    <div class="contact-detail">
-      <div class="contact-main">
-        <div class="avatar">
-          
+  <div class="contact-panel d-flex">
+    <div class="contact-info-panel pr-4c">
+      <div class="contact-main d-flex">
+        <div class="contact-avatar lg font-weight-bold">
+          {{contact.avatarName}}
+        </div>
+        <div class="contact-main-info ml-3">
+          <div class="f-20 font-weight-bold">{{contact.fullName}}</div>
+          <div class="f-3 op-40">{{contact.last_activity_time | date :'MM/dd/yyyy'}}</div>
         </div>
       </div>
-      <div class="contact-detail"></div>
-      <div class="contact-secondary"></div>
-      <div class="contact-additional"></div>
-      <div class="automation"></div>
-    </div>
-    <div class="action-detail">
+      <div class="my-3 py-2">
+        <app-label-select [value]="contact.label" type="form"></app-label-select>
+      </div>
+      <mat-accordion multi class="general-panels">
+        <!-- Begin Contact Detail -->
+        <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="v-center w-100">
+                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
+                <span class="f-6 font-weight-bold ml-2">Contact details</span>
+                <button class="btn border border-primary f-2 font-weight-bold c-blue ml-auto btn-sm">Edit contact
+                  details</button>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="contact-detail">
+            <div class="v-center py-1">
+              <i class="i-icon i-contact-phone bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.cell_phone}}</span>
+            </div>
+            <div class="v-center py-1">
+              <i class="i-icon i-message bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.email}}</span>
+            </div>
+            <div class="v-center py-1">
+              <i class="i-icon i-contact-location bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.fullAddress}}</span>
+            </div>
+            <div class="v-center py-1">
+              <i class="i-icon i-webpage bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.website}}</span>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <!-- End Contact Detail -->
 
+        <!-- Begin Contact Secondary Information -->
+        <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="v-center">
+                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
+                <span class="f-6 font-weight-bold ml-2">Secondary contacts</span>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="contact-secondary"></div>
+        </mat-expansion-panel>
+        <!-- End Contact Secondary Information -->
+
+        <!-- Begin Contact Additional Information -->
+        <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="v-center">
+                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
+                <span class="f-6 font-weight-bold ml-2">Additional information</span>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="contact-additional">
+            <div class="v-center py-2">
+              <span class="f-6 fw-600 op-40">Source</span>
+              <span class="f-6">{{contact.source}}</span>
+            </div>
+            <div class="v-center py-2">
+              <span class="f-6 fw-600 op-40">Current Company</span>
+              <span class="f-6">{{contact.brokerage}}</span>
+            </div>
+            <div class="v-center py-2">
+              <span class="f-6 fw-600 op-40">Tags</span>
+              <span class="f-6"></span>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <!-- End Contact Additional Information -->
+
+        <!-- Begin Contact Automation Information -->
+        <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="v-center">
+                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
+                <span class="f-6 font-weight-bold ml-2">Automation</span>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="automation"></div>
+        </mat-expansion-panel>
+        <!-- Begin Contact Automation Information -->
+      </mat-accordion>
+    </div>
+    <div class="contact-action-panel flex-grow-1 position-relative">
+      <div class="action-panel position-relative">
+        <div class="secondary-actions">
+          <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm mx-1">Create group call</button>
+          <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm mx-1">Create appointment</button>
+          <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm mx-1">Add new task</button>
+        </div>
+        <div class="main-actions">
+          <div [class]="'d-flex action-headers ' + mainAction">
+            <div [class.active]="mainAction === 'send_message'" class="font-weight-bold c-pointer py-3 send_message"
+              (click)="mainAction = 'send_message'">Send Message</div>
+            <div [class.active]="mainAction === 'create_note'" class="font-weight-bold ml-3 c-pointer py-3 create_note"
+              (click)="mainAction = 'create_note'">Note</div>
+          </div>
+          <div class="tab-panel">
+
+          </div>
+        </div>
+      </div>
+      <div class="history-panel pt-3 pl-3 mt-2">
+        <div class="type-headers d-flex">
+          <div class="type-item rounded px-2 py-1 f-3 font-weight-bold c-pointer" *ngFor="let type of TYPES"
+            [ngClass]="{'border': type.id === activeHistory, 'border-primary': type.id === activeHistory, 'c-blue': type.id === activeHistory}"
+            [class.op-40]="type.id !== activeHistory" (click)="activeHistory = type.id">
+            {{type.label}}
+          </div>
+        </div>
+        <div class="history-list mt-3 position-relative" *ngIf="contact.activity && contact.activity.length">
+          <ng-container *ngFor="let activity of contact.activity" [ngSwitch]="activity.type">
+            <div class="time-line d-flex">
+              <div class="history-icon mr-3"></div>
+              <!-- Contact Activity -->
+              <div class="history-info" *ngSwitchCase="'contacts'">
+                <div class="history-header">
+                  <span>{{activity.content}}</span>
+                  <div class="v-center history-time ml-auto">
+                    <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'hh:mm a'}}</span>
+                    <div ngbDropdown class="button-more p-1 rounded">
+                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item">
+                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="history-detail">
+                  {{activity.activity_detail | json}}
+                </div>
+              </div>
+
+              <!-- Follow Up Activity -->
+              <div class="history-info" *ngSwitchCase="'follow_ups'">
+                <div class="history-header">
+                  <span>{{activity.content}}</span>
+                  <div class="v-center history-time ml-auto">
+                    <span class="f-3 op-56">{{activity.created_at | date :'hh:mm a'}}</span>
+                    <div ngbDropdown class="button-more p-1 rounded">
+                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item">
+                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="history-detail">
+                  {{activity.activity_detail | json}}
+                </div>
+              </div>
+
+              <!-- Phone Logs Activity -->
+              <div class="history-info" *ngSwitchCase="'phone_logs'">
+                <div class="history-header">
+                  <span>{{activity.content}}</span>
+                  <div class="v-center history-time ml-auto">
+                    <span class="f-3 op-56">{{activity.created_at | date :'hh:mm a'}}</span>
+                    <div ngbDropdown class="button-more p-1 rounded">
+                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item">
+                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="history-detail"></div>
+              </div>
+
+              <!-- Email Activity  -->
+
+              <!-- Text Activity -->
+
+              <!-- Send Video Activity -->
+
+              <!-- Send Pdf Activity -->
+
+              <!-- Send Image Activity -->
+
+
+            </div>
+          </ng-container>
+        </div>
+      </div>
     </div>
   </div>
 </div>

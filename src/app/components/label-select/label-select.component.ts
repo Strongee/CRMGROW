@@ -22,6 +22,7 @@ import * as _ from 'lodash';
 })
 export class LabelSelectComponent implements OnInit, AfterViewInit {
   @Input('value') value = '';
+  @Input('type') type = '';
 
   @ViewChild('selector') selector: MatSelect;
   @ViewChild('auto') autoComplete: MatAutocomplete;
