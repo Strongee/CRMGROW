@@ -1,0 +1,105 @@
+<h1 mat-dialog-title>Share CRMGROW</h1>
+<mat-dialog-content>
+  <div class="v-center h-100 form-group" mat-dialog-content>
+    <label>Please input emails to share CRMGrow with your colleagues.</label>
+    <div class="content">
+      <div class="search-form">
+        <div class="selected-contacts">
+          <div class="contact-list">
+            <ul>
+              <li *ngFor="let contact of selectedContacts; let i = index">
+                <div class="remove-icon" (click)="removeContact(i, contact.email)"></div>
+                <div class="name" *ngIf="contact.name">{{contact.name}}</div>
+                <div class="email ml-1" *ngIf="contact.name; else onlyEmail">({{contact.email}})</div>
+                <ng-template #onlyEmail><div class="email">{{contact.email}}</div></ng-template>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="form-group search-group">
+          <div class="input-group">
+            <input class="form-control" [(ngModel)]="searchStr" placeholder="Add Referrals"
+                   (ngModelChange)="searchContacts()" aria-describedby="validationTooltipUsernamePrepend"
+                   (keyup)="manualAddContact($event)" (focus)="showLabelSearchedResult = false; hideSearchedResult()" (click)="showLabelSearchedResult = false; hideSearchedResult()"
+            />
+            <a class="label-search" *ngIf="labelSearchedContacts.length" (click)="toggleLabelContacts()">Team Contacts</a>
+          </div>
+          <div class="searched-result mt-0" [hidden]="!showSearchedResult">
+            <ul>
+              <li *ngIf="searchedContacts.length" class="action mr-0">
+                <a (click)="addAllSearched()">Select All</a>
+              </li>
+              <ng-container *ngFor="let contact of searchedContacts; let i = index;">
+                <li [class.active]="i === hoverIndex" (click)="addContact(contact)">
+                  <div class="added-icon" *ngIf="selectedEmails.indexOf(contact.email) !== -1"></div>
+                  <div class="name">{{contact.name}}</div>
+                  <div class="email">{{contact.email}}</div>
+                </li>
+              </ng-container>
+              <li *ngIf="!searchedContacts.length" class="empty">
+                <p class="mb-0" style="font-size: 12px; font-weight: 400;">
+                  <span *ngIf="!isValid(searchStr); else emailAddTemplate">There is no searched Contacts.</span>
+                  <ng-template #emailAddTemplate><span>Please click "Enter" to <a class="manual" (click)="manualAdd()">insert</a> the current email</span></ng-template>
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div class="searched-result label-searched mt-0" [hidden]="!showLabelSearchedResult || showSearchedResult">
+            <ul>
+              <li *ngIf="labelSearchedContacts.length" class="action mr-0">
+                <a (click)="addAllLabelSearched()">Select All</a>
+              </li>
+              <li *ngFor="let contact of labelSearchedContacts" (click)="addContact(contact)">
+                <div class="added-icon" *ngIf="selectedEmails.indexOf(contact.email) !== -1"></div>
+                <div class="name">{{contact.name}}</div>
+                <div class="email">{{contact.email}}</div>
+              </li>
+              <li *ngIf="!labelSearchedContacts.length" class="empty">
+                <p class="mb-0" style="font-size: 12px; font-weight: 400;">
+                  <span>There is no searched Contacts.</span>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="email-form mt-3" (click)="hideSearchedResultFn($event)">
+        <div class="form-group">
+          <input class="form-control" placeholder="Email Subject" [(ngModel)]="email.subject" (focus)="hideSearchedResult()"/>
+        </div>
+        <div class="form-group">
+          <div class="v-center label-group">
+            <label class="theme-label">CONTENT</label>
+            <span class="c-blue f-1 mb-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
+            <div ngbDropdown class="justify-content-end mb-1 field-actions button-more rounded">
+              <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+              </a>
+              <div ngbDropdownMenu class="button-more-container light">
+                <div class="actions ml-auto">
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_name}')">Your Name</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_email}')">Your Email</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
+                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item" (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <quill-editor placeholder="Enter Text" [(ngModel)]="email.content" [modules]="config"
+                        [styles]="{ height: '270px' }" name="mailContent" #mailContent="ngModel"
+                        (onEditorCreated)="getEditorInstance($event)" required #emailEditor>
+          </quill-editor>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn btn-white" mat-dialog-close>Close</button>
+  <button class="btn btn-primary" [disabled]="!selectedContacts.length || !email.subject || !email.content "
+          (click)="share()" *ngIf="!sharing">Share</button>
+  <app-loading-button [class]="'btn btn-sm btn-primary'" [title]="'Sharing...'" *ngIf="sharing"></app-loading-button>
+</mat-dialog-actions>

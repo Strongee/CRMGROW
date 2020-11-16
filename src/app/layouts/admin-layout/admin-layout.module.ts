@@ -44,8 +44,12 @@ import { DealsComponent } from '../../pages/deals/deals.component';
 import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.component';
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
+import { MoneyPipe } from '../../pipes/money.pipe';
+import { CampaignListItemComponent } from '../../pages/campaign-list-item/campaign-list-item.component';
+import { CampaignBulkMailingItemComponent } from "../../pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component";
 import { AutoResendVideoComponent } from '../../pages/auto-resend-video/auto-resend-video.component';
 import { AutoFollowUpComponent } from '../../pages/auto-follow-up/auto-follow-up.component';
+import { ContactComponent } from '../../pages/contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +86,11 @@ import { AutoFollowUpComponent } from '../../pages/auto-follow-up/auto-follow-up
     DealsComponent,
     DealsDetailComponent,
     AutoflowComponent,
-    VideoCreateComponent
+    VideoCreateComponent,
+    MoneyPipe,
+    CampaignListItemComponent,
+    CampaignBulkMailingItemComponent,
+    ContactComponent
   ],
   imports: [
     CommonModule,

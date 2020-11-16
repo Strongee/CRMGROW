@@ -104,4 +104,10 @@ export class ContactService extends HttpService {
         catchError(this.handleError('SEARCH CONTACTS', []))
       );
   }
+  filter(query): Observable<Contact[]> {
+    return this.httpClient.post(this.server + CONTACT.FILTER, query).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('FILTER CONTACTS', []))
+    );
+  }
 }

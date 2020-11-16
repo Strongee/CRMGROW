@@ -190,14 +190,26 @@ export class UserService extends HttpService {
   }
   public loadAffiliate(): Observable<any> {
     return this.httpClient.get(this.server + USER.LOAD_AFFILIATE).pipe(
-      map((res) => res['data']),
+      map((res) => res),
       catchError(this.handleError('GET USER AFFILIATE'))
     );
   }
   public createAffiliate(): Observable<any> {
     return this.httpClient.post(this.server + USER.CREATE_AFFILIATE, {}).pipe(
-      map((res) => res['data']),
+      map((res) => res),
       catchError(this.handleError('CREATE AFFILIATE'))
+    );
+  }
+  public loadReferrals(page): Observable<any> {
+    return this.httpClient.get(this.server + USER.LOAD_REFERRALS).pipe(
+      map((res) => res),
+      catchError(this.handleError('GET USER REFERRALS'))
+    );
+  }
+  public updateAffiliate(data): Observable<any> {
+    return this.httpClient.put(this.server + USER.CREATE_AFFILIATE, data).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('UPDATE PROFILE'))
     );
   }
 }

@@ -18,8 +18,9 @@ export const USER = {
   UPDATE_PASSWORD: 'user/new-password',
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
-  LOAD_AFFILIATE: '',
+  LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: '',
+  LOAD_REFERRALS: 'affiliate/referrals/',
   UPDATE_GARBAGE: 'garbage'
 };
 export const GUEST = {
@@ -58,7 +59,8 @@ export const CONTACT = {
   NORMAL_SEARCH: 'contact/search',
   SELECT_ALL: 'contact/select-all',
   LOAD_SERACH: 'contact/advance-search',
-  LOAD_BY_IDS: 'contact/get'
+  LOAD_BY_IDS: 'contact/get',
+  FILTER: 'contact/filter'
 };
 export const VIDEO = {
   CREATE: 'video/create',
@@ -160,7 +162,25 @@ export const MAILLIST = {
   CREATE: 'mail-list',
   GET: 'mail-list/'
 };
-
+export const SEND = {
+  VIDEO_EMAIL: 'video/bulk-email',
+  VIDEO_GMAIL: 'video/bulk-gmail',
+  VIDEO_OUTLOOK: 'video/bulk-outlook',
+  PDF_EMAIL: 'pdf/bulk-email',
+  PDF_GMAIL: 'pdf/bulk-gmail',
+  PDF_OUTLOOK: 'pdf/bulk-outlook',
+  IMAGE_EMAIL: 'image/bulk-email',
+  IMAGE_GMAIL: 'image/bulk-gmail',
+  IMAGE_OUTLOOK: 'image/bulk-outlook',
+  VIDEO_TEXT: 'video/bulk-text',
+  PDF_TEXT: 'pdf/bulk-text',
+  IMAGE_TEXT: 'image/bulk-text',
+  EMAIL: 'email/bulk-email',
+  GMAIL: 'email/bulk-gmail',
+  OUTLOOK: 'email/bulk-outlook',
+  TEXT: '',
+  SHARE: 'email/share-platform'
+};
 export const TAG = {
   GET: 'tag/load',
   UPDATE: 'tag/update',

@@ -51,6 +51,9 @@ import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.com
 import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
 import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
 import { MaterialAddComponent } from './material-add/material-add.component';
+import { NotifyComponent } from './notify/notify.component';
+import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
+import { ShareSiteComponent } from './share-site/share-site.component';
 import { AssistantCreateComponent } from './assistant-create/assistant-create.component';
 import { AssistantPasswordComponent } from './assistant-password/assistant-password.component';
 import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
@@ -108,6 +111,9 @@ import { TagDeleteComponent } from './tag-delete/tag-delete.component';
     CustomFieldDeleteComponent,
     AutomationAssignComponent,
     MaterialAddComponent,
+    NotifyComponent,
+    SafeHtmlPipe,
+    ShareSiteComponent,
     AssistantCreateComponent,
     AssistantPasswordComponent,
     AssistantRemoveComponent,
