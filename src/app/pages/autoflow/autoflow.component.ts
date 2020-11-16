@@ -57,6 +57,8 @@ export class AutoflowComponent
   autoZoom = false;
   zoomLevel = 1;
 
+  editMode = 'new';
+
   @ViewChild('wrapper') wrapper: ElementRef;
   wrapperWidth = 0;
   wrapperHeight = 0;
@@ -97,10 +99,12 @@ export class AutoflowComponent
           this.created_at = curDate.toISOString();
         }
       });
+      this.editMode = 'edit';
     } else {
       this.auth = 'owner';
       const curDate = new Date();
       this.created_at = curDate.toISOString();
+      this.editMode = 'new';
     }
     window['confirmReload'] = true;
   }
@@ -1344,18 +1348,16 @@ export class AutoflowComponent
   }
 
   ICONS = {
-    follow_up: 'https://app.crmgrow.com/assets/img/icons/follow-step.png',
+    follow_up: '../../assets/image/follow_up.svg',
     update_follow_up:
       'https://app.crmgrow.com/assets/img/icons/follow-step.png',
-    note: 'https://app.crmgrow.com/assets/img/icons/note-step.png',
-    email: 'https://app.crmgrow.com/assets/img/icons/email-step.png',
-    send_email_video:
-      'https://app.crmgrow.com/assets/img/icons/video_email_step.png',
-    send_text_video: 'https://app.crmgrow.com/assets/img/icons/video_sms.png',
-    send_email_pdf: 'https://app.crmgrow.com/assets/img/icons/pdf_email.png',
-    send_text_pdf: 'https://app.crmgrow.com/assets/img/icons/pdf_sms.png',
-    send_email_image:
-      'https://app.crmgrow.com/assets/img/icons/image_email.png',
+    note: '../../assets/image/create_note.svg',
+    email: '../../assets/image/send_email.svg',
+    send_email_video: '../../assets/image/send_video_email.svg',
+    send_text_video: '../../assets/image/send_video_text.svg',
+    send_email_pdf: '../../assets/image/send_pdf_email.svg',
+    send_text_pdf: '../../assets/image/send_pdf_text.svg',
+    send_email_image: '../../assets/image/send_image_email.svg',
     send_text_image: 'https://app.crmgrow.com/assets/img/icons/image_sms.png',
     update_contact:
       'https://app.crmgrow.com/assets/img/icons/update_contact.png'

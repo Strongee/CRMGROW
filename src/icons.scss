@@ -214,3 +214,24 @@
   height: 24px;
 }
 
+
+///////////// design icons //////////////////
+
+.i-sent-mail {
+  mask-image: url('/assets/image/sent_mail.svg');
+}
+.i-opened-mail {
+  mask-image: url('/assets/image/opened_mail.svg');
+}
+.i-bounced-mail {
+  mask-image: url('/assets/image/bounced_mail.svg');
+}
+.i-unsubscribed-mail {
+  mask-image: url('/assets/image/unsubscribed_mail.svg');
+}
+.i-clicked-mail {
+  mask-image: url('/assets/image/clicked_mail.svg');
+}
+.i-delivered-mail {
+  mask-image: url('/assets/image/delivered_mail.svg');
+}

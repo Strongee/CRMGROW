@@ -1,53 +1,59 @@
 <div class="page-content">
   <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Affiliate</h6>
   <div class="affiliate-page">
-    <p class="f-4 my-4">Take advantage of our affiliate program and receive
-      <span class="f-5 font-weight-bold">20%</span> residual per month for any users you refer.
+    <p class="f-3 font-weight-bold my-4">Take advantage of our affiliate program and receive
+      <span class="f-4 font-weight-bold">20%</span> residual per month for any users you refer.
     </p>
-    <div class="referral-link">
+    <div class="referral-link form-group">
       <label>Referral Link</label>
       <div class="v-center">
         <div class="form-group mb-0 flex-grow-1">
-          <input class="form-control bg-white border-primary c-blue" type="text" [(ngModel)]="affiliate['share_link']" disabled>
+          <input class="form-control bg-white border-primary c-blue" type="text" [(ngModel)]="affiliate.share_link" disabled>
         </div>
-        <button class="form-control btn-blue text-white ml-2" [disabled]="loadingMain || creating"
+        <button class="btn btn-primary font-weight-bold f-6 ml-2" [disabled]="loadingMain || creating"
           (click)="openShare()">Share</button>
-        <button class="form-control btn-blue text-white ml-1" [disabled]="loadingMain || creating"
+        <button class="btn btn-primary font-weight-bold f-6 ml-1" [disabled]="loadingMain || creating"
           (click)="copyLink()">Copy</button>
       </div>
     </div>
-    <p class="f-4 mt-4 mb-2">Add the PayPal address you'd like commissions paid to
+    <p class="f-3 mt-4 mb-2">Add the PayPal address you'd like commissions paid to
       - this is the only way we can pay you.
     </p>
     <div class="v-center">
       <img class="paypal-logo" src="../../../assets/img/paypal.svg" alt="PayPal">
       <input class="form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
-      <button class="form-control btn-blue text-white ml-2" *ngIf="!updating" [disabled]="loadingMain || creating"
-        (click)="update()">Update</button>
+      <button class="btn btn-blue text-white font-weight-bold ml-2" (click)="update()" [disabled]="loadingMain || creating" [class.loading]="updating">Update</button>
     </div>
+    <ng-container *ngIf="loadingMain || creating">
+        <ngx-spinner name="sp5" bdColor="rgba(50,50,50,0)" size="medium" color="#888" type="square-jelly-box"
+                     [fullScreen]="false">
+          <p class="text-dark loading-text" *ngIf="loadingMain">Loading Affiliate Information...</p>
+          <p class="text-dark loading-text" *ngIf="creating">Creating Affiliate...</p>
+        </ngx-spinner>
+    </ng-container>
     <ng-container *ngIf="!loadingMain && !creating">
       <h6 class="f-6 font-weight-bold mt-5 mb-2">Commisions</h6>
       <div class="v-center">
         <div class="cards d-grid">
           <div class="card-item rounded p-3">
-            <span class="f-3 c-dark font-weight-bold mt-1 op-40">Unpaid commision</span>
+            <span class="f-3 c-dark font-weight-bold mt-1 opacity-4">Unpaid commision</span>
             <div class="v-center mt-2">
-              <span class="f-8 c-dark font-weight-bold op-40">$</span>
-              <h3 class="card-value c-blue ml-2 mb-0">0</h3>
+              <span class="f-8 c-dark font-weight-bold opacity-4">$</span>
+              <h3 class="card-value c-blue ml-2 mb-0">{{(affiliate.commission_stats?.currencies?.USD?.unpaid?.cents || 0) | money}}</h3>
             </div>
           </div>
           <div class="card-item rounded p-3">
-            <span class="f-3 c-dark font-weight-bold mt-1 op-40">Paid commision</span>
+            <span class="f-3 c-dark font-weight-bold mt-1 opacity-4">Paid commision</span>
             <div class="v-center mt-2">
-              <span class="f-8 c-dark font-weight-bold op-40">$</span>
-              <h3 class="card-value c-blue ml-2 mb-0">5.80</h3>
+              <span class="f-8 c-dark font-weight-bold opacity-4">$</span>
+              <h3 class="card-value c-blue ml-2 mb-0">{{(affiliate.commission_stats?.currencies?.USD?.paid?.cents || 0) | money}}</h3>
             </div>
           </div>
           <div class="card-item rounded p-3">
-            <span class="f-3 c-dark font-weight-bold mt-1 op-40">Total commision</span>
+            <span class="f-3 c-dark font-weight-bold mt-1 opacity-4">Total commision</span>
             <div class="v-center mt-2">
-              <span class="f-8 c-dark font-weight-bold op-40">$</span>
-              <h3 class="card-value c-blue ml-2 mb-0">5.80</h3>
+              <span class="f-8 c-dark font-weight-bold opacity-4">$</span>
+              <h3 class="card-value c-blue ml-2 mb-0">{{(affiliate.commission_stats?.currencies?.USD?.total?.cents || 0) | money}}</h3>
             </div>
           </div>
         </div>
@@ -56,65 +62,78 @@
       <div class="v-center">
         <div class="cards d-grid">
           <div class="card-item rounded p-3">
-            <span class="f-3 c-dark font-weight-bold op-40 mt-1">Visitors</span>
+            <span class="f-3 c-dark font-weight-bold opacity-4 mt-1">Visitors</span>
             <div class="v-center mt-2">
-              <h3 class="card-value c-blue mb-0">16</h3>
+              <h3 class="card-value c-blue mb-0">{{affiliate.visitors || 0}}</h3>
             </div>
           </div>
           <div class="card-item rounded p-3">
-            <span class="f-3 c-dark font-weight-bold op-40 mt-1">Sign ups</span>
+            <span class="f-3 c-dark font-weight-bold opacity-4 mt-1">Sign ups</span>
             <div class="v-center mt-2">
-              <h3 class="card-value c-blue mb-0">0</h3>
+              <h3 class="card-value c-blue mb-0">{{affiliate.leads || 0}}</h3>
             </div>
           </div>
           <div class="card-item rounded p-3">
-            <span class="f-3 c-dark font-weight-bold op-40 mt-1">Conversions</span>
+            <span class="f-3 c-dark font-weight-bold opacity-4 mt-1">Conversions</span>
             <div class="v-center mt-2">
-              <h3 class="card-value c-blue mb-0">0</h3>
+              <h3 class="card-value c-blue mb-0">{{affiliate.conversions || 0}}</h3>
             </div>
           </div>
         </div>
       </div>
       <h6 class="f-6 font-weight-bold mt-5 mb-3">Active Referred Subscribers</h6>
-      <table class="table affiliate-table">
-        <thead>
-        <th class="pl-0">Name</th>
-        <th>E-mail</th>
-        <th>Status</th>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let user of users">
-            <tr *ngIf="user.customer && user.customer.email">
-              <td class="pl-0">
-                <div class="v-center">
-                  <div class="name-avatar font-weight-bold mr-2" *ngIf="user.customer.name">{{user.customer.name[0]}}</div>
-                  <div class="name">{{user.customer.name}}</div>
-                </div>
-              </td>
-              <td>
-                {{user.customer.email}}
-              </td>
-              <td>
-                <div class="status" [class]="user.customer.status">
-                  {{user.customer.status}}
-                </div>
-              </td>
-            </tr>
-          </ng-container>
-          <ng-container *ngIf="!users.length">
-            <tr>
-              <td colspan="3">
-                <p class="text-center my-2" *ngIf="!loadingUsers" style="font-size: 14px;">
-                  There is no active users that signed up with your affiliate invitation.
-                </p>
-                <p class="text-center my-2" *ngIf="loadingUsers" style="font-size: 14px;">
-                  Loading Referral users...
-                </p>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
+      <div class="list-content">
+        <div class="pagination-wrapper" [hidden]="userCount <= 25">
+          <pagination-controls (pageChange)="loadUsers($event)" id="users" maxSize="4" previousLabel=""
+                               nextLabel=""></pagination-controls>
+        </div>
+        <table class="table affiliate-table">
+          <thead>
+          <th class="pl-0">Name</th>
+          <th>E-mail</th>
+          <th>Status</th>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let user of users | paginate : {id: 'users', itemsPerPage: 100, currentPage: userPage, totalItems: userCount}">
+              <tr *ngIf="user.customer && user.customer.email">
+                <td class="pl-0">
+                  <div class="v-center">
+                    <div class="name-avatar font-weight-bold mr-2">
+                      {{user.customer.name ? getAvatarName(user.customer.name) : 'UN'}}
+                    </div>
+                    <div class="name">{{user.customer?.name || 'Unnamed'}}</div>
+                  </div>
+                </td>
+                <td>
+                  {{user.customer?.email || 'Undefined'}}
+                </td>
+                <td>
+                  <div class="status" [class.active]="user.conversion_state == 'conversion'" [class.pending]="user.conversion_state == 'lead'">
+                    <ng-container *ngIf="user.conversion_state === 'conversion'; else pendingStatus">
+                      ACTIVE
+                    </ng-container>
+                    <ng-template #pendingStatus>
+                      PENDING
+                    </ng-template>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="!users.length">
+              <tr>
+                <td colspan="3">
+                  <p class="text-center my-2" *ngIf="!loadingUsers" style="font-size: 14px;">
+                    There is no active users that signed up with your affiliate invitation.
+                  </p>
+                  <ng-container *ngIf="loadingUsers">
+                    <app-loading-overlay [type]="'table'"></app-loading-overlay>
+                  </ng-container>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
     </ng-container>
   </div>
 </div>

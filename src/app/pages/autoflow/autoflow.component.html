@@ -1,8 +1,13 @@
-<div class="container-fluid page-wrapper">
-  <div class="automation-container">
+<div class="page-content">
+  <div class="automation-container my-3">
     <form #automationForm="ngForm" (ngSubmit)="submitted=true; automationForm.form.valid ? storeData() : false;"
           [class.was-validated]="submitted">
-      <div class="f-8 font-weight-bold text-uppercase">Automations</div>
+      <div class="v-center my-2">
+        <a [routerLink]="['/automations']" class="c-dark mr-2">
+          <div class="f-8 ls-2 font-weight-bold text-uppercase">Automations</div>
+        </a>
+        <div class="f-8 font-weight-bold text-uppercase" *ngIf="editMode=='new'"> / Create Template</div>
+      </div>
       <div class="align-items-top automation-name-wrapper mt-3">
         <div class="row">
           <div class="col-md-7 col-sm-12">
@@ -10,13 +15,15 @@
               <div class="title w-100">
                 <label for="automation-title">Title</label>
                 <input class="form-control" id="automation-title" [(ngModel)]="automation_title" type="text"
-                       name="automationTitle" #automationTitle="ngModel" required>
+                       name="automationTitle" #automationTitle="ngModel" placeholder="Type in new automation title" required>
                 <span class="invalid-feedback"
                       *ngIf="automationTitle.errors&&(automationTitle.touched||automationTitle.dirty||submitted)&&submitted">Automation
             name is required.</span>
               </div>
               <div class="btn-wrapper">
-                <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">Save</button>
+                <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
+                  {{editMode == 'edit' ? 'Save' : 'Create'}}
+                </button>
               </div>
             </div>
           </div>
@@ -65,7 +72,7 @@
               <p class="count font-weight-bold">{{automation && automation.automations.length ? automation.automations.length : 0}}</p>
             </div>
           </div>
-          <div class="contacts-count mt-3">
+          <div class="contacts-count mt-3" *ngIf="editMode == 'edit'">
             <label class="f-1 text-uppercase">Contacts</label>
             <div class="content contacts">
               <p class="count font-weight-bold">0</p>
@@ -89,7 +96,7 @@
                                class="drop-target">
                       <xhtml:div class="cardContainer" style="margin-bottom: 5px; margin-top: 10px; text-align: center;"
                                  xmlns="http://www.w3.org/1999/xhtml">
-                        <img [attr.src]="'./assets/img/start_button.png'" x="75" y="0" height="50px"
+                        <img [attr.src]="'./assets/image/automation_start.svg'" x="75" y="0" height="50px"
                              width="50px" />
                       </xhtml:div>
                       <xhtml:div class="cardContainer"
@@ -125,7 +132,7 @@
             </ng-template>
 
             <ng-template #nodeTemplate let-node>
-              <svg:g class="node" *ngIf="node.category === 'NORMAL'"  (click)="editAction($event, node)">
+              <svg:g class="node" *ngIf="node.category === 'NORMAL'">
                 <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.leaf ? 200 : 110"
                           fill="transparent" />
                 <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110">
@@ -134,7 +141,7 @@
                     <img [attr.src]="ICONS[node.type]" x="75" y="0" height="50px" width="50px" />
                     <label class="remove-action" (click)="removeAction(node)">&times;</label>
                   </xhtml:div>
-                  <xhtml:div class="cardContainer"
+                  <xhtml:div class="cardContainer" (click)="editAction($event, node)"
                              style="background-color: transparent; padding: 5px 8px 20px 8px; margin-bottom: 15px; text-align: center;"
                              xmlns="http://www.w3.org/1999/xhtml">
                     <label class="name" style="margin: 0; font-size: 14px; font-weight: bold;">{{node.label}}</label>
@@ -145,9 +152,11 @@
                       style="background-color: transparent; border-left: 2px dashed #aaa; width: 2px; height: 30px; margin-top: -15px; margin-left: auto; margin-right: auto;"
                       xmlns="http://www.w3.org/1999/xhtml">
                     </xhtml:div>
-                    <xhtml:div class="v-leaf" (click)="addAction(node)"
-                               style="background-color: transparent; height: 50px; width: 70px; border: 2px dashed #aaa; margin: auto;"
-                               xmlns="http://www.w3.org/1999/xhtml" >
+                    <xhtml:div class="cardContainer" (click)="addAction(node)"
+                               style="margin-bottom: 5px; margin-top: 5px; text-align: center;"
+                               xmlns="http://www.w3.org/1999/xhtml">
+                      <img [attr.src]="'./assets/image/automation_start.svg'" x="75" y="0" height="48px"
+                           width="48px" />
                     </xhtml:div>
                   </ng-container>
                 </svg:foreignObject>
@@ -165,9 +174,11 @@
                       style="background-color: transparent; border-left: 2px dashed #aaa; width: 2px; height: 30px; margin-top: -15px; margin-left: auto; margin-right: auto;"
                       xmlns="http://www.w3.org/1999/xhtml">
                     </xhtml:div>
-                    <xhtml:div class="v-leaf" (click)="addAction(node)"
-                               style="background-color: transparent; height: 50px; width: 70px; border: 2px dashed #aaa; margin: auto;"
-                               xmlns="http://www.w3.org/1999/xhtml" >
+                    <xhtml:div class="cardContainer" (click)="addAction(node)"
+                               style="margin-bottom: 5px; margin-top: 5px; text-align: center;"
+                               xmlns="http://www.w3.org/1999/xhtml">
+                      <img [attr.src]="'./assets/image/automation_start.svg'" x="75" y="0" height="48px"
+                           width="48px" />
                     </xhtml:div>
                   </ng-container>
                 </svg:foreignObject>
