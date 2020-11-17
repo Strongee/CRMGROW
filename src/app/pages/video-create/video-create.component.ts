@@ -159,6 +159,8 @@ export class VideoCreateComponent implements OnInit {
       thumbnail: '',
       description: ''
     };
+    this.urlChecked = false;
+    this.loadedData = false;
   }
 
   selectTheme(): void {
@@ -327,20 +329,38 @@ export class VideoCreateComponent implements OnInit {
       });
   }
 
+  openPreviewDialog(): void {
+    this.helperService
+      .promptForImage()
+      .then((imageFile) => {
+        this.helperService
+          .generateImageThumbnail(imageFile)
+          .then((thumbnail) => {
+            this.video.thumbnail = thumbnail;
+            this.video['custom_thumbnail'] = true;
+            this.helperService
+              .generateImageThumbnail(imageFile, 'video_play')
+              .then((image) => {
+                this.video['site_image'] = image;
+              });
+          })
+          .catch(() => {
+            this.toast.warning('Cannot load the image file.');
+          });
+      })
+      .catch(() => {
+        this.toast.warning('Cannot read this image file.');
+      });
+  }
+
   checkVideoUrl(): void {
+    this.videoType = 'web';
+    this.uploadVideo();
     if (this.video.url.toLowerCase().indexOf('youtube.com') > -1) {
       this.getYoutubeId();
-      if (this.loadedData == true) {
-        this.videoType = 'web';
-        this.uploadVideo();
-      }
     }
     if (this.video.url.toLowerCase().indexOf('vimeo.com') > -1) {
       this.getVimeoId();
-      if (this.loadedData == true) {
-        this.videoType = 'web';
-        this.uploadVideo();
-      }
     }
   }
 

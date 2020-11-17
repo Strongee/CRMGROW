@@ -113,7 +113,6 @@ export class HelperService {
               );
               resolve(canvas.toDataURL('image/jpeg'));
             };
-            overlay.src = '../../assets/img/icons/pdf_overlay.png';
           }
           if (type == 'image') {
             const overlay = new Image();
@@ -127,7 +126,6 @@ export class HelperService {
               );
               resolve(canvas.toDataURL('image/jpeg'));
             };
-            overlay.src = '../../assets/img/icons/image_overlay.png';
           }
           if (type == 'video_play') {
             const overlay = new Image();
@@ -135,7 +133,6 @@ export class HelperService {
               context.drawImage(overlay, 19.2, 183);
               resolve(canvas.toDataURL('image/jpeg'));
             };
-            overlay.src = '../../assets/img/icons/overlay.png';
           }
         });
         source.src = fileReader.result as string;
@@ -155,6 +152,21 @@ export class HelperService {
       });
       fileInput.addEventListener('change', () => {
         resolve(fileInput.files);
+      });
+      fileInput.click();
+    });
+  }
+
+  promptForImage(): Promise<File> {
+    return new Promise<File>((resolve, reject) => {
+      const fileInput: HTMLInputElement = this.document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.addEventListener('error', (event) => {
+        reject(event.error);
+      });
+      fileInput.addEventListener('change', (event) => {
+        resolve(fileInput.files[0]);
       });
       fileInput.click();
     });

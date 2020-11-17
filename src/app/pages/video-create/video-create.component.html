@@ -78,7 +78,10 @@
                 <div class="video-default mb-4">
                     <span class="f-1 font-weight-bold text-uppercase small-label" *ngIf="videoType == 'web'">original title</span>
                     <span class="d-flex f-6 font-weight-bold text-c-dark mb-4" *ngIf="videoType == 'web'">{{video.title}}</span>
-                    <img [src]="video.thumbnail">
+                    <div class="thumbnail">
+                        <img [src]="video.thumbnail">
+                        <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog()"><i class="d-block i-icon i-edit bgc-white"></i></a>
+                    </div>
                 </div>
                 <div class="form-group has-feedback mb-4">
                     <label class="f-1 font-weight-bold text-uppercase small-label" for="title">custom title</label>
