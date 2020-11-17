@@ -354,8 +354,6 @@ export class VideoCreateComponent implements OnInit {
   }
 
   checkVideoUrl(): void {
-    this.videoType = 'web';
-    this.uploadVideo();
     if (this.video.url.toLowerCase().indexOf('youtube.com') > -1) {
       this.getYoutubeId();
     }
@@ -443,6 +441,8 @@ export class VideoCreateComponent implements OnInit {
           }
           if (res['items']) {
             this.loadedData = true;
+            this.videoType = 'web';
+            this.uploadVideo();
           }
         },
         (err) => {
@@ -460,6 +460,8 @@ export class VideoCreateComponent implements OnInit {
           this.video.thumbnail = res[0]['thumbnail_large'];
           this.video.duration = res[0]['duration'];
           this.loadedData = true;
+          this.videoType = 'web';
+          this.uploadVideo();
         }
       });
   }
