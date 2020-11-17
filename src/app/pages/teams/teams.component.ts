@@ -7,7 +7,7 @@ import { TeamService } from 'src/app/services/team.service';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule, Routes} from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
 import { TeamDeleteComponent } from '../../components/team-delete/team-delete.component';
@@ -16,7 +16,8 @@ import { CallRequestConfirmComponent } from '../../components/call-request-confi
 import { CallRequestCancelComponent } from '../../components/call-request-cancel/call-request-cancel.component';
 import { JoinTeamComponent } from 'src/app/components/join-team/join-team.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
-
+import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
+import * as moment from 'moment';
 @Component({
   selector: 'app-teams',
   templateUrl: './teams.component.html',
@@ -92,7 +93,8 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     private location: Location,
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -100,7 +102,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.isPlannedLoading = true;
     this.isFinishedLoading = true;
     this.userService.profile$.subscribe((res) => {
-      console.log("user profile =============>", res);
+      console.log('user profile =============>', res);
       this.currentUser = res;
       this.userId = res._id;
       this.load();
@@ -113,7 +115,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      const callId = this.route.snapshot.params['id'];
+      const callId = this.route.snapshot.params.id;
       if (callId) {
         this.teamService.getInquiry(callId).subscribe((res) => {
           const inquiry = res;
@@ -696,5 +698,23 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     }
   }
   editGroupCall(plan): void {}
-  addToCalendar(plan): void {}
+  addToCalendar(plan): void {
+    this.router.navigate(['/calendar']);
+    const startDate = new Date(plan.proposed_at[plan.proposed_at.length - 1]);
+    const endDate = moment(startDate).add(plan.duration, 'm').toISOString();
+    const calendarData = {
+      title: plan.subject,
+      start: startDate,
+      end: new Date(endDate),
+      meta: {
+        contacts: plan.contacts,
+        description: plan.description,
+        guests: plan.guests,
+        is_organizer: plan.user._id === this.userId
+      }
+    };
+    this.dialog.open(CalendarDialogComponent, {
+
+    });
+  }
 }

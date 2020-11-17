@@ -35,6 +35,7 @@ export class TemplatesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.userService.loadProfile().subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
@@ -128,7 +129,7 @@ export class TemplatesComponent implements OnInit {
     this.isSetting = true;
     this.templatesService
       .setDefault({
-        cannedMessage
+        canned_message: cannedMessage
       })
       .subscribe(
         (res) => {
