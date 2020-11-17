@@ -156,11 +156,7 @@ export class CalendarDialogComponent implements OnInit {
         this.duration =
           end_hour - start_hour + (end_minute - start_minute) / 60;
 
-        if (this.event.is_organizer) {
-          this.isUser = this.event.is_organizer;
-          this.event.is_organizer = this.data.event.meta.is_organizer;
-        }
-
+        this.event.is_organizer = this.data.event.meta.is_organizer;
         this.event.contacts = this.data.event.meta.contacts;
         this.event.guests = this.data.event.meta.guests;
         if (this.data.event.meta.guests.length > 0) {
@@ -198,6 +194,10 @@ export class CalendarDialogComponent implements OnInit {
           this.event.recurrence = this.data.event.meta.recurrence;
         }
         this.event.recurrence_id = this.data.event.meta.recurrence_id;
+
+        if (this.event.is_organizer) {
+          this.isUser = this.event.is_organizer;
+        }
         this.event.calendar_id = this.data.event.meta.calendar_id;
         this.event.event_id = this.data.event.meta.event_id;
         if (this.data.event.meta.event_id) {
