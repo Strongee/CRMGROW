@@ -2,7 +2,8 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {
   TIMES,
   CALENDAR_DURATION,
-  RECURRING_TYPE
+  RECURRING_TYPE,
+  QuillEditor
 } from 'src/app/constants/variable.constants';
 import {
   MatDialog,
@@ -10,23 +11,18 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import { QuillEditorComponent } from 'ngx-quill';
-import { FileUploader } from 'ng2-file-upload';
-import { QuillEditor } from '../../constants/variable.constants';
 import { UserService } from '../../services/user.service';
 import { FileService } from '../../services/file.service';
 import { HelperService } from '../../services/helper.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
-import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
-import { Subscription } from 'rxjs';
-import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 Quill.register('modules/imageResize', ImageResize);
-
+import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',
@@ -77,10 +73,8 @@ export class CalendarDialogComponent implements OnInit {
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarDialogComponent>,
     private fileService: FileService,
-    private userService: UserService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
-    private helperService: HelperService,
     private contactService: ContactService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -119,13 +113,45 @@ export class CalendarDialogComponent implements OnInit {
       }
       if (this.data.event) {
         this.event.title = this.data.event.title;
-        this.event.location = this.data.event.meta.location;
-        this.event.description = this.data.event.meta.description;
-        this.event.recurrence = this.data.event.meta.recurrence;
-        this.event.recurrence_id = this.data.event.meta.recurrence_id;
-        this.event.contacts = this.data.event.meta.contacts;
-        this.event.calendar_id = this.data.event.meta.calendar_id;
+
+        this.due_date.year = this.data.event.start.getFullYear();
+        this.due_date.month = this.data.event.start.getMonth() + 1;
+        this.due_date.day = this.data.event.start.getDate();
+        this.selectedDateTime = moment(
+          this.due_date.year +
+            '-' +
+            this.due_date.month +
+            '-' +
+            this.due_date.day
+        ).format('YYYY-MM-DD');
+
+        const duration = moment(this.selectedDateTime)
+          .add(this.duration * 60, 'minutes')
+          .format();
+        this.event.due_start = this.selectedDateTime;
+        this.event.due_end = duration;
+        let hour, minute;
+        if (this.data.event.start.getHours().toString().length == 1) {
+          hour = `0${this.data.event.start.getHours()}`;
+        } else {
+          hour = this.data.event.start.getHours();
+        }
+        if (this.data.event.start.getMinutes().toString().length == 1) {
+          minute = `0${this.data.event.start.getMinutes()}`;
+        } else {
+          minute = this.data.event.start.getMinutes();
+        }
+        this.due_time = `${hour}:${minute}:00.000`;
+
+        const start_hour = this.data.event.start.getHours();
+        const end_hour = this.data.event.end.getHours();
+        const start_minute = this.data.event.start.getMinutes();
+        const end_minute = this.data.event.end.getMinutes();
+        this.duration =
+          end_hour - start_hour + (end_minute - start_minute) / 60;
+
         this.event.is_organizer = this.data.event.meta.is_organizer;
+        this.event.contacts = this.data.event.meta.contacts;
         this.event.guests = this.data.event.meta.guests;
         if (this.data.event.meta.guests.length > 0) {
           this.data.event.meta.guests.forEach(
@@ -155,42 +181,16 @@ export class CalendarDialogComponent implements OnInit {
             }
           );
         }
+
+        this.event.location = this.data.event.meta.location;
+        this.event.description = this.data.event.meta.description;
+        this.event.recurrence = this.data.event.meta.recurrence;
+        this.event.recurrence_id = this.data.event.meta.recurrence_id;
+        this.event.calendar_id = this.data.event.meta.calendar_id;
+
         if (this.event.is_organizer) {
           this.isUser = this.event.is_organizer;
         }
-        this.due_date.year = this.data.event.start.getFullYear();
-        this.due_date.month = this.data.event.start.getMonth() + 1;
-        this.due_date.day = this.data.event.start.getDate();
-        this.selectedDateTime = moment(
-          this.due_date.year +
-            '-' +
-            this.due_date.month +
-            '-' +
-            this.due_date.day
-        ).format('YYYY-MM-DD');
-        const duration = moment(this.selectedDateTime)
-          .add(this.duration * 60, 'minutes')
-          .format();
-        this.event.due_start = this.selectedDateTime;
-        this.event.due_end = duration;
-        let hour, minute;
-        if (this.data.event.start.getHours().toString().length == 1) {
-          hour = `0${this.data.event.start.getHours()}`;
-        } else {
-          hour = this.data.event.start.getHours();
-        }
-        if (this.data.event.start.getMinutes().toString().length == 1) {
-          minute = `0${this.data.event.start.getMinutes()}`;
-        } else {
-          minute = this.data.event.start.getMinutes();
-        }
-        this.due_time = `${hour}:${minute}:00.000`;
-        const start_hour = this.data.event.start.getHours();
-        const end_hour = this.data.event.end.getHours();
-        const start_minute = this.data.event.start.getMinutes();
-        const end_minute = this.data.event.end.getMinutes();
-        this.duration =
-          end_hour - start_hour + (end_minute - start_minute) / 60;
         this.event.event_id = this.data.event.meta.event_id;
         if (this.data.event.meta.event_id) {
           this.changeMode = 'update';
