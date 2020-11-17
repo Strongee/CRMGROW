@@ -714,7 +714,12 @@ export class TeamsComponent implements OnInit, AfterViewInit {
       }
     };
     this.dialog.open(CalendarDialogComponent, {
-
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      data: {
+        event: calendarData
+      }
     });
   }
 }
