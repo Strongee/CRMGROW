@@ -1,18 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29.409" height="24" viewBox="0 0 29.409 24">
-  <defs>
-    <path id="path-4" fill-rule="evenodd" d="M11.2046301 10h7c.82787255 0 1.5.67212746 1.5 1.5s-.67212745 1.5-1.5 1.5h-7c-.82787253 0-1.5-.67212746-1.5-1.5s.67212747-1.5 1.5-1.5z"/>
-    <mask id="mask-5" x="0" y="0" maskContentUnits="userSpaceOnUse" maskUnits="userSpaceOnUse">
-      <rect width="29.409" height="24" x="0" y="0" fill="black"/>
-      <use fill="white" xlink:href="#path-4"/>
-    </mask>
-  </defs>
-  <g>
-    <rect width="24" height="24" x="2.705" y="0" fill="none" rx="0" ry="0"/>
-    <path fill="none" stroke="rgb(16,19,54)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M17.73352342 17h4.97110669c1.1045695 0 2-.8954305 2-2V8c0-1.1045695-.8954305-2-2-2h-4.97110669"/>
-    <path fill="none" stroke="rgb(16,19,54)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M11.6757368 17H6.7046301c-1.10456949 0-2-.8954305-2-2V8c0-1.1045695.89543051-2 2-2h4.9711067"/>
-    <g>
-      <use fill="rgb(16,19,54)" xlink:href="#path-4"/>
-      <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" mask="url(#mask-5)" xlink:href="#path-4"/>
-    </g>
+<svg id="Group_3_Copy" data-name="Group 3 Copy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="Rectangle_Copy" data-name="Rectangle Copy" width="24" height="24" fill="none"/>
+  <path id="Rectangle" d="M0,11H4.971a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2H0" transform="translate(15.029 6)" fill="none" stroke="#101336" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+  <path id="Rectangle_Copy_7" data-name="Rectangle Copy 7" d="M0,11H-4.971a2,2,0,0,1-2-2V2a2,2,0,0,1,2-2H0" transform="translate(8.971 6)" fill="none" stroke="#101336" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+  <g id="Rectangle-2" data-name="Rectangle" transform="translate(7 10)" fill="#101336" stroke="#101336" stroke-miterlimit="10" stroke-width="1">
+    <rect width="10" height="3" rx="1.5" stroke="none"/>
+    <rect x="0.5" y="0.5" width="9" height="2" rx="1" fill="none"/>
   </g>
 </svg>

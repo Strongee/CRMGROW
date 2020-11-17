@@ -149,13 +149,14 @@ td {
       .custom-control {
           display: none;
       }
-      .button-more {
-        a {
-            &::after {
-                content: none;
-            }
+    }
+}
+
+.button-more {
+    a {
+        &::after {
+            content: none;
         }
-      }
     }
 }
 
