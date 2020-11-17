@@ -74,7 +74,6 @@ export class CallRequestConfirmComponent implements OnInit {
           : this.formData.duration + ' mins';
       this.note = this.formData.note;
       this.isNoteEditable = this.isLeader && this.formData.status !== 'pending';
-      console.log("call inquiry data ==============>", this.formData);
     });
   }
   getEditorInstance(editorInstance: any): void {

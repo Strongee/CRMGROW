@@ -56,7 +56,7 @@
   mask-image: url('/assets/img/setting.svg');
 }
 .i-share{
-  mask-image: url('/assets/img/share.svg');
+  mask-image: url('/assets/image/share.svg');
 }
 .i-sms-sent{
   mask-image: url('/assets/img/sms_sent.svg');
@@ -284,4 +284,16 @@
 }
 .i-group-call {
   mask-image: url('/assets/image/group_call.svg');
+}
+.i-invite-member {
+  mask-image: url('/assets/image/invite_member.svg');
+}
+.i-send {
+  mask-image: url('/assets/image/material_send.svg');
+}
+.i-copy-link {
+  mask-image: url('/assets/image/material_copy_link.svg');
+}
+.i-edit-template {
+  mask-image: url('/assets/image/edit_template.svg');
 }
