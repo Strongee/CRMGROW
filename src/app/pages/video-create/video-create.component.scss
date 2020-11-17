@@ -110,6 +110,17 @@
                 font-size: 14px;
                 font-weight: 600;
             }
+            .setting-spinner {
+                position: absolute;
+                top: 0px;
+                bottom: 0px;
+                left: 0px;
+                right: 0px;
+                text-align: center;
+                margin: 0px;
+                background: #3c3c3cab;
+                border-radius: 5px;
+            }
             &.selected {
                 background: #0700FF;
                 border-radius: 5px;

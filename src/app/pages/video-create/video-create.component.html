@@ -134,6 +134,9 @@
                     <div class="col-sm-4 col-6 py-3 theme" *ngFor="let theme of themes" (click)="setVideoTheme(theme)" [class.selected]="selectedTheme.id == theme.id">
                       <img src="{{theme.thumbnail}}" class="w-100 theme-thumb" />
                       <div class="f-1 text-center text-c-dark pt-3 theme-name">{{theme.name}}</div>
+                      <div class="v-center justify-content-center c-white setting-spinner" *ngIf="selectedTheme.id == theme.id && themeSaving">
+                        Applying
+                      </div>
                     </div>
                 </div>
                 <div class="v-center justify-content-end mt-4">

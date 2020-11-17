@@ -7,7 +7,9 @@ import { FileService } from '../../services/file.service';
 import { MaterialService } from '../../services/material.service';
 import { HelperService } from '../../services/helper.service';
 import { ToastrService } from 'ngx-toastr';
+import { ThemeService } from '../../services/theme.service';
 import { environment } from 'src/environments/environment';
+import { Garbage } from 'src/app/models/garbage.model';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
@@ -21,6 +23,7 @@ Quill.register('modules/imageResize', ImageResize);
   styleUrls: ['./video-create.component.scss']
 })
 export class VideoCreateComponent implements OnInit {
+  garbage: Garbage = new Garbage();
   submitted = false;
   isStep = 1;
   isActive = 1;
@@ -53,6 +56,7 @@ export class VideoCreateComponent implements OnInit {
   uploadTimer: any;
   uploadTimeSubscriber: any;
   uploaded_time = 0;
+  themeSaving = false;
 
   themes = [
     {
@@ -96,8 +100,16 @@ export class VideoCreateComponent implements OnInit {
     private userService: UserService,
     private toast: ToastrService,
     private helperService: HelperService,
+    private themeService: ThemeService,
     private router: Router
-  ) {}
+  ) {
+    this.userService.garbage$.subscribe((res) => {
+      this.garbage = new Garbage().deserialize(res);
+      this.selectedTheme = this.themes.filter(
+        (theme) => theme.id == this.garbage.material_theme
+      )[0];
+    });
+  }
 
   ngOnInit(): void {
     this.uploader.onAfterAddingFile = (file) => {
@@ -168,8 +180,19 @@ export class VideoCreateComponent implements OnInit {
     this.isActive++;
   }
 
-  setVideoTheme(theme) {
+  setVideoTheme(theme: any): void {
+    this.themeSaving = true;
     this.selectedTheme = theme;
+    this.garbage.material_theme = this.selectedTheme.id;
+    this.userService.updateGarbage(this.garbage).subscribe(
+      () => {
+        this.themeSaving = false;
+        this.userService.updateGarbageImpl(this.garbage);
+      },
+      () => {
+        this.themeSaving = false;
+      }
+    );
   }
 
   backDetail(): void {
