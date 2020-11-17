@@ -298,7 +298,6 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   create(): void {
-    console.log('###', this.contacts);
     this.isLoading = true;
     this.event.contacts = [];
     this.event.guests = [];
@@ -328,21 +327,21 @@ export class CalendarDialogComponent implements OnInit {
         this.event.guests.push(contact.email);
       });
     }
-    // this.appointmentService.createEvents(this.event).subscribe(
-    //   (res) => {
-    //     if (res['status'] == true) {
-    //       this.isLoading = false;
-    //       const data = {
-    //         event_id: res['event_id']
-    //       };
-    //       this.toast.success('New Event is created successfully');
-    //       this.dialogRef.close(data);
-    //     }
-    //   },
-    //   (error) => {
-    //     this.isLoading = false;
-    //   }
-    // );
+    this.appointmentService.createEvents(this.event).subscribe(
+      (res) => {
+        if (res['status'] == true) {
+          this.isLoading = false;
+          const data = {
+            event_id: res['event_id']
+          };
+          this.toast.success('New Event is created successfully');
+          this.dialogRef.close(data);
+        }
+      },
+      (error) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   getDateTime(): any {
