@@ -181,7 +181,6 @@
         </div>
         <div *ngSwitchCase="'week'">
             <mwl-calendar-week-view
-                *ngSwitchCase="CalendarView.Week"
                 [viewDate]="viewDate"
                 [events]="events"
                 [headerTemplate]="weekHeaderTemplate"
@@ -198,7 +197,7 @@
                         <span class="cal-time f-1 font-weight-bold op-64">
                             {{ segment.date | calendarDate:'dayViewHour':locale }}
                         </span>
-                        <div class="time-line">
+                        <div class="time-line ml-3">
                             <div class="line"></div>
                             <div class="line"></div>
                             <div class="line"></div>

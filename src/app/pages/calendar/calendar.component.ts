@@ -134,6 +134,7 @@ export class CalendarComponent implements OnInit {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '600px',
+        maxHeight: '700px',
         data: {
           start_date: date,
           type: 'month'
@@ -181,6 +182,7 @@ export class CalendarComponent implements OnInit {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '600px',
+        maxHeight: '700px',
         data: {
           start_date: date,
           type: 'week'
@@ -227,7 +229,8 @@ export class CalendarComponent implements OnInit {
       .open(CalendarDialogComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '600px'
+        maxWidth: '600px',
+        maxHeight: '700px'
       })
       .afterClosed()
       .subscribe((res) => {
@@ -271,6 +274,7 @@ export class CalendarComponent implements OnInit {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '300px',
+        maxHeight: '500px',
         data: {
           event: event
         }
