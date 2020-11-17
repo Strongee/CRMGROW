@@ -23,6 +23,7 @@ const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
 Quill.register('modules/imageResize', ImageResize);
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
+import { Contact } from 'src/app/models/contact.model';
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',
@@ -54,7 +55,7 @@ export class CalendarDialogComponent implements OnInit {
     is_organizer: false
   };
   duration = 0.5;
-  contacts = [];
+  contacts: Contact[] = [];
   changeMode = 'create';
   isRepeat = false;
   isLoading = false;
@@ -162,20 +163,18 @@ export class CalendarDialogComponent implements OnInit {
                   if (res['status'] == true) {
                     if (res['data'].contacts.length > 0) {
                       res['data'].contacts[0].email_status = guest.response;
-                      this.contacts = [
-                        ...this.contacts,
-                        res['data'].contacts[0]
-                      ];
+                      let contacts = new Contact();
+                      contacts = res['data'].contacts[0];
+                      this.contacts = [...this.contacts, contacts];
                     } else {
                       const firstname = res['data'].search.split('@')[0];
-                      const contacts = {
+                      const guests = new Contact().deserialize({
                         first_name: firstname,
-                        email: res['data'].search,
-                        isNew: true,
-                        email_status: guest.response
-                      };
-                      this.contacts = [...this.contacts, contacts];
+                        email: res['data'].search
+                      });
+                      this.contacts = [...this.contacts, guests];
                     }
+                    console.log('###', this.contacts);
                   }
                 });
             }
@@ -299,6 +298,7 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   create(): void {
+    console.log('###', this.contacts);
     this.isLoading = true;
     this.event.contacts = [];
     this.event.guests = [];
@@ -328,21 +328,21 @@ export class CalendarDialogComponent implements OnInit {
         this.event.guests.push(contact.email);
       });
     }
-    this.appointmentService.createEvents(this.event).subscribe(
-      (res) => {
-        if (res['status'] == true) {
-          this.isLoading = false;
-          const data = {
-            event_id: res['event_id']
-          };
-          this.toast.success('New Event is created successfully');
-          this.dialogRef.close(data);
-        }
-      },
-      (error) => {
-        this.isLoading = false;
-      }
-    );
+    // this.appointmentService.createEvents(this.event).subscribe(
+    //   (res) => {
+    //     if (res['status'] == true) {
+    //       this.isLoading = false;
+    //       const data = {
+    //         event_id: res['event_id']
+    //       };
+    //       this.toast.success('New Event is created successfully');
+    //       this.dialogRef.close(data);
+    //     }
+    //   },
+    //   (error) => {
+    //     this.isLoading = false;
+    //   }
+    // );
   }
 
   getDateTime(): any {

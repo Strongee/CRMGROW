@@ -140,7 +140,6 @@
     <div [ngSwitch]="view">
         <div *ngSwitchCase="'month'">
             <mwl-calendar-month-view
-                *ngSwitchCase="CalendarView.Month"
                 [viewDate]="viewDate"
                 [events]="events"
                 (dayClicked)="dayClicked($event.day)"
@@ -183,6 +182,7 @@
             <mwl-calendar-week-view
                 [viewDate]="viewDate"
                 [events]="events"
+                [eventTemplate]="weekEventTemplate"
                 [headerTemplate]="weekHeaderTemplate"
                 [hourSegmentHeight]="60"
                 [hourSegments]="1"
@@ -191,6 +191,16 @@
                 (eventClicked)="handleEvent($event.event)"
             >
             </mwl-calendar-week-view>
+            <ng-template #weekEventTemplate let-weekEvent="weekEvent" let-locale="locale" let-eventClicked="eventClicked">
+                <div class="cal-event" (mwlClick)="eventClicked.emit({ event: weekEvent.event })" >
+                    <div class="f-1 font-weight-bold c-white cal-event-title">
+                        {{weekEvent.event.title}}
+                    </div>
+                    <div class="f-1 font-weight-bold c-white cal-event-title">
+                        {{weekEvent.event.start | date:'HH:mm'}}-{{weekEvent.event.end | date:'HH:mm'}}
+                    </div>
+                </div>
+            </ng-template>
             <ng-template #weekHourTemplate let-segment="segment" let-locale="locale" let-isTimeLabel="isTimeLabel">
                 <div *ngIf="isTimeLabel">
                     <div class="cal-hour-segment">
@@ -229,7 +239,6 @@
         </div>
         <div *ngSwitchCase="'day'">
             <mwl-calendar-day-view
-                *ngSwitchCase="CalendarView.Day"
                 [viewDate]="viewDate"
                 [events]="events"
                 (hourSegmentClicked)="hourClicked($event.date)"
