@@ -139,91 +139,11 @@
           </div>
         </div>
         <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
-          <ng-container *ngFor="let activity of mainTimelines" [ngSwitch]="activity.type">
+          <ng-container *ngFor="let activity of mainTimelines">
             <div class="time-line d-flex">
-              <div class="history-icon mr-3"></div>
-              <!-- Contact Activity -->
-              <div class="history-info" *ngSwitchCase="'contacts'">
-                <div class="history-header">
-                  <span>{{activity.content}}</span>
-                  <div class="v-center history-time ml-auto">
-                    <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'hh:mm a'}}</span>
-                    <div ngbDropdown class="button-more p-1 rounded">
-                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item">
-                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="history-detail">
-                  {{activity.activity_detail | json}}
-                </div>
-              </div>
-
-              <!-- Follow Up Activity -->
-              <div class="history-info" *ngSwitchCase="'follow_ups'">
-                <div class="history-header">
-                  <span>{{activity.content}}</span>
-                  <div class="v-center history-time ml-auto">
-                    <span class="f-3 op-56">{{activity.created_at | date :'hh:mm a'}}</span>
-                    <div ngbDropdown class="button-more p-1 rounded">
-                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item">
-                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="history-detail">
-                  {{activity.activity_detail | json}}
-                </div>
-              </div>
-
-              <!-- Phone Logs Activity -->
-              <div class="history-info" *ngSwitchCase="'phone_logs'">
-                <div class="history-header">
-                  <span>{{activity.content}}</span>
-                  <div class="v-center history-time ml-auto">
-                    <span class="f-3 op-56">{{activity.created_at | date :'hh:mm a'}}</span>
-                    <div ngbDropdown class="button-more p-1 rounded">
-                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item">
-                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="history-detail"></div>
-              </div>
-
-              <!-- Email Activity  -->
-
-              <!-- Text Activity -->
-
-              <!-- Send Video Activity -->
-
-              <!-- Send Pdf Activity -->
-
-              <!-- Send Image Activity -->
-
-              <!-- Default Activity -->
-              <div class="history-info" *ngSwitchDefault>
+              <div class="history-icon mr-3"><i class="i-icon {{activity.type}}" ></i></div>
+              <!-- History Item -->
+              <div class="history-info">
                 <div class="history-header">
                   <span>{{activity.content}}</span>
                   <div class="v-center history-time ml-auto">
