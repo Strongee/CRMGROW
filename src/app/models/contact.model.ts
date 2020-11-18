@@ -143,7 +143,7 @@ export class ContactActivity implements Deserializable {
 }
 
 export class ContactDetail extends Contact {
-  activity: DetailActivity[];
+  activity: DetailActivity[] = [];
   automation: {
     _id: string;
     title: string;
@@ -161,6 +161,7 @@ export class ContactDetail extends Contact {
     this.activity = input.activity.map((e) =>
       new DetailActivity().deserialize(e)
     );
+    this.activity ? true : (this.activity = []);
     return this;
   }
 

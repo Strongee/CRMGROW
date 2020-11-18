@@ -98,11 +98,14 @@ export class ActivityDetail implements Deserializable {
 }
 
 export class DetailActivity extends PureActivity {
-  activity_detail: any[];
+  group_id: string;
+  activity_detail: any[]; // VIDEO_Tracker, PDF_Tracker, IMAGE_tracker, VIDEO, PDF, IMAGE, TASK, NOTE, PHONE_LOG
 
   deserialize(input: any): this {
     Object.assign(this, input);
-    this.activity_detail = input.activity_detail;
+    this.activity_detail = input.activity_detail
+      ? input.activity_detail[0]
+      : null;
     return this;
   }
 }

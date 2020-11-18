@@ -138,8 +138,8 @@
             {{type.label}}
           </div>
         </div>
-        <div class="history-list mt-3 position-relative" *ngIf="contact.activity && contact.activity.length">
-          <ng-container *ngFor="let activity of contact.activity" [ngSwitch]="activity.type">
+        <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
+          <ng-container *ngFor="let activity of mainTimelines" [ngSwitch]="activity.type">
             <div class="time-line d-flex">
               <div class="history-icon mr-3"></div>
               <!-- Contact Activity -->
@@ -222,6 +222,29 @@
 
               <!-- Send Image Activity -->
 
+              <!-- Default Activity -->
+              <div class="history-info" *ngSwitchDefault>
+                <div class="history-header">
+                  <span>{{activity.content}}</span>
+                  <div class="v-center history-time ml-auto">
+                    <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'hh:mm a'}}</span>
+                    <div ngbDropdown class="button-more p-1 rounded">
+                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item">
+                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="history-detail">
+                  {{activity | json}}
+                </div>
+              </div>
 
             </div>
           </ng-container>
