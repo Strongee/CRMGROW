@@ -113,6 +113,7 @@ export class HelperService {
               );
               resolve(canvas.toDataURL('image/jpeg'));
             };
+            overlay.src = '../../assets/img/pdf_overlay.png';
           }
           if (type == 'image') {
             const overlay = new Image();
@@ -126,6 +127,7 @@ export class HelperService {
               );
               resolve(canvas.toDataURL('image/jpeg'));
             };
+            overlay.src = '../../assets/img/image_overlay.png';
           }
           if (type == 'video_play') {
             const overlay = new Image();
@@ -133,6 +135,7 @@ export class HelperService {
               context.drawImage(overlay, 19.2, 183);
               resolve(canvas.toDataURL('image/jpeg'));
             };
+            overlay.src = '../../assets/img/overlay.png';
           }
         });
         source.src = fileReader.result as string;

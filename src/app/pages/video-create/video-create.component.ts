@@ -438,8 +438,6 @@ export class VideoCreateComponent implements OnInit {
     );
   }
 
-  updateImage(image): void {}
-
   openFileDialog(type: string): void {
     switch (type) {
       case 'video':
@@ -496,7 +494,7 @@ export class VideoCreateComponent implements OnInit {
         break;
       case 'pdf':
         try {
-          const file = evt.target.files[0];
+          const file = this.pdfUploader.queue[0]._file;
           if (file) {
             const fileReader = new FileReader();
             fileReader.onload = (e) => {
@@ -506,9 +504,7 @@ export class VideoCreateComponent implements OnInit {
             fileReader.readAsArrayBuffer(file);
             this.uploadVideo();
           }
-        } catch (e) {
-          this.toast.error('Loading the PDF file is failed. Please try agian');
-        }
+        } catch (e) {}
         break;
       case 'image':
         try {
@@ -526,11 +522,7 @@ export class VideoCreateComponent implements OnInit {
               this.thumbnail_loading = false;
               this.toast.warning('Cannot load the image file.');
             });
-        } catch (e) {
-          this.toast.error(
-            'Loading the Preview Image is failed. Please try agian'
-          );
-        }
+        } catch (e) {}
         break;
     }
   }
