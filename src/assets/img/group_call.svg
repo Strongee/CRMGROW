@@ -1,47 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27.409" height="27.106" viewBox="0 0 27.409 27.106">
-  <defs>
-    <path id="path-1" fill-rule="evenodd" d="M0 9c0-2.209139 1.790861-4 4-4s4 1.790861 4 4c0 .55228475-.44771525 1-1 1H1c-.55228475 0-1-.44771525-1-1z"/>
-    <path id="path-2" fill-rule="evenodd" d="M10 9c0-2.209139 1.790861-4 4-4s4 1.790861 4 4c0 .55228475-.44771525 1-1 1h-6c-.55228475 0-1-.44771525-1-1z"/>
-    <path id="path-3" fill-rule="evenodd" d="M5 9c0-2.209139 1.790861-4 4-4s4 1.790861 4 4c0 .55228475-.44771525 1-1 1H6c-.55228475 0-1-.44771525-1-1z"/>
-    <ellipse id="ellipse-4" cx="14" cy="3" rx="3" ry="3"/>
-    <ellipse id="ellipse-5" cx="4" cy="3" rx="3" ry="3"/>
-    <ellipse id="ellipse-6" cx="9" cy="3" rx="3" ry="3"/>
-    <path id="path-7" fill-rule="evenodd" d="M.27681902 2.80002065C-.1384263 1.91077039-.02500377 1.4142186.21668717 1.19121309L.96214435.51804536c.28395745-.25641959.7266532-.24442048.99549992.02698275l.67128568.6776735c.20717267.20914658.19740402.54304947-.02165725.7403911-.3417338.30785415-.45115332.83537989-.1524318 1.2480776.32384536.44741637.75550583.91751296 1.11018154 1.24301832.35600456.3266902.8699519.72386417 1.35731766 1.02037173.42385622.25789282.95259875.16609093 1.28210174-.14200537.23479422-.21953754.62794009-.23095332.87837836-.02205321l.67665.56451891c.30968125.25841173.32092542.68741151.03026591.95849302l-.66931684.62423555c-.26101579.23830438-.84086817.33464664-1.81911073-.05007376-.82811293-.32569563-1.89177116-1.18966254-2.81281069-2.03490584-.45217108-.4149895-.91986622-.87066935-1.32037635-1.32210719C.76332259 3.59440319.44690816 3.1642748.27681902 2.80002065z"/>
-    <mask id="mask-8" x="-6.132" y="-.537" maskContentUnits="userSpaceOnUse" maskUnits="userSpaceOnUse">
-      <rect width="27.409" height="27.106" x="-6.132" y="-.537" fill="white"/>
-      <use fill="black" xlink:href="#path-7"/>
-    </mask>
-  </defs>
-  <g transform="translate(1 -2.25685517)">
-    <g transform="translate(0 11.25685517)">
-      <g>
-        <use fill="rgb(217,217,223)" xlink:href="#path-1"/>
-        <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#path-1"/>
-      </g>
-      <g>
-        <use fill="rgb(217,217,223)" xlink:href="#path-2"/>
-        <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#path-2"/>
-      </g>
-      <g>
-        <use fill="rgb(217,217,223)" xlink:href="#path-3"/>
-        <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#path-3"/>
-      </g>
-      <g>
-        <use fill="rgb(217,217,223)" xlink:href="#ellipse-4"/>
-        <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#ellipse-4"/>
-      </g>
-      <g>
-        <use fill="rgb(217,217,223)" xlink:href="#ellipse-5"/>
-        <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#ellipse-5"/>
-      </g>
-      <g>
-        <use fill="rgb(231,231,234)" xlink:href="#ellipse-6"/>
-        <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#ellipse-6"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="19" height="20" viewBox="0 0 19 20">
+  <g id="Icons_Group_Call_Blue" data-name="Icons / Group Call Blue" transform="translate(1 1)">
+    <g id="Icons_Teams" data-name="Icons / Teams" transform="translate(7 6)">
+      <g id="Group_2" data-name="Group 2">
+        <g id="Rectangle" transform="translate(0 7)" fill="none" stroke="blue" stroke-miterlimit="10" stroke-width="2">
+          <path d="M4.222,0h1A5.778,5.778,0,0,1,11,5.778v0A.222.222,0,0,1,10.778,6H.222A.222.222,0,0,1,0,5.778V4.222A4.222,4.222,0,0,1,4.222,0Z" stroke="none"/>
+          <path d="M3.88,1H6a4,4,0,0,1,4,4V5a0,0,0,0,1,0,0H1A0,0,0,0,1,1,5V3.88A2.88,2.88,0,0,1,3.88,1Z" fill="none"/>
+        </g>
       </g>
     </g>
-    <g transform="rotate(138.00005 6.06683792 6.0880864)">
-      <use fill="rgb(217,217,223)" xlink:href="#path-7"/>
-      <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" mask="url(#mask-8)" xlink:href="#path-7"/>
+    <g id="Group_50" data-name="Group 50" transform="translate(-2 -1)">
+      <g id="Icons_Calendar_Blue" data-name="Icons / Calendar Blue" transform="translate(2 1)">
+        <g id="calendar">
+          <path id="Path" d="M11.25,1.688h0A1.688,1.688,0,0,0,9.562,0H1.5A2.011,2.011,0,0,0,.446,1.167,22.021,22.021,0,0,0,0,5.735,22.422,22.422,0,0,0,.4,10.06a1.744,1.744,0,0,0,1.362,1.389,21.179,21.179,0,0,0,4.242.4" transform="translate(0 1.147)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+          <path id="Path-2" data-name="Path" d="M.5,1h6" transform="translate(0.5 6)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+          <path id="Path-3" data-name="Path" d="M.375,3V0" transform="translate(3.375)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+          <path id="Path-4" data-name="Path" d="M.375,3V0" transform="translate(7.875)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+        </g>
+      </g>
+      <path id="Path_Copy_8" data-name="Path Copy 8" d="M2.5,0A2.5,2.5,0,1,0,5,2.5,2.5,2.5,0,0,0,2.5,0Z" transform="translate(12 7)" fill="none" stroke="blue" stroke-miterlimit="10" stroke-width="2"/>
     </g>
   </g>
 </svg>

@@ -4,15 +4,6 @@
   justify-content: space-between;
 }
 
-.teams-table {
-  th, td {
-    &.team-members,
-    &.team-materials {
-      width: 90px;
-      padding-right: 30px;
-    }
-  }
-}
 @media screen and (max-width: 576px) {
   .teams-tab-container {
     display: block;
@@ -42,11 +33,15 @@
 }
 
 .teams-table {
-
   margin-bottom: 50px;
 
-  td {
+  th, td {
     padding: 10px;
+    &.team-members,
+    &.team-materials {
+      width: 90px;
+      padding-right: 30px;
+    }
   }
 
   a:hover {
@@ -119,7 +114,6 @@
 
   .call-request-table {
     td {
-      padding: 10px 0px;
       cursor: pointer;
 
       &.guests {
@@ -264,11 +258,5 @@
 
   ul.ngx-pagination .current {
     background-color: #0000ff;
-  }
-}
-
-.table {
-  thead th {
-    padding: 0px;
   }
 }

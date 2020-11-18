@@ -31,6 +31,10 @@
       }
     }
 
+    .variable-mobile {
+      display: none;
+    }
+
     textarea {
       min-height: 200px;
     }
@@ -56,13 +60,39 @@
       }
 
       .variable-button-group {
-        position: absolute;
-        width: 200px;
-        padding: 2rem 1.5rem;
-        top: 150px;
-        right: 0;
-        background: #FFFFFF;
+        display: none;
       }
+
+      .variable-mobile {
+        display: block;
+      }
+    }
+  }
+
+  .button-more {
+    display: inline-block;
+
+    .i-icon {
+      width: 10px;
+      height: 10px;
+    }
+    a {
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .button-more-container {
+    .actions {
+      padding: 0px 5px;
+      text-align: left;
+    }
+  }
+
+  :host ::ng-deep {
+    .dropdown-menu {
+      left: -150px !important;
     }
   }
 }

@@ -1,3 +1,5 @@
+@import 'src/variables.scss';
+
 .title {
   font-size: 18px;
 }
@@ -334,9 +336,27 @@ button:disabled {
   }
 }
 
+.task-types {
+  border: 1px solid $color-trans28;
+  label {
+    opacity: 1;
+    margin: -1px;
+    &.active {
+      border: 1px solid $color-blue;
+    }
+
+    i {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+    }
+  }
+}
+
 :host ::ng-deep {
   .dropdown-menu {
     padding: 0;
     min-width: 8rem;
   }
 }
+

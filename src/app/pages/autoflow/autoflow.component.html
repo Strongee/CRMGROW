@@ -11,14 +11,14 @@
       <div class="align-items-top automation-name-wrapper mt-3">
         <div class="row">
           <div class="col-md-7 col-sm-12">
-            <div class="form-group d-flex align-items-end">
+            <div class="form-group d-flex align-items-start">
               <div class="title w-100">
                 <label for="automation-title">Title</label>
                 <input class="form-control" id="automation-title" [(ngModel)]="automation_title" type="text"
                        name="automationTitle" #automationTitle="ngModel" placeholder="Type in new automation title" required>
                 <span class="invalid-feedback"
                       *ngIf="automationTitle.errors&&(automationTitle.touched||automationTitle.dirty||submitted)&&submitted">Automation
-            name is required.</span>
+                      name is required.</span>
               </div>
               <div class="btn-wrapper">
                 <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
@@ -96,7 +96,7 @@
                                class="drop-target">
                       <xhtml:div class="cardContainer" style="margin-bottom: 5px; margin-top: 10px; text-align: center;"
                                  xmlns="http://www.w3.org/1999/xhtml">
-                        <img [attr.src]="'./assets/image/automation_start.svg'" x="75" y="0" height="50px"
+                        <img [attr.src]="'./assets/img/automation_start.svg'" x="75" y="0" height="50px"
                              width="50px" />
                       </xhtml:div>
                       <xhtml:div class="cardContainer"
@@ -155,7 +155,7 @@
                     <xhtml:div class="cardContainer" (click)="addAction(node)"
                                style="margin-bottom: 5px; margin-top: 5px; text-align: center;"
                                xmlns="http://www.w3.org/1999/xhtml">
-                      <img [attr.src]="'./assets/image/automation_start.svg'" x="75" y="0" height="48px"
+                      <img [attr.src]="'./assets/img/automation_start.svg'" x="75" y="0" height="48px"
                            width="48px" />
                     </xhtml:div>
                   </ng-container>
@@ -177,7 +177,7 @@
                     <xhtml:div class="cardContainer" (click)="addAction(node)"
                                style="margin-bottom: 5px; margin-top: 5px; text-align: center;"
                                xmlns="http://www.w3.org/1999/xhtml">
-                      <img [attr.src]="'./assets/image/automation_start.svg'" x="75" y="0" height="48px"
+                      <img [attr.src]="'./assets/img/automation_start.svg'" x="75" y="0" height="48px"
                            width="48px" />
                     </xhtml:div>
                   </ng-container>

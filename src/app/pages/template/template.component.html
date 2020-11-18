@@ -1,14 +1,33 @@
 <div class="page-content">
   <div class="template-container d-flex w-100">
     <div class="template-content my-2">
-      <div class="d-flex justify-content-between">
+      <div class="v-center justify-content-between">
         <ng-container *ngIf="isNew; else editTemplate">
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Create new template</h6>
         </ng-container>
         <ng-template #editTemplate>
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Edit template</h6>
         </ng-template>
-
+        <div class="variable-mobile">
+          <span class="c-blue f-3 ml-2 mr-1 font-weight-bold">Insert variables</span>
+          <div ngbDropdown class="justify-content-end field-actions button-more rounded">
+            <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+              <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
+            </a>
+            <div ngbDropdownMenu class="button-more-container light">
+              <div class="actions ml-auto">
+                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1" (click)="insertValue('{user_name}')">Your Name</button>
+                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1" (click)="insertValue('{user_email}')">Your Email</button>
+                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1" (click)="insertValue('{user_phone}')">Your Phone</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_email}')">Contact Email</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{material_title}')">Material Title</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_phone}')">Contact Phone</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_first_name}')">Contact Firstname</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_last_name}')">Contact Lastname</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="v-center mt-3">
         <div class="custom-radio-container">

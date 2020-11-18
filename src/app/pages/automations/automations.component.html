@@ -2,7 +2,10 @@
   <div class="my-2">
     <div class="d-flex justify-content-between">
       <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Automations</h6>
-      <a class="btn btn-primary btn-sm br-default mb-2" [routerLink]="['/autoflow/new']">+ Create template</a>
+      <a class="btn btn-primary shadow py-2 v-center mb-2 border-0" [routerLink]="['/autoflow/new']">
+        <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
+        <span class="fw-600 f-3">Create template</span>
+      </a>
     </div>
   </div>
   <div class="my-3">
@@ -31,27 +34,30 @@
               <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === user_id" [class.shared]="automation.role === 'team' && automation.user !== user_id"></div>
             </td>
             <td class="action-count">
-              <div class="f-5">{{automation.automations && automation.automations.length}}</div>
+              <div class="f-3">{{automation.automations && automation.automations.length}}</div>
             </td>
             <td class="contacts">
-              <div class="f-5">{{automation.contacts.length}}</div>
+              <div class="f-3">{{automation.contacts.length}}</div>
             </td>
             <td class="created">
-              <div class="f-5">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
+              <div class="f-3">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
             </td>
             <td class="actions">
               <div class="v-center">
                 <button class="btn btn-white f-3 font-weight-bold" (click)="assignAutomation($event, automation)">
                   Assign
                 </button>
-<!--                <ng-container *ngIf="automation.role != 'admin' && automation.user == user_id">-->
+                <ng-container *ngIf="automation.role != 'admin' && automation.user == user_id">
                   <div class="icon-button v-center justify-content-center ml-3" (click)="openAutomation($event, automation)">
                     <i class="i-icon bgc-black i-edit"></i>
                   </div>
-                  <div class="icon-button v-center justify-content-center ml-3">
-                    <i class="i-icon bgc-black i-triangle-up"></i>
-                  </div>
-<!--                </ng-container>-->
+                </ng-container>
+                <div class="icon-button v-center justify-content-center ml-3">
+                  <i class="i-icon bgc-black i-triangle-up"></i>
+                </div>
+                <div class="icon-button v-center justify-content-center ml-3" (click)="duplicate($event, automation)">
+                  <i class="i-icon bgc-black i-duplicate"></i>
+                </div>
               </div>
             </td>
           </tr>

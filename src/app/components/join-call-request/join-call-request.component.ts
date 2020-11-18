@@ -20,7 +20,7 @@ import { UserService } from '../../services/user.service';
 })
 export class JoinCallRequestComponent implements OnInit, OnDestroy {
   contacts = [];
-  leader;
+  leader = null;
   subject = '';
 
   description: any;
@@ -163,6 +163,7 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
             dateTime.date.day
           )}T${dateTime.time}${timezone}`
         ).toISOString();
+
         const index = dueDateTimes.indexOf(dueDateTime);
         if (index < 0) {
           dueDateTimes.push(dueDateTime);

@@ -1348,16 +1348,16 @@ export class AutoflowComponent
   }
 
   ICONS = {
-    follow_up: '../../assets/image/follow_up.svg',
+    follow_up: '../../assets/img/follow_up.svg',
     update_follow_up:
       'https://app.crmgrow.com/assets/img/icons/follow-step.png',
-    note: '../../assets/image/create_note.svg',
-    email: '../../assets/image/send_email.svg',
-    send_email_video: '../../assets/image/send_video_email.svg',
-    send_text_video: '../../assets/image/send_video_text.svg',
-    send_email_pdf: '../../assets/image/send_pdf_email.svg',
-    send_text_pdf: '../../assets/image/send_pdf_text.svg',
-    send_email_image: '../../assets/image/send_image_email.svg',
+    note: '../../assets/img/create_note.svg',
+    email: '../../assets/img/send_email.svg',
+    send_email_video: '../../assets/img/send_video_email.svg',
+    send_text_video: '../../assets/img/send_video_text.svg',
+    send_email_pdf: '../../assets/img/send_pdf_email.svg',
+    send_text_pdf: '../../assets/img/send_pdf_text.svg',
+    send_email_image: '../../assets/img/send_image_email.svg',
     send_text_image: 'https://app.crmgrow.com/assets/img/icons/image_sms.png',
     update_contact:
       'https://app.crmgrow.com/assets/img/icons/update_contact.png'
