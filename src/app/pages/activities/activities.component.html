@@ -44,7 +44,7 @@
     <ng-container matColumnDef="contact_phone">
       <th mat-header-cell *matHeaderCellDef>phone</th>
       <td mat-cell *matCellDef="let element">
-        <span class="c-blue font-weight-bold">{{element.contacts.cell_phone}}</span>
+        <span class="c-blue font-weight-bold">{{element.contacts.cell_phone | phone_format}}</span>
       </td>
     </ng-container>
 
