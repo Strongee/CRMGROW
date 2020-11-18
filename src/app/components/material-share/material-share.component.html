@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Attach media</h1>
+<h1 mat-dialog-title>Share media</h1>
 <mat-dialog-content>
   <div class="template-container">
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
@@ -76,44 +76,8 @@
       </ng-container>
     </ng-container>
   </div>
-  <div class="selected-materials mt-3">
-    <table class="table">
-      <thead>
-      <th class="selected-media">
-        <div class="v-center">
-          <div>Selected Media</div>
-          <div class="media-count ml-3 f-2 c-white bgc-blue" *ngIf="selectedMaterials.length">{{selectedMaterials.length}}</div>
-        </div>
-      </th>
-      <th class="type">Type</th>
-      <th class="action"></th>
-      </thead>
-      <tbody>
-      <tr *ngFor="let material of selectedMaterials">
-        <td class="selected-media">
-          <div class="c-blue f-3 font-weight-bold">{{material.title}}</div>
-        </td>
-        <td class="type">
-          <div class="v-center border-0 bgc-trans">
-            <i class="i-icon bgc-black" aria-hidden="true"
-               [class.i-video]="getMaterialType(material) === 'Video'"
-               [class.i-pdf]="getMaterialType(material) === 'PDF'"
-               [class.i-notification]="getMaterialType(material) === 'Image'"
-            ></i>
-            <span class="f-3 font-weight-bold ml-2">{{getMaterialType(material)}}</span>
-          </div>
-        </td>
-        <td class="action">
-          <button class="v-center justify-content-end border-0 bgc-trans" type="button" (click)="deselectMaterial(material)">
-            <i class="i-icon i-close bgc-black" aria-hidden="true"></i>
-          </button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn c-blue" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary" [class.loading]="attaching" (click)="attachMaterial()">Attach</button>
+  <button class="btn btn-primary" [class.loading]="sharing" (click)="shareMaterials()">Share</button>
 </mat-dialog-actions>

@@ -59,6 +59,9 @@ import { AssistantPasswordComponent } from './assistant-password/assistant-passw
 import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { TagDeleteComponent } from './tag-delete/tag-delete.component';
+import { MaterialShareComponent } from './material-share/material-share.component';
+import { TemplateShareComponent } from './template-share/template-share.component';
+import { AutomationShareComponent } from './automation-share/automation-share.component';
 
 @NgModule({
   declarations: [
@@ -118,7 +121,10 @@ import { TagDeleteComponent } from './tag-delete/tag-delete.component';
     AssistantPasswordComponent,
     AssistantRemoveComponent,
     TagEditComponent,
-    TagDeleteComponent
+    TagDeleteComponent,
+    MaterialShareComponent,
+    TemplateShareComponent,
+    AutomationShareComponent
   ],
   imports: [
     CommonModule,

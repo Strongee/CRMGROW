@@ -79,7 +79,15 @@ export class AutomationService extends HttpService {
       })
       .pipe(
         map((res) => res['data'] || []),
-        catchError(this.handleError('GET AUTOMATION STATUS', []))
+        catchError(this.handleError('AUTOMATION BULK ASSIGN', []))
       );
   }
+
+  loadOwn(): Observable<Automation[]> {
+    return this.httpClient.get(this.server + AUTOMATION.LOAD_OWN).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('LOAD OWN AUTOMATION', []))
+    );
+  }
+
 }

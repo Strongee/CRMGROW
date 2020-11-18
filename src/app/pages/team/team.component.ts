@@ -16,6 +16,9 @@ import { VideoShareComponent } from '../../components/video-share/video-share.co
 import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
 import { InviteTeamComponent } from 'src/app/components/invite-team/invite-team.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
+import { MaterialShareComponent } from '../../components/material-share/material-share.component';
+import { TemplateShareComponent } from '../../components/template-share/template-share.component';
+import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 
 @Component({
   selector: 'app-team',
@@ -48,12 +51,12 @@ export class TeamComponent implements OnInit {
   shareUrl = 'https://www.crmgrow.com/';
   tabs: TabItem[] = [
     { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
-    { icon: 'i-icon i-group-call', label: 'SHARED', id: 'shared' }
+    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
   ];
   selectedTab: TabItem = this.tabs[0];
   sharedTabs: TabItem[] = [
     { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
-    { icon: 'i-icon i-group-call', label: 'SHARED', id: 'shared' }
+    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
   ];
   selectedSharedTab: TabItem = this.sharedTabs[0];
   constructor(
@@ -164,12 +167,15 @@ export class TeamComponent implements OnInit {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
+        console.log("load team ==========>", this.team);
         this.loading = false;
         const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
         if (ownerIndex !== -1) {
           this.role = 'owner';
         } else if (this.team.editors.indexOf(this.userId) !== -1) {
           this.role = 'editor';
+        } else {
+          this.role = 'viewer';
         }
       },
       (err) => {
@@ -178,6 +184,21 @@ export class TeamComponent implements OnInit {
         // this.loadError = true;
       }
     );
+  }
+  createMaterial(): void {
+    this.dialog
+      .open(MaterialShareComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          team_id: this.teamId
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+
+      });
   }
   createTeamVideo(): void {
     this.dialog
@@ -338,50 +359,49 @@ export class TeamComponent implements OnInit {
     //   });
   }
   createAutomation(): void {
-    // this.dialog
-    //   .open(ShareAutomationComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: '70vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.teamId
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       if (res.automations) {
-    //         this.team.automations = [
-    //           ...this.team.automations,
-    //           ...res.automations
-    //         ];
-    //       }
-    //     }
-    //   });
+    this.dialog
+      .open(AutomationShareComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          team_id: this.teamId
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.automations) {
+            this.team.automations = [
+              ...this.team.automations,
+              ...res.automations
+            ];
+          }
+        }
+      });
   }
   createEmailTemplate(): void {
-    // this.dialog
-    //   .open(ShareTemplatesComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: '70vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.teamId
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       if (res.templates) {
-    //         this.team.email_templates = [
-    //           ...this.team.email_templates,
-    //           ...res.templates
-    //         ];
-    //       }
-    //     }
-    //   });
+    this.dialog
+      .open(TemplateShareComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        height: '70vh',
+        disableClose: true,
+        data: {
+          team_id: this.teamId
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.templates) {
+            this.team.email_templates = [
+              ...this.team.email_templates,
+              ...res.templates
+            ];
+          }
+        }
+      });
   }
   removeTeamVideo(material): void {
     // this.dialog
@@ -766,6 +786,7 @@ export class TeamComponent implements OnInit {
         return 'Editor';
       }
     }
+    return 'Viewer';
   }
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;

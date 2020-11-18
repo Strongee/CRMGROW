@@ -87,4 +87,12 @@ export class TemplatesService extends HttpService {
         catchError(this.handleError('SEARCH TEMPLATES', []))
       );
   }
+
+  loadOwn(): Observable<Template[]> {
+    return this.httpClient.post(this.server + TEMPLATE.LOAD_OWN, {}).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('LOAD OWN TEMPLATE', []))
+    );
+  }
+
 }

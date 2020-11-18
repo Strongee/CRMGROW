@@ -140,7 +140,8 @@ export const AUTOMATION = {
   READ: 'automation/',
   UPDATE: 'automation/',
   CREATE: 'automation',
-  ASSIGN: 'timeline/create'
+  ASSIGN: 'timeline/create',
+  LOAD_OWN: 'automation/list/own'
 };
 export const APPOINTMENT = {
   GET_EVENT: 'appointment',
