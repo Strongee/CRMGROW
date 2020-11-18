@@ -5,7 +5,7 @@
   mask-image: url('/assets/img/broadcasts.svg');
 }
 .i-calendar{
-  mask-image: url('/assets/img/calendar.svg');
+  mask-image: url('/assets/image/calendar.svg');
 }
 .i-copy{
   mask-image: url('/assets/img/copy.svg');
@@ -17,7 +17,7 @@
   mask-image: url('/assets/img/download.svg');
 }
 .i-edit{
-  mask-image: url('/assets/img/edit.svg');
+  mask-image: url('/assets/image/table_edit.svg');
 }
 .i-follow{
   mask-image: url('/assets/img/follow.svg');
@@ -56,7 +56,7 @@
   mask-image: url('/assets/img/setting.svg');
 }
 .i-share{
-  mask-image: url('/assets/img/share.svg');
+  mask-image: url('/assets/image/share.svg');
 }
 .i-sms-sent{
   mask-image: url('/assets/img/sms_sent.svg');
@@ -68,7 +68,7 @@
   mask-image: url('/assets/img/template.svg');
 }
 .i-trash{
-  mask-image: url('/assets/img/trash.svg');
+  mask-image: url('/assets/image/trash.svg');
 }
 .i-webpage{
   mask-image: url('/assets/img/webpage.svg');
@@ -160,7 +160,7 @@
   mask-image: url('/assets/img/folder.svg');
 }
 .i-menu-more {
-  mask-image: url('/assets/img/more_menu.svg');
+  mask-image: url('/assets/image/kebab.svg');
 }
 .i-assistant {
   mask-image: url('/assets/img/assistant.svg');
@@ -190,12 +190,6 @@
     transform: translate(-50%, -50%);
   }
 }
-.i-teams {
-  mask-image: url('/assets/img/teams.svg');
-}
-.i-group-call {
-  mask-image: url('/assets/img/group_call.svg');
-}
 .i-block {
   mask-image: url('/assets/img/block.svg');
 }
@@ -206,7 +200,7 @@
   mask-image: url('/assets/img/check.svg');
 }
 .i-question {
-  mask-image: url('/assets/img/question-sign-in-circles.svg');
+  mask-image: url('/assets/image/question.svg');
 }
 .i-like {
   mask-image: url('/assets/img/like.svg');
@@ -284,4 +278,22 @@
 }
 .i-delivered-mail {
   mask-image: url('/assets/image/delivered_mail.svg');
+}
+.i-teams {
+  mask-image: url('/assets/image/teams.svg');
+}
+.i-group-call {
+  mask-image: url('/assets/image/group_call.svg');
+}
+.i-invite-member {
+  mask-image: url('/assets/image/invite_member.svg');
+}
+.i-send {
+  mask-image: url('/assets/image/material_send.svg');
+}
+.i-copy-link {
+  mask-image: url('/assets/image/material_copy_link.svg');
+}
+.i-edit-template {
+  mask-image: url('/assets/image/edit_template.svg');
 }

@@ -1,3 +1,5 @@
+@import  "src/variables.scss";
+
 .error-result {
   text-align: center;
   width: 400px;
@@ -75,6 +77,12 @@
 }
 
 .members-table-container {
+
+  .members-table {
+    td {
+      padding: 10px;
+    }
+  }
   .check-cell {
     width: 40px;
   }
@@ -170,94 +178,208 @@
 }
 
 .material-share-table {
+  th, td {
+    vertical-align: middle !important;
+    background-color: white;
+    &.checkbox-col {
+      opacity: 1;
+    }
+  }
+  .checkbox-col {
+    width: 36px;
+  }
+  .thumbnail-col {
+    margin: 0px;
+    width: 112px;
+  }
+  .thumbnail {
+    padding: 0px;
+    width: 96px;
+    height: 54px;
+    object-fit: contain;
+    border: none;
+    margin: 0px;
+    border-radius: 0px;
+    background-color: #dedede;
+  }
+
+  .thumb-prev-wrapper img {
+    width: 96px;
+    height: 54px;
+    object-fit: cover;
+  }
+
+  .thumb-prev-wrapper .preview {
+    display: none;
+  }
+
+  .thumb-prev-wrapper {
+    &:hover .preview {
+      display: block;
+    }
+    &:hover .thumbnail {
+      display: none;
+    }
+  }
+
+  .name-col {
+    h5 {
+      margin-bottom: 10px;
+      max-width: 400px;
+      height: 17px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    span {
+      opacity: 0.64;
+      max-width: 400px;
+      height: 15px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    .thumbnail {
+      display: none;
+    }
+
+    .thumb-prev-wrapper {
+      display: none;
+    }
+
+    .view-field {
+      display: none;
+    }
+    @media screen and (max-width: 1480px) {
+      h5 {
+        max-width: 350px;
+      }
+      span {
+        max-width: 350px;
+      }
+    }
+  }
 
   td {
-    margin: 5px 0px;
-    vertical-align: center;
+    height: 90px;
   }
 
-  .check-cell {
-    width: 40px;
+  .view-col {
+    width: 75px;
   }
 
-  .material-name {
-    .thumbnail img {
-      width: 100px;
-      height: 58px;
-      object-fit: cover;
-    }
-  }
-
-  .material-view {
-    width: 60px;
-    padding-right: 30px;
-  }
-
-  .material-actions-count,
-  .material-contacts {
-    width: 100px;
-    padding-right: 30px;
-  }
-
-  .material-created {
+  .time-col {
     width: 120px;
-    padding-right: 30px;
   }
 
-  .material-actions {
-    .dropdown-menu {
-      width: 190px;
+  .capture-col {
+    width: 100px;
+  }
+
+  .actions-col {
+    min-width: 470px;
+    .actions-wrapper {
+      width: 100%;
+      .custom-control {
+        display: none;
+      }
+      .button-more {
+        a {
+          &::after {
+            content: none;
+          }
+        }
+      }
     }
   }
 
-  &.template-table,
-  &.automation-table, {
-    td {
-      margin: 15px 0px;
+  @media screen and (max-width: 1400px) {
+    th, td {
+      vertical-align: top !important;
+    }
+    .name-col {
+      h5 {
+        max-width: unset;
+        white-space: normal;
+      }
+      span {
+        max-width: unset;
+        display: unset;
+        white-space: normal;
+      }
+    }
+    .time-col {
+      width: 100px;
+    }
+    .actions-col {
+      width: 100px;
+      .actions-wrapper {
+        width: 100px;
+        display: block;
+        .button-more {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .table-wrapper {
+      margin-top: 0px;
+    }
+    .material-folder {
+      margin: 0px 10px 10px 10px;
+    }
+    .time-col {
+      display: none;
+    }
+    .capture-col {
+      display: none;
+    }
+    .actions-col .actions-wrapper .custom-control {
+      display: block;
+      text-align: center;
+    }
+  }
+
+  @media screen and (max-width: 575px) {
+    th, td {
+      padding: 3px !important;
+    }
+    .thumbnail-col {
+      display: none;
+    }
+    .name-col {
+      .thumbnail {
+        display: block;
+        width: 150px;
+        height: 90px;
+        margin-bottom: 10px;
+      }
+      .thumb-prev-wrapper {
+        display: block;
+      }
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .view-col {
+      display: none;
+    }
+    .name-col {
+      .view-field {
+        display: flex;
+      }
     }
   }
 }
 
 
-@media screen and (max-width: 768px) {
-  .material-share-table {
-    .material-name .info {
-      display: none;
-    }
-
-    .material-actions {
-      .button-label {
-        display: none;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .material-share-table {
-    .material-name {
-      .thumbnail img {
-        width: 50px;
-        height: 29px;
-      }
-
-      .info {
-        display: none;
-      }
-    }
-
-    .material-view,
-    .material-added,
-    .material-contacts,
-    .material-created {
-      display: none;
-    }
-
-    .material-actions {
-      .btn {
-        padding: 0.375rem;
-      }
-    }
+.template-table, .automation-table {
+  th, td {
+    padding: 10px 0px;
   }
 }
 
@@ -275,6 +397,10 @@
     font-size: 16px;
     font-weight: bold;
     color: blue;
+  }
+
+  .sb-group {
+    flex-wrap: nowrap;
   }
 }
 
