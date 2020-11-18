@@ -5,7 +5,7 @@
   mask-image: url('/assets/img/broadcasts.svg');
 }
 .i-calendar{
-  mask-image: url('/assets/image/calendar.svg');
+  mask-image: url('/assets/img/calendar.svg');
 }
 .i-copy{
   mask-image: url('/assets/img/copy.svg');
@@ -17,7 +17,7 @@
   mask-image: url('/assets/img/download.svg');
 }
 .i-edit{
-  mask-image: url('/assets/image/table_edit.svg');
+  mask-image: url('/assets/img/edit.svg');
 }
 .i-follow{
   mask-image: url('/assets/img/follow.svg');
@@ -56,7 +56,7 @@
   mask-image: url('/assets/img/setting.svg');
 }
 .i-share{
-  mask-image: url('/assets/image/share.svg');
+  mask-image: url('/assets/img/share.svg');
 }
 .i-sms-sent{
   mask-image: url('/assets/img/sms_sent.svg');
@@ -68,7 +68,7 @@
   mask-image: url('/assets/img/template.svg');
 }
 .i-trash{
-  mask-image: url('/assets/image/trash.svg');
+  mask-image: url('/assets/img/trash.svg');
 }
 .i-webpage{
   mask-image: url('/assets/img/webpage.svg');
@@ -160,7 +160,7 @@
   mask-image: url('/assets/img/folder.svg');
 }
 .i-menu-more {
-  mask-image: url('/assets/image/kebab.svg');
+  mask-image: url('/assets/img/more_menu.svg');
 }
 .i-assistant {
   mask-image: url('/assets/img/assistant.svg');
@@ -200,7 +200,7 @@
   mask-image: url('/assets/img/check.svg');
 }
 .i-question {
-  mask-image: url('/assets/image/question.svg');
+  mask-image: url('/assets/img/question.svg');
 }
 .i-like {
   mask-image: url('/assets/img/like.svg');
@@ -262,40 +262,40 @@
 ///////////// design icons //////////////////
 
 .i-sent-mail {
-  mask-image: url('/assets/image/sent_mail.svg');
+  mask-image: url('/assets/img/sent_mail.svg');
 }
 .i-opened-mail {
-  mask-image: url('/assets/image/opened_mail.svg');
+  mask-image: url('/assets/img/opened_mail.svg');
 }
 .i-bounced-mail {
-  mask-image: url('/assets/image/bounced_mail.svg');
+  mask-image: url('/assets/img/bounced_mail.svg');
 }
 .i-unsubscribed-mail {
-  mask-image: url('/assets/image/unsubscribed_mail.svg');
+  mask-image: url('/assets/img/unsubscribed_mail.svg');
 }
 .i-clicked-mail {
-  mask-image: url('/assets/image/clicked_mail.svg');
+  mask-image: url('/assets/img/clicked_mail.svg');
 }
 .i-delivered-mail {
-  mask-image: url('/assets/image/delivered_mail.svg');
+  mask-image: url('/assets/img/delivered_mail.svg');
 }
 .i-teams {
-  mask-image: url('/assets/image/teams.svg');
+  mask-image: url('/assets/img/teams.svg');
 }
 .i-group-call {
-  mask-image: url('/assets/image/group_call.svg');
+  mask-image: url('/assets/img/group_call_schedule.svg');
 }
 .i-invite-member {
-  mask-image: url('/assets/image/invite_member.svg');
+  mask-image: url('/assets/img/invite_member.svg');
 }
 .i-send {
-  mask-image: url('/assets/image/material_send.svg');
+  mask-image: url('/assets/img/sent.svg');
 }
 .i-copy-link {
-  mask-image: url('/assets/image/material_copy_link.svg');
+  mask-image: url('/assets/img/copy.svg');
 }
 .i-edit-template {
-  mask-image: url('/assets/image/edit_template.svg');
+  mask-image: url('/assets/img/template.svg');
 }
 
 
@@ -390,4 +390,7 @@
 }
 .act-phone_logs {
   background-image: url('/assets/img/activities/phone.svg');
+}
+.act-notes {
+  background-image: url('/assets/img/activities/note.svg');
 }

@@ -1,21 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.409" height="23.705" viewBox="0 0 24.409 23.705">
-  <defs>
-    <path id="path-6" fill-rule="evenodd" d="M16.7046301 17.7046301h1c2.75957513 0 5 2.24042489 5 5 0 .55191503-.44808497 1-1 1h-9c-.55191502 0-1-.44808497-1-1 0-2.75957511 2.24042489-5 5-5z"/>
-    <mask id="mask-7" x="0" y="0" maskContentUnits="userSpaceOnUse" maskUnits="userSpaceOnUse">
-      <rect width="24.409" height="23.705" x="0" y="0" fill="black"/>
-      <use fill="white" xlink:href="#path-6"/>
-    </mask>
-  </defs>
-  <g>
-    <g>
-      <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M15.9546301 7.53937484h0c0-.93208319-.7556027-1.6876859-1.6876859-1.6876859H6.2046301c-.409965.14630352-.9612675.73486705-1.0541475 1.16749176-.1940925.90405059-.4458525 2.47923-.4458525 4.56780235 0 1.91268235.2111325 3.39475882.39576 4.32517647.140445.7077353.668115 1.24578235 1.362255 1.3889353.912525.18827058 2.3661225.40353529 4.241985.40353529"/>
-      <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M5.7046301 11.7046301h6"/>
-      <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M8.4546301 7.7046301v-3"/>
-      <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M12.9546301 7.7046301v-3"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="19" height="20" viewBox="0 0 19 20">
+  <g id="Icons_Group_Call_Blue" data-name="Icons / Group Call Blue" transform="translate(1 1)">
+    <g id="Icons_Teams" data-name="Icons / Teams" transform="translate(7 6)">
+      <g id="Group_2" data-name="Group 2">
+        <g id="Rectangle" transform="translate(0 7)" fill="none" stroke="blue" stroke-miterlimit="10" stroke-width="2">
+          <path d="M4.222,0h1A5.778,5.778,0,0,1,11,5.778v0A.222.222,0,0,1,10.778,6H.222A.222.222,0,0,1,0,5.778V4.222A4.222,4.222,0,0,1,4.222,0Z" stroke="none"/>
+          <path d="M3.88,1H6a4,4,0,0,1,4,4V5a0,0,0,0,1,0,0H1A0,0,0,0,1,1,5V3.88A2.88,2.88,0,0,1,3.88,1Z" fill="none"/>
+        </g>
+      </g>
     </g>
-    <g>
-      <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" d="M17.2046301 10.7046301c-1.37852575 0-2.5 1.12147425-2.5 2.5 0 .42429486.10654382.8240316.29383228 1.17438888.26682963.49928544.69804437.89785633 1.22102294 1.12297856.30248213.13019932.63546446.20263257.98514479.20263257 1.37852576 0 2.5-1.12147424 2.5-2.5s-1.12147424-2.5-2.5-2.5z"/>
-      <use fill-opacity="0" stroke="rgb(0,0,255)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="4" mask="url(#mask-7)" xlink:href="#path-6"/>
+    <g id="Group_50" data-name="Group 50" transform="translate(-2 -1)">
+      <g id="Icons_Calendar_Blue" data-name="Icons / Calendar Blue" transform="translate(2 1)">
+        <g id="calendar">
+          <path id="Path" d="M11.25,1.688h0A1.688,1.688,0,0,0,9.562,0H1.5A2.011,2.011,0,0,0,.446,1.167,22.021,22.021,0,0,0,0,5.735,22.422,22.422,0,0,0,.4,10.06a1.744,1.744,0,0,0,1.362,1.389,21.179,21.179,0,0,0,4.242.4" transform="translate(0 1.147)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+          <path id="Path-2" data-name="Path" d="M.5,1h6" transform="translate(0.5 6)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+          <path id="Path-3" data-name="Path" d="M.375,3V0" transform="translate(3.375)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+          <path id="Path-4" data-name="Path" d="M.375,3V0" transform="translate(7.875)" fill="none" stroke="blue" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+        </g>
+      </g>
+      <path id="Path_Copy_8" data-name="Path Copy 8" d="M2.5,0A2.5,2.5,0,1,0,5,2.5,2.5,2.5,0,0,0,2.5,0Z" transform="translate(12 7)" fill="none" stroke="blue" stroke-miterlimit="10" stroke-width="2"/>
     </g>
   </g>
 </svg>
