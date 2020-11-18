@@ -141,7 +141,7 @@
         <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
           <ng-container *ngFor="let activity of mainTimelines">
             <div class="time-line d-flex">
-              <div class="history-icon mr-3"><i class="i-icon {{activity.type}}" ></i></div>
+              <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} sub-{{activity.activity_detail?.type}}" ></i></div>
               <!-- History Item -->
               <div class="history-info">
                 <div class="history-header">
@@ -162,7 +162,7 @@
                   </div>
                 </div>
                 <div class="history-detail">
-                  {{activity | json}}
+                  {{activity.activity_detail | json}}
                 </div>
               </div>
 
