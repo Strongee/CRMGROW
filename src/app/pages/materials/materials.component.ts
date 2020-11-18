@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { ToastrService } from 'ngx-toastr';
@@ -9,6 +10,7 @@ import { TabItem } from 'src/app/utils/data.types';
 import { environment } from 'src/environments/environment';
 import { BulkActions } from 'src/app/constants/variable.constants';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 
 @Component({
   selector: 'app-materials',
@@ -35,6 +37,7 @@ export class MaterialsComponent implements OnInit {
   selectedImageLists = new SelectionModel<any>(true, []);
 
   constructor(
+    private dialog: MatDialog,
     public storeService: StoreService,
     public materialService: MaterialService,
     private userService: UserService,
@@ -194,5 +197,18 @@ export class MaterialsComponent implements OnInit {
         }
         return true;
     }
+  }
+
+  editTemplate(material_id: string): void {
+    this.dialog.open(MaterialEditTemplateComponent, {
+      position: { top: '10vh' },
+      width: '100vw',
+      maxWidth: '600px',
+      height: '650px',
+      disableClose: true,
+      data: {
+        id: material_id
+      }
+    });
   }
 }

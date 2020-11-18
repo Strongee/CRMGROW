@@ -56,6 +56,7 @@ import { AssistantPasswordComponent } from './assistant-password/assistant-passw
 import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { TagDeleteComponent } from './tag-delete/tag-delete.component';
+import { MaterialEditTemplateComponent } from './material-edit-template/material-edit-template.component';
 
 @NgModule({
   declarations: [
@@ -112,7 +113,8 @@ import { TagDeleteComponent } from './tag-delete/tag-delete.component';
     AssistantPasswordComponent,
     AssistantRemoveComponent,
     TagEditComponent,
-    TagDeleteComponent
+    TagDeleteComponent,
+    MaterialEditTemplateComponent
   ],
   imports: [
     CommonModule,
@@ -149,7 +151,8 @@ import { TagDeleteComponent } from './tag-delete/tag-delete.component';
     CustomFieldAddComponent,
     CustomFieldDeleteComponent,
     TagEditComponent,
-    TagDeleteComponent
+    TagDeleteComponent,
+    MaterialEditTemplateComponent
   ],
   bootstrap: [
     ContactCreateComponent,
