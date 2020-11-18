@@ -11,6 +11,7 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ComponentsModule } from '../../components/components.module';
 import { AdminLayoutRoutes } from './admin-layout.routing.module';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { HomeComponent } from '../../pages/home/home.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
@@ -95,7 +96,8 @@ import { AutoFollowUpComponent } from '../../pages/auto-follow-up/auto-follow-up
     ShareIconsModule,
     MatExpansionModule,
     DragDropModule,
-    NgxGraphModule
+    NgxGraphModule,
+    PdfViewerModule
   ],
   schemas: []
 })

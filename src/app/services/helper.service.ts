@@ -56,7 +56,7 @@ export class HelperService {
       video.load();
     });
   }
-  public b64toBlob(dataURI) {
+  public b64toBlob(dataURI): any {
     const byteString = atob(dataURI.split(',')[1]);
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
@@ -169,6 +169,38 @@ export class HelperService {
         resolve(fileInput.files[0]);
       });
       fileInput.click();
+    });
+  }
+
+  resizeThumbnail(blob, type = null): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const source = new Image();
+      const canvasWidth = 480;
+      let canvasHeight = 270;
+      source.onload = (e) => {
+        const imgWidth = source.width;
+        const imgHeight = source.height;
+        const newWidth = canvasWidth;
+        const newHeight = (newWidth * imgHeight) / imgWidth;
+        canvasHeight = newHeight;
+        const canvas: HTMLCanvasElement = this.document.createElement('canvas');
+        const context: CanvasRenderingContext2D = canvas.getContext('2d');
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        context.drawImage(source, 0, 0, newWidth, newHeight);
+        if (!type) {
+          resolve(canvas.toDataURL('image/jpeg'));
+        }
+        if (type == 'pdf') {
+          const overlay = new Image();
+          overlay.onload = (e) => {
+            context.drawImage(overlay, newWidth - 70, newHeight - 85, 60, 75);
+            resolve(canvas.toDataURL('image/jpeg'));
+          };
+          overlay.src = '../../assets/img/pdf_overlay.png';
+        }
+      };
+      source.src = blob;
     });
   }
 }
