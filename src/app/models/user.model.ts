@@ -26,8 +26,7 @@ export class User implements Deserializable {
     number?: string;
     is_released: false;
   };
-  picture_profile =
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQVbekPCpDJMuCuIYc7rdb4rxojgBCVXm_wlQ&usqp=CAU';
+  picture_profile: string;
   learn_more: string;
   role: string;
   outlook_refresh_token: string;

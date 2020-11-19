@@ -1,11 +1,16 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  EventEmitter
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
-import { CampaignAddContactComponent } from '../../components/campaign-add-contact/campaign-add-contact.component';
-import { UploadContactsComponent } from '../../components/upload-contacts/upload-contacts.component';
-import { MailListService } from '../../services/maillist.service';
-import { catchError } from 'rxjs/operators';
+import { CampaignAddListComponent } from '../../components/campaign-add-list/campaign-add-list.component';
+import { ActionItem } from '../../utils/data.types';
 
 @Component({
   selector: 'app-campaign-list',
@@ -13,122 +18,115 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./campaign-list.component.scss']
 })
 export class CampaignListComponent implements OnInit {
-  public csvLines = [];
-  private dataText = '';
-  selectedCSVColumn;
-  selectedCSVColumnIndex;
+  lists = [];
+  listCount;
+  selected = 1;
+  selectedLists = new SelectionModel<any>(true, []);
 
-  selectedTab = 1;
-  tabs = ['List', 'Bulk Mailing'];
-  tabUrls = ['list', 'bulk'];
-  contacts: any[] = [];
-  currentContactPage = 1;
-  contactCount;
-  selectedContacts = new SelectionModel<any>(true, []);
+  @Output() onDetail: EventEmitter<string> = new EventEmitter();
+  constructor(private location: Location, private dialog: MatDialog) {}
 
-  csvColumns = [];
-
-  @ViewChild('file') file: any;
-  constructor(
-    private location: Location,
-    private dialog: MatDialog,
-    private mailListService: MailListService
-  ) {}
-
-  ngOnInit(): void {}
-
-  changeTab(event): void {
-    this.selectedTab = event.index;
-    this.location.replaceState('/campaign/' + this.tabUrls[this.selectedTab - 1]);
+  ngOnInit(): void {
+    this.loadList();
   }
 
-  selectAllPage(): void {
-    if (this.isSelectedPage()) {
-      this.contacts.forEach((e) => {
-        if (this.selectedContacts.isSelected(e._id)) {
-          this.selectedContacts.deselect(e._id);
-        }
-      });
-    } else {
-      this.contacts.forEach((e) => {
-        if (!this.selectedContacts.isSelected(e._id)) {
-          this.selectedContacts.select(e._id);
-        }
-      });
+  loadList(): void {
+    for (let i = 1; i < 5; i++) {
+      const list = {
+        _id: i,
+        name: 'list' + i,
+        subscribers: 0,
+        unsubscribers: 0,
+        deliveryissues: 0
+      };
+      this.lists.push(list);
     }
   }
+
+  /**
+   * Emit the Parent Event to go to detail page
+   * @param id : list ID
+   */
+  goToDetailPage(id: string): void {
+    this.onDetail.emit(id);
+  }
+
   isSelectedPage(): any {
-    if (this.contacts.length) {
-      for (let i = 0; i < this.contacts.length; i++) {
-        const e = this.contacts[i];
-        if (!this.selectedContacts.isSelected(e._id)) {
+    if (this.lists.length) {
+      for (let i = 0; i < this.lists.length; i++) {
+        const e = this.lists[i];
+        if (!this.selectedLists.isSelected(e._id)) {
           return false;
         }
       }
-    } else {
-      return false;
     }
     return true;
   }
 
-  addContact(): void {
+  selectAllPage(): void {
+    if (this.isSelectedPage()) {
+      this.lists.forEach((e) => {
+        if (this.selectedLists.isSelected(e._id)) {
+          this.selectedLists.deselect(e._id);
+        }
+      });
+    } else {
+      this.lists.forEach((e) => {
+        if (!this.selectedLists.isSelected(e._id)) {
+          this.selectedLists.select(e._id);
+        }
+      });
+    }
+  }
+
+  addList(): void {
     this.dialog
-      .open(CampaignAddContactComponent, {
+      .open(CampaignAddListComponent, {
         width: '96vw',
-        maxWidth: '1280px',
+        maxWidth: '500px',
         height: 'auto',
         disableClose: true
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          const contacts = res.contacts;
-          this.addUniqueContacts(contacts);
-          if (contacts.length) {
-            const title = 'test list';
-            this.mailListService.createList(title, contacts).subscribe(
-              (response) => {
-                console.log("create mail list response ==========>", response);
-              },
-              (err) => {
-              }
-            );
-          }
+          const list = {
+            _id: this.lists.length + 1,
+            name: res['name'],
+            subscribers: 0,
+            unsubscribers: 0,
+            deliveryissues: 0
+          };
+          this.lists.push(list);
         }
       });
   }
 
-  addUniqueContacts(contacts): void {
-    for( let i = 0; i < contacts.length; i++ ){
-      if (this.contacts.length) {
-        const isExist = this.contacts.filter(
-          (contact) => contact.email === contacts[i].email
-        ).length;
-        if (!isExist) {
-          this.contacts.push(contacts[i]);
-        }
-      } else {
-        this.contacts.push(contacts[i]);
-      }
+  editList(list): void {}
+
+  doAction(action: any): void {
+    console.log('action', action);
+  }
+
+  actions: ActionItem[] = [
+    {
+      icon: 'i-message',
+      label: 'Merge list',
+      type: 'button'
+    },
+    {
+      icon: 'i-message',
+      label: 'Delete list',
+      type: 'button'
+    },
+    {
+      spliter: true,
+      label: 'Select All',
+      type: 'button'
+    },
+    {
+      label: 'Deselect',
+      type: 'button'
     }
-  }
-
-  importCSV(): void {
-    this.dialog
-      .open(UploadContactsComponent, {
-        width: '100vw',
-        maxWidth: '768px',
-        disableClose: true
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          const csvContacts = res.data;
-          this.addUniqueContacts(csvContacts);
-        }
-      });
-  }
-
-  bulkImport(): void {}
-  addBroadcast(): void {}
+  ];
 }

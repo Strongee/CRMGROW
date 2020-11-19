@@ -10,25 +10,25 @@ export class SecurityComponent implements OnInit {
   old_password = '';
   new_password = '';
   confirm_password = '';
-  passwordSaving = false;
+  saving = false;
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {}
 
   saveChange(): void {
-    this.passwordSaving = true;
+    this.saving = true;
     this.userService
       .updatePassword(this.old_password, this.new_password)
       .subscribe(
         (res) => {
-          this.passwordSaving = false;
+          this.saving = false;
           this.old_password = '';
           this.new_password = '';
           this.confirm_password = '';
         },
         (err) => {
-          this.passwordSaving = false;
+          this.saving = false;
         }
       );
   }

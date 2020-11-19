@@ -1,0 +1,34 @@
+.templates-container {
+  max-height: calc(60vh - 100px);
+}
+
+.material {
+  margin: 8px 3px;
+
+  .custom-control {
+    align-self: center;
+  }
+
+  .info {
+    margin-left: 8px;
+    width: calc(100% - 110px);
+
+    .title {
+
+    }
+
+    .subject {
+      font-size: 13px;
+      color: gray;
+      font-weight: 600;
+    }
+
+    .desc {
+      font-size: 12px;
+      max-height: 36px;
+      overflow: hidden;
+      color: gray;
+    }
+  }
+
+}

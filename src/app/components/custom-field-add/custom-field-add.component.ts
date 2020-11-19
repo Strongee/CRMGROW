@@ -15,6 +15,7 @@ export class CustomFieldAddComponent implements OnInit {
   customFieldType = '';
   submitted = false;
   isSame = false;
+  saving = false;
 
   constructor(
     private dialogRef: MatDialogRef<CustomFieldAddComponent>,
@@ -43,12 +44,14 @@ export class CustomFieldAddComponent implements OnInit {
   }
 
   addField(): void {
+    this.saving = true;
     if (this.typeOption == 'text') {
       const data = {
         field: this.fieldName,
         placeholder: this.suggestion,
         mode: 'text'
       };
+      this.saving = false;
       this.dialogRef.close(data);
     } else {
       const data = {
@@ -56,6 +59,7 @@ export class CustomFieldAddComponent implements OnInit {
         options: this.options,
         mode: 'dropdown'
       };
+      this.saving = false;
       this.dialogRef.close(data);
     }
   }

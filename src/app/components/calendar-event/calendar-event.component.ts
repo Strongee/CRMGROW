@@ -85,7 +85,7 @@ export class CalendarEventComponent implements OnInit {
                 (res) => {
                   if (res['status'] == true) {
                     const data = {
-                      recurrence_id: this.event.meta.recurrence_id
+                      id: this.event.meta.recurrence_id
                     };
                     this.toast.success('Event is removed successfully');
                     this.dialogRef.close(data);

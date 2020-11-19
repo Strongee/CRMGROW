@@ -199,6 +199,12 @@ ul {
 .f-8{
   font-size: 18px;
 }
+.f-22{
+  font-size: 22px;
+}
+.f-20 {
+  font-size: 20px;
+}
 .f-28{
   font-size: 28px;
 }
@@ -378,6 +384,9 @@ ul {
 }
 .opacity-6 {
   opacity: 0.6;
+}
+.opacity-4 {
+  opacity: 0.4;
 }
 .opacity-3 {
   opacity: 0.3;
@@ -954,7 +963,9 @@ table {
     }
   }
 }
-
+.general-panels .mat-expanded .toggle-icon {
+  transform: rotate(90deg);
+}
 /** ==== Avatar Style === */
 //* Profile Avatar
 .avatar-wrapper {
@@ -1031,6 +1042,13 @@ table {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+
+  &.lg {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    line-height: 48px;
+  }
 }
 
 .avatar {
@@ -1324,3 +1342,4 @@ select.theme-control {
     }
   }
 }
+

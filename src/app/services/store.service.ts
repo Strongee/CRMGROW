@@ -6,7 +6,7 @@ import { Video } from '../models/video.model';
 import { Template } from '../models/template.model';
 import { TaskDetail } from '../models/task.model';
 import { Activity } from '../models/activity.model';
-import { ContactActivity } from '../models/contact.model';
+import { ContactActivity, ContactDetail } from '../models/contact.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,9 @@ export class StoreService {
   tasks: BehaviorSubject<TaskDetail[]> = new BehaviorSubject([]);
   activities: BehaviorSubject<Activity[]> = new BehaviorSubject([]);
   contacts: BehaviorSubject<ContactActivity[]> = new BehaviorSubject([]);
+  selectedContact: BehaviorSubject<ContactDetail> = new BehaviorSubject(
+    new ContactDetail()
+  );
 
   videos: BehaviorSubject<Video[]> = new BehaviorSubject([]);
   pdfs: BehaviorSubject<Pdf[]> = new BehaviorSubject([]);
@@ -28,6 +31,7 @@ export class StoreService {
   tasks$ = this.tasks.asObservable();
   activities$ = this.activities.asObservable();
   contacts$ = this.contacts.asObservable();
+  selectedContact$ = this.selectedContact.asObservable();
 
   videos$ = this.videos.asObservable();
   pdfs$ = this.pdfs.asObservable();

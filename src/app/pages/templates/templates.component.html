@@ -9,7 +9,7 @@
     </div>
     <div class="my-3">
       <ng-container *ngIf="isLoading">
-        <p>Loading</p>
+        <app-loading-overlay [type]="'table'"></app-loading-overlay>
       </ng-container>
       <ng-container *ngIf="!isLoading && !count">
         <p>There is no template data</p>

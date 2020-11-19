@@ -159,7 +159,7 @@ export class HelperService {
       fileInput.click();
     });
   }
-
+  
   promptForImage(): Promise<File> {
     return new Promise<File>((resolve, reject) => {
       const fileInput: HTMLInputElement = this.document.createElement('input');
@@ -202,6 +202,41 @@ export class HelperService {
           };
           overlay.src = '../../assets/img/pdf_overlay.png';
         }
+      };
+      source.src = blob;
+    });
+  }
+  
+  
+  public generateAvatar(blob: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const source = new Image();
+      const canvasWidth = 300;
+      const canvasHeight = 300;
+      source.onload = (e) => {
+        const imgWidth = source.width;
+        const imgHeight = source.height;
+        let newWidth, newHeight;
+        let offX, offY;
+        if (imgHeight < imgWidth) {
+          newWidth = canvasWidth;
+          newHeight = (newWidth * imgHeight) / imgWidth;
+          offX = 0;
+          offY = (canvasHeight - newHeight) / 2;
+        } else {
+          newHeight = canvasHeight;
+          newWidth = (newHeight * imgWidth) / imgHeight;
+          offX = (canvasWidth - newWidth) / 2;
+          offY = 0;
+        }
+        const canvas: HTMLCanvasElement = this.document.createElement('canvas');
+        const context: CanvasRenderingContext2D = canvas.getContext('2d');
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, canvasWidth, canvasHeight);
+        context.drawImage(source, offX, offY, newWidth, newHeight);
+        resolve(canvas.toDataURL('image/jpeg'));
       };
       source.src = blob;
     });

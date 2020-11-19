@@ -5,7 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { StoreService } from './store.service';
 import { Observable } from 'rxjs';
 import { CONTACT } from '../constants/api.constant';
-import { Contact, ContactActivity } from '../models/contact.model';
+import {
+  Contact,
+  ContactActivity,
+  ContactDetail
+} from '../models/contact.model';
 import { ActivityDetail } from '../models/activity.model';
 import { map, catchError } from 'rxjs/operators';
 
@@ -22,7 +26,31 @@ export class ContactService extends HttpService {
   }
 
   create(contact: any): void {}
-  read(_id: string): void {}
+  /**
+   * Read the Detail information of the contact
+   * @param _id: Contact Id to read the detail information
+   * @param sortInfo: Page sort information for the next and prev contact
+   */
+  readImpl(_id: string, sortInfo = {}): Observable<ContactDetail> {
+    return this.httpClient
+      .post(this.server + CONTACT.READ + _id, sortInfo)
+      .pipe(
+        map((res) => new ContactDetail().deserialize(res['data'])),
+        catchError(this.handleError('CONTACT DETAIL', null))
+      );
+  }
+  /**
+   * Read the Detail information of the contact and Emit the Behavior Subject
+   * @param _id: Contact Id to read the detail information
+   * @param sortInfo: Page sort information for the next and prev contact
+   */
+  read(_id: string, sortInfo = {}): void {
+    this.readImpl(_id, sortInfo).subscribe((res) => {
+      if (res) {
+        this.storeService.selectedContact.next(res);
+      }
+    });
+  }
   update(_id: string): void {}
   delete(_id: string): void {}
   /**
@@ -103,5 +131,11 @@ export class ContactService extends HttpService {
         map((res) => res['data'] || []),
         catchError(this.handleError('SEARCH CONTACTS', []))
       );
+  }
+  filter(query): Observable<Contact[]> {
+    return this.httpClient.post(this.server + CONTACT.FILTER, query).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('FILTER CONTACTS', []))
+    );
   }
 }

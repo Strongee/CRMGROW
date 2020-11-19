@@ -25,7 +25,7 @@
 }
 .date-picker {
     padding: 1rem;
-  }
+}
   
 :host ::ng-deep {
     .picker-body {
@@ -35,13 +35,17 @@
             .ngb-dp-header, .ngb-dp-weekdays {
                 background-color: white;
                 border-bottom: none;
-                margin-top: 10px;
             }
             .ngb-dp-weekday {
                 color: #101336;
                 font-style: normal;
                 font-size: 13px;
                 font-weight: bold;
+            }
+            .ngb-dp-day {
+                &:focus {
+                    outline: unset;
+                }
             }
         }
         .custom-select {

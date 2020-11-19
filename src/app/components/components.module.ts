@@ -51,12 +51,18 @@ import { CustomFieldAddComponent } from './custom-field-add/custom-field-add.com
 import { CustomFieldDeleteComponent } from './custom-field-delete/custom-field-delete.component';
 import { AutomationAssignComponent } from './automation-assign/automation-assign.component';
 import { MaterialAddComponent } from './material-add/material-add.component';
+import { NotifyComponent } from './notify/notify.component';
+import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
+import { ShareSiteComponent } from './share-site/share-site.component';
 import { AssistantCreateComponent } from './assistant-create/assistant-create.component';
 import { AssistantPasswordComponent } from './assistant-password/assistant-password.component';
 import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { TagDeleteComponent } from './tag-delete/tag-delete.component';
 import { MaterialEditTemplateComponent } from './material-edit-template/material-edit-template.component';
+import { MaterialShareComponent } from './material-share/material-share.component';
+import { TemplateShareComponent } from './template-share/template-share.component';
+import { AutomationShareComponent } from './automation-share/automation-share.component';
 
 @NgModule({
   declarations: [
@@ -109,12 +115,18 @@ import { MaterialEditTemplateComponent } from './material-edit-template/material
     CustomFieldDeleteComponent,
     AutomationAssignComponent,
     MaterialAddComponent,
+    NotifyComponent,
+    SafeHtmlPipe,
+    ShareSiteComponent,
     AssistantCreateComponent,
     AssistantPasswordComponent,
     AssistantRemoveComponent,
     TagEditComponent,
     TagDeleteComponent,
-    MaterialEditTemplateComponent
+    MaterialEditTemplateComponent,
+    MaterialShareComponent,
+    TemplateShareComponent,
+    AutomationShareComponent
   ],
   imports: [
     CommonModule,

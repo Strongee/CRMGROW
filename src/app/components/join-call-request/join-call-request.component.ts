@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
-
+import { numPad } from "../../helper";
 import {
   QuillEditor,
   TIMES,
@@ -158,13 +158,15 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       const timezone = res['time_zone'];
       const dueDateTimes = [];
       for (const dateTime of this.callDateTimes) {
-        dueDateTimes.push(
-          new Date(
-            `${dateTime.date.year}-${this.numPad(
-              dateTime.date.month
-            )}-${this.numPad(dateTime.date.day)}T${dateTime.time}${timezone}`
-          ).toISOString()
-        );
+        const dueDateTime = new Date(
+          `${dateTime.date.year}-${numPad(dateTime.date.month)}-${numPad(
+            dateTime.date.day
+          )}T${dateTime.time}${timezone}`
+        ).toISOString();
+        const index = dueDateTimes.indexOf(dueDateTime);
+        if (index < 0) {
+          dueDateTimes.push(dueDateTime);
+        }
       }
       const data = {
         user: res._id,
@@ -185,10 +187,4 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
 
   onAdding(): void {}
 
-  numPad(num): any {
-    if (num < 10) {
-      return '0' + num;
-    }
-    return num + '';
-  }
 }

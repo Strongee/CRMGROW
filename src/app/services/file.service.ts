@@ -21,7 +21,7 @@ export class FileService extends HttpService {
   }
 
   attachImage(file): Observable<any> {
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append('file', file);
     return this.httpClient
       .post(this.server + FILE.UPLOAD_IMAGE, { formData })
