@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 export class TeamDeleteComponent implements OnInit {
   updating = false;
   team;
+  submitted = false;
   constructor(
     private teamService: TeamService,
     private toast: ToastrService,

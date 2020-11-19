@@ -43,10 +43,11 @@
   }
 
   .status {
-    padding: 3px 5px;
-    border-radius: 5px;
+    padding: 4px 5px;
+    border-radius: 4px;
     width: 60px;
     text-align: center;
+
     &.Owner {
       background-color: #F1305E;
     }
@@ -103,7 +104,7 @@
   }
 
   .status-cell {
-    max-width: 80px;
+    max-width: 150px;
 
     .status {
 
@@ -115,8 +116,8 @@
       .Owner {
         width: 70px;
         height: 22px;
-        padding: 2px;
-        border-radius: 5px;
+        padding: 3px;
+        border-radius: 4px;
         background-color: #F1305E;
       }
 
@@ -131,8 +132,8 @@
       .Invite {
         width: 70px;
         height: 22px;
-        padding: 2px;
-        border-radius: 5px;
+        padding: 3px;
+        border-radius: 4px;
         background-color: #FFAA2A;
       }
     }
@@ -140,7 +141,7 @@
     .remind {
       border-radius: 4px;
       padding: 3px 5px;
-      height: 23px;
+      height: 22px;
       border-width: 1px;
       font-size: 11px
     }

@@ -1,11 +1,6 @@
+<h1 mat-dialog-title>Edit team</h1>
 <form #teamForm="ngForm" (ngSubmit)="submitted = true; teamForm.form.valid ? update() : false"
   [class.was-validated]="submitted" class="team-edit-form">
-  <div class="v-center justify-content-between mx-0">
-    <h4 class="f-22 font-weight-bold c-black">Edit team</h4>
-    <button class="v-center border-0 bgc-trans dropdown-item" mat-dialog-close>
-      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
-    </button>
-  </div>
   <div mat-dialog-content class="my-2">
     <div class="content">
       <div class="form-group">

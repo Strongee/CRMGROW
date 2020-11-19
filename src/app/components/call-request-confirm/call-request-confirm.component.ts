@@ -5,7 +5,7 @@ import { UserService } from '../../services/user.service';
 import { NoteQuillEditor } from '../../constants/variable.constants';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Location } from '@angular/common';
-import * as moment from "moment";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-call-request-confirm',

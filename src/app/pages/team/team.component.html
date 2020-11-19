@@ -72,7 +72,7 @@
           <div class="ml-5">
             <label>Your Status</label>
             <div class="value v-center">
-              <div class="status font-weight-bold f-3 c-white" [class] = "status(team)">{{status(team)}}</div>
+              <div class="status font-weight-bold f-1 c-white" [class] = "status(team)">{{status(team)}}</div>
             </div>
           </div>
         </div>
@@ -83,12 +83,12 @@
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
-          <div class="button-group v-center">
-            <button class="v-center btn btn-blue f-3 font-weight-bold text-white ml-2 py-2 border-0" (click)="inviteMember()">
+          <div class="button-group v-center justify-content-end">
+            <button class="v-center btn btn-primary f-3 font-weight-bold shadow text-white ml-2 p-2" (click)="inviteMember()">
               <i class="bgc-white i-icon i-invite-member sm mr-2"></i>
               Invite member
             </button>
-            <button class="v-center btn btn-white-blue f-3 font-weight-bold ml-2" (click)="editTeam()" *ngIf="role == 'owner'">
+            <button class="v-center btn btn-white-blue f-3 font-weight-bold ml-2 p-2" (click)="editTeam()" *ngIf="role == 'owner'">
               <i class="bgc-blue i-icon i-edit sm mr-2"></i>
               Edit team
             </button>
@@ -134,7 +134,7 @@
               </td>
               <td class="status-cell">
                 <div class="status">
-                  <div class="Owner c-white text-center f-3">Owner</div>
+                  <div class="Owner c-white text-center f-1 font-weight-bold">Owner</div>
                 </div>
               </td>
               <td class="added-cell f-3">
@@ -167,12 +167,12 @@
               <td class="status-cell">
                 <div class="label-cell status">
                   <select (change)="toggleMember(member)"
-                          class="c-white f-3"
+                          class="c-white f-1 font-weight-bold"
                           [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
-                    <option [value]="'Viewer'" class="Viewer c-white f-3" [selected]="team.editors.indexOf(member._id) === -1">
+                    <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
                       Viewer
                     </option>
-                    <option [value]="'Editor'" class="Editor c-white f-3" [selected]="team.editors.indexOf(member._id) !== -1">
+                    <option [value]="'Editor'" class="Editor c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) !== -1">
                       Editor
                     </option>
                   </select>
@@ -184,8 +184,8 @@
               <td class="phone-cell">
                 {{member.cell_phone}}
               </td>
-              <td class="action-cell">
-                <button class="v-center btn bgc-white c-dark f-3 ml-2 opacity-3" (click)="removeMember(member)">
+              <td class="action-cell d-flex justify-content-end">
+                <button class="v-center btn bgc-white c-dark f-3 ml-2 opacity-3 justify-content-end" (click)="removeMember(member)">
                   <i class="bgc-dark i-icon i-trash mr-2"></i>
                   <span class="button-label">Remove</span>
                 </button>
@@ -212,9 +212,9 @@
               <td class="status-cell">
                 <div class="v-center">
                   <div class="status mr-3">
-                    <div class="Invite c-white text-center f-3">Invite sent</div>
+                    <div class="Invite c-white text-center f-1 font-weight-bold">Invite sent</div>
                   </div>
-                  <div class="btn-white-blue remind f-3">Remind</div>
+                  <div class="btn-white-blue remind f-1 font-weight-bold">Remind</div>
                 </div>
               </td>
               <td class="added-cell">
@@ -223,7 +223,7 @@
               <td class="phone-cell">
                 {{invite.cell_phone}}
               </td>
-              <td class="action-cell">
+              <td class="action-cell d-flex justify-content-end">
                 <button class="v-center btn bgc-white c-dark f-3 opacity-3 ml-2" (click)="cancelInvite(invite)">
                   <i class="bgc-dark i-icon i-trash mr-2"></i>
                   <span class="button-label">Cancel invitation</span>
@@ -242,7 +242,7 @@
               </ng-template>
               <div class="materials-list-wrapper tab-panel">
                 <div class="d-flex my-3">
-                  <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createMaterial()">ADD MATERIAL</button>
+                  <button class="btn btn-primary f-3 font-weight-bold ml-auto" (click)="createMaterial()">ADD MATERIAL</button>
                 </div>
                 <div class="materials mt-3">
                   <h6 class="f-6 font-weight-bold c-dark">Video</h6>
@@ -552,7 +552,7 @@
               </ng-template>
               <div class="template-list-wrapper tab-panel">
                 <div class="d-flex my-3">
-                  <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createEmailTemplate()">ADD TEMPLATE</button>
+                  <button class="btn btn-primary f-3 font-weight-bold ml-auto" (click)="createEmailTemplate()">ADD TEMPLATE</button>
                 </div>
                 <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
@@ -613,8 +613,7 @@
               </ng-template>
               <div class="automation-list-wrapper tab-panel">
                 <div class="d-flex my-3">
-                  <button class="btn btn-sm btn-primary f-3 ml-auto" (click)="createAutomation()">ADD
-                    AUTOMATION</button>
+                  <button class="btn btn-primary f-3 font-weight-bold ml-auto" (click)="createAutomation()">ADD AUTOMATION</button>
                 </div>
                 <ng-container *ngIf="team.automations.length; else emptyAutomationListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
