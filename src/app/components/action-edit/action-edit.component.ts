@@ -20,6 +20,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { LabelService } from 'src/app/services/label.service';
 import { LabelComponent } from '../label/label.component';
 import { UserService } from '../../services/user.service';
+import {Task} from "../../models/task.model";
 
 @Component({
   selector: 'app-action-edit',
@@ -84,6 +85,7 @@ export class ActionEditComponent implements OnInit {
   update_due_date = {};
   update_due_time = '12:00:00.000';
   update_due_duration = 0;
+  task = new Task();
 
   constructor(
     private dialogRef: MatDialogRef<ActionEditComponent>,
@@ -134,6 +136,8 @@ export class ActionEditComponent implements OnInit {
       this.material = this.data.action.image;
     }
     if (this.data.action.type === 'follow_up') {
+      console.log("automation data =============>", this.data);
+      this.task.type = this.data.action.task_type;
       if (this.data.action.due_duration) {
         this.due_duration = this.data.action.due_duration;
         this.followDueOption = 'delay';
@@ -173,6 +177,7 @@ export class ActionEditComponent implements OnInit {
     }
 
     if (this.data.action.type === 'update_follow_up') {
+      this.task.type = this.data.action.task_type;
       if (this.data.action.due_date) {
         this.updateFollowDueOption = 'update_due_date';
         let timezone = this.currentUser.time_zone;
@@ -410,6 +415,7 @@ export class ActionEditComponent implements OnInit {
         );
         this.dialogRef.close({
           ...this.action,
+          task_type: this.task.type,
           due_date: due_date,
           period,
           due_duration: undefined
@@ -417,6 +423,7 @@ export class ActionEditComponent implements OnInit {
       } else {
         this.dialogRef.close({
           ...this.action,
+          task_type: this.task.type,
           due_duration: this.due_duration,
           period,
           due_date: undefined
@@ -472,6 +479,7 @@ export class ActionEditComponent implements OnInit {
           this.dialogRef.close({
             ...this.action,
             type: this.type,
+            task_type: this.task.type,
             due_duration: undefined,
             due_date: undefined,
             period,
@@ -490,6 +498,7 @@ export class ActionEditComponent implements OnInit {
           this.dialogRef.close({
             ...this.action,
             type: this.type,
+            task_type: this.task.type,
             due_date: due_date,
             period,
             command: 'update_follow_up',
@@ -499,6 +508,7 @@ export class ActionEditComponent implements OnInit {
           this.dialogRef.close({
             ...this.action,
             type: this.type,
+            task_type: this.task.type,
             due_duration: this.update_due_duration || 0,
             period,
             command: 'update_follow_up',
@@ -509,6 +519,7 @@ export class ActionEditComponent implements OnInit {
         this.dialogRef.close({
           ...this.action,
           type: this.type,
+          task_type: this.task.type,
           period,
           command: 'complete_follow_up',
           ref_id: this.selectedFollow.id

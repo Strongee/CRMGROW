@@ -78,6 +78,6 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button class="btn c-blue" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary" [class.loading]="sharing" (click)="shareMaterials()">Share</button>
+  <button type="button" class="btn c-blue" mat-dialog-close>Cancel</button>
+  <button type="submit" class="btn btn-primary" [class.loading]="sharing" (click)="shareMaterials()">Share</button>
 </mat-dialog-actions>

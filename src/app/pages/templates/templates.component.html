@@ -2,7 +2,7 @@
   <div class="my-2">
     <div class="d-flex justify-content-between">
       <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Templates</h6>
-      <a class="btn btn-primary br-default shadow py-2 v-center mb-2 border-0" [routerLink]="['/templates/new']">
+      <a class="btn btn-primary shadow py-2 v-center mb-2 border-0" [routerLink]="['/templates/new']">
         <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
         <span class="fw-600 f-3">New Template</span>
       </a>
@@ -15,13 +15,6 @@
         <p>There is no template data</p>
       </ng-container>
       <ng-container *ngIf="!isLoading && count">
-        <div class="d-flex justify-content-end align-items-center my-2">
-          <div class="call-request-count" *ngIf="count">{{count}} template(s)</div>
-          <div class="ml-3 pagination-wrapper" *ngIf="count">
-            <pagination-controls (pageChange)="setPageTemplate($event)" id="templateTable" maxSize="10" previousLabel=""
-                                 nextLabel=""></pagination-controls>
-          </div>
-        </div>
         <table class="table template-table">
           <thead>
           <th class="template-title">Title</th>
@@ -79,6 +72,12 @@
             </tr>
           </tbody>
         </table>
+        <div class="d-flex justify-content-center align-items-center my-2">
+          <div class="ml-3 pagination-wrapper" *ngIf="count">
+            <pagination-controls (pageChange)="setPageTemplate($event)" id="templateTable" maxSize="10" previousLabel=""
+                                 nextLabel=""></pagination-controls>
+          </div>
+        </div>
       </ng-container>
     </div>
   </div>

@@ -1,16 +1,20 @@
 <h1 mat-dialog-title>New group call inquiry</h1>
-<form #actionForm="ngForm" (ngSubmit)="assignCallRequest()">
+<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? assignCallRequest() : false"
+      [class.was-validated]="submitted">
   <mat-dialog-content class="content-section form-group">
     <ng-container>
       <div class="my-3">
         <label>Subject</label>
         <div clas="contact-input">
-          <input type="text" class="form-control" [(ngModel)]="subject" name="callSubject" #callSubject="ngModel">
+          <input type="text" class="form-control" [(ngModel)]="subject" name="callSubject" #callSubject="ngModel" required>
+          <span class="invalid-feedback"
+                *ngIf="!subject && submitted">Subject is required.</span>
         </div>
       </div>
       <div class="my-3">
         <label>Select group call leader</label>
         <app-select-leader (onSelect)="changeLeader($event)"></app-select-leader>
+        <div class="invalid-feedback" [class.invalid]="!leader && submitted">Leader is required.</div>
       </div>
       <div class="my-3">
         <label>Invite contacts & guests</label>
@@ -19,6 +23,7 @@
           [selectedContacts]="contacts"
         >
         </app-input-contacts>
+        <div class="invalid-feedback" [class.invalid]="!contacts.length && submitted">Contact is required.</div>
       </div>
       <div class="my-3">
         <label>Propose date & time</label>
@@ -55,13 +60,13 @@
                 <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
               </select>
             </div>
-            <button class="v-center border-0 bgc-white py-2 ml-2" (click)="removeCallDateTime(dateTime)">
+            <button type="button" class="v-center border-0 bgc-white py-2 ml-2" (click)="removeCallDateTime(dateTime)">
               <i class="i-icon i-close bgc-dark" aria-hidden="true"></i>
             </button>
           </div>
         </ng-container>
         <div class="d-flex justify-content-end mt-2 mr-3">
-          <button class="v-center border-0 bgc-trans" (click)="addCallDateTime()">
+          <button type="button" class="v-center border-0 bgc-trans" (click)="addCallDateTime()">
             <i class="i-icon i-plus bgc-blue" aria-hidden="true"></i>
             <span class="ml-2 f-4 c-blue font-weight-bold">Add another proposed date & time</span>
           </button>
@@ -78,7 +83,7 @@
       <div class="my-3">
         <label>Description (Optional)</label>
         <quill-editor placeholder="Enter Text" [(ngModel)]="description" [modules]="config" name="descriptionContent"
-                      [styles]="{height: '120px'}" #descriptionContent="ngModel" required (onEditorCreated)="getEditorInstance($event)"
+                      [styles]="{height: '120px'}" #descriptionContent="ngModel" (onEditorCreated)="getEditorInstance($event)"
                       [class.has-error]="descriptionContent.errors && (descriptionContent.touched || descriptionContent.dirty )" class="rounded" #descriptionEditor>
         </quill-editor>
       </div>

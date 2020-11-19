@@ -1343,3 +1343,25 @@ select.theme-control {
   }
 }
 
+///////////// pagination style ///////////////////
+mat-expansion-panel {
+  overflow: visible;
+}
+
+.ngx-pagination .pagination-previous a::before, .ngx-pagination .pagination-previous.disabled::before {
+  content: '◀' !important;
+}
+
+.ngx-pagination .pagination-next a::after, .ngx-pagination .pagination-next.disabled::after {
+  content: '▶' !important;
+}
+
+ul.ngx-pagination .current {
+  background-color: #0000ff;
+}
+
+.invalid {
+  &.invalid-feedback {
+    display: block;
+  }
+}

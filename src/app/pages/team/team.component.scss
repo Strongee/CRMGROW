@@ -103,6 +103,8 @@
   }
 
   .status-cell {
+    max-width: 80px;
+
     .status {
 
       select {
@@ -141,6 +143,18 @@
       height: 23px;
       border-width: 1px;
       font-size: 11px
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .phone-cell {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .added-cell {
+      display: none;
     }
   }
 }
@@ -315,6 +329,7 @@
     }
     .actions-col {
       width: 100px;
+      min-width: auto;
       .actions-wrapper {
         width: 100px;
         display: block;
@@ -342,6 +357,9 @@
       display: block;
       text-align: center;
     }
+    .button-label {
+      display: none;
+    }
   }
 
   @media screen and (max-width: 575px) {
@@ -354,8 +372,8 @@
     .name-col {
       .thumbnail {
         display: block;
-        width: 150px;
-        height: 90px;
+        width: 100px;
+        height: 60px;
         margin-bottom: 10px;
       }
       .thumb-prev-wrapper {
@@ -376,10 +394,15 @@
   }
 }
 
-
 .template-table, .automation-table {
   th, td {
     padding: 10px 0px;
+  }
+
+  @media screen and (max-width: 576px) {
+    .material-created, .material-contacts {
+      display: none;
+    }
   }
 }
 
@@ -388,6 +411,13 @@
     border-radius: 20px;
     height: 5px;
   }
+
+  .material-share-table {
+    .btn {
+      padding: 5px;
+    }
+  }
+
 
   .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
     background-color: blue;

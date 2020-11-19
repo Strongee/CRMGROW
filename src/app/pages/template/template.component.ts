@@ -188,6 +188,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
     // const range = this.quillEditorRef.getSelection();
     // const el = `<span>${value}</span>`
     // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, el);
+    this.emailEditor.quillEditor.focus();
     const range = this.emailEditor.quillEditor.getSelection();
     if (!range) {
       return;

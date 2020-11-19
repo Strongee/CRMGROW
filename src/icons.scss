@@ -194,7 +194,7 @@
   mask-image: url('/assets/img/block.svg');
 }
 .i-triangle-up {
-  mask-image: url('/assets/img/up-triangle.svg');
+  mask-image: url('/assets/img/up_triangle.svg');
 }
 .i-check {
   mask-image: url('/assets/img/check.svg');
@@ -309,6 +309,10 @@
 .i-edit-template {
   mask-image: url('/assets/img/template.svg');
 }
+.i-duplicate {
+  mask-image: url('/assets/img/duplicate.svg');
+}
+
 
 
 ///////////// Activity List Icons //////////////////

@@ -114,6 +114,35 @@
                 </ng-template>
               </div>
             </div>
+            <ng-container *ngIf="type==='follow_up' || type === 'update_follow_up'">
+              <div class="col-12 form-group">
+                <label>type of the task</label>
+                <div>
+                  <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="task.type">
+                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                      <input type="radio" name="options" value="task" ngbButton>
+                      <i class="i-icon i-task d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                      <input type="radio" name="options" value="call" ngbButton>
+                      <i class="i-icon i-phone d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                      <input type="radio" name="options" value="meeting" ngbButton>
+                      <i class="i-icon i-lunch d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                      <input type="radio" name="options" value="email" ngbButton>
+                      <i class="i-icon i-message d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                      <input type="radio" name="options" value="material" ngbButton>
+                      <i class="i-icon i-video d-block bgc-dark"></i>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
             <div class="col-12" *ngIf="action['period'] == 'custom_date'">
               <div class="d-flex m-0">
                 <div class="form-group mb-0">
@@ -420,15 +449,16 @@
           <ng-container [ngSwitch]="contactUpdateOption">
             <div *ngSwitchCase="'update_label'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(NEW LABEL)</span></label>
-              <select class="form-control theme-control" (change)="changeLabel($event.target.value)"
-                      [ngStyle]="{'background-color': getLabelById(commandLabel).color, 'color': getLabelById(commandLabel).font_color}">
-                <option selected *ngFor="let label of labels" [selected]="commandLabel === label._id"
-                        [value]="label._id" class="c-label"
-                        [ngStyle]="{'background-color': label.color, 'color': label.font_color}">{{label.name}}
-                </option>
-                <option class="c-label" [ngStyle]="{'background-color': 'white', 'color': 'black'}" value="createlabel">
-                  Create New Label</option>
-              </select>
+              <app-label-select type="form"></app-label-select>
+<!--              <select class="form-control theme-control" (change)="changeLabel($event.target.value)"-->
+<!--                      [ngStyle]="{'background-color': getLabelById(commandLabel).color, 'color': getLabelById(commandLabel).font_color}">-->
+<!--                <option selected *ngFor="let label of labels" [selected]="commandLabel === label._id"-->
+<!--                        [value]="label._id" class="c-label"-->
+<!--                        [ngStyle]="{'background-color': label.color, 'color': label.font_color}">{{label.name}}-->
+<!--                </option>-->
+<!--                <option class="c-label" [ngStyle]="{'background-color': 'white', 'color': 'black'}" value="createlabel">-->
+<!--                  Create New Label</option>-->
+<!--              </select>-->
             </div>
             <div *ngSwitchCase="'push_tag'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO INSERT)</span></label>

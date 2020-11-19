@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Icons / Calendar Black</title>
-    <g id="Icons-/-Calendar-Black" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="calendar" transform="translate(2.000000, 1.000000)">
-            <path d="M2,1.5 L2,1.5 C1.45338,1.69132 0.71831,2.46098 0.59447,3.02672 C0.33568,4.20894 0,6.26879 0,9 C0,11.5012 0.28151,13.4393 0.52768,14.656 C0.71494,15.5815 1.4185,16.2851 2.34402,16.4723 C3.56072,16.7185 5.49885,17 8,17 C10.5012,17 12.4393,16.7185 13.656,16.4723 C14.5815,16.2851 15.2851,15.5815 15.4723,14.656 C15.7185,13.4393 16,11.5012 16,9 C16,6.26879 15.6643,4.20894 15.4055,3.02672 C15.2468,2.30139 14.7008,1.74529 14,1.5 L14,1.5" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></path>
-            <path d="M2,1.5 C1.45338,1.69132 0.71831,2.46098 0.59447,3.02672 C0.33568,4.20894 0,6.26879 0,9 C0,11.5012 0.28151,13.4393 0.52768,14.656 C0.71494,15.5815 1.4185,16.2851 2.34402,16.4723 C3.56072,16.7185 5.49885,17 8,17 C10.5012,17 12.4393,16.7185 13.656,16.4723 C14.5815,16.2851 15.2851,15.5815 15.4723,14.656 C15.7185,13.4393 16,11.5012 16,9 C16,6.26879 15.6643,4.20894 15.4055,3.02672 C15.2468,2.30139 14.7008,1.74529 14,1.5 L2,1.5 Z" id="Path-Copy" fill-opacity="0.1" fill="#101336"></path>
-            <line x1="1" y1="7" x2="15" y2="7" id="Path" stroke="#101336" stroke-width="2"></line>
-            <line x1="5" y1="3" x2="5" y2="0" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></line>
-            <line x1="11" y1="3" x2="11" y2="0" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></line>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16.2" viewBox="0 0 16 16.2">
+  <g id="Icons_Calendar_Black" data-name="Icons / Calendar Black" transform="translate(0 0.2)">
+    <g id="calendar" transform="translate(1.6 0.8)">
+      <path id="Path" d="M1.6,0h0A2.118,2.118,0,0,0,.476,1.221,22.612,22.612,0,0,0,0,6a23.021,23.021,0,0,0,.422,4.525,1.842,1.842,0,0,0,1.453,1.453A23.019,23.019,0,0,0,6.4,12.4a23.019,23.019,0,0,0,4.525-.422,1.842,1.842,0,0,0,1.453-1.453A23.019,23.019,0,0,0,12.8,6a22.611,22.611,0,0,0-.476-4.779A1.7,1.7,0,0,0,11.2,0h0" transform="translate(0 1.2)" fill="none" stroke="#101336" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <path id="Path_Copy" data-name="Path Copy" d="M1.6,0A2.118,2.118,0,0,0,.476,1.221,22.612,22.612,0,0,0,0,6a23.021,23.021,0,0,0,.422,4.525,1.842,1.842,0,0,0,1.453,1.453A23.019,23.019,0,0,0,6.4,12.4a23.019,23.019,0,0,0,4.525-.422,1.842,1.842,0,0,0,1.453-1.453A23.019,23.019,0,0,0,12.8,6a22.611,22.611,0,0,0-.476-4.779A1.7,1.7,0,0,0,11.2,0Z" transform="translate(0 1.2)" fill="rgba(16,19,54,0.1)"/>
+      <path id="Path-2" data-name="Path" d="M0,.5H11.2" transform="translate(0.8 5.1)" fill="none" stroke="#101336" stroke-miterlimit="10" stroke-width="2"/>
+      <path id="Path-3" data-name="Path" d="M.5,2.4V0" transform="translate(3.5)" fill="none" stroke="#101336" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <path id="Path-4" data-name="Path" d="M.5,2.4V0" transform="translate(8.3)" fill="none" stroke="#101336" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
     </g>
+  </g>
 </svg>

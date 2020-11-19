@@ -380,6 +380,7 @@ export class ActionDialogComponent implements OnInit {
         this.dialogRef.close({
           ...this.action,
           type: this.type,
+          task_type: this.task.type,
           category: this.category,
           due_date: due_date,
           period
@@ -388,6 +389,7 @@ export class ActionDialogComponent implements OnInit {
         this.dialogRef.close({
           ...this.action,
           type: this.type,
+          task_type: this.task.type,
           category: this.category,
           due_duration: this.due_duration,
           period
@@ -436,6 +438,7 @@ export class ActionDialogComponent implements OnInit {
           this.dialogRef.close({
             ...this.action,
             type: this.type,
+            task_type: this.task.type,
             category: this.category,
             due_duration: undefined,
             due_date: undefined,
@@ -455,6 +458,7 @@ export class ActionDialogComponent implements OnInit {
           this.dialogRef.close({
             ...this.action,
             type: this.type,
+            task_type: this.task.type,
             category: this.category,
             due_date: due_date,
             period,
@@ -465,6 +469,7 @@ export class ActionDialogComponent implements OnInit {
           this.dialogRef.close({
             ...this.action,
             type: this.type,
+            task_type: this.task.type,
             category: this.category,
             due_duration: this.update_due_duration || 0,
             period,
@@ -476,6 +481,7 @@ export class ActionDialogComponent implements OnInit {
         this.dialogRef.close({
           ...this.action,
           type: this.type,
+          task_type: this.task.type,
           category: this.category,
           period,
           command: 'complete_follow_up',

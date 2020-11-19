@@ -2,8 +2,8 @@
   <div class="v-center justify-content-between mx-0">
     <h4 class="f-22 font-weight-bold c-black">Add Contacts</h4>
     <div class="v-center">
-      <button class="btn btn-white font-weight-bold f-4">Advanced Filter</button>
-      <button class="v-center border-0 bgc-trans close-button ml-2" mat-dialog-close>
+      <button type="button" class="btn btn-white font-weight-bold f-4">Advanced Filter</button>
+      <button type="button" class="v-center border-0 bgc-trans close-button ml-2" mat-dialog-close>
         <i class="i-icon i-close bgc-black" aria-hidden="true"></i>
       </button>
     </div>
@@ -26,8 +26,8 @@
       </div>
       <div class="v-center justify-content-center my-3" *ngIf="pageContacts.length && isSelectedPage() && !isLoading">
         <div class="f-6 font-weight-bold">{{selectedContacts.selected.length}} contacts on this page is selected.</div>
-        <button class="btn btn-white-blue ml-4" (click)="selectAllContact()" *ngIf="selectedContacts.selected.length != contactCount">Select All {{contactCount}} Contacts</button>
-        <button class="btn btn-white-blue ml-2" (click)="clearAllSelected()">Clear Selected</button>
+        <button type="button" class="btn btn-white-blue ml-4" (click)="selectAllContact()" *ngIf="selectedContacts.selected.length != contactCount">Select All {{contactCount}} Contacts</button>
+        <button type="button" class="btn btn-white-blue ml-2" (click)="clearAllSelected()">Clear Selected</button>
       </div>
       <ng-container *ngIf="isLoading">
         <div class="px-3 pb-3">

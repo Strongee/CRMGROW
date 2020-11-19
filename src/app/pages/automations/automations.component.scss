@@ -12,4 +12,10 @@
   .icon-button {
     cursor: pointer;
   }
+
+  @media screen and (max-width: 576px) {
+    .action-count, .contacts, .created {
+      display: none;
+    }
+  }
 }
