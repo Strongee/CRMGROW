@@ -159,7 +159,7 @@ export class HelperService {
       fileInput.click();
     });
   }
-  
+
   promptForImage(): Promise<File> {
     return new Promise<File>((resolve, reject) => {
       const fileInput: HTMLInputElement = this.document.createElement('input');
@@ -206,8 +206,7 @@ export class HelperService {
       source.src = blob;
     });
   }
-  
-  
+
   public generateAvatar(blob: any): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const source = new Image();

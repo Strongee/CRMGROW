@@ -7,9 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user.model';
 import { Garbage } from 'src/app/models/garbage.model';
-import { MaterialService } from 'src/app/services/material.service';
-import { StoreService } from 'src/app/services/store.service';
-import { ActionItem, TabItem } from 'src/app/utils/data.types';
+import { TabItem } from 'src/app/utils/data.types';
 import { environment } from 'src/environments/environment';
 import { BulkActions } from 'src/app/constants/variable.constants';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -219,9 +217,11 @@ export class MaterialsComponent implements OnInit {
         if (this.captureVideos.indexOf(material_id) === -1) {
           this.captureVideos.push(material_id);
           this.garbage.capture_videos = this.captureVideos;
-          this.userService.updateGarbage(this.garbage).subscribe(() => {
-            this.userService.updateGarbageImpl(this.garbage);
-          });
+          this.userService
+            .updateGarbage({ capture_videos: this.captureVideos })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
         } else {
           const pos = this.captureVideos.indexOf(material_id);
           this.captureVideos.splice(pos, 1);
