@@ -35,7 +35,7 @@ export class StoreService {
 
   videos$ = this.videos.asObservable();
   pdfs$ = this.pdfs.asObservable();
-  images$ = this.pdfs.asObservable();
+  images$ = this.images.asObservable();
   templates$ = this.templates.asObservable();
 
   /**

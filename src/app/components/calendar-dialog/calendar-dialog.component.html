@@ -23,12 +23,8 @@
         required
       />
       <span
-        class="invalid-feedback"
-        *ngIf="
-          title.errors &&
-          (title.touched || title.dirty || submitted) &&
-          submitted
-        "
+        class="invalid-error f-3 font-weight-bold c-red"
+        *ngIf="event.title == '' && submitted"
       >
         Title is required
       </span>
@@ -64,6 +60,12 @@
               </div>
             </div>
           </div>
+          <span
+            class="invalid-error f-3 font-weight-bold c-red"
+            *ngIf="due_date.year == '' && due_date.month == '' && due_date.day == '' && submitted"
+          >
+            Title is required
+          </span>
         </div>
       </div>
       <div class="col-3">
@@ -74,23 +76,12 @@
             [(ngModel)]="due_time"
             name="time"
             #time="ngModel"
-            required
           >
             <option value="" disabled>Due Time</option>
             <option *ngFor="let time of times" value="{{ time.id }}">
               {{ time.text }}
             </option>
           </select>
-          <span
-            class="invalid-feedback"
-            *ngIf="
-              time.errors &&
-              (time.touched || time.dirty || submitted) &&
-              submitted
-            "
-          >
-            Due time is required.
-          </span>
         </div>
       </div>
       <div class="col-4">

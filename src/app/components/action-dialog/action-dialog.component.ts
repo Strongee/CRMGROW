@@ -733,7 +733,7 @@ export class ActionDialogComponent implements OnInit {
       type: 'follow_up',
       title: 'Follow Up',
       description: '',
-      icon: '../../../assets/img/follow_up.svg',
+      icon: '../../../assets/img/automations/follow_up.svg',
       category: ACTION_CAT.NORMAL
     },
     {
@@ -747,28 +747,28 @@ export class ActionDialogComponent implements OnInit {
       type: 'note',
       title: 'Create Note',
       description: '',
-      icon: '../../../assets/img/create_note.svg',
+      icon: '../../../assets/img/automations/create_note.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'email',
       title: 'Send E-mail',
       description: '',
-      icon: '../../../assets/img/send_email.svg',
+      icon: '../../../assets/img/automations/send_email.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_email_material',
       title: 'Send Material E-mail',
       description: '',
-      icon: '../../../assets/img/send_video_email.svg',
+      icon: '../../../assets/img/automations/send_video_email.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_text_material',
       title: 'Send Material Text',
       description: '',
-      icon: '../../../assets/img/send_video_text.svg',
+      icon: '../../../assets/img/automations/send_video_text.svg',
       category: ACTION_CAT.NORMAL
     },
     {
@@ -785,7 +785,7 @@ export class ActionDialogComponent implements OnInit {
       type: 'follow_up',
       title: 'Follow Up',
       description: '',
-      icon: '../../../assets/img/follow_up.svg',
+      icon: '../../../assets/img/automations/follow_up.svg',
       category: ACTION_CAT.NORMAL
     },
     {
@@ -799,49 +799,49 @@ export class ActionDialogComponent implements OnInit {
       type: 'note',
       title: 'Create Note',
       description: '',
-      icon: '../../../assets/img/create_note.svg',
+      icon: '../../../assets/img/automations/create_note.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'email',
       title: 'Send E-mail',
       description: '',
-      icon: '../../../assets/img/send_email.svg',
+      icon: '../../../assets/img/automations/send_email.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_email_video',
       title: 'Send Video E-mail',
       description: '',
-      icon: '../../../assets/img/send_video_email.svg',
+      icon: '../../../assets/img/automations/send_video_email.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_text_video',
       title: 'Send Video Text',
       description: '',
-      icon: '../../../assets/img/send_video_text.svg',
+      icon: '../../../assets/img/automations/send_video_text.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_email_pdf',
       title: 'Send PDF E-mail',
       description: '',
-      icon: '../../../assets/img/send_pdf_email.svg',
+      icon: '../../../assets/img/automations/send_pdf_email.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_text_pdf',
       title: 'Send PDF Text',
       description: '',
-      icon: '../../../assets/img/send_pdf_text.svg',
+      icon: '../../../assets/img/automations/send_pdf_text.svg',
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_email_image',
       title: 'Send Image E-mail',
       description: '',
-      icon: '../../../assets/img/send_image_email.svg',
+      icon: '../../../assets/img/automations/send_image_email.svg',
       category: ACTION_CAT.NORMAL
     },
     {

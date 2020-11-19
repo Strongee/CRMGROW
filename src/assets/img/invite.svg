@@ -1,26 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.705" height="24.409" viewBox="0 0 24.705 24.409">
-  <defs>
-    <path id="path-2" fill-rule="evenodd" d="M18.7046901 11.7046301h5c.55191503 0 1 .44808498 1 1 0 .55191503-.44808497 1-1 1h-5c-.55191502 0-1-.44808497-1-1 0-.55191502.44808498-1 1-1z"/>
-    <mask id="mask-3" x="0" y="0" maskContentUnits="userSpaceOnUse" maskUnits="userSpaceOnUse">
-      <rect width="24.705" height="24.409" x="0" y="0" fill="black"/>
-      <use fill="white" xlink:href="#path-2"/>
-    </mask>
-    <path id="path-4" fill-rule="evenodd" d="M18.7046901 11.7046301h5c.55191503 0 1 .44808498 1 1 0 .55191503-.44808497 1-1 1h-5c-.55191502 0-1-.44808497-1-1 0-.55191502.44808498-1 1-1z"/>
-    <mask id="mask-5" x="0" y="0" maskContentUnits="userSpaceOnUse" maskUnits="userSpaceOnUse">
-      <rect width="24.705" height="24.409" x="0" y="0" fill="black"/>
-      <use fill="white" xlink:href="#path-4"/>
-    </mask>
-  </defs>
-  <g>
-    <path fill="none" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" d="M10.2046521 14.39282727h.00497198c.26932238.00001.60548037.00001 1.08735448-.08260771.4663642-.07996779 1.03946076-.23145359 1.83432699-.50400604.59476643-.20393435 1.1514731-.10154718 1.60742035.3138113.49411704.45006754.9659042 1.37012205.9659042 2.92867887 0 .91807457-.22626863 1.57775629-.58585648 1.9889449-.32581804.37238968-.87031477.66698152-1.86800879.66698152H7.1584624c-.99768302 0-1.54213575-.29459184-1.8679208-.66698152-.35969784-.41118861-.58591148-1.07087033-.58591148-1.9889449 0-1.55855682.47178717-2.47861133.9658602-2.92866886.45599127-.4153685 1.01276393-.51775566 1.60747536-.3138213.79487723.27256244 1.3679848.42403824 1.834349.50400603.4818741.08261771.81803209.08261771 1.08736547.08260771h.00497197z"/>
-    <g>
-      <use fill="rgb(16,19,54)" xlink:href="#path-2"/>
-      <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" mask="url(#mask-3)" xlink:href="#path-2"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="21" height="17" viewBox="0 0 21 17">
+  <g id="Icon_assistant" transform="translate(1 1)">
+    <path id="Path" d="M5.5.688h0A5.858,5.858,0,0,0,6.592.606,11.988,11.988,0,0,0,8.427.1a1.528,1.528,0,0,1,1.607.314A3.865,3.865,0,0,1,11,3.344a2.974,2.974,0,0,1-.586,1.989A2.307,2.307,0,0,1,8.546,6H2.454A2.306,2.306,0,0,1,.586,5.333,2.973,2.973,0,0,1,0,3.344,3.865,3.865,0,0,1,.966.415,1.528,1.528,0,0,1,2.573.1a11.987,11.987,0,0,0,1.834.5A5.858,5.858,0,0,0,5.5.688Z" transform="translate(0 9)" fill="none" stroke="#101336" stroke-miterlimit="10" stroke-width="2"/>
+    <g id="Rectangle" transform="translate(13 7)" fill="#101336" stroke="#101336" stroke-miterlimit="10" stroke-width="1">
+      <rect width="7" height="2" rx="1" stroke="none"/>
+      <rect x="0.5" y="0.5" width="6" height="1" rx="0.5" fill="none"/>
     </g>
-    <g transform="rotate(-90.000032 21.2046901 12.7046301)">
-      <use fill="rgb(16,19,54)" xlink:href="#path-4"/>
-      <use fill-opacity="0" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" mask="url(#mask-5)" xlink:href="#path-4"/>
+    <g id="Rectangle_Copy_15" data-name="Rectangle Copy 15" transform="translate(15.5 11.5) rotate(-90)" fill="#101336" stroke="#101336" stroke-miterlimit="10" stroke-width="1">
+      <rect width="7" height="2" rx="1" stroke="none"/>
+      <rect x="0.5" y="0.5" width="6" height="1" rx="0.5" fill="none"/>
     </g>
-    <path fill="none" stroke="rgb(16,19,54)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" d="M12.6793651 10.6790776l-.000175.000105c-.692475.69258-1.49625 1.0254475-2.4745 1.0254475-.97755 0-1.7815-.33285-2.474325-1.0254825-.692825-.69258-1.025675-1.4964425-1.025675-2.474675 0-.9778825.33285-1.7817975 1.0255-2.474465.69265-.692545 1.49625-1.0253775 2.4745-1.0253775.977725 0 1.781675.3327275 2.474325 1.025115.692825.693 1.025675 1.4969675 1.025675 2.4747275 0 .9783375-.33285 1.78206-1.025325 2.474605z"/>
+    <path id="Path_Copy" data-name="Path Copy" d="M5.975,5.974h0A3.333,3.333,0,0,1,3.5,7,3.334,3.334,0,0,1,1.026,5.975,3.332,3.332,0,0,1,0,3.5,3.333,3.333,0,0,1,1.026,1.025,3.333,3.333,0,0,1,3.5,0,3.334,3.334,0,0,1,5.974,1.025,3.334,3.334,0,0,1,7,3.5,3.333,3.333,0,0,1,5.975,5.974Z" transform="translate(2)" fill="none" stroke="#101336" stroke-miterlimit="10" stroke-width="2"/>
   </g>
 </svg>

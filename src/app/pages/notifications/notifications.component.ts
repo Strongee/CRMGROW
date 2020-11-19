@@ -38,7 +38,6 @@ export class NotificationsComponent implements OnInit {
   constructor(public userService: UserService) {
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
-      console.log('this.garbage', this.garbage);
     });
   }
 

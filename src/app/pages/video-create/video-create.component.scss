@@ -71,9 +71,24 @@
             }
         }
         .video-default {
-            img {
-                width: 220px;
-                height: 120px;
+            .thumbnail {
+                position: relative;
+                width: 300px;
+                background: #f8f8f8;
+                img {
+                    width: 300px;
+                    max-height: 200px;
+                    overflow: hidden;
+                    object-fit: contain;
+                }
+                .edit-thumbnail {
+                    position: absolute;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    top: 5px;
+                    right: 5px;
+                }
                 @media screen and (max-width: 576px) {
                     width: 200px;
                 }
@@ -94,8 +109,19 @@
         .theme {
             border-radius: 5px;
             .theme-name {
-                font-size: 14px;
+                font-size: 13px;
                 font-weight: 600;
+            }
+            .setting-spinner {
+                position: absolute;
+                top: 0px;
+                bottom: 0px;
+                left: 0px;
+                right: 0px;
+                text-align: center;
+                margin: 0px;
+                background: #3c3c3cab;
+                border-radius: 5px;
             }
             &.selected {
                 background: #0700FF;

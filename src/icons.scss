@@ -17,7 +17,7 @@
   mask-image: url('/assets/img/download.svg');
 }
 .i-edit{
-  mask-image: url('/assets/img/table_edit.svg');
+  mask-image: url('/assets/img/edit.svg');
 }
 .i-follow{
   mask-image: url('/assets/img/follow.svg');
@@ -160,7 +160,7 @@
   mask-image: url('/assets/img/folder.svg');
 }
 .i-menu-more {
-  mask-image: url('/assets/img/kebab.svg');
+  mask-image: url('/assets/img/more_menu.svg');
 }
 .i-assistant {
   mask-image: url('/assets/img/assistant.svg');
@@ -235,6 +235,18 @@
 .i-auto-follow {
   mask-image: url('/assets/img/auto_follow.svg');
 }
+.i-folder-name {
+  mask-image: url('/assets/img/ABC.svg');
+}
+.i-copy-link {
+  mask-image: url('/assets/img/copy_link.svg');
+}
+.i-invite {
+  mask-image: url('/assets/img/invite.svg');
+}
+.i-duplicate {
+  mask-image: url('/assets/img/duplicate.svg');
+}
 .i-backward {
   mask-image: url('/assets/img/backward.svg');
 }
@@ -283,19 +295,19 @@
   mask-image: url('/assets/img/teams.svg');
 }
 .i-group-call {
-  mask-image: url('/assets/img/group_call.svg');
+  mask-image: url('/assets/img/group_call_schedule.svg');
 }
 .i-invite-member {
   mask-image: url('/assets/img/invite_member.svg');
 }
 .i-send {
-  mask-image: url('/assets/img/material_send.svg');
+  mask-image: url('/assets/img/sent.svg');
 }
 .i-copy-link {
-  mask-image: url('/assets/img/material_copy_link.svg');
+  mask-image: url('/assets/img/copy.svg');
 }
 .i-edit-template {
-  mask-image: url('/assets/img/edit_template.svg');
+  mask-image: url('/assets/img/template.svg');
 }
 .i-duplicate {
   mask-image: url('/assets/img/duplicate.svg');
@@ -394,4 +406,7 @@
 }
 .act-phone_logs {
   background-image: url('/assets/img/activities/phone.svg');
+}
+.act-notes {
+  background-image: url('/assets/img/activities/note.svg');
 }

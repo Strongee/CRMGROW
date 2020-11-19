@@ -59,6 +59,7 @@ import { AssistantPasswordComponent } from './assistant-password/assistant-passw
 import { AssistantRemoveComponent } from './assistant-remove/assistant-remove.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { TagDeleteComponent } from './tag-delete/tag-delete.component';
+import { MaterialEditTemplateComponent } from './material-edit-template/material-edit-template.component';
 import { MaterialShareComponent } from './material-share/material-share.component';
 import { TemplateShareComponent } from './template-share/template-share.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
@@ -122,6 +123,7 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
     AssistantRemoveComponent,
     TagEditComponent,
     TagDeleteComponent,
+    MaterialEditTemplateComponent,
     MaterialShareComponent,
     TemplateShareComponent,
     AutomationShareComponent
@@ -161,7 +163,8 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
     CustomFieldAddComponent,
     CustomFieldDeleteComponent,
     TagEditComponent,
-    TagDeleteComponent
+    TagDeleteComponent,
+    MaterialEditTemplateComponent
   ],
   bootstrap: [
     ContactCreateComponent,
