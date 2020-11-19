@@ -10,9 +10,9 @@
         <div class="form-group mb-0 flex-grow-1">
           <input class="form-control bg-white border-primary c-blue" type="text" [(ngModel)]="affiliate.share_link" disabled>
         </div>
-        <button class="btn btn-primary font-weight-bold f-6 ml-2" [disabled]="loadingMain || creating"
+        <button type="button" class="btn btn-primary font-weight-bold f-6 ml-2" [disabled]="loadingMain || creating"
           (click)="openShare()">Share</button>
-        <button class="btn btn-primary font-weight-bold f-6 ml-1" [disabled]="loadingMain || creating"
+        <button type="button" class="btn btn-primary font-weight-bold f-6 ml-1" [disabled]="loadingMain || creating"
           (click)="copyLink()">Copy</button>
       </div>
     </div>

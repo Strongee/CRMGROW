@@ -44,7 +44,7 @@
             </td>
             <td class="actions">
               <div class="v-center">
-                <button class="btn btn-white f-3 font-weight-bold" (click)="assignAutomation($event, automation)">
+                <button type="button" class="btn btn-white f-3 font-weight-bold" (click)="assignAutomation($event, automation)">
                   Assign
                 </button>
                 <ng-container *ngIf="automation.role != 'admin' && automation.user == user_id">
