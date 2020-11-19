@@ -1,0 +1,17 @@
+.themes {
+    .theme {
+        border-radius: 5px;
+        .theme-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        &.selected {
+            background: #0700FF;
+            border-radius: 5px;
+            box-shadow: 3px 3px 10px #888;
+            .theme-name {
+                color: white;
+            }
+        }
+    }
+}

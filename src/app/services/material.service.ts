@@ -78,6 +78,14 @@ export class MaterialService extends HttpService {
     );
   }
 
+  updatePdf(id: string, pdf: any): any {
+    return this.httpClient.put(this.server + PDF.UPDATE + id, pdf);
+  }
+
+  updateImage(id: string, image: any): any {
+    return this.httpClient.put(this.server + IMAGE.UPDATE + id, image);
+  }
+
   getVimeoMeta(id: string): any {
     return this.httpClient.get(`https://vimeo.com/api/v2/video/${id}.json`);
   }
