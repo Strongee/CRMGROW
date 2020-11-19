@@ -221,7 +221,12 @@
               <td class="capture-col text-right">
                 <div class="v-center custom-control custom-switch">
                   <label class="custom-toggle mb-0" placement="top">
-                    <input type="checkbox">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(video._id, 'video')"
+                      [checked]="captureVideos.indexOf(video._id)!==-1"
+                      id="capture-{{video._id}}"
+                    >
                     <span class="custom-toggle-slider rounded-circle"></span>
                   </label>
                 </div>
@@ -361,7 +366,12 @@
               <td class="capture-col text-right">
                 <div class="v-center custom-control custom-switch">
                   <label class="custom-toggle mb-0" placement="top">
-                    <input type="checkbox">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(pdf._id, 'pdf')"
+                      [checked]="capturePdfs.indexOf(pdf._id)!==-1"
+                      id="capture-{{pdf._id}}"
+                    >
                     <span class="custom-toggle-slider rounded-circle"></span>
                   </label>
                 </div>
@@ -501,7 +511,12 @@
               <td class="capture-col text-right">
                 <div class="v-center custom-control custom-switch">
                   <label class="custom-toggle mb-0" placement="top">
-                    <input type="checkbox">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(image._id, 'image')"
+                      [checked]="captureImages.indexOf(image._id)!==-1"
+                      id="capture-{{image._id}}"
+                    >
                     <span class="custom-toggle-slider rounded-circle"></span>
                   </label>
                 </div>

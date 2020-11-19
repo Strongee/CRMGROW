@@ -6,11 +6,13 @@ import { StoreService } from 'src/app/services/store.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user.model';
+import { Garbage } from 'src/app/models/garbage.model';
 import { TabItem } from 'src/app/utils/data.types';
 import { environment } from 'src/environments/environment';
 import { BulkActions } from 'src/app/constants/variable.constants';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
+import { getJSDocThisTag } from 'typescript';
 
 @Component({
   selector: 'app-materials',
@@ -19,6 +21,7 @@ import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-
 })
 export class MaterialsComponent implements OnInit {
   user: User = new User();
+  garbage: Garbage = new Garbage();
   BULK_ACTIONS = BulkActions.Materials;
   tabs: TabItem[] = [
     { icon: '', label: 'ALL', id: 'all' },
@@ -35,6 +38,9 @@ export class MaterialsComponent implements OnInit {
   selectedVideoLists = new SelectionModel<any>(true, []);
   selectedPdfLists = new SelectionModel<any>(true, []);
   selectedImageLists = new SelectionModel<any>(true, []);
+  captureVideos = [];
+  capturePdfs = [];
+  captureImages = [];
 
   constructor(
     private dialog: MatDialog,
@@ -56,6 +62,12 @@ export class MaterialsComponent implements OnInit {
     });
     this.storeService.images$.subscribe((images) => {
       this.images = images;
+    });
+    this.userService.garbage$.subscribe((res) => {
+      this.garbage = new Garbage().deserialize(res);
+      this.captureVideos = this.garbage['capture_videos'] || [];
+      this.capturePdfs = this.garbage['capture_pdfs'] || [];
+      this.captureImages = this.garbage['capture_images'] || [];
     });
   }
 
@@ -196,6 +208,62 @@ export class MaterialsComponent implements OnInit {
           }
         }
         return true;
+    }
+  }
+
+  setCapture(material_id: string, type: string): void {
+    switch (type) {
+      case 'video':
+        if (this.captureVideos.indexOf(material_id) === -1) {
+          this.captureVideos.push(material_id);
+          this.garbage.capture_videos = this.captureVideos;
+          this.userService.updateGarbage(this.garbage).subscribe(() => {
+            this.userService.updateGarbageImpl(this.garbage);
+          });
+        } else {
+          const pos = this.captureVideos.indexOf(material_id);
+          this.captureVideos.splice(pos, 1);
+          this.garbage.capture_videos = [];
+          this.garbage.capture_videos = this.captureVideos;
+          this.userService.updateGarbage(this.garbage).subscribe(() => {
+            this.userService.updateGarbageImpl(this.garbage);
+          });
+        }
+        break;
+      case 'pdf':
+        if (this.capturePdfs.indexOf(material_id) === -1) {
+          this.capturePdfs.push(material_id);
+          this.garbage.capture_pdfs = this.capturePdfs;
+          this.userService.updateGarbage(this.garbage).subscribe(() => {
+            this.userService.updateGarbageImpl(this.garbage);
+          });
+        } else {
+          const pos = this.capturePdfs.indexOf(material_id);
+          this.capturePdfs.splice(pos, 1);
+          this.garbage.capture_pdfs = [];
+          this.garbage.capture_pdfs = this.capturePdfs;
+          this.userService.updateGarbage(this.garbage).subscribe(() => {
+            this.userService.updateGarbageImpl(this.garbage);
+          });
+        }
+        break;
+      case 'image':
+        if (this.captureImages.indexOf(material_id) === -1) {
+          this.captureImages.push(material_id);
+          this.garbage.capture_images = this.captureImages;
+          this.userService.updateGarbage(this.garbage).subscribe(() => {
+            this.userService.updateGarbageImpl(this.garbage);
+          });
+        } else {
+          const pos = this.captureImages.indexOf(material_id);
+          this.captureImages.splice(pos, 1);
+          this.garbage.capture_images = [];
+          this.garbage.capture_images = this.captureImages;
+          this.userService.updateGarbage(this.garbage).subscribe(() => {
+            this.userService.updateGarbageImpl(this.garbage);
+          });
+        }
+        break;
     }
   }
 

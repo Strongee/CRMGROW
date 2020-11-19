@@ -106,7 +106,7 @@ export class UserService extends HttpService {
       catchError(this.handleError('UPDATE PROFILE'))
     );
   }
-  public updateUser(field, value) {
+  public updateUser(field, value): void {
     const user = JSON.parse(localStorage.getItem('user'));
     user[field] = value;
     localStorage.setItem('user', JSON.stringify(user));
