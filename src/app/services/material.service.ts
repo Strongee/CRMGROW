@@ -1,3 +1,4 @@
+import { V } from '@angular/cdk/keycodes';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { interval, Observable } from 'rxjs';
@@ -76,6 +77,10 @@ export class MaterialService extends HttpService {
       this.server + VIDEO.UPDATE_VIDEO_DETAIL + id,
       video
     );
+  }
+
+  deleteVideo(id: string): any {
+    return this.httpClient.delete(this.server + VIDEO.DELETE + id);
   }
 
   updatePdf(id: string, pdf: any): any {
