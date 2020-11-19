@@ -42,7 +42,5 @@ export class MaterialsComponent implements OnInit {
     this.router.navigate(['./materials/create']);
   }
 
-  doAction(command: any): void {
-    // Action Item
-  }
+  doAction(evt: any): void {}
 }

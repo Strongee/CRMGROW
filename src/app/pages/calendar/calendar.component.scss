@@ -29,7 +29,11 @@
     }
     mwl-calendar-week-view-header{
         .cal-day-headers {
+            border: unset;
             .cal-header {
+                &:last-child {
+                    border-right: 1px solid #e1e1e1;
+                }
                 &.cal-today {
                     background-color: $color-white;
                     color: $color-blue;
@@ -38,11 +42,6 @@
                           background-color: $color-blue;
                           color: #ffffff;
                         }
-                    }
-                }
-                &.cal-weekend {
-                    span {
-                        color: #FF0000;
                     }
                 }
                 &:hover {
@@ -81,14 +80,61 @@
     }
     mwl-calendar-week-view {
         .cal-week-view {
-            .cal-hour {
-                &:not(:last-child) {
-                    .cal-hour-segment {
-                        border-bottom: 1px solid #e1e1e1;
+            border-top: unset;
+            .cal-time-events {
+                border-left: unset;
+                .cal-time-label-column {
+                    mwl-calendar-week-view-hour-segment {
+                        border: none;
                     }
                 }
-                &.cal-hour-odd {
-                    background-color: $color-white;
+                .cal-day-columns {
+                    mwl-calendar-week-view-hour-segment {
+                        border-top: 1px solid #e1e1e1;
+                    }
+                    .cal-event-container {
+                        .cal-event {
+                            width: 100%;
+                            height: 100%;
+                            margin: 0;
+                            background-color: $color-blue;
+                            border-left: 1px solid $color-white;
+                            border-radius: 5px;
+                            line-height: 1;
+                            .cal-event-title {
+                                padding: 2px 0;
+                            }
+                        }
+                    }
+                }
+                .cal-hour {
+                    &.cal-hour-odd {
+                        background-color: $color-white;
+                    }
+                    .cal-hour-segment {
+                        border: none;
+                        height: 60px;
+                        position: relative;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        .cal-time {
+                            display: block;
+                            position: absolute;
+                            top: -12px;
+                        }
+                        .time-line {
+                            width: 20px;
+                            .line {
+                                width: 100%;
+                                height: 2px;
+                                background-color: #dadada;
+                                &:nth-child(2) {
+                                    margin: 10px 0;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -151,16 +197,15 @@
     }
 }
 
-.page-title {
-    font-size: 22px;
-}
-
 .calendar-time {
     .btn {
         i {
             width: 12px;
             height: 12px;
             min-width: 12px;
+        }
+        &.btn-blue {
+            box-shadow: 0 5px 16px -5px rgba(16, 19, 54, 0.35);
         }
     }
     .small-button {

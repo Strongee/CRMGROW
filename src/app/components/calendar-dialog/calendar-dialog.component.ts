@@ -18,15 +18,13 @@ import { HelperService } from '../../services/helper.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
-import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
-import { Subscription } from 'rxjs';
-import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 Quill.register('modules/imageResize', ImageResize);
-
+import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
+import { Contact } from 'src/app/models/contact.model';
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',
@@ -58,7 +56,7 @@ export class CalendarDialogComponent implements OnInit {
     is_organizer: false
   };
   duration = 0.5;
-  contacts = [];
+  contacts: Contact[] = [];
   changeMode = 'create';
   isRepeat = false;
   isLoading = false;
@@ -77,10 +75,8 @@ export class CalendarDialogComponent implements OnInit {
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarDialogComponent>,
     private fileService: FileService,
-    private userService: UserService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
-    private helperService: HelperService,
     private contactService: ContactService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -168,20 +164,18 @@ export class CalendarDialogComponent implements OnInit {
                   if (res['status'] == true) {
                     if (res['data'].contacts.length > 0) {
                       res['data'].contacts[0].email_status = guest.response;
-                      this.contacts = [
-                        ...this.contacts,
-                        res['data'].contacts[0]
-                      ];
+                      let contacts = new Contact();
+                      contacts = res['data'].contacts[0];
+                      this.contacts = [...this.contacts, contacts];
                     } else {
                       const firstname = res['data'].search.split('@')[0];
-                      const contacts = {
+                      const guests = new Contact().deserialize({
                         first_name: firstname,
-                        email: res['data'].search,
-                        isNew: true,
-                        email_status: guest.response
-                      };
-                      this.contacts = [...this.contacts, contacts];
+                        email: res['data'].search
+                      });
+                      this.contacts = [...this.contacts, guests];
                     }
+                    console.log('###', this.contacts);
                   }
                 });
             }
@@ -190,15 +184,13 @@ export class CalendarDialogComponent implements OnInit {
 
         this.event.location = this.data.event.meta.location;
         this.event.description = this.data.event.meta.description;
-        if (this.data.meta.recurrence) {
-          this.event.recurrence = this.data.event.meta.recurrence;
-        }
+        this.event.recurrence = this.data.event.meta.recurrence;
         this.event.recurrence_id = this.data.event.meta.recurrence_id;
+        this.event.calendar_id = this.data.event.meta.calendar_id;
 
         if (this.event.is_organizer) {
           this.isUser = this.event.is_organizer;
         }
-        this.event.calendar_id = this.data.event.meta.calendar_id;
         this.event.event_id = this.data.event.meta.event_id;
         if (this.data.event.meta.event_id) {
           this.changeMode = 'update';
@@ -376,7 +368,7 @@ export class CalendarDialogComponent implements OnInit {
     toolbar.addHandler('image', this.initImageHandler);
   }
 
-  initImageHandler = () => {
+  initImageHandler = (): void => {
     const imageInput = document.createElement('input');
     imageInput.setAttribute('type', 'file');
     imageInput.setAttribute('accept', 'image/*');
