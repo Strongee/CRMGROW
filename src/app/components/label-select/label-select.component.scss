@@ -1,5 +1,5 @@
 @import 'src/variables.scss';
-.custom-mat-field {
+.custom-mat-field:not(.label_form) {
   width: 152px;
 }
 

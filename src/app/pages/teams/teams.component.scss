@@ -249,3 +249,26 @@
   }
 }
 
+:host ::ng-deep {
+  mat-expansion-panel {
+    overflow: visible;
+  }
+
+  .ngx-pagination .pagination-previous a::before, .ngx-pagination .pagination-previous.disabled::before {
+    content: '◀';
+  }
+
+  .ngx-pagination .pagination-next a::after, .ngx-pagination .pagination-next.disabled::after {
+    content: '▶';
+  }
+
+  ul.ngx-pagination .current {
+    background-color: #0000ff;
+  }
+}
+
+.table {
+  thead th {
+    padding: 0px;
+  }
+}

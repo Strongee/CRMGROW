@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ContactActivity } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
@@ -37,6 +38,7 @@ export class ContactsComponent implements OnInit {
   pageSize = this.PAGE_COUNTS[0];
   selection = new SelectionModel<ContactActivity>(true, []);
   constructor(
+    public router: Router,
     public storeService: StoreService,
     private contactService: ContactService
   ) {}
@@ -62,4 +64,12 @@ export class ContactsComponent implements OnInit {
 
   openFilter(): void {}
   importContacts(): void {}
+
+  /**
+   * Open the contact detail page
+   * @param contact : contact
+   */
+  openContact(contact: ContactActivity): void {
+    this.router.navigate([`contacts/${contact._id}`]);
+  }
 }

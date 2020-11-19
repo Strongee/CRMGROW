@@ -74,29 +74,9 @@ export const ROUTES: RouteInfo[] = [
     protectedRole: null
   },
   {
-    path: 'settings',
-    title: 'Settings',
-    icon: 'i-setting bgc-dark',
-    class: '',
-    beta: false,
-    betaClass: '',
-    betaLabel: '',
-    protectedRole: null
-  },
-  {
-    path: 'affiliate',
-    title: 'Affiliate',
-    icon: 'i-automation bgc-dark',
-    class: '',
-    beta: false,
-    betaClass: '',
-    betaLabel: '',
-    protectedRole: null
-  },
-  {
-    path: 'teams',
-    title: 'Teams',
-    icon: 'i-lunch bgc-dark',
+    path: 'calendar',
+    title: 'Calendar',
+    icon: 'i-calendar bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -114,9 +94,29 @@ export const ROUTES: RouteInfo[] = [
     protectedRole: null
   },
   {
-    path: 'calendar',
-    title: 'Calendar',
-    icon: 'i-calendar bgc-dark',
+    path: 'teams',
+    title: 'Teams',
+    icon: 'i-lunch bgc-dark',
+    class: '',
+    beta: false,
+    betaClass: '',
+    betaLabel: '',
+    protectedRole: null
+  },
+  {
+    path: 'affiliate',
+    title: 'Affiliate',
+    icon: 'i-automation bgc-dark',
+    class: '',
+    beta: false,
+    betaClass: '',
+    betaLabel: '',
+    protectedRole: null
+  },
+  {
+    path: 'settings',
+    title: 'Settings',
+    icon: 'i-setting bgc-dark',
     class: '',
     beta: false,
     betaClass: '',

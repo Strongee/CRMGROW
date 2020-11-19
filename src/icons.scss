@@ -190,12 +190,6 @@
     transform: translate(-50%, -50%);
   }
 }
-.i-teams {
-  mask-image: url('/assets/img/teams.svg');
-}
-.i-group-call {
-  mask-image: url('/assets/img/group_call.svg');
-}
 .i-block {
   mask-image: url('/assets/img/block.svg');
 }
@@ -206,7 +200,7 @@
   mask-image: url('/assets/img/check.svg');
 }
 .i-question {
-  mask-image: url('/assets/img/question-sign-in-circles.svg');
+  mask-image: url('/assets/img/question.svg');
 }
 .i-like {
   mask-image: url('/assets/img/like.svg');
@@ -268,20 +262,135 @@
 ///////////// design icons //////////////////
 
 .i-sent-mail {
-  mask-image: url('/assets/image/sent_mail.svg');
+  mask-image: url('/assets/img/sent_mail.svg');
 }
 .i-opened-mail {
-  mask-image: url('/assets/image/opened_mail.svg');
+  mask-image: url('/assets/img/opened_mail.svg');
 }
 .i-bounced-mail {
-  mask-image: url('/assets/image/bounced_mail.svg');
+  mask-image: url('/assets/img/bounced_mail.svg');
 }
 .i-unsubscribed-mail {
-  mask-image: url('/assets/image/unsubscribed_mail.svg');
+  mask-image: url('/assets/img/unsubscribed_mail.svg');
 }
 .i-clicked-mail {
-  mask-image: url('/assets/image/clicked_mail.svg');
+  mask-image: url('/assets/img/clicked_mail.svg');
 }
 .i-delivered-mail {
-  mask-image: url('/assets/image/delivered_mail.svg');
+  mask-image: url('/assets/img/delivered_mail.svg');
+}
+.i-teams {
+  mask-image: url('/assets/img/teams.svg');
+}
+.i-group-call {
+  mask-image: url('/assets/img/group_call_schedule.svg');
+}
+.i-invite-member {
+  mask-image: url('/assets/img/invite_member.svg');
+}
+.i-send {
+  mask-image: url('/assets/img/sent.svg');
+}
+.i-copy-link {
+  mask-image: url('/assets/img/copy.svg');
+}
+.i-edit-template {
+  mask-image: url('/assets/img/template.svg');
+}
+
+
+///////////// Activity List Icons //////////////////
+.act-icon{
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.act-videos {
+  background-image: url('/assets/img/activities/video.svg');
+}
+.act-pdfs {
+  background-image: url('/assets/img/activities/pdf.svg');
+}
+.act-images {
+  background-image: url('/assets/img/activities/image.svg');
+}
+.act-emails {
+  background-image: url('/assets/img/activities/email.svg');
+}
+.act-video_trackers {
+  background-image: url('/assets/img/activities/video_watched.svg');
+}
+.act-video_trackers.watch {
+  background-image: url('/assets/img/activities/video_watched.svg');
+}
+.act-video_trackers.thumbs {
+  background-image: url('/assets/img/activities/video_like.svg');
+}
+.act-video_trackers.unsubscribe {
+  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+}
+.act-video_trackers.share {
+  background-image: url('/assets/img/activities/video_like.svg');
+}
+
+.act-image_trackers {
+  background-image: url('/assets/img/activities/image_watched.svg');
+}
+.act-image_trackers.watch {
+  background-image: url('/assets/img/activities/image_watched.svg');
+}
+.act-image_trackers.thumbs {
+  background-image: url('/assets/img/activities/image_like.svg');
+}
+.act-image_trackers.unsubscribe {
+  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+}
+.act-image_trackers.share {
+  background-image: url('/assets/img/activities/image_like.svg');
+}
+
+.act-pdf_trackers {
+  background-image: url('/assets/img/activities/pdf_watched.svg');
+}
+.act-pdf_trackers.watch {
+  background-image: url('/assets/img/activities/pdf_watched.svg');
+}
+.act-pdf_trackers.thumbs {
+  background-image: url('/assets/img/activities/pdf_like.svg');
+}
+.act-pdf_trackers.unsubscribe {
+  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+}
+.act-pdf_trackers.share {
+  background-image: url('/assets/img/activities/pdf_like.svg');
+}
+
+.act-email_trackers {
+  background-image: url('/assets/img/activities/email_opened.svg');
+}
+.act-email_trackers.open {
+  background-image: url('/assets/img/activities/email_opened.svg');
+}
+.act-email_trackers.click {
+  background-image: url('/assets/img/activities/link_clicked.svg');
+}
+.act-email_trackers.unsubscribe {
+  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+}
+
+.act-contacts {
+  background-image: url('/assets/img/activities/contact.svg');
+}
+
+.act-follow_ups {
+  background-image: url('/assets/img/activities/task.svg');
+}
+.act-phone_logs {
+  background-image: url('/assets/img/activities/phone.svg');
+}
+.act-notes {
+  background-image: url('/assets/img/activities/note.svg');
 }

@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Attach media</h1>
 <mat-dialog-content>
-  <div class="temlate-container">
+  <div class="template-container">
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
     <ng-container *ngIf="selectedTab.label == 'VIDEO'">
@@ -19,8 +19,8 @@
               <div class="material-title f-1 font-weight-bold mt-3">
                 {{video.title}}
               </div>
-              <div class="material-description f-1 mt-2" *ngIf="video.description">
-                {{video.description | stripTags | shorten: 80: '...'}}
+              <div class="material-description f-1 mt-2">
+                {{video.description || '' | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </ng-container>
@@ -43,8 +43,8 @@
               <div class="material-title f-1 font-weight-bold mt-3">
                 {{pdf.title}}
               </div>
-              <div class="material-description f-1 mt-2" *ngIf="pdf.description">
-                {{pdf.description | stripTags | shorten: 80: '...'}}
+              <div class="material-description f-1 mt-2">
+                {{pdf.description || '' | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </ng-container>
@@ -67,8 +67,8 @@
               <div class="material-title f-1 font-weight-bold mt-3">
                 {{image.title}}
               </div>
-              <div class="material-description f-1 mt-2" *ngIf="image.description">
-                {{image.description | stripTags | shorten: 80: '...'}}
+              <div class="material-description f-1 mt-2">
+                {{image.description || '' | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </ng-container>

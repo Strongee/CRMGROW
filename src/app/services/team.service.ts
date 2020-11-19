@@ -277,4 +277,24 @@ export class TeamService extends HttpService {
       catchError(this.handleError('REJECT CALL', []))
     );
   }
+
+  shareTemplates(teamId, templateIds): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.SHARE_TEMPLATES, {
+      team_id: teamId,
+      template_ids: templateIds
+    }).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('SHARE TEMPLATES', []))
+    );
+  }
+
+  shareAutomations(teamId, automationIds): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.SHARE_AUTOMATIONS, {
+      team_id: teamId,
+      automation_ids: automationIds
+    }).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('SHARE AUTOMATION', []))
+    );
+  }
 }

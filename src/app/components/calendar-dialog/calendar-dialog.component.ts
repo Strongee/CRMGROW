@@ -11,6 +11,7 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import { QuillEditorComponent } from 'ngx-quill';
+import { FileUploader } from 'ng2-file-upload';
 import { UserService } from '../../services/user.service';
 import { FileService } from '../../services/file.service';
 import { HelperService } from '../../services/helper.service';
