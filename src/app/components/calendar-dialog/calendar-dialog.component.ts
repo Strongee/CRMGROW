@@ -201,22 +201,13 @@ export class CalendarDialogComponent implements OnInit {
 
   update(): void {
     this.isLoading = true;
-    const due_date = moment(
-      this.due_date.year +
-        '-' +
-        this.due_date.month +
-        '-' +
-        this.due_date.day +
-        ' ' +
-        this.due_time
-    ).format();
     this.selectedDateTime = moment(
       this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
     ).format('YYYY-MM-DD');
-    const duration = moment(due_date)
+    const duration = moment(this.selectedDateTime)
       .add(this.duration * 60, 'minutes')
       .format();
-    this.event.due_start = due_date;
+    this.event.due_start = this.selectedDateTime;
     this.event.due_end = duration;
     if (this.contacts.length > 0) {
       this.event.contacts.forEach((eventContact) => {
