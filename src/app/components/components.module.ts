@@ -63,6 +63,7 @@ import { MaterialEditTemplateComponent } from './material-edit-template/material
 import { MaterialShareComponent } from './material-share/material-share.component';
 import { TemplateShareComponent } from './template-share/template-share.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
+import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
 
 @NgModule({
   declarations: [
@@ -126,7 +127,8 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
     MaterialEditTemplateComponent,
     MaterialShareComponent,
     TemplateShareComponent,
-    AutomationShareComponent
+    AutomationShareComponent,
+    CallRequestScheduledComponent
   ],
   imports: [
     CommonModule,

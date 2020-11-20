@@ -1,25 +1,22 @@
-<form #actionForm="ngForm" class="dialog-container form-group">
-  <div class="v-center justify-content-between mx-0">
-    <h4 class="f-22 font-weight-bold c-black">Cancelling call</h4>
-    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
-      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
-    </button>
-  </div>
+<h1 mat-dialog-title>Cancelling call</h1>
+<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? sendMessage() : false"
+      [class.was-validated]="submitted">
   <mat-dialog-content class="content-section">
-    <div class="my-3 f-5">Inform organizer why you are cancelling this call</div>
-    <div class="my-3">
+    <div class="my-3 f-3">Inform organizer why you are cancelling this call</div>
+    <div class="my-3 form-group">
       <label>Message</label>
       <quill-editor placeholder="Enter Text" [(ngModel)]="message" [modules]="config" name="messageContent"
                     [styles]="{height: '120px'}" #messageContent="ngModel" required (onEditorCreated)="getEditorInstance($event)"
                     [class.has-error]="messageContent.errors && (messageContent.touched || messageContent.dirty )" class="rounded" #messageEditor>
       </quill-editor>
+      <div class="invalid-feedback" [class.invalid]="!message && submitted">Message is required.</div>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions class="justify-content-end mx-0 mr-2">
-    <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="closeDialog()">
+    <button type="button" class="btn bgc-trans font-weight-bold c-blue" mat-dialog-close>
       Skip
     </button>
-    <button type="button" class="btn btn-primary font-weight-bold" [class.loading]="isSending" (click)="sendMessage()">
+    <button type="submit" class="btn btn-primary font-weight-bold" [class.loading]="isSending">
       Send
     </button>
   </mat-dialog-actions>

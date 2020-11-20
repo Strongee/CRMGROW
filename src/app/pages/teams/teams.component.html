@@ -3,7 +3,7 @@
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
     <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="teams.length + invitedTeams.length && selectedTab.id === 'teams'">
-      <button class="btn btn-blue text-white f-3 py-2 fw-600 shadow border-0" (click)="joinForm()">Join team</button>
+      <button class="btn btn-blue text-white f-3 py-2 fw-600 border-0" (click)="joinForm()">Join team</button>
       <button class="v-center btn btn-blue text-white py-2 ml-2 shadow border-0" *ngIf="ownTeams.length == 0">
         <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
         <span class="fw-600 f-3">Create new team</span>
@@ -39,7 +39,10 @@
               <tbody>
               <tr *ngFor="let team of teams">
                 <td class="team-name">
-                  <a class="item-detail-link f-6 font-weight-bold" [routerLink]="['/teams/' + team._id]">{{team.name}}</a>
+                  <a class="v-center item-detail-link" [routerLink]="['/teams/' + team._id]">
+                    <div class="f-6 font-weight-bold">{{team.name}}</div>
+                    <div class="invite-count ml-3 c-white f-1 font-weight-bold" *ngIf="team.invites.length">{{team.invites.length}} Invite waiting</div>
+                  </a>
                 </td>
                 <td class="team-members text-right">
                   <div class="f-6 font-weight-bold">{{team.members.length}}</div>
@@ -90,7 +93,7 @@
                   </div>
                 </td>
                 <td class="team-status">
-                  <div class="status font-weight-bold f-2 c-white" [class] = "status(team)">
+                  <div class="status font-weight-bold f-1 c-white" [class] = "status(team)">
                     {{status(team)}}
                   </div>
                 </td>
@@ -123,22 +126,22 @@
               </tbody>
             </table>
             <ng-container *ngIf="invitedTeams.length">
-              <div classs="f-8 font-weight-bold" *ngIf="invitedTeams.length">
+              <div classs="f-6 font-weight-bold" *ngIf="invitedTeams.length">
                 YOU ARE INVITED FROM FOLLOWING TEAMS
               </div>
-              <table class="table teams-table mt-2" *ngIf="invitedTeams.length">
+              <table class="table teams-table mt-3" *ngIf="invitedTeams.length">
                 <thead>
                 <th class="team-name">Team Name</th>
                 <th class="team-members">Members</th>
                 <th class="team-materials">Materials</th>
                 <th class="team-owner">Owner</th>
-                <th class="team-status">Your status</th>
-                <th class="team-actions">Quick Actions</th>
+                <th class="received_date">Invite Received</th>
+                <th class="team-actions">Actions</th>
                 </thead>
                 <tbody>
                 <tr *ngFor="let team of invitedTeams">
                   <td class="team-name">
-                    <a class="item-detail-link f-6 font-weight-bold" [routerLink]="['/teams/' + team._id]">{{team.name}}</a>
+                    <div class="f-6 font-weight-bold c-blue">{{team.name}}</div>
                   </td>
                   <td class="team-members text-right">
                     <div class="f-6 font-weight-bold">{{team.members.length}}</div>
@@ -188,15 +191,25 @@
                       </div>
                     </div>
                   </td>
-                  <td class="team-status">
+                  <td class="received_date">
                     <div class="status font-weight-bold f-2 c-white" [class] = "status(team)">
                       {{status(team)}}
                     </div>
                   </td>
-                  <td class="actions">
-                    <button class="v-center btn bgc-white c-dark f-4 mr-2" (click)="acceptInvitation(team)">
-                      <i class="bgc-dark i-icon i-check mr-2"></i>
+                  <td class="team_actions d-flex justify-content-end">
+                    <button class="btn btn-accept-outline f-1 mr-2 font-weight-bold"
+                      [class.loading]="isAcceptInviting"
+                      [class.bgc-accept]="isAcceptInviting"
+                      (click)="acceptInvitation(team)"
+                    >
                       <span class="button-label">Accept</span>
+                    </button>
+                    <button class="btn btn-decline f-1 font-weight-bold"
+                      [class.loading]="isDeclineInviting"
+                      [class.bgc-red]="isDeclineInviting"
+                      (click)="declineInvitation(team)"
+                    >
+                      <span class="button-label">Decline</span>
                     </button>
                   </td>
                 </tr>
@@ -254,7 +267,7 @@
                 <table class="table call-request-table" [class.loading]="isInquiryTableLoading">
                   <thead>
                   <tr>
-                    <th class="subject">Subject & Description</th>
+                    <th class="subject">Subject</th>
                     <th class="organizer">Organizer</th>
                     <th class="leader">Leader</th>
                     <th class="guests">Guests</th>
@@ -266,7 +279,7 @@
                   <tr *ngFor="let inquiry of inquiriesData | paginate : { id: 'new_inquiries', itemsPerPage: 8, currentPage: currentInquiriesPage, totalItems: totalInquiries }">
                     <td class="subject" (click)="confirmRequest(inquiry)">
                       <div class="c-blue f-3 font-weight-bold">{{inquiry.subject}}</div>
-                      <div class="c-dark opacity-6 f-3" *ngIf="inquiry.description">{{inquiry.description | stripTags | shorten: 40: '...'}}</div>
+                      <div class="c-dark opacity-6 f-3">{{inquiry.description || '' | stripTags | shorten: 40: '...'}}</div>
                     </td>
                     <td class="organizer" (click)="confirmRequest(inquiry)">
                       <div class="v-center">
@@ -319,15 +332,15 @@
                         <div ngbDropdownMenu class="light">
                           <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="finishedInquiry(inquiry)">
                             <i class="i-icon i-check bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4">Set as Finished</span>
+                            <span class="ml-3 f-3 font-weight-bold">Set as Finished</span>
                           </button>
                           <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="cancelInquiry(inquiry)">
                             <i class="i-icon i-block bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4">Set as Canceled</span>
+                            <span class="ml-3 f-3 font-weight-bold">Set as Canceled</span>
                           </button>
                           <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteInquiry(inquiry)">
                             <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4">Delete</span>
+                            <span class="ml-3 f-3 font-weight-bold">Delete</span>
                           </button>
                         </div>
                       </div>
@@ -387,11 +400,11 @@
                   </thead>
                   <tbody>
                   <tr *ngFor="let plan of plannedData | paginate : { id: 'plannedTable', itemsPerPage: 8, currentPage: currentPlannedPage, totalItems: totalPlanned }">
-                    <td class="subject" (click)="confirmRequest(plan)">
+                    <td class="subject" (click)="scheduleCall(plan)">
                       <div class="c-blue f-3 font-weight-bold">{{plan.subject}}</div>
-                      <div class="c-dark opacity-6 f-3" *ngIf="plan.description">{{plan.description | stripTags | shorten: 40: '...'}}</div>
+                      <div class="c-dark opacity-6 f-3">{{plan.description || '' | stripTags | shorten: 40: '...'}}</div>
                     </td>
-                    <td class="organizer" (click)="confirmRequest(plan)">
+                    <td class="organizer" (click)="scheduleCall(plan)">
                       <div class="v-center">
                         <div class="member-avatar">
                           <ng-container *ngIf="plan.user.picture_profile; else userProfilePlaceholder">
@@ -406,7 +419,7 @@
                         <div class="f-3 ml-2">{{plan.user.user_name}}</div>
                       </div>
                     </td>
-                    <td class="leader" (click)="confirmRequest(plan)">
+                    <td class="leader" (click)="scheduleCall(plan)">
                       <div class="v-center">
                         <ng-container *ngIf="plan.leader">
                           <div class="member-avatar">
@@ -520,11 +533,11 @@
                   </thead>
                   <tbody>
                   <tr *ngFor="let finished of finishedData | paginate : { id: 'finishedTable', itemsPerPage: 8, currentPage: currentFinishedPage, totalItems: totalFinished }">
-                    <td class="subject" (click)="confirmRequest(finished)">
+                    <td class="subject" (click)="scheduleCall(finished)">
                       <div class="c-blue f-3 font-weight-bold">{{finished.subject}}</div>
-                      <div class="c-dark opacity-6 f-3" *ngIf="finished.description">{{finished.description | stripTags | shorten: 40: '...'}}</div>
+                      <div class="c-dark opacity-6 f-3">{{finished.description || '' | stripTags | shorten: 40: '...'}}</div>
                     </td>
-                    <td class="organizer" (click)="confirmRequest(finished)">
+                    <td class="organizer" (click)="scheduleCall(finished)">
                       <div class="v-center">
                         <div class="member-avatar">
                           <ng-container *ngIf="finished.user.picture_profile; else userProfilePlaceholder">
@@ -539,7 +552,7 @@
                         <div class="f-3 c-dark ml-2">{{finished.user.user_name}}</div>
                       </div>
                     </td>
-                    <td class="leader" (click)="confirmRequest(finished)">
+                    <td class="leader" (click)="scheduleCall(finished)">
                       <div class="v-center">
                         <ng-container *ngIf="finished.leader">
                           <div class="member-avatar">
@@ -568,7 +581,7 @@
                       </div>
                     </td>
                     <td class="status">
-                      <div class="status" (click)="confirmRequest(finished)">
+                      <div class="status">
                         <div [className]="finished.status">{{finished.status}}</div>
                       </div>
                     </td>

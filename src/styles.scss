@@ -80,6 +80,9 @@ ul {
 .bgc-leafy-green {
   background-color: #4ac236;
 }
+.bgc-accept {
+  background-color: #04B800;
+}
 .bgc-pale {
   background-color: #f6f5ff;
 }
@@ -510,6 +513,26 @@ button {
   &:active {
     background-color: #04B800;
     color: $color-white;
+  }
+}
+.btn-accept-outline {
+  background-color: $color-white;
+  border-color: #04B800;
+  color: #04B800;
+
+  &:hover {
+    background-color: $color-white;
+    border-color: #04B800;
+    color: #04B800;
+  }
+  &:focus {
+    background-color: $color-white;
+    border-color: #04B800;
+    color: #04B800;
+  }
+  &:active {
+    background-color: #04B800;
+    color: #04B800;
   }
 }
 .btn-white {
