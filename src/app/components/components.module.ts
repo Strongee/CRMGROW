@@ -63,6 +63,9 @@ import { MaterialEditTemplateComponent } from './material-edit-template/material
 import { MaterialShareComponent } from './material-share/material-share.component';
 import { TemplateShareComponent } from './template-share/template-share.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
+import { VideoEditComponent } from './video-edit/video-edit.component';
+import { PdfEditComponent } from './pdf-edit/pdf-edit.component';
+import { ImageEditComponent } from './image-edit/image-edit.component';
 
 @NgModule({
   declarations: [
@@ -126,7 +129,10 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
     MaterialEditTemplateComponent,
     MaterialShareComponent,
     TemplateShareComponent,
-    AutomationShareComponent
+    AutomationShareComponent,
+    VideoEditComponent,
+    PdfEditComponent,
+    ImageEditComponent
   ],
   imports: [
     CommonModule,
@@ -164,7 +170,10 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
     CustomFieldDeleteComponent,
     TagEditComponent,
     TagDeleteComponent,
-    MaterialEditTemplateComponent
+    MaterialEditTemplateComponent,
+    VideoEditComponent,
+    PdfEditComponent,
+    ImageEditComponent
   ],
   bootstrap: [
     ContactCreateComponent,
