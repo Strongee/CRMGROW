@@ -13,6 +13,8 @@ import { BulkActions } from 'src/app/constants/variable.constants';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 import { getJSDocThisTag } from 'typescript';
+import { Subscription } from 'rxjs';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 
 @Component({
   selector: 'app-materials',
@@ -32,15 +34,39 @@ export class MaterialsComponent implements OnInit {
   selectedTab: TabItem = this.tabs[0];
   siteUrl = environment.website;
   user_id = '';
-  videos = [];
-  pdfs = [];
-  images = [];
+
+  videos: any[] = [];
+  adminVideos: any[] = [];
+  ownVideos: any[] = [];
+  teamVideos: any[] = [];
+
+  pdfs: any[] = [];
+  adminPdfs: any[] = [];
+  ownPdfs: any[] = [];
+  teamPdfs: any[] = [];
+
+  images: any[] = [];
+  adminImages: any[] = [];
+  ownImages: any[] = [];
+  teamImages: any[] = [];
+
+  videoLoadSubscription: Subscription;
+  pdfLoadSubscription: Subscription;
+  imageLoadSubscription: Subscription;
+
+  videoDeleteSubscription: Subscription;
+  pdfDeleteSubscription: Subscription;
+  imageDeleteSubscription: Subscription;
+
   selectedVideoLists = new SelectionModel<any>(true, []);
   selectedPdfLists = new SelectionModel<any>(true, []);
   selectedImageLists = new SelectionModel<any>(true, []);
   captureVideos = [];
+  editedVideos;
   capturePdfs = [];
+  editedPdfs;
   captureImages = [];
+  editedImages;
 
   constructor(
     private dialog: MatDialog,
@@ -50,24 +76,21 @@ export class MaterialsComponent implements OnInit {
     private toast: ToastrService,
     private router: Router
   ) {
+    this.loadVideos();
+    this.loadImages();
+    this.loadPdfs();
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
       this.user_id = this.user._id;
     });
-    this.storeService.videos$.subscribe((videos) => {
-      this.videos = videos;
-    });
-    this.storeService.pdfs$.subscribe((pdfs) => {
-      this.pdfs = pdfs;
-    });
-    this.storeService.images$.subscribe((images) => {
-      this.images = images;
-    });
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
       this.captureVideos = this.garbage['capture_videos'] || [];
+      this.editedVideos = this.garbage['edited_video'] || [];
       this.capturePdfs = this.garbage['capture_pdfs'] || [];
+      this.editedPdfs = this.garbage['edited_pdf'] || [];
       this.captureImages = this.garbage['capture_images'] || [];
+      this.editedImages = this.garbage['edited_image'] || [];
     });
   }
 
@@ -77,8 +100,92 @@ export class MaterialsComponent implements OnInit {
     this.materialService.loadImages();
   }
 
+  ngOnDestroy(): void {
+    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
+    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
+    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
+    this.videoDeleteSubscription && this.videoDeleteSubscription.unsubscribe();
+    this.pdfDeleteSubscription && this.pdfDeleteSubscription.unsubscribe();
+    this.imageDeleteSubscription && this.imageDeleteSubscription.unsubscribe();
+  }
+
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+  }
+
+  loadVideos(): void {
+    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
+    this.videoLoadSubscription = this.storeService.videos$.subscribe(
+      (videos) => {
+        this.adminVideos = [];
+        this.ownVideos = [];
+        this.teamVideos = [];
+        const videoIds = [];
+        videos.forEach((e) => {
+          if (videoIds.indexOf(e._id) !== -1) {
+            return;
+          }
+          if (e.role == 'admin') {
+            this.adminVideos.push(e);
+          } else if (e.role === 'team' && e.user !== this.user_id) {
+            this.teamVideos.push(e);
+          } else {
+            this.ownVideos.push(e);
+          }
+          videoIds.push(e._id);
+        });
+      }
+    );
+  }
+
+  loadPdfs(): void {
+    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
+    this.pdfLoadSubscription = this.storeService.pdfs$.subscribe((pdfs) => {
+      this.pdfs = pdfs;
+      this.adminPdfs = [];
+      this.teamPdfs = [];
+      this.ownPdfs = [];
+      const pdfIds = [];
+      pdfs.forEach((e) => {
+        if (pdfIds.indexOf(e._id) !== -1) {
+          return;
+        }
+        if (e.role == 'admin') {
+          this.adminPdfs.push(e);
+        } else if (e.role == 'team' && e.user != this.user_id) {
+          this.teamPdfs.push(e);
+        } else {
+          this.ownPdfs.push(e);
+        }
+        pdfIds.push(e._id);
+      });
+    });
+  }
+
+  loadImages(): void {
+    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
+    this.imageLoadSubscription = this.storeService.images$.subscribe(
+      (images) => {
+        this.images = images;
+        this.adminImages = [];
+        this.ownImages = [];
+        this.teamImages = [];
+        const imageIds = [];
+        images.forEach((e) => {
+          if (imageIds.indexOf(e._id) !== -1) {
+            return;
+          }
+          if (e.role == 'admin') {
+            this.adminImages.push(e);
+          } else if (e.role == 'team' && e.user != this.user_id) {
+            this.teamImages.push(e);
+          } else {
+            this.ownImages.push(e);
+          }
+          imageIds.push(e._id);
+        });
+      }
+    );
   }
 
   createVideo(): void {
@@ -227,42 +334,128 @@ export class MaterialsComponent implements OnInit {
           this.captureVideos.splice(pos, 1);
           this.garbage.capture_videos = [];
           this.garbage.capture_videos = this.captureVideos;
-          this.userService.updateGarbage(this.garbage).subscribe(() => {
-            this.userService.updateGarbageImpl(this.garbage);
-          });
+          this.userService
+            .updateGarbage({ capture_videos: this.captureVideos })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
         }
         break;
       case 'pdf':
         if (this.capturePdfs.indexOf(material_id) === -1) {
           this.capturePdfs.push(material_id);
           this.garbage.capture_pdfs = this.capturePdfs;
-          this.userService.updateGarbage(this.garbage).subscribe(() => {
-            this.userService.updateGarbageImpl(this.garbage);
-          });
+          this.userService
+            .updateGarbage({ capture_pdfs: this.capturePdfs })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
         } else {
           const pos = this.capturePdfs.indexOf(material_id);
           this.capturePdfs.splice(pos, 1);
           this.garbage.capture_pdfs = [];
           this.garbage.capture_pdfs = this.capturePdfs;
-          this.userService.updateGarbage(this.garbage).subscribe(() => {
-            this.userService.updateGarbageImpl(this.garbage);
-          });
+          this.userService
+            .updateGarbage({ capture_pdfs: this.capturePdfs })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
         }
         break;
       case 'image':
         if (this.captureImages.indexOf(material_id) === -1) {
           this.captureImages.push(material_id);
           this.garbage.capture_images = this.captureImages;
-          this.userService.updateGarbage(this.garbage).subscribe(() => {
-            this.userService.updateGarbageImpl(this.garbage);
-          });
+          this.userService
+            .updateGarbage({ capture_images: this.captureImages })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
         } else {
           const pos = this.captureImages.indexOf(material_id);
           this.captureImages.splice(pos, 1);
           this.garbage.capture_images = [];
           this.garbage.capture_images = this.captureImages;
-          this.userService.updateGarbage(this.garbage).subscribe(() => {
-            this.userService.updateGarbageImpl(this.garbage);
+          this.userService
+            .updateGarbage({ capture_images: this.captureImages })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
+        }
+        break;
+    }
+  }
+
+  editMaterial(material: any): void {
+    console.log('##', this.garbage);
+  }
+
+  duplicateMaterial(): void {}
+
+  deleteMaterial(material: any, type: string): void {
+    switch (type) {
+      case 'video':
+        const confirmDialog = this.dialog.open(ConfirmComponent, {
+          position: { top: '100px' },
+          data: {
+            title: 'Delete Video',
+            message: 'Are you sure to delete this video?',
+            confirmLabel: 'Delete',
+            cancelLabel: 'Cancel'
+          }
+        });
+        if (material.rol == 'admin') {
+          confirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              const pos = this.editedVideos.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_video: [...this.editedVideos, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedVideos.push(material._id);
+                    this.userService.updateGarbageImpl(this.garbage);
+                    this.adminVideos.some((e, index) => {
+                      if (e._id == material._id) {
+                        this.adminVideos.splice(index, 1);
+                        return true;
+                      }
+                    });
+                  });
+              }
+            }
+          });
+        } else {
+          confirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              this.videoDeleteSubscription &&
+                this.videoDeleteSubscription.unsubscribe();
+              this.videoDeleteSubscription = this.materialService
+                .deleteVideo(material._id)
+                .subscribe((res) => {
+                  this.adminVideos.some((e, index) => {
+                    if (e._id == material._id) {
+                      if (this.selectedVideoLists.isSelected(material)) {
+                        this.selectedVideoLists.deselect(material);
+                      }
+                      this.adminVideos.splice(index, 1);
+                      return true;
+                    }
+                  });
+                  this.ownVideos.some((e, index) => {
+                    if (e._id == material._id) {
+                      if (this.selectedVideoLists.isSelected(material)) {
+                        this.selectedVideoLists.deselect(material);
+                      }
+                      this.ownVideos.splice(index, 1);
+                      return true;
+                    }
+                  });
+                });
+            }
           });
         }
         break;
@@ -274,7 +467,7 @@ export class MaterialsComponent implements OnInit {
       position: { top: '10vh' },
       width: '100vw',
       maxWidth: '600px',
-      height: '650px',
+      height: '550px',
       disableClose: true,
       data: {
         id: material_id
