@@ -632,6 +632,9 @@ export class MaterialsComponent implements OnInit {
                     this.userService.updateGarbageImpl(this.garbage);
                     this.adminVideos.some((e, index) => {
                       if (e._id == material._id) {
+                        if (this.selectedPdfLists.isSelected(material)) {
+                          this.selectedPdfLists.deselect(material);
+                        }
                         this.adminVideos.splice(index, 1);
                         return true;
                       }
@@ -648,15 +651,6 @@ export class MaterialsComponent implements OnInit {
               this.videoDeleteSubscription = this.materialService
                 .deleteVideo(material._id)
                 .subscribe((res) => {
-                  this.adminVideos.some((e, index) => {
-                    if (e._id == material._id) {
-                      if (this.selectedVideoLists.isSelected(material)) {
-                        this.selectedVideoLists.deselect(material);
-                      }
-                      this.adminVideos.splice(index, 1);
-                      return true;
-                    }
-                  });
                   this.ownVideos.some((e, index) => {
                     if (e._id == material._id) {
                       if (this.selectedVideoLists.isSelected(material)) {
@@ -697,6 +691,9 @@ export class MaterialsComponent implements OnInit {
                     this.userService.updateGarbageImpl(this.garbage);
                     this.adminPdfs.some((e, index) => {
                       if (e._id == material._id) {
+                        if (this.selectedPdfLists.isSelected(material)) {
+                          this.selectedPdfLists.deselect(material);
+                        }
                         this.adminPdfs.splice(index, 1);
                         return true;
                       }
@@ -713,15 +710,6 @@ export class MaterialsComponent implements OnInit {
               this.pdfDeleteSubscription = this.materialService
                 .deletePdf(material._id)
                 .subscribe((res) => {
-                  this.adminPdfs.some((e, index) => {
-                    if (e._id == material._id) {
-                      if (this.selectedPdfLists.isSelected(material)) {
-                        this.selectedPdfLists.deselect(material);
-                      }
-                      this.adminPdfs.splice(index, 1);
-                      return true;
-                    }
-                  });
                   this.ownPdfs.some((e, index) => {
                     if (e._id == material._id) {
                       if (this.selectedPdfLists.isSelected(material)) {
@@ -762,6 +750,9 @@ export class MaterialsComponent implements OnInit {
                     this.userService.updateGarbageImpl(this.garbage);
                     this.adminImages.some((e, index) => {
                       if (e._id == material._id) {
+                        if (this.selectedImageLists.isSelected(material)) {
+                          this.selectedImageLists.deselect(material);
+                        }
                         this.adminImages.splice(index, 1);
                         return true;
                       }
@@ -778,15 +769,6 @@ export class MaterialsComponent implements OnInit {
               this.imageDeleteSubscription = this.materialService
                 .deleteImage(material._id)
                 .subscribe((res) => {
-                  this.adminImages.some((e, index) => {
-                    if (e._id == material._id) {
-                      if (this.selectedImageLists.isSelected(material)) {
-                        this.selectedImageLists.deselect(material);
-                      }
-                      this.adminImages.splice(index, 1);
-                      return true;
-                    }
-                  });
                   this.ownImages.some((e, index) => {
                     if (e._id == material._id) {
                       if (this.selectedImageLists.isSelected(material)) {
@@ -921,8 +903,12 @@ export class MaterialsComponent implements OnInit {
                       this.editedVideos.push(deleteVideo[0]._id);
                       this.adminVideos.some((e, index) => {
                         if (e._id == deleteVideo[0]._id) {
+                          if (
+                            this.selectedVideoLists.isSelected(deleteVideo[0])
+                          ) {
+                            this.selectedVideoLists.deselect(deleteVideo[0]);
+                          }
                           this.adminVideos.splice(index, 1);
-                          return true;
                         }
                       });
                     }
@@ -932,17 +918,6 @@ export class MaterialsComponent implements OnInit {
                     this.videoDeleteSubscription = this.materialService
                       .deleteVideo(deleteVideo[0]._id)
                       .subscribe((res) => {
-                        this.adminVideos.some((e, index) => {
-                          if (e._id == deleteVideo[0]._id) {
-                            if (
-                              this.selectedVideoLists.isSelected(deleteVideo[0])
-                            ) {
-                              this.selectedVideoLists.deselect(deleteVideo[0]);
-                            }
-                            this.adminVideos.splice(index, 1);
-                            return true;
-                          }
-                        });
                         this.ownVideos.some((e, index) => {
                           if (e._id == deleteVideo[0]._id) {
                             if (
@@ -951,7 +926,6 @@ export class MaterialsComponent implements OnInit {
                               this.selectedVideoLists.deselect(deleteVideo[0]);
                             }
                             this.ownVideos.splice(index, 1);
-                            return true;
                           }
                         });
                       });
@@ -970,8 +944,10 @@ export class MaterialsComponent implements OnInit {
                       this.editedPdfs.push(deletePdf[0]._id);
                       this.adminPdfs.some((e, index) => {
                         if (e._id == deletePdf[0]._id) {
+                          if (this.selectedPdfLists.isSelected(deletePdf[0])) {
+                            this.selectedPdfLists.deselect(deletePdf[0]);
+                          }
                           this.adminPdfs.splice(index, 1);
-                          return true;
                         }
                       });
                     }
@@ -981,17 +957,6 @@ export class MaterialsComponent implements OnInit {
                     this.pdfDeleteSubscription = this.materialService
                       .deletePdf(deletePdf[0]._id)
                       .subscribe((res) => {
-                        this.adminPdfs.some((e, index) => {
-                          if (e._id == deletePdf[0]._id) {
-                            if (
-                              this.selectedPdfLists.isSelected(deletePdf[0])
-                            ) {
-                              this.selectedPdfLists.deselect(deletePdf[0]);
-                            }
-                            this.adminPdfs.splice(index, 1);
-                            return true;
-                          }
-                        });
                         this.ownPdfs.some((e, index) => {
                           if (e._id == deletePdf[0]._id) {
                             if (
@@ -1000,7 +965,6 @@ export class MaterialsComponent implements OnInit {
                               this.selectedPdfLists.deselect(deletePdf[0]);
                             }
                             this.ownPdfs.splice(index, 1);
-                            return true;
                           }
                         });
                       });
@@ -1021,8 +985,12 @@ export class MaterialsComponent implements OnInit {
                       this.editedImages.push(deleteImage[0]._id);
                       this.adminImages.some((e, index) => {
                         if (e._id == deleteImage[0]._id) {
+                          if (
+                            this.selectedImageLists.isSelected(deleteImage[0])
+                          ) {
+                            this.selectedImageLists.deselect(deleteImage[0]);
+                          }
                           this.adminImages.splice(index, 1);
-                          return true;
                         }
                       });
                     }
@@ -1032,17 +1000,6 @@ export class MaterialsComponent implements OnInit {
                     this.imageDeleteSubscription = this.materialService
                       .deleteImage(deleteImage[0]._id)
                       .subscribe((res) => {
-                        this.adminImages.some((e, index) => {
-                          if (e._id == deleteImage[0]._id) {
-                            if (
-                              this.selectedImageLists.isSelected(deleteImage[0])
-                            ) {
-                              this.selectedImageLists.deselect(deleteImage[0]);
-                            }
-                            this.adminImages.splice(index, 1);
-                            return true;
-                          }
-                        });
                         this.ownImages.some((e, index) => {
                           if (e._id == deleteImage[0]._id) {
                             if (
@@ -1051,7 +1008,6 @@ export class MaterialsComponent implements OnInit {
                               this.selectedImageLists.deselect(deleteImage[0]);
                             }
                             this.ownImages.splice(index, 1);
-                            return true;
                           }
                         });
                       });
@@ -1060,9 +1016,9 @@ export class MaterialsComponent implements OnInit {
               }
               this.userService
                 .updateGarbage({
-                  capture_videos: this.captureVideos,
-                  capture_pdfs: this.capturePdfs,
-                  capture_images: this.captureImages
+                  edited_video: this.editedVideos,
+                  edited_pdf: this.editedPdfs,
+                  edited_image: this.editedImages
                 })
                 .subscribe(() => {
                   this.userService.updateGarbageImpl(this.garbage);
