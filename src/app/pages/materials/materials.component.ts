@@ -539,12 +539,20 @@ export class MaterialsComponent implements OnInit {
         break;
       case 'pdf':
         const pdf = {
+          url: material.url,
           title: material.title,
           description: material.description,
-          thumbnail: material.thumbnail
+          preview: material.preview
         };
+        this.materialService.createPdf(pdf).subscribe((res) => {});
         break;
       case 'image':
+        const image = {
+          title: material.title,
+          description: material.description,
+          preview: material.preview
+        };
+        this.materialService.createImage(image).subscribe((res) => {});
         break;
     }
   }

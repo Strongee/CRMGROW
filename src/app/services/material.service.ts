@@ -94,6 +94,10 @@ export class MaterialService extends HttpService {
     return this.httpClient.delete(this.server + VIDEO.DELETE + id);
   }
 
+  createPdf(pdf: any): any {
+    return this.httpClient.post(this.server + PDF.CREATE, pdf);
+  }
+
   updatePdf(id: string, pdf: any): any {
     return this.httpClient.put(this.server + PDF.UPDATE + id, pdf);
   }
@@ -107,6 +111,10 @@ export class MaterialService extends HttpService {
 
   deletePdf(id: string): any {
     return this.httpClient.delete(this.server + PDF.DELETE + id);
+  }
+
+  createImage(image: any): any {
+    return this.httpClient.post(this.server + IMAGE.CREATE, image);
   }
 
   updateImage(id: string, image: any): any {
