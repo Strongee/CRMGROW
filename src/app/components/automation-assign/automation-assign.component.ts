@@ -28,7 +28,7 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
     private automationService: AutomationService,
     private toastr: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (this.data) {
@@ -36,9 +36,7 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-
-  }
+  ngOnDestroy(): void {}
 
   assignAutomation(): void {
     this.submitted = true;
