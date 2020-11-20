@@ -64,6 +64,7 @@ import { MaterialShareComponent } from './material-share/material-share.componen
 import { TemplateShareComponent } from './template-share/template-share.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
 import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
+import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
 
 @NgModule({
   declarations: [
@@ -128,7 +129,8 @@ import { CallRequestScheduledComponent } from './call-request-scheduled/call-req
     MaterialShareComponent,
     TemplateShareComponent,
     AutomationShareComponent,
-    CallRequestScheduledComponent
+    CallRequestScheduledComponent,
+    AdvancedFilterDemoComponent
   ],
   imports: [
     CommonModule,
