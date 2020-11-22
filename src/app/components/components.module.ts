@@ -65,6 +65,8 @@ import { TemplateShareComponent } from './template-share/template-share.componen
 import { AutomationShareComponent } from './automation-share/automation-share.component';
 import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
 import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
+import { ManageLabelComponent } from './manage-label/manage-label.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   declarations: [
@@ -130,14 +132,16 @@ import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-fil
     TemplateShareComponent,
     AutomationShareComponent,
     CallRequestScheduledComponent,
-    AdvancedFilterDemoComponent
+    AdvancedFilterDemoComponent,
+    ManageLabelComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule,
     TranslateModule.forChild({ extend: true }),
-    NgxCropperJsModule
+    NgxCropperJsModule,
+    ColorPickerModule
   ],
   exports: [
     TopbarComponent,
