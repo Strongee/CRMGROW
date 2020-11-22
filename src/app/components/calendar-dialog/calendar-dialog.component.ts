@@ -73,7 +73,6 @@ export class CalendarDialogComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<CalendarDialogComponent>,
     private fileService: FileService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
@@ -115,7 +114,6 @@ export class CalendarDialogComponent implements OnInit {
       }
       if (this.data.event) {
         this.event.title = this.data.event.title;
-
         this.due_date.year = this.data.event.start.getFullYear();
         this.due_date.month = this.data.event.start.getMonth() + 1;
         this.due_date.day = this.data.event.start.getDate();
@@ -126,7 +124,6 @@ export class CalendarDialogComponent implements OnInit {
             '-' +
             this.due_date.day
         ).format('YYYY-MM-DD');
-
         const duration = moment(this.selectedDateTime)
           .add(this.duration * 60, 'minutes')
           .format();
@@ -144,14 +141,12 @@ export class CalendarDialogComponent implements OnInit {
           minute = this.data.event.start.getMinutes();
         }
         this.due_time = `${hour}:${minute}:00.000`;
-
         const start_hour = this.data.event.start.getHours();
         const end_hour = this.data.event.end.getHours();
         const start_minute = this.data.event.start.getMinutes();
         const end_minute = this.data.event.end.getMinutes();
         this.duration =
           end_hour - start_hour + (end_minute - start_minute) / 60;
-
         this.event.is_organizer = this.data.event.meta.is_organizer;
         this.event.contacts = this.data.event.meta.contacts;
         this.event.guests = this.data.event.meta.guests;
@@ -175,19 +170,16 @@ export class CalendarDialogComponent implements OnInit {
                       });
                       this.contacts = [...this.contacts, guests];
                     }
-                    console.log('###', this.contacts);
                   }
                 });
             }
           );
         }
-
         this.event.location = this.data.event.meta.location;
         this.event.description = this.data.event.meta.description;
         this.event.recurrence = this.data.event.meta.recurrence;
         this.event.recurrence_id = this.data.event.meta.recurrence_id;
         this.event.calendar_id = this.data.event.meta.calendar_id;
-
         if (this.event.is_organizer) {
           this.isUser = this.event.is_organizer;
         }
@@ -254,12 +246,12 @@ export class CalendarDialogComponent implements OnInit {
                       recurrence_id: this.event.recurrence_id
                     };
                     this.toast.success('Event is updated successfully');
-                    this.dialogRef.close(data);
+                    // this.dialogRef.close(data);
                   }
                 },
                 (err) => {
                   this.isLoading = false;
-                  this.dialogRef.close();
+                  // this.dialogRef.close();
                 }
               );
           } else {
@@ -278,12 +270,12 @@ export class CalendarDialogComponent implements OnInit {
                 recurrence_id: this.event.recurrence_id
               };
               this.toast.success('Event is updated successfully');
-              this.dialogRef.close(data);
+              // this.dialogRef.close(data);
             }
           },
           (err) => {
             this.isLoading = false;
-            this.dialogRef.close();
+            // this.dialogRef.close();
           }
         );
     }
@@ -327,7 +319,7 @@ export class CalendarDialogComponent implements OnInit {
             event_id: res['event_id']
           };
           this.toast.success('New Event is created successfully');
-          this.dialogRef.close(data);
+          // this.dialogRef.close(data);
         }
       },
       (error) => {

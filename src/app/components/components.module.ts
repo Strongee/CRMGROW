@@ -64,6 +64,7 @@ import { MaterialShareComponent } from './material-share/material-share.componen
 import { TemplateShareComponent } from './template-share/template-share.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
 import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
+import { CalendarOverlayComponent } from './calendar-overlay/calendar-overlay.component';
 
 @NgModule({
   declarations: [
@@ -128,7 +129,8 @@ import { CallRequestScheduledComponent } from './call-request-scheduled/call-req
     MaterialShareComponent,
     TemplateShareComponent,
     AutomationShareComponent,
-    CallRequestScheduledComponent
+    CallRequestScheduledComponent,
+    CalendarOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -166,7 +168,8 @@ import { CallRequestScheduledComponent } from './call-request-scheduled/call-req
     CustomFieldDeleteComponent,
     TagEditComponent,
     TagDeleteComponent,
-    MaterialEditTemplateComponent
+    MaterialEditTemplateComponent,
+    CalendarOverlayComponent
   ],
   bootstrap: [
     ContactCreateComponent,
