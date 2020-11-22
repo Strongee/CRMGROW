@@ -94,22 +94,6 @@ export class MaterialsComponent implements OnInit {
       this.captureImages = this.garbage['capture_images'] || [];
       this.editedImages = this.garbage['edited_image'] || [];
     });
-    const setCaptureList =
-      this.captureVideos.length +
-      this.capturePdfs.length +
-      this.captureImages.length;
-    const materialList =
-      this.videos.length + this.pdfs.length + this.images.length;
-    const bulkSetCapture = this.BULK_ACTIONS.filter(
-      (action) => action.label == 'Lead Capture'
-    );
-    if (materialList != 0 && setCaptureList != 0) {
-      if (setCaptureList == materialList) {
-        bulkSetCapture[0].status = true;
-      } else {
-        bulkSetCapture[0].status = false;
-      }
-    }
   }
 
   ngOnInit(): void {
