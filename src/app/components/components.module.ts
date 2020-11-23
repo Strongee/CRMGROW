@@ -67,6 +67,7 @@ import { CallRequestScheduledComponent } from './call-request-scheduled/call-req
 import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
 import { ManageLabelComponent } from './manage-label/manage-label.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { RecordSettingDialogComponent } from './record-setting-dialog/record-setting-dialog.component';
 
 @NgModule({
   declarations: [
@@ -133,7 +134,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     AutomationShareComponent,
     CallRequestScheduledComponent,
     AdvancedFilterDemoComponent,
-    ManageLabelComponent
+    ManageLabelComponent,
+    RecordSettingDialogComponent
   ],
   imports: [
     CommonModule,
