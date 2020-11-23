@@ -11,15 +11,18 @@ export class CallRequestCancelComponent implements OnInit {
   message = '';
   config = NoteQuillEditor;
   quillEditorRef;
+  submitted = false;
   isSending = false;
   constructor(
     private dialogRef: MatDialogRef<CallRequestCancelComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   @ViewChild('messageEditor') noteEditor: QuillEditorComponent;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("cancel call ============>", this.data);
+  }
   getEditorInstance(editorInstance: any): void {
     this.quillEditorRef = editorInstance;
     const toolbar = this.quillEditorRef.getModule('toolbar');
@@ -28,6 +31,6 @@ export class CallRequestCancelComponent implements OnInit {
     this.dialogRef.close();
   }
   sendMessage(): void {
-    this.dialogRef.close();
+    // this.dialogRef.close();
   }
 }

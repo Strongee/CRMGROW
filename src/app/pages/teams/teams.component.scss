@@ -1,3 +1,5 @@
+@import "src/variables";
+
 .teams-tab-container {
   display: flex;
   align-items: center;
@@ -32,11 +34,32 @@
   }
 }
 
+.table {
+  th, td {
+    padding: 10px 0px;
+  }
+
+  tbody tr {
+    height: 50px;
+  }
+}
+
+.group-call-container {
+  .table {
+
+    tbody tr {
+      height: 90px;
+      border-bottom-width: 1px;
+      border-bottom-color: $color-trans08;
+      border-bottom-style: solid;
+    }
+  }
+}
+
 .teams-table {
   margin-bottom: 50px;
 
   th, td {
-    padding: 10px;
     &.team-members,
     &.team-materials {
       width: 90px;
@@ -48,11 +71,17 @@
     text-decoration: none;
   }
 
+  .invite-count {
+    background-color: #308BF1;
+    padding: 3px 5px;
+    border-radius: 4px;
+  }
+
   .team-status {
     .status {
       padding: 3px 5px;
-      border-radius: 5px;
-      width: 60px;
+      border-radius: 4px;
+      width: 50px;
       text-align: center;
 
       &.Owner {
@@ -128,11 +157,6 @@
 
   @media screen and (max-width: 576px) {
     .call-request-table {
-
-      thead th {
-        font-size: 0.6rem;
-        line-height: 0.8rem;
-      }
 
       .avatar {
         display: none;
@@ -246,6 +270,11 @@
 :host ::ng-deep {
   mat-expansion-panel {
     overflow: visible;
+
+    mat-expansion-panel-header,
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
   }
 
   .ngx-pagination .pagination-previous a::before, .ngx-pagination .pagination-previous.disabled::before {
@@ -258,5 +287,9 @@
 
   ul.ngx-pagination .current {
     background-color: #0000ff;
+  }
+
+  .dropdown-menu {
+    border-radius: 8px;
   }
 }

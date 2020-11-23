@@ -7,7 +7,7 @@ import { TeamService } from 'src/app/services/team.service';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { Location } from '@angular/common';
-import {ActivatedRoute, Router, RouterModule, Routes} from '@angular/router';
+import { ActivatedRoute, Router, RouterModule, Routes } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
 import { TeamDeleteComponent } from '../../components/team-delete/team-delete.component';
@@ -18,6 +18,7 @@ import { JoinTeamComponent } from 'src/app/components/join-team/join-team.compon
 import { DialogSettings } from 'src/app/constants/variable.constants';
 import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
 import * as moment from 'moment';
+import { CallRequestScheduledComponent } from '../../components/call-request-scheduled/call-request-scheduled.component';
 @Component({
   selector: 'app-teams',
   templateUrl: './teams.component.html',
@@ -85,6 +86,9 @@ export class TeamsComponent implements OnInit, AfterViewInit {
   inquiryExpanded = true;
   plannedExpanded = true;
   finishedExpanded = true;
+
+  isAcceptInviting = false;
+  isDeclineInviting = false;
 
   constructor(
     private teamService: TeamService,
@@ -412,7 +416,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
               height: 'auto',
               disableClose: true,
               data: {
-                inquiry
+                data: inquiry
               }
             })
             .afterClosed()
@@ -466,6 +470,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             status: 'canceled'
           };
           this.loadPlannedPage(this.currentPlannedPage);
+          this.loadFinishedPage(this.currentFinishedPage)
           // this.signalService.plannedUpdateSignal(result);
         }
       },
@@ -608,7 +613,9 @@ export class TeamsComponent implements OnInit, AfterViewInit {
   }
 
   acceptInvitation(team): void {
+    this.isAcceptInviting = true;
     this.teamService.acceptInvitation(team._id).subscribe((res) => {
+      this.isAcceptInviting = false;
       team.invites.some((e, index) => {
         if (e === this.userId) {
           team.invites.splice(index, 1);
@@ -622,6 +629,10 @@ export class TeamsComponent implements OnInit, AfterViewInit {
         return e._id === team._id;
       });
     });
+  }
+
+  declineInvitation(team): void {
+
   }
 
   confirmRequest(inquiry): void {
@@ -652,7 +663,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
                   height: 'auto',
                   disableClose: true,
                   data: {
-                    inquiry
+                    data: inquiry
                   }
                 })
                 .afterClosed()
@@ -662,6 +673,47 @@ export class TeamsComponent implements OnInit, AfterViewInit {
                 });
             }
             this.loadInquiriesPage(this.currentInquiriesPage);
+            this.loadFinishedPage(this.currentFinishedPage);
+          }
+        }
+        this.location.replaceState('/teams');
+      });
+  }
+  scheduleCall(plan): void {
+    this.location.replaceState('/teams/call/' + plan._id);
+    const status = plan.status;
+    this.dialog
+      .open(CallRequestScheduledComponent, {
+        width: '96vw',
+        maxWidth: '600px',
+        height: 'auto',
+        disableClose: true,
+        data: {
+          plan
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.data.status === 'canceled') {
+            if (status === 'pending') {
+              this.dialog
+                .open(CallRequestCancelComponent, {
+                  width: '96vw',
+                  maxWidth: '600px',
+                  height: 'auto',
+                  disableClose: true,
+                  data: {
+                    date: plan
+                  }
+                })
+                .afterClosed()
+                .subscribe((response) => {
+                  this.loadPlannedPage(this.currentInquiriesPage);
+                  this.loadFinishedPage(this.currentFinishedPage);
+                });
+            }
+            this.loadPlannedPage(this.currentInquiriesPage);
             this.loadFinishedPage(this.currentFinishedPage);
           }
         }

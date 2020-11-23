@@ -66,6 +66,10 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
 import { VideoEditComponent } from './video-edit/video-edit.component';
 import { PdfEditComponent } from './pdf-edit/pdf-edit.component';
 import { ImageEditComponent } from './image-edit/image-edit.component';
+import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
+import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
+import { ManageLabelComponent } from './manage-label/manage-label.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   declarations: [
@@ -132,14 +136,18 @@ import { ImageEditComponent } from './image-edit/image-edit.component';
     AutomationShareComponent,
     VideoEditComponent,
     PdfEditComponent,
-    ImageEditComponent
+    ImageEditComponent,
+    CallRequestScheduledComponent,
+    AdvancedFilterDemoComponent,
+    ManageLabelComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule,
     TranslateModule.forChild({ extend: true }),
-    NgxCropperJsModule
+    NgxCropperJsModule,
+    ColorPickerModule
   ],
   exports: [
     TopbarComponent,

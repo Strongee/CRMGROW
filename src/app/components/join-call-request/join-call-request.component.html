@@ -27,25 +27,6 @@
       </div>
       <div class="my-3">
         <label>Propose date & time</label>
-<!--        <ng-container *ngFor="let dateTime of callDateTimes">-->
-<!--          <div class="v-center mb-2">-->
-<!--            <div class="input-group">-->
-<!--              <div class="input-group-prepend">-->
-<!--                <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>-->
-<!--              </div>-->
-<!--              <input class="form-control datepicker" [id]="'date'-dateTime.id" placeholder="Select date" [name]="'date'-dateTime.id" [value]="dateTime.date.year+'-'+dateTime.date.month+'-'+dateTime.date.day" [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>-->
-<!--            </div>-->
-<!--            <div class="input-group ml-2">-->
-<!--              <select class="form-control" [(ngModel)]="dateTime.time" [id]="'time'-dateTime.id">-->
-<!--                <option value="" disabled>From Time</option>-->
-<!--                <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>-->
-<!--              </select>-->
-<!--            </div>-->
-<!--            <button class="v-center border-0 bgc-white py-2 ml-2" (click)="removeCallDateTime(dateTime)">-->
-<!--              <i class="i-icon i-close bgc-dark" aria-hidden="true"></i>-->
-<!--            </button>-->
-<!--          </div>-->
-<!--        </ng-container>-->
         <ng-container *ngFor="let dateTime of callDateTimes">
           <div class="v-center mb-2">
             <div class="input-group">

@@ -1,16 +1,12 @@
-<div class="team-delete-form">
-  <div class="v-center justify-content-between mx-0">
-    <h4 class="f-22 font-weight-bold c-black">Delete custom field</h4>
-    <button type="button" class="v-center border-0 bgc-trans dropdown-item" mat-dialog-close>
-      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
-    </button>
-  </div>
+<h1 mat-dialog-title>Delete custom field</h1>
+<form #teamForm="ngForm" (ngSubmit)="submitted = true; teamForm.form.valid ? deleteTeam() : false"
+      [class.was-validated]="submitted" class="team-edit-form">
   <div mat-dialog-content class="font-weight-bold my-4 mx-5">
     Do you want to delete <span class="c-blue font-weight-bold">{{team.name}}</span> team?
   </div>
   <div mat-dialog-actions class="mx-0" align="end">
     <button type="button" class="btn btn-white f-6 font-weight-bold" mat-dialog-close>Cancel</button>
-    <button class="btn btn-red text-white f-6 font-weight-bold" [class.loading]="updating" type="submit" (click)="deleteTeam()">Delete</button>
+    <button class="btn btn-red text-white f-6 font-weight-bold" [class.loading]="updating" type="submit">Delete</button>
   </div>
-</div>
+</form>
 

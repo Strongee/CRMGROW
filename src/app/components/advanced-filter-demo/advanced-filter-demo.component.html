@@ -1,0 +1,173 @@
+<div class="v-center">
+  <h1 mat-dialog-title>Advanced Filter</h1>
+  <div class="c-blue f-3 text-uppercase font-weight-bold ml-3">Clear All Filter</div>
+</div>
+<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? applyFilters() : false"
+      [class.was-validated]="submitted">
+  <mat-dialog-content>
+    <div class="form-group">
+      <label>Saved Filters</label>
+      <div class="v-center">
+        <select class="form-control" [(ngModel)]="selectedSavedFilter">
+          <option *ngFor="let filter of savedFilters; let index = index;"
+                  value="{{filter}}" [class.c-blue]="index == 0"
+                  class="my-1 f-3"
+          >
+            {{filter}}
+          </option>
+        </select>
+        <button type="button" class="btn btn-primary ml-2">Save</button>
+      </div>
+      <div class="my-3">
+        <label>Global Search</label>
+        <input type="text" class="form-control" [(ngModel)]="searchString" placeholder="Type in string"
+               name="global_search" #global_search="ngModel"/>
+      </div>
+    </div>
+    <div class="mt-5 mb-3 v-center justify-content-between">
+      <div class="v-center form-group mb-0">
+        <div class="v-center">
+          <label class="mb-0">Status</label>
+          <div class="c-blue font-weight-bold text-uppercase f-3 ml-3">{{status}}</div>
+        </div>
+      </div>
+      <div class="v-center">
+        <div class="f-3 font-weight-bold">Include</div>
+        <label class="custom-toggle mb-0 mx-2" placement="top">
+          <input type="checkbox" [checked]="isStatusInclude" (change)="setStatusInclude()">
+          <span class="custom-toggle-slider rounded-circle"></span>
+        </label>
+        <div class="f-3 font-weight-bold">Exclude</div>
+      </div>
+    </div>
+    <div class="checkbox-wrapper my-3 w-100">
+      <div class="custom-checkbox label-item" *ngFor="let item of labelService.labels$ | async"
+           style="height: unset; line-height: unset;">
+        <input type="checkbox" class="custom-control-input" id="label-{{item._id}}" name="label-{{item._id}}" (change)="selectedLabels.toggle(item._id)" [checked]="selectedLabels.isSelected(item._id)">
+        <label class="custom-control-label v-center" for="label-{{item._id}}">
+          <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>
+          <span>{{item.name}}</span>
+        </label>
+      </div>
+    </div>
+    <div class="checkbox-wrapper w-100 my-3">
+      <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
+           style="height: unset; line-height: unset;">
+        <input type="checkbox" class="custom-control-input" id="material-{{item._id}}" name="material-{{item._id}}" (change)="selectedMaterialActions.toggle(item._id)" [checked]="selectedMaterialActions.isSelected(item._id)">
+        <label class="custom-control-label v-center" for="material-{{item._id}}">
+          <div class="f-3">{{item.title}}</div>
+          <div class="count f-3 font-weight-bold c-white bgc-blue ml-2" *ngIf="item.count">{{item.count}}</div>
+          <div class="list f-1 font-weight-bold px-2 py-1 ml-2">List</div>
+        </label>
+      </div>
+    </div>
+    <div class="form-group my-3">
+      <label for="country_cc">country</label>
+      <select id="country_cc" class="form-control" [(ngModel)]="searchCountry" name="country" #country="ngModel">
+        <option *ngFor="let country of COUNTRIES" value="{{country.code}}">{{country.name}}</option>
+      </select>
+    </div>
+    <div class="form-group my-3">
+      <label for="state">State</label>
+      <input type="text" class="form-control" [(ngModel)]="searchState" placeholder=""
+             id="state" name="state" #state="ngModel"/>
+    </div>
+    <div class="form-group my-3">
+      <label for="city">City</label>
+      <input type="text" class="form-control" [(ngModel)]="searchCity" placeholder=""
+             id="city" name="city" #city="ngModel"/>
+    </div>
+    <div class="form-group my-3">
+      <label for="zipcode">ZipCode</label>
+      <input type="text" class="form-control" [(ngModel)]="searchZipCode" placeholder=""
+             id="zipcode" name="zipcode" #zipcode="ngModel"/>
+    </div>
+    <div class="my-3">
+      <div class="d-flex align-items-end justify-content-between">
+        <div class="form-group mb-0">
+          <label for="city">Source</label>
+        </div>
+        <div class="v-center mb-2">
+          <div class="f-3 font-weight-bold">Include</div>
+          <label class="custom-toggle mb-0 mx-2" placement="top">
+            <input type="checkbox" id="source_check" name="source_check" [checked]="isSourceInclude" (change)="setSourceInclude()">
+            <span class="custom-toggle-slider rounded-circle"></span>
+          </label>
+          <div class="f-3 font-weight-bold">Exclude</div>
+        </div>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="searchSource" placeholder=""
+             id="source" name="source" #source="ngModel"/>
+    </div>
+    <div class="my-3">
+      <div class="d-flex align-items-end justify-content-between">
+        <div class="form-group mb-0">
+          <label for="city">Company</label>
+        </div>
+        <div class="v-center mb-2">
+          <div class="f-3 font-weight-bold">Include</div>
+          <label class="custom-toggle mb-0 mx-2" placement="top">
+            <input type="checkbox" id="company_check" name="company_check" [checked]="isCompanyInclude" (change)="setCompanyInclude()">
+            <span class="custom-toggle-slider rounded-circle"></span>
+          </label>
+          <div class="f-3 font-weight-bold">Exclude</div>
+        </div>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="searchCompany" placeholder=""
+             id="company" name="company" #company="ngModel"/>
+    </div>
+    <div class="my-3">
+      <div class="d-flex align-items-end justify-content-between">
+        <div class="form-group mb-0">
+          <label for="tag">Tag</label>
+        </div>
+        <div class="v-center mb-2">
+          <div class="f-3 font-weight-bold">Include</div>
+          <label class="custom-toggle mb-0 mx-2" placement="top">
+            <input type="checkbox" id="tag_check" name="tag_check" [checked]="isTagInclude" (change)="setTagInclude()">
+            <span class="custom-toggle-slider rounded-circle"></span>
+          </label>
+          <div class="f-3 font-weight-bold">Exclude</div>
+        </div>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="searchTag" placeholder=""
+             id="tag" name="tag" #tag="ngModel"/>
+    </div>
+    <div class="my-3">
+      <div class="form-group mb-0">
+        <label>Last Activity</label>
+      </div>
+      <div class="checkbox-wrapper">
+        <div class="custom-checkbox material-action" *ngFor="let item of activities"
+             style="height: unset; line-height: unset;">
+          <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}" (change)="selectedActivities.toggle(item._id)" [checked]="selectedActivities.isSelected(item._id)">
+          <label class="custom-control-label" for="activity-{{item._id}}">
+            <div class="f-3 mt-1">{{item.title}}</div>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group my-3">
+      <label>Select Date</label>
+      <div class="v-center">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+          </div>
+          <input class="form-control datepicker" placeholder="Select date"  [(ngModel)]="fromDate" ngbDatepicker #duefrom="ngbDatepicker" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text"/>
+        </div>
+        <div class="mx-2">-</div>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+          </div>
+          <input class="form-control datepicker" placeholder="Select date"  [(ngModel)]="toDate" ngbDatepicker #dueto="ngbDatepicker" (click)="dueto.toggle()" [firstDayOfWeek]="7" type="text"/>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" class="btn btn-white" type="button" mat-dialog-close>Cancel</button>
+    <button type="submit" class="btn btn-primary ml-2" [class.loading]="loading">Apply filters</button>
+  </mat-dialog-actions>
+</form>
