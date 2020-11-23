@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  Input,
-  ComponentRef
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
@@ -139,7 +133,7 @@ export class CalendarComponent implements OnInit {
   //   });
   // }
 
-  dayClicked({ date }: { date: Date }): void {
+  dayClicked({ date }: { date: Date }, origin: any): void {
     // this.dialog
     //   .open(CalendarDialogComponent, {
     //     position: { top: '100px' },
@@ -185,11 +179,14 @@ export class CalendarComponent implements OnInit {
     //       this.changeDetectorRef.detectChanges();
     //     }
     //   });
-    this.overlayRef = this.overlay.create({});
+    const config = {
+      hasBackdrop: true,
+      disableClose: false
+    };
+    this.overlayRef = this.overlay.create(config);
     const createPortal = new ComponentPortal(CalendarOverlayComponent);
-    const createRef: ComponentRef<CalendarOverlayComponent> = this.overlayRef.attach(
-      createPortal
-    );
+    this.overlayRef.attach(createPortal);
+    this.overlayRef.backdropClick().subscribe(() => this.overlayRef.dispose());
   }
 
   hourClicked(date): void {

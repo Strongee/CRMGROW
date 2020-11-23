@@ -11,7 +11,7 @@
       : false
   "
 >
-  <div mat-dialog-content>
+  <div class="overlay-header">
     <div class="form-group mx-2">
       <input
         class="form-control f-3 font-weight-bold border-primary"
@@ -201,12 +201,12 @@
       </div>
     </div>
   </div>
-  <div mat-dialog-actions align="end">
+  <div class="overlay-footer" align="end">
     <div class="row mx-0">
       <div class="col-12">
         <button
           type="button"
-          mat-dialog-close
+          (click)="overlayClose()"
           class="btn btn-white py-2 f-6 font-weight-bold"
         >
           Cancel
