@@ -22,6 +22,8 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
   contacts: any[] = [];
 
   submitted = false;
+  contactOverflow = false;
+  loading = false;
 
   constructor(
     private dialogRef: MatDialogRef<AutomationAssignComponent>,
@@ -43,6 +45,7 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
     if (!this.selectedAutomation || !this.contacts.length) {
       return;
     }
+    this.loading = true;
     let automation = this.selectedAutomation._id;
     let contacts = [];
     this.contacts.forEach((e) => {
@@ -51,12 +54,36 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
 
     this.automationService.bulkAssign(contacts, automation).subscribe(
       (res) => {
+        this.loading = false;
         this.dialogRef.close({ status: true });
-        this.toastr.success("Automation is assigned to selected contacts successfully.")
+        this.toastr.success(
+          'Automation is assigned to selected contacts successfully.'
+        );
       },
       (err) => {
+        this.loading = false;
         this.dialogRef.close({ status: true });
       }
     );
+  }
+
+  addContacts(contact): any {
+    if (this.contacts.length === 15) {
+      this.contactOverflow = true;
+      return;
+    } else if (contact && this.contacts.length < 15) {
+      const index = this.contacts.findIndex((item) => item._id === contact._id);
+      if (index < 0) {
+        this.contacts.push(contact);
+      }
+    }
+  }
+
+  removeContact(contact): void {
+    const index = this.contacts.findIndex((item) => item._id === contact._id);
+    if (index >= 0) {
+      this.contacts.splice(index, 1);
+      this.contactOverflow = false;
+    }
   }
 }
