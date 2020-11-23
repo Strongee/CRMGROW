@@ -1,0 +1,32 @@
+.color-picker-button {
+  background-image: url('../../../assets/img/edit.svg');
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  border: 0px;
+  background-size: 16px 16px;
+
+  &:focus {
+    border: 0px;
+    outline: none;
+  }
+}
+
+.i-small {
+  width: 12px;
+  height: 12px;
+}
+
+.label-name-input {
+  max-width: 200px;
+}
+
+.h-40 {
+  height: 40px;
+}
+
+.label-item {
+  height: 40px;
+  padding: 10px 0px;
+}

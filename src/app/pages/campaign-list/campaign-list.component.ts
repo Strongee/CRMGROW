@@ -11,6 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CampaignAddListComponent } from '../../components/campaign-add-list/campaign-add-list.component';
 import { ActionItem } from '../../utils/data.types';
+import { AdvancedFilterDemoComponent } from '../../components/advanced-filter-demo/advanced-filter-demo.component';
+import { ManageLabelComponent } from '../../components/manage-label/manage-label.component';
 
 @Component({
   selector: 'app-campaign-list',
@@ -80,24 +82,52 @@ export class CampaignListComponent implements OnInit {
   }
 
   addList(): void {
+    // this.dialog
+    //   .open(CampaignAddListComponent, {
+    //     width: '96vw',
+    //     maxWidth: '500px',
+    //     height: 'auto',
+    //     disableClose: true
+    //   })
+    //   .afterClosed()
+    //   .subscribe((res) => {
+    //     if (res) {
+    //       const list = {
+    //         _id: this.lists.length + 1,
+    //         name: res['name'],
+    //         subscribers: 0,
+    //         unsubscribers: 0,
+    //         deliveryissues: 0
+    //       };
+    //       this.lists.push(list);
+    //     }
+    //   });
+
+    // this.dialog
+    //   .open(AdvancedFilterDemoComponent, {
+    //     width: '96vw',
+    //     maxWidth: '550px',
+    //     height: 'auto',
+    //     disableClose: true
+    //   })
+    //   .afterClosed()
+    //   .subscribe((res) => {
+    //     if (res) {
+    //
+    //     }
+    //   });
+
     this.dialog
-      .open(CampaignAddListComponent, {
+      .open(ManageLabelComponent, {
         width: '96vw',
-        maxWidth: '500px',
+        maxWidth: '550px',
         height: 'auto',
         disableClose: true
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          const list = {
-            _id: this.lists.length + 1,
-            name: res['name'],
-            subscribers: 0,
-            unsubscribers: 0,
-            deliveryissues: 0
-          };
-          this.lists.push(list);
+
         }
       });
   }
