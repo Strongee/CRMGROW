@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { OveralyService } from 'src/app/services/overlay.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +13,7 @@ import { CalendarEventComponent } from 'src/app/components/calendar-event/calend
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { CalendarOverlayComponent } from 'src/app/components/calendar-overlay/calendar-overlay.component';
+import { windowWhen } from 'rxjs/operators';
 // import { CalendarConnectDialogComponent } from 'src/app/components/calendar-connect-dialog/calendar-connect-dialog.component';
 
 @Component({
@@ -41,6 +43,7 @@ export class CalendarComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private appointmentService: AppointmentService,
+    private overlayService: OveralyService,
     private userService: UserService,
     private router: ActivatedRoute,
     private location: Location,
@@ -179,14 +182,27 @@ export class CalendarComponent implements OnInit {
     //       this.changeDetectorRef.detectChanges();
     //     }
     //   });
-    const config = {
-      hasBackdrop: true,
-      disableClose: false
-    };
-    this.overlayRef = this.overlay.create(config);
-    const createPortal = new ComponentPortal(CalendarOverlayComponent);
-    this.overlayRef.attach(createPortal);
-    this.overlayRef.backdropClick().subscribe(() => this.overlayRef.dispose());
+    // const config = {
+    //   hasBackdrop: true,
+    //   disableClose: false
+    // };
+    // this.overlayRef = this.overlay.create(config);
+    // const createPortal = new ComponentPortal(CalendarOverlayComponent);
+    // this.overlayRef.attach(createPortal);
+    // this.overlayRef.backdropClick().subscribe(() => this.overlayRef.dispose());
+    const ref = this.overlayService.open({
+      content: CalendarOverlayComponent,
+      origin,
+      width: '600px',
+      data: {
+        start_date: date,
+        type: 'month'
+      }
+    });
+
+    ref.afterClosed$.subscribe((res) => {
+      console.log('##', res);
+    });
   }
 
   hourClicked(date): void {
