@@ -63,6 +63,9 @@ import { MaterialEditTemplateComponent } from './material-edit-template/material
 import { MaterialShareComponent } from './material-share/material-share.component';
 import { TemplateShareComponent } from './template-share/template-share.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
+import { VideoEditComponent } from './video-edit/video-edit.component';
+import { PdfEditComponent } from './pdf-edit/pdf-edit.component';
+import { ImageEditComponent } from './image-edit/image-edit.component';
 import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
 import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
 import { ManageLabelComponent } from './manage-label/manage-label.component';
@@ -131,6 +134,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
     MaterialShareComponent,
     TemplateShareComponent,
     AutomationShareComponent,
+    VideoEditComponent,
+    PdfEditComponent,
+    ImageEditComponent,
     CallRequestScheduledComponent,
     AdvancedFilterDemoComponent,
     ManageLabelComponent
@@ -172,7 +178,10 @@ import { ColorPickerModule } from 'ngx-color-picker';
     CustomFieldDeleteComponent,
     TagEditComponent,
     TagDeleteComponent,
-    MaterialEditTemplateComponent
+    MaterialEditTemplateComponent,
+    VideoEditComponent,
+    PdfEditComponent,
+    ImageEditComponent
   ],
   bootstrap: [
     ContactCreateComponent,

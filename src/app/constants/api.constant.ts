@@ -68,6 +68,7 @@ export const VIDEO = {
   READ: 'video/',
   UPDATE: 'video/',
   UPDATE_VIDEO_DETAIL: 'video/detail/',
+  UPDATE_ADMIN: 'video/update-admin',
   DELETE: 'video/',
   LOAD: 'video'
 };
@@ -75,12 +76,14 @@ export const PDF = {
   CREATE: 'pdf',
   READ: 'pdf/',
   UPDATE: 'pdf/',
+  UPDATE_ADMIN: 'pdf/update-admin',
   DELETE: 'pdf/'
 };
 export const IMAGE = {
   CREATE: 'image',
   READ: 'image/',
   UPDATE: 'image/',
+  UPDATE_ADMIN: 'image/update-admin',
   DELETE: 'image/'
 };
 export const TEMPLATE = {

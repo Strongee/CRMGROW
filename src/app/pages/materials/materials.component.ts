@@ -12,9 +12,11 @@ import { environment } from 'src/environments/environment';
 import { BulkActions } from 'src/app/constants/variable.constants';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
-import { getJSDocThisTag } from 'typescript';
 import { Subscription } from 'rxjs';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { VideoEditComponent } from 'src/app/components/video-edit/video-edit.component';
+import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component';
+import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
 
 @Component({
   selector: 'app-materials',
@@ -117,6 +119,7 @@ export class MaterialsComponent implements OnInit {
     this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
     this.videoLoadSubscription = this.storeService.videos$.subscribe(
       (videos) => {
+        this.videos = videos;
         this.adminVideos = [];
         this.ownVideos = [];
         this.teamVideos = [];
@@ -192,8 +195,6 @@ export class MaterialsComponent implements OnInit {
     this.router.navigate(['./materials/create']);
   }
 
-  doAction(evt: any): void {}
-
   selectFolder(): void {}
 
   copyLink(material: any, type: string): void {
@@ -237,47 +238,33 @@ export class MaterialsComponent implements OnInit {
     switch (type) {
       case 'video':
         if (this.isSelectedPage(type)) {
-          this.videos.forEach((e) => {
-            if (this.selectedVideoLists.isSelected(e._id)) {
-              this.selectedVideoLists.deselect(e._id);
-            }
-          });
+          this.selectedVideoLists.clear();
         } else {
-          this.videos.forEach((e) => {
-            if (!this.selectedVideoLists.isSelected(e._id)) {
-              this.selectedVideoLists.select(e._id);
-            }
-          });
+          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
+          this.adminVideos.forEach((e) =>
+            this.selectedVideoLists.select(e._id)
+          );
+          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
         }
         break;
       case 'pdf':
         if (this.isSelectedPage(type)) {
-          this.pdfs.forEach((e) => {
-            if (this.selectedPdfLists.isSelected(e._id)) {
-              this.selectedPdfLists.deselect(e._id);
-            }
-          });
+          this.selectedPdfLists.clear();
         } else {
-          this.pdfs.forEach((e) => {
-            if (!this.selectedPdfLists.isSelected(e._id)) {
-              this.selectedPdfLists.select(e._id);
-            }
-          });
+          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
         }
         break;
       case 'image':
         if (this.isSelectedPage(type)) {
-          this.images.forEach((e) => {
-            if (this.selectedImageLists.isSelected(e._id)) {
-              this.selectedImageLists.deselect(e._id);
-            }
-          });
+          this.selectedImageLists.clear();
         } else {
-          this.images.forEach((e) => {
-            if (!this.selectedImageLists.isSelected(e._id)) {
-              this.selectedImageLists.select(e._id);
-            }
-          });
+          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
+          this.adminImages.forEach((e) =>
+            this.selectedImageLists.select(e._id)
+          );
+          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
         }
         break;
     }
@@ -286,39 +273,34 @@ export class MaterialsComponent implements OnInit {
   isSelectedPage(type: string): any {
     switch (type) {
       case 'video':
-        if (this.videos.length) {
-          for (let i = 0; i < this.videos.length; i++) {
-            const e = this.videos[i];
-            if (!this.selectedVideoLists.isSelected(e._id)) {
-              return false;
-            }
-          }
-        }
-        return true;
+        const videoCounts =
+          this.adminVideos.length +
+          this.ownVideos.length +
+          this.teamVideos.length;
+        const selectedVideoCounts = this.selectedVideoLists.selected.length;
+        return videoCounts == selectedVideoCounts;
       case 'pdf':
-        if (this.pdfs.length) {
-          for (let i = 0; i < this.pdfs.length; i++) {
-            const e = this.pdfs[i];
-            if (!this.selectedPdfLists.isSelected(e._id)) {
-              return false;
-            }
-          }
-        }
-        return true;
+        const pdfCounts =
+          this.adminPdfs.length + this.ownPdfs.length + this.teamPdfs.length;
+        const selectedPdfCounts = this.selectedPdfLists.selected.length;
+        return pdfCounts == selectedPdfCounts;
       case 'image':
-        if (this.images.length) {
-          for (let i = 0; i < this.images.length; i++) {
-            const e = this.images[i];
-            if (!this.selectedImageLists.isSelected(e._id)) {
-              return false;
-            }
-          }
-        }
-        return true;
+        const imageCounts =
+          this.adminImages.length +
+          this.ownImages.length +
+          this.teamImages.length;
+        const selectedImageCounts = this.selectedImageLists.selected.length;
+        return imageCounts == selectedImageCounts;
     }
   }
 
   setCapture(material_id: string, type: string): void {
+    let setCaptureList;
+    const materialList =
+      this.videos.length + this.pdfs.length + this.images.length;
+    const bulkSetCapture = this.BULK_ACTIONS.filter(
+      (action) => action.label == 'Lead Capture'
+    );
     switch (type) {
       case 'video':
         if (this.captureVideos.indexOf(material_id) === -1) {
@@ -339,6 +321,15 @@ export class MaterialsComponent implements OnInit {
             .subscribe(() => {
               this.userService.updateGarbageImpl(this.garbage);
             });
+        }
+        setCaptureList =
+          this.captureVideos.length +
+          this.capturePdfs.length +
+          this.captureImages.length;
+        if (setCaptureList == materialList) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
         }
         break;
       case 'pdf':
@@ -361,6 +352,15 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
+        setCaptureList =
+          this.captureVideos.length +
+          this.capturePdfs.length +
+          this.captureImages.length;
+        if (setCaptureList == materialList) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
       case 'image':
         if (this.captureImages.indexOf(material_id) === -1) {
@@ -382,20 +382,216 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
+        setCaptureList =
+          this.captureVideos.length +
+          this.capturePdfs.length +
+          this.captureImages.length;
+        if (setCaptureList == materialList) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
     }
   }
 
-  editMaterial(material: any): void {
-    console.log('##', this.garbage);
+  editVideo(video: any): void {
+    this.dialog
+      .open(VideoEditComponent, {
+        position: { top: '5vh' },
+        width: '100vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          _id: video._id,
+          title: video.title,
+          description: video.description,
+          thumbnail: video.thumbnail,
+          role: video.role
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res['status']) {
+          if (video.role === 'admin') {
+            this.adminVideos.some((e, index) => {
+              if (e._id == video._id) {
+                this.adminVideos.splice(index, 1);
+                return true;
+              }
+            });
+            this.editedVideos.push(video._id);
+            this.userService
+              .updateGarbage({
+                edited_video: this.editedVideos
+              })
+              .subscribe(() => {
+                this.userService.updateGarbageImpl(this.garbage);
+              });
+            const newVideo = {
+              ...video,
+              _id: res['data']['_id'],
+              title: res['data']['title'],
+              description: res['data']['description'],
+              thumbnail: res['data']['thumbnail']
+            };
+            this.ownVideos.push(newVideo);
+          } else {
+            video.title = res['data']['title'];
+            video.description = res['data']['description'];
+            video.thumbnail = res['data']['thumbnail'];
+          }
+        }
+      });
   }
 
-  duplicateMaterial(): void {}
+  editPdf(pdf: any): void {
+    this.dialog
+      .open(PdfEditComponent, {
+        position: { top: '5vh' },
+        width: '100vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          _id: pdf._id,
+          title: pdf.title,
+          description: pdf.description,
+          preview: pdf.preview,
+          role: pdf.role
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res['status']) {
+          if (pdf.role === 'admin') {
+            this.adminPdfs.some((e, index) => {
+              if (e._id === pdf._id) {
+                this.adminPdfs.splice(index, 1);
+                return true;
+              }
+            });
+            this.editedPdfs.push(pdf._id);
+            this.userService
+              .updateGarbage({
+                edited_pdf: this.editedPdfs
+              })
+              .subscribe(() => {
+                this.userService.updateGarbageImpl(this.garbage);
+              });
+            const newPdf = {
+              ...pdf,
+              _id: res['data']['_id'],
+              title: res['data']['title'],
+              description: res['data']['description'],
+              thumbnail: res['data']['preview']
+            };
+            this.ownPdfs.push(newPdf);
+          } else {
+            pdf.title = res['data']['title'];
+            pdf.description = res['data']['description'];
+            pdf.preview = res['data']['preview'];
+          }
+        }
+      });
+  }
+
+  editImage(image: any): void {
+    this.dialog
+      .open(ImageEditComponent, {
+        position: { top: '5vh' },
+        width: '100vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          _id: image._id,
+          title: image.title,
+          description: image.description,
+          preview: image.preview
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res['status']) {
+          if (image.role === 'admin') {
+            this.adminImages.some((e, index) => {
+              if (e._id == image._id) {
+                this.adminImages.splice(index, 1);
+                return true;
+              }
+            });
+            this.editedImages.push(image._id);
+            this.userService
+              .updateGarbage({
+                edited_image: this.editedImages
+              })
+              .subscribe(() => {
+                this.userService.updateGarbageImpl(this.garbage);
+              });
+            const newImage = {
+              ...image,
+              _id: res['data']['_id'],
+              title: res['data']['title'],
+              description: res['data']['description'],
+              thumbnail: res['data']['preview']
+            };
+            this.ownImages.push(newImage);
+          } else {
+            image.title = res['data']['title'];
+            image.description = res['data']['description'];
+            image.preview = res['data']['preview'];
+          }
+        }
+      });
+  }
+
+  duplicateMaterial(material: any, type: string): void {
+    switch (type) {
+      case 'video':
+        const video = {
+          url: material.url,
+          title: material.title,
+          duration: material.duration,
+          thumbnail: material.thumbnail,
+          description: material.description
+        };
+        this.materialService.createVideo(video).subscribe((res) => {
+          if (res['data']) {
+            const newVideo = {
+              ...material,
+              _id: res['data']['_id'],
+              title: res['data']['title'],
+              description: res['data']['description'],
+              thumbnail: res['data']['thumbnail'],
+              role: 'user'
+            };
+            this.ownVideos.push(newVideo);
+          }
+        });
+        break;
+      case 'pdf':
+        const pdf = {
+          url: material.url,
+          title: material.title,
+          description: material.description,
+          preview: material.preview
+        };
+        this.materialService.createPdf(pdf).subscribe((res) => {});
+        break;
+      case 'image':
+        const image = {
+          title: material.title,
+          description: material.description,
+          preview: material.preview
+        };
+        this.materialService.createImage(image).subscribe((res) => {});
+        break;
+    }
+  }
 
   deleteMaterial(material: any, type: string): void {
     switch (type) {
       case 'video':
-        const confirmDialog = this.dialog.open(ConfirmComponent, {
+        const videoConfirmDialog = this.dialog.open(ConfirmComponent, {
           position: { top: '100px' },
           data: {
             title: 'Delete Video',
@@ -404,8 +600,8 @@ export class MaterialsComponent implements OnInit {
             cancelLabel: 'Cancel'
           }
         });
-        if (material.rol == 'admin') {
-          confirmDialog.afterClosed().subscribe((res) => {
+        if (material.role == 'admin') {
+          videoConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               const pos = this.editedVideos.indexOf(material._id);
               if (pos != -1) {
@@ -420,6 +616,9 @@ export class MaterialsComponent implements OnInit {
                     this.userService.updateGarbageImpl(this.garbage);
                     this.adminVideos.some((e, index) => {
                       if (e._id == material._id) {
+                        if (this.selectedPdfLists.isSelected(material)) {
+                          this.selectedPdfLists.deselect(material);
+                        }
                         this.adminVideos.splice(index, 1);
                         return true;
                       }
@@ -429,28 +628,137 @@ export class MaterialsComponent implements OnInit {
             }
           });
         } else {
-          confirmDialog.afterClosed().subscribe((res) => {
+          videoConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               this.videoDeleteSubscription &&
                 this.videoDeleteSubscription.unsubscribe();
               this.videoDeleteSubscription = this.materialService
                 .deleteVideo(material._id)
                 .subscribe((res) => {
-                  this.adminVideos.some((e, index) => {
-                    if (e._id == material._id) {
-                      if (this.selectedVideoLists.isSelected(material)) {
-                        this.selectedVideoLists.deselect(material);
-                      }
-                      this.adminVideos.splice(index, 1);
-                      return true;
-                    }
-                  });
                   this.ownVideos.some((e, index) => {
                     if (e._id == material._id) {
                       if (this.selectedVideoLists.isSelected(material)) {
                         this.selectedVideoLists.deselect(material);
                       }
                       this.ownVideos.splice(index, 1);
+                      return true;
+                    }
+                  });
+                });
+            }
+          });
+        }
+        break;
+      case 'pdf':
+        const pdfConfirmDialog = this.dialog.open(ConfirmComponent, {
+          position: { top: '100px' },
+          data: {
+            title: 'Delete Pdf',
+            message: 'Are you sure to delete this pdf?',
+            confirmLabel: 'Delete',
+            cancelLabel: 'Cancel'
+          }
+        });
+        if (material.role == 'admin') {
+          pdfConfirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              const pos = this.editedPdfs.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_pdf: [...this.editedPdfs, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedPdfs.push(material._id);
+                    this.userService.updateGarbageImpl(this.garbage);
+                    this.adminPdfs.some((e, index) => {
+                      if (e._id == material._id) {
+                        if (this.selectedPdfLists.isSelected(material)) {
+                          this.selectedPdfLists.deselect(material);
+                        }
+                        this.adminPdfs.splice(index, 1);
+                        return true;
+                      }
+                    });
+                  });
+              }
+            }
+          });
+        } else {
+          pdfConfirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              this.pdfDeleteSubscription &&
+                this.pdfDeleteSubscription.unsubscribe();
+              this.pdfDeleteSubscription = this.materialService
+                .deletePdf(material._id)
+                .subscribe((res) => {
+                  this.ownPdfs.some((e, index) => {
+                    if (e._id == material._id) {
+                      if (this.selectedPdfLists.isSelected(material)) {
+                        this.selectedPdfLists.deselect(material);
+                      }
+                      this.ownPdfs.splice(index, 1);
+                      return true;
+                    }
+                  });
+                });
+            }
+          });
+        }
+        break;
+      case 'image':
+        const imageConfirmDialog = this.dialog.open(ConfirmComponent, {
+          position: { top: '100px' },
+          data: {
+            title: 'Delete Image',
+            message: 'Are you sure to delete this Image?',
+            confirmLabel: 'Delete',
+            cancelLabel: 'Cancel'
+          }
+        });
+        if (material.role == 'admin') {
+          imageConfirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              const pos = this.editedImages.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_image: [...this.editedImages, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedImages.push(material._id);
+                    this.userService.updateGarbageImpl(this.garbage);
+                    this.adminImages.some((e, index) => {
+                      if (e._id == material._id) {
+                        if (this.selectedImageLists.isSelected(material)) {
+                          this.selectedImageLists.deselect(material);
+                        }
+                        this.adminImages.splice(index, 1);
+                        return true;
+                      }
+                    });
+                  });
+              }
+            }
+          });
+        } else {
+          imageConfirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              this.imageDeleteSubscription &&
+                this.imageDeleteSubscription.unsubscribe();
+              this.imageDeleteSubscription = this.materialService
+                .deleteImage(material._id)
+                .subscribe((res) => {
+                  this.ownImages.some((e, index) => {
+                    if (e._id == material._id) {
+                      if (this.selectedImageLists.isSelected(material)) {
+                        this.selectedImageLists.deselect(material);
+                      }
+                      this.ownImages.splice(index, 1);
                       return true;
                     }
                   });
@@ -473,5 +781,236 @@ export class MaterialsComponent implements OnInit {
         id: material_id
       }
     });
+  }
+
+  doAction(evt: any): void {
+    switch (evt.label) {
+      case 'Select all':
+        this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
+        this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+        this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        break;
+      case 'Deselect':
+        this.selectedVideoLists.clear();
+        this.selectedPdfLists.clear();
+        this.selectedImageLists.clear();
+        break;
+      case 'Lead Capture':
+        const setCaptureList =
+          this.captureVideos.length +
+          this.capturePdfs.length +
+          this.captureImages.length;
+        const materialList =
+          this.videos.length + this.pdfs.length + this.images.length;
+        if (setCaptureList == materialList) {
+          this.captureVideos = [];
+          this.garbage.capture_videos = [];
+          this.capturePdfs = [];
+          this.garbage.capture_pdfs = [];
+          this.captureImages = [];
+          this.garbage.capture_images = [];
+          this.userService
+            .updateGarbage({
+              capture_videos: this.captureVideos,
+              capture_pdfs: this.capturePdfs,
+              capture_images: this.captureImages
+            })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
+          evt.status = false;
+        } else {
+          this.videos.forEach((e) => {
+            if (this.captureVideos.indexOf(e._id) === -1) {
+              this.captureVideos.push(e._id);
+            }
+          });
+          this.pdfs.forEach((e) => {
+            if (this.capturePdfs.indexOf(e._id) === -1) {
+              this.capturePdfs.push(e._id);
+            }
+          });
+          this.images.forEach((e) => {
+            if (this.captureImages.indexOf(e._id) === -1) {
+              this.captureImages.push(e._id);
+            }
+          });
+          this.garbage.capture_videos = [];
+          this.garbage.capture_pdfs = [];
+          this.garbage.capture_images = [];
+          this.garbage.capture_videos = this.captureVideos;
+          this.garbage.capture_pdfs = this.capturePdfs;
+          this.garbage.capture_images = this.captureImages;
+          this.userService
+            .updateGarbage({
+              capture_videos: this.captureVideos,
+              capture_pdfs: this.capturePdfs,
+              capture_images: this.captureImages
+            })
+            .subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
+          evt.status = true;
+        }
+        break;
+      case 'Delete':
+        if (
+          this.selectedVideoLists.selected.length +
+            this.selectedPdfLists.selected.length +
+            this.selectedImageLists.selected.length ==
+          0
+        ) {
+          return;
+        } else {
+          const confirmDialog = this.dialog.open(ConfirmComponent, {
+            position: { top: '100px' },
+            data: {
+              title: 'Delete Materials',
+              message: 'Are you sure to delete these materials?',
+              confirmLabel: 'Delete',
+              cancelLabel: 'Cancel'
+            }
+          });
+          confirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              if (this.selectedVideoLists.selected.length > 0) {
+                this.selectedVideoLists.selected.forEach((e) => {
+                  const deleteVideo = this.videos.filter(
+                    (video) => video._id == e
+                  );
+                  if (deleteVideo[0].role == 'admin') {
+                    const pos = this.editedVideos.indexOf(deleteVideo[0]._id);
+
+                    if (pos != -1) {
+                      return;
+                    } else {
+                      this.editedVideos.push(deleteVideo[0]._id);
+                      this.adminVideos.some((e, index) => {
+                        if (e._id == deleteVideo[0]._id) {
+                          if (
+                            this.selectedVideoLists.isSelected(deleteVideo[0])
+                          ) {
+                            this.selectedVideoLists.deselect(deleteVideo[0]);
+                          }
+                          this.adminVideos.splice(index, 1);
+                        }
+                      });
+                    }
+                  } else {
+                    this.videoDeleteSubscription &&
+                      this.videoDeleteSubscription.unsubscribe();
+                    this.videoDeleteSubscription = this.materialService
+                      .deleteVideo(deleteVideo[0]._id)
+                      .subscribe((res) => {
+                        this.ownVideos.some((e, index) => {
+                          if (e._id == deleteVideo[0]._id) {
+                            if (
+                              this.selectedVideoLists.isSelected(deleteVideo[0])
+                            ) {
+                              this.selectedVideoLists.deselect(deleteVideo[0]);
+                            }
+                            this.ownVideos.splice(index, 1);
+                          }
+                        });
+                      });
+                  }
+                });
+              }
+              if (this.selectedPdfLists.selected.length > 0) {
+                this.selectedPdfLists.selected.forEach((e) => {
+                  const deletePdf = this.pdfs.filter((pdf) => pdf._id == e);
+                  if (deletePdf[0].role == 'admin') {
+                    const pos = this.editedPdfs.indexOf(deletePdf[0]._id);
+
+                    if (pos != -1) {
+                      return;
+                    } else {
+                      this.editedPdfs.push(deletePdf[0]._id);
+                      this.adminPdfs.some((e, index) => {
+                        if (e._id == deletePdf[0]._id) {
+                          if (this.selectedPdfLists.isSelected(deletePdf[0])) {
+                            this.selectedPdfLists.deselect(deletePdf[0]);
+                          }
+                          this.adminPdfs.splice(index, 1);
+                        }
+                      });
+                    }
+                  } else {
+                    this.pdfDeleteSubscription &&
+                      this.pdfDeleteSubscription.unsubscribe();
+                    this.pdfDeleteSubscription = this.materialService
+                      .deletePdf(deletePdf[0]._id)
+                      .subscribe((res) => {
+                        this.ownPdfs.some((e, index) => {
+                          if (e._id == deletePdf[0]._id) {
+                            if (
+                              this.selectedPdfLists.isSelected(deletePdf[0])
+                            ) {
+                              this.selectedPdfLists.deselect(deletePdf[0]);
+                            }
+                            this.ownPdfs.splice(index, 1);
+                          }
+                        });
+                      });
+                  }
+                });
+              }
+              if (this.selectedImageLists.selected.length > 0) {
+                this.selectedImageLists.selected.forEach((e) => {
+                  const deleteImage = this.images.filter(
+                    (image) => image._id == e
+                  );
+                  if (deleteImage[0].role == 'admin') {
+                    const pos = this.editedImages.indexOf(deleteImage[0]._id);
+
+                    if (pos != -1) {
+                      return;
+                    } else {
+                      this.editedImages.push(deleteImage[0]._id);
+                      this.adminImages.some((e, index) => {
+                        if (e._id == deleteImage[0]._id) {
+                          if (
+                            this.selectedImageLists.isSelected(deleteImage[0])
+                          ) {
+                            this.selectedImageLists.deselect(deleteImage[0]);
+                          }
+                          this.adminImages.splice(index, 1);
+                        }
+                      });
+                    }
+                  } else {
+                    this.imageDeleteSubscription &&
+                      this.imageDeleteSubscription.unsubscribe();
+                    this.imageDeleteSubscription = this.materialService
+                      .deleteImage(deleteImage[0]._id)
+                      .subscribe((res) => {
+                        this.ownImages.some((e, index) => {
+                          if (e._id == deleteImage[0]._id) {
+                            if (
+                              this.selectedImageLists.isSelected(deleteImage[0])
+                            ) {
+                              this.selectedImageLists.deselect(deleteImage[0]);
+                            }
+                            this.ownImages.splice(index, 1);
+                          }
+                        });
+                      });
+                  }
+                });
+              }
+              this.userService
+                .updateGarbage({
+                  edited_video: this.editedVideos,
+                  edited_pdf: this.editedPdfs,
+                  edited_image: this.editedImages
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+            }
+          });
+        }
+        break;
+    }
   }
 }
