@@ -1,36 +1,31 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   TIMES,
   CALENDAR_DURATION,
   RECURRING_TYPE,
   QuillEditor
 } from 'src/app/constants/variable.constants';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { QuillEditorComponent } from 'ngx-quill';
-import { FileUploader } from 'ng2-file-upload';
-import { UserService } from '../../services/user.service';
 import { FileService } from '../../services/file.service';
-import { HelperService } from '../../services/helper.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
+import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
+import { Contact } from 'src/app/models/contact.model';
+import { OverlayRef } from '@angular/cdk/overlay';
 import * as moment from 'moment';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
 Quill.register('modules/imageResize', ImageResize);
-import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
-import { Contact } from 'src/app/models/contact.model';
+
 @Component({
-  selector: 'app-calendar-dialog',
-  templateUrl: './calendar-dialog.component.html',
-  styleUrls: ['./calendar-dialog.component.scss']
+  selector: 'app-calendar-overlay',
+  templateUrl: './calendar-overlay.component.html',
+  styleUrls: ['./calendar-overlay.component.scss']
 })
-export class CalendarDialogComponent implements OnInit {
+export class CalendarOverlayComponent implements OnInit {
   submitted = false;
   due_time = '12:00:00.000';
   due_date = {
@@ -68,128 +63,18 @@ export class CalendarDialogComponent implements OnInit {
   quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
   config = QuillEditor;
   focusEditor = '';
+  private overlayRef: OverlayRef;
 
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-
   constructor(
     private dialog: MatDialog,
     private fileService: FileService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
-    private contactService: ContactService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private contactService: ContactService
   ) {}
 
-  ngOnInit(): void {
-    if (this.data) {
-      if (this.data.user) {
-        this.isUser = this.data.user;
-        this.contacts = [...this.contacts, this.data.contact];
-      }
-      if (this.data.start_date) {
-        this.due_date.year = this.data.start_date.getFullYear();
-        this.due_date.month = this.data.start_date.getMonth() + 1;
-        this.due_date.day = this.data.start_date.getDate();
-        this.selectedDateTime = moment(
-          this.due_date.year +
-            '-' +
-            this.due_date.month +
-            '-' +
-            this.due_date.day
-        ).format('YYYY-MM-DD');
-        if (this.data.type != 'month') {
-          let hour: string, minute: string;
-          if (this.data.start_date.getHours().toString().length == 1) {
-            hour = `0${this.data.start_date.getHours()}`;
-          } else {
-            hour = this.data.start_date.getHours();
-          }
-          if (this.data.start_date.getMinutes().toString().length == 1) {
-            minute = `0${this.data.start_date.getMinutes()}`;
-          } else {
-            minute = this.data.start_date.getMinutes();
-          }
-          this.due_time = `${hour}:${minute}:00.000`;
-        }
-      }
-      if (this.data.event) {
-        this.event.title = this.data.event.title;
-        this.due_date.year = this.data.event.start.getFullYear();
-        this.due_date.month = this.data.event.start.getMonth() + 1;
-        this.due_date.day = this.data.event.start.getDate();
-        this.selectedDateTime = moment(
-          this.due_date.year +
-            '-' +
-            this.due_date.month +
-            '-' +
-            this.due_date.day
-        ).format('YYYY-MM-DD');
-        const duration = moment(this.selectedDateTime)
-          .add(this.duration * 60, 'minutes')
-          .format();
-        this.event.due_start = this.selectedDateTime;
-        this.event.due_end = duration;
-        let hour, minute;
-        if (this.data.event.start.getHours().toString().length == 1) {
-          hour = `0${this.data.event.start.getHours()}`;
-        } else {
-          hour = this.data.event.start.getHours();
-        }
-        if (this.data.event.start.getMinutes().toString().length == 1) {
-          minute = `0${this.data.event.start.getMinutes()}`;
-        } else {
-          minute = this.data.event.start.getMinutes();
-        }
-        this.due_time = `${hour}:${minute}:00.000`;
-        const start_hour = this.data.event.start.getHours();
-        const end_hour = this.data.event.end.getHours();
-        const start_minute = this.data.event.start.getMinutes();
-        const end_minute = this.data.event.end.getMinutes();
-        this.duration =
-          end_hour - start_hour + (end_minute - start_minute) / 60;
-        this.event.is_organizer = this.data.event.meta.is_organizer;
-        this.event.contacts = this.data.event.meta.contacts;
-        this.event.guests = this.data.event.meta.guests;
-        if (this.data.event.meta.guests.length > 0) {
-          this.data.event.meta.guests.forEach(
-            (guest: { email: any; response: any }) => {
-              this.contactService
-                .getNormalSearch(guest.email)
-                .subscribe((res) => {
-                  if (res['status'] == true) {
-                    if (res['data'].contacts.length > 0) {
-                      res['data'].contacts[0].email_status = guest.response;
-                      let contacts = new Contact();
-                      contacts = res['data'].contacts[0];
-                      this.contacts = [...this.contacts, contacts];
-                    } else {
-                      const firstname = res['data'].search.split('@')[0];
-                      const guests = new Contact().deserialize({
-                        first_name: firstname,
-                        email: res['data'].search
-                      });
-                      this.contacts = [...this.contacts, guests];
-                    }
-                  }
-                });
-            }
-          );
-        }
-        this.event.location = this.data.event.meta.location;
-        this.event.description = this.data.event.meta.description;
-        this.event.recurrence = this.data.event.meta.recurrence;
-        this.event.recurrence_id = this.data.event.meta.recurrence_id;
-        this.event.calendar_id = this.data.event.meta.calendar_id;
-        if (this.event.is_organizer) {
-          this.isUser = this.event.is_organizer;
-        }
-        this.event.event_id = this.data.event.meta.event_id;
-        if (this.data.event.meta.event_id) {
-          this.changeMode = 'update';
-        }
-      }
-    }
-  }
+  ngOnInit(): void {}
 
   update(): void {
     this.isLoading = true;
@@ -339,6 +224,10 @@ export class CalendarDialogComponent implements OnInit {
   setDateTime(): void {
     this.selectedDateTime = moment(this.getDateTime()).format('YYYY-MM-DD');
     close();
+  }
+
+  overlayClose(): void {
+    this.overlayRef.detach();
   }
 
   handleAddressChange(evt: any): void {

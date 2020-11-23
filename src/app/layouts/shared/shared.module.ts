@@ -34,6 +34,7 @@ import {
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { PhonePipe } from '../../pipes/phone.pipe';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [LoadingOverlayComponent, DurationPipe, PhonePipe],
@@ -67,7 +68,8 @@ import { PhonePipe } from '../../pipes/phone.pipe';
     }),
     FileUploadModule,
     NgxPaginationModule,
-    TimeagoModule.forRoot()
+    TimeagoModule.forRoot(),
+    OverlayModule
   ],
   exports: [
     FormsModule,
@@ -98,7 +100,8 @@ import { PhonePipe } from '../../pipes/phone.pipe';
     TimeagoModule,
     LoadingOverlayComponent,
     DurationPipe,
-    PhonePipe
+    PhonePipe,
+    OverlayModule
   ]
 })
 export class SharedModule {}

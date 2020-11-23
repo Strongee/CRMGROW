@@ -67,6 +67,7 @@ import { VideoEditComponent } from './video-edit/video-edit.component';
 import { PdfEditComponent } from './pdf-edit/pdf-edit.component';
 import { ImageEditComponent } from './image-edit/image-edit.component';
 import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
+import { CalendarOverlayComponent } from './calendar-overlay/calendar-overlay.component';
 import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
 import { ManageLabelComponent } from './manage-label/manage-label.component';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -138,6 +139,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
     PdfEditComponent,
     ImageEditComponent,
     CallRequestScheduledComponent,
+    CalendarOverlayComponent,
     AdvancedFilterDemoComponent,
     ManageLabelComponent
   ],
@@ -179,6 +181,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
     TagEditComponent,
     TagDeleteComponent,
     MaterialEditTemplateComponent,
+    CalendarOverlayComponent,
     VideoEditComponent,
     PdfEditComponent,
     ImageEditComponent
