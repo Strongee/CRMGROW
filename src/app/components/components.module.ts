@@ -63,6 +63,9 @@ import { MaterialEditTemplateComponent } from './material-edit-template/material
 import { MaterialShareComponent } from './material-share/material-share.component';
 import { TemplateShareComponent } from './template-share/template-share.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
+import { VideoEditComponent } from './video-edit/video-edit.component';
+import { PdfEditComponent } from './pdf-edit/pdf-edit.component';
+import { ImageEditComponent } from './image-edit/image-edit.component';
 import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
 import { CalendarOverlayComponent } from './calendar-overlay/calendar-overlay.component';
 import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
@@ -132,6 +135,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
     MaterialShareComponent,
     TemplateShareComponent,
     AutomationShareComponent,
+    VideoEditComponent,
+    PdfEditComponent,
+    ImageEditComponent,
     CallRequestScheduledComponent,
     CalendarOverlayComponent,
     AdvancedFilterDemoComponent,
@@ -175,7 +181,10 @@ import { ColorPickerModule } from 'ngx-color-picker';
     TagEditComponent,
     TagDeleteComponent,
     MaterialEditTemplateComponent,
-    CalendarOverlayComponent
+    CalendarOverlayComponent,
+    VideoEditComponent,
+    PdfEditComponent,
+    ImageEditComponent
   ],
   bootstrap: [
     ContactCreateComponent,

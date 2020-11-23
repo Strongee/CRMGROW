@@ -175,7 +175,7 @@
           </thead>
           <tbody>
             <tr class="section-header">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 Common Videos
               </td>
             </tr>
@@ -261,7 +261,7 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(video)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editVideo(video)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -269,7 +269,7 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
@@ -283,7 +283,7 @@
               </td>
             </tr>
             <tr class="section-header own-section" *ngIf="ownVideos.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 My own Videos
               </td>
             </tr>
@@ -369,7 +369,7 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(video)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editVideo(video)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -377,7 +377,7 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
@@ -391,7 +391,7 @@
               </td>
             </tr>
             <tr class="section-header own-section" *ngIf="teamVideos.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 Team Videos
               </td>
             </tr>
@@ -477,7 +477,7 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(video)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editVideo(video)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -485,7 +485,7 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
@@ -547,7 +547,7 @@
           </thead>
           <tbody>
             <tr class="section-header" *ngIf="adminPdfs.length || editedPdfs.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 Common PDFs
               </td>
             </tr>
@@ -626,20 +626,20 @@
                     <a class="d-flex c-pointer" ngbDropdownToggle>
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
-                    <div ngbDropdownMenu class="p-3">
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="editMaterial()">
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editPdf(pdf)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="editTemplate(pdf._id)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(pdf._id)">
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="deleteMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(pdf, 'pdf')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Delete</span>
                       </button>
@@ -649,7 +649,7 @@
               </td>
             </tr>
             <tr class="section-header own-section" *ngIf="ownPdfs.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 My Own PDFs
               </td>
             </tr>
@@ -728,20 +728,20 @@
                     <a class="d-flex c-pointer" ngbDropdownToggle>
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
-                    <div ngbDropdownMenu class="p-3">
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="editMaterial()">
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editPdf(pdf)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="editTemplate(pdf._id)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(pdf._id)">
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="deleteMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(pdf, 'pdf')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Delete</span>
                       </button>
@@ -751,7 +751,7 @@
               </td>
             </tr>
             <tr class="section-header own-section" *ngIf="teamPdfs.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 Team PDFs
               </td>
             </tr>
@@ -830,20 +830,20 @@
                     <a class="d-flex c-pointer" ngbDropdownToggle>
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
-                    <div ngbDropdownMenu class="p-3">
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="editMaterial()">
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editPdf(pdf)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="editTemplate(pdf._id)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(pdf._id)">
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded" (click)="deleteMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(pdf, 'pdf')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Delete</span>
                       </button>
@@ -901,7 +901,7 @@
           </thead>
           <tbody>
             <tr class="section-header" *ngIf="adminImages.length || editedImages.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 Common Images
               </td>
             </tr>
@@ -981,7 +981,7 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(image)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editImage(image)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -989,11 +989,11 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(image, 'image')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>
@@ -1003,7 +1003,7 @@
               </td>
             </tr>
             <tr class="section-header own-section" *ngIf="ownImages.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 My Own Images
               </td>
             </tr>
@@ -1083,7 +1083,7 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(image)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editImage(image)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -1091,11 +1091,11 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(image, 'image')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>
@@ -1105,7 +1105,7 @@
               </td>
             </tr>
             <tr class="section-header own-section" *ngIf="teamImages.length">
-              <td colspan="6">
+              <td colspan="7" class="f-3 font-weight-bold">
                 Team Images
               </td>
             </tr>
@@ -1185,7 +1185,7 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(image)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editImage(image)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -1193,11 +1193,11 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial()">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(image, 'image')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>

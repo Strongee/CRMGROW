@@ -79,16 +79,57 @@ export class MaterialService extends HttpService {
     );
   }
 
+  updateVideo(id: string, video: any): any {
+    return this.httpClient.put(this.server + VIDEO.UPDATE + id, video);
+  }
+
+  updateAdminVideo(id: string, video: any): any {
+    return this.httpClient.post(this.server + VIDEO.UPDATE_ADMIN, {
+      id,
+      video
+    });
+  }
+
   deleteVideo(id: string): any {
     return this.httpClient.delete(this.server + VIDEO.DELETE + id);
+  }
+
+  createPdf(pdf: any): any {
+    return this.httpClient.post(this.server + PDF.CREATE, pdf);
   }
 
   updatePdf(id: string, pdf: any): any {
     return this.httpClient.put(this.server + PDF.UPDATE + id, pdf);
   }
 
+  updateAdminPdf(id: string, pdf: any): any {
+    return this.httpClient.post(this.server + PDF.UPDATE_ADMIN, {
+      id,
+      pdf
+    });
+  }
+
+  deletePdf(id: string): any {
+    return this.httpClient.delete(this.server + PDF.DELETE + id);
+  }
+
+  createImage(image: any): any {
+    return this.httpClient.post(this.server + IMAGE.CREATE, image);
+  }
+
   updateImage(id: string, image: any): any {
     return this.httpClient.put(this.server + IMAGE.UPDATE + id, image);
+  }
+
+  updateAdminImage(id: string, image: any): any {
+    return this.httpClient.post(this.server + IMAGE.UPDATE_ADMIN, {
+      id,
+      image
+    });
+  }
+
+  deleteImage(id: string): any {
+    return this.httpClient.delete(this.server + IMAGE.DELETE + id);
   }
 
   getVimeoMeta(id: string): any {
