@@ -1,8 +1,6 @@
 @import 'src/variables.scss';
 
 .color-picker-button {
-  background-image: url('../../../assets/img/edit.svg');
-  background-repeat: no-repeat;
   width: 16px;
   height: 16px;
   background-color: transparent;
@@ -12,6 +10,12 @@
   &:focus {
     border: 0px;
     outline: none;
+  }
+
+  i.i-icon {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
   }
 }
 
