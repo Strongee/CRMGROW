@@ -479,6 +479,11 @@ export const DialogSettings = {
   ASSISTANT: {
     width: '98vw',
     maxWidth: '394px'
+  },
+  UPLOAD: {
+    width: '98vw',
+    maxWidth: '780px',
+    disableClose: true
   }
 };
 
