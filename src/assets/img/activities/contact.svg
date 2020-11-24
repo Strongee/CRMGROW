@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>DBED8CAF-9D8E-4B00-B2D8-60B22071CF24</title>
+    <g id="Main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Timeline-Actions-Icons" transform="translate(-439.000000, -159.000000)">
+            <g id="Icons-/-Contacts-Added" transform="translate(439.000000, 159.000000)">
+                <g transform="translate(1.000000, 0.000000)" id="Group">
+                    <g id="Contact-added" transform="translate(0.000000, 11.000000)">
+                        <path d="M10.1437822,-3.62125975e-05 C8.5,-3.62125975e-05 7.00001,0.651887596 6.50001,0.651887596 C6.00001,0.651887596 5.5,0.602 4,0.145 C2.04732,-0.4499 0,0.7885 0,3.801 C0,5.629 0.99998,7 3.49998,7 L6.5,7 L10.1437822,7 C11.8212731,6.73466667 12.6600185,5.66833333 12.6600185,3.801 C12.6600185,1.93366667 11.8212731,0.666654596 10.1437822,-3.62125975e-05 Z" id="Path-Copy" fill="#E5EDF6"></path>
+                        <path d="M9,0.145 C7.5,0.602 7.00001,0.651887596 6.50001,0.651887596 C6.00001,0.651887596 5.5,0.602 4,0.145 C2.04732,-0.4499 0,0.7885 0,3.801 C0,5.629 0.99998,7 3.49998,7 L6.5,7" id="Path" stroke="#034DAC" stroke-width="2" stroke-linecap="round"></path>
+                        <line x1="14" y1="1" x2="14" y2="7" id="Path" stroke="#034DAC" stroke-width="2" stroke-linecap="round"></line>
+                        <line x1="11" y1="4" x2="17" y2="4" id="Path" stroke="#034DAC" stroke-width="2" stroke-linecap="round"></line>
+                    </g>
+                    <circle id="Oval" stroke="#034DAC" stroke-width="2" fill="#E5EDF6" cx="6.5" cy="4.5" r="3.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

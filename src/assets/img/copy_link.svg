@@ -1,0 +1,9 @@
+<svg id="Group_3_Copy" data-name="Group 3 Copy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="Rectangle_Copy" data-name="Rectangle Copy" width="24" height="24" fill="none"/>
+  <path id="Rectangle" d="M0,11H4.971a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2H0" transform="translate(15.029 6)" fill="none" stroke="#101336" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+  <path id="Rectangle_Copy_7" data-name="Rectangle Copy 7" d="M0,11H-4.971a2,2,0,0,1-2-2V2a2,2,0,0,1,2-2H0" transform="translate(8.971 6)" fill="none" stroke="#101336" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+  <g id="Rectangle-2" data-name="Rectangle" transform="translate(7 10)" fill="#101336" stroke="#101336" stroke-miterlimit="10" stroke-width="1">
+    <rect width="10" height="3" rx="1.5" stroke="none"/>
+    <rect x="0.5" y="0.5" width="9" height="2" rx="1" fill="none"/>
+  </g>
+</svg>

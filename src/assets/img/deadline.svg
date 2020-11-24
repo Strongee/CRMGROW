@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons / Table / Deadline</title>
+    <g id="Icons-/-Table-/-Deadline" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Deadline" transform="translate(0.000000, 2.000000)">
+            <path d="M2,6 C2,9.3137 4.68629,12 8,12 C11.3137,12 14,9.3137 14,6 C14,2.68629 11.3137,0 8,0" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></path>
+            <line x1="7" y1="4" x2="7" y2="7" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></line>
+            <line x1="10" y1="7" x2="7" y2="7" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></line>
+            <path d="M1.68011694,3.16363235 C1.84005892,2.94545588 2.15994288,2.94545588 2.31988486,3.16363235 L3.91930466,5.34545425 C4.11700094,5.61514346 3.92891717,6 3.5994207,6 L0.400581106,6 C0.0710822345,6 -0.117002336,5.61514346 0.0806971467,5.34545425 L1.68011694,3.16363235 Z" id="Path" fill="#101336" fill-rule="nonzero"></path>
+            <circle id="Oval" fill-opacity="0.1" fill="#101336" fill-rule="nonzero" cx="8" cy="6" r="6"></circle>
+        </g>
+    </g>
+</svg>
