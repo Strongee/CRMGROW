@@ -81,52 +81,24 @@ export class CampaignListComponent implements OnInit {
   }
 
   addList(): void {
-    // this.dialog
-    //   .open(CampaignAddListComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: 'auto',
-    //     disableClose: true
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       const list = {
-    //         _id: this.lists.length + 1,
-    //         name: res['name'],
-    //         subscribers: 0,
-    //         unsubscribers: 0,
-    //         deliveryissues: 0
-    //       };
-    //       this.lists.push(list);
-    //     }
-    //   });
-
-    // this.dialog
-    //   .open(AdvancedFilterDemoComponent, {
-    //     width: '96vw',
-    //     maxWidth: '550px',
-    //     height: 'auto',
-    //     disableClose: true
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //
-    //     }
-    //   });
-
     this.dialog
-      .open(ManageLabelComponent, {
+      .open(CampaignAddListComponent, {
         width: '96vw',
-        maxWidth: '550px',
+        maxWidth: '500px',
         height: 'auto',
         disableClose: true
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-
+          const list = {
+            _id: this.lists.length + 1,
+            name: res['name'],
+            subscribers: 0,
+            unsubscribers: 0,
+            deliveryissues: 0
+          };
+          this.lists.push(list);
         }
       });
   }
