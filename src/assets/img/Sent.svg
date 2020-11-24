@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Icons / Table / Sent</title>
-    <g id="Icons-/-Table-/-Sent" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.1">
-        <g id="Sent" transform="translate(0.000000, 1.000000)" fill="#000000" fill-rule="nonzero" stroke="#101336" stroke-width="2">
-            <path d="M11.9592,0.87056 L2.24195,4.46172 C0.38185,5.14915 0.5486,7.83318 2.47948,8.28509 L5.04145,8.8847 C5.79289,9.0606 6.3761,9.6531 6.54004,10.4072 L7.0366,12.6914 C7.45845,14.6319 10.1448,14.838 10.8576,12.9845 L14.5192,3.46451 C15.1368,1.85866 13.573,0.27414 11.9592,0.87056 Z" id="Path"></path>
-        </g>
-    </g>
-</svg>
