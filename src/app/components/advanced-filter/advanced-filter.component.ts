@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { LabelService } from '../../services/label.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { COUNTRIES } from "../../constants/variable.constants";
+import { COUNTRIES } from '../../constants/variable.constants';
 
 @Component({
-  selector: 'app-advanced-filter-demo',
-  templateUrl: './advanced-filter-demo.component.html',
-  styleUrls: ['./advanced-filter-demo.component.scss']
+  selector: 'app-advanced-filter',
+  templateUrl: './advanced-filter.component.html',
+  styleUrls: ['./advanced-filter.component.scss']
 })
-export class AdvancedFilterDemoComponent implements OnInit {
-
+export class AdvancedFilterComponent implements OnInit {
   loading = false;
   submitted = false;
   selectedSavedFilter;
@@ -36,9 +35,7 @@ export class AdvancedFilterDemoComponent implements OnInit {
   selectedLabels = new SelectionModel<any>(true, []);
   selectedMaterialActions = new SelectionModel<any>(true, []);
   selectedActivities = new SelectionModel<any>(true, []);
-  constructor(
-    public labelService: LabelService
-  ) { }
+  constructor(public labelService: LabelService) {}
 
   ngOnInit(): void {
     this.savedFilters.push('Default');
@@ -132,9 +129,7 @@ export class AdvancedFilterDemoComponent implements OnInit {
     ];
   }
 
-  applyFilters(): void {
-
-  }
+  applyFilters(): void {}
 
   setStatusInclude(): void {
     this.isStatusInclude = !this.isStatusInclude;

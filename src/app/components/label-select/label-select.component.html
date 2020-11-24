@@ -62,7 +62,7 @@
       [class]="(type === 'form' ? 'form-' : '') + 'label-panel'"
     >
       <mat-option style="height: unset; line-height: unset;" [disabled]="true">
-        <a class="py-2 text-primary f-2 v-center border rounded mt-2 mb-2 px-2 td-none c-pointer manage-label">
+        <a class="py-2 text-primary f-2 v-center border rounded mt-2 mb-2 px-2 td-none c-pointer manage-label" (click)="openManageLabel()">
           <i class="i-icon i-setting bgc-blue mr-1 sm"></i>
           <span class="c-blue fw-600">Manage Labels</span>
         </a>

@@ -1,0 +1,49 @@
+.page {
+  .mat-drawer-container {
+    z-index: 997;
+    margin-top: 1px;
+    background-color: #fff;
+
+    .mat-drawer-backdrop.mat-drawer-shown {
+      background-color: #0002;
+    }
+
+    .mat-drawer {
+      position: fixed;
+      top: 0px;
+      height: 100vh;
+      border-radius: 8px 0px 0px 8px;
+
+      .mat-drawer-inner-container {
+        overflow: unset;
+      }
+    }
+
+    .mat-drawer-backdrop{
+      position: fixed;
+      left: 160px;
+      top: 63px;
+    }
+  }
+
+  &.has-topbar {
+    .mat-drawer-container .mat-drawer-backdrop{
+      position: fixed;
+      left: 160px;
+      top: 113px;
+    }
+  }
+
+  @media screen and (max-width: 680px) {
+    
+    .mat-drawer-container .mat-drawer-backdrop {
+      top: 101px;
+    }
+    
+    &.has-topbar {
+      .mat-drawer-container .mat-drawer-backdrop {
+        top: 151px;
+      }
+    }
+  }
+}

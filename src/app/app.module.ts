@@ -20,6 +20,7 @@ import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { environment } from '../environments/environment';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -44,6 +45,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       }
     }),
     NgbModule,
+    MatSidenavModule,
     ComponentsModule,
     ToastrModule.forRoot({})
   ],

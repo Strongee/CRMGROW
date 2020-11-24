@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Garbage } from 'src/app/models/garbage.model';
 import { User } from 'src/app/models/user.model';
 import { LabelService } from 'src/app/services/label.service';
@@ -10,6 +11,9 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./admin-layout.component.scss']
 })
 export class AdminLayoutComponent implements OnInit {
+
+  @ViewChild('drawer') manageLabelPanel: MatDrawer;
+
   constructor(
     private userService: UserService,
     private labelService: LabelService
@@ -19,6 +23,17 @@ export class AdminLayoutComponent implements OnInit {
       this.userService.setGarbage(new Garbage().deserialize(res['garbage']));
     });
     this.labelService.loadLabels();
+
+    // Open or Close Manage Label
+    this.labelService.manageLabel$.subscribe((flg) => {
+      if (this.manageLabelPanel) {
+        if (flg) {
+          this.manageLabelPanel.open();
+        } else {
+          this.manageLabelPanel.close();
+        }
+      }
+    });
   }
 
   ngOnInit(): void {}

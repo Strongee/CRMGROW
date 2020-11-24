@@ -1,3 +1,5 @@
+@import 'src/variables.scss';
+
 .color-picker-button {
   background-image: url('../../../assets/img/edit.svg');
   background-repeat: no-repeat;
@@ -20,13 +22,21 @@
 
 .label-name-input {
   max-width: 200px;
-}
-
-.h-40 {
-  height: 40px;
+  height: 32px;
 }
 
 .label-item {
-  height: 40px;
-  padding: 10px 0px;
+  margin-left: -8px;
+  margin-right: -8px;
+  margin-bottom: 12px;
+  position: relative;
+  &:hover {
+    box-shadow: 0px 5px 24px 5px $color-trans28;
+    border-radius: 8px;
+    z-index: 1;
+  }
+}
+
+.panel {
+  max-width: 480px;
 }

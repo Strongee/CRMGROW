@@ -1,52 +1,52 @@
-<h1 mat-dialog-title>Manage labels</h1>
-<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? saveLabel() : false"
-      [class.was-validated]="submitted">
-  <mat-dialog-content>
-    <div class="form-group">
-      <div>
-        <label>You can create own new label</label>
-        <div class="v-center justify-content-between w-100">
-          <div class="v-center">
-            <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="color"></i>
-            <span>{{'Default color'}}</span>
-            <input type="button" class="color-picker-button ml-2" [(colorPicker)]="color" />
+<div class="panel p-4c">
+  <div class="v-center mb-3">
+    <h4>Manage labels</h4>
+  </div>
+  <form #actionForm="ngForm" (ngSubmit)="actionForm.form.valid ? saveLabel() : false"
+        [class.was-validated]="actionForm.submitted">
+      <div class="form-group">
+        <div>
+          <label>You can create own new label</label>
+          <div class="v-center justify-content-between w-100">
+            <div class="v-center">
+              <i class="i-icon i-label d-block mr-2 bgc-dark" [style.backgroundColor]="color"></i>
+              <span class="f-3 fw-600">{{'Default color'}}</span>
+              <button type="button" class="color-picker-button ml-2"></button>
+            </div>
+            <div class="v-center">
+              <input type="text" class="form-control label-name-input ml-2" [(ngModel)]="labelName" placeholder="Name new label"
+                     name="edit_label_name" #edit_label_name="ngModel" required/>
+              <button type="submit" class="v-center btn btn-primary ml-2 px-2" [class.loading]="loading">
+                <i class="i-icon i-plus i-small bgc-white"></i>
+                <span class="f-3 font-weight-bold ml-2">Save</span>
+              </button>
+            </div>
           </div>
-          <div class="v-center">
-            <input type="text" class="form-control label-name-input ml-3" [(ngModel)]="labelName" placeholder="Name new label"
-                   name="edit_label_name" #edit_label_name="ngModel" required/>
-            <button type="submit" class="v-center h-40 btn btn-primary ml-2" [class.loading]="loading">
-              <i class="i-icon i-plus i-small bgc-white"></i>
-              <span class="f-3 font-weight-bold ml-2">Save</span>
-            </button>
+        </div>
+        <div class="my-3">
+          <label>Created Labels</label>
+          <div class="label-list" cdkDropList (cdkDropListDropped)="drop($event)">
+            <ng-container *ngFor="let item of labelService.labels$ | async">
+              <div class="label-item v-center justify-content-between px-2 py-2 bg-white" *ngIf="item.role != 'admin'" cdkDrag>
+                <div class="v-center">
+                  <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>
+                  <span class="f-3 fw-600">{{item.name}}</span>
+                </div>
+                <div class="v-center">
+                  <button type="button" class="v-center btn bgc-trans c-blue border-0 py-1" (click)="editLabel(item)">
+                    <i class="i-icon i-edit bgc-blue"></i>
+                    <span class="f-3 ml-2 c-blue fw-600">Edit label</span>
+                  </button>
+                  <button type="button" class="v-center btn bgc-trans c-red border-0 py-1" (click)="removeLabel(item)">
+                    <i class="i-icon i-trash bgc-red"></i>
+                    <span class="f-3 ml-2 c-red fw-600">Remove</span>
+                  </button>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </div>
       </div>
-      <div class="my-3">
-        <label>Created Labels</label>
-        <div class="label-item v-center justify-content-between" *ngFor="let item of labels"
-             style="height: unset; line-height: unset;"
-             [class.shadow] = "item == focusedLabel"
-             (mouseover)="setFocused(item)"
-        >
-          <div class="v-center">
-            <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>
-            <span>{{item.name}}</span>
-          </div>
-          <div class="v-center">
-            <button type="button" class="v-center btn bgc-trans c-blue border-0" (click)="editLabel(item)">
-              <i class="i-icon i-edit bgc-blue"></i>
-              <span class="f-3 ml-2 c-blue">Edit label</span>
-            </button>
-            <button type="button" class="v-center btn bgc-trans c-red border-0" (click)="removeLabel(item)">
-              <i class="i-icon i-trash bgc-red"></i>
-              <span class="f-3 ml-2 c-red">Remove</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button type="button" class="btn btn-white" type="button" mat-dialog-close>Cancel</button>
-  </mat-dialog-actions>
-</form>
+      <!-- <color-swatches (onChange)="handleChange($event)" [colors]="COLORS" width="170" height="120"></color-swatches> -->
+  </form>
+</div>
