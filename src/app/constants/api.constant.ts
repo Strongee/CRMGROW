@@ -19,7 +19,7 @@ export const USER = {
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
   LOAD_AFFILIATE: 'affiliate',
-  CREATE_AFFILIATE: '',
+  CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',
   UPDATE_GARBAGE: 'garbage'
 };

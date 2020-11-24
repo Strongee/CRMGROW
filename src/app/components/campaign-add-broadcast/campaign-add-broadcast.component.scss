@@ -60,6 +60,11 @@ p {
 }
 
 :host ::ng-deep {
+
+  mat-dialog-content {
+    overflow: visible;
+  }
+
   .date-time-picker {
     .time-picker {
 

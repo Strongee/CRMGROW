@@ -68,6 +68,7 @@ import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-fil
 import { ManageLabelComponent } from './manage-label/manage-label.component';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { RecordSettingDialogComponent } from './record-setting-dialog/record-setting-dialog.component';
+import { TeamCreateComponent } from './team-create/team-create.component';
 
 @NgModule({
   declarations: [
@@ -135,7 +136,8 @@ import { RecordSettingDialogComponent } from './record-setting-dialog/record-set
     CallRequestScheduledComponent,
     AdvancedFilterDemoComponent,
     ManageLabelComponent,
-    RecordSettingDialogComponent
+    RecordSettingDialogComponent,
+    TeamCreateComponent
   ],
   imports: [
     CommonModule,

@@ -19,6 +19,7 @@ import { DialogSettings } from 'src/app/constants/variable.constants';
 import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
 import * as moment from 'moment';
 import { CallRequestScheduledComponent } from '../../components/call-request-scheduled/call-request-scheduled.component';
+import { TeamCreateComponent } from '../../components/team-create/team-create.component';
 @Component({
   selector: 'app-teams',
   templateUrl: './teams.component.html',
@@ -107,6 +108,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.isFinishedLoading = true;
     this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
+      console.log("user info =============>", res);
       this.userId = res._id;
       this.load();
       this.initSignalHandlers();
@@ -470,7 +472,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
             status: 'canceled'
           };
           this.loadPlannedPage(this.currentPlannedPage);
-          this.loadFinishedPage(this.currentFinishedPage)
+          this.loadFinishedPage(this.currentFinishedPage);
           // this.signalService.plannedUpdateSignal(result);
         }
       },
@@ -595,7 +597,29 @@ export class TeamsComponent implements OnInit, AfterViewInit {
 
   leaveTeam(team): void {}
 
-  openForm(): void {}
+  openForm(): void {
+    this.dialog
+      .open(TeamCreateComponent, {
+        width: '96vw',
+        maxWidth: '600px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const userId = this.userId;
+          const user_name = this.currentUser.user_name;
+          const picture_profile = this.currentUser.picture_profile;
+          const team = {
+            ...res,
+            owner: [{ _id: userId, user_name, picture_profile }],
+            own: true
+          };
+          this.ownTeams.push(team);
+          this.teams.push(team);
+        }
+      });
+  }
 
   joinForm(): void {
     this.dialog.open(JoinTeamComponent, DialogSettings.JOIN_TEAM);
@@ -631,9 +655,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  declineInvitation(team): void {
-
-  }
+  declineInvitation(team): void {}
 
   confirmRequest(inquiry): void {
     this.location.replaceState('/teams/call/' + inquiry._id);
