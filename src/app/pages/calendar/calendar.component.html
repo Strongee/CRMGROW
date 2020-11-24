@@ -142,30 +142,34 @@
             <mwl-calendar-month-view
                 [viewDate]="viewDate"
                 [events]="events"
-                (dayClicked)="dayClicked($event.day, 'monthCellTemplate')"
                 [cellTemplate]="monthCellTemplate"
                 [headerTemplate]="monthHeaderTemplate"
                 (eventClicked)="handleEvent($event.event)"
             >
             </mwl-calendar-month-view>
             <ng-template #monthCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
-                <div class="cal-cell-top mt-1 mb-2">
-                <span class="cal-day-number">
-                    {{ day.date | calendarDate:'monthViewDayNumber':locale }}
-                </span>
-                </div>
-                <div *ngIf="day.events.length > 0">
-                    <div *ngFor="let event of day.events">
-                        <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" (mwlClick)="eventClicked.emit({event: event})">
-                        <div class="cal-events-header mr-1">
-                        </div>
-                        <div class="d-flex cal-events-body">
-                            <span class="cal-events-time mr-1">{{event.start | date:'shortTime'}}</span>
-                            <span class="cal-events-title">{{event.title}}</span>
-                        </div>
+                <div class="cal-cell" #eventCell (click)="createEvent(day, eventCell, createOverlay)">
+                    <div class="cal-cell-top mt-1 mb-2">
+                        <span class="cal-day-number">
+                            {{ day.date | calendarDate:'monthViewDayNumber':locale }}
+                        </span>
+                    </div>
+                    <div *ngIf="day.events.length > 0">
+                        <div *ngFor="let event of day.events">
+                            <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" (mwlClick)="eventClicked.emit({event: event})">
+                                <div class="cal-events-header mr-1">
+                                </div>
+                                <div class="d-flex cal-events-body">
+                                    <span class="cal-events-time mr-1">{{event.start | date:'shortTime'}}</span>
+                                    <span class="cal-events-title">{{event.title}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </ng-template>
+            <ng-template #createOverlay let-close="close" let-data>
+                <app-calendar-overlay></app-calendar-overlay>
             </ng-template>
             <ng-template #monthHeaderTemplate let-days="days" let-locale="locale">
                 <div class="v-center cal-header py-2">

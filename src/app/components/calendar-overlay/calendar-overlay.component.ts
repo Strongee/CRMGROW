@@ -9,11 +9,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { QuillEditorComponent } from 'ngx-quill';
 import { FileService } from '../../services/file.service';
 import { ContactService } from 'src/app/services/contact.service';
+import { OverlayService } from 'src/app/services/overlay.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { Contact } from 'src/app/models/contact.model';
-import { OverlayRef } from '@angular/cdk/overlay';
 import * as moment from 'moment';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
@@ -63,7 +63,6 @@ export class CalendarOverlayComponent implements OnInit {
   quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
   config = QuillEditor;
   focusEditor = '';
-  private overlayRef: OverlayRef;
 
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
   constructor(
@@ -71,7 +70,8 @@ export class CalendarOverlayComponent implements OnInit {
     private fileService: FileService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private overlayService: OverlayService
   ) {}
 
   ngOnInit(): void {}
@@ -227,7 +227,7 @@ export class CalendarOverlayComponent implements OnInit {
   }
 
   overlayClose(): void {
-    this.overlayRef.detach();
+    this.overlayService.close(null);
   }
 
   handleAddressChange(evt: any): void {

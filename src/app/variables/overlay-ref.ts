@@ -1,6 +1,6 @@
 import { ComponentType, OverlayRef } from '@angular/cdk/overlay';
 import { Subject } from 'rxjs';
-import { OverlayParams } from '../services/overlay.service';
+// import { OverlayParams } from '../services/overlay.service';
 import { Type } from '@angular/core';
 
 export type OverlayCloseEvent<T = any> = {
@@ -8,7 +8,7 @@ export type OverlayCloseEvent<T = any> = {
   data: T;
 };
 
-export type OverlayContent = ComponentType<any> | Type<any> | string;
+export type OverlayContent = ComponentType<any>;
 
 export class myOverlayRef<T = any> {
   private afterClosed = new Subject<OverlayCloseEvent<T>>();

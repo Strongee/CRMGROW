@@ -1,7 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  Input,
+  ViewContainerRef
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppointmentService } from 'src/app/services/appointment.service';
-import { OveralyService } from 'src/app/services/overlay.service';
+import { OverlayService } from 'src/app/services/overlay.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
 import { ActivatedRoute } from '@angular/router';
@@ -10,10 +16,6 @@ import { startOfWeek, endOfWeek } from 'date-fns';
 import { UserService } from 'src/app/services/user.service';
 import { TabItem } from 'src/app/utils/data.types';
 import { CalendarEventComponent } from 'src/app/components/calendar-event/calendar-event.component';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { CalendarOverlayComponent } from 'src/app/components/calendar-overlay/calendar-overlay.component';
-import { windowWhen } from 'rxjs/operators';
 // import { CalendarConnectDialogComponent } from 'src/app/components/calendar-connect-dialog/calendar-connect-dialog.component';
 
 @Component({
@@ -38,17 +40,16 @@ export class CalendarComponent implements OnInit {
     { icon: '', label: 'MONTH', id: 'month' }
   ];
   selectedTab: TabItem = this.tabs[0];
-  private overlayRef: OverlayRef;
 
   constructor(
     private dialog: MatDialog,
     private appointmentService: AppointmentService,
-    private overlayService: OveralyService,
+    private overlayService: OverlayService,
     private userService: UserService,
     private router: ActivatedRoute,
     private location: Location,
     private changeDetectorRef: ChangeDetectorRef,
-    private overlay: Overlay
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit(): void {
@@ -136,7 +137,7 @@ export class CalendarComponent implements OnInit {
   //   });
   // }
 
-  dayClicked({ date }: { date: Date }, origin: any): void {
+  createEvent(event, origin: any, content: any): void {
     // this.dialog
     //   .open(CalendarDialogComponent, {
     //     position: { top: '100px' },
@@ -190,19 +191,13 @@ export class CalendarComponent implements OnInit {
     // const createPortal = new ComponentPortal(CalendarOverlayComponent);
     // this.overlayRef.attach(createPortal);
     // this.overlayRef.backdropClick().subscribe(() => this.overlayRef.dispose());
-    const ref = this.overlayService.open({
-      content: CalendarOverlayComponent,
-      origin,
-      width: '600px',
-      data: {
-        start_date: date,
-        type: 'month'
-      }
-    });
-
-    ref.afterClosed$.subscribe((res) => {
-      console.log('##', res);
-    });
+    this.overlayService
+      .open(origin, content, this.viewContainerRef, {
+        data: event
+      })
+      .subscribe((res) => {
+        console.log('##', res);
+      });
   }
 
   hourClicked(date): void {

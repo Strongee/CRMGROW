@@ -1,85 +1,115 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, ViewContainerRef, Host, Optional } from '@angular/core';
 import {
   Overlay,
+  OverlayContainer,
   ConnectionPositionPair,
   PositionStrategy,
   OverlayConfig
 } from '@angular/cdk/overlay';
-import { PortalInjector, ComponentPortal } from '@angular/cdk/portal';
-import { myOverlayRef, OverlayContent } from '../variables/overlay-ref';
-import { ComponentType } from 'ngx-toastr';
-
-export type OverlayParams<T> = {
-  width?: string | number;
-  height?: string | number;
-  origin: HTMLElement;
-  content: OverlayContent;
-  data?: T;
-};
+import {
+  PortalInjector,
+  ComponentPortal,
+  TemplatePortal
+} from '@angular/cdk/portal';
+import { fromEvent, Subscription, Subject } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OveralyService {
-  constructor(private overlay: Overlay, private injector: Injector) {}
+export class OverlayService {
+  overlayRef: any;
+  sub: Subscription;
+  private afterClosed = new Subject<any>();
+  onClosed = this.afterClosed.asObservable();
 
-  open<T>({
-    origin,
-    content,
-    data,
-    width,
-    height
-  }: OverlayParams<T>): myOverlayRef<T> {
-    const overlayRef = this.overlay.create(
-      this.getOverlayConfig({ origin, width, height })
+  constructor(
+    private overlay: Overlay,
+    private overlayContainer: OverlayContainer
+  ) {}
+
+  open(
+    origin: any,
+    menu: any,
+    viewContainerRef: ViewContainerRef,
+    data: any
+  ): any {
+    this.close(null);
+    this.overlayRef = this.overlay.create(
+      this.getOverlayConfig({ origin: origin })
     );
-    const popoverRef = new myOverlayRef<T>(overlayRef, content, data);
-
-    const injector = this.createInjector(popoverRef, this.injector);
-    overlayRef.attach(new ComponentPortal(content, null, injector));
-
-    return popoverRef;
-  }
-
-  private getOverlayConfig({ origin, width, height }): OverlayConfig {
-    return new OverlayConfig({
-      hasBackdrop: true,
-      width,
-      height,
-      backdropClass: 'popover-backdrop',
-      positionStrategy: this.getOverlayPosition(origin),
-      scrollStrategy: this.overlay.scrollStrategies.reposition()
+    this.overlayRef.attach(
+      new TemplatePortal(menu, viewContainerRef, {
+        $implicit: data,
+        close: this.close
+      })
+    );
+    setTimeout(() => {
+      console.log(
+        this.overlayContainer.getContainerElement().getBoundingClientRect()
+      );
     });
+    this.sub = fromEvent<MouseEvent>(document, 'click')
+      .pipe(
+        filter((event) => {
+          const clickTarget = event.target as HTMLElement;
+          return (
+            clickTarget != origin &&
+            !!this.overlayRef &&
+            !this.overlayRef.overlayElement.contains(clickTarget)
+          );
+        }),
+        take(1)
+      )
+      .subscribe(() => {
+        this.close(null);
+      });
+    return this.onClosed.pipe(take(1));
   }
 
-  private getOverlayPosition(origin: HTMLElement): PositionStrategy {
+  close = (data: any) => {
+    this.sub && this.sub.unsubscribe();
+    if (this.overlayRef) {
+      this.overlayRef.dispose();
+      this.overlayRef = null;
+      this.afterClosed.next(data);
+    }
+  };
+  private getOverlayPosition(origin: any): PositionStrategy {
     const positionStrategy = this.overlay
       .position()
       .flexibleConnectedTo(origin)
       .withPositions(this.getPositions())
-      .withFlexibleDimensions(false)
       .withPush(false);
-
+    console.log('##', this.overlay.position().flexibleConnectedTo(origin));
     return positionStrategy;
   }
-
-  createInjector(popoverRef: myOverlayRef, injector: Injector): any {
-    const tokens = new WeakMap([[myOverlayRef, popoverRef]]);
-    return new PortalInjector(injector, tokens);
+  private getOverlayConfig({ origin }): OverlayConfig {
+    return new OverlayConfig({
+      hasBackdrop: false,
+      backdropClass: 'popover-backdrop',
+      positionStrategy: this.getOverlayPosition(origin),
+      scrollStrategy: this.overlay.scrollStrategies.close()
+    });
   }
-
   private getPositions(): ConnectionPositionPair[] {
     return [
       {
         originX: 'center',
-        originY: 'top',
-        overlayX: 'center',
-        overlayY: 'bottom'
-      },
-      {
-        originX: 'center',
         originY: 'bottom',
         overlayX: 'center',
+        overlayY: 'top'
+      },
+      {
+        originX: 'start',
+        originY: 'bottom',
+        overlayX: 'start',
+        overlayY: 'top'
+      },
+      {
+        originX: 'end',
+        originY: 'bottom',
+        overlayX: 'end',
         overlayY: 'top'
       }
     ];
