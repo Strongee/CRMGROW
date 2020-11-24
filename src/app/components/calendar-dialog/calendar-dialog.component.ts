@@ -57,7 +57,6 @@ export class CalendarDialogComponent implements OnInit {
   };
   duration = 0.5;
   contacts: Contact[] = [];
-  changeMode = 'create';
   isRepeat = false;
   isLoading = false;
   isUser = false;
@@ -73,6 +72,7 @@ export class CalendarDialogComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
+    private dialogRef: MatDialogRef<CalendarDialogComponent>,
     private fileService: FileService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
@@ -85,32 +85,6 @@ export class CalendarDialogComponent implements OnInit {
       if (this.data.user) {
         this.isUser = this.data.user;
         this.contacts = [...this.contacts, this.data.contact];
-      }
-      if (this.data.start_date) {
-        this.due_date.year = this.data.start_date.getFullYear();
-        this.due_date.month = this.data.start_date.getMonth() + 1;
-        this.due_date.day = this.data.start_date.getDate();
-        this.selectedDateTime = moment(
-          this.due_date.year +
-            '-' +
-            this.due_date.month +
-            '-' +
-            this.due_date.day
-        ).format('YYYY-MM-DD');
-        if (this.data.type != 'month') {
-          let hour: string, minute: string;
-          if (this.data.start_date.getHours().toString().length == 1) {
-            hour = `0${this.data.start_date.getHours()}`;
-          } else {
-            hour = this.data.start_date.getHours();
-          }
-          if (this.data.start_date.getMinutes().toString().length == 1) {
-            minute = `0${this.data.start_date.getMinutes()}`;
-          } else {
-            minute = this.data.start_date.getMinutes();
-          }
-          this.due_time = `${hour}:${minute}:00.000`;
-        }
       }
       if (this.data.event) {
         this.event.title = this.data.event.title;
@@ -184,9 +158,6 @@ export class CalendarDialogComponent implements OnInit {
           this.isUser = this.event.is_organizer;
         }
         this.event.event_id = this.data.event.meta.event_id;
-        if (this.data.event.meta.event_id) {
-          this.changeMode = 'update';
-        }
       }
     }
   }
@@ -246,12 +217,12 @@ export class CalendarDialogComponent implements OnInit {
                       recurrence_id: this.event.recurrence_id
                     };
                     this.toast.success('Event is updated successfully');
-                    // this.dialogRef.close(data);
+                    this.dialogRef.close(data);
                   }
                 },
                 (err) => {
                   this.isLoading = false;
-                  // this.dialogRef.close();
+                  this.dialogRef.close();
                 }
               );
           } else {
@@ -270,62 +241,15 @@ export class CalendarDialogComponent implements OnInit {
                 recurrence_id: this.event.recurrence_id
               };
               this.toast.success('Event is updated successfully');
-              // this.dialogRef.close(data);
+              this.dialogRef.close(data);
             }
           },
           (err) => {
             this.isLoading = false;
-            // this.dialogRef.close();
+            this.dialogRef.close();
           }
         );
     }
-  }
-
-  create(): void {
-    this.isLoading = true;
-    this.event.contacts = [];
-    this.event.guests = [];
-    const date = moment(
-      this.due_date.year +
-        '-' +
-        this.due_date.month +
-        '-' +
-        this.due_date.day +
-        ' ' +
-        this.due_time
-    ).format();
-    const duration = moment(date)
-      .add(this.duration * 60, 'minutes')
-      .format();
-    this.event.due_start = date;
-    this.event.due_end = duration;
-    if (this.contacts.length > 0) {
-      this.contacts.forEach((contact) => {
-        if (contact._id) {
-          const data = {
-            email: contact.email,
-            _id: contact._id
-          };
-          this.event.contacts.push(data);
-        }
-        this.event.guests.push(contact.email);
-      });
-    }
-    this.appointmentService.createEvents(this.event).subscribe(
-      (res) => {
-        if (res['status'] == true) {
-          this.isLoading = false;
-          const data = {
-            event_id: res['event_id']
-          };
-          this.toast.success('New Event is created successfully');
-          // this.dialogRef.close(data);
-        }
-      },
-      (error) => {
-        this.isLoading = false;
-      }
-    );
   }
 
   getDateTime(): any {

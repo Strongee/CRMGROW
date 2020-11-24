@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   TIMES,
   CALENDAR_DURATION,
@@ -26,6 +26,8 @@ Quill.register('modules/imageResize', ImageResize);
   styleUrls: ['./calendar-overlay.component.scss']
 })
 export class CalendarOverlayComponent implements OnInit {
+  @Input('start_date') start_date: Date;
+  @Input('type') type = '';
   submitted = false;
   due_time = '12:00:00.000';
   due_date = {
@@ -52,7 +54,6 @@ export class CalendarOverlayComponent implements OnInit {
   };
   duration = 0.5;
   contacts: Contact[] = [];
-  changeMode = 'create';
   isRepeat = false;
   isLoading = false;
   isUser = false;
@@ -74,95 +75,28 @@ export class CalendarOverlayComponent implements OnInit {
     private overlayService: OverlayService
   ) {}
 
-  ngOnInit(): void {}
-
-  update(): void {
-    this.isLoading = true;
-    this.selectedDateTime = moment(
-      this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
-    ).format('YYYY-MM-DD');
-    const duration = moment(this.selectedDateTime)
-      .add(this.duration * 60, 'minutes')
-      .format();
-    this.event.due_start = this.selectedDateTime;
-    this.event.due_end = duration;
-    if (this.contacts.length > 0) {
-      this.event.contacts.forEach((eventContact) => {
-        this.contacts.forEach((selectContact) => {
-          if (Object.values(selectContact).indexOf(eventContact._id) == -1) {
-            this.event.remove_contacts.push(eventContact._id);
-          }
-        });
-      });
-      this.event.contacts = [];
-      this.event.guests = [];
-      this.contacts.forEach((contact) => {
-        if (contact._id) {
-          const data = {
-            email: contact.email,
-            _id: contact._id
-          };
-          this.event.contacts.push(data);
+  ngOnInit(): void {
+    if (this.start_date) {
+      this.due_date.year = this.start_date.getFullYear().toString();
+      this.due_date.month = (this.start_date.getMonth() + 1).toString();
+      this.due_date.day = this.start_date.getDate().toString();
+      this.selectedDateTime = moment(
+        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+      ).format('YYYY-MM-DD');
+      if (this.type != 'month') {
+        let hour: string, minute: string;
+        if (this.start_date.getHours().toString().length == 1) {
+          hour = `0${this.start_date.getHours()}`;
+        } else {
+          hour = this.start_date.getHours().toString();
         }
-        this.event.guests.push(contact.email);
-      });
-    }
-    if (this.event.recurrence_id) {
-      this.dialog
-        .open(CalendarRecurringDialogComponent, {
-          position: { top: '40vh' },
-          width: '100vw',
-          maxWidth: '320px',
-          disableClose: true
-        })
-        .afterClosed()
-        .subscribe((res) => {
-          if (res) {
-            if (res.type == 'own') {
-              delete this.event['recurrence_id'];
-            }
-            this.appointmentService
-              .updateEvents(this.event, this.event.event_id)
-              .subscribe(
-                (res) => {
-                  if (res['status'] == true) {
-                    this.isLoading = false;
-                    const data = {
-                      recurrence_id: this.event.recurrence_id
-                    };
-                    this.toast.success('Event is updated successfully');
-                    // this.dialogRef.close(data);
-                  }
-                },
-                (err) => {
-                  this.isLoading = false;
-                  // this.dialogRef.close();
-                }
-              );
-          } else {
-            this.isLoading = false;
-          }
-        });
-    } else {
-      delete this.event['recurrence_id'];
-      this.appointmentService
-        .updateEvents(this.event, this.event.event_id)
-        .subscribe(
-          (res) => {
-            if (res['status'] == true) {
-              this.isLoading = false;
-              const data = {
-                recurrence_id: this.event.recurrence_id
-              };
-              this.toast.success('Event is updated successfully');
-              // this.dialogRef.close(data);
-            }
-          },
-          (err) => {
-            this.isLoading = false;
-            // this.dialogRef.close();
-          }
-        );
+        if (this.start_date.getMinutes().toString().length == 1) {
+          minute = `0${this.start_date.getMinutes().toString()}`;
+        } else {
+          minute = this.start_date.getMinutes().toString();
+        }
+        this.due_time = `${hour}:${minute}:00.000`;
+      }
     }
   }
 
@@ -204,7 +138,7 @@ export class CalendarOverlayComponent implements OnInit {
             event_id: res['event_id']
           };
           this.toast.success('New Event is created successfully');
-          // this.dialogRef.close(data);
+          this.overlayService.close(data);
         }
       },
       (error) => {

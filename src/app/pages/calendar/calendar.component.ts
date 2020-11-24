@@ -137,66 +137,46 @@ export class CalendarComponent implements OnInit {
   //   });
   // }
 
-  createEvent(event, origin: any, content: any): void {
-    // this.dialog
-    //   .open(CalendarDialogComponent, {
-    //     position: { top: '100px' },
-    //     width: '100vw',
-    //     maxWidth: '600px',
-    //     maxHeight: '700px',
-    //     data: {
-    //       start_date: date,
-    //       type: 'month'
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.isLoading = true;
-    //       const eventDate = this.viewDate.toISOString();
-    //       this.appointmentService
-    //         .getEvents(eventDate, this.view)
-    //         .subscribe((res) => {
-    //           if (res['status'] == true) {
-    //             this.events = res['data'].map((item) => {
-    //               return {
-    //                 title: item.title,
-    //                 start: new Date(item.due_start),
-    //                 end: new Date(item.due_end),
-    //                 meta: {
-    //                   contacts: item.contacts,
-    //                   calendar_id: item.calendar_id,
-    //                   description: item.description,
-    //                   location: item.location,
-    //                   type: item.type,
-    //                   guests: item.guests,
-    //                   event_id: item.event_id,
-    //                   recurrence: item.recurrence,
-    //                   recurrence_id: item.recurrence_id,
-    //                   is_organizer: item.is_organizer
-    //                 }
-    //               };
-    //             });
-    //             this.isLoading = false;
-    //           }
-    //         });
-    //       this.changeDetectorRef.detectChanges();
-    //     }
-    //   });
-    // const config = {
-    //   hasBackdrop: true,
-    //   disableClose: false
-    // };
-    // this.overlayRef = this.overlay.create(config);
-    // const createPortal = new ComponentPortal(CalendarOverlayComponent);
-    // this.overlayRef.attach(createPortal);
-    // this.overlayRef.backdropClick().subscribe(() => this.overlayRef.dispose());
+  createEvent(event: any, origin: any, content: any): void {
     this.overlayService
       .open(origin, content, this.viewContainerRef, {
-        data: event
+        data: {
+          start_date: event.date,
+          type: 'month'
+        }
       })
       .subscribe((res) => {
-        console.log('##', res);
+        if (res) {
+          this.isLoading = true;
+          const eventDate = this.viewDate.toISOString();
+          this.appointmentService
+            .getEvents(eventDate, this.view)
+            .subscribe((res) => {
+              if (res['status'] == true) {
+                this.events = res['data'].map((item) => {
+                  return {
+                    title: item.title,
+                    start: new Date(item.due_start),
+                    end: new Date(item.due_end),
+                    meta: {
+                      contacts: item.contacts,
+                      calendar_id: item.calendar_id,
+                      description: item.description,
+                      location: item.location,
+                      type: item.type,
+                      guests: item.guests,
+                      event_id: item.event_id,
+                      recurrence: item.recurrence,
+                      recurrence_id: item.recurrence_id,
+                      is_organizer: item.is_organizer
+                    }
+                  };
+                });
+                this.isLoading = false;
+              }
+            });
+          this.changeDetectorRef.detectChanges();
+        }
       });
   }
 
@@ -292,18 +272,13 @@ export class CalendarComponent implements OnInit {
       });
   }
 
-  handleEvent(event): void {
-    this.dialog
-      .open(CalendarEventComponent, {
-        position: { top: '100px' },
-        width: '100vw',
-        maxWidth: '300px',
-        maxHeight: '500px',
+  handleEvent(event: any, origin: any, content: any): void {
+    this.overlayService
+      .open(origin, content, this.viewContainerRef, {
         data: {
           event: event
         }
       })
-      .afterClosed()
       .subscribe((res) => {
         if (res) {
           if (res.id) {

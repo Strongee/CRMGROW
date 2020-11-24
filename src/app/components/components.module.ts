@@ -184,7 +184,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     CalendarOverlayComponent,
     VideoEditComponent,
     PdfEditComponent,
-    ImageEditComponent
+    ImageEditComponent,
+    CalendarEventComponent
   ],
   bootstrap: [
     ContactCreateComponent,

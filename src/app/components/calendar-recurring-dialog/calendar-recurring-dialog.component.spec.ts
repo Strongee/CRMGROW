@@ -8,9 +8,8 @@ describe('CalendarRecurringDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalendarRecurringDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [CalendarRecurringDialogComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

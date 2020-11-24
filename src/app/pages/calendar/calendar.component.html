@@ -144,7 +144,6 @@
                 [events]="events"
                 [cellTemplate]="monthCellTemplate"
                 [headerTemplate]="monthHeaderTemplate"
-                (eventClicked)="handleEvent($event.event)"
             >
             </mwl-calendar-month-view>
             <ng-template #monthCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
@@ -156,7 +155,7 @@
                     </div>
                     <div *ngIf="day.events.length > 0">
                         <div *ngFor="let event of day.events">
-                            <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" (mwlClick)="eventClicked.emit({event: event})">
+                            <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" #viewEvent (mwlClick)="handleEvent(event, viewEvent, viewOverlay)">
                                 <div class="cal-events-header mr-1">
                                 </div>
                                 <div class="d-flex cal-events-body">
@@ -169,7 +168,17 @@
                 </div>
             </ng-template>
             <ng-template #createOverlay let-close="close" let-data>
-                <app-calendar-overlay></app-calendar-overlay>
+                <app-calendar-overlay
+                    [start_date]="data.data.start_date"
+                    [type]="data.data.type"
+                >
+                </app-calendar-overlay>
+            </ng-template>
+            <ng-template #viewOverlay let-close="close" let-data>
+                <app-calendar-event
+                    [event]="data.data.event"
+                >
+                </app-calendar-event>
             </ng-template>
             <ng-template #monthHeaderTemplate let-days="days" let-locale="locale">
                 <div class="v-center cal-header py-2">

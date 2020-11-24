@@ -81,15 +81,13 @@ export class OverlayService {
       .flexibleConnectedTo(origin)
       .withPositions(this.getPositions())
       .withPush(false);
-    console.log('##', this.overlay.position().flexibleConnectedTo(origin));
     return positionStrategy;
   }
   private getOverlayConfig({ origin }): OverlayConfig {
     return new OverlayConfig({
       hasBackdrop: false,
       backdropClass: 'popover-backdrop',
-      positionStrategy: this.getOverlayPosition(origin),
-      scrollStrategy: this.overlay.scrollStrategies.close()
+      positionStrategy: this.getOverlayPosition(origin)
     });
   }
   private getPositions(): ConnectionPositionPair[] {
