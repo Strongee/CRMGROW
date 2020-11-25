@@ -201,7 +201,7 @@
                 </a>
               </td>
               <td class="name-col">
-                <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                <a href="{{siteUrl}}/video?video={{video._id}}&user={{user_id}}" target="_blank">
                   <div class="thumb-prev-wrapper">
                     <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
                     <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
@@ -246,10 +246,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ video._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -354,10 +361,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ video._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -462,10 +476,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ video._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -612,10 +633,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -714,10 +742,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -816,10 +851,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -964,10 +1006,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -1066,10 +1115,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
@@ -1168,10 +1224,17 @@
                     <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-1 f-3 c-dark">Copy link</span>
                   </button>
-                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
-                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-1 f-3 c-dark">Share</span>
-                  </button>
+                  <div ngbDropdown class="material-action">
+                    <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
+                      <i class="bgc-dark i-icon i-share mr-2"></i>
+                      <span class="button-label">Share</span>
+                    </a>
+                    <div ngbDropdownMenu>
+                      <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                     [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                     [autoSetMeta]="false"></share-buttons>
+                    </div>
+                  </div>
                   <div class="custom-control custom-switch p-0">
                     <label class="custom-toggle mb-0" placement="top">
                       <input type="checkbox">
