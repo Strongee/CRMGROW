@@ -1,11 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { OverlayService } from 'src/app/services/overlay.service';
 import { ToastrService } from 'ngx-toastr';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
 import { CalendarDeclineComponent } from '../calendar-decline/calendar-decline.component';
@@ -16,6 +13,7 @@ import { CalendarDeclineComponent } from '../calendar-decline/calendar-decline.c
   styleUrls: ['./calendar-event.component.scss']
 })
 export class CalendarEventComponent implements OnInit {
+  @Input('event') viewEvent;
   event = {
     title: '',
     start: '',
@@ -38,14 +36,13 @@ export class CalendarEventComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<CalendarEventComponent>,
     private appointmentService: AppointmentService,
-    private toast: ToastrService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private overlayService: OverlayService,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.event = this.data.event;
+    this.event = this.viewEvent;
   }
 
   update(): void {
@@ -55,7 +52,7 @@ export class CalendarEventComponent implements OnInit {
       maxWidth: '600px',
       disableClose: true,
       data: {
-        event: this.data.event
+        event: this.viewEvent
       }
     });
   }
@@ -85,17 +82,16 @@ export class CalendarEventComponent implements OnInit {
                 (res) => {
                   if (res['status'] == true) {
                     const data = {
-                      id: this.event.meta.recurrence_id
+                      recurrence_id: this.event.meta.recurrence_id
                     };
                     this.toast.success('Event is removed successfully');
-                    this.dialogRef.close(data);
+                    this.overlayService.close(data);
                   }
                 },
                 (err) => {
-                  this.dialogRef.close();
+                  this.overlayService.close(null);
                 }
               );
-          } else {
           }
         });
     } else {
@@ -113,11 +109,11 @@ export class CalendarEventComponent implements OnInit {
                 id: this.event.meta.event_id
               };
               this.toast.success('Event is removed successfully');
-              this.dialogRef.close(data);
+              this.overlayService.close(data);
             }
           },
           (err) => {
-            this.dialogRef.close();
+            this.overlayService.close(null);
           }
         );
     }

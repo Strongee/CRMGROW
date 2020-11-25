@@ -1,15 +1,6 @@
 <form
   #eventForm="ngForm"
-  (ngSubmit)="
-    submitted = true;
-    changeMode == 'update'
-      ? eventForm.form.valid
-        ? update()
-        : false
-      : eventForm.form.valid
-      ? create()
-      : false
-  "
+  (ngSubmit)="submitted = true; eventForm.form.valid ? create() : false"
 >
   <div class="overlay-header">
     <div class="form-group mx-2">
@@ -107,8 +98,8 @@
       <div class="col-12">
         <div class="form-group">
           <label class="calendar-label">ASSIGN GUESTS</label>
-          <app-calendar-contacts [selectedContacts]="contacts">
-          </app-calendar-contacts>
+          <app-input-contacts [selectedContacts]="contacts">
+          </app-input-contacts>
         </div>
       </div>
     </div>
@@ -174,7 +165,6 @@
             id="customControlInline"
             [checked]="isRepeat"
             (change)="setRepeatEvent()"
-            [disabled]="changeMode == 'update'"
           />
           <label
             class="custom-control-label f-3 font-weight-bold pt-1"
@@ -201,31 +191,22 @@
       </div>
     </div>
   </div>
-  <div class="overlay-footer" align="end">
+  <div class="overlay-footer py-3" align="end">
     <div class="row mx-0">
       <div class="col-12">
         <button
           type="button"
           (click)="overlayClose()"
-          class="btn btn-white py-2 f-6 font-weight-bold"
+          class="btn btn-white mr-2 py-2 f-6 font-weight-bold"
         >
           Cancel
         </button>
         <button
           type="submit"
-          class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
-          *ngIf="changeMode == 'create'"
+          class="btn btn-blue text-white br-default mr-2 py-2 f-6 font-weight-bold"
           [class.loading]="isLoading"
         >
           Create
-        </button>
-        <button
-          type="submit"
-          class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
-          *ngIf="changeMode == 'update'"
-          [class.loading]="isLoading"
-        >
-          Update
         </button>
       </div>
     </div>

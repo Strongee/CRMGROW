@@ -1,15 +1,6 @@
 <form
   #eventForm="ngForm"
-  (ngSubmit)="
-    submitted = true;
-    changeMode == 'update'
-      ? eventForm.form.valid
-        ? update()
-        : false
-      : eventForm.form.valid
-      ? create()
-      : false
-  "
+  (ngSubmit)="submitted = true; eventForm.form.valid ? update() : false"
 >
   <div mat-dialog-content>
     <div class="form-group mx-2">
@@ -174,7 +165,7 @@
             id="customControlInline"
             [checked]="isRepeat"
             (change)="setRepeatEvent()"
-            [disabled]="changeMode == 'update'"
+            disabled
           />
           <label
             class="custom-control-label f-3 font-weight-bold pt-1"
@@ -214,15 +205,6 @@
         <button
           type="submit"
           class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
-          *ngIf="changeMode == 'create'"
-          [class.loading]="isLoading"
-        >
-          Create
-        </button>
-        <button
-          type="submit"
-          class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
-          *ngIf="changeMode == 'update'"
           [class.loading]="isLoading"
         >
           Update

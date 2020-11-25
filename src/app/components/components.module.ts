@@ -197,6 +197,7 @@ import { TaskTypeComponent } from './task-type/task-type.component';
     VideoEditComponent,
     PdfEditComponent,
     ImageEditComponent,
+    CalendarEventComponent,
     AdvancedFilterComponent,
     ManageLabelComponent,
     TaskFilterComponent

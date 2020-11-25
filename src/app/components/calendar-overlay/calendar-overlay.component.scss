@@ -1,9 +1,15 @@
 form {
     width: 100%;
     max-width: 550px;
+    height: 550px;
+    overflow: hidden;
     padding: 2.25rem;
     background: white;
     box-shadow: -8px 0 24px -5px rgba(16,19,54,0.24);
+    .overlay-header {
+        height: 420px;
+        overflow: auto;
+    }
 }
 .form-group {
     .form-control {
