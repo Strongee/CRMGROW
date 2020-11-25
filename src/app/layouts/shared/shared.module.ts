@@ -16,6 +16,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgPipesModule } from 'ngx-pipes';
@@ -34,6 +36,8 @@ import {
 import { LoadingOverlayComponent } from '../../elements/loading-overlay/loading-overlay.component';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { PhonePipe } from '../../pipes/phone.pipe';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { ColorSwatchesModule } from 'ngx-color/swatches';
 
 @NgModule({
   declarations: [LoadingOverlayComponent, DurationPipe, PhonePipe],
@@ -57,6 +61,9 @@ import { PhonePipe } from '../../pipes/phone.pipe';
     MatNativeDateModule,
     MatTableModule,
     MatCheckboxModule,
+    MatSidenavModule,
+    DragDropModule,
+    ColorSwatchesModule,
     NgxMatSelectSearchModule,
     NgPipesModule,
     GooglePlaceModule,
@@ -67,7 +74,8 @@ import { PhonePipe } from '../../pipes/phone.pipe';
     }),
     FileUploadModule,
     NgxPaginationModule,
-    TimeagoModule.forRoot()
+    TimeagoModule.forRoot(),
+    OverlayModule
   ],
   exports: [
     FormsModule,
@@ -87,7 +95,10 @@ import { PhonePipe } from '../../pipes/phone.pipe';
     MatNativeDateModule,
     MatTabsModule,
     MatTableModule,
+    MatSidenavModule,
     MatCheckboxModule,
+    DragDropModule,
+    ColorSwatchesModule,
     NgxMatSelectSearchModule,
     GooglePlaceModule,
     NgPipesModule,
@@ -98,7 +109,8 @@ import { PhonePipe } from '../../pipes/phone.pipe';
     TimeagoModule,
     LoadingOverlayComponent,
     DurationPipe,
-    PhonePipe
+    PhonePipe,
+    OverlayModule
   ]
 })
 export class SharedModule {}

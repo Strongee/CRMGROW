@@ -2,12 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Team } from '../models/team.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
-import { StoreService } from './store.service';
 import { Label } from '../models/label.model';
-import {LABEL, TEAM, VIDEO} from '../constants/api.constant';
+import { LABEL } from '../constants/api.constant';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +14,11 @@ import {LABEL, TEAM, VIDEO} from '../constants/api.constant';
 export class LabelService extends HttpService {
   labels: BehaviorSubject<Label[]> = new BehaviorSubject([]);
   labels$ = this.labels.asObservable();
+
+  //Subscribe to open Manage Label Panel
+  manageLabel: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  manageLabel$ = this.manageLabel.asObservable();
+
   constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
   }
@@ -43,10 +47,20 @@ export class LabelService extends HttpService {
       catchError(this.handleError('UPDATE LABEL', []))
     );
   }
-  deleteLabel(id): Observable<Label[]> {
+  deleteLabel(id: string): Observable<Label[]> {
     return this.httpClient.delete(this.server + LABEL.DELETE + id).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('DELETE LABEL', []))
     );
+  }
+  /**
+   * Change the Order of the labels
+   * @param prevIndex : Prev Index of the Priority
+   * @param currentIndex : Current Index of the Priority
+   */
+  changeOrder(prevIndex: number, currentIndex: number): void {
+    const labelList = this.labels.getValue();
+    moveItemInArray(labelList, prevIndex, currentIndex);
+    this.labels.next(labelList);
   }
 }

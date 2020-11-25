@@ -1,0 +1,65 @@
+<div class="v-center justify-content-between">
+    <h1 mat-dialog-title>
+        Edit your video
+    </h1>
+    <button class="v-center border-0 bgc-trans" mat-dialog-close>
+        <i class="d-block i-icon i-close bgc-dark"></i>
+    </button>
+</div>
+<form #videoForm="ngForm" (ngSubmit)="submitted = true; videoForm.form.valid ? update() : false" [class.was-validateed]="submitted">
+    <mat-dialog-content>
+        <div class="row mx-0">
+            <div class="col-12 mb-2 rounded bgc-pale px-0">
+                <div class="thumbnail-wrapper">
+                <img class="thumbnail" src="{{video.thumbnail}}" />
+                <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog()"><i class="d-block i-icon i-edit bgc-white"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-0">
+            <div class="col-12 px-0">
+                <div class="form-group">
+                <input class="form-control" 
+                    type="text" 
+                    placeholder="Video Title" 
+                    name="title" 
+                    #title="ngModel" 
+                    [(ngModel)]="video.title" 
+                    required>
+                <span class="invalid-feedback" *ngIf="title.errors && ( title.touched || title.dirty || submitted ) && submitted">
+                    Video title is required
+                </span>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-0">
+            <div class="col-12 px-0">
+                <div class="form-group">
+                <quill-editor
+                    image-resize="true"
+                    placeholder="Video Description"
+                    [(ngModel)]="video.description"
+                    [modules]="config"
+                    name="mailContent"
+                    [styles]="{ height: '150px' }"
+                    #mailContent="ngModel"
+                    (onEditorCreated)="getEditorInstance($event)"
+                    (click)="setFocusField('content-email')"
+                    class="rounded"
+                    [class.has-error]="
+                    mailContent.errors &&
+                    (mailContent.touched || mailContent.dirty || submitted) &&
+                    submitted
+                    "
+                    #emailEditor
+                >
+                </quill-editor>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button class="btn btn-white f-6 font-weight-bold mr-2" mat-dialog-close>Cancel</button>
+        <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving" [disabled]="thumbnailLoading">Update</button>
+    </mat-dialog-actions>
+</form>

@@ -11,7 +11,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CampaignAddListComponent } from '../../components/campaign-add-list/campaign-add-list.component';
 import { ActionItem } from '../../utils/data.types';
-import { AdvancedFilterDemoComponent } from '../../components/advanced-filter-demo/advanced-filter-demo.component';
 import { ManageLabelComponent } from '../../components/manage-label/manage-label.component';
 import { MailListService } from '../../services/maillist.service';
 
@@ -93,34 +92,6 @@ export class CampaignListComponent implements OnInit {
           this.lists.push(res.data);
         }
       });
-
-    // this.dialog
-    //   .open(AdvancedFilterDemoComponent, {
-    //     width: '96vw',
-    //     maxWidth: '550px',
-    //     height: 'auto',
-    //     disableClose: true
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //
-    //     }
-    //   });
-
-    // this.dialog
-    //   .open(ManageLabelComponent, {
-    //     width: '96vw',
-    //     maxWidth: '550px',
-    //     height: 'auto',
-    //     disableClose: true
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //
-    //     }
-    //   });
   }
 
   editList(list): void {}

@@ -8,14 +8,14 @@ import { TabOption } from 'src/app/utils/data.types';
 })
 export class TabOptionComponent implements OnInit {
   @Input('options') options: TabOption[] = [];
-  @Input('selected') selected = ''; //corresponds to value of TabOption
-  @Output('onChange') onChange = new EventEmitter();
+  @Input() value = ''; //corresponds to value of TabOption
+  @Output() valueChange = new EventEmitter<TabOption>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
   changeOption(option: TabOption): void {
-    this.onChange.emit(option.value);
+    this.valueChange.emit(option);
   }
 }

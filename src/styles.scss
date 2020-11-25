@@ -18,7 +18,9 @@ $custom-checkbox-indicator-border-radius: 3px;
 @import "src/assets/scss/custom-mat-dialog";
 @import "src/assets/scss/custom-mat-calendar";
 @import "src/assets/scss/custom-mat-table";
+@import "src/assets/scss/custom-mat-drawer";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import '~@angular/cdk/overlay-prebuilt.css';
 
 /* Material Theme Basic Setting  */
 html, body { height: 100%; }
@@ -596,7 +598,7 @@ button {
   label {
     font-size: 11px;
     color: $color-dark;
-    opacity: 0.4;
+    opacity: 0.75;
     font-weight: 600;
     text-transform: uppercase;
   }
@@ -947,7 +949,6 @@ table {
   thead th {
     font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
     border-top: none;
     border-bottom: 2px solid #e9ecef;
     color: #101336;
@@ -1389,3 +1390,33 @@ ul.ngx-pagination .current {
   }
 }
 
+
+
+/** ===== Color Swatches ==== */
+body {
+  .swatches-overflow {
+    padding: 0px!important;
+
+    .swatches-group {
+      width: 20px!important;
+      margin-right: 0px!important;
+      padding-bottom: 0px!important;
+    
+      .swatch {
+        width: 19px !important;
+        height: 19px!important;
+        margin-bottom: 0px!important;
+        border-radius: 0px!important;
+
+        .swatch-check {
+          margin-left: 0px!important;
+
+          svg {
+            width: 19px!important;
+            height: 19px!important;
+          }
+        }
+      }
+    }
+  }
+}

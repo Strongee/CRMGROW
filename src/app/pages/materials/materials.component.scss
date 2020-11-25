@@ -4,6 +4,13 @@
     padding: 10px;
 }
 
+.dropdown-menu {
+    &.show {
+        top: 0px !important;
+        left: -140px !important;
+    }
+}
+
 .actions-groups {
     &.show {
         .button-add {
@@ -32,21 +39,29 @@
     margin-top: 10px;
     border-radius: 5px;
     padding: 0px 0px;
-    overflow: hidden;
 }
 
-table.table th {
-    position: sticky;
-    top: 0px;
-    background-color: white;
-    z-index: 11;
-}
-
-th, td {
-    vertical-align: middle !important;
-    background-color: white;
-    &.checkbox-col {
-        opacity: 1;
+table {
+    th {
+        position: sticky;
+        top: 0px;
+        background-color: white;
+        z-index: 11;
+    }    
+    th, td {
+        vertical-align: middle !important;
+        background-color: white;
+        &.checkbox-col {
+            opacity: 1;
+        }
+    }
+    tr {
+        &.section-header {
+            td {
+                background-color: #f3f3f3 !important;
+                height: 50px;
+            }
+        }
     }
 }
 .checkbox-col {

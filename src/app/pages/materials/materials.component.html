@@ -174,7 +174,228 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let video of videos">
+            <tr class="section-header">
+              <td colspan="7" class="f-3 font-weight-bold">
+                Common Videos
+              </td>
+            </tr>
+            <tr *ngFor="let video of adminVideos">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="video-{{video._id}}" 
+                    (change)="selectedVideoLists.toggle(video._id)"
+                    [checked]="selectedVideoLists.isSelected(video._id)"
+                  >
+                  <label class="custom-control-label" for="video-{{video._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}&user={{user_id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                  </div>
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                  </div>
+                </a>
+                <h5 class="f-3 font-weight-bold c-dark m-0">{{video.title}}</h5>
+                <span class="f-1 c-dark">{{(video.description || '') | stripTags | shorten: 120: '...'}}</span>
+                <div class="f-3 c-dark view-field">
+                  {{video.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-3 c-dark py-2">
+                  {{video.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-3 c-dark">
+                <div class="v-centerf-3 c-dark py-2">
+                  {{video.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(video._id, 'video')"
+                      [checked]="captureVideos.indexOf(video._id)!==-1"
+                      id="capture-{{video._id}}"
+                    >
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(video, 'video')">
+                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editVideo(video)">
+                        <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(video._id)">
+                        <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
+                        <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(video, 'video')">
+                        <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="section-header own-section" *ngIf="ownVideos.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                My own Videos
+              </td>
+            </tr>
+            <tr *ngFor="let video of ownVideos">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="video-{{video._id}}" 
+                    (change)="selectedVideoLists.toggle(video._id)"
+                    [checked]="selectedVideoLists.isSelected(video._id)"
+                  >
+                  <label class="custom-control-label" for="video-{{video._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}&user={{user_id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                  </div>
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                  <div class="thumb-prev-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                  </div>
+                </a>
+                <h5 class="f-3 font-weight-bold c-dark m-0">{{video.title}}</h5>
+                <span class="f-1 c-dark">{{(video.description || '') | stripTags | shorten: 120: '...'}}</span>
+                <div class="f-3 c-dark view-field">
+                  {{video.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-3 c-dark py-2">
+                  {{video.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-3 c-dark">
+                <div class="v-centerf-3 c-dark py-2">
+                  {{video.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(video._id, 'video')"
+                      [checked]="captureVideos.indexOf(video._id)!==-1"
+                      id="capture-{{video._id}}"
+                    >
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(video, 'video')">
+                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editVideo(video)">
+                        <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(video._id)">
+                        <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
+                        <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(video, 'video')">
+                        <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="section-header own-section" *ngIf="teamVideos.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                Team Videos
+              </td>
+            </tr>
+            <tr *ngFor="let video of teamVideos">
               <td class="checkbox-col">
                 <div class="custom-control custom-checkbox">
                   <input
@@ -256,7 +477,7 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editVideo(video)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -264,11 +485,11 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial()">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>
@@ -325,7 +546,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let pdf of pdfs">
+            <tr class="section-header" *ngIf="adminPdfs.length || editedPdfs.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                Common PDFs
+              </td>
+            </tr>
+            <tr *ngFor="let pdf of adminPdfs">
               <td class="checkbox-col">
                 <div class="custom-control custom-checkbox">
                   <input
@@ -400,20 +626,224 @@
                     <a class="d-flex c-pointer" ngbDropdownToggle>
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
-                    <div ngbDropdownMenu class="p-3">
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded">
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editPdf(pdf)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(pdf._id)">
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center bgc-white border-0 py-2 w-100 mb-1 rounded">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(pdf, 'pdf')">
+                        <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="section-header own-section" *ngIf="ownPdfs.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                My Own PDFs
+              </td>
+            </tr>
+            <tr *ngFor="let pdf of ownPdfs">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="pdf-{{pdf._id}}"
+                    (change)="selectedPdfLists.toggle(pdf._id)"
+                    [checked]="selectedPdfLists.isSelected(pdf._id)"
+                  >
+                  <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}&user={{user_id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-3 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
+                <span class="f-1 c-dark">{{(pdf.description || '') | stripTags | shorten: 120: '...'}}</span>
+                <div class="f-3 c-dark view-field">
+                  {{pdf.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-3 c-dark py-2">
+                  {{pdf.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-3 c-dark">
+                <div class="v-centerf-3 c-dark py-2">
+                  {{pdf.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(pdf._id, 'pdf')"
+                      [checked]="capturePdfs.indexOf(pdf._id)!==-1"
+                      id="capture-{{pdf._id}}"
+                    >
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editPdf(pdf)">
+                        <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(pdf._id)">
+                        <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
+                        <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(pdf, 'pdf')">
+                        <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="section-header own-section" *ngIf="teamPdfs.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                Team PDFs
+              </td>
+            </tr>
+            <tr *ngFor="let pdf of teamPdfs">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="pdf-{{pdf._id}}"
+                    (change)="selectedPdfLists.toggle(pdf._id)"
+                    [checked]="selectedPdfLists.isSelected(pdf._id)"
+                  >
+                  <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}&user={{user_id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
+                  <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-3 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
+                <span class="f-1 c-dark">{{(pdf.description || '') | stripTags | shorten: 120: '...'}}</span>
+                <div class="f-3 c-dark view-field">
+                  {{pdf.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-3 c-dark py-2">
+                  {{pdf.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-3 c-dark">
+                <div class="v-centerf-3 c-dark py-2">
+                  {{pdf.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(pdf._id, 'pdf')"
+                      [checked]="capturePdfs.indexOf(pdf._id)!==-1"
+                      id="capture-{{pdf._id}}"
+                    >
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editPdf(pdf)">
+                        <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(pdf._id)">
+                        <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
+                        <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(pdf, 'pdf')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 c-dark font-weight-bold">Delete</span>
                       </button>
@@ -453,7 +883,6 @@
                 <span class="f-1">NAME</span>
               </th>
               <th class="name-col border-top-0">
-
               </th>
               <th class="view-col border-top-0 text-right">
                 <span class="f-1">VIEWS</span>
@@ -465,12 +894,16 @@
                 <span class="f-1">LEAD CAPTURE</span>
               </th>
               <th class="actions-col border-top-0">
-
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let image of images">
+            <tr class="section-header" *ngIf="adminImages.length || editedImages.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                Common Images
+              </td>
+            </tr>
+            <tr *ngFor="let image of adminImages">
               <td class="checkbox-col">
                 <div class="custom-control custom-checkbox">
                   <input
@@ -546,19 +979,223 @@
                       <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editImage(image)">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(image._id)">
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(image, 'image')">
+                        <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="section-header own-section" *ngIf="ownImages.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                My Own Images
+              </td>
+            </tr>
+            <tr *ngFor="let image of ownImages">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="image-{{image._id}}"
+                    (change)="selectedImageLists.toggle(image._id)"
+                    [checked]="selectedImageLists.isSelected(image._id)"
+                  >
+                  <label class="custom-control-label" for="image-{{image._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}&user={{user_id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-3 font-weight-bold c-dark m-0">{{image.title}}</h5>
+                <span class="f-1 c-dark">{{(image.description || '') | stripTags | shorten: 120: '...'}}</span>
+                <div class="f-3 c-dark view-field">
+                  {{image.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-3 c-dark py-2">
+                  {{image.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-3 c-dark">
+                <div class="v-centerf-3 c-dark py-2">
+                  {{image.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(image._id, 'image')"
+                      [checked]="captureImages.indexOf(image._id)!==-1"
+                      id="capture-{{image._id}}"
+                    >
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editImage(image)">
+                        <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(image._id)">
+                        <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
+                        <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(image, 'image')">
+                        <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="section-header own-section" *ngIf="teamImages.length">
+              <td colspan="7" class="f-3 font-weight-bold">
+                Team Images
+              </td>
+            </tr>
+            <tr *ngFor="let image of teamImages">
+              <td class="checkbox-col">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="image-{{image._id}}"
+                    (change)="selectedImageLists.toggle(image._id)"
+                    [checked]="selectedImageLists.isSelected(image._id)"
+                  >
+                  <label class="custom-control-label" for="image-{{image._id}}"></label>
+                </div>
+              </td>
+              <td class="thumbnail-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}&user={{user_id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+              </td>
+              <td class="name-col">
+                <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
+                  <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                </a>
+                <h5 class="f-3 font-weight-bold c-dark m-0">{{image.title}}</h5>
+                <span class="f-1 c-dark">{{(image.description || '') | stripTags | shorten: 120: '...'}}</span>
+                <div class="f-3 c-dark view-field">
+                  {{image.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="view-col">
+                <div class="v-center justify-content-end f-3 c-dark py-2">
+                  {{image.views}} <i class="i-icon i-notification bgc-dark ml-1" aria-hidden="true"></i>
+                </div>
+              </td>
+              <td class="time-col f-3 c-dark">
+                <div class="v-centerf-3 c-dark py-2">
+                  {{image.created_at | date : 'mediumDate'}}
+                </div>
+              </td>
+              <td class="capture-col text-right">
+                <div class="v-center custom-control custom-switch">
+                  <label class="custom-toggle mb-0" placement="top">
+                    <input
+                      type="checkbox"
+                      (change)="setCapture(image._id, 'image')"
+                      [checked]="captureImages.indexOf(image._id)!==-1"
+                      id="capture-{{image._id}}"
+                    >
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="actions-col">
+                <div class="v-center justify-content-between actions-wrapper">
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Send</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Copy link</span>
+                  </button>
+                  <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-1 f-3 c-dark">Share</span>
+                  </button>
+                  <div class="custom-control custom-switch p-0">
+                    <label class="custom-toggle mb-0" placement="top">
+                      <input type="checkbox">
+                      <span class="custom-toggle-slider rounded-circle"></span>
+                    </label>
+                  </div>
+                  <div ngbDropdown class="button-more p-2 rounded">
+                    <a class="d-flex c-pointer" ngbDropdownToggle>
+                      <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+                    </a>
+                    <div ngbDropdownMenu class="light">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editImage(image)">
+                        <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(image._id)">
+                        <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Edit template</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
+                        <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(image, 'image')">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>

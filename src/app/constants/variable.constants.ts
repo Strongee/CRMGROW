@@ -439,6 +439,17 @@ export const QuillEditor = {
   imageResize: true
 };
 
+export const COLORS = [
+  ['#f6c5be', '#ef9f93', '#e66550', '#cc3a21', '#ac2c17', '#822212'],
+  ['#fee6c7', '#fdd6a2', '#fcbc6c', '#eaa040', '#cf8933', '#a46a20'],
+  ['#fef1d1', '#fce8b3', '#fcda83', '#f2c960', '#d5ae4a', '#aa8832'],
+  ['#b9e4d0', '#89d3b2', '#44b984', '#279e60', '#1e804b', '#156239'],
+  ['#c6f3de', '#a0eac9', '#68dfa9', '#3dc789', '#2a9c68', '#1b764d'],
+  ['#c9daf8', '#a4c2f4', '#6d9eeb', '#3d78d8', '#275bac', '#1c4587'],
+  ['#e4d7f5', '#d0bcf1', '#b694e8', '#8e63cd', '#653d9b', '#41236d'],
+  ['#fcdee8', '#fbc8d8', '#f7a7c0', '#e07798', '#b65775', '#83334c']
+];
+
 export const DialogSettings = {
   CONTACT: {
     width: '98vw',
@@ -468,6 +479,11 @@ export const DialogSettings = {
   ASSISTANT: {
     width: '98vw',
     maxWidth: '394px'
+  },
+  UPLOAD: {
+    width: '98vw',
+    maxWidth: '780px',
+    disableClose: true
   }
 };
 
@@ -681,3 +697,8 @@ export const Labels = [
 ];
 
 export const TeamLabel = '5f16d58d0af09220208b6e0b';
+export const TaskStatus = {
+  ALL: 'all',
+  TODO: 'to_do',
+  COMPLETED: 'completed'
+};
