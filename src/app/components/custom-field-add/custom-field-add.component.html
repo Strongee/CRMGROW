@@ -95,6 +95,9 @@
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <a class="btn btn-white f-6 font-weight-bold c-blue mr-2" (click)="close()">Cancel</a>
-        <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Add</button>
+        <button *ngIf="customFieldType == 'create'; else updateButton" class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Add</button>
+        <ng-template #updateButton>
+            <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Update</button>
+        </ng-template>
     </mat-dialog-actions>
 </form>

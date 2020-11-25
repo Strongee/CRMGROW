@@ -25,19 +25,17 @@ export class CustomFieldAddComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
+      console.log('##', this.data);
       this.customFieldType = 'update';
-      this.fieldName = this.data.field.field_name;
+      this.fieldName = this.data.field.name;
       if (this.data.field.placeholder) {
         this.suggestion = this.data.field.placeholder;
         this.typeOption = 'text';
       }
-      if (this.data.field.options) {
+      if (this.data.field.options.length > 0) {
         this.options = this.data.field.options;
         this.typeOption = 'dropdown';
       }
-      this.customFieldType = 'update';
-      this.fieldName = this.data.field.field_name;
-      this.suggestion = this.data.field.placeholder;
     } else {
       this.customFieldType = 'create';
     }
