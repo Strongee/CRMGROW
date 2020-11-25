@@ -34,10 +34,16 @@
     }
   }
 
+  @media screen and (max-width: 992px) {
+    .mat-drawer-container .mat-drawer-backdrop {
+      left: 65px;
+    }
+  }
+
   @media screen and (max-width: 680px) {
-    
     .mat-drawer-container .mat-drawer-backdrop {
       top: 101px;
+      left: 0px;
     }
     
     &.has-topbar {

@@ -73,6 +73,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { AdvancedFilterComponent } from './advanced-filter/advanced-filter.component';
 import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { ContactBulkComponent } from './contact-bulk/contact-bulk.component';
+import { TaskTypeComponent } from './task-type/task-type.component';
 
 @NgModule({
   declarations: [
@@ -145,7 +146,8 @@ import { ContactBulkComponent } from './contact-bulk/contact-bulk.component';
     ManageLabelComponent,
     AdvancedFilterComponent,
     TaskFilterComponent,
-    ContactBulkComponent
+    ContactBulkComponent,
+    TaskTypeComponent
   ],
   imports: [
     CommonModule,
@@ -190,7 +192,8 @@ import { ContactBulkComponent } from './contact-bulk/contact-bulk.component';
     PdfEditComponent,
     ImageEditComponent,
     AdvancedFilterComponent,
-    ManageLabelComponent
+    ManageLabelComponent,
+    TaskFilterComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -1,1 +1,95 @@
-<p>task-filter works!</p>
+<div class="panel p-4c">
+  <div class="v-center mb-4">
+    <h4 class="font-weight-bold mb-0">Filters</h4>
+    <div class="c-blue f-1 text-uppercase ml-2 mt-2">Clear All Filters</div>
+
+  </div>
+  <form #form="ngForm" (ngSubmit)="form.form.valid ? applyFilters() : false">
+    <div class="form-group">
+      <label for="task-search">Global Search</label>
+      <input type="text" class="form-control" [(ngModel)]="search" placeholder="Type in string"
+        name="taskSearch" #taskSearch="ngModel" id="task-search" />
+    </div>
+    <div class="form-group">
+      <label>type of task</label>
+      <div>
+        <div class="task-types btn-group btn-group-toggle rounded">
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="checkbox" name="options" ngbButton [ngModel]="types.indexOf('task')!==-1" (ngModelChange)="toggleTypes('task')">
+            <i class="i-icon i-task d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="checkbox" name="options" ngbButton [ngModel]="types.indexOf('call')!==-1" (ngModelChange)="toggleTypes('call')">
+            <i class="i-icon i-phone d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="checkbox" name="options" ngbButton [ngModel]="types.indexOf('meeting')!==-1" (ngModelChange)="toggleTypes('meeting')">
+            <i class="i-icon i-lunch d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="checkbox" name="options" ngbButton [ngModel]="types.indexOf('email')!==-1" (ngModelChange)="toggleTypes('email')">
+            <i class="i-icon i-message d-block bgc-dark"></i>
+          </label>
+          <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+            <input type="checkbox" name="options" ngbButton [ngModel]="types.indexOf('material')!==-1" (ngModelChange)="toggleTypes('material')">
+            <i class="i-icon i-video d-block bgc-dark"></i>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>status of task</label>
+      <div>
+        <app-tab-option [options]="STATUS_OPTIONS" [(value)]="status"></app-tab-option>
+      </div>
+    </div>
+    <div class="d-flex mt-4">
+      <label class="f-1 op-75 mb-0">CONTACT STATUS</label>
+      <a class="f-1 c-blue ml-2">CLEAR</a>
+    </div>
+    <div class="labels-wrapper">
+      <div class="custom-checkbox label-item" *ngFor="let item of labelService.labels$ | async"
+        style="height: unset; line-height: unset;">
+        <input type="checkbox" class="custom-control-input" id="label-{{item._id}}" name="label-{{item._id}}"
+          (change)="selectedLabels.toggle(item._id)" [checked]="selectedLabels.isSelected(item._id)">
+        <label class="custom-control-label v-center" for="label-{{item._id}}">
+          <i class="i-icon i-label d-block mr-2"
+            [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>
+          <span class="f-3 fw-600">{{item.name}}</span>
+        </label>
+      </div>
+    </div>
+    <div class="form-group mt-3">
+      <label>TASK REGARDING CONTACT</label>
+      <app-select-contact></app-select-contact>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="form-group">
+          <label>date</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text bgc-blue border-0"><i class="bgc-white i-icon i-calendar"></i></span>
+            </div>
+            <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="startDate" ngbDatepicker
+              #start_date="ngbDatepicker" (click)="start_date.toggle()" [firstDayOfWeek]="7" type="text" />
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label>time</label>
+          <select class="form-control" name="start_time" #start_time="ngModel" [(ngModel)]="startTime">
+            <option *ngFor="let time of TIMES" [value]="time.id">
+              {{time.text}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex mt-4">
+      <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button">Cancel</button>
+      <button type="submit" class="btn btn-primary ml-2" [class.loading]="loading">Apply filters</button>
+    </div>
+  </form>
+</div>

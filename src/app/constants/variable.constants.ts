@@ -697,3 +697,8 @@ export const Labels = [
 ];
 
 export const TeamLabel = '5f16d58d0af09220208b6e0b';
+export const TaskStatus = {
+  ALL: 'all',
+  TODO: 'to_do',
+  COMPLETED: 'completed'
+};
