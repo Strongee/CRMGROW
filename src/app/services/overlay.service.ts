@@ -109,6 +109,24 @@ export class OverlayService {
         originY: 'bottom',
         overlayX: 'end',
         overlayY: 'top'
+      },
+      {
+        originX: 'center',
+        originY: 'top',
+        overlayX: 'center',
+        overlayY: 'bottom'
+      },
+      {
+        originX: 'start',
+        originY: 'top',
+        overlayX: 'start',
+        overlayY: 'bottom'
+      },
+      {
+        originX: 'end',
+        originY: 'top',
+        overlayX: 'end',
+        overlayY: 'bottom'
       }
     ];
   }

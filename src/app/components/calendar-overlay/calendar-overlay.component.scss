@@ -1,6 +1,8 @@
 form {
     width: 100%;
     max-width: 550px;
+    max-height: 550px;
+    overflow: auto;
     padding: 2.25rem;
     background: white;
     box-shadow: -8px 0 24px -5px rgba(16,19,54,0.24);
