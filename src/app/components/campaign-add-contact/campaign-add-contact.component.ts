@@ -13,6 +13,7 @@ import { ContactPageSize } from '../../constants/variable.constants';
 export class CampaignAddContactComponent implements OnInit {
   submitted = false;
   isLoading = false;
+  adding = false;
   searchedName = '';
   contacts = [];
   pageContacts = [];
@@ -322,12 +323,14 @@ export class CampaignAddContactComponent implements OnInit {
       return;
     }
     this.submitted = true;
+    this.adding = true;
     this.contactService
       .getContactsByIds(this.selectedContacts.selected)
       .subscribe(
         (res) => {
           const contacts = res;
           this.submitted = false;
+          this.adding = false;
           this.dialogRef.close({ contacts });
         },
         (err) => {

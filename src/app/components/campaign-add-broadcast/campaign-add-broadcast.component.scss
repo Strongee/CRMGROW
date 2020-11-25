@@ -72,6 +72,15 @@ p {
         border: none;
       }
 
+      .ngb-tp-minute {
+        .ngb-tp-chevron::before {
+          display: none;
+        }
+
+        .ngb-tp-chevron.bottom::before {
+          display: none;
+        }
+      }
       .ngb-tp-chevron::before {
         border-bottom: 12px solid #1301FF;
         border-left: 12px solid transparent;

@@ -21,7 +21,7 @@
         <a [routerLink]="['/teams']" class="c-dark mr-2">My Teams</a> / <span>{{team.name}}</span>
       </div>
       <div class="team-info-container form-group v-center justify-content-between mt-5">
-        <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 v-center">
+        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 v-center">
           <div class="owner">
             <label>Owner</label>
             <div class="v-center value">
@@ -76,7 +76,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
+        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
           <div class="tabs">
             <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
             </app-slide-tab>
@@ -326,7 +326,7 @@
                                   <span class="button-label">Share</span>
                                 </a>
                                 <div ngbDropdownMenu>
-                                  <share-buttons [theme]="'circle-dark'" [include]="['facebook', 'twitter', 'linkedin']"
+                                  <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
                                                  [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ video._id }}&user={{userId}}"
                                                  [autoSetMeta]="false"></share-buttons>
                                 </div>

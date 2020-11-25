@@ -19,9 +19,9 @@
             <label class="custom-control-label" for="selectcontacts"></label>
           </div>
         </th>
-        <th class="email">Email</th>
-        <th class="last-name">Last Name</th>
         <th class="first-name">First Name</th>
+        <th class="last-name">Last Name</th>
+        <th class="email">Email</th>
         <th class="phone">Phone No</th>
       </tr>
       </thead>
@@ -34,14 +34,14 @@
               <label class="custom-control-label" for="contact-{{contact._id}}"></label>
             </div>
           </td>
-          <td class="email">
-            <div class="c-blue f-4 font-weight-bold">{{contact.email}}</div>
+          <td class="first-name">
+            <div class="c-dark f-4">{{contact.first_name}}</div>
           </td>
           <td class="last-name">
             <div class="c-dark f-4">{{contact.last_name}}</div>
           </td>
-          <td class="first-name">
-            <div class="c-dark f-4">{{contact.first_name}}</div>
+          <td class="email">
+            <div class="c-blue f-4 font-weight-bold">{{contact.email}}</div>
           </td>
           <td class="phone">
             <div class="c-dark f-4">{{contact.cell_phone}}</div>

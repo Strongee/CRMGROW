@@ -44,4 +44,12 @@ export class MailListService extends HttpService {
         catchError(this.handleError('SEARCH MAILLIST', []))
       );
   }
+  addContacts(mail_list, contacts): Observable<any[]> {
+    return this.httpClient
+      .post(this.server + MAILLIST.ADD_CONTACTS, { mail_list, contacts })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('ADD CONTACTS', []))
+      );
+  }
 }

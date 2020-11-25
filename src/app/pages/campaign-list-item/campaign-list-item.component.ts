@@ -77,13 +77,14 @@ export class CampaignListItemComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           const contacts = res.contacts;
-          this.addUniqueContacts(contacts);
           if (contacts.length) {
-            const title = 'test list';
-            this.mailListService.createList(title, contacts).subscribe(
+            this.mailListService.addContacts(this.id, contacts).subscribe(
               (response) => {
-              },
-              (err) => {
+                if (response.length) {
+                  for (let i = 0; i < response.length; i++) {
+                    this.contacts.push(response[i]);
+                  }
+                }
               }
             );
           }

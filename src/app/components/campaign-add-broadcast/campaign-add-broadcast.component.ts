@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialAddComponent } from '../material-add/material-add.component';
+import {numPad} from "../../helper";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-campaign-add-broadcast',
@@ -10,7 +12,8 @@ import { MaterialAddComponent } from '../material-add/material-add.component';
 })
 export class CampaignAddBroadcastComponent implements OnInit {
   name = '';
-  selectedTemplate = { subject: '', content: '' };
+  selectedTemplate;
+  selectedMailList;
   date;
   time;
   datetime = '';
@@ -21,7 +24,10 @@ export class CampaignAddBroadcastComponent implements OnInit {
   selectedDateTime;
   materials = [];
 
-  constructor(private dialog: MatDialog) {
+  constructor(
+    private dialog: MatDialog,
+    private userService: UserService
+  ) {
     const current = new Date();
     this.minDate = {
       year: current.getFullYear(),
@@ -31,7 +37,7 @@ export class CampaignAddBroadcastComponent implements OnInit {
     this.date = this.minDate;
     this.time = {
       hour: current.getHours(),
-      minute: current.getMinutes()
+      minute: 0
     };
   }
 
@@ -47,6 +53,10 @@ export class CampaignAddBroadcastComponent implements OnInit {
 
   selectTemplate(event): void {
     this.selectedTemplate = event;
+  }
+
+  selectMailList(event): void {
+    this.selectedMailList = event;
   }
 
   toggle($event): void {
@@ -76,7 +86,7 @@ export class CampaignAddBroadcastComponent implements OnInit {
       ' ' +
       this.time.hour +
       ':' +
-      this.time.minute
+      '00'
     );
   }
 
@@ -108,5 +118,15 @@ export class CampaignAddBroadcastComponent implements OnInit {
         }
       });
   }
-  addBroadcast(): void {}
+  addBroadcast(): void {
+    this.userService.profile$.subscribe((res) => {
+      const timezone = res['time_zone'];
+      const dueDateTime = new Date(
+        `${this.date.year}-${numPad(this.date.month)}-${numPad(
+          this.date.day ? this.date.day : this.minDate.day
+        )}T${this.time.hour + ':00:00.000'}${timezone}`
+      ).toISOString();
+      console.log("broadcast data ========>", this.name, this.selectedMailList, this.selectedTemplate, this.time.hour, dueDateTime);
+    });
+  }
 }

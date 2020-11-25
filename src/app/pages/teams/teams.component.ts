@@ -554,7 +554,7 @@ export class TeamsComponent implements OnInit, AfterViewInit {
     this.dialog
       .open(TeamEditComponent, {
         width: '96vw',
-        maxWidth: '500px',
+        maxWidth: '600px',
         disableClose: true,
         data: {
           team
