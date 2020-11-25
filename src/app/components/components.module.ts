@@ -68,9 +68,14 @@ import { PdfEditComponent } from './pdf-edit/pdf-edit.component';
 import { ImageEditComponent } from './image-edit/image-edit.component';
 import { CallRequestScheduledComponent } from './call-request-scheduled/call-request-scheduled.component';
 import { CalendarOverlayComponent } from './calendar-overlay/calendar-overlay.component';
-import { AdvancedFilterDemoComponent } from './advanced-filter-demo/advanced-filter-demo.component';
 import { ManageLabelComponent } from './manage-label/manage-label.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { RecordSettingDialogComponent } from './record-setting-dialog/record-setting-dialog.component';
+import { TeamCreateComponent } from './team-create/team-create.component';
+import { AdvancedFilterComponent } from './advanced-filter/advanced-filter.component';
+import { TaskFilterComponent } from './task-filter/task-filter.component';
+import { ContactBulkComponent } from './contact-bulk/contact-bulk.component';
+import { TaskTypeComponent } from './task-type/task-type.component';
 
 @NgModule({
   declarations: [
@@ -139,9 +144,16 @@ import { ColorPickerModule } from 'ngx-color-picker';
     PdfEditComponent,
     ImageEditComponent,
     CallRequestScheduledComponent,
-    CalendarOverlayComponent,
     AdvancedFilterDemoComponent,
-    ManageLabelComponent
+    ManageLabelComponent,
+    RecordSettingDialogComponent,
+    TeamCreateComponent,
+    CalendarOverlayComponent,
+    ManageLabelComponent,
+    AdvancedFilterComponent,
+    TaskFilterComponent,
+    ContactBulkComponent,
+    TaskTypeComponent
   ],
   imports: [
     CommonModule,
@@ -185,7 +197,10 @@ import { ColorPickerModule } from 'ngx-color-picker';
     VideoEditComponent,
     PdfEditComponent,
     ImageEditComponent,
-    CalendarEventComponent
+    CalendarEventComponent,
+    AdvancedFilterComponent,
+    ManageLabelComponent,
+    TaskFilterComponent
   ],
   bootstrap: [
     ContactCreateComponent,

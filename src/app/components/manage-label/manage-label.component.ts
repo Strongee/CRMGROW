@@ -3,6 +3,9 @@ import { LabelService } from '../../services/label.service';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { create } from 'domain';
+import { COLORS } from 'src/app/constants/variable.constants';
+import { Label } from 'src/app/models/label.model';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-manage-label',
@@ -10,56 +13,17 @@ import { create } from 'domain';
   styleUrls: ['./manage-label.component.scss']
 })
 export class ManageLabelComponent implements OnInit {
-  submitted = false;
   loading = false;
   color;
-  editItem;
+  editItem: Label = new Label().deserialize({
+    color: '#000',
+    name: 'Default color'
+  });
   labelName = '';
-  focusedLabel;
-  labelsLength = 0;
-  labels = [];
+  labelsLength = 3;
   constructor(private dialog: MatDialog, public labelService: LabelService) {}
 
-  ngOnInit(): void {
-    this.editItem = {
-      color: '#000',
-      name: 'Default color'
-    };
-    this.getCustomLabelsLength();
-    this.getCustomLabels();
-  }
-
-  getCustomLabels(): any {
-    this.labelService.getLabels().subscribe(
-      async (res: any) => {
-        this.labels = res
-          .sort((a, b) => {
-            return a.priority - b.priority;
-          })
-          .filter((label) => label.role !== 'admin');
-      },
-      (err) => {
-        this.loading = false;
-      }
-    );
-  }
-
-  getCustomLabelsLength(): void {
-    this.labelService.getLabels().subscribe(
-      async (res: any) => {
-        this.labelsLength = res.filter(
-          (label) => label.role !== 'admin'
-        ).length;
-      },
-      (err) => {
-        this.loading = false;
-      }
-    );
-  }
-
-  setFocused(label): void {
-    this.focusedLabel = label;
-  }
+  ngOnInit(): void {}
 
   saveLabel(): void {
     console.log('edit label ==========>', this.editItem);
@@ -114,17 +78,24 @@ export class ManageLabelComponent implements OnInit {
       if (res) {
         this.labelService.deleteLabel(label._id).subscribe((response) => {
           let i;
-          for (i = label.priority / 100; i < this.labels.length; i++) {
-            const lb = this.labels[i];
-            const tmp = lb;
-            tmp['priority'] = lb.priority - 100;
-            this.labelService
-              .updateLabel(lb._id, tmp)
-              .subscribe((result) => {});
-          }
-          this.getCustomLabels();
+          // for (i = label.priority / 100; i < this.labels.length; i++) {
+          //   const lb = this.labels[i];
+          //   const tmp = lb;
+          //   tmp['priority'] = lb.priority - 100;
+          //   this.labelService
+          //     .updateLabel(lb._id, tmp)
+          //     .subscribe((result) => {});
+          // }
         });
       }
     });
   }
+
+  drop(event: CdkDragDrop<string[]>): void {
+    this.labelService.changeOrder(event.previousIndex, event.currentIndex);
+  }
+
+  handleChange(evt): void {}
+
+  COLORS = COLORS;
 }

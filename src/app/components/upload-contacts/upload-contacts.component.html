@@ -45,14 +45,14 @@
       <div class="f-3 font-weight-bold my-3">Map columns in your file to contact properties.</div>
       <table class="table">
         <thead>
-          <th class="matched">Matched</th>
+          <th class="matched pl-0">Matched</th>
           <th class="column-file">Column Header From File</th>
           <th class="preview">Preview Information</th>
           <th class="crmgrow-property">Crmgrow Property</th>
         </thead>
         <tbody>
           <tr *ngFor="let column of columns; let i = index">
-            <td class="matched">
+            <td class="matched pl-0">
               <div class="v-center" *ngIf="updateColumn[column]" >
                 <i class="i-icon i-round-check mr-2 round-check"></i>
               </div>
@@ -66,10 +66,12 @@
               </div>
             </td>
             <td class="crmgrow-property">
-              <select class="form-control" [(ngModel)]="updateColumn[column]">
-                <option value="">Select Property</option>
-                <option *ngFor="let field of fields" value="{{field.value}}">{{field.label}}</option>
-              </select>
+              <div class="form-group mb-0">
+                <select class="form-control" [(ngModel)]="updateColumn[column]">
+                  <option value="">Select Property</option>
+                  <option *ngFor="let field of fields" value="{{field.value}}">{{field.label}}</option>
+                </select>
+              </div>
             </td>
           </tr>
         </tbody>

@@ -3,8 +3,8 @@
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
     <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3" *ngIf="teams.length + invitedTeams.length && selectedTab.id === 'teams'">
-      <button class="btn btn-blue text-white f-3 py-2 fw-600 border-0" (click)="joinForm()">Join team</button>
-      <button class="v-center btn btn-blue text-white py-2 ml-2 shadow border-0" *ngIf="ownTeams.length == 0">
+      <button type="button" class="btn btn-blue text-white f-3 py-2 fw-600 border-0" (click)="joinForm()">Join team</button>
+      <button type="button" class="v-center btn btn-blue text-white py-2 ml-2 shadow border-0" *ngIf="ownTeams.length == 0" (click)="openForm()">
         <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
         <span class="fw-600 f-3">Create new team</span>
       </button>

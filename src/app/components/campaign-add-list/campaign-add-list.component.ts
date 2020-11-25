@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MailListService } from '../../services/maillist.service';
 
 @Component({
   selector: 'app-campaign-add-list',
@@ -9,17 +10,19 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class CampaignAddListComponent implements OnInit {
   listName = '';
   submitted = false;
-  isLoading = false;
-  constructor(private dialogRef: MatDialogRef<CampaignAddListComponent>) {}
+  creating = false;
+  constructor(
+    private dialogRef: MatDialogRef<CampaignAddListComponent>,
+    private mailListService: MailListService
+  ) {}
 
   ngOnInit(): void {}
 
   addList(): void {
-    this.submitted = true;
-    if (this.listName === '') {
-      return;
-    }
-
-    this.dialogRef.close({ name: this.listName });
+    this.creating = true;
+    this.mailListService.createList(this.listName, []).subscribe((res) => {
+      this.creating = false;
+      this.dialogRef.close({ data: res });
+    });
   }
 }

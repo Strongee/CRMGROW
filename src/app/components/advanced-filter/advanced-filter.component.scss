@@ -1,0 +1,26 @@
+.panel {
+  max-width: 480px;
+}
+
+.checkbox-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  .label-item {
+    margin: 0.75rem 2rem;
+  }
+
+  .material-action {
+    margin: 0.5rem 0.5rem 0.5rem 2rem;
+
+    .count {
+      width: 22px;
+      height: 22px;
+      padding: 2px 0px;
+    }
+
+    .list {
+      padding: 2px 6px;
+    }
+  }
+}

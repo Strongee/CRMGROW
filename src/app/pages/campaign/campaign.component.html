@@ -5,7 +5,7 @@
       <ul class="m-0 p-0">
         <ng-container *ngFor="let menuItem of menuItems" class="nav-item">
           <li>
-            <a class="d-flex nav-link c-dark c-pointer px-0" [ngClass]="{active: currentPage === menuItem.id}" (click)="changeMenu(menuItem)">
+            <a class="d-flex nav-link c-dark c-pointer px-0" [ngClass]="{active: currentPageType === menuItem.id}" (click)="changeMenu(menuItem)">
               <i class="i-icon bgc-dark {{menuItem.icon}} mr-2"></i>
               <span class="f-3 menu-label font-weight-bold">{{menuItem.label | translate}}</span>
             </a>

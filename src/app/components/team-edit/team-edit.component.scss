@@ -1,25 +1,49 @@
-.team-edit-form {
-  padding: 1rem 0.5rem;
+h4 {
+  margin: 0;
+}
+.dropdown-item {
+  width: auto;
+  padding: 0;
 
-  h4 {
-    margin: 0;
+  &:focus, &:hover {
+    color: #000000;
+    background-color: transparent;
   }
-  .dropdown-item {
-    width: auto;
-    padding: 0;
 
-    &:focus, &:hover {
-      color: #000000;
-      background-color: transparent;
-    }
-
-    .i-icon {
-      width: 24px;
-      height: 24px;
-    }
+  .i-icon {
+    width: 24px;
+    height: 24px;
   }
 }
 
 .f-22 {
   font-size: 22px;
+}
+
+.avatar-wrapper {
+  cursor: pointer;
+
+  .rectangle {
+    border-radius: 3px;
+  }
+
+  &.empty {
+    border: 1px dashed #101336;
+    opacity: 0.64;
+    padding: 30px 12px;
+    text-align: center;
+  }
+
+  .btn-icon {
+    bottom: -14px;
+    right: -14px;
+  }
+}
+
+.description {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  &:hover {
+    background-color: #ebebff;
+  }
 }

@@ -4,6 +4,10 @@
 <div class="page">
   <router-outlet></router-outlet>
   <div class="footer">
-
   </div>
+  <mat-drawer-container [hasBackdrop]="true">
+    <mat-drawer #drawer position="end">
+      <app-manage-label></app-manage-label>
+    </mat-drawer>
+  </mat-drawer-container>
 </div>

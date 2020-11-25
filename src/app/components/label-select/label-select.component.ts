@@ -47,4 +47,11 @@ export class LabelSelectComponent implements OnInit, AfterViewInit {
   focusField(): void {
     this.trigger.nativeElement.focus();
   }
+
+  /**
+   * Open Manage Label Panel
+   */
+  openManageLabel(): void {
+    this.labelService.manageLabel.next(true);
+  }
 }
