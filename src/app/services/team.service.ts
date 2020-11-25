@@ -279,22 +279,33 @@ export class TeamService extends HttpService {
   }
 
   shareTemplates(teamId, templateIds): Observable<any> {
-    return this.httpClient.post(this.server + TEAM.SHARE_TEMPLATES, {
-      team_id: teamId,
-      template_ids: templateIds
-    }).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('SHARE TEMPLATES', []))
-    );
+    return this.httpClient
+      .post(this.server + TEAM.SHARE_TEMPLATES, {
+        team_id: teamId,
+        template_ids: templateIds
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('SHARE TEMPLATES', []))
+      );
   }
 
   shareAutomations(teamId, automationIds): Observable<any> {
-    return this.httpClient.post(this.server + TEAM.SHARE_AUTOMATIONS, {
-      team_id: teamId,
-      automation_ids: automationIds
-    }).pipe(
+    return this.httpClient
+      .post(this.server + TEAM.SHARE_AUTOMATIONS, {
+        team_id: teamId,
+        automation_ids: automationIds
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('SHARE AUTOMATION', []))
+      );
+  }
+
+  create(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.CREATE, data).pipe(
       map((res) => res['data'] || []),
-      catchError(this.handleError('SHARE AUTOMATION', []))
+      catchError(this.handleError('CREATE TEAM', []))
     );
   }
 }

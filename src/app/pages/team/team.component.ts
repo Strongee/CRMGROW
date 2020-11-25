@@ -51,7 +51,8 @@ export class TeamComponent implements OnInit {
   shareUrl = 'https://www.crmgrow.com/';
   tabs: TabItem[] = [
     { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
-    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
+    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' },
+    { icon: 'i-icon i-deals', label: 'DEALS', id: 'deals' }
   ];
   selectedTab: TabItem = this.tabs[0];
   sharedTabs: TabItem[] = [

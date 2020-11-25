@@ -43,15 +43,20 @@
               <div class="f-3">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
             </td>
             <td class="actions">
-              <div class="v-center">
+              <div class="v-center justify-content-end">
                 <button type="button" class="btn btn-white f-3 font-weight-bold" (click)="assignAutomation($event, automation)">
                   Assign
                 </button>
-                <ng-container *ngIf="automation.role != 'admin' && automation.user == user_id">
+                <ng-container *ngIf="automation.role != 'admin' && automation.user == user_id; else noneEditable">
                   <div class="icon-button v-center justify-content-center ml-3" (click)="openAutomation($event, automation)">
                     <i class="i-icon bgc-black i-edit"></i>
                   </div>
                 </ng-container>
+                <ng-template #noneEditable>
+                  <div class="icon-button v-center justify-content-center ml-3">
+                    <i class="i-icon bgc-white i-edit"></i>
+                  </div>
+                </ng-template>
                 <div class="icon-button v-center justify-content-center ml-3">
                   <i class="i-icon bgc-black i-triangle-up"></i>
                 </div>

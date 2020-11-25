@@ -8,6 +8,7 @@ import {
   MatDialog
 } from '@angular/material/dialog';
 import { TeamDeleteComponent } from '../team-delete/team-delete.component';
+import {HelperService} from "../../services/helper.service";
 
 @Component({
   selector: 'app-team-edit',
@@ -20,11 +21,13 @@ export class TeamEditComponent implements OnInit {
   updateSubscription: Subscription;
   team;
   name = '';
+  picture = '';
   constructor(
     private teamService: TeamService,
     private toast: ToastrService,
     private dialogRef: MatDialogRef<TeamEditComponent>,
     private dialog: MatDialog,
+    private helperService: HelperService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.team) {
@@ -34,12 +37,14 @@ export class TeamEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.name = this.team.name;
+    this.picture = this.team.picture;
   }
 
   update(): void {
     const data = {
       ...this.team,
-      name: this.name
+      name: this.name,
+      picture: this.picture
     };
     this.updating = true;
     this.updateSubscription = this.teamService
@@ -64,5 +69,40 @@ export class TeamEditComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {});
+  }
+
+  closeAvatar(): void {
+    this.picture = '';
+  }
+
+  openAvatar(): void {
+    this.helperService
+      .promptForFiles('image/jpg, image/png, image/jpeg, image/webp, image/bmp')
+      .then((files) => {
+        const file: File = files[0];
+        const type = file.type;
+        const validTypes = [
+          'image/jpg',
+          'image/png',
+          'image/jpeg',
+          'image/webp',
+          'image/bmp'
+        ];
+        if (validTypes.indexOf(type) === -1) {
+          this.toast.warning('Unsupported File Selected.');
+          return;
+        }
+        this.helperService
+          .loadBase64(file)
+          .then((thumbnail) => {
+            this.picture = thumbnail;
+          })
+          .catch(() => {
+            this.toast.warning('Cannot load the image file.');
+          });
+      })
+      .catch((err) => {
+        this.toast.error('File Select', err);
+      });
   }
 }

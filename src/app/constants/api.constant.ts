@@ -19,7 +19,7 @@ export const USER = {
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
   LOAD_AFFILIATE: 'affiliate',
-  CREATE_AFFILIATE: '',
+  CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',
   UPDATE_GARBAGE: 'garbage'
 };
@@ -165,8 +165,14 @@ export const LABEL = {
 
 export const MAILLIST = {
   CREATE: 'mail-list',
-  GET: 'mail-list/'
+  GET: 'mail-list/',
+  ADD_CONTACTS: 'mail-list/add-contacts'
 };
+
+export const CAMPAIGN = {
+  CREATE: 'campaign'
+};
+
 export const SEND = {
   VIDEO_EMAIL: 'video/bulk-email',
   VIDEO_GMAIL: 'video/bulk-gmail',

@@ -240,4 +240,15 @@ export class HelperService {
       source.src = blob;
     });
   }
+
+  public loadBase64(file: Blob): Promise<any> {
+    let fileReader = new FileReader();
+    return new Promise<any>((resolve, reject) => {
+      fileReader.addEventListener('error', reject);
+      fileReader.addEventListener('load', () => {
+        resolve(fileReader.result);
+      });
+      fileReader.readAsDataURL(file);
+    });
+  }
 }
