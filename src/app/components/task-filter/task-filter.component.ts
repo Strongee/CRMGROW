@@ -21,7 +21,9 @@ export class TaskFilterComponent implements OnInit {
   types = [];
   status = this.STATUS_OPTIONS[1];
   selectedLabels = new SelectionModel<string>(true, []);
-  start_date;
+  startDate;
+  startTime;
+  loading = false;
 
   constructor(public labelService: LabelService) {}
 

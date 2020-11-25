@@ -144,7 +144,6 @@ import { TaskTypeComponent } from './task-type/task-type.component';
     PdfEditComponent,
     ImageEditComponent,
     CallRequestScheduledComponent,
-    AdvancedFilterDemoComponent,
     ManageLabelComponent,
     RecordSettingDialogComponent,
     TeamCreateComponent,
