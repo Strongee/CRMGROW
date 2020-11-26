@@ -118,6 +118,17 @@ export class CampaignAddContactComponent implements OnInit {
     }
     return retVal;
   }
+  getAvatarName(contact): any {
+    if (contact.first_name && contact.last_name) {
+      return contact.first_name[0] + contact.last_name[0];
+    } else if (contact.first_name && !contact.last_name) {
+      return contact.first_name[0];
+    } else if (!contact.first_name && contact.last_name) {
+      return contact.last_name[0];
+    }
+    return 'UC';
+  }
+
   selectAllContact(): void {
     if (this.isSearchedResult) {
       this.contacts.forEach((e) => {
@@ -187,6 +198,7 @@ export class CampaignAddContactComponent implements OnInit {
             return false;
           }
         }
+        return true;
       } else {
         return false;
       }
@@ -198,6 +210,7 @@ export class CampaignAddContactComponent implements OnInit {
             return false;
           }
         }
+        return true;
       } else {
         return false;
       }
@@ -330,6 +343,7 @@ export class CampaignAddContactComponent implements OnInit {
           const contacts = [];
           res.forEach((contact) => {
             const item = {
+              _id: contact._id,
               first_name: contact.first_name,
               last_name: contact.last_name,
               email: contact.email,

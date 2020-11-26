@@ -6,7 +6,7 @@ import { CampaignAddContactComponent } from '../../components/campaign-add-conta
 import { UploadContactsComponent } from '../../components/upload-contacts/upload-contacts.component';
 import { MailListService } from '../../services/maillist.service';
 import { ActivatedRoute } from '@angular/router';
-import {ActionItem} from "../../utils/data.types";
+import { ActionItem } from '../../utils/data.types';
 
 @Component({
   selector: 'app-campaign-list-item',
@@ -19,6 +19,8 @@ export class CampaignListItemComponent implements OnInit {
   selectedCSVColumn;
   selectedCSVColumnIndex;
 
+  isLoading = false;
+  isTableChanging = false;
   contacts: any[] = [];
   currentContactPage = 1;
   contactCount;
@@ -39,9 +41,16 @@ export class CampaignListItemComponent implements OnInit {
   }
 
   loadContacts(): void {
-    this.mailListService.get(this.id).subscribe((res) => {
-      this.contacts = res['contacts'];
-    });
+    this.isLoading = true;
+    this.mailListService.get(this.id).subscribe(
+      (res) => {
+        this.contacts = res['contacts'];
+        this.isLoading = false;
+      },
+      (error) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   selectAllPage(): void {
@@ -76,6 +85,7 @@ export class CampaignListItemComponent implements OnInit {
           return false;
         }
       }
+      return true;
     } else {
       return false;
     }
@@ -95,22 +105,22 @@ export class CampaignListItemComponent implements OnInit {
         if (res) {
           const contacts = res.contacts;
           if (contacts.length) {
-            this.mailListService.addContacts(this.id, contacts).subscribe(
-              (response) => {
+            this.mailListService
+              .addContacts(this.id, contacts)
+              .subscribe((response) => {
                 if (response.length) {
                   for (let i = 0; i < response.length; i++) {
                     this.contacts.push(response[i]);
                   }
                 }
-              }
-            );
+              });
           }
         }
       });
   }
 
   addUniqueContacts(contacts): void {
-    for( let i = 0; i < contacts.length; i++ ){
+    for (let i = 0; i < contacts.length; i++) {
       if (this.contacts.length) {
         const isExist = this.contacts.filter(
           (contact) => contact.email === contacts[i].email
@@ -154,18 +164,24 @@ export class CampaignListItemComponent implements OnInit {
           removeContacts.push(e);
         }
       });
-      this.mailListService
-        .removeContacts(this.id, removeContacts)
-        .subscribe((res) => {
-          if (res) {
-            removeContacts.forEach((contact) => {
-              const index = this.contacts.findIndex(
-                (item) => item._id === contact._id
-              );
-              this.contacts.splice(index, 1);
-            });
-          }
-        });
+
+      if (removeContacts) {
+        this.isTableChanging = true;
+        this.mailListService.removeContacts(this.id, removeContacts).subscribe((res) => {
+            if (res) {
+              removeContacts.forEach((contact) => {
+                const index = this.contacts.findIndex(
+                  (item) => item._id === contact._id
+                );
+                this.contacts.splice(index, 1);
+              });
+              this.isTableChanging = false;
+            }
+          },
+          (error) => {
+            this.isTableChanging = false;
+          });
+      }
     }
   }
 
