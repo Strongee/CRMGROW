@@ -13,21 +13,14 @@ import { Template } from 'src/app/models/template.model';
   styleUrls: ['./templates.component.scss']
 })
 export class TemplatesComponent implements OnInit {
-  isLoading = false;
-  templates = [];
-  loadSubscription: Subscription;
-  count = 0;
   page = 1;
   userId = '';
   emailDefault = '';
   smsDefault = '';
-  pageTemplateData: any[] = [];
-  currentTemplatePage: any = 1;
-  isTemplateTableLoading = false;
   isSetting = false;
-  garbage: any[] = [];
-  currentUser: any;
   deleting = false;
+  currentUser: any;
+
   constructor(
     public templatesService: TemplatesService,
     private userService: UserService,
@@ -45,76 +38,16 @@ export class TemplatesComponent implements OnInit {
     this.userService.profile$.subscribe((profile) => {
       this.userId = profile._id;
     });
-    this.templatesService.loadAll();
+    this.templatesService.loadAll(true);
   }
 
-  loadAllTemplates(): void {
-    // this.isLoading = true;
-    // this.templatesService.loadAll().subscribe(
-    //   (res) => {
-    //     this.isLoading = false;
-    //     const templates = res;
-    //     const templateIds = [];
-    //     templates.forEach((e) => {
-    //       if (templateIds.indexOf(e._id) !== -1) {
-    //         return;
-    //       }
-    //       templateIds.push(e._id);
-    //       this.templates.push(e);
-    //     });
-    //     this.templates.sort((a, b) => {
-    //       if (a.role === 'admin') {
-    //         return -1;
-    //       } else if (a.role === 'team' && a.user !== this.userId) {
-    //         return 1;
-    //       } else {
-    //         return 0;
-    //       }
-    //     });
-    //     this.count = this.templates.length;
-    //   },
-    //   (err) => {
-    //     this.isLoading = false;
-    //   }
-    // );
-  }
-
-  loadTemplatePage(page): void {
-    let skip = 0;
-    if (page) {
-      this.currentTemplatePage = page;
-      skip = (page - 1) * 10;
-    } else {
-      this.currentTemplatePage = 1;
-      skip = 0;
-    }
-
-    this.isTemplateTableLoading = true;
-    this.templatesService.getByPage(skip).subscribe(
-      (res) => {
-        this.isTemplateTableLoading = false;
-        this.templates = res;
-      },
-      (error) => {
-        this.isTemplateTableLoading = false;
-      }
-    );
-  }
-
-  setPageTemplate(page): void {
-    this.loadTemplatePage(page);
-    const start = (page - 1) * 10;
-    const end = page * 10;
-    this.pageTemplateData = this.pageTemplateData.slice(start, end);
-    this.currentTemplatePage = page;
-  }
-
-  setDefault(template): void {
+  setDefault(template: Template): void {
     const cannedMessage = {
       email: this.emailDefault,
       sms: this.smsDefault
     };
     if (template._id === this.emailDefault) {
+      // Disable the Default Email Template
       delete cannedMessage.email;
     } else if (template._id === this.smsDefault) {
       // Disable the Default Sms Template
@@ -128,27 +61,15 @@ export class TemplatesComponent implements OnInit {
     }
 
     this.isSetting = true;
-    this.templatesService
-      .setDefault({
-        canned_message: cannedMessage
-      })
-      .subscribe(
-        (res) => {
-          this.isSetting = false;
-          this.emailDefault = cannedMessage.email;
-          this.smsDefault = cannedMessage.sms;
-          if (
-            this.currentUser.garbage &&
-            this.currentUser.garbage.canned_message
-          ) {
-            this.currentUser.garbage.canned_message = cannedMessage;
-            this.userService.updateProfile(this.currentUser);
-          }
-        },
-        (err) => {
-          this.isSetting = false;
-        }
-      );
+    this.userService.updateGarbage({ canned_message: cannedMessage }).subscribe(
+      () => {
+        this.isSetting = false;
+        this.userService.updateGarbageImpl({ canned_message: cannedMessage });
+      },
+      () => {
+        this.isSetting = false;
+      }
+    );
   }
 
   openTemplate(template: Template): void {
@@ -165,21 +86,9 @@ export class TemplatesComponent implements OnInit {
     });
 
     dialog.afterClosed().subscribe((res) => {
+      console.log(res);
       if (res) {
-        this.deleting = true;
-        this.templatesService.delete(template._id).subscribe(
-          (delRes) => {
-            this.templates.some((e, index) => {
-              if (e._id === template._id) {
-                this.templates.splice(index, 1);
-                return true;
-              }
-            });
-          },
-          (err) => {
-            this.deleting = false;
-          }
-        );
+        this.templatesService.delete(template._id);
       }
     });
   }

@@ -7,6 +7,7 @@ import { STATUS } from '../constants/variable.constants';
 import { Template } from '../models/template.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +23,14 @@ export class TemplatesService extends HttpService {
 
   /**
    * LOAD ALL TEMPLATES
+   * @param force Flag to load force
    */
-  loadAll(): void {
-    const loadStatus = this.loadStatus.getValue();
-    if (loadStatus != STATUS.NONE) {
-      return;
+  loadAll(force = false): void {
+    if (!force) {
+      const loadStatus = this.loadStatus.getValue();
+      if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {
+        return;
+      }
     }
     this.loadStatus.next(STATUS.REQUEST);
     this.loadAllImpl().subscribe((templates) => {
@@ -62,18 +66,44 @@ export class TemplatesService extends HttpService {
     );
   }
 
-  delete(id): Observable<Template[]> {
+  delete(id: string): void {
+    this.deleteImpl(id).subscribe((status) => {
+      if (status === null) {
+        return;
+      }
+      if (!status) {
+        return;
+      }
+      const templates = this.templates.getValue();
+      _.remove(templates, (e) => {
+        return e._id === id;
+      });
+      this.templates.next(templates);
+    });
+  }
+
+  deleteImpl(id: string): Observable<Template[]> {
     return this.httpClient.delete(this.server + TEMPLATE.DELETE + id).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('DELETE TEMPLATE', []))
+      map((res) => res['status'] || false),
+      catchError(this.handleError('DELETE TEMPLATE', null))
     );
   }
 
-  create(template): Observable<Template[]> {
+  create(template: Template): Observable<Template[]> {
     return this.httpClient.post(this.server + TEMPLATE.CREATE, template).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('CREATE TEMPLATE', []))
     );
+  }
+
+  /**
+   * Push new template to the subject
+   * @param template New Template
+   */
+  pushNew(template: Template): void {
+    const templates = this.templates.getValue();
+    templates.unshift(template);
+    this.templates.next(templates);
   }
 
   update(id, template): Observable<Template[]> {

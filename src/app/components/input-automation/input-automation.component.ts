@@ -23,6 +23,7 @@ import {
 } from 'rxjs/operators';
 import { AutomationService } from 'src/app/services/automation.service';
 import { Automation } from 'src/app/models/automation.model';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-input-automation',
@@ -34,8 +35,11 @@ export class InputAutomationComponent
   @Input('resultItem') resultItemTemplate: TemplateRef<HTMLElement>;
   @Input('placeholder') placeholder = 'Search automation';
   @Input('formPlaceholder') formPlaceholder = 'Search automations';
-  @Input('automation') automation = null;
-  @Output() onSelect = new EventEmitter();
+
+  @Input() id: string = '';
+  @Output() idChange = new EventEmitter<string>();
+  @Input() automation: Automation;
+  @Output() automationChange = new EventEmitter<Automation>();
 
   formControl: FormControl = new FormControl();
   inputControl: FormControl = new FormControl();
@@ -43,6 +47,7 @@ export class InputAutomationComponent
   @ViewChild('selector') selector: MatSelect;
 
   protected _onDestroy = new Subject<void>();
+  search = '';
   searching = false;
   filteredResults: ReplaySubject<Automation[]> = new ReplaySubject<
     Automation[]
@@ -53,18 +58,23 @@ export class InputAutomationComponent
   ngOnInit(): void {
     this.inputControl.valueChanges
       .pipe(
-        filter((search) => !!search),
+        filter(() => true),
         takeUntil(this._onDestroy),
         debounceTime(200),
         distinctUntilChanged(),
         tap(() => (this.searching = true)),
         map((search) => {
-          return this.automationService.search(search);
+          this.search = search;
+          return this.automationService.automations$;
         })
       )
       .subscribe(
-        (api) => {
-          api.subscribe((res) => {
+        (data) => {
+          data.subscribe((automations) => {
+            const res = _.filter(automations, (e) => {
+              const searchReg = new RegExp(this.search, 'gi');
+              return searchReg.test(e.title);
+            });
             this.searching = false;
             this.filteredResults.next(res);
           });
@@ -73,8 +83,27 @@ export class InputAutomationComponent
           this.searching = false;
         }
       );
+
     this.formControl.valueChanges.subscribe((val) => {
-      this.onSelect.emit(val);
+      if (val && val._id !== this.id) {
+        this.automationChange.emit(val);
+        this.idChange.emit(val);
+      }
+    });
+
+    // Init the Form Control with Two-bind Modal
+    if (this.automation) {
+      this.formControl.setValue(this.automation);
+    }
+    this.automationService.automations$.subscribe((automations) => {
+      this.filteredResults.next(automations);
+
+      if (this.id) {
+        const automation = _.find(automations, (e) => {
+          return this.id === e._id;
+        });
+        automation && this.formControl.setValue(automation);
+      }
     });
   }
 

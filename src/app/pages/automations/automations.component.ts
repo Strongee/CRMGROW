@@ -8,6 +8,7 @@ import { ActionName } from '../../constants/variable.constants';
 import { Location } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
+import { Automation } from 'src/app/models/automation.model';
 
 @Component({
   selector: 'app-automations',
@@ -15,26 +16,12 @@ import { AutomationAssignComponent } from '../../components/automation-assign/au
   styleUrls: ['./automations.component.scss']
 })
 export class AutomationsComponent implements OnInit {
-  isLoading = false;
-  automations = [];
-  loadSubscription: Subscription;
-  count = 0;
+  userId = '';
   page = 1;
-
-  selectedAutomation;
-  readSubscription: Subscription;
-  automationDetails;
-  isReading = false;
-
   deleting = false;
 
-  contacts = [];
-  statusDetails = {};
-  assignedContacts = {};
-
-  user_id = '';
   constructor(
-    private automationService: AutomationService,
+    public automationService: AutomationService,
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
@@ -44,125 +31,67 @@ export class AutomationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.profile$.subscribe((res) => {
-      this.user_id = res._id;
-      this.loadAll();
+      this.userId = res._id;
     });
+    this.automationService.loadAll(true);
   }
 
-  loadAutomations(page): void {
-    if (this.page !== page) {
-      this.location.replaceState('/automation/' + page);
-    }
-    this.page = page;
-    this.isLoading = true;
-    this.automationService.getByPage(page).subscribe(
-      (res) => {
-        this.isLoading = false;
-        if (res['data'] && res['data'].length) {
-          this.automations = res['data'];
-        }
-        this.count = res['total'];
-      },
-      (err) => {
-        this.isLoading = false;
-      }
-    );
-  }
-
-  loadAll(): void {
-    this.isLoading = true;
-    this.automationService.loadAll().subscribe(
-      (res) => {
-        this.isLoading = false;
-        const automations = res;
-        const automationIds = [];
-        automations.forEach((e) => {
-          if (automationIds.indexOf(e._id) !== -1) {
-            return;
-          }
-          automationIds.push(e._id);
-          this.automations.push(e);
-        });
-        this.automations.sort((a, b) => {
-          if (a.role === 'admin') {
-            return -1;
-          } else if (a.role === 'team' && a.user !== this.user_id) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        this.count = this.automations.length;
-        console.log('automations =========>', automations);
-      },
-      (err) => {
-        this.isLoading = false;
-      }
-    );
-  }
-
-  showAutomation(): void {
-    const automation = this.selectedAutomation;
-
-    this.contacts = automation.contact;
-    this.statusDetails = {};
-    this.assignedContacts = {};
-    this.isReading = true;
-    if (!automation.contacts.length) {
-      return;
-    }
-
-    const contacts = [];
-    automation.contacts.forEach((e) => {
-      contacts.push(e._id);
-    });
-
-    this.readSubscription && this.readSubscription.unsubscribe();
-    this.readSubscription = this.automationService
-      .getStatus(automation._id, contacts)
-      .subscribe(
-        (res) => {
-          const automationDetails = res['timelines'];
-          const assignedContacts = res['contacts'];
-          automationDetails.forEach((e) => {
-            const key = e['contact'] + '_' + e['ref'];
-            this.statusDetails[key] = e['status'];
-          });
-          assignedContacts.forEach((e) => {
-            this.assignedContacts[e._id] = e;
-          });
-          this.isReading = false;
-        },
-        (err) => {
-          this.isReading = false;
-        }
-      );
-  }
-
-  togglePanel(event, automation): void {
-    event.stopPropagation();
-    if (
-      !this.selectedAutomation ||
-      this.selectedAutomation._id !== automation._id
-    ) {
-      this.selectedAutomation = automation;
-      this.showAutomation();
-    } else {
-      this.selectedAutomation = undefined;
-    }
-  }
-
-  openAutomation(event, automation): void {
+  /**
+   * Redirects to the selected Automation
+   * @param event HTML Event
+   * @param automation Automation to Open
+   */
+  openAutomation(event: Event, automation: Automation): void {
     event.stopPropagation();
     this.router.navigate(['/autoflow/edit/' + automation._id]);
   }
 
-  duplicate(event, automation): void {
+  /**
+   * Redirect to the duplication link of the selected automation
+   * @param event HTML Event
+   * @param automation Automation to duplicate
+   */
+  duplicate(event: Event, automation: Automation): void {
     event.stopPropagation();
     this.router.navigate(['/autoflow/new/' + automation._id]);
   }
 
-  assignAutomation(event, automation): void {
+  /**
+   * Open the delete confirm dlg to delete the automation
+   * @param event HTML Expansion click event
+   * @param automation Automation to delete
+   */
+  deleteAutomation(event: Event, automation: Automation): void {
+    event.stopPropagation();
+    const dialog = this.dialog.open(ConfirmComponent, {
+      data: {
+        message: 'Are you sure to remove the automation?',
+        cancelLabel: 'No',
+        confirmLabel: 'Remove'
+      }
+    });
+
+    dialog.afterClosed().subscribe((res) => {
+      if (res) {
+        this.deleting = true;
+        this.automationService.delete(automation._id).subscribe(
+          (response) => {
+            this.deleting = false;
+          },
+          (err) => {
+            this.deleting = false;
+          }
+        );
+      }
+    });
+  }
+
+  /**
+   * Open the dialog to assing the automation
+   * @param event HTML Expansion click event
+   * @param automation Automation to assign
+   */
+  assignAutomation(event: Event, automation: Automation): void {
     event.stopPropagation();
     this.dialog
       .open(AutomationAssignComponent, {
@@ -178,31 +107,4 @@ export class AutomationsComponent implements OnInit {
         }
       });
   }
-
-  deleteAutomation(event, automation): void {
-    event.stopPropagation();
-    const dialog = this.dialog.open(ConfirmComponent, {
-      data: {
-        message: 'Are you sure to remove the automation?',
-        cancelLabel: 'No',
-        confirmLabel: 'Remove'
-      }
-    });
-
-    dialog.afterClosed().subscribe((res) => {
-      if (res) {
-        this.deleting = true;
-        this.automationService.delete(automation._id).subscribe(
-          (response) => {
-            // this.loadAutomations(this.page);
-            this.loadAll();
-          },
-          (err) => {
-            this.deleting = false;
-          }
-        );
-      }
-    });
-  }
-  ActionTypes = ActionName;
 }

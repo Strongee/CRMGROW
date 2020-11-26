@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AUTOMATION } from '../constants/api.constant';
+import { STATUS } from '../constants/variable.constants';
 import { Automation } from '../models/automation.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
@@ -13,6 +14,41 @@ import { HttpService } from './http.service';
 export class AutomationService extends HttpService {
   constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
+  }
+
+  automations: BehaviorSubject<Automation[]> = new BehaviorSubject([]);
+  automations$ = this.automations.asObservable();
+  loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+
+  /**
+   * Load All Automations
+   * @param force Flag to load force
+   */
+  loadAll(force = false): void {
+    if (!force) {
+      const loadStatus = this.loadStatus.getValue();
+      if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadStatus.next(STATUS.REQUEST);
+    this.loadAllImpl().subscribe((automations) => {
+      automations
+        ? this.loadStatus.next(STATUS.SUCCESS)
+        : this.loadStatus.next(STATUS.FAILURE);
+      this.automations.next(automations || []);
+    });
+  }
+  /**
+   * Call Load API
+   */
+  loadAllImpl(): Observable<Automation[]> {
+    return this.httpClient.get(this.server + AUTOMATION.LOAD_ALL).pipe(
+      map((res) =>
+        (res['data'] || []).map((e) => new Automation().deserialize(e))
+      ),
+      catchError(this.handleError('LOAD ALL AUTOMATION', null))
+    );
   }
 
   search(keyword: string): Observable<Automation[]> {
@@ -29,12 +65,6 @@ export class AutomationService extends HttpService {
     return this.httpClient.get(this.server + AUTOMATION.LOAD_PAGE).pipe(
       map((res) => res),
       catchError(this.handleError('GET AUTOMATION PAGE BY ID', []))
-    );
-  }
-  loadAll(): Observable<Automation[]> {
-    return this.httpClient.get(this.server + AUTOMATION.LOAD_ALL).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('LOAD ALL AUTOMATION', []))
     );
   }
   getStatus(id, contacts): Observable<Automation[]> {
@@ -89,5 +119,4 @@ export class AutomationService extends HttpService {
       catchError(this.handleError('LOAD OWN AUTOMATION', []))
     );
   }
-
 }

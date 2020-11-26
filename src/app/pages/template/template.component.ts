@@ -8,6 +8,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
+import { Template } from 'src/app/models/template.model';
 Quill.register('modules/imageResize', ImageResize);
 
 @Component({
@@ -16,12 +17,7 @@ Quill.register('modules/imageResize', ImageResize);
   styleUrls: ['./template.component.scss']
 })
 export class TemplateComponent implements OnInit, OnDestroy {
-  template = {
-    title: '',
-    subject: '',
-    content: '',
-    type: 'email'
-  };
+  template: Template = new Template();
   isNew = true;
   type = true;
   emailType = 'checked';
@@ -89,7 +85,10 @@ export class TemplateComponent implements OnInit, OnDestroy {
       this.template.content = this.smsContent;
     }
     if (!this.id) {
-      const template = { ...this.template, type: this.type ? 'email' : 'text' };
+      const template = new Template().deserialize({
+        ...this.template,
+        type: this.type ? 'email' : 'text'
+      });
       this.isSaving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
       this.saveSubscription = this.templatesService.create(template).subscribe(
@@ -124,7 +123,6 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.loadSubcription && this.loadSubcription.unsubscribe();
     this.loadSubcription = this.templatesService.read(id).subscribe(
       (res) => {
-        console.log("load template ===============>", res);
         this.id = id;
         this.isLoading = false;
         this.template.title = res.title;

@@ -19,7 +19,7 @@
         <tbody>
           <tr
             *ngFor="let template of templatesService.templates$ | async
-            | paginate : {id: 'templateTable', itemsPerPage: 10, currentPage: currentTemplatePage, totalItems: count}
+            | paginate : {id: 'templateTable', itemsPerPage: 10, currentPage: page, totalItems: (templatesService.templates$ | async).length}
           ">
             <td class="template-title">
               <a [routerLink]="['/templates/' + template._id]"
@@ -66,8 +66,8 @@
         </tbody>
       </table>
       <div class="d-flex justify-content-center align-items-center my-2">
-        <div class="ml-3 pagination-wrapper" *ngIf="count">
-          <pagination-controls (pageChange)="setPageTemplate($event)" id="templateTable" maxSize="10" previousLabel=""
+        <div class="ml-3 pagination-wrapper">
+          <pagination-controls (pageChange)="page = $event" id="templateTable" maxSize="5" previousLabel=""
                                nextLabel=""></pagination-controls>
         </div>
       </div>
