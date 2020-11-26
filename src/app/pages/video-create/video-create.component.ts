@@ -260,6 +260,7 @@ export class VideoCreateComponent implements OnInit {
     this.pdfUploader.clearQueue();
     this.imageUploader.cancelAll();
     this.imageUploader.clearQueue();
+    this.upload_thumbnail = '';
   }
 
   uploadVideo(): void {
