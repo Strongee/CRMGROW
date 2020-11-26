@@ -34,6 +34,13 @@ export class CampaignListItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadContacts();
+  }
+
+  loadContacts(): void {
+    this.mailListService.get(this.id).subscribe((res) => {
+      this.contacts = res['contacts'];
+    });
   }
 
   selectAllPage(): void {

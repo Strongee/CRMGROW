@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { MaterialAddComponent } from '../material-add/material-add.component';
-import {numPad} from "../../helper";
-import {UserService} from "../../services/user.service";
+import { numPad } from '../../helper';
+import { UserService } from '../../services/user.service';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'app-campaign-add-broadcast',
@@ -11,7 +12,7 @@ import {UserService} from "../../services/user.service";
   styleUrls: ['./campaign-add-broadcast.component.scss']
 })
 export class CampaignAddBroadcastComponent implements OnInit {
-  name = '';
+  title = '';
   selectedTemplate;
   selectedMailList;
   date;
@@ -23,10 +24,13 @@ export class CampaignAddBroadcastComponent implements OnInit {
   submitted = false;
   selectedDateTime;
   materials = [];
+  adding = false;
 
   constructor(
+    private dialogRef: MatDialogRef<CampaignAddBroadcastComponent>,
     private dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    private campaignService: CampaignService
   ) {
     const current = new Date();
     this.minDate = {
@@ -119,6 +123,11 @@ export class CampaignAddBroadcastComponent implements OnInit {
       });
   }
   addBroadcast(): void {
+    if (!this.selectedMailList && !this.selectedTemplate) {
+      return;
+    }
+
+    this.adding = true;
     this.userService.profile$.subscribe((res) => {
       const timezone = res['time_zone'];
       const dueDateTime = new Date(
@@ -126,7 +135,18 @@ export class CampaignAddBroadcastComponent implements OnInit {
           this.date.day ? this.date.day : this.minDate.day
         )}T${this.time.hour + ':00:00.000'}${timezone}`
       ).toISOString();
-      console.log("broadcast data ========>", this.name, this.selectedMailList, this.selectedTemplate, this.time.hour, dueDateTime);
+
+      const data = {
+        title: this.title,
+        mail_list: this.selectedMailList._id,
+        email_template: this.selectedTemplate._id,
+        due_start: dueDateTime
+      };
+
+      this.campaignService.create(data).subscribe((response) => {
+        this.adding = false;
+        this.dialogRef.close({ data: response });
+      });
     });
   }
 }

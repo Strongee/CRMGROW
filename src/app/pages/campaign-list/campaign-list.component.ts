@@ -59,7 +59,7 @@ export class CampaignListComponent implements OnInit {
         }
       }
     }
-    return false;
+    return true;
   }
 
   selectAllPage(): void {
