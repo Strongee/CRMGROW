@@ -135,13 +135,22 @@ export class CampaignAddBroadcastComponent implements OnInit {
     this.adding = true;
     this.userService.profile$.subscribe((res) => {
       const timezone = res['time_zone'];
-      const time =
-        Number(new Date(this.selectedDateTime).getHours()) + ':00:00.000';
-      const dueDateTime = new Date(
-        `${this.date.year}-${numPad(this.date.month)}-${numPad(
-          this.date.day ? this.date.day : this.minDate.day
-        )}T${time}${timezone}`
-      ).toISOString();
+      console.log('this.selectedDateTime*********', this.selectedDateTime);
+      const dueDateTime = moment(this.selectedDateTime)
+        .set({
+          minute: 0,
+          second: 0,
+          millisecond: 0
+        })
+        .toISOString();
+      // Number(new Date(this.selectedDateTime).getHours()) + ':00:00';
+      // console.log("broadcast:: ======>", timezone, time);
+
+      // const dueDateTime = new Date(
+      //   `${this.date.year}-${numPad(this.date.month)}-${numPad(
+      //     this.date.day ? this.date.day : this.minDate.day
+      //   )}T${time}${timezone}`
+      // ).toISOString();
 
       const data = {
         title: this.title,
