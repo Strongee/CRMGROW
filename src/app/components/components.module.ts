@@ -76,6 +76,7 @@ import { AdvancedFilterComponent } from './advanced-filter/advanced-filter.compo
 import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { ContactBulkComponent } from './contact-bulk/contact-bulk.component';
 import { TaskTypeComponent } from './task-type/task-type.component';
+import { InputTagComponent } from './input-tag/input-tag.component';
 
 @NgModule({
   declarations: [
@@ -152,7 +153,8 @@ import { TaskTypeComponent } from './task-type/task-type.component';
     AdvancedFilterComponent,
     TaskFilterComponent,
     ContactBulkComponent,
-    TaskTypeComponent
+    TaskTypeComponent,
+    InputTagComponent
   ],
   imports: [
     CommonModule,

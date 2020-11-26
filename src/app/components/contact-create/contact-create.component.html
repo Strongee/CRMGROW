@@ -45,6 +45,32 @@
       </div>
     </div>
     <div class="row">
+      <div class="col-sm-4 form-group">
+        <label for="label_cc">label</label>
+        <app-label-select type="form" [value]="contact.label"></app-label-select>
+      </div>
+      <div class="col-sm-4 form-group">
+        <label for="source_cc">source</label>
+        <input type="text" id="source_cc" class="form-control" required name="source"  #source="ngModel" [(ngModel)]="contact.source" />
+      </div>
+      <div class="col-sm-4 form-group">
+        <label for="stage_cc">stage</label>
+        <select id="stage_cc" class="form-control" [(ngModel)]="contact.recruiting_stage" name="stage" #stage="ngModel">
+          <option *ngFor="let stage of STAGES" value="{{stage}}">{{stage}}</option>        
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 form-group">
+        <label for="website_cc">website</label>
+        <input type="text" id="website_cc" class="form-control" required name="website"  #website="ngModel" [(ngModel)]="contact.website" />
+      </div>
+      <div class="col-sm-6 form-group">
+        <label for="company_cc">company</label>
+        <input type="text" id="company_cc" class="form-control" required name="company"  #company="ngModel" [(ngModel)]="contact.brokerage" />
+      </div>
+    </div>
+    <div class="row">
       <div class="col-sm-6 col-12 form-group">
         <label for="address_cc">address</label>
         <input type="text" placeholder="" id="address_cc" class="form-control" [(ngModel)]="contact.address" name="address" #address="ngModel" ngx-google-places-autocomplete #addressplacesRef="ngx-places" [options]="{types: [], componentRestrictions: { country: contact.country || LOCATION_COUNTRIES }}" (onAddressChange)="handleAddressChange($event)" />

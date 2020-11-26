@@ -3,9 +3,9 @@ import { Deserializable } from './deserialize.model';
 export class Template implements Deserializable {
   _id: string;
   user: string;
-  title: string;
-  subject: string;
-  content: string;
+  title: string = '';
+  subject: string = '';
+  content: string = '';
   role: string;
   type: string;
   default: boolean;

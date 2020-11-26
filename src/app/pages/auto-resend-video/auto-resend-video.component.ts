@@ -22,15 +22,6 @@ export class AutoResendVideoComponent implements OnInit {
     this.delays = AUTO_RESEND_DELAY;
   }
 
-  selectTemplate(event: any, resend_data: any, type: string): void {
-    if (type == 'email') {
-      resend_data.email_canned_message = event._id;
-    }
-    if (type == 'sms') {
-      resend_data.sms_canned_message = event._id;
-    }
-  }
-
   changeToggle(evt: any, resend_data: any): void {
     resend_data.enabled = evt.target.checked;
   }

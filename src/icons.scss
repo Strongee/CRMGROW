@@ -220,6 +220,9 @@
 .i-round-check {
   mask-image: url('/assets/img/round-check.svg');
 }
+.i-round {
+  mask-image: url('/assets/img/round.svg');
+}
 .i-triangle-more {
   mask-image: url('/assets/img/triangle_more.svg');
 }
@@ -376,6 +379,10 @@
   height: 100%;
   display: block;
 }
+.act-icon.normal {
+  width: 18px;
+  height: 18px;
+}
 .act-videos {
   background-image: url('/assets/img/activities/video.svg');
 }
@@ -460,5 +467,14 @@
   background-image: url('/assets/img/activities/phone.svg');
 }
 .act-notes {
+  background-image: url('/assets/img/activities/note.svg');
+}
+.act-appointments {
+  background-image: url('/assets/img/activities/note.svg');
+}
+.act-sms {
+  background-image: url('/assets/img/activities/note.svg');
+}
+.act-sms_trackers {
   background-image: url('/assets/img/activities/note.svg');
 }

@@ -11,6 +11,7 @@ import { TaskService } from 'src/app/services/task.service';
 export class TasksComponent implements OnInit {
   DISPLAY_COLUMNS = [
     'select',
+    'status',
     'contact_name',
     'contact_label',
     'subject',

@@ -1,3 +1,9 @@
+export const STATUS = {
+  NONE: 'none',
+  REQUEST: 'request',
+  SUCCESS: 'success',
+  FAILURE: 'failure'
+};
 export const COMPANIES = ['eXp Realty', 'other'];
 export const MONTH = [
   { id: '1', text: 'January' },
@@ -167,6 +173,19 @@ export const REGIONS = {
     'Saskatchewan'
   ]
 };
+
+export const STAGES = [
+  'Initial Contact Made',
+  'Attraction Material Shared',
+  'Attended Webinar or demo',
+  'Interested in joining',
+  'Application submitted',
+  'Joined company',
+  'Long term follow-up',
+  'Not interested now',
+  'Not interest(lost)',
+  'Attended Lunch & Learn'
+];
 
 export const TIMEZONE = [
   {

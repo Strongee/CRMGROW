@@ -193,6 +193,7 @@ export const SEND = {
   SHARE: 'email/share-platform'
 };
 export const TAG = {
+  ALL: 'tag/getAll',
   GET: 'tag/load',
   UPDATE: 'tag/update',
   DELETe: 'tag/delete'
