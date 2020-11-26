@@ -787,7 +787,7 @@ export class MaterialsComponent implements OnInit {
   recordSetting(): void {
     this.dialog.open(RecordSettingDialogComponent, {
       width: '96vw',
-      maxWidth: '600px',
+      maxWidth: '600px'
     });
   }
   doAction(evt: any): void {

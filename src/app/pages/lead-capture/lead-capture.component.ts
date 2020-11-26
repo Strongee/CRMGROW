@@ -71,7 +71,7 @@ export class LeadCaptureComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res.mode == 'text') {
+        if (res && res.mode == 'text') {
           editData.field_name = res.field;
           editData.placeholder = res.placeholder;
         }
