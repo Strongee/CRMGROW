@@ -1,29 +1,50 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { interval, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { TEMPLATE, GARBAGE } from '../constants/api.constant';
+import { STATUS } from '../constants/variable.constants';
 import { Template } from '../models/template.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
-import { StoreService } from './store.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TemplatesService extends HttpService {
-  constructor(
-    errorService: ErrorService,
-    private httpClient: HttpClient,
-    private storeService: StoreService
-  ) {
+  constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
   }
 
-  loadAll(): Observable<Template[]> {
+  templates: BehaviorSubject<Template[]> = new BehaviorSubject([]);
+  templates$ = this.templates.asObservable();
+  loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+
+  /**
+   * LOAD ALL TEMPLATES
+   */
+  loadAll(): void {
+    const loadStatus = this.loadStatus.getValue();
+    if (loadStatus != STATUS.NONE) {
+      return;
+    }
+    this.loadStatus.next(STATUS.REQUEST);
+    this.loadAllImpl().subscribe((templates) => {
+      templates
+        ? this.loadStatus.next(STATUS.SUCCESS)
+        : this.loadStatus.next(STATUS.FAILURE);
+      this.templates.next(templates || []);
+    });
+  }
+  /**
+   * CALL LOAD API
+   */
+  loadAllImpl(): Observable<Template[]> {
     return this.httpClient.get(this.server + TEMPLATE.LOAD_ALL).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('LOAD TEMPLATES', []))
+      map((res) =>
+        (res['data'] || []).map((e) => new Template().deserialize(e))
+      ),
+      catchError(this.handleError('LOAD TEMPLATES', null))
     );
   }
 
@@ -94,5 +115,4 @@ export class TemplatesService extends HttpService {
       catchError(this.handleError('LOAD OWN TEMPLATE', []))
     );
   }
-
 }

@@ -42,6 +42,7 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected _onDestroy = new Subject<void>();
   searching = false;
+  search = '';
   filteredResults: ReplaySubject<MailList[]> = new ReplaySubject<MailList[]>(1);
 
   constructor(private mailListService: MailListService) {}
@@ -55,23 +56,21 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
         distinctUntilChanged(),
         tap(() => (this.searching = true)),
         map((search) => {
-          return this.mailListService.search(search);
+          this.search = search;
+          return this.mailListService.getList();
         })
       )
       .subscribe(
         (api) => {
           api.subscribe((res) => {
-            // const maillists = [];
-            // for(let i = 1; i < 5; i++ ){
-            //   const maillist = {
-            //     _id: i,
-            //     title: 'maillist' + i,
-            //     contacts: i
-            //   };
-            //   maillists.push(maillist);
-            // }
+            const maillists = [];
+            res.forEach((item) => {
+              if (item.title.includes(this.search)) {
+                maillists.push(item);
+              }
+            });
             this.searching = false;
-            this.filteredResults.next(res);
+            this.filteredResults.next(maillists);
             // this.filteredResults.next(maillists);
           });
         },

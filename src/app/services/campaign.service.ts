@@ -21,7 +21,7 @@ export class CampaignService extends HttpService {
   }
 
   create(data): Observable<Campaign[]> {
-    return this.httpClient.post(this.server + CAMPAIGN.CREATE, { data }).pipe(
+    return this.httpClient.post(this.server + CAMPAIGN.CREATE, { ...data }).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('CREATE CAMPAIGN', []))
     );

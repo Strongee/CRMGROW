@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
-import { COUNTRIES, REGIONS } from 'src/app/constants/variable.constants';
+import {
+  COUNTRIES,
+  REGIONS,
+  STAGES
+} from 'src/app/constants/variable.constants';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -23,6 +27,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   COUNTRIES = COUNTRIES;
   COUNTRY_REGIONS = REGIONS;
   LOCATION_COUNTRIES = ['US', 'CA'];
+  STAGES = STAGES;
 
   // Variables for the processs
   checkingEmail = false;

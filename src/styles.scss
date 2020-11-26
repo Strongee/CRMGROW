@@ -956,6 +956,10 @@ table {
     font-weight: bold;
     padding: 5px 10px;
     vertical-align: middle;
+
+    &.check-cell {
+      opacity: 1;
+    }
   }
 
   td {
@@ -1401,7 +1405,7 @@ body {
       width: 20px!important;
       margin-right: 0px!important;
       padding-bottom: 0px!important;
-    
+
       .swatch {
         width: 19px !important;
         height: 19px!important;

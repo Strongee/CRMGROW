@@ -1,18 +1,18 @@
 <h1 mat-dialog-title>Add broadcast</h1>
-<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? addBroadcast() : false"
-      [class.was-validated]="submitted">
+<form #actionForm="ngForm" (ngSubmit)="addBroadcast()">
   <mat-dialog-content>
     <div class="form-group">
       <div>
         <label>Name</label>
         <input class="form-control" name="broadcast_name" #broadcast_name="ngModel"
-               [(ngModel)]="name" type="text" required/>
+               [(ngModel)]="title" type="text" required/>
         <span class="invalid-feedback"
-              *ngIf="!name">Broadcast name is required.</span>
+              [class.invalid]="!title && submitted">Broadcast name is required.</span>
       </div>
       <div class="mt-3">
         <label>Recipient list</label>
         <app-mail-list (onSelect)="selectMailList($event)"></app-mail-list>
+        <div class="invalid-feedback" [class.invalid]="!selectedMailList && submitted">MailList is required.</div>
       </div>
       <div class="mt-3">
         <label>Email Template</label>
@@ -21,17 +21,21 @@
           [placeholder]="'Search templates'"
           (onSelect)="selectTemplate($event)">
         </app-input-template>
+        <div class="invalid-feedback" [class.invalid]="!selectedTemplate && submitted">Email template is required.</div>
       </div>
       <div class="mt-3">
         <label>Send Time</label>
         <div class="row">
           <div class="col-md-7 col-sm-12">
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text bgc-blue border-dark"><i class="bgc-white i-icon i-calendar"></i></span>
-              </div>
               <div ngbDropdown display="dynamic">
-                <input class="form-control datepicker" placeholder="Select date time" name="send_date_time" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bgc-blue border-dark"><i class="bgc-white i-icon i-calendar"></i></span>
+                    <input class="form-control datepicker" placeholder="Select date time" name="send_date_time" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
+                  </div>
+                  <div class="invalid-feedback" [class.invalid]="!selectedDateTime && submitted">Send time is required.</div>
+                </div>
                 <div ngbDropdownMenu class="date-time-picker mb-3">
                   <div class="picker-header v-center justify-content-between mt-2">
                     <div class="f-6 font-weight-bold">Send time</div>
@@ -96,7 +100,7 @@
     <button class="btn btn-white-blue" type="button" (click)="attachMaterials()">Send material</button>
     <div>
       <button class="btn btn-white" type="button" mat-dialog-close>Close</button>
-      <button class="btn btn-primary ml-2" type="submit">Add</button>
+      <button class="btn btn-primary ml-2" type="submit" [class.loading]="adding">Add</button>
     </div>
   </mat-dialog-actions>
 </form>

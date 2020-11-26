@@ -10,44 +10,56 @@
     </div>
   </div>
   <div class="col-12 mt-3">
-    <table class="table campaign-list">
-      <thead>
-      <tr>
-        <th class="check-cell border-top-0">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="selectcontacts" (change)="selectAllPage()" [checked]="isSelectedPage()">
-            <label class="custom-control-label" for="selectcontacts"></label>
-          </div>
-        </th>
-        <th class="first-name">First Name</th>
-        <th class="last-name">Last Name</th>
-        <th class="email">Email</th>
-        <th class="phone">Phone No</th>
-      </tr>
-      </thead>
-      <tbody>
-      <ng-container *ngIf="contacts">
-        <tr *ngFor="let contact of contacts">
-          <td class="check-cell">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="contact-{{contact._id}}" (change)="selectedContacts.toggle(contact._id)" [checked]="selectedContacts.isSelected(contact._id)">
-              <label class="custom-control-label" for="contact-{{contact._id}}"></label>
-            </div>
-          </td>
-          <td class="first-name">
-            <div class="c-dark f-4">{{contact.first_name}}</div>
-          </td>
-          <td class="last-name">
-            <div class="c-dark f-4">{{contact.last_name}}</div>
-          </td>
-          <td class="email">
-            <div class="c-blue f-4 font-weight-bold">{{contact.email}}</div>
-          </td>
-          <td class="phone">
-            <div class="c-dark f-4">{{contact.cell_phone}}</div>
-          </td>
-        </tr>
+    <ng-container *ngIf="isLoading; else showContacts">
+      <app-loading-overlay type="table"></app-loading-overlay>
+    </ng-container>
+    <ng-template #showContacts>
+      <ng-container *ngIf="contacts.length; else noContacts">
+        <table class="table campaign-list" [class.loading]="isTableChanging">
+          <thead>
+          <tr>
+            <th class="check-cell border-top-0">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="selectcontacts" (change)="selectAllPage()" [checked]="isSelectedPage()">
+                <label class="custom-control-label" for="selectcontacts"></label>
+              </div>
+            </th>
+            <th class="first-name">First Name</th>
+            <th class="last-name">Last Name</th>
+            <th class="email">Email</th>
+            <th class="phone">Phone No</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="contacts">
+            <tr *ngFor="let contact of contacts">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="contact-{{contact._id}}" (change)="selectedContacts.toggle(contact._id)" [checked]="selectedContacts.isSelected(contact._id)">
+                  <label class="custom-control-label" for="contact-{{contact._id}}"></label>
+                </div>
+              </td>
+              <td class="first-name">
+                <div class="c-dark f-4">{{contact.first_name}}</div>
+              </td>
+              <td class="last-name">
+                <div class="c-dark f-4">{{contact.last_name}}</div>
+              </td>
+              <td class="email">
+                <div class="c-blue f-4 font-weight-bold">{{contact.email}}</div>
+              </td>
+              <td class="phone">
+                <div class="c-dark f-4">{{contact.cell_phone}}</div>
+              </td>
+            </tr>
+          </ng-container>
+        </table>
       </ng-container>
-    </table>
+      <ng-template #noContacts>
+        <app-data-empty [type]="'campaign-contact'"></app-data-empty>
+      </ng-template>
+    </ng-template>
+
   </div>
 </div>
+<app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar>

@@ -28,7 +28,7 @@
                     <app-input-template
                         [type]="'email'"
                         [placeholder]="'Click here to assign an email template'"
-                        (onSelect)="selectTemplate($event, garbage.auto_resend, 'email')">
+                        [(id)]="garbage.auto_resend.email_canned_message">
                     </app-input-template>
                 </div>
                 <div class="search-sms mt-3">
@@ -38,7 +38,7 @@
                     <app-input-template
                         [type]="'text'"
                         [placeholder]="'Click here to assign an sms template'"
-                        (onSelect)="selectTemplate($event, garbage.auto_resend, 'sms')">
+                        [(id)]="garbage.auto_resend.sms_canned_message">
                     </app-input-template>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     <app-input-template
                         [type]="'email'"
                         [placeholder]="'Click here to assign an email template'"
-                        (onSelect)="selectTemplate($event, garbage.auto_resend2, 'email')">
+                        [(id)]="garbage.auto_resend2.email_canned_message">
                     </app-input-template>
                 </div>
                 <div class="search-sms mt-3">
@@ -100,7 +100,7 @@
                     <app-input-template
                         [type]="'text'"
                         [placeholder]="'Click here to assign an sms template'"
-                        (onSelect)="selectTemplate($event, garbage.auto_resend2, 'sms')">
+                        [(id)]="garbage.auto_resend2.sms_canned_message">
                     </app-input-template>
                 </div>
             </div>

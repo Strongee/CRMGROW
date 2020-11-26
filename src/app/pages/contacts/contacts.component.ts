@@ -23,7 +23,23 @@ export class ContactsComponent implements OnInit {
     'contact_email',
     'contact_phone'
   ];
-  ACTIVITY_ICONS = {};
+  ACTIVITY_ICONS = {
+    contacts: '',
+    appointments: '',
+    emails: '',
+    videos: '',
+    pdfs: '',
+    images: '',
+    email_trackers: '',
+    phone_logs: '',
+    image_trackers: '',
+    pdf_trackers: '',
+    video_trackers: '',
+    follow_ups: '',
+    notes: '',
+    sms_trackers: '',
+    sms: ''
+  };
   SORT_TYPES = [
     { id: 'alpha_down', label: 'Alphabetical down' },
     { id: 'alpha_up', label: 'Alphabetical up' },
@@ -44,7 +60,7 @@ export class ContactsComponent implements OnInit {
     public router: Router,
     public storeService: StoreService,
     private contactService: ContactService,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {

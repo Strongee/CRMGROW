@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-templates',
@@ -28,54 +29,54 @@ export class TemplatesComponent implements OnInit {
   currentUser: any;
   deleting = false;
   constructor(
-    private templatesService: TemplatesService,
+    public templatesService: TemplatesService,
     private userService: UserService,
     private dialog: MatDialog,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.userService.loadProfile().subscribe((res) => {
-      this.currentUser = res;
-      this.userId = res._id;
-      const garbage = res.garbage;
-      const cannedTemplate = garbage && garbage.canned_message;
-      this.emailDefault = cannedTemplate && cannedTemplate.email;
-      this.smsDefault = cannedTemplate && cannedTemplate.sms;
-      this.loadAllTemplates();
+    this.userService.garbage$.subscribe((garbage) => {
+      if (garbage && garbage.canned_message) {
+        this.emailDefault = garbage.canned_message.email;
+        this.smsDefault = garbage.canned_message.sms;
+      }
     });
+    this.userService.profile$.subscribe((profile) => {
+      this.userId = profile._id;
+    });
+    this.templatesService.loadAll();
   }
 
   loadAllTemplates(): void {
-    this.isLoading = true;
-    this.templatesService.loadAll().subscribe(
-      (res) => {
-        this.isLoading = false;
-        const templates = res;
-        const templateIds = [];
-        templates.forEach((e) => {
-          if (templateIds.indexOf(e._id) !== -1) {
-            return;
-          }
-          templateIds.push(e._id);
-          this.templates.push(e);
-        });
-        this.templates.sort((a, b) => {
-          if (a.role === 'admin') {
-            return -1;
-          } else if (a.role === 'team' && a.user !== this.userId) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        this.count = this.templates.length;
-      },
-      (err) => {
-        this.isLoading = false;
-      }
-    );
+    // this.isLoading = true;
+    // this.templatesService.loadAll().subscribe(
+    //   (res) => {
+    //     this.isLoading = false;
+    //     const templates = res;
+    //     const templateIds = [];
+    //     templates.forEach((e) => {
+    //       if (templateIds.indexOf(e._id) !== -1) {
+    //         return;
+    //       }
+    //       templateIds.push(e._id);
+    //       this.templates.push(e);
+    //     });
+    //     this.templates.sort((a, b) => {
+    //       if (a.role === 'admin') {
+    //         return -1;
+    //       } else if (a.role === 'team' && a.user !== this.userId) {
+    //         return 1;
+    //       } else {
+    //         return 0;
+    //       }
+    //     });
+    //     this.count = this.templates.length;
+    //   },
+    //   (err) => {
+    //     this.isLoading = false;
+    //   }
+    // );
   }
 
   loadTemplatePage(page): void {
@@ -150,11 +151,11 @@ export class TemplatesComponent implements OnInit {
       );
   }
 
-  openTemplate(template): void {
+  openTemplate(template: Template): void {
     this.router.navigate(['/templates/' + template._id]);
   }
 
-  deleteTemplate(template): void {
+  deleteTemplate(template: Template): void {
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
         message: 'Are you sure to remove the template?',

@@ -166,7 +166,8 @@ export const LABEL = {
 export const MAILLIST = {
   CREATE: 'mail-list',
   GET: 'mail-list/',
-  ADD_CONTACTS: 'mail-list/add-contacts'
+  ADD_CONTACTS: 'mail-list/add-contacts',
+  REMOVE_CONTACTS: 'mail-list/remove-contacts'
 };
 
 export const CAMPAIGN = {
@@ -193,6 +194,7 @@ export const SEND = {
   SHARE: 'email/share-platform'
 };
 export const TAG = {
+  ALL: 'tag/getAll',
   GET: 'tag/load',
   UPDATE: 'tag/update',
   DELETe: 'tag/delete'

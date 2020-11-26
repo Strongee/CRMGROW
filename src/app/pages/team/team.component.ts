@@ -852,7 +852,7 @@ export class TeamComponent implements OnInit {
         }
       }
     }
-    return true;
+    return false;
   }
   memberStatus(member): any {
     if (this.team.editors.indexOf(member._id) === -1) {

@@ -59,6 +59,12 @@ p {
   }
 }
 
+.invalid {
+  &.invalid-feedback {
+    display: block;
+  }
+}
+
 :host ::ng-deep {
 
   mat-dialog-content {
@@ -191,3 +197,4 @@ p {
     display: none;
   }
 }
+

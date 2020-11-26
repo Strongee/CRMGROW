@@ -8,77 +8,69 @@
       </a>
     </div>
     <div class="my-3">
-      <ng-container *ngIf="isLoading">
-        <app-loading-overlay [type]="'table'"></app-loading-overlay>
-      </ng-container>
-      <ng-container *ngIf="!isLoading && !count">
-        <p>There is no template data</p>
-      </ng-container>
-      <ng-container *ngIf="!isLoading && count">
-        <table class="table template-table">
-          <thead>
-          <th class="template-title">Title</th>
-          <th class="template-auth">Owner</th>
-          <th class="template-content">Template</th>
-          <th class="template-type">Type</th>
-          <th class="template-action">Default</th>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let template of templates
-              | paginate : {id: 'templateTable', itemsPerPage: 10, currentPage: currentTemplatePage, totalItems: count}
-            ">
-              <td class="template-title">
-                <a [routerLink]="['/templates/' + template._id]"
-                   class="hover-bottom font-weight-bold f-4">{{template.title}}</a>
-              </td>
-              <td class="template-auth">
-                <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
-              </td>
-              <td class="template-content">
-                <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripTags | shorten: 40: '...'}}</h5>
-                <span [innerHTML]="template.content | stripTags | shorten: 80: '...'"></span>
-              </td>
-              <td class="template-type">
-                <div class="v-center">
-                  <ng-container *ngIf="template.type=='text'; else emailType">
-                    <i class="i-icon bgc-dark i-phone mr-2"></i>
-                    <span class="f-4 menu-label font-weight-bold ml-1">{{template.type}}</span>
+      <table class="table template-table">
+        <thead>
+        <th class="template-title">Title</th>
+        <th class="template-auth">Owner</th>
+        <th class="template-content">Template</th>
+        <th class="template-type">Type</th>
+        <th class="template-action">Default</th>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let template of templatesService.templates$ | async
+            | paginate : {id: 'templateTable', itemsPerPage: 10, currentPage: currentTemplatePage, totalItems: count}
+          ">
+            <td class="template-title">
+              <a [routerLink]="['/templates/' + template._id]"
+                 class="hover-bottom font-weight-bold f-4">{{template.title}}</a>
+            </td>
+            <td class="template-auth">
+              <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
+            </td>
+            <td class="template-content">
+              <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripTags | shorten: 40: '...'}}</h5>
+              <span [innerHTML]="template.content | stripTags | shorten: 80: '...'"></span>
+            </td>
+            <td class="template-type">
+              <div class="v-center">
+                <ng-container *ngIf="template.type=='text'; else emailType">
+                  <i class="i-icon bgc-dark i-phone mr-2"></i>
+                  <span class="f-4 menu-label font-weight-bold ml-1">{{template.type}}</span>
+                </ng-container>
+                <ng-template #emailType>
+                  <i class="i-icon bgc-dark i-message mr-2"></i>
+                  <span class="f-4 menu-label font-weight-bold ml-1">E-mail</span>
+                </ng-template>
+              </div>
+            </td>
+            <td class="template-action">
+              <div class="v-center">
+                <label class="custom-toggle mb-0" placement="top" ngbTooltip="Set as {{template.type == 'email' ? 'Default Email' : 'Default Text'}}">
+                  <input type="checkbox" [checked]="template._id == emailDefault || template._id == smsDefault" (change)="setDefault(template)">
+                  <span class="custom-toggle-slider rounded-circle"></span>
+                </label>
+                <div class="v-center ml-4">
+                  <ng-container *ngIf="template.role != 'admin' && template.user == userId">
+                    <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" [class.disabled]="template.role == 'admin'">
+                      <i class="i-icon bgc-dark i-edit"></i>
+                    </div>
+                    <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)" [class.disabled]="template.role == 'admin'">
+                      <i class="i-icon bgc-dark i-trash ml-2"></i>
+                    </div>
                   </ng-container>
-                  <ng-template #emailType>
-                    <i class="i-icon bgc-dark i-message mr-2"></i>
-                    <span class="f-4 menu-label font-weight-bold ml-1">E-mail</span>
-                  </ng-template>
                 </div>
-              </td>
-              <td class="template-action">
-                <div class="v-center">
-                  <label class="custom-toggle mb-0" placement="top" ngbTooltip="Set as {{template.type == 'email' ? 'Default Email' : 'Default Text'}}">
-                    <input type="checkbox" [checked]="template._id == emailDefault || template._id == smsDefault" (change)="setDefault(template)">
-                    <span class="custom-toggle-slider rounded-circle"></span>
-                  </label>
-                  <div class="v-center ml-4">
-                    <ng-container *ngIf="template.role != 'admin' && template.user == userId">
-                      <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" [class.disabled]="template.role == 'admin'">
-                        <i class="i-icon bgc-dark i-edit"></i>
-                      </div>
-                      <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)" [class.disabled]="template.role == 'admin'">
-                        <i class="i-icon bgc-dark i-trash ml-2"></i>
-                      </div>
-                    </ng-container>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="d-flex justify-content-center align-items-center my-2">
-          <div class="ml-3 pagination-wrapper" *ngIf="count">
-            <pagination-controls (pageChange)="setPageTemplate($event)" id="templateTable" maxSize="10" previousLabel=""
-                                 nextLabel=""></pagination-controls>
-          </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-center align-items-center my-2">
+        <div class="ml-3 pagination-wrapper" *ngIf="count">
+          <pagination-controls (pageChange)="setPageTemplate($event)" id="templateTable" maxSize="10" previousLabel=""
+                               nextLabel=""></pagination-controls>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
 </div>

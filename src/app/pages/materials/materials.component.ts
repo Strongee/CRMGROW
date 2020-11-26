@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 import { BulkActions } from 'src/app/constants/variable.constants';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
-import { getJSDocThisTag } from 'typescript';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { Subscription } from 'rxjs';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
