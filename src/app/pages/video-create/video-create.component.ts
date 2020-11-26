@@ -254,6 +254,12 @@ export class VideoCreateComponent implements OnInit {
     this.selectedTab = tab;
     this.isStep = 1;
     this.isActive = 1;
+    this.videoUploader.cancelAll();
+    this.videoUploader.clearQueue();
+    this.pdfUploader.cancelAll();
+    this.pdfUploader.clearQueue();
+    this.imageUploader.cancelAll();
+    this.imageUploader.clearQueue();
   }
 
   uploadVideo(): void {
@@ -282,6 +288,12 @@ export class VideoCreateComponent implements OnInit {
     };
     this.urlChecked = false;
     this.loadedData = false;
+    this.videoUploader.cancelAll();
+    this.videoUploader.clearQueue();
+    this.pdfUploader.cancelAll();
+    this.pdfUploader.clearQueue();
+    this.imageUploader.cancelAll();
+    this.imageUploader.clearQueue();
   }
 
   selectTheme(): void {
@@ -468,6 +480,8 @@ export class VideoCreateComponent implements OnInit {
             )
           ) {
             this.toast.warning('Unsupported File Selected.');
+            this.videoUploader.cancelAll();
+            this.videoUploader.clearQueue();
             return false;
           }
           this.helperService
@@ -493,36 +507,63 @@ export class VideoCreateComponent implements OnInit {
         }
         break;
       case 'pdf':
-        try {
+        this.fileOver = evt;
+        if (this.fileOver == false) {
           const file = this.pdfUploader.queue[0]._file;
-          if (file) {
-            const fileReader = new FileReader();
-            fileReader.onload = (e) => {
-              this.file = e.target['result'];
-            };
-            this.thumbnail_loading = true;
-            fileReader.readAsArrayBuffer(file);
-            this.uploadVideo();
+          if (!file) {
+            return false;
           }
-        } catch (e) {}
+          if (!file.name.toLowerCase().endsWith('.pdf')) {
+            this.toast.warning('Unsupported File Selected.');
+            this.pdfUploader.cancelAll();
+            this.pdfUploader.clearQueue();
+            return false;
+          }
+          const fileReader = new FileReader();
+          fileReader.onload = (e) => {
+            this.file = e.target['result'];
+          };
+          this.thumbnail_loading = true;
+          fileReader.readAsArrayBuffer(file);
+          this.uploadVideo();
+        }
         break;
       case 'image':
-        try {
-          const rawfile: Blob = this.imageUploader.queue[0].file.rawFile as any;
-          const file: Blob = rawfile as Blob;
-          this.thumbnail_loading = true;
-          this.helperService
-            .generateImageThumbnail(file, 'image')
-            .then((thumbnail) => {
-              this.thumbnail_loading = false;
-              this.upload_thumbnail = thumbnail;
-              this.uploadVideo();
-            })
-            .catch(() => {
-              this.thumbnail_loading = false;
-              this.toast.warning('Cannot load the image file.');
-            });
-        } catch (e) {}
+        this.fileOver = evt;
+        if (this.fileOver == false) {
+          this.imageUploader.queue.forEach((queue) => {
+            const file = queue.file;
+            if (!file) {
+              return false;
+            }
+            if (!file.type.toLowerCase().startsWith('image')) {
+              this.toast.warning('Unsupported File Selected.');
+              this.imageUploader.cancelAll();
+              this.imageUploader.clearQueue();
+              return false;
+            }
+          });
+          console.log('##', this.imageUploader.queue);
+          if (this.imageUploader.queue.length > 0) {
+            const rawfile: Blob = this.imageUploader.queue[0].file
+              .rawFile as any;
+            const file: Blob = rawfile as Blob;
+            if (file) {
+              this.thumbnail_loading = true;
+              this.helperService
+                .generateImageThumbnail(file, 'image')
+                .then((thumbnail) => {
+                  this.thumbnail_loading = false;
+                  this.upload_thumbnail = thumbnail;
+                  this.uploadVideo();
+                })
+                .catch(() => {
+                  this.thumbnail_loading = false;
+                  this.toast.warning('Cannot load the image file.');
+                });
+            }
+          }
+        }
         break;
     }
   }
