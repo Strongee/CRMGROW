@@ -124,7 +124,11 @@ export class CampaignAddBroadcastComponent implements OnInit {
   }
   addBroadcast(): void {
     this.submitted = true;
-    if (!this.selectedMailList || !this.selectedTemplate) {
+    if (
+      !this.selectedMailList ||
+      !this.selectedTemplate ||
+      !this.selectedDateTime
+    ) {
       return;
     }
 

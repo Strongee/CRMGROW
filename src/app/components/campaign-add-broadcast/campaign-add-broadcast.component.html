@@ -28,11 +28,14 @@
         <div class="row">
           <div class="col-md-7 col-sm-12">
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text bgc-blue border-dark"><i class="bgc-white i-icon i-calendar"></i></span>
-              </div>
               <div ngbDropdown display="dynamic">
-                <input class="form-control datepicker" placeholder="Select date time" name="send_date_time" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bgc-blue border-dark"><i class="bgc-white i-icon i-calendar"></i></span>
+                    <input class="form-control datepicker" placeholder="Select date time" name="send_date_time" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
+                  </div>
+                  <div class="invalid-feedback" [class.invalid]="!selectedDateTime && submitted">Send time is required.</div>
+                </div>
                 <div ngbDropdownMenu class="date-time-picker mb-3">
                   <div class="picker-header v-center justify-content-between mt-2">
                     <div class="f-6 font-weight-bold">Send time</div>
