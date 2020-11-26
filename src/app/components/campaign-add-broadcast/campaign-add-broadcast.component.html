@@ -1,6 +1,5 @@
 <h1 mat-dialog-title>Add broadcast</h1>
-<form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? addBroadcast() : false"
-      [class.was-validated]="submitted">
+<form #actionForm="ngForm" (ngSubmit)="addBroadcast()">
   <mat-dialog-content>
     <div class="form-group">
       <div>
@@ -8,7 +7,7 @@
         <input class="form-control" name="broadcast_name" #broadcast_name="ngModel"
                [(ngModel)]="title" type="text" required/>
         <span class="invalid-feedback"
-              *ngIf="!title">Broadcast name is required.</span>
+              [class.invalid]="!title && submitted">Broadcast name is required.</span>
       </div>
       <div class="mt-3">
         <label>Recipient list</label>

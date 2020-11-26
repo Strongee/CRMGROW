@@ -58,7 +58,6 @@ export class CampaignAddContactComponent implements OnInit {
           this.contactCount = res.count;
           this.totalContacts = res.count;
           this.isSearchedResult = false;
-          console.log('contacts ==============>', res);
         },
         (err) => {
           this.isLoading = false;
@@ -328,7 +327,16 @@ export class CampaignAddContactComponent implements OnInit {
       .getContactsByIds(this.selectedContacts.selected)
       .subscribe(
         (res) => {
-          const contacts = res;
+          const contacts = [];
+          res.forEach((contact) => {
+            const item = {
+              first_name: contact.first_name,
+              last_name: contact.last_name,
+              email: contact.email,
+              cell_phone: contact.cell_phone
+            };
+            contacts.push(item);
+          });
           this.submitted = false;
           this.adding = false;
           this.dialogRef.close({ contacts });

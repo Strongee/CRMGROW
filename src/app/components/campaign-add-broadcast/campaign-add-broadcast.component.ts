@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MaterialAddComponent } from '../material-add/material-add.component';
 import { numPad } from '../../helper';
 import { UserService } from '../../services/user.service';
@@ -123,13 +123,15 @@ export class CampaignAddBroadcastComponent implements OnInit {
       });
   }
   addBroadcast(): void {
-    if (!this.selectedMailList && !this.selectedTemplate) {
+    this.submitted = true;
+    if (!this.selectedMailList || !this.selectedTemplate) {
       return;
     }
 
     this.adding = true;
     this.userService.profile$.subscribe((res) => {
       const timezone = res['time_zone'];
+      console.log("time ===========>", this.time.hour + ':00:00.000', timezone);
       const dueDateTime = new Date(
         `${this.date.year}-${numPad(this.date.month)}-${numPad(
           this.date.day ? this.date.day : this.minDate.day
