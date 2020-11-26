@@ -71,7 +71,7 @@ export class CustomFieldAddComponent implements OnInit {
     this.options.push(data);
   }
 
-  deleteOption(optionLabel: string, index: number): void {
+  deleteOption(index: number): void {
     this.options.splice(index, 1);
     this.isSame = false;
   }
