@@ -202,7 +202,7 @@ export class CampaignAddContactComponent implements OnInit {
         return false;
       }
     }
-    return true;
+    return false;
   }
   searchContacts(): void {
     if (this.searchedName === '') {

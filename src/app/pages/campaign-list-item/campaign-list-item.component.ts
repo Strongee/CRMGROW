@@ -79,7 +79,7 @@ export class CampaignListItemComponent implements OnInit {
     } else {
       return false;
     }
-    return true;
+    return false;
   }
 
   addContact(): void {

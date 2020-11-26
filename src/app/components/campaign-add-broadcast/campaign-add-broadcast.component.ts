@@ -135,7 +135,6 @@ export class CampaignAddBroadcastComponent implements OnInit {
     this.adding = true;
     this.userService.profile$.subscribe((res) => {
       const timezone = res['time_zone'];
-      console.log('this.selectedDateTime*********', this.selectedDateTime);
       const dueDateTime = moment(this.selectedDateTime)
         .set({
           minute: 0,
