@@ -6,6 +6,7 @@ import { CampaignAddContactComponent } from '../../components/campaign-add-conta
 import { UploadContactsComponent } from '../../components/upload-contacts/upload-contacts.component';
 import { MailListService } from '../../services/maillist.service';
 import { ActivatedRoute } from '@angular/router';
+import { ActionItem } from '../../utils/data.types';
 
 @Component({
   selector: 'app-campaign-list-item',
@@ -18,11 +19,13 @@ export class CampaignListItemComponent implements OnInit {
   selectedCSVColumn;
   selectedCSVColumnIndex;
 
+  isLoading = false;
+  isTableChanging = false;
   contacts: any[] = [];
   currentContactPage = 1;
   contactCount;
   selectedContacts = new SelectionModel<any>(true, []);
-
+  selected = 1;
   csvColumns = [];
 
   @Input('id') id: string;
@@ -34,6 +37,20 @@ export class CampaignListItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadContacts();
+  }
+
+  loadContacts(): void {
+    this.isLoading = true;
+    this.mailListService.get(this.id).subscribe(
+      (res) => {
+        this.contacts = res['contacts'];
+        this.isLoading = false;
+      },
+      (error) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   selectAllPage(): void {
@@ -51,6 +68,15 @@ export class CampaignListItemComponent implements OnInit {
       });
     }
   }
+
+  deslectAllPage(): void {
+    this.contacts.forEach((e) => {
+      if (this.selectedContacts.isSelected(e._id)) {
+        this.selectedContacts.deselect(e._id);
+      }
+    });
+  }
+
   isSelectedPage(): any {
     if (this.contacts.length) {
       for (let i = 0; i < this.contacts.length; i++) {
@@ -59,10 +85,11 @@ export class CampaignListItemComponent implements OnInit {
           return false;
         }
       }
+      return true;
     } else {
       return false;
     }
-    return true;
+    return false;
   }
 
   addContact(): void {
@@ -78,22 +105,22 @@ export class CampaignListItemComponent implements OnInit {
         if (res) {
           const contacts = res.contacts;
           if (contacts.length) {
-            this.mailListService.addContacts(this.id, contacts).subscribe(
-              (response) => {
+            this.mailListService
+              .addContacts(this.id, contacts)
+              .subscribe((response) => {
                 if (response.length) {
                   for (let i = 0; i < response.length; i++) {
                     this.contacts.push(response[i]);
                   }
                 }
-              }
-            );
+              });
           }
         }
       });
   }
 
   addUniqueContacts(contacts): void {
-    for( let i = 0; i < contacts.length; i++ ){
+    for (let i = 0; i < contacts.length; i++) {
       if (this.contacts.length) {
         const isExist = this.contacts.filter(
           (contact) => contact.email === contacts[i].email
@@ -124,5 +151,54 @@ export class CampaignListItemComponent implements OnInit {
   }
 
   bulkImport(): void {}
-  addBroadcast(): void {}
+
+  doAction(action: any): void {
+    if (action.label === 'Select All') {
+      this.selectAllPage();
+    } else if (action.label === 'Deselect') {
+      this.deslectAllPage();
+    } else if (action.label === 'Remove') {
+      const removeContacts = [];
+      this.contacts.forEach((e) => {
+        if (this.selectedContacts.isSelected(e._id)) {
+          removeContacts.push(e);
+        }
+      });
+
+      if (removeContacts) {
+        this.isTableChanging = true;
+        this.mailListService.removeContacts(this.id, removeContacts).subscribe((res) => {
+            if (res) {
+              removeContacts.forEach((contact) => {
+                const index = this.contacts.findIndex(
+                  (item) => item._id === contact._id
+                );
+                this.contacts.splice(index, 1);
+              });
+              this.isTableChanging = false;
+            }
+          },
+          (error) => {
+            this.isTableChanging = false;
+          });
+      }
+    }
+  }
+
+  actions: ActionItem[] = [
+    {
+      icon: 'i-trash',
+      label: 'Remove',
+      type: 'button'
+    },
+    {
+      spliter: true,
+      label: 'Select All',
+      type: 'button'
+    },
+    {
+      label: 'Deselect',
+      type: 'button'
+    }
+  ];
 }

@@ -24,6 +24,7 @@ export class CampaignListComponent implements OnInit {
   listCount;
   selected = 1;
   selectedLists = new SelectionModel<any>(true, []);
+  isLoading = false;
 
   @Output() onDetail: EventEmitter<string> = new EventEmitter();
   constructor(
@@ -37,9 +38,15 @@ export class CampaignListComponent implements OnInit {
   }
 
   loadList(): void {
+    this.isLoading = true;
     this.mailListService.getList().subscribe((res) => {
-      this.lists = res;
-    });
+        this.lists = res;
+        this.isLoading = false;
+      },
+      (err) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   /**
@@ -58,6 +65,7 @@ export class CampaignListComponent implements OnInit {
           return false;
         }
       }
+      return true;
     }
     return false;
   }

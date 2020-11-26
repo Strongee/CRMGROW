@@ -58,7 +58,6 @@ export class CampaignAddContactComponent implements OnInit {
           this.contactCount = res.count;
           this.totalContacts = res.count;
           this.isSearchedResult = false;
-          console.log('contacts ==============>', res);
         },
         (err) => {
           this.isLoading = false;
@@ -119,6 +118,17 @@ export class CampaignAddContactComponent implements OnInit {
     }
     return retVal;
   }
+  getAvatarName(contact): any {
+    if (contact.first_name && contact.last_name) {
+      return contact.first_name[0] + contact.last_name[0];
+    } else if (contact.first_name && !contact.last_name) {
+      return contact.first_name[0];
+    } else if (!contact.first_name && contact.last_name) {
+      return contact.last_name[0];
+    }
+    return 'UC';
+  }
+
   selectAllContact(): void {
     if (this.isSearchedResult) {
       this.contacts.forEach((e) => {
@@ -188,6 +198,7 @@ export class CampaignAddContactComponent implements OnInit {
             return false;
           }
         }
+        return true;
       } else {
         return false;
       }
@@ -199,11 +210,12 @@ export class CampaignAddContactComponent implements OnInit {
             return false;
           }
         }
+        return true;
       } else {
         return false;
       }
     }
-    return true;
+    return false;
   }
   searchContacts(): void {
     if (this.searchedName === '') {
@@ -328,7 +340,17 @@ export class CampaignAddContactComponent implements OnInit {
       .getContactsByIds(this.selectedContacts.selected)
       .subscribe(
         (res) => {
-          const contacts = res;
+          const contacts = [];
+          res.forEach((contact) => {
+            const item = {
+              _id: contact._id,
+              first_name: contact.first_name,
+              last_name: contact.last_name,
+              email: contact.email,
+              cell_phone: contact.cell_phone
+            };
+            contacts.push(item);
+          });
           this.submitted = false;
           this.adding = false;
           this.dialogRef.close({ contacts });

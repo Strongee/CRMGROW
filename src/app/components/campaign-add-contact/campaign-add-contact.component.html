@@ -17,13 +17,6 @@
                  placeholder="Start typing contact info to search">
         </div>
       </div>
-      <div class="d-flex justify-content-end align-items-center mt-5">
-        <div class="f-5 font-weight-bold mb-2" *ngIf="contactCount">{{contactCount}} contact(s)</div>
-        <div class="ml-3 pagination-wrapper" *ngIf="contactCount">
-          <pagination-controls (pageChange)="setPageContacts($event)" id="searchContacts" maxSize="5" previousLabel=""
-                               nextLabel=""></pagination-controls>
-        </div>
-      </div>
       <div class="v-center justify-content-center my-3" *ngIf="pageContacts.length && isSelectedPage() && !isLoading">
         <div class="f-6 font-weight-bold">{{selectedContacts.selected.length}} contacts on this page is selected.</div>
         <button type="button" class="btn btn-white-blue ml-4" (click)="selectAllContact()" *ngIf="selectedContacts.selected.length != contactCount">Select All {{contactCount}} Contacts</button>
@@ -67,19 +60,7 @@
                 <div class="v-center">
                   <div>
                     <div class="contact-avatar">
-                      <ng-container *ngIf="!contact.first_name && !contact.last_name; else hasNamedAvatar">
-                        UC
-                      </ng-container>
-                      <ng-template #hasNamedAvatar>
-                        <ng-container *ngIf="contact.first_name != '' && contact.first_name; else lastnameAvatar">
-                          {{contact.first_name.length > 1 ? contact.first_name[0] + contact.first_name[1] : contact.first_name[0]}}
-                        </ng-container>
-                        <ng-template #lastnameAvatar>
-                          <ng-container *ngIf="contact.last_name && contact.last_name != ''">
-                            {{contact.last_name[0].length > 1 ? contact.last_name[0] + contact.last_name[1] : contact.last_name[0] }}
-                          </ng-container>
-                        </ng-template>
-                      </ng-template>
+                      {{getAvatarName(contact)}}
                     </div>
                   </div>
                   <div class="f-4 ml-2">
@@ -131,6 +112,12 @@
           </ng-container>
         </table>
       </ng-container>
+      <div class="d-flex justify-content-center align-items-center mt-3">
+        <div class="ml-3 pagination-wrapper" *ngIf="contactCount">
+          <pagination-controls (pageChange)="setPageContacts($event)" id="searchContacts" maxSize="5" previousLabel=""
+                               nextLabel=""></pagination-controls>
+        </div>
+      </div>
     </ng-container>
   </mat-dialog-content>
   <mat-dialog-actions class="justify-content-end mx-0">
@@ -138,7 +125,7 @@
       Cancel
     </button>
     <button type="submit" class="btn btn-primary font-weight-bold f-6" [class.loading]="adding">
-      Create
+      Add
     </button>
   </mat-dialog-actions>
 </form>

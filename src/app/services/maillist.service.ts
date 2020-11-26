@@ -19,11 +19,16 @@ export class MailListService extends HttpService {
   ) {
     super(errorService);
   }
-
+  get(id): Observable<MailList[]> {
+    return this.httpClient.get(this.server + MAILLIST.GET + id).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET MAILLIST', []))
+    );
+  }
   getList(): Observable<MailList[]> {
     return this.httpClient.get(this.server + MAILLIST.GET).pipe(
       map((res) => res['data'] || []),
-      catchError(this.handleError('GET MAILLIST', []))
+      catchError(this.handleError('GET ALL MAILLIST', []))
     );
   }
   createList(title, contacts): Observable<MailList[]> {
@@ -34,22 +39,20 @@ export class MailListService extends HttpService {
         catchError(this.handleError('CREATE MAILLIST', []))
       );
   }
-  search(keyword): Observable<MailList[]> {
-    return this.httpClient
-      .post(`${this.server + TEMPLATE.SEARCH}?q=${keyword}`, {})
-      .pipe(
-        map((res) =>
-          (res['data'] || []).map((e) => new MailList().deserialize(e))
-        ),
-        catchError(this.handleError('SEARCH MAILLIST', []))
-      );
-  }
   addContacts(mail_list, contacts): Observable<any[]> {
     return this.httpClient
       .post(this.server + MAILLIST.ADD_CONTACTS, { mail_list, contacts })
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('ADD CONTACTS', []))
+      );
+  }
+  removeContacts(mail_list, contacts): Observable<any> {
+    return this.httpClient
+      .post(this.server + MAILLIST.REMOVE_CONTACTS, { mail_list, contacts })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('REMOVE CONTACTS', []))
       );
   }
 }

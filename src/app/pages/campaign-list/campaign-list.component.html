@@ -3,56 +3,66 @@
     <div class="d-flex justify-content-between align-items-center">
       <h2 class="mb-4"></h2>
       <div>
-        <button type="button" class="btn btn-primary f-5 ml-auto" (click)="addList()">+ Add a list</button>
+        <button type="button" class="btn btn-primary shadow f-5 ml-auto" (click)="addList()">+ Add a list</button>
       </div>
     </div>
   </div>
   <div class="col-12 mt-3">
-    <table class="table campaign-list-table">
-      <thead>
-        <tr>
-          <th class="check-cell border-top-0">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="selectAllLists" (change)="selectAllPage()" [checked]="isSelectedPage()">
-              <label class="custom-control-label" for="selectAllLists"></label>
-            </div>
-          </th>
-          <th class="name">List</th>
-          <th class="subscribers">Subscribers</th>
-          <th class="unsubscribers">Unsbuscribes</th>
-          <th class="delivery-issues">Delivery issues</th>
-          <th class="action">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngIf="lists">
-          <tr *ngFor="let list of lists">
-            <td class="check-cell">
+    <ng-container *ngIf="isLoading; else listShow">
+      <app-loading-overlay type="table"></app-loading-overlay>
+    </ng-container>
+    <ng-template #listShow>
+      <ng-container *ngIf="lists.length; else noLists">
+        <table class="table campaign-list-table">
+          <thead>
+          <tr>
+            <th class="check-cell border-top-0">
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="list-{{list._id}}" (change)="selectedLists.toggle(list._id)" [checked]="selectedLists.isSelected(list._id)">
-                <label class="custom-control-label" for="list-{{list._id}}"></label>
+                <input type="checkbox" class="custom-control-input" id="selectAllLists" (change)="selectAllPage()" [checked]="isSelectedPage()">
+                <label class="custom-control-label" for="selectAllLists"></label>
               </div>
-            </td>
-            <td class="name">
-              <div class="c-blue f-8 font-weight-bold" (click)="goToDetailPage(list._id)">{{list.title}}</div>
-            </td>
-            <td class="subscribers">
-              <div class="f-6 font-weight-bold">{{list.subscribers}}</div>
-            </td>
-            <td class="unsubscribers">
-              <div class="f-6 font-weight-bold">{{list.unsubscribers}}</div>
-            </td>
-            <td class="delivery-issues">
-              <div class="f-6 font-weight-bold">{{list.deliveryissues}}</div>
-            </td>
-            <td class="action">
-              <div class="v-center justify-content-end btn bg-white" (click)="editList(list)">
-                <i class="bgc-dark opacity-3 i-icon i-edit"></i>
-              </div>
-            </td>
+            </th>
+            <th class="name">List</th>
+            <th class="subscribers">Subscribers</th>
+            <th class="unsubscribers">Unsbuscribes</th>
+            <th class="delivery-issues">Delivery issues</th>
+            <th class="action">Action</th>
           </tr>
-        </ng-container>
-    </table>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="lists">
+            <tr *ngFor="let list of lists">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="list-{{list._id}}" (change)="selectedLists.toggle(list._id)" [checked]="selectedLists.isSelected(list._id)">
+                  <label class="custom-control-label" for="list-{{list._id}}"></label>
+                </div>
+              </td>
+              <td class="name">
+                <div class="c-blue f-6 font-weight-bold" (click)="goToDetailPage(list._id)">{{list.title}}</div>
+              </td>
+              <td class="subscribers">
+                <div class="f-6 font-weight-bold">{{list.subscribers}}</div>
+              </td>
+              <td class="unsubscribers">
+                <div class="f-6 font-weight-bold">{{list.unsubscribers}}</div>
+              </td>
+              <td class="delivery-issues">
+                <div class="f-6 font-weight-bold">{{list.deliveryissues}}</div>
+              </td>
+              <td class="action">
+                <div class="v-center justify-content-end btn bg-white" (click)="editList(list)">
+                  <i class="bgc-dark opacity-3 i-icon i-edit"></i>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </table>
+      </ng-container>
+      <ng-template #noLists>
+        <app-data-empty [type]="'campaign-list'"></app-data-empty>
+      </ng-template>
+    </ng-template>
   </div>
 </div>
-<app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar>
+<app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)" *ngIf="lists.length"></app-actions-bar>
