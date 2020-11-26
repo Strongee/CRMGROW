@@ -11,7 +11,7 @@
       </div>
       <div class="mt-3">
         <label>Recipient list</label>
-        <app-mail-list (onSelect)="selectMailList($event)"></app-mail-list>
+        <app-mail-list [placeholder]="'Search mail lists'" [(maillist)]="selectedMailList"></app-mail-list>
         <div class="invalid-feedback" [class.invalid]="!selectedMailList && submitted">MailList is required.</div>
       </div>
       <div class="mt-3">
@@ -19,7 +19,7 @@
         <app-input-template
           [type]="'email'"
           [placeholder]="'Search templates'"
-          (onSelect)="selectTemplate($event)">
+          [(template)]="selectedTemplate">
         </app-input-template>
         <div class="invalid-feedback" [class.invalid]="!selectedTemplate && submitted">Email template is required.</div>
       </div>
