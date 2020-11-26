@@ -23,6 +23,7 @@ import {
 } from 'rxjs/operators';
 import { MailList } from '../../models/maillist.model';
 import { MailListService } from '../../services/maillist.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-mail-list',
@@ -34,6 +35,11 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input('placeholder') placeholder = 'Search mail list';
   @Input('formPlaceholder') formPlaceholder = 'Search mail list';
   @Output() onSelect = new EventEmitter();
+
+  @Input() id: string = '';
+  @Output() idChange = new EventEmitter<string>();
+  @Input() maillist: MailList;
+  @Output() maillistChange = new EventEmitter<MailList>();
 
   formControl: FormControl = new FormControl();
   inputControl: FormControl = new FormControl();
@@ -62,16 +68,15 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe(
         (api) => {
-          api.subscribe((res) => {
-            const maillists = [];
-            res.forEach((item) => {
-              if (item.title.includes(this.search)) {
-                maillists.push(item);
+          api.subscribe((mailLists) => {
+            const res = _.filter(mailLists, (e) => {
+              const searchReg = new RegExp(this.search, 'gi');
+              if (searchReg.test(e.title)) {
+                return true;
               }
             });
             this.searching = false;
-            this.filteredResults.next(maillists);
-            // this.filteredResults.next(maillists);
+            this.filteredResults.next(res);
           });
         },
         () => {
@@ -79,7 +84,24 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       );
     this.formControl.valueChanges.subscribe((val) => {
-      this.onSelect.emit(val);
+      if (val && val._id !== this.id) {
+        this.maillistChange.emit(val);
+        this.idChange.emit(val._id);
+      }
+    });
+
+    // Init the Form Control with Two-bind Modal
+    if (this.maillist) {
+      this.formControl.setValue(this.maillist);
+    }
+    this.mailListService.getList().subscribe((mailLists) => {
+      this.filteredResults.next(mailLists);
+      if (this.id) {
+        const mailList = _.find(mailLists, (e) => {
+          return this.id === e._id;
+        });
+        mailList && this.formControl.setValue(mailList);
+      }
     });
   }
 
