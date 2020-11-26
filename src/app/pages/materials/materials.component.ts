@@ -13,7 +13,7 @@ import { BulkActions } from 'src/app/constants/variable.constants';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 import { getJSDocThisTag } from 'typescript';
-import {RecordSettingDialogComponent} from "../../components/record-setting-dialog/record-setting-dialog.component";
+import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { Subscription } from 'rxjs';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { VideoEditComponent } from 'src/app/components/video-edit/video-edit.component';
@@ -788,7 +788,7 @@ export class MaterialsComponent implements OnInit {
   recordSetting(): void {
     this.dialog.open(RecordSettingDialogComponent, {
       width: '96vw',
-      maxWidth: '600px',
+      maxWidth: '600px'
     });
   }
   doAction(evt: any): void {
