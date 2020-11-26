@@ -47,4 +47,12 @@ export class MailListService extends HttpService {
         catchError(this.handleError('ADD CONTACTS', []))
       );
   }
+  removeContacts(mail_list, contacts): Observable<any> {
+    return this.httpClient
+      .post(this.server + MAILLIST.REMOVE_CONTACTS, { mail_list, contacts })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('REMOVE CONTACTS', []))
+      );
+  }
 }

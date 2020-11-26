@@ -6,6 +6,7 @@ import { CampaignAddContactComponent } from '../../components/campaign-add-conta
 import { UploadContactsComponent } from '../../components/upload-contacts/upload-contacts.component';
 import { MailListService } from '../../services/maillist.service';
 import { ActivatedRoute } from '@angular/router';
+import {ActionItem} from "../../utils/data.types";
 
 @Component({
   selector: 'app-campaign-list-item',
@@ -22,7 +23,7 @@ export class CampaignListItemComponent implements OnInit {
   currentContactPage = 1;
   contactCount;
   selectedContacts = new SelectionModel<any>(true, []);
-
+  selected = 1;
   csvColumns = [];
 
   @Input('id') id: string;
@@ -58,6 +59,15 @@ export class CampaignListItemComponent implements OnInit {
       });
     }
   }
+
+  deslectAllPage(): void {
+    this.contacts.forEach((e) => {
+      if (this.selectedContacts.isSelected(e._id)) {
+        this.selectedContacts.deselect(e._id);
+      }
+    });
+  }
+
   isSelectedPage(): any {
     if (this.contacts.length) {
       for (let i = 0; i < this.contacts.length; i++) {
@@ -131,5 +141,48 @@ export class CampaignListItemComponent implements OnInit {
   }
 
   bulkImport(): void {}
-  addBroadcast(): void {}
+
+  doAction(action: any): void {
+    if (action.label === 'Select All') {
+      this.selectAllPage();
+    } else if (action.label === 'Deselect') {
+      this.deslectAllPage();
+    } else if (action.label === 'Remove') {
+      const removeContacts = [];
+      this.contacts.forEach((e) => {
+        if (this.selectedContacts.isSelected(e._id)) {
+          removeContacts.push(e);
+        }
+      });
+      this.mailListService
+        .removeContacts(this.id, removeContacts)
+        .subscribe((res) => {
+          if (res) {
+            removeContacts.forEach((contact) => {
+              const index = this.contacts.findIndex(
+                (item) => item._id === contact._id
+              );
+              this.contacts.splice(index, 1);
+            });
+          }
+        });
+    }
+  }
+
+  actions: ActionItem[] = [
+    {
+      icon: 'i-trash',
+      label: 'Remove',
+      type: 'button'
+    },
+    {
+      spliter: true,
+      label: 'Select All',
+      type: 'button'
+    },
+    {
+      label: 'Deselect',
+      type: 'button'
+    }
+  ];
 }
