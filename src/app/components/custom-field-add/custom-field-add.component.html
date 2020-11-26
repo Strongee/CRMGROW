@@ -69,7 +69,7 @@
                     <div class="col-12 mt-3">
                         <div class="form-group">
                             <label for="option" class="mb-0">options</label>
-                            <div class="v-center mt-3 dropdown-options" *ngFor="let option of options">
+                            <div class="v-center mt-3 dropdown-options" *ngFor="let option of options; let index=index">
                                 <div class="dropdown-option w-100">
                                     <input
                                         class="form-control"
@@ -81,12 +81,14 @@
                                         required
                                     />
                                 </div>
-                                <span class="f-1 font-weightb-bold c-blue ml-3 c-pointer" (click)="deleteOption(option.label)">Delete</span>
+                                <span class="f-1 font-weightb-bold c-blue ml-3 c-pointer" (click)="deleteOption(option.label, index)">Delete</span>
                             </div>
                             <span class="invalid-option mt-1" *ngIf="isSame">
                                 Duplicated options is existing.
                             </span>
-                            <a class="v-center justify-content-center btn btn-white-blue w-100 py-2 mt-3" (click)="addOption()"><i class="d-block i-icon i-plus bgc-blue"></i></a> 
+                            <button class="v-center justify-content-center btn btn-white-blue w-100 py-2 mt-3" type="button" (click)="addOption()" [disabled]="isSame">
+                                <i class="d-block i-icon i-plus bgc-blue"></i>
+                            </button> 
                         </div>
                     </div>
                 </ng-template>
@@ -95,9 +97,9 @@
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <a class="btn btn-white f-6 font-weight-bold c-blue mr-2" (click)="close()">Cancel</a>
-        <button *ngIf="customFieldType == 'create'; else updateButton" class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Add</button>
+        <button *ngIf="customFieldType == 'create'; else updateButton" class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving" [disabled]="isSame">Add</button>
         <ng-template #updateButton>
-            <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Update</button>
+            <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving" [disabled]="isSame">Update</button>
         </ng-template>
     </mat-dialog-actions>
 </form>
