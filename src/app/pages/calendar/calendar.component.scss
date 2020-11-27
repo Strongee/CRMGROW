@@ -157,6 +157,13 @@
                             }
                         }
                     }
+                    mwl-calendar-week-view-hour-segment {
+                        border-top: unset;
+                        .cal-day-timelabel {
+                            width: 70px;
+                            border-right: 1px solid #e1e1e1;
+                        }
+                    }
                 }
                 .cal-hour .cal-hour-segment {
                     justify-content: start;
