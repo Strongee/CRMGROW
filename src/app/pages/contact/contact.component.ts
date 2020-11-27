@@ -4,7 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
-import { ActivityDetail, DetailActivity } from 'src/app/models/activityDetail.model';
+import {
+  ActivityDetail,
+  DetailActivity
+} from 'src/app/models/activityDetail.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ContactMergeComponent } from 'src/app/components/contact-merge/contact-merge.component';
 
 @Component({
   selector: 'app-contact',
@@ -52,6 +57,7 @@ export class ContactComponent implements OnInit {
   mainAction = 'send_message';
   activeHistory = 'all';
   constructor(
+    private dialog: MatDialog,
     private location: Location,
     private route: ActivatedRoute,
     private contactService: ContactService,
@@ -181,4 +187,16 @@ export class ContactComponent implements OnInit {
    * Create Note
    */
   createNote(): void {}
+
+  contactMerge(contact: any): void {
+    this.dialog.open(ContactMergeComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '900px',
+      maxHeight: '600px',
+      data: {
+        contact: contact
+      }
+    });
+  }
 }
