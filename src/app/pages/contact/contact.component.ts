@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
-import { ActivityDetail, DetailActivity } from 'src/app/models/activity.model';
+import { ActivityDetail, DetailActivity } from 'src/app/models/activityDetail.model';
 
 @Component({
   selector: 'app-contact',

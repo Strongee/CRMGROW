@@ -1,4 +1,4 @@
-import { DetailActivity, PureActivity } from './activity.model';
+import { DetailActivity, PureActivity } from './activityDetail.model';
 import { Deserializable } from './deserialize.model';
 import { Task } from './task.model';
 import { Timeline } from './timeline.model';

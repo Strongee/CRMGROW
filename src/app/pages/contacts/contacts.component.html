@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="custom-mat-table">
-    <table class="w-100" mat-table [dataSource]="storeService.contacts$ | async">
+    <table class="w-100" mat-table [dataSource]="storeService.pageContacts$ | async | paginate: {id: 'contactPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: contactService.total$ | async}">
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef class="pl-2">
           <div class="custom-control custom-checkbox" [class.indeterminate]="selection.hasValue() && !isAllSelected()">
@@ -119,6 +119,25 @@
       <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
       <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
     </table>
+    <div class="d-flex justify-content-center align-items-center my-2">
+      <div class="ml-3 pagination-wrapper">
+        <pagination-controls (pageChange)="page = $event" id="contactPages" maxSize="5" previousLabel=""
+                             nextLabel=""></pagination-controls>
+      </div>
+    </div>
+    <div class="" ngbDropdown placement="bottom-right">
+      <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
+        <span class="pr-2">Page Size</span>
+      </div>
+      <div ngbDropdownMenu aria-labelledby="contactPageSize">
+        <div class="py-2" ngbDropdownItem *ngFor="let type of PAGE_COUNTS" (click)="changePageSize(type)">
+          <span class="f-3 v-center" [class.font-weight-bold]="type.id === pageSize.id">
+            {{type.label}}
+            <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1" *ngIf="type.id === pageSize.id"></i>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

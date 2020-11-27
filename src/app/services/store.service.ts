@@ -16,7 +16,9 @@ export class StoreService {
 
   tasks: BehaviorSubject<TaskDetail[]> = new BehaviorSubject([]);
   activities: BehaviorSubject<Activity[]> = new BehaviorSubject([]);
-  contacts: BehaviorSubject<ContactActivity[]> = new BehaviorSubject([]);
+
+  contacts: ContactActivity[] = [];
+  pageContacts: BehaviorSubject<ContactActivity[]> = new BehaviorSubject([]);
   selectedContact: BehaviorSubject<ContactDetail> = new BehaviorSubject(
     new ContactDetail()
   );
@@ -30,7 +32,7 @@ export class StoreService {
 
   tasks$ = this.tasks.asObservable();
   activities$ = this.activities.asObservable();
-  contacts$ = this.contacts.asObservable();
+  pageContacts$ = this.pageContacts.asObservable();
   selectedContact$ = this.selectedContact.asObservable();
 
   videos$ = this.videos.asObservable();
@@ -45,7 +47,6 @@ export class StoreService {
     this.tags.next([]);
     this.tasks.next([]);
     this.activities.next([]);
-    this.contacts.next([]);
     this.videos.next([]);
     this.pdfs.next([]);
     this.images.next([]);
