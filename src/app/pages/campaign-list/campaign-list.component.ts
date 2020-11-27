@@ -86,6 +86,22 @@ export class CampaignListComponent implements OnInit {
     }
   }
 
+  selectAll(): void {
+    this.lists.forEach((e) => {
+      if (!this.selectedLists.isSelected(e._id)) {
+        this.selectedLists.select(e._id);
+      }
+    });
+  }
+
+  deselectAll(): void {
+    this.lists.forEach((e) => {
+      if (this.selectedLists.isSelected(e._id)) {
+        this.selectedLists.deselect(e._id);
+      }
+    });
+  }
+
   addList(): void {
     this.dialog
       .open(CampaignAddListComponent, {
@@ -105,18 +121,22 @@ export class CampaignListComponent implements OnInit {
   editList(list): void {}
 
   doAction(action: any): void {
-    console.log('action', action);
+    if (action.label === 'Select All') {
+      this.selectAll();
+    } else if (action.label === 'Deselect') {
+      this.deselectAll();
+    }
   }
 
   actions: ActionItem[] = [
     {
       icon: 'i-message',
-      label: 'Merge list',
+      label: 'Merge',
       type: 'button'
     },
     {
       icon: 'i-message',
-      label: 'Delete list',
+      label: 'Delete',
       type: 'button'
     },
     {

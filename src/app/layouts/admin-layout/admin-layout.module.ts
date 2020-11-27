@@ -52,6 +52,8 @@ import { CampaignBulkMailingItemComponent } from '../../pages/campaign-bulk-mail
 import { AutoResendVideoComponent } from '../../pages/auto-resend-video/auto-resend-video.component';
 import { AutoFollowUpComponent } from '../../pages/auto-follow-up/auto-follow-up.component';
 import { ContactComponent } from '../../pages/contact/contact.component';
+import { TeamListComponent } from '../../pages/team-list/team-list.component';
+import { TeamCallComponent } from '../../pages/team-call/team-call.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +94,9 @@ import { ContactComponent } from '../../pages/contact/contact.component';
     MoneyPipe,
     CampaignListItemComponent,
     CampaignBulkMailingItemComponent,
-    ContactComponent
+    ContactComponent,
+    TeamListComponent,
+    TeamCallComponent
   ],
   imports: [
     CommonModule,
