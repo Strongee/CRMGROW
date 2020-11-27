@@ -671,19 +671,19 @@
             <ng-container *ngIf="type.indexOf('email')!==-1; else textTemplate">
               <label class="theme-label">Template</label>
               <app-input-template
-                [value]="selectedTemplate"
                 [type]="'email'"
                 [placeholder]="'Search templates'"
-                (onSelect)="selectTemplate($event)">
+                [(template)]="selectedTemplate"
+                (templateChange)="selectTemplate($event)">
               </app-input-template>
             </ng-container>
             <ng-template #textTemplate>
               <label class="theme-label">Template</label>
               <app-input-template
-                [value]="selectedTemplate"
                 [type]="'email'"
                 [placeholder]="'Search templates'"
-                (onSelect)="selectTemplate($event)">
+                [(template)]="selectedTemplate"
+                (templateChange)="selectTemplate($event)">
               </app-input-template>
             </ng-template>
           </div>
