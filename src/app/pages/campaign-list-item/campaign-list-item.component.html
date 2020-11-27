@@ -62,4 +62,4 @@
 
   </div>
 </div>
-<app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar>
+<app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)" *ngIf="contacts.length"></app-actions-bar>
