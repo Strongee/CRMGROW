@@ -1,0 +1,206 @@
+@import "src/variables";
+
+.table {
+  th, td {
+    padding: 10px 0px;
+  }
+
+  tbody tr {
+    height: 50px;
+  }
+}
+
+.group-call-container {
+  .table {
+
+    tbody tr {
+      height: 90px;
+      border-bottom-width: 1px;
+      border-bottom-color: $color-trans08;
+      border-bottom-style: solid;
+    }
+  }
+}
+
+.team-actions {
+  text-align: right;
+
+  .button-more {
+    a {
+      &::after {
+        content: none;
+      }
+    }
+  }
+}
+
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.group-call-container {
+  .mat-accordion {
+    .mat-expansion-panel {
+      box-shadow: none;
+
+      .mat-expansion-panel-header {
+        .mat-content {
+          order: 2;
+        }
+      }
+    }
+  }
+
+  .call-request-table {
+
+    .guests {
+      text-align: right;
+      padding-right: 30px;
+    }
+    td {
+      cursor: pointer;
+    }
+
+    &.loading {
+      filter: blur(1px);
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .call-request-table {
+
+      .avatar {
+        display: none;
+      }
+
+      .name-avatar {
+        display: none;
+      }
+
+      .guests {
+        display: none;
+      }
+
+      .organizer {
+        display: none;
+      }
+    }
+
+    .scheduled-call-table {
+      .leader {
+        display: none;
+      }
+    }
+
+    .completed-call-table {
+      .leader {
+        display: none;
+      }
+    }
+  }
+
+  .expand {
+    .i-icon {
+      transition: all .3s;
+      width: 10px;
+      height: 10px;
+
+      &.expand {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  .subscribe-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+
+    &.like {
+      background-color: #04b800;
+    }
+
+    &.unlike {
+      background-color: #d92121;
+      transform: rotate(180deg);
+    }
+  }
+
+  .status {
+    color: #FFFFFF;
+    width: 60px;
+    text-align: center;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+
+    .pending {
+      background-color: #0000FF;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .canceled {
+      background-color: #d92121;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .planned {
+      background-color: #f28422;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+
+    .finished {
+      background-color: #04b800;
+      border-radius: 5px;
+      padding: 3px 5px;
+    }
+  }
+  .pagination-wrapper {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    bottom: 8px;
+  }
+
+  :host ::ng-deep {
+    .pagination-wrapper {
+      pagination-controls {
+        background: #f8f8f8;
+        padding: 3px 5px;
+        border: 1px solid gainsboro;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  mat-expansion-panel {
+    overflow: visible;
+
+    mat-expansion-panel-header,
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
+  }
+
+  .ngx-pagination .pagination-previous a::before, .ngx-pagination .pagination-previous.disabled::before {
+    content: '◀';
+  }
+
+  .ngx-pagination .pagination-next a::after, .ngx-pagination .pagination-next.disabled::after {
+    content: '▶';
+  }
+
+  ul.ngx-pagination .current {
+    background-color: #0000ff;
+  }
+
+  .dropdown-menu {
+    border-radius: 8px;
+  }
+}

@@ -69,7 +69,15 @@ export class CampaignListItemComponent implements OnInit {
     }
   }
 
-  deslectAllPage(): void {
+  selectAll(): void {
+    this.contacts.forEach((e) => {
+      if (!this.selectedContacts.isSelected(e._id)) {
+        this.selectedContacts.select(e._id);
+      }
+    });
+  }
+
+  deselectAll(): void {
     this.contacts.forEach((e) => {
       if (this.selectedContacts.isSelected(e._id)) {
         this.selectedContacts.deselect(e._id);
@@ -154,9 +162,9 @@ export class CampaignListItemComponent implements OnInit {
 
   doAction(action: any): void {
     if (action.label === 'Select All') {
-      this.selectAllPage();
+      this.selectAll();
     } else if (action.label === 'Deselect') {
-      this.deslectAllPage();
+      this.deselectAll();
     } else if (action.label === 'Remove') {
       const removeContacts = [];
       this.contacts.forEach((e) => {
