@@ -1105,6 +1105,11 @@ table {
   width: 60px;
   height: 60px;
   margin: auto;
+
+  &.lg {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 
@@ -1422,5 +1427,54 @@ body {
         }
       }
     }
+  }
+}
+
+
+/*===== Empty List ====*/
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+
+  .object-icon {
+    width: 88px;
+    height: 88px;
+    background: $color-trans08;
+    border-radius: 50%;
+    justify-content: center;
+    i {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+.list-loading {
+  padding: 15px;
+}
+.updating-status {
+  position: absolute;
+  background: #000000aa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  z-index: 2;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 14px;
+  animation: loadAppear 0.4s;
+}
+
+@keyframes loadAppear {
+  0% {
+    top: 20px;
+    opacity: 0;
+  }
+  100% {
+    top: 50px;
+    opacity: 1;
   }
 }

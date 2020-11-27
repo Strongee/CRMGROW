@@ -20,6 +20,7 @@ export class TemplatesService extends HttpService {
   templates: BehaviorSubject<Template[]> = new BehaviorSubject([]);
   templates$ = this.templates.asObservable();
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loading$ = this.loadStatus.asObservable();
 
   /**
    * LOAD ALL TEMPLATES

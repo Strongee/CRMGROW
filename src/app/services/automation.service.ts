@@ -19,6 +19,7 @@ export class AutomationService extends HttpService {
   automations: BehaviorSubject<Automation[]> = new BehaviorSubject([]);
   automations$ = this.automations.asObservable();
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loading$ = this.loadStatus.asObservable();
 
   /**
    * Load All Automations
