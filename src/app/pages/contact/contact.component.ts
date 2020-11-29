@@ -192,7 +192,7 @@ export class ContactComponent implements OnInit {
     this.dialog.open(ContactMergeComponent, {
       position: { top: '100px' },
       width: '100vw',
-      maxWidth: '900px',
+      maxWidth: '700px',
       maxHeight: '600px',
       data: {
         contact: contact

@@ -18,14 +18,16 @@
     </button>
 </div>
 <mat-dialog-content class="mt-4">
-    <div class="v-center justify-content-between">
-        <div class="source-contact">
+    <div class="d-flex">
+        <div class="source-contact mr-5">
             <div class="v-center select-all">
                 <div class="custom-control custom-checkbox">
                     <input
                       type="checkbox"
                       class="custom-control-input"
                       id="sourceSelectAll"
+                      (change)="selectAll('source')"
+                      [checked]="isSelected('source')"
                     />
                     <label
                       class="custom-control-label"
@@ -47,13 +49,15 @@
                           type="checkbox"
                           class="custom-control-input"
                           id="sourceName"
+                          (change)="selectedSourceLists.toggle('sourceName')"
+                          [checked]="selectedSourceLists.isSelected('sourceName')"
                         />
                         <label
                           class="custom-control-label"
                           for="sourceName"
                         ></label>
                     </div>
-                    <span class="f-6 font-weight-bold">Rafal Baran</span>
+                    <span class="f-6 font-weight-bold">{{sourceContact.fullName}}</span>
                 </div>
             </div>
             <div class="v-center contact-label">
@@ -66,13 +70,15 @@
                           type="checkbox"
                           class="custom-control-input"
                           id="sourceLabel"
+                          (change)="selectedSourceLists.toggle('sourceLabel')"
+                          [checked]="selectedSourceLists.isSelected('sourceLabel')"
                         />
                         <label
                           class="custom-control-label"
                           for="sourceLabel"
                         ></label>
                     </div>
-                    <app-label-select [value]="'Warm'"></app-label-select>
+                    <app-label-select [value]="sourceContact.label"></app-label-select>
                 </div>
             </div>
             <div class="source-primary">
@@ -82,6 +88,8 @@
                           type="checkbox"
                           class="custom-control-input"
                           id="sourcePrimary"
+                          (change)="selectedSourceLists.toggle('sourcePrimary')"
+                          [checked]="selectedSourceLists.isSelected('sourcePrimary')"
                         />
                         <label
                           class="custom-control-label"
@@ -100,13 +108,15 @@
                               type="checkbox"
                               class="custom-control-input"
                               id="sourcePrimaryPhone"
+                              (change)="selectedSourceLists.toggle('sourcePrimaryPhone')"
+                              [checked]="selectedSourceLists.isSelected('sourcePrimaryPhone')"
                             />
                             <label
                               class="custom-control-label"
                               for="sourcePrimaryPhone"
                             ></label>
                         </div>
-                        <span class="f-6">+1 (202) 555 0168</span>
+                        <span class="f-6">{{sourceContact.cell_phone}}</span>
                     </div>
                 </div>
                 <div class="v-center mt-1 primary-email">
@@ -119,13 +129,15 @@
                               type="checkbox"
                               class="custom-control-input"
                               id="sourcePrimaryEmail"
+                              (change)="selectedSourceLists.toggle('sourcePrimaryEmail')"
+                              [checked]="selectedSourceLists.isSelected('sourcePrimaryEmail')"
                             />
                             <label
                               class="custom-control-label"
                               for="sourcePrimaryEmail"
                             ></label>
                         </div>
-                        <span class="f-6">firstname.lastname@gmail.com</span>
+                        <span class="f-6">{{sourceContact.email}}</span>
                     </div>
                 </div>
                 <div class="v-center mt-1 primary-address">
@@ -138,13 +150,15 @@
                               type="checkbox"
                               class="custom-control-input"
                               id="sourcePrimaryAddress"
+                              (change)="selectedSourceLists.toggle('sourcePrimaryAddress')"
+                              [checked]="selectedSourceLists.isSelected('sourcePrimaryAddress')"
                             />
                             <label
                               class="custom-control-label"
                               for="sourcePrimaryAddress"
                             ></label>
                         </div>
-                        <span class="f-6">698 E Milwaukee Ave Scranton US 18503</span>
+                        <span class="f-6">{{sourceContact.fullAddress}}</span>
                     </div>
                 </div>
                 <div class="v-center mt-1 primary-website">
@@ -157,13 +171,15 @@
                               type="checkbox"
                               class="custom-control-input"
                               id="sourcePrimaryWebsite"
+                              (change)="selectedSourceLists.toggle('sourcePrimaryWebsite')"
+                              [checked]="selectedSourceLists.isSelected('sourcePrimaryWebsite')"
                             />
                             <label
                               class="custom-control-label"
                               for="sourcePrimaryWebsite"
                             ></label>
                         </div>
-                        <span class="f-6">companypersonalwebsite.com</span>
+                        <span class="f-6">{{sourceContact.website}}</span>
                     </div>
                 </div>
             </div>
@@ -174,6 +190,8 @@
                           type="checkbox"
                           class="custom-control-input"
                           id="sourceSecond"
+                          (change)="selectedSourceLists.toggle('sourceSecond')"
+                          [checked]="selectedSourceLists.isSelected('sourceSecond')"
                         />
                         <label
                           class="custom-control-label"
@@ -192,13 +210,15 @@
                               type="checkbox"
                               class="custom-control-input"
                               id="sourceSecondPhone"
+                              (change)="selectedSourceLists.toggle('sourceSecondPhone')"
+                              [checked]="selectedSourceLists.isSelected('sourceSecondPhone')"
                             />
                             <label
                               class="custom-control-label"
                               for="sourceSecondPhone"
                             ></label>
                         </div>
-                        <span class="f-6">+1 (202) 555 1123</span>
+                        <span class="f-6"></span>
                     </div>
                 </div>
                 <div class="v-center mt-1 second-email">
@@ -211,24 +231,28 @@
                               type="checkbox"
                               class="custom-control-input"
                               id="sourceSecondEmail"
+                              (change)="selectedSourceLists.toggle('sourceSecondEmail')"
+                              [checked]="selectedSourceLists.isSelected('sourceSecondEmail')"
                             />
                             <label
                               class="custom-control-label"
                               for="sourceSecondEmail"
                             ></label>
                         </div>
-                        <span class="f-6">firstname.lastname2@yahoo.com</span>
+                        <span class="f-6"></span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="merge-contact">
+        <div class="merge-contact ml-5">
             <div class="v-center select-all">
                 <div class="custom-control custom-checkbox">
                     <input
                       type="checkbox"
                       class="custom-control-input"
                       id="mergeSelectAll"
+                      (change)="selectAll('merge')"
+                      [checked]="isSelected('merge')"
                     />
                     <label
                       class="custom-control-label"
@@ -240,149 +264,171 @@
             <div class="f-1 font-weight-bold op-40 text-uppercase my-2 source-detail">
                 contact to merge
             </div>
-            <div class="v-center contact-name">
-                <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="mergeName"
-                    />
-                    <label
-                      class="custom-control-label"
-                      for="mergeName"
-                    ></label>
-                </div>
-                <span class="f-6 font-weight-bold"></span>
-            </div>
-            <div class="v-center contact-label">
-                <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="mergeLabel"
-                    />
-                    <label
-                      class="custom-control-label"
-                      for="mergeLabel"
-                    ></label>
-                </div>
-                <app-label-select [value]="'Warm'"></app-label-select>
-            </div>
-            <div class="merge-primary">
-                <div class="v-center my-2 contact-primary">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergePrimary"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergePrimary"
-                        ></label>
-                    </div>
-                    <span class="f-6 font-weight-bold">Primary contacts</span>
-                </div>
-                <div class="v-center primary-phone">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergePrimaryPhone"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergePrimaryPhone"
-                        ></label>
-                    </div>
-                    <span class="f-6"></span>
-                </div>
-                <div class="v-center mt-1 primary-email">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergePrimaryEmail"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergePrimaryEmail"
-                        ></label>
-                    </div>
-                    <span class="f-6">firstname.lastname@gmail.com</span>
-                </div>
-                <div class="v-center mt-1 primary-address">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergePrimaryAddress"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergePrimaryAddress"
-                        ></label>
-                    </div>
-                    <span class="f-6">698 E Milwaukee Ave Scranton US 18503</span>
-                </div>
-                <div class="v-center mt-1 primary-website">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergePrimaryWebsite"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergePrimaryWebsite"
-                        ></label>
-                    </div>
-                    <span class="f-6">companypersonalwebsite.com</span>
-                </div>
-            </div>
-            <div class="mt-3 merge-second">
-                <div class="v-center my-2 contact-second">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergeSecond"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergeSecond"
-                        ></label>
-                    </div>
-                    <span class="f-6 font-weight-bold">Secondary contacts</span>
-                </div>
-                <div class="v-center second-phone">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergeSecondPhone"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergeSecondPhone"
-                        ></label>
-                    </div>
-                    <span class="f-6">+1 (202) 555 1123</span>
-                </div>
-                <div class="v-center mt-1 second-email">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="mergeSecondEmail"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="mergeSecondEmail"
-                        ></label>
-                    </div>
-                    <span class="f-6">firstname.lastname2@yahoo.com</span>
-                </div>
+            <div *ngIf="contactSelected">
+              <div class="v-center contact-name">
+                  <div class="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="mergeName"
+                        (change)="selectedMergeLists.toggle('mergeName')"
+                        [checked]="selectedMergeLists.isSelected('mergeName')"
+                      />
+                      <label
+                        class="custom-control-label"
+                        for="mergeName"
+                      ></label>
+                  </div>
+                  <span class="f-6 font-weight-bold">{{mergeContact.fullName}}</span>
+              </div>
+              <div class="v-center contact-label">
+                  <div class="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="mergeLabel"
+                        (change)="selectedMergeLists.toggle('mergeLabel')"
+                        [checked]="selectedMergeLists.isSelected('mergeLabel')"
+                      />
+                      <label
+                        class="custom-control-label"
+                        for="mergeLabel"
+                      ></label>
+                  </div>
+                  <app-label-select [value]="mergeContact.label"></app-label-select>
+              </div>
+              <div class="merge-primary">
+                  <div class="v-center my-2 contact-primary">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergePrimary"
+                            (change)="selectedMergeLists.toggle('mergePrimary')"
+                            [checked]="selectedMergeLists.isSelected('mergePrimary')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergePrimary"
+                          ></label>
+                      </div>
+                      <span class="f-6 font-weight-bold">Primary contacts</span>
+                  </div>
+                  <div class="v-center primary-phone">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergePrimaryPhone"
+                            (change)="selectedMergeLists.toggle('mergePrimaryPhone')"
+                            [checked]="selectedMergeLists.isSelected('mergePrimaryPhone')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergePrimaryPhone"
+                          ></label>
+                      </div>
+                      <span class="f-6">{{mergeContact.cell_phone}}</span>
+                  </div>
+                  <div class="v-center mt-1 primary-email">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergePrimaryEmail"
+                            (change)="selectedMergeLists.toggle('mergePrimaryEmail')"
+                            [checked]="selectedMergeLists.isSelected('mergePrimaryEmail')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergePrimaryEmail"
+                          ></label>
+                      </div>
+                      <span class="f-6">{{mergeContact.email}}</span>
+                  </div>
+                  <div class="v-center mt-1 primary-address">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergePrimaryAddress"
+                            (change)="selectedMergeLists.toggle('mergePrimaryAddress')"
+                            [checked]="selectedMergeLists.isSelected('mergePrimaryAddress')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergePrimaryAddress"
+                          ></label>
+                      </div>
+                      <span class="f-6">{{mergeContact.fullAddress}}</span>
+                  </div>
+                  <div class="v-center mt-1 primary-website">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergePrimaryWebsite"
+                            (change)="selectedMergeLists.toggle('mergePrimaryWebsite')"
+                            [checked]="selectedMergeLists.isSelected('mergePrimaryWebsite')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergePrimaryWebsite"
+                          ></label>
+                      </div>
+                      <span class="f-6">{{mergeContact.website}}</span>
+                  </div>
+              </div>
+              <div class="mt-3 merge-second">
+                  <div class="v-center my-2 contact-second">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergeSecond"
+                            (change)="selectedMergeLists.toggle('mergeSecond')"
+                            [checked]="selectedMergeLists.isSelected('mergeSecond')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergeSecond"
+                          ></label>
+                      </div>
+                      <span class="f-6 font-weight-bold">Secondary contacts</span>
+                  </div>
+                  <div class="v-center second-phone">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergeSecondPhone"
+                            (change)="selectedMergeLists.toggle('mergeSecondPhone')"
+                            [checked]="selectedMergeLists.isSelected('mergeSecondPhone')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergeSecondPhone"
+                          ></label>
+                      </div>
+                      <span class="f-6"></span>
+                  </div>
+                  <div class="v-center mt-1 second-email">
+                      <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="mergeSecondEmail"
+                            (change)="selectedMergeLists.toggle('mergeSecondEmail')"
+                            [checked]="selectedMergeLists.isSelected('mergeSecondEmail')"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="mergeSecondEmail"
+                          ></label>
+                      </div>
+                      <span class="f-6"></span>
+                  </div>
+              </div>
             </div>
         </div>
     </div>
