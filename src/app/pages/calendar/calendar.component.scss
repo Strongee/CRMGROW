@@ -49,13 +49,13 @@
                 }
                 .avatar-wrapper {
                     width: 100%;
-                    height: 38px;
+                    height: 32px;
                   
                     .avatar {
-                      width: 38px;
-                      min-width: 38px;
-                      height: 38px;
-                      min-height: 38px;
+                      width: 32px;
+                      min-width: 32px;
+                      height: 32px;
+                      min-height: 32px;
                       background-color: $color-white;
                       color: $color-dark;
                       box-shadow: unset;
@@ -81,11 +81,19 @@
     mwl-calendar-week-view {
         .cal-week-view {
             border-top: unset;
+            .cal-day-headers {
+                @media screen and (max-width: 576px) {
+                    padding-left: 40px;
+                }
+            }
             .cal-time-events {
                 border-left: unset;
                 .cal-time-label-column {
                     mwl-calendar-week-view-hour-segment {
                         border: none;
+                    }
+                    @media screen and (max-width: 576px) {
+                        width: 40px;
                     }
                 }
                 .cal-day-columns {
@@ -219,6 +227,11 @@
             }
         }
     }
+    app-slide-tab {
+        .tab-container {
+            width: 293px;
+        }
+    }
 }
 
 .calendar-time {
@@ -300,7 +313,7 @@
         }
     }
     .date {
-        width: 300px;
+        width: 240px;
         font-size: 20px;
         letter-spacing: 0;
         line-height: 32px;
@@ -314,6 +327,13 @@
             .mobile {
                 display: block;
             }
+        }
+    }
+    @media screen and (max-width: 768px) {
+        display: block;
+        .view-time {
+            justify-content: start !important;
+            margin-top: 1rem;
         }
     }
     @media screen and (max-width: 576px) {
