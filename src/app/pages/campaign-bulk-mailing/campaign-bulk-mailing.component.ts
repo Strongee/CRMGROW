@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ActionItem } from '../../utils/data.types';
 import { CampaignAddBroadcastComponent } from '../../components/campaign-add-broadcast/campaign-add-broadcast.component';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'app-campaign-bulk-mailing',
@@ -21,6 +22,7 @@ export class CampaignBulkMailingComponent implements OnInit {
 
   bulkLists = [];
   selected = 1;
+  isLoading = false;
   selectedBulkLists = new SelectionModel<any>(true, []);
 
   actions: ActionItem[] = [
@@ -51,24 +53,27 @@ export class CampaignBulkMailingComponent implements OnInit {
   ];
 
   @Output() onDetail: EventEmitter<string> = new EventEmitter();
-  constructor(private location: Location, private dialog: MatDialog) {}
+  constructor(
+    private location: Location,
+    private dialog: MatDialog,
+    private campaignService: CampaignService
+  ) {}
 
   ngOnInit(): void {
     this.loadBulk();
   }
 
   loadBulk(): void {
-    for (let i = 1; i < 5; i++) {
-      const bulk = {
-        _id: i,
-        name: 'bulk' + i,
-        status: 'SENT',
-        send_time: Date.now(),
-        delivered: 8,
-        opened: 5
-      };
-      this.bulkLists.push(bulk);
-    }
+    this.isLoading = true;
+    this.campaignService.getList().subscribe(
+      (res) => {
+        this.bulkLists = res;
+        this.isLoading = false;
+      },
+      (err) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   selectAllBulkPage(): void {
@@ -99,6 +104,23 @@ export class CampaignBulkMailingComponent implements OnInit {
     }
     return true;
   }
+
+  selectAll(): void {
+    this.bulkLists.forEach((e) => {
+      if (!this.selectedBulkLists.isSelected(e._id)) {
+        this.selectedBulkLists.select(e._id);
+      }
+    });
+  }
+
+  deselectAll(): void {
+    this.bulkLists.forEach((e) => {
+      if (this.selectedBulkLists.isSelected(e._id)) {
+        this.selectedBulkLists.deselect(e._id);
+      }
+    });
+  }
+
   addBroadcast(): void {
     this.dialog
       .open(CampaignAddBroadcastComponent, {
@@ -110,7 +132,7 @@ export class CampaignBulkMailingComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-
+          this.bulkLists.push(res.data);
         }
       });
   }
@@ -124,7 +146,11 @@ export class CampaignBulkMailingComponent implements OnInit {
   }
 
   doAction(action: any): void {
-    console.log('action', action);
+    if (action.label === 'Select All') {
+      this.selectAll();
+    } else if (action.label === 'Deselect') {
+      this.deselectAll();
+    }
   }
 
 }

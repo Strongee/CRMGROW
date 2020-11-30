@@ -2,7 +2,10 @@
   .check-cell {
     width: 40px;
   }
-;
+  
+  .broadcast {
+    cursor: pointer;
+  }
 }
 
 :host ::ng-deep {
