@@ -4,6 +4,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { ContactService } from '../../services/contact.service';
 import { LabelService } from '../../services/label.service';
 import { ContactPageSize } from '../../constants/variable.constants';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-campaign-add-contact',
@@ -26,7 +27,8 @@ export class CampaignAddContactComponent implements OnInit {
   sortDir = true; // true -> 'asc', false -> 'desc'
   labels = [];
   selecting = false;
-  selectedContacts = new SelectionModel<any>(true, []);
+  searchSubscription: Subscription;
+  selectedAddContacts = new SelectionModel<any>(true, []);
 
   constructor(
     private dialogRef: MatDialogRef<CampaignAddContactComponent>,
@@ -132,8 +134,8 @@ export class CampaignAddContactComponent implements OnInit {
   selectAllContact(): void {
     if (this.isSearchedResult) {
       this.contacts.forEach((e) => {
-        if (!this.selectedContacts.isSelected(e._id)) {
-          this.selectedContacts.select(e._id);
+        if (!this.selectedAddContacts.isSelected(e._id)) {
+          this.selectedAddContacts.select(e._id);
         }
       });
     } else {
@@ -143,8 +145,8 @@ export class CampaignAddContactComponent implements OnInit {
           this.selecting = false;
           if (res) {
             res.forEach((e) => {
-              if (!this.selectedContacts.isSelected(e._id)) {
-                this.selectedContacts.select(e._id);
+              if (!this.selectedAddContacts.isSelected(e._id)) {
+                this.selectedAddContacts.select(e._id);
               }
             });
           }
@@ -156,34 +158,34 @@ export class CampaignAddContactComponent implements OnInit {
     }
   }
   clearAllSelected(): void {
-    this.selectedContacts.clear();
+    this.selectedAddContacts.clear();
   }
   selectAllPage(): void {
     if (this.isSearchedResult) {
       if (this.isSelectedPage()) {
         this.contacts.forEach((e) => {
-          if (this.selectedContacts.isSelected(e._id)) {
-            this.selectedContacts.deselect(e._id);
+          if (this.selectedAddContacts.isSelected(e._id)) {
+            this.selectedAddContacts.deselect(e._id);
           }
         });
       } else {
         this.contacts.forEach((e) => {
-          if (!this.selectedContacts.isSelected(e._id)) {
-            this.selectedContacts.select(e._id);
+          if (!this.selectedAddContacts.isSelected(e._id)) {
+            this.selectedAddContacts.select(e._id);
           }
         });
       }
     } else {
       if (this.isSelectedPage()) {
         this.pageContacts.forEach((e) => {
-          if (this.selectedContacts.isSelected(e._id)) {
-            this.selectedContacts.deselect(e._id);
+          if (this.selectedAddContacts.isSelected(e._id)) {
+            this.selectedAddContacts.deselect(e._id);
           }
         });
       } else {
         this.pageContacts.forEach((e) => {
-          if (!this.selectedContacts.isSelected(e._id)) {
-            this.selectedContacts.select(e._id);
+          if (!this.selectedAddContacts.isSelected(e._id)) {
+            this.selectedAddContacts.select(e._id);
           }
         });
       }
@@ -194,7 +196,7 @@ export class CampaignAddContactComponent implements OnInit {
       if (this.contacts.length) {
         for (let i = 0; i < this.contacts.length; i++) {
           const e = this.contacts[i];
-          if (!this.selectedContacts.isSelected(e._id)) {
+          if (!this.selectedAddContacts.isSelected(e._id)) {
             return false;
           }
         }
@@ -206,7 +208,7 @@ export class CampaignAddContactComponent implements OnInit {
       if (this.pageContacts.length) {
         for (let i = 0; i < this.pageContacts.length; i++) {
           const e = this.pageContacts[i];
-          if (!this.selectedContacts.isSelected(e._id)) {
+          if (!this.selectedAddContacts.isSelected(e._id)) {
             return false;
           }
         }
@@ -317,7 +319,8 @@ export class CampaignAddContactComponent implements OnInit {
         tagsCondition: [],
         zipcodeCondition: ''
       };
-      this.contactService.getSearchedContacts(query).subscribe(
+      this.searchSubscription && this.searchSubscription.unsubscribe();
+      this.searchSubscription = this.contactService.getSearchedContacts(query).subscribe(
         (res) => {
           this.isLoading = false;
           this.contacts = res.data;
@@ -331,13 +334,13 @@ export class CampaignAddContactComponent implements OnInit {
     }
   }
   addContacts(): void {
-    if (!this.selectedContacts.selected.length) {
+    if (!this.selectedAddContacts.selected.length) {
       return;
     }
     this.submitted = true;
     this.adding = true;
     this.contactService
-      .getContactsByIds(this.selectedContacts.selected)
+      .getContactsByIds(this.selectedAddContacts.selected)
       .subscribe(
         (res) => {
           const contacts = [];

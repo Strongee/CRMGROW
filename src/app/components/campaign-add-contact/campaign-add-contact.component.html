@@ -13,13 +13,13 @@
       <div class="my-3">
         <label>Search</label>
         <div clas="contact-input">
-          <input type="text" class="form-control" [(ngModel)]="searchedName" name="searchContact" (keypress)="searchContacts()"
+          <input type="text" class="form-control" [(ngModel)]="searchedName" name="searchContact" (ngModelChange)="searchContacts()"
                  placeholder="Start typing contact info to search">
         </div>
       </div>
       <div class="v-center justify-content-center my-3" *ngIf="pageContacts.length && isSelectedPage() && !isLoading">
-        <div class="f-6 font-weight-bold">{{selectedContacts.selected.length}} contacts on this page is selected.</div>
-        <button type="button" class="btn btn-white-blue ml-4" (click)="selectAllContact()" *ngIf="selectedContacts.selected.length != contactCount">Select All {{contactCount}} Contacts</button>
+        <div class="f-6 font-weight-bold">{{selectedAddContacts.selected.length}} contacts on this page is selected.</div>
+        <button type="button" class="btn btn-white-blue ml-4" (click)="selectAllContact()" *ngIf="selectedAddContacts.selected.length != contactCount">Select All {{contactCount}} Contacts</button>
         <button type="button" class="btn btn-white-blue ml-2" (click)="clearAllSelected()">Clear Selected</button>
       </div>
       <ng-container *ngIf="isLoading">
@@ -52,8 +52,8 @@
             <tr *ngFor="let contact of contacts | paginate: {id: 'searchContacts', itemsPerPage: 50, currentPage: currentPage, totalItems: contactCount}">
               <td class="check-cell">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="contact-{{contact._id}}" (change)="selectedContacts.toggle(contact._id)" [checked]="selectedContacts.isSelected(contact._id)">
-                  <label class="custom-control-label" for="contact-{{contact._id}}"></label>
+                  <input type="checkbox" class="custom-control-input" id="add-contact-{{contact._id}}" (change)="selectedAddContacts.toggle(contact._id)" [checked]="selectedAddContacts.isSelected(contact._id)">
+                  <label class="custom-control-label" for="add-contact-{{contact._id}}"></label>
                 </div>
               </td>
               <td class="name">
