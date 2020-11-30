@@ -8,7 +8,10 @@ export const AUTH = {
   OAUTH_REQUEST: '',
   OUTLOOK_PROFILE_REQUEST: '',
   GOOGLE_PROFILE_REQUEST: '',
-  LOG_OUT: 'user/logout'
+  LOG_OUT: 'user/logout',
+  CHECK_EMAIL: 'user/check',
+  CHECK_NICKNAME: 'user/search-nickname',
+  CHECK_PHONE: 'user/search-phone',
 };
 export const USER = {
   PROFILE: 'user/me',
