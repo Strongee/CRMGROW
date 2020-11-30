@@ -469,6 +469,19 @@ export const COLORS = [
   ['#fcdee8', '#fbc8d8', '#f7a7c0', '#e07798', '#b65775', '#83334c']
 ];
 
+export const LABEL_COLORS = [
+  { color: '#0000ff', type: 'default' },
+  { color: '#00a9ff', type: 'default' },
+  { color: '#ffcc00', type: 'default' },
+  { color: '#f5325b', type: 'default' },
+  { color: '#00916e', type: 'default' },
+  { color: '#dae0f2', type: 'default' },
+  { color: '#86bbd8', type: 'default' },
+  { color: '#f26419', type: 'default' },
+  { color: '#0d5c63', type: 'default' },
+  { color: '#101336', type: 'custom' }
+];
+
 export const DialogSettings = {
   CONTACT: {
     width: '98vw',
