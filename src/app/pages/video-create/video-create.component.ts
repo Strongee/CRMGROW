@@ -260,6 +260,7 @@ export class VideoCreateComponent implements OnInit {
     this.pdfUploader.clearQueue();
     this.imageUploader.cancelAll();
     this.imageUploader.clearQueue();
+    this.upload_thumbnail = '';
   }
 
   uploadVideo(): void {
@@ -543,7 +544,6 @@ export class VideoCreateComponent implements OnInit {
               return false;
             }
           });
-          console.log('##', this.imageUploader.queue);
           if (this.imageUploader.queue.length > 0) {
             const rawfile: Blob = this.imageUploader.queue[0].file
               .rawFile as any;

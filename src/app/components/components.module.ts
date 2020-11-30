@@ -77,6 +77,7 @@ import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { ContactBulkComponent } from './contact-bulk/contact-bulk.component';
 import { TaskTypeComponent } from './task-type/task-type.component';
 import { InputTagComponent } from './input-tag/input-tag.component';
+import { ContactMergeComponent } from './contact-merge/contact-merge.component';
 
 @NgModule({
   declarations: [
@@ -154,7 +155,8 @@ import { InputTagComponent } from './input-tag/input-tag.component';
     TaskFilterComponent,
     ContactBulkComponent,
     TaskTypeComponent,
-    InputTagComponent
+    InputTagComponent,
+    ContactMergeComponent
   ],
   imports: [
     CommonModule,
@@ -201,7 +203,8 @@ import { InputTagComponent } from './input-tag/input-tag.component';
     CalendarEventComponent,
     AdvancedFilterComponent,
     ManageLabelComponent,
-    TaskFilterComponent
+    TaskFilterComponent,
+    ContactMergeComponent
   ],
   bootstrap: [
     ContactCreateComponent,

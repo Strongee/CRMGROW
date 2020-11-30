@@ -83,6 +83,18 @@ export class UserService extends HttpService {
       { headers: reqHeader }
     );
   }
+
+  public authorizeOutlook(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_OUTLOOK + '?code=' + code
+    );
+  }
+  public authorizeGoogle(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_GOOGLE + '?code=' + code
+    );
+  }
+
   public checkEmail(): void {}
   public checkNickName(): void {}
   public checkPhone(): void {}
