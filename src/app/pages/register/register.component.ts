@@ -5,8 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { HelperService } from '../../services/helper.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import {UserService} from "../../services/user.service";
 import {AvatarEditorComponent} from "../../components/avatar-editor/avatar-editor.component";
+import { UserService } from '../../services/user.service';
+import { validateEmail } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,17 @@ import {AvatarEditorComponent} from "../../components/avatar-editor/avatar-edito
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  step = 2;
+  // Constant Variables
+  timezones = TIMEZONE;
+  countries: CountryISO[] = [
+    CountryISO.UnitedStates,
+    CountryISO.UnitedKingdom,
+    CountryISO.Canada,
+    CountryISO.SouthAfrica
+  ];
+  CountryISO = CountryISO;
+
+  step = 1;
   user = {
     user_name: '',
     email: '',
@@ -36,15 +47,14 @@ export class RegisterComponent implements OnInit {
   cardNumberLen = 16;
   termsChecked = false;
 
-  // Constant Variables
-  timezones = TIMEZONE;
-  countries: CountryISO[] = [
-    CountryISO.UnitedStates,
-    CountryISO.UnitedKingdom,
-    CountryISO.Canada,
-    CountryISO.SouthAfrica
-  ];
-  CountryISO = CountryISO;
+  existing = false;
+  checkingUser = false;
+  checkUserSubscription: Subscription;
+
+  checkingPhone = false;
+  phoneExisting = false;
+  checkPhoneSubscription: Subscription;
+
   creditCardInput = {
     creditCard: true,
     onCreditCardTypeChanged: (type) => {
@@ -70,14 +80,6 @@ export class RegisterComponent implements OnInit {
     numeral: true,
     numeralThousandsGroupStyle: 'wan'
   };
-
-  existing = false;
-  checkingUser = false;
-  checkUserSubscription: Subscription;
-
-  checkingPhone = false;
-  phoneExisting = false;
-  checkPhoneSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -110,7 +112,7 @@ export class RegisterComponent implements OnInit {
 
   confirmEmail(): void {
     this.existing = false;
-    if (this.user.email) {
+    if (this.user.email && validateEmail(this.user.email)) {
       this.checkingUser = true;
       this.checkUserSubscription && this.checkUserSubscription.unsubscribe();
       this.checkUserSubscription = this.userService
