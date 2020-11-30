@@ -165,16 +165,29 @@
                             }
                         }
                     }
-                    mwl-calendar-week-view-hour-segment {
-                        border-top: unset;
-                        .cal-day-timelabel {
-                            width: 70px;
-                            border-right: 1px solid #e1e1e1;
+                    .cal-hour {
+                        mwl-calendar-week-view-hour-segment {
+                            position: relative;
+                            .cal-day-timelabel {
+                                position: absolute;
+                                top: -1px;
+                                width: 70px;
+                                border-right: 1px solid #e1e1e1;
+                                border-top: 1px solid #ffffff;
+                            }
+                        }
+                        &:last-child {
+                            mwl-calendar-week-view-hour-segment {
+                                .cal-day-timelabel {
+                                    bottom: -1px;
+                                    border-bottom: 1px solid #ffffff;
+                                }
+                            }
                         }
                     }
                 }
                 .cal-hour .cal-hour-segment {
-                    justify-content: start;
+                    justify-content: center;
                 }
             }
         }
@@ -221,9 +234,8 @@
             border-left: 1px solid #FFFFFF;
             border-radius: 5px;
             .cal-event-body {
-                width: 100%;
+                width: 0px;
                 height: 20px;
-                overflow: hidden;
             }
         }
     }
