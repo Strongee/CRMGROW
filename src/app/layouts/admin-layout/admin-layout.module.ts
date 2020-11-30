@@ -54,6 +54,7 @@ import { AutoFollowUpComponent } from '../../pages/auto-follow-up/auto-follow-up
 import { ContactComponent } from '../../pages/contact/contact.component';
 import { TeamListComponent } from '../../pages/team-list/team-list.component';
 import { TeamCallComponent } from '../../pages/team-call/team-call.component';
+import { CampaignSmtpComponent } from '../../pages/campaign-smtp/campaign-smtp.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +97,8 @@ import { TeamCallComponent } from '../../pages/team-call/team-call.component';
     CampaignBulkMailingItemComponent,
     ContactComponent,
     TeamListComponent,
-    TeamCallComponent
+    TeamCallComponent,
+    CampaignSmtpComponent
   ],
   imports: [
     CommonModule,
