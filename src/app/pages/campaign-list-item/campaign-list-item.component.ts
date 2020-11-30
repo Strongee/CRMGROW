@@ -117,9 +117,7 @@ export class CampaignListItemComponent implements OnInit {
               .addContacts(this.id, contacts)
               .subscribe((response) => {
                 if (response.length) {
-                  for (let i = 0; i < response.length; i++) {
-                    this.contacts.push(response[i]);
-                  }
+                  this.contacts = response;
                 }
               });
           }

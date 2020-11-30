@@ -343,20 +343,20 @@ export class CampaignAddContactComponent implements OnInit {
       .getContactsByIds(this.selectedAddContacts.selected)
       .subscribe(
         (res) => {
-          const contacts = [];
-          res.forEach((contact) => {
-            const item = {
-              _id: contact._id,
-              first_name: contact.first_name,
-              last_name: contact.last_name,
-              email: contact.email,
-              cell_phone: contact.cell_phone
-            };
-            contacts.push(item);
-          });
+          // const contacts = [];
+          // res.forEach((contact) => {
+          //   const item = {
+          //     _id: contact._id,
+          //     first_name: contact.first_name,
+          //     last_name: contact.last_name,
+          //     email: contact.email,
+          //     cell_phone: contact.cell_phone
+          //   };
+          //   contacts.push(item);
+          // });
           this.submitted = false;
           this.adding = false;
-          this.dialogRef.close({ contacts });
+          this.dialogRef.close({ contacts: res });
         },
         (err) => {
           this.submitted = false;

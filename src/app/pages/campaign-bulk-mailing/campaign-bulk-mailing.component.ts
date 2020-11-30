@@ -20,17 +20,23 @@ import { CampaignAddBroadcastComponent } from '../../components/campaign-add-bro
 export class CampaignBulkMailingComponent implements OnInit {
 
   bulkLists = [];
+  selected = 1;
   selectedBulkLists = new SelectionModel<any>(true, []);
 
   actions: ActionItem[] = [
     {
       icon: 'i-message',
-      label: 'Merge list',
+      label: 'Send Test Email',
       type: 'button'
     },
     {
-      icon: 'i-message',
-      label: 'Delete list',
+      icon: 'i-copy',
+      label: 'Copy',
+      type: 'button'
+    },
+    {
+      icon: 'i-trash',
+      label: 'Delete',
       type: 'button'
     },
     {

@@ -4,3 +4,14 @@
   }
 ;
 }
+
+:host ::ng-deep {
+
+  mat-dialog-container {
+    overflow: visible;
+  }
+  
+  mat-dialog-content {
+    overflow: visible;
+  }
+}
