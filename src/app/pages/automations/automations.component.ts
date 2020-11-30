@@ -95,8 +95,8 @@ export class AutomationsComponent implements OnInit {
     event.stopPropagation();
     this.dialog
       .open(AutomationAssignComponent, {
-        width: '100vw',
-        maxWidth: '500px',
+        width: '500px',
+        maxWidth: '90vw',
         data: {
           automation
         }

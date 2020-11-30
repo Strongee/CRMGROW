@@ -17,8 +17,9 @@ import { CampaignComponent } from 'src/app/pages/campaign/campaign.component';
 import { AutoflowComponent } from 'src/app/pages/autoflow/autoflow.component';
 import { TeamComponent } from 'src/app/pages/team/team.component';
 import { TemplateComponent } from 'src/app/pages/template/template.component';
-import { CampaignBulkMailingComponent } from 'src/app/pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 import { ContactComponent } from 'src/app/pages/contact/contact.component';
+import { ForgotPasswordComponent } from '../../pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '../../pages/reset-password/reset-password.component';
 
 export const AdminLayoutRoutes: Routes = [
   {

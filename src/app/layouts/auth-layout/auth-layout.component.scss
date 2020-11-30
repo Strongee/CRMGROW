@@ -28,6 +28,18 @@
 
     .social-btn {
       border-width: 2px;
+      height: 40px;
+
+      .social-icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      .social-text {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
   }
 }
