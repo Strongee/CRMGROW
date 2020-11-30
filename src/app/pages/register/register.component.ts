@@ -6,6 +6,7 @@ import { HelperService } from '../../services/helper.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import {UserService} from "../../services/user.service";
+import {AvatarEditorComponent} from "../../components/avatar-editor/avatar-editor.component";
 
 @Component({
   selector: 'app-register',
@@ -87,11 +88,19 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  fillBasic(): void {
+  fillBasic(): any {
+    if (!this.checkingUser && this.existing) {
+      return;
+    }
+
     this.step = 2;
   }
 
   fillProfile(): void {
+    if (!this.checkingPhone && this.phoneExisting) {
+      return;
+    }
+
     this.step = 3;
   }
 
@@ -165,14 +174,18 @@ export class RegisterComponent implements OnInit {
           this.toast.warning('Unsupported File Selected.');
           return;
         }
-        this.helperService
-          .loadBase64(file)
-          .then((thumbnail) => {
-            this.user.picture_profile = thumbnail;
-          })
-          .catch(() => {
-            this.toast.warning('Cannot load the image file.');
-          });
+        const imageEditor = this.dialog.open(AvatarEditorComponent, {
+          width: '98vw',
+          maxWidth: '400px',
+          data: {
+            fileInput: file
+          }
+        });
+        imageEditor.afterClosed().subscribe((res) => {
+          if (res) {
+            this.user.picture_profile = res;
+          }
+        });
       })
       .catch((err) => {
         this.toast.error('File Select', err);
