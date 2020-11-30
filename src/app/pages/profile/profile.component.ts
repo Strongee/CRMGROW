@@ -38,14 +38,15 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Google and Outlook Integration Redirect Handler
     this.queryParamSubscription && this.queryParamSubscription.unsubscribe();
     this.queryParamSubscription = this.route.queryParams.subscribe((params) => {
       if (params['code']) {
         const action = this.route.snapshot.params['page'];
         if (action == 'outlook') {
+          this.currentPage = 'integration';
           this.userService.authorizeOutlook(params['code']).subscribe(
             (res) => {
-              this.currentPage = 'integration';
               this.user.connected_email_type = 'outlook';
               this.user.primary_connected = true;
               this.user.connected_email = res['data'];
@@ -58,14 +59,14 @@ export class ProfileComponent implements OnInit {
               this.location.replaceState('/profile/integration');
             },
             (err) => {
-              this.location.replaceState('/profile');
+              this.location.replaceState('/profile/integration');
             }
           );
         }
         if (action == 'gmail') {
+          this.currentPage = 'integration';
           this.userService.authorizeGoogle(params['code']).subscribe(
             (res) => {
-              this.currentPage = 'integration';
               this.user.connected_email_type = 'gmail';
               this.user.primary_connected = true;
               this.user.connected_email = res['data'];
@@ -76,7 +77,7 @@ export class ProfileComponent implements OnInit {
               this.location.replaceState('/profile/integration');
             },
             (err) => {
-              this.location.replaceState('/profile');
+              this.location.replaceState('/profile/integration');
             }
           );
         }
@@ -86,6 +87,11 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Change the page and replace the location
+   * @param menu : SubMenu Item
+   */
   changeMenu(menu: PageMenuItem): void {
     this.currentPage = menu.id;
     this.location.replaceState(`profile/${menu.id}`);
