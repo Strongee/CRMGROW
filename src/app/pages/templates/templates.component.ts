@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
+import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-templates',
@@ -13,6 +14,8 @@ import { Template } from 'src/app/models/template.model';
   styleUrls: ['./templates.component.scss']
 })
 export class TemplatesComponent implements OnInit {
+  STATUS = STATUS;
+
   page = 1;
   userId = '';
   emailDefault = '';

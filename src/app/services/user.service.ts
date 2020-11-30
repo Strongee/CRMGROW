@@ -105,7 +105,17 @@ export class UserService extends HttpService {
       })
       .pipe(catchError(this.handleError('CHECK PHONE')));
   }
-  public checkNickName(): void {}
+
+  public authorizeOutlook(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_OUTLOOK + '?code=' + code
+    );
+  }
+  public authorizeGoogle(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_GOOGLE + '?code=' + code
+    );
+  }
   public requestResetPassword(email): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',

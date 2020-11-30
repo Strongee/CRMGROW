@@ -3,16 +3,20 @@ import { HttpService } from './http.service';
 import { ErrorService } from './error.service';
 import { HttpClient } from '@angular/common/http';
 import { StoreService } from './store.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CONTACT } from '../constants/api.constant';
 import {
   Contact,
   ContactActivity,
   ContactDetail
 } from '../models/contact.model';
-import { ActivityDetail } from '../models/activity.model';
+import { ActivityDetail } from '../models/activityDetail.model';
 import { map, catchError } from 'rxjs/operators';
+import { STATUS } from '../constants/variable.constants';
 
+interface LoadResponse {
+  contacts: ContactActivity[];
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +28,15 @@ export class ContactService extends HttpService {
   ) {
     super(errorService);
   }
+
+  loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loading$ = this.loadStatus.asObservable();
+  total: BehaviorSubject<number> = new BehaviorSubject(0);
+  total$ = this.total.asObservable();
+  searchOption: BehaviorSubject<any> = new BehaviorSubject({});
+  searchOption$ = this.searchOption.asObservable();
+  pageIndex: BehaviorSubject<number> = new BehaviorSubject(1);
+  pageIndex$ = this.pageIndex.asObservable();
 
   create(contact: any): void {}
   /**
@@ -58,27 +71,39 @@ export class ContactService extends HttpService {
    * @param page : Contact Page Number
    */
   load(page: number): void {
-    this.loadImpl(page).subscribe((contacts) => {
-      this.storeService.contacts.next(contacts);
+    this.loadImpl(page).subscribe((res) => {
+      res
+        ? this.loadStatus.next(STATUS.SUCCESS)
+        : this.loadStatus.next(STATUS.FAILURE);
+      if (res && res['contacts']) {
+        this.storeService.contacts = [];
+        this.storeService.pageContacts.next(res['contacts']);
+        this.total.next(res['total']);
+      }
     });
   }
   /**
    * Call API & Load Contacts
    * @param page
    */
-  loadImpl(page: number): Observable<ContactActivity[]> {
+  loadImpl(page: number): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.LOAD_PAGE + page, {
         field: 'name',
         dir: true
       })
       .pipe(
-        map((res) =>
-          (res['data']['contacts'] || []).map((e) =>
-            new ContactActivity().deserialize(e)
-          )
-        ),
-        catchError(this.handleError('LOAD CONTACTS', []))
+        map((res) => {
+          const contacts = [];
+          (res['data']['contacts'] || []).forEach((e) => {
+            contacts.push(new ContactActivity().deserialize(e));
+          });
+          return {
+            contacts,
+            total: res['data']['count'] || 0
+          };
+        }),
+        catchError(this.handleError('LOAD CONTACTS', null))
       );
   }
   easySearch(keyword: string): Observable<Contact[]> {

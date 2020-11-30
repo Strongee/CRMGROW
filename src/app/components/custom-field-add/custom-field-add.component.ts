@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-custom-field-add',
@@ -70,12 +71,9 @@ export class CustomFieldAddComponent implements OnInit {
     this.options.push(data);
   }
 
-  deleteOption(optionLabel: string): void {
-    const options = this.options.filter(
-      (option) => option.label != optionLabel
-    );
-    this.options = [];
-    this.options = options;
+  deleteOption(index: number): void {
+    this.options.splice(index, 1);
+    this.isSame = false;
   }
 
   close(): void {
@@ -89,6 +87,8 @@ export class CustomFieldAddComponent implements OnInit {
       } else {
         this.isSame = false;
       }
+    } else {
+      this.isSame = false;
     }
   }
 

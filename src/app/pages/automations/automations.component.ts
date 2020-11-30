@@ -4,7 +4,7 @@ import { AutomationService } from 'src/app/services/automation.service';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ActionName } from '../../constants/variable.constants';
+import { STATUS } from '../../constants/variable.constants';
 import { Location } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
@@ -16,6 +16,8 @@ import { Automation } from 'src/app/models/automation.model';
   styleUrls: ['./automations.component.scss']
 })
 export class AutomationsComponent implements OnInit {
+  STATUS = STATUS;
+
   userId = '';
   page = 1;
   deleting = false;

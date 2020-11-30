@@ -21,6 +21,8 @@ export const USER = {
   UPDATE_PASSWORD: 'user/new-password',
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
+  AUTH_GOOGLE: 'user/authorize-gmail',
+  AUTH_OUTLOOK: 'user/authorize-outlook',
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',

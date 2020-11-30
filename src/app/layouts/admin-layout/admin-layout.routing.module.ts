@@ -185,6 +185,13 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'profile/:action',
+    component: ProfileComponent,
+    data: {
+      title: 'Profile'
+    }
+  },
+  {
     path: 'affiliate',
     component: AffiliateComponent,
     data: {
