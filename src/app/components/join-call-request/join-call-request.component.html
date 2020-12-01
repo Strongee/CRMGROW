@@ -31,7 +31,7 @@
           <div class="v-center mb-2">
             <div class="input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+                <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
               </div>
               <input class="form-control datepicker" placeholder="Select date" [name]="dateTime.id"  [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>
             </div>

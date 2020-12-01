@@ -59,4 +59,27 @@ export class HomeComponent implements OnInit {
    * Open Filter Panel
    */
   openFilter(): void {}
+
+
+
+  //////////////////// analytics page ////////////////////
+  analyticsTabs: TabItem[] = [
+    { icon: 'i-icon i-video', label: 'Video Sent', id: 'video-sent' },
+    {
+      icon: 'i-icon i-notification',
+      label: 'Video watched',
+      id: 'video-watched'
+    },
+    {
+      icon: 'i-icon i-group-call',
+      label: 'Contacts Added',
+      id: 'contacts-added'
+    }
+  ];
+
+  selectedAnalyticsTab: TabItem = this.analyticsTabs[0];
+
+  changeAnalyticsTab(tab: TabItem): void {
+    this.selectedAnalyticsTab = tab;
+  }
 }

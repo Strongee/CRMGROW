@@ -5,7 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import { StoreService } from './store.service';
-import { CAMPAIGN, MAILLIST, TEMPLATE } from '../constants/api.constant';
+import { CAMPAIGN } from '../constants/api.constant';
 import { Campaign } from '../models/campaign.model';
 
 @Injectable({
@@ -21,9 +21,24 @@ export class CampaignService extends HttpService {
   }
 
   create(data): Observable<Campaign[]> {
-    return this.httpClient.post(this.server + CAMPAIGN.CREATE, { ...data }).pipe(
+    return this.httpClient
+      .post(this.server + CAMPAIGN.CREATE, { ...data })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('CREATE CAMPAIGN', []))
+      );
+  }
+
+  get(id): Observable<Campaign[]> {
+    return this.httpClient.get(this.server + CAMPAIGN.GET + id).pipe(
       map((res) => res['data'] || []),
-      catchError(this.handleError('CREATE CAMPAIGN', []))
+      catchError(this.handleError('GET CAMPAIGN', []))
+    );
+  }
+  getList(): Observable<Campaign[]> {
+    return this.httpClient.get(this.server + CAMPAIGN.GET).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET ALL CAMPAIGN', []))
     );
   }
 }
