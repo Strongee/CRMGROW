@@ -38,6 +38,7 @@ export class MaterialsComponent implements OnInit {
   selectedTab: TabItem = this.tabs[0];
   siteUrl = environment.website;
   user_id = '';
+  STATUS = STATUS;
 
   videos: any[] = [];
   adminVideos: any[] = [];
@@ -99,9 +100,9 @@ export class MaterialsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.materialService.loadVideos();
-    this.materialService.loadPdfs();
-    this.materialService.loadImages();
+    this.materialService.loadVideos(true);
+    this.materialService.loadPdfs(true);
+    this.materialService.loadImages(true);
   }
 
   ngOnDestroy(): void {

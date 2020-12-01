@@ -1,7 +1,7 @@
 import { V } from '@angular/cdk/keycodes';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { interval, Observable } from 'rxjs';
+import { interval, Observable, BehaviorSubject } from 'rxjs';
 import {
   catchError,
   filter,
@@ -21,6 +21,7 @@ import { Video } from '../models/video.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import { StoreService } from './store.service';
+import { STATUS } from '../constants/variable.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,18 @@ export class MaterialService extends HttpService {
   ) {
     super(errorService);
   }
+
+  loadVidoeStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loadingVideo$ = this.loadVidoeStatus.asObservable();
+  loadPdfStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loadingPdf$ = this.loadPdfStatus.asObservable();
+  loadImageStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loadingImage$ = this.loadImageStatus.asObservable();
+
+  /**
+   * LOAD MATERIALS
+   * @param force Flag to load force
+   */
 
   loadVideosImpl(): Observable<Video[]> {
     return this.httpClient.get(this.server + VIDEO.LOAD).pipe(
@@ -52,18 +65,48 @@ export class MaterialService extends HttpService {
       catchError(this.handleError('LOAD IMAGES', []))
     );
   }
-  loadVideos(): void {
+  loadVideos(force = false): void {
+    if (!force) {
+      const loadVidoeStatus = this.loadVidoeStatus.getValue();
+      if (loadVidoeStatus != STATUS.NONE && loadVidoeStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadVidoeStatus.next(STATUS.REQUEST);
     this.loadVideosImpl().subscribe((videos) => {
+      videos
+        ? this.loadVidoeStatus.next(STATUS.SUCCESS)
+        : this.loadVidoeStatus.next(STATUS.FAILURE);
       this.storeService.videos.next(videos);
     });
   }
-  loadPdfs(): void {
+  loadPdfs(force = false): void {
+    if (!force) {
+      const loadPdfStatus = this.loadPdfStatus.getValue();
+      if (loadPdfStatus != STATUS.NONE && loadPdfStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadPdfStatus.next(STATUS.REQUEST);
     this.loadPdfsImpl().subscribe((pdfs) => {
+      pdfs
+        ? this.loadPdfStatus.next(STATUS.SUCCESS)
+        : this.loadPdfStatus.next(STATUS.FAILURE);
       this.storeService.pdfs.next(pdfs);
     });
   }
-  loadImages(): void {
+  loadImages(force = false): void {
+    if (!force) {
+      const loadImageStatus = this.loadImageStatus.getValue();
+      if (loadImageStatus != STATUS.NONE && loadImageStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadImageStatus.next(STATUS.REQUEST);
     this.loadImagesImpl().subscribe((images) => {
+      images
+        ? this.loadImageStatus.next(STATUS.SUCCESS)
+        : this.loadImageStatus.next(STATUS.FAILURE);
       this.storeService.images.next(images);
     });
   }
