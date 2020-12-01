@@ -3,7 +3,9 @@ import { TabItem } from '../../utils/data.types';
 import { MaterialService } from '../../services/material.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {TeamService} from "../../services/team.service";
+import { TeamService } from '../../services/team.service';
+import { StoreService } from 'src/app/services/store.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-material-share',
@@ -11,7 +13,6 @@ import {TeamService} from "../../services/team.service";
   styleUrls: ['./material-share.component.scss']
 })
 export class MaterialShareComponent implements OnInit {
-
   material_type = '';
   teamId = '';
   sharing = false;
@@ -42,18 +43,33 @@ export class MaterialShareComponent implements OnInit {
   selectedPdfs = new SelectionModel<any>(true, []);
   selectedImages = new SelectionModel<any>(true, []);
 
+  videoLoadSubscription: Subscription;
+  pdfLoadSubscription: Subscription;
+  imageLoadSubscription: Subscription;
+
   constructor(
     private dialogRef: MatDialogRef<MaterialShareComponent>,
     private materialService: MaterialService,
+    public storeService: StoreService,
     private teamService: TeamService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.loadVideos();
+    this.loadImages();
+    this.loadPdfs();
+  }
 
   ngOnInit(): void {
     this.teamId = this.data.team_id;
-    this.loadVideos();
-    this.loadPdfs();
-    this.loadImages();
+    this.materialService.loadVideos();
+    this.materialService.loadPdfs();
+    this.materialService.loadImages();
+  }
+
+  ngOnDestroy(): void {
+    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
+    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
+    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
   }
 
   changeTab(tab: TabItem): void {
@@ -63,10 +79,11 @@ export class MaterialShareComponent implements OnInit {
   loadVideos(): void {
     this.videosLoading = true;
     this.videosLoadError = '';
-    this.materialService.loadVideosImpl().subscribe(
-      (res) => {
+    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
+    this.videoLoadSubscription = this.storeService.videos$.subscribe(
+      (videos) => {
         this.videosLoading = false;
-        this.videos = res;
+        this.videos = videos;
       },
       (err) => {
         this.videosLoading = false;
@@ -77,11 +94,11 @@ export class MaterialShareComponent implements OnInit {
   loadPdfs(): void {
     this.pdfsLoading = true;
     this.pdfsLoadError = '';
-    this.materialService.loadPdfsImpl().subscribe(
-      (res) => {
+    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
+    this.pdfLoadSubscription = this.storeService.pdfs$.subscribe(
+      (pdfs) => {
         this.pdfsLoading = false;
-        this.pdfs = res;
-        console.log('material pdfs ===========>', res);
+        this.pdfs = pdfs;
       },
       (err) => {
         this.pdfsLoading = false;
@@ -92,11 +109,11 @@ export class MaterialShareComponent implements OnInit {
   loadImages(): void {
     this.imagesLoading = true;
     this.imagesLoadError = '';
-    this.materialService.loadImagesImpl().subscribe(
-      (res) => {
+    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
+    this.imageLoadSubscription = this.storeService.images$.subscribe(
+      (images) => {
         this.imagesLoading = false;
-        this.images = res;
-        console.log('material images ===========>', res);
+        this.images = images;
       },
       (err) => {
         this.imagesLoading = false;
@@ -207,9 +224,7 @@ export class MaterialShareComponent implements OnInit {
       }
     }
 
-    this.teamService.shareVideos(this.teamId, videoIds).subscribe((res) => {
-
-    });
+    this.teamService.shareVideos(this.teamId, videoIds).subscribe((res) => {});
     // await this.teamService.sharePdfs(this.teamId, pdfIds);
     // await this.teamService.shareImages(this.teamId, imageIds);
 
