@@ -181,6 +181,7 @@ import { ContactMergeComponent } from './contact-merge/contact-merge.component';
     InputTemplateComponent,
     InputAutomationComponent,
     InputTeamComponent,
+    InputTagComponent,
     SelectUserComponent,
     SelectLeaderComponent,
     CalendarDialogComponent,
