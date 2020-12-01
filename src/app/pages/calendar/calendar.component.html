@@ -153,8 +153,8 @@
                             {{ day.date | calendarDate:'monthViewDayNumber':locale }}
                         </span>
                     </div>
-                    <div class="cal-event m-0" *ngFor="let event of day.events">
-                        <div class="f-2 font-weight-bold c-white p-1 cal-event-body" #monthEventView (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
+                    <div class="cal-event m-0" *ngFor="let event of day.events" #monthEventView (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
+                        <div class="f-2 font-weight-bold c-white p-1 cal-event-body">
                             {{event.title | stripTags | shorten: 20: '...'}}
                         </div>
                     </div>
