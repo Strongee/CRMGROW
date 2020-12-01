@@ -10,7 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 export class CampaignComponent implements OnInit, AfterViewInit {
   menuItems: PageMenuItem[] = [
     { id: 'list', icon: 'i-list', label: 'List' },
-    { id: 'bulk', icon: 'i-bulk', label: 'Bulk Mailing' }
+    { id: 'bulk', icon: 'i-bulk', label: 'Bulk Mailing' },
+    { id: 'smtp', icon: 'i-message', label: 'Connect SMTP' }
   ];
   defaultPage = 'list';
   currentPageType: string;

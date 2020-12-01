@@ -25,7 +25,17 @@ p {
   padding: 1rem;
 }
 
+.input-group {
+  .datepicker {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
 .send-materials {
+  overflow: auto;
+  max-height: 240px;
+
   .thumbnail {
     width: 96px;
     height: 54px;

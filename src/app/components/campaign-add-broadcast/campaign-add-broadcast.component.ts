@@ -108,6 +108,17 @@ export class CampaignAddBroadcastComponent implements OnInit {
     }
   }
 
+  getMaterialType(material): any {
+    if (material.type) {
+      if (material.type === 'application/pdf') {
+        return 'PDF';
+      } else if (material.type.includes('image')) {
+        return 'Image';
+      }
+    }
+    return 'Video';
+  }
+
   attachMaterials(): void {
     this.dialog
       .open(MaterialAddComponent, {
@@ -132,6 +143,21 @@ export class CampaignAddBroadcastComponent implements OnInit {
       return;
     }
 
+    const images = [];
+    const pdfs = [];
+    const videos = [];
+
+    this.materials.forEach((material) => {
+      const type = this.getMaterialType(material);
+      if (type === 'Image') {
+        images.push(material._id);
+      } else if (type === 'PDF') {
+        pdfs.push(material._id);
+      } else if (type === 'Video') {
+        videos.push(material._id);
+      }
+    });
+
     this.adding = true;
     this.userService.profile$.subscribe((res) => {
       const timezone = res['time_zone'];
@@ -155,7 +181,10 @@ export class CampaignAddBroadcastComponent implements OnInit {
         title: this.title,
         mail_list: this.selectedMailList._id,
         email_template: this.selectedTemplate._id,
-        due_start: dueDateTime
+        due_start: dueDateTime,
+        video: videos,
+        pdf: pdfs,
+        image: images
       };
 
       this.campaignService.create(data).subscribe((response) => {

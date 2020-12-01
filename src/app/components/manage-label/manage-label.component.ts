@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { LabelService } from '../../services/label.service';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { MatDialog } from '@angular/material/dialog';
-import { create } from 'domain';
-import { COLORS } from 'src/app/constants/variable.constants';
 import { Label } from 'src/app/models/label.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { LabelEditColorComponent } from '../label-edit-color/label-edit-color.component';
+import { LabelEditComponent } from '../label-edit/label-edit.component';
 
 @Component({
   selector: 'app-manage-label',
@@ -26,7 +26,6 @@ export class ManageLabelComponent implements OnInit {
   ngOnInit(): void {}
 
   saveLabel(): void {
-    console.log('edit label ==========>', this.editItem);
     if (this.editItem) {
       const updateLabel = {
         ...this.editItem,
@@ -59,10 +58,39 @@ export class ManageLabelComponent implements OnInit {
     }
   }
 
-  editLabel(label): void {
-    this.editItem = label;
-    this.labelName = label.name;
-    this.color = this.editItem.color === '#FFF' ? '#000' : this.editItem.color;
+  editLabel(label: any): void {
+    this.dialog
+      .open(LabelEditComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        maxHeight: '400px',
+        data: {
+          label: label
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          label = res;
+        }
+      });
+  }
+
+  editLabelColor(): void {
+    this.dialog
+      .open(LabelEditColorComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        maxHeight: '400px'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.color = res;
+        }
+      });
   }
 
   removeLabel(label): void {
@@ -94,8 +122,4 @@ export class ManageLabelComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>): void {
     this.labelService.changeOrder(event.previousIndex, event.currentIndex);
   }
-
-  handleChange(evt): void {}
-
-  COLORS = COLORS;
 }

@@ -10,6 +10,7 @@ $modal-mobile-bottom-padding: 1rem;
 
 body .mat-dialog-container {
   padding: $modal-top-padding $modal-right-padding $modal-bottom-padding $modal-left-padding;
+  overflow: visible;
 
   .mat-dialog-title {
     margin-bottom: 0.5rem;
@@ -39,12 +40,12 @@ body .mat-dialog-container {
 @media screen and (max-width: 575px) {
   body .mat-dialog-container {
     padding: $modal-mobile-top-padding $modal-mobile-right-padding $modal-mobile-bottom-padding $modal-mobile-left-padding;
-  
+
     .mat-dialog-title {
       margin-bottom: 0.5rem;
       font-size: 24px;
     }
-  
+
     .mat-dialog-content {
       margin-left: -1 * $modal-mobile-left-padding;
       margin-right: -1 * $modal-mobile-right-padding;

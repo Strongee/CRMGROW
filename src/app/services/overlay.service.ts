@@ -49,7 +49,7 @@ export class OverlayService {
         this.overlayContainer.getContainerElement().getBoundingClientRect()
       );
     });
-    this.sub = fromEvent<MouseEvent>(document, '')
+    this.sub = fromEvent<MouseEvent>(document, 'click')
       .pipe(
         filter((event) => {
           const clickTarget = event.target as HTMLElement;

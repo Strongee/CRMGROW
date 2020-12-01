@@ -2,5 +2,19 @@
   .check-cell {
     width: 40px;
   }
-;
+
+  .broadcast {
+    cursor: pointer;
+  }
+}
+
+:host ::ng-deep {
+
+  mat-dialog-container {
+    overflow: visible;
+  }
+
+  mat-dialog-content {
+    overflow: visible;
+  }
 }

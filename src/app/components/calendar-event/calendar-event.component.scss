@@ -1,11 +1,13 @@
 .event-container {
-    width: 100%;
-    max-width: 350px;
-    max-height: 500px;
-    overflow: auto;
     padding: 2.25rem;
     background: white;
     box-shadow: -8px 0 24px -5px rgba(16,19,54,0.24);
+    .event-detail {
+        width: 100%;
+        max-width: 300px;
+        max-height: 350px;
+        overflow: auto;
+    }
 }
 .btn-red {
     &:hover {

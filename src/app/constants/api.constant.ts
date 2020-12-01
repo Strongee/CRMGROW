@@ -176,7 +176,8 @@ export const MAILLIST = {
 };
 
 export const CAMPAIGN = {
-  CREATE: 'campaign'
+  CREATE: 'campaign',
+  GET: 'campaign/'
 };
 
 export const SEND = {
