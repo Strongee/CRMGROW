@@ -162,7 +162,6 @@ export class TeamComponent implements OnInit {
     this.loadSubscription = this.teamService.read(this.teamId).subscribe(
       (res) => {
         this.hideLoader();
-        console.log("load team =============>", res);
         this.team = {
           ...res,
           owner: res['owner'],

@@ -31,7 +31,7 @@
           <p class="text-dark loading-text" *ngIf="creating">Creating Affiliate...</p>
         </ngx-spinner>
     </ng-container>
-    <ng-container *ngIf="!loadingMain && !creating">
+    <ng-container *ngIf="!creating">
       <h6 class="f-6 font-weight-bold mt-5 mb-2">Commisions</h6>
       <div class="v-center">
         <div class="cards d-grid">
@@ -82,7 +82,20 @@
         </div>
       </div>
       <h6 class="f-6 font-weight-bold mt-5 mb-3">Active Referred Subscribers</h6>
-      <div class="list-content">
+      <div class="list-loading text-center" *ngIf="loadingUsers">
+        <div class="loader"></div>
+        <h4 class="fw-600 mt-2">Loading active referred subscribers...</h4>
+      </div>
+      <div class="empty-list" *ngIf="!loadingUsers && !users.length && !loadingMain">
+        <div class="object-icon v-center">
+          <i class="i-icon i-template d-block bgc-dark"></i>
+        </div>
+        <h5 class="font-weight-bold mt-4 mb-3">
+          There is no active referred subscribers.
+        </h5>
+        <p class="mb-4">Please pay for use this site.</p>
+      </div>
+      <div class="list-content" *ngIf="!loadingUsers && users.length">
         <div class="pagination-wrapper" [hidden]="userCount <= 25">
           <pagination-controls (pageChange)="loadUsers($event)" id="users" maxSize="4" previousLabel=""
                                nextLabel=""></pagination-controls>
