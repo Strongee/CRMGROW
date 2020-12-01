@@ -162,13 +162,13 @@ export class TeamComponent implements OnInit {
     this.loadSubscription = this.teamService.read(this.teamId).subscribe(
       (res) => {
         this.hideLoader();
+        console.log("load team =============>", res);
         this.team = {
           ...res,
           owner: res['owner'],
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
-        console.log("load team ==========>", this.team);
         this.loading = false;
         const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
         if (ownerIndex !== -1) {

@@ -63,6 +63,25 @@
     <app-tasks [class.d-none]="selectedTab.id !== 'tasks'"></app-tasks>
     <app-activities [class.d-none]="selectedTab.id === 'tasks'"></app-activities>
   </div>
+
+  <div class="mt-5">
+    <div class="v-center">
+      <app-slide-tab [tabs]="analyticsTabs" [selected]="selectedAnalyticsTab" (onChange)="changeAnalyticsTab($event)">
+      </app-slide-tab>
+    </div>
+    <div class="my-3">
+      <ng-container *ngIf="selectedAnalyticsTab.id === 'video-sent'">
+        <app-analytics-video-sent></app-analytics-video-sent>
+      </ng-container>
+      <ng-container *ngIf="selectedAnalyticsTab.id === 'video-watched'">
+        <app-analytics-video-watched></app-analytics-video-watched>
+      </ng-container>
+      <ng-container *ngIf="selectedAnalyticsTab.id === 'contacts-added'">
+        <app-analytics-contacts-added></app-analytics-contacts-added>
+      </ng-container>
+    </div>
+  </div>
+
 </div>
 <mat-drawer-container [hasBackdrop]="true">
   <mat-drawer #drawer position="end">
@@ -110,7 +129,7 @@
   <app-input-template></app-input-template>
   <app-actions-bar [actions]="actions" [isActive]="selected" (doCommand)="doAction($event)"></app-actions-bar> -->
 
-<!-- 
+<!--
   <div class="custom-mat-field">
     <mat-form-field appearance="outline" floatLabel="never" class="d-block">
       <mat-chip-list aria-label="Contact Selection" #contactList>
@@ -133,3 +152,4 @@
       </mat-autocomplete>
     </mat-form-field>
   </div> -->
+

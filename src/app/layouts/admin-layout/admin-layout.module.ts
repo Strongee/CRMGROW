@@ -55,6 +55,9 @@ import { ContactComponent } from '../../pages/contact/contact.component';
 import { TeamListComponent } from '../../pages/team-list/team-list.component';
 import { TeamCallComponent } from '../../pages/team-call/team-call.component';
 import { CampaignSmtpComponent } from '../../pages/campaign-smtp/campaign-smtp.component';
+import { AnalyticsVideoSentComponent } from '../../pages/analytics-video-sent/analytics-video-sent.component';
+import { AnalyticsVideoWatchedComponent } from '../../pages/analytics-video-watched/analytics-video-watched.component';
+import { AnalyticsContactsAddedComponent } from '../../pages/analytics-contacts-added/analytics-contacts-added.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +101,10 @@ import { CampaignSmtpComponent } from '../../pages/campaign-smtp/campaign-smtp.c
     ContactComponent,
     TeamListComponent,
     TeamCallComponent,
-    CampaignSmtpComponent
+    CampaignSmtpComponent,
+    AnalyticsVideoSentComponent,
+    AnalyticsVideoWatchedComponent,
+    AnalyticsContactsAddedComponent
   ],
   imports: [
     CommonModule,
