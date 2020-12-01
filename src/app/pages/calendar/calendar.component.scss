@@ -49,13 +49,13 @@
                 }
                 .avatar-wrapper {
                     width: 100%;
-                    height: 38px;
+                    height: 32px;
                   
                     .avatar {
-                      width: 38px;
-                      min-width: 38px;
-                      height: 38px;
-                      min-height: 38px;
+                      width: 32px;
+                      min-width: 32px;
+                      height: 32px;
+                      min-height: 32px;
                       background-color: $color-white;
                       color: $color-dark;
                       box-shadow: unset;
@@ -81,11 +81,19 @@
     mwl-calendar-week-view {
         .cal-week-view {
             border-top: unset;
+            .cal-day-headers {
+                @media screen and (max-width: 576px) {
+                    padding-left: 40px;
+                }
+            }
             .cal-time-events {
                 border-left: unset;
                 .cal-time-label-column {
                     mwl-calendar-week-view-hour-segment {
                         border: none;
+                    }
+                    @media screen and (max-width: 576px) {
+                        width: 40px;
                     }
                 }
                 .cal-day-columns {
@@ -157,16 +165,29 @@
                             }
                         }
                     }
-                    mwl-calendar-week-view-hour-segment {
-                        border-top: unset;
-                        .cal-day-timelabel {
-                            width: 70px;
-                            border-right: 1px solid #e1e1e1;
+                    .cal-hour {
+                        mwl-calendar-week-view-hour-segment {
+                            position: relative;
+                            .cal-day-timelabel {
+                                position: absolute;
+                                top: -1px;
+                                width: 70px;
+                                border-right: 1px solid #e1e1e1;
+                                border-top: 1px solid #ffffff;
+                            }
+                        }
+                        &:last-child {
+                            mwl-calendar-week-view-hour-segment {
+                                .cal-day-timelabel {
+                                    bottom: -1px;
+                                    border-bottom: 1px solid #ffffff;
+                                }
+                            }
                         }
                     }
                 }
                 .cal-hour .cal-hour-segment {
-                    justify-content: start;
+                    justify-content: center;
                 }
             }
         }
@@ -213,10 +234,14 @@
             border-left: 1px solid #FFFFFF;
             border-radius: 5px;
             .cal-event-body {
-                width: 100%;
+                width: 0px;
                 height: 20px;
-                overflow: hidden;
             }
+        }
+    }
+    app-slide-tab {
+        .tab-container {
+            width: 293px;
         }
     }
 }
@@ -300,7 +325,7 @@
         }
     }
     .date {
-        width: 300px;
+        width: 240px;
         font-size: 20px;
         letter-spacing: 0;
         line-height: 32px;
@@ -314,6 +339,13 @@
             .mobile {
                 display: block;
             }
+        }
+    }
+    @media screen and (max-width: 768px) {
+        display: block;
+        .view-time {
+            justify-content: start !important;
+            margin-top: 1rem;
         }
     }
     @media screen and (max-width: 576px) {

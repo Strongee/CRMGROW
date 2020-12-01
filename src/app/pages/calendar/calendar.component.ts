@@ -351,6 +351,47 @@ export class CalendarComponent implements OnInit {
     const date = this.viewDate.toISOString();
     this.appointmentService.getEvents(date, this.view).subscribe((res) => {
       if (res['status'] == true) {
+        // if (res['data'].length == 0) {
+        //   this.events = [
+        //     {
+        //       title: 'CRM grow',
+        //       start: new Date(
+        //         'Tue Nov 03 2020 18:30:00 GMT+0800 (China Standard Time)'
+        //       ),
+        //       end: new Date(
+        //         'Tue Nov 03 2020 19:30:00 GMT+0800 (China Standard Time)'
+        //       ),
+        //       meta: {
+        //         calendar_id:
+        //           'AQMkADAwATM0MDAAMS0wM2Y5LTk2MDYtMDACLTAwCgBGAAADsJ-oI7iWi0i9DKacmlpJ7QcAUAdwxlkjskWEkX-gVnwOkAAAAgEGAAAAUAdwxlkjskWEkX-gVnwOkAAAAhHJAAAA',
+        //         contacts: [],
+        //         description: '',
+        //         event_id:
+        //           'AQMkADAwATM0MDAAMS0wM2Y5LTk2MDYtMDACLTAwCgBGAAADsJ-oI7iWi0i9DKacmlpJ7QcAUAdwxlkjskWEkX-gVnwOkAAAAgENAAAAUAdwxlkjskWEkX-gVnwOkAADCiS9dAAAAA=='
+        //       }
+        //     }
+        //   ];
+        // } else {
+        //   this.events = res['data'].map((item) => {
+        //     return {
+        //       title: item.title,
+        //       start: new Date(item.due_start),
+        //       end: new Date(item.due_end),
+        //       meta: {
+        //         contacts: item.contacts,
+        //         calendar_id: item.calendar_id,
+        //         description: item.description,
+        //         location: item.location,
+        //         type: item.type,
+        //         guests: item.guests,
+        //         event_id: item.event_id,
+        //         recurrence: item.recurrence,
+        //         recurrence_id: item.recurrence_id,
+        //         is_organizer: item.is_organizer
+        //       }
+        //     };
+        //   });
+        // }
         this.events = res['data'].map((item) => {
           return {
             title: item.title,
