@@ -6,11 +6,13 @@
       <h4 class="text-center font-weight-bold mb-4">Sign Up!</h4>
       <p class="f-3 text-center">Please complete your basic information <br/> for your account</p>
       <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
-      <button type="button" class="social-btn btn border-primary d-block w-100 mt-4 font-weight-bold">
-        <span>Sign Up with Google</span>
+      <button type="button" class="v-center social-btn btn border-primary w-100 mt-4 font-weight-bold">
+        <img class="social-icon" src="../../../assets/img/google.svg" alt="">
+        <div class="social-text">Sign Up with Google</div>
       </button>
-      <button type="button" class="social-btn btn border-primary d-block w-100 mt-2 font-weight-bold">
-        <span>Sign Up with Outlook</span>
+      <button type="button" class="v-center social-btn btn border-primary w-100 mt-2 font-weight-bold">
+        <img class="social-icon" src="../../../assets/img/outlook.svg" alt="">
+        <div class="social-text">Sign Up with Outlook</div>
       </button>
       <div class="v-center my-3">
         <hr class="flex-grow-1"/>
@@ -27,15 +29,17 @@
           </div>
           <input type="text" class="form-control" [(ngModel)]="user.user_name" name="username" id="username" required #username="ngModel"/>
         </div>
-        <div class="form-group" [ngClass]="{invalid: basicForm.submitted && email.invalid && (email.dirty || email.touched || basicForm.submitted)}">
+        <div class="form-group email-form" [ngClass]="{invalid: basicForm.submitted && email.invalid && (email.dirty || email.touched || basicForm.submitted)}">
           <div class="d-flex">
             <label for="email" class="mr-auto">E-Mail</label>
             <span class="error" *ngIf="email.errors">
               <ng-container *ngIf="email.errors.required">Required!</ng-container>
               <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
             </span>
+            <span class="error d-inline-block" *ngIf="!checkingUser && existing">Email is already taken</span>
           </div>
-          <input type="email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
+          <input type="email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" (ngModelChange)="confirmEmail()"/>
+          <img class="check-spinner" src="../../../assets/img/spinner.gif" alt="" *ngIf="checkingUser">
         </div>
         <div class="form-group" [ngClass]="{invalid: basicForm.submitted && password.invalid && (password.dirty || password.touched || basicForm.submitted)}">
           <div class="d-flex">
@@ -66,7 +70,7 @@
       </form>
     </div>
     <!-- End Basic Profile Information Step -->
-    
+
     <!-- Main Profile Information Step -->
     <div class="mx-3 my-2" *ngSwitchCase="2">
       <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
@@ -90,6 +94,7 @@
               <ng-container *ngIf="phone.errors.required; else phoneFormat">Required!</ng-container>
               <ng-template #phoneFormat>Wrong cell-phone!</ng-template>
             </span>
+            <span class="error d-inline-block" *ngIf="!checkingPhone && phoneExisting">Phone is already taken</span>
           </div>
           <ngx-intl-tel-input
             [cssClass]="'form-control phone-form'"
@@ -101,12 +106,13 @@
             [maxLength]="15"
             [phoneValidation]="true"
             [separateDialCode]="true"
-            name="phone" 
+            name="phone"
             #phone="ngModel"
             [(ngModel)]="user.phone"
             (ngModelChange)="phone.errors ? false : confirmPhone();"
             required>
           </ngx-intl-tel-input>
+          <img class="check-spinner" src="../../../assets/img/spinner.gif" alt="" *ngIf="checkingPhone">
         </div>
         <div class="form-group" [ngClass]="{invalid: profileForm.submitted && timezone.invalid && (timezone.dirty || timezone.touched || profileForm.submitted)}">
           <div class="d-flex">

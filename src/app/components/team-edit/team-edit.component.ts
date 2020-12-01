@@ -8,7 +8,7 @@ import {
   MatDialog
 } from '@angular/material/dialog';
 import { TeamDeleteComponent } from '../team-delete/team-delete.component';
-import {HelperService} from "../../services/helper.service";
+import { HelperService } from '../../services/helper.service';
 
 @Component({
   selector: 'app-team-edit',

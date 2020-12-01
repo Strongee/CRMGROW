@@ -147,22 +147,15 @@
             >
             </mwl-calendar-month-view>
             <ng-template #monthCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
-                <div class="cal-cell" #eventCell (click)="createEvent(day, eventCell, createOverlay)">
+                <div class="cal-month-cell h-100" #eventCell (click)="createEvent(day, eventCell, createOverlay)">
                     <div class="cal-cell-top mt-1 mb-2">
                         <span class="cal-day-number">
                             {{ day.date | calendarDate:'monthViewDayNumber':locale }}
                         </span>
                     </div>
-                    <div *ngIf="day.events.length > 0">
-                        <div *ngFor="let event of day.events">
-                            <div class="d-flex align-items-center px-2 py-1 m-0 cal-events" #monthEventView (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
-                                <div class="cal-events-header mr-1">
-                                </div>
-                                <div class="d-flex cal-events-body">
-                                    <span class="cal-events-time mr-1">{{event.start | date:'shortTime'}}</span>
-                                    <span class="cal-events-title">{{event.title}}</span>
-                                </div>
-                            </div>
+                    <div class="cal-event m-0" *ngFor="let event of day.events">
+                        <div class="f-2 font-weight-bold c-white p-1 cal-event-body" #monthEventView (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
+                            {{event.start | date:'shortTime' | shorten: 10: '...'}} {{event.title | shorten: 20: '...'}}
                         </div>
                     </div>
                 </div>
@@ -201,7 +194,7 @@
             </ng-template>
             <ng-template #weekHourTemplate let-segment="segment" let-locale="locale" let-isTimeLabel="isTimeLabel">
                 <div *ngIf="isTimeLabel; else calHourCell">
-                    <div class="cal-hour-segment" #calHourCell>
+                    <div class="cal-hour-segment">
                         <span class="cal-time f-1 font-weight-bold op-64">
                             {{ segment.date | calendarDate:'dayViewHour':locale }}
                         </span>
@@ -243,10 +236,41 @@
             <mwl-calendar-day-view
                 [viewDate]="viewDate"
                 [events]="events"
-                (hourSegmentClicked)="hourClicked($event.date)"
-                (eventClicked)="handleEvent($event.event)"
+                [hourSegmentHeight]="60"
+                [hourSegments]="1"
+                [hourSegmentTemplate]="dayHourTemplate"
+                [eventTemplate]="dayEventTemplate"
             >
             </mwl-calendar-day-view>
+            <ng-template #dayEventTemplate let-weekEvent="weekEvent" let-locale="locale" let-eventClicked="eventClicked">
+                <div class="cal-event">
+                    <!-- <div class="f-1 font-weight-bold c-white cal-event-title">
+                        {{dayEvent}}
+                    </div>
+                    <div class="f-1 font-weight-bold c-white cal-event-title">
+                        
+                    </div> -->
+                    {{weekEvent.title}}
+                </div>
+            </ng-template>
+            <ng-template #dayHourTemplate let-segment="segment" let-locale="locale" let-isTimeLabel="isTimeLabel">
+                <div class="cal-day-timelabel" *ngIf="isTimeLabel; else calHourCell">
+                    <div class="cal-hour-segment">
+                        <span class="cal-time f-1 font-weight-bold op-64">
+                            {{ segment.date | calendarDate:'dayViewHour':locale }}
+                        </span>
+                        <div class="time-line ml-3">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #calHourCell let-close="close" let-data>
+                    <div class="cal-hour h-100" #createday (click)="hourClicked(segment.date, createday, createOverlay)">
+                    </div>
+                </ng-template>
+            </ng-template>
         </div>
         <ng-template #createOverlay let-close="close" let-data>
             <app-calendar-overlay

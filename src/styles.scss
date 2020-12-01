@@ -213,6 +213,9 @@ ul {
 .f-20 {
   font-size: 20px;
 }
+.f-24 {
+  font-size: 24px;
+}
 .f-28{
   font-size: 28px;
 }
@@ -887,7 +890,7 @@ body{
 //* Body Mobile style
 @media screen and (max-width: 575px) {
   body .page .page-content {
-    padding: 1rem 0.5rem;
+    padding: 1rem;
   }
 }
 
@@ -1481,3 +1484,4 @@ body {
     opacity: 1;
   }
 }
+

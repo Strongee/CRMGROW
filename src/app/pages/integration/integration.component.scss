@@ -13,3 +13,18 @@
     word-break: break-all;
   }
 }
+
+.social-btn {
+  height: 40px;
+
+  .social-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .social-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

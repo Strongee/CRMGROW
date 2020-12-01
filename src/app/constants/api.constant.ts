@@ -8,7 +8,10 @@ export const AUTH = {
   OAUTH_REQUEST: '',
   OUTLOOK_PROFILE_REQUEST: '',
   GOOGLE_PROFILE_REQUEST: '',
-  LOG_OUT: 'user/logout'
+  LOG_OUT: 'user/logout',
+  CHECK_EMAIL: 'user/check',
+  CHECK_NICKNAME: 'user/search-nickname',
+  CHECK_PHONE: 'user/search-phone',
 };
 export const USER = {
   PROFILE: 'user/me',
@@ -18,6 +21,8 @@ export const USER = {
   UPDATE_PASSWORD: 'user/new-password',
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
+  AUTH_GOOGLE: 'user/authorize-gmail',
+  AUTH_OUTLOOK: 'user/authorize-outlook',
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',
@@ -171,7 +176,8 @@ export const MAILLIST = {
 };
 
 export const CAMPAIGN = {
-  CREATE: 'campaign'
+  CREATE: 'campaign',
+  GET: 'campaign/'
 };
 
 export const SEND = {

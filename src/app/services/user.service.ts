@@ -83,9 +83,65 @@ export class UserService extends HttpService {
       { headers: reqHeader }
     );
   }
-  public checkEmail(): void {}
-  public checkNickName(): void {}
-  public checkPhone(): void {}
+  public checkEmail(email): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(this.server + AUTH.CHECK_EMAIL, JSON.stringify({ email }), {
+        headers: reqHeader
+      })
+      .pipe(catchError(this.handleError('CHECK EMAIL')));
+  }
+  public checkPhone(cell_phone): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(this.server + AUTH.CHECK_PHONE, JSON.stringify({ cell_phone }), {
+        headers: reqHeader
+      })
+      .pipe(catchError(this.handleError('CHECK PHONE')));
+  }
+
+  public authorizeOutlook(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_OUTLOOK + '?code=' + code
+    );
+  }
+  public authorizeGoogle(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_GOOGLE + '?code=' + code
+    );
+  }
+  public requestResetPassword(email): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(
+        this.server + AUTH.FORGOT_PASSWORD,
+        { email: email },
+        {
+          headers: reqHeader
+        }
+      )
+      .pipe(catchError(this.handleError('REQUEST RESET PASSWORD')));
+  }
+  public resetPassword(requestData): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(this.server + AUTH.RESET_PASSWORD, JSON.stringify(requestData), {
+        headers: reqHeader
+      })
+      .pipe(catchError(this.handleError('RESET PASSWORD')));
+  }
   public isAuthenticated(): boolean {
     if (localStorage.getItem('token') != null) {
       return true;
@@ -212,4 +268,5 @@ export class UserService extends HttpService {
       catchError(this.handleError('UPDATE PROFILE'))
     );
   }
+
 }

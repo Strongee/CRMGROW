@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { TIMEZONE } from 'src/app/constants/variable.constants';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { MatDialog } from '@angular/material/dialog';
-import { AvatarEditorComponent } from 'src/app/components/avatar-editor/avatar-editor.component';
+import { HelperService } from '../../services/helper.service';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import {AvatarEditorComponent} from "../../components/avatar-editor/avatar-editor.component";
+import { UserService } from '../../services/user.service';
+import { validateEmail } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-register',
@@ -10,14 +15,26 @@ import { AvatarEditorComponent } from 'src/app/components/avatar-editor/avatar-e
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  step = 2;
+  // Constant Variables
+  timezones = TIMEZONE;
+  countries: CountryISO[] = [
+    CountryISO.UnitedStates,
+    CountryISO.UnitedKingdom,
+    CountryISO.Canada,
+    CountryISO.SouthAfrica
+  ];
+  CountryISO = CountryISO;
+
+  step = 1;
   user = {
     user_name: '',
     email: '',
     password: '',
     learn_more: '',
     cell_phone: '',
-    phone: {}
+    phone: {},
+    picture_profile: '',
+    time_zone_info: ''
   };
   confirm_password = '';
   payment = {
@@ -30,15 +47,14 @@ export class RegisterComponent implements OnInit {
   cardNumberLen = 16;
   termsChecked = false;
 
-  // Constant Variables
-  timezones = TIMEZONE;
-  countries: CountryISO[] = [
-    CountryISO.UnitedStates,
-    CountryISO.UnitedKingdom,
-    CountryISO.Canada,
-    CountryISO.SouthAfrica
-  ];
-  CountryISO = CountryISO;
+  existing = false;
+  checkingUser = false;
+  checkUserSubscription: Subscription;
+
+  checkingPhone = false;
+  phoneExisting = false;
+  checkPhoneSubscription: Subscription;
+
   creditCardInput = {
     creditCard: true,
     onCreditCardTypeChanged: (type) => {
@@ -65,15 +81,28 @@ export class RegisterComponent implements OnInit {
     numeralThousandsGroupStyle: 'wan'
   };
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private helperService: HelperService,
+    private toast: ToastrService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {}
 
-  fillBasic(): void {
+  fillBasic(): any {
+    if (!this.checkingUser && this.existing) {
+      return;
+    }
+
     this.step = 2;
   }
 
   fillProfile(): void {
+    if (!this.checkingPhone && this.phoneExisting) {
+      return;
+    }
+
     this.step = 3;
   }
 
@@ -81,11 +110,87 @@ export class RegisterComponent implements OnInit {
     // Billing Information confirm and Register
   }
 
-  confirmEmail(): void {}
+  confirmEmail(): void {
+    this.existing = false;
+    if (this.user.email && validateEmail(this.user.email)) {
+      this.checkingUser = true;
+      this.checkUserSubscription && this.checkUserSubscription.unsubscribe();
+      this.checkUserSubscription = this.userService
+        .checkEmail(this.user.email)
+        .subscribe(
+          (res) => {
+            this.checkingUser = false;
+            if (res['status']) {
+              this.existing = false;
+            } else {
+              this.existing = true;
+            }
+          },
+          (err) => {
+            this.checkingUser = false;
+          }
+        );
+    }
+  }
 
-  confirmPhone(): void {}
+  confirmPhone(): void {
+    this.phoneExisting = false;
+    const cell_phone =
+      (this.user.phone && this.user.phone['internationalNumber']) ||
+      this.user.phone;
+    if (cell_phone) {
+      this.checkingPhone = true;
+      this.checkPhoneSubscription && this.checkPhoneSubscription.unsubscribe();
+      this.checkPhoneSubscription = this.userService
+        .checkPhone(cell_phone)
+        .subscribe(
+          (res) => {
+            this.checkingPhone = false;
+            if (res['status']) {
+              this.phoneExisting = false;
+            } else {
+              this.phoneExisting = true;
+            }
+          },
+          (err) => {
+            this.checkingPhone = false;
+          }
+        );
+    }
+  }
 
   openProfilePhoto(): void {
-    this.dialog.open(AvatarEditorComponent);
+    this.helperService
+      .promptForFiles('image/jpg, image/png, image/jpeg, image/webp, image/bmp')
+      .then((files) => {
+        const file: File = files[0];
+        const type = file.type;
+        const validTypes = [
+          'image/jpg',
+          'image/png',
+          'image/jpeg',
+          'image/webp',
+          'image/bmp'
+        ];
+        if (validTypes.indexOf(type) === -1) {
+          this.toast.warning('Unsupported File Selected.');
+          return;
+        }
+        const imageEditor = this.dialog.open(AvatarEditorComponent, {
+          width: '98vw',
+          maxWidth: '400px',
+          data: {
+            fileInput: file
+          }
+        });
+        imageEditor.afterClosed().subscribe((res) => {
+          if (res) {
+            this.user.picture_profile = res;
+          }
+        });
+      })
+      .catch((err) => {
+        this.toast.error('File Select', err);
+      });
   }
 }

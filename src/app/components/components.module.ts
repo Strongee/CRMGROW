@@ -79,6 +79,7 @@ import { TaskTypeComponent } from './task-type/task-type.component';
 import { InputTagComponent } from './input-tag/input-tag.component';
 import { LabelEditColorComponent } from './label-edit-color/label-edit-color.component';
 import { LabelEditComponent } from './label-edit/label-edit.component';
+import { ContactMergeComponent } from './contact-merge/contact-merge.component';
 
 @NgModule({
   declarations: [
@@ -158,7 +159,8 @@ import { LabelEditComponent } from './label-edit/label-edit.component';
     TaskTypeComponent,
     InputTagComponent,
     LabelEditColorComponent,
-    LabelEditComponent
+    LabelEditComponent,
+    ContactMergeComponent
   ],
   imports: [
     CommonModule,
@@ -205,7 +207,8 @@ import { LabelEditComponent } from './label-edit/label-edit.component';
     CalendarEventComponent,
     AdvancedFilterComponent,
     ManageLabelComponent,
-    TaskFilterComponent
+    TaskFilterComponent,
+    ContactMergeComponent
   ],
   bootstrap: [
     ContactCreateComponent,

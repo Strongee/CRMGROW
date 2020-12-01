@@ -88,7 +88,6 @@ export class MaterialAddComponent implements OnInit {
       (res) => {
         this.pdfsLoading = false;
         this.pdfs = res;
-        console.log('material pdfs ===========>', res);
       },
       (err) => {
         this.pdfsLoading = false;
@@ -103,7 +102,6 @@ export class MaterialAddComponent implements OnInit {
       (res) => {
         this.imagesLoading = false;
         this.images = res;
-        console.log('material images ===========>', res);
       },
       (err) => {
         this.imagesLoading = false;
