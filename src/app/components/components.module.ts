@@ -80,7 +80,6 @@ import { InputTagComponent } from './input-tag/input-tag.component';
 import { LabelEditColorComponent } from './label-edit-color/label-edit-color.component';
 import { LabelEditComponent } from './label-edit/label-edit.component';
 import { ContactMergeComponent } from './contact-merge/contact-merge.component';
-import { DeliveryDialogComponent } from './delivery-dialog/delivery-dialog.component';
 
 @NgModule({
   declarations: [
@@ -161,8 +160,7 @@ import { DeliveryDialogComponent } from './delivery-dialog/delivery-dialog.compo
     InputTagComponent,
     LabelEditColorComponent,
     LabelEditComponent,
-    ContactMergeComponent,
-    DeliveryDialogComponent
+    ContactMergeComponent
   ],
   imports: [
     CommonModule,
@@ -211,8 +209,7 @@ import { DeliveryDialogComponent } from './delivery-dialog/delivery-dialog.compo
     AdvancedFilterComponent,
     ManageLabelComponent,
     TaskFilterComponent,
-    ContactMergeComponent,
-    DeliveryDialogComponent
+    ContactMergeComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
-import { DeliveryDialogComponent } from 'src/app/components/delivery-dialog/delivery-dialog.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
@@ -10,6 +9,8 @@ import { User } from 'src/app/models/user.model';
 import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
 import { UserService } from 'src/app/services/user.service';
+import { ChartType } from 'chart.js';
+import { MultiDataSet, Label, Color } from 'ng2-charts';
 
 @Component({
   selector: 'app-navbar',
@@ -33,6 +34,81 @@ export class NavbarComponent implements OnInit {
     { label: 'Templates', id: 'templates' }
   ];
   currentSearchType: any = this.searchDataTypes[0];
+
+  chartLabels: Label[] = ['Failed', 'Delivered'];
+  chartData: MultiDataSet = [[50, 450]];
+  chartType: ChartType = 'doughnut';
+  chartOptions: any = {
+    legend: {
+      display: false
+    },
+    tooltips: {
+      enabled: false
+    }
+  };
+  chartColor: Color[] = [{ backgroundColor: ['#FF0000', '#00916E'] }];
+  sentSms = [
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'delivered',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'failed',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'delivered',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'failed',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'delivered',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'delivered',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'failed',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'failed',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'failed',
+      created_at: '11.25 at 7:37 PM'
+    },
+    {
+      name: 'John Doe',
+      cellPhone: '+16309844707',
+      status: 'delivered',
+      created_at: '11.25 at 7:37 PM'
+    }
+  ];
 
   constructor(
     public userService: UserService,
@@ -78,15 +154,11 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  deliveryDialog(): void {
-    this.dialog.open(DeliveryDialogComponent, {
-      position: { top: '50px' },
-      width: '400px',
-      maxHeight: '450px'
-    });
-  }
-
   changeType(type: any): void {
     this.currentSearchType = type;
+  }
+
+  clear(): void {
+    this.sentSms = [];
   }
 }
