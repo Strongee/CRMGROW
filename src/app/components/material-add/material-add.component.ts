@@ -3,6 +3,8 @@ import { TabItem } from '../../utils/data.types';
 import { MaterialService } from '../../services/material.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { StoreService } from 'src/app/services/store.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-material-add',
@@ -39,17 +41,26 @@ export class MaterialAddComponent implements OnInit {
   selectedPdfs = new SelectionModel<any>(true, []);
   selectedImages = new SelectionModel<any>(true, []);
 
+  videoLoadSubscription: Subscription;
+  pdfLoadSubscription: Subscription;
+  imageLoadSubscription: Subscription;
+
   constructor(
     private dialogRef: MatDialogRef<MaterialAddComponent>,
     private materialService: MaterialService,
+    public storeService: StoreService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.loadVideos();
+    this.loadImages();
+    this.loadPdfs();
+  }
 
   ngOnInit(): void {
     this.selectedMaterials = this.data;
-    this.loadVideos();
-    this.loadPdfs();
-    this.loadImages();
+    this.materialService.loadVideos();
+    this.materialService.loadPdfs();
+    this.materialService.loadImages();
 
     for (let i = 0; i < this.selectedMaterials.length; i++) {
       const material = this.selectedMaterials[i];
@@ -63,6 +74,12 @@ export class MaterialAddComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
+    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
+    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
+  }
+
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
   }
@@ -70,10 +87,11 @@ export class MaterialAddComponent implements OnInit {
   loadVideos(): void {
     this.videosLoading = true;
     this.videosLoadError = '';
-    this.materialService.loadVideosImpl().subscribe(
-      (res) => {
+    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
+    this.videoLoadSubscription = this.storeService.videos$.subscribe(
+      (videos) => {
         this.videosLoading = false;
-        this.videos = res;
+        this.videos = videos;
       },
       (err) => {
         this.videosLoading = false;
@@ -84,10 +102,11 @@ export class MaterialAddComponent implements OnInit {
   loadPdfs(): void {
     this.pdfsLoading = true;
     this.pdfsLoadError = '';
-    this.materialService.loadPdfsImpl().subscribe(
-      (res) => {
+    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
+    this.pdfLoadSubscription = this.storeService.pdfs$.subscribe(
+      (pdfs) => {
         this.pdfsLoading = false;
-        this.pdfs = res;
+        this.pdfs = pdfs;
       },
       (err) => {
         this.pdfsLoading = false;
@@ -98,10 +117,11 @@ export class MaterialAddComponent implements OnInit {
   loadImages(): void {
     this.imagesLoading = true;
     this.imagesLoadError = '';
-    this.materialService.loadImagesImpl().subscribe(
-      (res) => {
+    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
+    this.imageLoadSubscription = this.storeService.images$.subscribe(
+      (images) => {
         this.imagesLoading = false;
-        this.images = res;
+        this.images = images;
       },
       (err) => {
         this.imagesLoading = false;

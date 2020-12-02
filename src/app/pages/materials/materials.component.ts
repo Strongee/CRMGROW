@@ -18,6 +18,7 @@ import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { VideoEditComponent } from 'src/app/components/video-edit/video-edit.component';
 import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component';
 import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
+import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-materials',
@@ -37,6 +38,7 @@ export class MaterialsComponent implements OnInit {
   selectedTab: TabItem = this.tabs[0];
   siteUrl = environment.website;
   user_id = '';
+  STATUS = STATUS;
 
   videos: any[] = [];
   adminVideos: any[] = [];
@@ -98,9 +100,9 @@ export class MaterialsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.materialService.loadVideos();
-    this.materialService.loadPdfs();
-    this.materialService.loadImages();
+    this.materialService.loadVideos(true);
+    this.materialService.loadPdfs(true);
+    this.materialService.loadImages(true);
   }
 
   ngOnDestroy(): void {
