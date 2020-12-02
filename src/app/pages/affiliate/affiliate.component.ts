@@ -70,12 +70,10 @@ export class AffiliateComponent implements OnInit {
 
   loadMainInfo(): void {
     this.loadingMain = true;
-    this.showLoader();
     this.mainLoadingSubscription && this.mainLoadingSubscription.unsubscribe();
     this.mainLoadingSubscription = this.userService.loadAffiliate().subscribe(
       (res) => {
         this.loadingMain = false;
-        this.hideLoader();
         // Load the Main Info
         if (res['data']) {
           this.affiliate = res['data'];
@@ -87,7 +85,6 @@ export class AffiliateComponent implements OnInit {
         } else {
           // Create Affiliate if there is no link
           this.creating = true;
-          this.showLoader();
           this.affiliateCreateSubscription &&
             this.affiliateCreateSubscription.unsubscribe();
           this.affiliateCreateSubscription = this.userService
@@ -101,20 +98,17 @@ export class AffiliateComponent implements OnInit {
                   ];
                 }
                 this.creating = false;
-                this.hideLoader();
                 // Load Refered Users
                 this.loadUsers(1);
               },
               (err) => {
                 this.creating = false;
-                this.hideLoader();
               }
             );
         }
       },
       (err) => {
         this.loadingMain = false;
-        this.hideLoader();
       }
     );
   }
@@ -180,13 +174,6 @@ export class AffiliateComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(el);
     this.toast.success('Copied the link to clipboard');
-  }
-
-  showLoader(): void {
-    this.spinner.show('sp5');
-  }
-  hideLoader(): void {
-    this.spinner.hide('sp5');
   }
 
   getAvatarName(name): any {

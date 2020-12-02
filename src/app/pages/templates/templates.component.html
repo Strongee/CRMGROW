@@ -86,7 +86,9 @@
               There is no templates for emailing and texting yet.
             </h4>
             <p class="mb-4">Please create templates to use for emailing and texting easily.</p>
-            <button class="btn btn-primary font-weight-bold">Create Template</button>
+            <a class="btn btn-primary" [routerLink]="['/templates/new']">
+              <span class="font-weight-bold f-3">Create Template</span>
+            </a>
           </div>
           <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
             <div class="loader mt-5 lg"></div>
