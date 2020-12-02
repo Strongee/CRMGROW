@@ -125,16 +125,18 @@
                              nextLabel=""></pagination-controls>
       </div>
     </div>
-    <div class="" ngbDropdown placement="bottom-right">
-      <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
-        <span class="pr-2">Page Size</span>
-      </div>
-      <div ngbDropdownMenu aria-labelledby="contactPageSize">
-        <div class="py-2" ngbDropdownItem *ngFor="let type of PAGE_COUNTS" (click)="changePageSize(type)">
-          <span class="f-3 v-center" [class.font-weight-bold]="type.id === pageSize.id">
-            {{type.label}}
-            <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1" *ngIf="type.id === pageSize.id"></i>
-          </span>
+    <div class="d-flex">
+      <div class="shadow-dropdown ml-auto" ngbDropdown placement="top-right">
+        <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
+          <span class="pr-2">Page Size</span>
+        </div>
+        <div ngbDropdownMenu aria-labelledby="contactPageSize">
+          <div class="py-2" ngbDropdownItem *ngFor="let type of PAGE_COUNTS" (click)="changePageSize(type)">
+            <span class="f-3 v-center" [class.font-weight-bold]="type.id === pageSize.id">
+              {{type.label}}
+              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1" *ngIf="type.id === pageSize.id"></i>
+            </span>
+          </div>
         </div>
       </div>
     </div>

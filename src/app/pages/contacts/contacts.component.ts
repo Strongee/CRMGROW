@@ -8,6 +8,7 @@ import { Contact, ContactActivity } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import * as _ from 'lodash';
+import { SearchOption } from 'src/app/models/searchOption.model';
 
 @Component({
   selector: 'app-contacts',
@@ -62,16 +63,24 @@ export class ContactsComponent implements OnInit {
     });
 
     this.contactService.pageIndex$.subscribe((page) => {
+      this.page = page;
       // Search Option Check
       // if option is advanced search, filter the current result
       // if option is normal search, filter the current result
       // if option is empty, call load api
     });
 
-    this.contactService.searchOption$.subscribe((option) => {
-      // if search option is normal, call normal search
-      // if search is empty, call page load api
-      // if search is advanced, call advanced search
+    this.contactService.searchOption$.subscribe((option: SearchOption) => {
+      if (!option) {
+        return;
+      }
+      if (option.isEmpty()) {
+        // if search option is normal, call normal search
+        // if search is empty, call page load api
+      } else {
+        this.contactService.advancedSearch('');
+        // if search is advanced, call advanced search
+      }
     });
   }
   /**
@@ -103,6 +112,15 @@ export class ContactsComponent implements OnInit {
   }
 
   changePageSize(type: any): void {
+    const currentSize = this.pageSize.id;
     this.pageSize = type;
+    // Check with the Prev Page Size
+    if (currentSize < this.pageSize.id) {
+      const loaded = this.page * currentSize;
+      const newPage = Math.floor(loaded / this.pageSize.id) + 1;
+      this.contactService.pageIndex.next(newPage);
+    } else {
+      this.contactService.resizePage(this.pageSize.id);
+    }
   }
 }

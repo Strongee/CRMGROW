@@ -13,6 +13,7 @@ import {
 import { ActivityDetail } from '../models/activityDetail.model';
 import { map, catchError } from 'rxjs/operators';
 import { STATUS } from '../constants/variable.constants';
+import { SearchOption } from '../models/searchOption.model';
 
 interface LoadResponse {
   contacts: ContactActivity[];
@@ -33,7 +34,9 @@ export class ContactService extends HttpService {
   loading$ = this.loadStatus.asObservable();
   total: BehaviorSubject<number> = new BehaviorSubject(0);
   total$ = this.total.asObservable();
-  searchOption: BehaviorSubject<any> = new BehaviorSubject({});
+  searchOption: BehaviorSubject<SearchOption> = new BehaviorSubject(
+    new SearchOption()
+  );
   searchOption$ = this.searchOption.asObservable();
   pageIndex: BehaviorSubject<number> = new BehaviorSubject(1);
   pageIndex$ = this.pageIndex.asObservable();
@@ -66,6 +69,7 @@ export class ContactService extends HttpService {
   }
   update(_id: string): void {}
   delete(_id: string): void {}
+
   /**
    * Load Contacts and update the store
    * @param page : Contact Page Number
@@ -106,6 +110,79 @@ export class ContactService extends HttpService {
         catchError(this.handleError('LOAD CONTACTS', null))
       );
   }
+
+  /**
+   * Advanced Search Call
+   * @param str : keyword in the advanced search
+   */
+  advancedSearch(str: string): void {
+    this.advancedSearchImpl(str).subscribe((contacts) => {
+      contacts
+        ? this.loadStatus.next(STATUS.SUCCESS)
+        : this.loadStatus.next(STATUS.FAILURE);
+      if (contacts && contacts.length) {
+        this.storeService.contacts = contacts;
+        this.storeService.pageContacts.next(contacts);
+        this.total.next(contacts.length);
+      }
+    });
+  }
+
+  advancedSearchImpl(str: string): Observable<ContactActivity[]> {
+    const searchOption = this.searchOption.getValue();
+    return this.httpClient
+      .post(this.server + CONTACT.ADVANCE_SERACH, {
+        ...searchOption,
+        searchStr: str
+      })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new ContactActivity().deserialize(e))
+        ),
+        catchError(this.handleError('ADVANCED FILTER', null))
+      );
+  }
+
+  /**
+   * Normal Search Call
+   * @param str : keyword in the normal search
+   */
+  normalSearch(str: string): void {
+    this.normalSearchImpl(str).subscribe((contacts) => {
+      contacts
+        ? this.loadStatus.next(STATUS.SUCCESS)
+        : this.loadStatus.next(STATUS.FAILURE);
+      if (contacts && contacts.length) {
+        this.storeService.contacts = contacts;
+        this.storeService.pageContacts.next(contacts);
+        this.total.next(contacts.length);
+      }
+    });
+  }
+  normalSearchImpl(str: string): Observable<ContactActivity[]> {
+    return this.httpClient
+      .post(this.server + CONTACT.NORMAL_SEARCH, {
+        search: str
+      })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new ContactActivity().deserialize(e))
+        ),
+        catchError(this.handleError('FILTER', null))
+      );
+  }
+  /**
+   * Reduce the Page size
+   * @param pageSize : New Page size of the Contacts
+   */
+  resizePage(pageSize: number): void {
+    if (this.storeService.contacts.length) {
+      return;
+    }
+    const contacts = this.storeService.pageContacts.getValue();
+    const reduced = contacts.slice(0, pageSize);
+    this.storeService.pageContacts.next(reduced);
+  }
   easySearch(keyword: string): Observable<Contact[]> {
     return this.httpClient
       .post(this.server + CONTACT.QUICK_SEARCH, { search: keyword })
@@ -143,12 +220,12 @@ export class ContactService extends HttpService {
       catchError(this.handleError('SELECT ALL CONTACTS', []))
     );
   }
-  getSearchedContacts(query): Observable<any> {
-    return this.httpClient.post(this.server + CONTACT.LOAD_SERACH, query).pipe(
-      map((res) => res),
-      catchError(this.handleError('SEARCH CONTACTS', []))
-    );
-  }
+  // getSearchedContacts(query): Observable<any> {
+  //   return this.httpClient.post(this.server + CONTACT.LOAD_SERACH, query).pipe(
+  //     map((res) => res),
+  //     catchError(this.handleError('SEARCH CONTACTS', []))
+  //   );
+  // }
   getContactsByIds(ids): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.LOAD_BY_IDS, { ids })

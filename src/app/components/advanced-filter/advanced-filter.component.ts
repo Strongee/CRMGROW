@@ -3,6 +3,7 @@ import { LabelService } from '../../services/label.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { COUNTRIES } from '../../constants/variable.constants';
 import { SearchOption } from 'src/app/models/searchOption.model';
+import { ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -31,7 +32,10 @@ export class AdvancedFilterComponent implements OnInit {
 
   selectedMaterialActions = new SelectionModel<any>(true, []);
   selectedActivities = new SelectionModel<any>(true, []);
-  constructor(public labelService: LabelService) {}
+  constructor(
+    public labelService: LabelService,
+    private contactService: ContactService
+  ) {}
 
   searchOption: SearchOption = new SearchOption();
 
@@ -140,5 +144,6 @@ export class AdvancedFilterComponent implements OnInit {
     } else {
       this.searchOption.labelCondition.push(label);
     }
+    this.contactService.searchOption.next(this.searchOption);
   }
 }
