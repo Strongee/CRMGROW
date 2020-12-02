@@ -1,4 +1,4 @@
-import { Injectable, ViewContainerRef, Host, Optional } from '@angular/core';
+import { Injectable, ViewContainerRef } from '@angular/core';
 import {
   Overlay,
   OverlayContainer,
@@ -56,7 +56,8 @@ export class OverlayService {
           return (
             clickTarget != origin &&
             !!this.overlayRef &&
-            !this.overlayRef.overlayElement.contains(clickTarget)
+            !this.overlayRef.overlayElement.contains(clickTarget) &&
+            this.overlayRef.overlayElement.contains(clickTarget)
           );
         }),
         take(1)
