@@ -502,6 +502,9 @@ button {
     background-color: $color-white;
     color: $color-red;
   }
+  &.declining {
+    background-color: $color-white;
+  }
 }
 .btn-accept {
   background-color: #04B800;
@@ -538,6 +541,10 @@ button {
   &:active {
     background-color: #04B800;
     color: #04B800;
+  }
+
+  &.accepting {
+    background-color: #04B800;
   }
 }
 .btn-white {

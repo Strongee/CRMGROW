@@ -187,14 +187,14 @@
               <td class="team_actions d-flex justify-content-end">
                 <button class="btn btn-accept-outline f-1 mr-2 font-weight-bold"
                         [class.loading]="isAcceptInviting"
-                        [class.bgc-accept]="isAcceptInviting"
+                        [class.accepting]="isAcceptInviting"
                         (click)="acceptInvitation(team)"
                 >
                   <span class="button-label">Accept</span>
                 </button>
                 <button class="btn btn-decline f-1 font-weight-bold"
                         [class.loading]="isDeclineInviting"
-                        [class.bgc-red]="isDeclineInviting"
+                        [class.declining]="isDeclineInviting"
                         (click)="declineInvitation(team)"
                 >
                   <span class="button-label">Decline</span>

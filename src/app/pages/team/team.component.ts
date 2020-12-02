@@ -19,6 +19,7 @@ import { DialogSettings } from 'src/app/constants/variable.constants';
 import { MaterialShareComponent } from '../../components/material-share/material-share.component';
 import { TemplateShareComponent } from '../../components/template-share/template-share.component';
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
+import { NotifyComponent } from '../../components/notify/notify.component';
 
 @Component({
   selector: 'app-team',
@@ -41,6 +42,8 @@ export class TeamComponent implements OnInit {
   createubscription: Subscription;
   creating = false;
   accepting = false;
+  acceptJoinRequest = false;
+  declineJoinRequest = false;
   acceptSubscription: Subscription;
   selectedVideos = new SelectionModel<any>(true, []);
   selectedPdfs = new SelectionModel<any>(true, []);
@@ -48,6 +51,7 @@ export class TeamComponent implements OnInit {
   loadAffiliateSubscription: Subscription;
   createAffiliateSubscription: Subscription;
   selectedMembers = new SelectionModel(true, []);
+  selectedJoinRequest = new SelectionModel(true, []);
   shareUrl = 'https://www.crmgrow.com/';
   tabs: TabItem[] = [
     { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
@@ -161,6 +165,7 @@ export class TeamComponent implements OnInit {
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.teamService.read(this.teamId).subscribe(
       (res) => {
+        console.log("team info ==========>", res);
         this.hideLoader();
         this.team = {
           ...res,
@@ -646,49 +651,56 @@ export class TeamComponent implements OnInit {
         }
       });
   }
-  acceptRequest(member): void {
-    this.teamService.acceptRequest(this.teamId, member._id).subscribe(
+  acceptRequest(user): void {
+    this.acceptJoinRequest = true;
+    this.teamService.acceptRequest(this.teamId, user._id).subscribe(
       (res) => {
-        this.team.members.push(member);
+        this.acceptJoinRequest = false;
+        this.team.members.push(user);
         this.team.requests.some((e, index) => {
-          if (e._id === member._id) {
+          if (e._id === user._id) {
             this.team.requests.splice(index, 1);
             return true;
           }
         });
       },
-      (err) => {}
+      (err) => {
+        this.acceptJoinRequest = false;
+      }
     );
   }
+  declineRequest(user): void {
+
+  }
   acceptOutRequest(teamId, memberId): void {
-    // this.accepting = true;
-    // this.teamService.acceptRequest(teamId, memberId).subscribe(
-    //   (res) => {
-    //     this.accepting = false;
-    //     this.location.replaceState('/teams/' + this.teamId);
-    //     this.loadTeam();
-    //   },
-    //   (err) => {
-    //     this.accepting = false;
-    //     if (err.status === 400) {
-    //       this.dialog
-    //         .open(NotifyComponent, {
-    //           width: '96vw',
-    //           maxWidth: '400px',
-    //           data: {
-    //             message: 'Invalid permission for this team.'
-    //           },
-    //           disableClose: true
-    //         })
-    //         .afterClosed()
-    //         .subscribe((res) => {
-    //           this.router.navigate(['/teams']);
-    //         });
-    //     } else {
-    //       this.router.navigate(['/teams']);
-    //     }
-    //   }
-    // );
+    this.accepting = true;
+    this.teamService.acceptRequest(teamId, memberId).subscribe(
+      (res) => {
+        this.accepting = false;
+        this.location.replaceState('/teams/' + this.teamId);
+        this.loadTeam();
+      },
+      (err) => {
+        this.accepting = false;
+        if (err.status === 400) {
+          this.dialog
+            .open(NotifyComponent, {
+              width: '96vw',
+              maxWidth: '400px',
+              data: {
+                message: 'Invalid permission for this team.'
+              },
+              disableClose: true
+            })
+            .afterClosed()
+            .subscribe((res) => {
+              this.router.navigate(['/teams']);
+            });
+        } else {
+          this.router.navigate(['/teams']);
+        }
+      }
+    );
   }
   sendMaterials(materialType, mediaType, material): void {
     // let materials = [];
@@ -827,6 +839,9 @@ export class TeamComponent implements OnInit {
     }
   }
   isSelectedPage(): any {
+    let selectedMember = false;
+    let selectedOwner = false;
+    let selectedInvite = false;
     if (this.team.members.length) {
       for (let i = 0; i < this.team.members.length; i++) {
         const e = this.team.members[i];
@@ -834,14 +849,16 @@ export class TeamComponent implements OnInit {
           return false;
         }
       }
+      selectedMember = true;
     }
-    if (this.team.owner.lenght) {
+    if (this.team.owner.length) {
       for (let i = 0; i < this.team.owner.length; i++) {
         const e = this.team.owner[i];
         if (!this.selectedMembers.isSelected(e._id)) {
           return false;
         }
       }
+      selectedOwner = true;
     }
     if (this.team.invites.length) {
       for (let i = 0; i < this.team.invites.length; i++) {
@@ -850,8 +867,52 @@ export class TeamComponent implements OnInit {
           return false;
         }
       }
+      selectedInvite = true;
+    }
+
+    if (selectedMember || selectedOwner || selectedInvite) {
+      return true;
+    }
+
+    return false;
+  }
+  selectAllJoinRequestPage(): void {
+    if (this.isSelectedJoinRequestPage()) {
+      this.team.requests.forEach((e) => {
+        if (this.selectedJoinRequest.isSelected(e._id)) {
+          this.selectedJoinRequest.deselect(e._id);
+        }
+      });
+    } else {
+      this.team.requests.forEach((e) => {
+        if (!this.selectedJoinRequest.isSelected(e._id)) {
+          this.selectedJoinRequest.select(e._id);
+        }
+      });
+    }
+  }
+  isSelectedJoinRequestPage(): any {
+    if (this.team.requests.length) {
+      for (let i = 0; i < this.team.requests.length; i++) {
+        const e = this.team.requests[i];
+        if (!this.selectedJoinRequest.isSelected(e._id)) {
+          return false;
+        }
+      }
+      return true;
     }
     return false;
+  }
+  avatarName(user_name): string {
+    if (user_name) {
+      const names = user_name.split(' ');
+      if (names.length > 1) {
+        return names[0][0] + names[1][0];
+      } else {
+        return names[0][0];
+      }
+    }
+    return 'UN';
   }
   memberStatus(member): any {
     if (this.team.editors.indexOf(member._id) === -1) {
