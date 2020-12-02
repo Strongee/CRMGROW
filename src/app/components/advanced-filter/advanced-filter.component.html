@@ -33,7 +33,7 @@
       <div class="v-center">
         <div class="f-3 fw-600 c-dark">Include</div>
         <label class="custom-toggle mb-0 mx-2" placement="top">
-          <input type="checkbox" [checked]="isStatusInclude" (change)="setStatusInclude()">
+          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="searchOption.includeLabel = !searchOption.includeLabel">
           <span class="custom-toggle-slider rounded-circle"></span>
         </label>
         <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -43,7 +43,7 @@
       <div class="custom-checkbox label-item" *ngFor="let item of labelService.labels$ | async"
         style="height: unset; line-height: unset;">
         <input type="checkbox" class="custom-control-input" id="label-{{item._id}}" name="label-{{item._id}}"
-          (change)="selectedLabels.toggle(item._id)" [checked]="selectedLabels.isSelected(item._id)">
+          (change)="toggleLabels(item._id)" [checked]="searchOption.labelCondition.indexOf(item._id) !== -1">
         <label class="custom-control-label v-center" for="label-{{item._id}}">
           <i class="i-icon i-label d-block mr-2"
             [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>
@@ -51,6 +51,7 @@
         </label>
       </div>
     </div>
+
     <div class="checkbox-wrapper w-100 my-3">
       <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
         style="height: unset; line-height: unset;">
@@ -63,6 +64,7 @@
         </label>
       </div>
     </div>
+    
     <div class="form-group my-3">
       <label for="country_cc">country</label>
       <select id="country_cc" class="form-control" [(ngModel)]="searchCountry" name="country" #country="ngModel">
@@ -84,6 +86,7 @@
       <input type="text" class="form-control" [(ngModel)]="searchZipCode" placeholder="" id="zipcode" name="zipcode"
         #zipcode="ngModel" />
     </div>
+
     <div class="my-3">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
@@ -92,8 +95,8 @@
         <div class="v-center mb-2">
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
-            <input type="checkbox" id="source_check" name="source_check" [checked]="isSourceInclude"
-              (change)="setSourceInclude()">
+            <input type="checkbox" id="source_check" name="source_check" [checked]="!searchOption.includeSource"
+              (change)="searchOption.includeSource = !searchOption.includeSource">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -102,6 +105,8 @@
       <input type="text" class="form-control" [(ngModel)]="searchSource" placeholder="" id="source" name="source"
         #source="ngModel" />
     </div>
+
+    
     <div class="my-3">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
@@ -110,8 +115,8 @@
         <div class="v-center mb-2">
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
-            <input type="checkbox" id="company_check" name="company_check" [checked]="isCompanyInclude"
-              (change)="setCompanyInclude()">
+            <input type="checkbox" id="company_check" name="company_check" [checked]="!searchOption.includeBrokerage"
+              (change)="searchOption.includeBrokerage = !searchOption.includeBrokerage">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -120,6 +125,7 @@
       <input type="text" class="form-control" [(ngModel)]="searchCompany" placeholder="" id="company" name="company"
         #company="ngModel" />
     </div>
+
     <div class="my-3">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
@@ -128,14 +134,13 @@
         <div class="v-center mb-2">
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
-            <input type="checkbox" id="tag_check" name="tag_check" [checked]="isTagInclude" (change)="setTagInclude()">
+            <input type="checkbox" id="tag_check" name="tag_check" [checked]="!searchOption.includeTag" (change)="searchOption.includeTag = !searchOption.includeTag">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <input type="text" class="form-control" [(ngModel)]="searchTag" placeholder="" id="tag" name="tag"
-        #tag="ngModel" />
+      <app-input-tag [selectedTags]="searchOption.tagsCondition" [onlyFromSearch]="true"></app-input-tag>
     </div>
     <div class="my-3">
       <div class="form-group mb-0">

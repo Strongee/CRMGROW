@@ -45,7 +45,7 @@ export class SearchOption implements Deserializable {
   labelCondition: string[] = [];
   lastMaterial: LastMaterialCondition = new LastMaterialCondition();
   materialCondition: any;
-  includeLable: boolean = true;
+  includeLabel: boolean = true;
   includeLastActivity: boolean = true;
   includeBrokerage: boolean = true;
   includeSource: boolean = true;

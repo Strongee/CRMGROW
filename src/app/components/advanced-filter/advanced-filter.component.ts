@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LabelService } from '../../services/label.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { COUNTRIES } from '../../constants/variable.constants';
+import { SearchOption } from 'src/app/models/searchOption.model';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -15,7 +16,6 @@ export class AdvancedFilterComponent implements OnInit {
   savedFilters = [];
   searchString = '';
   status = 'clear';
-  isStatusInclude = true;
   materialActions = [];
   COUNTRIES = COUNTRIES;
   searchCountry = '';
@@ -25,17 +25,15 @@ export class AdvancedFilterComponent implements OnInit {
   searchSource = '';
   searchCompany = '';
   searchTag = '';
-  isSourceInclude = true;
-  isCompanyInclude = true;
-  isTagInclude = true;
   activities = [];
   fromDate = '';
   toDate = '';
 
-  selectedLabels = new SelectionModel<any>(true, []);
   selectedMaterialActions = new SelectionModel<any>(true, []);
   selectedActivities = new SelectionModel<any>(true, []);
   constructor(public labelService: LabelService) {}
+
+  searchOption: SearchOption = new SearchOption();
 
   ngOnInit(): void {
     this.savedFilters.push('Default');
@@ -131,19 +129,16 @@ export class AdvancedFilterComponent implements OnInit {
 
   applyFilters(): void {}
 
-  setStatusInclude(): void {
-    this.isStatusInclude = !this.isStatusInclude;
-  }
-
-  setSourceInclude(): void {
-    this.isSourceInclude = !this.isSourceInclude;
-  }
-
-  setCompanyInclude(): void {
-    this.isCompanyInclude = !this.isCompanyInclude;
-  }
-
-  setTagInclude(): void {
-    this.isTagInclude = !this.isTagInclude;
+  /**
+   * Toggle Label for search
+   * @param label : Label Id
+   */
+  toggleLabels(label: string): void {
+    const pos = this.searchOption.labelCondition.indexOf(label);
+    if (pos !== -1) {
+      this.searchOption.labelCondition.splice(pos, 1);
+    } else {
+      this.searchOption.labelCondition.push(label);
+    }
   }
 }
