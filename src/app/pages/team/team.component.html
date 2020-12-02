@@ -96,7 +96,62 @@
         </div>
       </div>
       <div class="members-table-container mt-5" *ngIf="selectedTab.id === 'members'">
-        <table class="table members-table">
+        <ng-container *ngIf="team.requests.length">
+          <div class="f-6 font-weight-bold">Requests</div>
+          <table class="table join-request-table mt-3 mb-5">
+            <thead>
+            <th class="check-cell border-top-0">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="selectAllJoinRequest" (change)="selectAllJoinRequestPage()" [checked]="isSelectedJoinRequestPage()">
+                <label class="custom-control-label" for="selectAllJoinRequest"></label>
+              </div>
+            </th>
+            <th class="name-cell">Members</th>
+            <th class="invite-received">Invite Received</th>
+            <th class="team-actions">Actions</th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let user of team.requests">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="request-{{user._id}}" (change)="selectedJoinRequest.toggle(user._id)" [checked]="selectedJoinRequest.isSelected(user._id)">
+                  <label class="custom-control-label" for="request-{{user._id}}"></label>
+                </div>
+              </td>
+              <td class="name-cell">
+                <div class="v-center">
+                  <ng-container *ngIf="user.picture_profile; else ownNamePlaceholder">
+                    <img [src]="user.picture_profile" class="avatar mr-3" />
+                  </ng-container>
+                  <ng-template #ownNamePlaceholder>
+                    <div class="name-avatar mr-3">{{avatarName(user.user_name)}}</div>
+                  </ng-template>
+                  <div class="f-3 font-weight-bold">{{user.user_name || 'Unnamed Contact'}}</div>
+                </div>
+              </td>
+              <td class="invite-received">{{user.updated_at | date : 'hh:mm a, dd MMM yyyy'}}</td>
+              <td class="team_actions d-flex justify-content-end">
+                <button class="btn btn-accept-outline f-1 mr-2 font-weight-bold"
+                        [class.loading]="acceptJoinRequest"
+                        [class.accepting]="acceptJoinRequest"
+                        (click)="acceptRequest(user)"
+                >
+                  <span class="button-label">Accept</span>
+                </button>
+                <button class="btn btn-decline f-1 font-weight-bold"
+                        [class.loading]="declineJoinRequest"
+                        [class.declining]="declineJoinRequest"
+                        (click)="declineRequest(user)"
+                >
+                  <span class="button-label">Decline</span>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </ng-container>
+        <div class="f-6 font-weight-bold">Members</div>
+        <table class="table members-table mt-3">
           <thead>
           <tr>
             <th class="check-cell border-top-0">

@@ -18,13 +18,22 @@
       <div class="inquiry-call-container">
         <ng-container *ngIf="isInquiryLoading">
           <div class="px-3 pb-3">
-            <div class="bg-white rounded">
-              <app-loading-overlay [type]="'table'"></app-loading-overlay>
+            <div class="list-loading text-center">
+              <div class="loader"></div>
+              <h5 class="fw-600 mt-2">Loading new inquiries for group calls...</h5>
             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="!totalInquiries && !isInquiryLoading">
-          <app-data-empty [type]="'inquiry'"></app-data-empty>
+          <div class="empty-list">
+            <div class="object-icon v-center">
+              <i class="i-icon i-group-call d-block bgc-dark"></i>
+            </div>
+            <h5 class="font-weight-bold mt-4 mb-3">
+              There is no new inquiries.
+            </h5>
+            <p class="mb-4">Please create new inquiry.</p>
+          </div>
         </ng-container>
         <div class="bg-white rounded position-relative">
           <ng-container *ngIf="totalInquiries">
@@ -135,13 +144,22 @@
       <div class="inquiry-call-container">
         <ng-container *ngIf="isPlannedLoading">
           <div class="px-3 pb-3">
-            <div class="bg-white rounded">
-              <app-loading-overlay [type]="'table'"></app-loading-overlay>
+            <div class="list-loading text-center">
+              <div class="loader"></div>
+              <h5 class="fw-600 mt-2">Loading scheduled calls for group calls...</h5>
             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="!totalPlanned && !isPlannedLoading">
-          <app-data-empty [type]="'plan'"></app-data-empty>
+          <div class="empty-list">
+            <div class="object-icon v-center">
+              <i class="i-icon i-group-call d-block bgc-dark"></i>
+            </div>
+            <h5 class="font-weight-bold mt-4 mb-3">
+              There is no scheduled calls.
+            </h5>
+            <p class="mb-4">Please schedule calls in new inquiries.</p>
+          </div>
         </ng-container>
         <div class="bg-white rounded position-relative">
           <ng-container *ngIf="totalPlanned">
@@ -268,13 +286,22 @@
       <div class="inquiry-call-container">
         <ng-container *ngIf="isFinishedLoading">
           <div class="px-3 pb-3">
-            <div class="bg-white rounded">
-              <app-loading-overlay [type]="'table'"></app-loading-overlay>
+            <div class="list-loading text-center">
+              <div class="loader"></div>
+              <h5 class="fw-600 mt-2">Loading completed & cancelled calls for group calls...</h5>
             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="!totalFinished && !isFinishedLoading">
-          <app-data-empty [type]="'finish'"></app-data-empty>
+          <div class="empty-list">
+            <div class="object-icon v-center">
+              <i class="i-icon i-group-call d-block bgc-dark"></i>
+            </div>
+            <h5 class="font-weight-bold mt-4 mb-3">
+              There is no completed & cancelled calls.
+            </h5>
+            <p class="mb-4">Please complete and cancel calls in new inquiries or scheduled calls.</p>
+          </div>
         </ng-container>
         <div class="bg-white rounded position-relative">
           <ng-container *ngIf="totalFinished">
