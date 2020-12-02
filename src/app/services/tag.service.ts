@@ -17,12 +17,18 @@ export class TagService extends HttpService {
   tags: BehaviorSubject<string[]> = new BehaviorSubject([]);
   tags$ = this.tags.asObservable();
 
+  sources: BehaviorSubject<string[]> = new BehaviorSubject([]);
+  sources$ = this.sources.asObservable();
+
+  companies: BehaviorSubject<string[]> = new BehaviorSubject([]);
+  companies$ = this.companies.asObservable();
+
   /**
    * Get All Tags
    */
   public getAllTagsImpl(): Observable<string[]> {
     return this.httpClient.get(this.server + TAG.ALL).pipe(
-      map((res) => res['data']),
+      map((res) => res['data'] || []),
       catchError(this.handleError('LOAD ALL TAGES', []))
     );
   }

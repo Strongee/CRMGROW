@@ -141,9 +141,14 @@
   </div>
 </div>
 
-
 <mat-drawer-container [hasBackdrop]="true">
   <mat-drawer #drawer position="end">
     <app-advanced-filter></app-advanced-filter>
   </mat-drawer>
 </mat-drawer-container>
+
+<div class="p-4">
+  <app-input-tag [selectedTags]="tags"></app-input-tag>
+
+  {{tags | json}}
+</div>

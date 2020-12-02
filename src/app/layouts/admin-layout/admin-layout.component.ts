@@ -3,6 +3,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Garbage } from 'src/app/models/garbage.model';
 import { User } from 'src/app/models/user.model';
 import { LabelService } from 'src/app/services/label.service';
+import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,18 +12,19 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./admin-layout.component.scss']
 })
 export class AdminLayoutComponent implements OnInit {
-
   @ViewChild('drawer') manageLabelPanel: MatDrawer;
 
   constructor(
     private userService: UserService,
-    private labelService: LabelService
+    private labelService: LabelService,
+    private tagService: TagService
   ) {
     this.userService.loadProfile().subscribe((res) => {
       this.userService.setProfile(new User().deserialize(res));
       this.userService.setGarbage(new Garbage().deserialize(res['garbage']));
     });
     this.labelService.loadLabels();
+    this.tagService.getAllTags();
 
     // Open or Close Manage Label
     this.labelService.manageLabel$.subscribe((flg) => {

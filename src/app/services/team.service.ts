@@ -1,34 +1,67 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { TEAM } from '../constants/api.constant';
 import { Team } from '../models/team.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
-import { StoreService } from './store.service';
 import { TeamCall } from '../models/team-call.model';
 import { User } from '../models/user.model';
 import { environment } from 'src/environments/environment';
-
+import { STATUS } from '../constants/variable.constants';
+import * as _ from 'lodash';
 @Injectable({
   providedIn: 'root'
 })
 export class TeamService extends HttpService {
-  constructor(
-    errorService: ErrorService,
-    private httpClient: HttpClient,
-    private storeService: StoreService
-  ) {
+  constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
   }
 
-  loadAll(): Observable<Team[]> {
+  teams: BehaviorSubject<Team[]> = new BehaviorSubject([]);
+  teams$ = this.teams.asObservable();
+  loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loading$ = this.loadStatus.asObservable();
+
+  invites: BehaviorSubject<Team[]> = new BehaviorSubject([]);
+  invites$ = this.invites.asObservable();
+  invitesLoadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  invitesLoading$ = this.loadStatus.asObservable();
+
+  /**
+   * LOAD ALL TEMPLATES
+   * @param force Flag to load force
+   */
+  loadAll(force = false): void {
+    if (!force) {
+      const loadStatus = this.loadStatus.getValue();
+      if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadStatus.next(STATUS.REQUEST);
+    this.loadAllImpl().subscribe((teams) => {
+      teams
+        ? this.loadStatus.next(STATUS.SUCCESS)
+        : this.loadStatus.next(STATUS.FAILURE);
+      this.teams.next(teams || []);
+    });
+  }
+
+  /**
+   * CALL LOAD API
+   */
+  loadAllImpl(): Observable<Team[]> {
     return this.httpClient.get(this.server + TEAM.LOAD).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('LOAD TEAM', []))
+      map((res) => (res['data'] || []).map((e) => new Team().deserialize(e))),
+      catchError(this.handleError('LOAD TEAM', null))
     );
   }
+
+  /**
+   * Load the Team Leaders
+   */
   loadLeaders(): Observable<User[]> {
     return this.httpClient.get(this.server + TEAM.LOAD_LEADERS).pipe(
       map((res) =>
@@ -77,6 +110,36 @@ export class TeamService extends HttpService {
         catchError(this.handleError('SEARCH USERS', {}))
       );
   }
+
+  /**
+   * Load the invites and Put them to Subject
+   */
+  loadInvites(force = false): void {
+    if (!force) {
+      const loadStatus = this.invitesLoadStatus.getValue();
+      if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.invitesLoadStatus.next(STATUS.REQUEST);
+    this.loadInvitesImpl().subscribe((teams) => {
+      teams
+        ? this.invitesLoadStatus.next(STATUS.SUCCESS)
+        : this.invitesLoadStatus.next(STATUS.FAILURE);
+      this.invites.next(teams || []);
+    });
+  }
+
+  /**
+   * Call API to Load Invites
+   */
+  loadInvitesImpl(): Observable<Team[]> {
+    return this.httpClient.get(this.server + TEAM.LOAD_INVITED).pipe(
+      map((res) => (res['data'] || []).map((e) => new Team().deserialize(e))),
+      catchError(this.handleError('LOAD INVITED TEAM', []))
+    );
+  }
+
   /**
    * Send the request to join
    * @param request: request object to join (searchedUser: user_id array || undefined, team_id: id of team)
@@ -110,6 +173,42 @@ export class TeamService extends HttpService {
         catchError(this.handleError('SEND INVITATION', {}))
       );
   }
+
+  /**
+   * Update Team from Subject
+   * @param _id : Team Id to update
+   * @param team : Data to update
+   */
+  updateTeam$(_id: string, team: Team): void {
+    const teams = this.teams.getValue();
+    teams.some((e) => {
+      if (e._id === _id) {
+        e = new Team().deserialize(team);
+        return true;
+      }
+    });
+    this.teams.next(teams);
+  }
+  /**
+   * Delete Team from Subject
+   * @param _id : Team Id to delete
+   */
+  deleteTeam$(_id: string): void {
+    const teams = this.teams.getValue();
+    _.remove(teams, (e) => {
+      return e._id === _id;
+    });
+    this.teams.next(teams);
+  }
+  /**
+   * Insert new team to Subject
+   * @param team : New Team Data
+   */
+  createTeam$(team: Team): void {
+    const teams = this.teams.getValue();
+    teams.push(team);
+    this.teams.next(teams);
+  }
   update(id, data): Observable<Team[]> {
     return this.httpClient.put(this.server + TEAM.UPDATE + id, data).pipe(
       map((res) => res['data'] || []),
@@ -122,10 +221,10 @@ export class TeamService extends HttpService {
       catchError(this.handleError('DELETE TEAM', []))
     );
   }
-  loadInvitedStatus(): Observable<Team[]> {
-    return this.httpClient.get(this.server + TEAM.LOAD_INVITED).pipe(
+  read(id): Observable<Team[]> {
+    return this.httpClient.get(this.server + TEAM.READ + id).pipe(
       map((res) => res['data'] || []),
-      catchError(this.handleError('LOAD INVITED TEAM', []))
+      catchError(this.handleError('READ TEAM', []))
     );
   }
   acceptInvitation(teamId): Observable<any> {
@@ -135,12 +234,6 @@ export class TeamService extends HttpService {
         map((res) => res['data'] || []),
         catchError(this.handleError('ACCEPT TEAM INVITATION', []))
       );
-  }
-  read(id): Observable<Team[]> {
-    return this.httpClient.get(this.server + TEAM.READ + id).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('READ TEAM', []))
-    );
   }
   shareVideos(teamId, videoIds): Observable<any> {
     return this.httpClient
