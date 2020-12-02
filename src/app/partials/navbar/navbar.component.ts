@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
+import { DeliveryDialogComponent } from 'src/app/components/delivery-dialog/delivery-dialog.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
@@ -75,6 +76,14 @@ export class NavbarComponent implements OnInit {
         console.log('LOG OUT FAILURE');
       }
     );
+  }
+
+  deliveryDialog(): void {
+    this.dialog.open(DeliveryDialogComponent, {
+      position: { top: '50px' },
+      width: '400px',
+      maxHeight: '450px'
+    });
   }
 
   changeType(type: any): void {
