@@ -79,10 +79,14 @@ export class InputTagComponent implements OnInit {
             const remained = _.difference(tags, this.selectedTags);
             const res = _.filter(remained, (e) => {
               const searchReg = new RegExp(this.keyword, 'gi');
-              return searchReg.test(e);
+              return searchReg.test(e._id);
             });
             this.searching = false;
-            this.filteredResults.next(res);
+            if (res.length) {
+              this.filteredResults.next(res);
+            } else if (this.keyword && !this.onlyFromSearch) {
+              this.filteredResults.next([{ _id: this.keyword, isNew: true }]);
+            }
           });
         },
         () => {
@@ -102,15 +106,15 @@ export class InputTagComponent implements OnInit {
    * @param evt : MatAutoCompleteSelectedEvent
    */
   onSelectOption(evt: MatAutocompleteSelectedEvent): void {
-    // const tag = evt.option.value;
-    // const index = _.findIndex(this.selectedTags, function (e) {
-    //   return e === tag;
-    // });
-    // if (index === -1) {
-    //   this.selectedTags.push(tag);
-    // }
-    // this.inputField.nativeElement.value = '';
-    // this.formControl.setValue(null);
-    // this.keyword = '';
+    const tag: Tag = evt.option.value;
+    const index = _.findIndex(this.selectedTags, function (e) {
+      return e === tag;
+    });
+    if (index === -1) {
+      this.selectedTags.push(tag._id);
+    }
+    this.inputField.nativeElement.value = '';
+    this.formControl.setValue(null);
+    this.keyword = '';
   }
 }

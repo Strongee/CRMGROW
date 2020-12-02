@@ -30,7 +30,8 @@
       <mat-option *ngFor="let item of filteredResults | async" [value]="item">
         <div class="d-flex chip py-2">
           <div class="info">
-            <div class="f-5 font-weight-bold">{{item._id}}</div>
+            <div class="f-3" *ngIf="item.isNew">Create new tag:</div>
+            <div class="f-4 fw-600">{{item._id}}</div>
           </div>
         </div>
       </mat-option>

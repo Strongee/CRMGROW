@@ -96,11 +96,6 @@
   }
 }
 
-.mat-form-field + .mat-form-field {
-  margin-left: 8px;
-}
-
-
 :host ::ng-deep {
   mat-expansion-panel {
     overflow: visible;
@@ -109,21 +104,5 @@
     .mat-expansion-panel-body {
       padding: 0;
     }
-  }
-
-  .ngx-pagination .pagination-previous a::before, .ngx-pagination .pagination-previous.disabled::before {
-    content: '◀';
-  }
-
-  .ngx-pagination .pagination-next a::after, .ngx-pagination .pagination-next.disabled::after {
-    content: '▶';
-  }
-
-  ul.ngx-pagination .current {
-    background-color: #0000ff;
-  }
-
-  .dropdown-menu {
-    border-radius: 8px;
   }
 }

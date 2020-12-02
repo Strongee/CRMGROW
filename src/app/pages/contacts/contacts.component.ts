@@ -42,6 +42,8 @@ export class ContactsComponent implements OnInit {
   page = 1;
   selection = new SelectionModel<Contact>(true, []);
   pageSelection = new SelectionModel<Contact>(true, []);
+
+  tags = [];
   constructor(
     public router: Router,
     public storeService: StoreService,
