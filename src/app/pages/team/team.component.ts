@@ -80,7 +80,8 @@ export class TeamComponent implements OnInit {
   }
   load(): void {
     this.teamId = this.route.snapshot.params['id'];
-    this.userService.loadProfile().subscribe((res) => {
+    this.loading = true;
+    this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
       if (this.teamId) {
@@ -161,12 +162,9 @@ export class TeamComponent implements OnInit {
   }
   loadTeam(): void {
     this.loading = true;
-    this.showLoader();
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.teamService.read(this.teamId).subscribe(
       (res) => {
-        console.log("team info ==========>", res);
-        this.hideLoader();
         this.team = {
           ...res,
           owner: res['owner'],
@@ -184,7 +182,6 @@ export class TeamComponent implements OnInit {
         }
       },
       (err) => {
-        this.hideLoader();
         this.loading = false;
         // this.loadError = true;
       }

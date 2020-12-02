@@ -1,11 +1,9 @@
 <div class="page-content">
   <div class="p-md-3 p-2">
     <ng-container *ngIf="loading">
-      <div class="loading-screen">
-        <ngx-spinner name="sp5" bdColor="rgba(50,50,50,0)" size="medium" color="#888" type="square-jelly-box"
-                     [fullScreen]="false">
-          <p class="text-dark loading-text mt-7" style="font-weight: 400;">Loading team details...</p>
-        </ngx-spinner>
+      <div class="list-loading text-center">
+        <div class="loader mt-5 lg"></div>
+        <h4 class="fw-600 mt-2">Loading team informations...</h4>
       </div>
     </ng-container>
     <ng-container *ngIf="loadError">
@@ -399,7 +397,18 @@
                   </ng-container>
                   <ng-template #emptyVideoListTemplate>
                     <div class="empty-materials mt-3">
-                      <app-data-empty [type]="'material_video'"></app-data-empty>
+                      <div class="empty-list">
+                        <div class="object-icon v-center">
+                          <i class="i-icon i-video d-block bgc-dark"></i>
+                        </div>
+                        <h4 class="font-weight-bold mt-4 mb-3">
+                          There is no templates for emailing and texting yet.
+                        </h4>
+                        <p class="mb-4">Please create templates to use for emailing and texting easily.</p>
+                        <a class="btn btn-primary" [routerLink]="['/templates/new']">
+                          <span class="font-weight-bold f-3">Create Template</span>
+                        </a>
+                      </div>
                     </div>
                   </ng-template>
                 </div>
