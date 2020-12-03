@@ -21,4 +21,20 @@ export class ThemeService extends HttpService {
       catchError(this.handleError('LOAD THEMES', []))
     );
   }
+
+  getTheme(id: string): any {
+    return this.httpClient.get(this.server + THEME.GET_THEME + id);
+  }
+
+  saveTheme(theme: any): any {
+    return this.httpClient.post(this.server + THEME.GET_THEME, theme);
+  }
+
+  updateTheme(id: string, data: any): any {
+    return this.httpClient.put(this.server + THEME.GET_THEME + id, data);
+  }
+
+  deleteTheme(id: string): any {
+    return this.httpClient.delete(this.server + THEME.GET_THEME + id);
+  }
 }
