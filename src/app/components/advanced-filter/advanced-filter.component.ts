@@ -44,10 +44,6 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.userService.profile$.subscribe((res) => {
-    });
-
     this.savedFilters.push('Default');
     this.savedFilters.push('Hot leads with 1 material sent');
     this.savedFilters.push('Last month best contacts');
