@@ -398,16 +398,13 @@
                   <ng-template #emptyVideoListTemplate>
                     <div class="empty-materials mt-3">
                       <div class="empty-list">
-                        <div class="object-icon v-center">
+                        <div class="object-icon sm v-center">
                           <i class="i-icon i-video d-block bgc-dark"></i>
                         </div>
-                        <h4 class="font-weight-bold mt-4 mb-3">
-                          There is no templates for emailing and texting yet.
-                        </h4>
-                        <p class="mb-4">Please create templates to use for emailing and texting easily.</p>
-                        <a class="btn btn-primary" [routerLink]="['/templates/new']">
-                          <span class="font-weight-bold f-3">Create Template</span>
-                        </a>
+                        <h5 class="font-weight-bold mt-4 mb-3">
+                          There is no videos for share yet.
+                        </h5>
+                        <p class="mb-4">Please add material to use for sharing.</p>
                       </div>
                     </div>
                   </ng-template>
@@ -506,7 +503,17 @@
                   </ng-container>
                   <ng-template #emptyPdfListTemplate>
                     <div class="empty-materials mt-3">
-                      <app-data-empty [type]="'material_pdf'"></app-data-empty>
+                      <div class="empty-materials mt-3">
+                        <div class="empty-list">
+                          <div class="object-icon sm v-center">
+                            <i class="i-icon i-pdf d-block bgc-dark"></i>
+                          </div>
+                          <h5 class="font-weight-bold mt-4 mb-3">
+                            There is no PDFs for share yet.
+                          </h5>
+                          <p class="mb-4">Please add material to use for sharing.</p>
+                        </div>
+                      </div>
                     </div>
                   </ng-template>
                 </div>
@@ -604,7 +611,15 @@
                   </ng-container>
                   <ng-template #emptyImageListTemplate>
                     <div class="empty-materials mt-3">
-                      <app-data-empty [type]="'material_image'"></app-data-empty>
+                      <div class="empty-list">
+                        <div class="object-icon sm v-center">
+                          <i class="i-icon i-notification d-block bgc-dark"></i>
+                        </div>
+                        <h5 class="font-weight-bold mt-4 mb-3">
+                          There is no images for share yet.
+                        </h5>
+                        <p class="mb-4">Please add material to use for sharing.</p>
+                      </div>
                     </div>
                   </ng-template>
                 </div>
@@ -666,7 +681,15 @@
                 </ng-container>
                 <ng-template #emptyTemplateListTemplate>
                   <div class="empty-materials mt-3">
-                    <app-data-empty [type]="'template'"></app-data-empty>
+                    <div class="empty-list">
+                      <div class="object-icon sm v-center">
+                        <i class="i-icon i-template d-block bgc-dark"></i>
+                      </div>
+                      <h5 class="font-weight-bold mt-4 mb-3">
+                        There is no templates for share yet.
+                      </h5>
+                      <p class="mb-4">Please add template to use for sharing.</p>
+                    </div>
                   </div>
                 </ng-template>
               </div>
@@ -725,17 +748,15 @@
                 </ng-container>
                 <ng-template #emptyAutomationListTemplate>
                   <div class="empty-materials mt-3">
-                    <img src="../../../assets/img/file_empty.png" />
-                    <ng-container *ngIf="role === 'owner' || role === 'editor'; else onlyMemberAutomationEmpty">
-                      <p class="desc">There is no team automations yet. Please create automation to share with your team.
-                      </p>
-                      <div class="action">
-                        <button class="btn btn-primary btn-sm text-white" (click)="createAutomation()">CREATE AUTOMATION</button>
+                    <div class="empty-list">
+                      <div class="object-icon sm v-center">
+                        <i class="i-icon i-notification d-block bgc-dark"></i>
                       </div>
-                    </ng-container>
-                    <ng-template #onlyMemberAutomationEmpty>
-                      <p class="desc">There is no team automations yet. Please wait for a while.</p>
-                    </ng-template>
+                      <h5 class="font-weight-bold mt-4 mb-3">
+                        There is no automations for share yet.
+                      </h5>
+                      <p class="mb-4">Please add automation to use for sharing.</p>
+                    </div>
                   </div>
                 </ng-template>
               </div>

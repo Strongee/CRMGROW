@@ -43,6 +43,44 @@ export class TagService extends HttpService {
   }
 
   /**
+   * Get All Sources
+   */
+  public getAllSourcesImpl(): Observable<string[]> {
+    return this.httpClient.get(this.server + TAG.LOAD_SOURCES).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('LOAD ALL SOURCES', []))
+    );
+  }
+
+  /**
+   * Get All Sources and Set the Observable Data
+   */
+  public getAllSources(): void {
+    this.getAllSourcesImpl().subscribe((tags) => {
+      this.sources.next(tags);
+    });
+  }
+
+  /**
+   * Get All Brokerage
+   */
+  public getAllCompaniesImpl(): Observable<string[]> {
+    return this.httpClient.get(this.server + TAG.LOAD_COMPANIES).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('LOAD ALL COMPANIES', []))
+    );
+  }
+
+  /**
+   * Get All Tags and Set the Observable Data
+   */
+  public getAllCompanies(): void {
+    this.getAllCompaniesImpl().subscribe((tags) => {
+      this.companies.next(tags);
+    });
+  }
+
+  /**
    * Update the List with New Tags List
    */
   public mergeList(tags: string[]): void {
@@ -77,6 +115,6 @@ export class TagService extends HttpService {
     const data = {
       tag: tagName
     };
-    return this.httpClient.post(this.server + TAG.DELETe, data);
+    return this.httpClient.post(this.server + TAG.DELETE, data);
   }
 }

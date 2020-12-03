@@ -25,6 +25,8 @@ export class AdminLayoutComponent implements OnInit {
     });
     this.labelService.loadLabels();
     this.tagService.getAllTags();
+    this.tagService.getAllCompanies();
+    this.tagService.getAllSources();
 
     // Open or Close Manage Label
     this.labelService.manageLabel$.subscribe((flg) => {

@@ -80,6 +80,8 @@ import { InputTagComponent } from './input-tag/input-tag.component';
 import { LabelEditColorComponent } from './label-edit-color/label-edit-color.component';
 import { LabelEditComponent } from './label-edit/label-edit.component';
 import { ContactMergeComponent } from './contact-merge/contact-merge.component';
+import { InputSourceComponent } from './input-source/input-source.component';
+import { InputCompanyComponent } from './input-company/input-company.component';
 
 @NgModule({
   declarations: [
@@ -160,7 +162,9 @@ import { ContactMergeComponent } from './contact-merge/contact-merge.component';
     InputTagComponent,
     LabelEditColorComponent,
     LabelEditComponent,
-    ContactMergeComponent
+    ContactMergeComponent,
+    InputSourceComponent,
+    InputCompanyComponent
   ],
   imports: [
     CommonModule,
@@ -209,7 +213,10 @@ import { ContactMergeComponent } from './contact-merge/contact-merge.component';
     AdvancedFilterComponent,
     ManageLabelComponent,
     TaskFilterComponent,
-    ContactMergeComponent
+    ContactMergeComponent,
+    InputTagComponent,
+    InputSourceComponent,
+    InputCompanyComponent
   ],
   bootstrap: [
     ContactCreateComponent,
