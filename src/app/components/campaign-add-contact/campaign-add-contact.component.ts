@@ -320,17 +320,17 @@ export class CampaignAddContactComponent implements OnInit {
         zipcodeCondition: ''
       };
       this.searchSubscription && this.searchSubscription.unsubscribe();
-      this.searchSubscription = this.contactService.getSearchedContacts(query).subscribe(
-        (res) => {
-          this.isLoading = false;
-          this.contacts = res.data;
-          this.contactCount = this.contacts.length;
-          this.contacts = res.data;
-          this.isSearchedResult = true;
-          this.isSearchLoading = false;
-        },
-        (err) => (this.isLoading = false)
-      );
+      // this.searchSubscription = this.contactService.getSearchedContacts(query).subscribe(
+      //   (res) => {
+      //     this.isLoading = false;
+      //     this.contacts = res.data;
+      //     this.contactCount = this.contacts.length;
+      //     this.contacts = res.data;
+      //     this.isSearchedResult = true;
+      //     this.isSearchLoading = false;
+      //   },
+      //   (err) => (this.isLoading = false)
+      // );
     }
   }
   addContacts(): void {

@@ -561,7 +561,7 @@ export const BulkActions = {
     {
       label: 'Add notes',
       type: 'button',
-      icon: 'i-note',
+      icon: 'i-template',
       command: 'add_note'
     },
     {

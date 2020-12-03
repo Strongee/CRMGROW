@@ -17,7 +17,6 @@ export class StoreService {
   tasks: BehaviorSubject<TaskDetail[]> = new BehaviorSubject([]);
   activities: BehaviorSubject<Activity[]> = new BehaviorSubject([]);
 
-  contacts: ContactActivity[] = [];
   pageContacts: BehaviorSubject<ContactActivity[]> = new BehaviorSubject([]);
   selectedContact: BehaviorSubject<ContactDetail> = new BehaviorSubject(
     new ContactDetail()
