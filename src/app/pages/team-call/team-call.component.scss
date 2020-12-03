@@ -188,18 +188,6 @@
     }
   }
 
-  .ngx-pagination .pagination-previous a::before, .ngx-pagination .pagination-previous.disabled::before {
-    content: '◀';
-  }
-
-  .ngx-pagination .pagination-next a::after, .ngx-pagination .pagination-next.disabled::after {
-    content: '▶';
-  }
-
-  ul.ngx-pagination .current {
-    background-color: #0000ff;
-  }
-
   .dropdown-menu {
     border-radius: 8px;
   }

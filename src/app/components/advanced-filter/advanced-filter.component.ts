@@ -3,6 +3,8 @@ import { LabelService } from '../../services/label.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { COUNTRIES } from '../../constants/variable.constants';
 import { SearchOption } from 'src/app/models/searchOption.model';
+import { UserService } from '../../services/user.service';
+import { ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -28,14 +30,24 @@ export class AdvancedFilterComponent implements OnInit {
   activities = [];
   fromDate = '';
   toDate = '';
+  brokerages = [];
+  sources = [];
 
   selectedMaterialActions = new SelectionModel<any>(true, []);
   selectedActivities = new SelectionModel<any>(true, []);
-  constructor(public labelService: LabelService) {}
-
   searchOption: SearchOption = new SearchOption();
+  constructor(
+    public labelService: LabelService,
+    public contactService: ContactService
+  ) {
+    this.searchOption = this.contactService.searchOption.getValue();
+  }
 
   ngOnInit(): void {
+
+    this.userService.profile$.subscribe((res) => {
+    });
+
     this.savedFilters.push('Default');
     this.savedFilters.push('Hot leads with 1 material sent');
     this.savedFilters.push('Last month best contacts');
@@ -127,6 +139,14 @@ export class AdvancedFilterComponent implements OnInit {
     ];
   }
 
+  /**
+   * Update the Search Str Subject in Contact Service.
+   * @param str : string to search
+   */
+  updateSearchStr(str: string): void {
+    this.contactService.searchStr.next(str);
+  }
+
   applyFilters(): void {}
 
   /**
@@ -140,5 +160,6 @@ export class AdvancedFilterComponent implements OnInit {
     } else {
       this.searchOption.labelCondition.push(label);
     }
+    this.contactService.searchOption.next(this.searchOption);
   }
 }

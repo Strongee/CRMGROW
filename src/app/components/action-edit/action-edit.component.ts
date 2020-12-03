@@ -58,6 +58,7 @@ export class ActionEditComponent implements OnInit {
   labelsLoadError = '';
   commandLabel = ''; // Label
   commandTags = []; // Tags
+  selectedTags = [];
 
   mediaType = '';
   materialType = '';

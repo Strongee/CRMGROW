@@ -38,6 +38,7 @@ import { DurationPipe } from '../../pipes/duration.pipe';
 import { PhonePipe } from '../../pipes/phone.pipe';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ColorSwatchesModule } from 'ngx-color/swatches';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [LoadingOverlayComponent, DurationPipe, PhonePipe],
@@ -75,7 +76,8 @@ import { ColorSwatchesModule } from 'ngx-color/swatches';
     FileUploadModule,
     NgxPaginationModule,
     TimeagoModule.forRoot(),
-    OverlayModule
+    OverlayModule,
+    ChartsModule
   ],
   exports: [
     FormsModule,
@@ -110,7 +112,8 @@ import { ColorSwatchesModule } from 'ngx-color/swatches';
     LoadingOverlayComponent,
     DurationPipe,
     PhonePipe,
-    OverlayModule
+    OverlayModule,
+    ChartsModule
   ]
 })
 export class SharedModule {}

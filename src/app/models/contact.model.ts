@@ -140,6 +140,16 @@ export class ContactActivity implements Deserializable {
     }
     return '';
   }
+
+  get mainInfo(): Contact {
+    return new Contact().deserialize({
+      _id: this._id,
+      first_name: this.first_name,
+      last_name: this.last_name,
+      email: this.email,
+      cell_phone: this.cell_phone
+    });
+  }
 }
 
 export class ContactDetail extends Contact {

@@ -30,21 +30,93 @@ class LastMaterialCondition implements Deserializable {
     return Object.assign(this, input);
   }
 }
+
+class MaterialCondition implements Deserializable {
+  watched_video: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  watched_image: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  watched_pdf: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  not_watched_video: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  not_watched_image: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  not_watched_pdf: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  sent_video: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  sent_image: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  sent_pdf: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  not_sent_video: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  not_sent_image: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+  not_sent_pdf: { flag: boolean; material: string } = {
+    flag: false,
+    material: undefined
+  };
+
+  deserialize(input: any): this {
+    return Object.assign(this, input);
+  }
+
+  isSet(): boolean {
+    return (
+      this.watched_video.flag ||
+      this.watched_pdf.flag ||
+      this.watched_image.flag ||
+      this.not_watched_video.flag ||
+      this.not_watched_pdf.flag ||
+      this.not_watched_image.flag ||
+      this.sent_video.flag ||
+      this.sent_pdf.flag ||
+      this.sent_image.flag ||
+      this.not_sent_video.flag ||
+      this.not_sent_pdf.flag ||
+      this.not_sent_image.flag
+    );
+  }
+}
 export class SearchOption implements Deserializable {
   _id: string;
   str: any = '';
   recruitingStageCondition: string[] = [];
   countryCondition: string;
   regionCondition: string[] = [];
-  cityCondition: string;
-  zipcodeCondition: string;
+  cityCondition: string[] = [];
+  zipcodeCondition: string = '';
   tagsCondition: string[] = [];
   sourceCondition: string[] = [];
   brokerageCondition: string[] = [];
   activityCondition: string[] = [];
   labelCondition: string[] = [];
   lastMaterial: LastMaterialCondition = new LastMaterialCondition();
-  materialCondition: any;
+  materialCondition: MaterialCondition = new MaterialCondition();
   includeLabel: boolean = true;
   includeLastActivity: boolean = true;
   includeBrokerage: boolean = true;
@@ -61,25 +133,25 @@ export class SearchOption implements Deserializable {
 
   isEmpty(): boolean {
     return (
-      this.labelCondition.length &&
-      this.recruitingStageCondition.length &&
-      this.countryCondition &&
-      this.regionCondition.length &&
-      this.cityCondition &&
-      this.zipcodeCondition &&
-      this.tagsCondition.length &&
-      this.brokerageCondition.length &&
-      this.activityCondition.length &&
-      this.sourceCondition.length &&
-      this.lastMaterial.send_pdf.flag &&
-      this.lastMaterial.send_video.flag &&
-      this.lastMaterial.send_image.flag &&
-      this.lastMaterial.watched_video.flag &&
-      this.lastMaterial.watched_pdf.flag &&
-      this.lastMaterial.watched_image.flag &&
-      this.activityStart &&
-      this.activityEnd &&
-      this.materialCondition
+      !this.labelCondition.length &&
+      !this.recruitingStageCondition.length &&
+      !this.countryCondition &&
+      !this.regionCondition.length &&
+      !this.cityCondition.length &&
+      !this.zipcodeCondition &&
+      !this.tagsCondition.length &&
+      !this.brokerageCondition.length &&
+      !this.activityCondition.length &&
+      !this.sourceCondition.length &&
+      !this.lastMaterial.send_pdf.flag &&
+      !this.lastMaterial.send_video.flag &&
+      !this.lastMaterial.send_image.flag &&
+      !this.lastMaterial.watched_video.flag &&
+      !this.lastMaterial.watched_pdf.flag &&
+      !this.lastMaterial.watched_image.flag &&
+      !this.activityStart &&
+      !this.activityEnd &&
+      !this.materialCondition.isSet()
     );
   }
 }
