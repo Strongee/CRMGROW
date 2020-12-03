@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ThemeService } from 'src/app/services/theme.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
-import { Theme } from '../../models/theme.model';
+import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-themes',
@@ -11,25 +11,16 @@ import { Theme } from '../../models/theme.model';
   styleUrls: ['./themes.component.scss']
 })
 export class ThemesComponent implements OnInit {
-  themes: Theme[] = [];
+  STATUS = STATUS;
 
   constructor(
-    private themeService: ThemeService,
+    public themeService: ThemeService,
     private router: Router,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.loadAllThemes();
-  }
-
-  loadAllThemes(): void {
-    this.themeService.getAllTheme().subscribe(
-      (res) => {
-        this.themes = res;
-      },
-      (err) => {}
-    );
+    this.themeService.getAllTheme(true);
   }
 
   editTheme(id: string): void {
@@ -48,11 +39,7 @@ export class ThemesComponent implements OnInit {
     });
     confirmDialog.afterClosed().subscribe((res) => {
       if (res) {
-        this.themeService.deleteTheme(id).subscribe((res) => {
-          if (res['status'] == true) {
-            this.loadAllThemes();
-          }
-        });
+        this.themeService.deleteTheme(id);
       }
     });
   }
