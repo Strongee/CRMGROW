@@ -166,7 +166,7 @@ export class ContactsComponent implements OnInit {
    * Run the bulk action
    * @param event Bulk Action Command
    */
-  doAction(event: any) {
+  doAction(event: any): void {
     switch (event.command) {
       case 'deselect':
         this.pageSelection = [];
