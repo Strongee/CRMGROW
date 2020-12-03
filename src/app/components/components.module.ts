@@ -209,7 +209,8 @@ import { ContactMergeComponent } from './contact-merge/contact-merge.component';
     AdvancedFilterComponent,
     ManageLabelComponent,
     TaskFilterComponent,
-    ContactMergeComponent
+    ContactMergeComponent,
+    InputTagComponent
   ],
   bootstrap: [
     ContactCreateComponent,

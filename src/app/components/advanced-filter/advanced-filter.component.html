@@ -64,7 +64,7 @@
         </label>
       </div>
     </div>
-    
+
     <div class="form-group my-3">
       <label for="country_cc">country</label>
       <select id="country_cc" class="form-control" [(ngModel)]="searchCountry" name="country" #country="ngModel">
@@ -102,11 +102,12 @@
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <input type="text" class="form-control" [(ngModel)]="searchSource" placeholder="" id="source" name="source"
-        #source="ngModel" />
+      <select class="form-control" [(ngModel)]="searchSource">
+        <option *ngFor="let source of sources; let index = index;" value="{{source._id}}" class="my-1 f-3">
+          {{source.text}}
+        </option>
+      </select>
     </div>
-
-    
     <div class="my-3">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
@@ -122,14 +123,17 @@
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <input type="text" class="form-control" [(ngModel)]="searchCompany" placeholder="" id="company" name="company"
-        #company="ngModel" />
+      <select class="form-control" [(ngModel)]="searchCompany">
+        <option *ngFor="let brokerage of brokerages; let index = index;" value="{{brokerage._id}}" class="my-1 f-3">
+          {{brokerage._id}}
+        </option>
+      </select>
     </div>
 
     <div class="my-3">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
-          <label for="tag">Tag</label>
+          <label for="tag_check">Tag</label>
         </div>
         <div class="v-center mb-2">
           <div class="f-3 fw-600 c-dark">Include</div>

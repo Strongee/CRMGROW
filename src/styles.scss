@@ -1457,10 +1457,23 @@ body {
     background: $color-trans08;
     border-radius: 50%;
     justify-content: center;
+
     i {
       width: 30px;
       height: 30px;
     }
+
+    &.sm {
+      width: 44px;
+      height: 44px;
+
+      i {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+
   }
 }
 .list-loading {

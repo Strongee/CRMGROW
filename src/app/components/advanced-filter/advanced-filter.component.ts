@@ -3,6 +3,7 @@ import { LabelService } from '../../services/label.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { COUNTRIES } from '../../constants/variable.constants';
 import { SearchOption } from 'src/app/models/searchOption.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -28,14 +29,23 @@ export class AdvancedFilterComponent implements OnInit {
   activities = [];
   fromDate = '';
   toDate = '';
+  brokerages = [];
+  sources = [];
 
   selectedMaterialActions = new SelectionModel<any>(true, []);
   selectedActivities = new SelectionModel<any>(true, []);
-  constructor(public labelService: LabelService) {}
+  constructor(
+    public labelService: LabelService,
+    public userService: UserService
+  ) {}
 
   searchOption: SearchOption = new SearchOption();
 
   ngOnInit(): void {
+
+    this.userService.profile$.subscribe((res) => {
+    });
+
     this.savedFilters.push('Default');
     this.savedFilters.push('Hot leads with 1 material sent');
     this.savedFilters.push('Last month best contacts');
