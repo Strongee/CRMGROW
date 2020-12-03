@@ -41,6 +41,9 @@ export class ContactsComponent implements OnInit {
   sortType = this.SORT_TYPES[0];
   pageSize = this.PAGE_COUNTS[3];
   page = 1;
+  searchOption: SearchOption;
+  searchStr = '';
+
   selection = new SelectionModel<Contact>(true, []);
   pageSelection = new SelectionModel<Contact>(true, []);
 
@@ -53,7 +56,6 @@ export class ContactsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contactService.load(0);
     this.storeService.pageContacts$.subscribe((contacts) => {
       this.pageSelection = _.intersectionBy(
         contacts,
@@ -62,26 +64,62 @@ export class ContactsComponent implements OnInit {
       );
     });
 
-    this.contactService.pageIndex$.subscribe((page) => {
-      this.page = page;
-      // Search Option Check
-      // if option is advanced search, filter the current result
-      // if option is normal search, filter the current result
-      // if option is empty, call load api
+    this.contactService.searchOption$.subscribe((option: SearchOption) => {
+      this.searchOption = option;
+      this.load();
     });
 
-    this.contactService.searchOption$.subscribe((option: SearchOption) => {
-      if (!option) {
-        return;
-      }
-      if (option.isEmpty()) {
-        // if search option is normal, call normal search
-        // if search is empty, call page load api
-      } else {
-        this.contactService.advancedSearch('');
-        // if search is advanced, call advanced search
-      }
+    this.contactService.searchStr$.subscribe((str) => {
+      this.searchStr = str;
+      this.load();
     });
+  }
+  /**
+   * Load the contacts: Advanced Search, Normal Search, API Call
+   */
+  load(): void {
+    if (this.searchOption.isEmpty()) {
+      if (this.searchStr) {
+        // Call Normal Search
+        this.contactService.normalSearch(this.searchStr);
+      } else {
+        // Call Normal Load
+        this.contactService.load(0);
+      }
+    } else {
+      this.contactService.advancedSearch(this.searchStr);
+    }
+    this.page = 0;
+  }
+  /**
+   * Load the page contacts
+   * @param page : Page Number to load
+   */
+  changePage(page: number): void {
+    this.page = page;
+    if (!this.searchStr && this.searchOption.isEmpty()) {
+      let skip = (page - 1) * this.pageSize.id;
+      skip = skip < 0 ? 0 : skip;
+      this.contactService.load(skip);
+    }
+  }
+  /**
+   * Change the Page Size
+   * @param type : Page size information element ({id: size of page, label: label to show UI})
+   */
+  changePageSize(type: any): void {
+    const currentSize = this.pageSize.id;
+    this.pageSize = type;
+    // Check with the Prev Page Size
+    if (currentSize < this.pageSize.id) {
+      const loaded = this.page * currentSize;
+      const newPage = Math.floor(loaded / this.pageSize.id) + 1;
+      this.contactService.pageIndex.next(newPage);
+    } else {
+      if (this.searchOption.isEmpty() || !this.searchStr) {
+        this.contactService.resizePage(this.pageSize.id);
+      }
+    }
   }
   /**
    * Change the sort column and dir
@@ -111,16 +149,5 @@ export class ContactsComponent implements OnInit {
     this.router.navigate([`contacts/${contact._id}`]);
   }
 
-  changePageSize(type: any): void {
-    const currentSize = this.pageSize.id;
-    this.pageSize = type;
-    // Check with the Prev Page Size
-    if (currentSize < this.pageSize.id) {
-      const loaded = this.page * currentSize;
-      const newPage = Math.floor(loaded / this.pageSize.id) + 1;
-      this.contactService.pageIndex.next(newPage);
-    } else {
-      this.contactService.resizePage(this.pageSize.id);
-    }
-  }
+  
 }

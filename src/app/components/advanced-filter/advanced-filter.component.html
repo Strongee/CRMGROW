@@ -9,7 +9,7 @@
     <div class="form-group">
       <label>Saved Filters</label>
       <div class="v-center">
-        <select class="form-control" [(ngModel)]="selectedSavedFilter">
+        <select class="form-control" [(ngModel)]="selectedSavedFilter" name="filterSearch">
           <option *ngFor="let filter of savedFilters; let index = index;" value="{{filter}}" [class.c-blue]="index == 0"
             class="my-1 f-3">
             {{filter}}
@@ -20,7 +20,7 @@
       <div class="my-3">
         <label>Global Search</label>
         <input type="text" class="form-control" [(ngModel)]="searchString" placeholder="Type in string"
-          name="global_search" #global_search="ngModel" />
+          name="global_search" #global_search="ngModel" (ngModelChange)="updateSearchStr($event)" />
       </div>
     </div>
     <div class="mt-5 mb-3 v-center justify-content-between">
@@ -33,7 +33,7 @@
       <div class="v-center">
         <div class="f-3 fw-600 c-dark">Include</div>
         <label class="custom-toggle mb-0 mx-2" placement="top">
-          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="searchOption.includeLabel = !searchOption.includeLabel">
+          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="searchOption.includeLabel = !searchOption.includeLabel" name="includeLabel">
           <span class="custom-toggle-slider rounded-circle"></span>
         </label>
         <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -165,7 +165,7 @@
             <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
           </div>
           <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="fromDate" ngbDatepicker
-            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" />
+            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" name="activityStartDate"/>
         </div>
         <div class="mx-2">-</div>
         <div class="input-group">
@@ -173,7 +173,7 @@
             <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
           </div>
           <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="toDate" ngbDatepicker
-            #dueto="ngbDatepicker" (click)="dueto.toggle()" [firstDayOfWeek]="7" type="text" />
+            #dueto="ngbDatepicker" (click)="dueto.toggle()" [firstDayOfWeek]="7" type="text"  name="activityEndDate"/>
         </div>
       </div>
     </div>

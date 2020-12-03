@@ -3,7 +3,7 @@ import { HttpService } from './http.service';
 import { ErrorService } from './error.service';
 import { HttpClient } from '@angular/common/http';
 import { StoreService } from './store.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CONTACT } from '../constants/api.constant';
 import {
   Contact,
@@ -38,8 +38,12 @@ export class ContactService extends HttpService {
     new SearchOption()
   );
   searchOption$ = this.searchOption.asObservable();
+  searchStr: BehaviorSubject<string> = new BehaviorSubject('');
+  searchStr$ = this.searchStr.asObservable();
   pageIndex: BehaviorSubject<number> = new BehaviorSubject(1);
   pageIndex$ = this.pageIndex.asObservable();
+
+  loadSubscription: Subscription;
 
   create(contact: any): void {}
   /**
@@ -75,7 +79,8 @@ export class ContactService extends HttpService {
    * @param page : Contact Page Number
    */
   load(page: number): void {
-    this.loadImpl(page).subscribe((res) => {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.loadImpl(page).subscribe((res) => {
       res
         ? this.loadStatus.next(STATUS.SUCCESS)
         : this.loadStatus.next(STATUS.FAILURE);
@@ -116,18 +121,20 @@ export class ContactService extends HttpService {
    * @param str : keyword in the advanced search
    */
   advancedSearch(str: string): void {
-    this.advancedSearchImpl(str).subscribe((contacts) => {
-      contacts
-        ? this.loadStatus.next(STATUS.SUCCESS)
-        : this.loadStatus.next(STATUS.FAILURE);
-      if (contacts && contacts.length) {
-        this.storeService.contacts = contacts;
-        this.storeService.pageContacts.next(contacts);
-        this.total.next(contacts.length);
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.advancedSearchImpl(str).subscribe(
+      (contacts) => {
+        contacts
+          ? this.loadStatus.next(STATUS.SUCCESS)
+          : this.loadStatus.next(STATUS.FAILURE);
+        if (contacts && contacts.length) {
+          this.storeService.contacts = contacts;
+          this.storeService.pageContacts.next(contacts);
+          this.total.next(contacts.length);
+        }
       }
-    });
+    );
   }
-
   advancedSearchImpl(str: string): Observable<ContactActivity[]> {
     const searchOption = this.searchOption.getValue();
     return this.httpClient
@@ -148,7 +155,8 @@ export class ContactService extends HttpService {
    * @param str : keyword in the normal search
    */
   normalSearch(str: string): void {
-    this.normalSearchImpl(str).subscribe((contacts) => {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.normalSearchImpl(str).subscribe((contacts) => {
       contacts
         ? this.loadStatus.next(STATUS.SUCCESS)
         : this.loadStatus.next(STATUS.FAILURE);
@@ -166,7 +174,9 @@ export class ContactService extends HttpService {
       })
       .pipe(
         map((res) =>
-          (res['data'] || []).map((e) => new ContactActivity().deserialize(e))
+          (res['data']['contacts'] || []).map((e) =>
+            new ContactActivity().deserialize(e)
+          )
         ),
         catchError(this.handleError('FILTER', null))
       );
@@ -176,9 +186,6 @@ export class ContactService extends HttpService {
    * @param pageSize : New Page size of the Contacts
    */
   resizePage(pageSize: number): void {
-    if (this.storeService.contacts.length) {
-      return;
-    }
     const contacts = this.storeService.pageContacts.getValue();
     const reduced = contacts.slice(0, pageSize);
     this.storeService.pageContacts.next(reduced);

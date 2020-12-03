@@ -7,64 +7,77 @@
     </div>
     <div class="ml-auto v-center">
       <div class="border-right px-3 py-1 text-center mx-3">
-        <a class="mr-3 f-3 font-weight-bold c-dark td-none c-pointer" (click)="importContacts()">Import contacts</a>
+        <a class="mr-3 f-3 font-weight-bold c-dark td-none c-pointer"
+          (click)="importContacts()">Import contacts</a>
       </div>
-      <div class="" ngbDropdown placement="bottom-right">
-        <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
+      <div class=""
+        ngbDropdown
+        placement="bottom-right">
+        <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+          ngbDropdownToggle>
           <span class="pr-2">Sort by</span>
         </div>
-        <div ngbDropdownMenu aria-labelledby="taskSortTypes">
-          <div class="py-2" ngbDropdownItem *ngFor="let type of SORT_TYPES" (click)="changeSort(type)">
-            <span class="f-3 v-center" [class.font-weight-bold]="type.id === sortType.id">
+        <div ngbDropdownMenu
+          aria-labelledby="taskSortTypes">
+          <div class="py-2"
+            ngbDropdownItem
+            *ngFor="let type of SORT_TYPES"
+            (click)="changeSort(type)">
+            <span class="f-3 v-center"
+              [class.font-weight-bold]="type.id === sortType.id">
               {{type.label}}
-              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1" *ngIf="type.id === sortType.id"></i>
+              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                *ngIf="type.id === sortType.id"></i>
             </span>
           </div>
         </div>
       </div>
       <div class="border-left px-3 py-1 text-center mx-3">
-        <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer" (click)="drawer.toggle()">Advanced Filter</a>
+        <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer"
+          (click)="drawer.toggle()">Advanced Filter</a>
       </div>
     </div>
   </div>
   <div class="custom-mat-table">
-    <table class="w-100" mat-table [dataSource]="storeService.pageContacts$ | async | paginate: {id: 'contactPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: contactService.total$ | async}">
+    <table class="w-100"
+      mat-table
+      [dataSource]="storeService.pageContacts$ | async | paginate: {id: 'contactPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: contactService.total$ | async}">
       <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef class="pl-2">
-          <div class="custom-control custom-checkbox" [class.indeterminate]="selection.hasValue() && !isAllSelected()">
-            <input
-              type="checkbox"
+        <th mat-header-cell
+          *matHeaderCellDef
+          class="pl-2">
+          <div class="custom-control custom-checkbox"
+            [class.indeterminate]="selection.hasValue() && !isAllSelected()">
+            <input type="checkbox"
               class="custom-control-input"
               id="selectAllContacts"
               (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-            />
-            <label
-              class="custom-control-label"
-              for="selectAllContacts"
-            ></label>
+              [checked]="selection.hasValue() && isAllSelected()" />
+            <label class="custom-control-label"
+              for="selectAllContacts"></label>
           </div>
         </th>
-        <td mat-cell *matCellDef="let element" class="pl-2">
+        <td mat-cell
+          *matCellDef="let element"
+          class="pl-2">
           <div class="custom-control custom-checkbox">
-            <input
-              type="checkbox"
+            <input type="checkbox"
               class="custom-control-input"
-              id="contact-{{element._id}}"
-            />
-            <label
-              class="custom-control-label"
-              for="contact-{{element._id}}"
-            ></label>
+              id="contact-{{element._id}}" />
+            <label class="custom-control-label"
+              for="contact-{{element._id}}"></label>
           </div>
         </td>
       </ng-container>
-    
+
 
       <!-- Name Column -->
       <ng-container matColumnDef="contact_name">
-        <th mat-header-cell *matHeaderCellDef> contact name </th>
-        <td mat-cell *matCellDef="let element" (click)="openContact(element)">
+        <th mat-header-cell
+          *matHeaderCellDef> contact name </th>
+        <td mat-cell
+          *matCellDef="let element"
+          (click)="openContact(element)">
           <div class="v-center">
             <div class="contact-avatar f-3 mr-2">{{element.avatarName}}</div>
             <span>{{element.fullName}}</span>
@@ -74,16 +87,21 @@
 
       <!-- Label Column -->
       <ng-container matColumnDef="contact_label">
-        <th mat-header-cell *matHeaderCellDef> label </th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell
+          *matHeaderCellDef> label </th>
+        <td mat-cell
+          *matCellDef="let element">
           <app-label-select [value]="element.label"></app-label-select>
         </td>
       </ng-container>
 
       <!-- Activity Column -->
       <ng-container matColumnDef="activity">
-        <th mat-header-cell *matHeaderCellDef> last activity </th>
-        <td mat-cell *matCellDef="let element" (click)="openContact(element)">
+        <th mat-header-cell
+          *matHeaderCellDef> last activity </th>
+        <td mat-cell
+          *matCellDef="let element"
+          (click)="openContact(element)">
           <div class="v-center">
             <i class="act-icon normal {{'act-'+element.last_activity.type}} d-block mr-2"></i>
             <span>{{element.last_activity.content}}</span>
@@ -93,48 +111,71 @@
 
       <!-- Tags Column -->
       <ng-container matColumnDef="contact_tags">
-        <th mat-header-cell *matHeaderCellDef> tags </th>
-        <td mat-cell *matCellDef="let element" (click)="openContact(element)">
-          <span class="tag rounded mr-2" *ngIf="element.tags.length">{{element.tags[0]}}</span>
+        <th mat-header-cell
+          *matHeaderCellDef> tags </th>
+        <td mat-cell
+          *matCellDef="let element"
+          (click)="openContact(element)">
+          <span class="tag rounded mr-2"
+            *ngIf="element.tags.length">{{element.tags[0]}}</span>
           <span class="f-2 op-56">{{element.moreTag}}</span>
         </td>
       </ng-container>
 
       <!-- Email Column -->
       <ng-container matColumnDef="contact_email">
-        <th mat-header-cell *matHeaderCellDef> email address </th>
-        <td mat-cell *matCellDef="let element" (click)="openContact(element)">
+        <th mat-header-cell
+          *matHeaderCellDef> email address </th>
+        <td mat-cell
+          *matCellDef="let element"
+          (click)="openContact(element)">
           <span class="">{{element.email}}</span>
         </td>
       </ng-container>
 
       <!-- Phone Column -->
       <ng-container matColumnDef="contact_phone">
-        <th mat-header-cell *matHeaderCellDef> phone number </th>
-        <td mat-cell *matCellDef="let element" (click)="openContact(element)">
+        <th mat-header-cell
+          *matHeaderCellDef> phone number </th>
+        <td mat-cell
+          *matCellDef="let element"
+          (click)="openContact(element)">
           <span class="c-blue font-weight-bold">{{element.cell_phone | phone_format}}</span>
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
-      <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+      <tr mat-header-row
+        *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+      <tr mat-row
+        *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
     </table>
-    <div class="d-flex justify-content-center align-items-center my-2">
-      <div class="ml-3 pagination-wrapper">
-        <pagination-controls (pageChange)="page = $event" id="contactPages" maxSize="5" previousLabel=""
-                             nextLabel=""></pagination-controls>
+    <div class="my-2 table-control mode-1">
+      <div class="pagination-wrapper m-auto">
+        <pagination-controls (pageChange)="changePage($event)"
+          id="contactPages"
+          maxSize="5"
+          previousLabel=""
+          nextLabel="">
+        </pagination-controls>
       </div>
-    </div>
-    <div class="d-flex">
-      <div class="shadow-dropdown ml-auto" ngbDropdown placement="top-right">
-        <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
-          <span class="pr-2">Page Size</span>
+      <div class="shadow-dropdown ml-auto page-size-control"
+        ngbDropdown
+        placement="top-right">
+        <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+          ngbDropdownToggle>
+          <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
         </div>
-        <div ngbDropdownMenu aria-labelledby="contactPageSize">
-          <div class="py-2" ngbDropdownItem *ngFor="let type of PAGE_COUNTS" (click)="changePageSize(type)">
-            <span class="f-3 v-center" [class.font-weight-bold]="type.id === pageSize.id">
-              {{type.label}}
-              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1" *ngIf="type.id === pageSize.id"></i>
+        <div ngbDropdownMenu
+          aria-labelledby="contactPageSize">
+          <div class="py-2"
+            ngbDropdownItem
+            *ngFor="let type of PAGE_COUNTS"
+            (click)="changePageSize(type)">
+            <span class="f-3 v-center"
+              [class.font-weight-bold]="type.id === pageSize.id">
+              Show {{type.label}} rows per page
+              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                *ngIf="type.id === pageSize.id"></i>
             </span>
           </div>
         </div>
@@ -144,7 +185,8 @@
 </div>
 
 <mat-drawer-container [hasBackdrop]="true">
-  <mat-drawer #drawer position="end">
+  <mat-drawer #drawer
+    position="end">
     <app-advanced-filter></app-advanced-filter>
   </mat-drawer>
 </mat-drawer-container>

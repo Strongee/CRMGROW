@@ -131,6 +131,14 @@ export class AdvancedFilterComponent implements OnInit {
     ];
   }
 
+  /**
+   * Update the Search Str Subject in Contact Service.
+   * @param str : string to search
+   */
+  updateSearchStr(str: string): void {
+    this.contactService.searchStr.next(str);
+  }
+
   applyFilters(): void {}
 
   /**
