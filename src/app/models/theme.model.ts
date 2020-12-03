@@ -11,6 +11,7 @@ export class Theme implements Deserializable {
   company: string;
   created_at: Date;
   updated_at: Date;
+  _id: string;
 
   deserialize(input: any): this {
     return Object.assign(this, input);
