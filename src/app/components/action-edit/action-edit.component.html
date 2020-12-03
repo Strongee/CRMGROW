@@ -463,23 +463,13 @@
             <div *ngSwitchCase="'push_tag'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO INSERT)</span></label>
               <div class="tag-input-wrapper br-default">
-                <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"
-                           [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">
-                  <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"
-                                      [displayBy]="'value'">
-                  </tag-input-dropdown>
-                </tag-input>
+                <app-input-tag [selectedTags]="commandTags" [onlyFromSearch]="true"></app-input-tag>
               </div>
             </div>
             <div *ngSwitchCase="'pull_tag'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO REMOVE)</span></label>
               <div class="tag-input-wrapper br-default">
-                <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"
-                           [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">
-                  <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"
-                                      [displayBy]="'value'">
-                  </tag-input-dropdown>
-                </tag-input>
+                <app-input-tag [selectedTags]="commandTags" [onlyFromSearch]="true"></app-input-tag>
               </div>
             </div>
           </ng-container>
