@@ -1444,6 +1444,10 @@ mat-expansion-panel {
 .table-control.mode-1 {
   display: grid;
   grid-template-columns: 200px auto 200px;
+  position: sticky;
+  bottom: 0px;
+  background: white;
+  z-index: 2;
 
   @media screen and (max-width: 670px) {
     display: flex;

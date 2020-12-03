@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { UploadContactsComponent } from 'src/app/components/upload-contacts/upload-contacts.component';
-import { DialogSettings } from 'src/app/constants/variable.constants';
+import { BulkActions, DialogSettings, STATUS } from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
@@ -16,6 +16,8 @@ import { SearchOption } from 'src/app/models/searchOption.model';
   styleUrls: ['./contacts.component.scss']
 })
 export class ContactsComponent implements OnInit {
+  STATUS = STATUS;
+  ACTIONS = BulkActions.Contacts;
   DISPLAY_COLUMNS = [
     'select',
     'contact_name',
@@ -41,11 +43,12 @@ export class ContactsComponent implements OnInit {
   sortType = this.SORT_TYPES[0];
   pageSize = this.PAGE_COUNTS[3];
   page = 1;
-  searchOption: SearchOption;
+  searchOption: SearchOption = new SearchOption();
   searchStr = '';
 
-  selection = new SelectionModel<Contact>(true, []);
-  pageSelection = new SelectionModel<Contact>(true, []);
+  selection: Contact[] = [];
+  pageSelection: Contact[] = [];
+  pageContacts: ContactActivity[] = [];
 
   tags = [];
   constructor(
@@ -57,19 +60,21 @@ export class ContactsComponent implements OnInit {
 
   ngOnInit(): void {
     this.storeService.pageContacts$.subscribe((contacts) => {
-      this.pageSelection = _.intersectionBy(
-        contacts,
-        this.selection.selected,
-        '_id'
-      );
+      if (!this.searchStr && this.searchOption.isEmpty()) {
+        this.pageContacts = contacts;
+      } else {
+        this.pageContacts = contacts.slice(0, this.pageSize.id);
+      }
+      this.pageSelection = [];
+      this.selection = [];
+      // this.pageSelection = _.intersectionBy(this.selection, contacts, '_id');
     });
 
     this.contactService.searchOption$.subscribe((option: SearchOption) => {
       this.searchOption = option;
       this.load();
     });
-
-    this.contactService.searchStr$.subscribe((str) => {
+    this.contactService.searchStr$.subscribe((str: string) => {
       this.searchStr = str;
       this.load();
     });
@@ -78,17 +83,6 @@ export class ContactsComponent implements OnInit {
    * Load the contacts: Advanced Search, Normal Search, API Call
    */
   load(): void {
-    if (this.searchOption.isEmpty()) {
-      if (this.searchStr) {
-        // Call Normal Search
-        this.contactService.normalSearch(this.searchStr);
-      } else {
-        // Call Normal Load
-        this.contactService.load(0);
-      }
-    } else {
-      this.contactService.advancedSearch(this.searchStr);
-    }
     this.page = 0;
   }
   /**
@@ -114,9 +108,9 @@ export class ContactsComponent implements OnInit {
     if (currentSize < this.pageSize.id) {
       const loaded = this.page * currentSize;
       const newPage = Math.floor(loaded / this.pageSize.id) + 1;
-      this.contactService.pageIndex.next(newPage);
+      this.changePage(newPage);
     } else {
-      if (this.searchOption.isEmpty() || !this.searchStr) {
+      if (this.searchOption.isEmpty() && !this.searchStr) {
         this.contactService.resizePage(this.pageSize.id);
       }
     }
@@ -129,11 +123,31 @@ export class ContactsComponent implements OnInit {
     this.sortType = type;
   }
 
+  toggle(contact: ContactActivity): void {
+    const selectedContact = contact.mainInfo;
+    const toggledSelection = _.xorBy(
+      this.pageSelection,
+      [selectedContact],
+      '_id'
+    );
+    this.pageSelection = toggledSelection;
+  }
   masterToggle(): void {
-    // toggle the page selection
+    if (this.isAllSelected()) {
+      this.pageSelection = [];
+      return;
+    }
+    this.pageContacts.forEach((e) => {
+      if (!this.isSelected(e)) {
+        this.pageSelection.push(e.mainInfo);
+      }
+    });
+  }
+  isSelected(contact: ContactActivity): boolean {
+    return _.findIndex(this.pageSelection, contact.mainInfo, '_id') !== -1;
   }
   isAllSelected(): boolean {
-    return this.pageSelection.selected.length === this.pageSize.id;
+    return this.pageSelection.length === this.pageSize.id;
   }
 
   openFilter(): void {}
@@ -148,6 +162,32 @@ export class ContactsComponent implements OnInit {
   openContact(contact: ContactActivity): void {
     this.router.navigate([`contacts/${contact._id}`]);
   }
-
-  
+  /**
+   * Run the bulk action
+   * @param event Bulk Action Command
+   */
+  doAction(event: any) {
+    switch (event.command) {
+      case 'deselect':
+        this.pageSelection = [];
+        this.selection = [];
+        break;
+      case 'select':
+        break;
+      case 'automation':
+        break;
+      case 'delete':
+        break;
+      case 'edit':
+        break;
+      case 'download':
+        break;
+      case 'message':
+        break;
+      case 'add_note':
+        break;
+      case 'add_task':
+        break;
+    }
+  }
 }

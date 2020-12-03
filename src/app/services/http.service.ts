@@ -11,7 +11,6 @@ export class HttpService {
   constructor(private errorService: ErrorService) {}
 
   handleError<T>(operation = 'Server Connection', result?: T) {
-    console.log('OPERATION', operation);
     return (error: any): Observable<T> => {
       // error message add to the Error Service
       this.errorService.addError(operation, error);

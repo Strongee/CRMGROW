@@ -32,12 +32,13 @@ export class AdvancedFilterComponent implements OnInit {
 
   selectedMaterialActions = new SelectionModel<any>(true, []);
   selectedActivities = new SelectionModel<any>(true, []);
+  searchOption: SearchOption = new SearchOption();
   constructor(
     public labelService: LabelService,
-    private contactService: ContactService
-  ) {}
-
-  searchOption: SearchOption = new SearchOption();
+    public contactService: ContactService
+  ) {
+    this.searchOption = this.contactService.searchOption.getValue();
+  }
 
   ngOnInit(): void {
     this.savedFilters.push('Default');

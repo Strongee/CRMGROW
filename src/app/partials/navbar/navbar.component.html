@@ -21,7 +21,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text border-0" id="search-addon">@</span>
       </div>
-      <input type="text" class="form-control fc-control bgc-trans border-0" placeholder="Search" aria-label="search" aria-describedby="search-addon">
+      <input type="text" class="form-control fc-control bgc-trans border-0" placeholder="Search" aria-label="search" aria-describedby="search-addon" (ngModelChange)="onFilter($event)" [(ngModel)]="keyword">
       <div class="input-group-append px-3 border-left" ngbDropdown>
         <div class="v-center c-pointer" ngbDropdownToggle>
           <span class="mr-2 f-3 font-weight-bold">{{currentSearchType.label}}</span>

@@ -6,6 +6,7 @@ import { NoteCreateComponent } from 'src/app/components/note-create/note-create.
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
+import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
 import { UserService } from 'src/app/services/user.service';
@@ -32,11 +33,13 @@ export class NavbarComponent implements OnInit {
     { label: 'Templates', id: 'templates' }
   ];
   currentSearchType: any = this.searchDataTypes[0];
+  keyword = '';
 
   constructor(
     public userService: UserService,
-    private dialog: MatDialog,
     private storeService: StoreService,
+    private contactService: ContactService,
+    private dialog: MatDialog,
     private router: Router
   ) {}
 
@@ -77,6 +80,23 @@ export class NavbarComponent implements OnInit {
     );
   }
 
+  /**
+   * Filter Objects
+   * @param str : keyword to filter the contacts, materials ...
+   */
+  onFilter(str: string): void {
+    switch (this.currentSearchType.id) {
+      case 'contacts':
+        this.contactService.searchStr.next(str);
+        break;
+      case 'tasks':
+        break;
+      case 'materials':
+        break;
+      case 'templates':
+        break;
+    }
+  }
   changeType(type: any): void {
     this.currentSearchType = type;
   }
