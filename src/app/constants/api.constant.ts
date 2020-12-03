@@ -11,7 +11,7 @@ export const AUTH = {
   LOG_OUT: 'user/logout',
   CHECK_EMAIL: 'user/check',
   CHECK_NICKNAME: 'user/search-nickname',
-  CHECK_PHONE: 'user/search-phone',
+  CHECK_PHONE: 'user/search-phone'
 };
 export const USER = {
   PROFILE: 'user/me',
