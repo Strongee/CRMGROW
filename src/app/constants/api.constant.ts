@@ -203,5 +203,7 @@ export const TAG = {
   ALL: 'tag/getAll',
   GET: 'tag/load',
   UPDATE: 'tag/update',
-  DELETe: 'tag/delete'
+  DELETE: 'tag/delete',
+  LOAD_SOURCES: 'contact/sources',
+  LOAD_COMPANIES: 'contact/brokerage'
 };

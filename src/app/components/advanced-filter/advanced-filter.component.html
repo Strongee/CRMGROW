@@ -102,11 +102,7 @@
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <select class="form-control" [(ngModel)]="searchSource">
-        <option *ngFor="let source of sources; let index = index;" value="{{source._id}}" class="my-1 f-3">
-          {{source.text}}
-        </option>
-      </select>
+      <app-input-source [selectedTags]="searchOption.sourceCondition" [onlyFromSearch]="true"></app-input-source>
     </div>
     <div class="my-3">
       <div class="d-flex align-items-end justify-content-between">
@@ -123,11 +119,7 @@
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <select class="form-control" [(ngModel)]="searchCompany">
-        <option *ngFor="let brokerage of brokerages; let index = index;" value="{{brokerage._id}}" class="my-1 f-3">
-          {{brokerage._id}}
-        </option>
-      </select>
+      <app-input-company [selectedTags]="searchOption.brokerageCondition" [onlyFromSearch]="true"></app-input-company>
     </div>
 
     <div class="my-3">
