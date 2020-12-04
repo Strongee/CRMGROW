@@ -38,7 +38,8 @@ export class AdvancedFilterComponent implements OnInit {
   searchOption: SearchOption = new SearchOption();
   constructor(
     public labelService: LabelService,
-    public contactService: ContactService
+    public contactService: ContactService,
+    public userService: UserService
   ) {
     this.searchOption = this.contactService.searchOption.getValue();
   }

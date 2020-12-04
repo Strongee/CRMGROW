@@ -3,12 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { UploadContactsComponent } from 'src/app/components/upload-contacts/upload-contacts.component';
-import { BulkActions, DialogSettings, STATUS } from 'src/app/constants/variable.constants';
+import {
+  BulkActions,
+  DialogSettings,
+  STATUS
+} from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import * as _ from 'lodash';
 import { SearchOption } from 'src/app/models/searchOption.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-contacts',
@@ -55,6 +60,7 @@ export class ContactsComponent implements OnInit {
     public router: Router,
     public storeService: StoreService,
     public contactService: ContactService,
+    public userService: UserService,
     private dialog: MatDialog
   ) {}
 
