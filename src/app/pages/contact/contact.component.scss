@@ -2,8 +2,64 @@
 
 .contact-info-panel {
   min-width: 376px;
-}
+  .automation {
+    app-input-automation {
+      width: 100%;
+    }
+    .automation-action {
+      i {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+      }
+    }
+    .automation-detail {
+      mat-tree {
+        li {
+          list-style-type: none;
+          img {
+            width: 24px;
+            height: 24px;
+          }
+          .badge.status {
+            &.completed {
+              color: $color-green-weak;
+            }
+            &.checking {
+              color: $color-orange-weak;
+            }
+            &.pending {
+              color: $color-orange-weak;
+            }
+            &.active {
+              color: $color-blue;
+            }
+            &.error {
+              color: $color-red;
+            }
+          }
+        }
+        .line {
+          width: 1px;
+          height: 20px;
+          margin-left: 11px;
+        }
+      }
+      mat-nested-tree-node {
+        width: 100%;
+        .mat-tree-node {
+          min-height: 40px;
 
+        }
+      }
+      .timeline-tree-invisible {
+        mat-tree-node {
+          align-items: flex-start;
+        }
+      }
+    }
+  }
+}
 
 .contact-action-panel {
   &::before {

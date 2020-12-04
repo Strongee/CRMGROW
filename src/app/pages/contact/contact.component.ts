@@ -10,6 +10,11 @@ import {
 } from 'src/app/models/activityDetail.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactMergeComponent } from 'src/app/components/contact-merge/contact-merge.component';
+import { Automation } from 'src/app/models/automation.model';
+import { ActionName } from 'src/app/constants/variable.constants';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { listToTree } from 'src/app/helper';
 
 @Component({
   selector: 'app-contact',
@@ -56,6 +61,14 @@ export class ContactComponent implements OnInit {
 
   mainAction = 'send_message';
   activeHistory = 'all';
+
+  selectedAutomation: Automation;
+  ActionName = ActionName;
+  treeControl = new NestedTreeControl<any>((node) => node.children);
+  dataSource = new MatTreeNestedDataSource<any>();
+  hasChild = (_: number, node: any) =>
+    !!node.children && node.children.length > 0;
+
   constructor(
     private dialog: MatDialog,
     private location: Location,
@@ -69,8 +82,12 @@ export class ContactComponent implements OnInit {
     this.loadContact(this._id);
 
     this.storeService.selectedContact$.subscribe((res) => {
-      this.contact = res;
-      this.groupActivities();
+      if (res) {
+        this.contact = res;
+        console.log('#########', this.contact);
+        this.timeLineArrangement();
+        this.groupActivities();
+      }
     });
   }
 
@@ -199,4 +216,32 @@ export class ContactComponent implements OnInit {
       }
     });
   }
+
+  selectAutomation(evt: any): void {
+    this.selectedAutomation = evt.Automation;
+    console.log('#########', this.selectAutomation);
+  }
+
+  timeLineArrangement(): void {
+    this.dataSource.data = listToTree(this.contact['time_lines']);
+    console.log('@@@', this.dataSource);
+  }
+
+  createAutomation(): void {}
+
+  ICONS = {
+    follow_up: '../../assets/img/automations/follow_up.svg',
+    update_follow_up:
+      'https://app.crmgrow.com/assets/img/icons/follow-step.png',
+    note: '../../assets/img/automations/create_note.svg',
+    email: '../../assets/img/automations/send_email.svg',
+    send_email_video: '../../assets/img/automations/send_video_email.svg',
+    send_text_video: '../../assets/img/automations/send_video_text.svg',
+    send_email_pdf: '../../assets/img/automations/send_pdf_email.svg',
+    send_text_pdf: '../../assets/img/automations/send_pdf_text.svg',
+    send_email_image: '../../assets/img/automations/send_image_email.svg',
+    send_text_image: 'https://app.crmgrow.com/assets/img/icons/image_sms.png',
+    update_contact:
+      'https://app.crmgrow.com/assets/img/icons/update_contact.png'
+  };
 }
