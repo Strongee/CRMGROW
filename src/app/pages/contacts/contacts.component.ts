@@ -1,15 +1,19 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { UploadContactsComponent } from 'src/app/components/upload-contacts/upload-contacts.component';
-import { BulkActions, DialogSettings, STATUS } from 'src/app/constants/variable.constants';
+import {
+  BulkActions,
+  DialogSettings,
+  STATUS
+} from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
-import * as _ from 'lodash';
 import { SearchOption } from 'src/app/models/searchOption.model';
-
+import * as _ from 'lodash';
+import { saveAs } from 'file-saver';
+import { MatDrawer } from '@angular/material/sidenav';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -39,6 +43,8 @@ export class ContactsComponent implements OnInit {
     { id: 25, label: '25' },
     { id: 50, label: '50' }
   ];
+  @ViewChild('drawer') drawer: MatDrawer;
+  panelType = '';
 
   sortType = this.SORT_TYPES[0];
   pageSize = this.PAGE_COUNTS[3];
@@ -62,20 +68,26 @@ export class ContactsComponent implements OnInit {
     this.storeService.pageContacts$.subscribe((contacts) => {
       if (!this.searchStr && this.searchOption.isEmpty()) {
         this.pageContacts = contacts;
+        this.pageSelection = _.intersectionBy(
+          this.selection,
+          this.pageContacts,
+          '_id'
+        );
       } else {
         this.pageContacts = contacts.slice(0, this.pageSize.id);
       }
-      this.pageSelection = [];
-      this.selection = [];
-      // this.pageSelection = _.intersectionBy(this.selection, contacts, '_id');
     });
 
     this.contactService.searchOption$.subscribe((option: SearchOption) => {
       this.searchOption = option;
+      this.pageSelection = [];
+      this.selection = [];
       this.load();
     });
     this.contactService.searchStr$.subscribe((str: string) => {
       this.searchStr = str;
+      this.pageSelection = [];
+      this.selection = [];
       this.load();
     });
   }
@@ -83,7 +95,7 @@ export class ContactsComponent implements OnInit {
    * Load the contacts: Advanced Search, Normal Search, API Call
    */
   load(): void {
-    this.page = 0;
+    this.page = 1;
   }
   /**
    * Load the page contacts
@@ -92,9 +104,23 @@ export class ContactsComponent implements OnInit {
   changePage(page: number): void {
     this.page = page;
     if (!this.searchStr && this.searchOption.isEmpty()) {
+      // Normal Load by Page
       let skip = (page - 1) * this.pageSize.id;
       skip = skip < 0 ? 0 : skip;
       this.contactService.load(skip);
+    } else {
+      // Change the Page Selection
+      let skip = (page - 1) * this.pageSize.id;
+      skip = skip < 0 ? 0 : skip;
+      // Reset the Page Contacts
+      const contacts = this.storeService.pageContacts.getValue();
+      this.pageContacts = contacts.slice(skip, skip + this.pageSize.id);
+      // Clear the page selection
+      this.pageSelection = _.intersectionBy(
+        this.selection,
+        this.pageContacts,
+        '_id'
+      );
     }
   }
   /**
@@ -106,12 +132,19 @@ export class ContactsComponent implements OnInit {
     this.pageSize = type;
     // Check with the Prev Page Size
     if (currentSize < this.pageSize.id) {
+      // If page size get bigger
       const loaded = this.page * currentSize;
-      const newPage = Math.floor(loaded / this.pageSize.id) + 1;
+      let newPage = Math.floor(loaded / this.pageSize.id);
+      newPage = newPage > 0 ? newPage : 1;
       this.changePage(newPage);
     } else {
+      // if page size get smaller: TODO -> Set Selection and Page contacts
       if (this.searchOption.isEmpty() && !this.searchStr) {
-        this.contactService.resizePage(this.pageSize.id);
+        const skipped = (this.page - 1) * currentSize;
+        const newPage = Math.floor(skipped / this.pageSize.id) + 1;
+        this.changePage(newPage);
+      } else {
+        this.changePage(this.page);
       }
     }
   }
@@ -131,15 +164,28 @@ export class ContactsComponent implements OnInit {
       '_id'
     );
     this.pageSelection = toggledSelection;
+
+    const toggledAllSelection = _.xorBy(
+      this.selection,
+      [selectedContact],
+      '_id'
+    );
+    this.selection = toggledAllSelection;
   }
   masterToggle(): void {
     if (this.isAllSelected()) {
+      this.selection = _.differenceBy(
+        this.selection,
+        this.pageSelection,
+        '_id'
+      );
       this.pageSelection = [];
       return;
     }
     this.pageContacts.forEach((e) => {
       if (!this.isSelected(e)) {
         this.pageSelection.push(e.mainInfo);
+        this.selection.push(e.mainInfo);
       }
     });
   }
@@ -173,14 +219,16 @@ export class ContactsComponent implements OnInit {
         this.selection = [];
         break;
       case 'select':
-        break;
-      case 'automation':
+        this.selectAll();
         break;
       case 'delete':
+        this.delete();
         break;
       case 'edit':
+        this.bulkEdit();
         break;
       case 'download':
+        this.downloadCSV();
         break;
       case 'message':
         break;
@@ -188,6 +236,169 @@ export class ContactsComponent implements OnInit {
         break;
       case 'add_task':
         break;
+      case 'automation':
+        break;
     }
   }
+
+  /**
+   * Update the Command Status
+   * @param command :Command String
+   * @param loading :Whether current action is running
+   */
+  updateActionsStatus(command: string, loading: boolean): void {
+    this.ACTIONS.some((e) => {
+      if (e.command === command) {
+        e.loading = loading;
+        return true;
+      }
+    });
+  }
+
+  /**
+   * Download CSV
+   */
+  downloadCSV(): void {
+    const ids = [];
+    this.selection.forEach((e) => {
+      ids.push(e._id);
+    });
+    this.updateActionsStatus('download', true);
+    this.contactService.downloadCSV(ids).subscribe((data) => {
+      const contacts = [];
+      data.forEach((e) => {
+        const contact = {
+          first_name: e.contact.first_name,
+          last_name: e.contact.last_name,
+          email: e.contact.email,
+          phone: e.contact.phone,
+          source: e.contact.source,
+          brokerage: e.contact.brokerage,
+          city: e.contact.city,
+          state: e.contact.state,
+          zip: e.contact.zip,
+          address: e.contact.address
+        };
+        const notes = [];
+        if (e.note && e.note.length) {
+          e.note.forEach((note) => {
+            notes.push(note.content);
+          });
+        }
+        let label = '';
+        if (e.contact.label) {
+          label = e.contact.label.name || '';
+        }
+        contact['note'] = notes.join('     ');
+        contact['tags'] = e.contact.tags.join(', ');
+        contact['label'] = label;
+        contacts.push(contact);
+      });
+      if (contacts.length) {
+        const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
+        const header = Object.keys(contacts[0]);
+        const csv = contacts.map((row) =>
+          header
+            .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+            .join(',')
+        );
+        csv.unshift(header.join(','));
+        const csvArray = csv.join('\r\n');
+
+        const blob = new Blob([csvArray], { type: 'text/csv' });
+        saveAs(blob, 'myFile.csv');
+      }
+      this.updateActionsStatus('download', false);
+    });
+  }
+
+  /**
+   * Select All Contacts
+   */
+  selectAll(): void {
+    if (this.searchStr || !this.searchOption.isEmpty()) {
+      const contacts = this.storeService.pageContacts.getValue();
+      contacts.forEach((e) => {
+        if (!this.isSelected(e)) {
+          this.pageSelection.push(e.mainInfo);
+          this.selection.push(e.mainInfo);
+        }
+      });
+      return;
+    }
+    this.updateActionsStatus('select', true);
+    this.contactService.selectAll().subscribe((contacts) => {
+      this.selection = _.unionBy(this.selection, contacts, '_id');
+      this.pageSelection = _.intersectionBy(
+        this.selection,
+        this.pageContacts,
+        '_id'
+      );
+      this.updateActionsStatus('select', false);
+    });
+  }
+
+  /**
+   * Delete Selected Contacts
+   */
+  delete(): void {
+    const ids = [];
+    this.selection.forEach((e) => {
+      ids.push(e._id);
+    });
+    this.updateActionsStatus('delete', true);
+    this.contactService.bulkDelete(ids).subscribe((status) => {
+      this.updateActionsStatus('delete', false);
+      if (!status) {
+        return;
+      }
+      if (this.searchStr || !this.searchOption.isEmpty()) {
+        // Searched Contacts
+        const selection = [...this.selection];
+        this.selection = [];
+        this.pageSelection = [];
+        this.contactService.delete$([...selection]);
+      } else {
+        // Pages Contacts
+        const selection = [...this.selection];
+        this.selection = [];
+        this.pageSelection = [];
+        const { total, page } = this.contactService.delete$([...selection]);
+        if (page) {
+          return;
+        }
+        const maxPage =
+          total % this.pageSize.id
+            ? Math.floor(total / this.pageSize.id) + 1
+            : total / this.pageSize.id;
+        if (maxPage >= this.page) {
+          this.changePage(this.page);
+        }
+      }
+    });
+  }
+
+  bulkEdit(): void {
+    this.panelType = 'editor';
+    this.drawer.open();
+  }
+
+  /**
+   * Handler when page number get out of the bound after remove contacts.
+   * @param $event : Page Number
+   */
+  pageChanged($event: number): void {
+    this.changePage($event);
+  }
+
+  setPanelType($event: boolean): void {
+    if (!$event) {
+      this.panelType = '';
+    }
+  }
+
+  // Reset the Selection without current Contact page to fix when merge
+  // this.selection = _.differenceBy(this.selection, this.pageContacts, '_id');
+  // Merge the All Selection with page Selection
+  // this.selection = _.unionBy(this.selection, this.pageSelection, '_id');
 }

@@ -19,7 +19,9 @@
   <div class="search-form-wrapper v-center">
     <div class="input-group bgc-dark-trans08 rounded">
       <div class="input-group-prepend">
-        <span class="input-group-text border-0" id="search-addon">@</span>
+        <span class="input-group-text border-0 py-1 px-2" id="search-addon">
+          <i class="i-icon i-search d-block bgc-dark"></i>
+        </span>
       </div>
       <input type="text" class="form-control fc-control bgc-trans border-0" placeholder="Search" aria-label="search" aria-describedby="search-addon" (ngModelChange)="onFilter($event)" [(ngModel)]="keyword">
       <div class="input-group-append px-3 border-left" ngbDropdown>

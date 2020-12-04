@@ -211,6 +211,7 @@ import { InputCompanyComponent } from './input-company/input-company.component';
     ImageEditComponent,
     CalendarEventComponent,
     AdvancedFilterComponent,
+    ContactBulkComponent,
     ManageLabelComponent,
     TaskFilterComponent,
     ContactMergeComponent,

@@ -1,1 +1,68 @@
-<p>contact-bulk works!</p>
+<div class="p-4c panel">
+  <div class="v-center mb-3">
+    <h5 class="font-weight-bold mb-0">Editing multiple contacts</h5>
+  </div>
+  <form #form="ngForm" (ngSubmit)="form.form.valid ? update() : false">
+    <div class="form-group">
+      <label>status</label>
+      <app-label-select type="form" defaultLabel="Original"></app-label-select>
+    </div>
+    <div class="form-group">
+      <label for="bulk-source">source</label>
+      <input type="text" name="source" class="form-control" id="bulk-source" [(ngModel)]="contact.source"  />
+    </div>
+    
+    <div class="form-group">
+      <label for="bulk-company">company</label>
+      <input type="text" name="company" class="form-control" id="bulk-company" [(ngModel)]="contact.brokerage"  />
+    </div>
+
+    <div class="form-group">
+      <label for="bulk-company">tags</label>
+      <div class="form-group">
+        <select [(ngModel)]="tagMode" class="form-control" name="keepTag" #keepTag="ngModel">
+            <option [ngValue]="MODE.KEEP">Keep the original tags</option>
+            <option [ngValue]="MODE.PUSH">Add the new tags</option>
+            <option [ngValue]="MODE.PULL">Remove the tags</option>
+            <option [ngValue]="MODE.SET">Set the new tags</option>
+        </select>
+      </div>
+      <div class="" *ngIf="tagMode != MODE.KEEP">
+        <app-input-tag [selectedTags]="contact.tags"></app-input-tag>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="bulk-stage">stage</label>
+      <select id="bulk-stage" class="form-control" [(ngModel)]="contact.recruiting_stage" name="stage" #stage="ngModel">
+        <option value="" selected>Original</option>        
+        <option *ngFor="let stage of STAGES" value="{{stage}}">{{stage}}</option>        
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="bulk-city">city</label>
+      <input type="text" name="city" class="form-control" id="bulk-city" [(ngModel)]="contact.city"  />
+    </div>
+
+    <div class="form-group">
+      <label for="bulk-country">country</label>
+      <input type="text" name="country" class="form-control" id="bulk-country" [(ngModel)]="contact.country"  />
+    </div>
+
+    <div class="form-group">
+      <label for="bulk-state">state</label>
+      <input type="text" name="state" class="form-control" id="bulk-state" [(ngModel)]="contact.state"  />
+    </div>
+
+    <div class="form-group my-3">
+      <label for="bulk-zipcode">zipcode</label>
+      <input type="text" name="zipcode" class="form-control" id="bulk-zipcode" [(ngModel)]="contact.zip" />
+    </div>
+
+    <div class="mt-4 d-flex">
+      <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="close()">Cancel</button>
+      <button type="submit" class="btn btn-primary ml-2" [class.loading]="loading">Save</button>
+    </div>
+  </form>
+</div>

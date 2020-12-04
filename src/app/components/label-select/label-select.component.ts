@@ -23,6 +23,7 @@ import * as _ from 'lodash';
 export class LabelSelectComponent implements OnInit, AfterViewInit {
   @Input('value') value = '';
   @Input('type') type = '';
+  @Input('defaultLabel') defaultLabel = 'No Label';
 
   @ViewChild('selector') selector: MatSelect;
   @ViewChild('auto') autoComplete: MatAutocomplete;
