@@ -54,7 +54,11 @@ export class InputCompanyComponent implements OnInit {
 
   filteredResults: ReplaySubject<Tag[]> = new ReplaySubject<Tag[]>(1);
 
-  constructor(private tagService: TagService) {}
+  constructor(private tagService: TagService) {
+    this.tagService.companies$.subscribe((tags) => {
+      this.filteredResults.next(tags);
+    });
+  }
 
   ngOnInit(): void {
     this.formControl.valueChanges
@@ -95,11 +99,12 @@ export class InputCompanyComponent implements OnInit {
       );
   }
 
-  // remove(tag: string): void {
-  //   _.remove(this.selectedTags, (e) => {
-  //     return e === tag;
-  //   });
-  // }
+  remove(tag: string): void {
+    _.remove(this.selectedTags, (e) => {
+      return e === tag;
+    });
+    this.onSelect.emit();
+  }
 
   /**
    * Select the option from the autocomplete list
@@ -116,5 +121,6 @@ export class InputCompanyComponent implements OnInit {
     this.inputField.nativeElement.value = '';
     this.formControl.setValue(null);
     this.keyword = '';
+    this.onSelect.emit();
   }
 }

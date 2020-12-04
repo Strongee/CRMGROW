@@ -58,6 +58,9 @@ import { CampaignSmtpComponent } from '../../pages/campaign-smtp/campaign-smtp.c
 import { AnalyticsVideoSentComponent } from '../../pages/analytics-video-sent/analytics-video-sent.component';
 import { AnalyticsVideoWatchedComponent } from '../../pages/analytics-video-watched/analytics-video-watched.component';
 import { AnalyticsContactsAddedComponent } from '../../pages/analytics-contacts-added/analytics-contacts-added.component';
+import { ThemesComponent } from '../../pages/themes/themes.component';
+import { ThemeComponent } from '../../pages/theme/theme.component';
+import { EmailEditorModule } from 'angular-email-editor';
 
 @NgModule({
   declarations: [
@@ -104,7 +107,9 @@ import { AnalyticsContactsAddedComponent } from '../../pages/analytics-contacts-
     CampaignSmtpComponent,
     AnalyticsVideoSentComponent,
     AnalyticsVideoWatchedComponent,
-    AnalyticsContactsAddedComponent
+    AnalyticsContactsAddedComponent,
+    ThemesComponent,
+    ThemeComponent
   ],
   imports: [
     CommonModule,
@@ -119,7 +124,8 @@ import { AnalyticsContactsAddedComponent } from '../../pages/analytics-contacts-
     DragDropModule,
     NgxGraphModule,
     PdfViewerModule,
-    OverlayModule
+    OverlayModule,
+    EmailEditorModule
   ],
   schemas: []
 })
