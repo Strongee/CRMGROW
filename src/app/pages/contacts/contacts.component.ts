@@ -11,6 +11,7 @@ import { Contact, ContactActivity } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { SearchOption } from 'src/app/models/searchOption.model';
+import { UserService } from '../../services/user.service';
 import * as _ from 'lodash';
 import { saveAs } from 'file-saver';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -61,6 +62,7 @@ export class ContactsComponent implements OnInit {
     public router: Router,
     public storeService: StoreService,
     public contactService: ContactService,
+    public userService: UserService,
     private dialog: MatDialog
   ) {}
 

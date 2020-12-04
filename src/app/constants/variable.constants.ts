@@ -514,7 +514,7 @@ export const DialogSettings = {
   },
   UPLOAD: {
     width: '98vw',
-    maxWidth: '780px',
+    maxWidth: '840px',
     disableClose: true
   }
 };
