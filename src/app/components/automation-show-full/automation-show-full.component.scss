@@ -1,0 +1,53 @@
+@import 'src/variables.scss';
+
+:host ::ng-deep {
+    mat-dialog-content {
+        mat-tree {
+            li {
+                list-style-type: none;
+                img {
+                width: 24px;
+                height: 24px;
+                }
+                .badge.status {
+                &.completed {
+                    color: $color-green-weak;
+                }
+                &.checking {
+                    color: $color-orange-weak;
+                }
+                &.pending {
+                    color: $color-orange-weak;
+                }
+                &.active {
+                    color: $color-blue;
+                }
+                &.error {
+                    color: $color-red;
+                }
+                }
+            }
+            .line {
+                width: 1px;
+                height: 20px;
+                margin-left: 11px;
+            }
+        }
+        mat-nested-tree-node {
+            .mat-tree-node {
+                min-height: 40px;  
+            }
+        }
+        .timeline-tree-invisible {
+            mat-tree-node {
+                &.mat-tree {
+                    &.first {
+                        order: 1;
+                    }
+                    order: 2;
+                }
+                align-items: flex-start;
+            }
+        }
+    }
+}

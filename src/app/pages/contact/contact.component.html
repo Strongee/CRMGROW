@@ -123,12 +123,12 @@
               <ng-container *ngIf="contact.time_lines?.length">
                 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl"
                 class="timeline timeline-one-side time-line">
-                  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                  <mat-tree-node class="mat-tree" [class.first]="node['condition']['answer'] == true" *matTreeNodeDef="let node" matTreeNodeToggle>
                     <li class="mat-tree-node timeline-block {{ node.status }}">
                       <div class="timeline w-100">
                         <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition']['answer'] == true">
                           <img src="../../assets/img/automations/yes.svg">
-                          <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}</span>
+                          <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}?</span>
                         </div>
                         <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition']['answer'] == false">
                           <img src="../../assets/img/automations/no.svg">
@@ -186,6 +186,9 @@
                   </mat-nested-tree-node>
                 </mat-tree>
               </ng-container>
+            </div>
+            <div class="v-center justify-content-center f-6 font-weight-bold c-blue c-pointer mt-3" (click)="showFullAutomation()">
+              Show full automation
             </div>
           </div>
         </mat-expansion-panel>

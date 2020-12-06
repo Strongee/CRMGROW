@@ -15,6 +15,7 @@ import { ActionName } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { listToTree } from 'src/app/helper';
+import { AutomationShowFullComponent } from 'src/app/components/automation-show-full/automation-show-full.component';
 
 @Component({
   selector: 'app-contact',
@@ -65,6 +66,7 @@ export class ContactComponent implements OnInit {
   selectedAutomation: Automation;
   ActionName = ActionName;
   treeControl = new NestedTreeControl<any>((node) => node.children);
+  allDataSource = new MatTreeNestedDataSource<any>();
   dataSource = new MatTreeNestedDataSource<any>();
   hasChild = (_: number, node: any) =>
     !!node.children && node.children.length > 0;
@@ -84,7 +86,6 @@ export class ContactComponent implements OnInit {
     this.storeService.selectedContact$.subscribe((res) => {
       if (res) {
         this.contact = res;
-        console.log('#########', this.contact);
         this.timeLineArrangement();
         this.groupActivities();
       }
@@ -219,12 +220,133 @@ export class ContactComponent implements OnInit {
 
   selectAutomation(evt: any): void {
     this.selectedAutomation = evt.Automation;
-    console.log('#########', this.selectAutomation);
   }
 
   timeLineArrangement(): void {
-    this.dataSource.data = listToTree(this.contact['time_lines']);
-    console.log('@@@', this.dataSource);
+    this.allDataSource.data = listToTree(this.contact['time_lines']);
+    console.log('@@@', this.allDataSource.data);
+    this.dataSource.data = this.allDataSource.data;
+    while (this.dataSource.data) {
+      if (this.dataSource.data[0] || this.dataSource.data[1]) {
+        if (
+          this.dataSource.data[0] &&
+          this.dataSource.data[0].status == 'completed'
+        ) {
+          if (
+            this.dataSource.data[0].children[0].status == 'completed' ||
+            this.dataSource.data[0].children[1].status == 'completed'
+          ) {
+            this.dataSource.data = this.dataSource.data[0].children;
+          } else {
+            break;
+          }
+        }
+        if (
+          this.dataSource.data[1] &&
+          this.dataSource.data[1].status == 'completed'
+        ) {
+          if (
+            this.dataSource.data[0].children[0].status == 'completed' ||
+            this.dataSource.data[0].children[1].status == 'completed'
+          ) {
+            this.dataSource.data = this.dataSource.data[0].children;
+          } else {
+            break;
+          }
+        }
+      } else {
+        break;
+      }
+    }
+    if (this.dataSource.data[0]) {
+      if (this.dataSource.data[0].children[0]) {
+        if (this.dataSource.data[0].children[0].children[0]) {
+          if (this.dataSource.data[0].children[0].children[0].children[0]) {
+            this.dataSource.data[0].children[0].children[0].children[0].children = [];
+          }
+          if (this.dataSource.data[0].children[0].children[0].children[1]) {
+            this.dataSource.data[0].children[0].children[0].children[1].children = [];
+          }
+        }
+        if (this.dataSource.data[0].children[0].children[1]) {
+          if (this.dataSource.data[0].children[0].children[1].children[0]) {
+            this.dataSource.data[0].children[0].children[1].children[0].children = [];
+          }
+          if (this.dataSource.data[0].children[0].children[1].children[1]) {
+            this.dataSource.data[0].children[0].children[1].children[1].children = [];
+          }
+        }
+      }
+      if (this.dataSource.data[0].children[1]) {
+        if (this.dataSource.data[0].children[1].children[0]) {
+          if (this.dataSource.data[0].children[1].children[0].children[0]) {
+            this.dataSource.data[0].children[1].children[0].children[0].children = [];
+          }
+          if (this.dataSource.data[0].children[1].children[0].children[1]) {
+            this.dataSource.data[0].children[1].children[0].children[1].children = [];
+          }
+        }
+        if (this.dataSource.data[0].children[1].children[1]) {
+          if (this.dataSource.data[0].children[1].children[1].children[0]) {
+            this.dataSource.data[0].children[1].children[1].children[0].children = [];
+          }
+          if (this.dataSource.data[0].children[1].children[1].children[1]) {
+            this.dataSource.data[0].children[1].children[1].children[1].children = [];
+          }
+        }
+      }
+    }
+    if (this.dataSource.data[1]) {
+      if (this.dataSource.data[1].children[0]) {
+        if (this.dataSource.data[1].children[0].children[0]) {
+          if (this.dataSource.data[1].children[0].children[0].children[0]) {
+            this.dataSource.data[1].children[0].children[0].children[0].children = [];
+          }
+          if (this.dataSource.data[1].children[0].children[0].children[1]) {
+            this.dataSource.data[1].children[0].children[0].children[1].children = [];
+          }
+        }
+        if (this.dataSource.data[1].children[0].children[1]) {
+          if (this.dataSource.data[1].children[0].children[1].children[0]) {
+            this.dataSource.data[1].children[0].children[1].children[0].children = [];
+          }
+          if (this.dataSource.data[1].children[0].children[1].children[1]) {
+            this.dataSource.data[1].children[0].children[1].children[1].children = [];
+          }
+        }
+      }
+      if (this.dataSource.data[1].children[1]) {
+        if (this.dataSource.data[1].children[1].children[0]) {
+          if (this.dataSource.data[1].children[1].children[0].children[0]) {
+            this.dataSource.data[1].children[1].children[0].children[0].children = [];
+          }
+          if (this.dataSource.data[1].children[1].children[0].children[1]) {
+            this.dataSource.data[1].children[1].children[0].children[1].children = [];
+          }
+        }
+        if (this.dataSource.data[1].children[1].children[1]) {
+          if (this.dataSource.data[1].children[1].children[1].children[0]) {
+            this.dataSource.data[1].children[1].children[1].children[0].children = [];
+          }
+          if (this.dataSource.data[1].children[1].children[1].children[1]) {
+            this.dataSource.data[1].children[1].children[1].children[1].children = [];
+          }
+        }
+      }
+    }
+    // console.log('$$$$$$', this.dataSource.data);
+  }
+
+  showFullAutomation(): void {
+    this.dialog.open(AutomationShowFullComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '700px',
+      maxHeight: '600px',
+      data: {
+        automation: this.allDataSource.data
+      }
+    });
   }
 
   createAutomation(): void {}

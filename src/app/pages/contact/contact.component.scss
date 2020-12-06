@@ -46,7 +46,6 @@
         }
       }
       mat-nested-tree-node {
-        width: 100%;
         .mat-tree-node {
           min-height: 40px;
 
@@ -54,6 +53,12 @@
       }
       .timeline-tree-invisible {
         mat-tree-node {
+          &.mat-tree {
+            &.first {
+                order: 1;
+            }
+            order: 2;
+          }
           align-items: flex-start;
         }
       }
