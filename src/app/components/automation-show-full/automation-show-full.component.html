@@ -34,7 +34,7 @@
             </div>
         </li>
         </mat-tree-node>
-        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <mat-nested-tree-node class="mat-nested-tree" [class.first]="node['condition']['answer'] == true" *matTreeNodeDef="let node; when: hasChild">
         <div class="timeline-condition" *ngIf="node['condition'] && node['condition']['case']">
             <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition']['answer'] == true">
             <img src="../../assets/img/automations/yes.svg">

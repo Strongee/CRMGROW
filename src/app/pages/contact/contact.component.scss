@@ -61,6 +61,14 @@
           }
           align-items: flex-start;
         }
+        mat-nested-tree-node {
+          &.mat-nested-tree {
+            &.first {
+              order: 1;
+            }
+            order: 2
+          }
+        }
       }
     }
   }
