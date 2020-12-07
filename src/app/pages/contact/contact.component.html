@@ -105,9 +105,9 @@
                   <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                   <span class="f-6 font-weight-bold ml-2">Automation</span>
                 </div>
-                <div class="f-3 fw-600 c-blue c-pointer" (click)="createAutomation()">
+                <!-- <div class="f-3 fw-600 c-blue c-pointer" (click)="createAutomation()">
                   Create new automation
-                </div>
+                </div> -->
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -120,17 +120,17 @@
               </div>
             </div>
             <div class="automation-detail mt-3">
-              <ng-container *ngIf="contact.time_lines?.length">
+              <ng-container *ngIf="allDataSource.data?.length">
                 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl"
                 class="timeline timeline-one-side time-line">
                   <mat-tree-node class="mat-tree" [class.first]="node['condition'] && node['condition']['answer'] == true" *matTreeNodeDef="let node" matTreeNodeToggle>
                     <li class="mat-tree-node timeline-block {{ node.status }}">
                       <div class="timeline w-100">
-                        <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition']['answer'] == true">
+                        <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
                           <img src="../../assets/img/automations/yes.svg">
                           <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}?</span>
                         </div>
-                        <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition']['answer'] == false">
+                        <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
                           <img src="../../assets/img/automations/no.svg">
                         </div>
                         <div class="bgc-green-weak line"></div>
@@ -152,11 +152,11 @@
                   </mat-tree-node>
                   <mat-nested-tree-node class="mat-nested-tree" [class.first]="node['condition'] && node['condition']['answer'] == true" *matTreeNodeDef="let node; when: hasChild">
                     <div class="timeline-condition" *ngIf="node['condition'] && node['condition']['case']">
-                      <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition']['answer'] == true">
+                      <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
                         <img src="../../assets/img/automations/yes.svg">
                         <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}</span>
                       </div>
-                      <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition']['answer'] == false">
+                      <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] &&node['condition']['answer'] == false">
                         <img src="../../assets/img/automations/no.svg">
                       </div>
                       <div class="bgc-green-weak line"></div>
@@ -185,10 +185,10 @@
                     </li>
                   </mat-nested-tree-node>
                 </mat-tree>
+                <div class="v-center justify-content-center f-6 font-weight-bold c-blue c-pointer mt-3" (click)="showFullAutomation()">
+                  Show full automation
+                </div>
               </ng-container>
-            </div>
-            <div class="v-center justify-content-center f-6 font-weight-bold c-blue c-pointer mt-3" (click)="showFullAutomation()">
-              Show full automation
             </div>
           </div>
         </mat-expansion-panel>

@@ -15,6 +15,7 @@
     }
     .automation-detail {
       mat-tree {
+        overflow-x: auto;
         li {
           list-style-type: none;
           img {
@@ -34,6 +35,9 @@
             &.active {
               color: $color-blue;
             }
+            &.disabled {
+              color: $color-red;
+            }
             &.error {
               color: $color-red;
             }
@@ -44,29 +48,29 @@
           height: 20px;
           margin-left: 11px;
         }
-      }
-      mat-nested-tree-node {
-        .mat-tree-node {
-          min-height: 40px;
-
-        }
-      }
-      .timeline-tree-invisible {
-        mat-tree-node {
-          &.mat-tree {
-            &.first {
-                order: 1;
-            }
-            order: 2;
-          }
-          align-items: flex-start;
-        }
         mat-nested-tree-node {
-          &.mat-nested-tree {
-            &.first {
-              order: 1;
+          .mat-tree-node {
+            min-height: 40px;
+  
+          }
+        }
+        .timeline-tree-invisible {
+          mat-tree-node {
+            &.mat-tree {
+              &.first {
+                  order: 1;
+              }
+              order: 2;
             }
-            order: 2
+            align-items: flex-start;
+          }
+          mat-nested-tree-node {
+            &.mat-nested-tree {
+              &.first {
+                order: 1;
+              }
+              order: 2
+            }
           }
         }
       }
