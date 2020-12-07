@@ -94,7 +94,7 @@
           *matHeaderCellDef> label </th>
         <td mat-cell
           *matCellDef="let element">
-          <app-label-select [value]="element.label"></app-label-select>
+          <app-label-select [value]="element.label" (valueChange)="updateLabel($event, element._id)"></app-label-select>
         </td>
       </ng-container>
 
@@ -225,7 +225,7 @@
 <mat-drawer-container [hasBackdrop]="true">
   <mat-drawer #drawer
     position="end" (openedChange)="setPanelType($event)">
-    <app-advanced-filter [hidden]="panelType" (onClose)="drawer.close()"></app-advanced-filter>
-    <app-contact-bulk [hidden]="panelType !== 'editor'" (onClose)="drawer.close()"></app-contact-bulk>
+    <app-advanced-filter [hidden]="panelType" (onClose)="drawer.close()" #filterPanel></app-advanced-filter>
+    <app-contact-bulk [hidden]="panelType !== 'editor'" (onClose)="drawer.close()" [contacts]="selection" #editPanel></app-contact-bulk>
   </mat-drawer>
 </mat-drawer-container>
