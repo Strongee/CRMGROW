@@ -29,6 +29,13 @@ export class ContactBulkComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  clearForm(): void {
+    this.contact = new Contact().deserialize({
+      recruiting_stage: '',
+      tags: []
+    });
+  }
+
   update(): void {
     const data = {};
     const tagData = {};
