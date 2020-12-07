@@ -90,9 +90,9 @@ export class ContactComponent implements OnInit {
       if (res) {
         this.contact = res;
         this.groupActivities();
+        this.timeLineArrangement();
       }
     });
-    this.timeLineArrangement();
   }
 
   /**
@@ -226,10 +226,10 @@ export class ContactComponent implements OnInit {
   }
 
   timeLineArrangement(): void {
-    if (this.contact['time_lines']?.length == 0) {
+    if (!this.contact.time_lines || this.contact.time_lines.length == 0) {
       return;
     }
-    this.allDataSource.data = listToTree(this.contact['time_lines']);
+    this.allDataSource.data = listToTree(this.contact.time_lines);
     let root = null;
     if (this.allDataSource.data?.length == 0) {
       return;
