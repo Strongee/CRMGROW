@@ -102,7 +102,7 @@
                   [class.last-row]="row == dupItem.values.length - 1 ? true : false"
                 >
                   <td class="check-cell">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-checkbox" *ngIf="dupItem.values.length > 1">
                       <input type="checkbox" class="custom-control-input" id="secondary-{{contact.id}}"
                              [checked]="dupItem.secondaryId?.indexOf(contact.id)!==-1"
                              (change)="$event ? toggleSecContact(dupItem, contact) : null">
@@ -117,7 +117,7 @@
                     </td>
                   </ng-container>
                   <td class="radio-cell">
-                    <div class="custom-control custom-radio ml-auto">
+                    <div class="custom-control custom-radio ml-auto" *ngIf="dupItem.values.length > 1">
                       <input type="radio" class="custom-control-input" id="primary-{{contact.id}}" name="primary-{{dupIndex}}"
                              [(ngModel)]="dupItem.primaryId" [value]="contact.id">
                       <label class="custom-control-label f-4 font-weight-bold" for="primary-{{contact.id}}">{{dupItem.primaryId == contact.id ? 'Primary' : ''}}</label>
