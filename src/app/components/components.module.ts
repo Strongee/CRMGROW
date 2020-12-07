@@ -82,6 +82,7 @@ import { LabelEditComponent } from './label-edit/label-edit.component';
 import { ContactMergeComponent } from './contact-merge/contact-merge.component';
 import { InputSourceComponent } from './input-source/input-source.component';
 import { InputCompanyComponent } from './input-company/input-company.component';
+import { ContactEditComponent } from './contact-edit/contact-edit.component';
 
 @NgModule({
   declarations: [
@@ -164,7 +165,8 @@ import { InputCompanyComponent } from './input-company/input-company.component';
     LabelEditComponent,
     ContactMergeComponent,
     InputSourceComponent,
-    InputCompanyComponent
+    InputCompanyComponent,
+    ContactEditComponent
   ],
   imports: [
     CommonModule,

@@ -8,6 +8,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as d3 from 'd3-collection';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UserService } from '../../services/user.service';
+import { ConfirmComponent } from '../confirm/confirm.component';
+import { ContactEditComponent } from '../contact-edit/contact-edit.component';
 
 @Component({
   selector: 'app-upload-contacts',
@@ -70,6 +72,7 @@ export class UploadContactsComponent implements OnInit {
   selectedImportContacts = new SelectionModel<any>(true, []);
   overwriteContacts = new SelectionModel(true, []); // Contacts to overwrite
   overwriting = false;
+  selectedMergeContacts = new SelectionModel<any>(true, []);
 
   constructor(
     private dialogRef: MatDialogRef<UploadContactsComponent>,
@@ -183,6 +186,7 @@ export class UploadContactsComponent implements OnInit {
 
           this.selectedColumn = this.columns[0];
           this.selectedColumnIndex = 0;
+          this.step = 2;
         }
       });
     };
@@ -412,12 +416,12 @@ export class UploadContactsComponent implements OnInit {
 
     mergeList.forEach((e) => {
       if (e.length > 1) {
-        e.primaryId = e[0].id;
-        e.secondaryId = [];
-        e.forEach((val) => {
-          e.secondaryId.push(val.id);
-        });
-        e.values = e;
+        //   e.primaryId = e[0].id;
+        //   e.secondaryId = [];
+        //   e.forEach((val) => {
+        //     e.secondaryId.push(val.id);
+        //   });
+        //   e.values = e;
         this.sameContacts.push(e);
       } else if (e.length === 1) {
         this.contactsToUpload.push(e[0]);
@@ -717,6 +721,105 @@ export class UploadContactsComponent implements OnInit {
     }
     return true;
   }
+
+  editContact(id): void {
+    const contact = this.contacts[id];
+    console.log('contact ============>', contact);
+    this.dialog
+      .open(ContactEditComponent, {
+        data: {
+          ...contact,
+          cell_phone: contact.phone,
+          tags: contact.tags ? contact.tags.split(',') : ''
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          let updated = res.contact;
+          if (updated) {
+            let tags = '';
+            if (updated.tags) {
+              for (let i = 0; i < updated.tags.length; i++) {
+                if (i === updated.tags.length - 1) {
+                  tags = tags + updated.tags[i];
+                } else {
+                  tags = tags + updated.tags[i] + ',';
+                }
+              }
+            }
+            updated = {
+              ...updated,
+              phone: updated.cell_phone,
+              tags
+            };
+            this.contacts.splice(id, 1, updated);
+            this.sameContacts.some((e, index) => {
+              e.some((item, idx) => {
+                if (item.id === id) {
+                  e.splice(idx, 1, updated);
+                }
+              });
+            });
+            const nIndex = this.contactsToUpload.findIndex(
+              (item) => item.id === id
+            );
+            if (nIndex >= 0) {
+              this.contactsToUpload.splice(nIndex, 1, updated);
+            }
+          }
+        }
+      });
+  }
+
+  removeContact(id): void {
+    const dialog = this.dialog.open(ConfirmComponent, {
+      data: {
+        message: 'Are you sure to remove the contact?',
+        cancelLabel: 'No',
+        confirmLabel: 'Remove'
+      }
+    });
+
+    dialog.afterClosed().subscribe((res) => {
+      if (res) {
+        this.contacts.splice(id, 1);
+        this.sameContacts.some((e, index) => {
+          e.some((contact, idx) => {
+            if (contact.id === id) {
+              e.splice(idx, 1);
+            }
+          });
+        });
+        const nIndex = this.contactsToUpload.findIndex(
+          (item) => item.id === id
+        );
+        if (nIndex >= 0) {
+          this.contactsToUpload.splice(nIndex, 1);
+        }
+      }
+    });
+  }
+
+  isSelectedMerge(id): any {
+    if (this.selectedMergeContacts.isSelected(id)) {
+      return true;
+    }
+    return false;
+  }
+
+  toggleContact(id): void {
+    if (this.selectedMergeContacts.selected.length > 1) {
+      return;
+    } else {
+      if (this.selectedMergeContacts.isSelected(id)) {
+        this.selectedMergeContacts.deselect(id);
+      } else {
+        this.selectedMergeContacts.select(id);
+      }
+    }
+  }
+
   fields = [
     {
       value: 'first_name',
