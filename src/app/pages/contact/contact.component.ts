@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
+import { OverlayService } from 'src/app/services/overlay.service';
 import {
   ActivityDetail,
   DetailActivity
@@ -76,7 +77,9 @@ export class ContactComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private contactService: ContactService,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private overlayService: OverlayService,
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit(): void {
@@ -86,10 +89,10 @@ export class ContactComponent implements OnInit {
     this.storeService.selectedContact$.subscribe((res) => {
       if (res) {
         this.contact = res;
-        this.timeLineArrangement();
         this.groupActivities();
       }
     });
+    this.timeLineArrangement();
   }
 
   /**
@@ -223,118 +226,31 @@ export class ContactComponent implements OnInit {
   }
 
   timeLineArrangement(): void {
-    this.allDataSource.data = listToTree(this.contact['time_lines'] || []);
-    console.log('@@@', this.allDataSource.data);
-    this.dataSource.data = this.allDataSource.data;
-    while (this.dataSource.data) {
-      if (this.dataSource.data[0] || this.dataSource.data[1]) {
-        if (
-          this.dataSource.data[0] &&
-          this.dataSource.data[0].status == 'completed'
-        ) {
-          if (
-            this.dataSource.data[0].children[0].status == 'completed' ||
-            this.dataSource.data[0].children[1].status == 'completed'
-          ) {
-            this.dataSource.data = this.dataSource.data[0].children;
-          } else {
-            break;
-          }
-        }
-        if (
-          this.dataSource.data[1] &&
-          this.dataSource.data[1].status == 'completed'
-        ) {
-          if (
-            this.dataSource.data[0].children[0].status == 'completed' ||
-            this.dataSource.data[0].children[1].status == 'completed'
-          ) {
-            this.dataSource.data = this.dataSource.data[0].children;
-          } else {
-            break;
-          }
-        }
-      } else {
-        break;
-      }
+    if (this.contact['time_lines']?.length == 0) {
+      return;
     }
-    if (this.dataSource.data[0]) {
-      if (this.dataSource.data[0].children[0]) {
-        if (this.dataSource.data[0].children[0].children[0]) {
-          if (this.dataSource.data[0].children[0].children[0].children[0]) {
-            this.dataSource.data[0].children[0].children[0].children[0].children = [];
-          }
-          if (this.dataSource.data[0].children[0].children[0].children[1]) {
-            this.dataSource.data[0].children[0].children[0].children[1].children = [];
-          }
-        }
-        if (this.dataSource.data[0].children[0].children[1]) {
-          if (this.dataSource.data[0].children[0].children[1].children[0]) {
-            this.dataSource.data[0].children[0].children[1].children[0].children = [];
-          }
-          if (this.dataSource.data[0].children[0].children[1].children[1]) {
-            this.dataSource.data[0].children[0].children[1].children[1].children = [];
-          }
-        }
-      }
-      if (this.dataSource.data[0].children[1]) {
-        if (this.dataSource.data[0].children[1].children[0]) {
-          if (this.dataSource.data[0].children[1].children[0].children[0]) {
-            this.dataSource.data[0].children[1].children[0].children[0].children = [];
-          }
-          if (this.dataSource.data[0].children[1].children[0].children[1]) {
-            this.dataSource.data[0].children[1].children[0].children[1].children = [];
-          }
-        }
-        if (this.dataSource.data[0].children[1].children[1]) {
-          if (this.dataSource.data[0].children[1].children[1].children[0]) {
-            this.dataSource.data[0].children[1].children[1].children[0].children = [];
-          }
-          if (this.dataSource.data[0].children[1].children[1].children[1]) {
-            this.dataSource.data[0].children[1].children[1].children[1].children = [];
-          }
-        }
-      }
+    this.allDataSource.data = listToTree(this.contact['time_lines']);
+    let root = null;
+    if (this.allDataSource.data?.length == 0) {
+      return;
     }
-    if (this.dataSource.data[1]) {
-      if (this.dataSource.data[1].children[0]) {
-        if (this.dataSource.data[1].children[0].children[0]) {
-          if (this.dataSource.data[1].children[0].children[0].children[0]) {
-            this.dataSource.data[1].children[0].children[0].children[0].children = [];
-          }
-          if (this.dataSource.data[1].children[0].children[0].children[1]) {
-            this.dataSource.data[1].children[0].children[0].children[1].children = [];
-          }
-        }
-        if (this.dataSource.data[1].children[0].children[1]) {
-          if (this.dataSource.data[1].children[0].children[1].children[0]) {
-            this.dataSource.data[1].children[0].children[1].children[0].children = [];
-          }
-          if (this.dataSource.data[1].children[0].children[1].children[1]) {
-            this.dataSource.data[1].children[0].children[1].children[1].children = [];
-          }
-        }
-      }
-      if (this.dataSource.data[1].children[1]) {
-        if (this.dataSource.data[1].children[1].children[0]) {
-          if (this.dataSource.data[1].children[1].children[0].children[0]) {
-            this.dataSource.data[1].children[1].children[0].children[0].children = [];
-          }
-          if (this.dataSource.data[1].children[1].children[0].children[1]) {
-            this.dataSource.data[1].children[1].children[0].children[1].children = [];
-          }
-        }
-        if (this.dataSource.data[1].children[1].children[1]) {
-          if (this.dataSource.data[1].children[1].children[1].children[0]) {
-            this.dataSource.data[1].children[1].children[1].children[0].children = [];
-          }
-          if (this.dataSource.data[1].children[1].children[1].children[1]) {
-            this.dataSource.data[1].children[1].children[1].children[1].children = [];
-          }
-        }
-      }
+    if (this.allDataSource.data[0]?.status == 'completed') {
+      root = this.allDataSource.data[0];
     }
-    // console.log('$$$$$$', this.dataSource.data);
+    while (true) {
+      if (root.children[0]?.status == 'completed') {
+        root = root.children[0];
+      } else if (root.children[1]?.status == 'completed') {
+        root = root.children[1];
+      } else break;
+    }
+
+    for (const firstChild of root.children)
+      for (const secondChild of firstChild.children)
+        for (const thirdChild of secondChild.children) thirdChild.children = [];
+
+    this.dataSource.data = [];
+    this.dataSource.data.push(root);
   }
 
   showFullAutomation(): void {
@@ -346,6 +262,12 @@ export class ContactComponent implements OnInit {
       data: {
         automation: this.allDataSource.data
       }
+    });
+  }
+
+  easyView(node: any, origin: any, content: any): void {
+    this.overlayService.open(origin, content, this.viewContainerRef, {
+      data: node
     });
   }
 
