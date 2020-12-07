@@ -11,7 +11,7 @@ export const AUTH = {
   LOG_OUT: 'user/logout',
   CHECK_EMAIL: 'user/check',
   CHECK_NICKNAME: 'user/search-nickname',
-  CHECK_PHONE: 'user/search-phone',
+  CHECK_PHONE: 'user/search-phone'
 };
 export const USER = {
   PROFILE: 'user/me',
@@ -62,11 +62,14 @@ export const CONTACT = {
   ADVANCE_SERACH: 'contact/advance-search',
   NORMAL_SEARCH: 'contact/search',
   QUICK_SEARCH: 'contact/search-easy',
-  LATEST_CONTACTS: 'video/latest-sent',
-  SELECT_ALL: 'contact/select-all',
+  SELECT_ALL: 'contact/get-all',
   LOAD_BY_IDS: 'contact/get',
   FILTER: 'contact/filter',
-  READ: 'contact/'
+  READ: 'contact/',
+  EXPORT: 'contact/export-csv',
+  BULK_DELETE: 'contact/remove',
+  BULK_UPDATE: 'contact/bulk-update',
+  LATEST_CONTACTS: 'video/latest-sent'
 };
 export const VIDEO = {
   CREATE: 'video/create',

@@ -45,7 +45,7 @@
         <ng-template #emptyLabel>
           <div class="v-center py-1">
             <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
-            <span class="f-3 fw-600">No Label</span>
+            <span class="f-3 fw-600">{{defaultLabel}}</span>
           </div>
         </ng-template>
       </mat-basic-chip>
@@ -66,6 +66,13 @@
           <i class="i-icon i-setting bgc-blue mr-1 sm"></i>
           <span class="c-blue fw-600">Manage Labels</span>
         </a>
+      </mat-option>
+      <mat-option [value]="null"
+        style="height: unset; line-height: unset;">
+        <div class="v-center py-1 f-3 fw-600">
+          <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
+          <span>{{defaultLabel}}</span>
+        </div>
       </mat-option>
       <mat-option *ngFor="let item of labelService.labels$ | async" [value]="item"
         style="height: unset; line-height: unset;">

@@ -1,8 +1,7 @@
 <div class="p-4c panel">
   <div class="v-center mb-3">
     <h4 class="font-weight-bold mb-0">Advanced Filter</h4>
-    <div class="c-blue f-1 text-uppercase ml-2 mt-2">Clear All Filters</div>
-
+    <div class="c-blue f-1 text-uppercase ml-2 mt-2 c-pointer" (click)="clearAllFilters()">Clear All Filters</div>
   </div>
   <form #actionForm="ngForm" (ngSubmit)="actionForm.form.valid ? applyFilters() : false"
     [class.was-validated]="actionForm.submitted">
@@ -102,7 +101,7 @@
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <app-input-source [selectedTags]="searchOption.sourceCondition" [onlyFromSearch]="true"></app-input-source>
+      <app-input-source [selectedTags]="searchOption.sourceCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-source>
     </div>
     <div class="my-3">
       <div class="d-flex align-items-end justify-content-between">
@@ -119,7 +118,7 @@
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <app-input-company [selectedTags]="searchOption.brokerageCondition" [onlyFromSearch]="true"></app-input-company>
+      <app-input-company [selectedTags]="searchOption.brokerageCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-company>
     </div>
 
     <div class="my-3">
@@ -136,7 +135,7 @@
           <div class="f-3 fw-600 c-dark">Exclude</div>
         </div>
       </div>
-      <app-input-tag [selectedTags]="searchOption.tagsCondition" [onlyFromSearch]="true"></app-input-tag>
+      <app-input-tag [selectedTags]="searchOption.tagsCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-tag>
     </div>
     <div class="my-3">
       <div class="form-group mb-0">

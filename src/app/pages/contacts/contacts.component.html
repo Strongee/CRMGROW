@@ -2,7 +2,9 @@
   <div class="status-header v-center mb-3">
     <div class="count-status">
       <div class="f-6">
-        <span class="font-weight-bold text-uppercase">Contacts</span>
+        <span class="font-weight-bold text-uppercase">Contacts ({{contactService.total$ | async}})</span>
+        <span *ngIf="searchStr || !searchOption.isEmpty()" class="op-56"> / Found {{(storeService.pageContacts$ | async).length}} contacts</span>
+        <span *ngIf="selection.length" class="op-56"> / Selected {{selection.length}} contacts</span>
       </div>
     </div>
     <div class="ml-auto v-center">
@@ -71,7 +73,6 @@
           </div>
         </td>
       </ng-container>
-
 
       <!-- Name Column -->
       <ng-container matColumnDef="contact_name">
@@ -159,6 +160,7 @@
       <div class="my-2 table-control mode-1">
         <div class="pagination-wrapper m-auto">
           <pagination-controls (pageChange)="changePage($event)"
+            (pageBoundsCorrection)="pageChanged($event)"
             id="contactPages"
             maxSize="5"
             previousLabel=""
@@ -218,11 +220,12 @@
   </div>
 </div>
 
+<app-actions-bar [actions]="ACTIONS" [isActive]="selection.length + pageSelection.length" (doCommand)="doAction($event)"></app-actions-bar>
+
 <mat-drawer-container [hasBackdrop]="true">
   <mat-drawer #drawer
-    position="end">
-    <app-advanced-filter></app-advanced-filter>
+    position="end" (openedChange)="setPanelType($event)">
+    <app-advanced-filter [hidden]="panelType" (onClose)="drawer.close()"></app-advanced-filter>
+    <app-contact-bulk [hidden]="panelType !== 'editor'" (onClose)="drawer.close()"></app-contact-bulk>
   </mat-drawer>
 </mat-drawer-container>
-
-<app-actions-bar [actions]="ACTIONS" [isActive]="pageSelection.length" (doCommand)="doAction($event)"></app-actions-bar>
