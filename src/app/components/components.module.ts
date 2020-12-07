@@ -83,6 +83,7 @@ import { ContactMergeComponent } from './contact-merge/contact-merge.component';
 import { InputSourceComponent } from './input-source/input-source.component';
 import { InputCompanyComponent } from './input-company/input-company.component';
 import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
+import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
 
 @NgModule({
   declarations: [
@@ -166,7 +167,8 @@ import { AutomationShowFullComponent } from './automation-show-full/automation-s
     ContactMergeComponent,
     InputSourceComponent,
     InputCompanyComponent,
-    AutomationShowFullComponent
+    AutomationShowFullComponent,
+    AutomationTreeOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -220,7 +222,8 @@ import { AutomationShowFullComponent } from './automation-show-full/automation-s
     InputTagComponent,
     InputSourceComponent,
     InputCompanyComponent,
-    AutomationShowFullComponent
+    AutomationShowFullComponent,
+    AutomationTreeOverlayComponent
   ],
   bootstrap: [
     ContactCreateComponent,

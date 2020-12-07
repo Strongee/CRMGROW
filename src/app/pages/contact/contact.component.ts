@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
+import { OverlayService } from 'src/app/services/overlay.service';
 import {
   ActivityDetail,
   DetailActivity
@@ -77,7 +78,8 @@ export class ContactComponent implements OnInit {
     private route: ActivatedRoute,
     private contactService: ContactService,
     private storeService: StoreService,
-    private changeDetectorRef: ChangeDetectorRef
+    private overlayService: OverlayService,
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit(): void {
@@ -224,12 +226,18 @@ export class ContactComponent implements OnInit {
   }
 
   timeLineArrangement(): void {
+    if (this.contact['time_lines']?.length == 0) {
+      return;
+    }
     this.allDataSource.data = listToTree(this.contact['time_lines']);
     console.log('###', this.allDataSource.data);
     let root = null;
-    if (this.allDataSource.data.length == 0) return;
-    if (this.allDataSource.data[0]?.status == 'completed')
+    if (this.allDataSource.data?.length == 0) {
+      return;
+    }
+    if (this.allDataSource.data[0]?.status == 'completed') {
       root = this.allDataSource.data[0];
+    }
     while (true) {
       if (root.children[0]?.status == 'completed') {
         root = root.children[0];
@@ -244,7 +252,6 @@ export class ContactComponent implements OnInit {
 
     this.dataSource.data = [];
     this.dataSource.data.push(root);
-    this.changeDetectorRef.detectChanges();
   }
 
   showFullAutomation(): void {
@@ -256,6 +263,12 @@ export class ContactComponent implements OnInit {
       data: {
         automation: this.allDataSource.data
       }
+    });
+  }
+
+  easyView(node: any, origin: any, content: any): void {
+    this.overlayService.open(origin, content, this.viewContainerRef, {
+      data: node
     });
   }
 

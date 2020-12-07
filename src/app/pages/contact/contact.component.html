@@ -134,12 +134,12 @@
                           <img src="../../assets/img/automations/no.svg">
                         </div>
                         <div class="bgc-green-weak line"></div>
-                        <div class="v-center">
+                        <div class="v-center" #treeNode (click)="easyView(node, treeNode, treeOverlay)">
                           <span class="timeline-step {{ node.action?.type }}">
                             <img [attr.src]="ICONS[node.action?.type]">
                           </span>
-                          <div class="timeline-content ml-2">
-                            <p class="f-3 font-weight-bold title m-0">
+                          <div class="timeline-content ml-2 c-pointer">
+                            <p class="f-3 font-weight-bold title m-0 c-pointer">
                               {{ ActionName[node.action?.type] }}
                             </p>
                             <div class="f-1 font-weight-bold text-left text-uppercase p-0 badge status {{ node.status }}">
@@ -161,9 +161,8 @@
                       </div>
                       <div class="bgc-green-weak line"></div>
                     </div>
-
                     <li>
-                      <div class="d-flex mat-tree-node timeline-block {{ node.status }}">
+                      <div class="d-flex mat-tree-node timeline-block c-pointer {{ node.status }}" #nestedTreeNode (click)="easyView(node, nestedTreeNode, treeOverlay)">
                         <span class="timeline-step {{ node.action?.type }}">
                           <img [attr.src]="ICONS[node.action?.type]">
                         </span>
@@ -188,6 +187,12 @@
                 <div class="v-center justify-content-center f-6 font-weight-bold c-blue c-pointer mt-3" (click)="showFullAutomation()">
                   Show full automation
                 </div>
+                <ng-template #treeOverlay let-close="close" let-data>
+                  <app-automation-tree-overlay
+                      [dataSource]="data.data"
+                  >
+                  </app-automation-tree-overlay>
+                </ng-template>
               </ng-container>
             </div>
           </div>
