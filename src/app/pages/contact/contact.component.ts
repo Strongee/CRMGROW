@@ -230,7 +230,6 @@ export class ContactComponent implements OnInit {
       return;
     }
     this.allDataSource.data = listToTree(this.contact['time_lines']);
-    console.log('###', this.allDataSource.data);
     let root = null;
     if (this.allDataSource.data?.length == 0) {
       return;
