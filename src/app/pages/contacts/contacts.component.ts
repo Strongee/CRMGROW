@@ -17,6 +17,9 @@ import { saveAs } from 'file-saver';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bulk.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
+import { AutomationAssignComponent } from 'src/app/components/automation-assign/automation-assign.component';
+import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -281,12 +284,16 @@ export class ContactsComponent implements OnInit {
         this.downloadCSV();
         break;
       case 'message':
+        this.openMessageDlg();
         break;
       case 'add_note':
+        this.openNoteDlg();
         break;
       case 'add_task':
+        this.openTaskDlg();
         break;
       case 'automation':
+        this.openAutomationDlg();
         break;
     }
   }
@@ -434,6 +441,34 @@ export class ContactsComponent implements OnInit {
   bulkEdit(): void {
     this.panelType = 'editor';
     this.drawer.open();
+  }
+
+  openMessageDlg(): void {
+    // this.dialog.open(Message)
+  }
+
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.NOTE,
+      data: {
+        contacts: this.selection
+      }
+    });
+  }
+
+  openTaskDlg(): void {
+    this.dialog.open(TaskCreateComponent, {
+      ...DialogSettings.TASK,
+      data: {
+        contacts: this.selection
+      }
+    });
+  }
+
+  openAutomationDlg(): void {
+    this.dialog.open(AutomationAssignComponent, {
+      ...DialogSettings.AUTOMATION
+    });
   }
 
   /**

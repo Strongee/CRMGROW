@@ -35,23 +35,48 @@ export class LabelService extends HttpService {
       catchError(this.handleError('GET LABELS', []))
     );
   }
-  createLabel(label): Observable<Label[]> {
+  createLabel(label: Label): Observable<Label> {
     return this.httpClient.post(this.server + LABEL.CREATE, label).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('CREATE LABEL', []))
+      map((res) => new Label().deserialize(res['data'])),
+      catchError(this.handleError('CREATE LABEL', null))
     );
   }
-  updateLabel(id: string, label: any): Observable<any> {
+  create$(label: Label): void {
+    const labels = this.labels.getValue();
+    labels.push(label);
+    this.labels.next(labels);
+  }
+  updateLabel(id: string, label: any): Observable<boolean> {
     return this.httpClient.put(this.server + LABEL.PUT + id, label).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('UPDATE LABEL', []))
+      map((res) => res['status'] || false),
+      catchError(this.handleError('UPDATE LABEL', false))
     );
   }
-  deleteLabel(id: string): Observable<Label[]> {
+  update$(label: Label): void {
+    const labels = this.labels.getValue();
+    labels.some((e) => {
+      if (e._id === label._id) {
+        e.deserialize({ ...label });
+        return true;
+      }
+    });
+    this.labels.next(labels);
+  }
+  deleteLabel(id: string): Observable<boolean> {
     return this.httpClient.delete(this.server + LABEL.DELETE + id).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('DELETE LABEL', []))
+      map((res) => res['status'] || false),
+      catchError(this.handleError('DELETE LABEL', false))
     );
+  }
+  delete$(_id: string): void {
+    const labels = this.labels.getValue();
+    labels.some((e, index) => {
+      if (e._id === _id) {
+        labels.splice(index, 1);
+        return true;
+      }
+    });
+    this.labels.next(labels);
   }
   /**
    * Change the Order of the labels

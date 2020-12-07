@@ -9,13 +9,16 @@
           <label>You can create own new label</label>
           <div class="v-center justify-content-between w-100">
             <div class="v-center">
-              <i class="i-icon i-label d-block mr-2 bgc-dark" [style.backgroundColor]="color"></i>
-              <span class="f-3 fw-600">{{'Default color'}}</span>
+              <i class="i-icon i-label d-block mr-2 bgc-dark" [style.backgroundColor]="newLabel.color"></i>
+              <span class="f-3 fw-600">Select Color</span>
               <button type="button" class="color-picker-button ml-2 p-0" (click)="editLabelColor()"><i class="i-icon i-edit bgc-dark d-block"></i></button>
             </div>
             <div class="v-center">
-              <input type="text" class="form-control label-name-input ml-2" [(ngModel)]="labelName" placeholder="Name new label"
+              <input type="text" class="form-control label-name-input ml-2" [(ngModel)]="newLabel.name" placeholder="Name new label"
                      name="edit_label_name" #edit_label_name="ngModel" required/>
+              <span class="error" *ngIf="edit_label_name.errors">
+                Label name is required.
+              </span>
               <button type="submit" class="v-center btn btn-primary ml-2 px-2" [class.loading]="loading">
                 <i class="i-icon i-plus i-small bgc-white"></i>
                 <span class="f-3 font-weight-bold ml-2">Save</span>

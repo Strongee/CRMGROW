@@ -7,6 +7,8 @@ import {
 import { Label } from 'src/app/models/label.model';
 import { LABEL_COLORS } from 'src/app/constants/variable.constants';
 import { LabelEditColorComponent } from '../label-edit-color/label-edit-color.component';
+import { Subscription } from 'rxjs';
+import { LabelService } from 'src/app/services/label.service';
 
 @Component({
   selector: 'app-label-edit',
@@ -14,17 +16,19 @@ import { LabelEditColorComponent } from '../label-edit-color/label-edit-color.co
   styleUrls: ['./label-edit.component.scss']
 })
 export class LabelEditComponent implements OnInit {
+  LABEL_COLORS = LABEL_COLORS;
   label: Label = new Label();
-  labelColors = LABEL_COLORS;
-  selectedColor = '';
-  submitted = false;
+
+  saving = false;
+  saveSubscription: Subscription;
 
   constructor(
+    private labelService: LabelService,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<LabelEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: Label
   ) {
-    this.label = this.data.label;
+    this.label = new Label().deserialize(this.data);
   }
 
   ngOnInit(): void {}
@@ -38,21 +42,31 @@ export class LabelEditComponent implements OnInit {
         maxHeight: '400px'
       })
       .afterClosed()
-      .subscribe((res) => {
-        this.labelColors.forEach((label) => {
-          if (label.type == 'custom') {
-            label.color = res;
-          }
-        });
+      .subscribe((color) => {
+        if (color) {
+          this.label.color = color;
+        }
       });
   }
 
   selectColor(color: string): void {
-    this.selectedColor = color;
     this.label.color = color;
   }
 
   editLabel(): void {
-    this.dialogRef.close(this.label);
+    this.saving = true;
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    this.saveSubscription = this.labelService
+      .updateLabel(this.label._id, {
+        ...this.label,
+        _id: undefined
+      })
+      .subscribe((status) => {
+        this.saving = false;
+        if (status) {
+          this.labelService.update$(this.label);
+          this.dialogRef.close();
+        }
+      });
   }
 }

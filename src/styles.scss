@@ -703,6 +703,14 @@ button {
   display: block;
 }
 
+form.was-validated {
+  .form-group {
+    .error {
+      display: block;
+    }
+  }
+}
+
 /** ==== Dropdown Style === */
 .dropdown-menu {
   box-shadow: 0 5px 24px -5px rgba(16, 19, 54, 0.24);
