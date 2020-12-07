@@ -2,7 +2,7 @@ import { DetailActivity, PureActivity } from './activityDetail.model';
 import { Deserializable } from './deserialize.model';
 import { Task } from './task.model';
 import { Timeline } from './timeline.model';
-
+import * as _ from 'lodash';
 export class Contact implements Deserializable {
   _id: string;
   first_name: string;
@@ -149,6 +149,20 @@ export class ContactActivity implements Deserializable {
       email: this.email,
       cell_phone: this.cell_phone
     });
+  }
+
+  updateTag(tagData: any): void {
+    switch (tagData.option) {
+      case 2:
+        this.tags = _.union(this.tags, tagData.tags);
+        break;
+      case 3:
+        this.tags = _.difference(this.tags, tagData.tags);
+        break;
+      case 4:
+        this.tags = tagData.tags;
+        break;
+    }
   }
 }
 

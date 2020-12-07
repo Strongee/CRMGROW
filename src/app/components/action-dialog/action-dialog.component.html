@@ -503,38 +503,17 @@
             <div *ngSwitchCase="'update_label'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(NEW LABEL)</span></label>
               <app-label-select type="form"></app-label-select>
-<!--              <select class="form-control theme-control" (change)="changeLabel($event.target.value)"-->
-<!--                      [ngStyle]="{'background-color': getLabelById(commandLabel).color, 'color': getLabelById(commandLabel).font_color}">-->
-<!--                <option selected *ngFor="let label of labels" [selected]="commandLabel === label._id"-->
-<!--                        [value]="label._id" class="c-label"-->
-<!--                        [ngStyle]="{'background-color': label.color, 'color': label.font_color}">{{label.name}}-->
-<!--                </option>-->
-<!--                <option class="c-label" [ngStyle]="{'background-color': 'white', 'color': 'black'}" value="createlabel">-->
-<!--                  Create New Label</option>-->
-<!--              </select>-->
             </div>
             <div *ngSwitchCase="'push_tag'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO INSERT)</span></label>
               <div class="tag-input-wrapper br-default">
                 <app-input-tag [selectedTags]="commandTags" [onlyFromSearch]="false"></app-input-tag>
-<!--                <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"-->
-<!--                           [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">-->
-<!--                  <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"-->
-<!--                                      [displayBy]="'value'">-->
-<!--                  </tag-input-dropdown>-->
-<!--                </tag-input>-->
               </div>
             </div>
             <div *ngSwitchCase="'pull_tag'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO REMOVE)</span></label>
               <div class="tag-input-wrapper br-default">
                 <app-input-tag [selectedTags]="commandTags" [onlyFromSearch]="true"></app-input-tag>
-<!--                <tag-input [placeholder]="'+ Add Tags'" [secondaryPlaceholder]="'Tags'" [(ngModel)]="commandTags"-->
-<!--                           [clearOnBlur]="true" name="taglist" #taglist="ngModel" [blinkIfDupe]="false" (onAdd)="removeError()">-->
-<!--                  <tag-input-dropdown [autocompleteItems]="tags" [focusFirstElement]="true" [identifyBy]="'_id'"-->
-<!--                                      [displayBy]="'value'">-->
-<!--                  </tag-input-dropdown>-->
-<!--                </tag-input>-->
               </div>
             </div>
           </ng-container>

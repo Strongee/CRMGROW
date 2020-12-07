@@ -106,7 +106,29 @@ export class ContactService extends HttpService {
    * @param contact : information to update
    * @param tagData : tag information to update (remove, add)
    */
-  bulkUpdate(_ids: string[], contact: any, tagData: any) {}
+  bulkUpdate(_ids: string[], contact: any, tagData: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + CONTACT.BULK_UPDATE, {
+        contacts: _ids,
+        data: contact,
+        tags: tagData
+      })
+      .pipe(
+        map((res) => res['status'] || false),
+        catchError(this.handleError('BULK UPDATE', false))
+      );
+  }
+  bulkUpdate$(_ids: string[], contact: any, tagData: any): void {
+    const contacts = this.storeService.pageContacts.getValue();
+    contacts.forEach((e) => {
+      if (_ids.indexOf(e._id) !== -1) {
+        e.deserialize(contact);
+        if (tagData['option']) {
+          e.updateTag(tagData);
+        }
+      }
+    });
+  }
   /**
    * download the csv of selected contacts
    * @param _ids : contact id array
