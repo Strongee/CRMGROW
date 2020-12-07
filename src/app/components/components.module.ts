@@ -213,6 +213,7 @@ import { AutomationShowFullComponent } from './automation-show-full/automation-s
     ImageEditComponent,
     CalendarEventComponent,
     AdvancedFilterComponent,
+    ContactBulkComponent,
     ManageLabelComponent,
     TaskFilterComponent,
     ContactMergeComponent,

@@ -14,13 +14,13 @@ export class TagService extends HttpService {
   constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
   }
-  tags: BehaviorSubject<string[]> = new BehaviorSubject([]);
+  tags: BehaviorSubject<any[]> = new BehaviorSubject([]);
   tags$ = this.tags.asObservable();
 
-  sources: BehaviorSubject<string[]> = new BehaviorSubject([]);
+  sources: BehaviorSubject<any[]> = new BehaviorSubject([]);
   sources$ = this.sources.asObservable();
 
-  companies: BehaviorSubject<string[]> = new BehaviorSubject([]);
+  companies: BehaviorSubject<any[]> = new BehaviorSubject([]);
   companies$ = this.companies.asObservable();
 
   /**

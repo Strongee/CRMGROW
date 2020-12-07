@@ -20,6 +20,8 @@ import { TemplateComponent } from 'src/app/pages/template/template.component';
 import { ContactComponent } from 'src/app/pages/contact/contact.component';
 import { ForgotPasswordComponent } from '../../pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from '../../pages/reset-password/reset-password.component';
+import { ThemesComponent } from 'src/app/pages/themes/themes.component';
+import { ThemeComponent } from 'src/app/pages/theme/theme.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -224,6 +226,27 @@ export const AdminLayoutRoutes: Routes = [
     component: CalendarComponent,
     data: {
       title: 'Calendar'
+    }
+  },
+  {
+    path: 'theme',
+    component: ThemesComponent,
+    data: {
+      title: 'Themes'
+    }
+  },
+  {
+    path: 'theme/new',
+    component: ThemeComponent,
+    data: {
+      title: 'Theme'
+    }
+  },
+  {
+    path: 'theme/:mode/:id',
+    component: ThemeComponent,
+    data: {
+      title: 'Theme'
     }
   }
 ];
