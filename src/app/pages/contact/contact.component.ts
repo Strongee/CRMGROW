@@ -223,7 +223,7 @@ export class ContactComponent implements OnInit {
   }
 
   timeLineArrangement(): void {
-    this.allDataSource.data = listToTree(this.contact['time_lines']);
+    this.allDataSource.data = listToTree(this.contact['time_lines'] || []);
     console.log('@@@', this.allDataSource.data);
     this.dataSource.data = this.allDataSource.data;
     while (this.dataSource.data) {

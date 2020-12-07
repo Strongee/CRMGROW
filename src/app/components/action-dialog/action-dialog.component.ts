@@ -18,7 +18,6 @@ import { UserService } from '../../services/user.service';
 import { FileService } from 'src/app/services/file.service';
 import { QuillEditorComponent } from 'ngx-quill';
 import { LabelService } from 'src/app/services/label.service';
-import { LabelComponent } from '../label/label.component';
 import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
 
@@ -105,9 +104,7 @@ export class ActionDialogComponent implements OnInit {
     private materialService: MaterialService,
     private templateService: TemplatesService,
     private userService: UserService,
-    private fileService: FileService,
-    private labelService: LabelService,
-    private dialog: MatDialog
+    private fileService: FileService
   ) {
     this.userService.garbage$.subscribe((res) => {
       const garbage = res;
@@ -158,60 +155,6 @@ export class ActionDialogComponent implements OnInit {
     // if(this.data.action.category === 'START') {
     //   this.action['period'] = 0
     // }
-    this.getLabels();
-  }
-
-  getLabels(): void {
-    this.labelsLoading = true;
-    this.labelService.getLabels().subscribe(
-      async (res: any) => {
-        this.labels = res.sort((a, b) => {
-          return a.priority - b.priority;
-        });
-        this.labels.unshift({
-          _id: '',
-          color: 'ghostwhite',
-          font_color: 'gray',
-          name: 'No Label'
-        });
-        this.labelsLoading = false;
-      },
-      (err) => {
-        this.labelsLoading = false;
-      }
-    );
-  }
-  getLabelById(id): any {
-    let retVal = { color: 'white', font_color: 'black' };
-    let i;
-    for (i = 0; i < this.labels.length; i++) {
-      if (this.labels[i]._id === id) {
-        retVal = this.labels[i];
-      }
-    }
-    return retVal;
-  }
-  changeLabel(label): void {
-    if (label !== 'createlabel') {
-      this.commandLabel = label;
-      if (this.commandLabel) {
-        this.error = '';
-      }
-    } else {
-      this.openLabelDialog();
-    }
-  }
-  openLabelDialog(): void {
-    this.dialog
-      .open(LabelComponent, {
-        position: { top: '5vh' },
-        width: '96vw',
-        maxWidth: '500px'
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        this.getLabels();
-      });
   }
 
   removeError(): void {

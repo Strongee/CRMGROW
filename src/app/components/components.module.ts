@@ -40,7 +40,6 @@ import { CalendarDeclineComponent } from './calendar-decline/calendar-decline.co
 import { JoinTeamComponent } from './join-team/join-team.component';
 import { InviteTeamComponent } from './invite-team/invite-team.component';
 import { SearchUserComponent } from './search-user/search-user.component';
-import { LabelComponent } from './label/label.component';
 import { ActionDialogComponent } from './action-dialog/action-dialog.component';
 import { ActionEditComponent } from './action-edit/action-edit.component';
 import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
@@ -124,7 +123,6 @@ import { AutomationShowFullComponent } from './automation-show-full/automation-s
     JoinTeamComponent,
     InviteTeamComponent,
     SearchUserComponent,
-    LabelComponent,
     ActionDialogComponent,
     ActionEditComponent,
     CaseConfirmComponent,
@@ -155,7 +153,6 @@ import { AutomationShowFullComponent } from './automation-show-full/automation-s
     RecordSettingDialogComponent,
     TeamCreateComponent,
     CalendarOverlayComponent,
-    ManageLabelComponent,
     AdvancedFilterComponent,
     TaskFilterComponent,
     ContactBulkComponent,
