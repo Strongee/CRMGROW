@@ -17,6 +17,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTreeModule } from '@angular/material/tree';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -63,6 +64,7 @@ import { ChartsModule } from 'ng2-charts';
     MatTableModule,
     MatCheckboxModule,
     MatSidenavModule,
+    MatTreeModule,
     DragDropModule,
     ColorSwatchesModule,
     NgxMatSelectSearchModule,
@@ -99,6 +101,7 @@ import { ChartsModule } from 'ng2-charts';
     MatTableModule,
     MatSidenavModule,
     MatCheckboxModule,
+    MatTreeModule,
     DragDropModule,
     ColorSwatchesModule,
     NgxMatSelectSearchModule,
