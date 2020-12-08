@@ -5,7 +5,6 @@ import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/cus
 import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-delete/custom-field-delete.component';
 import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
-import { deserialize } from 'v8';
 
 @Component({
   selector: 'app-lead-capture',
@@ -16,14 +15,40 @@ export class LeadCaptureComponent implements OnInit {
   times = DELAY;
   garbage: Garbage = new Garbage();
   saving = false;
+  defaultField = [
+    {
+      id: '',
+      name: 'Email',
+      options: [],
+      placeholder: 'email',
+      status: false,
+      type: 'text'
+    },
+    {
+      id: '',
+      name: 'Name',
+      options: [],
+      placeholder: 'name',
+      status: false,
+      type: 'text'
+    },
+    {
+      id: '',
+      name: 'Phone',
+      options: [],
+      placeholder: 'phone',
+      status: false,
+      type: 'text'
+    }
+  ];
 
   constructor(private dialog: MatDialog, public userService: UserService) {
     this.userService.garbage$.subscribe((res) => {
       if (res) {
-        this.garbage.additional_fields = [
-          ...this.garbage.additional_fields,
-          ...res.additional_fields
-        ];
+        this.garbage = new Garbage().deserialize(res);
+        this.defaultField[0].status = this.garbage.capture_field.email;
+        this.defaultField[1].status = this.garbage.capture_field.first_name;
+        this.defaultField[2].status = this.garbage.capture_field.cell_phone;
       }
     });
   }
@@ -112,14 +137,10 @@ export class LeadCaptureComponent implements OnInit {
 
   saveDelay(): void {
     this.saving = true;
-    const data = new Garbage().deserialize(this.garbage);
-    data.additional_fields = data.additional_fields.filter(
-      (field) => field.id != '0' && field.id != '1' && field.id != '2'
-    );
-    this.userService.updateGarbage(data).subscribe(
+    this.userService.updateGarbage(this.garbage).subscribe(
       () => {
         this.saving = false;
-        this.userService.updateGarbageImpl(data);
+        this.userService.updateGarbageImpl(this.garbage);
       },
       () => {
         this.saving = false;
