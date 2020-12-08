@@ -87,7 +87,7 @@ export class ContactComponent implements OnInit {
     this.loadContact(this._id);
 
     this.storeService.selectedContact$.subscribe((res) => {
-      if (res) {
+      if (res && res._id === this._id) {
         this.contact = res;
         this.groupActivities();
         this.timeLineArrangement();
