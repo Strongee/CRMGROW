@@ -21,7 +21,6 @@ export class LeadCaptureComponent implements OnInit {
       name: 'Email',
       options: [],
       placeholder: 'email',
-      status: false,
       type: 'text'
     },
     {
@@ -29,7 +28,6 @@ export class LeadCaptureComponent implements OnInit {
       name: 'Name',
       options: [],
       placeholder: 'name',
-      status: false,
       type: 'text'
     },
     {
@@ -37,7 +35,6 @@ export class LeadCaptureComponent implements OnInit {
       name: 'Phone',
       options: [],
       placeholder: 'phone',
-      status: false,
       type: 'text'
     }
   ];
@@ -46,9 +43,6 @@ export class LeadCaptureComponent implements OnInit {
     this.userService.garbage$.subscribe((res) => {
       if (res) {
         this.garbage = new Garbage().deserialize(res);
-        this.defaultField[0].status = this.garbage.capture_field.email;
-        this.defaultField[1].status = this.garbage.capture_field.first_name;
-        this.defaultField[2].status = this.garbage.capture_field.cell_phone;
       }
     });
   }
@@ -131,8 +125,19 @@ export class LeadCaptureComponent implements OnInit {
       });
   }
 
-  statusChange(evt: any, field: any): void {
-    field.status = evt.target.checked;
+  statusChange(evt: any, type: string): void {
+    switch (type) {
+      case 'email':
+        this.garbage.capture_field.email = evt.target.checked;
+        break;
+      case 'name':
+        this.garbage.capture_field.first_name = evt.target.checked;
+        break;
+      case 'phone':
+        this.garbage.capture_field.cell_phone = evt.target.checked;
+        break;
+    }
+    console.log('##', this.garbage.capture_field);
   }
 
   saveDelay(): void {

@@ -18,8 +18,25 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="{{field.name}}" 
-                    [checked]="field.status"
-                    (change)="statusChange($event, field)"
+                    [checked]="garbage.capture_field.email"
+                    (change)="statusChange($event, 'email')"
+                    *ngIf="field.name == 'Email'"
+                />
+                <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{field.name}}" 
+                    [checked]="garbage.capture_field.first_name"
+                    (change)="statusChange($event, 'name')"
+                    *ngIf="field.name == 'Name'"
+                />
+                <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{field.name}}" 
+                    [checked]="garbage.capture_field.cell_phone"
+                    (change)="statusChange($event, 'phone')"
+                    *ngIf="field.name == 'Phone'"
                 />
                 <label class="custom-control-label" for="{{field.name}}"></label>
             </div>
