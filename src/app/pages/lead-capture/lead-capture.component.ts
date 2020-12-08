@@ -137,7 +137,6 @@ export class LeadCaptureComponent implements OnInit {
         this.garbage.capture_field.cell_phone = evt.target.checked;
         break;
     }
-    console.log('##', this.garbage.capture_field);
   }
 
   saveDelay(): void {
