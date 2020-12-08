@@ -5,6 +5,7 @@ import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/cus
 import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-delete/custom-field-delete.component';
 import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
+import { deserialize } from 'v8';
 
 @Component({
   selector: 'app-lead-capture',
@@ -16,13 +17,18 @@ export class LeadCaptureComponent implements OnInit {
   garbage: Garbage = new Garbage();
   saving = false;
 
-  constructor(private dialog: MatDialog, public userService: UserService) {}
-
-  ngOnInit(): void {
+  constructor(private dialog: MatDialog, public userService: UserService) {
     this.userService.garbage$.subscribe((res) => {
-      this.garbage = new Garbage().deserialize(res);
+      if (res) {
+        this.garbage.additional_fields = [
+          ...this.garbage.additional_fields,
+          ...res.additional_fields
+        ];
+      }
     });
   }
+
+  ngOnInit(): void {}
 
   addField(): void {
     this.dialog
@@ -36,7 +42,7 @@ export class LeadCaptureComponent implements OnInit {
         if (res) {
           if (res.mode == 'text') {
             const data = {
-              id: '',
+              id: (this.garbage.additional_fields.length + 1).toString(),
               name: res.field,
               placeholder: res.placeholder,
               options: [],
@@ -46,7 +52,7 @@ export class LeadCaptureComponent implements OnInit {
             this.garbage.additional_fields.push(data);
           } else {
             const data = {
-              id: '',
+              id: (this.garbage.additional_fields.length + 1).toString(),
               name: res.field,
               placeholder: '',
               options: res.options,
@@ -92,7 +98,7 @@ export class LeadCaptureComponent implements OnInit {
       .subscribe((res) => {
         if (res == true) {
           const required_fields = this.garbage.additional_fields.filter(
-            (field) => field.name != deleteData.name
+            (field) => field.id != deleteData.id
           );
           this.garbage.additional_fields = [];
           this.garbage.additional_fields = required_fields;
@@ -106,10 +112,14 @@ export class LeadCaptureComponent implements OnInit {
 
   saveDelay(): void {
     this.saving = true;
-    this.userService.updateGarbage(this.garbage).subscribe(
+    const data = new Garbage().deserialize(this.garbage);
+    data.additional_fields = data.additional_fields.filter(
+      (field) => field.id != '0' && field.id != '1' && field.id != '2'
+    );
+    this.userService.updateGarbage(data).subscribe(
       () => {
         this.saving = false;
-        this.userService.updateGarbageImpl(this.garbage);
+        this.userService.updateGarbageImpl(data);
       },
       () => {
         this.saving = false;
