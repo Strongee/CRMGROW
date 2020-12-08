@@ -33,6 +33,6 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button class="btn c-blue" mat-dialog-close>Cancel</button>
-    <button class="btn btn-primary" type="submit">Add note</button>
+    <button class="btn btn-primary" type="submit" [class.loading]="saving">Add note</button>
   </mat-dialog-actions>
 </form>

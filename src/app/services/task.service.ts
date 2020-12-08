@@ -34,4 +34,15 @@ export class TaskService extends HttpService {
       catchError(this.handleError('LOAD TODAY TASKS', []))
     );
   }
+
+  /**
+   * Create Tasks to Bulk Contacts
+   * @param data : {type: string, content: string, due_date: date, contacts: contact ids array}
+   */
+  bulkCreate(data: any): Observable<any> {
+    return this.http.post(this.server + TASK.BULK_CREATE, data).pipe(
+      map((res) => res[data]),
+      catchError(this.handleError('BULK TASK CREATE', null))
+    );
+  }
 }

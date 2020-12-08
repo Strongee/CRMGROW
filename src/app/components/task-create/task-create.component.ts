@@ -1,8 +1,10 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { REPEAT_DURATIONS, TIMES } from 'src/app/constants/variable.constants';
 import { Contact } from 'src/app/models/contact.model';
 import { Task } from 'src/app/models/task.model';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-task-create',
@@ -20,7 +22,11 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   isSelected = false;
   contacts: Contact[] = [];
 
+  saving = false;
+  saveSubscription: Subscription;
+
   constructor(
+    private taskService: TaskService,
     private dialogRef: MatDialogRef<TaskCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -46,5 +52,28 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   selectContact(event: Contact): void {
     this.contacts = [event];
   }
-  submit(): void {}
+  submit(): void {
+    if (!this.contacts.length) {
+      return;
+    }
+    this.saving = true;
+    const ids = [];
+    this.contacts.forEach((e) => {
+      ids.push(e._id);
+    });
+    const due_date = new Date();
+    const data = {
+      contacts: ids,
+      type: this.task.type,
+      content: this.task.content,
+      due_date: due_date
+    };
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    this.saveSubscription = this.taskService
+      .bulkCreate(data)
+      .subscribe((res) => {
+        this.saving = false;
+        this.dialogRef.close();
+      });
+  }
 }
