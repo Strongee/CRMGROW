@@ -112,6 +112,9 @@ ul {
 .bgc-green {
   background-color: #00DA42;
 }
+.bgc-green-weak {
+  background-color: #46D3A9;
+}
 .op-08 {
   opacity: 0.08;
 }
@@ -147,6 +150,9 @@ ul {
 }
 .c-green {
   color: #00DA42;
+}
+.c-green-weak {
+  color: #46D3A9;
 }
 .c-red-pink {
   color: #f5325b;
@@ -695,6 +701,14 @@ button {
 }
 .phone-form .iti {
   display: block;
+}
+
+form.was-validated {
+  .form-group {
+    .error {
+      display: block;
+    }
+  }
 }
 
 /** ==== Dropdown Style === */

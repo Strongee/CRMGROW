@@ -40,7 +40,6 @@ import { CalendarDeclineComponent } from './calendar-decline/calendar-decline.co
 import { JoinTeamComponent } from './join-team/join-team.component';
 import { InviteTeamComponent } from './invite-team/invite-team.component';
 import { SearchUserComponent } from './search-user/search-user.component';
-import { LabelComponent } from './label/label.component';
 import { ActionDialogComponent } from './action-dialog/action-dialog.component';
 import { ActionEditComponent } from './action-edit/action-edit.component';
 import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
@@ -82,6 +81,8 @@ import { LabelEditComponent } from './label-edit/label-edit.component';
 import { ContactMergeComponent } from './contact-merge/contact-merge.component';
 import { InputSourceComponent } from './input-source/input-source.component';
 import { InputCompanyComponent } from './input-company/input-company.component';
+import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
+import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,6 @@ import { InputCompanyComponent } from './input-company/input-company.component';
     JoinTeamComponent,
     InviteTeamComponent,
     SearchUserComponent,
-    LabelComponent,
     ActionDialogComponent,
     ActionEditComponent,
     CaseConfirmComponent,
@@ -154,7 +154,6 @@ import { InputCompanyComponent } from './input-company/input-company.component';
     RecordSettingDialogComponent,
     TeamCreateComponent,
     CalendarOverlayComponent,
-    ManageLabelComponent,
     AdvancedFilterComponent,
     TaskFilterComponent,
     ContactBulkComponent,
@@ -164,7 +163,9 @@ import { InputCompanyComponent } from './input-company/input-company.component';
     LabelEditComponent,
     ContactMergeComponent,
     InputSourceComponent,
-    InputCompanyComponent
+    InputCompanyComponent,
+    AutomationShowFullComponent,
+    AutomationTreeOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -211,12 +212,15 @@ import { InputCompanyComponent } from './input-company/input-company.component';
     ImageEditComponent,
     CalendarEventComponent,
     AdvancedFilterComponent,
+    ContactBulkComponent,
     ManageLabelComponent,
     TaskFilterComponent,
     ContactMergeComponent,
     InputTagComponent,
     InputSourceComponent,
-    InputCompanyComponent
+    InputCompanyComponent,
+    AutomationShowFullComponent,
+    AutomationTreeOverlayComponent
   ],
   bootstrap: [
     ContactCreateComponent,

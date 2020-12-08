@@ -79,13 +79,14 @@
     </ng-container>
     <ng-container *ngIf="step == 3">
       <div class="duplicate-wrapper">
-        <div class="dups-container" *ngIf="sameEmails.length">
+        <div class="dups-container" *ngIf="sameContacts.length">
           <div class="f-4 font-weight-bold my-3">
-            There were <span class="f-8 c-blue">{{sameEmails.length}}</span> record duplicates found in your .csv file! Select primary data.
+            There were <span class="f-8 c-blue">{{sameContacts.length}}</span> record duplicates found in your .csv file! Select primary data.
           </div>
           <table class="table duplicate-check-table">
             <thead>
             <tr>
+              <th class="check-cell"></th>
               <ng-container *ngFor="let column of columns">
                 <th *ngIf="updateColumn[column]">
                   {{updateColumn[column]}}
@@ -95,26 +96,76 @@
             </tr>
             </thead>
             <tbody>
-            <ng-container  *ngFor="let dupItem of sameEmails; let dupIndex = index;">
-              <tr class="duplicate-row" *ngFor="let contact of dupItem.values; let row = index;"
-                [class.last-row]="row == dupItem.values.length - 1 ? true : false"
-              >
-                <ng-container *ngFor="let column of columns; let i = index;">
-                  <td *ngIf="updateColumn[column]"
-                      class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
-                  >
-                    {{contact[updateColumn[column]]}}
+            <ng-container  *ngFor="let dupItem of sameContacts; let dupIndex = index;">
+              <ng-container *ngIf="previewContacts.indexOf(dupItem.primaryId) === -1; else previewTemplate">
+                <tr class="duplicate-row" *ngFor="let contact of dupItem.values; let row = index;"
+                  [class.last-row]="row == dupItem.values.length - 1 ? true : false"
+                >
+                  <td class="check-cell">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="secondary-{{contact.id}}"
+                             [checked]="dupItem.secondaryId?.indexOf(contact.id)!==-1"
+                             (change)="$event ? toggleSecContact(dupItem, contact) : null">
+                      <label class="custom-control-label" for="secondary-{{contact.id}}"></label>
+                    </div>
                   </td>
-                </ng-container>
-                <td>
-                  <div class="custom-control custom-radio ml-auto">
-                    <input type="radio" class="custom-control-input" id="dep-{{contact.id}}" name="dep-{{dupIndex}}"
-                           [(ngModel)]="dupItem.primary" [value]="contact.id">
-                    <label class="custom-control-label f-4 font-weight-bold" for="dep-{{contact.id}}">{{dupItem.primary == contact.id ? 'Primary' : ''}}</label>
-                  </div>
-                </td>
-              </tr>
-              <tr class="blank-row"></tr>
+                  <ng-container *ngFor="let column of columns; let i = index;">
+                    <td *ngIf="updateColumn[column]"
+                        class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
+                    >
+                      {{contact[updateColumn[column]]}}
+                    </td>
+                  </ng-container>
+                  <td class="radio-cell">
+                    <div class="custom-control custom-radio ml-auto">
+                      <input type="radio" class="custom-control-input" id="primary-{{contact.id}}" name="primary-{{dupIndex}}"
+                             [(ngModel)]="dupItem.primaryId" [value]="contact.id">
+                      <label class="custom-control-label f-4 font-weight-bold" for="primary-{{contact.id}}">{{dupItem.primaryId == contact.id ? 'Primary' : ''}}</label>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="button-row">
+                  <td [colSpan]="columns.length + 2">
+                    <div class="form-group d-flex align-items-start justify-content-between" *ngIf="dupItem.values.length > 1">
+                      <div>
+                        <span class="f-1 font-weight-bold c-red"
+                          *ngIf="duplicateItems.indexOf(dupItem.primaryId) >= 0">
+                          EMAIL is duplicated. Please merge duplicated emails.
+                        </span>
+                      </div>
+                      <div class="v-center">
+                        <button type="button" class="btn btn-white-blue btn-sm f-3 font-weight-bold" (click)="keepSeparated(dupItem)">Keep Separated</button>
+                        <button type="button" class="btn btn-primary btn-sm f-3 font-weight-bold ml-2" (click)="mergePreview(dupItem)">Merge Preview</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="blank-row"></tr>
+              </ng-container>
+              <ng-template #previewTemplate>
+                <tr class="duplicate-row" *ngFor="let contact of dupItem.previews; let row = index;"
+                    [class.last-row]="row == dupItem.previews.length - 1 ? true : false"
+                >
+                  <td></td>
+                  <ng-container *ngFor="let column of columns; let i = index;">
+                    <td *ngIf="updateColumn[column]"
+                        class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
+                    >
+                      {{contact[updateColumn[column]]}}
+                    </td>
+                  </ng-container>
+                  <td></td>
+                </tr>
+                <tr class="button-row">
+                  <td [colSpan]="columns.length + 2">
+                    <div class="v-center justify-content-end" *ngIf="dupItem.values.length > 1">
+                      <button type="button" class="btn btn-white-blue btn-sm f-3 font-weight-bold" (click)="cancelPreview(dupItem)">Back</button>
+                      <button type="button" class="btn btn-primary btn-sm f-3 font-weight-bold ml-2" (click)="mergeConfirm(dupItem)">Merge</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="blank-row"></tr>
+              </ng-template>
             </ng-container>
             </tbody>
           </table>
@@ -214,13 +265,12 @@
     <ng-container *ngIf="step == 3">
       <div class="d-flex justify-content-end">
         <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-        <button class="btn btn-primary" type="button" (click)="goToReview()">Merge & Review</button>
+        <button class="btn btn-primary" type="button" (click)="goToReview()">Review</button>
       </div>
     </ng-container>
     <ng-container *ngIf="step == 4">
       <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-      <button class="btn btn-primary" (click)="upload()" *ngIf="!uploading">Import</button>
-      <app-loading-button [class]="'btn btn-primary'" [title]="'Importing...'" *ngIf="uploading"></app-loading-button>
+      <button class="btn btn-primary" (click)="upload()" [class.loading]="uploading">Import</button>
     </ng-container>
   </mat-dialog-actions>
 </div>

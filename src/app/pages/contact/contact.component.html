@@ -100,13 +100,102 @@
         <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <div class="v-center">
-                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
-                <span class="f-6 font-weight-bold ml-2">Automation</span>
+              <div class="v-center justify-content-between w-100">
+                <div class="v-center">
+                  <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
+                  <span class="f-6 font-weight-bold ml-2">Automation</span>
+                </div>
+                <!-- <div class="f-3 fw-600 c-blue c-pointer" (click)="createAutomation()">
+                  Create new automation
+                </div> -->
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="automation"></div>
+          <div class="automation">
+            <div class="v-center">
+              <app-input-automation></app-input-automation>
+              <div class="v-center automation-action ml-2">
+                <i class="d-block i-icon i-automation-start bgc-green-weak"></i>
+                <i class="d-block i-icon i-automation-cancel bgc-blue ml-2"></i>  
+              </div>
+            </div>
+            <div class="automation-detail mt-3">
+              <ng-container *ngIf="allDataSource.data?.length">
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl"
+                class="timeline timeline-one-side time-line">
+                  <mat-tree-node class="mat-tree" [class.first]="node['condition'] && node['condition']['answer'] == true" *matTreeNodeDef="let node" matTreeNodeToggle>
+                    <li class="mat-tree-node timeline-block {{ node.status }}">
+                      <div class="timeline w-100">
+                        <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
+                          <img src="../../assets/img/automations/yes.svg">
+                          <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}?</span>
+                        </div>
+                        <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
+                          <img src="../../assets/img/automations/no.svg">
+                        </div>
+                        <div class="bgc-green-weak line"></div>
+                        <div class="v-center" #treeNode (click)="easyView(node, treeNode, treeOverlay)">
+                          <span class="timeline-step {{ node.action?.type }}">
+                            <img [attr.src]="ICONS[node.action?.type]">
+                          </span>
+                          <div class="timeline-content ml-2 c-pointer">
+                            <p class="f-3 font-weight-bold title m-0 c-pointer">
+                              {{ ActionName[node.action?.type] }}
+                            </p>
+                            <div class="f-1 font-weight-bold text-left text-uppercase p-0 badge status {{ node.status }}">
+                              {{ node.status }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </mat-tree-node>
+                  <mat-nested-tree-node class="mat-nested-tree" [class.first]="node['condition'] && node['condition']['answer'] == true" *matTreeNodeDef="let node; when: hasChild">
+                    <div class="timeline-condition" *ngIf="node['condition'] && node['condition']['case']">
+                      <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
+                        <img src="../../assets/img/automations/yes.svg">
+                        <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}</span>
+                      </div>
+                      <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] &&node['condition']['answer'] == false">
+                        <img src="../../assets/img/automations/no.svg">
+                      </div>
+                      <div class="bgc-green-weak line"></div>
+                    </div>
+                    <li>
+                      <div class="d-flex mat-tree-node timeline-block c-pointer {{ node.status }}" #nestedTreeNode (click)="easyView(node, nestedTreeNode, treeOverlay)">
+                        <span class="timeline-step {{ node.action?.type }}">
+                          <img [attr.src]="ICONS[node.action?.type]">
+                        </span>
+                        <div class="timeline-content ml-2">
+                          <p class="f-3 font-weight-bold title m-0">
+                            {{ ActionName[node.action?.type] }}
+                          </p>
+                          <div class="f-1 font-weight-bold text-left text-uppercase p-0 badge status {{ node.status }}">
+                            {{ node.status }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="bgc-green-weak line"></div>
+                      <div class="d-flex p-0" [class.timeline-tree-invisible]="
+                          !treeControl.isExpanded(node)
+                        ">
+                        <ng-container matTreeNodeOutlet></ng-container>
+                      </div>
+                    </li>
+                  </mat-nested-tree-node>
+                </mat-tree>
+                <div class="v-center justify-content-center f-6 font-weight-bold c-blue c-pointer mt-3" (click)="showFullAutomation()">
+                  Show full automation
+                </div>
+                <ng-template #treeOverlay let-close="close" let-data>
+                  <app-automation-tree-overlay
+                      [dataSource]="data.data"
+                  >
+                  </app-automation-tree-overlay>
+                </ng-template>
+              </ng-container>
+            </div>
+          </div>
         </mat-expansion-panel>
         <!-- Begin Contact Automation Information -->
       </mat-accordion>

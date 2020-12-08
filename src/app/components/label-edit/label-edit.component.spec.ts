@@ -8,9 +8,8 @@ describe('LabelEditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LabelEditComponent ]
-    })
-    .compileComponents();
+      declarations: [LabelEditComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

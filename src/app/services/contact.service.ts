@@ -14,7 +14,7 @@ import { ActivityDetail } from '../models/activityDetail.model';
 import { map, catchError } from 'rxjs/operators';
 import { STATUS } from '../constants/variable.constants';
 import { SearchOption } from '../models/searchOption.model';
-
+import * as _ from 'lodash';
 interface LoadResponse {
   contacts: ContactActivity[];
 }
@@ -54,6 +54,18 @@ export class ContactService extends HttpService {
 
   create(contact: any): void {}
   /**
+   * Read the Detail information of the contact and Emit the Behavior Subject
+   * @param _id: Contact Id to read the detail information
+   * @param sortInfo: Page sort information for the next and prev contact
+   */
+  read(_id: string, sortInfo = {}): void {
+    this.readImpl(_id, sortInfo).subscribe((res) => {
+      if (res) {
+        this.storeService.selectedContact.next(res);
+      }
+    });
+  }
+  /**
    * Read the Detail information of the contact
    * @param _id: Contact Id to read the detail information
    * @param sortInfo: Page sort information for the next and prev contact
@@ -66,20 +78,71 @@ export class ContactService extends HttpService {
         catchError(this.handleError('CONTACT DETAIL', null))
       );
   }
+  update(_id: string): void {}
+  delete(_id: string): void {}
+  bulkDelete(_ids: string[]): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + CONTACT.BULK_DELETE, { ids: _ids })
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('DELETE CONTACTS', false))
+      );
+  }
+  delete$(contacts: Contact[]): any {
+    const pageContacts = this.storeService.pageContacts.getValue();
+    const remainedContacts = _.differenceBy(pageContacts, contacts, '_id');
+    this.storeService.pageContacts.next(remainedContacts);
+
+    const total = this.total.getValue();
+    this.total.next(total - contacts.length);
+    return {
+      page: remainedContacts.length,
+      total: total - contacts.length
+    };
+  }
   /**
-   * Read the Detail information of the contact and Emit the Behavior Subject
-   * @param _id: Contact Id to read the detail information
-   * @param sortInfo: Page sort information for the next and prev contact
+   *
+   * @param _ids : contact id array
+   * @param contact : information to update
+   * @param tagData : tag information to update (remove, add)
    */
-  read(_id: string, sortInfo = {}): void {
-    this.readImpl(_id, sortInfo).subscribe((res) => {
-      if (res) {
-        this.storeService.selectedContact.next(res);
+  bulkUpdate(_ids: string[], contact: any, tagData: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + CONTACT.BULK_UPDATE, {
+        contacts: _ids,
+        data: contact,
+        tags: tagData
+      })
+      .pipe(
+        map((res) => res['status'] || false),
+        catchError(this.handleError('BULK UPDATE', false))
+      );
+  }
+  bulkUpdate$(_ids: string[], contact: any, tagData: any): void {
+    const contacts = this.storeService.pageContacts.getValue();
+    contacts.forEach((e) => {
+      if (_ids.indexOf(e._id) !== -1) {
+        e.deserialize(contact);
+        if (tagData['option']) {
+          e.updateTag(tagData);
+        }
       }
     });
   }
-  update(_id: string): void {}
-  delete(_id: string): void {}
+  /**
+   * download the csv of selected contacts
+   * @param _ids : contact id array
+   */
+  downloadCSV(_ids: string[]): Observable<any[]> {
+    return this.httpClient
+      .post(this.server + CONTACT.EXPORT, {
+        contacts: _ids
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('DOWNLOAD CSV', []))
+      );
+  }
 
   loadPage(): void {
     const searchOption = this.searchOption.getValue();
@@ -152,7 +215,7 @@ export class ContactService extends HttpService {
           ? this.loadStatus.next(STATUS.SUCCESS)
           : this.loadStatus.next(STATUS.FAILURE);
         this.storeService.pageContacts.next(contacts || []);
-        this.total.next(contacts.length);
+        this.total.next((contacts || []).length);
       }
     );
   }
@@ -183,7 +246,7 @@ export class ContactService extends HttpService {
         ? this.loadStatus.next(STATUS.SUCCESS)
         : this.loadStatus.next(STATUS.FAILURE);
       this.storeService.pageContacts.next(contacts || []);
-      this.total.next(contacts.length);
+      this.total.next((contacts || []).length);
     });
   }
   normalSearchImpl(str: string): Observable<ContactActivity[]> {
@@ -200,32 +263,11 @@ export class ContactService extends HttpService {
         catchError(this.handleError('FILTER', null))
       );
   }
-  /**
-   * Reduce the Page size
-   * @param pageSize : New Page size of the Contacts
-   */
-  resizePage(pageSize: number): void {
-    const contacts = this.storeService.pageContacts.getValue();
-    const reduced = contacts.slice(0, pageSize);
-    this.storeService.pageContacts.next(reduced);
-  }
-  easySearch(keyword: string): Observable<Contact[]> {
-    return this.httpClient
-      .post(this.server + CONTACT.QUICK_SEARCH, { search: keyword })
-      .pipe(
-        map((res) =>
-          (res['data'] || []).map((data) => new Contact().deserialize(data))
-        ),
-        catchError(this.handleError('SEARCH CONTACTS', []))
-      );
-  }
-  latestContacts(_id: string): Observable<ActivityDetail[]> {
-    return this.httpClient
-      .get(this.server + CONTACT.LATEST_CONTACTS + _id)
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('GET LATEST CONTACTS', []))
-      );
+  filter(query): Observable<Contact[]> {
+    return this.httpClient.post(this.server + CONTACT.FILTER, query).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('FILTER CONTACTS', []))
+    );
   }
   getNormalSearch(str: string): any {
     return this.httpClient.post(this.server + CONTACT.NORMAL_SEARCH, {
@@ -240,30 +282,68 @@ export class ContactService extends HttpService {
         catchError(this.handleError('LOAD CONTACTS', []))
       );
   }
-  selectAll(): Observable<any> {
-    return this.httpClient.get(this.server + CONTACT.SELECT_ALL).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('SELECT ALL CONTACTS', []))
-    );
-  }
   // getSearchedContacts(query): Observable<any> {
   //   return this.httpClient.post(this.server + CONTACT.LOAD_SERACH, query).pipe(
   //     map((res) => res),
   //     catchError(this.handleError('SEARCH CONTACTS', []))
   //   );
   // }
-  getContactsByIds(ids): Observable<any> {
+  /**
+   * Reduce the Page size
+   * @param pageSize : New Page size of the Contacts
+   */
+  resizePage(pageSize: number): void {
+    const contacts = this.storeService.pageContacts.getValue();
+    const reduced = contacts.slice(0, pageSize);
+    this.storeService.pageContacts.next(reduced);
+  }
+  /**
+   * Search the contacts using keyword.
+   * @param keyword : keyword
+   */
+  easySearch(keyword: string): Observable<Contact[]> {
+    return this.httpClient
+      .post(this.server + CONTACT.QUICK_SEARCH, { search: keyword })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((data) => new Contact().deserialize(data))
+        ),
+        catchError(this.handleError('SEARCH CONTACTS', []))
+      );
+  }
+  /**
+   * Find the contacts that sent the selected material lately
+   * @param _id :Material id
+   */
+  latestContacts(_id: string): Observable<ActivityDetail[]> {
+    return this.httpClient
+      .get(this.server + CONTACT.LATEST_CONTACTS + _id)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('GET LATEST CONTACTS', []))
+      );
+  }
+  /**
+   * Select All Contacts
+   */
+  selectAll(): Observable<any> {
+    return this.httpClient.get(this.server + CONTACT.SELECT_ALL).pipe(
+      map((res) =>
+        (res['data'] || []).map((e) => new Contact().deserialize(e))
+      ),
+      catchError(this.handleError('SELECT ALL CONTACTS', []))
+    );
+  }
+  /**
+   * Load the contacts information by contact ids
+   * @param ids : contact id array
+   */
+  getContactsByIds(ids: string[]): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.LOAD_BY_IDS, { ids })
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('SEARCH CONTACTS', []))
       );
-  }
-  filter(query): Observable<Contact[]> {
-    return this.httpClient.post(this.server + CONTACT.FILTER, query).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('FILTER CONTACTS', []))
-    );
   }
 }

@@ -54,7 +54,11 @@ export class InputTagComponent implements OnInit {
 
   filteredResults: ReplaySubject<Tag[]> = new ReplaySubject<Tag[]>(1);
 
-  constructor(private tagService: TagService) {}
+  constructor(private tagService: TagService) {
+    this.tagService.tags$.subscribe((tags) => {
+      this.filteredResults.next(tags);
+    });
+  }
 
   ngOnInit(): void {
     this.formControl.valueChanges
@@ -99,6 +103,7 @@ export class InputTagComponent implements OnInit {
     _.remove(this.selectedTags, (e) => {
       return e === tag;
     });
+    this.onSelect.emit();
   }
 
   /**
@@ -116,5 +121,11 @@ export class InputTagComponent implements OnInit {
     this.inputField.nativeElement.value = '';
     this.formControl.setValue(null);
     this.keyword = '';
+    this.onSelect.emit();
+  }
+
+  focusField(): void {
+    // Focus The field
+    console.log('focus field');
   }
 }

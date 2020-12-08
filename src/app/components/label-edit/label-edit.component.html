@@ -6,19 +6,30 @@
 </div>
 <form
   #labelForm="ngForm"
-  (ngSubmit)="submitted = true; labelForm.form.valid ? editLabel() : false"
+  (ngSubmit)="labelForm.form.valid ? editLabel() : false"
 >
     <mat-dialog-content>
-        <div class="f-1 op-40 text-uppercase mt-3">
+        <div class="f-1 op-75 text-uppercase mt-3 c-dark">
             change color
         </div>
         <div class="v-center justify-content-between mt-2">
-            <div class="label-color" *ngFor="let label of labelColors">
-                <i class="i-icon i-label d-block bgc-dark c-pointer" (click)="selectColor(label.color)" [style.backgroundColor]="label.color"></i>
-                <div class="v-center justify-content-center check-icon bgc-green" *ngIf="selectedColor == label.color">
+            <div class="label-color" *ngFor="let color of LABEL_COLORS">
+                <i class="i-icon i-label d-block bgc-dark c-pointer" (click)="selectColor(color)" [style.backgroundColor]="color"></i>
+                <div class="v-center justify-content-center check-icon bgc-green" *ngIf="color == label.color">
                     <i class="d-block i-icon i-check bgc-white"></i>
                 </div>
             </div>
+            <div class="label-color" *ngIf="LABEL_COLORS.indexOf(label.color) === -1; else defaultColor;">
+                <i class="i-icon i-label d-block bgc-dark c-pointer" [style.backgroundColor]="label.color"></i>
+                <div class="v-center justify-content-center check-icon bgc-green">
+                    <i class="d-block i-icon i-check bgc-white"></i>
+                </div>
+            </div>
+            <ng-template #defaultColor>
+                <div class="label-color">
+                    <i class="i-icon i-label d-block bgc-dark c-pointer" [style.backgroundColor]="'#000'" (click)="selectColor('#000')"></i>
+                </div>
+            </ng-template>
         </div>
         <div class="f-3 font-weight-bold c-blue mt-2 c-pointer" (click)="addColor()">
             Add custom color
@@ -36,8 +47,8 @@
                 required
             />
             <span
-                class="invalid-error f-3 font-weight-bold c-red"
-                *ngIf="label.name == '' && submitted"
+                class="invalid-error f-2 c-red"
+                *ngIf="labelText.errors"
             >
                 Label name is required
             </span>
@@ -54,6 +65,7 @@
         <button
           type="submit"
           class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
+          [class.loading]="saving"
         >
           Save changes
         </button>

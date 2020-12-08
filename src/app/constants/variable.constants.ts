@@ -470,16 +470,14 @@ export const COLORS = [
 ];
 
 export const LABEL_COLORS = [
-  { color: '#0000ff', type: 'default' },
-  { color: '#00a9ff', type: 'default' },
-  { color: '#ffcc00', type: 'default' },
-  { color: '#f5325b', type: 'default' },
-  { color: '#00916e', type: 'default' },
-  { color: '#dae0f2', type: 'default' },
-  { color: '#86bbd8', type: 'default' },
-  { color: '#f26419', type: 'default' },
-  { color: '#0d5c63', type: 'default' },
-  { color: '#101336', type: 'custom' }
+  '#0000ff',
+  '#ffcc00',
+  '#f5325b',
+  '#00916e',
+  '#dae0f2',
+  '#86bbd8',
+  '#f26419',
+  '#0d5c63'
 ];
 
 export const DialogSettings = {
@@ -504,6 +502,10 @@ export const DialogSettings = {
     width: '98vw',
     maxWidth: '394px'
   },
+  AUTOMATION: {
+    width: '98vw',
+    maxWidth: '394px'
+  },
   CONFIRM: {
     width: '98vw',
     maxWidth: '400px'
@@ -514,7 +516,7 @@ export const DialogSettings = {
   },
   UPLOAD: {
     width: '98vw',
-    maxWidth: '780px',
+    maxWidth: '840px',
     disableClose: true
   }
 };
@@ -525,30 +527,35 @@ export const BulkActions = {
       label: 'Edit tasks',
       type: 'button',
       icon: 'i-edit',
-      command: 'edit'
+      command: 'edit',
+      loading: false
     },
     {
       label: 'Complete tasks',
       type: 'button',
       icon: 'i-check',
-      command: 'complete'
+      command: 'complete',
+      loading: false
     },
     {
       label: 'Delete tasks',
       type: 'button',
       icon: 'i-trash',
-      command: 'delete'
+      command: 'delete',
+      loading: false
     },
     {
       spliter: true,
       label: 'Select all',
       type: 'button',
-      command: 'select'
+      command: 'select',
+      loading: false
     },
     {
       label: 'Deselect',
       type: 'button',
-      command: 'deselect'
+      command: 'deselect',
+      loading: false
     }
   ],
   Contacts: [
@@ -556,54 +563,63 @@ export const BulkActions = {
       label: 'Add tasks',
       type: 'button',
       icon: 'i-edit',
-      command: 'add_task'
+      command: 'add_task',
+      loading: false
     },
     {
       label: 'Add notes',
       type: 'button',
       icon: 'i-template',
-      command: 'add_note'
+      command: 'add_note',
+      loading: false
     },
     {
       label: 'Send messages',
       type: 'button',
       icon: 'i-message',
-      command: 'message'
+      command: 'message',
+      loading: false
     },
     {
       label: 'Download',
       type: 'button',
       icon: 'i-download',
-      command: 'download'
+      command: 'download',
+      loading: false
     },
     {
       label: 'Edit',
       type: 'button',
       icon: 'i-edit',
-      command: 'edit'
+      command: 'edit',
+      loading: false
     },
     {
       label: 'Delete',
       type: 'button',
       icon: 'i-trash',
-      command: 'delete'
+      command: 'delete',
+      loading: false
     },
     {
       label: 'Add automation',
       type: 'button',
       icon: 'i-automation',
-      command: 'automation'
+      command: 'automation',
+      loading: false
     },
     {
       spliter: true,
       label: 'Select all',
       type: 'button',
-      command: 'select'
+      command: 'select',
+      loading: false
     },
     {
       label: 'Deselect',
       type: 'button',
-      command: 'deselect'
+      command: 'deselect',
+      loading: false
     }
   ],
   Materials: [
@@ -611,36 +627,42 @@ export const BulkActions = {
       label: 'Send via e-mail',
       type: 'button',
       icon: 'i-message',
-      command: 'email'
+      command: 'email',
+      loading: false
     },
     {
       label: 'Send via SMS',
       type: 'button',
       icon: 'i-sms-sent',
-      command: 'text'
+      command: 'text',
+      loading: false
     },
     {
       label: 'Lead Capture',
       type: 'toggle',
       status: false,
-      command: 'lead_capture'
+      command: 'lead_capture',
+      loading: false
     },
     {
       label: 'Delete',
       type: 'button',
       icon: 'i-trash',
-      command: 'delete'
+      command: 'delete',
+      loading: false
     },
     {
       spliter: true,
       label: 'Select all',
       type: 'button',
-      command: 'select'
+      command: 'select',
+      loading: false
     },
     {
       label: 'Deselect',
       type: 'button',
-      command: 'deselect'
+      command: 'deselect',
+      loading: false
     }
   ],
   Compaigns: [],
@@ -667,18 +689,21 @@ export const BulkActions = {
       label: 'Remove member',
       type: 'button',
       icon: 'i-trash',
-      command: 'delete'
+      command: 'delete',
+      loading: false
     },
     {
       spliter: true,
       label: 'Select all',
       type: 'button',
-      command: 'select'
+      command: 'select',
+      loading: false
     },
     {
       label: 'Deselect',
       type: 'button',
-      command: 'deselect'
+      command: 'deselect',
+      loading: false
     }
   ]
 };

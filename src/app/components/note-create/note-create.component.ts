@@ -10,14 +10,22 @@ import { Note } from 'src/app/models/note.model';
 })
 export class NoteCreateComponent implements OnInit {
   isSelected = false;
-  contact: Contact;
+  contacts: Contact[] = [];
   note: Note = new Note();
   constructor(
     private dialogRef: MatDialogRef<NoteCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any,
-  ) {}
+    @Inject(MAT_DIALOG_DATA) private data: any
+  ) {
+    if (this.data && this.data.contacts) {
+      this.isSelected = true;
+      this.contacts = this.data.contacts;
+    }
+  }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  selectContact(event: Contact): void {
+    this.contacts = [event];
   }
 
   submit(): void {}
