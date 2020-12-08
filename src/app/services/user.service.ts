@@ -268,5 +268,4 @@ export class UserService extends HttpService {
       catchError(this.handleError('UPDATE PROFILE'))
     );
   }
-
 }
