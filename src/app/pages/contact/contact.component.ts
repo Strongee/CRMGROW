@@ -125,6 +125,9 @@ export class ContactComponent implements OnInit {
    * @param activity : Activity Detail Information
    */
   generateUniqueId(activity: DetailActivity): string {
+    if (!activity.activity_detail) {
+      return activity._id;
+    }
     let material_id;
     switch (activity.type) {
       case 'video_trackers':
