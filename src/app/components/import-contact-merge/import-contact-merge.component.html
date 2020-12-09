@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Contacts merge</h1>
 <mat-dialog-content>
   <div class="contact-wrapper">
-    <table class="table">
+    <table class="table my-3">
       <thead>
       <th></th>
       <th>
@@ -24,7 +24,9 @@
       </th>
       </thead>
       <tbody>
-      <tr></tr>
+      <tr>
+        <td colspan="3"></td>
+      </tr>
       <tr *ngFor="let column of columns let row = index">
         <ng-container *ngIf="isCheckable(column) else selectableColumn">
           <td>
@@ -122,7 +124,7 @@
       </tbody>
     </table>
     <ng-container *ngIf="previewContact">
-      <div class="f-5 font-weight-bold text-center w-100 mt-3">Preview Contact</div>
+      <div class="f-5 font-weight-bold text-center w-100 mt-5">Preview Contact</div>
       <table class="table">
         <thead>
         <th></th>

@@ -51,7 +51,9 @@ export class ImportContactMergeComponent implements OnInit {
       this.secondaryContact = this.data.secondary;
       this.previewContact = Object.assign({}, this.primaryContact);
       this.previewContact.secondary = Object.assign({}, this.primaryContact.secondary);
-
+      if (this.primaryContact.additional) {
+        this.previewContact.addtional = Object.assign({}, this.primaryContact.additional);
+      }
       // load primary columns
       this.updateColumn = this.data.updateColumn;
       for (const name in this.updateColumn) {
@@ -140,10 +142,12 @@ export class ImportContactMergeComponent implements OnInit {
 
   changePrimarySecondarySelection(column): any {
     this.primarySecondarySelectionModel[column] = !this.primarySecondarySelectionModel[column];
+    this.mergePreview();
   }
 
   changeSecondarySecondarySelection(column): any {
     this.secondarySecondarySelectionModel[column] = !this.secondarySecondarySelectionModel[column];
+    this.mergePreview();
   }
 
   isCheckable(column): any {
@@ -166,13 +170,19 @@ export class ImportContactMergeComponent implements OnInit {
       result.push(this.primaryContact[column]);
     }
     if (this.secondarySelectionModel[index]) {
-      result.push(this.secondaryContact[column]);
+      if (result.indexOf(this.secondaryContact[column]) < 0) {
+        result.push(this.secondaryContact[column]);
+      }
     }
     if (this.primarySecondarySelectionModel[column]) {
-      result.push(this.primaryContact.secondary[column]);
+      if (result.indexOf(this.primaryContact.secondary[column]) < 0) {
+        result.push(this.primaryContact.secondary[column]);
+      }
     }
     if (this.secondarySecondarySelectionModel[column]) {
-      result.push(this.secondaryContact.secondary[column]);
+      if (result.indexOf(this.secondaryContact.secondary[column]) < 0) {
+        result.push(this.secondaryContact.secondary[column]);
+      }
     }
     return result;
   }
@@ -192,6 +202,8 @@ export class ImportContactMergeComponent implements OnInit {
           // primary
           if (checkedValues.length) {
             this.previewContact[column] = checkedValues[0];
+          } else {
+            this.previewContact[column] = '';
           }
 
           // secondary
@@ -210,7 +222,14 @@ export class ImportContactMergeComponent implements OnInit {
 
           // aditional
           if (checkedValues.length > 2) {
-
+            if (!this.previewContact.additional) {
+              this.previewContact.additional = {};
+            }
+            const val = [];
+            for (let i = 2; i < checkedValues.length; i++) {
+              val.push(checkedValues[i]);
+            }
+            this.previewContact.additional[column] = val;
           }
         } else {
           if (this.primarySelectionModel[i] && this.secondarySelectionModel[i]) {

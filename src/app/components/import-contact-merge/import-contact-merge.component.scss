@@ -3,6 +3,12 @@
   align-items: start;
 }
 
+.table thead th {
+  border-bottom: none;
+  opacity: 1;
+}
+
+
 :host ::ng-deep {
   .check-wrapper {
     .custom-radio:checked, .custom-radio:not(:checked) {
@@ -32,7 +38,7 @@
     }
 
     .custom-control-label::after {
-      top: 0.3rem;
+      top: 0.25rem;
       left: -1.5rem;
       width: 0.75rem;
       height: 0.75rem;

@@ -284,12 +284,12 @@ export class UploadContactsComponent implements OnInit {
         });
         this.contacts.push({ ...contact, id: this.contacts.length });
       });
-      this.rebuildContacts();
       const dupTest = this.checkDuplicate();
       console.log(
         dupTest,
         this.sameEmails
       );
+      this.rebuildContacts();
       if (dupTest) {
         this.step = 3;
       } else {
@@ -319,14 +319,16 @@ export class UploadContactsComponent implements OnInit {
         for (let i = 0; i < ImportSelectableColumn.length; i++) {
           if (ImportSelectableColumn[i] === 'tags') {
             const val = contact[ImportSelectableColumn[i]];
-            const tags = [];
-            const tagArray = val.split(',');
-            for (let i = 0; i < tagArray.length; i++) {
-              if (tags.indexOf(tagArray[i]) < 0) {
-                tags.push(tagArray[i]);
+            if (val) {
+              const tags = [];
+              const tagArray = val.split(',');
+              for (let i = 0; i < tagArray.length; i++) {
+                if (tags.indexOf(tagArray[i]) < 0) {
+                  tags.push(tagArray[i]);
+                }
               }
+              contact[ImportSelectableColumn[i]] = tags;
             }
-            contact[ImportSelectableColumn[i]] = tags;
           } else {
             const val = contact[ImportSelectableColumn[i]];
             if (val) {
@@ -539,8 +541,8 @@ export class UploadContactsComponent implements OnInit {
   merge(dupIndex): void {
     const primaryContactId = this.selectedMergeContacts[dupIndex].selected[0];
     const secondaryContactId = this.selectedMergeContacts[dupIndex].selected[1];
-    const primaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === primaryContactId);
-    const secondaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === secondaryContactId);
+    let primaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === primaryContactId);
+    let secondaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === secondaryContactId);
 
     if (primaryIndex < 0 || secondaryIndex < 0) {
       return;
@@ -561,16 +563,19 @@ export class UploadContactsComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           const merged = res.merged;
-          this.selectedMergeContacts[dupIndex].clear;
+          this.selectedMergeContacts[dupIndex].deselect(primaryContactId);
+          this.selectedMergeContacts[dupIndex].deselect(secondaryContactId);
           this.sameContacts[dupIndex].splice(primaryIndex, 1);
+          secondaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === secondaryContactId);
           this.sameContacts[dupIndex].splice(secondaryIndex, 1);
 
           const idxPrimary = this.contacts.findIndex((item) => item.id === primaryContactId);
-          const idxSecondary = this.contacts.findIndex((item) => item.id === secondaryContactId);
 
           if (idxPrimary >= 0) {
             this.contacts.splice(idxPrimary, 1);
           }
+
+          const idxSecondary = this.contacts.findIndex((item) => item.id === secondaryContactId);
           if (idxSecondary >= 0) {
             this.contacts.splice(idxSecondary, 1);
           }
@@ -626,7 +631,7 @@ export class UploadContactsComponent implements OnInit {
   goToReview(): void {
     let isDuplicateKey = false;
     this.duplicateItems = [];
-    this.sameContacts.forEach((dupItem) => {
+    this.sameContacts.forEach((dupItem, index) => {
       let emailKey = '';
       for (const key in this.updateColumn) {
         if (this.updateColumn[key] === 'email') {
@@ -634,21 +639,21 @@ export class UploadContactsComponent implements OnInit {
         }
       }
       if (emailKey) {
-        for (let i = 0; i < dupItem.values.length; i++) {
-          for (let j = i; j < dupItem.values.length; j++) {
+        for (let i = 0; i < dupItem.length; i++) {
+          for (let j = i; j < dupItem.length; j++) {
             if (i === j) {
               continue;
             }
-            if (dupItem.values[i][emailKey] === dupItem.values[j][emailKey]) {
+            if (dupItem[i][emailKey] === dupItem[j][emailKey]) {
               isDuplicateKey = true;
-              this.duplicateItems.push(dupItem.primaryId);
+              this.duplicateItems.push(index);
               return;
             }
           }
         }
       }
       if (!isDuplicateKey) {
-        this.contactsToUpload = this.contactsToUpload.concat(dupItem.values);
+        this.contactsToUpload = this.contactsToUpload.concat(dupItem);
       }
     });
 
