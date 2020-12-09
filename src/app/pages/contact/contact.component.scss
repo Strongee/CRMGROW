@@ -19,8 +19,9 @@
         li {
           list-style-type: none;
           img {
-            width: 24px;
-            height: 24px;
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
           }
           .badge.status {
             &.completed {
@@ -46,12 +47,17 @@
         .line {
           width: 1px;
           height: 20px;
-          margin-left: 11px;
+          margin-left: 18px;
+        }
+        .condition {
+          img {
+            height: 30px;
+          }
         }
         mat-nested-tree-node {
           .mat-tree-node {
             min-height: 40px;
-  
+            min-width: 160px;
           }
         }
         .timeline-tree-invisible {

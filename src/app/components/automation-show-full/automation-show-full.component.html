@@ -4,17 +4,17 @@
         <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
     </button>
 </div>
-<mat-dialog-content>
+<mat-dialog-content class="mt-3 p-0 m-0">
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl"
-    class="timeline timeline-one-side time-line">
+    class="timeline timeline-one-side time-line pb-3">
         <mat-tree-node class="mat-tree" [class.first]="node['condition'] && node['condition']['answer'] == true" *matTreeNodeDef="let node" matTreeNodeToggle>
         <li class="mat-tree-node timeline-block {{ node.status }}">
             <div class="timeline w-100">
-            <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
+            <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
                 <img src="../../assets/img/automations/yes.svg">
-                <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}</span>
+                <span class="f-3 font-weight-bold text-center w-100" *ngIf="node['condition']">{{ActionName[node['condition']['case']]}}?</span>
             </div>
-            <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
+            <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
                 <img src="../../assets/img/automations/no.svg">
             </div>
             <div class="bgc-green-weak line"></div>
@@ -36,12 +36,12 @@
         </mat-tree-node>
         <mat-nested-tree-node class="mat-nested-tree" [class.first]="node['condition'] && node['condition']['answer'] == true" *matTreeNodeDef="let node; when: hasChild">
         <div class="timeline-condition" *ngIf="node['condition'] && node['condition']['case']">
-            <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
-            <img src="../../assets/img/automations/yes.svg">
-            <span class="f-3 font-weight-bold text-center w-100">{{node['condition']['case']}}</span>
+            <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
+                <img src="../../assets/img/automations/yes.svg">
+                <span class="f-3 font-weight-bold text-center w-100" *ngIf="node['condition']">{{ActionName[node['condition']['case']]}}?</span>
             </div>
-            <div class="v-center justify-content-between my-1 w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
-            <img src="../../assets/img/automations/no.svg">
+            <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
+                <img src="../../assets/img/automations/no.svg">
             </div>
             <div class="bgc-green-weak line"></div>
         </div>
