@@ -57,22 +57,40 @@ export class OverlayService {
           this.overlayContainer.getContainerElement().getBoundingClientRect()
         );
       });
-      this.sub = fromEvent<MouseEvent>(document, 'click')
-        .pipe(
-          filter((event) => {
-            const clickTarget = event.target as HTMLElement;
-            return (
-              clickTarget != origin &&
-              !!this.overlayRef &&
-              !this.overlayRef.overlayElement.contains(clickTarget) &&
-              this.overlayRef.overlayElement.contains(clickTarget)
-            );
-          }),
-          take(1)
-        )
-        .subscribe(() => {
-          this.close(null);
-        });
+      if (type == 'automation') {
+        this.sub = fromEvent<MouseEvent>(document, 'click')
+          .pipe(
+            filter((event) => {
+              const clickTarget = event.target as HTMLElement;
+              return (
+                clickTarget != origin &&
+                !!this.overlayRef &&
+                !this.overlayRef.overlayElement.contains(clickTarget)
+              );
+            }),
+            take(1)
+          )
+          .subscribe(() => {
+            this.close(null);
+          });
+      } else {
+        this.sub = fromEvent<MouseEvent>(document, 'click')
+          .pipe(
+            filter((event) => {
+              const clickTarget = event.target as HTMLElement;
+              return (
+                clickTarget != origin &&
+                !!this.overlayRef &&
+                !this.overlayRef.overlayElement.contains(clickTarget) &&
+                this.overlayRef.overlayElement.contains(clickTarget)
+              );
+            }),
+            take(1)
+          )
+          .subscribe(() => {
+            this.close(null);
+          });
+      }
       return this.onClosed.pipe(take(1));
     }
   }
