@@ -1,21 +1,21 @@
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
   REGIONS,
   STAGES
 } from 'src/app/constants/variable.constants';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 
 @Component({
-  selector: 'app-contact-create',
-  templateUrl: './contact-edit.component.html',
-  styleUrls: ['./contact-edit.component.scss']
+  selector: 'app-import-contact-edit',
+  templateUrl: './import-contact-edit.component.html',
+  styleUrls: ['./import-contact-edit.component.scss']
 })
-export class ContactEditComponent implements OnInit, OnDestroy {
+export class ImportContactEditComponent implements OnInit, OnDestroy {
   // Setting Variable for the UI
   countries: CountryISO[] = [
     CountryISO.UnitedStates,
@@ -40,7 +40,7 @@ export class ContactEditComponent implements OnInit, OnDestroy {
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
   constructor(
-    private dialogRef: MatDialogRef<ContactEditComponent>,
+    private dialogRef: MatDialogRef<ImportContactEditComponent>,
     private contactService: ContactService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -49,14 +49,15 @@ export class ContactEditComponent implements OnInit, OnDestroy {
     this.contact = {
       ...this.data
     };
-    this.cell_phone = this.contact.cell_phone;
+
+    this.cell_phone = this.contact['phone'];
   }
   ngOnDestroy(): void {}
 
   edit(): void {
     const contact = {
       ...this.contact,
-      phone: this.cell_phone
+      phone: this.cell_phone ? this.cell_phone.internationalNumber : ''
     };
     this.dialogRef.close({ contact });
   }

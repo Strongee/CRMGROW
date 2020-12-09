@@ -111,8 +111,9 @@
                 <td class="check-cell">
                   <div class="custom-control custom-checkbox" *ngIf="dupItem.length > 1">
                     <input type="checkbox" class="custom-control-input" id="duplicate-{{contact.id}}"
-                           [checked]="isSelectedMerge(contact.id)"
-                           (change)="$event ? toggleContact(contact) : null">
+                           [checked]="isSelectedMerge(dupIndex, contact.id)"
+                           (change)="$event ? selectedMergeContacts[dupIndex].toggle(contact.id) : null"
+                           [disabled]="isDisable(dupIndex, contact.id)">
                     <label class="custom-control-label" for="duplicate-{{contact.id}}"></label>
                   </div>
                 </td>
@@ -120,7 +121,7 @@
                   <td *ngIf="updateColumn[column]"
                       class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
                   >
-                    {{contact[updateColumn[column]]}}
+                    <div [innerHTML]="isSelectableColumn(updateColumn[column]) ? selectableContent(updateColumn[column], contact[updateColumn[column]]) : contact[updateColumn[column]]"></div>
                   </td>
                 </ng-container>
                 <td class="actions">
@@ -143,16 +144,10 @@
               </tr>
               <tr class="button-row">
                 <td [colSpan]="columns.length + 2">
-                  <div class="form-group d-flex align-items-start justify-content-between" *ngIf="dupItem.values.length > 1">
-                    <div>
-                      <span class="f-1 font-weight-bold c-red"
-                        *ngIf="duplicateItems.indexOf(dupItem.primaryId) >= 0">
-                        EMAIL is duplicated. Please merge duplicated emails.
-                      </span>
-                    </div>
+                  <div class="form-group d-flex align-items-start justify-content-between" *ngIf="this.selectedMergeContacts[dupIndex].selected.length > 1">
                     <div class="v-center">
                       <button type="button" class="btn btn-white-blue btn-sm f-3 font-weight-bold" (click)="keepSeparated(dupItem)">Keep Separated</button>
-                      <button type="button" class="btn btn-primary btn-sm f-3 font-weight-bold ml-2" (click)="mergePreview(dupItem)">Merge</button>
+                      <button type="button" class="btn btn-primary btn-sm f-3 font-weight-bold ml-2" (click)="merge(dupIndex)">Merge</button>
                     </div>
                   </div>
                 </td>
