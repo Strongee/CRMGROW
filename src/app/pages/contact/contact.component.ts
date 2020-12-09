@@ -249,8 +249,7 @@ export class ContactComponent implements OnInit {
     }
 
     for (const firstChild of root.children)
-      for (const secondChild of firstChild.children)
-        for (const thirdChild of secondChild.children) thirdChild.children = [];
+      for (const secondChild of firstChild.children) secondChild.children = [];
 
     this.dataSource.data = [];
     this.dataSource.data.push(root);

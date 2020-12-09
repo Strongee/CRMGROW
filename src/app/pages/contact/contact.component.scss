@@ -15,13 +15,12 @@
     }
     .automation-detail {
       mat-tree {
-        overflow-x: auto;
         li {
           list-style-type: none;
           img {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
           }
           .badge.status {
             &.completed {
@@ -46,18 +45,25 @@
         }
         .line {
           width: 1px;
-          height: 20px;
-          margin-left: 18px;
+          height: 25px;
+          margin-left: 11px;
         }
         .condition {
           img {
-            height: 30px;
+            width: 24px;
+            height: 20px;
+          }
+        }
+        .timeline-content {
+          height: 24px;
+          div {
+            line-height: 1;
           }
         }
         mat-nested-tree-node {
           .mat-tree-node {
-            min-height: 40px;
-            min-width: 160px;
+            min-height: 24px;
+            min-width: 120px;
           }
         }
         .timeline-tree-invisible {

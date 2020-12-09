@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="contact-panel d-flex">
-    <div class="contact-info-panel pr-4c">
+    <div class="contact-info-panel pr-3">
       <div class="contact-main d-flex">
         <div class="contact-avatar lg font-weight-bold">
           {{contact.avatarName}}
@@ -121,13 +121,13 @@
             </div>
             <div class="automation-detail mt-3" *ngIf="allDataSource.data?.length">
               <mat-tree [dataSource]="dataSource" [treeControl]="treeControl"
-              class="timeline timeline-one-side time-line pb-3">
+              class="timeline timeline-one-side time-line">
                 <mat-tree-node class="mat-tree" [class.first]="node['condition'] && node['condition']['answer'] == true" *matTreeNodeDef="let node" matTreeNodeToggle>
                   <li class="mat-tree-node timeline-block {{ node.status }}">
                     <div class="timeline w-100">
                       <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
                         <img src="../../assets/img/automations/yes.svg">
-                        <span class="f-3 font-weight-bold text-center w-100" *ngIf="node['condition']">{{ActionName[node['condition']['case']]}}?</span>
+                        <span class="f-1 font-weight-bold text-center w-100" *ngIf="node['condition']">{{ActionName[node['condition']['case']]}}?</span>
                       </div>
                       <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
                         <img src="../../assets/img/automations/no.svg">
@@ -137,10 +137,10 @@
                         <span class="timeline-step {{ node.action?.type }}">
                           <img [attr.src]="ICONS[node.action?.type]">
                         </span>
-                        <div class="timeline-content ml-2">
-                          <p class="f-3 font-weight-bold title m-0">
+                        <div class="timeline-content ml-1">
+                          <div class="f-1 font-weight-bold title m-0">
                             {{ ActionName[node.action?.type] }}
-                          </p>
+                          </div>
                           <div class="f-1 font-weight-bold text-left text-uppercase p-0 badge status {{ node.status }}">
                             {{ node.status }}
                           </div>
@@ -153,7 +153,7 @@
                   <div class="timeline-condition" *ngIf="node['condition'] && node['condition']['case']">
                     <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == true">
                       <img src="../../assets/img/automations/yes.svg">
-                      <span class="f-3 font-weight-bold text-center w-100" *ngIf="node['condition']">{{ActionName[node['condition']['case']]}}?</span>
+                      <span class="f-1 font-weight-bold text-center w-100" *ngIf="node['condition']">{{ActionName[node['condition']['case']]}}?</span>
                     </div>
                     <div class="v-center justify-content-between w-100 condition" *ngIf="node['condition'] && node['condition']['answer'] == false">
                       <img src="../../assets/img/automations/no.svg">
@@ -165,10 +165,10 @@
                       <span class="timeline-step {{ node.action?.type }}">
                         <img [attr.src]="ICONS[node.action?.type]">
                       </span>
-                      <div class="timeline-content ml-2">
-                        <p class="f-3 font-weight-bold title m-0">
+                      <div class="timeline-content ml-1">
+                        <div class="f-1 font-weight-bold title m-0">
                           {{ ActionName[node.action?.type] }}
-                        </p>
+                        </div>
                         <div class="f-1 font-weight-bold text-left text-uppercase p-0 badge status {{ node.status }}">
                           {{ node.status }}
                         </div>
