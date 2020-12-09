@@ -138,7 +138,7 @@ export class CalendarComponent implements OnInit {
 
   createEvent(event: any, origin: any, content: any): void {
     this.overlayService
-      .open(origin, content, this.viewContainerRef, {
+      .open(origin, content, this.viewContainerRef, 'create', {
         data: {
           start_date: event.date,
           type: 'month'
@@ -181,7 +181,7 @@ export class CalendarComponent implements OnInit {
 
   hourClicked(date: any, origin: any, content: any): void {
     this.overlayService
-      .open(origin, content, this.viewContainerRef, {
+      .open(origin, content, this.viewContainerRef, 'create', {
         data: {
           start_date: date,
           type: 'week'
@@ -268,7 +268,7 @@ export class CalendarComponent implements OnInit {
 
   handleEvent(event: any, origin: any, content: any): void {
     this.overlayService
-      .open(origin, content, this.viewContainerRef, {
+      .open(origin, content, this.viewContainerRef, 'edit', {
         data: {
           event: event
         }

@@ -269,7 +269,7 @@ export class ContactComponent implements OnInit {
   }
 
   easyView(node: any, origin: any, content: any): void {
-    this.overlayService.open(origin, content, this.viewContainerRef, {
+    this.overlayService.open(origin, content, this.viewContainerRef, 'create', {
       data: node
     });
   }
