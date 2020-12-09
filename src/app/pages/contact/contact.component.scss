@@ -150,6 +150,14 @@
             border: none;
             outline: none;
           }
+          border-bottom: 1px solid #c6c7cf;
+        }
+        .message-body {
+          textarea {
+            border: none;
+            outline: none;
+            resize: none;
+          }
         }
       }
     }
