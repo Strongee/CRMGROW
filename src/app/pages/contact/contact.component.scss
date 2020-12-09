@@ -137,6 +137,23 @@
       transition: all .3s;
     }
   }
+  .tab-panel {
+    border: 1px solid #c6c7cf;
+    .message-panel {
+      .message-box {
+        .sender, .receiver {
+          background-color: rgba(16,19,54,0.04);
+          border-bottom: 1px solid #c6c7cf;
+        }
+        .message-title {
+          input {
+            border: none;
+            outline: none;
+          }
+        }
+      }
+    }
+  }
 }
 
 // History Panel
@@ -181,6 +198,7 @@
         border-radius: 8px;
         border: 1px solid $color-trans28;
         transition: box-shadow .2s;
+        word-break: break-all;
 
         &:hover {
           box-shadow: 0px 2px 10px $color-trans28;
