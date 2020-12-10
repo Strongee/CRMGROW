@@ -53,7 +53,7 @@ export class VideoEditComponent implements OnInit {
     const video = {};
     const keys = ['title', 'thumbnail', 'description', 'site_image'];
     keys.forEach((e) => {
-      if (this.video[e] != this.data[e]) {
+      if (this.video[e] != this.data.material[e]) {
         video[e] = this.video[e];
       }
     });

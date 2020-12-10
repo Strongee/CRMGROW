@@ -399,7 +399,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="video.default_edited == false" (click)="duplicateMaterial(video, 'video')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>
@@ -516,7 +516,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="video.default_edited == false" (click)="duplicateMaterial(video, 'video')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>
@@ -675,7 +675,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -786,7 +786,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -809,7 +809,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="pdf.default_edited == false" (click)="duplicateMaterial(pdf, 'pdf')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                         </button>
@@ -897,7 +897,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -920,7 +920,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="pdf.default_edited == false" (click)="duplicateMaterial(pdf, 'pdf')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                         </button>
@@ -1077,7 +1077,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ image._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -1188,7 +1188,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ image._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -1211,7 +1211,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="image.default_edited == false" (click)="duplicateMaterial(image, 'image')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>
@@ -1299,7 +1299,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ image._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -1322,7 +1322,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="image.default_edited == false" (click)="duplicateMaterial(image, 'image')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>

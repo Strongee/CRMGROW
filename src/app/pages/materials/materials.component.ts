@@ -459,11 +459,14 @@ export class MaterialsComponent implements OnInit {
         maxWidth: '500px',
         disableClose: true,
         data: {
-          _id: pdf._id,
-          title: pdf.title,
-          description: pdf.description,
-          preview: pdf.preview,
-          role: pdf.role
+          material: {
+            _id: pdf._id,
+            title: pdf.title,
+            description: pdf.description,
+            preview: pdf.preview,
+            role: pdf.role
+          },
+          type: 'edit'
         }
       })
       .afterClosed()
@@ -509,10 +512,13 @@ export class MaterialsComponent implements OnInit {
         maxWidth: '500px',
         disableClose: true,
         data: {
-          _id: image._id,
-          title: image.title,
-          description: image.description,
-          preview: image.preview
+          material: {
+            _id: image._id,
+            title: image.title,
+            description: image.description,
+            preview: image.preview
+          },
+          type: 'edit'
         }
       })
       .afterClosed()
@@ -574,33 +580,89 @@ export class MaterialsComponent implements OnInit {
           })
           .afterClosed()
           .subscribe((res) => {
-            const newVideo = {
-              ...material,
-              _id: res._id,
-              title: res.title,
-              description: res.description,
-              thumbnail: res.thumbnail,
-              role: 'user'
-            };
-            this.ownVideos.push(newVideo);
+            if (res) {
+              const newVideo = {
+                ...material,
+                _id: res._id,
+                title: res.title,
+                description: res.description,
+                thumbnail: res.thumbnail,
+                role: 'user',
+                default_edited: true
+              };
+              this.ownVideos.push(newVideo);
+            }
           });
         break;
       case 'pdf':
-        const pdf = {
-          url: material.url,
-          title: material.title,
-          description: material.description,
-          preview: material.preview
-        };
-        this.materialService.createPdf(pdf).subscribe((res) => {});
+        this.dialog
+          .open(PdfEditComponent, {
+            position: { top: '5vh' },
+            width: '100vw',
+            maxWidth: '500px',
+            disableClose: true,
+            data: {
+              material: {
+                _id: material._id,
+                url: material.url,
+                title: material.title,
+                description: material.description,
+                preview: material.preview,
+                role: material.role
+              },
+              type: 'duplicate'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const newPdf = {
+                ...material,
+                _id: res._id,
+                title: res.title,
+                description: res.description,
+                preview: res.preview,
+                role: 'user',
+                default_edited: true
+              };
+              this.ownPdfs.push(newPdf);
+            }
+          });
         break;
       case 'image':
-        const image = {
-          title: material.title,
-          description: material.description,
-          preview: material.preview
-        };
-        this.materialService.createImage(image).subscribe((res) => {});
+        this.dialog
+          .open(ImageEditComponent, {
+            position: { top: '5vh' },
+            width: '100vw',
+            maxWidth: '500px',
+            disableClose: true,
+            data: {
+              material: {
+                _id: material._id,
+                title: material.title,
+                description: material.description,
+                preview: material.preview,
+                role: material.role,
+                url: material.url
+              },
+              type: 'duplicate'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const newImage = {
+                ...material,
+                _id: res._id,
+                title: res.title,
+                description: res.description,
+                preview: res.preview,
+                role: 'user',
+                default_edited: true
+              };
+              this.ownImages.push(newImage);
+            }
+          });
         break;
     }
   }
