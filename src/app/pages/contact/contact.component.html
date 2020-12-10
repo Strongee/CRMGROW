@@ -21,6 +21,10 @@
       <div class="my-3 py-2">
         <app-label-select [value]="contact.label" type="form"></app-label-select>
       </div>
+      <div class="v-center justify-content-between mb-3">
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm mx-1">Create group call</button>
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm mx-1">Create appointment</button>
+      </div>
       <mat-accordion multi class="general-panels">
         <!-- Begin Contact Detail -->
         <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
@@ -215,7 +219,41 @@
               (click)="mainAction = 'create_note'">Note</div>
           </div>
           <div class="tab-panel">
-
+            <div class="message-panel" *ngIf="mainAction === 'send_message'">
+              <div class="message-box">
+                <div class="sender px-3 py-2">
+                  <label class="f-6 op-56 m-0">From:</label>
+                  <span class="ml-2">Thomas NewMan</span>
+                </div>
+                <div class="v-center justify-content-between receiver px-3 py-2">
+                  <div>
+                    <label class="f-6 op-56 m-0">To:</label>
+                    <span class="ml-2 f-6 c-blue">Andrew Johnson (andrew.johnson@airframe.io)</span>
+                  </div>
+                  <div>
+                    <span class="f-6 c-blue">Add Cc</span>
+                    <span class="f-6 c-blue ml-3">Add Bcc</span>
+                  </div>
+                </div>
+                <div class="message-title px-3 py-2">
+                  <input
+                    class="w-100"
+                    type="text"
+                    placeholder="Subject:"
+                  >
+                </div>
+                <div class="message-body px-3 py-2">
+                  <button class="btn-white border-0 f-1 font-weight-bold op-28 p-0">Show Shortcut Tokens</button>
+                  <textarea
+                    class="w-100"
+                    placeholder="Start typing here..."
+                    rows="4" cols="50"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="note-panel" *ngIf="mainAction === 'create_note'">
+            </div>
           </div>
         </div>
       </div>
