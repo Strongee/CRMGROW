@@ -11,6 +11,36 @@
     <div class="form-group">
         <h6 class="f-3 font-weight-bold mb-1">Required fields</h6>
         <label class="f-1 mb-3">Informations required from your visitors</label>
+        <div class="v-center required-field mb-2" *ngFor="let field of defaultField">
+            <div class="f-3 field-name">{{field.name}}</div>
+            <div class="custom-control custom-checkbox">
+                <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{field.name}}" 
+                    [checked]="garbage.capture_field.email"
+                    (change)="statusChange($event, 'email')"
+                    *ngIf="field.name == 'Email'"
+                />
+                <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{field.name}}" 
+                    [checked]="garbage.capture_field.first_name"
+                    (change)="statusChange($event, 'name')"
+                    *ngIf="field.name == 'Name'"
+                />
+                <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{field.name}}" 
+                    [checked]="garbage.capture_field.cell_phone"
+                    (change)="statusChange($event, 'phone')"
+                    *ngIf="field.name == 'Phone'"
+                />
+                <label class="custom-control-label" for="{{field.name}}"></label>
+            </div>
+        </div>
         <div class="v-center required-field mb-2" *ngFor="let field of garbage.additional_fields">
             <div class="f-3 field-name">{{field.name}}</div>
             <div class="custom-control custom-checkbox">
@@ -23,7 +53,7 @@
                 />
                 <label class="custom-control-label" for="{{field.name}}"></label>
             </div>
-            <div class="v-center" *ngIf="field.id != '0' && field.id != '1' && field.id != '2'">
+            <div class="v-center">
                 <i class="d-block i-icon i-edit bgc-blue ml-3 c-pointer" (click)="editField(field)"></i>
                 <i class="d-block i-icon i-trash bgc-red ml-3 c-pointer" (click)="deleteField(field)"></i>
             </div>

@@ -88,32 +88,7 @@ export class Garbage implements Deserializable {
     placeholder: string;
     status: boolean;
     options: { value: string; label: string }[];
-  }[] = [
-    {
-      id: '0',
-      name: 'Name',
-      options: [],
-      placeholder: 'name',
-      status: true,
-      type: 'text'
-    },
-    {
-      id: '1',
-      name: 'Text',
-      options: [],
-      placeholder: 'text',
-      status: true,
-      type: 'text'
-    },
-    {
-      id: '2',
-      name: 'Email',
-      options: [],
-      placeholder: 'email',
-      status: true,
-      type: 'text'
-    }
-  ];
+  }[] = [];
 
   deserialize(input: any): this {
     Object.entries(input).forEach(([key, value]) => {

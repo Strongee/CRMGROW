@@ -5,7 +5,6 @@ import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/cus
 import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-delete/custom-field-delete.component';
 import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
-import { deserialize } from 'v8';
 
 @Component({
   selector: 'app-lead-capture',
@@ -16,14 +15,34 @@ export class LeadCaptureComponent implements OnInit {
   times = DELAY;
   garbage: Garbage = new Garbage();
   saving = false;
+  defaultField = [
+    {
+      id: '',
+      name: 'Email',
+      options: [],
+      placeholder: 'email',
+      type: 'text'
+    },
+    {
+      id: '',
+      name: 'Name',
+      options: [],
+      placeholder: 'name',
+      type: 'text'
+    },
+    {
+      id: '',
+      name: 'Phone',
+      options: [],
+      placeholder: 'phone',
+      type: 'text'
+    }
+  ];
 
   constructor(private dialog: MatDialog, public userService: UserService) {
     this.userService.garbage$.subscribe((res) => {
       if (res) {
-        this.garbage.additional_fields = [
-          ...this.garbage.additional_fields,
-          ...res.additional_fields
-        ];
+        this.garbage = new Garbage().deserialize(res);
       }
     });
   }
@@ -106,20 +125,26 @@ export class LeadCaptureComponent implements OnInit {
       });
   }
 
-  statusChange(evt: any, field: any): void {
-    field.status = evt.target.checked;
+  statusChange(evt: any, type: string): void {
+    switch (type) {
+      case 'email':
+        this.garbage.capture_field.email = evt.target.checked;
+        break;
+      case 'name':
+        this.garbage.capture_field.first_name = evt.target.checked;
+        break;
+      case 'phone':
+        this.garbage.capture_field.cell_phone = evt.target.checked;
+        break;
+    }
   }
 
   saveDelay(): void {
     this.saving = true;
-    const data = new Garbage().deserialize(this.garbage);
-    data.additional_fields = data.additional_fields.filter(
-      (field) => field.id != '0' && field.id != '1' && field.id != '2'
-    );
-    this.userService.updateGarbage(data).subscribe(
+    this.userService.updateGarbage(this.garbage).subscribe(
       () => {
         this.saving = false;
-        this.userService.updateGarbageImpl(data);
+        this.userService.updateGarbageImpl(this.garbage);
       },
       () => {
         this.saving = false;
