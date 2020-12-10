@@ -3,6 +3,9 @@
     max-width: 400px;
     .form-control {
         width: 150px;
+        @media screen and (max-width: 576px) {
+            width: 100%;
+        }
     }
     .form-group {
         .add-button {

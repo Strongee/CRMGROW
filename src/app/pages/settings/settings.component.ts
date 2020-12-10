@@ -28,14 +28,22 @@ export class SettingsComponent implements OnInit {
   ];
   defaultPage = 'notifications';
   currentPage: string;
+  currentPageItem: PageMenuItem[];
 
   constructor(private location: Location, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.currentPage = this.route.snapshot.params['page'] || this.defaultPage;
+    this.currentPageItem = this.menuItems.filter(
+      (item) => item.id == this.currentPage
+    );
   }
   changeMenu(menu: PageMenuItem): void {
     this.currentPage = menu.id;
+    this.currentPageItem = this.menuItems.filter(
+      (item) => item.id == this.currentPage
+    );
+    console.log('##', this.currentPageItem);
     this.location.replaceState(`settings/${menu.id}`);
   }
 }

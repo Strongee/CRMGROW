@@ -10,6 +10,14 @@
             }
         }
     }
+    .delay-time {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @media screen and (max-width: 576px) {
+            display: block;
+        }
+    }
     .btn-blue {
         &:hover {
             color: white;
