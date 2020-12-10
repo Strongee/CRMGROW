@@ -15,6 +15,11 @@ import { UserService } from '../../services/user.service';
 import * as _ from 'lodash';
 import { saveAs } from 'file-saver';
 import { MatDrawer } from '@angular/material/sidenav';
+import { Subscription } from 'rxjs';
+import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bulk.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
+import { AutomationAssignComponent } from 'src/app/components/automation-assign/automation-assign.component';
+import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -44,7 +49,9 @@ export class ContactsComponent implements OnInit {
     { id: 25, label: '25' },
     { id: 50, label: '50' }
   ];
+
   @ViewChild('drawer') drawer: MatDrawer;
+  @ViewChild('editPanel') editPanel: ContactBulkComponent;
   panelType = '';
 
   sortType = this.SORT_TYPES[0];
@@ -57,7 +64,10 @@ export class ContactsComponent implements OnInit {
   pageSelection: Contact[] = [];
   pageContacts: ContactActivity[] = [];
 
-  tags = [];
+  // Variables for Label Update
+  isUpdating = false;
+  updateSubscription: Subscription;
+
   constructor(
     public router: Router,
     public storeService: StoreService,
@@ -158,22 +168,9 @@ export class ContactsComponent implements OnInit {
     this.sortType = type;
   }
 
-  toggle(contact: ContactActivity): void {
-    const selectedContact = contact.mainInfo;
-    const toggledSelection = _.xorBy(
-      this.pageSelection,
-      [selectedContact],
-      '_id'
-    );
-    this.pageSelection = toggledSelection;
-
-    const toggledAllSelection = _.xorBy(
-      this.selection,
-      [selectedContact],
-      '_id'
-    );
-    this.selection = toggledAllSelection;
-  }
+  /**
+   * Toggle All Elements in Page
+   */
   masterToggle(): void {
     if (this.isAllSelected()) {
       this.selection = _.differenceBy(
@@ -191,9 +188,36 @@ export class ContactsComponent implements OnInit {
       }
     });
   }
+  /**
+   * Toggle Element
+   * @param contact : Contact
+   */
+  toggle(contact: ContactActivity): void {
+    const selectedContact = contact.mainInfo;
+    const toggledSelection = _.xorBy(
+      this.pageSelection,
+      [selectedContact],
+      '_id'
+    );
+    this.pageSelection = toggledSelection;
+
+    const toggledAllSelection = _.xorBy(
+      this.selection,
+      [selectedContact],
+      '_id'
+    );
+    this.selection = toggledAllSelection;
+  }
+  /**
+   * Check contact is selected.
+   * @param contact : ContactActivity
+   */
   isSelected(contact: ContactActivity): boolean {
     return _.findIndex(this.pageSelection, contact.mainInfo, '_id') !== -1;
   }
+  /**
+   * Check all contacts in page are selected.
+   */
   isAllSelected(): boolean {
     return this.pageSelection.length === this.pageSize.id;
   }
@@ -210,6 +234,33 @@ export class ContactsComponent implements OnInit {
   openContact(contact: ContactActivity): void {
     this.router.navigate([`contacts/${contact._id}`]);
   }
+
+  /**
+   * Update the Label of the current contact or selected contacts.
+   * @param label : Label to update
+   * @param _id : id of contact to update
+   */
+  updateLabel(label: string, _id: string): void {
+    const newLabel = label ? label : '';
+    let ids = [];
+    this.selection.forEach((e) => {
+      ids.push(e._id);
+    });
+    if (ids.indexOf(_id) === -1) {
+      ids = [_id];
+    }
+    this.isUpdating = true;
+    this.updateSubscription && this.updateSubscription.unsubscribe();
+    this.updateSubscription = this.contactService
+      .bulkUpdate(ids, { label: newLabel }, {})
+      .subscribe((status) => {
+        this.isUpdating = false;
+        if (status) {
+          this.contactService.bulkUpdate$(ids, { label: newLabel }, {});
+        }
+      });
+  }
+
   /**
    * Run the bulk action
    * @param event Bulk Action Command
@@ -233,12 +284,16 @@ export class ContactsComponent implements OnInit {
         this.downloadCSV();
         break;
       case 'message':
+        this.openMessageDlg();
         break;
       case 'add_note':
+        this.openNoteDlg();
         break;
       case 'add_task':
+        this.openTaskDlg();
         break;
       case 'automation':
+        this.openAutomationDlg();
         break;
     }
   }
@@ -380,9 +435,40 @@ export class ContactsComponent implements OnInit {
     });
   }
 
+  /**
+   * Bulk Edit Open
+   */
   bulkEdit(): void {
     this.panelType = 'editor';
     this.drawer.open();
+  }
+
+  openMessageDlg(): void {
+    // this.dialog.open(Message)
+  }
+
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.NOTE,
+      data: {
+        contacts: this.selection
+      }
+    });
+  }
+
+  openTaskDlg(): void {
+    this.dialog.open(TaskCreateComponent, {
+      ...DialogSettings.TASK,
+      data: {
+        contacts: this.selection
+      }
+    });
+  }
+
+  openAutomationDlg(): void {
+    this.dialog.open(AutomationAssignComponent, {
+      ...DialogSettings.AUTOMATION
+    });
   }
 
   /**
@@ -393,9 +479,15 @@ export class ContactsComponent implements OnInit {
     this.changePage($event);
   }
 
+  /**
+   * Panel Open and Close event
+   * @param $event Panel Open Status
+   */
   setPanelType($event: boolean): void {
     if (!$event) {
       this.panelType = '';
+    } else {
+      this.editPanel.clearForm();
     }
   }
 

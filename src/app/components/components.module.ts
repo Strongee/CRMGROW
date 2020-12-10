@@ -40,7 +40,6 @@ import { CalendarDeclineComponent } from './calendar-decline/calendar-decline.co
 import { JoinTeamComponent } from './join-team/join-team.component';
 import { InviteTeamComponent } from './invite-team/invite-team.component';
 import { SearchUserComponent } from './search-user/search-user.component';
-import { LabelComponent } from './label/label.component';
 import { ActionDialogComponent } from './action-dialog/action-dialog.component';
 import { ActionEditComponent } from './action-edit/action-edit.component';
 import { CaseConfirmComponent } from './case-confirm/case-confirm.component';
@@ -84,6 +83,8 @@ import { InputSourceComponent } from './input-source/input-source.component';
 import { InputCompanyComponent } from './input-company/input-company.component';
 import { ImportContactEditComponent } from './import-contact-edit/import-contact-edit.component';
 import { ImportContactMergeComponent } from './import-contact-merge/import-contact-merge.component';
+import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
+import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,6 @@ import { ImportContactMergeComponent } from './import-contact-merge/import-conta
     JoinTeamComponent,
     InviteTeamComponent,
     SearchUserComponent,
-    LabelComponent,
     ActionDialogComponent,
     ActionEditComponent,
     CaseConfirmComponent,
@@ -156,7 +156,6 @@ import { ImportContactMergeComponent } from './import-contact-merge/import-conta
     RecordSettingDialogComponent,
     TeamCreateComponent,
     CalendarOverlayComponent,
-    ManageLabelComponent,
     AdvancedFilterComponent,
     TaskFilterComponent,
     ContactBulkComponent,
@@ -168,7 +167,9 @@ import { ImportContactMergeComponent } from './import-contact-merge/import-conta
     InputSourceComponent,
     InputCompanyComponent,
     ImportContactEditComponent,
-    ImportContactMergeComponent
+    ImportContactMergeComponent,
+    AutomationShowFullComponent,
+    AutomationTreeOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -221,7 +222,9 @@ import { ImportContactMergeComponent } from './import-contact-merge/import-conta
     ContactMergeComponent,
     InputTagComponent,
     InputSourceComponent,
-    InputCompanyComponent
+    InputCompanyComponent,
+    AutomationShowFullComponent,
+    AutomationTreeOverlayComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -38,10 +38,9 @@
             </ng-container>
         </div>
         <ng-container *ngIf="isLoading">
-            <div class="px-3 pb-3">
-              <div class="bg-white rounded">
-                <app-loading-overlay [type]="'screen'"></app-loading-overlay>
-              </div>
+            <div class="list-loading text-center">
+                <div class="loader mt-5 lg"></div>
+                <h4 class="fw-600 mt-2">Loading theme ...</h4>
             </div>
         </ng-container>
     </form>

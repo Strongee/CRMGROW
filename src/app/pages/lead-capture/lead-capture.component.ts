@@ -15,14 +15,39 @@ export class LeadCaptureComponent implements OnInit {
   times = DELAY;
   garbage: Garbage = new Garbage();
   saving = false;
+  defaultField = [
+    {
+      id: '',
+      name: 'Email',
+      options: [],
+      placeholder: 'email',
+      type: 'text'
+    },
+    {
+      id: '',
+      name: 'Name',
+      options: [],
+      placeholder: 'name',
+      type: 'text'
+    },
+    {
+      id: '',
+      name: 'Phone',
+      options: [],
+      placeholder: 'phone',
+      type: 'text'
+    }
+  ];
 
-  constructor(private dialog: MatDialog, public userService: UserService) {}
-
-  ngOnInit(): void {
+  constructor(private dialog: MatDialog, public userService: UserService) {
     this.userService.garbage$.subscribe((res) => {
-      this.garbage = new Garbage().deserialize(res);
+      if (res) {
+        this.garbage = new Garbage().deserialize(res);
+      }
     });
   }
+
+  ngOnInit(): void {}
 
   addField(): void {
     this.dialog
@@ -36,7 +61,7 @@ export class LeadCaptureComponent implements OnInit {
         if (res) {
           if (res.mode == 'text') {
             const data = {
-              id: '',
+              id: (this.garbage.additional_fields.length + 1).toString(),
               name: res.field,
               placeholder: res.placeholder,
               options: [],
@@ -46,7 +71,7 @@ export class LeadCaptureComponent implements OnInit {
             this.garbage.additional_fields.push(data);
           } else {
             const data = {
-              id: '',
+              id: (this.garbage.additional_fields.length + 1).toString(),
               name: res.field,
               placeholder: '',
               options: res.options,
@@ -92,7 +117,7 @@ export class LeadCaptureComponent implements OnInit {
       .subscribe((res) => {
         if (res == true) {
           const required_fields = this.garbage.additional_fields.filter(
-            (field) => field.name != deleteData.name
+            (field) => field.id != deleteData.id
           );
           this.garbage.additional_fields = [];
           this.garbage.additional_fields = required_fields;
@@ -100,8 +125,18 @@ export class LeadCaptureComponent implements OnInit {
       });
   }
 
-  statusChange(evt: any, field: any): void {
-    field.status = evt.target.checked;
+  statusChange(evt: any, type: string): void {
+    switch (type) {
+      case 'email':
+        this.garbage.capture_field.email = evt.target.checked;
+        break;
+      case 'name':
+        this.garbage.capture_field.first_name = evt.target.checked;
+        break;
+      case 'phone':
+        this.garbage.capture_field.cell_phone = evt.target.checked;
+        break;
+    }
   }
 
   saveDelay(): void {

@@ -470,16 +470,14 @@ export const COLORS = [
 ];
 
 export const LABEL_COLORS = [
-  { color: '#0000ff', type: 'default' },
-  { color: '#00a9ff', type: 'default' },
-  { color: '#ffcc00', type: 'default' },
-  { color: '#f5325b', type: 'default' },
-  { color: '#00916e', type: 'default' },
-  { color: '#dae0f2', type: 'default' },
-  { color: '#86bbd8', type: 'default' },
-  { color: '#f26419', type: 'default' },
-  { color: '#0d5c63', type: 'default' },
-  { color: '#101336', type: 'custom' }
+  '#0000ff',
+  '#ffcc00',
+  '#f5325b',
+  '#00916e',
+  '#dae0f2',
+  '#86bbd8',
+  '#f26419',
+  '#0d5c63'
 ];
 
 export const DialogSettings = {
@@ -501,6 +499,10 @@ export const DialogSettings = {
     maxWidth: '394px'
   },
   NOTE: {
+    width: '98vw',
+    maxWidth: '394px'
+  },
+  AUTOMATION: {
     width: '98vw',
     maxWidth: '394px'
   },

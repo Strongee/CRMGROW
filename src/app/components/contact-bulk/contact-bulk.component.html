@@ -5,7 +5,7 @@
   <form #form="ngForm" (ngSubmit)="form.form.valid ? update() : false">
     <div class="form-group">
       <label>status</label>
-      <app-label-select type="form" defaultLabel="Original"></app-label-select>
+      <app-label-select type="form" defaultLabel="Original" [value]="contact.label" (valueChange)="contact.label = $event"></app-label-select>
     </div>
     <div class="form-group">
       <label for="bulk-source">source</label>
@@ -62,7 +62,7 @@
 
     <div class="mt-4 d-flex">
       <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="close()">Cancel</button>
-      <button type="submit" class="btn btn-primary ml-2" [class.loading]="loading">Save</button>
+      <button type="submit" class="btn btn-primary ml-2" [class.loading]="isUpdating">Save</button>
     </div>
   </form>
 </div>

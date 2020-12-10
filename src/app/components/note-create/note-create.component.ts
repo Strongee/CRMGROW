@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { Note } from 'src/app/models/note.model';
+import { NoteService } from 'src/app/services/note.service';
 
 @Component({
   selector: 'app-note-create',
@@ -10,15 +12,48 @@ import { Note } from 'src/app/models/note.model';
 })
 export class NoteCreateComponent implements OnInit {
   isSelected = false;
-  contact: Contact;
+  contacts: Contact[] = [];
   note: Note = new Note();
-  constructor(
-    private dialogRef: MatDialogRef<NoteCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any,
-  ) {}
+  saving = false;
+  saveSubscription: Subscription;
 
-  ngOnInit(): void {
+  constructor(
+    private noteService: NoteService,
+    private dialogRef: MatDialogRef<NoteCreateComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: any
+  ) {
+    if (this.data && this.data.contacts) {
+      this.isSelected = true;
+      this.contacts = this.data.contacts;
+    }
   }
 
-  submit(): void {}
+  ngOnInit(): void {}
+
+  selectContact(event: Contact): void {
+    this.contacts = [event];
+  }
+
+  submit(): void {
+    if (!this.contacts.length) {
+      return;
+    }
+    this.saving = true;
+    const ids = [];
+    this.contacts.forEach((e) => {
+      ids.push(e._id);
+    });
+    const data = {
+      contacts: ids,
+      title: this.note.title,
+      content: this.note.content
+    };
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    this.saveSubscription = this.noteService
+      .bulkCreate(data)
+      .subscribe((res) => {
+        this.saving = false;
+        this.dialogRef.close();
+      });
+  }
 }

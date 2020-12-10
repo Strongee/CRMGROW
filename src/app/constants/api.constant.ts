@@ -41,9 +41,19 @@ export const GARBAGE = {
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'
 };
+export const NOTE = {
+  CREATE: 'note',
+  BULK_CREATE: 'note/create',
+  DELETE: 'note',
+  UPDATE: 'note'
+};
 export const TASK = {
   CREATE: 'follow/',
+  BULK_CREATE: 'follow/create',
   UPDATE: 'follow/',
+  BULK_UPDATE: 'follow/update',
+  BULK_COMPLETE: 'follow/checked',
+  BULK_ARCHIVE: 'follow/archived',
   TODAY: 'follow/date?due_date=today',
   TOMORROW: 'follow/date?due_date=tomorrow',
   NEXT_WEEK: 'follow/date?due_date=next_week',

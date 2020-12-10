@@ -19,10 +19,7 @@ export class ThemeComponent implements OnInit {
   options = {
     projectId: UnlayerThemeId,
     templateId: undefined,
-    customJS: [
-      'https://app.crmgrow.com/customTool/crmgrow_video.js',
-      'https://app.crmgrow.com/customTool/crmgrow_video1.js'
-    ]
+    customJS: ['http://127.0.0.1:3000/customTool/crmgrow_video.js']
   };
   theme = {
     created_at: '',

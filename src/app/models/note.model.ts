@@ -3,6 +3,7 @@ import { Deserializable } from './deserialize.model';
 export class Note implements Deserializable {
   _id: string;
   user: string;
+  title: string;
   content: string;
   contact: string;
   updated_at: Date;

@@ -14,67 +14,22 @@ import { LabelEditComponent } from '../label-edit/label-edit.component';
 })
 export class ManageLabelComponent implements OnInit {
   loading = false;
-  color;
-  editItem: Label = new Label().deserialize({
+  newLabel: Label = new Label().deserialize({
     color: '#000',
-    name: 'Default color'
+    name: ''
   });
-  labelName = '';
-  labelsLength = 3;
+  labelLength = 0;
   constructor(private dialog: MatDialog, public labelService: LabelService) {}
 
-  ngOnInit(): void {}
-
-  saveLabel(): void {
-    if (this.editItem) {
-      const updateLabel = {
-        ...this.editItem,
-        color: this.color,
-        name: this.labelName
-      };
-      this.labelService
-        .updateLabel(this.editItem._id, updateLabel)
-        .subscribe((res) => {
-          if (res) {
-            console.log('updated label ========>', res);
-          }
-        });
-    } else {
-      const createLabel = {
-        color: this.color,
-        name: this.labelName,
-        font_color: 'black'
-      };
-      this.labelService
-        .createLabel({
-          ...createLabel,
-          priority: (this.labelsLength + 1) * 1000
-        })
-        .subscribe((res) => {
-          if (res) {
-            console.log('updated label ========>', res);
-          }
-        });
-    }
-  }
-
-  editLabel(label: any): void {
-    this.dialog
-      .open(LabelEditComponent, {
-        position: { top: '100px' },
-        width: '100vw',
-        maxWidth: '400px',
-        maxHeight: '400px',
-        data: {
-          label: label
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          label = res;
+  ngOnInit(): void {
+    this.labelService.labels$.subscribe((labels) => {
+      this.labelLength = 0;
+      labels.forEach((e) => {
+        if (e.role !== 'admin') {
+          this.labelLength++;
         }
       });
+    });
   }
 
   editLabelColor(): void {
@@ -88,12 +43,38 @@ export class ManageLabelComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.color = res;
+          this.newLabel.color = res;
         }
       });
   }
 
-  removeLabel(label): void {
+  saveLabel(): void {
+    this.labelService
+      .createLabel(
+        this.newLabel.deserialize({ priority: (this.labelLength + 1) * 1000 })
+      )
+      .subscribe((newLabel) => {
+        if (newLabel) {
+          this.labelService.create$(newLabel);
+          this.newLabel = new Label().deserialize({
+            color: '#000',
+            name: ''
+          });
+        }
+      });
+  }
+
+  editLabel(label: Label): void {
+    this.dialog.open(LabelEditComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '400px',
+      maxHeight: '400px',
+      data: label
+    });
+  }
+
+  removeLabel(label: Label): void {
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
         message: 'Are you sure to remove the label?',
@@ -101,19 +82,12 @@ export class ManageLabelComponent implements OnInit {
         confirmLabel: 'Remove'
       }
     });
-
     dialog.afterClosed().subscribe((res) => {
       if (res) {
-        this.labelService.deleteLabel(label._id).subscribe((response) => {
-          let i;
-          // for (i = label.priority / 100; i < this.labels.length; i++) {
-          //   const lb = this.labels[i];
-          //   const tmp = lb;
-          //   tmp['priority'] = lb.priority - 100;
-          //   this.labelService
-          //     .updateLabel(lb._id, tmp)
-          //     .subscribe((result) => {});
-          // }
+        this.labelService.deleteLabel(label._id).subscribe((status) => {
+          if (status) {
+            this.labelService.delete$(label._id);
+          }
         });
       }
     });

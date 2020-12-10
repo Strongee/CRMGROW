@@ -1,12 +1,23 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false">
   <h1 mat-dialog-title>Add new task</h1>
   <mat-dialog-content>
+    <ng-container *ngIf="isSelected">
+      <div class="f-6 mb-2">
+        adding to 
+        <span class="f-6 c-blue font-weight-bold">{{contacts[0].fullName}}</span>
+        <ng-container *ngIf="contacts.length > 1">
+          and <span class="f-6 c-blue font-weight-bold">{{contacts.length - 1}} contact(s)</span>
+        </ng-container>
+      </div>
+    </ng-container>
+    
     <div class="form-group">
       <label>type of the task</label>
       <div>
         <app-task-type [(value)]="task.type"></app-task-type>
       </div>
     </div>
+    
     <div class="form-group">
       <label for="content_tc">task regarding</label>
       <input type="text" class="form-control" id="content_tc" name="content" #content="ngModel" [(ngModel)]="task.content" required>
@@ -14,10 +25,14 @@
         <ng-container *ngIf="content.errors.required">Required!</ng-container>
       </span>
     </div>
-    <div class="form-group">
-      <label for="contact_tc">assign to contact</label>
-      <app-select-contact></app-select-contact>
-    </div>
+
+    <ng-container *ngIf="!isSelected">
+      <div class="form-group">
+        <label for="contact_tc">assign to contact</label>
+        <app-select-contact (onSelect)="selectContact($event)"></app-select-contact>
+      </div>  
+    </ng-container>
+    
     <div class="row">
       <div class="col-sm-6 col-12">
         <div class="form-group">
@@ -85,6 +100,6 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button class="btn c-blue" mat-dialog-close>Cancel</button>
-    <button class="btn btn-primary">Create</button>
+    <button class="btn btn-primary" [class.loading]="saving">Create</button>
   </mat-dialog-actions>
 </form>

@@ -1,7 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { STAGES } from 'src/app/constants/variable.constants';
 import { Contact } from 'src/app/models/contact.model';
+import { ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-contact-bulk',
@@ -16,6 +18,7 @@ export class ContactBulkComponent implements OnInit {
     PULL: 3,
     SET: 4
   };
+  @Input('contacts') contacts: Contact[] = [];
   @Output() onClose = new EventEmitter();
 
   contact: Contact = new Contact().deserialize({
@@ -25,9 +28,20 @@ export class ContactBulkComponent implements OnInit {
   loading = false;
   tagMode = this.MODE.KEEP; // 1, 2, 3, 4
 
-  constructor() {}
+  updateSubscription: Subscription;
+  isUpdating = false;
+
+  constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {}
+
+  clearForm(): void {
+    this.contact = new Contact().deserialize({
+      recruiting_stage: '',
+      tags: []
+    });
+    this.tagMode = this.MODE.KEEP;
+  }
 
   update(): void {
     const data = {};
@@ -53,6 +67,21 @@ export class ContactBulkComponent implements OnInit {
     if (!dataKeys.length && !tagKeys.length) {
       return;
     }
+
+    const ids = [];
+    this.contacts.forEach((e) => {
+      ids.push(e._id);
+    });
+    this.isUpdating = true;
+    this.updateSubscription && this.updateSubscription.unsubscribe();
+    this.updateSubscription = this.contactService
+      .bulkUpdate(ids, data, tagData)
+      .subscribe((status) => {
+        this.isUpdating = false;
+        if (status) {
+          this.contactService.bulkUpdate$(ids, data, tagData);
+        }
+      });
   }
 
   close(): void {

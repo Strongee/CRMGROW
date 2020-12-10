@@ -2,8 +2,87 @@
 
 .contact-info-panel {
   min-width: 376px;
+  .automation {
+    app-input-automation {
+      width: 100%;
+    }
+    .automation-action {
+      i {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+      }
+    }
+    .automation-detail {
+      mat-tree {
+        overflow-x: auto;
+        li {
+          list-style-type: none;
+          img {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+          }
+          .badge.status {
+            &.completed {
+              color: $color-green-weak;
+            }
+            &.checking {
+              color: $color-orange-weak;
+            }
+            &.pending {
+              color: $color-orange-weak;
+            }
+            &.active {
+              color: $color-blue;
+            }
+            &.disabled {
+              color: $color-red;
+            }
+            &.error {
+              color: $color-red;
+            }
+          }
+        }
+        .line {
+          width: 1px;
+          height: 20px;
+          margin-left: 18px;
+        }
+        .condition {
+          img {
+            height: 30px;
+          }
+        }
+        mat-nested-tree-node {
+          .mat-tree-node {
+            min-height: 40px;
+            min-width: 160px;
+          }
+        }
+        .timeline-tree-invisible {
+          mat-tree-node {
+            &.mat-tree {
+              &.first {
+                  order: 1;
+              }
+              order: 2;
+            }
+            align-items: flex-start;
+          }
+          mat-nested-tree-node {
+            &.mat-nested-tree {
+              &.first {
+                order: 1;
+              }
+              order: 2
+            }
+          }
+        }
+      }
+    }
+  }
 }
-
 
 .contact-action-panel {
   &::before {

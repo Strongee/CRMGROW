@@ -18,9 +18,8 @@ import { FormControl } from '@angular/forms';
 import { FileService } from 'src/app/services/file.service';
 import { QuillEditorComponent } from 'ngx-quill';
 import { LabelService } from 'src/app/services/label.service';
-import { LabelComponent } from '../label/label.component';
 import { UserService } from '../../services/user.service';
-import {Task} from "../../models/task.model";
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-action-edit',
@@ -118,7 +117,6 @@ export class ActionEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getLabels();
     if (this.data.action.type.indexOf('email') !== -1) {
       this.mediaType = 'email';
     } else {
@@ -255,7 +253,6 @@ export class ActionEditComponent implements OnInit {
     if (this.mediaType) {
       this.loadTemplates();
     }
-
   }
 
   loadMaterials(): void {
@@ -312,59 +309,6 @@ export class ActionEditComponent implements OnInit {
     );
   }
 
-  getLabels(): void {
-    this.labelsLoading = true;
-    this.labelService.getLabels().subscribe(
-      async (res: any) => {
-        this.labels = res.sort((a, b) => {
-          return a.priority - b.priority;
-        });
-        this.labels.unshift({
-          _id: '',
-          color: 'ghostwhite',
-          font_color: 'gray',
-          name: 'No Label'
-        });
-        this.labelsLoading = false;
-      },
-      (err) => {
-        this.labelsLoading = false;
-      }
-    );
-  }
-  getLabelById(id): any {
-    let retVal = { color: 'white', font_color: 'black' };
-    let i;
-    for (i = 0; i < this.labels.length; i++) {
-      if (this.labels[i]._id === id) {
-        retVal = this.labels[i];
-      }
-    }
-    return retVal;
-  }
-  changeLabel(label): void {
-    if (label !== 'createlabel') {
-      this.commandLabel = label;
-      if (this.commandLabel) {
-        this.error = '';
-      }
-    } else {
-      this.openLabelDialog();
-    }
-  }
-  openLabelDialog(): void {
-    this.dialog
-      .open(LabelComponent, {
-        position: { top: '5vh' },
-        width: '96vw',
-        maxWidth: '500px'
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        this.getLabels();
-      });
-  }
-
   removeError(): void {
     this.error = '';
   }
@@ -404,7 +348,12 @@ export class ActionEditComponent implements OnInit {
       } else {
         this.action[this.materialType] = this.material;
       }
-      console.log("update ============>", this.material, this.materialType, this.action);
+      console.log(
+        'update ============>',
+        this.material,
+        this.materialType,
+        this.action
+      );
     }
     if (this.type === 'follow_up') {
       if (this.followDueOption === 'date') {
