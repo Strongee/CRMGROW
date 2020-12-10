@@ -96,7 +96,7 @@
             <tr>
               <th class="check-cell"></th>
               <ng-container *ngFor="let column of columns">
-                <th *ngIf="updateColumn[column]">
+                <th [class]="column" *ngIf="updateColumn[column]">
                   {{updateColumn[column]}}
                 </th>
               </ng-container>
@@ -119,9 +119,11 @@
                 </td>
                 <ng-container *ngFor="let column of columns; let i = index;">
                   <td *ngIf="updateColumn[column]"
-                      class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
+                      class="{{column}} f-3 font-weight-bold last-row"
                   >
-                    <div [innerHTML]="isSelectableColumn(updateColumn[column]) ? selectableContent(updateColumn[column], contact[updateColumn[column]]) : contact[updateColumn[column]]"></div>
+                    <div [class]="column" [innerHTML]="isSelectableColumn(updateColumn[column]) ?
+                      (selectableContent(updateColumn[column], contact[updateColumn[column]]) | stripTags | shorten: 80: '...') :
+                      (contact[updateColumn[column]] | stripTags | shorten: 80: '...')"></div>
                   </td>
                 </ng-container>
                 <td class="actions">
@@ -145,14 +147,14 @@
               <tr class="button-row">
                 <td [colSpan]="columns.length + 2">
                   <div>
-                        <span class="f-1 font-weight-bold c-red"
-                              *ngIf="duplicateItems.indexOf(dupIndex) >= 0">
-                          EMAIL is duplicated. Please merge duplicated emails.
-                        </span>
+                      <span class="f-1 font-weight-bold c-red"
+                            *ngIf="duplicateItems.indexOf(dupIndex) >= 0">
+                        EMAIL is duplicated. Please merge duplicated emails.
+                      </span>
                   </div>
-                  <div class="v-center justify-content-end" *ngIf="this.selectedMergeContacts[dupIndex].selected.length > 1">
-<!--                      <button type="button" class="btn btn-white-blue btn-sm f-3 font-weight-bold" (click)="keepSeparated(dupItem)">Keep Separated</button>-->
-                    <button type="button" class="btn btn-primary btn-sm f-3 font-weight-bold ml-2" (click)="merge(dupIndex)">Merge</button>
+                  <div class="v-center mt-2" *ngIf="this.selectedMergeContacts[dupIndex].selected.length > 1">
+                    <!--                      <button type="button" class="btn btn-white-blue btn-sm f-3 font-weight-bold" (click)="keepSeparated(dupItem)">Keep Separated</button>-->
+                    <button type="button" class="btn btn-primary btn-sm f-3 font-weight-bold" (click)="merge(dupIndex)">Merge</button>
                   </div>
                 </td>
               </tr>
@@ -164,40 +166,42 @@
       </div>
     </ng-container>
     <ng-container *ngIf="step == 4">
-      <table class="table">
-        <thead>
-        <tr>
-          <th class="check-cell border-top-0">
-            <div class="custom-control custom-checkbox" (click)="selectAllContacts()">
-              <input type="checkbox" class="custom-control-input" id="select_import_contacts" (change)="selectAllContacts()" [checked]="isSelectedContacts()">
-              <label class="custom-control-label" for="select_import_contacts"></label>
-            </div>
-          </th>
-          <ng-container *ngFor="let column of columns">
-            <th *ngIf="updateColumn[column]">
-              {{updateColumn[column]}}
+      <div class="review-container">
+        <table class="table">
+          <thead>
+          <tr>
+            <th class="check-cell border-top-0">
+              <div class="custom-control custom-checkbox" (click)="selectAllContacts()">
+                <input type="checkbox" class="custom-control-input" id="select_import_contacts" (change)="selectAllContacts()" [checked]="isSelectedContacts()">
+                <label class="custom-control-label" for="select_import_contacts"></label>
+              </div>
             </th>
-          </ng-container>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let record of contactsToUpload; let row = index;">
-          <td class="check-cell">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="record-{{record.id}}" (change)="selectedImportContacts.toggle(record.id)" [checked]="selectedImportContacts.isSelected(record.id)">
-              <label class="custom-control-label" for="record-{{record.id}}"></label>
-            </div>
-          </td>
-          <ng-container *ngFor="let column of columns; let i = index;">
-            <td *ngIf="updateColumn[column]"
-                class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
-            >
-              <div [innerHTML]="isSelectableColumn(updateColumn[column]) ? selectableContent(updateColumn[column], record[updateColumn[column]]) : record[updateColumn[column]]"></div>
+            <ng-container *ngFor="let column of columns">
+              <th *ngIf="updateColumn[column]">
+                {{updateColumn[column]}}
+              </th>
+            </ng-container>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let record of contactsToUpload; let row = index;">
+            <td class="check-cell">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="record-{{record.id}}" (change)="selectedImportContacts.toggle(record.id)" [checked]="selectedImportContacts.isSelected(record.id)">
+                <label class="custom-control-label" for="record-{{record.id}}"></label>
+              </div>
             </td>
-          </ng-container>
-        </tr>
-        </tbody>
-      </table>
+            <ng-container *ngFor="let column of columns; let i = index;">
+              <td *ngIf="updateColumn[column]"
+                  class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
+              >
+                <div [class]="column" [innerHTML]="isSelectableColumn(updateColumn[column]) ? selectableContent(updateColumn[column], record[updateColumn[column]]) : record[updateColumn[column]]"></div>
+              </td>
+            </ng-container>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </ng-container>
 <!--    <ng-container *ngIf="step == 5">-->
 <!--      <p class="p-2 text-white alert-warning">-->
