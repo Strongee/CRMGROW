@@ -59,7 +59,9 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="primary-{{column}}"
                      [checked]="primarySelectionModel[row]"
-                     (change)="$event ? changePrimarySelection(row) : null">
+                     (change)="$event ? changePrimarySelection(row) : null"
+                     [disabled]="primaryContact[column] == '' || primaryContact[column] == undefined"
+              >
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectablePrimaryColumn">
                 <label class="custom-control-label"
                        for="primary-{{column}}"
@@ -75,7 +77,9 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="secondary-{{column}}"
                      [checked]="secondarySelectionModel[row]"
-                     (change)="$event ? changeSecondarySelection(row) : null">
+                     (change)="$event ? changeSecondarySelection(row) : null"
+                     [disabled]="secondaryContact[column] == '' || secondaryContact[column] == undefined"
+              >
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectableSecondaryColumn">
                 <label class="custom-control-label"
                        for="secondary-{{column}}"
@@ -107,7 +111,9 @@
             <div class="custom-control custom-checkbox" *ngIf="primaryContact.secondary">
               <input type="checkbox" class="custom-control-input" id="primary-secondary-{{secondaryColumn}}"
                      [checked]="primarySecondarySelectionModel[secondaryColumn]"
-                     (change)="$event ? changePrimarySecondarySelection(secondaryColumn) : null">
+                     (change)="$event ? changePrimarySecondarySelection(secondaryColumn) : null"
+                     [disabled]="primaryContact.secondary[secondaryColumn] == '' || primaryContact.secondary[secondaryColumn] == undefined"
+              >
               <label class="custom-control-label" for="primary-secondary-{{secondaryColumn}}">{{primaryContact.secondary[secondaryColumn]}}</label>
             </div>
           </td>
@@ -115,7 +121,9 @@
             <div class="custom-control custom-checkbox" *ngIf="secondaryContact.secondary">
               <input type="checkbox" class="custom-control-input" id="secondary-secondary-{{secondaryColumn}}"
                      [checked]="secondarySecondarySelectionModel[secondaryColumn]"
-                     (change)="$event ? changeSecondarySecondarySelection(secondaryColumn) : null">
+                     (change)="$event ? changeSecondarySecondarySelection(secondaryColumn) : null"
+                     [disabled]="secondaryContact.secondary[secondaryColumn] == '' || secondaryContact.secondary[secondaryColumn] == undefined"
+              >
               <label class="custom-control-label" for="secondary-secondary-{{secondaryColumn}}">{{secondaryContact.secondary[secondaryColumn]}}</label>
             </div>
           </td>

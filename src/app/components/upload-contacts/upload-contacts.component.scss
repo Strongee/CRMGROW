@@ -1,5 +1,6 @@
 .dialog-container{
   padding: 0;
+  max-width: 800px;
 
   .f-22 {
     font-size: 22px;
@@ -23,6 +24,18 @@
   .table {
     td {
       padding: 10px;
+    }
+
+    .note {
+      width: 150px;
+    }
+
+    @media screen and (max-width: 576px) {
+      .crmgrow-property {
+        select {
+          width: 140px;
+        }
+      }
     }
   }
   .round-check {
@@ -56,29 +69,6 @@
   }
 }
 
-.columns-container {
-  max-height: calc(100vh - 400px);
-  overflow-y: auto;
-  .column-list {
-    background-color: white;
-    border-right: 1px solid gainsboro;
-
-    .column-item {
-      min-height: 36px;
-      padding: 5px 10px;
-      border-top: 1px solid #d9e1e8;
-      cursor: pointer;
-
-      &.selected {
-        background-color: #d3edff;
-      }
-
-      &:hover {
-        background-color: #eaf7ff;
-      }
-    }
-  }
-}
 
 .example-data {
   overflow: hidden;
@@ -90,48 +80,43 @@
 }
 
 .duplicate-wrapper {
-  margin-left: -10px;
-  margin-right: -10px;
+  max-height: 60vh;
+  overflow: auto;
+
+  .duplicate-check-table {
+
+    th {
+      border-bottom: none;
+    }
+
+    .duplicate-row {
+      background-color: #f5f6fd;
+      border-bottom: 2px solid #e9ecef;
+
+      &.last-row {
+        border-bottom: none;
+      }
+    }
+
+    .blank-row {
+      background-color: #ffffff;
+      height: 10px;
+    }
+
+    td {
+      padding: 15px 10px;
+    }
+  }
 }
 
-.dialog-header{
-  position: relative;
-  padding-right: 30px;
-  .close-button {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    cursor: pointer;
-  }
+.review-container {
+  width: 100%;
+  max-height: 60vh;
+  overflow: auto;
 }
 
 .template-screenshot {
   width: 100%;
-}
-
-.duplicate-check-table {
-
-  th {
-    border-bottom: none;
-  }
-
-  .duplicate-row {
-    background-color: #f5f6fd;
-    border-bottom: 2px solid #e9ecef;
-
-    &.last-row {
-      border-bottom: none;
-    }
-  }
-
-  .blank-row {
-    background-color: #ffffff;
-    height: 10px;
-  }
-
-  td {
-    padding: 15px 10px;
-  }
 }
 
 .upload-container {

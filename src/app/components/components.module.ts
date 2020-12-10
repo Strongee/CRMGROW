@@ -85,6 +85,7 @@ import { ImportContactEditComponent } from './import-contact-edit/import-contact
 import { ImportContactMergeComponent } from './import-contact-merge/import-contact-merge.component';
 import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
 import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
+import { ImportContactMergeConfirmComponent } from './import-contact-merge-confirm/import-contact-merge-confirm.component';
 
 @NgModule({
   declarations: [
@@ -169,7 +170,8 @@ import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automa
     ImportContactEditComponent,
     ImportContactMergeComponent,
     AutomationShowFullComponent,
-    AutomationTreeOverlayComponent
+    AutomationTreeOverlayComponent,
+    ImportContactMergeConfirmComponent
   ],
   imports: [
     CommonModule,

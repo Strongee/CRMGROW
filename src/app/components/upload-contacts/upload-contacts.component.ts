@@ -10,8 +10,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { UserService } from '../../services/user.service';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { ImportContactEditComponent } from '../import-contact-edit/import-contact-edit.component';
-import {ImportContactMergeComponent} from "../import-contact-merge/import-contact-merge.component";
-import {ImportSelectableColumn} from "../../constants/variable.constants";
+import { ImportContactMergeComponent } from '../import-contact-merge/import-contact-merge.component';
+import {
+  DialogSettings,
+  ImportSelectableColumn
+} from '../../constants/variable.constants';
 
 @Component({
   selector: 'app-upload-contacts',
@@ -270,7 +273,7 @@ export class UploadContactsComponent implements OnInit {
           const newColumn = this.updateColumn[originColumn];
           if (newColumn) {
             if (newColumn === 'note') {
-              let obj = {};
+              const obj = {};
               obj[originColumn] = e;
               if (Array.isArray(contact[newColumn])) {
                 contact[newColumn].push(obj);
@@ -285,10 +288,7 @@ export class UploadContactsComponent implements OnInit {
         this.contacts.push({ ...contact, id: this.contacts.length });
       });
       const dupTest = this.checkDuplicate();
-      console.log(
-        dupTest,
-        this.sameEmails
-      );
+      console.log(dupTest, this.sameEmails);
       this.rebuildContacts();
       if (dupTest) {
         this.step = 3;
@@ -541,8 +541,12 @@ export class UploadContactsComponent implements OnInit {
   merge(dupIndex): void {
     const primaryContactId = this.selectedMergeContacts[dupIndex].selected[0];
     const secondaryContactId = this.selectedMergeContacts[dupIndex].selected[1];
-    let primaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === primaryContactId);
-    let secondaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === secondaryContactId);
+    const primaryIndex = this.sameContacts[dupIndex].findIndex(
+      (item) => item.id === primaryContactId
+    );
+    let secondaryIndex = this.sameContacts[dupIndex].findIndex(
+      (item) => item.id === secondaryContactId
+    );
 
     if (primaryIndex < 0 || secondaryIndex < 0) {
       return;
@@ -553,6 +557,7 @@ export class UploadContactsComponent implements OnInit {
 
     this.dialog
       .open(ImportContactMergeComponent, {
+        ...DialogSettings.UPLOAD,
         data: {
           primary: primaryContact,
           secondary: secondaryContact,
@@ -566,16 +571,22 @@ export class UploadContactsComponent implements OnInit {
           this.selectedMergeContacts[dupIndex].deselect(primaryContactId);
           this.selectedMergeContacts[dupIndex].deselect(secondaryContactId);
           this.sameContacts[dupIndex].splice(primaryIndex, 1);
-          secondaryIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === secondaryContactId);
+          secondaryIndex = this.sameContacts[dupIndex].findIndex(
+            (item) => item.id === secondaryContactId
+          );
           this.sameContacts[dupIndex].splice(secondaryIndex, 1);
 
-          const idxPrimary = this.contacts.findIndex((item) => item.id === primaryContactId);
+          const idxPrimary = this.contacts.findIndex(
+            (item) => item.id === primaryContactId
+          );
 
           if (idxPrimary >= 0) {
             this.contacts.splice(idxPrimary, 1);
           }
 
-          const idxSecondary = this.contacts.findIndex((item) => item.id === secondaryContactId);
+          const idxSecondary = this.contacts.findIndex(
+            (item) => item.id === secondaryContactId
+          );
           if (idxSecondary >= 0) {
             this.contacts.splice(idxSecondary, 1);
           }
@@ -814,7 +825,7 @@ export class UploadContactsComponent implements OnInit {
     this.dialog
       .open(ImportContactEditComponent, {
         data: {
-          ...contact,
+          ...contact
         }
       })
       .afterClosed()
