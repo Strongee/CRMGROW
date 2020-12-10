@@ -315,7 +315,7 @@ export class ImportContactMergeComponent implements OnInit {
               this.previewContact.additional = {};
             }
             const val = [];
-            for (let j = 2; j < checkedValues.length; i++) {
+            for (let j = 2; j < checkedValues.length; j++) {
               val.push(checkedValues[j]);
             }
             this.previewContact.additional[column] = val;
