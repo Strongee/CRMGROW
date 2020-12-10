@@ -439,7 +439,8 @@ export class MaterialsComponent implements OnInit {
               _id: res['data']['_id'],
               title: res['data']['title'],
               description: res['data']['description'],
-              thumbnail: res['data']['thumbnail']
+              thumbnail: res['data']['thumbnail'],
+              default_edited: true
             };
             this.ownVideos.push(newVideo);
           } else {
@@ -492,7 +493,8 @@ export class MaterialsComponent implements OnInit {
               _id: res['data']['_id'],
               title: res['data']['title'],
               description: res['data']['description'],
-              thumbnail: res['data']['preview']
+              thumbnail: res['data']['preview'],
+              default_edited: true
             };
             this.ownPdfs.push(newPdf);
           } else {
@@ -544,7 +546,8 @@ export class MaterialsComponent implements OnInit {
               _id: res['data']['_id'],
               title: res['data']['title'],
               description: res['data']['description'],
-              thumbnail: res['data']['preview']
+              thumbnail: res['data']['preview'],
+              default_edited: true
             };
             this.ownImages.push(newImage);
           } else {
