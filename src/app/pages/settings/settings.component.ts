@@ -43,7 +43,6 @@ export class SettingsComponent implements OnInit {
     this.currentPageItem = this.menuItems.filter(
       (item) => item.id == this.currentPage
     );
-    console.log('##', this.currentPageItem);
     this.location.replaceState(`settings/${menu.id}`);
   }
 }
