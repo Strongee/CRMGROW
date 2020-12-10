@@ -406,11 +406,14 @@ export class MaterialsComponent implements OnInit {
         maxWidth: '500px',
         disableClose: true,
         data: {
-          _id: video._id,
-          title: video.title,
-          description: video.description,
-          thumbnail: video.thumbnail,
-          role: video.role
+          material: {
+            _id: video._id,
+            title: video.title,
+            description: video.description,
+            thumbnail: video.thumbnail,
+            role: video.role
+          },
+          type: 'edit'
         }
       })
       .afterClosed()
@@ -550,41 +553,37 @@ export class MaterialsComponent implements OnInit {
   duplicateMaterial(material: any, type: string): void {
     switch (type) {
       case 'video':
-        let video;
-        if (material.role == 'admin') {
-          video = {
-            url: material.url,
-            title: material.title,
-            duration: material.duration,
-            thumbnail: material.thumbnail,
-            description: material.description,
-            default_edited: true,
-            default_video: material._id
-          };
-        } else {
-          video = {
-            url: material.url,
-            title: material.title,
-            duration: material.duration,
-            thumbnail: material.thumbnail,
-            description: material.description,
-            has_shared: true,
-            shared_video: material._id
-          };
-        }
-        this.materialService.createVideo(video).subscribe((res) => {
-          if (res['data']) {
+        this.dialog
+          .open(VideoEditComponent, {
+            position: { top: '5vh' },
+            width: '100vw',
+            maxWidth: '500px',
+            disableClose: true,
+            data: {
+              material: {
+                _id: material._id,
+                url: material.url,
+                title: material.title,
+                duration: material.duration,
+                description: material.description,
+                thumbnail: material.thumbnail,
+                role: material.role
+              },
+              type: 'duplicate'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
             const newVideo = {
               ...material,
-              _id: res['data']['_id'],
-              title: res['data']['title'],
-              description: res['data']['description'],
-              thumbnail: res['data']['thumbnail'],
+              _id: res._id,
+              title: res.title,
+              description: res.description,
+              thumbnail: res.thumbnail,
               role: 'user'
             };
             this.ownVideos.push(newVideo);
-          }
-        });
+          });
         break;
       case 'pdf':
         const pdf = {

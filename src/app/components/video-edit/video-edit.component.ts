@@ -19,9 +19,13 @@ Quill.register('modules/imageResize', ImageResize);
 export class VideoEditComponent implements OnInit {
   submitted = false;
   video = {
+    _id: '',
+    url: '',
+    duration: '',
     thumbnail: '',
     title: '',
-    description: ''
+    description: '',
+    role: ''
   };
   saving = false;
   thumbnailLoading = false;
@@ -41,7 +45,7 @@ export class VideoEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.video = { ...this.data };
+    this.video = { ...this.data.material };
   }
 
   update(): void {
@@ -74,6 +78,38 @@ export class VideoEditComponent implements OnInit {
         }
       );
     }
+  }
+
+  duplicate(): void {
+    this.saving = true;
+    let video;
+    if (this.video.role == 'admin') {
+      video = {
+        url: this.video.url,
+        title: this.video.title,
+        duration: this.video.duration,
+        thumbnail: this.video.thumbnail,
+        description: this.video.description,
+        default_edited: true,
+        default_video: this.video._id
+      };
+    } else {
+      video = {
+        url: this.video.url,
+        title: this.video.title,
+        duration: this.video.duration,
+        thumbnail: this.video.thumbnail,
+        description: this.video.description,
+        has_shared: true,
+        shared_video: this.video._id
+      };
+    }
+    this.materialService.createVideo(video).subscribe((res) => {
+      if (res['data']) {
+        this.saving = false;
+        this.dialogRef.close(res['data']);
+      }
+    });
   }
 
   openPreviewDialog(): void {
