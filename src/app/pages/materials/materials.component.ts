@@ -550,13 +550,28 @@ export class MaterialsComponent implements OnInit {
   duplicateMaterial(material: any, type: string): void {
     switch (type) {
       case 'video':
-        const video = {
-          url: material.url,
-          title: material.title,
-          duration: material.duration,
-          thumbnail: material.thumbnail,
-          description: material.description
-        };
+        let video;
+        if (material.role == 'admin') {
+          video = {
+            url: material.url,
+            title: material.title,
+            duration: material.duration,
+            thumbnail: material.thumbnail,
+            description: material.description,
+            default_edited: true,
+            default_video: material._id
+          };
+        } else {
+          video = {
+            url: material.url,
+            title: material.title,
+            duration: material.duration,
+            thumbnail: material.thumbnail,
+            description: material.description,
+            has_shared: true,
+            shared_video: material._id
+          };
+        }
         this.materialService.createVideo(video).subscribe((res) => {
           if (res['data']) {
             const newVideo = {
