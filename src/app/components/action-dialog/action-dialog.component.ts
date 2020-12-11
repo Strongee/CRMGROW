@@ -102,7 +102,6 @@ export class ActionDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<ActionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private materialService: MaterialService,
-    private templateService: TemplatesService,
     private userService: UserService,
     private fileService: FileService
   ) {
@@ -476,35 +475,6 @@ export class ActionDialogComponent implements OnInit {
         this.mediaType = '';
         this.materialType = '';
         break;
-    }
-
-    if (this.mediaType) {
-      this.templateLoadingSubscription &&
-        this.templateLoadingSubscription.unsubscribe();
-      this.isProcessing = true;
-      this.templateLoadingSubscription = this.templateService
-        .search('', { type: this.mediaType })
-        .subscribe(
-          (res) => {
-            this.isProcessing = false;
-            this.templates = res;
-            this.selectedTemplate = { subject: '', content: '' };
-            this.templates.some((e) => {
-              const defaultTemplate =
-                this.mediaType === 'email'
-                  ? this.default['email']
-                  : this.default['sms'];
-              if (e._id === defaultTemplate) {
-                this.selectedTemplate = { ...e, _id: undefined };
-                return true;
-              }
-            });
-            this.initMessage();
-          },
-          (err) => {
-            this.isProcessing = false;
-          }
-        );
     }
   }
 

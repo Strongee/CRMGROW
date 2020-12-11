@@ -58,10 +58,25 @@ export class ImportContactMergeComponent implements OnInit {
       // load primary columns
       this.updateColumn = this.data.updateColumn;
       for (const name in this.updateColumn) {
-        this.columns.push(this.updateColumn[name]);
-        this.previewColumns.push(this.updateColumn[name]);
-        this.primarySelectionModel.push(true);
-        this.secondarySelectionModel.push(false);
+        if (this.primaryContact[this.updateColumn[name]] || this.secondaryContact[this.updateColumn[name]]) {
+          this.columns.push(this.updateColumn[name]);
+          this.previewColumns.push(this.updateColumn[name]);
+          if (this.isPrimaryActive()) {
+            if (this.primaryContact[this.updateColumn[name]]) {
+              this.primarySelectionModel.push(true);
+            } else {
+              this.primarySelectionModel.push(false);
+            }
+            this.secondarySelectionModel.push(false);
+          } else {
+            if (this.secondaryContact[this.updateColumn[name]]) {
+              this.secondarySelectionModel.push(true);
+            } else {
+              this.secondarySelectionModel.push(false);
+            }
+            this.primarySelectionModel.push(false);
+          }
+        }
       }
     }
   }
@@ -73,37 +88,55 @@ export class ImportContactMergeComponent implements OnInit {
     this.dialogRef.close({ merged });
   }
 
-  changeContact($event): void {
+  isPrimaryActive(): any {
     if (this.selectedContact === 'Primary') {
+      return true;
+    }
+    return false;
+  }
+
+  changeContact($event): void {
+    this.primarySelectionModel = [];
+    this.secondarySelectionModel = [];
+
+    if (this.isPrimaryActive()) {
       this.selectedContact = 'Secondary';
-      for (let i = 0; i < this.primarySelectionModel.length; i++) {
-        this.primarySelectionModel[i] = false;
-        this.secondarySelectionModel[i] = true;
+      for (const name in this.updateColumn) {
+        if (this.secondaryContact[this.updateColumn[name]]) {
+          this.secondarySelectionModel.push(true);
+        } else {
+          this.secondarySelectionModel.push(false);
+        }
+        this.primarySelectionModel.push(false);
       }
     } else {
       this.selectedContact = 'Primary';
-      for (let i = 0; i < this.secondarySelectionModel.length; i++) {
-        this.primarySelectionModel[i] = true;
-        this.secondarySelectionModel[i] = false;
+      for (const name in this.updateColumn) {
+        if (this.primaryContact[this.updateColumn[name]]) {
+          this.primarySelectionModel.push(true);
+        } else {
+          this.primarySelectionModel.push(false);
+        }
+        this.secondarySelectionModel.push(false);
       }
     }
-    this.mergePreview();
+    this.mergePreview('all');
   }
 
-  changeCheck(row): void {
+  changeCheck(row, column): void {
     this.primarySelectionModel[row] = !this.primarySelectionModel[row];
     this.secondarySelectionModel[row] = !this.secondarySelectionModel[row];
-    this.mergePreview();
+    this.mergePreview(column);
   }
 
-  changePrimarySelection(row): void {
+  changePrimarySelection(row, column): void {
     this.primarySelectionModel[row] = !this.primarySelectionModel[row];
-    this.mergePreview();
+    this.mergePreview(column);
   }
 
-  changeSecondarySelection(row): void {
+  changeSecondarySelection(row, column): void {
     this.secondarySelectionModel[row] = !this.secondarySelectionModel[row];
-    this.mergePreview();
+    this.mergePreview(column);
   }
 
   isCheckable(column): any {
@@ -165,7 +198,7 @@ export class ImportContactMergeComponent implements OnInit {
     return result;
   }
 
-  mergePreview(): void {
+  mergePreview(updatedColumn): void {
     for (let i = 0; i < this.columns.length; i++) {
       const column = this.columns[i];
       if (this.isCheckable(column)) {
@@ -182,9 +215,18 @@ export class ImportContactMergeComponent implements OnInit {
           column === 'secondary_phone'
         ) {
           const filter = column.includes('email') ? 'email' : 'phone';
+          const updatedFilter = updatedColumn.includes('email') ? 'email' : 'phone';
           const primaryFilter = 'primary_' + filter;
           const secondaryFilter = 'secondary_' + filter;
           const checkedValues = this.getAllCheckValues(column);
+
+          // additional
+          if (this.isPrimaryActive()) {
+            this.previewColumns['additional_data'] = Object.assign({}, this.primaryContact['additional_data']);
+          } else {
+            this.previewColumns['additional_data'] = Object.assign({}, this.secondaryContact['additional_data']);
+          }
+
           // primary
           if (checkedValues.length) {
             this.previewContact[column] = checkedValues[0];
@@ -200,43 +242,47 @@ export class ImportContactMergeComponent implements OnInit {
             if (checkedValues.length === 2) {
               this.previewContact[secondaryFilter] = checkedValues[1];
             } else {
-              const emails = [];
+              const mergeValues = [];
               for (let j = 1; j < checkedValues.length; j++) {
-                emails.push(checkedValues[j]);
+                mergeValues.push(checkedValues[j]);
               }
-              if (column === 'primary_email') {
+              if (column === 'primary_email' && updatedFilter === 'email' || column === 'primary_phone' && updatedFilter === 'phone') {
                 this.dialog
                   .open(ImportContactMergeConfirmComponent, {
                     data: {
-                      emails
+                      values: mergeValues,
+                      type: filter
                     }
                   })
                   .afterClosed()
                   .subscribe((res) => {
                     if (res) {
-                      this.previewContact[secondaryFilter] = res.email;
+
+                      this.previewContact[secondaryFilter] = res.selected;
+
+                      // set additional email
+                      const idx = mergeValues.indexOf(res.selected);
+                      if (idx >= 0) {
+                        mergeValues.splice(idx, 1);
+                      }
+
+                      const val = [];
+                      for (let j = 0; j < mergeValues.length; j++) {
+                        val.push(mergeValues[j]);
+                      }
+
+                      if (!this.previewContact.additional_data) {
+                        this.previewContact.additional_data = {};
+                      }
+                      if (!this.previewContact.additional_data[filter]) {
+                        this.previewContact.additional_data[filter] = [];
+                      }
+
+                      this.previewContact.additional_data[filter] = this.previewContact.additional_data[filter].concat(val);
                     }
                   });
               }
             }
-          } else {
-            if (this.previewContact[secondaryFilter]) {
-              delete this.previewContact[secondaryFilter];
-              const index = this.previewColumns.indexOf(secondaryFilter);
-              this.previewColumns.splice(index, 1);
-            }
-          }
-
-          // aditional
-          if (checkedValues.length > 2) {
-            if (!this.previewContact.additional_data) {
-              this.previewContact.additional_data = {};
-            }
-            const val = [];
-            for (let j = 2; j < checkedValues.length; j++) {
-              val.push(checkedValues[j]);
-            }
-            this.previewContact.additional_data[filter] = val;
           }
         } else {
           if (
@@ -256,7 +302,7 @@ export class ImportContactMergeComponent implements OnInit {
                 mergeItems
               );
             } else if (column === 'note') {
-              if (this.selectedContact === 'Primary') {
+              if (this.isPrimaryActive()) {
                 for (let j = 0; j < this.primaryContact[column].length; j++) {
                   mergeItems.push(this.primaryContact[column][j]);
                 }
@@ -307,21 +353,7 @@ export class ImportContactMergeComponent implements OnInit {
       return result;
     } else if (column === 'note') {
       for (let i = 0; i < content.length; i++) {
-        // const values = content[i].content;
-        // let value = '';
-        // if (Array.isArray(values)) {
-        //   for (let j = 0; j < values.length; j++) {
-        //     if (j === values.length - 1) {
-        //       value = value + values[j];
-        //     } else {
-        //       value = value + values[j] + ', ';
-        //     }
-        //   }
-        //   result = result + content[i].title + ': ' + value + '<br/>';
-        // } else {
-        result =
-          result + content[i].title + ': ' + content[i].content + '<br/>';
-        // }
+        result = result + content[i].title + ': ' + content[i].content + '<br/>';
       }
       return result;
     }

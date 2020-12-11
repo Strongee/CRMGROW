@@ -701,7 +701,7 @@ export class UploadContactsComponent implements OnInit {
             if (i === j) {
               continue;
             }
-            if (dupItem[i][emailKey] === dupItem[j][emailKey]) {
+            if (dupItem[i]['primary_email'] === dupItem[j]['primary_email']) {
               isDuplicateKey = true;
               this.duplicateItems.push(index);
               return;
@@ -736,7 +736,7 @@ export class UploadContactsComponent implements OnInit {
       const record = [];
       for (let i = 0; i < headers.length; i++) {
         const key = headers[i];
-        if (key === 'phone') {
+        if (key === 'primary_phone') {
           let cell_phone = contact['phone'];
           if (cell_phone) {
             if (cell_phone[0] === '+') {
@@ -748,6 +748,21 @@ export class UploadContactsComponent implements OnInit {
             }
           }
           record.push(cell_phone || '');
+        } else if (key === 'secondary_phone') {
+          let secondary_phone = contact['secondary_phone'];
+          if (secondary_phone) {
+            if (secondary_phone[0] === '+') {
+              secondary_phone = secondary_phone.replace(/\D/g, '');
+              secondary_phone = '+' + secondary_phone;
+            } else {
+              secondary_phone = secondary_phone.replace(/\D/g, '');
+              secondary_phone = '+1' + secondary_phone;
+            }
+          }
+          record.push(secondary_phone || '');
+        } else if (key === 'primary_email') {
+          let email = contact['primary_email'];
+          record.push(email || '');
         } else {
           record.push(contact[key] || '');
         }

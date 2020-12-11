@@ -36,7 +36,7 @@
             <div class="check-wrapper">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="primary-{{column}}" name="contact-{{column}}"
-                       [checked]="primarySelectionModel[row]" (change)="changeCheck(row)">
+                       [checked]="primarySelectionModel[row]" (change)="changeCheck(row, column)">
                 <label class="custom-control-label f-3 font-weight-bold" for="primary-{{column}}">{{primaryContact[column]}}</label>
               </div>
             </div>
@@ -45,7 +45,7 @@
             <div class="check-wrapper">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="secondary-{{column}}" name="contact-{{column}}"
-                       [checked]="secondarySelectionModel[row]" (change)="changeCheck(row)">
+                       [checked]="secondarySelectionModel[row]" (change)="changeCheck(row, column)">
                 <label class="custom-control-label f-3 font-weight-bold" for="secondary-{{column}}">{{secondaryContact[column]}}</label>
               </div>
             </div>
@@ -59,7 +59,7 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="primary-{{column}}"
                      [checked]="primarySelectionModel[row]"
-                     (change)="$event ? changePrimarySelection(row) : null"
+                     (change)="$event ? changePrimarySelection(row, column) : null"
                      [disabled]="primaryContact[column] == '' || primaryContact[column] == undefined"
               >
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectablePrimaryColumn">
@@ -77,7 +77,7 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="secondary-{{column}}"
                      [checked]="secondarySelectionModel[row]"
-                     (change)="$event ? changeSecondarySelection(row) : null"
+                     (change)="$event ? changeSecondarySelection(row, column) : null"
                      [disabled]="secondaryContact[column] == '' || secondaryContact[column] == undefined"
               >
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectableSecondaryColumn">

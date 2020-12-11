@@ -6,7 +6,6 @@ import {
   STAGES
 } from 'src/app/constants/variable.constants';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 
@@ -34,7 +33,7 @@ export class ImportContactEditComponent implements OnInit, OnDestroy {
   checkingPhone = false;
   creating = false;
   cell_phone: any = {};
-  contact = new Contact();
+  contact;
 
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
@@ -50,14 +49,14 @@ export class ImportContactEditComponent implements OnInit, OnDestroy {
       ...this.data
     };
 
-    this.cell_phone = this.contact['phone'];
+    this.cell_phone = this.contact['primary_phone'];
   }
   ngOnDestroy(): void {}
 
   edit(): void {
     const contact = {
       ...this.contact,
-      phone: this.cell_phone ? this.cell_phone.internationalNumber : ''
+      primary_phone: this.cell_phone ? this.cell_phone.internationalNumber : ''
     };
     this.dialogRef.close({ contact });
   }
