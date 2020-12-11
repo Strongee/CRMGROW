@@ -1620,6 +1620,12 @@ body {
   }
 }
 
+.cdk-global-scrollblock {
+  position: unset;
+  width: unset;
+  overflow-y: unset;
+}
+
 .cdk-overlay-backdrop {
   &.trans {
     display: none;
