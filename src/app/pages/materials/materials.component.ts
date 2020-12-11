@@ -866,10 +866,20 @@ export class MaterialsComponent implements OnInit {
   }
 
   recordSetting(): void {
-    this.dialog.open(RecordSettingDialogComponent, {
-      width: '96vw',
-      maxWidth: '600px'
-    });
+    this.dialog
+      .open(RecordSettingDialogComponent, {
+        position: { top: '0px' },
+        width: '0px',
+        height: '0px',
+        panelClass: 'trans-modal',
+        backdropClass: 'trans'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.ownVideos.push(res.data);
+        }
+      });
   }
   doAction(evt: any): void {
     switch (evt.label) {
