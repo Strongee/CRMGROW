@@ -19,6 +19,7 @@ import { VideoEditComponent } from 'src/app/components/video-edit/video-edit.com
 import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component';
 import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
 import { STATUS } from 'src/app/constants/variable.constants';
+import { MaterialSendComponent } from 'src/app/components/material-send/material-send.component';
 
 @Component({
   selector: 'app-materials',
@@ -199,6 +200,19 @@ export class MaterialsComponent implements OnInit {
   }
 
   selectFolder(): void {}
+
+  sendMaterial(material: any, type: string): void {
+    this.dialog.open(MaterialSendComponent, {
+      position: { top: '5vh' },
+      width: '100vw',
+      maxWidth: '600px',
+      disableClose: false,
+      data: {
+        material,
+        type
+      }
+    });
+  }
 
   copyLink(material: any, type: string): void {
     let url;

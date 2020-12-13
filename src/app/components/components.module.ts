@@ -83,6 +83,7 @@ import { InputSourceComponent } from './input-source/input-source.component';
 import { InputCompanyComponent } from './input-company/input-company.component';
 import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
 import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
+import { MaterialSendComponent } from './material-send/material-send.component';
 
 @NgModule({
   declarations: [
@@ -165,7 +166,8 @@ import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automa
     InputSourceComponent,
     InputCompanyComponent,
     AutomationShowFullComponent,
-    AutomationTreeOverlayComponent
+    AutomationTreeOverlayComponent,
+    MaterialSendComponent
   ],
   imports: [
     CommonModule,
@@ -220,7 +222,8 @@ import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automa
     InputSourceComponent,
     InputCompanyComponent,
     AutomationShowFullComponent,
-    AutomationTreeOverlayComponent
+    AutomationTreeOverlayComponent,
+    MaterialSendComponent
   ],
   bootstrap: [
     ContactCreateComponent,
