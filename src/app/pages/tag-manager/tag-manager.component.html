@@ -1,4 +1,4 @@
-<div class="page-content">
+<div class="page-content p-0">
     <div class="v-center justify-content-between mb-3">
         <h6 class="f-3 font-weight-bold mb-0">Tag manager</h6>
         <button class="v-center btn btn-blue f-3 font-weight-bold text-white add-tag">
@@ -8,16 +8,16 @@
     </div>
     <div class="table">
         <div class="v-center pt-3 pb-2 table-header">
-            <div class="f-1 tag-col">
+            <div class="f-1 tag-col px-1">
                 tag name
             </div>
-            <div class="f-1 edit-col text-center">
+            <div class="f-1 edit-col text-center px-1">
                 edit
             </div>
             <div class="f-1 time-col text-right">
                 times used
             </div>
-            <div class="f-1 delete-col text-right">
+            <div class="f-1 delete-col text-right px-1">
                 delete
             </div>
         </div>
@@ -27,16 +27,16 @@
                     <mat-expansion-panel hideToggle>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <div class="tag-col">
+                                <div class="tag-col px-1">
                                     <span class="f-3 bgc-pale px-2 py-1 tag-label">{{tag._id}}</span>
                                 </div>
-                                <div class="edit-col text-center" (click)="editTag(tag)">
+                                <div class="edit-col text-center px-1" (click)="editTag(tag)">
                                     <i class="d-block mx-auto i-icon i-edit bgc-dark"></i>
                                 </div>
                                 <div class="f-3 font-weight-bold text-primary text-right time-col">
                                     {{tag.count}}
                                 </div>
-                                <div class="delete-col text-right" (click)="deleteTag(tag)">
+                                <div class="delete-col text-right px-1" (click)="deleteTag(tag)">
                                     <i class="d-block mx-auto i-icon i-trash bgc-red"></i>
                                 </div>
                             </mat-panel-title>

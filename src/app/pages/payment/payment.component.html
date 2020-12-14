@@ -1,6 +1,6 @@
 <form #paymentForm="ngForm" (ngSubmit)="paymentForm.form.valid ? createBill() : false;">
-    <span class="f-4 font-weight-bold mb-1">Detail information</span>
-    <div class="row payment-form px-2">
+    <span class="f-3 font-weight-bold mb-1">Detail information</span>
+    <div class="payment-form">
         <div class="form-group payment-card-img">
             <label for="payment-method" class="font-weight-bold mr-auto">payment method</label>
             <div class="payment-card d-flex flex-column">
@@ -18,15 +18,15 @@
                     </ng-container>
                 </div>
                 <div class="v-center justify-content-between px-3 pb-3">
-                    <div class="f-4 font-weight-bold">
+                    <div class="f-3 font-weight-bold">
                         {{card.exp_month}}/{{card.exp_year}}
                     </div>
-                    <div class="f-4 font-weight-bold">
+                    <div class="f-3 font-weight-bold">
                         ****{{card.last4}}
                     </div>
                 </div>
             </div>
-            <div class="f-1 text-center mt-4 px-5 unsubscribe">If you want to unsubscribe your payment method click <a class="c-dark c-pointer">here</a>.</div>
+            <div class="f-1 mt-2 mt-sm-4 px-2 px-sm-5 unsubscribe">If you want to unsubscribe your payment method click <a class="c-dark c-pointer">here</a>.</div>
         </div>
         <div class="ml-lg-3 ml-md-0 pyament-card-form">
             <div class="form-group" [ngClass]="{invalid: paymentForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || paymentForm.submitted)}">
@@ -118,8 +118,8 @@
             </div>
         </div>
     </div>
-    <div class="row mt-4 px-2">
-        <h6 class="f-4 font-weight-bold mb-1">Your invoices</h6>
+    <div class="mt-4">
+        <h6 class="f-3 font-weight-bold mb-1">Your invoices</h6>
         <table class="table mt-2">
             <thead>
                 <tr>
@@ -158,16 +158,16 @@
                           <label class="custom-control-label" for="invoice-{{index}}"></label>
                         </div>
                     </td>
-                    <td class="number-col f-4 font-weight-bold text-primary pt-3 pb-0">
+                    <td class="number-col f-3 font-weight-bold text-primary pt-3 pb-0">
                         {{invoice.number}}
                     </td>
-                    <td class="paymeny-col f-4 font-weight-bold pt-3 pb-0">
+                    <td class="paymeny-col f-3 font-weight-bold pt-3 pb-0">
                         {{invoice.payment_date}}
                     </td>
-                    <td class="issue-col f-4 font-weight-bold pt-3 pb-0">
+                    <td class="issue-col f-3 font-weight-bold pt-3 pb-0">
                         {{invoice.issue_date}}
                     </td>
-                    <td class="gross-col f-4 font-weight-bold text-right pr-0  pt-3 pb-0">
+                    <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">
                         {{invoice.gross}}
                     </td>
                 </tr>

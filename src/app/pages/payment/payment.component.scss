@@ -9,14 +9,22 @@
 
     .pyament-card-form {
         max-width: 380px;
+        @media screen and (max-width: 576px) {
+            max-width: 100%;
+        }
     }
 }
 
 .unsubscribe {
     max-width: 260px;
     opacity: 0.25;
+    text-align: center;
     a {
         text-decoration: underline;
+    }
+    @media screen and (max-width: 576px) {
+        max-width: 320px;
+        text-align: left;
     }
 }
 .payment-card {
@@ -30,6 +38,10 @@
         img {
             width: 40px;
         }
+    }
+    @media screen and (max-width: 576px) {
+        max-width: 320px;
+        height: 180px;
     }
 }
 table.table th {
@@ -45,6 +57,11 @@ th, td {
     background-color: white;
     &.checkbox-col {
         opacity: 1;
+    }
+}
+td {
+    @media screen and (max-width: 576px) {
+        padding: 5px 5px;
     }
 }
 .checkbox-col {

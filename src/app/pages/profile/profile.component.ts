@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
   ];
   defaultPage = 'general';
   currentPage: string;
+  currentPageItem: PageMenuItem[];
   queryParamSubscription: Subscription;
 
   constructor(
@@ -84,6 +85,9 @@ export class ProfileComponent implements OnInit {
       } else {
         this.currentPage =
           this.route.snapshot.params['page'] || this.defaultPage;
+        this.currentPageItem = this.menuItems.filter(
+          (item) => item.id == this.currentPage
+        );
       }
     });
   }
@@ -94,6 +98,9 @@ export class ProfileComponent implements OnInit {
    */
   changeMenu(menu: PageMenuItem): void {
     this.currentPage = menu.id;
+    this.currentPageItem = this.menuItems.filter(
+      (item) => item.id == this.currentPage
+    );
     this.location.replaceState(`profile/${menu.id}`);
   }
 }
