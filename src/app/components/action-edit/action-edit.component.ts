@@ -13,7 +13,6 @@ import {
 } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { Subscription } from 'rxjs';
-import { TemplatesService } from 'src/app/services/templates.service';
 import { FormControl } from '@angular/forms';
 import { FileService } from 'src/app/services/file.service';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -91,7 +90,6 @@ export class ActionEditComponent implements OnInit {
     private dialogRef: MatDialogRef<ActionEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private materialService: MaterialService,
-    private templateService: TemplatesService,
     private userService: UserService,
     private fileService: FileService,
     private dialog: MatDialog,
@@ -249,9 +247,6 @@ export class ActionEditComponent implements OnInit {
 
     if (this.materialType) {
       this.loadMaterials();
-    }
-    if (this.mediaType) {
-      this.loadTemplates();
     }
   }
 
@@ -478,36 +473,6 @@ export class ActionEditComponent implements OnInit {
       return;
     }
     this.dialogRef.close({ ...this.action, period });
-  }
-
-  loadTemplates(): any {
-    if (this.mediaType) {
-      this.templateLoadingSubscription &&
-        this.templateLoadingSubscription.unsubscribe();
-      this.isProcessing = true;
-      this.templateLoadingSubscription = this.templateService
-        .search('', { type: this.mediaType })
-        .subscribe(
-          (res) => {
-            this.isProcessing = false;
-            this.templates = res;
-            this.selectedTemplate = { subject: '', content: '' };
-            this.templates.some((e) => {
-              const defaultTemplate =
-                this.mediaType === 'email'
-                  ? this.default['email']
-                  : this.default['sms'];
-              if (e._id === defaultTemplate) {
-                this.selectedTemplate = { ...e, _id: undefined };
-                return true;
-              }
-            });
-          },
-          (err) => {
-            this.isProcessing = false;
-          }
-        );
-    }
   }
 
   displayFn(template): any {

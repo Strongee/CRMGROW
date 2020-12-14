@@ -7,8 +7,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class ImportContactMergeConfirmComponent implements OnInit {
 
-  emails;
-  selectedEmail = 0;
+  values;
+  type;
+  selected = 0;
   constructor(
     private dialogRef: MatDialogRef<ImportContactMergeConfirmComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -16,16 +17,17 @@ export class ImportContactMergeConfirmComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
-      this.emails = this.data.emails;
+      this.values = this.data.values;
+      this.type = this.data.type;
     }
   }
 
-  changeEmail(row): void {
-    this.selectedEmail = row;
+  changeValue(row): void {
+    this.selected = row;
   }
 
   confirm(): void {
-    this.dialogRef.close({ email: this.emails[this.selectedEmail] });
+    this.dialogRef.close({ selected: this.values[this.selected] });
   }
 
 }

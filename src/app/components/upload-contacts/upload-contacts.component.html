@@ -114,16 +114,17 @@
                            [checked]="isSelectedMerge(dupIndex, contact.id)"
                            (change)="$event ? selectedMergeContacts[dupIndex].toggle(contact.id) : null"
                            [disabled]="isDisable(dupIndex, contact.id)">
-                    <label class="custom-control-label" for="duplicate-{{contact.id}}"></label>
+                    <label class="custom-control-label"
+                           [class.c-red]="checkDuplicateEmail(contact)"
+                           for="duplicate-{{contact.id}}"></label>
                   </div>
                 </td>
                 <ng-container *ngFor="let column of columns; let i = index;">
                   <td *ngIf="updateColumn[column]"
                       class="{{column}} f-3 font-weight-bold last-row"
                   >
-                    <div [class]="column" [innerHTML]="isSelectableColumn(updateColumn[column]) ?
-                      (selectableContent(updateColumn[column], contact[updateColumn[column]]) | stripTags | shorten: 80: '...') :
-                      (contact[updateColumn[column]] | stripTags | shorten: 80: '...')"></div>
+                    <div [class]="column" [class.c-red]="checkDuplicateEmail(contact)" [innerHTML]="isSelectableColumn(updateColumn[column]) ?
+                      selectableContent(updateColumn[column], contact[updateColumn[column]]) : contact[updateColumn[column]]"></div>
                   </td>
                 </ng-container>
                 <td class="actions">

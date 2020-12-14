@@ -36,7 +36,7 @@
             <div class="check-wrapper">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="primary-{{column}}" name="contact-{{column}}"
-                       [checked]="primarySelectionModel[row]" (change)="changeCheck(row)">
+                       [checked]="primarySelectionModel[row]" (change)="changeCheck(row, column)">
                 <label class="custom-control-label f-3 font-weight-bold" for="primary-{{column}}">{{primaryContact[column]}}</label>
               </div>
             </div>
@@ -45,7 +45,7 @@
             <div class="check-wrapper">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="secondary-{{column}}" name="contact-{{column}}"
-                       [checked]="secondarySelectionModel[row]" (change)="changeCheck(row)">
+                       [checked]="secondarySelectionModel[row]" (change)="changeCheck(row, column)">
                 <label class="custom-control-label f-3 font-weight-bold" for="secondary-{{column}}">{{secondaryContact[column]}}</label>
               </div>
             </div>
@@ -59,7 +59,7 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="primary-{{column}}"
                      [checked]="primarySelectionModel[row]"
-                     (change)="$event ? changePrimarySelection(row) : null"
+                     (change)="$event ? changePrimarySelection(row, column) : null"
                      [disabled]="primaryContact[column] == '' || primaryContact[column] == undefined"
               >
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectablePrimaryColumn">
@@ -77,7 +77,7 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="secondary-{{column}}"
                      [checked]="secondarySelectionModel[row]"
-                     (change)="$event ? changeSecondarySelection(row) : null"
+                     (change)="$event ? changeSecondarySelection(row, column) : null"
                      [disabled]="secondaryContact[column] == '' || secondaryContact[column] == undefined"
               >
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectableSecondaryColumn">
@@ -93,42 +93,6 @@
           </td>
         </ng-template>
       </tr>
-      <ng-container *ngIf="hasSecondary()">
-        <tr>
-          <td></td>
-          <td>
-            <div class="f-4 font-weight-bold">Secondary</div>
-          </td>
-          <td>
-            <div class="f-4 font-weight-bold">Secondary</div>
-          </td>
-        </tr>
-        <tr *ngFor="let secondaryColumn of secondaryColumns let secondaryRow = index">
-          <td>
-            <div class="f-3 op-75 text-uppercase">{{secondaryColumn}}</div>
-          </td>
-          <td>
-            <div class="custom-control custom-checkbox" *ngIf="primaryContact.secondary">
-              <input type="checkbox" class="custom-control-input" id="primary-secondary-{{secondaryColumn}}"
-                     [checked]="primarySecondarySelectionModel[secondaryColumn]"
-                     (change)="$event ? changePrimarySecondarySelection(secondaryColumn) : null"
-                     [disabled]="primaryContact.secondary[secondaryColumn] == '' || primaryContact.secondary[secondaryColumn] == undefined"
-              >
-              <label class="custom-control-label" for="primary-secondary-{{secondaryColumn}}">{{primaryContact.secondary[secondaryColumn]}}</label>
-            </div>
-          </td>
-          <td>
-            <div class="custom-control custom-checkbox" *ngIf="secondaryContact.secondary">
-              <input type="checkbox" class="custom-control-input" id="secondary-secondary-{{secondaryColumn}}"
-                     [checked]="secondarySecondarySelectionModel[secondaryColumn]"
-                     (change)="$event ? changeSecondarySecondarySelection(secondaryColumn) : null"
-                     [disabled]="secondaryContact.secondary[secondaryColumn] == '' || secondaryContact.secondary[secondaryColumn] == undefined"
-              >
-              <label class="custom-control-label" for="secondary-secondary-{{secondaryColumn}}">{{secondaryContact.secondary[secondaryColumn]}}</label>
-            </div>
-          </td>
-        </tr>
-      </ng-container>
       </tbody>
     </table>
     <ng-container *ngIf="previewContact">
@@ -139,7 +103,7 @@
         <th></th>
         </thead>
         <tbody>
-        <tr *ngFor="let column of columns let row = index">
+        <tr *ngFor="let column of previewColumns let row = index">
           <td>
             <div class="f-3 op-75 text-uppercase">{{column}}</div>
           </td>
@@ -150,22 +114,6 @@
             </div>
           </td>
         </tr>
-        <ng-container *ngIf="previewContact.secondary">
-          <tr>
-            <td></td>
-            <td>
-              <div class="f-4 font-weight-bold">Secondary</div>
-            </td>
-          </tr>
-          <tr *ngFor="let secondaryColumn of previewSecondaryColumns">
-            <td>
-              <div class="f-3 op-75 text-uppercase">{{secondaryColumn}}</div>
-            </td>
-            <td>
-              <div class="f-3 font-weight-bold">{{previewContact.secondary[secondaryColumn]}}</div>
-            </td>
-          </tr>
-        </ng-container>
         </tbody>
       </table>
     </ng-container>
