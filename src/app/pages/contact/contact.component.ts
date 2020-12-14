@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
+import { FileService } from '../../services/file.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { OverlayService } from 'src/app/services/overlay.service';
@@ -100,6 +101,7 @@ export class ContactComponent implements OnInit {
   due_time = '12:00:00.000';
   times = TIMES;
   taskSaving = false;
+  emailSubmitted = false;
   note: Note = new Note();
   noteSaving = false;
 
@@ -124,10 +126,13 @@ export class ContactComponent implements OnInit {
   hasChild = (_: number, node: any) =>
     !!node.children && node.children.length > 0;
 
+  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+
   constructor(
     private dialog: MatDialog,
     private location: Location,
     private route: ActivatedRoute,
+    private fileService: FileService,
     private contactService: ContactService,
     private noteService: NoteService,
     private taskService: TaskService,
@@ -312,6 +317,22 @@ export class ContactComponent implements OnInit {
         this.storeService.activityAdd$([this._id], 'note');
       });
   }
+  
+  insertEmailContentValue(value: string): void {
+    this.emailEditor.quillEditor.focus();
+    const range = this.emailEditor.quillEditor.getSelection();
+    if (!range) {
+      return;
+    }
+    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
+    this.emailEditor.quillEditor.setSelection(
+      range.index + value.length,
+      0,
+      'user'
+    );
+  }
+
+  sendEmail(): void {}
 
   getDateTime(): any {
     if (this.due_date.day != '') {
@@ -378,6 +399,46 @@ export class ContactComponent implements OnInit {
         data: node
       }
     );
+  }
+
+  selectTemplate(event: any): void {
+    this.selectedTemplate = event;
+    this.emailSubject = this.selectedTemplate.subject;
+    this.emailContent = this.selectedTemplate.content;
+  }
+
+  getEditorInstance(editorInstance: any): void {
+    this.quillEditorRef = editorInstance;
+    const toolbar = this.quillEditorRef.getModule('toolbar');
+    toolbar.addHandler('image', this.initImageHandler);
+  }
+
+  initImageHandler = (): void => {
+    const imageInput = document.createElement('input');
+    imageInput.setAttribute('type', 'file');
+    imageInput.setAttribute('accept', 'image/*');
+    imageInput.classList.add('ql-image');
+
+    imageInput.addEventListener('change', () => {
+      if (imageInput.files != null && imageInput.files[0] != null) {
+        const file = imageInput.files[0];
+        this.fileService.attachImage(file).subscribe((res) => {
+          this.insertImageToEditor(res.url);
+        });
+      }
+    });
+    imageInput.click();
+  };
+
+  insertImageToEditor(url: string): void {
+    const range = this.quillEditorRef.getSelection();
+    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
+    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
+    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
+    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
+  }
+  setFocusField(editorType: string): void {
+    this.focusEditor = editorType;
   }
 
   createAutomation(): void {}
