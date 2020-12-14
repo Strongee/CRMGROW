@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 export class SlideTabComponent implements OnInit, AfterViewInit {
   @Input('tabs') tabs: TabItem[] = [];
   @Input('selected') selected: TabItem;
+  @Input('type') type: string = '';
   @Output() onChange = new EventEmitter();
   @ViewChild('container') container: ElementRef;
   @ViewChild('indicator') indicator: ElementRef;

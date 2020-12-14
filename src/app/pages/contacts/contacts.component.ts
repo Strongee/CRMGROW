@@ -256,7 +256,7 @@ export class ContactsComponent implements OnInit {
       .subscribe((status) => {
         this.isUpdating = false;
         if (status) {
-          this.contactService.bulkUpdate$(ids, { label: newLabel }, {});
+          this.storeService.bulkUpdate$(ids, { label: newLabel }, {});
         }
       });
   }

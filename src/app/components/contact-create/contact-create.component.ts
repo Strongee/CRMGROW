@@ -9,6 +9,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
+import { Subscription } from 'rxjs';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-contact-create',
@@ -36,21 +38,37 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   cell_phone: any = {};
   contact = new Contact();
 
+  isCreating = false;
+  createSubscription: Subscription;
+
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private storeService: StoreService
   ) {}
 
   ngOnInit(): void {}
   ngOnDestroy(): void {}
 
-  create(): void {}
+  create(): void {
+    this.isCreating = true;
+    this.createSubscription && this.createSubscription.unsubscribe();
+    this.createSubscription = this.contactService
+      .create(this.contact)
+      .subscribe((contact) => {
+        console.log('contact created', contact);
+        this.isCreating = false;
+        if (contact) {
+          this.storeService.addContact$(contact);
+          this.dialogRef.close();
+        }
+      });
+  }
 
   handleAddressChange(evt: any): void {
-    console.log('evt.address_components', evt.address_components);
     this.contact.address = '';
     for (const component of evt.address_components) {
       if (!component['types']) {

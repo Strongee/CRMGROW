@@ -60,8 +60,6 @@ export class HomeComponent implements OnInit {
    */
   openFilter(): void {}
 
-
-
   //////////////////// analytics page ////////////////////
   analyticsTabs: TabItem[] = [
     { icon: 'i-icon i-video', label: 'Video Sent', id: 'video-sent' },

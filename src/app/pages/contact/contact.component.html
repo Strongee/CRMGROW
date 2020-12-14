@@ -17,13 +17,36 @@
           <div class="f-20 font-weight-bold">{{contact.fullName}}</div>
           <div class="f-3 op-40">{{contact.last_activity_time | date :'MM/dd/yyyy'}}</div>
         </div>
+        <div ngbDropdown class="button-more ml-auto">
+          <a class="d-flex c-pointer" ngbDropdownToggle>
+            <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+          </a>
+          <div ngbDropdownMenu class="light">
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-list bgc-dark ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold">Add to campaign</span>
+            </button>
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-contact-merge bgc-dark ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold">Merge</span>
+            </button>
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold">Share contact</span>
+            </button>
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-trash bgc-red ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold c-red">Delete</span>
+            </button>
+          </div>
+        </div>
       </div>
       <div class="my-3 py-2">
         <app-label-select [value]="contact.label" type="form"></app-label-select>
       </div>
-      <div class="v-center justify-content-between mb-3">
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 mr-1" (click)="openGroupCallDlg()">Create group call</button>
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 ml-1" (click)="openAppointmentDlg()">Create appointment</button>
+      <div class="v-center justify-content-between mb-3 create-actions">
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 mr-1 py-2" (click)="openGroupCallDlg()">Create group call</button>
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 ml-1 py-2" (click)="openAppointmentDlg()">Create appointment</button>
       </div>
       <mat-accordion multi class="general-panels">
         <!-- Begin Contact Detail -->
@@ -33,8 +56,10 @@
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Contact details</span>
-                <button class="btn border border-primary f-2 font-weight-bold c-blue ml-auto btn-sm" (click)="contactMerge(contact)">Edit contact
-                  details</button>
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                  <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
+                  <span>Edit</span>
+                </button>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -63,12 +88,26 @@
         <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <div class="v-center">
+              <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Secondary contacts</span>
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                  <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
+                  <span>Edit</span>
+                </button>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
+          <div class="contact-detail">
+            <div class="v-center py-1">
+              <i class="i-icon i-contact-phone bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.secondary_phone}}</span>
+            </div>
+            <div class="v-center py-1">
+              <i class="i-icon i-message bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.secondary_email}}</span>
+            </div>
+          </div>
           <div class="contact-secondary"></div>
         </mat-expansion-panel>
         <!-- End Contact Secondary Information -->
@@ -77,24 +116,30 @@
         <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <div class="v-center">
+              <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Additional information</span>
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                  <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
+                  <span>Edit</span>
+                </button>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="contact-additional">
             <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40">Source</span>
+              <span class="f-6 fw-600 op-40 info-title">Source</span>
               <span class="f-6">{{contact.source}}</span>
             </div>
             <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40">Current Company</span>
+              <span class="f-6 fw-600 op-40 info-title">Current Company</span>
               <span class="f-6">{{contact.brokerage}}</span>
             </div>
-            <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40">Tags</span>
-              <span class="f-6"></span>
+            <div class="d-flex py-2">
+              <span class="f-6 fw-600 op-40 info-title">Tags</span>
+              <div class="f-3 tags-wrapper flex-grow-1">
+                <app-input-tag [selectedTags]="contact.tags"></app-input-tag>
+              </div>
             </div>
           </div>
         </mat-expansion-panel>
@@ -205,18 +250,10 @@
     <div class="contact-action-panel flex-grow-1 position-relative">
       <div class="action-panel position-relative">
         <div class="main-actions">
-          <div [class]="'d-flex action-headers ' + mainAction">
-            <div [class.active]="mainAction === 'send_email'" class="font-weight-bold c-pointer py-3 send_email"
-              (click)="mainAction = 'send_email'">Send Email</div>
-            <div [class.active]="mainAction === 'send_text'" class="font-weight-bold ml-3 c-pointer py-3 send_text"
-              (click)="mainAction = 'send_text'">Send Text</div>
-            <div [class.active]="mainAction === 'create_note'" class="font-weight-bold ml-3 c-pointer py-3 create_note"
-              (click)="mainAction = 'create_note'">Note</div>
-            <div [class.active]="mainAction === 'add_task'" class="font-weight-bold ml-3 c-pointer py-3 add_task"
-              (click)="mainAction = 'add_task'">Add new task</div>
-          </div>
+          <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="action = $event" type="plain">
+          </app-slide-tab>
           <div class="tab-panel">
-            <div class="email-panel" *ngIf="mainAction === 'send_email'">
+            <div class="email-panel" *ngIf="action.id === 'send_email'">
               <form #emailForm="ngForm" (ngSubmit)="emailSubmitted = true; emailForm.form.valid ? sendEmail() : false">
                 <div class="email-box">
                   <div class="v-center justify-content-between receiver px-3 py-2">
@@ -349,47 +386,48 @@
                 </div>
               </form>
             </div>
-            <div class="text-panel" *ngIf="mainAction === 'send_text'">
+            <div class="text-panel" *ngIf="action.id === 'send_text'">
             </div>
-            <div class="note-panel" *ngIf="mainAction === 'create_note'">
-              <form #noteForm="ngForm" (ngSubmit)="noteSubmitted = true; noteForm.form.valid ? createNote() : false">
-                <div class="note-title px-3 py-2">
-                  <div class="v-center">
-                    <label class="f-6 op-56 m-0">Title:</label>
-                    <input
-                        class="ml-2 w-100"
-                        type="text"
-                        name="noteTitle"
-                        #noteTitle="ngModel"
-                        [(ngModel)]="note.title"
-                    >
-                  </div>
-                  <span
-                    class="invalid-error f-3 font-weight-bold c-red"
-                    *ngIf="note.title == '' && noteSubmitted"
+            
+            <div class="note-panel" *ngIf="action.id === 'note'">
+              <form #noteForm="ngForm" (ngSubmit)="noteForm.form.valid ? createNote() : false">
+                <div class="note-title px-2 py-2 position-relative">
+                  <input
+                    class="ml-2 w-100"
+                    type="text"
+                    name="noteTitle"
+                    #noteTitle="ngModel"
+                    [(ngModel)]="note.title"
+                    placeholder="Title"
+                    required
                   >
-                    Subject is required
+                  <span
+                    class="invalid-error f-3 fw-600 c-red pl-2 inline-error"
+                    *ngIf="!note.title && noteForm.submitted"
+                  >
+                    Required!
                   </span>
                 </div>
-                <div class="note-content p-3">
+                <div class="note-content p-3 position-relative">
                   <textarea
-                      class="w-100"
-                      placeholder="Start typing here..."
-                      name="noteContent"
-                      #noteContent="ngModel"
-                      [(ngModel)]="note.content"
-                      rows="10" cols="50"
+                    class="w-100"
+                    placeholder="Start typing here..."
+                    name="noteContent"
+                    #noteContent="ngModel"
+                    [(ngModel)]="note.content"
+                    rows="7" cols="50"
+                    required
                   ></textarea>
                   <span
-                    class="invalid-error f-3 font-weight-bold c-red"
-                    *ngIf="note.content == '' && noteSubmitted"
+                    class="invalid-error f-3 fw-600 c-red inline-error"
+                    *ngIf="!note.content && noteForm.submitted"
                   >
-                    Content is required
+                    Required!
                   </span>
                   <div class="v-center justify-content-end">
                     <button
                       type="submit"
-                      class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold mt-2"
+                      class="btn btn-blue text-white br-default f-6 font-weight-bold"
                       [class.loading]="noteSaving"
                     >
                       Add note
@@ -398,55 +436,46 @@
                 </div>
               </form>
             </div>
-            <div class="task-panel p-4" *ngIf="mainAction === 'add_task'">
-              <form #taskForm="ngForm" (ngSubmit)="taskSubmitted = true; taskForm.form.valid ? openTaskDlg() : false">
+
+            <div class="task-panel p-4" *ngIf="action.id === 'add_task'">
+              <form #taskForm="ngForm" (ngSubmit)="taskForm.form.valid ? createTask() : false">
                 <div class="form-group">
-                  <label>type of task</label>
+                  <label class="mb-0">type of task</label>
                   <div>
-                    <div class="task-types btn-group btn-group-toggle rounded">
-                      <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
-                        <input type="checkbox" name="options" ngbButton [ngModel]="taskTypes.indexOf('task')!==-1" (ngModelChange)="toggleTypes('task')">
-                        <i class="i-icon i-task d-block bgc-dark"></i>
-                      </label>
-                      <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
-                        <input type="checkbox" name="options" ngbButton [ngModel]="taskTypes.indexOf('call')!==-1" (ngModelChange)="toggleTypes('call')">
-                        <i class="i-icon i-phone d-block bgc-dark"></i>
-                      </label>
-                      <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
-                        <input type="checkbox" name="options" ngbButton [ngModel]="taskTypes.indexOf('meeting')!==-1" (ngModelChange)="toggleTypes('meeting')">
-                        <i class="i-icon i-lunch d-block bgc-dark"></i>
-                      </label>
-                      <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
-                        <input type="checkbox" name="options" ngbButton [ngModel]="taskTypes.indexOf('email')!==-1" (ngModelChange)="toggleTypes('email')">
-                        <i class="i-icon i-message d-block bgc-dark"></i>
-                      </label>
-                      <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
-                        <input type="checkbox" name="options" ngbButton [ngModel]="taskTypes.indexOf('material')!==-1" (ngModelChange)="toggleTypes('material')">
-                        <i class="i-icon i-video d-block bgc-dark"></i>
-                      </label>
-                    </div>
+                    <app-task-type [(value)]="task.type"></app-task-type>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label>subject</label>
+                  <div class="v-center">
+                    <label class="mb-0">subject</label>
+                    <span
+                      class="invalid-error f-3 fw-600 c-red ml-auto"
+                      *ngIf="!task.content && taskForm.submitted"
+                    >
+                      Required!
+                    </span>
+                  </div>
                   <input
                     class="form-control"
                     type="text"
                     placeholder="Provide subject"
                     name="taskSubject"
                     #taskSubject="ngModel"
-                    [(ngModel)]="task.subject">
-                  <span
-                    class="invalid-error f-3 font-weight-bold c-red"
-                    *ngIf="task.subject == '' && taskSubmitted"
-                  >
-                    Subject is required
-                  </span>
+                    [(ngModel)]="task.content"
+                    required>
                 </div>
                 <div class="row task-time">
                   <div class="col-12 col-sm-6">
                     <div class="form-group">
-                      <label>date</label>
+                      <div class="v-center">
+                        <label class="mb-0">date</label>
+                        <span
+                          class="invalid-error f-3 fw-600 c-red ml-auto"
+                          *ngIf="!due_date.year && !due_date.month && !due_date.day && taskForm.submitted"
+                        >
+                          Required!
+                        </span>
+                      </div>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text bgc-blue">
@@ -454,7 +483,7 @@
                           </span>
                         </div>
                         <div ngbDropdown class="w-100">
-                          <input class="form-control datepicker f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
+                          <input class="form-control datepicker f-3" placeholder="Select date" name="send_date" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
                           <div ngbDropdownMenu class="date-picker">
                             <div class="picker-header v-center justify-content-between mt-2">
                               <div class="f-6 font-weight-bold">Appointment date</div>
@@ -474,19 +503,13 @@
                           </div>
                         </div>
                       </div>
-                      <span
-                        class="invalid-error f-3 font-weight-bold c-red"
-                        *ngIf="due_date.year == '' && due_date.month == '' && due_date.day == '' && taskSubmitted"
-                      >
-                        Date is required
-                      </span>
                     </div>
                   </div>
                   <div class="col-12 col-sm-6">
                     <div class="form-group">
-                      <label>time</label>
+                      <label class="mb-0 d-block">time</label>
                       <select
-                        class="form-control f-3 font-weight-bold"
+                        class="form-control f-3"
                         [(ngModel)]="due_time"
                         name="time"
                         #time="ngModel"
@@ -505,36 +528,27 @@
                       <input
                         type="checkbox"
                         class="custom-control-input"
-                        id="customControlInline"
-                        [checked]="isRepeat"
-                        (change)="setRepeatEvent()"
+                        id="repeat_tcc"
+                        [checked]="task.is_repeat"
+                        (change)="task.is_repeat = !task.is_repeat"
                       />
                       <label
-                        class="custom-control-label f-3 font-weight-bold pt-1"
-                        for="customControlInline"
+                        class="custom-control-label f-3 fw-600 pt-1"
+                        for="repeat_tcc"
                         >Set as recurring event</label
                       >
                     </div>
-                    <div class="form-group mt-3 ml-3">
-                      <select
-                        class="form-control f-3 font-weight-bold text-primary"
-                        [(ngModel)]="task.recurrence"
-                        name="repeat"
-                        #repeat="ngModel"
-                        [disabled]="!isRepeat"
-                      >
-                        <option
-                          *ngFor="let recurring of recurrings"
-                          value="{{ recurring.value }}"
-                        >
-                          {{ recurring.text }}
+                    <div class="form-group ml-3 mb-0">
+                      <select class="form-control c-blue font-weight-bold" [(ngModel)]="task.repeat_duration" name="duration" #duration="ngModel" [disabled]="!task.is_repeat">
+                        <option *ngFor="let type of REPEAT_DURATIONS" [value]="type.value">
+                          {{type.label}}
                         </option>
                       </select>
                     </div>
                   </div>
                   <button
                     type="submit"
-                    class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
+                    class="btn btn-blue text-white br-default f-6 font-weight-bold"
                     [class.loading]="taskSaving"
                   >
                     Create

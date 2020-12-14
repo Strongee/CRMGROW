@@ -16,7 +16,7 @@ import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
   TIMES,
-  RECURRING_TYPE,
+  REPEAT_DURATIONS,
   QuillEditor
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
@@ -26,6 +26,11 @@ import { AutomationShowFullComponent } from 'src/app/components/automation-show-
 import * as moment from 'moment';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
+import { TabItem } from 'src/app/utils/data.types';
+import { Task } from 'src/app/models/task.model';
+import { Note } from 'src/app/models/note.model';
+import { NoteService } from 'src/app/services/note.service';
+import { TaskService } from 'src/app/services/task.service';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import ImageResize from 'quill-image-resize-module';
@@ -68,8 +73,37 @@ export class ContactComponent implements OnInit {
       label: 'Deals'
     }
   ];
+  REPEAT_DURATIONS = REPEAT_DURATIONS;
+  tabs: TabItem[] = [
+    { icon: '', label: 'Send Email', id: 'send_email' },
+    { icon: '', label: 'Send Text', id: 'send_text' },
+    { icon: '', label: 'Note', id: 'note' },
+    { icon: '', label: 'Add new task', id: 'add_task' }
+  ];
+  action: TabItem = this.tabs[0];
+
   contact: ContactDetail = new ContactDetail();
   groupActions = {};
+  mainTimelines: ActivityDetail[] = [];
+  _id = '';
+  next: string = null;
+  prev: string = null;
+  activeHistory = 'all';
+
+  task: Task = new Task();
+  due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
+  selectedDateTime;
+  minDate: any;
+  due_time = '12:00:00.000';
+  times = TIMES;
+  taskSaving = false;
+  emailSubmitted = false;
+  note: Note = new Note();
+  noteSaving = false;
 
   emailSending = false;
   ccFlag = false;
@@ -83,41 +117,6 @@ export class ContactComponent implements OnInit {
   quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
   config = QuillEditor;
   focusEditor = '';
-
-  taskTypes = [];
-  task = {
-    subject: '',
-    recurrence: ''
-  };
-  due_date = {
-    year: '',
-    month: '',
-    day: ''
-  };
-  selectedDateTime;
-  minDate: any;
-  due_time = '12:00:00.000';
-  times = TIMES;
-  recurrings = RECURRING_TYPE;
-  taskSaving = false;
-  isRepeat = false;
-  taskSubmitted = false;
-  noteSubmitted = false;
-  emailSubmitted = false;
-
-  mainTimelines: ActivityDetail[] = [];
-  _id = '';
-  next: string = null;
-  prev: string = null;
-
-  note = {
-    title: '',
-    content: ''
-  };
-  noteSaving = false;
-
-  mainAction = 'send_email';
-  activeHistory = 'all';
 
   selectedAutomation: Automation;
   ActionName = ActionName;
@@ -135,6 +134,8 @@ export class ContactComponent implements OnInit {
     private route: ActivatedRoute,
     private fileService: FileService,
     private contactService: ContactService,
+    private noteService: NoteService,
+    private taskService: TaskService,
     private storeService: StoreService,
     private overlayService: OverlayService,
     private viewContainerRef: ViewContainerRef
@@ -149,6 +150,9 @@ export class ContactComponent implements OnInit {
         this.contact = res;
         this.groupActivities();
         this.timeLineArrangement();
+      } else {
+        this.contact = res;
+        this.groupActivities();
       }
     });
   }
@@ -165,6 +169,8 @@ export class ContactComponent implements OnInit {
    * Group Activities
    */
   groupActivities(): void {
+    this.groupActions = {};
+    this.mainTimelines = [];
     for (let i = this.contact.activity.length - 1; i >= 0; i--) {
       const e = this.contact.activity[i];
       const group = this.generateUniqueId(e);
@@ -238,7 +244,17 @@ export class ContactComponent implements OnInit {
   /**
    * Open dialog to merge
    */
-  openMergeContactDlg(): void {}
+  openMergeContactDlg(): void {
+    this.dialog.open(ContactMergeComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '700px',
+      maxHeight: '600px',
+      data: {
+        contact: this.contact
+      }
+    });
+  }
 
   /**
    * Open the Campagin Dialog to assign the curent contact to the compaign list.
@@ -277,13 +293,31 @@ export class ContactComponent implements OnInit {
   /**
    * Open Dialog to create new task
    */
-  openTaskDlg(): void {}
+  createTask(): void {
+    this.taskSaving = true;
+    this.taskService
+      .create({ ...this.task, contact: this._id })
+      .subscribe((res) => {
+        this.taskSaving = false;
+        this.storeService.registerActivity$(res);
+        this.storeService.activityAdd$([this._id], 'task');
+      });
+  }
 
   /**
    * Create Note
    */
-  createNote(): void {}
-
+  createNote(): void {
+    this.noteSaving = true;
+    this.noteService
+      .create({ ...this.note, contact: this._id })
+      .subscribe((res) => {
+        this.noteSaving = false;
+        this.storeService.registerActivity$(res);
+        this.storeService.activityAdd$([this._id], 'note');
+      });
+  }
+  
   insertEmailContentValue(value: string): void {
     this.emailEditor.quillEditor.focus();
     const range = this.emailEditor.quillEditor.getSelection();
@@ -300,15 +334,6 @@ export class ContactComponent implements OnInit {
 
   sendEmail(): void {}
 
-  toggleTypes(type: string): void {
-    const pos = this.taskTypes.indexOf(type);
-    if (pos !== -1) {
-      this.taskTypes.splice(pos, 1);
-    } else {
-      this.taskTypes.push(type);
-    }
-  }
-
   getDateTime(): any {
     if (this.due_date.day != '') {
       return (
@@ -316,26 +341,9 @@ export class ContactComponent implements OnInit {
       );
     }
   }
-
   setDateTime(): void {
     this.selectedDateTime = moment(this.getDateTime()).format('DD.MM.YYYY');
     close();
-  }
-
-  setRepeatEvent(): void {
-    this.isRepeat = !this.isRepeat;
-  }
-
-  contactMerge(contact: any): void {
-    this.dialog.open(ContactMergeComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '700px',
-      maxHeight: '600px',
-      data: {
-        contact: contact
-      }
-    });
   }
 
   selectAutomation(evt: any): void {

@@ -51,7 +51,7 @@
       </div>
       <div class="col-sm-4 form-group">
         <label for="source_cc">source</label>
-        <input type="text" id="source_cc" class="form-control" required name="source"  #source="ngModel" [(ngModel)]="contact.source" />
+        <input type="text" id="source_cc" class="form-control" name="source"  #source="ngModel" [(ngModel)]="contact.source" />
       </div>
       <div class="col-sm-4 form-group">
         <label for="stage_cc">stage</label>
@@ -63,11 +63,11 @@
     <div class="row">
       <div class="col-sm-6 form-group">
         <label for="website_cc">website</label>
-        <input type="text" id="website_cc" class="form-control" required name="website"  #website="ngModel" [(ngModel)]="contact.website" />
+        <input type="text" id="website_cc" class="form-control" name="website"  #website="ngModel" [(ngModel)]="contact.website" />
       </div>
       <div class="col-sm-6 form-group">
         <label for="company_cc">company</label>
-        <input type="text" id="company_cc" class="form-control" required name="company"  #company="ngModel" [(ngModel)]="contact.brokerage" />
+        <input type="text" id="company_cc" class="form-control" name="company"  #company="ngModel" [(ngModel)]="contact.brokerage" />
       </div>
     </div>
     <div class="row">
@@ -116,6 +116,6 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button type="button" mat-dialog-close class="btn c-blue">Cancel</button>
-    <button type="submit" class="btn btn-primary" [class.loading]="creating">Add</button>
+    <button type="submit" class="btn btn-primary" [class.loading]="isCreating">Add</button>
   </mat-dialog-actions>
 </form>

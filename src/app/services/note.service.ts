@@ -19,13 +19,20 @@ export class NoteService extends HttpService {
     super(errorService);
   }
 
+  create(data: any): Observable<any> {
+    return this.httpClient.post(this.server + NOTE.CREATE, data).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('NOTE CREATE', null))
+    );
+  }
+
   /**
    * Create the notes for bulk contacts
    * @param data : {title: string, content: string, contacts: contact ids array}
    */
   bulkCreate(data: any): Observable<any> {
     return this.httpClient.post(this.server + NOTE.BULK_CREATE, data).pipe(
-      map((res) => res[data]),
+      map((res) => res['data']),
       catchError(this.handleError('BULK NOTE CREATE', null))
     );
   }
