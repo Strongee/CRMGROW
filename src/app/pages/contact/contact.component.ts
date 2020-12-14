@@ -64,7 +64,7 @@ export class ContactComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   groupActions = {};
 
-  types = [];
+  taskTypes = [];
   task = {
     subject: '',
     recurrence: ''
@@ -81,14 +81,21 @@ export class ContactComponent implements OnInit {
   recurrings = RECURRING_TYPE;
   taskSaving = false;
   isRepeat = false;
-  submitted = false;
+  taskSubmitted = false;
+  noteSubmitted = false;
 
   mainTimelines: ActivityDetail[] = [];
   _id = '';
   next: string = null;
   prev: string = null;
 
-  mainAction = 'send_message';
+  note = {
+    title: '',
+    content: ''
+  };
+  noteSaving = false;
+
+  mainAction = 'send_email';
   activeHistory = 'all';
 
   selectedAutomation: Automation;
@@ -254,11 +261,11 @@ export class ContactComponent implements OnInit {
   createNote(): void {}
 
   toggleTypes(type: string): void {
-    const pos = this.types.indexOf(type);
+    const pos = this.taskTypes.indexOf(type);
     if (pos !== -1) {
-      this.types.splice(pos, 1);
+      this.taskTypes.splice(pos, 1);
     } else {
-      this.types.push(type);
+      this.taskTypes.push(type);
     }
   }
 
