@@ -12,11 +12,18 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ContactMergeComponent } from 'src/app/components/contact-merge/contact-merge.component';
 import { Automation } from 'src/app/models/automation.model';
-import { ActionName } from 'src/app/constants/variable.constants';
+import {
+  ActionName,
+  TIMES,
+  RECURRING_TYPE
+} from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { listToTree } from 'src/app/helper';
 import { AutomationShowFullComponent } from 'src/app/components/automation-show-full/automation-show-full.component';
+import * as moment from 'moment';
+import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
+import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
 
 @Component({
   selector: 'app-contact',
@@ -56,6 +63,26 @@ export class ContactComponent implements OnInit {
   ];
   contact: ContactDetail = new ContactDetail();
   groupActions = {};
+
+  types = [];
+  task = {
+    subject: '',
+    recurrence: ''
+  };
+  due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
+  selectedDateTime;
+  minDate: any;
+  due_time = '12:00:00.000';
+  times = TIMES;
+  recurrings = RECURRING_TYPE;
+  taskSaving = false;
+  isRepeat = false;
+  submitted = false;
+
   mainTimelines: ActivityDetail[] = [];
   _id = '';
   next: string = null;
@@ -195,12 +222,26 @@ export class ContactComponent implements OnInit {
   /**
    * Open dialog to create new group call
    */
-  openGroupCallDlg(): void {}
+  openGroupCallDlg(): void {
+    this.dialog.open(JoinCallRequestComponent, {
+      width: '96vw',
+      maxWidth: '500px',
+      height: 'auto',
+      disableClose: true
+    });
+  }
 
   /**
    * Open Dialog to create new appointment
    */
-  openAppointmentDlg(): void {}
+  openAppointmentDlg(): void {
+    this.dialog.open(CalendarDialogComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      maxHeight: '700px'
+    });
+  }
 
   /**
    * Open Dialog to create new task
@@ -211,6 +252,32 @@ export class ContactComponent implements OnInit {
    * Create Note
    */
   createNote(): void {}
+
+  toggleTypes(type: string): void {
+    const pos = this.types.indexOf(type);
+    if (pos !== -1) {
+      this.types.splice(pos, 1);
+    } else {
+      this.types.push(type);
+    }
+  }
+
+  getDateTime(): any {
+    if (this.due_date.day != '') {
+      return (
+        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+      );
+    }
+  }
+
+  setDateTime(): void {
+    this.selectedDateTime = moment(this.getDateTime()).format('DD.MM.YYYY');
+    close();
+  }
+
+  setRepeatEvent(): void {
+    this.isRepeat = !this.isRepeat;
+  }
 
   contactMerge(contact: any): void {
     this.dialog.open(ContactMergeComponent, {
@@ -280,6 +347,8 @@ export class ContactComponent implements OnInit {
   }
 
   createAutomation(): void {}
+
+  addNewTask(): void {}
 
   ICONS = {
     follow_up: '../../assets/img/automations/follow_up.svg',
