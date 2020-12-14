@@ -77,6 +77,8 @@ export class ContactComponent implements OnInit {
   emailContacts: Contact[] = [];
   ccContacts: Contact[] = [];
   bccContacts: Contact[] = [];
+  emailSubject = '';
+  emailContent = '';
   selectedTemplate = { subject: '', content: '' };
   quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
   config = QuillEditor;
@@ -282,6 +284,20 @@ export class ContactComponent implements OnInit {
    */
   createNote(): void {}
 
+  insertEmailContentValue(value: string): void {
+    this.emailEditor.quillEditor.focus();
+    const range = this.emailEditor.quillEditor.getSelection();
+    if (!range) {
+      return;
+    }
+    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
+    this.emailEditor.quillEditor.setSelection(
+      range.index + value.length,
+      0,
+      'user'
+    );
+  }
+
   sendEmail(): void {}
 
   toggleTypes(type: string): void {
@@ -379,6 +395,8 @@ export class ContactComponent implements OnInit {
 
   selectTemplate(event: any): void {
     this.selectedTemplate = event;
+    this.emailSubject = this.selectedTemplate.subject;
+    this.emailContent = this.selectedTemplate.content;
   }
 
   getEditorInstance(editorInstance: any): void {

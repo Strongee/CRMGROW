@@ -237,15 +237,15 @@
                       <mat-icon class="mr-2">warning</mat-icon>
                       Email tracking is not working if you add cc, bcc.
                     </div>
-                    <div class="v-center" *ngIf="ccFlag">
-                      <label>cc:</label>
+                    <div class="v-center py-2 email-cc" *ngIf="ccFlag">
+                      <label class="f-6 text-uppercase m-0">cc:</label>
                       <app-input-contacts
                         [selectedContacts]="ccContacts"
                         class="w-100 ml-2"
                       ></app-input-contacts>
                     </div>
-                    <div class="v-center" *ngIf="bccFlag">
-                      <label>bcc:</label>
+                    <div class="v-center py-2 email-bcc" *ngIf="bccFlag">
+                      <label class="f-6 text-uppercase m-0">bcc:</label>
                       <app-input-contacts
                         [selectedContacts]="bccContacts"
                         class="w-100 ml-2"
@@ -259,7 +259,7 @@
                       placeholder="Subject:"
                       name="emailTitle"
                       #emailTitle="ngModel"
-                      [(ngModel)]="selectedTemplate.subject"
+                      [(ngModel)]="emailSubject"
                     >
                     <span
                       class="invalid-error f-3 font-weight-bold c-red"
@@ -272,7 +272,7 @@
                     <quill-editor
                       image-resize="true"
                       placeholder="Start typing here..."
-                      [(ngModel)]="selectedTemplate.content"
+                      [(ngModel)]="emailContent"
                       [modules]="config"
                       name="mailContent"
                       [styles]="{ height: '180px' }"
@@ -289,6 +289,19 @@
                     >
                       Content is required
                     </span>
+                    <div ngbDropdown class="insert-token">
+                      <div class="v-center" ngbDropdownToggle>
+                        <span class="f-1 font-weight-bold mr-2">Insert Token</span>
+                        <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+                        <i class="d-block i-icon i-triangle-up bgc-blue"></i>
+                      </div>
+                      <div ngbDropdownMenu class="light p-2">
+                        <div class="f-3 p-1 c-pointer" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</div>
+                        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_name}')">Your name</div>
+                        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_email}')">Your email</div>
+                        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_phone}')">Your phone</div>
+                      </div>
+                    </div>
                   </div>
                   <div class="v-center justify-content-between p-3 email-setting">
                     <div class="v-center justify-content-between">

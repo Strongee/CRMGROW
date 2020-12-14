@@ -179,6 +179,9 @@
           .mat-icon {
             color: #c6c7cf;
           }
+          .email-cc, .email-bcc {
+            border-bottom: 1px solid #c6c7cf;
+          }
         }
         .email-title {
           input {
@@ -188,7 +191,34 @@
           border-bottom: 1px solid #c6c7cf;
         }
         .email-body {
+          position: relative;
           border-bottom: 1px solid #c6c7cf;
+          .insert-token {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            .dropdown-toggle {
+              .i-triangle-up {
+                display: none !important;
+              }
+            }
+            &.show {
+              .dropdown-toggle {
+                color: $color-blue;
+                .i-triangle-down {
+                  display: none !important;
+                }
+                .i-triangle-up {
+                  display: block !important;
+                }
+              }
+            }
+            i {
+              width: 10px;
+              height: 10px;
+              min-width: 10px;
+            }
+          }
         }
         .email-setting {
           .material-button {
@@ -382,6 +412,7 @@
     .ql-toolbar {
       border: 0;
       border-bottom: 1px solid #c6c7cf;
+      padding-right: 90px;
     }
     .ql-container {
       border: none;
