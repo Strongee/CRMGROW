@@ -67,6 +67,7 @@ export const ACTIVITY = {
   REMOVE: 'activity/remove'
 };
 export const CONTACT = {
+  CREATE: 'contact',
   LOAD_ALL: 'contact',
   LOAD_PAGE: 'contact/last/',
   ADVANCE_SERACH: 'contact/advance-search',

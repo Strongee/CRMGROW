@@ -1,11 +1,16 @@
-
-<div class="custom-mat-table">
-  <table class="w-100" mat-table [dataSource]="storeService.activities$ | async">
+<div class="custom-mat-table position-relative">
+  <table class="w-100"
+    mat-table
+    [dataSource]="storeService.activities$ | async | paginate: {id: 'activityPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: activityService.total$ | async}">
 
     <!-- Name Column -->
     <ng-container matColumnDef="contact_name">
-      <th mat-header-cell *matHeaderCellDef class="pl-0">contact name</th>
-      <td mat-cell *matCellDef="let element" class="pl-0">
+      <th mat-header-cell
+        *matHeaderCellDef
+        class="pl-0">contact name</th>
+      <td mat-cell
+        *matCellDef="let element"
+        class="pl-0">
         <div class="v-center">
           <div class="contact-avatar f-3 mr-2">{{element.contacts.avatarName}}</div>
           <span>{{element.contacts.fullName}}</span>
@@ -15,16 +20,21 @@
 
     <!-- Label Column -->
     <ng-container matColumnDef="contact_label">
-      <th mat-header-cell *matHeaderCellDef>label</th>
-      <td mat-cell *matCellDef="let element">
-        <app-label-select [value]="element.contacts.label"></app-label-select>
+      <th mat-header-cell
+        *matHeaderCellDef>label</th>
+      <td mat-cell
+        *matCellDef="let element">
+        <app-label-select [value]="element.contacts.label"
+          (valueChange)="updateLabel($event, element.contacts._id)"></app-label-select>
       </td>
     </ng-container>
 
     <!-- Activity Column -->
     <ng-container matColumnDef="activity">
-      <th mat-header-cell *matHeaderCellDef>last activities</th>
-      <td mat-cell *matCellDef="let element">
+      <th mat-header-cell
+        *matHeaderCellDef>last activities</th>
+      <td mat-cell
+        *matCellDef="let element">
         <div class="v-center">
           <i class="act-icon normal {{'act-' + element.type}} d-block mr-2"></i>
           <span>{{element.content}}</span>
@@ -34,21 +44,82 @@
 
     <!-- Email Column -->
     <ng-container matColumnDef="contact_email">
-      <th mat-header-cell *matHeaderCellDef>email</th>
-      <td mat-cell *matCellDef="let element">
+      <th mat-header-cell
+        *matHeaderCellDef>email</th>
+      <td mat-cell
+        *matCellDef="let element">
         <span class="">{{element.contacts.email}}</span>
       </td>
     </ng-container>
 
     <!-- Phone Column -->
     <ng-container matColumnDef="contact_phone">
-      <th mat-header-cell *matHeaderCellDef>phone</th>
-      <td mat-cell *matCellDef="let element">
+      <th mat-header-cell
+        *matHeaderCellDef>phone</th>
+      <td mat-cell
+        *matCellDef="let element">
         <span class="c-blue font-weight-bold">{{element.contacts.cell_phone | phone_format}}</span>
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
-    <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+    <tr mat-header-row
+      *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+    <tr mat-row
+      *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
   </table>
+  <ng-container *ngIf="(storeService.activities$ | async).length; else emptyListTemplate">
+    <div class="updating-status"
+      *ngIf="(activityService.loading$ | async) === STATUS.REQUEST">
+      LOADING
+    </div>
+    <div class="my-2 table-control mode-1">
+      <div class="pagination-wrapper m-auto">
+        <pagination-controls (pageChange)="changePage($event)"
+          (pageBoundsCorrection)="onOverPages($event)"
+          id="activityPages"
+          maxSize="5"
+          previousLabel=""
+          nextLabel="">
+        </pagination-controls>
+      </div>
+      <div class="shadow-dropdown ml-auto page-size-control"
+        ngbDropdown
+        placement="top-right">
+        <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+          ngbDropdownToggle>
+          <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
+        </div>
+        <div ngbDropdownMenu
+          aria-labelledby="contactPageSize">
+          <div class="py-2"
+            ngbDropdownItem
+            *ngFor="let type of PAGE_COUNTS"
+            (click)="changePageSize(type)">
+            <span class="f-3 v-center"
+              [class.font-weight-bold]="type.id === pageSize.id">
+              Show {{type.label}} rows per page
+              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                *ngIf="type.id === pageSize.id"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #emptyListTemplate>
+    <ng-container [ngSwitch]="(activityService.loading$ | async)">
+      <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
+        <div class="object-icon v-center">
+          <i class="i-icon i-activity d-block bgc-dark"></i>
+        </div>
+        <h4 class="font-weight-bold mt-4 mb-3">
+          There is no activity in your account.
+        </h4>
+      </div>
+      <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+        <div class="loader mt-5 lg"></div>
+        <h4 class="fw-600 mt-2">Loading activities...</h4>
+      </div>
+    </ng-container>
+  </ng-template>
 </div>

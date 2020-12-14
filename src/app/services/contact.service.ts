@@ -52,7 +52,16 @@ export class ContactService extends HttpService {
     });
   }
 
-  create(contact: any): void {}
+  /**
+   * Create Contact
+   * @param contact
+   */
+  create(contact: Contact): Observable<Contact> {
+    return this.httpClient.post(this.server + CONTACT.CREATE, contact).pipe(
+      map((res) => new Contact().deserialize(res['data'])),
+      catchError(this.handleError('CONTACT CREATE', null))
+    );
+  }
   /**
    * Read the Detail information of the contact and Emit the Behavior Subject
    * @param _id: Contact Id to read the detail information
@@ -117,17 +126,6 @@ export class ContactService extends HttpService {
         map((res) => res['status'] || false),
         catchError(this.handleError('BULK UPDATE', false))
       );
-  }
-  bulkUpdate$(_ids: string[], contact: any, tagData: any): void {
-    const contacts = this.storeService.pageContacts.getValue();
-    contacts.forEach((e) => {
-      if (_ids.indexOf(e._id) !== -1) {
-        e.deserialize(contact);
-        if (tagData['option']) {
-          e.updateTag(tagData);
-        }
-      }
-    });
   }
   /**
    * download the csv of selected contacts

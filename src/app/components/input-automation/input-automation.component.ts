@@ -53,7 +53,9 @@ export class InputAutomationComponent
     Automation[]
   >(1);
 
-  constructor(private automationService: AutomationService) {}
+  constructor(private automationService: AutomationService) {
+    this.automationService.loadAll();
+  }
 
   ngOnInit(): void {
     this.inputControl.valueChanges
