@@ -231,7 +231,8 @@ import { ImportContactMergeConfirmComponent } from './import-contact-merge-confi
     InputCompanyComponent,
     AutomationShowFullComponent,
     AutomationTreeOverlayComponent,
-    MaterialSendComponent
+    MaterialSendComponent,
+    TaskTypeComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -108,65 +108,6 @@
   right: 0px;
 }
 .main-actions {
-  .action-headers {
-    position: relative;
-    .send_email, .add_task {
-      width: 110px;
-      opacity: 0.4;
-    }
-    .send_text {
-      width: 75px;
-      opacity: 0.4;
-    }
-    .create_note {
-      width: 40px;
-      opacity: 0.4;
-    }
-    .active {
-      color: $color-blue;
-      opacity: 1;
-    }
-    &.send_email::after {
-      content: '';
-      position: absolute;
-      bottom: 0px;
-      left: 0px;
-      width: 110px;
-      height: 3px;
-      background-color: $color-blue;
-      transition: all .3s;
-    }
-    &.send_text::after {
-      content: '';
-      position: absolute;
-      bottom: 0px;
-      left: 126px;
-      width: 75px;
-      height: 3px;
-      background-color: $color-blue;
-      transition: all .3s;
-    }
-    &.create_note::after {
-      content: '';
-      position: absolute;
-      bottom: 0px;
-      left: 217px;
-      width: 40px;
-      height: 3px;
-      background-color: $color-blue;
-      transition: all .3s;
-    }
-    &.add_task::after {
-      content: '';
-      position: absolute;
-      bottom: 0px;
-      left: 273px;
-      width: 110px;
-      height: 3px;
-      background-color: $color-blue;
-      transition: all .3s;
-    }
-  }
   .tab-panel {
     border: 1px solid #c6c7cf;
     .email-panel {
@@ -200,6 +141,11 @@
           outline: none;
           background: transparent;
         }
+        .inline-error {
+          position: absolute;
+          right: 12px;
+          top: 12px;
+        }
       }
       .note-content {
         background-color: #fff7d1;
@@ -207,31 +153,16 @@
           resize: none;
           border: none;
           outline: none;
-          background-color: transparent;
+          background: transparent;
+        }
+        .inline-error {
+          position: absolute;
+          right: 12px;
+          top: 20px;
         }
       }
     }
     .task-panel {
-      .task-types {
-        border: 1px solid $color-trans28;
-        label {
-          opacity: 1;
-          margin: -1px;
-          &.active {
-            border: 1px solid $color-blue;
-          }
-      
-          i {
-            width: 16px;
-            height: 16px;
-            min-width: 16px;
-          }
-      
-          &:nth-child(n+2) {
-            margin-left: 0px;
-          }
-        }
-      }
       .task-time {
         .form-group {
           .form-control {
@@ -249,9 +180,6 @@
               border-bottom-left-radius: unset;
             }
           }
-        }
-        select.form-control {
-          background-image: linear-gradient(45deg, transparent 50%, #101336 50%), linear-gradient(135deg, #101336 50%, transparent 50%);
         }
         .btn {
           height: 40px;
@@ -398,5 +326,21 @@
   }
   .dropdown-toggle::after {
     display: none;
+  }
+}
+
+:host ::ng-deep {
+  .tab-container {
+    padding: 0px!important;
+
+    .tab {
+      text-transform: none!important;
+      letter-spacing: 0px!important;
+      padding-left: 12px!important;
+      padding-right: 12px!important;
+      &:nth-child(2) {
+        padding-left: 6px!important;
+      }
+    }
   }
 }

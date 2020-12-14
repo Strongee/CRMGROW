@@ -15,7 +15,7 @@ import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
   TIMES,
-  RECURRING_TYPE
+  REPEAT_DURATIONS
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -24,6 +24,9 @@ import { AutomationShowFullComponent } from 'src/app/components/automation-show-
 import * as moment from 'moment';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
+import { TabItem } from 'src/app/utils/data.types';
+import { Task } from 'src/app/models/task.model';
+import { Note } from 'src/app/models/note.model';
 
 @Component({
   selector: 'app-contact',
@@ -61,14 +64,24 @@ export class ContactComponent implements OnInit {
       label: 'Deals'
     }
   ];
+  REPEAT_DURATIONS = REPEAT_DURATIONS;
+  tabs: TabItem[] = [
+    { icon: '', label: 'Send Email', id: 'send_email' },
+    { icon: '', label: 'Send Text', id: 'send_text' },
+    { icon: '', label: 'Note', id: 'note' },
+    { icon: '', label: 'Add new task', id: 'add_task' }
+  ];
+  action: TabItem = this.tabs[0];
+
   contact: ContactDetail = new ContactDetail();
   groupActions = {};
+  mainTimelines: ActivityDetail[] = [];
+  _id = '';
+  next: string = null;
+  prev: string = null;
+  activeHistory = 'all';
 
-  taskTypes = [];
-  task = {
-    subject: '',
-    recurrence: ''
-  };
+  task: Task = new Task();
   due_date = {
     year: '',
     month: '',
@@ -78,25 +91,9 @@ export class ContactComponent implements OnInit {
   minDate: any;
   due_time = '12:00:00.000';
   times = TIMES;
-  recurrings = RECURRING_TYPE;
   taskSaving = false;
-  isRepeat = false;
-  taskSubmitted = false;
-  noteSubmitted = false;
-
-  mainTimelines: ActivityDetail[] = [];
-  _id = '';
-  next: string = null;
-  prev: string = null;
-
-  note = {
-    title: '',
-    content: ''
-  };
+  note: Note = new Note();
   noteSaving = false;
-
-  mainAction = 'send_email';
-  activeHistory = 'all';
 
   selectedAutomation: Automation;
   ActionName = ActionName;
@@ -260,15 +257,6 @@ export class ContactComponent implements OnInit {
    */
   createNote(): void {}
 
-  toggleTypes(type: string): void {
-    const pos = this.taskTypes.indexOf(type);
-    if (pos !== -1) {
-      this.taskTypes.splice(pos, 1);
-    } else {
-      this.taskTypes.push(type);
-    }
-  }
-
   getDateTime(): any {
     if (this.due_date.day != '') {
       return (
@@ -280,10 +268,6 @@ export class ContactComponent implements OnInit {
   setDateTime(): void {
     this.selectedDateTime = moment(this.getDateTime()).format('DD.MM.YYYY');
     close();
-  }
-
-  setRepeatEvent(): void {
-    this.isRepeat = !this.isRepeat;
   }
 
   contactMerge(contact: any): void {

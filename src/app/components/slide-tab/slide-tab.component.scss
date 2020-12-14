@@ -59,3 +59,15 @@
     }
   }
 }
+
+.tab-container.plain {
+  background-color: transparent;
+
+  .tab-indicator {
+    height: 4px;
+    bottom: 0px;
+    top: unset;
+    transform: none;
+    background-color: $color-blue;
+  }
+}

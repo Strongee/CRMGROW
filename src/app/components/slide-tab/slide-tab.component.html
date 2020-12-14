@@ -1,4 +1,4 @@
-<div class="tab-container" #container>
+<div class="tab-container" #container [class.plain]="type === 'plain' ? 'plain' : ''">
   <div class="tab-indicator" #indicator></div>
   <ng-container *ngFor="let tab of tabs;">
     <div class="tab" [ngClass]="{'active': tab.id === selected.id}" (click)="changeTab($event, tab)">
