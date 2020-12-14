@@ -81,9 +81,12 @@ import { LabelEditComponent } from './label-edit/label-edit.component';
 import { ContactMergeComponent } from './contact-merge/contact-merge.component';
 import { InputSourceComponent } from './input-source/input-source.component';
 import { InputCompanyComponent } from './input-company/input-company.component';
+import { ImportContactEditComponent } from './import-contact-edit/import-contact-edit.component';
+import { ImportContactMergeComponent } from './import-contact-merge/import-contact-merge.component';
 import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
 import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
 import { MaterialSendComponent } from './material-send/material-send.component';
+import { ImportContactMergeConfirmComponent } from './import-contact-merge-confirm/import-contact-merge-confirm.component';
 
 @NgModule({
   declarations: [
@@ -165,9 +168,12 @@ import { MaterialSendComponent } from './material-send/material-send.component';
     ContactMergeComponent,
     InputSourceComponent,
     InputCompanyComponent,
+    ImportContactEditComponent,
+    ImportContactMergeComponent,
     AutomationShowFullComponent,
     AutomationTreeOverlayComponent,
-    MaterialSendComponent
+    MaterialSendComponent,
+    ImportContactMergeConfirmComponent
   ],
   imports: [
     CommonModule,

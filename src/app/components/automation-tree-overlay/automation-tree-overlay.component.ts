@@ -10,9 +10,7 @@ export class AutomationTreeOverlayComponent implements OnInit {
   @Input('dataSource') node;
   constructor(private overlayService: OverlayService) {}
 
-  ngOnInit(): void {
-    console.log('###', this.node);
-  }
+  ngOnInit(): void {}
 
   overlayClose(): void {
     this.overlayService.close(null);
