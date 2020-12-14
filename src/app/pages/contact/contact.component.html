@@ -17,13 +17,36 @@
           <div class="f-20 font-weight-bold">{{contact.fullName}}</div>
           <div class="f-3 op-40">{{contact.last_activity_time | date :'MM/dd/yyyy'}}</div>
         </div>
+        <div ngbDropdown class="button-more ml-auto">
+          <a class="d-flex c-pointer" ngbDropdownToggle>
+            <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
+          </a>
+          <div ngbDropdownMenu class="light">
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-list bgc-dark ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold">Add to campaign</span>
+            </button>
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-contact-merge bgc-dark ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold">Merge</span>
+            </button>
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold">Share contact</span>
+            </button>
+            <button class="v-center border-0 py-2 c-dark dropdown-item">
+              <i class="i-icon i-trash bgc-red ml-1" aria-hidden="true"></i>
+              <span class="ml-3 f-3 font-weight-bold c-red">Delete</span>
+            </button>
+          </div>
+        </div>
       </div>
       <div class="my-3 py-2">
         <app-label-select [value]="contact.label" type="form"></app-label-select>
       </div>
-      <div class="v-center justify-content-between mb-3">
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 mr-1" (click)="openGroupCallDlg()">Create group call</button>
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 ml-1" (click)="openAppointmentDlg()">Create appointment</button>
+      <div class="v-center justify-content-between mb-3 create-actions">
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 mr-1 py-2" (click)="openGroupCallDlg()">Create group call</button>
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 ml-1 py-2" (click)="openAppointmentDlg()">Create appointment</button>
       </div>
       <mat-accordion multi class="general-panels">
         <!-- Begin Contact Detail -->
@@ -33,7 +56,10 @@
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Contact details</span>
-                <button class="btn border border-primary f-2 font-weight-bold c-blue ml-auto btn-sm" (click)="openMergeContactDlg()">Edit</button>
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                  <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
+                  <span>Edit</span>
+                </button>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -62,12 +88,26 @@
         <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <div class="v-center">
+              <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Secondary contacts</span>
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                  <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
+                  <span>Edit</span>
+                </button>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
+          <div class="contact-detail">
+            <div class="v-center py-1">
+              <i class="i-icon i-contact-phone bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.secondary_phone}}</span>
+            </div>
+            <div class="v-center py-1">
+              <i class="i-icon i-message bgc-dark mr-2"></i>
+              <span class="f-6">{{contact.secondary_email}}</span>
+            </div>
+          </div>
           <div class="contact-secondary"></div>
         </mat-expansion-panel>
         <!-- End Contact Secondary Information -->
@@ -76,24 +116,30 @@
         <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <div class="v-center">
+              <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Additional information</span>
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                  <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
+                  <span>Edit</span>
+                </button>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="contact-additional">
             <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40">Source</span>
+              <span class="f-6 fw-600 op-40 info-title">Source</span>
               <span class="f-6">{{contact.source}}</span>
             </div>
             <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40">Current Company</span>
+              <span class="f-6 fw-600 op-40 info-title">Current Company</span>
               <span class="f-6">{{contact.brokerage}}</span>
             </div>
-            <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40">Tags</span>
-              <span class="f-6"></span>
+            <div class="d-flex py-2">
+              <span class="f-6 fw-600 op-40 info-title">Tags</span>
+              <div class="f-3 tags-wrapper flex-grow-1">
+                <app-input-tag [selectedTags]="contact.tags"></app-input-tag>
+              </div>
             </div>
           </div>
         </mat-expansion-panel>

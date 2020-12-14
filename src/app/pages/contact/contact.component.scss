@@ -2,6 +2,9 @@
 
 .contact-info-panel {
   min-width: 376px;
+  .info-title {
+    width: 150px;
+  }
   .automation {
     app-input-automation {
       width: 100%;
@@ -342,5 +345,50 @@
         padding-left: 6px!important;
       }
     }
+  }
+}
+
+:host ::ng-deep {
+  .tags-wrapper {
+    .chip {
+      background: #ddd;
+      padding: 0rem 0.1rem 0rem 0.2rem!important;
+      border-radius: 4px;
+      font-size: 13px;
+      align-items: center;
+      margin-right: 2px;
+      margin-bottom: 2px;
+    }
+  }
+}
+
+
+
+// Responsive Design
+@media screen and (max-width: 1200px) {
+  .contact-panel {
+    flex-direction: column;
+
+    .contact-info-panel {
+      padding-right: 0px!important;
+      min-width: unset;
+    }
+
+    .type-headers {
+      flex-wrap: wrap;
+    }
+    .contact-action-panel {
+      &::before {
+        display: none;
+      }
+    }
+    .history-panel {
+      padding-left: 0px!important;
+    }
+  }
+}
+@media screen and (max-width: 380px) {
+  .create-actions button {
+    font-size: 13px;
   }
 }

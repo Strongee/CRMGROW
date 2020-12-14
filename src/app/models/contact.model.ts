@@ -23,6 +23,8 @@ export class Contact implements Deserializable {
   tags: string[];
   recruiting_stage: string;
   website: string;
+  secondary_email: string;
+  secondary_phone: string;
 
   deserialize(input: any): this {
     return Object.assign(this, input);
