@@ -110,8 +110,12 @@
 .main-actions {
   .action-headers {
     position: relative;
-    .send_message, .add_task {
+    .send_email, .add_task {
       width: 110px;
+      opacity: 0.4;
+    }
+    .send_text {
+      width: 75px;
       opacity: 0.4;
     }
     .create_note {
@@ -122,7 +126,7 @@
       color: $color-blue;
       opacity: 1;
     }
-    &.send_message::after {
+    &.send_email::after {
       content: '';
       position: absolute;
       bottom: 0px;
@@ -132,11 +136,21 @@
       background-color: $color-blue;
       transition: all .3s;
     }
-    &.create_note::after {
+    &.send_text::after {
       content: '';
       position: absolute;
       bottom: 0px;
       left: 126px;
+      width: 75px;
+      height: 3px;
+      background-color: $color-blue;
+      transition: all .3s;
+    }
+    &.create_note::after {
+      content: '';
+      position: absolute;
+      bottom: 0px;
+      left: 217px;
       width: 40px;
       height: 3px;
       background-color: $color-blue;
@@ -146,7 +160,7 @@
       content: '';
       position: absolute;
       bottom: 0px;
-      left: 182px;
+      left: 273px;
       width: 110px;
       height: 3px;
       background-color: $color-blue;
@@ -155,25 +169,45 @@
   }
   .tab-panel {
     border: 1px solid #c6c7cf;
-    .message-panel {
-      .message-box {
+    .email-panel {
+      .email-box {
         .sender, .receiver {
           background-color: rgba(16,19,54,0.04);
           border-bottom: 1px solid #c6c7cf;
         }
-        .message-title {
+        .email-title {
           input {
             border: none;
             outline: none;
           }
           border-bottom: 1px solid #c6c7cf;
         }
-        .message-body {
+        .email-body {
           textarea {
             border: none;
             outline: none;
             resize: none;
           }
+        }
+      }
+    }
+    .note-panel {
+      .note-title {
+        background-color:rgba(16,19,54,0.04);
+        border-bottom: 1px solid #C6C7CF;
+        input {
+          border: none;
+          outline: none;
+          background: transparent;
+        }
+      }
+      .note-content {
+        background-color: #fff7d1;
+        textarea {
+          resize: none;
+          border: none;
+          outline: none;
+          background-color: transparent;
         }
       }
     }
