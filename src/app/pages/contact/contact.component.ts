@@ -79,6 +79,7 @@ export class ContactComponent implements OnInit {
   recurrings = RECURRING_TYPE;
   taskSaving = false;
   isRepeat = false;
+  submitted = false;
 
   mainTimelines: ActivityDetail[] = [];
   _id = '';
@@ -261,6 +262,8 @@ export class ContactComponent implements OnInit {
   setRepeatEvent(): void {
     this.isRepeat = !this.isRepeat;
   }
+
+  createTask(): void {}
 
   contactMerge(contact: any): void {
     this.dialog.open(ContactMergeComponent, {
