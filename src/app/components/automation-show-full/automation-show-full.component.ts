@@ -1,8 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewContainerRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActionName } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
+import { OverlayService } from 'src/app/services/overlay.service';
 
 @Component({
   selector: 'app-automation-show-full',
@@ -19,11 +20,25 @@ export class AutomationShowFullComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AutomationShowFullComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private overlayService: OverlayService,
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.data.automation;
+  }
+
+  easyView(node: any, origin: any, content: any): void {
+    this.overlayService.open(
+      origin,
+      content,
+      this.viewContainerRef,
+      'automation',
+      {
+        data: node
+      }
+    );
   }
 
   ICONS = {
