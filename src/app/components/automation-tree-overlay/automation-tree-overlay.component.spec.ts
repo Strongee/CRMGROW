@@ -8,9 +8,8 @@ describe('AutomationTreeOverlayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AutomationTreeOverlayComponent ]
-    })
-    .compileComponents();
+      declarations: [AutomationTreeOverlayComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

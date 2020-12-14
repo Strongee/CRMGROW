@@ -25,6 +25,9 @@ Quill.register('modules/imageResize', ImageResize);
 export class ImageEditComponent implements OnInit {
   submitted = false;
   image = {
+    _id: '',
+    url: [],
+    role: '',
     preview: '',
     title: '',
     description: ''
@@ -47,7 +50,7 @@ export class ImageEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.image = { ...this.data };
+    this.image = { ...this.data.material };
   }
 
   update(): void {
@@ -55,7 +58,7 @@ export class ImageEditComponent implements OnInit {
     const image = {};
     const keys = ['title', 'preview', 'description'];
     keys.forEach((e) => {
-      if (this.image[e] != this.data[e]) {
+      if (this.image[e] != this.data.material[e]) {
         image[e] = this.image[e];
       }
     });
@@ -80,6 +83,36 @@ export class ImageEditComponent implements OnInit {
         }
       );
     }
+  }
+
+  duplicate(): void {
+    this.saving = true;
+    let image;
+    if (this.image.role == 'admin') {
+      image = {
+        url: this.image.url,
+        title: this.image.title,
+        preview: this.image.preview,
+        description: this.image.description,
+        default_edited: true,
+        default_pdf: this.image._id
+      };
+    } else {
+      image = {
+        url: this.image.url,
+        title: this.image.title,
+        preview: this.image.preview,
+        description: this.image.description,
+        has_shared: true,
+        shared_pdf: this.image._id
+      };
+    }
+    this.materialService.createImage(image).subscribe((res) => {
+      if (res['data']) {
+        this.saving = false;
+        this.dialogRef.close(res['data']);
+      }
+    });
   }
 
   openPreviewDialog(): void {

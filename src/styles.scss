@@ -1610,3 +1610,33 @@ body {
   }
 }
 
+.trans-modal {
+  max-width: unset !important;
+
+  .mat-dialog-container {
+    transform: none;
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+.cdk-global-scrollblock {
+  position: unset;
+  width: unset;
+  overflow-y: unset;
+}
+
+.cdk-overlay-backdrop {
+  &.trans {
+    display: none;
+  }
+}
+
+.config-back-drop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background: rgba(43, 43, 43, 0.5);
+  bottom: 0px;
+  right: 0px;
+}

@@ -27,6 +27,9 @@
     }
     .form-control {
         width: 120px;
+        @media screen and (max-width: 576px) {
+            width: 100%;
+        }
     }
     .reminder {
         .form-group {

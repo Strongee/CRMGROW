@@ -1,0 +1,125 @@
+<h1 mat-dialog-title>Contacts merge</h1>
+<mat-dialog-content>
+  <div class="contact-wrapper">
+    <table class="table my-3">
+      <thead>
+      <th></th>
+      <th>
+        <div class="check-wrapper">
+          <div class="custom-control custom-radio ml-auto">
+            <input type="radio" class="custom-control-input" id="primary-contact" name="contact-select"
+                   [checked]="selectedContact == 'Primary'" (change)="changeContact($event)">
+            <label class="custom-control-label f-4 font-weight-bold" for="primary-contact">Primary Contact</label>
+          </div>
+        </div>
+      </th>
+      <th>
+        <div class="check-wrapper">
+          <div class="custom-control custom-radio ml-auto">
+            <input type="radio" class="custom-control-input" id="secondary-contact" name="contact-select"
+                   [checked]="selectedContact == 'Secondary'" (change)="changeContact($event)">
+            <label class="custom-control-label f-4 font-weight-bold" for="secondary-contact">Secondary Contact</label>
+          </div>
+        </div>
+      </th>
+      </thead>
+      <tbody>
+      <tr>
+        <td colspan="3"></td>
+      </tr>
+      <tr *ngFor="let column of columns let row = index">
+        <ng-container *ngIf="isCheckable(column) else selectableColumn">
+          <td>
+            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+          </td>
+          <td>
+            <div class="check-wrapper">
+              <div class="custom-control custom-radio ml-auto">
+                <input type="radio" class="custom-control-input" id="primary-{{column}}" name="contact-{{column}}"
+                       [checked]="primarySelectionModel[row]" (change)="changeCheck(row, column)">
+                <label class="custom-control-label f-3 font-weight-bold" for="primary-{{column}}">{{primaryContact[column]}}</label>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="check-wrapper">
+              <div class="custom-control custom-radio ml-auto">
+                <input type="radio" class="custom-control-input" id="secondary-{{column}}" name="contact-{{column}}"
+                       [checked]="secondarySelectionModel[row]" (change)="changeCheck(row, column)">
+                <label class="custom-control-label f-3 font-weight-bold" for="secondary-{{column}}">{{secondaryContact[column]}}</label>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-template #selectableColumn>
+          <td>
+            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="primary-{{column}}"
+                     [checked]="primarySelectionModel[row]"
+                     (change)="$event ? changePrimarySelection(row, column) : null"
+                     [disabled]="primaryContact[column] == '' || primaryContact[column] == undefined"
+              >
+              <ng-container *ngIf="isSelectableColumn(column); else nonSelectablePrimaryColumn">
+                <label class="custom-control-label"
+                       for="primary-{{column}}"
+                       [innerHTML]="selectableContent(column, primaryContact[column])"
+                ></label>
+              </ng-container>
+              <ng-template #nonSelectablePrimaryColumn>
+                <label class="custom-control-label" for="primary-{{column}}">{{primaryContact[column]}}</label>
+              </ng-template>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="secondary-{{column}}"
+                     [checked]="secondarySelectionModel[row]"
+                     (change)="$event ? changeSecondarySelection(row, column) : null"
+                     [disabled]="secondaryContact[column] == '' || secondaryContact[column] == undefined"
+              >
+              <ng-container *ngIf="isSelectableColumn(column); else nonSelectableSecondaryColumn">
+                <label class="custom-control-label"
+                       for="secondary-{{column}}"
+                       [innerHTML]="selectableContent(column, secondaryContact[column])"
+                ></label>
+              </ng-container>
+              <ng-template #nonSelectableSecondaryColumn>
+                <label class="custom-control-label" for="secondary-{{column}}">{{secondaryContact[column]}}</label>
+              </ng-template>
+            </div>
+          </td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </table>
+    <ng-container *ngIf="previewContact">
+      <div class="f-5 font-weight-bold text-center w-100 mt-5">Preview Contact</div>
+      <table class="table">
+        <thead>
+        <th></th>
+        <th></th>
+        </thead>
+        <tbody>
+        <tr *ngFor="let column of previewColumns let row = index">
+          <td>
+            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+          </td>
+          <td>
+            <div class="f-3 font-weight-bold"
+                 [innerHTML]="isSelectableColumn(column) ? selectableContent(column, previewContact[column]) : previewContact[column]"
+            >
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" class="btn c-blue" mat-dialog-close>Cancel</button>
+  <button type="button" class="btn btn-primary" (click)="merge()">Merge</button>
+</mat-dialog-actions>

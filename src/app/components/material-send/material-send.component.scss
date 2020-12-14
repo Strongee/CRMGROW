@@ -1,0 +1,31 @@
+@import 'src/variables.scss';
+
+:host ::ng-deep {
+    mat-tab-group {
+        .mat-tab-labels {
+            display: flex;
+            justify-content: space-around;
+            .mat-tab-label {
+                opacity: 1;
+                .mat-tab-label-content {
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: $color-blue;
+                }
+            }
+        }
+        .mat-ink-bar {
+            background-color: $color-blue !important;
+            height: 4px;
+        }
+        textarea {
+            resize: none;
+        }
+    }
+}
+.material-preivew {
+    img {
+        width: 160px;
+        height: 90px;
+    }
+}

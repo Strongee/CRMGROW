@@ -54,13 +54,13 @@ export class MaterialService extends HttpService {
     );
   }
   loadPdfsImpl(): Observable<Pdf[]> {
-    return this.httpClient.get(this.server + PDF.CREATE).pipe(
+    return this.httpClient.get(this.server + PDF.LOAD).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD PDFS', []))
     );
   }
   loadImagesImpl(): Observable<Image[]> {
-    return this.httpClient.get(this.server + IMAGE.CREATE).pipe(
+    return this.httpClient.get(this.server + IMAGE.LOAD).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD IMAGES', []))
     );

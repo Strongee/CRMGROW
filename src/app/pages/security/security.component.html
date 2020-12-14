@@ -1,5 +1,5 @@
 <form #profileForm="ngForm" (ngSubmit)="profileForm.form.valid ? saveChange() : false" style="max-width: 300px;">
-  <div class="form-group" [ngClass]="{invalid: profileForm.submitted && oldPassword.invalid && (oldPassword.dirty || oldPassword.touched || profileForm.submitted)}">
+  <div class="form-group mt-2 mt-sm-0" [ngClass]="{invalid: profileForm.submitted && oldPassword.invalid && (oldPassword.dirty || oldPassword.touched || profileForm.submitted)}">
     <div class="d-flex">
       <label for="oldPassword" class="mr-auto">current password</label>
       <span class="error" *ngIf="oldPassword.errors">

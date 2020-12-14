@@ -19,6 +19,7 @@ import { VideoEditComponent } from 'src/app/components/video-edit/video-edit.com
 import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component';
 import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
 import { STATUS } from 'src/app/constants/variable.constants';
+import { MaterialSendComponent } from 'src/app/components/material-send/material-send.component';
 
 @Component({
   selector: 'app-materials',
@@ -199,6 +200,19 @@ export class MaterialsComponent implements OnInit {
   }
 
   selectFolder(): void {}
+
+  sendMaterial(material: any, type: string): void {
+    this.dialog.open(MaterialSendComponent, {
+      position: { top: '5vh' },
+      width: '100vw',
+      maxWidth: '600px',
+      disableClose: false,
+      data: {
+        material,
+        type
+      }
+    });
+  }
 
   copyLink(material: any, type: string): void {
     let url;
@@ -406,11 +420,14 @@ export class MaterialsComponent implements OnInit {
         maxWidth: '500px',
         disableClose: true,
         data: {
-          _id: video._id,
-          title: video.title,
-          description: video.description,
-          thumbnail: video.thumbnail,
-          role: video.role
+          material: {
+            _id: video._id,
+            title: video.title,
+            description: video.description,
+            thumbnail: video.thumbnail,
+            role: video.role
+          },
+          type: 'edit'
         }
       })
       .afterClosed()
@@ -436,7 +453,8 @@ export class MaterialsComponent implements OnInit {
               _id: res['data']['_id'],
               title: res['data']['title'],
               description: res['data']['description'],
-              thumbnail: res['data']['thumbnail']
+              thumbnail: res['data']['thumbnail'],
+              default_edited: true
             };
             this.ownVideos.push(newVideo);
           } else {
@@ -456,11 +474,14 @@ export class MaterialsComponent implements OnInit {
         maxWidth: '500px',
         disableClose: true,
         data: {
-          _id: pdf._id,
-          title: pdf.title,
-          description: pdf.description,
-          preview: pdf.preview,
-          role: pdf.role
+          material: {
+            _id: pdf._id,
+            title: pdf.title,
+            description: pdf.description,
+            preview: pdf.preview,
+            role: pdf.role
+          },
+          type: 'edit'
         }
       })
       .afterClosed()
@@ -486,7 +507,8 @@ export class MaterialsComponent implements OnInit {
               _id: res['data']['_id'],
               title: res['data']['title'],
               description: res['data']['description'],
-              thumbnail: res['data']['preview']
+              thumbnail: res['data']['preview'],
+              default_edited: true
             };
             this.ownPdfs.push(newPdf);
           } else {
@@ -506,10 +528,13 @@ export class MaterialsComponent implements OnInit {
         maxWidth: '500px',
         disableClose: true,
         data: {
-          _id: image._id,
-          title: image.title,
-          description: image.description,
-          preview: image.preview
+          material: {
+            _id: image._id,
+            title: image.title,
+            description: image.description,
+            preview: image.preview
+          },
+          type: 'edit'
         }
       })
       .afterClosed()
@@ -535,7 +560,8 @@ export class MaterialsComponent implements OnInit {
               _id: res['data']['_id'],
               title: res['data']['title'],
               description: res['data']['description'],
-              thumbnail: res['data']['preview']
+              thumbnail: res['data']['preview'],
+              default_edited: true
             };
             this.ownImages.push(newImage);
           } else {
@@ -550,43 +576,110 @@ export class MaterialsComponent implements OnInit {
   duplicateMaterial(material: any, type: string): void {
     switch (type) {
       case 'video':
-        const video = {
-          url: material.url,
-          title: material.title,
-          duration: material.duration,
-          thumbnail: material.thumbnail,
-          description: material.description
-        };
-        this.materialService.createVideo(video).subscribe((res) => {
-          if (res['data']) {
-            const newVideo = {
-              ...material,
-              _id: res['data']['_id'],
-              title: res['data']['title'],
-              description: res['data']['description'],
-              thumbnail: res['data']['thumbnail'],
-              role: 'user'
-            };
-            this.ownVideos.push(newVideo);
-          }
-        });
+        this.dialog
+          .open(VideoEditComponent, {
+            position: { top: '5vh' },
+            width: '100vw',
+            maxWidth: '500px',
+            disableClose: true,
+            data: {
+              material: {
+                _id: material._id,
+                url: material.url,
+                title: material.title,
+                duration: material.duration,
+                description: material.description,
+                thumbnail: material.thumbnail,
+                role: material.role
+              },
+              type: 'duplicate'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const newVideo = {
+                ...material,
+                _id: res._id,
+                title: res.title,
+                description: res.description,
+                thumbnail: res.thumbnail,
+                role: 'user',
+                default_edited: true
+              };
+              this.ownVideos.push(newVideo);
+            }
+          });
         break;
       case 'pdf':
-        const pdf = {
-          url: material.url,
-          title: material.title,
-          description: material.description,
-          preview: material.preview
-        };
-        this.materialService.createPdf(pdf).subscribe((res) => {});
+        this.dialog
+          .open(PdfEditComponent, {
+            position: { top: '5vh' },
+            width: '100vw',
+            maxWidth: '500px',
+            disableClose: true,
+            data: {
+              material: {
+                _id: material._id,
+                url: material.url,
+                title: material.title,
+                description: material.description,
+                preview: material.preview,
+                role: material.role
+              },
+              type: 'duplicate'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const newPdf = {
+                ...material,
+                _id: res._id,
+                title: res.title,
+                description: res.description,
+                preview: res.preview,
+                role: 'user',
+                default_edited: true
+              };
+              this.ownPdfs.push(newPdf);
+            }
+          });
         break;
       case 'image':
-        const image = {
-          title: material.title,
-          description: material.description,
-          preview: material.preview
-        };
-        this.materialService.createImage(image).subscribe((res) => {});
+        this.dialog
+          .open(ImageEditComponent, {
+            position: { top: '5vh' },
+            width: '100vw',
+            maxWidth: '500px',
+            disableClose: true,
+            data: {
+              material: {
+                _id: material._id,
+                title: material.title,
+                description: material.description,
+                preview: material.preview,
+                role: material.role,
+                url: material.url
+              },
+              type: 'duplicate'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const newImage = {
+                ...material,
+                _id: res._id,
+                title: res.title,
+                description: res.description,
+                preview: res.preview,
+                role: 'user',
+                default_edited: true
+              };
+              this.ownImages.push(newImage);
+            }
+          });
         break;
     }
   }
@@ -787,10 +880,20 @@ export class MaterialsComponent implements OnInit {
   }
 
   recordSetting(): void {
-    this.dialog.open(RecordSettingDialogComponent, {
-      width: '96vw',
-      maxWidth: '600px'
-    });
+    this.dialog
+      .open(RecordSettingDialogComponent, {
+        position: { top: '0px' },
+        width: '0px',
+        height: '0px',
+        panelClass: 'trans-modal',
+        backdropClass: 'trans'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.ownVideos.push(res.data);
+        }
+      });
   }
   doAction(evt: any): void {
     switch (evt.label) {
