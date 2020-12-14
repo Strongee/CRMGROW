@@ -85,6 +85,7 @@ import { ImportContactEditComponent } from './import-contact-edit/import-contact
 import { ImportContactMergeComponent } from './import-contact-merge/import-contact-merge.component';
 import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
 import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
+import { TaskAddComponent } from './task-add/task-add.component';
 import { MaterialSendComponent } from './material-send/material-send.component';
 import { ImportContactMergeConfirmComponent } from './import-contact-merge-confirm/import-contact-merge-confirm.component';
 
@@ -172,6 +173,7 @@ import { ImportContactMergeConfirmComponent } from './import-contact-merge-confi
     ImportContactMergeComponent,
     AutomationShowFullComponent,
     AutomationTreeOverlayComponent,
+    TaskAddComponent,
     MaterialSendComponent,
     ImportContactMergeConfirmComponent
   ],
