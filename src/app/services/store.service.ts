@@ -11,7 +11,7 @@ import {
   ContactActivity,
   ContactDetail
 } from '../models/contact.model';
-import { PureActivity } from '../models/activityDetail.model';
+import { DetailActivity, PureActivity } from '../models/activityDetail.model';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +112,14 @@ export class StoreService {
     });
     // Detail Page update
     // Activities Page Update
+  }
+
+  registerActivity$(data: any): void {
+    const activity = new DetailActivity().deserialize(data['activity']);
+    activity.activity_detail = { ...data, activity: undefined };
+    const currentContact = this.selectedContact.getValue();
+    currentContact.activity.push(activity);
+    this.selectedContact.next(currentContact);
   }
 
   /**

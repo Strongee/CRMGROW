@@ -27,6 +27,8 @@ import { JoinCallRequestComponent } from 'src/app/components/join-call-request/j
 import { TabItem } from 'src/app/utils/data.types';
 import { Task } from 'src/app/models/task.model';
 import { Note } from 'src/app/models/note.model';
+import { NoteService } from 'src/app/services/note.service';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-contact',
@@ -108,6 +110,8 @@ export class ContactComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private contactService: ContactService,
+    private noteService: NoteService,
+    private taskService: TaskService,
     private storeService: StoreService,
     private overlayService: OverlayService,
     private viewContainerRef: ViewContainerRef
@@ -122,6 +126,9 @@ export class ContactComponent implements OnInit {
         this.contact = res;
         this.groupActivities();
         this.timeLineArrangement();
+      } else {
+        this.contact = res;
+        this.groupActivities();
       }
     });
   }
@@ -138,6 +145,8 @@ export class ContactComponent implements OnInit {
    * Group Activities
    */
   groupActivities(): void {
+    this.groupActions = {};
+    this.mainTimelines = [];
     for (let i = this.contact.activity.length - 1; i >= 0; i--) {
       const e = this.contact.activity[i];
       const group = this.generateUniqueId(e);
@@ -211,7 +220,17 @@ export class ContactComponent implements OnInit {
   /**
    * Open dialog to merge
    */
-  openMergeContactDlg(): void {}
+  openMergeContactDlg(): void {
+    this.dialog.open(ContactMergeComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '700px',
+      maxHeight: '600px',
+      data: {
+        contact: this.contact
+      }
+    });
+  }
 
   /**
    * Open the Campagin Dialog to assign the curent contact to the compaign list.
@@ -250,12 +269,30 @@ export class ContactComponent implements OnInit {
   /**
    * Open Dialog to create new task
    */
-  openTaskDlg(): void {}
+  createTask(): void {
+    this.taskSaving = true;
+    this.taskService
+      .create({ ...this.task, contact: this._id })
+      .subscribe((res) => {
+        this.taskSaving = false;
+        this.storeService.registerActivity$(res);
+        this.storeService.activityAdd$([this._id], 'task');
+      });
+  }
 
   /**
    * Create Note
    */
-  createNote(): void {}
+  createNote(): void {
+    this.noteSaving = true;
+    this.noteService
+      .create({ ...this.note, contact: this._id })
+      .subscribe((res) => {
+        this.noteSaving = false;
+        this.storeService.registerActivity$(res);
+        this.storeService.activityAdd$([this._id], 'note');
+      });
+  }
 
   getDateTime(): any {
     if (this.due_date.day != '') {
@@ -264,22 +301,9 @@ export class ContactComponent implements OnInit {
       );
     }
   }
-
   setDateTime(): void {
     this.selectedDateTime = moment(this.getDateTime()).format('DD.MM.YYYY');
     close();
-  }
-
-  contactMerge(contact: any): void {
-    this.dialog.open(ContactMergeComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '700px',
-      maxHeight: '600px',
-      data: {
-        contact: contact
-      }
-    });
   }
 
   selectAutomation(evt: any): void {
@@ -338,8 +362,6 @@ export class ContactComponent implements OnInit {
   }
 
   createAutomation(): void {}
-
-  addNewTask(): void {}
 
   ICONS = {
     follow_up: '../../assets/img/automations/follow_up.svg',

@@ -33,8 +33,7 @@
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Contact details</span>
-                <button class="btn border border-primary f-2 font-weight-bold c-blue ml-auto btn-sm" (click)="contactMerge(contact)">Edit contact
-                  details</button>
+                <button class="btn border border-primary f-2 font-weight-bold c-blue ml-auto btn-sm" (click)="openMergeContactDlg()">Edit</button>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -254,6 +253,7 @@
                     #noteTitle="ngModel"
                     [(ngModel)]="note.title"
                     placeholder="Title"
+                    required
                   >
                   <span
                     class="invalid-error f-3 fw-600 c-red pl-2 inline-error"
@@ -270,6 +270,7 @@
                     #noteContent="ngModel"
                     [(ngModel)]="note.content"
                     rows="7" cols="50"
+                    required
                   ></textarea>
                   <span
                     class="invalid-error f-3 fw-600 c-red inline-error"
@@ -291,7 +292,7 @@
             </div>
 
             <div class="task-panel p-4" *ngIf="action.id === 'add_task'">
-              <form #taskForm="ngForm" (ngSubmit)="taskForm.form.valid ? openTaskDlg() : false">
+              <form #taskForm="ngForm" (ngSubmit)="taskForm.form.valid ? createTask() : false">
                 <div class="form-group">
                   <label class="mb-0">type of task</label>
                   <div>
@@ -303,7 +304,7 @@
                     <label class="mb-0">subject</label>
                     <span
                       class="invalid-error f-3 fw-600 c-red ml-auto"
-                      *ngIf="!task.subject && taskForm.submitted"
+                      *ngIf="!task.content && taskForm.submitted"
                     >
                       Required!
                     </span>
@@ -314,7 +315,8 @@
                     placeholder="Provide subject"
                     name="taskSubject"
                     #taskSubject="ngModel"
-                    [(ngModel)]="task.subject">
+                    [(ngModel)]="task.content"
+                    required>
                 </div>
                 <div class="row task-time">
                   <div class="col-12 col-sm-6">
