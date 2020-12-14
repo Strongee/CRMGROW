@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ContactDetail } from 'src/app/models/contact.model';
+import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { OverlayService } from 'src/app/services/overlay.service';
@@ -15,7 +15,8 @@ import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
   TIMES,
-  REPEAT_DURATIONS
+  REPEAT_DURATIONS,
+  QuillEditor
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -29,6 +30,11 @@ import { Task } from 'src/app/models/task.model';
 import { Note } from 'src/app/models/note.model';
 import { NoteService } from 'src/app/services/note.service';
 import { TaskService } from 'src/app/services/task.service';
+import * as QuillNamespace from 'quill';
+const Quill: any = QuillNamespace;
+import ImageResize from 'quill-image-resize-module';
+Quill.register('modules/imageResize', ImageResize);
+import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
   selector: 'app-contact',
@@ -96,6 +102,19 @@ export class ContactComponent implements OnInit {
   taskSaving = false;
   note: Note = new Note();
   noteSaving = false;
+
+  emailSending = false;
+  ccFlag = false;
+  bccFlag = false;
+  emailContacts: Contact[] = [];
+  ccContacts: Contact[] = [];
+  bccContacts: Contact[] = [];
+  emailSubject = '';
+  emailContent = '';
+  selectedTemplate = { subject: '', content: '' };
+  quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
+  config = QuillEditor;
+  focusEditor = '';
 
   selectedAutomation: Automation;
   ActionName = ActionName;
