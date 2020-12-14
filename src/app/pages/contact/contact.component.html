@@ -22,8 +22,8 @@
         <app-label-select [value]="contact.label" type="form"></app-label-select>
       </div>
       <div class="v-center justify-content-between mb-3">
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm mx-1">Create group call</button>
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm mx-1">Create appointment</button>
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 mr-1" (click)="openGroupCallDlg()">Create group call</button>
+        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 ml-1" (click)="openAppointmentDlg()">Create appointment</button>
       </div>
       <mat-accordion multi class="general-panels">
         <!-- Begin Contact Detail -->
@@ -255,7 +255,7 @@
             <div class="note-panel" *ngIf="mainAction === 'create_note'">
             </div>
             <div class="task-panel p-4" *ngIf="mainAction === 'add_task'">
-              <form #taskForm="ngForm" (ngSubmit)="submitted = true; taskForm.form.valid ? createTask() : false">
+              <form #taskForm="ngForm" (ngSubmit)="submitted = true; taskForm.form.valid ? openTaskDlg() : false">
                 <div class="form-group">
                   <label>type of task</label>
                   <div>

@@ -22,6 +22,8 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { listToTree } from 'src/app/helper';
 import { AutomationShowFullComponent } from 'src/app/components/automation-show-full/automation-show-full.component';
 import * as moment from 'moment';
+import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
+import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
 
 @Component({
   selector: 'app-contact',
@@ -220,12 +222,26 @@ export class ContactComponent implements OnInit {
   /**
    * Open dialog to create new group call
    */
-  openGroupCallDlg(): void {}
+  openGroupCallDlg(): void {
+    this.dialog.open(JoinCallRequestComponent, {
+      width: '96vw',
+      maxWidth: '500px',
+      height: 'auto',
+      disableClose: true
+    });
+  }
 
   /**
    * Open Dialog to create new appointment
    */
-  openAppointmentDlg(): void {}
+  openAppointmentDlg(): void {
+    this.dialog.open(CalendarDialogComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      maxHeight: '700px'
+    });
+  }
 
   /**
    * Open Dialog to create new task
@@ -262,8 +278,6 @@ export class ContactComponent implements OnInit {
   setRepeatEvent(): void {
     this.isRepeat = !this.isRepeat;
   }
-
-  createTask(): void {}
 
   contactMerge(contact: any): void {
     this.dialog.open(ContactMergeComponent, {
