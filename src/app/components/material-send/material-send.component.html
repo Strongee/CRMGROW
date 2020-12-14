@@ -1,0 +1,124 @@
+<div class="v-center justify-content-between">
+    <h1 mat-dialog-title class="m-0">
+        Send Selected Material
+    </h1>
+    <button class="v-center border-0 bgc-trans" mat-dialog-close>
+        <i class="d-block i-icon i-close bgc-dark"></i>
+    </button>
+</div>
+<form #sendForm="ngForm" (ngSubmit)="submitted = true; sendForm.form.valid ? send() : false">
+    <mat-dialog-content>
+        <div class="d-flex mt-3 material-preivew">
+            <img [src]="data.material.thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );" *ngIf="materialType == 'video'">
+            <img [src]="data.material.preview" onerror="( this.src = './assets/img/video_thumb.jpg' );" *ngIf="materialType == 'pdf' || materialType == 'image'">
+            <div class="ml-4">
+                <div class="f-6 font-weight-bold material-title">
+                    {{data.material.title}}
+                </div>
+                <div class="f-3 op-64 mt-2">
+                    {{data.material.description}}
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+                select contact to who you want to send material
+            </span>
+            <app-input-contacts
+                [placeholder]="'Search for Contact'"
+                [selectedContacts]="contacts"
+            ></app-input-contacts>
+            <span></span>
+        </div>
+        <mat-tab-group (selectedTabChange)="onTabChanged($event)">
+            <mat-tab label="Send via Text">
+                <div class="mt-2">
+                    <app-input-template
+                        [placeholder]="'Search for Template to use'"
+                        [(template)]="selectedTemplate"
+                        [type]="'text'"
+                        (templateChange)="selectTemplate($event)"
+                    ></app-input-template>
+                </div>
+                <div class="mt-2">
+                    <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+                        message
+                    </span>
+                    <textarea
+                        rows="10"
+                        class="form-control"
+                        [(ngModel)]="selectedTemplate.content"
+                        name="content"
+                        #content="ngModel"
+                        [required]="mediaType == 'text' && selectedTemplate.content == '' && submitted"
+                    ></textarea>
+                    <span
+                        class="invalid-feedback"
+                        *ngIf="mediaType == 'text' && selectedTemplate.content == '' && submitted"
+                    >
+                        Please input the template content.
+                    </span>
+                </div>
+            </mat-tab>
+            <mat-tab label="Send via Email">
+                <div class="mt-2">
+                    <app-input-template
+                        [placeholder]="'Search for Template to use'"
+                        [(template)]="selectedTemplate"
+                        [type]="'email'"
+                        (templateChange)="selectTemplate($event)"
+                    ></app-input-template>
+                </div>
+                <div class="mt-2">
+                    <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+                        subject
+                    </span>
+                    <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="selectedTemplate.subject"
+                        name="mailSubject"
+                        #mailSubject="ngModel"
+                        [required]="mediaType == 'email' && selectedTemplate.subject == '' && submitted"
+                    />
+                    <span
+                        class="invalid-feedback"
+                        *ngIf="mediaType == 'email' && selectedTemplate.subject == '' && submitted"
+                    >
+                        Please input the template subject.
+                    </span>
+                </div>
+                <div class="mt-2">
+                    <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+                        message
+                    </span>
+                    <quill-editor
+                        image-resize="true"
+                        placeholder="Enter Text"
+                        [(ngModel)]="selectedTemplate.content"
+                        [modules]="config"
+                        name="mailContent"
+                        [styles]="{ height: '120px' }"
+                        #mailContent="ngModel"
+                        (onEditorCreated)="getEditorInstance($event)"
+                        (click)="setFocusField('content-email')"
+                        class="f-3 fwt-600 rounded"
+                        #emailEditor
+                        [required]="mediaType == 'email' && selectedTemplate.content == '' && submitted"
+                    >
+                    </quill-editor>
+                    <span
+                        class="invalid-feedback"
+                        *ngIf="mediaType == 'email' && selectedTemplate.content == '' && submitted"
+                    >
+                        Please input the template content.
+                    </span>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button class="btn btn-white f-6 font-weight-bold c-blue mr-2" type="button" mat-dialog-close>Cancel</button>
+        <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Send</button>
+    </mat-dialog-actions>
+</form>

@@ -91,18 +91,20 @@ export const VIDEO = {
   LOAD: 'video'
 };
 export const PDF = {
-  CREATE: 'pdf',
+  CREATE: 'pdf/create',
   READ: 'pdf/',
   UPDATE: 'pdf/',
   UPDATE_ADMIN: 'pdf/update-admin',
-  DELETE: 'pdf/'
+  DELETE: 'pdf/',
+  LOAD: 'pdf'
 };
 export const IMAGE = {
-  CREATE: 'image',
+  CREATE: 'image/create',
   READ: 'image/',
   UPDATE: 'image/',
   UPDATE_ADMIN: 'image/update-admin',
-  DELETE: 'image/'
+  DELETE: 'image/',
+  LOAD: 'image'
 };
 export const TEMPLATE = {
   CREATE: 'template/create',

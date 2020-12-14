@@ -19,6 +19,8 @@ Quill.register('modules/imageResize', ImageResize);
 export class PdfEditComponent implements OnInit {
   submitted = false;
   pdf = {
+    _id: '',
+    url: '',
     preview: '',
     title: '',
     description: '',
@@ -42,7 +44,7 @@ export class PdfEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.pdf = { ...this.data };
+    this.pdf = { ...this.data.material };
   }
 
   update(): void {
@@ -50,7 +52,7 @@ export class PdfEditComponent implements OnInit {
     const pdf = {};
     const keys = ['title', 'preview', 'description'];
     keys.forEach((e) => {
-      if (this.pdf[e] != this.data[e]) {
+      if (this.pdf[e] != this.data.material[e]) {
         pdf[e] = this.pdf[e];
       }
     });
@@ -75,6 +77,36 @@ export class PdfEditComponent implements OnInit {
         }
       );
     }
+  }
+
+  duplicate(): void {
+    this.saving = true;
+    let pdf;
+    if (this.pdf.role == 'admin') {
+      pdf = {
+        url: this.pdf.url,
+        title: this.pdf.title,
+        preview: this.pdf.preview,
+        description: this.pdf.description,
+        default_edited: true,
+        default_pdf: this.pdf._id
+      };
+    } else {
+      pdf = {
+        url: this.pdf.url,
+        title: this.pdf.title,
+        preview: this.pdf.preview,
+        description: this.pdf.description,
+        has_shared: true,
+        shared_pdf: this.pdf._id
+      };
+    }
+    this.materialService.createPdf(pdf).subscribe((res) => {
+      if (res['data']) {
+        this.saving = false;
+        this.dialogRef.close(res['data']);
+      }
+    });
   }
 
   openPreviewDialog(): void {

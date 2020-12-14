@@ -244,7 +244,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(video, 'video')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -361,7 +361,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(video, 'video')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -399,7 +399,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="video.default_edited == false" (click)="duplicateMaterial(video, 'video')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>
@@ -478,7 +478,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(video, 'video')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -516,7 +516,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(video, 'video')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="video.default_edited == false" (click)="duplicateMaterial(video, 'video')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>
@@ -541,8 +541,6 @@
               <h4 class="font-weight-bold mt-4 mb-3">
                 There is no videos yet.
               </h4>
-              <!-- <p class="mb-4">Please create videos to use for emailing and texting easily.</p>
-              <button class="btn btn-primary font-weight-bold">Create Template</button> -->
             </div>
             <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
               <div class="loader mt-5 lg"></div>
@@ -659,7 +657,7 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper">
+                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(pdf, 'pdf')">
                     <button class="v-center bgc-white border-0 w-100 py-2 rounded">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
@@ -675,7 +673,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -770,7 +768,7 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper">
+                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(pdf, 'pdf')">
                     <button class="v-center bgc-white border-0 w-100 py-2 rounded">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
@@ -786,7 +784,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -809,7 +807,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="pdf.default_edited == false" (click)="duplicateMaterial(pdf, 'pdf')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                         </button>
@@ -881,7 +879,7 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper">
+                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(pdf, 'pdf')">
                     <button class="v-center bgc-white border-0 w-100 py-2 rounded">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
@@ -897,7 +895,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ pdf._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -920,7 +918,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(pdf, 'pdf')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="pdf.default_edited == false" (click)="duplicateMaterial(pdf, 'pdf')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 c-dark font-weight-bold">Duplicate</span>
                         </button>
@@ -945,8 +943,6 @@
               <h4 class="font-weight-bold mt-4 mb-3">
                 There is no pdfs yet.
               </h4>
-              <!-- <p class="mb-4">Please create videos to use for emailing and texting easily.</p>
-              <button class="btn btn-primary font-weight-bold">Create Template</button> -->
             </div>
             <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
               <div class="loader mt-5 lg"></div>
@@ -1061,7 +1057,7 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper">
+                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(image, 'image')">
                     <button class="v-center bgc-white border-0 w-100 py-2 rounded">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
@@ -1077,7 +1073,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ image._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -1172,7 +1168,7 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper">
+                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(image, 'image')">
                     <button class="v-center bgc-white border-0 w-100 py-2 rounded">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
@@ -1188,7 +1184,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ image._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -1211,7 +1207,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="image.default_edited == false" (click)="duplicateMaterial(image, 'image')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>
@@ -1283,7 +1279,7 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper">
+                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(image, 'image')">
                     <button class="v-center bgc-white border-0 w-100 py-2 rounded">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
@@ -1299,7 +1295,7 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ image._id }}&user={{user_id}}"
+                                       [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ image._id }}&user={{user_id}}"
                                        [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
@@ -1322,7 +1318,7 @@
                           <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                         </button>
-                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(image, 'image')">
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="image.default_edited == false" (click)="duplicateMaterial(image, 'image')">
                           <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                           <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                         </button>
@@ -1347,8 +1343,6 @@
               <h4 class="font-weight-bold mt-4 mb-3">
                 There is no images yet.
               </h4>
-              <!-- <p class="mb-4">Please create videos to use for emailing and texting easily.</p>
-              <button class="btn btn-primary font-weight-bold">Create Template</button> -->
             </div>
             <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
               <div class="loader mt-5 lg"></div>
@@ -1359,5 +1353,10 @@
       </div>
     </div>
   </ng-container>
-  <app-actions-bar [actions]="BULK_ACTIONS" [isActive]="true" (doCommand)="doAction($event)"></app-actions-bar>
+  <app-actions-bar
+    [actions]="BULK_ACTIONS"
+    [isActive]="true"
+    [count]="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length"
+    (doCommand)="doAction($event)">
+  </app-actions-bar>
 </div>

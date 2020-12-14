@@ -5,7 +5,8 @@ import {
   ViewChild,
   ElementRef,
   Output,
-  EventEmitter
+  EventEmitter,
+  ChangeDetectorRef
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NotifyComponent } from '../notify/notify.component';
@@ -90,7 +91,8 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private helperService: HelperService,
     private toast: ToastrService,
-    private materialService: MaterialService
+    private materialService: MaterialService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -484,26 +486,44 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
       this.recording = false;
       this.recordStep = 4;
       this.recordedData = blob;
-      this.getSeekableBlob(blob, (newBlob) => {
-        this.recordedData = newBlob;
-        this.recordedFile = window.URL.createObjectURL(newBlob);
-        this.helperService
-          .generateThumbnail(newBlob)
-          .then((data) => {
-            this.videoObj['thumbnail'] = data.image;
-            this.videoObj['duration'] = data.duration;
-            const imageBlob = this.helperService.b64toBlob(data.image);
-            this.helperService
-              .generateImageThumbnail(imageBlob, 'video_play')
-              .then((image) => {
-                this.videoObj['site_image'] = image;
-              })
-              .catch((err) => {
-                console.log('Video Meta Image Load', err);
-              });
-          })
-          .catch((e) => {});
-      });
+      this.recordedFile = window.URL.createObjectURL(blob);
+      this.helperService
+        .generateThumbnail(blob)
+        .then((data) => {
+          this.videoObj['thumbnail'] = data.image;
+          this.videoObj['duration'] = data.duration;
+          this.changeDetectorRef.detectChanges();
+          const imageBlob = this.helperService.b64toBlob(data.image);
+          this.helperService
+            .generateImageThumbnail(imageBlob, 'video_play')
+            .then((image) => {
+              this.videoObj['site_image'] = image;
+            })
+            .catch((err) => {
+              console.log('Video Meta Image Load', err);
+            });
+        })
+        .catch((e) => {});
+      // this.getSeekableBlob(blob, (newBlob) => {
+      //   this.recordedData = newBlob;
+      //   this.recordedFile = window.URL.createObjectURL(newBlob);
+      //   this.helperService
+      //     .generateThumbnail(newBlob)
+      //     .then((data) => {
+      //       this.videoObj['thumbnail'] = data.image;
+      //       this.videoObj['duration'] = data.duration;
+      //       const imageBlob = this.helperService.b64toBlob(data.image);
+      //       this.helperService
+      //         .generateImageThumbnail(imageBlob, 'video_play')
+      //         .then((image) => {
+      //           this.videoObj['site_image'] = image;
+      //         })
+      //         .catch((err) => {
+      //           console.log('Video Meta Image Load', err);
+      //         });
+      //     })
+      //     .catch((e) => {});
+      // });
       this.recorder = undefined;
     });
   }
