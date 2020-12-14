@@ -103,21 +103,22 @@ export class UploadContactsComponent implements OnInit {
       this.uploading = false;
       if (response.status) {
         this.failedData = response.failure;
-        this.failedRecords = [];
-        const emails = [];
-        this.failedData.forEach((e) => {
-          emails.push(e.email);
-        });
-        this.contactsToUpload.forEach((e) => {
-          if (emails.indexOf(e.email) !== -1) {
-            this.failedRecords.push({ ...e });
-          }
-        });
-        if (!this.failedData.length) {
-          this.dialogRef.close({ status: true });
-        } else {
-          this.step = 5;
-        }
+
+        // this.failedRecords = [];
+        // const emails = [];
+        // this.failedData.forEach((e) => {
+        //   emails.push(e.email);
+        // });
+        // this.contactsToUpload.forEach((e) => {
+        //   if (emails.indexOf(e.email) !== -1) {
+        //     this.failedRecords.push({ ...e });
+        //   }
+        // });
+        // if (!this.failedData.length) {
+        //   this.dialogRef.close({ status: true });
+        // } else {
+        //   this.step = 5;
+        // }
       } else {
         this.uploading = false;
         this.file.nativeElement.value = '';
