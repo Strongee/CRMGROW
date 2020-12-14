@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ContactDetail } from 'src/app/models/contact.model';
+import { Contact, ContactDetail } from 'src/app/models/contact.model';
+import { FileService } from '../../services/file.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { OverlayService } from 'src/app/services/overlay.service';
@@ -15,7 +16,8 @@ import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
   TIMES,
-  RECURRING_TYPE
+  RECURRING_TYPE,
+  QuillEditor
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -24,6 +26,11 @@ import { AutomationShowFullComponent } from 'src/app/components/automation-show-
 import * as moment from 'moment';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
+import * as QuillNamespace from 'quill';
+const Quill: any = QuillNamespace;
+import ImageResize from 'quill-image-resize-module';
+Quill.register('modules/imageResize', ImageResize);
+import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
   selector: 'app-contact',
@@ -64,6 +71,17 @@ export class ContactComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   groupActions = {};
 
+  emailSending = false;
+  ccFlag = false;
+  bccFlag = false;
+  emailContacts: Contact[] = [];
+  ccContacts: Contact[] = [];
+  bccContacts: Contact[] = [];
+  selectedTemplate = { subject: '', content: '' };
+  quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
+  config = QuillEditor;
+  focusEditor = '';
+
   taskTypes = [];
   task = {
     subject: '',
@@ -83,6 +101,7 @@ export class ContactComponent implements OnInit {
   isRepeat = false;
   taskSubmitted = false;
   noteSubmitted = false;
+  emailSubmitted = false;
 
   mainTimelines: ActivityDetail[] = [];
   _id = '';
@@ -106,10 +125,13 @@ export class ContactComponent implements OnInit {
   hasChild = (_: number, node: any) =>
     !!node.children && node.children.length > 0;
 
+  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+
   constructor(
     private dialog: MatDialog,
     private location: Location,
     private route: ActivatedRoute,
+    private fileService: FileService,
     private contactService: ContactService,
     private storeService: StoreService,
     private overlayService: OverlayService,
@@ -260,6 +282,8 @@ export class ContactComponent implements OnInit {
    */
   createNote(): void {}
 
+  sendEmail(): void {}
+
   toggleTypes(type: string): void {
     const pos = this.taskTypes.indexOf(type);
     if (pos !== -1) {
@@ -353,9 +377,45 @@ export class ContactComponent implements OnInit {
     );
   }
 
-  createAutomation(): void {}
+  selectTemplate(event: any): void {
+    this.selectedTemplate = event;
+  }
 
-  addNewTask(): void {}
+  getEditorInstance(editorInstance: any): void {
+    this.quillEditorRef = editorInstance;
+    const toolbar = this.quillEditorRef.getModule('toolbar');
+    toolbar.addHandler('image', this.initImageHandler);
+  }
+
+  initImageHandler = (): void => {
+    const imageInput = document.createElement('input');
+    imageInput.setAttribute('type', 'file');
+    imageInput.setAttribute('accept', 'image/*');
+    imageInput.classList.add('ql-image');
+
+    imageInput.addEventListener('change', () => {
+      if (imageInput.files != null && imageInput.files[0] != null) {
+        const file = imageInput.files[0];
+        this.fileService.attachImage(file).subscribe((res) => {
+          this.insertImageToEditor(res.url);
+        });
+      }
+    });
+    imageInput.click();
+  };
+
+  insertImageToEditor(url: string): void {
+    const range = this.quillEditorRef.getSelection();
+    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
+    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
+    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
+    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
+  }
+  setFocusField(editorType: string): void {
+    this.focusEditor = editorType;
+  }
+
+  createAutomation(): void {}
 
   ICONS = {
     follow_up: '../../assets/img/automations/follow_up.svg',
