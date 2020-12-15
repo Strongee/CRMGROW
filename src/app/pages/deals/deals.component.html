@@ -19,7 +19,7 @@
                 (cdkDropListDropped)="drop($event)"
             >
                 <div
-                    class="task mt-3 mr-3 p-3"
+                    class="task mt-3 mr-3 p-3 c-pointer"
                     *ngFor="let item of column.tasks" cdkDrag
                     (click)="taskDetail(item)"
                 >
@@ -37,6 +37,9 @@
                             <img src="/assets/img/status_yellow.svg" alt="">
                         </div>
                         <div *ngIf="item == 'Real Estate sale 4'">
+                            <img src="/assets/img/status_gray.svg" alt="">
+                        </div>
+                        <div *ngIf="item != 'Real Estate sale 1' && item != 'Real Estate sale 2' && item != 'Real Estate sale 3' && item != 'Real Estate sale 4'">
                             <img src="/assets/img/status_gray.svg" alt="">
                         </div>
                     </div>
