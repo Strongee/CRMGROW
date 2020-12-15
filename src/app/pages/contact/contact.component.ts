@@ -317,7 +317,7 @@ export class ContactComponent implements OnInit {
         this.storeService.activityAdd$([this._id], 'note');
       });
   }
-  
+
   insertEmailContentValue(value: string): void {
     this.emailEditor.quillEditor.focus();
     const range = this.emailEditor.quillEditor.getSelection();
