@@ -4,7 +4,7 @@ import { ErrorService } from './error.service';
 import { HttpClient } from '@angular/common/http';
 import { StoreService } from './store.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { CONTACT } from '../constants/api.constant';
+import { CONTACT, TEAM } from '../constants/api.constant';
 import {
   Contact,
   ContactActivity,
@@ -78,7 +78,14 @@ export class ContactService extends HttpService {
         catchError(this.handleError('CONTACT DETAIL', null))
       );
   }
-  update(_id: string): void {}
+
+  update(id, contact): Observable<Contact[]> {
+    return this.httpClient.put(this.server + CONTACT.UPDATE + id, contact).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('UPDATE CONTACT', []))
+    );
+  }
+
   delete(_id: string): void {}
   bulkDelete(_ids: string[]): Observable<boolean> {
     return this.httpClient
@@ -345,5 +352,23 @@ export class ContactService extends HttpService {
         map((res) => res['data'] || []),
         catchError(this.handleError('SEARCH CONTACTS', []))
       );
+  }
+
+  /**
+   * merge two contacts
+   * @param data : primary, secondaries, result contacts
+   */
+  mergeContacts(data): Observable<Contact> {
+    return this.httpClient.post(this.server + CONTACT.MERGE, { ...data }).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('MERGE CONTACTS', []))
+    );
+  }
+
+  bulkCreate(contacts): Observable<any> {
+    return this.httpClient.post(this.server + CONTACT.BULK_CREATE, { contacts }).pipe(
+      map((res) => res),
+      catchError(this.handleError('BULK CREATE CONTACTS', []))
+    );
   }
 }

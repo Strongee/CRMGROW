@@ -263,7 +263,7 @@
     <ng-container *ngIf="step == 3">
       <div class="d-flex justify-content-end">
         <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-        <button class="btn btn-primary" type="button" (click)="goToReview()">Review</button>
+        <button class="btn btn-primary" type="button" (click)="goToReview()" [class.loading]="uploading">{{firstImport ? 'Review' : 'Import'}}</button>
       </div>
     </ng-container>
     <ng-container *ngIf="step == 4">

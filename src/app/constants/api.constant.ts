@@ -79,7 +79,11 @@ export const CONTACT = {
   EXPORT: 'contact/export-csv',
   BULK_DELETE: 'contact/remove',
   BULK_UPDATE: 'contact/bulk-update',
-  LATEST_CONTACTS: 'video/latest-sent'
+  LATEST_CONTACTS: 'video/latest-sent',
+  UPDATE: 'contact/',
+  CREATE: 'contact/',
+  MERGE: 'contact/contact-merge',
+  BULK_CREATE: 'contact/bulk-create'
 };
 export const VIDEO = {
   CREATE: 'video/create',
