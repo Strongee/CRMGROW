@@ -719,7 +719,6 @@ export class UploadContactsComponent implements OnInit {
           if (this.duplicateItems.length) {
             this.duplicateItems[dupIndex] = false;
           }
-
         }
       });
   }
@@ -1078,7 +1077,10 @@ export class UploadContactsComponent implements OnInit {
                 if (i === j) {
                   continue;
                 } else {
-                  if (this.sameContacts[dupIndex][i].primary_email === this.sameContacts[dupIndex][j].primary_email) {
+                  if (
+                    this.sameContacts[dupIndex][i].primary_email ===
+                    this.sameContacts[dupIndex][j].primary_email
+                  ) {
                     isDuplicatedKey = true;
                     break;
                   }

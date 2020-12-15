@@ -37,11 +37,7 @@ export class ImportContactMergeComponent implements OnInit {
   followup = 'Both';
   automation = 'Both';
 
-  mergeActions = [
-    'Both',
-    'Keep primary',
-    'Remove'
-  ];
+  mergeActions = ['Both', 'Keep primary', 'Remove'];
 
   checkableColumn = [
     'first_name',
@@ -182,11 +178,11 @@ export class ImportContactMergeComponent implements OnInit {
               if (
                 (Array.isArray(
                   this.secondaryContact[this.updateColumn[name]]
-                  ) &&
+                ) &&
                   this.secondaryContact[this.updateColumn[name]].length) ||
                 (!Array.isArray(
                   this.secondaryContact[this.updateColumn[name]]
-                  ) &&
+                ) &&
                   this.secondaryContact[this.updateColumn[name]])
               ) {
                 this.secondarySelectionModel.push(true);
@@ -252,7 +248,6 @@ export class ImportContactMergeComponent implements OnInit {
   }
 
   mergeContact(): void {
-
     const data = {
       primary_contact: {
         ...this.primaryContact,
@@ -266,17 +261,19 @@ export class ImportContactMergeComponent implements OnInit {
       },
       activity_merge: this.activity,
       followup_merge: this.followup,
-      automation_merge: this.automation,
+      automation_merge: this.automation
     };
     for (const field in this.contactContactColumn) {
       if (field === 'primary_email') {
         data['email'] = this.previewContact[this.contactContactColumn[field]];
       } else if (field === 'primary_phone') {
-        data['cell_phone'] = this.previewContact[this.contactContactColumn[field]];
+        data['cell_phone'] = this.previewContact[
+          this.contactContactColumn[field]
+        ];
       } else {
         data[field] = this.previewContact[this.contactContactColumn[field]];
       }
-    };
+    }
 
     this.merging = true;
     this.contactService.mergeContacts(data).subscribe(
