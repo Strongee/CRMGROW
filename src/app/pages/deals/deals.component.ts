@@ -21,24 +21,10 @@ export class DealsComponent implements OnInit {
       'Real Estate sale 3',
       'Real Estate sale 4'
     ]),
-    new Column('50% Commited', [
-      'Lorem ipsum',
-      'foo',
-      "This was in the 'Research' column"
-    ]),
-    new Column('Opportunity Fully Presented', [
-      'Get to work',
-      'Pick up groceries',
-      'Go home',
-      'Fall asleep'
-    ]),
-    new Column('Proposal Made', [
-      'Get up',
-      'Brush teeth',
-      'Take a shower',
-      'Check e-mail',
-      'Walk dog'
-    ])
+    new Column('50% Commited', ['Real Estate sale 3']),
+    new Column('Opportunity Fully Presented', ['Real Estate sale 3']),
+    new Column('Proposal Made', []),
+    new Column('Negotiations Started', ['Real Estate sale 3'])
   ]);
 
   constructor(private router: Router) {}

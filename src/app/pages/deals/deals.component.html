@@ -1,12 +1,15 @@
 <div class="page-content">
     <div class="d-flex columns" cdkDropListGroup>
         <div class="column" *ngFor="let column of board.columns">
-            <div class="column-title bgc-pale p-3">
+            <div class="column-title bgc-pale p-4">
                 <div class="f-4 font-weight-bold">
                     {{column.name}}
                 </div>
                 <div class="f-6 font-weight-bold text-primary">
                     {{column.tasks.length}} <span class="f-1 font-weight-bold c-dark op-56 text-uppercase">Deals</span>
+                </div>
+                <div class="title-triangle">
+                    <i class="d-block i-icon i-triangle-right bgc-dark"></i>
                 </div>
             </div>
             <div
@@ -16,11 +19,36 @@
                 (cdkDropListDropped)="drop($event)"
             >
                 <div
-                    class="task f-6 font-weight-bold bgc-white mt-3 mr-3 p-3"
+                    class="task mt-3 mr-3 p-3"
                     *ngFor="let item of column.tasks" cdkDrag
                     (click)="taskDetail(item)"
                 >
-                    {{ item }}
+                    <div class="v-center justify-content-between">
+                        <div class="f-6 font-weight-bold">
+                            {{ item }}
+                        </div>
+                        <div *ngIf="item == 'Real Estate sale 1'">
+                            <img src="/assets/img/status_green.svg" alt="">
+                        </div>
+                        <div *ngIf="item == 'Real Estate sale 2'">
+                            <img src="/assets/img/status_red.svg" alt="">
+                        </div>
+                        <div *ngIf="item == 'Real Estate sale 3'">
+                            <img src="/assets/img/status_yellow.svg" alt="">
+                        </div>
+                        <div *ngIf="item == 'Real Estate sale 4'">
+                            <img src="/assets/img/status_gray.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="v-center mt-2">
+                        <div class="avatar"></div>
+                        <div class="ml-2 f-3">
+                            Thomas Anderson
+                        </div>
+                    </div>
+                    <div class="f-3 op-64 mt-2">
+                        $100,000
+                    </div>
                 </div>
                 <div class="v-center justify-content-center add-task mt-3 mr-3">
                     <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addTasks(column.tasks)"></i>
