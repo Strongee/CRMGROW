@@ -132,7 +132,7 @@
                     <button type="button" class="v-center border-0 bgc-trans" (click)="editContact(contact.id)">
                       <i class="i-icon i-edit bgc-black" aria-hidden="true"></i>
                     </button>
-                    <button type="button" class="v-center border-0 bgc-trans ml-2" (click)="removeContact(contact.id)">
+                    <button type="button" class="v-center border-0 bgc-trans ml-2" (click)="removeContact(contact.id, dupIndex)">
                       <i class="i-icon i-trash bgc-black" aria-hidden="true"></i>
                     </button>
                   </div>
@@ -149,7 +149,7 @@
                 <td [colSpan]="columns.length + 2">
                   <div>
                       <span class="f-1 font-weight-bold c-red"
-                            *ngIf="duplicateItems.indexOf(dupIndex) >= 0">
+                            *ngIf="duplicateItems[dupIndex]">
                         EMAIL is duplicated. Please merge duplicated emails.
                       </span>
                   </div>
