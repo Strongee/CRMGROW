@@ -26,7 +26,8 @@ export const USER = {
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',
-  UPDATE_GARBAGE: 'garbage'
+  UPDATE_GARBAGE: 'garbage',
+  CONNECT_SMTP: 'integration/sync-smtp'
 };
 export const GUEST = {
   LOAD: 'guest/load',
