@@ -183,7 +183,7 @@ export class CalendarOverlayComponent implements OnInit {
     imageInput.addEventListener('change', () => {
       if (imageInput.files != null && imageInput.files[0] != null) {
         const file = imageInput.files[0];
-        this.fileService.attachImage(file).subscribe((res) => {
+        this.fileService.attachImage(file).then((res) => {
           this.insertImageToEditor(res.url);
         });
       }
