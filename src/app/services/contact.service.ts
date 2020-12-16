@@ -79,9 +79,9 @@ export class ContactService extends HttpService {
       );
   }
 
-  update(contact): Observable<Contact[]> {
+  update(contact): Observable<any> {
     return this.httpClient.post(this.server + CONTACT.UPDATE, {...contact}).pipe(
-      map((res) => res['data'] || []),
+      map((res) => res),
       catchError(this.handleError('UPDATE CONTACT', []))
     );
   }

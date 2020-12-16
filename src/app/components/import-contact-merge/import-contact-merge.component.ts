@@ -256,9 +256,15 @@ export class ImportContactMergeComponent implements OnInit {
       notes: this.notes
     };
 
+    let labelName = this.previewContact.label;
+    let labelId = this.previewContact.label_id;
     if (this.previewContact.label === this.primaryContact.label) {
+      labelName = this.primaryContact.label;
+      labelId = this.primaryContact.label_id;
       this.previewContact.label = this.primaryContact.label_id;
     } else {
+      labelName = this.secondaryContact.label;
+      labelId = this.secondaryContact.label_id;
       this.previewContact.label = this.secondaryContact.label_id;
     }
 
@@ -282,7 +288,9 @@ export class ImportContactMergeComponent implements OnInit {
           const merged = {
             ...res,
             primary_email: res.email,
-            primary_phone: res.cell_phone
+            primary_phone: res.cell_phone,
+            label: labelName,
+            label_id: labelId
           };
 
           this.dialogRef.close({ type: 'contact', merged });
