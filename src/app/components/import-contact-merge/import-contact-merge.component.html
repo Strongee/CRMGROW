@@ -43,7 +43,7 @@
             <div class="f-3 op-75 text-uppercase">{{column}}</div>
           </td>
           <td>
-            <div class="check-wrapper">
+            <div class="check-wrapper" *ngIf="!(primaryContact[column] == '' || primaryContact[column] == undefined)">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="primary-{{column}}" name="contact-{{column}}"
                        [checked]="primarySelectionModel[row]" (change)="changeCheck(row, column)"
@@ -54,7 +54,7 @@
             </div>
           </td>
           <td>
-            <div class="check-wrapper">
+            <div class="check-wrapper" *ngIf="!(secondaryContact[column] == '' || secondaryContact[column] == undefined)">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="secondary-{{column}}" name="contact-{{column}}"
                        [checked]="secondarySelectionModel[row]" (change)="changeCheck(row, column)"
@@ -70,7 +70,7 @@
             <div class="f-3 op-75 text-uppercase">{{column}}</div>
           </td>
           <td>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox" *ngIf="!(primaryContact[column] == '' || primaryContact[column] == undefined)">
               <input type="checkbox" class="custom-control-input" id="primary-{{column}}"
                      [checked]="primarySelectionModel[row]"
                      (change)="$event ? changePrimarySelection(row, column) : null"
@@ -88,7 +88,7 @@
             </div>
           </td>
           <td>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox" *ngIf="!(secondaryContact[column] == '' || secondaryContact[column] == undefined)">
               <input type="checkbox" class="custom-control-input" id="secondary-{{column}}"
                      [checked]="secondarySelectionModel[row]"
                      (change)="$event ? changeSecondarySelection(row, column) : null"

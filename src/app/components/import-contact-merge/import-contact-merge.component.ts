@@ -230,7 +230,15 @@ export class ImportContactMergeComponent implements OnInit {
 
   update(): void {
     this.updating = true;
-    this.contactService.update(this.previewContact).subscribe(
+    const data = Object.assign({}, this.previewContact);
+    const labelIndex = this.columns.indexOf(this.updateColumn['label']);
+    if (labelIndex >= 0) {
+      if ((this.isContact(this.primaryContact) && this.primarySelectionModel[labelIndex]) ||
+        (this.isContact(this.secondaryContact) && this.secondarySelectionModel[labelIndex])) {
+        delete data.label;
+      }
+    }
+    this.contactService.update(data).subscribe(
       (res) => {
         this.updating = false;
         if (res) {

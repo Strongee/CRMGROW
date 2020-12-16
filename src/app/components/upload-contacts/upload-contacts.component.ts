@@ -1118,6 +1118,10 @@ export class UploadContactsComponent implements OnInit {
               }
             }
           }
+
+          if (this.selectedMergeContacts[dupIndex].isSelected(id)) {
+            this.selectedMergeContacts[dupIndex].deselect(id);
+          }
         }
       }
     });
