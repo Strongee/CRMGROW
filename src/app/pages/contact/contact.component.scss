@@ -492,7 +492,15 @@
               float: right;
               color: $color-trans56;
             }
+            &.completed {
+              .content {text-decoration-line: line-through;}
+              .time {text-decoration-line: line-through;}
+            }
           }
+        }
+
+        &.emails-detail {
+          br {display: none;}
         }
 
 
@@ -524,6 +532,10 @@
       .mat-expansion-panel-header {
         background: transparent!important;
       }
+    }
+
+    &.emails-detail {
+      br {display: none;}
     }
   }
 }

@@ -90,6 +90,8 @@ import { MaterialSendComponent } from './material-send/material-send.component';
 import { ImportContactMergeConfirmComponent } from './import-contact-merge-confirm/import-contact-merge-confirm.component';
 import { HtmlEditorComponent } from './html-editor/html-editor.component';
 import { AccordionComponent } from './accordion/accordion.component';
+import { SubjectInputComponent } from './subject-input/subject-input.component';
+import { SmsEditorComponent } from './sms-editor/sms-editor.component';
 
 @NgModule({
   declarations: [
@@ -179,7 +181,9 @@ import { AccordionComponent } from './accordion/accordion.component';
     MaterialSendComponent,
     ImportContactMergeConfirmComponent,
     HtmlEditorComponent,
-    AccordionComponent
+    AccordionComponent,
+    SubjectInputComponent,
+    SmsEditorComponent
   ],
   imports: [
     CommonModule,

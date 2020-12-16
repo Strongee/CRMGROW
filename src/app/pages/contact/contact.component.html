@@ -567,23 +567,37 @@
                 </div>
                 <div class="history-detail {{activity.type}}-detail">
                   <ng-container [ngSwitch]="activity.type">
+
                     <!-- BEGIN FOLLOW UP ACTIVITY -->
                     <div *ngSwitchCase="'follow_ups'">
                       <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                        <div class="main-history-item">
+                        <div class="main-history-item" [class.completed]="activity.content.indexOf('completed') !== -1">
                           <div class="content">
                             {{activity.activity_detail.content}}
                           </div>
                           <div class="time ml-2">
-                            {{activity.created_at | date: 'MMM dd, hh:mm a'}}
+                            {{activity.activity_detail.due_date | date: 'MMM dd, hh:mm a'}}
                           </div>
                         </div>
                       </ng-container>
                       <ng-template #removedTaskTemplate>
-                        Can't see the detail as it is deleted.
+                        <div class="d-flex">
+                          <mat-icon class="mr-2">warning</mat-icon>
+                          <span>Can't see the detail as it is deleted.</span>
+                        </div>
                       </ng-template>
-                      <div class="related-history-item">
-                        <!-- {{groupActions[activity.group_id].length}} -->
+                      <div class="related-history-item" *ngIf="groupActions[activity.group_id].length > 1">
+                        <app-accordion showText="See detail" hideText="Hide detail" [resultItem]="result">
+                          <ng-template #result>
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-green-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                          </ng-template>
+                        </app-accordion>
                       </div>
                     </div>
                     <!-- END FOLLOW UP ACTIVITY -->
@@ -592,26 +606,40 @@
                     <div *ngSwitchCase="'notes'">
                       <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                         <div class="main-history-item">
-                          <div class="title">
+                          <div class="title font-weight-bold f-4">
                             {{activity.activity_detail.title || 'No Title Note'}}
                           </div>
-                          <!-- <app-accordion showText="See detail" hideText="Hide detail" [resultItem]="result">
+                          <app-accordion showText="See detail" hideText="Hide detail" [resultItem]="result">
                             <ng-template #result>
                               <div>{{activity.activity_detail.content}}</div>  
                             </ng-template>
-                          </app-accordion> -->
-                          <mat-expansion-panel class="mat-elevation-z bgc-trans d-flex flex-column-reverse mt-3">
-                            <mat-expansion-panel-header>
-                              <mat-panel-title>
-                                <div class="c-blue f-3 fw-600 mt-2">See detail</div>
-                              </mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <div>{{activity.activity_detail.content}}</div>
-                          </mat-expansion-panel>
+                          </app-accordion>
                         </div>
                       </ng-container>
                     </div>
                     <!-- END NOTE ACTIVITY -->
+
+                    <!-- BEGIN EMAIL ACTIVITY -->
+                    <div *ngSwitchCase="activity.type == 'emails' || activity.type == 'email_trackers' ? activity.type : ''">
+                      {{activity.activity_detail | json}}
+                      <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                        <div class="main-history-item">
+                          <div class="title font-weight-bold">
+                            {{activity.activity_detail.subject}}
+                          </div>
+                          <app-accordion showText="See detail" hideText="Hide detail" [resultItem]="result">
+                            <ng-template #result>
+                              <div>
+                                <h5 class="font-weight-bold">Details</h5>
+                                <div class="mb-2"><span class="font-weight-bold mr-3">Subject:</span>{{activity.activity_detail.subject}}</div>
+                                <div [innerHTML]="activity.activity_detail.content"></div>
+                              </div>  
+                            </ng-template>
+                          </app-accordion>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <!-- END EMAIL ACTIVITY -->
                   </ng-container>
                   
                   <!-- {{groupActions[activity.group_id] | json}} -->
