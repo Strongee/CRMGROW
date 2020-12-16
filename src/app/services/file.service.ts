@@ -20,14 +20,12 @@ export class FileService extends HttpService {
     super(errorService);
   }
 
-  attachImage(file): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.httpClient
-      .post(this.server + FILE.UPLOAD_IMAGE, { formData })
-      .pipe(
-        map((res) => res),
-        catchError(this.handleError('FILE UPLOAD', []))
-      );
+  attachImage(file: any): Observable<any> {
+    // const formData = new FormData();
+    // formData.append('file', file);
+    return this.httpClient.post(this.server + FILE.UPLOAD_IMAGE, file).pipe(
+      map((res) => res),
+      catchError(this.handleError('FILE UPLOAD', []))
+    );
   }
 }
