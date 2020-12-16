@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { STAGES } from 'src/app/constants/variable.constants';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
+import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -34,7 +35,7 @@ export class ContactBulkComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private storeService: StoreService
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {}
@@ -83,7 +84,7 @@ export class ContactBulkComponent implements OnInit {
       .subscribe((status) => {
         this.isUpdating = false;
         if (status) {
-          this.storeService.bulkUpdate$(ids, data, tagData);
+          this.handlerService.bulkContactUpdate$(ids, data, tagData);
         }
       });
   }

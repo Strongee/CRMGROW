@@ -19,6 +19,11 @@ export class ActivityService extends HttpService {
   total: BehaviorSubject<number> = new BehaviorSubject(0);
   total$ = this.total.asObservable();
   loadSubscription: Subscription;
+  page: BehaviorSubject<number> = new BehaviorSubject(1);
+  page$ = this.page.asObservable();
+  pageSize: BehaviorSubject<number> = new BehaviorSubject(20);
+  pageSize$ = this.pageSize.asObservable();
+
   constructor(
     errorService: ErrorService,
     private http: HttpClient,

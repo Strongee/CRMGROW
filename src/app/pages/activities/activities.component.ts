@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ActivityService } from 'src/app/services/activity.service';
 import { ContactService } from 'src/app/services/contact.service';
+import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -32,6 +33,7 @@ export class ActivitiesComponent implements OnInit {
   pageSize = this.PAGE_COUNTS[2];
   page = 1;
   constructor(
+    public handlerService: HandlerService,
     public storeService: StoreService,
     public activityService: ActivityService,
     private contactService: ContactService
@@ -64,7 +66,7 @@ export class ActivitiesComponent implements OnInit {
       .subscribe((status) => {
         this.isUpdating = false;
         if (status) {
-          this.storeService.bulkUpdate$(ids, { label: newLabel }, {});
+          this.handlerService.bulkContactUpdate$(ids, { label: newLabel }, {});
         }
       });
   }
