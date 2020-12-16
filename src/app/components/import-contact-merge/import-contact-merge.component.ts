@@ -248,27 +248,20 @@ export class ImportContactMergeComponent implements OnInit {
 
   mergeContact(): void {
     const data = {
-      primary_contact: {
-        ...this.primaryContact,
-        email: this.primaryContact.primary_email,
-        cell_phone: this.primaryContact.primary_phone,
-        label: {
-          _id: this.primaryContact.label_id
-        }
-      },
-      secondary_contact: {
-        ...this.secondaryContact,
-        email: this.secondaryContact.primary_email,
-        cell_phone: this.secondaryContact.primary_phone,
-        label: {
-          _id: this.primaryContact.label_id
-        }
-      },
+      primary_contact: this.primaryContact._id,
+      secondary_contact: this.secondaryContact._id,
       activity_merge: this.activity,
       followup_merge: this.followup,
       automation_merge: this.automation,
       notes: this.notes
     };
+
+    if (this.previewContact.label === this.primaryContact.label) {
+      this.previewContact.label = this.primaryContact.label_id;
+    } else {
+      this.previewContact.label = this.secondaryContact.label_id;
+    }
+
     for (const field in this.contactContactColumn) {
       if (field === 'primary_email') {
         data['email'] = this.previewContact[this.contactContactColumn[field]];
