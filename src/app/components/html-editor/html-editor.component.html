@@ -1,0 +1,33 @@
+<div class="html-editor position-relative">
+  <quill-editor
+    [placeholder]="placeholder"
+    [ngModel]="value"
+    (ngModelChange)="onChangeValue($event)"
+    [modules]="config"
+    [styles]="style"
+    [class]="class"
+    image-resize="true"
+    [required]="required ? true : false"
+    (onEditorCreated)="getEditorInstance($event)"
+    [formControl]="editorForm"
+    #emailEditor>
+  </quill-editor>
+  <span class="c-red error" *ngIf="editorForm.errors && (editorForm.touched || editorForm.dirty)">
+    Required!
+  </span>
+  <ng-container *ngIf="hasToken">
+    <div ngbDropdown class="insert-token">
+      <div class="v-center" ngbDropdownToggle>
+        <span class="f-1 font-weight-bold mr-2">Insert Token</span>
+        <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+        <i class="d-block i-icon i-triangle-up bgc-blue"></i>
+      </div>
+      <div ngbDropdownMenu class="light p-2">
+        <div class="f-3 p-1 c-pointer" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</div>
+        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_name}')">Your name</div>
+        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_email}')">Your email</div>
+        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_phone}')">Your phone</div>
+      </div>
+    </div>
+  </ng-container>
+</div>

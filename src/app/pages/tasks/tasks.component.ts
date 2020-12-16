@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { Task, TaskDetail } from 'src/app/models/task.model';
 import { ContactService } from 'src/app/services/contact.service';
+import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
 @Component({
@@ -35,6 +36,7 @@ export class TasksComponent implements OnInit {
 
   selection = [];
   constructor(
+    private handlerService: HandlerService,
     public taskService: TaskService,
     public storeService: StoreService,
     private contactService: ContactService
@@ -79,7 +81,7 @@ export class TasksComponent implements OnInit {
       .subscribe((status) => {
         this.isUpdating = false;
         if (status) {
-          this.storeService.bulkUpdate$(ids, { label: newLabel }, {});
+          this.handlerService.bulkContactUpdate$(ids, { label: newLabel }, {});
         }
       });
   }

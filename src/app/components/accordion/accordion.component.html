@@ -1,0 +1,9 @@
+<mat-expansion-panel class="mat-elevation-z bgc-trans d-flex flex-column-reverse mt-3" #panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="c-blue f-3 fw-600 mt-2">{{panel._getExpandedState() === 'collapsed' ? showText : hideText}}</div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container [ngTemplateOutlet]="resultItemTemplate">
+  </ng-container>
+</mat-expansion-panel>

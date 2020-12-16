@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { Note } from 'src/app/models/note.model';
+import { HandlerService } from 'src/app/services/handler.service';
 import { NoteService } from 'src/app/services/note.service';
 import { StoreService } from 'src/app/services/store.service';
 
@@ -20,7 +21,7 @@ export class NoteCreateComponent implements OnInit {
 
   constructor(
     private noteService: NoteService,
-    private storeService: StoreService,
+    private handlerService: HandlerService,
     private dialogRef: MatDialogRef<NoteCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -55,7 +56,7 @@ export class NoteCreateComponent implements OnInit {
       .bulkCreate(data)
       .subscribe((res) => {
         this.saving = false;
-        this.storeService.activityAdd$(ids, 'note');
+        this.handlerService.activityAdd$(ids, 'note');
         this.dialogRef.close();
       });
   }
