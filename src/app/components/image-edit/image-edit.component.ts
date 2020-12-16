@@ -12,10 +12,10 @@ import { HelperService } from 'src/app/services/helper.service';
 import { QuillEditorComponent } from 'ngx-quill';
 import { FileService } from 'src/app/services/file.service';
 import { QuillEditor } from '../../constants/variable.constants';
-import ImageResize from 'quill-image-resize-module';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-image-edit',

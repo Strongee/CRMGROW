@@ -36,3 +36,13 @@
   width: 100%;
   max-width: 520px;
 }
+
+.quill-better-table {
+  border: none!important;
+}
+
+:host ::ng-deep {
+  .quill-better-table td{
+    border: none!important;
+  } 
+}

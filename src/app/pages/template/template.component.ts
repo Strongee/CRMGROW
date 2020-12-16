@@ -7,9 +7,9 @@ import { QuillEditor } from '../../constants/variable.constants';
 import { QuillEditorComponent } from 'ngx-quill';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
 import { Template } from 'src/app/models/template.model';
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-template',

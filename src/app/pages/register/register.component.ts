@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HelperService } from '../../services/helper.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import {AvatarEditorComponent} from "../../components/avatar-editor/avatar-editor.component";
+import { AvatarEditorComponent } from '../../components/avatar-editor/avatar-editor.component';
 import { UserService } from '../../services/user.service';
 import { validateEmail } from 'src/app/utils/functions';
 

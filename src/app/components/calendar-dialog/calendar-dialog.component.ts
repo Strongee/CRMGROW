@@ -21,8 +21,8 @@ import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { Contact } from 'src/app/models/contact.model';
 @Component({

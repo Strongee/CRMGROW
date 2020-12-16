@@ -2,6 +2,7 @@ import * as Quill from 'quill';
 const Embed = Quill.import('blots/embed');
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
+const Block = Quill.import('blots/block');
 
 export const numPad = (num) => {
   if (num < 10) {
@@ -10,7 +11,6 @@ export const numPad = (num) => {
   return num + '';
 };
 
-
 export const TelFormat = {
   numericOnly: true,
   blocks: [0, 3, 3, 4],
@@ -18,7 +18,9 @@ export const TelFormat = {
 };
 
 export const ByteToSize = (bytes, decimals = 2) => {
-  if (bytes === 0) { return '0 Bytes'; }
+  if (bytes === 0) {
+    return '0 Bytes';
+  }
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
@@ -74,7 +76,10 @@ export const promptForFiles = (): Promise<FileList> => {
 };
 
 export const listToTree = (list) => {
-  var map = {}, node, roots = [], i;
+  let map = {},
+    node,
+    roots = [],
+    i;
   for (i = 0; i < list.length; i += 1) {
     map[list[i].ref] = i; // initialize the map
     list[i].children = []; // initialize the children
@@ -109,7 +114,9 @@ export const rebuildListToTree = (list) => {
     if (node.parent_ref !== '0') {
       const parent = map[node.parent_ref];
       if (parent) {
-        if (parent.status === 'disabled') { node.status = 'disabled'; }
+        if (parent.status === 'disabled') {
+          node.status = 'disabled';
+        }
         parent.children.push(node);
       }
     } else {
@@ -117,14 +124,18 @@ export const rebuildListToTree = (list) => {
     }
   }
 
-  if (root === null) { return roots; }
+  if (root === null) {
+    return roots;
+  }
 
   for (const node of list) {
     const parent = map[node.parent_ref];
     const isCompleted = !isUncompleted(node);
     if (parent && isCompleted) {
       const index = parent.children.indexOf(node.ref);
-      if (index >= 0) { parent.children.splice(index, 1); }
+      if (index >= 0) {
+        parent.children.splice(index, 1);
+      }
     }
   }
 
@@ -145,12 +156,19 @@ export const rebuildListToTree = (list) => {
           nextChild = child;
         }
       }
-      if (nextChild) { root = nextChild; }
-      else { break; }
-    } else { break; }
+      if (nextChild) {
+        root = nextChild;
+      } else {
+        break;
+      }
+    } else {
+      break;
+    }
   }
 
-  if (isUncompleted(root)) { roots.push(root); }
+  if (isUncompleted(root)) {
+    roots.push(root);
+  }
 
   return roots;
 };
@@ -194,10 +212,11 @@ export class SignatureBlot extends Embed {
   }
 }
 
-const Block = Parchment.query('block');
+console.log('Parchment', Block);
+// const Block = Parchment.query('block');
 Block.tagName = 'DIV';
-
-Quill.register(SignatureBlot, true);
+console.log('Parchment', Block);
+// Quill.register(SignatureBlot, true);
 Quill.register(Block, true);
 
 export function toInteger(value: any): number {
@@ -261,7 +280,7 @@ if (typeof Element !== 'undefined' && !Element.prototype.closest) {
       Element.prototype.webkitMatchesSelector;
   }
 
-  Element.prototype.closest = function(s: string) {
+  Element.prototype.closest = function (s: string) {
     let el = this;
     if (!document.documentElement.contains(el)) {
       return null;
@@ -300,4 +319,3 @@ export function validateEmail(email): any {
   }
   return true;
 }
-

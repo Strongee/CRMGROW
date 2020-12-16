@@ -5,9 +5,9 @@ import { QuillEditor } from 'src/app/constants/variable.constants';
 import { QuillEditorComponent } from 'ngx-quill';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
 import { Contact } from 'src/app/models/contact.model';
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-material-send',

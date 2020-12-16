@@ -14,8 +14,8 @@ import { QuillEditor } from 'src/app/constants/variable.constants';
 import { FileService } from 'src/app/services/file.service';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-html-editor',
