@@ -1044,7 +1044,11 @@ export class UploadContactsComponent implements OnInit {
           if (res) {
             const updated = res.contact;
             if (updated) {
-              this.contacts.splice(id, 1, updated);
+              const contactIndex = this.contacts.findIndex((contact) => contact.id === id);
+              if (contactIndex >= 0) {
+                this.contacts.splice(contactIndex, 1, updated);
+              }
+
               this.sameContacts.some((e, index) => {
                 e.some((item, idx) => {
                   if (item.id === id) {
