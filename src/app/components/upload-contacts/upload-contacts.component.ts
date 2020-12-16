@@ -466,11 +466,7 @@ export class UploadContactsComponent implements OnInit {
         }
         return result;
       } else if (column === 'notes') {
-        for (let i = 0; i < content.length; i++) {
-          result =
-            result + content[i].title + ': ' + content[i].content + '<br/>';
-        }
-        return result;
+        return '...';
       }
     }
   }
@@ -856,6 +852,8 @@ export class UploadContactsComponent implements OnInit {
               this.dialogRef.close({});
             }
           );
+        } else {
+          this.dialogRef.close({});
         }
       }
     }

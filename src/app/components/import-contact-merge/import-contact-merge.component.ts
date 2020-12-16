@@ -517,9 +517,19 @@ export class ImportContactMergeComponent implements OnInit {
                     this.previewContact.additional_data[filter] = [];
                   }
 
-                  this.previewContact.additional_data[
-                    filter
-                  ] = this.previewContact.additional_data[filter].concat(val);
+                  if (this.previewContact.additional_data[filter].length) {
+                    let isExist = false;
+                    for (let k = 0; k < this.previewContact.additional_data[filter].length; k++) {
+                      val.forEach((item, index) => {
+                        val.splice(index, 1);
+                      })
+                    }
+                    if (!isExist) {
+                      this.previewContact.additional_data[filter] = this.previewContact.additional_data[filter].concat(val);
+                    }
+                  } else {
+                    this.previewContact.additional_data[filter] = this.previewContact.additional_data[filter].concat(val);
+                  }
                 }
               });
           }
@@ -594,7 +604,7 @@ export class ImportContactMergeComponent implements OnInit {
         }
         return result;
       } else if (column === 'notes') {
-        return ' ';
+        return '...';
       }
     }
   }
