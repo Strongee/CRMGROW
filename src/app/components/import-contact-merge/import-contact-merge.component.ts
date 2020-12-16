@@ -36,6 +36,7 @@ export class ImportContactMergeComponent implements OnInit {
   activity = 'Keep primary';
   followup = 'Both';
   automation = 'Both';
+  notes = 'Both';
 
   mergeActions = ['Both', 'Keep primary', 'Remove'];
 
@@ -70,14 +71,14 @@ export class ImportContactMergeComponent implements OnInit {
     tags: 'tags',
     recruiting_stage: 'recruiting_stage',
     website: 'website',
-
-    note: 'note'
+    notes: 'notes'
   };
 
   contactContactColumn = {
     ...this.contactCSVColumn,
     last_activity: 'last_activity',
-    auto_follow_up: 'auto_follow_up'
+    auto_follow_up: 'auto_follow_up',
+    automation: 'automation'
   };
 
   selectedContact = 'Primary';
@@ -229,22 +230,20 @@ export class ImportContactMergeComponent implements OnInit {
 
   update(): void {
     this.updating = true;
-    this.contactService
-      .update(this.previewContact._id, this.previewContact)
-      .subscribe(
-        (res) => {
-          this.updating = false;
-          if (res) {
-            const merged = {
-              ...this.previewContact
-            };
-            this.dialogRef.close({ type: 'csv', merged });
-          }
-        },
-        (error) => {
-          this.updating = false;
+    this.contactService.update(this.previewContact).subscribe(
+      (res) => {
+        this.updating = false;
+        if (res) {
+          const merged = {
+            ...this.previewContact
+          };
+          this.dialogRef.close({ type: 'csv', merged });
         }
-      );
+      },
+      (error) => {
+        this.updating = false;
+      }
+    );
   }
 
   mergeContact(): void {
@@ -252,16 +251,23 @@ export class ImportContactMergeComponent implements OnInit {
       primary_contact: {
         ...this.primaryContact,
         email: this.primaryContact.primary_email,
-        cell_phone: this.primaryContact.primary_phone
+        cell_phone: this.primaryContact.primary_phone,
+        label: {
+          _id: this.primaryContact.label_id
+        }
       },
       secondary_contact: {
         ...this.secondaryContact,
         email: this.secondaryContact.primary_email,
-        cell_phone: this.secondaryContact.primary_phone
+        cell_phone: this.secondaryContact.primary_phone,
+        label: {
+          _id: this.primaryContact.label_id
+        }
       },
       activity_merge: this.activity,
       followup_merge: this.followup,
-      automation_merge: this.automation
+      automation_merge: this.automation,
+      notes: this.notes
     };
     for (const field in this.contactContactColumn) {
       if (field === 'primary_email') {
@@ -528,34 +534,36 @@ export class ImportContactMergeComponent implements OnInit {
       } else {
         if (this.primarySelectionModel[i] && this.secondarySelectionModel[i]) {
           const mergeItems = [];
-          this.secondaryContact[column].forEach((tag) => {
-            mergeItems.push(tag);
-          });
+
           if (column === 'tags') {
             if (this.secondaryContact[column].length) {
               this.secondaryContact[column].forEach((item, index) => {
-                if (this.primaryContact[column].indexOf(item) >= 0) {
-                  mergeItems.splice(index, 1);
+                if (this.primaryContact[column].indexOf(item) < 0) {
+                  mergeItems.push(item);
                 }
               });
             }
             this.previewContact[column] = this.primaryContact[column].concat(
               mergeItems
             );
-          } else if (column === 'note') {
+          } else if (column === 'notes') {
             if (this.isPrimaryActive()) {
               for (let j = 0; j < this.primaryContact[column].length; j++) {
                 mergeItems.push(this.primaryContact[column][j]);
               }
               for (let j = 0; j < this.secondaryContact[column].length; j++) {
-                mergeItems.push(this.secondaryContact[column][j]);
+                if (mergeItems.indexOf(this.secondaryContact[column][j]) < 0) {
+                  mergeItems.push(this.secondaryContact[column][j]);
+                }
               }
             } else {
               for (let j = 0; j < this.secondaryContact[column].length; j++) {
                 mergeItems.push(this.secondaryContact[column][j]);
               }
               for (let j = 0; j < this.primaryContact[column].length; j++) {
-                mergeItems.push(this.primaryContact[column][j]);
+                if (mergeItems.indexOf(this.primaryContact[column][j]) < 0) {
+                  mergeItems.push(this.primaryContact[column][j]);
+                }
               }
             }
             this.previewContact[column] = mergeItems;
@@ -592,12 +600,8 @@ export class ImportContactMergeComponent implements OnInit {
           }
         }
         return result;
-      } else if (column === 'note') {
-        for (let i = 0; i < content.length; i++) {
-          result =
-            result + content[i].title + ': ' + content[i].content + '<br/>';
-        }
-        return result;
+      } else if (column === 'notes') {
+        return ' ';
       }
     }
   }

@@ -113,7 +113,7 @@ export class UploadContactsComponent implements OnInit {
           this.sameContacts = [];
 
           let tagsKey = 'tags';
-          let noteKey = 'note';
+          let noteKey = 'notes';
           for (const key in this.updateColumn) {
             if (this.updateColumn[key] === 'primary_email') {
               for (let i = 0; i < this.columns.length; i++) {
@@ -133,7 +133,7 @@ export class UploadContactsComponent implements OnInit {
               delete this.updateColumn[key];
             } else if (this.updateColumn[key] === 'tags') {
               tagsKey = key;
-            } else if (this.updateColumn[key] === 'note') {
+            } else if (this.updateColumn[key] === 'notes') {
               noteKey = key;
             }
           }
@@ -156,6 +156,19 @@ export class UploadContactsComponent implements OnInit {
                 contact.data[tagsKey] = tags.split(',');
               }
             }
+
+            if (contact.data.label !== undefined && contact.data.label._id !== undefined) {
+              const labelName = contact.data.label.name;
+              const labelId = contact.data.label._id;
+              delete contact.data.label;
+              contact.data['label'] = labelName;
+              contact.data['label_id'] = labelId;
+            }
+
+            if (contact.data._id && contact.data.notes) {
+              contact.data.notes = JSON.parse(contact.data.notes);
+            }
+
             this.contacts.push(contact.data);
           });
 
@@ -339,7 +352,7 @@ export class UploadContactsComponent implements OnInit {
           const originColumn = this.columns[index];
           const newColumn = this.updateColumn[originColumn];
           if (newColumn) {
-            if (newColumn === 'note') {
+            if (newColumn === 'notes') {
               const obj = {};
               obj[originColumn] = e;
               if (Array.isArray(contact[newColumn])) {
@@ -372,13 +385,13 @@ export class UploadContactsComponent implements OnInit {
     let deleted = false;
     this.columns.forEach((column) => {
       const newColumn = this.updateColumn[column];
-      if (newColumn === 'note') {
+      if (newColumn === 'notes') {
         delete this.updateColumn[column];
         deleted = true;
       }
     });
     if (deleted) {
-      this.updateColumn['note'] = 'note';
+      this.updateColumn['notes'] = 'notes';
     }
 
     if (this.contacts.length) {
@@ -402,20 +415,24 @@ export class UploadContactsComponent implements OnInit {
             if (val) {
               if (!Array.isArray(val)) {
                 Object.keys(val).forEach((key) => {
-                  const note = {
-                    title: key,
-                    content: val[key]
-                  };
-                  notes.push(note);
+                  if (val[key]) {
+                    const note = {
+                      title: key,
+                      content: val[key]
+                    };
+                    notes.push(note);
+                  }
                 });
               } else {
                 for (let j = 0; j < val.length; j++) {
                   Object.keys(val[j]).forEach((key) => {
-                    const note = {
-                      title: key,
-                      content: val[j][key]
-                    };
-                    notes.push(note);
+                    if (val[j][key]) {
+                      const note = {
+                        title: key,
+                        content: val[j][key]
+                      };
+                      notes.push(note);
+                    }
                   });
                 }
               }
@@ -448,7 +465,7 @@ export class UploadContactsComponent implements OnInit {
           }
         }
         return result;
-      } else if (column === 'note') {
+      } else if (column === 'notes') {
         for (let i = 0; i < content.length; i++) {
           result =
             result + content[i].title + ': ' + content[i].content + '<br/>';
@@ -871,6 +888,12 @@ export class UploadContactsComponent implements OnInit {
           } else if (key === 'primary_email') {
             const email = contact['primary_email'];
             record.push(email || '');
+          } else if (key === 'notes') {
+            const notes = [];
+            for (let j = 0; j < contact['notes'].length; j++) {
+              notes.push(JSON.stringify(contact['notes'][j]));
+            }
+            record.push(notes);
           } else {
             record.push(contact[key] || '');
           }
@@ -1169,7 +1192,7 @@ export class UploadContactsComponent implements OnInit {
       label: 'Zipcode'
     },
     {
-      value: 'note',
+      value: 'notes',
       label: 'Notes'
     },
     {

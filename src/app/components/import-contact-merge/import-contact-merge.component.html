@@ -141,6 +141,17 @@
           </td>
           <td></td>
         </tr>
+        <tr>
+          <td>
+            <div class="f-3 op-75 text-uppercase">Notes</div>
+          </td>
+          <td>
+            <select class="form-control theme-control" [(ngModel)]="notes" name="notes_merge" #notes_merge="ngModel">
+              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
       </ng-container>
       </tbody>
     </table>
