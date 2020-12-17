@@ -180,6 +180,7 @@ export class UploadContactsComponent implements OnInit {
             this.contactsToUpload = this.contacts;
           }
         } else {
+          this.uploading = false;
           this.dialogRef.close({ status: true });
         }
 
@@ -387,11 +388,16 @@ export class UploadContactsComponent implements OnInit {
       const newColumn = this.updateColumn[column];
       if (newColumn === 'notes') {
         delete this.updateColumn[column];
+        const index = this.columns.indexOf(column);
+        if (index >= 0) {
+          this.columns.splice(index, 1);
+        }
         deleted = true;
       }
     });
     if (deleted) {
       this.updateColumn['notes'] = 'notes';
+      this.columns.push('notes');
     }
 
     if (this.contacts.length) {
@@ -466,7 +472,20 @@ export class UploadContactsComponent implements OnInit {
         }
         return result;
       } else if (column === 'notes') {
-        return '...';
+        if (Array.isArray(content) !== undefined && Array.isArray(content)) {
+          for( let i = 0; i < content.length; i++) {
+            result += JSON.stringify(content[i]) + '<br/>';
+          }
+          if (result && result.length > 50) {
+            return result.slice(0, 50) + '...';
+          }
+          return result;
+        } else {
+          if (content && content.length > 50) {
+            return content.slice(0, 50) + '...';
+          }
+          return content;
+        }
       }
     }
   }
@@ -490,6 +509,7 @@ export class UploadContactsComponent implements OnInit {
           return true;
         }
       }
+      return false;
     }
     return false;
   }
@@ -806,7 +826,7 @@ export class UploadContactsComponent implements OnInit {
             if (i === j) {
               continue;
             }
-            if (dupItem[i]['primary_email'] === dupItem[j]['primary_email']) {
+            if (dupItem[i]['primary_email'] !== '' && dupItem[j]['primary_email'] !== '' && dupItem[i]['primary_email'] === dupItem[j]['primary_email']) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
               return;

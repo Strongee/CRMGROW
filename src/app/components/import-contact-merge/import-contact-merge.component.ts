@@ -50,7 +50,7 @@ export class ImportContactMergeComponent implements OnInit {
     'zip',
     'label',
     'brokerage',
-    'source'
+    'source',
   ];
 
   contactCSVColumn = {
@@ -198,6 +198,11 @@ export class ImportContactMergeComponent implements OnInit {
           this.previewContact = Object.assign({}, this.primaryContact);
         } else {
           this.previewContact = Object.assign({}, this.secondaryContact);
+        }
+
+        const previewIndex = this.previewColumns.indexOf('notes');
+        if (previewIndex >= 0) {
+          this.previewColumns.splice(previewIndex, 1);
         }
       }
     }
@@ -607,8 +612,9 @@ export class ImportContactMergeComponent implements OnInit {
     return true;
   }
 
-  selectableContent(column, content): any {
+  selectableContent(column, contact): any {
     let result = '';
+    const content = contact[column];
     if (content) {
       if (column === 'tags') {
         for (let i = 0; i < content.length; i++) {
@@ -620,8 +626,41 @@ export class ImportContactMergeComponent implements OnInit {
         }
         return result;
       } else if (column === 'notes') {
-        return '...';
+        if (this.isContact(contact)) {
+          return '';
+        } else {
+          if (Array.isArray(content) !== undefined && Array.isArray(content)) {
+            for( let i = 0; i < content.length; i++) {
+              result += JSON.stringify(content[i]) + '<br/>';
+            }
+            if (result && result.length > 50) {
+              return result.slice(0, 50) + '...';
+            }
+            return result;
+          } else {
+            if (content && content.length > 50) {
+              return content.slice(0, 50) + '...';
+            }
+            return content;
+          }
+        }
       }
     }
+  }
+
+  isShowColumn(contact, column): any {
+    if (this.isContact(contact) && column === 'notes') {
+      return false;
+    }
+    if (!(contact[column] === '' || contact[column] === undefined)) {
+      if (column === 'notes') {
+        if (Array.isArray(contact[column]) !== undefined) {
+          return contact[column].length;
+        }
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 }
