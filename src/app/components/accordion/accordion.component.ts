@@ -6,7 +6,9 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
   styleUrls: ['./accordion.component.scss']
 })
 export class AccordionComponent implements OnInit {
-  @Input('resultItem') resultItemTemplate: TemplateRef<HTMLElement>;
+  @Input('detail') detailTemplate: TemplateRef<HTMLElement>;
+  @Input('showIndicator') showIndicator: TemplateRef<HTMLElement>;
+  @Input('hideIndicator') hideIndicator: TemplateRef<HTMLElement>;
   @Input() showText: string = '';
   @Input() hideText: string = '';
   constructor() {}

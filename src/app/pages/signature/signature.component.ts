@@ -11,7 +11,6 @@ Quill.register({ 'modules/better-table': quillBetterTable }, true);
 // Quill.register('modules/imageResize', ImageResize);
 // import ImageResize from 'quill-image-resize-module';
 const BlockEmbed = Quill.import('blots/block/embed');
-
 const keyboard = quillBetterTable.keyboardBindings;
 //Define a new blog type
 class AppPanelEmbed extends BlockEmbed {

@@ -545,7 +545,7 @@
         <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
           <ng-container *ngFor="let activity of mainTimelines">
             <div class="time-line d-flex">
-              <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} sub-{{activity.activity_detail?.type}}" ></i></div>
+              <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
               <!-- History Item -->
               <div class="history-info">
                 <div class="history-header">
@@ -587,7 +587,7 @@
                         </div>
                       </ng-template>
                       <div class="related-history-item" *ngIf="groupActions[activity.group_id].length > 1">
-                        <app-accordion showText="See detail" hideText="Hide detail" [resultItem]="result">
+                        <app-accordion [detail]="result">
                           <ng-template #result>
                             <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                               <div class="d-flex mb-1">
@@ -609,7 +609,7 @@
                           <div class="title font-weight-bold f-4">
                             {{activity.activity_detail.title || 'No Title Note'}}
                           </div>
-                          <app-accordion showText="See detail" hideText="Hide detail" [resultItem]="result">
+                          <app-accordion [detail]="result" *ngIf="activity.activity_detail.content">
                             <ng-template #result>
                               <div>{{activity.activity_detail.content}}</div>  
                             </ng-template>
@@ -621,13 +621,76 @@
 
                     <!-- BEGIN EMAIL ACTIVITY -->
                     <div *ngSwitchCase="activity.type == 'emails' || activity.type == 'email_trackers' ? activity.type : ''">
-                      {{activity.activity_detail | json}}
+                      <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                        <div class="main-history-item">
+                          <!-- Single History Template -->
+                          <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
+                            <div class="summary">
+                              <div class="title font-weight-bold">
+                                {{details[activity.emails]?.subject}}
+                              </div>
+                              <div class="c-blue mt-3 f-3 fw-600 c-pointer" (click)="showDetail($event)">See detail</div>
+                            </div>
+                            <div class="detail">
+                              <h5 class="font-weight-bold f-24 mb-3">Details</h5>
+                              <div class="mb-2"><span class="font-weight-bold mr-3">Subject:</span>{{details[activity.emails]?.subject}}</div>
+                              <div [innerHTML]="details[activity.emails]?.content"></div>
+                              <div class="d-flex">
+                                <button type="button" class="ml-auto btn btn-primary" (click)="hideDetail($event)">Close</button>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <!-- Multi History Template -->
+                          <ng-template #multiEmailHistory>
+                            <div class="title font-weight-bold">
+                              {{details[activity.activity_detail.email]?.subject}}
+                            </div>
+                            <app-accordion [detail]="result" [hideIndicator]="emptyHideIndicator">
+                              <ng-template #emptyHideIndicator>
+                                <div></div>
+                              </ng-template>
+                              <ng-template #result>
+                                <div>
+                                  <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                                    <div class="d-flex mb-1">
+                                      <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                      <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
+                                      <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                                    </div>
+                                  </ng-container>
+                                  <app-accordion [detail]="emailDetail" [showIndicator]="showIndicator" [hideIndicator]="hideIndicator">
+                                    <ng-template #emailDetail>
+                                      <div class="mb-3 f-6">
+                                        <span class="font-weight-bold mr-2">Subject:</span>
+                                        {{details[activity.activity_detail.email]?.subject}}
+                                      </div>
+                                      <div class="f-6" [innerHTML]="details[activity.activity_detail.email]?.content">
+                                      </div>
+                                    </ng-template>
+                                    <ng-template #showIndicator>
+                                      <div class="c-blue f-6 font-weight-bold m-auto">Expand</div>
+                                    </ng-template>
+                                    <ng-template #hideIndicator>
+                                      <div class="c-blue f-6 font-weight-bold m-auto">Collapse</div>
+                                    </ng-template>
+                                  </app-accordion>
+                                </div>  
+                              </ng-template>
+                            </app-accordion>
+                          </ng-template>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <!-- END EMAIL ACTIVITY -->
+
+                    <!-- BEGIN VIDEO ACTIVITY -->
+                    <div *ngSwitchCase="activity.type == 'videos' || activity.type == 'video_trackers' ? activity.type : ''">
                       <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                         <div class="main-history-item">
                           <div class="title font-weight-bold">
                             {{activity.activity_detail.subject}}
                           </div>
-                          <app-accordion showText="See detail" hideText="Hide detail" [resultItem]="result">
+                          <app-accordion [detail]="result">
                             <ng-template #result>
                               <div>
                                 <h5 class="font-weight-bold">Details</h5>
@@ -638,8 +701,9 @@
                           </app-accordion>
                         </div>
                       </ng-container>
+                      <!-- {{groupActions[activity.group_id] | json}} -->
                     </div>
-                    <!-- END EMAIL ACTIVITY -->
+                    <!-- END VIDEO ACTIVITY -->
                   </ng-container>
                   
                   <!-- {{groupActions[activity.group_id] | json}} -->
