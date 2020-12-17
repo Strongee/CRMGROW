@@ -26,15 +26,7 @@ export class DealsComponent implements OnInit {
   ) {
     this.dealsService.getStage().subscribe((res) => {
       if (res) {
-        res['data'].forEach((stage) => {
-          const column = new Column(stage.title, []);
-          this.board.columns.push(column);
-        });
-      }
-    });
-    this.dealsService.getDeal().subscribe((res) => {
-      if (res) {
-        console.log('###', res);
+        this.board.columns = res['data'];
       }
     });
   }
@@ -42,6 +34,7 @@ export class DealsComponent implements OnInit {
   ngOnInit(): void {}
 
   drop(event: CdkDragDrop<string[]>): void {
+    console.log('###', event);
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -67,21 +60,31 @@ export class DealsComponent implements OnInit {
       .open(DealCreateComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '400px'
+        maxWidth: '400px',
+        data: {
+          type: 'deal-stage'
+        }
       })
       .afterClosed()
       .subscribe((res) => {
-        const stage = new Column(res.title, []);
-        this.board.columns.push(stage);
+        this.board.columns.push(res);
       });
   }
 
-  addTasks(tasks: string[]): void {
-    // tasks.push('New Task');
-    this.dealsService.createDeal().subscribe((res) => {
-      if (res) {
-        console.log('###', res);
-      }
-    })
+  addTasks(column: any): void {
+    this.dialog
+      .open(DealCreateComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          id: column._id,
+          type: 'deal'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        column.deals.push(res);
+      });
   }
 }

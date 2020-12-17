@@ -1,14 +1,19 @@
 <div class="v-center justify-content-between">
-    <h1 mat-dialog-title class="m-0">
-        Deal Create
+    <h1 mat-dialog-title class="m-0" *ngIf="data.type == 'deal-stage'; else dealCreate">
+        Stage Create
     </h1>
+    <ng-template #dealCreate>
+        <h1 mat-dialog-title class="m-0">
+            Deal Create
+        </h1>
+    </ng-template>
     <button class="v-center border-0 bgc-trans" mat-dialog-close>
         <i class="d-block i-icon i-close bgc-dark"></i>
     </button>
 </div>
-<form #dealForm="ngForm" (ngSubmit)="submitted = true; dealForm.form.valid ? create() : false">
+<form #dealForm="ngForm" (ngSubmit)="submitted = true; dealForm.form.valid ? (data.type == 'deal-stage' ? createStages() : createDeals()) : false">
     <mat-dialog-content>
-        <div class="form-group">
+        <div class="form-group" *ngIf="data.type == 'deal'">
             <label>Contact Person</label>
             <app-input-contacts
                 [selectedContacts]="contacts"

@@ -228,5 +228,6 @@ export const DEALSTAGE = {
 };
 
 export const DEAL = {
-  GET: 'deal'
+  GET: 'deal',
+  MOVE: 'deal/move-deal'
 };

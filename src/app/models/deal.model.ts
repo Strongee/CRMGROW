@@ -1,11 +1,11 @@
 import { Deserializable } from './deserialize.model';
-import { Deal } from './deal.model';
+import { Activity } from './activity.model';
 
-export class Column implements Deserializable {
+export class Deal implements Deserializable {
   _id: string;
   user: string;
+  activity: Activity[];
   title: string;
-  deals: Deal[];
   created_at: Date;
   updated_at: Date;
 

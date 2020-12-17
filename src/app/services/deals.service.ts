@@ -24,7 +24,11 @@ export class DealsService extends HttpService {
     return this.httpClient.get(this.server + DEAL.GET);
   }
 
-  // public createDeal(): any {
-  //   return this.httpClient.post(this.server + DEAL.GET, );
-  // }
+  public createDeal(deal: any): any {
+    return this.httpClient.post(this.server + DEAL.GET, deal);
+  }
+
+  public moveDeal(data: any): any {
+    return this.httpClient.post(this.server + DEAL.MOVE, data);
+  }
 }
