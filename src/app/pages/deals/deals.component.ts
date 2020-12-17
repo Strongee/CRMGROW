@@ -34,21 +34,29 @@ export class DealsComponent implements OnInit {
   ngOnInit(): void {}
 
   drop(event: CdkDragDrop<string[]>): void {
-    console.log('###', event);
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
+    const data = {
+      deal_id: event.previousContainer.data[event.previousIndex]['_id'],
+      position: event.currentIndex,
+      deal_stage_id: event.container.data[0]['deal_stage']
+    };
+    console.log('###', data);
+    this.dealsService.moveDeal(data).subscribe((res) => {
+      console.log('####', res);
+    });
+    // if (event.previousContainer === event.container) {
+    //   moveItemInArray(
+    //     event.container.data,
+    //     event.previousIndex,
+    //     event.currentIndex
+    //   );
+    // } else {
+    //   transferArrayItem(
+    //     event.previousContainer.data,
+    //     event.container.data,
+    //     event.previousIndex,
+    //     event.currentIndex
+    //   );
+    // }
   }
 
   taskDetail(item: string): void {
