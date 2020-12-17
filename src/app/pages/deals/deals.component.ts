@@ -7,6 +7,9 @@ import {
 import { Board } from 'src/app/models/board.model';
 import { Column } from 'src/app/models/column.model';
 import { Router } from '@angular/router';
+import { DealsService } from 'src/app/services/deals.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 
 @Component({
   selector: 'app-deals',
@@ -14,20 +17,27 @@ import { Router } from '@angular/router';
   styleUrls: ['./deals.component.scss']
 })
 export class DealsComponent implements OnInit {
-  board: Board = new Board('Test Board', [
-    new Column('New lead - Working', [
-      'Real Estate sale 1',
-      'Real Estate sale 2',
-      'Real Estate sale 3',
-      'Real Estate sale 4'
-    ]),
-    new Column('50% Commited', ['Real Estate sale 3']),
-    new Column('Opportunity Fully Presented', ['Real Estate sale 3']),
-    new Column('Proposal Made', []),
-    new Column('Negotiations Started', ['Real Estate sale 3'])
-  ]);
+  board: Board = new Board('Test Board', []);
 
-  constructor(private router: Router) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private dealsService: DealsService
+  ) {
+    this.dealsService.getStage().subscribe((res) => {
+      if (res) {
+        res['data'].forEach((stage) => {
+          const column = new Column(stage.title, []);
+          this.board.columns.push(column);
+        });
+      }
+    });
+    this.dealsService.getDeal().subscribe((res) => {
+      if (res) {
+        console.log('###', res);
+      }
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -53,11 +63,25 @@ export class DealsComponent implements OnInit {
   }
 
   addColumns(): void {
-    const newColumn = new Column('New Column', []);
-    this.board.columns.push(newColumn);
+    this.dialog
+      .open(DealCreateComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        const stage = new Column(res.title, []);
+        this.board.columns.push(stage);
+      });
   }
 
   addTasks(tasks: string[]): void {
-    tasks.push('New Task');
+    // tasks.push('New Task');
+    this.dealsService.createDeal().subscribe((res) => {
+      if (res) {
+        console.log('###', res);
+      }
+    })
   }
 }

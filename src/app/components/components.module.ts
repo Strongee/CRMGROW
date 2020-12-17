@@ -88,6 +88,7 @@ import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automa
 import { TaskAddComponent } from './task-add/task-add.component';
 import { MaterialSendComponent } from './material-send/material-send.component';
 import { ImportContactMergeConfirmComponent } from './import-contact-merge-confirm/import-contact-merge-confirm.component';
+import { DealCreateComponent } from './deal-create/deal-create.component';
 
 @NgModule({
   declarations: [
@@ -175,7 +176,8 @@ import { ImportContactMergeConfirmComponent } from './import-contact-merge-confi
     AutomationTreeOverlayComponent,
     TaskAddComponent,
     MaterialSendComponent,
-    ImportContactMergeConfirmComponent
+    ImportContactMergeConfirmComponent,
+    DealCreateComponent
   ],
   imports: [
     CommonModule,
@@ -232,7 +234,8 @@ import { ImportContactMergeConfirmComponent } from './import-contact-merge-confi
     AutomationShowFullComponent,
     AutomationTreeOverlayComponent,
     MaterialSendComponent,
-    TaskTypeComponent
+    TaskTypeComponent,
+    DealCreateComponent
   ],
   bootstrap: [
     ContactCreateComponent,
