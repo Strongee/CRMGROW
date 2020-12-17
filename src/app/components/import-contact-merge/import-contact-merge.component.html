@@ -38,9 +38,9 @@
         <td colspan="3"></td>
       </tr>
       <tr *ngFor="let column of columns let row = index">
-        <ng-container *ngIf="isCheckable(column) else selectableColumn">
+        <ng-container *ngIf="isCheckable(updateColumn[column]) else selectableColumn">
           <td>
-            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+            <div class="f-3 op-75 text-uppercase">{{updateColumn[column] == 'notes' ? column + ' (Notes)' : updateColumn[column]}}</div>
           </td>
           <td>
             <div class="check-wrapper" *ngIf="isShowColumn(primaryContact, column)">
@@ -67,7 +67,7 @@
         </ng-container>
         <ng-template #selectableColumn>
           <td>
-            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+            <div class="f-3 op-75 text-uppercase">{{updateColumn[column] == 'notes' ? column + ' (Notes)' : updateColumn[column]}}</div>
           </td>
           <td>
             <div class="custom-control custom-checkbox" *ngIf="isShowColumn(primaryContact, column)">
@@ -165,7 +165,7 @@
         <tbody>
         <tr *ngFor="let column of previewColumns let row = index">
           <td>
-            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+            <div class="f-3 op-75 text-uppercase">{{updateColumn[column] == 'notes' ? column + ' (Notes)' : updateColumn[column]}}</div>
           </td>
           <td>
             <div class="f-3 font-weight-bold"

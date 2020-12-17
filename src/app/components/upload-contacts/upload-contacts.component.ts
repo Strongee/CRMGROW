@@ -165,7 +165,7 @@ export class UploadContactsComponent implements OnInit {
               contact.data['label_id'] = labelId;
             }
 
-            if (contact.data._id && contact.data.notes) {
+            if (!contact.data._id && contact.data.notes) {
               contact.data.notes = JSON.parse(contact.data.notes);
             }
 
@@ -383,22 +383,17 @@ export class UploadContactsComponent implements OnInit {
   }
 
   rebuildContacts(): void {
-    let deleted = false;
-    this.columns.forEach((column) => {
-      const newColumn = this.updateColumn[column];
-      if (newColumn === 'notes') {
-        delete this.updateColumn[column];
-        const index = this.columns.indexOf(column);
-        if (index >= 0) {
-          this.columns.splice(index, 1);
-        }
-        deleted = true;
-      }
-    });
-    if (deleted) {
-      this.updateColumn['notes'] = 'notes';
-      this.columns.push('notes');
-    }
+    // let deleted = false;
+    // this.columns.forEach((column) => {
+    //   const newColumn = this.updateColumn[column];
+    //   if (newColumn === 'notes') {
+    //     delete this.updateColumn[column];
+    //     deleted = true;
+    //   }
+    // });
+    // if (deleted) {
+    //   this.updateColumn['notes'] = 'notes';
+    // }
 
     if (this.contacts.length) {
       this.contacts.forEach((contact) => {
@@ -416,34 +411,34 @@ export class UploadContactsComponent implements OnInit {
               contact[ImportSelectableColumn[i]] = tags;
             }
           } else {
-            const val = contact[ImportSelectableColumn[i]];
-            const notes = [];
-            if (val) {
-              if (!Array.isArray(val)) {
-                Object.keys(val).forEach((key) => {
-                  if (val[key]) {
-                    const note = {
-                      title: key,
-                      content: val[key]
-                    };
-                    notes.push(note);
-                  }
-                });
-              } else {
-                for (let j = 0; j < val.length; j++) {
-                  Object.keys(val[j]).forEach((key) => {
-                    if (val[j][key]) {
-                      const note = {
-                        title: key,
-                        content: val[j][key]
-                      };
-                      notes.push(note);
-                    }
-                  });
-                }
-              }
-              contact[ImportSelectableColumn[i]] = notes;
-            }
+            // const val = contact[ImportSelectableColumn[i]];
+            // const notes = [];
+            // if (val) {
+            //   if (!Array.isArray(val)) {
+            //     Object.keys(val).forEach((key) => {
+            //       if (val[key]) {
+            //         const note = {
+            //           title: key,
+            //           content: val[key]
+            //         };
+            //         notes.push(note);
+            //       }
+            //     });
+            //   } else {
+            //     for (let j = 0; j < val.length; j++) {
+            //       Object.keys(val[j]).forEach((key) => {
+            //         if (val[j][key]) {
+            //           const note = {
+            //             title: key,
+            //             content: val[j][key]
+            //           };
+            //           notes.push(note);
+            //         }
+            //       });
+            //     }
+            //   }
+            //   contact[ImportSelectableColumn[i]] = notes;
+            // }
           }
         }
       });
@@ -457,35 +452,32 @@ export class UploadContactsComponent implements OnInit {
     return true;
   }
 
-  selectableContent(column, content): any {
+  selectableContent(column, contact): any {
     let result = '';
-    if (content) {
-      if (column === 'tags') {
-        for (let i = 0; i < content.length; i++) {
-          if (!result.includes(content[i])) {
-            if (i === content.length - 1) {
-              result = result + content[i];
-            } else {
-              result = result + content[i] + '<br/>';
-            }
+    const updateColumn = this.updateColumn[column];
+
+    if (updateColumn === 'tags') {
+      const content = contact[column];
+      for (let i = 0; i < content.length; i++) {
+        if (!result.includes(content[i])) {
+          if (i === content.length - 1) {
+            result = result + content[i];
+          } else {
+            result = result + content[i] + '<br/>';
           }
         }
-        return result;
-      } else if (column === 'notes') {
-        if (Array.isArray(content) !== undefined && Array.isArray(content)) {
-          for( let i = 0; i < content.length; i++) {
-            result += JSON.stringify(content[i]) + '<br/>';
-          }
-          if (result && result.length > 50) {
-            return result.slice(0, 50) + '...';
-          }
-          return result;
+      }
+      return result;
+    } else if (updateColumn === 'notes') {
+      if (contact['notes']) {
+        const columnIndex = contact['notes'].findIndex((item) => item[column]);
+        if (columnIndex >= 0) {
+          return contact['notes'][columnIndex][column];
         } else {
-          if (content && content.length > 50) {
-            return content.slice(0, 50) + '...';
-          }
-          return content;
+          return '';
         }
+      } else {
+        return '';
       }
     }
   }
@@ -883,6 +875,28 @@ export class UploadContactsComponent implements OnInit {
     this.step = 2;
   }
 
+  rebuildContactForNote(): any {
+    const uploadContacts = [];
+    for (let i = 0; i < this.contactsToUpload.length; i++) {
+      uploadContacts.push(Object.assign({}, this.contactsToUpload[i]));
+    }
+    for (const contact of uploadContacts) {
+      if (contact.notes && contact.notes.length) {
+        const tempNotes = [];
+        for (let i = 0; i < contact.notes.length; i++) {
+          for (let key in contact.notes[i]) {
+            tempNotes.push({
+              title: key,
+              content: contact.notes[i][key]
+            });
+          }
+        }
+        contact.notes = tempNotes;
+      }
+    }
+    return uploadContacts;
+  }
+
   upload(): void {
     // this.dialogRef.close({ data: this.contactsToUpload });
     let headers = [];
@@ -892,7 +906,8 @@ export class UploadContactsComponent implements OnInit {
         headers.push(this.updateColumn[key]);
       }
     }
-    this.contactsToUpload.forEach((contact) => {
+    const uploadContacts = this.rebuildContactForNote();
+    uploadContacts.forEach((contact) => {
       if (this.selectedImportContacts.isSelected(contact.id)) {
         const record = [];
         for (let i = 0; i < headers.length; i++) {
@@ -907,14 +922,13 @@ export class UploadContactsComponent implements OnInit {
             const email = contact['primary_email'];
             record.push(email || '');
           } else if (key === 'notes') {
-            const notes = [];
-            for (let j = 0; j < contact['notes'].length; j++) {
-              notes.push(JSON.stringify(contact['notes'][j]));
-            }
-            record.push(notes);
+            continue;
           } else {
             record.push(contact[key] || '');
           }
+        }
+        if (contact['notes']) {
+          record.push(JSON.stringify(contact['notes']));
         }
         lines.push(record);
       }
@@ -926,6 +940,10 @@ export class UploadContactsComponent implements OnInit {
           headers.push('email');
         } else if (this.updateColumn[key] === 'primary_phone') {
           headers.push('cell_phone');
+        } else if (this.updateColumn[key] === 'notes') {
+          if (headers.indexOf('notes') < 0) {
+            headers.push(this.updateColumn[key]);
+          }
         } else {
           headers.push(this.updateColumn[key]);
         }
@@ -991,9 +1009,18 @@ export class UploadContactsComponent implements OnInit {
             }
           }
           record.push(cell_phone || '');
-        } else {
+        } else if (key === 'notes') {
+          // const notes = [];
+          // for (let j = 0; j < contact['notes'].length; j++) {
+          //   notes.push(JSON.stringify(contact['notes'][j]));
+          // }
+          // record.push(notes);
+        }  else {
           record.push(contact[key] || '');
         }
+      }
+      if (contact['notes']) {
+        record.push(JSON.stringify(contact['notes']));
       }
       lines.push(record);
     });

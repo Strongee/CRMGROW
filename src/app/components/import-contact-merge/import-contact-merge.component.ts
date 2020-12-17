@@ -51,6 +51,7 @@ export class ImportContactMergeComponent implements OnInit {
     'label',
     'brokerage',
     'source',
+    'notes'
   ];
 
   contactCSVColumn = {
@@ -114,7 +115,7 @@ export class ImportContactMergeComponent implements OnInit {
             (!Array.isArray(this.secondaryContact[this.updateColumn[name]]) &&
               this.secondaryContact[this.updateColumn[name]])
           ) {
-            this.columns.push(this.updateColumn[name]);
+            this.columns.push(name);
             this.previewColumns.push(this.updateColumn[name]);
             if (this.isPrimaryActive()) {
               if (
@@ -161,7 +162,7 @@ export class ImportContactMergeComponent implements OnInit {
             (!Array.isArray(this.secondaryContact[this.updateColumn[name]]) &&
               this.secondaryContact[this.updateColumn[name]])
           ) {
-            this.columns.push(this.updateColumn[name]);
+            this.columns.push(name);
             this.previewColumns.push(this.updateColumn[name]);
             if (this.isContact(this.primaryContact)) {
               if (

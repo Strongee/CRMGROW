@@ -97,7 +97,7 @@
               <th class="check-cell"></th>
               <ng-container *ngFor="let column of columns">
                 <th [class]="column" *ngIf="updateColumn[column]">
-                  {{updateColumn[column]}}
+                  {{updateColumn[column] == 'notes' ? column + ' (Notes)' : column}}
                 </th>
               </ng-container>
               <th class="actions"></th>
@@ -124,7 +124,7 @@
                       class="{{column}} f-3 font-weight-bold last-row"
                   >
                     <div [class]="column" [class.c-red]="checkDuplicateEmail(contact)" [innerHTML]="isSelectableColumn(updateColumn[column]) ?
-                      selectableContent(updateColumn[column], contact[updateColumn[column]]) : contact[updateColumn[column]]"></div>
+                      selectableContent(column, contact) : contact[updateColumn[column]]"></div>
                   </td>
                 </ng-container>
                 <td class="actions">
@@ -179,7 +179,7 @@
             </th>
             <ng-container *ngFor="let column of columns">
               <th *ngIf="updateColumn[column]">
-                {{updateColumn[column]}}
+                {{updateColumn[column] == 'notes' ? column + ' (Notes)' : column}}
               </th>
             </ng-container>
           </tr>
@@ -196,7 +196,7 @@
               <td *ngIf="updateColumn[column]"
                   class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
               >
-                <div [class]="column" [innerHTML]="isSelectableColumn(updateColumn[column]) ? selectableContent(updateColumn[column], record[updateColumn[column]]) : record[updateColumn[column]]"></div>
+                <div [class]="column" [innerHTML]="isSelectableColumn(updateColumn[column]) ? selectableContent(column, record) : record[updateColumn[column]]"></div>
               </td>
             </ng-container>
           </tr>
