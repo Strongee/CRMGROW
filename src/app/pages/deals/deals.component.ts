@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
+import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-deals',
@@ -16,18 +17,15 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
   styleUrls: ['./deals.component.scss']
 })
 export class DealsComponent implements OnInit {
+  STATUS = STATUS;
   board: Board = new Board('Test Board', []);
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private dealsService: DealsService
+    public dealsService: DealsService
   ) {
-    this.dealsService.getStage().subscribe((res) => {
-      if (res) {
-        this.board.dealStages = res['data'];
-      }
-    });
+    this.dealsService.getStage(true);
   }
 
   ngOnInit(): void {}
