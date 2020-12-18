@@ -10,10 +10,6 @@ const Quill: any = QuillNamespace;
 Quill.register({ 'modules/better-table': quillBetterTable }, true);
 import BlotFormatter from 'quill-blot-formatter';
 Quill.register('modules/blotFormatter', BlotFormatter);
-// Quill.register('modules/imageResize', ImageResize);
-// import ImageResize from 'quill-image-resize-module';
-const BlockEmbed = Quill.import('blots/block/embed');
-const keyboard = quillBetterTable.keyboardBindings;
 
 @Component({
   selector: 'app-signature',
@@ -43,18 +39,6 @@ export class SignatureComponent implements OnInit {
     private userService: UserService,
     private fileService: FileService
   ) {
-    // console.log(quillBetterTable);
-    // this.config['keyboard'] = {
-    //   bindings: {
-    //     ...quillBetterTable.keyboardBindings,
-    //     Backspace: {
-    //       key: 'Backspace',
-    //       format: ['table-cell-line'],
-    //       collapsed: true,
-    //       offset: 0
-    //     }
-    //   }
-    // };
     this.userService.profile$.subscribe((profile) => {
       if (profile && profile._id) {
         this.user = profile;
@@ -67,10 +51,6 @@ export class SignatureComponent implements OnInit {
   changeTemplate(template: any): void {
     this.currentTemplate = template.layout;
     let signature;
-    // const delta = this.emailEditor.quillEditor.clipboard.convert(
-    //   { html: this.user.email_signature }
-    // );
-    // this.emailEditor.quillEditor.setContents(delta, 'user');
     switch (this.currentTemplate) {
       case 'img_text_hor':
         signature = `
@@ -183,7 +163,6 @@ export class SignatureComponent implements OnInit {
     const toolbar = this.quillEditorRef.getModule('toolbar');
     toolbar.addHandler('image', this.initImageHandler);
     this.table = this.quillEditorRef.getModule('better-table');
-    console.log('this.table', this.table);
   }
 
   initImageHandler = (): void => {
@@ -205,8 +184,6 @@ export class SignatureComponent implements OnInit {
 
   insertImageToEditor(url): void {
     const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
     this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
     this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
   }
