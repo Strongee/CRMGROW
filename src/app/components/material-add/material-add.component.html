@@ -1,97 +1,136 @@
 <h1 mat-dialog-title>Attach media</h1>
-<mat-dialog-content>
+<mat-dialog-content class="position-relative">
   <div class="template-container">
-    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" type="same">
     </app-slide-tab>
     <ng-container *ngIf="selectedTab.label == 'VIDEO'">
-      <ng-container *ngIf="videosLoading">
-        <app-loading-overlay [type]="'material'"></app-loading-overlay>
-      </ng-container>
-      <ng-container *ngIf="!videosLoading">
-        <app-data-empty [type]="'material_video'" *ngIf="!videos.length"></app-data-empty>
+      <ng-container *ngIf="(storeService.videos$ | async).length; else emptyVideos">
         <div class="material-container mt-3">
-          <ng-container *ngFor="let video of videos">
-            <div class="material-item" (click)="toggleVideo(video)" [class.active]="selectedVideos.isSelected(video._id)">
-              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedVideos.isSelected(video._id)">
+          <ng-container *ngFor="let material of storeService.videos$ | async">
+            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1">
+              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
-                <img class="thumbnail" src="{{video.thumbnail || video.preview}}" alt="{{video.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
+                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
               </div>
               <div class="material-title f-1 font-weight-bold mt-3">
-                {{video.title}}
+                {{material.title}}
               </div>
               <div class="material-description f-1 mt-2">
-                {{video.description || '' | stripTags | shorten: 80: '...'}}
+                {{material.description || '' | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </ng-container>
         </div>
       </ng-container>
+      <ng-template #emptyVideos>
+        <ng-container [ngSwitch]="(materialService.loadingVideo$ | async)">
+          <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
+            <div class="object-icon v-center">
+              <i class="i-icon i-template d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no video yet.
+            </h4>
+          </div>
+          <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+            <div class="loader mt-5 lg"></div>
+            <h4 class="fw-600 mt-2">Loading videos...</h4>
+          </div>
+        </ng-container>
+      </ng-template>
     </ng-container>
+    
     <ng-container *ngIf="selectedTab.label == 'PDF'">
-      <ng-container *ngIf="pdfsLoading">
-        <app-loading-overlay [type]="'material'"></app-loading-overlay>
-      </ng-container>
-      <ng-container *ngIf="!pdfsLoading">
-        <app-data-empty [type]="'material_pdf'" *ngIf="!pdfs.length"></app-data-empty>
+      <ng-container *ngIf="(storeService.pdfs$ | async).length; else emptyPdfs">
         <div class="material-container mt-3">
-          <ng-container *ngFor="let pdf of pdfs">
-            <div class="material-item" (click)="togglePdf(pdf)" [class.active]="selectedPdfs.isSelected(pdf._id)">
-              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedPdfs.isSelected(pdf._id)">
+          <ng-container *ngFor="let material of storeService.pdfs$ | async">
+            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1">
+              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
-                <img class="thumbnail" src="{{pdf.thumbnail || pdf.preview}}" alt="{{pdf.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
+                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
               </div>
               <div class="material-title f-1 font-weight-bold mt-3">
-                {{pdf.title}}
+                {{material.title}}
               </div>
               <div class="material-description f-1 mt-2">
-                {{pdf.description || '' | stripTags | shorten: 80: '...'}}
+                {{material.description || '' | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </ng-container>
         </div>
       </ng-container>
+      <ng-template #emptyPdfs>
+        <ng-container [ngSwitch]="(materialService.loadingPdf$ | async)">
+          <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
+            <div class="object-icon v-center">
+              <i class="i-icon i-template d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no pdf yet.
+            </h4>
+          </div>
+          <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+            <div class="loader mt-5 lg"></div>
+            <h4 class="fw-600 mt-2">Loading pdfs...</h4>
+          </div>
+        </ng-container>
+      </ng-template>
     </ng-container>
+
     <ng-container *ngIf="selectedTab.label == 'IMAGE'">
-      <ng-container *ngIf="imagesLoading">
-        <app-loading-overlay [type]="'material'"></app-loading-overlay>
-      </ng-container>
-      <ng-container *ngIf="!imagesLoading">
-        <app-data-empty [type]="'material_image'" *ngIf="!images.length"></app-data-empty>
+      <ng-container *ngIf="(storeService.images$ | async).length; else emptyImages">
         <div class="material-container mt-3">
-          <ng-container *ngFor="let image of images">
-            <div class="material-item" (click)="toggleImage(image)" [class.active]="selectedImages.isSelected(image._id)">
-              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedImages.isSelected(image._id)">
+          <ng-container *ngFor="let material of storeService.images$ | async">
+            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1">
+              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
-                <img class="thumbnail" src="{{image.thumbnail || image.preview}}" alt="{{image.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
+                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
               </div>
               <div class="material-title f-1 font-weight-bold mt-3">
-                {{image.title}}
+                {{material.title}}
               </div>
               <div class="material-description f-1 mt-2">
-                {{image.description || '' | stripTags | shorten: 80: '...'}}
+                {{material.description || '' | stripTags | shorten: 80: '...'}}
               </div>
             </div>
           </ng-container>
         </div>
       </ng-container>
+      <ng-template #emptyImages>
+        <ng-container [ngSwitch]="(materialService.loadingPdf$ | async)">
+          <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
+            <div class="object-icon v-center">
+              <i class="i-icon i-template d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no image yet.
+            </h4>
+          </div>
+          <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+            <div class="loader mt-5 lg"></div>
+            <h4 class="fw-600 mt-2">Loading images...</h4>
+          </div>
+        </ng-container>
+      </ng-template>
     </ng-container>
+
   </div>
   <div class="selected-materials mt-3">
     <table class="table">
       <thead>
-      <th class="selected-media">
+      <th class="selected-media p-0 op-full pb-1">
         <div class="v-center">
           <div>Selected Media</div>
-          <div class="media-count ml-3 f-2 c-white bgc-blue" *ngIf="selectedMaterials.length">{{selectedMaterials.length}}</div>
+          <div class="media-count ml-3 f-1 c-white bgc-blue rounded" *ngIf="selectedMaterials.length">{{selectedMaterials.length}}</div>
         </div>
       </th>
-      <th class="type">Type</th>
-      <th class="action"></th>
+      <th class="type p-0 op-full pb-1">Type</th>
+      <th class="action p-0 op-full pb-1"></th>
       </thead>
       <tbody>
       <tr *ngFor="let material of selectedMaterials">
         <td class="selected-media">
-          <div class="c-blue f-3 font-weight-bold">{{material.title}}</div>
+          <div class="c-blue f-2 font-weight-bold">{{material.title}}</div>
         </td>
         <td class="type">
           <div class="v-center border-0 bgc-trans">
@@ -100,7 +139,7 @@
                [class.i-pdf]="getMaterialType(material) === 'PDF'"
                [class.i-notification]="getMaterialType(material) === 'Image'"
             ></i>
-            <span class="f-3 font-weight-bold ml-2">{{getMaterialType(material)}}</span>
+            <span class="f-2 ml-2">{{getMaterialType(material)}}</span>
           </div>
         </td>
         <td class="action">
@@ -115,5 +154,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn c-blue" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary" [class.loading]="attaching" (click)="attachMaterial()">Attach</button>
+  <button class="btn btn-primary" (click)="attachMaterial()">Attach</button>
 </mat-dialog-actions>

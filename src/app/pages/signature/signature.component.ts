@@ -8,41 +8,12 @@ import * as QuillNamespace from 'quill';
 import quillBetterTable from 'quill-better-table';
 const Quill: any = QuillNamespace;
 Quill.register({ 'modules/better-table': quillBetterTable }, true);
+import BlotFormatter from 'quill-blot-formatter';
+Quill.register('modules/blotFormatter', BlotFormatter);
 // Quill.register('modules/imageResize', ImageResize);
 // import ImageResize from 'quill-image-resize-module';
 const BlockEmbed = Quill.import('blots/block/embed');
 const keyboard = quillBetterTable.keyboardBindings;
-//Define a new blog type
-class AppPanelEmbed extends BlockEmbed {
-  static create(value) {
-    const node = super.create(value);
-    node.setAttribute('contenteditable', 'false');
-    node.setAttribute('width', '100%');
-    //Set custom HTML
-    node.innerHTML = this.transformValue(value);
-    return node;
-  }
-
-  static transformValue(value) {
-    let handleArr = value.split('\n');
-    handleArr = handleArr.map((e) =>
-      e.replace(/^[\s]+/, '').replace(/[\s]+$/, '')
-    );
-    return handleArr.join('');
-  }
-
-  //Returns the value of the node itself for undo operation
-  static value(node) {
-    return node.innerHTML;
-  }
-}
-// blotName
-AppPanelEmbed.blotName = 'AppPanelEmbed';
-//The class name will be used to match the blot name
-AppPanelEmbed.className = 'embed-innerApp';
-//Label type customization
-AppPanelEmbed.tagName = 'div';
-Quill.register(AppPanelEmbed, true);
 
 @Component({
   selector: 'app-signature',
@@ -87,7 +58,6 @@ export class SignatureComponent implements OnInit {
     this.userService.profile$.subscribe((profile) => {
       if (profile && profile._id) {
         this.user = profile;
-        console.log('##', this.user);
       }
     });
   }
@@ -193,72 +163,6 @@ export class SignatureComponent implements OnInit {
       'user'
     );
     return;
-    switch (this.currentTemplate) {
-      case 'img_text_hor':
-        signature = `
-          <div class="d-flex">
-            <div class="image">
-              <img src="${this.user.picture_profile}" width="95" height="95">
-            </div>
-            <div class="text ml-2">
-              <div class="f-6">${this.user.user_name}</div>
-              <div class="f-6">${this.user.company}</div>
-              <div class="f-6">${this.user.email}</div>
-              <div class="f-6">${this.user.phone.internationalNumber}</div>
-            </div>
-          </div>
-        `;
-        this.emailEditor.quillEditor.insertEmbed(0, 'AppPanelEmbed', signature);
-        break;
-      case 'text_img_hor':
-        signature = `
-          <div class="d-flex">
-            <div class="text mr-2">
-              <div class="f-6">${this.user.user_name}</div>
-              <div class="f-6">${this.user.company}</div>
-              <div class="f-6">${this.user.email}</div>
-              <div class="f-6">${this.user.phone.internationalNumber}</div>
-            </div>
-            <div class="image">
-              <img src="${this.user.picture_profile}" width="95" height="95">
-            </div>
-          </div>
-        `;
-        this.emailEditor.quillEditor.insertEmbed(0, 'AppPanelEmbed', signature);
-        break;
-      case 'text_img_ver':
-        signature = `
-          <div class="d-block">
-            <div class="text mb-2">
-              <div class="f-6">${this.user.user_name}</div>
-              <div class="f-6">${this.user.company}</div>
-              <div class="f-6">${this.user.email}</div>
-              <div class="f-6">${this.user.phone.internationalNumber}</div>
-            </div>
-            <div class="image">
-              <img src="${this.user.picture_profile}" width="95" height="95">
-            </div>
-          </div>
-        `;
-        this.emailEditor.quillEditor.insertEmbed(0, 'AppPanelEmbed', signature);
-        break;
-      case 'img_text_ver':
-        signature = `
-          <div class="d-block">
-            <div class="image">
-              <img src="${this.user.picture_profile}" width="95" height="95">
-            </div>
-            <div class="text mt-2">
-              <div class="f-6">${this.user.user_name}</div>
-              <div class="f-6">${this.user.company}</div>
-              <div class="f-6">${this.user.email}</div>
-              <div class="f-6">${this.user.phone.internationalNumber}</div>
-            </div>
-          </div>
-        `;
-        this.emailEditor.quillEditor.insertEmbed(0, 'AppPanelEmbed', signature);
-        break;
-    }
   }
 
   update(): void {
@@ -292,7 +196,6 @@ export class SignatureComponent implements OnInit {
       if (imageInput.files != null && imageInput.files[0] != null) {
         const file = imageInput.files[0];
         this.fileService.attachImage(file).then((res) => {
-          console.log('###', res);
           this.insertImageToEditor(res['url']);
         });
       }
