@@ -5,11 +5,11 @@ import {
   transferArrayItem
 } from '@angular/cdk/drag-drop';
 import { Board } from 'src/app/models/board.model';
-import { DealStage } from 'src/app/models/deal-stage.model';
 import { Router } from '@angular/router';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
+import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-deals',
@@ -17,18 +17,15 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
   styleUrls: ['./deals.component.scss']
 })
 export class DealsComponent implements OnInit {
+  STATUS = STATUS;
   board: Board = new Board('Test Board', []);
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private dealsService: DealsService
+    public dealsService: DealsService
   ) {
-    this.dealsService.getStage().subscribe((res) => {
-      if (res) {
-        this.board.dealStages = res['data'];
-      }
-    });
+    this.dealsService.getStage(true);
   }
 
   ngOnInit(): void {}
@@ -39,22 +36,21 @@ export class DealsComponent implements OnInit {
       position: event.currentIndex,
       deal_stage_id: id
     };
-    this.dealsService.moveDeal(data).subscribe(() => {
-      if (event.previousContainer === event.container) {
-        moveItemInArray(
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex
-        );
-      } else {
-        transferArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex
-        );
-      }
-    });
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+    this.dealsService.moveDeal(data).subscribe(() => {});
   }
 
   taskDetail(item: string): void {
@@ -73,7 +69,9 @@ export class DealsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        this.board.dealStages.push(res);
+        if (res) {
+          this.board.dealStages.push(res);
+        }
       });
   }
 
@@ -90,7 +88,9 @@ export class DealsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        dealStage.deals.push(res);
+        if (res) {
+          dealStage.deals.push(res);
+        }
       });
   }
 }
