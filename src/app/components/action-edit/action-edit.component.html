@@ -149,10 +149,8 @@
                   <label class="theme-label">CUSTOM TIME DELAY <span class="description">(IN DAYS)</span></label>
                   <input type="number" step="1" class="form-control" name="planTimeDay" [required]="action['period'] == 'custom_date'" [(ngModel)]="plan_time['day']" />
                 </div>
-                <span class="error text-danger ml-2"
-                      *ngIf="action['period']=='custom_date' && !plan_time['day'] && !plan_time['hour'] && !plan_time['min'] && submitted">Plan time is required.</span>
               </div>
-              <span class="error text-danger ml-2"
+              <span class="error text-danger"
                     *ngIf="action['period']=='custom_date' && !plan_time['day'] && !plan_time['hour'] && !plan_time['min'] && submitted">Plan
               time is required.</span>
             </div>
@@ -231,7 +229,11 @@
           <div class="action-form">
             <div class="form-group has-feedback"
                  [class.has-error]="note.errors && (note.touched || note.dirty|| submitted) && submitted">
-              <label class="theme-label">NOTE CONTENT</label>
+              <label class="theme-label mt-3">Title</label>
+              <input type="text" class="form-control" [(ngModel)]="action['title']" name="title" #title="ngModel" required>
+              <span class="invalid-feedback"
+                    *ngIf="title.errors && (title.dirty || title.touched || submitted) && submitted">Title is required.</span>
+              <label class="theme-label mt-3">NOTE CONTENT</label>
               <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in note."
                         name="note" #note="ngModel" rows="6" required></textarea>
               <span class="invalid-feedback"
