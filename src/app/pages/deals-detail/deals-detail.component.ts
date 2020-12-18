@@ -132,8 +132,8 @@ export class DealsDetailComponent implements OnInit {
       .create({ ...this.task, contact: this._id })
       .subscribe((res) => {
         this.taskSaving = false;
-        this.storeService.registerActivity$(res);
-        this.storeService.activityAdd$([this._id], 'task');
+        // this.storeService.registerActivity$(res);
+        // this.storeService.activityAdd$([this._id], 'task');
       });
   }
 
@@ -143,8 +143,8 @@ export class DealsDetailComponent implements OnInit {
       .create({ ...this.note, contact: this._id })
       .subscribe((res) => {
         this.noteSaving = false;
-        this.storeService.registerActivity$(res);
-        this.storeService.activityAdd$([this._id], 'note');
+        // this.storeService.registerActivity$(res);
+        // this.storeService.activityAdd$([this._id], 'note');
       });
   }
 
@@ -195,7 +195,7 @@ export class DealsDetailComponent implements OnInit {
     imageInput.addEventListener('change', () => {
       if (imageInput.files != null && imageInput.files[0] != null) {
         const file = imageInput.files[0];
-        this.fileService.attachImage(file).subscribe((res) => {
+        this.fileService.attachImage(file).then((res) => {
           this.insertImageToEditor(res.url);
         });
       }
