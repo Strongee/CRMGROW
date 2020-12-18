@@ -4,13 +4,9 @@
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
     <ng-container *ngIf="selectedTab.label == 'VIDEO'">
-      <ng-container *ngIf="videosLoading">
-        <app-loading-overlay [type]="'material'"></app-loading-overlay>
-      </ng-container>
-      <ng-container *ngIf="!videosLoading">
-        <app-data-empty [type]="'material_video'" *ngIf="!videos.length"></app-data-empty>
+      <ng-container *ngIf="(storeService.videos$ | async).length; else emptyVideos">
         <div class="material-container mt-3">
-          <ng-container *ngFor="let video of videos">
+          <ng-container *ngFor="let video of storeService.videos$ | async">
             <div class="material-item" (click)="toggleVideo(video)" [class.active]="selectedVideos.isSelected(video._id)">
               <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedVideos.isSelected(video._id)">
               <div class="thumb-wrapper">
@@ -26,15 +22,27 @@
           </ng-container>
         </div>
       </ng-container>
+      <ng-template #emptyVideos>
+        <ng-container [ngSwitch]="(materialService.loadingVideo$ | async)">
+          <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
+            <div class="object-icon v-center">
+              <i class="i-icon i-template d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no video yet.
+            </h4>
+          </div>
+          <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+            <div class="loader mt-5 lg"></div>
+            <h4 class="fw-600 mt-2">Loading videos...</h4>
+          </div>
+        </ng-container>
+      </ng-template>
     </ng-container>
     <ng-container *ngIf="selectedTab.label == 'PDF'">
-      <ng-container *ngIf="pdfsLoading">
-        <app-loading-overlay [type]="'material'"></app-loading-overlay>
-      </ng-container>
-      <ng-container *ngIf="!pdfsLoading">
-        <app-data-empty [type]="'material_pdf'" *ngIf="!pdfs.length"></app-data-empty>
+      <ng-container *ngIf="(storeService.pdfs$ | async).length; else emptyPdfs">
         <div class="material-container mt-3">
-          <ng-container *ngFor="let pdf of pdfs">
+          <ng-container *ngFor="let pdf of storeService.pdfs$ | async">
             <div class="material-item" (click)="togglePdf(pdf)" [class.active]="selectedPdfs.isSelected(pdf._id)">
               <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedPdfs.isSelected(pdf._id)">
               <div class="thumb-wrapper">
@@ -50,30 +58,22 @@
           </ng-container>
         </div>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="selectedTab.label == 'IMAGE'">
-      <ng-container *ngIf="imagesLoading">
-        <app-loading-overlay [type]="'material'"></app-loading-overlay>
-      </ng-container>
-      <ng-container *ngIf="!imagesLoading">
-        <app-data-empty [type]="'material_image'" *ngIf="!images.length"></app-data-empty>
-        <div class="material-container mt-3">
-          <ng-container *ngFor="let image of images">
-            <div class="material-item" (click)="toggleImage(image)" [class.active]="selectedImages.isSelected(image._id)">
-              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedImages.isSelected(image._id)">
-              <div class="thumb-wrapper">
-                <img class="thumbnail" src="{{image.thumbnail || image.preview}}" alt="{{image.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
-              </div>
-              <div class="material-title f-1 font-weight-bold mt-3">
-                {{image.title}}
-              </div>
-              <div class="material-description f-1 mt-2">
-                {{image.description || '' | stripTags | shorten: 80: '...'}}
-              </div>
+      <ng-template #emptyPdfs>
+        <ng-container [ngSwitch]="(materialService.loadingPdf$ | async)">
+          <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
+            <div class="object-icon v-center">
+              <i class="i-icon i-template d-block bgc-dark"></i>
             </div>
-          </ng-container>
-        </div>
-      </ng-container>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no pdf yet.
+            </h4>
+          </div>
+          <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+            <div class="loader mt-5 lg"></div>
+            <h4 class="fw-600 mt-2">Loading pdfs...</h4>
+          </div>
+        </ng-container>
+      </ng-template>
     </ng-container>
   </div>
   <div class="selected-materials mt-3">

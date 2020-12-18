@@ -1,12 +1,25 @@
+@import 'src/variables.scss';
+
 .columns {
     flex-wrap: nowrap;
     max-width: calc(100vw-160px);
     .column {
-        width: 225px;
-        min-width: 225px;
+        width: 240px;
+        min-width: 240px;
         .column-title {
+            position: relative;
             border: 1px solid #D9D9DF;
-            height: 80px;
+            height: 100px;
+            .title-triangle {
+                position: absolute;
+                top: 45px;
+                left: -3px;
+                i {
+                    width: 10px;
+                    height: 10px;
+                    min-width: 10px;
+                }
+            }
         }
         &:first-child {
             .column-title {
@@ -26,13 +39,20 @@
                 border: 1px solid #D9D9DF;
                 border-radius: 5px;
                 box-shadow: 5px 5px 20px 1px rgba(0,0,0,0.05);
+                .avatar {
+                    width: 16px;
+                    height: 16px;
+                    min-width: 16px;
+                    border-radius: 50%;
+                    background-color: $color-dark;
+                }
             }
         }
     }
     .add-column {
         border-radius: 5px;
         border: 1px solid #0000FF;
-        height: 80px;
+        height: 100px;
     }
 }
 .cdk-drag-preview {

@@ -5,6 +5,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { StoreService } from 'src/app/services/store.service';
 import { Subscription } from 'rxjs';
+import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-material-add',
@@ -12,31 +13,22 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./material-add.component.scss']
 })
 export class MaterialAddComponent implements OnInit {
-  material_type = '';
-  attaching = false;
-  loading = false;
-
-  videos = [];
-  videosLoading = false;
-  videosLoadError = '';
-
-  pdfs = [];
-  pdfsLoading = false;
-  pdfsLoadError = '';
-
-  images = [];
-  imagesLoading = false;
-  imagesLoadError = '';
-
-  selectedMaterials = [];
-
-  materialError = '';
+  STATUS = STATUS;
   tabs: TabItem[] = [
     { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
     { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
     { icon: 'i-icon i-notification', label: 'IMAGE', id: 'images' }
   ];
   selectedTab: TabItem = this.tabs[0];
+  material_type = '';
+  attaching = false;
+
+  videos = [];
+  pdfs = [];
+  images = [];
+  selectedMaterials = [];
+
+  materialError = '';
   selectedVideos = new SelectionModel<any>(true, []);
   selectedPdfs = new SelectionModel<any>(true, []);
   selectedImages = new SelectionModel<any>(true, []);
@@ -50,14 +42,10 @@ export class MaterialAddComponent implements OnInit {
     private materialService: MaterialService,
     public storeService: StoreService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.loadVideos();
-    this.loadImages();
-    this.loadPdfs();
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.selectedMaterials = this.data;
+    this.selectedMaterials = this.data ? this.data : [];
     this.materialService.loadVideos();
     this.materialService.loadPdfs();
     this.materialService.loadImages();
@@ -74,65 +62,10 @@ export class MaterialAddComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(): void {
-    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
-    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
-    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
-  }
-
-  loadVideos(): void {
-    this.videosLoading = true;
-    this.videosLoadError = '';
-    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
-    this.videoLoadSubscription = this.storeService.videos$.subscribe(
-      (videos) => {
-        this.videosLoading = false;
-        this.videos = videos;
-      },
-      (err) => {
-        this.videosLoading = false;
-      }
-    );
-  }
-
-  loadPdfs(): void {
-    this.pdfsLoading = true;
-    this.pdfsLoadError = '';
-    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
-    this.pdfLoadSubscription = this.storeService.pdfs$.subscribe(
-      (pdfs) => {
-        this.pdfsLoading = false;
-        this.pdfs = pdfs;
-      },
-      (err) => {
-        this.pdfsLoading = false;
-      }
-    );
-  }
-
-  loadImages(): void {
-    this.imagesLoading = true;
-    this.imagesLoadError = '';
-    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
-    this.imageLoadSubscription = this.storeService.images$.subscribe(
-      (images) => {
-        this.imagesLoading = false;
-        this.images = images;
-      },
-      (err) => {
-        this.imagesLoading = false;
-        if (err.status === 400) {
-          this.imagesLoadError = 'Error is occured in image loading.';
-        }
-        if (err.status === 500) {
-          this.imagesLoadError = 'Server Error is occured in image Loading.';
-        }
-      }
-    );
   }
 
   toggleVideo(video): void {

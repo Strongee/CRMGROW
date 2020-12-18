@@ -268,4 +268,12 @@ export class UserService extends HttpService {
       catchError(this.handleError('UPDATE PROFILE'))
     );
   }
+  public connectSMTP(data): Observable<any> {
+    return this.httpClient
+      .post(this.server + USER.CONNECT_SMTP, { ...data })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('CONNECT SMTP'))
+      );
+  }
 }

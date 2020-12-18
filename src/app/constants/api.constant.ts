@@ -26,7 +26,8 @@ export const USER = {
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',
-  UPDATE_GARBAGE: 'garbage'
+  UPDATE_GARBAGE: 'garbage',
+  CONNECT_SMTP: 'integration/sync-smtp'
 };
 export const GUEST = {
   LOAD: 'guest/load',
@@ -80,7 +81,10 @@ export const CONTACT = {
   EXPORT: 'contact/export-csv',
   BULK_DELETE: 'contact/remove',
   BULK_UPDATE: 'contact/bulk-update',
-  LATEST_CONTACTS: 'video/latest-sent'
+  LATEST_CONTACTS: 'video/latest-sent',
+  UPDATE: 'contact/update-contact',
+  MERGE: 'contact/contact-merge',
+  BULK_CREATE: 'contact/bulk-create'
 };
 export const VIDEO = {
   CREATE: 'video/create',
@@ -222,4 +226,12 @@ export const TAG = {
   DELETE: 'tag/delete',
   LOAD_SOURCES: 'contact/sources',
   LOAD_COMPANIES: 'contact/brokerage'
+};
+export const DEALSTAGE = {
+  GET: 'deal-stage'
+};
+
+export const DEAL = {
+  GET: 'deal',
+  MOVE: 'deal/move-deal'
 };

@@ -657,12 +657,12 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(pdf, 'pdf')">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                  <div class="v-center justify-content-between actions-wrapper">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(pdf, 'pdf')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -673,8 +673,8 @@
                       </a>
                       <div ngbDropdownMenu>
                         <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                       [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
-                                       [autoSetMeta]="false"></share-buttons>
+                          [size]="-2" [show]="3" url="{{ siteUrl }}/pdf?pdf={{ pdf._id }}&user={{user_id}}"
+                          [autoSetMeta]="false"></share-buttons>
                       </div>
                     </div>
                     <div class="custom-control custom-switch p-0">
@@ -768,12 +768,12 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(pdf, 'pdf')">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                  <div class="v-center justify-content-between actions-wrapper">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(pdf, 'pdf')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -879,12 +879,12 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(pdf, 'pdf')">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                  <div class="v-center justify-content-between actions-wrapper">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(pdf, 'pdf')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -1057,12 +1057,12 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(image, 'image')">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                  <div class="v-center justify-content-between actions-wrapper">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(image, 'image')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -1168,12 +1168,12 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(image, 'image')">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                  <div class="v-center justify-content-between actions-wrapper">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(image, 'image')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -1279,12 +1279,12 @@
                   </div>
                 </td>
                 <td class="actions-col">
-                  <div class="v-center justify-content-between actions-wrapper" (click)="sendMaterial(image, 'image')">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                  <div class="v-center justify-content-between actions-wrapper">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="copyLink(image, 'image')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -1355,8 +1355,7 @@
   </ng-container>
   <app-actions-bar
     [actions]="BULK_ACTIONS"
-    [isActive]="true"
-    [count]="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length"
+    [isActive]="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length"
     (doCommand)="doAction($event)">
   </app-actions-bar>
 </div>

@@ -88,6 +88,7 @@ import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automa
 import { TaskAddComponent } from './task-add/task-add.component';
 import { MaterialSendComponent } from './material-send/material-send.component';
 import { ImportContactMergeConfirmComponent } from './import-contact-merge-confirm/import-contact-merge-confirm.component';
+import { DealCreateComponent } from './deal-create/deal-create.component';
 import { HtmlEditorComponent } from './html-editor/html-editor.component';
 import { AccordionComponent } from './accordion/accordion.component';
 import { SubjectInputComponent } from './subject-input/subject-input.component';
@@ -180,6 +181,7 @@ import { SmsEditorComponent } from './sms-editor/sms-editor.component';
     TaskAddComponent,
     MaterialSendComponent,
     ImportContactMergeConfirmComponent,
+    DealCreateComponent,
     HtmlEditorComponent,
     AccordionComponent,
     SubjectInputComponent,
@@ -241,6 +243,7 @@ import { SmsEditorComponent } from './sms-editor/sms-editor.component';
     AutomationTreeOverlayComponent,
     MaterialSendComponent,
     TaskTypeComponent,
+    DealCreateComponent,
     HtmlEditorComponent,
     AccordionComponent
   ],

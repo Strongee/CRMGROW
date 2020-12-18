@@ -774,4 +774,4 @@ export const TaskStatus = {
   COMPLETED: 'completed'
 };
 export const UnlayerThemeId = 6121;
-export const ImportSelectableColumn = ['note', 'tags'];
+export const ImportSelectableColumn = ['notes', 'tags'];

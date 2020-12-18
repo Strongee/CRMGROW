@@ -501,6 +501,27 @@
 
         &.emails-detail {
           br {display: none;}
+
+          .main-history-item {
+            .detail {
+              visibility: hidden;
+              height: 0px;
+              transition: height .3s;
+            }
+            .summary {
+              display: block;
+            }
+  
+            &.expanded {
+              .detail {
+                height: unset;
+                visibility: visible; 
+              }
+              .summary {
+                display: none;
+              }
+            }
+          }
         }
 
 

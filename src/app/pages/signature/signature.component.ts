@@ -10,6 +10,9 @@ const Quill: any = QuillNamespace;
 Quill.register({ 'modules/better-table': quillBetterTable }, true);
 import BlotFormatter from 'quill-blot-formatter';
 Quill.register('modules/blotFormatter', BlotFormatter);
+// Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+const BlockEmbed = Quill.import('blots/block/embed');
 const keyboard = quillBetterTable.keyboardBindings;
 
 @Component({

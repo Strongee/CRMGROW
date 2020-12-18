@@ -32,6 +32,7 @@ import { NoteService } from 'src/app/services/note.service';
 import { TaskService } from 'src/app/services/task.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { Template } from 'src/app/models/template.model';
+import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 
 @Component({
   selector: 'app-contact',
@@ -81,6 +82,7 @@ export class ContactComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   groupActions = {};
   mainTimelines: ActivityDetail[] = [];
+  details: any = {};
   _id = '';
   next: string = null;
   prev: string = null;
@@ -163,6 +165,7 @@ export class ContactComponent implements OnInit {
   groupActivities(): void {
     this.groupActions = {};
     this.mainTimelines = [];
+    this.details = {};
     for (let i = this.contact.activity.length - 1; i >= 0; i--) {
       const e = this.contact.activity[i];
       const group = this.generateUniqueId(e);
@@ -205,6 +208,11 @@ export class ContactComponent implements OnInit {
       case 'images':
       case 'emails':
         material_id = activity.activity_detail['_id'];
+        if (activity.type !== 'emails') {
+          activity.activity_detail['content'] = activity.content;
+          activity.activity_detail['subject'] = activity.subject;
+        }
+        this.details[material_id] = activity.activity_detail;
         return `${material_id}_${activity._id}`;
       case 'texts':
         return activity._id;
@@ -333,7 +341,39 @@ export class ContactComponent implements OnInit {
   /**
    * Open the Material Select Dialog
    */
-  openMaterialsDlg(): void {}
+  openMaterialsDlg(): void {
+    this.dialog
+      .open(MaterialAddComponent, {
+        width: '98vw',
+        maxWidth: '500px'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        console.log('material selected', res);
+      });
+  }
+
+  /**************************************
+   * Timeline Actions
+   **************************************/
+  showDetail(event: any): void {
+    const target: HTMLElement = <HTMLElement>event.target;
+    const parent: HTMLElement = <HTMLElement>(
+      target.closest('.main-history-item')
+    );
+    if (parent) {
+      parent.classList.add('expanded');
+    }
+  }
+  hideDetail(event: any): void {
+    const target: HTMLElement = <HTMLElement>event.target;
+    const parent: HTMLElement = <HTMLElement>(
+      target.closest('.main-history-item')
+    );
+    if (parent) {
+      parent.classList.remove('expanded');
+    }
+  }
 
   /**************************************
    * Task Panel Relative Functions
