@@ -71,3 +71,10 @@
     background-color: $color-blue;
   }
 }
+
+.tab-container.same {
+  .tab {
+    flex: 1;
+    justify-content: center;
+  }
+}

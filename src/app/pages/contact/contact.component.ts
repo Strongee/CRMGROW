@@ -348,9 +348,7 @@ export class ContactComponent implements OnInit {
         maxWidth: '500px'
       })
       .afterClosed()
-      .subscribe((res) => {
-        console.log('material selected', res);
-      });
+      .subscribe((res) => {});
   }
 
   /**************************************

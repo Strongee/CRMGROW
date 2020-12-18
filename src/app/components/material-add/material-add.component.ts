@@ -1,10 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { TabItem } from '../../utils/data.types';
 import { MaterialService } from '../../services/material.service';
-import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { StoreService } from 'src/app/services/store.service';
-import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
@@ -20,22 +18,12 @@ export class MaterialAddComponent implements OnInit {
     { icon: 'i-icon i-notification', label: 'IMAGE', id: 'images' }
   ];
   selectedTab: TabItem = this.tabs[0];
-  material_type = '';
-  attaching = false;
 
   videos = [];
   pdfs = [];
   images = [];
   selectedMaterials = [];
-
-  materialError = '';
-  selectedVideos = new SelectionModel<any>(true, []);
-  selectedPdfs = new SelectionModel<any>(true, []);
-  selectedImages = new SelectionModel<any>(true, []);
-
-  videoLoadSubscription: Subscription;
-  pdfLoadSubscription: Subscription;
-  imageLoadSubscription: Subscription;
+  selectedMaterialIds = [];
 
   constructor(
     private dialogRef: MatDialogRef<MaterialAddComponent>,
@@ -52,13 +40,7 @@ export class MaterialAddComponent implements OnInit {
 
     for (let i = 0; i < this.selectedMaterials.length; i++) {
       const material = this.selectedMaterials[i];
-      if (this.getMaterialType(material) === 'Video') {
-        this.selectedVideos.select(material._id);
-      } else if (this.getMaterialType(material) === 'PDF') {
-        this.selectedPdfs.select(material._id);
-      } else if (this.getMaterialType(material) === 'Image') {
-        this.selectedImages.select(material._id);
-      }
+      this.selectedMaterialIds.push(material._id);
     }
   }
 
@@ -68,73 +50,38 @@ export class MaterialAddComponent implements OnInit {
     this.selectedTab = tab;
   }
 
-  toggleVideo(video): void {
-    this.materialError = '';
-    if (this.selectedVideos.isSelected(video._id)) {
-      this.selectedVideos.deselect(video._id);
-      const index = this.selectedMaterials.findIndex(
-        (item) => item._id === video._id
-      );
-      if (index >= 0) {
-        this.selectedMaterials.splice(index, 1);
-      }
+  /**
+   * Toggle Material
+   * @param material : Material (Video | PDF | Image)
+   */
+  toggleMaterial(material: any): void {
+    const index = this.selectedMaterials.findIndex(
+      (item) => item._id === material._id
+    );
+    if (index !== -1) {
+      this.selectedMaterials.splice(index, 1);
+      this.selectedMaterialIds.splice(index, 1);
     } else {
-      this.selectedVideos.select(video._id);
-      this.selectedMaterials.push(video);
+      this.selectedMaterials.push(material);
+      this.selectedMaterialIds.push(material._id);
     }
   }
 
-  togglePdf(pdf): void {
-    this.materialError = '';
-    if (this.selectedPdfs.isSelected(pdf._id)) {
-      this.selectedPdfs.deselect(pdf._id);
-      const index = this.selectedMaterials.findIndex(
-        (item) => item._id === pdf._id
-      );
-      if (index >= 0) {
-        this.selectedMaterials.splice(index, 1);
-      }
-    } else {
-      this.selectedPdfs.select(pdf._id);
-      this.selectedMaterials.push(pdf);
-    }
-  }
-
-  toggleImage(image): void {
-    this.materialError = '';
-    if (this.selectedImages.isSelected(image._id)) {
-      this.selectedImages.deselect(image._id);
-      const index = this.selectedMaterials.findIndex(
-        (item) => item._id === image._id
-      );
-      if (index >= 0) {
-        this.selectedMaterials.splice(index, 1);
-      }
-    } else {
-      this.selectedImages.select(image._id);
-      this.selectedMaterials.push(image);
-    }
-  }
-
-  deselectMaterial(material): void {
+  /**
+   * Deselect the Material
+   * @param material : Material Object
+   */
+  deselectMaterial(material: any): void {
     const index = this.selectedMaterials.findIndex(
       (item) => item._id === material._id
     );
     if (index >= 0) {
       this.selectedMaterials.splice(index, 1);
-    }
-    if (this.selectedVideos.isSelected(material._id)) {
-      this.selectedVideos.deselect(material._id);
-    }
-    if (this.selectedPdfs.isSelected(material._id)) {
-      this.selectedPdfs.deselect(material._id);
-    }
-    if (this.selectedImages.isSelected(material._id)) {
-      this.selectedImages.deselect(material._id);
+      this.selectedMaterialIds.splice(index, 1);
     }
   }
 
-  getMaterialType(material): any {
+  getMaterialType(material: any): string {
     if (material.type) {
       if (material.type === 'application/pdf') {
         return 'PDF';
