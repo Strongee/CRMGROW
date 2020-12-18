@@ -11,14 +11,6 @@ export class ActionsBarComponent implements OnInit {
   isShow = false;
   @Input('actions') actions: ActionItem[] = [];
   @Input()
-  public set count(val: number) {
-    if (val > 0) {
-      this.isShow = true;
-    } else {
-      this.isShow = false;
-    }
-  }
-  @Input()
   public set isActive(val: number) {
     if (val) {
       this.isActiveFlag = true;

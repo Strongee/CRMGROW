@@ -5,8 +5,11 @@ import {
   transferArrayItem
 } from '@angular/cdk/drag-drop';
 import { Board } from 'src/app/models/board.model';
-import { Column } from 'src/app/models/column.model';
+import { DealStage } from 'src/app/models/deal-stage.model';
 import { Router } from '@angular/router';
+import { DealsService } from 'src/app/services/deals.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 
 @Component({
   selector: 'app-deals',
@@ -14,52 +17,44 @@ import { Router } from '@angular/router';
   styleUrls: ['./deals.component.scss']
 })
 export class DealsComponent implements OnInit {
-  board: Board = new Board('Test Board', [
-    new Column('New lead - Working', [
-      'Real Estate sale 1',
-      'Real Estate sale 2',
-      'Real Estate sale 3',
-      'Real Estate sale 4'
-    ]),
-    new Column('50% Commited', [
-      'Lorem ipsum',
-      'foo',
-      "This was in the 'Research' column"
-    ]),
-    new Column('Opportunity Fully Presented', [
-      'Get to work',
-      'Pick up groceries',
-      'Go home',
-      'Fall asleep'
-    ]),
-    new Column('Proposal Made', [
-      'Get up',
-      'Brush teeth',
-      'Take a shower',
-      'Check e-mail',
-      'Walk dog'
-    ])
-  ]);
+  board: Board = new Board('Test Board', []);
 
-  constructor(private router: Router) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private dealsService: DealsService
+  ) {
+    this.dealsService.getStage().subscribe((res) => {
+      if (res) {
+        this.board.dealStages = res['data'];
+      }
+    });
+  }
 
   ngOnInit(): void {}
 
-  drop(event: CdkDragDrop<string[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
+  drop(event: CdkDragDrop<string[]>, id: string): void {
+    const data = {
+      deal_id: event.previousContainer.data[event.previousIndex]['_id'],
+      position: event.currentIndex,
+      deal_stage_id: id
+    };
+    this.dealsService.moveDeal(data).subscribe(() => {
+      if (event.previousContainer === event.container) {
+        moveItemInArray(
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
+        );
+      } else {
+        transferArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
+        );
+      }
+    });
   }
 
   taskDetail(item: string): void {
@@ -67,11 +62,35 @@ export class DealsComponent implements OnInit {
   }
 
   addColumns(): void {
-    const newColumn = new Column('New Column', []);
-    this.board.columns.push(newColumn);
+    this.dialog
+      .open(DealCreateComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          type: 'deal-stage'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        this.board.dealStages.push(res);
+      });
   }
 
-  addTasks(tasks: string[]): void {
-    tasks.push('New Task');
+  addTasks(dealStage: any): void {
+    this.dialog
+      .open(DealCreateComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          id: dealStage._id,
+          type: 'deal'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        dealStage.deals.push(res);
+      });
   }
 }

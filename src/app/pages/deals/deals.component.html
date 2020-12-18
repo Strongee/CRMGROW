@@ -1,29 +1,60 @@
 <div class="page-content">
     <div class="d-flex columns" cdkDropListGroup>
-        <div class="column" *ngFor="let column of board.columns">
-            <div class="column-title bgc-pale p-3">
+        <div class="column" *ngFor="let dealStage of board.dealStages">
+            <div class="column-title bgc-pale p-4">
                 <div class="f-4 font-weight-bold">
-                    {{column.name}}
+                    {{dealStage.title}}
                 </div>
                 <div class="f-6 font-weight-bold text-primary">
-                    {{column.tasks.length}} <span class="f-1 font-weight-bold c-dark op-56 text-uppercase">Deals</span>
+                    {{dealStage.deals.length}} <span class="f-1 font-weight-bold c-dark op-56 text-uppercase">Deals</span>
+                </div>
+                <div class="title-triangle">
+                    <i class="d-block i-icon i-triangle-right bgc-dark"></i>
                 </div>
             </div>
             <div
                 class="tasks-container mt-4"
                 cdkDropList
-                [cdkDropListData]="column.tasks"
-                (cdkDropListDropped)="drop($event)"
+                [cdkDropListData]="dealStage.deals"
+                (cdkDropListDropped)="drop($event, dealStage._id)"
             >
                 <div
-                    class="task f-6 font-weight-bold bgc-white mt-3 mr-3 p-3"
-                    *ngFor="let item of column.tasks" cdkDrag
-                    (click)="taskDetail(item)"
+                    class="task mt-3 mr-3 p-3 c-pointer"
+                    *ngFor="let deal of dealStage.deals" cdkDrag
+                    (click)="taskDetail(deal)"
                 >
-                    {{ item }}
+                    <div class="v-center justify-content-between">
+                        <div class="f-6 font-weight-bold">
+                            {{ deal.title }}
+                        </div>
+                        <div *ngIf="deal.title == 'Real Estate 1'">
+                            <img src="/assets/img/status_green.svg" alt="">
+                        </div>
+                        <div *ngIf="deal.title == 'Real Estate 2'">
+                            <img src="/assets/img/status_red.svg" alt="">
+                        </div>
+                        <div *ngIf="deal.title == 'Real Estate 3'">
+                            <img src="/assets/img/status_yellow.svg" alt="">
+                        </div>
+                        <div *ngIf="deal.title == 'Real Estate 4'">
+                            <img src="/assets/img/status_gray.svg" alt="">
+                        </div>
+                        <div *ngIf="deal.title != 'Real Estate 1' && deal.title != 'Real Estate 2' && deal.title != 'Real Estate 3' && deal.title != 'Real Estate 4'">
+                            <img src="/assets/img/status_gray.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="v-center mt-2">
+                        <div class="avatar"></div>
+                        <div class="ml-2 f-3">
+                            Thomas Anderson
+                        </div>
+                    </div>
+                    <div class="f-3 op-64 mt-2">
+                        $100,000
+                    </div>
                 </div>
                 <div class="v-center justify-content-center add-task mt-3 mr-3">
-                    <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addTasks(column.tasks)"></i>
+                    <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addTasks(dealStage)"></i>
                 </div>
             </div>
         </div>

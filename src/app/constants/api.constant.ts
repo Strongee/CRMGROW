@@ -228,3 +228,11 @@ export const TAG = {
   LOAD_SOURCES: 'contact/sources',
   LOAD_COMPANIES: 'contact/brokerage'
 };
+export const DEALSTAGE = {
+  GET: 'deal-stage'
+};
+
+export const DEAL = {
+  GET: 'deal',
+  MOVE: 'deal/move-deal'
+};
