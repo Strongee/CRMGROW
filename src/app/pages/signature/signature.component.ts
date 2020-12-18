@@ -8,42 +8,9 @@ import * as QuillNamespace from 'quill';
 import quillBetterTable from 'quill-better-table';
 const Quill: any = QuillNamespace;
 Quill.register({ 'modules/better-table': quillBetterTable }, true);
-// Quill.register('modules/imageResize', ImageResize);
-// import ImageResize from 'quill-image-resize-module';
-const BlockEmbed = Quill.import('blots/block/embed');
-
+import BlotFormatter from 'quill-blot-formatter';
+Quill.register('modules/blotFormatter', BlotFormatter);
 const keyboard = quillBetterTable.keyboardBindings;
-//Define a new blog type
-class AppPanelEmbed extends BlockEmbed {
-  static create(value) {
-    const node = super.create(value);
-    node.setAttribute('contenteditable', 'false');
-    node.setAttribute('width', '100%');
-    //Set custom HTML
-    node.innerHTML = this.transformValue(value);
-    return node;
-  }
-
-  static transformValue(value) {
-    let handleArr = value.split('\n');
-    handleArr = handleArr.map((e) =>
-      e.replace(/^[\s]+/, '').replace(/[\s]+$/, '')
-    );
-    return handleArr.join('');
-  }
-
-  //Returns the value of the node itself for undo operation
-  static value(node) {
-    return node.innerHTML;
-  }
-}
-// blotName
-AppPanelEmbed.blotName = 'AppPanelEmbed';
-//The class name will be used to match the blot name
-AppPanelEmbed.className = 'embed-innerApp';
-//Label type customization
-AppPanelEmbed.tagName = 'div';
-Quill.register(AppPanelEmbed, true);
 
 @Component({
   selector: 'app-signature',
@@ -88,7 +55,6 @@ export class SignatureComponent implements OnInit {
     this.userService.profile$.subscribe((profile) => {
       if (profile && profile._id) {
         this.user = profile;
-        console.log('##', this.user);
       }
     });
   }
@@ -227,7 +193,6 @@ export class SignatureComponent implements OnInit {
       if (imageInput.files != null && imageInput.files[0] != null) {
         const file = imageInput.files[0];
         this.fileService.attachImage(file).then((res) => {
-          console.log('###', res);
           this.insertImageToEditor(res['url']);
         });
       }
