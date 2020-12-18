@@ -20,6 +20,7 @@ import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bu
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { AutomationAssignComponent } from 'src/app/components/automation-assign/automation-assign.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
+import { HandlerService } from 'src/app/services/handler.service';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -73,6 +74,7 @@ export class ContactsComponent implements OnInit {
     public storeService: StoreService,
     public contactService: ContactService,
     public userService: UserService,
+    private handlerService: HandlerService,
     private dialog: MatDialog
   ) {}
 
@@ -256,7 +258,7 @@ export class ContactsComponent implements OnInit {
       .subscribe((status) => {
         this.isUpdating = false;
         if (status) {
-          this.storeService.bulkUpdate$(ids, { label: newLabel }, {});
+          this.handlerService.bulkContactUpdate$(ids, { label: newLabel }, {});
         }
       });
   }

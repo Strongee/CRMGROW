@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-campaign-smtp',
@@ -6,7 +7,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./campaign-smtp.component.scss']
 })
 export class CampaignSmtpComponent implements OnInit {
-
   submitted = false;
   loading = false;
   senderName = '';
@@ -16,18 +16,29 @@ export class CampaignSmtpComponent implements OnInit {
   password = '';
   enableSSL = true;
 
-  constructor() { }
+  constructor(private userService: UserService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   saveSMTP(): void {
-
+    const data = {
+      host: this.smtpHost,
+      port: this.smtpPort,
+      user: this.senderName,
+      pass: this.password,
+      secure: this.enableSSL
+    };
+    this.userService.connectSMTP(data).subscribe(
+      (res) => {
+        if (res) {
+          console.log("smtp connect response ==========>", res);
+        }
+      },
+      (error) => {}
+    );
   }
 
-  cancel(): void {
-
-  }
+  cancel(): void {}
 
   setEnableSSL(): void {
     this.enableSSL = !this.enableSSL;

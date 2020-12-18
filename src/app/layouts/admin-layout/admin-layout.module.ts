@@ -8,7 +8,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../shared/shared.module';
 import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { ComponentsModule } from '../../components/components.module';
 import { AdminLayoutRoutes } from './admin-layout.routing.module';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -120,7 +119,6 @@ import { EmailEditorModule } from 'angular-email-editor';
     NgxSpinnerModule,
     ShareButtonsModule,
     ShareIconsModule,
-    MatExpansionModule,
     DragDropModule,
     NgxGraphModule,
     PdfViewerModule,

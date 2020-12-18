@@ -6,10 +6,10 @@ import { HelperService } from 'src/app/services/helper.service';
 import { QuillEditorComponent } from 'ngx-quill';
 import { FileService } from 'src/app/services/file.service';
 import { QuillEditor } from '../../constants/variable.constants';
-import ImageResize from 'quill-image-resize-module';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-pdf-edit',
@@ -145,7 +145,7 @@ export class PdfEditComponent implements OnInit {
     imageInput.addEventListener('change', () => {
       if (imageInput.files != null && imageInput.files[0] != null) {
         const file = imageInput.files[0];
-        this.fileService.attachImage(file).subscribe((res) => {
+        this.fileService.attachImage(file).then((res) => {
           this.insertImageToEditor(res.url);
         });
       }

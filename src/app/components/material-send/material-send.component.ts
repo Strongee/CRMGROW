@@ -5,9 +5,9 @@ import { QuillEditor } from 'src/app/constants/variable.constants';
 import { QuillEditorComponent } from 'ngx-quill';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
 import { Contact } from 'src/app/models/contact.model';
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-material-send',
@@ -77,7 +77,7 @@ export class MaterialSendComponent implements OnInit {
     imageInput.addEventListener('change', () => {
       if (imageInput.files != null && imageInput.files[0] != null) {
         const file = imageInput.files[0];
-        this.fileService.attachImage(file).subscribe((res) => {
+        this.fileService.attachImage(file).then((res) => {
           this.insertImageToEditor(res.url);
         });
       }

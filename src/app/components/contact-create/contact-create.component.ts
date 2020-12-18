@@ -11,6 +11,7 @@ import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
 import { StoreService } from 'src/app/services/store.service';
+import { HandlerService } from 'src/app/services/handler.service';
 
 @Component({
   selector: 'app-contact-create',
@@ -47,7 +48,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
     private contactService: ContactService,
-    private storeService: StoreService
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {}
@@ -62,7 +63,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
         console.log('contact created', contact);
         this.isCreating = false;
         if (contact) {
-          this.storeService.addContact$(contact);
+          this.handlerService.addContact$(contact);
           this.dialogRef.close();
         }
       });

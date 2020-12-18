@@ -14,10 +14,10 @@ import { Garbage } from 'src/app/models/garbage.model';
 import { TabItem } from 'src/app/utils/data.types';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
 import { Subscription, timer } from 'rxjs';
 import { Router } from '@angular/router';
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-video-create',
@@ -904,7 +904,7 @@ export class VideoCreateComponent implements OnInit {
     imageInput.addEventListener('change', () => {
       if (imageInput.files != null && imageInput.files[0] != null) {
         const file = imageInput.files[0];
-        this.fileService.attachImage(file).subscribe((res) => {
+        this.fileService.attachImage(file).then((res) => {
           this.insertImageToEditor(res.url);
         });
       }

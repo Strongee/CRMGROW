@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { REPEAT_DURATIONS, TIMES } from 'src/app/constants/variable.constants';
 import { Contact } from 'src/app/models/contact.model';
 import { Task } from 'src/app/models/task.model';
+import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -28,7 +29,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
 
   constructor(
     private taskService: TaskService,
-    private storeService: StoreService,
+    private handlerService: HandlerService,
     private dialogRef: MatDialogRef<TaskCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -75,7 +76,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       .bulkCreate(data)
       .subscribe((res) => {
         this.saving = false;
-        this.storeService.activityAdd$(ids, 'task');
+        this.handlerService.activityAdd$(ids, 'task');
         this.dialogRef.close();
       });
   }

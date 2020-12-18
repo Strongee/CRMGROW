@@ -106,8 +106,8 @@
           *matCellDef="let element"
           (click)="openContact(element)">
           <div class="v-center">
-            <i class="act-icon normal {{'act-'+element.last_activity.type}} d-block mr-2"></i>
-            <span>{{element.last_activity.content}}</span>
+            <i class="act-icon normal {{'act-'+element.last_activity?.type}} d-block mr-2"></i>
+            <span>{{element.last_activity?.content}}</span>
           </div>
         </td>
       </ng-container>

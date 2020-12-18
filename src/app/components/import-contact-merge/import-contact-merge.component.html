@@ -5,22 +5,32 @@
       <thead>
       <th></th>
       <th>
-        <div class="check-wrapper">
-          <div class="custom-control custom-radio ml-auto">
-            <input type="radio" class="custom-control-input" id="primary-contact" name="contact-select"
-                   [checked]="selectedContact == 'Primary'" (change)="changeContact($event)">
-            <label class="custom-control-label f-4 font-weight-bold" for="primary-contact">Primary Contact</label>
+        <ng-container *ngIf="mergeType() == MERGETYPE.CSV; else csvMerge">
+          <div class="check-wrapper">
+            <div class="custom-control custom-radio ml-auto">
+              <input type="radio" class="custom-control-input" id="primary-contact" name="contact-select"
+                     [checked]="selectedContact == 'Primary'" (change)="changeContact($event)">
+              <label class="custom-control-label f-4 font-weight-bold" for="primary-contact">Primary Contact</label>
+            </div>
           </div>
-        </div>
+        </ng-container>
+        <ng-template #csvMerge>
+          <div class="f-4 font-weight-bold text-center c-black">{{primaryContact._id ? 'Contact' : 'CSV'}}</div>
+        </ng-template>
       </th>
       <th>
-        <div class="check-wrapper">
-          <div class="custom-control custom-radio ml-auto">
-            <input type="radio" class="custom-control-input" id="secondary-contact" name="contact-select"
-                   [checked]="selectedContact == 'Secondary'" (change)="changeContact($event)">
-            <label class="custom-control-label f-4 font-weight-bold" for="secondary-contact">Secondary Contact</label>
+        <ng-container *ngIf="mergeType() == MERGETYPE.CSV; else csvSecondMerge">
+          <div class="check-wrapper">
+            <div class="custom-control custom-radio ml-auto">
+              <input type="radio" class="custom-control-input" id="secondary-contact" name="contact-select"
+                     [checked]="selectedContact == 'Secondary'" (change)="changeContact($event)">
+              <label class="custom-control-label f-4 font-weight-bold" for="secondary-contact">Secondary Contact</label>
+            </div>
           </div>
-        </div>
+        </ng-container>
+        <ng-template #csvSecondMerge>
+          <div class="f-4 font-weight-bold text-center c-black">{{secondaryContact._id ? 'Contact' : 'CSV'}}</div>
+        </ng-template>
       </th>
       </thead>
       <tbody>
@@ -28,24 +38,28 @@
         <td colspan="3"></td>
       </tr>
       <tr *ngFor="let column of columns let row = index">
-        <ng-container *ngIf="isCheckable(column) else selectableColumn">
+        <ng-container *ngIf="isCheckable(updateColumn[column]) else selectableColumn">
           <td>
-            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+            <div class="f-3 op-75 text-uppercase">{{updateColumn[column] == 'notes' ? column + ' (Notes)' : updateColumn[column]}}</div>
           </td>
           <td>
-            <div class="check-wrapper">
+            <div class="check-wrapper" *ngIf="isShowColumn(primaryContact, column)">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="primary-{{column}}" name="contact-{{column}}"
-                       [checked]="primarySelectionModel[row]" (change)="changeCheck(row, column)">
+                       [checked]="primarySelectionModel[row]" (change)="changeCheck(row, column)"
+                       [disabled]="primaryContact[column] == '' || primaryContact[column] == undefined"
+                >
                 <label class="custom-control-label f-3 font-weight-bold" for="primary-{{column}}">{{primaryContact[column]}}</label>
               </div>
             </div>
           </td>
           <td>
-            <div class="check-wrapper">
+            <div class="check-wrapper" *ngIf="isShowColumn(secondaryContact, column)">
               <div class="custom-control custom-radio ml-auto">
                 <input type="radio" class="custom-control-input" id="secondary-{{column}}" name="contact-{{column}}"
-                       [checked]="secondarySelectionModel[row]" (change)="changeCheck(row, column)">
+                       [checked]="secondarySelectionModel[row]" (change)="changeCheck(row, column)"
+                       [disabled]="secondaryContact[column] == '' || secondaryContact[column] == undefined"
+                >
                 <label class="custom-control-label f-3 font-weight-bold" for="secondary-{{column}}">{{secondaryContact[column]}}</label>
               </div>
             </div>
@@ -53,10 +67,10 @@
         </ng-container>
         <ng-template #selectableColumn>
           <td>
-            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+            <div class="f-3 op-75 text-uppercase">{{updateColumn[column] == 'notes' ? column + ' (Notes)' : updateColumn[column]}}</div>
           </td>
           <td>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox" *ngIf="isShowColumn(primaryContact, column)">
               <input type="checkbox" class="custom-control-input" id="primary-{{column}}"
                      [checked]="primarySelectionModel[row]"
                      (change)="$event ? changePrimarySelection(row, column) : null"
@@ -65,7 +79,7 @@
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectablePrimaryColumn">
                 <label class="custom-control-label"
                        for="primary-{{column}}"
-                       [innerHTML]="selectableContent(column, primaryContact[column])"
+                       [innerHTML]="selectableContent(column, primaryContact)"
                 ></label>
               </ng-container>
               <ng-template #nonSelectablePrimaryColumn>
@@ -74,7 +88,7 @@
             </div>
           </td>
           <td>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox" *ngIf="isShowColumn(secondaryContact, column)">
               <input type="checkbox" class="custom-control-input" id="secondary-{{column}}"
                      [checked]="secondarySelectionModel[row]"
                      (change)="$event ? changeSecondarySelection(row, column) : null"
@@ -83,7 +97,7 @@
               <ng-container *ngIf="isSelectableColumn(column); else nonSelectableSecondaryColumn">
                 <label class="custom-control-label"
                        for="secondary-{{column}}"
-                       [innerHTML]="selectableContent(column, secondaryContact[column])"
+                       [innerHTML]="selectableContent(column, secondaryContact)"
                 ></label>
               </ng-container>
               <ng-template #nonSelectableSecondaryColumn>
@@ -93,6 +107,52 @@
           </td>
         </ng-template>
       </tr>
+      <ng-container *ngIf="mergeType() == MERGETYPE.CONTACT">
+        <tr>
+          <td>
+            <div class="f-3 op-75 text-uppercase">Activity</div>
+          </td>
+          <td>
+            <select class="form-control theme-control" [(ngModel)]="activity" name="last_activity" #last_activity="ngModel">
+              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="f-3 op-75 text-uppercase">Follow up</div>
+          </td>
+          <td>
+            <select class="form-control theme-control" [(ngModel)]="followup" name="follow_up" #follow_up="ngModel">
+              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="f-3 op-75 text-uppercase">Automation</div>
+          </td>
+          <td>
+            <select class="form-control theme-control" [(ngModel)]="automation" name="automation_merge" #automation_merge="ngModel">
+              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="f-3 op-75 text-uppercase">Notes</div>
+          </td>
+          <td>
+            <select class="form-control theme-control" [(ngModel)]="notes" name="notes_merge" #notes_merge="ngModel">
+              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+      </ng-container>
       </tbody>
     </table>
     <ng-container *ngIf="previewContact">
@@ -105,11 +165,11 @@
         <tbody>
         <tr *ngFor="let column of previewColumns let row = index">
           <td>
-            <div class="f-3 op-75 text-uppercase">{{column}}</div>
+            <div class="f-3 op-75 text-uppercase">{{updateColumn[column] == 'notes' ? column + ' (Notes)' : updateColumn[column]}}</div>
           </td>
           <td>
             <div class="f-3 font-weight-bold"
-                 [innerHTML]="isSelectableColumn(column) ? selectableContent(column, previewContact[column]) : previewContact[column]"
+                 [innerHTML]="isSelectableColumn(column) ? selectableContent(column, previewContact) : previewContact[column]"
             >
             </div>
           </td>
@@ -121,5 +181,7 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button type="button" class="btn c-blue" mat-dialog-close>Cancel</button>
-  <button type="button" class="btn btn-primary" (click)="merge()">Merge</button>
+  <button type="button" class="btn btn-primary" (click)="mergeCSV()" *ngIf="mergeType() == MERGETYPE.CSV">Merge</button>
+  <button type="button" class="btn btn-primary" (click)="update()" *ngIf="mergeType() == MERGETYPE.CONTACT_CSV" [class.loading]="updating">Update</button>
+  <button type="button" class="btn btn-primary" (click)="mergeContact()" *ngIf="mergeType() == MERGETYPE.CONTACT" [class.loading]="merging">Merge</button>
 </mat-dialog-actions>

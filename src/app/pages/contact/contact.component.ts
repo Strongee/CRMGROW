@@ -16,8 +16,7 @@ import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
   TIMES,
-  REPEAT_DURATIONS,
-  QuillEditor
+  REPEAT_DURATIONS
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -31,11 +30,8 @@ import { Task } from 'src/app/models/task.model';
 import { Note } from 'src/app/models/note.model';
 import { NoteService } from 'src/app/services/note.service';
 import { TaskService } from 'src/app/services/task.service';
-import * as QuillNamespace from 'quill';
-const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
-Quill.register('modules/imageResize', ImageResize);
-import { QuillEditorComponent } from 'ngx-quill';
+import { HandlerService } from 'src/app/services/handler.service';
+import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-contact',
@@ -85,6 +81,7 @@ export class ContactComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   groupActions = {};
   mainTimelines: ActivityDetail[] = [];
+  details: any = {};
   _id = '';
   next: string = null;
   prev: string = null;
@@ -101,10 +98,11 @@ export class ContactComponent implements OnInit {
   due_time = '12:00:00.000';
   times = TIMES;
   taskSaving = false;
-  emailSubmitted = false;
+
   note: Note = new Note();
   noteSaving = false;
 
+  emailSubmitted = false;
   emailSending = false;
   ccFlag = false;
   bccFlag = false;
@@ -113,10 +111,7 @@ export class ContactComponent implements OnInit {
   bccContacts: Contact[] = [];
   emailSubject = '';
   emailContent = '';
-  selectedTemplate = { subject: '', content: '' };
-  quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
-  config = QuillEditor;
-  focusEditor = '';
+  selectedTemplate: Template = new Template();
 
   selectedAutomation: Automation;
   ActionName = ActionName;
@@ -126,18 +121,16 @@ export class ContactComponent implements OnInit {
   hasChild = (_: number, node: any) =>
     !!node.children && node.children.length > 0;
 
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-
   constructor(
     private dialog: MatDialog,
     private location: Location,
     private route: ActivatedRoute,
-    private fileService: FileService,
     private contactService: ContactService,
     private noteService: NoteService,
     private taskService: TaskService,
     private storeService: StoreService,
     private overlayService: OverlayService,
+    private handlerService: HandlerService,
     private viewContainerRef: ViewContainerRef
   ) {}
 
@@ -171,6 +164,7 @@ export class ContactComponent implements OnInit {
   groupActivities(): void {
     this.groupActions = {};
     this.mainTimelines = [];
+    this.details = {};
     for (let i = this.contact.activity.length - 1; i >= 0; i--) {
       const e = this.contact.activity[i];
       const group = this.generateUniqueId(e);
@@ -213,6 +207,11 @@ export class ContactComponent implements OnInit {
       case 'images':
       case 'emails':
         material_id = activity.activity_detail['_id'];
+        if (activity.type !== 'emails') {
+          activity.activity_detail['content'] = activity.content;
+          activity.activity_detail['subject'] = activity.subject;
+        }
+        this.details[material_id] = activity.activity_detail;
         return `${material_id}_${activity._id}`;
       case 'texts':
         return activity._id;
@@ -267,6 +266,11 @@ export class ContactComponent implements OnInit {
   openEditDlg(): void {}
 
   /**
+   * Share Contact to Team
+   */
+  shareContact(): void {}
+
+  /**
    * Open dialog to create new group call
    */
   openGroupCallDlg(): void {
@@ -299,8 +303,8 @@ export class ContactComponent implements OnInit {
       .create({ ...this.task, contact: this._id })
       .subscribe((res) => {
         this.taskSaving = false;
-        this.storeService.registerActivity$(res);
-        this.storeService.activityAdd$([this._id], 'task');
+        this.handlerService.registerActivity$(res);
+        this.handlerService.activityAdd$([this._id], 'task');
       });
   }
 
@@ -313,27 +317,56 @@ export class ContactComponent implements OnInit {
       .create({ ...this.note, contact: this._id })
       .subscribe((res) => {
         this.noteSaving = false;
-        this.storeService.registerActivity$(res);
-        this.storeService.activityAdd$([this._id], 'note');
+        this.handlerService.registerActivity$(res);
+        this.handlerService.activityAdd$([this._id], 'note');
       });
-  }
-
-  insertEmailContentValue(value: string): void {
-    this.emailEditor.quillEditor.focus();
-    const range = this.emailEditor.quillEditor.getSelection();
-    if (!range) {
-      return;
-    }
-    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
-    this.emailEditor.quillEditor.setSelection(
-      range.index + value.length,
-      0,
-      'user'
-    );
   }
 
   sendEmail(): void {}
 
+  /************************************
+   * Email Sending Panel Relative Functions
+   ************************************/
+  /**
+   * Populate the selected template content
+   * @param template : Template
+   */
+  selectTemplate(template: Template): void {
+    this.selectedTemplate = template;
+    this.emailSubject = this.selectedTemplate.subject;
+    this.emailContent = this.selectedTemplate.content;
+    // Attach the Selected Material Content
+  }
+  /**
+   * Open the Material Select Dialog
+   */
+  openMaterialsDlg(): void {}
+
+  /**************************************
+   * Timeline Actions
+   **************************************/
+  showDetail(event: any): void {
+    const target: HTMLElement = <HTMLElement>event.target;
+    const parent: HTMLElement = <HTMLElement>(
+      target.closest('.main-history-item')
+    );
+    if (parent) {
+      parent.classList.add('expanded');
+    }
+  }
+  hideDetail(event: any): void {
+    const target: HTMLElement = <HTMLElement>event.target;
+    const parent: HTMLElement = <HTMLElement>(
+      target.closest('.main-history-item')
+    );
+    if (parent) {
+      parent.classList.remove('expanded');
+    }
+  }
+
+  /**************************************
+   * Task Panel Relative Functions
+   **************************************/
   getDateTime(): any {
     if (this.due_date.day != '') {
       return (
@@ -346,10 +379,16 @@ export class ContactComponent implements OnInit {
     close();
   }
 
+  /*****************************************
+   * Automation Select & Display
+   *****************************************/
+  /**
+   * Select Automation To assign
+   * @param evt :Automation
+   */
   selectAutomation(evt: any): void {
     this.selectedAutomation = evt.Automation;
   }
-
   timeLineArrangement(): void {
     if (!this.contact.time_lines || this.contact.time_lines.length == 0) {
       return;
@@ -376,7 +415,6 @@ export class ContactComponent implements OnInit {
     this.dataSource.data = [];
     this.dataSource.data.push(root);
   }
-
   showFullAutomation(): void {
     this.dialog.open(AutomationShowFullComponent, {
       position: { top: '100px' },
@@ -388,7 +426,6 @@ export class ContactComponent implements OnInit {
       }
     });
   }
-
   easyView(node: any, origin: any, content: any): void {
     this.overlayService.open(
       origin,
@@ -400,47 +437,6 @@ export class ContactComponent implements OnInit {
       }
     );
   }
-
-  selectTemplate(event: any): void {
-    this.selectedTemplate = event;
-    this.emailSubject = this.selectedTemplate.subject;
-    this.emailContent = this.selectedTemplate.content;
-  }
-
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-
-  initImageHandler = (): void => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).subscribe((res) => {
-          this.insertImageToEditor(res.url);
-        });
-      }
-    });
-    imageInput.click();
-  };
-
-  insertImageToEditor(url: string): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-  setFocusField(editorType: string): void {
-    this.focusEditor = editorType;
-  }
-
   createAutomation(): void {}
 
   ICONS = {

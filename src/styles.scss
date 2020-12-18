@@ -52,6 +52,9 @@ ul {
 .bgc-orange {
   background-color: $color-orange;
 }
+.bgc-orange-weak {
+  background-color: $color-orange-weak;
+}
 .bgc-yellow {
   background-color: $color-yellow;
 }
@@ -187,6 +190,12 @@ ul {
 .c-white {
   color: #ffffff;
 }
+.c-trans56 {
+  color: $color-trans56;
+}
+.c-trans75 {
+  color: $color-trans75;
+}
 /** ==== Text Style:  Font Size (10px 18px), Font Weight, Letter Spacing, Decoration ==== */
 .f-0{
   font-size: 10px!important;
@@ -239,6 +248,9 @@ ul {
 }
 .td-none{
   text-decoration: none!important;
+}
+.text-capitalize {
+  text-transform: capitalize;
 }
 /** ==== Icon style ==== */
 .i-icon{
@@ -1461,7 +1473,7 @@ mat-expansion-panel {
   position: sticky;
   bottom: 0px;
   background: white;
-  z-index: 2;
+  z-index: 996;
 
   @media screen and (max-width: 670px) {
     display: flex;

@@ -26,7 +26,7 @@
               <i class="i-icon i-list bgc-dark ml-1" aria-hidden="true"></i>
               <span class="ml-3 f-3 font-weight-bold">Add to campaign</span>
             </button>
-            <button class="v-center border-0 py-2 c-dark dropdown-item">
+            <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="openMergeContactDlg()">
               <i class="i-icon i-contact-merge bgc-dark ml-1" aria-hidden="true"></i>
               <span class="ml-3 f-3 font-weight-bold">Merge</span>
             </button>
@@ -254,9 +254,9 @@
           </app-slide-tab>
           <div class="tab-panel">
             <div class="email-panel" *ngIf="action.id === 'send_email'">
-              <form #emailForm="ngForm" (ngSubmit)="emailSubmitted = true; emailForm.form.valid ? sendEmail() : false">
+              <form #emailForm="ngForm" (ngSubmit)="emailForm.form.valid ? sendEmail() : false">
                 <div class="email-box">
-                  <div class="v-center justify-content-between receiver px-3 py-2">
+                  <div class="v-center justify-content-between receiver pl-3 pr-2 py-1 contacts-wrapper">
                     <div class="v-center w-50">
                       <label class="f-6 op-56 m-0">To:</label>
                       <app-input-contacts
@@ -265,31 +265,31 @@
                       ></app-input-contacts>
                     </div>
                     <div class="v-center">
-                      <div class="f-6 c-blue p-2 c-pointer" (click)="ccFlag = !ccFlag">{{ccFlag ? "Disable Cc" : "Add Cc"}}</div>
-                      <div class="f-6 c-blue p-2 c-pointer" (click)="bccFlag = !bccFlag">{{bccFlag ? "Disable Bcc" : "Add Bcc"}}</div>
+                      <div class="f-6 c-blue p-1 c-pointer" (click)="ccFlag = !ccFlag">{{ccFlag ? "Disable Cc" : "Add Cc"}}</div>
+                      <div class="f-6 c-blue p-1 c-pointer" (click)="bccFlag = !bccFlag">{{bccFlag ? "Disable Bcc" : "Add Bcc"}}</div>
                     </div>
                   </div>
-                  <div class="email-tracking px-3 py-2" *ngIf="ccFlag || bccFlag">
-                    <div class="v-center">
+                  <div class="email-tracking contacts-wrapper" *ngIf="ccFlag || bccFlag">
+                    <div class="v-center pl-3 f-2 py-1">
                       <mat-icon class="mr-2">warning</mat-icon>
                       Email tracking is not working if you add cc, bcc.
                     </div>
-                    <div class="v-center py-2 email-cc" *ngIf="ccFlag">
-                      <label class="f-6 text-uppercase m-0">cc:</label>
+                    <div class="v-center pl-3 py-2 email-cc" *ngIf="ccFlag">
+                      <label class="f-6 text-uppercase op-56 m-0">cc:</label>
                       <app-input-contacts
                         [selectedContacts]="ccContacts"
                         class="w-100 ml-2"
                       ></app-input-contacts>
                     </div>
-                    <div class="v-center py-2 email-bcc" *ngIf="bccFlag">
-                      <label class="f-6 text-uppercase m-0">bcc:</label>
+                    <div class="v-center pl-3 py-2 email-bcc" *ngIf="bccFlag">
+                      <label class="f-6 text-uppercase op-56 m-0">bcc:</label>
                       <app-input-contacts
                         [selectedContacts]="bccContacts"
                         class="w-100 ml-2"
                       ></app-input-contacts>
                     </div>
                   </div>
-                  <div class="email-title px-3 py-2">
+                  <div class="email-title px-3 py-2 position-relative">
                     <input
                       class="w-100"
                       type="text"
@@ -297,48 +297,23 @@
                       name="emailTitle"
                       #emailTitle="ngModel"
                       [(ngModel)]="emailSubject"
+                      required
                     >
                     <span
-                      class="invalid-error f-3 font-weight-bold c-red"
-                      *ngIf="selectedTemplate.subject == '' && emailSubmitted"
+                      class="invalid-error f-3 c-red inline-error" 
+                      *ngIf="emailTitle.invalid && (emailTitle.touched || emailTitle.dirty)"
                     >
-                      Subject is required
+                      Required!
                     </span>
                   </div>
                   <div class="email-body">
-                    <quill-editor
-                      image-resize="true"
+                    <app-html-editor 
+                      [(value)]="emailContent" 
                       placeholder="Start typing here..."
-                      [(ngModel)]="emailContent"
-                      [modules]="config"
-                      name="mailContent"
-                      [styles]="{ height: '180px' }"
-                      #mailContent="ngModel"
-                      (onEditorCreated)="getEditorInstance($event)"
-                      (click)="setFocusField('content-email')"
-                      class="f-3 font-weight-bold rounded"
-                      #emailEditor
-                    >
-                    </quill-editor>
-                    <span
-                      class="invalid-error f-3 font-weight-bold c-red px-3 py-2"
-                      *ngIf="selectedTemplate.content == '' && emailSubmitted"
-                    >
-                      Content is required
-                    </span>
-                    <div ngbDropdown class="insert-token">
-                      <div class="v-center" ngbDropdownToggle>
-                        <span class="f-1 font-weight-bold mr-2">Insert Token</span>
-                        <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                        <i class="d-block i-icon i-triangle-up bgc-blue"></i>
-                      </div>
-                      <div ngbDropdownMenu class="light p-2">
-                        <div class="f-3 p-1 c-pointer" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</div>
-                        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_name}')">Your name</div>
-                        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_email}')">Your email</div>
-                        <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_phone}')">Your phone</div>
-                      </div>
-                    </div>
+                      required="true"
+                      hasToken=true
+                      >
+                    </app-html-editor>
                   </div>
                   <div class="v-center justify-content-between p-3 email-setting">
                     <div class="v-center justify-content-between">
@@ -347,14 +322,14 @@
                         <span class="f-3 font-weight-bold c-blue mx-2">Material</span>
                         <i class="d-block i-icon i-plus bgc-blue"></i>
                       </button>
-                      <div ngbDropdown class="email-template px-3 c-pointer" [class.selected]="selectedTemplate.subject != '' || selectedTemplate.content != ''">
+                      <div ngbDropdown class="email-template px-3 c-pointer">
                         <div class="v-center" ngbDropdownToggle>
                           <i class="d-block i-icon i-template bgc-blue"></i>
                           <div class="ml-2">
                             <div class="f-3 font-weight-bold c-blue select-title">
                               Template
                             </div>
-                            <div class="f-1 font-weight-bold op-64 c-white select-status" *ngIf="selectedTemplate.subject != '' || selectedTemplate.content != ''">
+                            <div class="f-1 font-weight-bold op-64 c-white select-status" *ngIf="selectedTemplate.subject|| selectedTemplate.content">
                               Selected
                             </div>
                           </div>
@@ -377,7 +352,7 @@
                     </div>
                     <button
                       type="submit"
-                      class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
+                      class="btn btn-blue text-white br-default py-1 f-6 font-weight-bold shadow"
                       [class.loading]="emailSending"
                     >
                       Send
@@ -570,7 +545,7 @@
         <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
           <ng-container *ngFor="let activity of mainTimelines">
             <div class="time-line d-flex">
-              <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} sub-{{activity.activity_detail?.type}}" ></i></div>
+              <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
               <!-- History Item -->
               <div class="history-info">
                 <div class="history-header">
@@ -590,8 +565,148 @@
                     </div>
                   </div>
                 </div>
-                <div class="history-detail">
-                  {{activity.activity_detail | json}}
+                <div class="history-detail {{activity.type}}-detail">
+                  <ng-container [ngSwitch]="activity.type">
+
+                    <!-- BEGIN FOLLOW UP ACTIVITY -->
+                    <div *ngSwitchCase="'follow_ups'">
+                      <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                        <div class="main-history-item" [class.completed]="activity.content.indexOf('completed') !== -1">
+                          <div class="content">
+                            {{activity.activity_detail.content}}
+                          </div>
+                          <div class="time ml-2">
+                            {{activity.activity_detail.due_date | date: 'MMM dd, hh:mm a'}}
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-template #removedTaskTemplate>
+                        <div class="d-flex">
+                          <mat-icon class="mr-2">warning</mat-icon>
+                          <span>Can't see the detail as it is deleted.</span>
+                        </div>
+                      </ng-template>
+                      <div class="related-history-item" *ngIf="groupActions[activity.group_id].length > 1">
+                        <app-accordion [detail]="result">
+                          <ng-template #result>
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-green-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                          </ng-template>
+                        </app-accordion>
+                      </div>
+                    </div>
+                    <!-- END FOLLOW UP ACTIVITY -->
+
+                    <!-- BEGIN NOTE ACTIVITY -->
+                    <div *ngSwitchCase="'notes'">
+                      <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                        <div class="main-history-item">
+                          <div class="title font-weight-bold f-4">
+                            {{activity.activity_detail.title || 'No Title Note'}}
+                          </div>
+                          <app-accordion [detail]="result" *ngIf="activity.activity_detail.content">
+                            <ng-template #result>
+                              <div>{{activity.activity_detail.content}}</div>  
+                            </ng-template>
+                          </app-accordion>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <!-- END NOTE ACTIVITY -->
+
+                    <!-- BEGIN EMAIL ACTIVITY -->
+                    <div *ngSwitchCase="activity.type == 'emails' || activity.type == 'email_trackers' ? activity.type : ''">
+                      <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                        <div class="main-history-item">
+                          <!-- Single History Template -->
+                          <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
+                            <div class="summary">
+                              <div class="title font-weight-bold">
+                                {{details[activity.emails]?.subject}}
+                              </div>
+                              <div class="c-blue mt-3 f-3 fw-600 c-pointer" (click)="showDetail($event)">See detail</div>
+                            </div>
+                            <div class="detail">
+                              <h5 class="font-weight-bold f-24 mb-3">Details</h5>
+                              <div class="mb-2"><span class="font-weight-bold mr-3">Subject:</span>{{details[activity.emails]?.subject}}</div>
+                              <div [innerHTML]="details[activity.emails]?.content"></div>
+                              <div class="d-flex">
+                                <button type="button" class="ml-auto btn btn-primary" (click)="hideDetail($event)">Close</button>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <!-- Multi History Template -->
+                          <ng-template #multiEmailHistory>
+                            <div class="title font-weight-bold">
+                              {{details[activity.activity_detail.email]?.subject}}
+                            </div>
+                            <app-accordion [detail]="result" [hideIndicator]="emptyHideIndicator">
+                              <ng-template #emptyHideIndicator>
+                                <div></div>
+                              </ng-template>
+                              <ng-template #result>
+                                <div>
+                                  <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                                    <div class="d-flex mb-1">
+                                      <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                      <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
+                                      <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                                    </div>
+                                  </ng-container>
+                                  <app-accordion [detail]="emailDetail" [showIndicator]="showIndicator" [hideIndicator]="hideIndicator">
+                                    <ng-template #emailDetail>
+                                      <div class="mb-3 f-6">
+                                        <span class="font-weight-bold mr-2">Subject:</span>
+                                        {{details[activity.activity_detail.email]?.subject}}
+                                      </div>
+                                      <div class="f-6" [innerHTML]="details[activity.activity_detail.email]?.content">
+                                      </div>
+                                    </ng-template>
+                                    <ng-template #showIndicator>
+                                      <div class="c-blue f-6 font-weight-bold m-auto">Expand</div>
+                                    </ng-template>
+                                    <ng-template #hideIndicator>
+                                      <div class="c-blue f-6 font-weight-bold m-auto">Collapse</div>
+                                    </ng-template>
+                                  </app-accordion>
+                                </div>  
+                              </ng-template>
+                            </app-accordion>
+                          </ng-template>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <!-- END EMAIL ACTIVITY -->
+
+                    <!-- BEGIN VIDEO ACTIVITY -->
+                    <div *ngSwitchCase="activity.type == 'videos' || activity.type == 'video_trackers' ? activity.type : ''">
+                      <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                        <div class="main-history-item">
+                          <div class="title font-weight-bold">
+                            {{activity.activity_detail.subject}}
+                          </div>
+                          <app-accordion [detail]="result">
+                            <ng-template #result>
+                              <div>
+                                <h5 class="font-weight-bold">Details</h5>
+                                <div class="mb-2"><span class="font-weight-bold mr-3">Subject:</span>{{activity.activity_detail.subject}}</div>
+                                <div [innerHTML]="activity.activity_detail.content"></div>
+                              </div>  
+                            </ng-template>
+                          </app-accordion>
+                        </div>
+                      </ng-container>
+                      <!-- {{groupActions[activity.group_id] | json}} -->
+                    </div>
+                    <!-- END VIDEO ACTIVITY -->
+                  </ng-container>
+                  
+                  <!-- {{groupActions[activity.group_id] | json}} -->
                 </div>
               </div>
             </div>

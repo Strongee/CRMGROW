@@ -455,7 +455,20 @@ export const QuillEditor = {
       ['link', 'image']
     ]
   },
-  imageResize: true
+  table: false,
+  'better-table': {
+    operationMenu: {
+      items: {
+        unmergeCells: {
+          text: 'Another unmerge cells name'
+        }
+      },
+      color: {
+        colors: ['green', 'red', 'yellow', 'blue', 'white'],
+        text: 'Background Colors:'
+      }
+    }
+  }
 };
 
 export const COLORS = [
@@ -760,4 +773,4 @@ export const TaskStatus = {
   COMPLETED: 'completed'
 };
 export const UnlayerThemeId = 6121;
-export const ImportSelectableColumn = ['note', 'tags'];
+export const ImportSelectableColumn = ['notes', 'tags'];
