@@ -468,7 +468,8 @@ export const QuillEditor = {
         text: 'Background Colors:'
       }
     }
-  }
+  },
+  blotFormatter: {}
 };
 
 export const COLORS = [
