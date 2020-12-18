@@ -17,8 +17,8 @@ import { StoreService } from 'src/app/services/store.service';
 import * as moment from 'moment';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
-import ImageResize from 'quill-image-resize-module';
-Quill.register('modules/imageResize', ImageResize);
+// import ImageResize from 'quill-image-resize-module';
+// Quill.register('modules/imageResize', ImageResize);
 import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
