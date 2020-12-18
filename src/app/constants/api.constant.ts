@@ -83,7 +83,6 @@ export const CONTACT = {
   BULK_UPDATE: 'contact/bulk-update',
   LATEST_CONTACTS: 'video/latest-sent',
   UPDATE: 'contact/update-contact',
-  CREATE: 'contact/',
   MERGE: 'contact/contact-merge',
   BULK_CREATE: 'contact/bulk-create'
 };

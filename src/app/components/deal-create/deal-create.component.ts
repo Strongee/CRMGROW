@@ -22,35 +22,39 @@ export class DealCreateComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  select(evt: any): void {
-    console.log('###', evt);
-  }
-
   createStages(): void {
-    this.saving = true;
-    const data = {
-      title: this.title
-    };
-    this.dealsService.createStage(data).subscribe((res) => {
-      if (res) {
-        this.saving = false;
-        this.dialogRef.close(res['data']);
-      }
-    });
+    if (this.title == '') {
+      return;
+    } else {
+      this.saving = true;
+      const data = {
+        title: this.title
+      };
+      this.dealsService.createStage(data).subscribe((res) => {
+        if (res) {
+          this.saving = false;
+          this.dialogRef.close(res['data']);
+        }
+      });
+    }
   }
 
   createDeals(): void {
-    this.saving = true;
-    const data = {
-      deal_stage: this.data.id,
-      contact: this.contacts[0],
-      title: this.title
-    };
-    this.dealsService.createDeal(data).subscribe((res) => {
-      if (res) {
-        this.saving = false;
-        this.dialogRef.close(res['data']);
-      }
-    });
+    if (this.contacts.length == 0) {
+      return;
+    } else {
+      this.saving = true;
+      const data = {
+        deal_stage: this.data.id,
+        contact: this.contacts[0],
+        title: this.contacts[0].fullName + ' deal'
+      };
+      this.dealsService.createDeal(data).subscribe((res) => {
+        if (res) {
+          this.saving = false;
+          this.dialogRef.close(res['data']);
+        }
+      });
+    }
   }
 }
