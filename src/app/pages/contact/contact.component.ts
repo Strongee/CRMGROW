@@ -32,6 +32,7 @@ import { NoteService } from 'src/app/services/note.service';
 import { TaskService } from 'src/app/services/task.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { Template } from 'src/app/models/template.model';
+import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 
 @Component({
   selector: 'app-contact',
@@ -340,7 +341,17 @@ export class ContactComponent implements OnInit {
   /**
    * Open the Material Select Dialog
    */
-  openMaterialsDlg(): void {}
+  openMaterialsDlg(): void {
+    this.dialog
+      .open(MaterialAddComponent, {
+        width: '98vw',
+        maxWidth: '500px'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        console.log('material selected', res);
+      });
+  }
 
   /**************************************
    * Timeline Actions
