@@ -1,7 +1,7 @@
 import { Deserializable } from './deserialize.model';
 import { Deal } from './deal.model';
 
-export class Column implements Deserializable {
+export class DealStage implements Deserializable {
   _id: string;
   user: string;
   title: string;

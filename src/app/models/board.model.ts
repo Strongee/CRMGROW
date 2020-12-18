@@ -1,5 +1,5 @@
-import { Column } from './column.model';
+import { DealStage } from './deal-stage.model';
 
 export class Board {
-  constructor(public name: string, public columns: Column[]) {}
+  constructor(public name: string, public dealStages: DealStage[]) {}
 }

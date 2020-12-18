@@ -5,7 +5,7 @@ import {
   transferArrayItem
 } from '@angular/cdk/drag-drop';
 import { Board } from 'src/app/models/board.model';
-import { Column } from 'src/app/models/column.model';
+import { DealStage } from 'src/app/models/deal-stage.model';
 import { Router } from '@angular/router';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,37 +26,35 @@ export class DealsComponent implements OnInit {
   ) {
     this.dealsService.getStage().subscribe((res) => {
       if (res) {
-        this.board.columns = res['data'];
+        this.board.dealStages = res['data'];
       }
     });
   }
 
   ngOnInit(): void {}
 
-  drop(event: CdkDragDrop<string[]>): void {
+  drop(event: CdkDragDrop<string[]>, id: string): void {
     const data = {
       deal_id: event.previousContainer.data[event.previousIndex]['_id'],
       position: event.currentIndex,
-      deal_stage_id: event.container.data[0]['deal_stage']
+      deal_stage_id: id
     };
-    console.log('###', data);
-    this.dealsService.moveDeal(data).subscribe((res) => {
-      console.log('####', res);
+    this.dealsService.moveDeal(data).subscribe(() => {
+      if (event.previousContainer === event.container) {
+        moveItemInArray(
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
+        );
+      } else {
+        transferArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
+        );
+      }
     });
-    // if (event.previousContainer === event.container) {
-    //   moveItemInArray(
-    //     event.container.data,
-    //     event.previousIndex,
-    //     event.currentIndex
-    //   );
-    // } else {
-    //   transferArrayItem(
-    //     event.previousContainer.data,
-    //     event.container.data,
-    //     event.previousIndex,
-    //     event.currentIndex
-    //   );
-    // }
   }
 
   taskDetail(item: string): void {
@@ -75,24 +73,24 @@ export class DealsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        this.board.columns.push(res);
+        this.board.dealStages.push(res);
       });
   }
 
-  addTasks(column: any): void {
+  addTasks(dealStage: any): void {
     this.dialog
       .open(DealCreateComponent, {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '400px',
         data: {
-          id: column._id,
+          id: dealStage._id,
           type: 'deal'
         }
       })
       .afterClosed()
       .subscribe((res) => {
-        column.deals.push(res);
+        dealStage.deals.push(res);
       });
   }
 }
