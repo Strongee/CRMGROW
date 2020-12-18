@@ -71,6 +71,7 @@
     "phone": "^2.4.17",
     "quill": "^2.0.0-dev.3",
     "quill-better-table": "^1.2.10",
+    "quill-blot-formatter": "^1.0.5",
     "quill-image-drop-module": "^1.0.3",
     "quill-image-resize-module": "^3.0.0",
     "quill-table-module": "^1.0.1",
