@@ -15,7 +15,6 @@ import { Contact } from 'src/app/models/contact.model';
   styleUrls: ['./material-send.component.scss']
 })
 export class MaterialSendComponent implements OnInit {
-  materialType = '';
   mediaType = 'text';
   contacts: Contact[] = [];
   selectedTemplate = { subject: '', content: '' };
@@ -34,7 +33,6 @@ export class MaterialSendComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materialType = this.data.type;
     console.log('###', this.data.material);
   }
 
@@ -56,7 +54,6 @@ export class MaterialSendComponent implements OnInit {
       return;
     } else {
       // this.saving = true;
-      console.log('###', this.contacts);
       if (this.mediaType == 'text') {
       }
     }

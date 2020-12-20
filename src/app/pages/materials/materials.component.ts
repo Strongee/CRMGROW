@@ -201,15 +201,14 @@ export class MaterialsComponent implements OnInit {
 
   selectFolder(): void {}
 
-  sendMaterial(material: any, type: string): void {
+  sendMaterial(material: any): void {
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',
       maxWidth: '600px',
       disableClose: false,
       data: {
-        material,
-        type
+        material: [material]
       }
     });
   }
@@ -898,7 +897,38 @@ export class MaterialsComponent implements OnInit {
   doAction(evt: any): void {
     switch (evt.label) {
       case 'Send via e-mail':
-        console.log('###', this.selectedVideoLists);
+        const material = [];
+        this.selectedVideoLists.selected.forEach((id) => {
+          this.videos.forEach((video) => {
+            if (video._id == id) {
+              material.push(video);
+            }
+          });
+        });
+        this.selectedPdfLists.selected.forEach((id) => {
+          this.pdfs.forEach((pdf) => {
+            if (pdf._id == id) {
+              material.push(pdf);
+            }
+          });
+        });
+        this.selectedImageLists.selected.forEach((id) => {
+          this.images.forEach((image) => {
+            if (image._id == id) {
+              material.push(image);
+            }
+          });
+        });
+        this.dialog.open(MaterialSendComponent, {
+          position: { top: '5vh' },
+          width: '100vw',
+          maxWidth: '600px',
+          disableClose: false,
+          data: {
+            material: material
+          }
+        });
+        console.log('###', material);
         break;
       case 'Send via SMS':
         break;
