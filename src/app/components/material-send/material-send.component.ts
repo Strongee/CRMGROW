@@ -6,6 +6,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import { Contact } from 'src/app/models/contact.model';
+import { FormControl } from '@angular/forms';
 // import ImageResize from 'quill-image-resize-module';
 // Quill.register('modules/imageResize', ImageResize);
 
@@ -15,7 +16,7 @@ import { Contact } from 'src/app/models/contact.model';
   styleUrls: ['./material-send.component.scss']
 })
 export class MaterialSendComponent implements OnInit {
-  mediaType = 'text';
+  selected = new FormControl(0);
   contacts: Contact[] = [];
   selectedTemplate = { subject: '', content: '' };
   submitted = false;
@@ -34,13 +35,12 @@ export class MaterialSendComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('###', this.data.material);
-  }
-
-  onTabChanged(evt: any): void {
-    if (evt.index == 0) {
-      this.mediaType = 'text';
-    } else {
-      this.mediaType = 'email';
+    if (this.data.type) {
+      if (this.data.type == 'email') {
+        this.selected.setValue(1);
+      } else {
+        this.selected.setValue(0);
+      }
     }
   }
 
@@ -54,7 +54,7 @@ export class MaterialSendComponent implements OnInit {
       return;
     } else {
       // this.saving = true;
-      if (this.mediaType == 'text') {
+      if (this.selected.value == 0) {
       }
     }
   }
