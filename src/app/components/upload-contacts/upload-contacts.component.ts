@@ -112,7 +112,7 @@ export class UploadContactsComponent implements OnInit {
         if (this.failedData.length) {
           this.contacts = [];
           this.sameContacts = [];
-
+          this.selectedMergeContacts = [];
           let tagsKey = 'tags';
           let noteKey = 'notes';
           for (const key in this.updateColumn) {
