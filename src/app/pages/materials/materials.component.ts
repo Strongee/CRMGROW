@@ -897,6 +897,11 @@ export class MaterialsComponent implements OnInit {
   }
   doAction(evt: any): void {
     switch (evt.label) {
+      case 'Send via e-mail':
+        console.log('###', this.selectedVideoLists);
+        break;
+      case 'Send via SMS':
+        break;
       case 'Select all':
         this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
         this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
