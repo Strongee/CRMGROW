@@ -50,10 +50,6 @@ export class SignatureComponent implements OnInit {
   changeTemplate(template: any): void {
     this.currentTemplate = template.layout;
     let signature;
-    // const delta = this.emailEditor.quillEditor.clipboard.convert(
-    //   { html: this.user.email_signature }
-    // );
-    // this.emailEditor.quillEditor.setContents(delta, 'user');
     switch (this.currentTemplate) {
       case 'img_text_hor':
         signature = `
@@ -166,7 +162,6 @@ export class SignatureComponent implements OnInit {
     const toolbar = this.quillEditorRef.getModule('toolbar');
     toolbar.addHandler('image', this.initImageHandler);
     this.table = this.quillEditorRef.getModule('better-table');
-    console.log('this.table', this.table);
   }
 
   initImageHandler = (): void => {
