@@ -158,7 +158,7 @@
                 </ng-container>
                 <ng-container *ngIf="checkOtherColumn()">
                   <td class="other f-3 font-weight-bold last-row">
-                    <div [class]="'other'" [class.c-red]="checkDuplicateEmail(contact)" [innerHTML]="contact['other'] || '' | stripTags | shorten: 40: '...'"></div>
+                    <div [class]="'other'" [class.c-red]="checkDuplicateEmail(contact)" [innerHTML]="getOtherContent(contact) || '' | stripTags | shorten: 40: '...'"></div>
                   </td>
                 </ng-container>
                 <td class="actions">
@@ -248,7 +248,7 @@
             </ng-container>
             <ng-container *ngIf="checkOtherColumn()">
               <td class="other f-3 font-weight-bold last-row">
-                <div [class]="'other'" [class.c-red]="checkDuplicateEmail(record)" [innerHTML]="record['other'] || '' | stripTags | shorten: 40: '...'"></div>
+                <div [class]="'other'" [class.c-red]="checkDuplicateEmail(record)" [innerHTML]="getOtherContent(record) || '' | stripTags | shorten: 40: '...'"></div>
               </td>
             </ng-container>
           </tr>

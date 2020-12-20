@@ -121,28 +121,28 @@
           </td>
           <td>
             <ng-container *ngFor="let note of getPrimaryNotes(); let row = index">
-              <div class="v-center my-2">
+              <div class="v-center my-2" *ngIf="primaryContact['notes'][row][note] != ''">
                 <div class="notes-label f-3 op-75 text-uppercase mr-3">{{note}}</div>
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="primary-note-{{row}}"
                          [checked]="primaryNotesSelectionModel[row]"
                          (change)="$event ? changePrimaryNotesSelection(row) : null"
                   >
-                  <label class="custom-control-label" for="primary-note-{{row}}">{{primaryContact['notes'][row][note] || '' | stripTags | shorten: 40: '...'}}</label>
+                  <label class="custom-control-label" for="primary-note-{{row}}">{{getNotesContents(row, primaryContact) || '' | stripTags | shorten: 40: '...'}}</label>
                 </div>
               </div>
             </ng-container>
           </td>
           <td>
             <ng-container *ngFor="let note of getSecondaryNotes(); let row = index">
-              <div class="v-center">
+              <div class="v-center my-2" *ngIf="secondaryContact['notes'][row][note] != ''">
                 <div class="notes-label f-3 op-75 text-uppercase mr-3">{{note}}</div>
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="secondary-note-{{row}}"
                          [checked]="secondaryNotesSelectionModel[row]"
                          (change)="$event ? changeSecondaryNotesSelection(row) : null"
                   >
-                  <label class="custom-control-label" for="secondary-note-{{row}}">{{secondaryContact['notes'][row][note] || '' | stripTags | shorten: 40: '...'}}</label>
+                  <label class="custom-control-label" for="secondary-note-{{row}}">{{getNotesContents(row, secondaryContact) || '' | stripTags | shorten: 40: '...'}}</label>
                 </div>
               </div>
             </ng-container>
@@ -217,16 +217,18 @@
             </div>
           </td>
         </tr>
-        <tr *ngFor="let content of previewContact['notes'] let row = index">
-          <td>
-            <div class="f-3 op-75 text-uppercase">{{getNotesColumn(row) + ' (Notes)'}}</div>
-          </td>
-          <td>
-            <div class="f-3 font-weight-bold"
-                 [innerHTML]="getNotesContents(row) || '' | stripTags | shorten: 40: '...'"
-            >
-            </div>
-          </td>
+        <tr *ngFor="let note of getPreviewNotes() let row = index">
+          <ng-container *ngIf="previewContact['notes'][row][note] != ''">
+            <td>
+              <div class="f-3 op-75 text-uppercase">{{getNotesColumn(row) + ' (Notes)'}}</div>
+            </td>
+            <td>
+              <div class="f-3 font-weight-bold"
+                   [innerHTML]="getNotesContents(row, previewContact) || '' | stripTags | shorten: 40: '...'"
+              >
+              </div>
+            </td>
+          </ng-container>
         </tr>
         </tbody>
       </table>
