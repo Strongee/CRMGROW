@@ -70,7 +70,7 @@
     <ng-template #emptyListStage>
         <ng-container [ngSwitch]="(dealsService.loadingStage$ | async)">
             <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
-                <div class="object-icon v-center" (click)="addColumns()">
+                <div class="object-icon v-center c-pointer" (click)="addColumns()">
                     <i class="i-icon i-template d-block bgc-dark"></i>
                 </div>
                 <h4 class="font-weight-bold mt-4 mb-3">
