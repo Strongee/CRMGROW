@@ -201,15 +201,14 @@ export class MaterialsComponent implements OnInit {
 
   selectFolder(): void {}
 
-  sendMaterial(material: any, type: string): void {
+  sendMaterial(material: any): void {
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',
       maxWidth: '600px',
       disableClose: false,
       data: {
-        material,
-        type
+        material: [material]
       }
     });
   }
@@ -897,6 +896,74 @@ export class MaterialsComponent implements OnInit {
   }
   doAction(evt: any): void {
     switch (evt.label) {
+      case 'Send via e-mail':
+        const emailMaterial = [];
+        this.selectedVideoLists.selected.forEach((id) => {
+          this.videos.forEach((video) => {
+            if (video._id == id) {
+              emailMaterial.push(video);
+            }
+          });
+        });
+        this.selectedPdfLists.selected.forEach((id) => {
+          this.pdfs.forEach((pdf) => {
+            if (pdf._id == id) {
+              emailMaterial.push(pdf);
+            }
+          });
+        });
+        this.selectedImageLists.selected.forEach((id) => {
+          this.images.forEach((image) => {
+            if (image._id == id) {
+              emailMaterial.push(image);
+            }
+          });
+        });
+        this.dialog.open(MaterialSendComponent, {
+          position: { top: '5vh' },
+          width: '100vw',
+          maxWidth: '600px',
+          disableClose: false,
+          data: {
+            material: emailMaterial,
+            type: 'email'
+          }
+        });
+        break;
+      case 'Send via SMS':
+        const textMaterial = [];
+        this.selectedVideoLists.selected.forEach((id) => {
+          this.videos.forEach((video) => {
+            if (video._id == id) {
+              textMaterial.push(video);
+            }
+          });
+        });
+        this.selectedPdfLists.selected.forEach((id) => {
+          this.pdfs.forEach((pdf) => {
+            if (pdf._id == id) {
+              textMaterial.push(pdf);
+            }
+          });
+        });
+        this.selectedImageLists.selected.forEach((id) => {
+          this.images.forEach((image) => {
+            if (image._id == id) {
+              textMaterial.push(image);
+            }
+          });
+        });
+        this.dialog.open(MaterialSendComponent, {
+          position: { top: '5vh' },
+          width: '100vw',
+          maxWidth: '600px',
+          disableClose: false,
+          data: {
+            material: textMaterial,
+            type: 'text'
+          }
+        });
+        break;
       case 'Select all':
         this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
         this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));

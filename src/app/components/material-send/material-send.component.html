@@ -9,8 +9,7 @@
 <form #sendForm="ngForm" (ngSubmit)="submitted = true; sendForm.form.valid ? send() : false">
     <mat-dialog-content>
         <div class="d-flex mt-3 material-preivew">
-            <img [src]="data.material.thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );" *ngIf="materialType == 'video'">
-            <img [src]="data.material.preview" onerror="( this.src = './assets/img/video_thumb.jpg' );" *ngIf="materialType == 'pdf' || materialType == 'image'">
+            <img [src]="data.material.thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );">
             <div class="ml-4">
                 <div class="f-6 font-weight-bold material-title">
                     {{data.material.title}}
@@ -30,7 +29,7 @@
             ></app-input-contacts>
             <span></span>
         </div>
-        <mat-tab-group (selectedTabChange)="onTabChanged($event)">
+        <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
             <mat-tab label="Send via Text">
                 <div class="mt-2">
                     <app-input-template
@@ -50,11 +49,11 @@
                         [(ngModel)]="selectedTemplate.content"
                         name="content"
                         #content="ngModel"
-                        [required]="mediaType == 'text' && selectedTemplate.content == '' && submitted"
+                        [required]="selected.value == 0 && selectedTemplate.content == '' && submitted"
                     ></textarea>
                     <span
                         class="invalid-feedback"
-                        *ngIf="mediaType == 'text' && selectedTemplate.content == '' && submitted"
+                        *ngIf="selected.value == 0 && selectedTemplate.content == '' && submitted"
                     >
                         Please input the template content.
                     </span>
@@ -79,11 +78,11 @@
                         [(ngModel)]="selectedTemplate.subject"
                         name="mailSubject"
                         #mailSubject="ngModel"
-                        [required]="mediaType == 'email' && selectedTemplate.subject == '' && submitted"
+                        [required]="selected.value == 1 && selectedTemplate.subject == '' && submitted"
                     />
                     <span
                         class="invalid-feedback"
-                        *ngIf="mediaType == 'email' && selectedTemplate.subject == '' && submitted"
+                        *ngIf="selected.value == 1 && selectedTemplate.subject == '' && submitted"
                     >
                         Please input the template subject.
                     </span>
@@ -104,12 +103,12 @@
                         (click)="setFocusField('content-email')"
                         class="f-3 fwt-600 rounded"
                         #emailEditor
-                        [required]="mediaType == 'email' && selectedTemplate.content == '' && submitted"
+                        [required]="selected.value == 1 && selectedTemplate.content == '' && submitted"
                     >
                     </quill-editor>
                     <span
                         class="invalid-feedback"
-                        *ngIf="mediaType == 'email' && selectedTemplate.content == '' && submitted"
+                        *ngIf="selected.value == 1 && selectedTemplate.content == '' && submitted"
                     >
                         Please input the template content.
                     </span>
