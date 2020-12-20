@@ -7,10 +7,25 @@
       <div class="f-22 font-weight-bold c-black">Import contacts</div>
     </ng-container>
     <ng-container *ngIf="step == 3">
-      <div class="f-22 font-weight-bold c-black">Duplicates</div>
+      <div class="f-22 font-weight-bold c-black">
+        Duplicates
+        <span class="f-6 ml-5 c-red ml-5" *ngIf="isDuplicatedEmail()">
+          Email is duplicated. Please merge duplicated emails.
+        </span>
+      </div>
     </ng-container>
     <ng-container *ngIf="step == 4">
-      <div class="f-22 font-weight-bold c-black">Review contacts to import</div>
+      <div class="d-flex align-items-end">
+        <div class="f-22 font-weight-bold c-black">
+          Review contacts to import
+        </div>
+        <div class="f-6 ml-5 font-weight-bold">
+          <span class="mr-2" *ngIf="selectedImportContactsCount() > 0">
+            {{selectedImportContactsCount()}} selected /
+          </span>
+          {{contactsToUpload.length}} contact(s)
+        </div>
+      </div>
     </ng-container>
     <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
       <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
@@ -96,9 +111,17 @@
             <tr>
               <th class="check-cell"></th>
               <ng-container *ngFor="let column of columns">
-                <th [class]="column" *ngIf="updateColumn[column]">
-                  {{updateColumn[column] == 'notes' ? column + ' (Notes)' : column}}
+                <th [class]="column" *ngIf="updateColumn[column] && updateColumn[column] != 'notes'">
+                  {{column}}
                 </th>
+              </ng-container>
+              <ng-container *ngFor="let column of notesColumns">
+                <th [class]="column">
+                  {{column + ' (Notes)'}}
+                </th>
+              </ng-container>
+              <ng-container *ngIf="checkOtherColumn()">
+                <th class="other">Other (Notes)</th>
               </ng-container>
               <th class="actions"></th>
             </tr>
@@ -120,11 +143,22 @@
                   </div>
                 </td>
                 <ng-container *ngFor="let column of columns; let i = index;">
-                  <td *ngIf="updateColumn[column]"
-                      class="{{column}} f-3 font-weight-bold last-row"
+                  <td
+                    *ngIf="updateColumn[column] && updateColumn[column] != 'notes'"
+                    class="{{column}} f-3 font-weight-bold last-row"
                   >
                     <div [class]="column" [class.c-red]="checkDuplicateEmail(contact)" [innerHTML]="isSelectableColumn(updateColumn[column]) ?
                       selectableContent(column, contact) : contact[updateColumn[column]]"></div>
+                  </td>
+                </ng-container>
+                <ng-container *ngFor="let column of notesColumns; let i = index;">
+                  <td class="{{column}} f-3 font-weight-bold last-row">
+                    <div [class]="column" [class.c-red]="checkDuplicateEmail(contact)" [innerHTML]="getNotesContent(i, column, contact) || '' | stripTags | shorten: 40: '...'"></div>
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="checkOtherColumn()">
+                  <td class="other f-3 font-weight-bold last-row">
+                    <div [class]="'other'" [class.c-red]="checkDuplicateEmail(contact)" [innerHTML]="contact['other'] || '' | stripTags | shorten: 40: '...'"></div>
                   </td>
                 </ng-container>
                 <td class="actions">
@@ -178,9 +212,17 @@
               </div>
             </th>
             <ng-container *ngFor="let column of columns">
-              <th *ngIf="updateColumn[column]">
-                {{updateColumn[column] == 'notes' ? column + ' (Notes)' : column}}
+              <th *ngIf="updateColumn[column] && updateColumn[column] != 'notes'">
+                {{column}}
               </th>
+            </ng-container>
+            <ng-container *ngFor="let column of notesColumns">
+              <th [class]="column">
+                {{column + ' (Notes)'}}
+              </th>
+            </ng-container>
+            <ng-container *ngIf="checkOtherColumn()">
+              <th class="other">Other (Notes)</th>
             </ng-container>
           </tr>
           </thead>
@@ -193,10 +235,20 @@
               </div>
             </td>
             <ng-container *ngFor="let column of columns; let i = index;">
-              <td *ngIf="updateColumn[column]"
+              <td *ngIf="updateColumn[column] && updateColumn[column] != 'notes'"
                   class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
               >
                 <div [class]="column" [innerHTML]="isSelectableColumn(updateColumn[column]) ? selectableContent(column, record) : record[updateColumn[column]]"></div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let column of notesColumns; let i = index;">
+              <td class="{{column}} f-3 font-weight-bold last-row">
+                <div [class]="column" [class.c-red]="checkDuplicateEmail(record)" [innerHTML]="getNotesContent(i, column, record) || '' | stripTags | shorten: 40: '...'"></div>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="checkOtherColumn()">
+              <td class="other f-3 font-weight-bold last-row">
+                <div [class]="'other'" [class.c-red]="checkDuplicateEmail(record)" [innerHTML]="record['other'] || '' | stripTags | shorten: 40: '...'"></div>
               </td>
             </ng-container>
           </tr>

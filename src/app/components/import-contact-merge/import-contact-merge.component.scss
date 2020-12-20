@@ -8,6 +8,10 @@
   opacity: 1;
 }
 
+.notes-label {
+  width: 70px;
+  min-width: 70px;
+}
 
 :host ::ng-deep {
   .check-wrapper {
