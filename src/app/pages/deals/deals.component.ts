@@ -10,6 +10,7 @@ import { DealsService } from 'src/app/services/deals.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { STATUS } from 'src/app/constants/variable.constants';
+import { DealStage } from 'src/app/models/deal-stage.model';
 
 @Component({
   selector: 'app-deals',
@@ -70,7 +71,7 @@ export class DealsComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.board.dealStages.push(res);
+          this.dealsService.createStage$(new DealStage().deserialize(res));
         }
       });
   }
