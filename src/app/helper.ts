@@ -211,13 +211,25 @@ export class SignatureBlot extends Embed {
     return domNode.getAttribute('data-value');
   }
 }
-
-console.log('Parchment', Block);
-// const Block = Parchment.query('block');
+export class MaterialBlot extends Embed {
+  static tagName = 'a';
+  static className = 'material-object';
+  static blotName = 'materialLink';
+  static create(data) {
+    console.log('material Link', data);
+    const node = super.create(data.value);
+    node.innerHTML = data.value;
+    return node;
+  }
+  static value(domNode) {
+    console.log('material dom node', domNode);
+    return domNode.getAttribute('data-value');
+  }
+}
 Block.tagName = 'DIV';
-console.log('Parchment', Block);
 // Quill.register(SignatureBlot, true);
 Quill.register(Block, true);
+Quill.register(MaterialBlot, true);
 
 export function toInteger(value: any): number {
   return parseInt(`${value}`, 10);

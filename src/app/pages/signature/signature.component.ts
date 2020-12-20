@@ -2,26 +2,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { FileService } from '../../services/file.service';
-import { QuillEditorComponent } from 'ngx-quill';
 import { QuillEditor } from '../../constants/variable.constants';
+import { QuillEditorComponent } from 'ngx-quill';
 import * as QuillNamespace from 'quill';
-import quillBetterTable from 'quill-better-table';
 const Quill: any = QuillNamespace;
+import quillBetterTable from 'quill-better-table';
 Quill.register({ 'modules/better-table': quillBetterTable }, true);
 import BlotFormatter from 'quill-blot-formatter';
 Quill.register('modules/blotFormatter', BlotFormatter);
-// Quill.register('modules/imageResize', ImageResize);
-// import ImageResize from 'quill-image-resize-module';
-const BlockEmbed = Quill.import('blots/block/embed');
-const keyboard = quillBetterTable.keyboardBindings;
-
 @Component({
   selector: 'app-signature',
   templateUrl: './signature.component.html',
   styleUrls: ['./signature.component.scss']
 })
 export class SignatureComponent implements OnInit {
-  table: any;
   user: User = new User();
   templates = [
     { layout: 'img_text_hor', icon: 'i-signature-1' },
@@ -30,12 +24,13 @@ export class SignatureComponent implements OnInit {
     { layout: 'img_text_ver', icon: 'i-signature-4' },
     { layout: 'custom', icon: 'i-signature-5' }
   ];
-  currentTemplate = 'text_img_ver';
+  currentTemplate = 'custom';
   submitted = false;
+  saving = false;
+
   quillEditorRef;
   config = QuillEditor;
-  focusEditor = '';
-  saving = false;
+  table: any;
 
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
@@ -43,18 +38,6 @@ export class SignatureComponent implements OnInit {
     private userService: UserService,
     private fileService: FileService
   ) {
-    // console.log(quillBetterTable);
-    // this.config['keyboard'] = {
-    //   bindings: {
-    //     ...quillBetterTable.keyboardBindings,
-    //     Backspace: {
-    //       key: 'Backspace',
-    //       format: ['table-cell-line'],
-    //       collapsed: true,
-    //       offset: 0
-    //     }
-    //   }
-    // };
     this.userService.profile$.subscribe((profile) => {
       if (profile && profile._id) {
         this.user = profile;
@@ -203,14 +186,9 @@ export class SignatureComponent implements OnInit {
     imageInput.click();
   };
 
-  insertImageToEditor(url): void {
+  insertImageToEditor(url: string): void {
     const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
     this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
     this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-  setFocusField(editorType): void {
-    this.focusEditor = editorType;
   }
 }
