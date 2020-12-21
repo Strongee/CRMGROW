@@ -27,9 +27,12 @@
         </div>
       </div>
     </ng-container>
-    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
-      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
-    </button>
+    <ng-container *ngIf="step == 5">
+      <div class="f-22 font-weight-bold c-black">Uploading Contacts</div>
+    </ng-container>
+<!--    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>-->
+<!--      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>-->
+<!--    </button>-->
   </div>
   <mat-dialog-content class="mt-3">
     <ng-container *ngIf="step == 1">
@@ -256,7 +259,24 @@
         </table>
       </div>
     </ng-container>
-<!--    <ng-container *ngIf="step == 5">-->
+    <ng-container *ngIf="step == 5">
+      <div class="v-center justify-content-center">
+        <circle-progress
+          [percent]=uploadPercent
+          [radius]="100"
+          [outerStrokeWidth]="16"
+          [innerStrokeWidth]="8"
+          [outerStrokeColor]="'#78C000'"
+          [innerStrokeColor]="'#C7E596'"
+          [backgroundColor]="'#ffffff'"
+          [titleColor]="'#0000ff'"
+          [subtitleColor]="'#000000'"
+          [animation]="true"
+          [animationDuration]="0"
+        ></circle-progress>
+      </div>
+      <div class="f-4 font-weight-bold c-red mt-5 w-100 text-center">Please don't close this tab while uploading contacts.</div>
+    </ng-container>
 <!--      <p class="p-2 text-white alert-warning">-->
 <!--        {{failedRecords.length}} of {{contactsToUpload.length}} contact(s) are failed in uploading because of duplication with Current Contact List.-->
 <!--        You can overwrite following contacts.-->
