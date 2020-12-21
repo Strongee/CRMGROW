@@ -216,14 +216,27 @@ export class MaterialBlot extends Embed {
   static className = 'material-object';
   static blotName = 'materialLink';
   static create(data) {
-    console.log('material Link', data);
-    const node = super.create(data.value);
-    node.innerHTML = data.value;
+    const node = super.create();
+    node.setAttribute('href', data._id);
+    const img = document.createElement('img');
+    img.setAttribute('src', data.preview);
+    img.alt = 'Preview image went something wrong. Please click here';
+    img.width = 320;
+    img.height = 176;
+    node.appendChild(img);
     return node;
   }
   static value(domNode) {
-    console.log('material dom node', domNode);
-    return domNode.getAttribute('data-value');
+    const _id = domNode.getAttribute('href');
+    let preview = '';
+    const previewImg = domNode.querySelector('img');
+    if (previewImg) {
+      preview = previewImg.src;
+    }
+    return {
+      _id,
+      preview
+    };
   }
 }
 Block.tagName = 'DIV';

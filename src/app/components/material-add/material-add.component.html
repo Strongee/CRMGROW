@@ -7,7 +7,7 @@
       <ng-container *ngIf="(storeService.videos$ | async).length; else emptyVideos">
         <div class="material-container mt-3">
           <ng-container *ngFor="let material of storeService.videos$ | async">
-            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1">
+            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1" [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
               <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
                 <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
@@ -44,7 +44,7 @@
       <ng-container *ngIf="(storeService.pdfs$ | async).length; else emptyPdfs">
         <div class="material-container mt-3">
           <ng-container *ngFor="let material of storeService.pdfs$ | async">
-            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1">
+            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1"  [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
               <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
                 <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />
@@ -81,7 +81,7 @@
       <ng-container *ngIf="(storeService.images$ | async).length; else emptyImages">
         <div class="material-container mt-3">
           <ng-container *ngFor="let material of storeService.images$ | async">
-            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1">
+            <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1"  [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
               <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
                 <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/icons/video_thumb.jpg' );" />

@@ -13,7 +13,7 @@ export const MONTH = [
   { id: '5', text: 'May' },
   { id: '6', text: 'June' },
   { id: '7', text: 'July' },
-  { id: '8', text: 'Augus' },
+  { id: '8', text: 'August' },
   { id: '9', text: 'September' },
   { id: '10', text: 'October' },
   { id: '11', text: 'November' },

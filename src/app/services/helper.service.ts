@@ -251,4 +251,32 @@ export class HelperService {
       fileReader.readAsDataURL(file);
     });
   }
+
+  public getMaterials(html: string): any[] {
+    const outer: HTMLDivElement = this.document.createElement('div');
+    outer.innerHTML = html;
+    const materials = outer.querySelectorAll('.material-object');
+    if (!materials.length) {
+      return [];
+    } else {
+      const result = [];
+      materials.forEach((e) => {
+        const materialDom = <HTMLLinkElement>e;
+        const material = { _id: materialDom.getAttribute('href') };
+        result.push(material);
+      });
+      return result;
+    }
+  }
+
+  getMaterialType(material: any): string {
+    if (material.type) {
+      if (material.type === 'application/pdf') {
+        return 'PDF';
+      } else if (material.type.includes('image')) {
+        return 'Image';
+      }
+    }
+    return 'Video';
+  }
 }

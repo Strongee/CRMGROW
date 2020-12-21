@@ -33,6 +33,10 @@ import { TaskService } from 'src/app/services/task.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+import { MaterialService } from 'src/app/services/material.service';
+import { HelperService } from 'src/app/services/helper.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-contact',
@@ -71,6 +75,7 @@ export class ContactComponent implements OnInit {
     }
   ];
   REPEAT_DURATIONS = REPEAT_DURATIONS;
+  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
     { icon: '', label: 'Send Email', id: 'send_email' },
     { icon: '', label: 'Send Text', id: 'send_text' },
@@ -121,6 +126,7 @@ export class ContactComponent implements OnInit {
   emailSubject = '';
   emailContent = '';
   selectedTemplate: Template = new Template();
+  materials = [];
 
   selectedAutomation: Automation;
   ActionName = ActionName;
@@ -140,7 +146,9 @@ export class ContactComponent implements OnInit {
     private storeService: StoreService,
     private overlayService: OverlayService,
     private handlerService: HandlerService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private materialService: MaterialService,
+    private helperSerivce: HelperService
   ) {}
 
   ngOnInit(): void {
@@ -331,7 +339,52 @@ export class ContactComponent implements OnInit {
       });
   }
 
-  sendEmail(): void {}
+  sendEmail(): void {
+    if (this.emailContacts.length) {
+      // email api call
+      const contacts = [];
+      const cc = [];
+      const bcc = [];
+      const video_ids = [];
+      const pdf_ids = [];
+      const image_ids = [];
+      const content = this.emailContent;
+      const subject = this.emailSubject;
+      this.emailContacts.forEach((e) => {
+        contacts.push(e._id);
+      });
+      const materials = this.helperSerivce.getMaterials(content);
+      this.materials = _.intersectionBy(this.materials, materials, '_id');
+      this.materials.forEach((e) => {
+        const type = this.helperSerivce.getMaterialType(e);
+        switch (type) {
+          case 'PDF':
+            pdf_ids.push(e._id);
+            break;
+          case 'Image':
+            image_ids.push(e._id);
+            break;
+          case 'Video':
+            video_ids.push(e._id);
+            break;
+        }
+      });
+      this.materialService
+        .sendMaterials({
+          contacts,
+          cc,
+          bcc,
+          video_ids,
+          pdf_ids,
+          image_ids,
+          subject,
+          content
+        })
+        .subscribe((status) => {
+          console.log('status', status);
+        });
+    }
+  }
 
   /************************************
    * Email Sending Panel Relative Functions
@@ -381,13 +434,27 @@ export class ContactComponent implements OnInit {
    * Open the Material Select Dialog
    */
   openMaterialsDlg(): void {
+    const content = this.emailContent;
+    const materials = this.helperSerivce.getMaterials(content);
     this.dialog
       .open(MaterialAddComponent, {
         width: '98vw',
-        maxWidth: '500px'
+        maxWidth: '500px',
+        data: {
+          hideMaterials: materials
+        }
       })
       .afterClosed()
-      .subscribe((res) => {});
+      .subscribe((res) => {
+        if (res && res.materials) {
+          this.materials = _.intersectionBy(this.materials, materials, '_id');
+          this.materials = [...this.materials, ...res.materials];
+          for (let i = 0; i < res.materials.length; i++) {
+            const material = res.materials[i];
+            this.htmlEditor.insertMaterials(material);
+          }
+        }
+      });
   }
 
   /**************************************

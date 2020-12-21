@@ -123,6 +123,9 @@ export class InputContactsComponent implements OnInit {
               const searchedContacts = [];
               const searchedContactIds = [];
               res.forEach((activity) => {
+                if (!activity || !activity.contacts) {
+                  return;
+                }
                 const contact = activity.contacts[0];
                 if (searchedContactIds.indexOf(contact._id) === -1) {
                   searchedContactIds.push(contact._id);
