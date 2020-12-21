@@ -1,5 +1,10 @@
 @import  "src/variables.scss";
 
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .btn {
     padding: 10px;
 }
@@ -206,6 +211,9 @@ td {
 }
 
 @media screen and (max-width: 768px) {
+    .page-header{
+        display: block;
+    }
     .table-wrapper {
         margin-top: 0px;
     }
@@ -253,5 +261,22 @@ td {
         display: flex;
         align-items: center;
       }
+    }
+}
+
+:host ::ng-deep {
+    app-slide-tab {
+        .tab-container {
+            width: 440px;
+            @media screen and (max-width: 575px) {
+                width: 370px;
+                .tab {
+                    padding: 0px 15px !important;
+                    .tab-label {
+                        font-size: 13px !important;
+                    }
+                }
+            }
+        }
     }
 }
