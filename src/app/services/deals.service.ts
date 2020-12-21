@@ -57,19 +57,28 @@ export class DealsService extends HttpService {
     );
   }
 
-  public createStage(stage: any): any {
-    return this.httpClient.post(this.server + DEALSTAGE.GET, stage);
+  createStage(stage: any): Observable<any> {
+    return this.httpClient.post(this.server + DEALSTAGE.GET, stage).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('CREATE STAGE', []))
+    );
   }
 
-  public getDeal(): any {
+  createStage$(stage: DealStage): void {
+    const stages = this.stages.getValue();
+    stages.push(stage);
+    this.stages.next(stages);
+  }
+
+  getDeal(): any {
     return this.httpClient.get(this.server + DEAL.GET);
   }
 
-  public createDeal(deal: any): any {
+  createDeal(deal: any): any {
     return this.httpClient.post(this.server + DEAL.GET, deal);
   }
 
-  public moveDeal(data: any): any {
+  moveDeal(data: any): any {
     return this.httpClient.post(this.server + DEAL.MOVE, data);
   }
 }

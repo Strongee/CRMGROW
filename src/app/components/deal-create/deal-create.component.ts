@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Contact } from 'src/app/models/contact.model';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-deal-create',
@@ -13,6 +14,7 @@ export class DealCreateComponent implements OnInit {
   title = '';
   submitted = false;
   saving = false;
+  createSubscription: Subscription;
 
   constructor(
     private dealsService: DealsService,
@@ -30,12 +32,17 @@ export class DealCreateComponent implements OnInit {
       const data = {
         title: this.title
       };
-      this.dealsService.createStage(data).subscribe((res) => {
-        if (res) {
+      this.createSubscription = this.dealsService.createStage(data).subscribe(
+        (res) => {
+          if (res) {
+            this.saving = false;
+            this.dialogRef.close(res);
+          }
+        },
+        (err) => {
           this.saving = false;
-          this.dialogRef.close(res['data']);
         }
-      });
+      );
     }
   }
 
