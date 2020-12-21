@@ -89,14 +89,22 @@ export class ContactComponent implements OnInit {
   activeHistory = 'all';
 
   task: Task = new Task();
-  due_date = {
+  task_date = {
     year: '',
     month: '',
     day: ''
   };
+  schedule_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
+  scheduleDateTime = '';
+  planned = false;
   selectedDateTime;
   minDate: any;
-  due_time = '12:00:00.000';
+  task_time = '12:00:00.000';
+  schedule_time = '12:00:00.000';
   times = TIMES;
   taskSaving = false;
 
@@ -338,6 +346,37 @@ export class ContactComponent implements OnInit {
     this.emailContent = this.selectedTemplate.content;
     // Attach the Selected Material Content
   }
+  getScheduleDateTime(): any {
+    if (this.schedule_date.day != '' && this.schedule_time != '') {
+      return moment(
+        this.schedule_date.year +
+          '-' +
+          this.schedule_date.month +
+          '-' +
+          this.schedule_date.day +
+          ' ' +
+          this.schedule_time
+      ).format();
+    }
+  }
+
+  setScheduleDateTime(): void {
+    this.scheduleDateTime = moment(
+      this.schedule_date.year +
+        '-' +
+        this.schedule_date.month +
+        '-' +
+        this.schedule_date.day +
+        ' ' +
+        this.schedule_time
+    ).format();
+    this.planned = true;
+  }
+
+  removeSchedule(): void {
+    this.planned == false;
+    this.scheduleDateTime = '';
+  }
   /**
    * Open the Material Select Dialog
    */
@@ -376,15 +415,19 @@ export class ContactComponent implements OnInit {
   /**************************************
    * Task Panel Relative Functions
    **************************************/
-  getDateTime(): any {
-    if (this.due_date.day != '') {
+  getTaskDateTime(): any {
+    if (this.task_date.day != '') {
       return (
-        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+        this.task_date.year +
+        '-' +
+        this.task_date.month +
+        '-' +
+        this.task_date.day
       );
     }
   }
-  setDateTime(): void {
-    this.selectedDateTime = moment(this.getDateTime()).format('DD.MM.YYYY');
+  setTaskDateTime(): void {
+    this.selectedDateTime = moment(this.getTaskDateTime()).format('DD.MM.YYYY');
     close();
   }
 

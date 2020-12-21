@@ -201,10 +201,29 @@
             }
           }
           .email-schedule, .email-reminder {
-            i {
+            .i-schedule, .i-reminder {
               width: 28px;
               height: 28px;
               min-width: 28px;
+            }
+            .show-plan {
+              display: none;
+              background-color: #ecedef;
+              &.show {
+                display: block;
+                border-radius: 3px;
+              }
+            }
+            .time-picker {
+              width: 250px;
+              .show-datetime {
+                background-color: #ecedef;
+                border-radius: 3px;
+              }
+              .remove-schedule {
+                border: 1px solid $color-red;
+                border-radius: 3px;
+              }
             }
           }
         }
