@@ -21,6 +21,9 @@ export class MaterialSendComponent implements OnInit {
   selectedTemplate = { subject: '', content: '' };
   submitted = false;
   saving = false;
+  videos: any[] = [];
+  pdfs: any[] = [];
+  images: any[] = [];
 
   quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
   config = QuillEditor;
@@ -34,7 +37,19 @@ export class MaterialSendComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('###', this.data.material);
+    if (this.data.material.length > 1) {
+      this.data.material.forEach((material) => {
+        if (material.type && material.type.startsWith('video')) {
+          this.videos.push(material);
+        }
+        if (material.type && material.type.endsWith('pdf')) {
+          this.pdfs.push(material);
+        }
+        if (material.type && material.type.startsWith('image')) {
+          this.images.push(material);
+        }
+      });
+    }
     if (this.data.type) {
       if (this.data.type == 'email') {
         this.selected.setValue(1);

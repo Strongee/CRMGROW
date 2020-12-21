@@ -9,14 +9,28 @@
 <form #sendForm="ngForm" (ngSubmit)="submitted = true; sendForm.form.valid ? send() : false">
     <mat-dialog-content>
         <div class="d-flex mt-3 material-preivew">
-            <img [src]="data.material.thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );">
+            <img [src]="data.material[0].thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );">
             <div class="ml-4">
                 <div class="f-6 font-weight-bold material-title">
-                    {{data.material.title}}
+                    {{data.material[0].title}}
                 </div>
                 <div class="f-3 op-64 mt-2">
-                    {{data.material.description}}
+                    {{data.material[0].description}}
                 </div>
+            </div>
+        </div>
+        <div class="v-center mt-3 material-more" *ngIf="data.material.length > 1">
+            <div class="v-center" *ngIf="videos.length > 0">
+                <i class="d-block i-icon act-videos mr-1"></i>
+                {{videos.length}} Videos
+            </div>
+            <div class="v-center mx-2" *ngIf="pdfs.length > 0">
+                <i class="d-block i-icon act-pdfs mr-1"></i>
+                {{pdfs.length}} Pdfs
+            </div>
+            <div class="v-center" *ngIf="images.length > 0">
+                <i class="d-block i-icon act-images mr-1"></i>
+                {{images.length}} Images
             </div>
         </div>
         <div class="mt-3">
