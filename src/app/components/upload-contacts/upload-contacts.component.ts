@@ -90,9 +90,10 @@ export class UploadContactsComponent implements OnInit {
   isCompleteUpload = false;
   isUploadCancel = false;
   uploadedContacts = [];
-  uploadInterval;
   uploadLines = [];
   uploadHeaders = [];
+  uploadSubTitle = '';
+  checkingDuplicate = false;
 
   constructor(
     private dialogRef: MatDialogRef<UploadContactsComponent>,
@@ -118,18 +119,18 @@ export class UploadContactsComponent implements OnInit {
       response = JSON.parse(response);
 
       if (response.status) {
+        this.uploading = false;
         this.uploadedContacts = response.failure;
         this.isUploading = false;
         this.isCompleteUpload = this.uploadedCount >= this.overallContacts ? true : false;
-        this.uploadPercent = Math.round(this.uploadedCount / this.overallContacts * 100);
-
-        if (this.uploadLines.length !== 0) {
-          if (this.uploadedContacts && this.uploadedContacts.length) {
-            for (const contact of this.uploadedContacts) {
-              this.failedData.push(contact);
-            }
+        this.uploadPercent = Math.round(this.uploadedCount / this.overallContacts * 100 ) ;
+        this.uploadSubTitle = this.uploadedCount + ' / ' + this.overallContacts + ' contacts';
+        if (this.uploadedContacts && this.uploadedContacts.length) {
+          for (const contact of this.uploadedContacts) {
+            this.failedData.push(contact);
           }
-
+        }
+        if (this.uploadedCount < this.overallContacts) {
           let uploads;
           if (this.uploadLines.length >= this.UPLOAD_ONCE) {
             uploads = this.uploadLines.slice(0, this.UPLOAD_ONCE);
@@ -138,7 +139,7 @@ export class UploadContactsComponent implements OnInit {
           } else {
             uploads = this.uploadLines.slice(0, this.uploadLines.length);
             this.uploadLines.splice(0, this.uploadLines.length);
-            this.uploadedCount += this.uploadLines.length;
+            this.uploadedCount += uploads.length;
           }
 
           this.uploadRecursive(uploads);
@@ -231,13 +232,22 @@ export class UploadContactsComponent implements OnInit {
               this.contacts.push(contact.data);
             });
 
-            const dupTest = this.checkDuplicate();
-            if (dupTest) {
-              this.step = 3;
-            } else {
-              this.step = 4;
-              this.contactsToUpload = this.contacts;
-            }
+            this.uploadPercent = 100;
+            this.uploadSubTitle = this.overallContacts + ' / ' + this.overallContacts + ' contacts';
+
+            this.checkingDuplicate = true;
+            const _SELF = this;
+            setTimeout( () => {
+              const dupTest = _SELF.checkDuplicate();
+              if (dupTest) {
+                _SELF.step = 3;
+                _SELF.checkingDuplicate = false;
+              } else {
+                _SELF.step = 4;
+                _SELF.checkingDuplicate = false;
+                _SELF.contactsToUpload = _SELF.contacts;
+              }
+            }, 1000);
           } else {
             this.uploading = false;
             this.dialogRef.close({status: true});
@@ -979,7 +989,9 @@ export class UploadContactsComponent implements OnInit {
             if (i === j) {
               continue;
             }
-            if (dupItem[i]['primary_email'] !== '' && dupItem[j]['primary_email'] !== '' && dupItem[i]['primary_email'] === dupItem[j]['primary_email']) {
+            if (dupItem[i]['primary_email'] !== '' && dupItem[j]['primary_email'] !== '' &&
+              dupItem[i]['primary_email'] !== null && dupItem[j]['primary_email'] !== null &&
+              dupItem[i]['primary_email'] === dupItem[j]['primary_email']) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
               return;
@@ -1046,10 +1058,12 @@ export class UploadContactsComponent implements OnInit {
         const tempNotes = [];
         for (let i = 0; i < contact.notes.length; i++) {
           for (let key in contact.notes[i]) {
-            tempNotes.push({
-              title: key,
-              content: contact.notes[i][key]
-            });
+            if (contact.notes[i][key] && contact.notes[i][key] !== '') {
+              tempNotes.push({
+                title: key,
+                content: contact.notes[i][key]
+              });
+            }
           }
         }
         contact.notes = tempNotes;
@@ -1059,7 +1073,7 @@ export class UploadContactsComponent implements OnInit {
   }
 
   upload(): void {
-    // this.dialogRef.close({ data: this.contactsToUpload });
+    this.failedData = [];
     let headers = [];
     const lines = [];
     for (const key in this.updateColumn) {
@@ -1096,7 +1110,9 @@ export class UploadContactsComponent implements OnInit {
           }
         }
         if (contact['notes']) {
-          record.push(JSON.stringify(contact['notes']));
+          if (contact['notes'].length) {
+            record.push(JSON.stringify(contact['notes']));
+          }
         }
         lines.push(record);
       }
@@ -1137,6 +1153,7 @@ export class UploadContactsComponent implements OnInit {
         uploads = this.uploadLines.slice(0, this.uploadLines.length);
         this.uploadLines.splice(0, this.uploadLines.length);
       }
+      this.uploadSubTitle = '0 / ' + this.overallContacts + ' contacts';
       this.uploadRecursive(uploads);
     }
   }
@@ -1161,77 +1178,6 @@ export class UploadContactsComponent implements OnInit {
     this.uploader.queue[0].withCredentials = false;
     this.uploader.uploadAll();
     this.uploading = true;
-  }
-
-  toggleAllFailedRecords(): void {
-    if (this.failedRecords.length !== this.overwriteContacts.selected.length) {
-      this.failedRecords.forEach((e) => {
-        if (!this.overwriteContacts.isSelected(e)) {
-          this.overwriteContacts.select(e);
-        }
-      });
-    } else {
-      this.overwriteContacts.clear();
-    }
-  }
-
-  toggleFailedRecord(contact): void {
-    this.overwriteContacts.toggle(contact);
-  }
-
-  overwrite(): void {
-    const headers = [];
-    const lines = [];
-    for (const key in this.updateColumn) {
-      if (this.updateColumn[key]) {
-        headers.push(this.updateColumn[key]);
-      }
-    }
-    this.overwriteContacts.selected.forEach((contact) => {
-      const record = [];
-      for (let i = 0; i < headers.length; i++) {
-        const key = headers[i];
-        if (key === 'phone') {
-          let cell_phone = contact['phone'];
-          if (cell_phone) {
-            if (cell_phone[0] === '+') {
-              cell_phone = cell_phone.replace(/\D/g, '');
-              cell_phone = '+' + cell_phone;
-            } else {
-              cell_phone = cell_phone.replace(/\D/g, '');
-              cell_phone = '+1' + cell_phone;
-            }
-          }
-          record.push(cell_phone || '');
-        } else if (key === 'notes') {
-          // const notes = [];
-          // for (let j = 0; j < contact['notes'].length; j++) {
-          //   notes.push(JSON.stringify(contact['notes'][j]));
-          // }
-          // record.push(notes);
-        }  else {
-          record.push(contact[key] || '');
-        }
-      }
-      if (contact['notes']) {
-        record.push(JSON.stringify(contact['notes']));
-      }
-      lines.push(record);
-    });
-    lines.unshift(headers);
-    const dataText = this.papa.unparse(lines);
-    let file;
-    try {
-      file = new File([dataText], 'upload.csv');
-    } catch {
-      const blob = new Blob([dataText]);
-      Object.assign(blob, {});
-      file = blob as File;
-    }
-    this.overwriter.addToQueue([file]);
-    this.overwriter.queue[0].withCredentials = false;
-    this.overwriter.uploadAll();
-    this.overwriting = true;
   }
 
   close(): void {
