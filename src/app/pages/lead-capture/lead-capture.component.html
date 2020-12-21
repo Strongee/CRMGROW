@@ -76,7 +76,7 @@
         <div class="v-center" *ngIf="garbage.intro_video">
             <div class="video-wrapper mt-1 mb-2">
                 <video #introVideo>
-                    <source [src]="garbage.intro_video">
+                    <source [src]="garbage['intro_video']">
                 </video>
                 <div class="play-button" (click)="toggleVideo()"><mat-icon>{{introVideoPlaying ? 'pause' : 'play_arrow'}}</mat-icon></div>
             </div>
@@ -85,7 +85,9 @@
                     Your uploaded video
                 </div>
                 <div class="f-3 mt-1">
-                    <a class="font-weight-bold c-red" (click)="removeVideo()">Remove</a> or <a class="font-weight-bold c-blue" (click)="browseVideo()">reupload</a>
+                    <a class="font-weight-bold c-red c-pointer" (click)="removeVideo()">Remove</a>
+                     or 
+                     <a class="font-weight-bold c-blue c-pointer" (click)="browseVideo()">reupload</a>
                 </div>
             </div>
         </div>

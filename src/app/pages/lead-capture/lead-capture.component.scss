@@ -1,3 +1,5 @@
+@import  "src/variables.scss";
+
 .page-content {
     width: 100%;
     max-width: 400px;
@@ -54,8 +56,16 @@
             }
         }
         .video-action {
-            a:hover {
-                text-decoration: none;
+            a {
+                &:hover {
+                    text-decoration: none;
+                }
+                &.c-red {
+                    color: $color-red;
+                }
+                &.c-blue {
+                    color: $color-blue;
+                }
             }
         }
     }

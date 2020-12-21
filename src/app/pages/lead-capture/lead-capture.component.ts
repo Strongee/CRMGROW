@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { DELAY } from 'src/app/constants/variable.constants';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/custom-field-add.component';
@@ -56,7 +62,8 @@ export class LeadCaptureComponent implements OnInit {
     private dialog: MatDialog,
     public userService: UserService,
     private toast: ToastrService,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.userService.garbage$.subscribe((res) => {
       if (res) {
@@ -83,10 +90,12 @@ export class LeadCaptureComponent implements OnInit {
         try {
           response = JSON.parse(response);
           if (response['data']) {
+            this.garbage['intro_video'] = '';
             this.garbage['intro_video'] = response['data']['intro_video'];
             this.userService.updateGarbage(this.garbage).subscribe(() => {
               this.userService.updateGarbageImpl(this.garbage);
             });
+            this.changeDetectorRef.detectChanges();
           }
         } catch (e) {}
       } else {
