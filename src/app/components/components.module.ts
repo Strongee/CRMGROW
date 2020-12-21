@@ -93,6 +93,7 @@ import { HtmlEditorComponent } from './html-editor/html-editor.component';
 import { AccordionComponent } from './accordion/accordion.component';
 import { SubjectInputComponent } from './subject-input/subject-input.component';
 import { SmsEditorComponent } from './sms-editor/sms-editor.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   declarations: [
@@ -193,7 +194,16 @@ import { SmsEditorComponent } from './sms-editor/sms-editor.component';
     RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule,
-    ColorPickerModule
+    ColorPickerModule,
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: '#78C000',
+      innerStrokeColor: '#C7E596',
+      animationDuration: 300
+    })
   ],
   exports: [
     TopbarComponent,
