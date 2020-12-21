@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DELAY } from 'src/app/constants/variable.constants';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomFieldAddComponent } from 'src/app/components/custom-field-add/custom-field-add.component';
 import { CustomFieldDeleteComponent } from 'src/app/components/custom-field-delete/custom-field-delete.component';
 import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { HelperService } from '../../services/helper.service';
+import { FileUploader } from 'ng2-file-upload';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-lead-capture',
@@ -38,8 +42,22 @@ export class LeadCaptureComponent implements OnInit {
       type: 'text'
     }
   ];
+  uploadingIntroVideo = false;
+  @ViewChild('introVideo') introVideo: ElementRef;
+  introVideoPlaying = false;
 
-  constructor(private dialog: MatDialog, public userService: UserService) {
+  videoUploader: FileUploader = new FileUploader({
+    url: environment.api + 'garbage/intro_video',
+    authToken: this.userService.getToken(),
+    itemAlias: 'video'
+  });
+
+  constructor(
+    private dialog: MatDialog,
+    public userService: UserService,
+    private toast: ToastrService,
+    private helperService: HelperService
+  ) {
     this.userService.garbage$.subscribe((res) => {
       if (res) {
         this.garbage = new Garbage().deserialize(res);
@@ -47,7 +65,35 @@ export class LeadCaptureComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.videoUploader.onAfterAddingFile = (file) => {
+      file.withCredentials = false;
+      if (this.videoUploader.queue.length > 1) {
+        this.videoUploader.queue.splice(0, 1);
+      }
+    };
+    this.videoUploader.onCompleteItem = (
+      item: any,
+      response: any,
+      status: any,
+      headers: any
+    ) => {
+      this.uploadingIntroVideo = false;
+      if (status === 200) {
+        try {
+          response = JSON.parse(response);
+          if (response['data']) {
+            this.garbage['intro_video'] = response['data']['intro_video'];
+            this.userService.updateGarbage(this.garbage).subscribe(() => {
+              this.userService.updateGarbageImpl(this.garbage);
+            });
+          }
+        } catch (e) {}
+      } else {
+        this.toast.error('Uploading Intro Video is Failed. Please try again.');
+      }
+    };
+  }
 
   addField(): void {
     this.dialog
@@ -137,6 +183,59 @@ export class LeadCaptureComponent implements OnInit {
         this.garbage.capture_field.cell_phone = evt.target.checked;
         break;
     }
+  }
+
+  browseVideo(): void {
+    this.helperService
+      .promptForVideo()
+      .then((video) => {
+        const type = video.type;
+        const name = video.name;
+        if (
+          type.startsWith('video') &&
+          (name.toLowerCase().endsWith('mp4') ||
+            name.toLowerCase().endsWith('mov'))
+        ) {
+          this.helperService
+            .getVideoDuration(video)
+            .then((duration) => {
+              if (duration.duration && duration.duration <= 60000) {
+                this.videoUploader.clearQueue();
+                this.videoUploader.addToQueue([video]);
+                this.uploadingIntroVideo = true;
+                this.videoUploader.uploadAll();
+              }
+            })
+            .catch((err) => {
+              this.toast.error(
+                "This video duration can't expected. Please try another video"
+              );
+            });
+        } else {
+          this.toast.error('Please select the *.mp4 or *.mov');
+        }
+      })
+      .catch((err) => {
+        this.toast.error("Couldn't load the Video File");
+      });
+  }
+
+  toggleVideo(): void {
+    const introVideoElement: HTMLVideoElement = this.introVideo.nativeElement;
+    if (introVideoElement.paused) {
+      introVideoElement.play();
+      this.introVideoPlaying = true;
+    } else {
+      introVideoElement.pause();
+      this.introVideoPlaying = false;
+    }
+  }
+
+  removeVideo(): void {
+    this.garbage.intro_video = '';
+    this.userService.updateGarbage(this.garbage).subscribe(() => {
+      this.userService.updateGarbageImpl(this.garbage);
+    });
   }
 
   saveDelay(): void {
