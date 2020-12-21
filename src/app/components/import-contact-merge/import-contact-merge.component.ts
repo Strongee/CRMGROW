@@ -276,9 +276,7 @@ export class ImportContactMergeComponent implements OnInit {
     if (this.primaryContact['notes']) {
       for (const note of this.primaryContact['notes']) {
         for (const key in note) {
-          if (note[key] !== '') {
-            result.push(key);
-          }
+          result.push(key);
         }
       }
     }
@@ -291,9 +289,19 @@ export class ImportContactMergeComponent implements OnInit {
     if (this.secondaryContact['notes']) {
       for (const note of this.secondaryContact['notes']) {
         for (const key in note) {
-          if (note[key] !== '') {
-            result.push(key);
-          }
+          result.push(key);
+        }
+      }
+    }
+    return result;
+  }
+
+  getPreviewNotes(): any {
+    const result = [];
+    if (this.previewContact['notes']) {
+      for (const note of this.previewContact['notes']) {
+        for (const key in note) {
+          result.push(key);
         }
       }
     }
@@ -860,10 +868,10 @@ export class ImportContactMergeComponent implements OnInit {
     }
   }
 
-  getNotesContents(row): any {
+  getNotesContents(row, contact): any {
     const result = [];
-    if (this.previewContact['notes'] && this.previewContact['notes'].length) {
-      for (const index of this.previewContact['notes']) {
+    if (contact['notes'] && contact['notes'].length) {
+      for (const index of contact['notes']) {
         for (const key in index) {
           result.push(index[key]);
         }

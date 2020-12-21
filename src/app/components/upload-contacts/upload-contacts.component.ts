@@ -112,7 +112,7 @@ export class UploadContactsComponent implements OnInit {
         if (this.failedData.length) {
           this.contacts = [];
           this.sameContacts = [];
-
+          this.selectedMergeContacts = [];
           let tagsKey = 'tags';
           let noteKey = 'notes';
           for (const key in this.updateColumn) {
@@ -511,6 +511,9 @@ export class UploadContactsComponent implements OnInit {
     return '';
   }
 
+  getOtherContent(contact): any {
+    return JSON.stringify(contact['other']);
+  }
   selectableContent(column, contact): any {
     let result = '';
     const updateColumn = this.updateColumn[column];
@@ -800,41 +803,42 @@ export class UploadContactsComponent implements OnInit {
             this.contacts.splice(idxSecondary, 1);
           }
 
+
+          if (merged['secondary_email']) {
+            let secondaryEmailKey = '';
+            for (const key in this.updateColumn) {
+              if (this.updateColumn[key] === 'secondary_email') {
+                secondaryEmailKey = key;
+              }
+            }
+            if (secondaryEmailKey !== '') {
+              if (this.columns.indexOf(secondaryEmailKey) < 0) {
+                this.columns.push(secondaryEmailKey);
+              }
+            } else {
+              this.updateColumn['secondary_email'] = 'secondary_email';
+              this.columns.push('secondary_email');
+            }
+          }
+
+          if (merged['secondary_phone']) {
+            let secondaryPhoneKey = '';
+            for (const key in this.updateColumn) {
+              if (this.updateColumn[key] === 'secondary_phone') {
+                secondaryPhoneKey = key;
+              }
+            }
+            if (secondaryPhoneKey !== '') {
+              if (this.columns.indexOf(secondaryPhoneKey) < 0) {
+                this.columns.push(secondaryPhoneKey);
+              }
+            } else {
+              this.updateColumn['secondary_phone'] = 'secondary_phone';
+              this.columns.push('secondary_phone');
+            }
+          }
+
           if (res.type === 'csv') {
-            if (merged['secondary_email']) {
-              let secondaryEmailKey = '';
-              for (const key in this.updateColumn) {
-                if (this.updateColumn[key] === 'secondary_email') {
-                  secondaryEmailKey = key;
-                }
-              }
-              if (secondaryEmailKey !== '') {
-                if (this.columns.indexOf(secondaryEmailKey) < 0) {
-                  this.columns.push(secondaryEmailKey);
-                }
-              } else {
-                this.updateColumn['secondary_email'] = 'secondary_email';
-                this.columns.push('secondary_email');
-              }
-            }
-
-            if (merged['secondary_phone']) {
-              let secondaryPhoneKey = '';
-              for (const key in this.updateColumn) {
-                if (this.updateColumn[key] === 'secondary_phone') {
-                  secondaryPhoneKey = key;
-                }
-              }
-              if (secondaryPhoneKey !== '') {
-                if (this.columns.indexOf(secondaryPhoneKey) < 0) {
-                  this.columns.push(secondaryPhoneKey);
-                }
-              } else {
-                this.updateColumn['secondary_phone'] = 'secondary_phone';
-                this.columns.push('secondary_phone');
-              }
-            }
-
             if (merged['notes']) {
               const tempNotes = [];
               for (let i = 0; i < merged['notes'].length; i++) {
@@ -848,7 +852,7 @@ export class UploadContactsComponent implements OnInit {
                 }
               }
               if (tempNotes.length) {
-                merged['other'] = JSON.stringify(tempNotes);
+                merged['other'] = tempNotes;
               }
             }
           }
