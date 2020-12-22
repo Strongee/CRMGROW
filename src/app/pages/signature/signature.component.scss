@@ -37,13 +37,15 @@
   max-width: 520px;
 }
 
-.quill-better-table {
-  border: none!important;
-}
-
 :host ::ng-deep {
+  .quill-better-table {
+    border: none!important;
+  }  
   .ql-editor {
     padding: 20px 15px;
+    @media screen and (max-width: 576px) {
+      width: 350px;
+    }
   }
   .quill-better-table td{
     border: none!important;

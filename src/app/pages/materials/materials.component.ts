@@ -202,6 +202,7 @@ export class MaterialsComponent implements OnInit {
   selectFolder(): void {}
 
   sendMaterial(material: any): void {
+    console.log('###', material);
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',
