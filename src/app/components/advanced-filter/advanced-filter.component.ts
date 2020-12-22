@@ -38,7 +38,6 @@ export class AdvancedFilterComponent implements OnInit {
 
   selectedMaterialActions = '';
   selectedMaterial = [];
-  selectedActivities = new SelectionModel<any>(true, []);
   searchOption: SearchOption = new SearchOption();
 
   @Output() onClose = new EventEmitter();
@@ -157,15 +156,24 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   clearAllFilters(): void {
+    this.selectedMaterial = [];
+    this.selectedMaterialActions = '';
+    this.materialActions.forEach((action) => {
+      action.count = 0;
+    });
     this.searchOption = new SearchOption();
+    this.contactService.searchOption.next(this.searchOption);
+  }
+
+  clearLabel(): void {
+    this.searchOption.includeLabel = true;
+    this.searchOption.labelCondition = [];
     this.contactService.searchOption.next(this.searchOption);
   }
 
   applyFilters(): void {}
 
   saveFilters(): void {
-    this.searchOption.activityCondition = [];
-    this.searchOption.activityCondition = this.selectedActivities.selected;
     this.dialog
       .open(FilterAddComponent, {
         position: { top: '100px' },
@@ -177,7 +185,9 @@ export class AdvancedFilterComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        this.savedFilters.push(res);
+        if (res) {
+          this.savedFilters.push(res);
+        }
       });
   }
 
@@ -197,74 +207,76 @@ export class AdvancedFilterComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        this.selectedMaterial = [];
-        this.selectedMaterial = [...this.selectedMaterial, ...res];
-        console.log('###', this.selectedMaterial);
-        this.materialActions.forEach((action) => {
-          action.count = 0;
-          if (action.title == this.selectedMaterialActions) {
-            action.count = res.length;
+        if (res) {
+          this.selectedMaterial = [];
+          this.selectedMaterial = [...this.selectedMaterial, ...res];
+          this.materialActions.forEach((action) => {
+            action.count = 0;
+            if (action.title == this.selectedMaterialActions) {
+              action.count = res.length;
+            }
+          });
+          if (this.selectedMaterial[0].type.startsWith('video')) {
+            switch (this.selectedMaterialActions) {
+              case 'Material sent':
+                this.searchOption.materialCondition.sent_video.flag = true;
+                this.searchOption.materialCondition.sent_video.material = this.selectedMaterial[0];
+                break;
+              case 'No material sent':
+                this.searchOption.materialCondition.not_sent_video.flag = true;
+                this.searchOption.materialCondition.not_sent_video.material = this.selectedMaterial[0];
+                break;
+              case 'Material reviewed':
+                this.searchOption.materialCondition.watched_video.flag = true;
+                this.searchOption.materialCondition.watched_video.material = this.selectedMaterial[0];
+                break;
+              case 'Material not reviewed':
+                this.searchOption.materialCondition.not_watched_video.flag = true;
+                this.searchOption.materialCondition.not_watched_video.material = this.selectedMaterial[0];
+                break;
+            }
           }
-        });
-        if (this.selectedMaterial[0].type.startsWith('video')) {
-          switch (this.selectedMaterialActions) {
-            case 'Material sent':
-              this.searchOption.materialCondition.sent_video.flag = true;
-              this.searchOption.materialCondition.sent_video.material = this.selectedMaterial[0];
-              break;
-            case 'No material sent':
-              this.searchOption.materialCondition.not_sent_video.flag = true;
-              this.searchOption.materialCondition.not_sent_video.material = this.selectedMaterial[0];
-              break;
-            case 'Material reviewed':
-              this.searchOption.materialCondition.watched_video.flag = true;
-              this.searchOption.materialCondition.watched_video.material = this.selectedMaterial[0];
-              break;
-            case 'Material not reviewed':
-              this.searchOption.materialCondition.not_watched_video.flag = true;
-              this.searchOption.materialCondition.not_watched_video.material = this.selectedMaterial[0];
-              break;
+          if (this.selectedMaterial[0].type.endsWith('pdf')) {
+            switch (this.selectedMaterialActions) {
+              case 'Material sent':
+                this.searchOption.materialCondition.sent_pdf.flag = true;
+                this.searchOption.materialCondition.sent_pdf.material = this.selectedMaterial[0];
+                break;
+              case 'No material sent':
+                this.searchOption.materialCondition.not_sent_pdf.flag = true;
+                this.searchOption.materialCondition.not_sent_pdf.material = this.selectedMaterial[0];
+                break;
+              case 'Material reviewed':
+                this.searchOption.materialCondition.watched_pdf.flag = true;
+                this.searchOption.materialCondition.watched_pdf.material = this.selectedMaterial[0];
+                break;
+              case 'Material not reviewed':
+                this.searchOption.materialCondition.not_watched_pdf.flag = true;
+                this.searchOption.materialCondition.not_watched_pdf.material = this.selectedMaterial[0];
+                break;
+            }
           }
-        }
-        if (this.selectedMaterial[0].type.endsWith('pdf')) {
-          switch (this.selectedMaterialActions) {
-            case 'Material sent':
-              this.searchOption.materialCondition.sent_pdf.flag = true;
-              this.searchOption.materialCondition.sent_pdf.material = this.selectedMaterial[0];
-              break;
-            case 'No material sent':
-              this.searchOption.materialCondition.not_sent_pdf.flag = true;
-              this.searchOption.materialCondition.not_sent_pdf.material = this.selectedMaterial[0];
-              break;
-            case 'Material reviewed':
-              this.searchOption.materialCondition.watched_pdf.flag = true;
-              this.searchOption.materialCondition.watched_pdf.material = this.selectedMaterial[0];
-              break;
-            case 'Material not reviewed':
-              this.searchOption.materialCondition.not_watched_pdf.flag = true;
-              this.searchOption.materialCondition.not_watched_pdf.material = this.selectedMaterial[0];
-              break;
+          if (this.selectedMaterial[0].type.startsWith('image')) {
+            switch (this.selectedMaterialActions) {
+              case 'Material sent':
+                this.searchOption.materialCondition.sent_image.flag = true;
+                this.searchOption.materialCondition.sent_image.material = this.selectedMaterial[0];
+                break;
+              case 'No material sent':
+                this.searchOption.materialCondition.not_sent_image.flag = true;
+                this.searchOption.materialCondition.not_sent_image.material = this.selectedMaterial[0];
+                break;
+              case 'Material reviewed':
+                this.searchOption.materialCondition.watched_image.flag = true;
+                this.searchOption.materialCondition.watched_image.material = this.selectedMaterial[0];
+                break;
+              case 'Material not reviewed':
+                this.searchOption.materialCondition.not_watched_image.flag = true;
+                this.searchOption.materialCondition.not_watched_image.material = this.selectedMaterial[0];
+                break;
+            }
           }
-        }
-        if (this.selectedMaterial[0].type.startsWith('image')) {
-          switch (this.selectedMaterialActions) {
-            case 'Material sent':
-              this.searchOption.materialCondition.sent_image.flag = true;
-              this.searchOption.materialCondition.sent_image.material = this.selectedMaterial[0];
-              break;
-            case 'No material sent':
-              this.searchOption.materialCondition.not_sent_image.flag = true;
-              this.searchOption.materialCondition.not_sent_image.material = this.selectedMaterial[0];
-              break;
-            case 'Material reviewed':
-              this.searchOption.materialCondition.watched_image.flag = true;
-              this.searchOption.materialCondition.watched_image.material = this.selectedMaterial[0];
-              break;
-            case 'Material not reviewed':
-              this.searchOption.materialCondition.not_watched_image.flag = true;
-              this.searchOption.materialCondition.not_watched_image.material = this.selectedMaterial[0];
-              break;
-          }
+          this.contactService.searchOption.next(this.searchOption);
         }
       });
   }
@@ -279,6 +291,16 @@ export class AdvancedFilterComponent implements OnInit {
       this.searchOption.labelCondition.splice(pos, 1);
     } else {
       this.searchOption.labelCondition.push(label);
+    }
+    this.contactService.searchOption.next(this.searchOption);
+  }
+
+  toggleActivities(activity: string): void {
+    const pos = this.searchOption.activityCondition.indexOf(activity);
+    if (pos !== -1) {
+      this.searchOption.activityCondition.splice(pos, 1);
+    } else {
+      this.searchOption.activityCondition.push(activity);
     }
     this.contactService.searchOption.next(this.searchOption);
   }

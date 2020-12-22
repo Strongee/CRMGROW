@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="mt-3">
-            <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+            <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                 select contact to who you want to send material
             </span>
             <app-input-contacts
@@ -54,7 +54,7 @@
                     ></app-input-template>
                 </div>
                 <div class="mt-2">
-                    <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+                    <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                         message
                     </span>
                     <textarea
@@ -83,7 +83,7 @@
                     ></app-input-template>
                 </div>
                 <div class="mt-2">
-                    <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+                    <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                         subject
                     </span>
                     <input
@@ -102,7 +102,7 @@
                     </span>
                 </div>
                 <div class="mt-2">
-                    <span class="f-1 fwt-600 op-40 text-uppercase mb-1">
+                    <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                         message
                     </span>
                     <quill-editor
@@ -115,7 +115,7 @@
                         #mailContent="ngModel"
                         (onEditorCreated)="getEditorInstance($event)"
                         (click)="setFocusField('content-email')"
-                        class="f-3 fwt-600 rounded"
+                        class="f-3 fw-600 rounded"
                         #emailEditor
                         [required]="selected.value == 1 && selectedTemplate.content == '' && submitted"
                     >
