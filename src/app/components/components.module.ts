@@ -93,6 +93,7 @@ import { HtmlEditorComponent } from './html-editor/html-editor.component';
 import { AccordionComponent } from './accordion/accordion.component';
 import { SubjectInputComponent } from './subject-input/subject-input.component';
 import { SmsEditorComponent } from './sms-editor/sms-editor.component';
+import { FilterAddComponent } from './filter-add/filter-add.component';
 
 @NgModule({
   declarations: [
@@ -185,7 +186,8 @@ import { SmsEditorComponent } from './sms-editor/sms-editor.component';
     HtmlEditorComponent,
     AccordionComponent,
     SubjectInputComponent,
-    SmsEditorComponent
+    SmsEditorComponent,
+    FilterAddComponent
   ],
   imports: [
     CommonModule,

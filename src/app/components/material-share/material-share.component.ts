@@ -31,6 +31,7 @@ export class MaterialShareComponent implements OnInit {
   imagesLoadError = '';
 
   selectedMaterials = [];
+  selectFilterMaterial = '';
 
   materialError = '';
   tabs: TabItem[] = [
@@ -127,7 +128,7 @@ export class MaterialShareComponent implements OnInit {
     );
   }
 
-  toggleVideo(video): void {
+  toggleVideo(video: any): void {
     this.materialError = '';
     if (this.selectedVideos.isSelected(video._id)) {
       this.selectedVideos.deselect(video._id);
@@ -143,7 +144,13 @@ export class MaterialShareComponent implements OnInit {
     }
   }
 
-  togglePdf(pdf): void {
+  selectMaterial(material: any): void {
+    this.selectedMaterials = [];
+    this.selectedMaterials.push(material);
+    this.selectFilterMaterial = material._id;
+  }
+
+  togglePdf(pdf: any): void {
     this.materialError = '';
     if (this.selectedPdfs.isSelected(pdf._id)) {
       this.selectedPdfs.deselect(pdf._id);
@@ -159,7 +166,7 @@ export class MaterialShareComponent implements OnInit {
     }
   }
 
-  toggleImage(image): void {
+  toggleImage(image: any): void {
     this.materialError = '';
     if (this.selectedImages.isSelected(image._id)) {
       this.selectedImages.deselect(image._id);
@@ -175,7 +182,7 @@ export class MaterialShareComponent implements OnInit {
     }
   }
 
-  deselectMaterial(material): void {
+  deselectMaterial(material: any): void {
     const index = this.selectedMaterials.findIndex(
       (item) => item._id === material._id
     );
@@ -193,7 +200,7 @@ export class MaterialShareComponent implements OnInit {
     }
   }
 
-  getMaterialType(material): any {
+  getMaterialType(material: any): any {
     if (material.type) {
       if (material.type === 'application/pdf') {
         return 'PDF';
@@ -230,5 +237,9 @@ export class MaterialShareComponent implements OnInit {
 
     this.sharing = false;
     this.dialogRef.close();
+  }
+
+  filterMaterial(): void {
+    this.dialogRef.close(this.selectedMaterials);
   }
 }
