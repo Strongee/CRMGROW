@@ -30,7 +30,7 @@ export class MaterialService extends HttpService {
   constructor(
     errorService: ErrorService,
     private httpClient: HttpClient,
-    private storeService: StoreService
+    private storeService: StoreService,
   ) {
     super(errorService);
   }

@@ -74,14 +74,14 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
+        <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
           <div class="tabs">
             <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
             </app-slide-tab>
           </div>
         </div>
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
-          <div class="button-group v-center justify-content-end">
+        <div class="col-xl-3 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
+          <div class="button-group v-center justify-content-lg-end justify-content-md-start">
             <button class="v-center btn btn-primary f-3 font-weight-bold shadow text-white ml-2 p-2" (click)="inviteMember()">
               <i class="bgc-white i-icon i-invite-member sm mr-2"></i>
               Invite member
@@ -294,14 +294,12 @@
                 Materials
               </ng-template>
               <div class="materials-list-wrapper tab-panel">
-                <div class="d-flex my-3">
-                  <button class="btn btn-primary f-3 font-weight-bold ml-auto" (click)="createMaterial()">ADD MATERIAL</button>
-                </div>
+                  <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="createMaterial()">ADD MATERIAL</button>
                 <div class="materials mt-3">
-                  <h6 class="f-6 font-weight-bold c-dark">Video</h6>
+                  <h6 class="f-6 font-weight-bold text-uppercase c-dark mt-3">Video</h6>
                   <ng-container *ngIf="team.videos.length; else emptyVideoListTemplate">
                     <ng-container *ngIf="role=='editor' || role == 'owner'">
-                      <table class="table material-share-table">
+                      <table class="table material-share-table mt-3">
                         <thead>
                         <tr>
                           <th class="checkbox-col border-top-0">
@@ -364,7 +362,7 @@
                             </div>
                           </td>
                           <td class="actions-col">
-                            <div class="v-center">
+                            <div class="actions-wrapper v-center justify-content-end">
                               <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterials('video', 'text', video)">
                                 <i class="bgc-dark i-icon i-send mr-2"></i>
                                 <span class="button-label">Send</span>
@@ -413,7 +411,7 @@
                   <h6 class="f-6 font-weight-bold c-dark">PDF</h6>
                   <ng-container *ngIf="team.pdfs.length; else emptyPdfListTemplate">
                     <ng-container *ngIf="role=='editor' || role == 'owner'">
-                      <table class="table material-share-table">
+                      <table class="table material-share-table mt-3">
                         <thead>
                         <tr>
                           <th class="checkbox-col border-top-0">
@@ -521,7 +519,7 @@
                   <h6 class="f-6 font-weight-bold c-dark">IMAGE</h6>
                   <ng-container *ngIf="team.images.length; else emptyImageListTemplate">
                     <ng-container *ngIf="role=='editor' || role == 'owner'">
-                      <table class="table material-share-table">
+                      <table class="table material-share-table mt-3">
                         <thead>
                         <tr>
                           <th class="checkbox-col border-top-0">
@@ -629,17 +627,15 @@
               <ng-template mat-tab-label>
                 Templates
               </ng-template>
-              <div class="template-list-wrapper tab-panel">
-                <div class="d-flex my-3">
-                  <button class="btn btn-primary f-3 font-weight-bold ml-auto" (click)="createEmailTemplate()">ADD TEMPLATE</button>
-                </div>
+              <div class="template-list-wrapper tab-panel mt-3">
+                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="createEmailTemplate()">ADD TEMPLATE</button>
                 <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <table class="table template-table">
                       <thead>
                       <th class="material-name">Title</th>
                       <th class="material-template">Template</th>
-                      <th class="material-type">Type</th>
+                      <th class="material-type"></th>
                       </thead>
                       <tbody>
                       <ng-container *ngIf="team.email_templates.length">
