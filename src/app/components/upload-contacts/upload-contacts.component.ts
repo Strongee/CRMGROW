@@ -700,40 +700,43 @@ export class UploadContactsComponent implements OnInit {
         if (!isExistSecond) {
           if (firstNameKey && lastNameKey) {
             if (
-              firstContact.first_name !== '' &&
-              secondContact.first_name !== '' &&
+              !!firstContact.first_name &&
+              !!firstContact.last_name &&
+              !!secondContact.first_name &&
+              !!secondContact.last_name &&
               firstContact.first_name === secondContact.first_name &&
               firstContact.last_name === secondContact.last_name
             ) {
               merge.push(secondContact);
               continue;
             }
-          } else {
-            if (firstNameKey) {
-              if (
-                firstContact.first_name !== '' &&
-                secondContact.first_name !== '' &&
-                firstContact.first_name === secondContact.first_name
-              ) {
-                merge.push(secondContact);
-                continue;
-              }
-            } else if (lastNameKey) {
-              if (
-                firstContact.last_name !== '' &&
-                secondContact.last_name !== '' &&
-                firstContact.last_name === secondContact.last_name
-              ) {
-                merge.push(secondContact);
-                continue;
-              }
-            }
           }
+          // else {
+          //   if (firstNameKey) {
+          //     if (
+          //       firstContact.first_name? &&
+          //       secondContact.first_name !== '' &&
+          //       firstContact.first_name === secondContact.first_name
+          //     ) {
+          //       merge.push(secondContact);
+          //       continue;
+          //     }
+          //   } else if (lastNameKey) {
+          //     if (
+          //       firstContact.last_name !== '' &&
+          //       secondContact.last_name !== '' &&
+          //       firstContact.last_name === secondContact.last_name
+          //     ) {
+          //       merge.push(secondContact);
+          //       continue;
+          //     }
+          //   }
+          // }
 
           if (emailKey) {
             if (
-              firstContact.primary_email !== '' &&
-              secondContact.primary_email !== '' &&
+              !!firstContact.primary_email &&
+              !!secondContact.primary_email &&
               firstContact.primary_email === secondContact.primary_email
             ) {
               merge.push(secondContact);
@@ -743,8 +746,8 @@ export class UploadContactsComponent implements OnInit {
 
           if (phoneKey) {
             if (
-              firstContact.primary_phone !== '' &&
-              secondContact.primary_phone !== '' &&
+              !!firstContact.primary_phone &&
+              !!secondContact.primary_phone &&
               firstContact.primary_phone === secondContact.primary_phone
             ) {
               merge.push(secondContact);
