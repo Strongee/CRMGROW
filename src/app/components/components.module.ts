@@ -94,6 +94,7 @@ import { AccordionComponent } from './accordion/accordion.component';
 import { SubjectInputComponent } from './subject-input/subject-input.component';
 import { SmsEditorComponent } from './sms-editor/sms-editor.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { FilterAddComponent } from './filter-add/filter-add.component';
 
 @NgModule({
   declarations: [
@@ -186,7 +187,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     HtmlEditorComponent,
     AccordionComponent,
     SubjectInputComponent,
-    SmsEditorComponent
+    SmsEditorComponent,
+    FilterAddComponent
   ],
   imports: [
     CommonModule,

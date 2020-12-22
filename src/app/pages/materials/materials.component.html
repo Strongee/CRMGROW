@@ -1,8 +1,8 @@
 <div class="page-content">
-  <div class="v-center justify-content-between">
+  <div class="page-header">
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
     </app-slide-tab>
-    <div class="v-center">
+    <div class="v-center justify-content-between mt-2 mt-md-0">
       <button class="v-center btn btn-blue f-6 font-weight-bold text-white" (click)="recordSetting()">
         <i class="bgc-white i-icon i-record mr-2"></i>
         Record new video
@@ -65,7 +65,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-2 mt-md-0">
         <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded" (click)="selectFolder()">
           <div class="v-center c-pointer">
             <i class="i-icon i-folder bgc-dark" aria-hidden="true"></i>
@@ -97,7 +97,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-2 mt-md-0">
         <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded" (click)="selectFolder()">
           <div class="v-center c-pointer">
             <i class="i-icon i-folder bgc-dark" aria-hidden="true"></i>

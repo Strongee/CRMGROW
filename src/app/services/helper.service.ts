@@ -160,6 +160,25 @@ export class HelperService {
     });
   }
 
+  public promptForVideo(): Promise<File> {
+    return new Promise<File>((resolve, reject) => {
+      // make file input element in memory
+      const fileInput: HTMLInputElement = this.document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'video/*';
+      fileInput.setAttribute('capture', 'camera');
+      // fileInput['capture'] = 'camera';
+      fileInput.addEventListener('error', (event) => {
+        reject(event.error);
+      });
+      fileInput.addEventListener('change', (event) => {
+        resolve(fileInput.files[0]);
+      });
+      // prompt for video file
+      fileInput.click();
+    });
+  }
+
   promptForImage(): Promise<File> {
     return new Promise<File>((resolve, reject) => {
       const fileInput: HTMLInputElement = this.document.createElement('input');
@@ -172,6 +191,30 @@ export class HelperService {
         resolve(fileInput.files[0]);
       });
       fileInput.click();
+    });
+  }
+
+  public getVideoDuration(videoFile: Blob): Promise<any> {
+    const video: HTMLVideoElement = this.document.createElement('video');
+    return new Promise<any>((resolve, reject) => {
+      video.addEventListener('error', reject);
+      video.addEventListener('canplay', (event) => {
+        if (video.duration) {
+          resolve({
+            duration: video.duration * 1000
+          });
+        } else {
+          resolve({
+            duration: 0
+          });
+        }
+      });
+      if (videoFile.type) {
+        video.setAttribute('type', videoFile.type);
+      }
+      video.preload = 'auto';
+      video.src = window.URL.createObjectURL(videoFile);
+      video.load();
     });
   }
 
@@ -242,7 +285,7 @@ export class HelperService {
   }
 
   public loadBase64(file: Blob): Promise<any> {
-    let fileReader = new FileReader();
+    const fileReader = new FileReader();
     return new Promise<any>((resolve, reject) => {
       fileReader.addEventListener('error', reject);
       fileReader.addEventListener('load', () => {
@@ -250,5 +293,33 @@ export class HelperService {
       });
       fileReader.readAsDataURL(file);
     });
+  }
+
+  public getMaterials(html: string): any[] {
+    const outer: HTMLDivElement = this.document.createElement('div');
+    outer.innerHTML = html;
+    const materials = outer.querySelectorAll('.material-object');
+    if (!materials.length) {
+      return [];
+    } else {
+      const result = [];
+      materials.forEach((e) => {
+        const materialDom = <HTMLLinkElement>e;
+        const material = { _id: materialDom.getAttribute('href') };
+        result.push(material);
+      });
+      return result;
+    }
+  }
+
+  getMaterialType(material: any): string {
+    if (material.type) {
+      if (material.type === 'application/pdf') {
+        return 'PDF';
+      } else if (material.type.includes('image')) {
+        return 'Image';
+      }
+    }
+    return 'Video';
   }
 }

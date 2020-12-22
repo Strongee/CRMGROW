@@ -235,3 +235,7 @@ export const DEAL = {
   GET: 'deal',
   MOVE: 'deal/move-deal'
 };
+
+export const MATERIAL = {
+  EMAIL: 'material/bulk-email'
+};

@@ -24,6 +24,7 @@ export class MaterialAddComponent implements OnInit {
   images = [];
   selectedMaterials = [];
   selectedMaterialIds = [];
+  hideMaterials = [];
 
   constructor(
     private dialogRef: MatDialogRef<MaterialAddComponent>,
@@ -33,7 +34,14 @@ export class MaterialAddComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.selectedMaterials = this.data ? this.data : [];
+    if (this.data && this.data.hideMaterials) {
+      this.data.hideMaterials.forEach((e) => {
+        this.hideMaterials.push(e._id);
+      });
+    }
+    if (this.data && this.data.materials) {
+      this.selectedMaterials = this.data.materials;
+    }
     this.materialService.loadVideos();
     this.materialService.loadPdfs();
     this.materialService.loadImages();

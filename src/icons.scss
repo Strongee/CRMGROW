@@ -415,6 +415,15 @@
 .i-analytics {
   mask-image: url('/assets/img/analytics.svg');
 }
+.icon-close {
+  background-image: url('/assets/img/close.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: block;
+  width: 16px;
+  height: 16px;
+}
 
 ///////////// Activity List Icons //////////////////
 .act-icon{

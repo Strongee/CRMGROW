@@ -86,4 +86,48 @@ export class HtmlEditorComponent implements OnInit {
   onChangeValue(value: string): void {
     this.valueChange.emit(value);
   }
+
+  insertMaterials(material: any): void {
+    const range = this.quillEditorRef.getSelection();
+    const length = this.emailEditor.quillEditor.getLength();
+    if (range && range.index) {
+      let selection = range.index;
+      this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
+      selection += 1;
+      this.emailEditor.quillEditor.insertText(
+        selection,
+        material.title,
+        'bold',
+        'user'
+      );
+      selection += material.title.length + 1;
+      this.emailEditor.quillEditor.insertEmbed(
+        selection,
+        `materialLink`,
+        { _id: material._id, preview: material.preview || material.thumbnail },
+        'user'
+      );
+      selection += 1;
+      this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
+    } else {
+      let selection = length;
+      this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
+      selection += 1;
+      this.emailEditor.quillEditor.insertText(
+        length,
+        material.title,
+        'bold',
+        'user'
+      );
+      selection += material.title.length + 1;
+      this.emailEditor.quillEditor.insertEmbed(
+        selection,
+        `materialLink`,
+        { _id: material._id, preview: material.preview || material.thumbnail },
+        'user'
+      );
+      selection += 1;
+      this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
+    }
+  }
 }

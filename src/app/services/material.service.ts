@@ -14,7 +14,7 @@ import {
   combineAll
 } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { VIDEO, PDF, IMAGE } from '../constants/api.constant';
+import { VIDEO, PDF, IMAGE, MATERIAL } from '../constants/api.constant';
 import { Image } from '../models/image.model';
 import { Pdf } from '../models/pdf.model';
 import { Video } from '../models/video.model';
@@ -173,6 +173,13 @@ export class MaterialService extends HttpService {
 
   deleteImage(id: string): any {
     return this.httpClient.delete(this.server + IMAGE.DELETE + id);
+  }
+
+  sendMaterials(data: any): Observable<boolean> {
+    return this.httpClient.post(this.server + MATERIAL.EMAIL, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('SEND MATERIALS', false))
+    );
   }
 
   getVimeoMeta(id: string): any {

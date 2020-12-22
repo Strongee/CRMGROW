@@ -171,6 +171,7 @@ export class VideoCreateComponent implements OnInit {
         response = JSON.parse(response);
         if (response['status']) {
           const video = { ...response['data'] };
+          console.log('###', video);
           this.updateVideo(video);
         } else {
           this.toast.error('Video uploading is failed.');

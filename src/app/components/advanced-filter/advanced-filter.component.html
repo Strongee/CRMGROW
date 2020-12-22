@@ -14,7 +14,7 @@
             {{filter}}
           </option>
         </select>
-        <button type="button" class="btn btn-primary ml-2">Save</button>
+        <button type="button" class="btn btn-primary ml-2" (click)="saveFilters()">Save</button>
       </div>
       <div class="my-3">
         <label>Global Search</label>
@@ -54,12 +54,12 @@
     <div class="checkbox-wrapper w-100 my-3">
       <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
         style="height: unset; line-height: unset;">
-        <input type="checkbox" class="custom-control-input" id="material-{{item._id}}" name="material-{{item._id}}"
-          (change)="selectedMaterialActions.toggle(item._id)" [checked]="selectedMaterialActions.isSelected(item._id)">
+        <input type="radio" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
+          (click)="selectMaterialAction(item._id)" [checked]="selectedMaterialActions == item._id">
         <label class="custom-control-label v-center" for="material-{{item._id}}">
           <div class="f-3 fw-600">{{item.title}}</div>
           <div class="count f-3 font-weight-bold c-white bgc-blue ml-2 text-center rounded-circle" *ngIf="item.count">{{item.count}}</div>
-          <div class="list f-1 font-weight-bold ml-2 border border-primary rounded c-blue">List</div>
+          <div class="list f-1 font-weight-bold ml-2 border border-primary rounded c-blue c-pointer" (click)="selectMaterial()">List</div>
         </label>
       </div>
     </div>
