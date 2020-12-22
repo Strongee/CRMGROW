@@ -27,7 +27,7 @@ export class TaskService extends HttpService {
   }
 
   loadTodayImpl(): Observable<TaskDetail[]> {
-    return this.http.get(this.server + TASK.OVERDUE).pipe(
+    return this.http.get(this.server + TASK.NEXT_WEEK).pipe(
       map((res) =>
         (res['data'] || []).map((e) => new TaskDetail().deserialize(e))
       ),

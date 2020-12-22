@@ -92,7 +92,7 @@
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>  </th>
       <td mat-cell *matCellDef="let element" class="p-0" style="width: 42px;">
-        <div><i class="i-icon i-edit op-28 d-block bgc-dark ml-auto"></i></div>
+        <div><i class="i-icon i-edit op-28 d-block bgc-dark ml-auto" (click)="openEdit(element)"></i></div>
       </td>
     </ng-container>
 

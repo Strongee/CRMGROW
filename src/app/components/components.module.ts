@@ -85,7 +85,6 @@ import { ImportContactEditComponent } from './import-contact-edit/import-contact
 import { ImportContactMergeComponent } from './import-contact-merge/import-contact-merge.component';
 import { AutomationShowFullComponent } from './automation-show-full/automation-show-full.component';
 import { AutomationTreeOverlayComponent } from './automation-tree-overlay/automation-tree-overlay.component';
-import { TaskAddComponent } from './task-add/task-add.component';
 import { MaterialSendComponent } from './material-send/material-send.component';
 import { ImportContactMergeConfirmComponent } from './import-contact-merge-confirm/import-contact-merge-confirm.component';
 import { DealCreateComponent } from './deal-create/deal-create.component';
@@ -93,6 +92,7 @@ import { HtmlEditorComponent } from './html-editor/html-editor.component';
 import { AccordionComponent } from './accordion/accordion.component';
 import { SubjectInputComponent } from './subject-input/subject-input.component';
 import { SmsEditorComponent } from './sms-editor/sms-editor.component';
+import { TaskEditComponent } from './task-edit/task-edit.component';
 
 @NgModule({
   declarations: [
@@ -178,14 +178,14 @@ import { SmsEditorComponent } from './sms-editor/sms-editor.component';
     ImportContactMergeComponent,
     AutomationShowFullComponent,
     AutomationTreeOverlayComponent,
-    TaskAddComponent,
     MaterialSendComponent,
     ImportContactMergeConfirmComponent,
     DealCreateComponent,
     HtmlEditorComponent,
     AccordionComponent,
     SubjectInputComponent,
-    SmsEditorComponent
+    SmsEditorComponent,
+    TaskEditComponent
   ],
   imports: [
     CommonModule,

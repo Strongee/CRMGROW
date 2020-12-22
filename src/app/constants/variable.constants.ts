@@ -194,32 +194,50 @@ export const TIMEZONE = [
       {
         country: 'US',
         name: 'EDT (Eastern Daylight Time: UTC -04)',
-        zone: '-04:00'
+        zone: '-04:00',
+        tz_name: 'America/New_York',
+        standard: '-05:00',
+        daylight: '-04:00'
       },
       {
         country: 'US',
         name: 'CDT (Central Daylight Time: UTC -05)',
-        zone: '-05:00'
+        zone: '-05:00',
+        tz_name: 'America/Chicago',
+        standard: '-06:00',
+        daylight: '-05:00'
       },
       {
         country: 'US',
         name: 'MDT (Mountain Daylight Time: UTC -06)',
-        zone: '-06:00'
+        zone: '-06:00',
+        tz_name: 'America/Denver',
+        standard: '-07:00',
+        daylight: '-06:00'
       },
       {
         country: 'US',
         name: 'PDT (Pacific Daylight Time: UTC -07)',
-        zone: '-07:00'
+        zone: '-07:00',
+        tz_name: 'America/Los_Angeles',
+        standard: '-08:00',
+        daylight: '-07:00'
       },
       {
         country: 'US',
         name: 'ADT (Alaska Daylight Time: UTC -08)',
-        zone: '-08:00'
+        zone: '-08:00',
+        tz_name: 'America/Anchorage',
+        standard: '-09:00',
+        daylight: '-08:00'
       },
       {
         country: 'US',
         name: 'HST (Hawaii Standard Time: UTC -10)',
-        zone: '-10:00'
+        zone: '-10:00',
+        tz_name: 'Pacific/Honolulu',
+        standard: '-09:00',
+        daylight: '-08:00'
       }
     ]
   },
@@ -229,32 +247,50 @@ export const TIMEZONE = [
       {
         country: 'CA',
         name: 'PST (Pacific Standard Time: UTC -08)',
-        zone: '-08:00'
+        zone: '-08:00',
+        tz_name: 'America/Tijuana',
+        standard: '-08:00',
+        daylight: '-07:00'
       },
       {
         country: 'CA',
         name: 'MST (Mountain Standard Time: UTC -07)',
-        zone: '-07:00'
+        zone: '-07:00',
+        tz_name: 'America/Edmonton',
+        standard: '-07:00',
+        daylight: '-06:00'
       },
       {
         country: 'CA',
         name: 'CST (Central Standard Time: UTC -06)',
-        zone: '-06:00'
+        zone: '-06:00',
+        tz_name: 'America/Winnipeg',
+        standard: '-06:00',
+        daylight: '-05:00'
       },
       {
         country: 'CA',
         name: 'EST (Eastern Standard Time: UTC -05)',
-        zone: '-05:00'
+        zone: '-05:00',
+        tz_name: 'America/Toronto',
+        standard: '-05:00',
+        daylight: '-04:00'
       },
       {
         country: 'CA',
         name: 'AST (Atlantic Standard Time: UTC -04)',
-        zone: '-04:00'
+        zone: '-04:00',
+        tz_name: 'America/Halifax',
+        standard: '-04:00',
+        daylight: '-03:00'
       },
       {
         country: 'CA',
         name: 'NST (Newfoundland Standard Time: UTC -03:30)',
-        zone: '-03:30'
+        zone: '-03:30',
+        tz_name: 'America/St_Johns',
+        standard: '-03:30',
+        daylight: '-02:30'
       }
     ]
   }

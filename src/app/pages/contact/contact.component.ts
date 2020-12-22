@@ -348,12 +348,12 @@ export class ContactComponent implements OnInit {
       const video_ids = [];
       const pdf_ids = [];
       const image_ids = [];
-      const content = this.emailContent;
+      const content = this.helperSerivce.convertEmailContent(this.emailContent);
       const subject = this.emailSubject;
       this.emailContacts.forEach((e) => {
         contacts.push(e._id);
       });
-      const materials = this.helperSerivce.getMaterials(content);
+      const materials = this.helperSerivce.getMaterials(this.emailContent);
       this.materials = _.intersectionBy(this.materials, materials, '_id');
       this.materials.forEach((e) => {
         const type = this.helperSerivce.getMaterialType(e);
