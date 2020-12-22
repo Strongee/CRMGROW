@@ -27,9 +27,12 @@
         </div>
       </div>
     </ng-container>
-    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
-      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
-    </button>
+    <ng-container *ngIf="step == 5">
+      <div class="f-22 font-weight-bold c-black">Uploading Contacts</div>
+    </ng-container>
+<!--    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>-->
+<!--      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>-->
+<!--    </button>-->
   </div>
   <mat-dialog-content class="mt-3">
     <ng-container *ngIf="step == 1">
@@ -256,7 +259,39 @@
         </table>
       </div>
     </ng-container>
-<!--    <ng-container *ngIf="step == 5">-->
+    <ng-container *ngIf="step == 5">
+      <div class="v-center justify-content-center" *ngIf="!checkingDuplicate">
+        <div class="upload-progress-wrapper">
+          <circle-progress
+            [percent]=uploadPercent
+            [radius]="100"
+            [outerStrokeWidth]="16"
+            [innerStrokeWidth]="8"
+            [outerStrokeColor]="'#78C000'"
+            [innerStrokeColor]="'#C7E596'"
+            [backgroundOpacity]="0"
+            [titleColor]="'#0000ff'"
+            [titleFontSize]="40"
+            [subtitleFontSize]="14"
+            [subtitle]=uploadSubTitle
+            [subtitleColor]="'#000000'"
+            [animation]="true"
+            [animationDuration]="0"
+          ></circle-progress>
+          <img class="glass-img" src="../../assets/img/hourglass.gif">
+        </div>
+      </div>
+      <div class="mt-2 text-center" *ngIf="checkingDuplicate">
+        <img class="checking-img" src="../../assets/img/hourglass.gif">
+        <div class="f-5 font-weight-bold c-blue w-100 text-center">Checking duplicated contacts...</div>
+      </div>
+      <div class="f-4 font-weight-bold c-red mt-2 w-100 text-center" *ngIf="!checkingDuplicate">
+        Please don't close this tab while uploading contacts.
+      </div>
+      <div class="f-4 font-weight-bold c-red mt-2 w-100 text-center" *ngIf="checkingDuplicate">
+        Please don't close this tab while checking duplicated contacts.
+      </div>
+    </ng-container>
 <!--      <p class="p-2 text-white alert-warning">-->
 <!--        {{failedRecords.length}} of {{contactsToUpload.length}} contact(s) are failed in uploading because of duplication with Current Contact List.-->
 <!--        You can overwrite following contacts.-->

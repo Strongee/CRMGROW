@@ -294,9 +294,7 @@
   }
 
   .actions-col {
-    min-width: 470px;
     .actions-wrapper {
-      width: 100%;
       .custom-control {
         display: none;
       }
@@ -328,17 +326,13 @@
     .time-col {
       width: 100px;
     }
-    .actions-col {
-      width: 100px;
-      min-width: auto;
-      .actions-wrapper {
-        width: 100px;
-        display: block;
-        .button-more {
-          display: none;
-        }
-      }
-    }
+  }
+
+  @media screen and (max-width: 1280px) {
+     .actions-wrapper {
+       display: block;
+       width: 130px;
+     }
   }
 
   @media screen and (max-width: 768px) {
@@ -354,12 +348,11 @@
     .capture-col {
       display: none;
     }
-    .actions-col .actions-wrapper .custom-control {
-      display: block;
-      text-align: center;
-    }
     .button-label {
       display: none;
+    }
+    .actions-wrapper {
+      width: 50px;
     }
   }
 
@@ -405,6 +398,12 @@
       display: none;
     }
   }
+}
+
+.absolute-right-button {
+  position: absolute;
+  right: 0;
+  z-index: 10;
 }
 
 :host ::ng-deep {

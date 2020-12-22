@@ -154,6 +154,28 @@
   }
 }
 
+.upload-progress-wrapper {
+  position: relative;
+  width: 250px;
+  height: 250px;
+}
+
+.glass-img {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  left: 80px;
+  top: 125px;
+  object-fit: contain;
+}
+
+.checking-img {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  margin: 0px auto;
+}
+
 :host ::ng-deep {
   .duplicate-check-table {
 
