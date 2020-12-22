@@ -93,6 +93,8 @@ import { AccordionComponent } from './accordion/accordion.component';
 import { SubjectInputComponent } from './subject-input/subject-input.component';
 import { SmsEditorComponent } from './sms-editor/sms-editor.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { FilterAddComponent } from './filter-add/filter-add.component';
 
 @NgModule({
   declarations: [
@@ -185,7 +187,8 @@ import { TaskEditComponent } from './task-edit/task-edit.component';
     AccordionComponent,
     SubjectInputComponent,
     SmsEditorComponent,
-    TaskEditComponent
+    TaskEditComponent,
+    FilterAddComponent
   ],
   imports: [
     CommonModule,
@@ -193,7 +196,16 @@ import { TaskEditComponent } from './task-edit/task-edit.component';
     RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule,
-    ColorPickerModule
+    ColorPickerModule,
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: '#78C000',
+      innerStrokeColor: '#C7E596',
+      animationDuration: 300
+    })
   ],
   exports: [
     TopbarComponent,

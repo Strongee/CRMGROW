@@ -150,6 +150,8 @@
           border-bottom: 1px solid #c6c7cf;
         }
         .email-setting {
+          display: flex;
+          align-items: center;
           .material-button {
             border-radius: 24px;
             border-width: 2px;
@@ -214,17 +216,35 @@
                 border-radius: 3px;
               }
             }
-            .time-picker {
-              width: 250px;
-              .show-datetime {
-                background-color: #ecedef;
-                border-radius: 3px;
+            .date-picker {
+              .picker-body{
+                display: flex;
+                justify-content: space-between;
+                .time-picker {
+                  width: 250px;
+                  .show-datetime {
+                    background-color: #ecedef;
+                    border-radius: 3px;
+                  }
+                  .remove-schedule {
+                    border: 1px solid $color-red;
+                    border-radius: 3px;
+                  }
+                }
+                @media screen and (max-width: 768px) {
+                  display: block;
+                }
               }
-              .remove-schedule {
-                border: 1px solid $color-red;
-                border-radius: 3px;
+              @media screen and (max-width: 768px) {
+                transform: translate(-250px, 28px) !important;
+              }
+              @media screen and (max-width: 480px) {
+                transform: translate(0px, 28px) !important;
               }
             }
+          }
+          @media screen and (max-width: 480px) {
+            display: block;
           }
         }
       }
@@ -279,6 +299,17 @@
         }
         .date-picker {
           padding: 1rem;
+        }
+      }
+      .task-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @media screen and (max-width: 576px) {
+          display: block;
+          .task-recurrence {
+            justify-content: space-between;
+          }
         }
       }
     }

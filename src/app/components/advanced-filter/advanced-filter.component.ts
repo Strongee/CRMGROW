@@ -5,6 +5,9 @@ import { COUNTRIES } from '../../constants/variable.constants';
 import { SearchOption } from 'src/app/models/searchOption.model';
 import { UserService } from '../../services/user.service';
 import { ContactService } from 'src/app/services/contact.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterAddComponent } from '../filter-add/filter-add.component';
+import { MaterialShareComponent } from '../material-share/material-share.component';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -33,18 +36,20 @@ export class AdvancedFilterComponent implements OnInit {
   brokerages = [];
   sources = [];
 
-  selectedMaterialActions = new SelectionModel<any>(true, []);
+  selectedMaterialActions = 0;
   selectedActivities = new SelectionModel<any>(true, []);
   searchOption: SearchOption = new SearchOption();
 
   @Output() onClose = new EventEmitter();
 
   constructor(
+    private dialog: MatDialog,
     public labelService: LabelService,
     public contactService: ContactService,
     public userService: UserService
   ) {
     this.searchOption = this.contactService.searchOption.getValue();
+    console.log('###', this.selectedMaterialActions);
   }
 
   ngOnInit(): void {
@@ -60,7 +65,7 @@ export class AdvancedFilterComponent implements OnInit {
       {
         _id: 1,
         title: 'Material sent',
-        count: 1
+        count: 0
       },
       {
         _id: 2,
@@ -157,6 +162,29 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   applyFilters(): void {}
+
+  saveFilters(): void {
+    this.dialog.open(FilterAddComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px'
+    });
+  }
+
+  selectMaterialAction(id: number): void {
+    this.selectedMaterialActions = id;
+  }
+
+  selectMaterial(): void {
+    this.dialog.open(MaterialShareComponent, {
+      width: '96vw',
+      maxWidth: '500px',
+      disableClose: true,
+      data: {
+        type: 'filter'
+      }
+    });
+  }
 
   /**
    * Toggle Label for search
