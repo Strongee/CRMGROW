@@ -180,7 +180,8 @@ export class AdvancedFilterComponent implements OnInit {
         width: '100vw',
         maxWidth: '600px',
         data: {
-          searchOption: this.searchOption
+          searchOption: this.searchOption,
+          material: this.selectedMaterial
         }
       })
       .afterClosed()
@@ -220,19 +221,19 @@ export class AdvancedFilterComponent implements OnInit {
             switch (this.selectedMaterialActions) {
               case 'Material sent':
                 this.searchOption.materialCondition.sent_video.flag = true;
-                this.searchOption.materialCondition.sent_video.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.sent_video.material = this.selectedMaterial[0]._id;
                 break;
               case 'No material sent':
                 this.searchOption.materialCondition.not_sent_video.flag = true;
-                this.searchOption.materialCondition.not_sent_video.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.not_sent_video.material = this.selectedMaterial[0]._id;
                 break;
               case 'Material reviewed':
                 this.searchOption.materialCondition.watched_video.flag = true;
-                this.searchOption.materialCondition.watched_video.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.watched_video.material = this.selectedMaterial[0]._id;
                 break;
               case 'Material not reviewed':
                 this.searchOption.materialCondition.not_watched_video.flag = true;
-                this.searchOption.materialCondition.not_watched_video.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.not_watched_video.material = this.selectedMaterial[0]._id;
                 break;
             }
           }
@@ -240,19 +241,19 @@ export class AdvancedFilterComponent implements OnInit {
             switch (this.selectedMaterialActions) {
               case 'Material sent':
                 this.searchOption.materialCondition.sent_pdf.flag = true;
-                this.searchOption.materialCondition.sent_pdf.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.sent_pdf.material = this.selectedMaterial[0]._id;
                 break;
               case 'No material sent':
                 this.searchOption.materialCondition.not_sent_pdf.flag = true;
-                this.searchOption.materialCondition.not_sent_pdf.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.not_sent_pdf.material = this.selectedMaterial[0]._id;
                 break;
               case 'Material reviewed':
                 this.searchOption.materialCondition.watched_pdf.flag = true;
-                this.searchOption.materialCondition.watched_pdf.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.watched_pdf.material = this.selectedMaterial[0]._id;
                 break;
               case 'Material not reviewed':
                 this.searchOption.materialCondition.not_watched_pdf.flag = true;
-                this.searchOption.materialCondition.not_watched_pdf.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.not_watched_pdf.material = this.selectedMaterial[0]._id;
                 break;
             }
           }
@@ -260,19 +261,19 @@ export class AdvancedFilterComponent implements OnInit {
             switch (this.selectedMaterialActions) {
               case 'Material sent':
                 this.searchOption.materialCondition.sent_image.flag = true;
-                this.searchOption.materialCondition.sent_image.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.sent_image.material = this.selectedMaterial[0]._id;
                 break;
               case 'No material sent':
                 this.searchOption.materialCondition.not_sent_image.flag = true;
-                this.searchOption.materialCondition.not_sent_image.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.not_sent_image.material = this.selectedMaterial[0]._id;
                 break;
               case 'Material reviewed':
                 this.searchOption.materialCondition.watched_image.flag = true;
-                this.searchOption.materialCondition.watched_image.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.watched_image.material = this.selectedMaterial[0]._id;
                 break;
               case 'Material not reviewed':
                 this.searchOption.materialCondition.not_watched_image.flag = true;
-                this.searchOption.materialCondition.not_watched_image.material = this.selectedMaterial[0];
+                this.searchOption.materialCondition.not_watched_image.material = this.selectedMaterial[0]._id;
                 break;
             }
           }
