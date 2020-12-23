@@ -1655,3 +1655,9 @@ body {
   bottom: 0px;
   right: 0px;
 }
+
+.send-email {
+  mat-dialog-container {
+    padding: 0;
+  }
+}
