@@ -50,19 +50,30 @@ export class ActivityService extends HttpService {
   loadImpl(page: number): Observable<any> {
     const pageSize = this.pageSize.getValue();
     const skip = (page - 1) * pageSize;
-    return this.http
-      .post(this.server + ACTIVITY.LOAD, { skip, size: pageSize })
-      .pipe(
-        map((res) => {
-          return {
-            activities: (res['data']['activity'] || []).map((e) =>
-              new Activity().deserialize(e)
-            ),
-            count: res['data']['count'] || 0
-          };
-        }),
-        catchError(this.handleError('LOAD ACTIVITY', null))
-      );
+    // return this.http
+    //   .post(this.server + ACTIVITY.LOAD, { skip, size: pageSize })
+    //   .pipe(
+    //     map((res) => {
+    //       return {
+    //         activities: (res['data']['activity'] || []).map((e) =>
+    //           new Activity().deserialize(e)
+    //         ),
+    //         count: res['data']['count'] || 0
+    //       };
+    //     }),
+    //     catchError(this.handleError('LOAD ACTIVITY', null))
+    //   );
+    return this.http.get(this.server + ACTIVITY.LOAD + page).pipe(
+      map((res) => {
+        return {
+          activities: (res['data']['activity'] || []).map((e) =>
+            new Activity().deserialize(e)
+          ),
+          count: res['data']['count'] || 0
+        };
+      }),
+      catchError(this.handleError('LOAD ACTIVITY', null))
+    );
   }
 
   reload(): void {
