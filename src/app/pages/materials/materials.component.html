@@ -2,11 +2,11 @@
   <div class="page-header">
     <h1 class="f-24 font-weight-bold m-0">Materials</h1>
     <div class="v-center justify-content-between ml-2">
-      <button class="v-center btn btn-blue font-weight-bold text-white button-record" (click)="recordSetting()">
+      <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record p-2" (click)="recordSetting()">
         <i class="bgc-white i-icon i-record mr-2"></i>
         Record new video
       </button>
-      <div ngbDropdown class="ml-1 ml-sm-3 actions-groups rounded-pill py-1">
+      <div ngbDropdown class="ml-1 ml-sm-3 actions-groups border border-primary rounded">
         <div class="font-weight-bold c-dark c-pointer px-2 px-sm-3 py-2 button-add" ngbDropdownToggle>
           Add new
         </div>
@@ -29,8 +29,8 @@
       </div>
     </div>
   </div>
-  <div class="material-folders mt-4">
-    <h6 class="f-6 font-weight-bold c-dark mb-4">Folders</h6>
+  <div class="material-folders mt-4 mb-2">
+    <h6 class="f-6 font-weight-bold c-dark mb-3">Folders</h6>
     <div class="row">
       <div class="col-md-4">
         <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded" (click)="selectFolder()">
