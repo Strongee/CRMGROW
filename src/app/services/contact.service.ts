@@ -34,6 +34,8 @@ export class ContactService extends HttpService {
   searchStr$ = this.searchStr.asObservable();
   pageIndex: BehaviorSubject<number> = new BehaviorSubject(1);
   pageIndex$ = this.pageIndex.asObservable();
+  pageSize: BehaviorSubject<number> = new BehaviorSubject(50);
+  pageSize$ = this.pageSize.asObservable();
 
   loadSubscription: Subscription;
 
@@ -89,10 +91,12 @@ export class ContactService extends HttpService {
   }
 
   update(contact): Observable<any> {
-    return this.httpClient.post(this.server + CONTACT.UPDATE, {...contact}).pipe(
-      map((res) => res),
-      catchError(this.handleError('UPDATE CONTACT', []))
-    );
+    return this.httpClient
+      .post(this.server + CONTACT.UPDATE, { ...contact })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('UPDATE CONTACT', []))
+      );
   }
 
   delete(_id: string): void {}
@@ -159,6 +163,22 @@ export class ContactService extends HttpService {
       } else {
         // Call Normal Load
         this.load(0);
+      }
+    } else {
+      this.advancedSearch(searchStr);
+    }
+  }
+  reloadPage(): void {
+    const searchOption = this.searchOption.getValue();
+    const searchStr = this.searchStr.getValue();
+    if (searchOption.isEmpty()) {
+      if (searchStr) {
+        // Call Normal Search
+        this.normalSearch(searchStr);
+      } else {
+        // Call Normal Load
+        const page = this.pageIndex.getValue();
+        this.load(page);
       }
     } else {
       this.advancedSearch(searchStr);

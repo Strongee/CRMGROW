@@ -52,7 +52,9 @@ export class HandlerService {
 
   bulkContactAdd$(): void {
     // Reload the Contact page
+    this.contactService.reloadPage();
     // Reload the Activity Page
+    this.activityService.reload();
   }
 
   bulkContactUpdate$(_ids: string[], contact: any, tagData: any): void {
