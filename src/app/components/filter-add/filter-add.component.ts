@@ -84,7 +84,12 @@ export class FilterAddComponent implements OnInit {
       this.filterCount++;
       this.selectedAction = 'Material reviewed';
     }
-    if (this.searchOption.activityCondition.length) {
+    if (
+      this.searchOption.activityCondition.length ||
+      this.searchOption.lastMaterial.send_image.flag ||
+      this.searchOption.lastMaterial.watched_pdf.flag ||
+      this.searchOption.lastMaterial.watched_image.flag
+    ) {
       this.filterCount++;
     }
     if (this.searchOption.brokerageCondition.length) {
@@ -132,4 +137,16 @@ export class FilterAddComponent implements OnInit {
   saveFilter(): void {
     this.dialogRef.close(this.filterName);
   }
+
+  activityDefine = {
+    contacts: 'Justadded',
+    notes: 'Added note',
+    follow_ups: 'Task added',
+    phone_logs: 'Log phone call',
+    email_trackers: 'Opened email',
+    videos: 'Sent video',
+    pdfs: 'Sent PDF',
+    video_trackers: 'Watched video',
+    emails: 'Sent email'
+  };
 }
