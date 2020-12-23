@@ -344,3 +344,4 @@ export function validateEmail(email): any {
   }
   return true;
 }
+

@@ -95,6 +95,7 @@ import { SubjectInputComponent } from './subject-input/subject-input.component';
 import { SmsEditorComponent } from './sms-editor/sms-editor.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FilterAddComponent } from './filter-add/filter-add.component';
+import { ContactAssignAutomationComponent } from './contact-assign-automation/contact-assign-automation.component';
 
 @NgModule({
   declarations: [
@@ -188,7 +189,8 @@ import { FilterAddComponent } from './filter-add/filter-add.component';
     AccordionComponent,
     SubjectInputComponent,
     SmsEditorComponent,
-    FilterAddComponent
+    FilterAddComponent,
+    ContactAssignAutomationComponent
   ],
   imports: [
     CommonModule,
