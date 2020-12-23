@@ -24,6 +24,7 @@ export class FilterAddComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.searchOption = this.data.searchOption;
+    this.selectedMaterial.push(this.data.material[0]);
     this.labelService.getLabels().subscribe((res) => {
       if (res) {
         this.searchOption.labelCondition.forEach((selectLabel) => {
@@ -38,86 +39,50 @@ export class FilterAddComponent implements OnInit {
     if (this.searchOption.materialCondition.not_sent_image.flag == true) {
       this.filterCount++;
       this.selectedAction = 'No material sent';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.not_sent_image.material
-      );
     }
     if (this.searchOption.materialCondition.not_sent_pdf.flag == true) {
       this.filterCount++;
       this.selectedAction = 'No material sent';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.not_sent_pdf.material
-      );
     }
     if (this.searchOption.materialCondition.not_sent_video.flag == true) {
       this.filterCount++;
       this.selectedAction = 'No material sent';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.not_sent_video.material
-      );
     }
     if (this.searchOption.materialCondition.not_watched_image.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material not viewed';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.not_watched_image.material
-      );
     }
     if (this.searchOption.materialCondition.not_watched_pdf.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material not viewed';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.not_watched_pdf.material
-      );
     }
     if (this.searchOption.materialCondition.not_watched_video.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material not viewed';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.not_watched_video.material
-      );
     }
     if (this.searchOption.materialCondition.sent_image.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material sent';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.sent_image.material
-      );
     }
     if (this.searchOption.materialCondition.sent_pdf.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material sent';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.sent_pdf.material
-      );
     }
     if (this.searchOption.materialCondition.sent_video.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material sent';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.sent_video.material
-      );
     }
     if (this.searchOption.materialCondition.watched_image.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material reviewed';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.watched_image.material
-      );
     }
     if (this.searchOption.materialCondition.watched_pdf.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material reviewed';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.watched_pdf.material
-      );
     }
     if (this.searchOption.materialCondition.watched_video.flag == true) {
       this.filterCount++;
       this.selectedAction = 'Material reviewed';
-      this.selectedMaterial.push(
-        this.searchOption.materialCondition.watched_video.material
-      );
     }
     if (this.searchOption.activityCondition.length) {
       this.filterCount++;
