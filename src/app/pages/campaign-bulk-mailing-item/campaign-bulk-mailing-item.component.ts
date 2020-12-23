@@ -6,6 +6,7 @@ import { CampaignService } from '../../services/campaign.service';
 import { MailListService } from '../../services/maillist.service';
 import { TemplatesService } from '../../services/templates.service';
 import {MaterialService} from "../../services/material.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-campaign-bulk-mailing-item',
@@ -14,16 +15,19 @@ import {MaterialService} from "../../services/material.service";
 })
 export class CampaignBulkMailingItemComponent implements OnInit {
   isLoading = false;
+  id = '';
+  campaign;
 
-  @Input('id') id: string;
   constructor(
     private campaignService: CampaignService,
     private mailListService: MailListService,
     private templateService: TemplatesService,
-    private materialService: MaterialService
+    private materialService: MaterialService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.id = this.route.snapshot.params.id;
     this.loadBulk();
   }
 
@@ -32,7 +36,7 @@ export class CampaignBulkMailingItemComponent implements OnInit {
     this.campaignService.get(this.id).subscribe(
       (res) => {
         if (res) {
-          console.log('bulk detail ======>', res);
+          this.campaign = res;
         }
       },
       (error) => {}
