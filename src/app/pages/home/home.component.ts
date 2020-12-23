@@ -14,20 +14,9 @@ export class HomeComponent implements OnInit {
     { icon: 'i-icon i-task', label: 'Tasks', id: 'tasks' },
     { icon: 'i-icon i-notification', label: 'Activity', id: 'activities' }
   ];
-  DEADLINE_TYPES = [
-    { id: 'all', label: 'All tasks' },
-    { id: 'overdue', label: 'Overdue' },
-    { id: 'today', label: 'Today' },
-    { id: 'tomorrow', label: 'Tomorrow' },
-    { id: 'this week', label: 'This week' },
-    { id: 'next week', label: 'Next week' }
-  ];
-
   selectedTab: TabItem = this.tabs[0];
   // Statistics
   duration = STATISTICS_DURATION[0];
-  // Task Filter Type
-  deadline = this.DEADLINE_TYPES[0];
 
   constructor(private location: Location) {}
 
@@ -56,17 +45,6 @@ export class HomeComponent implements OnInit {
   changeDuration(value: string): void {
     this.duration = value;
   }
-  /**
-   * Change the Task Deadline
-   * @param value : Deadline Type -> {label: '', id: ''}
-   */
-  changeDeadlineType(value: any): void {
-    this.deadline = value;
-  }
-  /**
-   * Open Filter Panel
-   */
-  openFilter(): void {}
 
   //////////////////// analytics page ////////////////////
   analyticsTabs: TabItem[] = [

@@ -33,6 +33,17 @@ export class TasksComponent implements OnInit, OnDestroy {
     email: 'i-message',
     material: 'i-video'
   };
+  DEADLINE_TYPES = [
+    { id: 'all', label: 'All tasks' },
+    { id: 'overdue', label: 'Overdue' },
+    { id: 'today', label: 'Today' },
+    { id: 'tomorrow', label: 'Tomorrow' },
+    { id: 'this week', label: 'This week' },
+    { id: 'next week', label: 'Next week' }
+  ];
+  // Task Filter Type
+  deadline = this.DEADLINE_TYPES[0];
+
   isUpdating = false;
   updateSubscription: Subscription;
 
@@ -49,12 +60,23 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.loadTasks();
   }
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
   loadTasks(): void {
     this.taskService.loadToday();
   }
+
+  /**
+   * Change the Task Deadline
+   * @param value : Deadline Type -> {label: '', id: ''}
+   */
+  changeDeadlineType(value: any): void {
+    this.deadline = value;
+  }
+  /**
+   * Open Filter Panel
+   */
+  openFilter(): void {}
 
   isAllSelected(): boolean {
     return false;

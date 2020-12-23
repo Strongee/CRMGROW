@@ -40,10 +40,22 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activityService.load(1);
+    const currentPage = this.activityService.page.getValue();
+    this.changePage(currentPage || 1);
+
+    const currentPageSize = this.activityService.pageSize.getValue();
+    this.PAGE_COUNTS.some((e) => {
+      if (e.id === currentPageSize) {
+        this.pageSize = e;
+        return true;
+      }
+    });
   }
 
   ngOnDestroy(): void {
+    // Page Size and Page Index Save
+    this.activityService.page.next(this.page);
+    this.activityService.pageSize.next(this.pageSize.id);
   }
 
   changePage(page: number): void {
@@ -56,7 +68,13 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   }
 
   changePageSize(type: any): void {
+    // Calculate New Page
+    const newPage =
+      Math.floor((this.pageSize.id * (this.page - 1)) / type.id) + 1;
+
     this.pageSize = type;
+    this.activityService.pageSize.next(type.id);
+    this.changePage(newPage);
   }
 
   updateLabel(label: string, _id: string): void {

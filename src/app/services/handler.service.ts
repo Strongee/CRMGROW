@@ -36,17 +36,18 @@ export class HandlerService {
     // Else contact page is not 1, reload the current page.
     // If Search option is not empty, check the search option and add or ...
 
-    // Activity Page update: Prepend the new activity to the list page
-    const newActivity = new Activity().deserialize({
-      type: 'contacts',
-      content: 'added contact'
-    });
-    newActivity.contacts = new Contact().deserialize(contact);
-    const activities = this.storeService.activities.getValue();
-    activities.unshift(newActivity);
-    this.storeService.activities.next([...activities]);
-    // TODO(Update above Logic): If activity page is 1, prepend the new activity
-    // Else activity page is not 1, reload the current page
+    // *** Activity Page update: Prepend the new activity to the list page
+    // const newActivity = new Activity().deserialize({
+    //   type: 'contacts',
+    //   content: 'added contact'
+    // });
+    // newActivity.contacts = new Contact().deserialize(contact);
+    // const activities = this.storeService.activities.getValue();
+    // activities.unshift(newActivity);
+    // this.storeService.activities.next([...activities]);
+    // *** TODO(Update above Logic): If activity page is 1, prepend the new activity
+    // *** Else activity page is not 1, reload the current page
+    this.activityService.reload();
   }
 
   bulkContactAdd$(): void {
@@ -86,18 +87,17 @@ export class HandlerService {
     // Update the Contacts Page
     // If search option is not empty, the update is working
     // If search option is empty, reload the current page. (the page is out of bounds, should reload the last page again.)
-
-    // Update the Activity Page: Reload
-
-    // Update the Task Page: Remove the Tasks
-    const tasks = this.storeService.tasks.getValue();
-    for (let i = tasks.length - 1; i >= 0; i--) {
-      const task = tasks[i];
-      if (_ids.indexOf(task.contact._id) !== -1) {
-        tasks.splice(i, 1);
-      }
-    }
-    this.storeService.tasks.next(tasks);
+    // *** Update the Activity Page: Reload
+    // this.activityService.reload();
+    // *** Update the Task Page: Remove the Tasks
+    // const tasks = this.storeService.tasks.getValue();
+    // for (let i = tasks.length - 1; i >= 0; i--) {
+    //   const task = tasks[i];
+    //   if (_ids.indexOf(task.contact._id) !== -1) {
+    //     tasks.splice(i, 1);
+    //   }
+    // }
+    // this.storeService.tasks.next(tasks);
   }
 
   activityAdd$(_ids: string[], type: string): void {
@@ -130,6 +130,7 @@ export class HandlerService {
     // Detail Page update
 
     // Activities Page Update
+    this.activityService.reload();
   }
 
   registerActivity$(data: any): void {
