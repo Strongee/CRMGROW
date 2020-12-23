@@ -64,6 +64,14 @@
     <app-activities [class.d-none]="selectedTab.id === 'tasks'"></app-activities>
   </div>
 
+</div>
+<mat-drawer-container [hasBackdrop]="true">
+  <mat-drawer #drawer position="end">
+    <app-task-filter></app-task-filter>
+  </mat-drawer>
+</mat-drawer-container>
+
+
   <!-- <div class="mt-5">
     <div class="v-center">
       <app-slide-tab [tabs]="analyticsTabs" [selected]="selectedAnalyticsTab" (onChange)="changeAnalyticsTab($event)">
@@ -81,14 +89,6 @@
       </ng-container>
     </div>
   </div> -->
-
-</div>
-<mat-drawer-container [hasBackdrop]="true">
-  <mat-drawer #drawer position="end">
-    <app-task-filter></app-task-filter>
-  </mat-drawer>
-</mat-drawer-container>
-
 
 <!-- DropUp Component -->
 

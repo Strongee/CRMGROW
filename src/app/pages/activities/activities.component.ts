@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ActivityService } from 'src/app/services/activity.service';
@@ -11,7 +11,7 @@ import { StoreService } from 'src/app/services/store.service';
   templateUrl: './activities.component.html',
   styleUrls: ['./activities.component.scss']
 })
-export class ActivitiesComponent implements OnInit {
+export class ActivitiesComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
   DISPLAY_COLUMNS = [
     'contact_name',
@@ -41,6 +41,9 @@ export class ActivitiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.activityService.load(1);
+  }
+
+  ngOnDestroy(): void {
   }
 
   changePage(page: number): void {

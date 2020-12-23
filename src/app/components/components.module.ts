@@ -95,6 +95,7 @@ import { SmsEditorComponent } from './sms-editor/sms-editor.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FilterAddComponent } from './filter-add/filter-add.component';
+import { TaskBulkComponent } from './task-bulk/task-bulk.component';
 
 @NgModule({
   declarations: [
@@ -188,7 +189,8 @@ import { FilterAddComponent } from './filter-add/filter-add.component';
     SubjectInputComponent,
     SmsEditorComponent,
     TaskEditComponent,
-    FilterAddComponent
+    FilterAddComponent,
+    TaskBulkComponent
   ],
   imports: [
     CommonModule,

@@ -31,7 +31,13 @@ export class HomeComponent implements OnInit {
 
   constructor(private location: Location) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Load the Last Tab Variable from Storage
+    const page = localStorage.getItem('homeTab');
+    if (page === 'activities') {
+      this.selectedTab = this.tabs[1];
+    }
+  }
 
   /**
    * Change the Tab -> This will change the view
@@ -40,6 +46,8 @@ export class HomeComponent implements OnInit {
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
     this.location.replaceState(tab.id);
+    // Set the storage for the active tab
+    localStorage.setItem('homeTab', tab.id);
   }
   /**
    * Change Duration

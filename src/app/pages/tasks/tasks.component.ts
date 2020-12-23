@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
@@ -14,7 +14,7 @@ import { TaskService } from 'src/app/services/task.service';
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
   DISPLAY_COLUMNS = [
     'select',
@@ -47,6 +47,9 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTasks();
+  }
+
+  ngOnDestroy(): void {
   }
 
   loadTasks(): void {
