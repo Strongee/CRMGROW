@@ -32,7 +32,7 @@
       <div class="v-center">
         <div class="f-3 fw-600 c-dark">Include</div>
         <label class="custom-toggle mb-0 mx-2" placement="top">
-          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="searchOption.includeLabel = !searchOption.includeLabel" name="includeLabel">
+          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="toggleInclude('label')" name="includeLabel">
           <span class="custom-toggle-slider rounded-circle"></span>
         </label>
         <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -54,12 +54,18 @@
     <div class="checkbox-wrapper w-100 my-3">
       <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
         style="height: unset; line-height: unset;">
-        <input type="radio" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
+        <input type="checkbox" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
           (click)="selectMaterialAction(item.title)" [checked]="selectedMaterialActions == item.title">
         <label class="custom-control-label v-center" for="material-{{item._id}}">
           <div class="f-3 fw-600 material-action-title">{{item.title}}</div>
           <div class="count f-3 font-weight-bold c-white bgc-blue ml-2 text-center rounded-circle" *ngIf="item.count">{{item.count}}</div>
-          <div class="list f-1 font-weight-bold ml-2 border border-primary rounded c-blue c-pointer" (click)="selectMaterial()">List</div>
+          <button type="button" 
+            class="list f-1 font-weight-bold ml-2 border border-primary rounded c-blue c-pointer bgc-white"
+            [disabled]="selectedMaterialActions != item.title"
+            (click)="selectMaterial()"
+          >
+            List
+          </button>
         </label>
       </div>
     </div>
@@ -95,7 +101,7 @@
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
             <input type="checkbox" id="source_check" name="source_check" [checked]="!searchOption.includeSource"
-              (change)="searchOption.includeSource = !searchOption.includeSource">
+              (change)="toggleInclude('source')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -112,7 +118,7 @@
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
             <input type="checkbox" id="company_check" name="company_check" [checked]="!searchOption.includeBrokerage"
-              (change)="searchOption.includeBrokerage = !searchOption.includeBrokerage">
+              (change)="toggleInclude('brokerage')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -129,7 +135,7 @@
         <div class="v-center mb-2">
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
-            <input type="checkbox" id="tag_check" name="tag_check" [checked]="!searchOption.includeTag" (change)="searchOption.includeTag = !searchOption.includeTag">
+            <input type="checkbox" id="tag_check" name="tag_check" [checked]="!searchOption.includeTag" (change)="toggleInclude('tag')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -144,11 +150,34 @@
       <div class="checkbox-wrapper">
         <div class="custom-checkbox material-action" *ngFor="let item of activities"
           style="height: unset; line-height: unset;">
-          <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
-            (change)="toggleActivities(item.title.toLocaleLowerCase())" [checked]="searchOption.activityCondition.indexOf(item.title.toLocaleLowerCase()) !== -1">
-          <label class="custom-control-label" for="activity-{{item._id}}">
-            <div class="f-3 mt-1">{{item.title}}</div>
-          </label>
+          <ng-container *ngIf="item.title != 'Sent image' && item.title != 'Reviewed PDF' && item.title != 'Reviewed image'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.activityCondition.indexOf(activityDefine[item.title]) !== -1">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
+          <ng-container *ngIf="item.title == 'Sent image'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.lastMaterial.send_image.flag">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
+          <ng-container *ngIf="item.title == 'Reviewed PDF'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.lastMaterial.watched_pdf.flag">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
+          <ng-container *ngIf="item.title == 'Reviewed image'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.lastMaterial.watched_image.flag">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
         </div>
       </div>
     </div>
