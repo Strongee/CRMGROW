@@ -1,4 +1,4 @@
-<div class="tab-container {{type}}" #container>
+<div class="tab-container {{type}} {{class}}" #container>
   <div class="tab-indicator" #indicator></div>
   <ng-container *ngFor="let tab of tabs;">
     <div class="tab" [ngClass]="{'active': tab.id === selected.id}" (click)="changeTab($event, tab)">

@@ -20,6 +20,7 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
   @Input('tabs') tabs: TabItem[] = [];
   @Input('selected') selected: TabItem;
   @Input('type') type: string = '';
+  @Input('class') class: string = '';
   @Output() onChange = new EventEmitter();
   @ViewChild('container') container: ElementRef;
   @ViewChild('indicator') indicator: ElementRef;
