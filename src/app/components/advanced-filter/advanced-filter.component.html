@@ -32,7 +32,7 @@
       <div class="v-center">
         <div class="f-3 fw-600 c-dark">Include</div>
         <label class="custom-toggle mb-0 mx-2" placement="top">
-          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="searchOption.includeLabel = !searchOption.includeLabel" name="includeLabel">
+          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="toggleInclude('label')" name="includeLabel">
           <span class="custom-toggle-slider rounded-circle"></span>
         </label>
         <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -95,7 +95,7 @@
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
             <input type="checkbox" id="source_check" name="source_check" [checked]="!searchOption.includeSource"
-              (change)="searchOption.includeSource = !searchOption.includeSource">
+              (change)="toggleInclude('source')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -112,7 +112,7 @@
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
             <input type="checkbox" id="company_check" name="company_check" [checked]="!searchOption.includeBrokerage"
-              (change)="searchOption.includeBrokerage = !searchOption.includeBrokerage">
+              (change)="toggleInclude('brokerage')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -129,7 +129,7 @@
         <div class="v-center mb-2">
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
-            <input type="checkbox" id="tag_check" name="tag_check" [checked]="!searchOption.includeTag" (change)="searchOption.includeTag = !searchOption.includeTag">
+            <input type="checkbox" id="tag_check" name="tag_check" [checked]="!searchOption.includeTag" (change)="toggleInclude('tag')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>

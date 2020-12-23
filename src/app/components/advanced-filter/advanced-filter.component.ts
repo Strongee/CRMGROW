@@ -306,6 +306,36 @@ export class AdvancedFilterComponent implements OnInit {
     this.contactService.searchOption.next(this.searchOption);
   }
 
+  toggleInclude(type: string): void {
+    switch (type) {
+      case 'label':
+        this.searchOption.includeLabel = !this.searchOption.includeLabel;
+        if (this.searchOption.labelCondition.length) {
+          this.contactService.searchOption.next(this.searchOption);
+        }
+        break;
+      case 'source':
+        this.searchOption.includeSource = !this.searchOption.includeSource;
+        if (this.searchOption.sourceCondition.length) {
+          this.contactService.searchOption.next(this.searchOption);
+        }
+        break;
+      case 'brokerage':
+        this.searchOption.includeBrokerage = !this.searchOption
+          .includeBrokerage;
+        if (this.searchOption.brokerageCondition.length) {
+          this.contactService.searchOption.next(this.searchOption);
+        }
+        break;
+      case 'tag':
+        this.searchOption.includeTag = !this.searchOption.includeTag;
+        if (this.searchOption.tagsCondition.length) {
+          this.contactService.searchOption.next(this.searchOption);
+        }
+        break;
+    }
+  }
+
   close(): void {
     this.onClose.emit();
   }
