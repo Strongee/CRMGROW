@@ -49,14 +49,6 @@ export class CampaignListComponent implements OnInit {
     );
   }
 
-  /**
-   * Emit the Parent Event to go to detail page
-   * @param id : list ID
-   */
-  goToDetailPage(id: string): void {
-    this.onDetail.emit(id);
-  }
-
   isSelectedPage(): any {
     if (this.lists.length) {
       for (let i = 0; i < this.lists.length; i++) {

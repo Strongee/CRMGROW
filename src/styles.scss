@@ -240,6 +240,10 @@ ul {
 .fw-600 {
   font-weight: 600;
 }
+.page-title {
+  font-size: 26px;
+  letter-spacing: 1px;
+}
 .ls-1{
   letter-spacing: 1px;
 }
@@ -583,7 +587,7 @@ button {
 .btn-white-blue {
   background-color: $color-white;
   color: $color-blue;
-  border: 2px solid $color-blue;
+  border: 1px solid $color-blue;
 
   &:hover {
     background-color: $color-white;
@@ -625,7 +629,9 @@ button {
   }
 }
 
-
+.hover-bottom:hover {
+  text-decoration: none;
+}
 
 /** ==== Form Group and Control === */
 .form-group {
@@ -1482,7 +1488,7 @@ mat-expansion-panel {
     display: flex;
     align-items: center;
   }
-  
+
   .pagination-wrapper {
     grid-column: 2/3;
   }
@@ -1502,7 +1508,7 @@ mat-expansion-panel {
   &.dropdown {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    
+
     &.show {
       box-shadow: 0 5px 24px -5px rgba(16, 19, 54, 0.24);
 
@@ -1521,7 +1527,7 @@ mat-expansion-panel {
 
     &.show {
       box-shadow: 0 5px 24px -5px rgba(16, 19, 54, 0.24);
-  
+
       .dropdown-menu {
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
