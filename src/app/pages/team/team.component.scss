@@ -352,7 +352,7 @@
       display: none;
     }
     .actions-wrapper {
-      width: 50px;
+      width: 30px;
     }
   }
 
@@ -388,13 +388,31 @@
   }
 }
 
-.template-table, .automation-table {
+.template-table,
+.automation-table,
+.contact-table {
   th, td {
-    padding: 10px 0px;
+    padding: 10px;
+  }
+
+  @media screen and (max-width: 1280px) {
+    .when-shared, .last-activity {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .shared-with {
+      display: none;
+    }
   }
 
   @media screen and (max-width: 576px) {
     .material-created, .material-contacts {
+      display: none;
+    }
+
+    .phone-number {
       display: none;
     }
   }
@@ -406,7 +424,9 @@
   z-index: 10;
 }
 
+
 :host ::ng-deep {
+
   .mat-ink-bar {
     border-radius: 20px;
     height: 5px;
@@ -417,7 +437,6 @@
       padding: 5px;
     }
   }
-
 
   .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
     background-color: blue;
@@ -431,6 +450,10 @@
 
   .sb-group {
     flex-wrap: nowrap;
+  }
+
+  .dropdown-toggle::after {
+    display: none;
   }
 }
 

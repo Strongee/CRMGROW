@@ -231,12 +231,25 @@ export class MaterialShareComponent implements OnInit {
       }
     }
 
-    this.teamService.shareVideos(this.teamId, videoIds).subscribe((res) => {});
+    this.teamService.shareVideos(this.teamId, videoIds).subscribe(
+      (res) => {
+        if (res) {
+          this.sharing = false;
+          this.dialogRef.close({
+            videos: res
+          });
+        }
+      },
+      (error) => {
+        this.sharing = false;
+        this.dialogRef.close();
+      }
+    );
     // await this.teamService.sharePdfs(this.teamId, pdfIds);
     // await this.teamService.shareImages(this.teamId, imageIds);
 
-    this.sharing = false;
-    this.dialogRef.close();
+    // this.sharing = false;
+    // this.dialogRef.close();
   }
 
   filterMaterial(): void {

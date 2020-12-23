@@ -294,7 +294,7 @@
                 Materials
               </ng-template>
               <div class="materials-list-wrapper tab-panel">
-                  <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="createMaterial()">ADD MATERIAL</button>
+                  <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareMaterial()">Share material</button>
                 <div class="materials mt-3">
                   <h6 class="f-6 font-weight-bold text-uppercase c-dark mt-3">Video</h6>
                   <ng-container *ngIf="team.videos.length; else emptyVideoListTemplate">
@@ -628,7 +628,7 @@
                 Templates
               </ng-template>
               <div class="template-list-wrapper tab-panel mt-3">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="createEmailTemplate()">ADD TEMPLATE</button>
+                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareEmailTemplate()">Share template</button>
                 <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <table class="table template-table">
@@ -694,10 +694,8 @@
               <ng-template mat-tab-label>
                 Automations
               </ng-template>
-              <div class="automation-list-wrapper tab-panel">
-                <div class="d-flex my-3">
-                  <button class="btn btn-primary f-3 font-weight-bold ml-auto" (click)="createAutomation()">ADD AUTOMATION</button>
-                </div>
+              <div class="automation-list-wrapper tab-panel mt-3">
+                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareAutomation()">Share automation</button>
                 <ng-container *ngIf="team.automations.length; else emptyAutomationListTemplate">
                   <ng-container *ngIf="role=='editor' || role == 'owner'">
                     <table class="table automation-table">
@@ -754,6 +752,89 @@
                       <p class="mb-4">Please add automation to use for sharing.</p>
                     </div>
                   </div>
+                </ng-template>
+              </div>
+            </mat-tab>
+            <mat-tab label="Automation">
+              <ng-template mat-tab-label>
+                Contacts
+              </ng-template>
+              <div class="contact-list-wrapper tab-panel mt-3">
+                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareContact()">Share Contact</button>
+                <ng-container *ngIf="sharedContacts.length; else emptyContactListTemplate">
+                  <ng-container *ngIf="role=='editor' || role == 'owner'">
+                    <table class="table contact-table mt-3">
+                      <thead>
+                      <th class="contact-name">Contact Name</th>
+                      <th class="contact-email">Email</th>
+                      <th class="phone-number">Phone Number</th>
+                      <th class="last-activity">Lastest Activity</th>
+                      <th class="when-shared">When Shared</th>
+                      <th class="shared-with">Shared With</th>
+                      <th class="share-status"></th>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let contact of sharedContacts">
+                          <td class="contact-name">
+                            <div class="v-center">
+                              <div class="contact-avatar f-3 mr-2">{{getAvatarName(contact)}}</div>
+                              <div class="f-3">{{contact.first_name + ' ' + contact.last_name}}</div>
+                            </div>
+                          </td>
+                          <td class="contact-email">
+                            <div class="f-3">{{contact.email}}</div>
+                          </td>
+                          <td class="phone-number">
+                            <div class="c-blue font-weight-bold">{{contact.cell_phone | phone_format}}</div>
+                          </td>
+                          <td class="last-activity">
+                            <div class="v-center">
+                              <i class="act-icon normal {{'act-'+ contact.last_activity?.type}} d-block mr-2"></i>
+                              <span>{{contact.last_activity?.content}}</span>
+                            </div>
+                          </td>
+                          <td class="when-shared">
+                            <div class="f-3">{{contact.share_at | date : 'MMM dd, yyyy'}}</div>
+                          </td>
+                          <td class="shared-with">
+                            <div ngbDropdown class="d-flex" *ngIf="contact.shared_members.length">
+                              <div class="v-center c-pointer" ngbDropdownToggle>
+                                <div class="contact-avatar f-3 mr-2">
+                                  {{getAvatarName(contact.shared_members[0])}}
+                                </div>
+                                <div class="f-3">{{contact.shared_members[0].first_name + ' ' + contact.shared_members[0].last_name}}</div>
+                              </div>
+                              <div ngbDropdownMenu class="light">
+                                <button class="border-0 py-2 c-blue f-3 font-weight-bold dropdown-item">
+                                  {{contact.shared_members[0].cell_phone | phone_format }}
+                                </button>
+                                <button class="border-0 py-2 c-dark f-3 dropdown-item">
+                                  {{contact.shared_members[0].email}}
+                                </button>
+                              </div>
+                            </div>
+<!--                            <div ngbDropdown class="v-center p-2 rounded">-->
+<!--                              <div class="v-center">-->
+<!--                                <div class="contact-avatar f-3 mr-2" *ngIf="contact.shared_members.length">-->
+<!--                                  {{getAvatarName(contact.shared_members[0])}}-->
+<!--                                </div>-->
+<!--                                <div class="f-3">{{contact.shared_members[0].first_name + ' ' + contact.shared_members[0].last_name}}</div>-->
+<!--                              </div>-->
+<!--                              <div ngbDropdownMenu class="light">-->
+
+<!--                              </div>-->
+<!--                            </div>-->
+                          </td>
+                          <td class="share-status">
+                            <div class="f-3 font-weight-bold c-red text-right" (click)="changeShareStatus(contact)">Stop sharing</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                </ng-container>
+                <ng-template #emptyContactListTemplate>
+
                 </ng-template>
               </div>
             </mat-tab>

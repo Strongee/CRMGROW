@@ -213,20 +213,20 @@ export class UploadContactsComponent implements OnInit {
                   parseNotes.push(noteObj);
                 }
 
-                const tempNotes = [];
-                for (let i = 0; i < parseNotes.length; i++) {
-                  tempNotes.push(parseNotes);
-                }
-
-                for (let i = 0; i < this.notesColumns.length; i++) {
-                  const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
-                  if (columnIndex >= 0) {
-                    tempNotes.splice(columnIndex, 1);
-                  }
-                }
-                if (tempNotes.length) {
-                  contact.data['other'] = JSON.stringify(tempNotes);
-                }
+                // const tempNotes = [];
+                // for (let i = 0; i < parseNotes.length; i++) {
+                //   tempNotes.push(parseNotes);
+                // }
+                //
+                // for (let i = 0; i < this.notesColumns.length; i++) {
+                //   const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
+                //   if (columnIndex >= 0) {
+                //     tempNotes.splice(columnIndex, 1);
+                //   }
+                // }
+                // if (tempNotes.length) {
+                //   contact.data['other'] = JSON.stringify(tempNotes);
+                // }
                 contact.data.notes = parseNotes;
               }
               this.contacts.push(contact.data);
@@ -563,6 +563,7 @@ export class UploadContactsComponent implements OnInit {
   getOtherContent(contact): any {
     return JSON.stringify(contact['other']);
   }
+
   selectableContent(column, contact): any {
     let result = '';
     const updateColumn = this.updateColumn[column];
@@ -894,7 +895,13 @@ export class UploadContactsComponent implements OnInit {
             if (merged['notes']) {
               const tempNotes = [];
               for (let i = 0; i < merged['notes'].length; i++) {
-                tempNotes.push(merged['notes'][i]);
+                if (!!merged['notes'][i]) {
+                  for (const key in merged['notes'][i]) {
+                    if (!!merged['notes'][i][key]) {
+                      tempNotes.push(merged['notes'][i]);
+                    }
+                  }
+                }
               }
 
               for (let i = 0; i < this.notesColumns.length; i++) {
@@ -1034,6 +1041,7 @@ export class UploadContactsComponent implements OnInit {
               if (res) {
               }
               this.dialogRef.close({});
+              window.location.reload();
             },
             (error) => {
               this.uploading = false;
@@ -1042,6 +1050,7 @@ export class UploadContactsComponent implements OnInit {
           );
         } else {
           this.dialogRef.close({});
+          window.location.reload();
         }
       }
     }

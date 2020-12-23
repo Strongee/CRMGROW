@@ -21,6 +21,7 @@ import { NoteCreateComponent } from 'src/app/components/note-create/note-create.
 import { AutomationAssignComponent } from 'src/app/components/automation-assign/automation-assign.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { HandlerService } from 'src/app/services/handler.service';
+import {ContactAssignAutomationComponent} from "../../components/contact-assign-automation/contact-assign-automation.component";
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -468,8 +469,11 @@ export class ContactsComponent implements OnInit {
   }
 
   openAutomationDlg(): void {
-    this.dialog.open(AutomationAssignComponent, {
-      ...DialogSettings.AUTOMATION
+    this.dialog.open(ContactAssignAutomationComponent, {
+      ...DialogSettings.AUTOMATION,
+      data: {
+        contacts: this.selection
+      }
     });
   }
 

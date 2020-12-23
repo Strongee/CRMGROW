@@ -20,6 +20,7 @@ import { MaterialShareComponent } from '../../components/material-share/material
 import { TemplateShareComponent } from '../../components/template-share/template-share.component';
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { NotifyComponent } from '../../components/notify/notify.component';
+import {AutomationAssignComponent} from "../../components/automation-assign/automation-assign.component";
 
 @Component({
   selector: 'app-team',
@@ -64,6 +65,95 @@ export class TeamComponent implements OnInit {
     { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
   ];
   selectedSharedTab: TabItem = this.sharedTabs[0];
+  sharedContacts = [
+    {
+      first_name: 'Ace',
+      last_name: 'Tanoue',
+      email: 'rcihawaii01@gmail.com',
+      cell_phone: '+18084877281',
+      last_activity: {
+        send_type: 0,
+        _id: '5fce9b8d9104550d64c544f5',
+        content: 'added contact',
+        contacts: '5fce9b8d9104550d64c54407',
+        user: '5e9a0285efb6b2a3449245da',
+        type: 'contacts'
+      },
+      share_at: '2020-12-07T21:15:57.368Z',
+      shared_members: [
+        {
+          first_name: 'Jone',
+          last_name: 'Doe',
+          email: 'jonedoe@gmail.com',
+          cell_phone: '+18084877281'
+        },
+        {
+          first_name: 'Jone',
+          last_name: 'Doe',
+          email: 'jonedoe@gmail.com',
+          cell_phone: '+18084877281'
+        }
+      ]
+    },
+    {
+      first_name: 'Ace',
+      last_name: 'Tanoue',
+      email: 'rcihawaii01@gmail.com',
+      cell_phone: '+18084877281',
+      last_activity: {
+        send_type: 0,
+        _id: '5fce9b8d9104550d64c544f5',
+        content: 'added contact',
+        contacts: '5fce9b8d9104550d64c54407',
+        user: '5e9a0285efb6b2a3449245da',
+        type: 'contacts'
+      },
+      share_at: '2020-12-07T21:15:57.368Z',
+      shared_members: [
+        {
+          first_name: 'Jone',
+          last_name: 'Doe',
+          email: 'jonedoe@gmail.com',
+          cell_phone: '+18084877281'
+        },
+        {
+          first_name: 'Jone',
+          last_name: 'Doe',
+          email: 'jonedoe@gmail.com',
+          cell_phone: '+18084877281'
+        }
+      ]
+    },
+    {
+      first_name: 'Ace',
+      last_name: 'Tanoue',
+      email: 'rcihawaii01@gmail.com',
+      cell_phone: '+18084877281',
+      last_activity: {
+        send_type: 0,
+        _id: '5fce9b8d9104550d64c544f5',
+        content: 'added contact',
+        contacts: '5fce9b8d9104550d64c54407',
+        user: '5e9a0285efb6b2a3449245da',
+        type: 'contacts'
+      },
+      share_at: '2020-12-07T21:15:57.368Z',
+      shared_members: [
+        {
+          first_name: 'Jone',
+          last_name: 'Doe',
+          email: 'jonedoe@gmail.com',
+          cell_phone: '+18084877281'
+        },
+        {
+          first_name: 'Jone',
+          last_name: 'Doe',
+          email: 'jonedoe@gmail.com',
+          cell_phone: '+18084877281'
+        }
+      ]
+    }
+  ];
   constructor(
     private teamService: TeamService,
     private userService: UserService,
@@ -187,7 +277,7 @@ export class TeamComponent implements OnInit {
       }
     );
   }
-  createMaterial(): void {
+  shareMaterial(): void {
     this.dialog
       .open(MaterialShareComponent, {
         width: '96vw',
@@ -199,7 +289,11 @@ export class TeamComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-
+        if (res) {
+          if (res.videos) {
+            this.team.videos = [...this.team.videos, ...res.videos];
+          }
+        }
       });
   }
   createTeamVideo(): void {
@@ -360,7 +454,7 @@ export class TeamComponent implements OnInit {
     //     }
     //   });
   }
-  createAutomation(): void {
+  shareAutomation(): void {
     this.dialog
       .open(AutomationShareComponent, {
         width: '96vw',
@@ -382,7 +476,12 @@ export class TeamComponent implements OnInit {
         }
       });
   }
-  createEmailTemplate(): void {
+
+  shareContact(): void {
+
+  }
+
+  shareEmailTemplate(): void {
     this.dialog
       .open(TemplateShareComponent, {
         width: '96vw',
@@ -774,7 +873,21 @@ export class TeamComponent implements OnInit {
     document.body.removeChild(el);
     this.toast.success('Copied the link to clipboard');
   }
-  assignContact(automation): void {}
+  assignContact(automation): void {
+    this.dialog
+      .open(AutomationAssignComponent, {
+        width: '500px',
+        maxWidth: '90vw',
+        data: {
+          automation
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+        }
+      });
+  }
   showLoader(): void {
     this.spinner.show('sp5');
   }
@@ -1022,6 +1135,21 @@ export class TeamComponent implements OnInit {
       ...DialogSettings.INVITE_TEAM,
       data: { ...this.team }
     });
+  }
+
+  changeShareStatus(contact): void {
+
+  }
+
+  getAvatarName(contact): any {
+    if (contact.first_name && contact.last_name) {
+      return contact.first_name[0] + contact.last_name[0];
+    } else if (contact.first_name && !contact.last_name) {
+      return contact.first_name[0];
+    } else if (!contact.first_name && contact.last_name) {
+      return contact.last_name[0];
+    }
+    return 'UC';
   }
   inviteMemberOld(): void {
     // this.dialog

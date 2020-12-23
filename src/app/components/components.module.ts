@@ -95,6 +95,7 @@ import { SmsEditorComponent } from './sms-editor/sms-editor.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FilterAddComponent } from './filter-add/filter-add.component';
+import { ContactAssignAutomationComponent } from './contact-assign-automation/contact-assign-automation.component';
 import { TaskBulkComponent } from './task-bulk/task-bulk.component';
 
 @NgModule({
@@ -188,6 +189,8 @@ import { TaskBulkComponent } from './task-bulk/task-bulk.component';
     AccordionComponent,
     SubjectInputComponent,
     SmsEditorComponent,
+    FilterAddComponent,
+    ContactAssignAutomationComponent,
     TaskEditComponent,
     FilterAddComponent,
     TaskBulkComponent
