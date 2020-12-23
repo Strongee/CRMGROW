@@ -31,10 +31,9 @@ export class MaterialsComponent implements OnInit {
   garbage: Garbage = new Garbage();
   BULK_ACTIONS = BulkActions.Materials;
   tabs: TabItem[] = [
-    { icon: '', label: 'ALL', id: 'all' },
     { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
     { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
-    { icon: 'i-icon i-notification', label: 'IMAGE', id: 'images' }
+    { icon: 'i-icon i-image', label: 'IMAGE', id: 'images' }
   ];
   selectedTab: TabItem = this.tabs[0];
   siteUrl = environment.website;
