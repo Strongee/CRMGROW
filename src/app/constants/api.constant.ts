@@ -63,7 +63,8 @@ export const TASK = {
   ALL: 'follow/load/'
 };
 export const ACTIVITY = {
-  LOAD: 'activity/get',
+  // LOAD: 'activity/get',
+  LOAD: 'activity/',
   REMOVE_ALL: 'activity/remove-all',
   REMOVE: 'activity/remove'
 };
