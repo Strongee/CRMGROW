@@ -26,7 +26,7 @@
       <div class="v-center form-group mb-0">
         <div class="v-center">
           <label class="mb-0">Status</label>
-          <div class="c-blue text-uppercase f-1 ml-3">{{status}}</div>
+          <div class="c-blue text-uppercase f-1 ml-3 c-pointer" (click)="clearLabel()">{{status}}</div>
         </div>
       </div>
       <div class="v-center">
@@ -72,17 +72,17 @@
     </div>
     <div class="form-group my-3">
       <label for="state">State</label>
-      <input type="text" class="form-control" [(ngModel)]="searchOption.regionCondition" placeholder="" id="state" name="state"
+      <input type="text" class="form-control" [(ngModel)]="searchOption.regionCondition" (ngModelChange)="updateFilter()" placeholder="" id="state" name="state"
         #state="ngModel" />
     </div>
     <div class="form-group my-3">
       <label for="city">City</label>
-      <input type="text" class="form-control" [(ngModel)]="searchOption.cityCondition" placeholder="" id="city" name="city"
+      <input type="text" class="form-control" [(ngModel)]="searchOption.cityCondition" (ngModelChange)="updateFilter()" placeholder="" id="city" name="city"
         #city="ngModel" />
     </div>
     <div class="form-group my-3">
       <label for="zipcode">ZipCode</label>
-      <input type="text" class="form-control" [(ngModel)]="searchOption.zipcodeCondition" placeholder="" id="zipcode" name="zipcode"
+      <input type="text" class="form-control" [(ngModel)]="searchOption.zipcodeCondition" (ngModelChange)="updateFilter()" placeholder="" id="zipcode" name="zipcode"
         #zipcode="ngModel" />
     </div>
 
@@ -145,7 +145,7 @@
         <div class="custom-checkbox material-action" *ngFor="let item of activities"
           style="height: unset; line-height: unset;">
           <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
-            (change)="selectedActivities.toggle(item.title)" [checked]="selectedActivities.isSelected(item.title)">
+            (change)="toggleActivities(item.title.toLocaleLowerCase())" [checked]="searchOption.activityCondition.indexOf(item.title.toLocaleLowerCase()) !== -1">
           <label class="custom-control-label" for="activity-{{item._id}}">
             <div class="f-3 mt-1">{{item.title}}</div>
           </label>
@@ -160,7 +160,7 @@
             <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
           </div>
           <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityStart" ngbDatepicker
-            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" name="activityStartDate"/>
+            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text" name="activityStartDate"/>
         </div>
         <div class="mx-2">-</div>
         <div class="input-group">
@@ -168,7 +168,7 @@
             <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
           </div>
           <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityEnd" ngbDatepicker
-            #dueto="ngbDatepicker" (click)="dueto.toggle()" [firstDayOfWeek]="7" type="text"  name="activityEndDate"/>
+            #dueto="ngbDatepicker" (click)="dueto.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text"  name="activityEndDate"/>
         </div>
       </div>
     </div>
