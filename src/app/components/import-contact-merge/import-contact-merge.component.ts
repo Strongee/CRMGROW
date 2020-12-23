@@ -348,12 +348,6 @@ export class ImportContactMergeComponent implements OnInit {
           merged = {
             ...this.previewContact
           };
-          if (this.previewContact.notes) {
-            merged = {
-              ...merged,
-              notes: JSON.stringify(this.previewContact.notes)
-            };
-          }
           this.dialogRef.close({ type: 'csv', merged });
         }
       },
