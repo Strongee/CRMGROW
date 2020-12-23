@@ -213,20 +213,20 @@ export class UploadContactsComponent implements OnInit {
                   parseNotes.push(noteObj);
                 }
 
-                const tempNotes = [];
-                for (let i = 0; i < parseNotes.length; i++) {
-                  tempNotes.push(parseNotes);
-                }
-
-                for (let i = 0; i < this.notesColumns.length; i++) {
-                  const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
-                  if (columnIndex >= 0) {
-                    tempNotes.splice(columnIndex, 1);
-                  }
-                }
-                if (tempNotes.length) {
-                  contact.data['other'] = JSON.stringify(tempNotes);
-                }
+                // const tempNotes = [];
+                // for (let i = 0; i < parseNotes.length; i++) {
+                //   tempNotes.push(parseNotes);
+                // }
+                //
+                // for (let i = 0; i < this.notesColumns.length; i++) {
+                //   const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
+                //   if (columnIndex >= 0) {
+                //     tempNotes.splice(columnIndex, 1);
+                //   }
+                // }
+                // if (tempNotes.length) {
+                //   contact.data['other'] = JSON.stringify(tempNotes);
+                // }
                 contact.data.notes = parseNotes;
               }
               this.contacts.push(contact.data);
