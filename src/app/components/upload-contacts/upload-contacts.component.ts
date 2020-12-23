@@ -16,6 +16,8 @@ import {
   ImportSelectableColumn
 } from '../../constants/variable.constants';
 import { ContactService } from '../../services/contact.service';
+import { HandlerService } from '../../services/handler.service';
+
 const phone = require('phone');
 
 @Component({
@@ -100,7 +102,8 @@ export class UploadContactsComponent implements OnInit {
     private userService: UserService,
     private dialog: MatDialog,
     private papa: Papa,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {
@@ -251,7 +254,7 @@ export class UploadContactsComponent implements OnInit {
           } else {
             this.uploading = false;
             this.dialogRef.close({status: true});
-            window.location.reload();
+            this.handlerService.bulkContactAdd$();
           }
 
           // this.failedRecords = [];
@@ -1041,7 +1044,7 @@ export class UploadContactsComponent implements OnInit {
               if (res) {
               }
               this.dialogRef.close({});
-              window.location.reload();
+              this.handlerService.bulkContactAdd$();
             },
             (error) => {
               this.uploading = false;
@@ -1050,7 +1053,7 @@ export class UploadContactsComponent implements OnInit {
           );
         } else {
           this.dialogRef.close({});
-          window.location.reload();
+          this.handlerService.bulkContactAdd$();
         }
       }
     }
