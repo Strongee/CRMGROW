@@ -27,8 +27,159 @@
         </div>
         <div class="v-center">
             <div class="f-1 font-weight-bold op-40 text-uppercase mr-2">active filters</div>
-            <div class="">
-
+            <div class="v-center justify-content-center filter-count bgc-blue c-white f-3 fw-600">
+                {{filterCount}}
+            </div>
+        </div>
+        <div class="v-center mt-3" *ngIf="this.searchOption.labelCondition.length">
+            <div class="f-3 fw-600" *ngIf="this.searchOption.includeLabel; else excludeLabel">
+                Including labels
+            </div>
+            <ng-template #excludeLabel>
+                <div class="f-3 fw-600">
+                    Excluding labels
+                </div>
+            </ng-template>
+            <div class="v-center">
+                <div class="v-center ml-2" *ngFor="let item of this.selectedLabels">
+                    <i class="d-block i-icon i-label mr-1"
+                        [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color">
+                    </i>
+                    <span class="f-3 fw-600">{{item.name}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="selectedAction != '' && selectedMaterial.length > 0">
+            <div class="f-3 fw-600">
+                {{selectedAction}}
+            </div>
+            <div class="v-center ml-2">
+                <i class="i-icon bgc-black mr-2" aria-hidden="true"
+                [class.i-video]="getMaterialType() === 'Video'"
+                [class.i-pdf]="getMaterialType() === 'PDF'"
+                [class.i-notification]="getMaterialType() === 'Image'"
+                ></i>
+                <span class="f-3 font-weight-bold c-blue">{{selectedMaterial[0].title}}</span>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="searchOption.regionCondition.length > 0">
+            <div class="f-3 fw-600">
+                Including state
+            </div>
+            <div class="v-center">
+                <div class="f-3 fw-600 ml-2">
+                    „{{searchOption.regionCondition}}”
+                </div>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="searchOption.cityCondition.length > 0">
+            <div class="f-3 fw-600">
+                Including city
+            </div>
+            <div class="v-center">
+                <div class="f-3 fw-600 ml-2">
+                    „{{searchOption.cityCondition}}”
+                </div>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="searchOption.zipcodeCondition.length > 0">
+            <div class="f-3 fw-600">
+                Including zipcode
+            </div>
+            <div class="v-center">
+                <div class="f-3 fw-600 ml-2">
+                    „{{searchOption.zipcodeCondition}}”
+                </div>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="this.searchOption.sourceCondition.length">
+            <div class="f-3 fw-600" *ngIf="this.searchOption.includeSource; else excludeSource">
+                Including sources
+            </div>
+            <ng-template #excludeSource>
+                <div class="f-3 fw-600">
+                    Excluding sources
+                </div>
+            </ng-template>
+            <div class="v-center">
+                <div class="f-3 fw-600 ml-2" *ngFor="let item of this.searchOption.sourceCondition">
+                    „{{item}}”
+                </div>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="this.searchOption.brokerageCondition.length">
+            <div class="f-3 fw-600" *ngIf="this.searchOption.includeBrokerage; else excludeBrokerage">
+                Including companies
+            </div>
+            <ng-template #excludeBrokerage>
+                <div class="f-3 fw-600">
+                    Excluding companies
+                </div>
+            </ng-template>
+            <div class="v-center">
+                <div class="f-3 fw-600 ml-2" *ngFor="let item of this.searchOption.brokerageCondition">
+                    „{{item}}”
+                </div>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="this.searchOption.tagsCondition.length">
+            <div class="f-3 fw-600" *ngIf="this.searchOption.includeTag; else excludeTag">
+                Including tags
+            </div>
+            <ng-template #excludeTag>
+                <div class="f-3 fw-600">
+                    Excluding tags
+                </div>
+            </ng-template>
+            <div class="v-center">
+                <div class="tag rounded f-3 fw-600 ml-2" *ngFor="let item of this.searchOption.tagsCondition">
+                    {{item}}
+                </div>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="this.searchOption.activityCondition.length ||
+            searchOption.lastMaterial.send_image.flag ||
+            searchOption.lastMaterial.watched_pdf.flag ||
+            searchOption.lastMaterial.watched_image.flag"
+        >
+            <div class="f-3 fw-600">
+                Including last activities
+            </div>
+            <div class="v-center">
+                <div class="f-3 fw-600 ml-2" *ngFor="let item of this.searchOption.activityCondition">
+                    {{activityDefine[item]}}
+                </div>
+                <ng-container *ngIf="searchOption.lastMaterial.send_image.flag">
+                    <div class="f-3 fw-600 ml-2">
+                        Sent image
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="searchOption.lastMaterial.watched_pdf.flag">
+                    <div class="f-3 fw-600 ml-2">
+                        Reviewed PDF
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="searchOption.lastMaterial.watched_image.flag">
+                    <div class="f-3 fw-600 ml-2">
+                        Reviewed image
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="this.searchOption.activityStart">
+            <div class="f-3 fw-600">
+                Activity start date
+            </div>
+            <div class="f-3 fw-600 c-blue ml-2">
+                {{this.searchOption.activityStart.year}}-{{this.searchOption.activityStart.month}}-{{this.searchOption.activityStart.day}}
+            </div>
+        </div>
+        <div class="v-center mt-2" *ngIf="this.searchOption.activityEnd">
+            <div class="f-3 fw-600">
+                Activity end date
+            </div>
+            <div class="f-3 fw-600 c-blue ml-2">
+                {{this.searchOption.activityEnd.year}}-{{this.searchOption.activityEnd.month}}-{{this.searchOption.activityEnd.day}}
             </div>
         </div>
     </mat-dialog-content>

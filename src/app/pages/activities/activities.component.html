@@ -67,7 +67,7 @@
     <tr mat-row
       *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
   </table>
-  <ng-container *ngIf="(storeService.activities$ | async).length; else emptyListTemplate">
+  <ng-container *ngIf="(storeService.activities$ | async).length || (activityService.total$ | async); else emptyListTemplate">
     <div class="updating-status"
       *ngIf="(activityService.loading$ | async) === STATUS.REQUEST">
       LOADING

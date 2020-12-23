@@ -33,6 +33,7 @@ export class ActivityService extends HttpService {
   }
 
   load(page: number): void {
+    this.page.next(page);
     this.loadStatus.next(STATUS.REQUEST);
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.loadImpl(page).subscribe((res) => {
@@ -47,17 +48,35 @@ export class ActivityService extends HttpService {
   }
 
   loadImpl(page: number): Observable<any> {
-    const skip = (page - 1) * 20;
-    return this.http.get(this.server + ACTIVITY.LOAD + skip).pipe(
-      map((res) => {
-        return {
-          activities: (res['data']['activity'] || []).map((e) =>
-            new Activity().deserialize(e)
-          ),
-          count: res['data']['count'] || 0
-        };
-      }),
-      catchError(this.handleError('LOAD ACTIVITY', null))
-    );
+    const pageSize = this.pageSize.getValue();
+    const skip = (page - 1) * pageSize;
+    return this.http
+      .post(this.server + ACTIVITY.LOAD, { skip, size: pageSize })
+      .pipe(
+        map((res) => {
+          return {
+            activities: (res['data']['activity'] || []).map((e) =>
+              new Activity().deserialize(e)
+            ),
+            count: res['data']['count'] || 0
+          };
+        }),
+        catchError(this.handleError('LOAD ACTIVITY', null))
+      );
+  }
+
+  reload(): void {
+    const page = this.page.getValue();
+    this.loadStatus.next(STATUS.REQUEST);
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.loadImpl(page).subscribe((res) => {
+      res
+        ? this.loadStatus.next(STATUS.SUCCESS)
+        : this.loadStatus.next(STATUS.FAILURE);
+      if (res && res['activities']) {
+        this.storeService.activities.next(res['activities']);
+        this.total.next(res['count']);
+      }
+    });
   }
 }

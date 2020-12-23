@@ -7,7 +7,10 @@ import { Task } from 'src/app/models/task.model';
 import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
-
+import { numPad, getCurrentTimezone } from 'src/app/helper';
+import * as moment from 'moment';
+import 'moment-timezone';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-task-create',
   templateUrl: './task-create.component.html',
@@ -27,9 +30,12 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   saving = false;
   saveSubscription: Subscription;
 
+  timezone;
+
   constructor(
     private taskService: TaskService,
     private handlerService: HandlerService,
+    private userService: UserService,
     private dialogRef: MatDialogRef<TaskCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -43,6 +49,14 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       this.isSelected = true;
       this.contacts = this.data.contacts;
     }
+    this.userService.profile$.subscribe((user) => {
+      try {
+        this.timezone = JSON.parse(user.time_zone_info);
+      } catch (err) {
+        const timezone = getCurrentTimezone();
+        this.timezone = { zone: user.time_zone || timezone };
+      }
+    });
   }
 
   ngOnInit(): void {}
@@ -64,7 +78,15 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     this.contacts.forEach((e) => {
       ids.push(e._id);
     });
-    const due_date = new Date();
+    let due_date = '';
+    if (this.timezone.tz_name) {
+      const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
+      due_date = moment.tz(dateStr, this.timezone.tz_name).format();
+    } else {
+      due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
+        this.date.day
+      )}T${this.time}${this.timezone.zone}`;
+    }
     const data = {
       contacts: ids,
       type: this.task.type,

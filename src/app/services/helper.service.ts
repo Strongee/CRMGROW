@@ -295,6 +295,30 @@ export class HelperService {
     });
   }
 
+  public customTzTime(dateTime: string, time_zone: string): any {
+    const timezone = time_zone.replace(':', '.');
+    const offset = parseFloat(timezone);
+    const date = new Date(dateTime);
+    const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+    const nd = new Date(utc + 3600000 * offset);
+    const year = nd.getFullYear();
+    const month = nd.getMonth() + 1;
+    const day = nd.getDate();
+
+    const hour = nd.getHours();
+    const min = nd.getMinutes();
+    const hour_s = hour < 10 ? '0' + hour : hour;
+    const min_s = min < 10 ? '0' + min : min;
+    const time = `${hour_s}:${min_s}:00.000`;
+
+    return {
+      year,
+      month,
+      day,
+      time
+    };
+  }
+
   public getMaterials(html: string): any[] {
     const outer: HTMLDivElement = this.document.createElement('div');
     outer.innerHTML = html;
@@ -309,6 +333,22 @@ export class HelperService {
         result.push(material);
       });
       return result;
+    }
+  }
+
+  convertEmailContent(html: string): string {
+    const outer: HTMLDivElement = this.document.createElement('div');
+    outer.innerHTML = html;
+    const materials = outer.querySelectorAll('.material-object');
+    if (!materials.length) {
+      return html;
+    } else {
+      materials.forEach((e) => {
+        const materialDom = <HTMLLinkElement>e;
+        const href = materialDom.getAttribute('href');
+        materialDom.setAttribute('href', '{{' + href + '}}');
+      });
+      return outer.innerHTML;
     }
   }
 

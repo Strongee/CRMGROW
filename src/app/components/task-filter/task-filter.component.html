@@ -71,7 +71,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text bgc-blue border-0"><i class="bgc-white i-icon i-calendar"></i></span>
             </div>
-            <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="startDate" ngbDatepicker
+            <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="startDate" name="taskDate" ngbDatepicker
               #start_date="ngbDatepicker" (click)="start_date.toggle()" [firstDayOfWeek]="7" type="text" />
           </div>
         </div>

@@ -18,7 +18,7 @@
       </div>
       <div class="my-3">
         <label>Global Search</label>
-        <input type="text" class="form-control" [(ngModel)]="searchString" placeholder="Type in string"
+        <input type="text" class="form-control" [(ngModel)]="searchOption.str" placeholder="Type in string"
           name="global_search" #global_search="ngModel" (ngModelChange)="updateSearchStr($event)" />
       </div>
     </div>
@@ -26,13 +26,13 @@
       <div class="v-center form-group mb-0">
         <div class="v-center">
           <label class="mb-0">Status</label>
-          <div class="c-blue text-uppercase f-1 ml-3">{{status}}</div>
+          <div class="c-blue text-uppercase f-1 ml-3 c-pointer" (click)="clearLabel()">{{status}}</div>
         </div>
       </div>
       <div class="v-center">
         <div class="f-3 fw-600 c-dark">Include</div>
         <label class="custom-toggle mb-0 mx-2" placement="top">
-          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="searchOption.includeLabel = !searchOption.includeLabel" name="includeLabel">
+          <input type="checkbox" [checked]="!searchOption.includeLabel" (change)="toggleInclude('label')" name="includeLabel">
           <span class="custom-toggle-slider rounded-circle"></span>
         </label>
         <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -54,35 +54,41 @@
     <div class="checkbox-wrapper w-100 my-3">
       <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
         style="height: unset; line-height: unset;">
-        <input type="radio" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
-          (click)="selectMaterialAction(item._id)" [checked]="selectedMaterialActions == item._id">
+        <input type="checkbox" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
+          (click)="selectMaterialAction(item.title)" [checked]="selectedMaterialActions == item.title">
         <label class="custom-control-label v-center" for="material-{{item._id}}">
-          <div class="f-3 fw-600">{{item.title}}</div>
+          <div class="f-3 fw-600 material-action-title">{{item.title}}</div>
           <div class="count f-3 font-weight-bold c-white bgc-blue ml-2 text-center rounded-circle" *ngIf="item.count">{{item.count}}</div>
-          <div class="list f-1 font-weight-bold ml-2 border border-primary rounded c-blue c-pointer" (click)="selectMaterial()">List</div>
+          <button type="button" 
+            class="list f-1 font-weight-bold ml-2 border border-primary rounded c-blue c-pointer bgc-white"
+            [disabled]="selectedMaterialActions != item.title"
+            (click)="selectMaterial()"
+          >
+            List
+          </button>
         </label>
       </div>
     </div>
 
     <div class="form-group my-3">
       <label for="country_cc">country</label>
-      <select id="country_cc" class="form-control" [(ngModel)]="searchCountry" name="country" #country="ngModel">
+      <select id="country_cc" class="form-control" [(ngModel)]="searchOption.countryCondition" name="country" #country="ngModel">
         <option *ngFor="let country of COUNTRIES" value="{{country.code}}">{{country.name}}</option>
       </select>
     </div>
     <div class="form-group my-3">
       <label for="state">State</label>
-      <input type="text" class="form-control" [(ngModel)]="searchState" placeholder="" id="state" name="state"
+      <input type="text" class="form-control" [(ngModel)]="searchOption.regionCondition" (ngModelChange)="updateFilter()" placeholder="" id="state" name="state"
         #state="ngModel" />
     </div>
     <div class="form-group my-3">
       <label for="city">City</label>
-      <input type="text" class="form-control" [(ngModel)]="searchCity" placeholder="" id="city" name="city"
+      <input type="text" class="form-control" [(ngModel)]="searchOption.cityCondition" (ngModelChange)="updateFilter()" placeholder="" id="city" name="city"
         #city="ngModel" />
     </div>
     <div class="form-group my-3">
       <label for="zipcode">ZipCode</label>
-      <input type="text" class="form-control" [(ngModel)]="searchZipCode" placeholder="" id="zipcode" name="zipcode"
+      <input type="text" class="form-control" [(ngModel)]="searchOption.zipcodeCondition" (ngModelChange)="updateFilter()" placeholder="" id="zipcode" name="zipcode"
         #zipcode="ngModel" />
     </div>
 
@@ -95,7 +101,7 @@
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
             <input type="checkbox" id="source_check" name="source_check" [checked]="!searchOption.includeSource"
-              (change)="searchOption.includeSource = !searchOption.includeSource">
+              (change)="toggleInclude('source')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -112,7 +118,7 @@
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
             <input type="checkbox" id="company_check" name="company_check" [checked]="!searchOption.includeBrokerage"
-              (change)="searchOption.includeBrokerage = !searchOption.includeBrokerage">
+              (change)="toggleInclude('brokerage')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -129,7 +135,7 @@
         <div class="v-center mb-2">
           <div class="f-3 fw-600 c-dark">Include</div>
           <label class="custom-toggle mb-0 mx-2" placement="top">
-            <input type="checkbox" id="tag_check" name="tag_check" [checked]="!searchOption.includeTag" (change)="searchOption.includeTag = !searchOption.includeTag">
+            <input type="checkbox" id="tag_check" name="tag_check" [checked]="!searchOption.includeTag" (change)="toggleInclude('tag')">
             <span class="custom-toggle-slider rounded-circle"></span>
           </label>
           <div class="f-3 fw-600 c-dark">Exclude</div>
@@ -144,11 +150,34 @@
       <div class="checkbox-wrapper">
         <div class="custom-checkbox material-action" *ngFor="let item of activities"
           style="height: unset; line-height: unset;">
-          <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
-            (change)="selectedActivities.toggle(item._id)" [checked]="selectedActivities.isSelected(item._id)">
-          <label class="custom-control-label" for="activity-{{item._id}}">
-            <div class="f-3 mt-1">{{item.title}}</div>
-          </label>
+          <ng-container *ngIf="item.title != 'Sent image' && item.title != 'Reviewed PDF' && item.title != 'Reviewed image'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.activityCondition.indexOf(activityDefine[item.title]) !== -1">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
+          <ng-container *ngIf="item.title == 'Sent image'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.lastMaterial.send_image.flag">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
+          <ng-container *ngIf="item.title == 'Reviewed PDF'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.lastMaterial.watched_pdf.flag">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
+          <ng-container *ngIf="item.title == 'Reviewed image'">
+            <input type="checkbox" class="custom-control-input" id="activity-{{item._id}}" name="activity-{{item._id}}"
+              (change)="toggleActivities(item.title)" [checked]="searchOption.lastMaterial.watched_image.flag">
+            <label class="custom-control-label" for="activity-{{item._id}}">
+              <div class="f-3 mt-1">{{item.title}}</div>
+            </label>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -159,16 +188,16 @@
           <div class="input-group-prepend">
             <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
           </div>
-          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="fromDate" ngbDatepicker
-            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" name="activityStartDate"/>
+          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityStart" ngbDatepicker
+            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text" name="activityStartDate"/>
         </div>
         <div class="mx-2">-</div>
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
           </div>
-          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="toDate" ngbDatepicker
-            #dueto="ngbDatepicker" (click)="dueto.toggle()" [firstDayOfWeek]="7" type="text"  name="activityEndDate"/>
+          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityEnd" ngbDatepicker
+            #dueto="ngbDatepicker" (click)="dueto.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text"  name="activityEndDate"/>
         </div>
       </div>
     </div>

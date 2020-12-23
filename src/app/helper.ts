@@ -344,4 +344,23 @@ export function validateEmail(email): any {
   }
   return true;
 }
+export function getCurrentTimezone(): string {
+  const oft = new Date().getTimezoneOffset();
+  const offset = Math.abs(oft);
+  const hour = Math.floor(offset / 60);
+  const min = offset % 60;
+  const symbol = oft > 0 ? '-' : '+';
+  const hour_s = numPad(hour);
+  const min_s = numPad(min);
+  return symbol + hour_s + ':' + min_s;
+}
 
+export function offsetToTz(oft: number): string {
+  const offset = Math.abs(oft);
+  const hour = Math.floor(offset / 60);
+  const min = offset % 60;
+  const symbol = oft > 0 ? '-' : '+';
+  const hour_s = numPad(hour);
+  const min_s = numPad(min);
+  return symbol + hour_s + ':' + min_s;
+}

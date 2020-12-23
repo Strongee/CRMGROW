@@ -1,7 +1,9 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { STATUS } from 'src/app/constants/variable.constants';
+import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
+import { DialogSettings, STATUS } from 'src/app/constants/variable.constants';
 import { Task, TaskDetail } from 'src/app/models/task.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { HandlerService } from 'src/app/services/handler.service';
@@ -12,7 +14,7 @@ import { TaskService } from 'src/app/services/task.service';
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
   DISPLAY_COLUMNS = [
     'select',
@@ -31,6 +33,17 @@ export class TasksComponent implements OnInit {
     email: 'i-message',
     material: 'i-video'
   };
+  DEADLINE_TYPES = [
+    { id: 'all', label: 'All tasks' },
+    { id: 'overdue', label: 'Overdue' },
+    { id: 'today', label: 'Today' },
+    { id: 'tomorrow', label: 'Tomorrow' },
+    { id: 'this week', label: 'This week' },
+    { id: 'next week', label: 'Next week' }
+  ];
+  // Task Filter Type
+  deadline = this.DEADLINE_TYPES[0];
+
   isUpdating = false;
   updateSubscription: Subscription;
 
@@ -39,16 +52,31 @@ export class TasksComponent implements OnInit {
     private handlerService: HandlerService,
     public taskService: TaskService,
     public storeService: StoreService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.loadTasks();
   }
 
+  ngOnDestroy(): void {}
+
   loadTasks(): void {
     this.taskService.loadToday();
   }
+
+  /**
+   * Change the Task Deadline
+   * @param value : Deadline Type -> {label: '', id: ''}
+   */
+  changeDeadlineType(value: any): void {
+    this.deadline = value;
+  }
+  /**
+   * Open Filter Panel
+   */
+  openFilter(): void {}
 
   isAllSelected(): boolean {
     return false;
@@ -84,5 +112,15 @@ export class TasksComponent implements OnInit {
           this.handlerService.bulkContactUpdate$(ids, { label: newLabel }, {});
         }
       });
+  }
+
+  openEdit(element: Task): void {
+    this.dialog
+      .open(TaskEditComponent, {
+        ...DialogSettings.TASK,
+        data: element
+      })
+      .afterClosed()
+      .subscribe((res) => {});
   }
 }

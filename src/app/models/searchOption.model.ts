@@ -31,7 +31,7 @@ class LastMaterialCondition implements Deserializable {
   }
 }
 
-class MaterialCondition implements Deserializable {
+export class MaterialCondition implements Deserializable {
   watched_video: { flag: boolean; material: string } = {
     flag: false,
     material: undefined

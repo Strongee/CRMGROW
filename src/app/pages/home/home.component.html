@@ -40,29 +40,14 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="selectedTab.id === 'tasks'">
-      <div class="shadow-dropdown ml-auto" ngbDropdown>
-        <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
-          <span class="pr-2">Sort by deadline</span>
-        </div>
-        <div ngbDropdownMenu aria-labelledby="taskSortTypes">
-          <div class="py-2" ngbDropdownItem *ngFor="let type of DEADLINE_TYPES" (click)="changeDeadlineType(type)">
-            <span class="f-3 v-center" [class.font-weight-bold]="type.id === deadline.id">
-              {{type.label}}
-              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1" *ngIf="type.id === deadline.id"></i>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="border-left px-3 py-2 text-center mx-3">
-        <a class="ml-3 f-3 font-weight-bold c-pointer c-dark td-none" (click)="drawer.toggle()">Filters</a>
-      </div>
-    </ng-container>
   </div>
   <div>
     <app-tasks [class.d-none]="selectedTab.id !== 'tasks'"></app-tasks>
     <app-activities [class.d-none]="selectedTab.id === 'tasks'"></app-activities>
   </div>
+
+</div>
+
 
   <!-- <div class="mt-5">
     <div class="v-center">
@@ -81,14 +66,6 @@
       </ng-container>
     </div>
   </div> -->
-
-</div>
-<mat-drawer-container [hasBackdrop]="true">
-  <mat-drawer #drawer position="end">
-    <app-task-filter></app-task-filter>
-  </mat-drawer>
-</mat-drawer-container>
-
 
 <!-- DropUp Component -->
 
