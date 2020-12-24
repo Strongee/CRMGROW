@@ -57,6 +57,15 @@ a {
   }
 }
 
+.overlayer {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 998;
+  background-color: #000000;
+  opacity: 0.3;
+}
 
 @media screen and (max-width: 992px) and (min-width: 680px) {
   .nav-link {
@@ -94,10 +103,7 @@ a {
     display: none;
     //animation: hide-navbar-collapse .2s ease forwards;
     background-color: #aaaaaa;
-    .sidebar-nav {
-      margin-top: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
+
     .nav-link {
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
@@ -141,19 +147,19 @@ a {
       width: 100vw;
       height: 100vh;
     }
+  }
 
-    .sidebar-content {
-      background-color: #ffffff;
-      width: 0px;
-      opacity: 0;
-      animation: decrease-width 1s ease;
+  .sidebar-content {
+    width: 60vw;
+    overflow: hidden;
 
-      &.show {
-        opacity: 1;
-        width: 60vw;
-        animation: increase-width 1s ease;
-      }
+    .sidebar-nav {
+      margin: 0;
     }
+  }
+
+  .overlayer.show {
+    display: block;
   }
 }
 @media screen and (max-width: 575px) {
@@ -192,11 +198,17 @@ a {
 :host ::ng-deep {
   mat-sidenav-container {
     z-index: 999;
+    display: none;
   }
 
   mat-sidenav {
     position: fixed;
     height: 100vh;
   }
-  
+
+  @media screen and (max-width: 680px) {
+    mat-sidenav-container {
+      display: block;
+    }
+  }
 }
