@@ -104,6 +104,7 @@
                     }
                 }
                 .date-picker {
+                    transform: translate(-218px, -450px) !important;
                     .picker-body {
                         display: flex;
                         justify-content: space-between;
@@ -123,10 +124,7 @@
                         }
                     }
                     @media screen and (max-width: 768px) {
-                        transform: translate(-250px, 28px) !important;
-                    }
-                    @media screen and (max-width: 480px) {
-                        transform: translate(0px, 28px) !important;
+                        transform: translate(-218px, -550px) !important;
                     }
                 }
             }
