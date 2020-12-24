@@ -332,8 +332,10 @@ export class ContactComponent implements OnInit {
         bottom: '50px',
         right: '50px'
       },
-      width: '600px',
+      width: '100vw',
+      maxWidth: '600px',
       panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
       disableClose: false
     });
   }
