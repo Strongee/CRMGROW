@@ -39,7 +39,14 @@ export class TaskDetail implements Deserializable {
   updated_at: Date;
   deserialize(input: any): this {
     Object.assign(this, input);
-    this.contact = new Contact().deserialize(input.contact);
+    if (!input.contact) {
+      return this;
+    }
+    if (input.contact instanceof Array) {
+      this.contact = new Contact().deserialize(input.contact[0]);
+    } else {
+      this.contact = new Contact().deserialize(input.contact);
+    }
     return this;
   }
 }

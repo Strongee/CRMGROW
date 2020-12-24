@@ -155,3 +155,27 @@ export class SearchOption implements Deserializable {
     );
   }
 }
+
+export class TaskSearchOption implements Deserializable {
+  str: string;
+  status: number;
+  contact: string;
+  types: string[];
+  labels: string[];
+  start_date: string;
+  end_date: string;
+
+  deserialize(input: any): this {
+    return Object.assign(this, input);
+  }
+}
+export class TaskDurationOption implements Deserializable {
+  start_date: string;
+  end_date: string;
+  status: number;
+  name: string;
+
+  deserialize(input: any): this {
+    return Object.assign(this, input);
+  }
+}

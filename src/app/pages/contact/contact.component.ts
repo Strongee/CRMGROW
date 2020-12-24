@@ -37,6 +37,7 @@ import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.
 import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
 import * as _ from 'lodash';
+import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 
 @Component({
   selector: 'app-contact',
@@ -47,7 +48,7 @@ export class ContactComponent implements OnInit {
   TYPES = [
     {
       id: 'all',
-      label: 'All actions'
+      label: 'Activity'
     },
     {
       id: 'note',
@@ -323,6 +324,18 @@ export class ContactComponent implements OnInit {
         this.handlerService.registerActivity$(res);
         this.handlerService.activityAdd$([this._id], 'task');
       });
+  }
+
+  openSendEmail(): void {
+    this.dialog.open(SendEmailComponent, {
+      position: {
+        bottom: '50px',
+        right: '50px'
+      },
+      width: '600px',
+      panelClass: 'send-email',
+      disableClose: false
+    });
   }
 
   /**

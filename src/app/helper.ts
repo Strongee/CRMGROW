@@ -3,6 +3,8 @@ const Embed = Quill.import('blots/embed');
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
 const Block = Quill.import('blots/block');
+import * as moment from 'moment';
+import 'moment-timezone';
 
 export const numPad = (num) => {
   if (num < 10) {
@@ -363,4 +365,58 @@ export function offsetToTz(oft: number): string {
   const hour_s = numPad(hour);
   const min_s = numPad(min);
   return symbol + hour_s + ':' + min_s;
+}
+
+/**
+ * Convert the time to specific timezone string
+ * @param date : Date Object (year, month, day)
+ * @param time : time String (hh:mm:ss.mmm)
+ * @param timezone : timezone object(tz_name, zone)
+ */
+export function convertTimetoTz(
+  date: any,
+  time: string,
+  timezone: any
+): string {
+  let dateTime = '';
+  if (timezone.tz_name) {
+    const dateStr = `${date.year}-${date.month}-${date.day} ${time}`;
+    dateTime = moment.tz(dateStr, timezone.tz_name).format();
+  } else {
+    dateTime = `${date.year}-${numPad(date.month)}-${numPad(date.day)}T${time}${
+      timezone.zone
+    }`;
+  }
+  return dateTime;
+}
+
+export function convertTimetoObj(dateTime: string, timezone: any): any {
+  try {
+    let date = moment(dateTime);
+    if (timezone.tz_name) {
+      date = date.tz(timezone.tz_name);
+    } else {
+      date = date.utcOffset(timezone.zone);
+    }
+    const year = date.get('year');
+    const month = date.get('month') + 1;
+    const day = date.get('date');
+    const hour = date.get('hour');
+    const min = date.get('minute');
+    const sec = date.get('second');
+    return {
+      year,
+      month,
+      day,
+      time: `${numPad(hour)}:${numPad(min)}:${numPad(sec)}.000`
+    };
+  } catch (err) {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+      time: '00:00:00.000'
+    };
+  }
 }

@@ -1,9 +1,9 @@
 
 <div class="custom-mat-table">
-  <div class="d-flex">
+  <div class="d-flex table-control-header">
     <div class="shadow-dropdown ml-auto" ngbDropdown>
       <div class="v-center c-pointer f-3 p-3 font-weight-bold" ngbDropdownToggle>
-        <span class="pr-2">Sort by deadline</span>
+        <span class="pr-2">{{ (!deadline || deadline.id === 'all') ? 'Sort by deadline' : deadline.label + ' tasks'}}</span>
       </div>
       <div ngbDropdownMenu aria-labelledby="taskSortTypes">
         <div class="py-2" ngbDropdownItem *ngFor="let type of DEADLINE_TYPES" (click)="changeDeadlineType(type)">
@@ -18,105 +18,164 @@
       <a class="ml-3 f-3 font-weight-bold c-pointer c-dark td-none" (click)="drawer.toggle()">Filters</a>
     </div>
   </div>
-  <table class="task-table w-100" mat-table [dataSource]="storeService.tasks$ | async">
+  <div class="position-relative">
+    <table class="w-100" mat-table [dataSource]="storeService.tasks$ | async | paginate: {id: 'tasks', itemsPerPage: pageSize.id, currentPage: page, totalItems: taskService.total$ | async}">
 
-    <!-- Select Column -->
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef class="pl-2">
-        <div class="custom-control custom-checkbox" [class.indeterminate]="selection.length && !isAllSelected()">
-          <input
-            type="checkbox"
-            class="custom-control-input"
-            id="selectAllContacts"
-            (change)="$event ? masterToggle() : null"
-            [checked]="selection.length && isAllSelected()"
-          />
-          <label
-            class="custom-control-label"
-            for="selectAllContacts"
-          ></label>
+      <!-- Select Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="pl-2">
+          <div class="custom-control custom-checkbox" [class.indeterminate]="selection.length && !isAllSelected()">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="selectAllContacts"
+              (change)="$event ? masterToggle() : null"
+              [checked]="selection.length && isAllSelected()"
+            />
+            <label
+              class="custom-control-label"
+              for="selectAllContacts"
+            ></label>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let element" class="pl-2">
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="contact-{{element._id}}"
+            />
+            <label
+              class="custom-control-label"
+              for="contact-{{element._id}}"
+            ></label>
+          </div>
+        </td>
+      </ng-container>
+  
+      <!-- Complete Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>DONE</th>
+        <td mat-cell *matCellDef="let element">
+          <i class="i-icon d-block {{element.status ? 'i-round-check bgc-accept' : 'i-round bgc-dark op-40'}} done-status"></i>
+        </td>
+      </ng-container>
+  
+      <!-- Name Column -->
+      <ng-container matColumnDef="contact_name">
+        <th mat-header-cell *matHeaderCellDef> contact name </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="v-center">
+            <div class="contact-avatar f-3 mr-2">{{element.contact.avatarName}}</div>
+            <span>{{element.contact.fullName}}</span>
+          </div>
+        </td>
+      </ng-container>
+  
+      <!-- Position Column -->
+      <ng-container matColumnDef="contact_label">
+        <th mat-header-cell *matHeaderCellDef> label </th>
+        <td mat-cell *matCellDef="let element">
+          <app-label-select [value]="element.contact.label" (valueChange)="updateLabel($event, element.contact._id)"></app-label-select>
+        </td>
+      </ng-container>
+  
+      <!-- Weight Column -->
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef> subject </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="v-center">
+            <i class="i-icon {{TASK_ICONS[element.type] || 'i-task'}} d-block bgc-dark mr-2"></i>
+            <span>{{element.content}}</span>
+          </div>
+        </td>
+      </ng-container>
+  
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="contact_phone">
+        <th mat-header-cell *matHeaderCellDef> phone number </th>
+        <td mat-cell *matCellDef="let element">
+          <span class="c-blue font-weight-bold">{{element.contact.cell_phone | phone_format}}</span>
+        </td>
+      </ng-container>
+  
+      <!-- Star Column -->
+      <ng-container matColumnDef="deadline">
+        <th mat-header-cell *matHeaderCellDef> deadline </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.due_date | date: 'MMM dd, hh:mm a'}}
+        </td>
+      </ng-container>
+  
+      <!-- ActioN Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element" class="p-0" style="width: 42px;">
+          <div><i class="i-icon i-edit op-28 d-block bgc-dark ml-auto" (click)="openEdit(element)"></i></div>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+      <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+    </table>
+  
+  
+    <ng-container *ngIf="(storeService.tasks$ | async).length || (taskService.total$ | async); else emptyListTemplate">
+      <div class="updating-status"
+        *ngIf="(taskService.loading$ | async) === STATUS.REQUEST">
+        LOADING
+      </div>
+      <div class="my-2 table-control mode-1">
+        <div class="pagination-wrapper m-auto">
+          <pagination-controls (pageChange)="changePage($event)"
+            (pageBoundsCorrection)="onOverPages($event)"
+            id="tasks"
+            maxSize="5"
+            previousLabel=""
+            nextLabel="">
+          </pagination-controls>
         </div>
-      </th>
-      <td mat-cell *matCellDef="let element" class="pl-2">
-        <div class="custom-control custom-checkbox">
-          <input
-            type="checkbox"
-            class="custom-control-input"
-            id="contact-{{element._id}}"
-          />
-          <label
-            class="custom-control-label"
-            for="contact-{{element._id}}"
-          ></label>
+        <div class="shadow-dropdown ml-auto page-size-control"
+          ngbDropdown
+          placement="top-right">
+          <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+            ngbDropdownToggle>
+            <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
+          </div>
+          <div ngbDropdownMenu
+            aria-labelledby="contactPageSize">
+            <div class="py-2"
+              ngbDropdownItem
+              *ngFor="let type of PAGE_COUNTS"
+              (click)="changePageSize(type)">
+              <span class="f-3 v-center"
+                [class.font-weight-bold]="type.id === pageSize.id">
+                Show {{type.label}} rows per page
+                <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                  *ngIf="type.id === pageSize.id"></i>
+              </span>
+            </div>
+          </div>
         </div>
-      </td>
+      </div>
     </ng-container>
-
-    <!-- Complete Status Column -->
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>DONE</th>
-      <td mat-cell *matCellDef="let element">
-        <i class="i-icon d-block {{element.status ? 'i-round-check bgc-accept' : 'i-round bgc-dark op-40'}} done-status"></i>
-      </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="contact_name">
-      <th class="name-col" mat-header-cell *matHeaderCellDef> contact name </th>
-      <td class="name-col" mat-cell *matCellDef="let element">
-        <div class="v-center">
-          <div class="contact-avatar f-3 mr-2">{{element.contact.avatarName}}</div>
-          <span>{{element.contact.fullName}}</span>
+    <ng-template #emptyListTemplate>
+      <ng-container [ngSwitch]="(taskService.loading$ | async)">
+        <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
+          <div class="object-icon v-center">
+            <i class="i-icon i-task d-block bgc-dark"></i>
+          </div>
+          <h4 class="font-weight-bold mt-4 mb-3">
+            There is no task in your account.
+          </h4>
         </div>
-      </td>
-    </ng-container>
-
-    <!-- Position Column -->
-    <ng-container matColumnDef="contact_label">
-      <th class="label-col" mat-header-cell *matHeaderCellDef> label </th>
-      <td class="label-col" mat-cell *matCellDef="let element">
-        <app-label-select [value]="element.contact.label" (valueChange)="updateLabel($event, element.contact._id)"></app-label-select>
-      </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="subject">
-      <th mat-header-cell *matHeaderCellDef> subject </th>
-      <td mat-cell *matCellDef="let element">
-        <div class="v-center">
-          <i class="i-icon {{TASK_ICONS[element.type] || 'i-task'}} d-block bgc-dark mr-2"></i>
-          <span>{{element.content}}</span>
+        <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+          <div class="loader mt-5 lg"></div>
+          <h4 class="fw-600 mt-2">Loading tasks...</h4>
         </div>
-      </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="contact_phone">
-      <th class="phone-col" mat-header-cell *matHeaderCellDef> phone number </th>
-      <td class="phone-col" mat-cell *matCellDef="let element">
-        <span class="c-blue font-weight-bold">{{element.contact.cell_phone | phone_format}}</span>
-      </td>
-    </ng-container>
-
-    <!-- Star Column -->
-    <ng-container matColumnDef="deadline">
-      <th class="deadline-col" mat-header-cell *matHeaderCellDef> deadline </th>
-      <td class="deadline-col" mat-cell *matCellDef="let element">
-        {{element.due_date | date: 'MMM dd, hh:mm a'}}
-      </td>
-    </ng-container>
-
-    <!-- ActioN Column -->
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>  </th>
-      <td mat-cell *matCellDef="let element" class="p-0" style="width: 42px;">
-        <div><i class="i-icon i-edit op-28 d-block bgc-dark ml-auto" (click)="openEdit(element)"></i></div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
-    <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
-  </table>
+      </ng-container>
+    </ng-template>
+  </div>
 </div>
 
 <mat-drawer-container [hasBackdrop]="true">

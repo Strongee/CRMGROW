@@ -9,7 +9,7 @@
   </div>
   <div class="contact-panel d-flex">
     <div class="contact-info-panel pr-3">
-      <div class="contact-main d-flex">
+      <div class="contact-main v-center">
         <div class="contact-avatar lg font-weight-bold">
           {{contact.avatarName}}
         </div>
@@ -17,26 +17,44 @@
           <div class="f-20 font-weight-bold">{{contact.fullName}}</div>
           <div class="f-3 op-40">{{contact.last_activity_time | date :'MM/dd/yyyy'}}</div>
         </div>
-        <div ngbDropdown class="button-more ml-auto">
-          <a class="d-flex c-pointer" ngbDropdownToggle>
-            <i class="i-icon i-menu-more bgc-dark" aria-hidden="true"></i>
-          </a>
+        <div ngbDropdown class="v-center btn btn-blue ml-auto button-more">
+          <span class="f-6 font-weight-bold text-white c-pointer mr-2" ngbDropdownToggle>
+            Actions
+          </span>
+          <i class="d-block i-icon i-triangle-down bgc-white"></i>
           <div ngbDropdownMenu class="light">
-            <button class="v-center border-0 py-2 c-dark dropdown-item">
-              <i class="i-icon i-list bgc-dark ml-1" aria-hidden="true"></i>
-              <span class="ml-3 f-3 font-weight-bold">Add to campaign</span>
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold">Create group call</span>
             </button>
-            <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="openMergeContactDlg()">
-              <i class="i-icon i-contact-merge bgc-dark ml-1" aria-hidden="true"></i>
-              <span class="ml-3 f-3 font-weight-bold">Merge</span>
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold">Create appointment</span>
             </button>
-            <button class="v-center border-0 py-2 c-dark dropdown-item">
-              <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
-              <span class="ml-3 f-3 font-weight-bold">Share contact</span>
+            <hr class="my-1">
+            <button class="border-0 c-dark dropdown-item" (click)="openSendEmail()">
+              <span class="ml-1 f-3 font-weight-bold">Send email</span>
             </button>
-            <button class="v-center border-0 py-2 c-dark dropdown-item">
-              <i class="i-icon i-trash bgc-red ml-1" aria-hidden="true"></i>
-              <span class="ml-3 f-3 font-weight-bold c-red">Delete</span>
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold">Send text</span>
+            </button>
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold">Add task</span>
+            </button>
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold">Add note</span>
+            </button>
+            <hr class="my-1">
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold">Add to campaign</span>
+            </button>
+            <button class="border-0 c-dark dropdown-item" (click)="openMergeContactDlg()">
+              <span class="ml-1 f-3 font-weight-bold">Merge</span>
+            </button>
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold">Share contact</span>
+            </button>
+            <hr class="my-1">
+            <button class="border-0 c-dark dropdown-item">
+              <span class="ml-1 f-3 font-weight-bold c-red">Delete</span>
             </button>
           </div>
         </div>
@@ -154,9 +172,9 @@
                   <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                   <span class="f-6 font-weight-bold ml-2">Automation</span>
                 </div>
-                <!-- <div class="f-3 fw-600 c-blue c-pointer" (click)="createAutomation()">
-                  Create new automation
-                </div> -->
+                <div class="f-3 fw-600 c-blue c-pointer" (click)="createAutomation()">
+                  Create own automation
+                </div>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -248,7 +266,7 @@
       </mat-accordion>
     </div>
     <div class="contact-action-panel flex-grow-1 position-relative">
-      <div class="action-panel position-relative">
+      <!-- <div class="action-panel position-relative">
         <div class="main-actions">
           <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="action = $event" type="plain">
           </app-slide-tab>
@@ -587,7 +605,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="history-panel pt-3 pl-3 mt-2">
         <div class="type-headers d-flex">
           <div class="type-item rounded px-2 py-1 f-3 font-weight-bold c-pointer" *ngFor="let type of TYPES"
