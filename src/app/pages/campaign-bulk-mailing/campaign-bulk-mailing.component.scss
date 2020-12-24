@@ -6,6 +6,15 @@
   .broadcast {
     cursor: pointer;
   }
+
+  @media screen and (max-width: 576px) {
+    .send-time,
+    .delivered,
+    .opened,
+    .clicked {
+      display: none;
+    }
+  }
 }
 
 :host ::ng-deep {

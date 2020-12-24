@@ -1,5 +1,5 @@
 <div class="page-content">
-  <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Affiliate</h6>
+  <h6 class="page-title ls-2 font-weight-bold my-3">Affiliate</h6>
   <div class="affiliate-page">
     <p class="f-3 font-weight-bold my-4">Take advantage of our affiliate program and receive
       <span class="f-4 font-weight-bold">20%</span> residual per month for any users you refer.
@@ -21,7 +21,7 @@
     </p>
     <div class="v-center">
       <img class="paypal-logo" src="../../../assets/img/paypal.svg" alt="PayPal">
-      <input class="form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
+      <input class="paypal-address form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
       <button class="btn btn-blue text-white font-weight-bold ml-2" (click)="update()" [disabled]="loadingMain || creating" [class.loading]="updating">Update</button>
     </div>
     <ng-container *ngIf="loadingMain || creating">

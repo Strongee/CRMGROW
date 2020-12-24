@@ -2,6 +2,16 @@
 
 .contact-info-panel {
   min-width: 376px;
+  .button-more {
+    i {
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+    }
+    .dropdown-menu.show {
+      transform: translate(-60px, 36px) !important;
+    }
+  }
   .info-title {
     width: 150px;
   }

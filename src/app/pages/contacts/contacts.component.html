@@ -1,43 +1,51 @@
 <div class="page-content">
-  <div class="status-header v-center mb-3">
+  <div class="status-header v-center mb-2">
     <div class="count-status">
-      <div class="f-6">
-        <span class="font-weight-bold text-uppercase">Contacts ({{contactService.total$ | async}})</span>
-        <span *ngIf="searchStr || !searchOption.isEmpty()" class="op-56"> / Found {{(storeService.pageContacts$ | async).length}} contacts</span>
-        <span *ngIf="selection.length" class="op-56"> / Selected {{selection.length}} contacts</span>
+      <div class="f-24 font-weight-bold">
+        Contacts
+        <!-- <span *ngIf="searchStr || !searchOption.isEmpty()" class="op-56"> / Found {{(storeService.pageContacts$ | async).length}} contacts</span>
+        <span *ngIf="selection.length" class="op-56"> / Selected {{selection.length}} contacts</span> -->
+      </div>
+      <div class="f-6 font-weight-bold op-64">
+        {{contactService.total$ | async}} contacts
       </div>
     </div>
     <div class="ml-auto v-center">
-      <div class="border-right px-3 py-1 text-center mx-3">
-        <a class="mr-3 f-3 font-weight-bold c-dark td-none c-pointer"
-          (click)="importContacts()">Import contacts</a>
+      <button class="v-center btn btn-blue f-6 font-weight-bold text-white rounded shadow mr-2 px-3 py-2">
+        <i class="d-block i-icon i-plus bgc-white mr-2"></i>
+        Create new contact
+      </button>
+      <button class="btn btn-white border border-primary f-6 font-weight-bold rounded px-3 py-2" (click)="importContacts()">
+        Import
+      </button>
+    </div>
+  </div>
+  <div class="v-center justify-content-end">
+    <div class=""
+      ngbDropdown
+      placement="bottom-right">
+      <div class="v-center c-pointer f-3 p-3 mr-2 font-weight-bold"
+        ngbDropdownToggle>
+        <span class="pr-2">Sort by</span>
       </div>
-      <div class=""
-        ngbDropdown
-        placement="bottom-right">
-        <div class="v-center c-pointer f-3 p-3 font-weight-bold"
-          ngbDropdownToggle>
-          <span class="pr-2">Sort by</span>
+      <div ngbDropdownMenu
+        aria-labelledby="taskSortTypes">
+        <div class="py-2"
+          ngbDropdownItem
+          *ngFor="let type of SORT_TYPES"
+          (click)="changeSort(type)">
+          <span class="f-3 v-center"
+            [class.font-weight-bold]="type.id === sortType.id">
+            {{type.label}}
+            <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+              *ngIf="type.id === sortType.id"></i>
+          </span>
         </div>
-        <div ngbDropdownMenu
-          aria-labelledby="taskSortTypes">
-          <div class="py-2"
-            ngbDropdownItem
-            *ngFor="let type of SORT_TYPES"
-            (click)="changeSort(type)">
-            <span class="f-3 v-center"
-              [class.font-weight-bold]="type.id === sortType.id">
-              {{type.label}}
-              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
-                *ngIf="type.id === sortType.id"></i>
-            </span>
-          </div>
-        </div>
       </div>
-      <div class="border-left px-3 py-1 text-center mx-3">
-        <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer"
-          (click)="drawer.toggle()">Advanced Filter</a>
-      </div>
+    </div>
+    <div class="border-left px-3 py-1 text-center mx-3">
+      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer"
+        (click)="drawer.toggle()">Filter</a>
     </div>
   </div>
   <div class="custom-mat-table position-relative">

@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { PageMenuItem } from '../../utils/data.types';
+import { TabItem } from '../../utils/data.types';
 import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-campaign',
@@ -8,11 +8,12 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./campaign.component.scss']
 })
 export class CampaignComponent implements OnInit, AfterViewInit {
-  menuItems: PageMenuItem[] = [
-    { id: 'list', icon: 'i-list', label: 'List' },
-    { id: 'bulk', icon: 'i-bulk', label: 'Bulk Mailing' },
-    { id: 'smtp', icon: 'i-message', label: 'Connect SMTP' }
+  tabs: TabItem[] = [
+    { id: 'list', icon: '', label: 'Lists' },
+    { id: 'bulk', icon: '', label: 'Bulk mailing' },
+    { id: 'smtp', icon: '', label: 'Connect SMTP' }
   ];
+  selectedTab: TabItem = this.tabs[0];
   defaultPage = 'list';
   currentPageType: string;
   detailID = {
@@ -23,32 +24,16 @@ export class CampaignComponent implements OnInit, AfterViewInit {
   constructor(private location: Location, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.currentPageType =
-      this.route.snapshot.params['page'] || this.defaultPage;
-    this.detailID[this.currentPageType] = this.route.snapshot.params['id'];
+    const currentTabId = this.route.snapshot.params['page'] || this.defaultPage;
+    const tabIndex = this.tabs.findIndex((tab) => tab.id === currentTabId);
+    this.selectedTab = this.tabs[tabIndex];
   }
-  /**
-   * Change the Page Type and Reset the Current List Id
-   * Replace the Routing
-   * @param menu: Page Sub Menu Item
-   */
-  changeMenu(menu: PageMenuItem): void {
-    this.location.replaceState(`campaign/${menu.id}`);
-    this.currentPageType = menu.id;
-    this.detailID = {
-      list: null,
-      bulk: null
-    };
+
+  changeTab(tab: TabItem): void {
+    this.selectedTab = tab;
+    this.location.replaceState(tab.id);
+    // Set the storage for the active tab
   }
-  /**
-   * Change the Page type and go to detail page
-   * @param type : Page List Type
-   * @param id : Detail Page Id
-   */
-  changePage(type: string, id: string): void {
-    this.location.replaceState(`campaign/${type}/${id}`);
-    this.currentPageType = type;
-    this.detailID[type] = id;
-  }
+
   ngAfterViewInit(): void {}
 }

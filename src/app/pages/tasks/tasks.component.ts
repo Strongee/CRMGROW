@@ -4,11 +4,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
 import { DialogSettings, STATUS } from 'src/app/constants/variable.constants';
+import { getCurrentTimezone } from 'src/app/helper';
+import { TaskDurationOption } from 'src/app/models/searchOption.model';
 import { Task, TaskDetail } from 'src/app/models/task.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
+import { UserService } from 'src/app/services/user.service';
+import * as moment from 'moment';
+import 'moment-timezone';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -41,29 +46,59 @@ export class TasksComponent implements OnInit, OnDestroy {
     { id: 'this week', label: 'This week' },
     { id: 'next week', label: 'Next week' }
   ];
+  PAGE_COUNTS = [
+    { id: 8, label: '8' },
+    { id: 10, label: '10' },
+    { id: 20, label: '20' },
+    { id: 50, label: '50' }
+  ];
+  pageSize = this.PAGE_COUNTS[2];
   // Task Filter Type
   deadline = this.DEADLINE_TYPES[0];
 
   isUpdating = false;
   updateSubscription: Subscription;
 
+  page = 1;
   selection = [];
+  timezone;
   constructor(
     private handlerService: HandlerService,
     public taskService: TaskService,
     public storeService: StoreService,
     private contactService: ContactService,
+    private userService: UserService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.userService.profile$.subscribe((user) => {
+      try {
+        this.timezone = JSON.parse(user.time_zone_info);
+      } catch (err) {
+        const timezone = getCurrentTimezone();
+        this.timezone = { zone: user.time_zone || timezone };
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.loadTasks();
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.taskService.resetOption();
+  }
 
   loadTasks(): void {
-    this.taskService.loadToday();
+    const page = this.taskService.page.getValue();
+    const pageSize = this.taskService.pageSize.getValue();
+    this.changePage(page || 1);
+
+    this.PAGE_COUNTS.some((e) => {
+      if (e.id === pageSize) {
+        this.pageSize = e;
+        return true;
+      }
+    });
   }
 
   /**
@@ -72,6 +107,71 @@ export class TasksComponent implements OnInit, OnDestroy {
    */
   changeDeadlineType(value: any): void {
     this.deadline = value;
+
+    const durationOption = new TaskDurationOption();
+    durationOption.name = value.id;
+    let today;
+    let weekDay;
+    if (this.timezone.tz_name) {
+      today = moment().tz(this.timezone.tz_name).startOf('day');
+      weekDay = moment().tz(this.timezone.tz_name).startOf('week');
+    } else {
+      today = moment().utcOffset(this.timezone.zone).startOf('day');
+      weekDay = moment().utcOffset(this.timezone.zone).startOf('week');
+    }
+    let start_date = '';
+    let end_date = '';
+    switch (value.id) {
+      case 'all':
+        break;
+      case 'overdue':
+        end_date = today.format();
+        durationOption.status = 0;
+        break;
+      case 'today':
+        start_date = today.format();
+        end_date = today.add('day', 1).format();
+        break;
+      case 'tomorrow':
+        start_date = today.add('day', 1).format();
+        end_date = today.add('day', 2).format();
+        break;
+      case 'this week':
+        start_date = weekDay.format();
+        end_date = weekDay.add('week', 1).format();
+        break;
+      case 'next week':
+        start_date = weekDay.add('week', 1).format();
+        end_date = weekDay.add('week', 2).format();
+        break;
+      case 'future':
+        start_date = weekDay.add('week', 2).format();
+        break;
+      default:
+    }
+    durationOption.start_date = start_date;
+    durationOption.end_date = end_date;
+
+    this.taskService.page.next(1);
+    this.taskService.changeDuration(durationOption);
+  }
+
+  changePage(page: number): void {
+    this.page = page;
+    this.taskService.loadPage(page);
+  }
+
+  onOverPages(page: number): void {
+    this.changePage(page);
+  }
+
+  changePageSize(size: any): void {
+    const newPage =
+      Math.floor((this.pageSize.id * (this.page - 1)) / size.id) + 1;
+
+    this.pageSize = size;
+    this.taskService.pageSize.next(size.id);
+    this.changePage(newPage);
   }
   /**
    * Open Filter Panel

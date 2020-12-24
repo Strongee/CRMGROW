@@ -27,8 +27,9 @@ export class CampaignListItemComponent implements OnInit {
   selectedContacts = new SelectionModel<any>(true, []);
   selected = 1;
   csvColumns = [];
+  id = '';
+  mailList;
 
-  @Input('id') id: string;
   constructor(
     private location: Location,
     private dialog: MatDialog,
@@ -37,13 +38,20 @@ export class CampaignListItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.id = this.route.snapshot.params.id;
+    this.isLoading = true;
+    this.mailListService.get(this.id).subscribe((res) => {
+      if (res) {
+        this.mailList = res;
+      }
+    });
     this.loadContacts();
   }
 
   loadContacts(): void {
-    this.isLoading = true;
     this.mailListService.get(this.id).subscribe(
       (res) => {
+        console.log("load contacts ==========>", res);
         this.contacts = res['contacts'];
         this.isLoading = false;
       },
@@ -143,7 +151,7 @@ export class CampaignListItemComponent implements OnInit {
   importCSV(): void {
     this.dialog
       .open(UploadContactsComponent, {
-        width: '100vw',
+        width: '96vw',
         maxWidth: '768px',
         disableClose: true
       })

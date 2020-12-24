@@ -8,8 +8,8 @@ import { TabItem } from '../../utils/data.types';
 })
 export class TeamsComponent implements OnInit {
   tabs: TabItem[] = [
-    { icon: 'i-icon i-teams', label: 'MY TEAMS', id: 'teams' },
-    { icon: 'i-icon i-group-call', label: 'GROUP CALLS', id: 'calls' }
+    { icon: '', label: 'MY TEAMS', id: 'teams' },
+    { icon: '', label: 'GROUP CALLS', id: 'calls' }
   ];
 
   selectedTab: TabItem = this.tabs[0];
