@@ -5,7 +5,7 @@ import { Contact } from 'src/app/models/contact.model';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from '../material-add/material-add.component';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import { TIMES } from 'src/app/constants/variable.constants';
 import * as moment from 'moment';
@@ -42,6 +42,7 @@ export class SendEmailComponent implements OnInit {
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
     private dialog: MatDialog,
+    private dialogRef: MatDialogRef<SendEmailComponent>,
     private helperSerivce: HelperService,
     private materialService: MaterialService
   ) {}
@@ -91,6 +92,7 @@ export class SendEmailComponent implements OnInit {
         })
         .subscribe((status) => {
           console.log('status', status);
+          this.dialogRef.close();
         });
     }
   }

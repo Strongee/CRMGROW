@@ -333,7 +333,8 @@ export class ContactComponent implements OnInit {
         right: '50px'
       },
       width: '600px',
-      panelClass: 'send-email'
+      panelClass: 'send-email',
+      disableClose: false
     });
   }
 
