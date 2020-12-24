@@ -1,7 +1,7 @@
 <div class="panel p-4c">
   <div class="v-center mb-4">
     <h4 class="font-weight-bold mb-0">Filters</h4>
-    <div class="c-blue f-1 text-uppercase ml-2 mt-2">Clear All Filters</div>
+    <div class="c-blue f-1 text-uppercase ml-2 mt-2 c-pointer" (click)="clearFilter()">Clear All Filters</div>
 
   </div>
   <form #form="ngForm" (ngSubmit)="form.form.valid ? applyFilters() : false">

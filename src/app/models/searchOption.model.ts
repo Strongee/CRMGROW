@@ -169,3 +169,13 @@ export class TaskSearchOption implements Deserializable {
     return Object.assign(this, input);
   }
 }
+export class TaskDurationOption implements Deserializable {
+  start_date: string;
+  end_date: string;
+  status: number;
+  name: string;
+
+  deserialize(input: any): this {
+    return Object.assign(this, input);
+  }
+}
