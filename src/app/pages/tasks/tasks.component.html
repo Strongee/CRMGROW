@@ -18,7 +18,7 @@
       <a class="ml-3 f-3 font-weight-bold c-pointer c-dark td-none" (click)="drawer.toggle()">Filters</a>
     </div>
   </div>
-  <table class="w-100" mat-table [dataSource]="storeService.tasks$ | async">
+  <table class="task-table w-100" mat-table [dataSource]="storeService.tasks$ | async">
 
     <!-- Select Column -->
     <ng-container matColumnDef="select">
@@ -62,8 +62,8 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="contact_name">
-      <th mat-header-cell *matHeaderCellDef> contact name </th>
-      <td mat-cell *matCellDef="let element">
+      <th class="name-col" mat-header-cell *matHeaderCellDef> contact name </th>
+      <td class="name-col" mat-cell *matCellDef="let element">
         <div class="v-center">
           <div class="contact-avatar f-3 mr-2">{{element.contact.avatarName}}</div>
           <span>{{element.contact.fullName}}</span>
@@ -73,8 +73,8 @@
 
     <!-- Position Column -->
     <ng-container matColumnDef="contact_label">
-      <th mat-header-cell *matHeaderCellDef> label </th>
-      <td mat-cell *matCellDef="let element">
+      <th class="label-col" mat-header-cell *matHeaderCellDef> label </th>
+      <td class="label-col" mat-cell *matCellDef="let element">
         <app-label-select [value]="element.contact.label" (valueChange)="updateLabel($event, element.contact._id)"></app-label-select>
       </td>
     </ng-container>
@@ -92,16 +92,16 @@
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="contact_phone">
-      <th mat-header-cell *matHeaderCellDef> phone number </th>
-      <td mat-cell *matCellDef="let element">
+      <th class="phone-col" mat-header-cell *matHeaderCellDef> phone number </th>
+      <td class="phone-col" mat-cell *matCellDef="let element">
         <span class="c-blue font-weight-bold">{{element.contact.cell_phone | phone_format}}</span>
       </td>
     </ng-container>
 
     <!-- Star Column -->
     <ng-container matColumnDef="deadline">
-      <th mat-header-cell *matHeaderCellDef> deadline </th>
-      <td mat-cell *matCellDef="let element">
+      <th class="deadline-col" mat-header-cell *matHeaderCellDef> deadline </th>
+      <td class="deadline-col" mat-cell *matCellDef="let element">
         {{element.due_date | date: 'MMM dd, hh:mm a'}}
       </td>
     </ng-container>

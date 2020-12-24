@@ -1,6 +1,6 @@
 <div class="page-content">
   <div class="my-3">
-    <div class="d-flex justify-content-between">
+    <div class="v-center justify-content-between">
       <h6 class="page-title font-weight-bold">Automations</h6>
       <a class="btn btn-primary shadow py-2 v-center mb-2 border-0" [routerLink]="['/autoflow/new']">
         <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
@@ -41,23 +41,23 @@
             </td>
             <td class="actions">
               <div class="v-center justify-content-end">
-                <button type="button" class="btn btn-white f-3 font-weight-bold" (click)="assignAutomation($event, automation)">
+                <button type="button" class="btn btn-white f-3 font-weight-bold p-1" (click)="assignAutomation($event, automation)">
                   Assign
                 </button>
                 <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
-                  <div class="icon-button v-center justify-content-center ml-3" (click)="openAutomation($event, automation)">
+                  <div class="icon-button v-center justify-content-center ml-2" (click)="openAutomation($event, automation)">
                     <i class="i-icon bgc-black i-edit"></i>
                   </div>
                 </ng-container>
                 <ng-template #noneEditable>
-                  <div class="icon-button v-center justify-content-center ml-3">
+                  <div class="icon-button v-center justify-content-center ml-2">
                     <i class="i-icon bgc-white i-edit"></i>
                   </div>
                 </ng-template>
-                <div class="icon-button v-center justify-content-center ml-3">
+                <div class="icon-button v-center justify-content-center ml-2">
                   <i class="i-icon bgc-black i-triangle-up"></i>
                 </div>
-                <div class="icon-button v-center justify-content-center ml-3" (click)="duplicate($event, automation)">
+                <div class="icon-button v-center justify-content-center ml-2" (click)="duplicate($event, automation)">
                   <i class="i-icon bgc-black i-duplicate"></i>
                 </div>
               </div>

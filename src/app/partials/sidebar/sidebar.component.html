@@ -1,16 +1,16 @@
-<a class="navbar-toggler" type="button" (click)="isCollapsed=!isCollapsed"
+<a class="navbar-toggler" type="button" (click)="sidenav.toggle()"
   aria-controls="sidenav-collapse-main">
   <span class="i-icon i-menu bgc-dark d-block"></span>
 </a>
-<div class="sidebar" [ngClass]="{show: !isCollapsed}">
+<div class="sidebar" [ngClass]="{show: !isCollapsed}" (click)="isCollapsed = !isCollapsed">
   <div class="sidebar-content d-flex flex-column">
-    <div class="sidebar-header v-center border-bottom">
+    <div class="sidebar-header v-center">
       <a class="navbar-brand m-0 p-0" routerLinkActive="active" [routerLink]="['/home']">
         <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">
       </a>
-      <a class="navbar-close ml-auto c-pointer" (click)="isCollapsed = true">
-        <i class="i-icon i-close bgc-dark d-block"></i>
-      </a>
+<!--      <a class="navbar-close ml-auto c-pointer" (click)="isCollapsed = true">-->
+<!--        <i class="i-icon i-close bgc-dark d-block"></i>-->
+<!--      </a>-->
     </div>
     <ul class="sidebar-nav">
       <ng-container *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
@@ -29,3 +29,47 @@
     </ul>
   </div>
 </div>
+<mat-sidenav-container (click)="sidenav.toggle()">
+  <mat-sidenav #sidenav>
+      <div style="width: 50vw; background: blue">
+        <a mat-list-item [routerLink]="'/accounts'"> Accounts </a>
+        <a mat-list-item [routerLink]="'/create-account'"> Create Account </a>
+        <a mat-list-item [routerLink]="'/contacts'"> Contacts </a>
+        <a mat-list-item [routerLink]="'/create-contact'"> Create Contact </a>
+        <a mat-list-item [routerLink]="'/activities'"> Activities </a>
+        <a mat-list-item [routerLink]="'/create-activity'"> Create Activity </a>
+        <a mat-list-item (click)="sidenav.toggle()" href="" mat-list-item>Close</a>
+      </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="contents"></div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!--<div class="sidebar show" (click)="isCollapsed = !isCollapsed">-->
+<!--  <div class="sidebar-content d-flex flex-column" [ngClass]="{show: !isCollapsed}">-->
+<!--    <div class="sidebar-header v-center">-->
+<!--      <a class="navbar-brand m-0 p-0" routerLinkActive="active" [routerLink]="['/home']">-->
+<!--        <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">-->
+<!--      </a>-->
+<!--      &lt;!&ndash;      <a class="navbar-close ml-auto c-pointer" (click)="isCollapsed = true">&ndash;&gt;-->
+<!--      &lt;!&ndash;        <i class="i-icon i-close bgc-dark d-block"></i>&ndash;&gt;-->
+<!--      &lt;!&ndash;      </a>&ndash;&gt;-->
+<!--    </div>-->
+<!--    <ul class="sidebar-nav">-->
+<!--      <ng-container *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">-->
+<!--        <li *ngIf="!menuItem.role || menuItem.protectedRole.indexOf(profile.role) === -1">-->
+<!--          <a routerLinkActive="active" [routerLink]="[menuItem.path]" class="nav-link c-dark v-center">-->
+<!--            <i class="i-icon {{menuItem.icon}} d-lg-none d-block mr-2"></i>-->
+<!--            <span class="menu-label">{{menuItem.title | translate}}</span>-->
+<!--            <ng-container *ngIf="menuItem.beta">-->
+<!--                <span class="{{menuItem.betaClass}}">-->
+<!--                  {{menuItem.betaLabel | translate}}-->
+<!--                </span>-->
+<!--            </ng-container>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      </ng-container>-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--</div>-->
