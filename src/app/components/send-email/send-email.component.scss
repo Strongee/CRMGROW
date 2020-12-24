@@ -230,3 +230,10 @@
       display: none;
     }
 }
+
+:host ::ng-deep {
+  .contacts-wrapper {
+    .custom-mat-field .mat-form-field-appearance-outline .mat-form-field-outline:not(.mat-form-field-outline-thick) {display: none}
+    .custom-mat-field .mat-form-field-appearance-outline .mat-form-field-infix {padding: 0px!important;}
+  }
+}
