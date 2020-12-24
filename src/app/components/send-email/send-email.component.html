@@ -1,7 +1,10 @@
-<div class="v-center justify-content-between bgc-blue">
+<div class="v-center justify-content-between bgc-blue p-3 email-header">
     <h1 class="f-6 font-weight-bold text-white m-0">
         Email
     </h1>
+    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
+      <i class="i-icon i-close bgc-white ml-1" aria-hidden="true"></i>
+  </button>
 </div>
 <div class="email-panel">
     <form #emailForm="ngForm" (ngSubmit)="emailForm.form.valid ? sendEmail() : false">
@@ -74,14 +77,14 @@
               <span class="f-3 font-weight-bold c-blue mx-2">Material</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </button>
-            <div ngbDropdown class="email-template px-3 c-pointer">
+            <div ngbDropdown class="email-template px-3 c-pointer" [class.selected]="selectedTemplate.subject && selectedTemplate.content">
               <div class="v-center" ngbDropdownToggle>
                 <i class="d-block i-icon i-template bgc-blue"></i>
                 <div class="ml-2">
                   <div class="f-3 font-weight-bold c-blue select-title">
                     Template
                   </div>
-                  <div class="f-1 font-weight-bold op-64 c-white select-status" *ngIf="selectedTemplate.subject|| selectedTemplate.content">
+                  <div class="f-1 font-weight-bold op-64 c-white select-status" *ngIf="selectedTemplate.subject && selectedTemplate.content">
                     Selected
                   </div>
                 </div>
