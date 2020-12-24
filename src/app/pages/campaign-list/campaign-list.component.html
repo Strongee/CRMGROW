@@ -1,4 +1,4 @@
-<div class="campaign-list-page">
+<div class="campaign-list-page mt-3">
   <div class="col-12">
     <div class="d-flex justify-content-between align-items-center">
       <h2 class="mb-4"></h2>
@@ -39,7 +39,9 @@
                 </div>
               </td>
               <td class="name">
-                <div class="c-blue f-6 font-weight-bold" (click)="goToDetailPage(list._id)">{{list.title}}</div>
+                <a [routerLink]="['/campaign/list/' + list._id]"
+                   class="hover-bottom font-weight-bold f-6">{{list.title}}</a>
+<!--                <div class="c-blue f-6 font-weight-bold" (click)="goToDetailPage(list._id)">{{list.title}}</div>-->
               </td>
               <td class="subscribers">
                 <div class="f-6 font-weight-bold">{{list.subscribers}}</div>

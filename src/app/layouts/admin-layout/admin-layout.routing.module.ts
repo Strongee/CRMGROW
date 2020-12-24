@@ -22,6 +22,9 @@ import { ForgotPasswordComponent } from '../../pages/forgot-password/forgot-pass
 import { ResetPasswordComponent } from '../../pages/reset-password/reset-password.component';
 import { ThemesComponent } from 'src/app/pages/themes/themes.component';
 import { ThemeComponent } from 'src/app/pages/theme/theme.component';
+import { CampaignListItemComponent } from 'src/app/pages/campaign-list-item/campaign-list-item.component';
+import { CampaignBulkMailingItemComponent } from 'src/app/pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component';
+import { CampaignSmtpComponent } from 'src/app/pages/campaign-smtp/campaign-smtp.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -102,8 +105,15 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'campaign/:page/:id',
-    component: CampaignComponent,
+    path: 'campaign/list/:id',
+    component: CampaignListItemComponent,
+    data: {
+      title: 'Campaign'
+    }
+  },
+  {
+    path: 'campaign/bulk/:id',
+    component: CampaignBulkMailingItemComponent,
     data: {
       title: 'Campaign'
     }
