@@ -27,11 +27,11 @@
     top: 125%;
     border-radius: 8px;
     min-width: 216px;
-  
+
     .dropdown-item:hover, .dropdown-item:focus{
       background-color: #ececef;
       color: $color-dark!important;
-  
+
       i {
         background-color: $color-dark!important;
       }
@@ -78,7 +78,7 @@
 /* Main Nav Bar Wrapper Style*/
 .navbar-nav {
   flex-direction: row;
-  
+
   .nav-item {
     margin: 0.5rem;
   }
@@ -125,6 +125,9 @@
   }
 }
 
+.search-wrapper-mobile {
+  display: none;
+}
 
 
 // Mobile Responsive : Tablet
@@ -160,3 +163,38 @@
     }
   }
 }
+
+@media screen and (max-width: 576px) {
+  .navbar {
+    display: flex;
+    flex-wrap: nowrap;
+    height: auto;
+    grid-column-gap: 0px;
+
+    .new-actions-wrapper {
+      margin-left: 36px;
+    }
+
+    .search-form-wrapper {
+      display: none;
+    }
+
+    .search-wrapper-mobile {
+      display: block;
+
+      .search-dropdown-menu {
+        border-radius: 8px;
+        width: 200px;
+      }
+
+      .search-box {
+        width: 160px;
+      }
+    }
+
+    .input-group-append {
+      display: none;
+    }
+  }
+}
+

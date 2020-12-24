@@ -51,6 +51,7 @@ export class CampaignListItemComponent implements OnInit {
   loadContacts(): void {
     this.mailListService.get(this.id).subscribe(
       (res) => {
+        console.log("load contacts ==========>", res);
         this.contacts = res['contacts'];
         this.isLoading = false;
       },
@@ -150,7 +151,7 @@ export class CampaignListItemComponent implements OnInit {
   importCSV(): void {
     this.dialog
       .open(UploadContactsComponent, {
-        width: '100vw',
+        width: '96vw',
         maxWidth: '768px',
         disableClose: true
       })

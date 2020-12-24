@@ -18,7 +18,6 @@
       <a class="ml-3 f-3 font-weight-bold c-pointer c-dark td-none" (click)="drawer.toggle()">Filters</a>
     </div>
   </div>
-  
   <div class="position-relative">
     <table class="w-100" mat-table [dataSource]="storeService.tasks$ | async | paginate: {id: 'tasks', itemsPerPage: pageSize.id, currentPage: page, totalItems: taskService.total$ | async}">
 

@@ -53,6 +53,11 @@
       color: #E02020;
     }
   }
+
+  @media screen and (max-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%
+  }
 }
 
 .templates-container {
@@ -84,6 +89,14 @@
   .table {
     .sent, .date, .completed {
       text-align: right;
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .session-table {
+    .date {
+      display: none;
     }
   }
 }

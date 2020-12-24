@@ -24,4 +24,8 @@
   &:hover {
     background-color: #ebebff;
   }
+
+  @media screen and (max-width: 576px) {
+    padding: 0;
+  }
 }

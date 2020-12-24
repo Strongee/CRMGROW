@@ -911,7 +911,7 @@ body{
       padding-top: 0px!important;
     }
     .page {
-      padding-top: 100px;
+      padding-top: 60px;
       margin-left: 0px;
     }
 
@@ -1047,6 +1047,7 @@ table {
 .avatar-wrapper {
   width: 94px;
   height: 94px;
+  min-width: 94px;
   position: relative;
   .avatar {
     width: 94px;

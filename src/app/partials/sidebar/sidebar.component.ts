@@ -132,7 +132,7 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   menuItems: RouteInfo[] = ROUTES;
-  isCollapsed = true;
+  isCollapsed = false;
   profile: any = {};
 
   constructor(private router: Router) {}

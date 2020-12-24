@@ -4,14 +4,14 @@
           [class.was-validated]="submitted">
       <div class="v-center my-2">
         <a [routerLink]="['/automations']" class="c-dark mr-2">
-          <div class="f-8 ls-2 font-weight-bold text-uppercase">Automations</div>
+          <h6 class="page-title font-weight-bold">Automations</h6>
         </a>
         <div class="f-8 font-weight-bold text-uppercase" *ngIf="editMode=='new'"> / Create Template</div>
       </div>
       <div class="align-items-top automation-name-wrapper mt-3">
         <div class="row">
           <div class="col-md-7 col-sm-12">
-            <div class="form-group d-flex align-items-start">
+            <div class="form-group d-flex align-items-end">
               <div class="title w-100">
                 <label for="automation-title">Title</label>
                 <input class="form-control" id="automation-title" [(ngModel)]="automation_title" type="text"
@@ -20,7 +20,7 @@
                       *ngIf="automationTitle.errors&&(automationTitle.touched||automationTitle.dirty||submitted)&&submitted">Automation
                       name is required.</span>
               </div>
-              <div class="btn-wrapper">
+              <div class="btn-wrapper ml-2">
                 <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
                   {{editMode == 'edit' ? 'Save' : 'Create'}}
                 </button>

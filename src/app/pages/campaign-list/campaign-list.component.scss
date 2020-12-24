@@ -1,5 +1,4 @@
 .campaign-list-table {
-
   .check-cell {
     width: 40px;
   }
@@ -7,6 +6,14 @@
   td {
     &.name {
       cursor: pointer;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .subscribers,
+    .unsubscribers,
+    .delivery-issues {
+      display: none;
     }
   }
 }

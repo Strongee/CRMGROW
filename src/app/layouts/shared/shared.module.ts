@@ -29,6 +29,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { MatNavList, MatListItem } from '@angular/material/list';
 import {
   TimeagoModule,
   TimeagoIntl,
@@ -81,7 +82,7 @@ import { ChartsModule } from 'ng2-charts';
     NgxPaginationModule,
     TimeagoModule.forRoot(),
     OverlayModule,
-    ChartsModule
+    ChartsModule,
   ],
   exports: [
     FormsModule,
@@ -119,7 +120,7 @@ import { ChartsModule } from 'ng2-charts';
     DurationPipe,
     PhonePipe,
     OverlayModule,
-    ChartsModule
+    ChartsModule,
   ]
 })
 export class SharedModule {}
