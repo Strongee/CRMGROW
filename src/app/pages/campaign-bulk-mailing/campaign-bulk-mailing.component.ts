@@ -137,14 +137,6 @@ export class CampaignBulkMailingComponent implements OnInit {
       });
   }
 
-  goToDetailPage(id: string): void {
-    this.onDetail.emit(id);
-  }
-
-  routingToItem(id): void {
-    this.location.replaceState('/campaign/bulk/' + id);
-  }
-
   doAction(action: any): void {
     if (action.label === 'Select All') {
       this.selectAll();

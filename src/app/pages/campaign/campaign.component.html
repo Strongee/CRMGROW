@@ -1,36 +1,10 @@
 <div class="page-content">
-  <div class="d-flex">
-    <div class="sub-sidebar">
-      <div class="f-8 font-weight-bold mb-4">Campaign</div>
-      <ul class="m-0 p-0">
-        <ng-container *ngFor="let menuItem of menuItems" class="nav-item">
-          <li>
-            <a class="d-flex nav-link c-dark c-pointer px-0" [ngClass]="{active: currentPageType === menuItem.id}" (click)="changeMenu(menuItem)">
-              <i class="i-icon bgc-dark {{menuItem.icon}} mr-2"></i>
-              <span class="f-3 menu-label font-weight-bold">{{menuItem.label | translate}}</span>
-            </a>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-    <div class="sub-container pl-4 flex-grow-1">
-      <ng-container [ngSwitch]="currentPageType">
-        <ng-container *ngSwitchCase="'list'">
-          <app-campaign-list *ngIf="!detailID.list; else detailListTemplate" (onDetail)="changePage('list', $event)"></app-campaign-list>
-          <ng-template #detailListTemplate>
-            <app-campaign-list-item [id]="detailID.list"></app-campaign-list-item>
-          </ng-template>
-        </ng-container>
-        <ng-container *ngSwitchCase="'bulk'">
-          <app-campaign-bulk-mailing *ngIf="!detailID.bulk; else detailBulkTemplate" (onDetail)="changePage('bulk', $event)"></app-campaign-bulk-mailing>
-          <ng-template #detailBulkTemplate>
-            <app-campaign-bulk-mailing-item [id]="detailID.bulk"></app-campaign-bulk-mailing-item>
-          </ng-template>
-        </ng-container>
-        <ng-container *ngSwitchCase="'smtp'">
-          <app-campaign-smtp></app-campaign-smtp>
-        </ng-container>
-      </ng-container>
-    </div>
+  <div class="page-title font-weight-bold my-3">Campaign</div>
+  <div>
+    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
+    </app-slide-tab>
+    <app-campaign-list [class.d-none]="selectedTab.id !== 'list'"></app-campaign-list>
+    <app-campaign-bulk-mailing [class.d-none]="selectedTab.id !== 'bulk'"></app-campaign-bulk-mailing>
+    <app-campaign-smtp [class.d-none]="selectedTab.id !== 'smtp'"></app-campaign-smtp>
   </div>
 </div>

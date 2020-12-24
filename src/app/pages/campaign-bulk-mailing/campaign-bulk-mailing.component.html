@@ -1,4 +1,4 @@
-<div class="campaign-bulk-mailing-page">
+<div class="campaign-bulk-mailing-page mt-3">
   <div class="col-12">
     <div class="d-flex justify-content-between align-items-center">
       <h2 class="mb-4"></h2>
@@ -40,7 +40,8 @@
               </div>
             </td>
             <td class="broadcast">
-              <div class="c-blue f-8 font-weight-bold" (click)="goToDetailPage(bulk._id)">{{bulk.title}}</div>
+              <a [routerLink]="['/campaign/bulk/' + bulk._id]"
+                 class="hover-bottom font-weight-bold f-6">{{bulk.title}}</a>
             </td>
             <td class="status">
   <!--            <div [class]="bulk.status" class="font-weight-bold c-white">{{bulk.status}}</div>-->

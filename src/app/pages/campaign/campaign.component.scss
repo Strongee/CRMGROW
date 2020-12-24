@@ -1,6 +1,16 @@
 @import "src/variables";
 
 :host ::ng-deep{
+  .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: blue;
+  }
+
+  .mat-tab-label .mat-tab-label-content {
+    font-size: 16px;
+    font-weight: bold;
+    color: blue;
+  }
+
   @media screen and (min-width: 1060px){
     .vertical-tab {
       flex-direction: row;
