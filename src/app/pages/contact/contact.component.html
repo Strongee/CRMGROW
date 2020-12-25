@@ -64,8 +64,8 @@
       </div>
       <mat-accordion multi class="general-panels">
         <!-- Begin Contact Detail -->
-        <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
-          <mat-expansion-panel-header>
+        <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="mainPanel">
+          <mat-expansion-panel-header (click)="mainPanel = !mainPanel">
             <mat-panel-title>
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
@@ -99,8 +99,8 @@
         <!-- End Contact Detail -->
 
         <!-- Begin Contact Secondary Information -->
-        <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
-          <mat-expansion-panel-header>
+        <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="secondPanel">
+          <mat-expansion-panel-header (click)="secondPanel = !secondPanel">
             <mat-panel-title>
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
@@ -127,8 +127,8 @@
         <!-- End Contact Secondary Information -->
 
         <!-- Begin Contact Additional Information -->
-        <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
-          <mat-expansion-panel-header>
+        <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="additionalPanel">
+          <mat-expansion-panel-header (click)="additionalPanel = !additionalPanel">
             <mat-panel-title>
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
