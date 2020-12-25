@@ -2,7 +2,6 @@
   <div class="v-center mb-4">
     <h4 class="font-weight-bold mb-0">Filters</h4>
     <div class="c-blue f-1 text-uppercase ml-2 mt-2 c-pointer" (click)="clearFilter()">Clear All Filters</div>
-
   </div>
   <form #form="ngForm" (ngSubmit)="form.form.valid ? applyFilters() : false">
     <div class="form-group">
@@ -61,7 +60,7 @@
     </div>
     <div class="form-group mt-3">
       <label>TASK REGARDING CONTACT</label>
-      <app-select-contact (onSelect)="selectContact($event)"></app-select-contact>
+      <app-select-contact [contact]="contact" (onSelect)="selectContact($event)"></app-select-contact>
     </div>
     <div class="row">
       <div class="col-6">

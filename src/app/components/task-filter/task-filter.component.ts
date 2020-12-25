@@ -33,7 +33,7 @@ export class TaskFilterComponent implements OnInit {
   types = [];
   status = this.STATUS_OPTIONS[1];
   selectedLabels = new SelectionModel<string>(true, []);
-  contact;
+  contact: string;
   startDate;
   startTime = '00:00:00.000';
   endDate;
@@ -93,7 +93,11 @@ export class TaskFilterComponent implements OnInit {
   }
 
   selectContact(event: Contact): void {
-    this.contact = event._id;
+    if (event && event._id) {
+      this.contact = event._id;
+    } else {
+      this.contact = null;
+    }
   }
 
   /**
@@ -134,6 +138,11 @@ export class TaskFilterComponent implements OnInit {
   }
 
   clearFilter(): void {
+    this.types = [];
+    this.search = '';
+    this.status = this.STATUS_OPTIONS[1];
+    this.selectedLabels.clear();
+    this.contact = null;
     this.taskService.clearSearchOption();
   }
 }

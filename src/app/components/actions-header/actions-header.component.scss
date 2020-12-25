@@ -1,0 +1,19 @@
+.actions-header {
+  border-left: 1px solid gainsboro;
+  padding-left: 8px;
+  margin-left: 10px;
+  height: 32px;
+
+  .action-item {
+    margin: 0px 6px;
+
+    .i-icon {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+    }
+    span {
+      text-transform: capitalize;
+    }
+  }
+}

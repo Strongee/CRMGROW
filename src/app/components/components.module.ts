@@ -100,6 +100,7 @@ import { TaskBulkComponent } from './task-bulk/task-bulk.component';
 import { SendEmailComponent } from './send-email/send-email.component';
 import { ContactEditComponent } from './contact-edit/contact-edit.component';
 import { AdditionalEditComponent } from './additional-edit/additional-edit.component';
+import { ActionsHeaderComponent } from './actions-header/actions-header.component';
 
 @NgModule({
   declarations: [
@@ -199,7 +200,8 @@ import { AdditionalEditComponent } from './additional-edit/additional-edit.compo
     TaskBulkComponent,
     SendEmailComponent,
     ContactEditComponent,
-    AdditionalEditComponent
+    AdditionalEditComponent,
+    ActionsHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -225,6 +227,7 @@ import { AdditionalEditComponent } from './additional-edit/additional-edit.compo
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
+    ActionsHeaderComponent,
     ConfirmComponent,
     TeamEditComponent,
     TeamDeleteComponent,
