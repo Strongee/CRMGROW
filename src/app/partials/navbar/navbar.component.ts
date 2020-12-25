@@ -12,6 +12,8 @@ import { TaskService } from 'src/app/services/task.service';
 import { UserService } from 'src/app/services/user.service';
 import { ChartType } from 'chart.js';
 import { MultiDataSet, Label, Color } from 'ng2-charts';
+import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
+import { SendEmailComponent } from '../../components/send-email/send-email.component';
 
 @Component({
   selector: 'app-navbar',
@@ -135,10 +137,29 @@ export class NavbarComponent implements OnInit {
         this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
         break;
       case 'message':
+        this.dialog.open(SendEmailComponent, {
+          position: {
+            bottom: '50px',
+            right: '50px'
+          },
+          width: '100vw',
+          maxWidth: '600px',
+          panelClass: 'send-email',
+          backdropClass: 'cdk-send-email',
+          disableClose: false
+        });
         break;
       case 'record':
+        this.dialog.open(RecordSettingDialogComponent, {
+          position: { top: '0px' },
+          width: '0px',
+          height: '0px',
+          panelClass: 'trans-modal',
+          backdropClass: 'trans'
+        });
         break;
       case 'video':
+        this.router.navigate(['./materials/create']);
         break;
     }
   }
