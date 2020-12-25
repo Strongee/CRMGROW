@@ -23,6 +23,10 @@ export class TaskService extends HttpService {
     private storeService: StoreService
   ) {
     super(errorService);
+
+    this.sortOption$.subscribe(() => {
+      this.reload();
+    });
   }
 
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
@@ -34,6 +38,7 @@ export class TaskService extends HttpService {
   durationOption: BehaviorSubject<TaskDurationOption> = new BehaviorSubject(
     new TaskDurationOption()
   );
+  sortOption: BehaviorSubject<number> = new BehaviorSubject(-1);
   total: BehaviorSubject<number> = new BehaviorSubject(0);
   page: BehaviorSubject<number> = new BehaviorSubject(1);
   pageSize: BehaviorSubject<number> = new BehaviorSubject(20);
@@ -42,6 +47,7 @@ export class TaskService extends HttpService {
   total$ = this.total.asObservable();
   page$ = this.page.asObservable();
   pageSize$ = this.pageSize.asObservable();
+  sortOption$ = this.sortOption.asObservable();
 
   changeDuration(duration: TaskDurationOption): void {
     this.durationOption.next(duration);
@@ -97,8 +103,10 @@ export class TaskService extends HttpService {
     const pageSize = this.pageSize.getValue();
     const skip = (page - 1) * pageSize;
     const searchOption = this.searchOption.getValue();
+    const sortDir = this.sortOption.getValue();
+    const option = { ...searchOption, sortDir };
     return this.http
-      .post(this.server + TASK.LOAD, { skip, pageSize, searchOption })
+      .post(this.server + TASK.LOAD, { skip, pageSize, searchOption: option })
       .pipe(
         map((res) => {
           return {

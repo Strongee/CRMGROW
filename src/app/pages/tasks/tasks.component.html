@@ -130,9 +130,9 @@
         <ng-container *matHeaderCellDef>
           <th mat-header-cell
               *ngIf="!selection.length">
-            <div class="v-center c-pointer" (click)="sortByDeadline()">
+            <div class="v-center c-pointer" (click)="changeSort()">
               <div>deadline</div>
-              <i class="d-block i-icon i-triangle-down s-8 ml-2 mb-1 bgc-dark"></i>
+              <i class="d-block i-icon s-8 ml-2 mb-1 bgc-dark {{(taskService.sortOption$ | async) === -1 ? 'i-triangle-up' : 'i-triangle-down'}}"></i>
             </div>
           </th>
         </ng-container>
