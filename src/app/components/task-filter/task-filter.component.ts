@@ -33,13 +33,12 @@ export class TaskFilterComponent implements OnInit {
   types = [];
   status = this.STATUS_OPTIONS[1];
   selectedLabels = new SelectionModel<string>(true, []);
-  contact;
+  contact: string;
   startDate;
   startTime = '00:00:00.000';
   endDate;
   endTime = '23:30:00.000';
   loading = false;
-  selectedContact;
 
   constructor(
     public labelService: LabelService,
@@ -139,7 +138,11 @@ export class TaskFilterComponent implements OnInit {
   }
 
   clearFilter(): void {
+    this.types = [];
+    this.search = '';
+    this.status = this.STATUS_OPTIONS[1];
+    this.selectedLabels.clear();
+    this.contact = null;
     this.taskService.clearSearchOption();
-    this.selectedContact = null;
   }
 }
