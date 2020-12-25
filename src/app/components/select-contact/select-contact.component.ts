@@ -35,7 +35,12 @@ export class SelectContactComponent
   @Input('placeholder') placeholder = 'Search contact';
   @Input('formPlaceholder') formPlaceholder = 'Search contacts';
   @Input('mustField') mustField = '';
-  @Input('contact') contact = null;
+  @Input()
+  public set contact(val: string) {
+    if (!val) {
+      this.formControl.setValue(null, {emitEvent: false});
+    }
+  }
   @Output() onSelect = new EventEmitter();
 
   formControl: FormControl = new FormControl();
@@ -105,4 +110,8 @@ export class SelectContactComponent
   }
 
   ngOnDestroy(): void {}
+
+  cancelSelect(): void {
+    this.formControl.setValue(null, {emitEvent: false});
+  }
 }

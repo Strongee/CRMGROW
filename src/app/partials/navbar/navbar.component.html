@@ -17,7 +17,7 @@
   </div>
   <!-- Search Form Wrapper -->
   <div class="search-form-wrapper v-center ml-md-0 ml-sm-2 ml-2">
-    <div class="input-group bgc-dark-trans08 rounded">
+    <div class="search-box input-group bgc-dark-trans08 rounded">
       <div class="input-group-prepend">
         <span class="input-group-text border-0 py-1 px-2" id="search-addon">
           <i class="i-icon i-search d-block bgc-dark"></i>
@@ -49,7 +49,7 @@
           >
           </canvas>
         </div>
-        <span class="f-1 op-40 mt-1 ml-1">Delivery completed</span>
+        <span class="delivery-text f-1 op-40 mt-1 ml-1">Delivery completed</span>
       </div>
       <div class="delivery-dropdown mt-2 p-3" ngbDropdownMenu>
         <div class="v-center justify-content-between">
@@ -99,6 +99,58 @@
       </div>
     </div> -->
     <!-- Notification Wrapper -->
+    <div class="nav-item">
+      <div class="search-form-wrapper delivery-mobile-wrapper v-center ml-md-0 ml-sm-2 ml-2">
+        <div class="ml-3 delivery" ngbDropdown display="dynamic">
+          <div class="v-center c-pointer delivery-button" ngbDropdownToggle>
+            <div class="chart-wrapper">
+              <canvas baseChart
+                      width="32"
+                      height="32"
+                      [data]="chartData"
+                      [labels]="chartLabels"
+                      [chartType]="chartType"
+                      [options]="chartOptions"
+                      [colors]="chartColor"
+              >
+              </canvas>
+            </div>
+          </div>
+          <div class="delivery-dropdown mt-2 p-3" ngbDropdownMenu>
+            <div class="v-center justify-content-between">
+              <h1 class="f-6 font-weight-bold m-0">
+                SMS Delivery Status
+              </h1>
+              <span class="f-3 font-weight-bold c-blue c-pointer" (click)="clear()">
+              Clear
+          </span>
+            </div>
+            <div class="mt-3 delivery">
+              <div class="f-3 op-64 count-detail">
+                Sent 500. Delivered 450. Failed 50.
+              </div>
+              <div class="mt-3 sms-wrapper pr-1">
+                <div class="mb-2 all-sms" *ngFor="let sms of sentSms">
+                  <div class="v-center justify-content-between">
+                    <div>
+                      <div class="f-3 font-weight-bold user-name">{{sms.name}}</div>
+                      <div class="f-1 op-64 mt-1 user-phone">{{sms.cellPhone}}</div>
+                    </div>
+                    <div class="mt-1">
+                      <div class="v-center justify-content-center ml-3 f-1 font-weight-bold text-uppercase deliver-status" *ngIf="sms.status == 'delivered'; else failStatus">{{sms.status}}</div>
+                      <ng-template #failStatus>
+                        <div class="v-center justify-content-center ml-4 f-1 font-weight-bold text-uppercase fail-status" *ngIf="sms.status == 'failed'">{{sms.status}}</div>
+                      </ng-template>
+                      <div class="f-1 op-64 mt-1 create-time">{{sms.created_at}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="nav-item">
       <div class="search-wrapper-mobile" ngbDropdown display="dynamic">
         <div class="no-carot" ngbDropdownToggle>

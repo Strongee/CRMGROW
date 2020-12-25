@@ -178,7 +178,7 @@
           </td>
           <td>
             <select class="form-control theme-control" [(ngModel)]="automation" name="automation_merge" #automation_merge="ngModel">
-              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>
+              <option *ngFor="let action of automationMergeAction; let index = index;" value="{{action}}">{{action}}</option>
             </select>
           </td>
           <td></td>
