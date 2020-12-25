@@ -71,6 +71,9 @@
             padding-top: 2px;
         }
       }
+      @media screen and (max-width: 680px) {
+        width: calc(100vw - 30px);
+      }
     }
   }
 }
@@ -194,7 +197,7 @@
       border-radius: 8px;
       width: calc(100vw - 30px);
     }
-    
+
     .search-wrapper-mobile {
       display: block;
 
