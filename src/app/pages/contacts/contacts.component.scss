@@ -18,3 +18,19 @@ tr.mat-row {
     }
   }
 }
+
+:host ::ng-deep {
+  thead tr.selected {
+    th {
+      background-color: aliceblue;
+    }
+  }
+
+  thead tr:first-child th {
+    position: sticky;
+    top: 64px;
+    background-color: white;
+    z-index: 997;
+  }
+}
+

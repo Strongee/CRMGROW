@@ -98,6 +98,7 @@ import { FilterAddComponent } from './filter-add/filter-add.component';
 import { ContactAssignAutomationComponent } from './contact-assign-automation/contact-assign-automation.component';
 import { TaskBulkComponent } from './task-bulk/task-bulk.component';
 import { SendEmailComponent } from './send-email/send-email.component';
+import { ActionsHeaderComponent } from './actions-header/actions-header.component';
 
 @NgModule({
   declarations: [
@@ -195,7 +196,8 @@ import { SendEmailComponent } from './send-email/send-email.component';
     TaskEditComponent,
     FilterAddComponent,
     TaskBulkComponent,
-    SendEmailComponent
+    SendEmailComponent,
+    ActionsHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -221,6 +223,7 @@ import { SendEmailComponent } from './send-email/send-email.component';
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
+    ActionsHeaderComponent,
     ConfirmComponent,
     TeamEditComponent,
     TeamDeleteComponent,
