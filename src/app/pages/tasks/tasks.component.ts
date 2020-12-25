@@ -171,6 +171,9 @@ export class TasksComponent implements OnInit, OnDestroy {
 
     this.taskService.page.next(1);
     this.taskService.changeDuration(durationOption);
+
+    this.selection = [];
+    this.pageSelection = [];
   }
 
   changePage(page: number): void {
@@ -290,5 +293,17 @@ export class TasksComponent implements OnInit, OnDestroy {
   deselectAll(): void {
     this.pageSelection = [];
     this.selection = [];
+  }
+
+  sortByDeadline(): void {
+    const findIndex = this.DEADLINE_TYPES.findIndex((type) => type.id === this.deadline.id);
+    if (findIndex >= 0) {
+      if (findIndex === this.DEADLINE_TYPES.length - 1) {
+        this.deadline = this.DEADLINE_TYPES[0];
+      } else {
+        this.deadline = this.DEADLINE_TYPES[findIndex + 1];
+      }
+      this.changeDeadlineType(this.deadline);
+    }
   }
 }
