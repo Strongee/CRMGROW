@@ -127,6 +127,14 @@ export class TaskService extends HttpService {
     );
   }
 
+  selectAll(): Observable<string[]> {
+    const searchOption = this.searchOption.getValue();
+    return this.http.post(this.server + TASK.SELECT, searchOption).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('SELECT ALL TASKS', null))
+    );
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(this.server + TASK.CREATE, data).pipe(
       map((res) => res['data']),
