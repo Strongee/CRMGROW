@@ -98,6 +98,9 @@ export class ContactComponent implements OnInit {
   next: string = null;
   prev: string = null;
   activeHistory = 'all';
+  mainPanel = true;
+  secondPanel = true;
+  additionalPanel = true;
 
   task: Task = new Task();
   task_date = {
@@ -244,6 +247,11 @@ export class ContactComponent implements OnInit {
   }
 
   editContacts(type: string): void {
+    if (type == 'main') {
+      this.mainPanel = !this.mainPanel;
+    } else {
+      this.secondPanel = !this.secondPanel;
+    }
     this.dialog
       .open(ContactEditComponent, {
         width: '98vw',
@@ -264,6 +272,7 @@ export class ContactComponent implements OnInit {
   }
 
   editAdditional(): void {
+    this.additionalPanel = !this.additionalPanel;
     this.dialog
       .open(AdditionalEditComponent, {
         width: '98vw',
