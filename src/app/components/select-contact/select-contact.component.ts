@@ -38,7 +38,7 @@ export class SelectContactComponent
   @Input()
   public set contact(val: string) {
     if (!val) {
-      this.formControl.setValue(null, {emitEvent: false});
+      this.formControl.setValue(null, { emitEvent: false });
     }
   }
   @Output() onSelect = new EventEmitter();
@@ -112,6 +112,7 @@ export class SelectContactComponent
   ngOnDestroy(): void {}
 
   cancelSelect(): void {
-    this.formControl.setValue(null, {emitEvent: false});
+    this.formControl.setValue(null, { emitEvent: false });
+    this.onSelect.emit(null);
   }
 }

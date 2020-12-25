@@ -94,17 +94,16 @@ export class TaskFilterComponent implements OnInit {
   }
 
   selectContact(event: Contact): void {
-    this.contact = event._id;
+    if (event && event._id) {
+      this.contact = event._id;
+    } else {
+      this.contact = null;
+    }
   }
 
   /**
    * Apply Filter to the Task List
    */
-  selectContact($event): void {
-    this.selectedContact = $event;
-    console.log("selected contact =============>", this.selectedContact);
-  }
-
   applyFilters(): void {
     const searchOption = new TaskSearchOption();
     searchOption.str = this.search;
