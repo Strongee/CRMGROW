@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
-import { DialogSettings, STATUS } from 'src/app/constants/variable.constants';
+import {BulkActions, DialogSettings, STATUS} from 'src/app/constants/variable.constants';
 import { getCurrentTimezone } from 'src/app/helper';
 import { TaskDurationOption } from 'src/app/models/searchOption.model';
 import { Task, TaskDetail } from 'src/app/models/task.model';
@@ -13,7 +13,9 @@ import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
 import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 import 'moment-timezone';
+import {ContactActivity} from "../../models/contact.model";
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -21,6 +23,7 @@ import 'moment-timezone';
 })
 export class TasksComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
+  ACTIONS = BulkActions.Tasks;
   DISPLAY_COLUMNS = [
     'select',
     'status',
@@ -61,6 +64,9 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   page = 1;
   selection = [];
+  pageSelection = [];
+  pageTasks = [];
+
   timezone;
   constructor(
     private handlerService: HandlerService,
@@ -92,7 +98,6 @@ export class TasksComponent implements OnInit, OnDestroy {
     const page = this.taskService.page.getValue();
     const pageSize = this.taskService.pageSize.getValue();
     this.changePage(page || 1);
-
     this.PAGE_COUNTS.some((e) => {
       if (e.id === pageSize) {
         this.pageSize = e;
@@ -159,6 +164,17 @@ export class TasksComponent implements OnInit, OnDestroy {
   changePage(page: number): void {
     this.page = page;
     this.taskService.loadPage(page);
+    this.storeService.tasks$.subscribe((res) => {
+      if (res) {
+        this.pageTasks = res;
+        this.pageSelection = _.intersectionBy(
+          this.selection,
+          this.pageTasks,
+          '_id'
+        );
+        console.log("page selection =============>", this.pageSelection);
+      }
+    })
   }
 
   onOverPages(page: number): void {
@@ -178,9 +194,6 @@ export class TasksComponent implements OnInit, OnDestroy {
    */
   openFilter(): void {}
 
-  isAllSelected(): boolean {
-    return false;
-  }
 
   /**
    * Do Action
@@ -222,5 +235,69 @@ export class TasksComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((res) => {});
+  }
+
+  toggle(task): void {
+    const selectedTask = task;
+    const toggledSelection = _.xorBy(
+      this.pageSelection,
+      [selectedTask],
+      '_id'
+    );
+    this.pageSelection = toggledSelection;
+
+    const toggledAllSelection = _.xorBy(
+      this.selection,
+      [selectedTask],
+      '_id'
+    );
+    this.selection = toggledAllSelection;
+  }
+
+  isSelected(task): boolean {
+    return _.findIndex(this.pageSelection, task, '_id') !== -1;
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected()) {
+      this.selection = _.differenceBy(
+        this.selection,
+        this.pageSelection,
+        '_id'
+      );
+      this.pageSelection = [];
+      return;
+    }
+    this.pageTasks.forEach((e) => {
+      if (!this.isSelected(e)) {
+        this.pageSelection.push(e);
+        this.selection.push(e);
+      }
+    });
+  }
+
+  isAllSelected(): boolean {
+    return this.pageSelection.length === this.pageTasks.length;
+  }
+
+  /**
+   * Select All Tasks
+   */
+  selectAll(): void {
+    this.storeService.tasks$.subscribe((res) => console.log("select all ===========>", res));
+    // this.contactService.selectAll().subscribe((contacts) => {
+    //   this.selection = _.unionBy(this.selection, contacts, '_id');
+    //   this.pageSelection = _.intersectionBy(
+    //     this.selection,
+    //     this.pageContacts,
+    //     '_id'
+    //   );
+    //   this.updateActionsStatus('select', false);
+    // });
+  }
+
+  deselectAll(): void {
+    this.pageSelection = [];
+    this.selection = [];
   }
 }
