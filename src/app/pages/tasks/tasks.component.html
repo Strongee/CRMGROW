@@ -44,6 +44,8 @@
               type="checkbox"
               class="custom-control-input"
               id="contact-{{element._id}}"
+              (change)="toggle(element)"
+              [checked]="isSelected(element)"
             />
             <label
               class="custom-control-label"
@@ -52,18 +54,33 @@
           </div>
         </td>
       </ng-container>
-  
+
       <!-- Complete Status Column -->
       <ng-container matColumnDef="status">
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+              *ngIf="!selection.length; else toolHeader">DONE</th>
+          <ng-template #toolHeader>
+            <th mat-header-cell colspan="7">
+              <div class="v-center">
+                <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
+                <app-actions-header [actions]="ACTIONS"></app-actions-header>
+              </div>
+            </th>
+          </ng-template>
+        </ng-container>
         <th mat-header-cell *matHeaderCellDef>DONE</th>
         <td mat-cell *matCellDef="let element">
           <i class="i-icon d-block {{element.status ? 'i-round-check bgc-accept' : 'i-round bgc-dark op-40'}} done-status"></i>
         </td>
       </ng-container>
-  
+
       <!-- Name Column -->
       <ng-container matColumnDef="contact_name">
-        <th mat-header-cell *matHeaderCellDef> contact name </th>
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+              *ngIf="!selection.length">contact name</th>
+        </ng-container>
         <td mat-cell *matCellDef="let element">
           <div class="v-center">
             <div class="contact-avatar f-3 mr-2">{{element.contact.avatarName}}</div>
@@ -71,7 +88,7 @@
           </div>
         </td>
       </ng-container>
-  
+
       <!-- Position Column -->
       <ng-container matColumnDef="contact_label">
         <th mat-header-cell *matHeaderCellDef> label </th>
@@ -79,7 +96,7 @@
           <app-label-select [value]="element.contact.label" (valueChange)="updateLabel($event, element.contact._id)"></app-label-select>
         </td>
       </ng-container>
-  
+
       <!-- Weight Column -->
       <ng-container matColumnDef="subject">
         <th mat-header-cell *matHeaderCellDef> subject </th>
@@ -90,7 +107,7 @@
           </div>
         </td>
       </ng-container>
-  
+
       <!-- Symbol Column -->
       <ng-container matColumnDef="contact_phone">
         <th mat-header-cell *matHeaderCellDef> phone number </th>
@@ -98,7 +115,7 @@
           <span class="c-blue font-weight-bold">{{element.contact.cell_phone | phone_format}}</span>
         </td>
       </ng-container>
-  
+
       <!-- Star Column -->
       <ng-container matColumnDef="deadline">
         <th mat-header-cell *matHeaderCellDef> deadline </th>
@@ -106,7 +123,7 @@
           {{element.due_date | date: 'MMM dd, hh:mm a'}}
         </td>
       </ng-container>
-  
+
       <!-- ActioN Column -->
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>  </th>
@@ -114,12 +131,26 @@
           <div><i class="i-icon i-edit op-28 d-block bgc-dark ml-auto" (click)="openEdit(element)"></i></div>
         </td>
       </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+
+      <ng-container matColumnDef="selection_info">
+        <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
+          <span *ngIf="selection.length !== (storeService.tasks$ | async); else deselectTemplate">
+            All {{pageTasks.length}} tasks are selected. <span class="c-blue font-weight-bold c-pointer" (click)="selectAll()">Select all {{taskService.total$ | async}} tasks</span>
+          </span>
+          <ng-template #deselectTemplate>
+            All {{taskService.total$ | async}} tasks are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>
+          </ng-template>
+        </th>
+      </ng-container>
+
+      <tr mat-header-row
+          *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length"></tr>
+      <tr mat-header-row *matHeaderRowDef="['selection_info']"
+          [class.d-none]="!isAllSelected()" class='selection-info'></tr>
       <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
     </table>
-  
-  
+
+
     <ng-container *ngIf="(storeService.tasks$ | async).length || (taskService.total$ | async); else emptyListTemplate">
       <div class="updating-status"
         *ngIf="(taskService.loading$ | async) === STATUS.REQUEST">

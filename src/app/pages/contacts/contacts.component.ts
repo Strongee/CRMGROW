@@ -135,6 +135,7 @@ export class ContactsComponent implements OnInit {
         this.pageContacts,
         '_id'
       );
+      console.log("contact page selection ============>", this.pageSelection);
     }
   }
   /**
