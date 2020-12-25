@@ -20,17 +20,20 @@ tr.mat-row {
 }
 
 :host ::ng-deep {
-  thead tr.selected {
-    th {
-      background-color: aliceblue;
-    }
-  }
-
   thead tr:first-child th {
     position: sticky;
     top: 64px;
     background-color: white;
     z-index: 997;
+  }
+  thead tr.selected {
+    th {
+      background-color: #f5f6fd;
+    }
+  }
+  thead tr.selection-info th {
+    background-color: #f5f6fd;
+    border-bottom: none;
   }
 }
 

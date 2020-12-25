@@ -612,15 +612,8 @@ export const BulkActions = {
     {
       label: 'Add tasks',
       type: 'button',
-      icon: 'i-edit',
+      icon: 'i-task',
       command: 'add_task',
-      loading: false
-    },
-    {
-      label: 'Add notes',
-      type: 'button',
-      icon: 'i-template',
-      command: 'add_note',
       loading: false
     },
     {
@@ -628,13 +621,6 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-message',
       command: 'message',
-      loading: false
-    },
-    {
-      label: 'Download',
-      type: 'button',
-      icon: 'i-download',
-      command: 'download',
       loading: false
     },
     {
@@ -652,10 +638,24 @@ export const BulkActions = {
       loading: false
     },
     {
+      label: 'Add notes',
+      type: 'button',
+      icon: 'i-template',
+      command: 'add_note',
+      loading: false
+    },
+    {
       label: 'Add automation',
       type: 'button',
       icon: 'i-automation',
       command: 'automation',
+      loading: false
+    },
+    {
+      label: 'Download',
+      type: 'button',
+      icon: 'i-download',
+      command: 'download',
       loading: false
     },
     {
