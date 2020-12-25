@@ -38,6 +38,8 @@ import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
 import * as _ from 'lodash';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
+import { ContactEditComponent } from 'src/app/components/contact-edit/contact-edit.component';
+import { AdditionalEditComponent } from 'src/app/components/additional-edit/additional-edit.component';
 
 @Component({
   selector: 'app-contact',
@@ -78,10 +80,13 @@ export class ContactComponent implements OnInit {
   REPEAT_DURATIONS = REPEAT_DURATIONS;
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
-    { icon: '', label: 'Send Email', id: 'send_email' },
-    { icon: '', label: 'Send Text', id: 'send_text' },
-    { icon: '', label: 'Note', id: 'note' },
-    { icon: '', label: 'Add new task', id: 'add_task' }
+    { icon: '', label: 'Activity', id: 'activity' },
+    { icon: '', label: 'Notes', id: 'note' },
+    { icon: '', label: 'Messages', id: 'message' },
+    { icon: '', label: 'Appointments', id: 'appointment' },
+    { icon: '', label: 'Group Calls', id: 'group_call' },
+    { icon: '', label: 'Tasks', id: 'task' },
+    { icon: '', label: 'Deals', id: 'deal' }
   ];
   action: TabItem = this.tabs[0];
 
@@ -238,6 +243,45 @@ export class ContactComponent implements OnInit {
     }
   }
 
+  editContacts(type: string): void {
+    this.dialog
+      .open(ContactEditComponent, {
+        width: '98vw',
+        maxWidth: '600px',
+        data: {
+          contact: this.contact,
+          type: type
+        }
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.storeService.selectedContact$.subscribe((res) => {
+          if (res) {
+            this.contact = res;
+          }
+        });
+      });
+  }
+
+  editAdditional(): void {
+    this.dialog
+      .open(AdditionalEditComponent, {
+        width: '98vw',
+        maxWidth: '600px',
+        data: {
+          contact: this.contact
+        }
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.storeService.selectedContact$.subscribe((res) => {
+          if (res) {
+            this.contact = res;
+          }
+        });
+      });
+  }
+
   /**
    * Go to Contact List Page
    */
@@ -354,53 +398,6 @@ export class ContactComponent implements OnInit {
       });
   }
 
-  sendEmail(): void {
-    if (this.emailContacts.length) {
-      // email api call
-      const contacts = [];
-      const cc = [];
-      const bcc = [];
-      const video_ids = [];
-      const pdf_ids = [];
-      const image_ids = [];
-      const content = this.helperSerivce.convertEmailContent(this.emailContent);
-      const subject = this.emailSubject;
-      this.emailContacts.forEach((e) => {
-        contacts.push(e._id);
-      });
-      const materials = this.helperSerivce.getMaterials(this.emailContent);
-      this.materials = _.intersectionBy(this.materials, materials, '_id');
-      this.materials.forEach((e) => {
-        const type = this.helperSerivce.getMaterialType(e);
-        switch (type) {
-          case 'PDF':
-            pdf_ids.push(e._id);
-            break;
-          case 'Image':
-            image_ids.push(e._id);
-            break;
-          case 'Video':
-            video_ids.push(e._id);
-            break;
-        }
-      });
-      this.materialService
-        .sendMaterials({
-          contacts,
-          cc,
-          bcc,
-          video_ids,
-          pdf_ids,
-          image_ids,
-          subject,
-          content
-        })
-        .subscribe((status) => {
-          console.log('status', status);
-        });
-    }
-  }
-
   /************************************
    * Email Sending Panel Relative Functions
    ************************************/
@@ -475,6 +472,10 @@ export class ContactComponent implements OnInit {
   /**************************************
    * Timeline Actions
    **************************************/
+  changeTab(tab: TabItem): void {
+    this.action = tab;
+  }
+
   showDetail(event: any): void {
     const target: HTMLElement = <HTMLElement>event.target;
     const parent: HTMLElement = <HTMLElement>(

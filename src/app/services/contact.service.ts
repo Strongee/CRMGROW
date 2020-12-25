@@ -15,6 +15,7 @@ import { map, catchError } from 'rxjs/operators';
 import { STATUS } from '../constants/variable.constants';
 import { SearchOption } from '../models/searchOption.model';
 import * as _ from 'lodash';
+import { id } from 'date-fns/locale';
 interface LoadResponse {
   contacts: ContactActivity[];
 }
@@ -97,6 +98,13 @@ export class ContactService extends HttpService {
         map((res) => res),
         catchError(this.handleError('UPDATE CONTACT', []))
       );
+  }
+
+  updateContact(id: string, contact: any): Observable<any> {
+    return this.httpClient.put(this.server + CONTACT.READ + id, contact).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('UPDATE CONTACT', []))
+    );
   }
 
   delete(_id: string): void {}
@@ -384,9 +392,11 @@ export class ContactService extends HttpService {
   }
 
   bulkCreate(contacts): Observable<any> {
-    return this.httpClient.post(this.server + CONTACT.BULK_CREATE, { contacts }).pipe(
-      map((res) => res),
-      catchError(this.handleError('BULK CREATE CONTACTS', []))
-    );
+    return this.httpClient
+      .post(this.server + CONTACT.BULK_CREATE, { contacts })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('BULK CREATE CONTACTS', []))
+      );
   }
 }
