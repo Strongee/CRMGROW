@@ -1662,3 +1662,16 @@ body {
   bottom: 0px;
   right: 0px;
 }
+
+.cdk-send-email {
+  background-color: transparent;
+}
+
+.send-email {
+  mat-dialog-container {
+    padding: 0;
+  }
+  @media screen and (max-width: 576px) {
+    margin-right: 0 !important;
+  }
+}

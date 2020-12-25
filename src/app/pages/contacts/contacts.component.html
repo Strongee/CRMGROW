@@ -1,43 +1,51 @@
 <div class="page-content">
-  <div class="status-header v-center mb-3">
+  <div class="status-header v-center mb-2">
     <div class="count-status">
-      <div class="f-6">
-        <span class="font-weight-bold text-uppercase">Contacts ({{contactService.total$ | async}})</span>
-        <span *ngIf="searchStr || !searchOption.isEmpty()" class="op-56"> / Found {{(storeService.pageContacts$ | async).length}} contacts</span>
-        <span *ngIf="selection.length" class="op-56"> / Selected {{selection.length}} contacts</span>
+      <div class="f-24 font-weight-bold">
+        Contacts
+        <!-- <span *ngIf="searchStr || !searchOption.isEmpty()" class="op-56"> / Found {{(storeService.pageContacts$ | async).length}} contacts</span>
+        <span *ngIf="selection.length" class="op-56"> / Selected {{selection.length}} contacts</span> -->
+      </div>
+      <div class="f-6 font-weight-bold op-64">
+        {{contactService.total$ | async}} contacts
       </div>
     </div>
     <div class="ml-auto v-center">
-      <div class="border-right px-3 py-1 text-center mx-3">
-        <a class="mr-3 f-3 font-weight-bold c-dark td-none c-pointer"
-          (click)="importContacts()">Import contacts</a>
+      <button class="v-center btn btn-blue f-6 font-weight-bold text-white rounded shadow mr-2 px-3 py-2">
+        <i class="d-block i-icon i-plus bgc-white mr-2"></i>
+        Create new contact
+      </button>
+      <button class="btn btn-white border border-primary f-6 font-weight-bold rounded px-3 py-2" (click)="importContacts()">
+        Import
+      </button>
+    </div>
+  </div>
+  <div class="v-center justify-content-end">
+    <div class=""
+      ngbDropdown
+      placement="bottom-right">
+      <div class="v-center c-pointer f-3 p-3 mr-2 font-weight-bold"
+        ngbDropdownToggle>
+        <span class="pr-2">Sort by</span>
       </div>
-      <div class=""
-        ngbDropdown
-        placement="bottom-right">
-        <div class="v-center c-pointer f-3 p-3 font-weight-bold"
-          ngbDropdownToggle>
-          <span class="pr-2">Sort by</span>
+      <div ngbDropdownMenu
+        aria-labelledby="taskSortTypes">
+        <div class="py-2"
+          ngbDropdownItem
+          *ngFor="let type of SORT_TYPES"
+          (click)="changeSort(type)">
+          <span class="f-3 v-center"
+            [class.font-weight-bold]="type.id === sortType.id">
+            {{type.label}}
+            <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+              *ngIf="type.id === sortType.id"></i>
+          </span>
         </div>
-        <div ngbDropdownMenu
-          aria-labelledby="taskSortTypes">
-          <div class="py-2"
-            ngbDropdownItem
-            *ngFor="let type of SORT_TYPES"
-            (click)="changeSort(type)">
-            <span class="f-3 v-center"
-              [class.font-weight-bold]="type.id === sortType.id">
-              {{type.label}}
-              <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
-                *ngIf="type.id === sortType.id"></i>
-            </span>
-          </div>
-        </div>
       </div>
-      <div class="border-left px-3 py-1 text-center mx-3">
-        <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer"
-          (click)="drawer.toggle()">Advanced Filter</a>
-      </div>
+    </div>
+    <div class="border-left px-3 py-1 text-center mx-3">
+      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer"
+        (click)="drawer.toggle()">Filter</a>
     </div>
   </div>
   <div class="custom-mat-table position-relative">
@@ -76,8 +84,18 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="contact_name">
-        <th mat-header-cell
-          *matHeaderCellDef> contact name </th>
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+           *ngIf="!selection.length; else toolHeader"> contact name </th>
+            <ng-template #toolHeader>
+              <th mat-header-cell colspan="7">
+                <div class="v-center">
+                  <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
+                  <app-actions-header [actions]="ACTIONS"></app-actions-header>
+                </div>
+              </th>
+            </ng-template>
+        </ng-container>
         <td mat-cell
           *matCellDef="let element"
           (click)="openContact(element)">
@@ -90,8 +108,10 @@
 
       <!-- Label Column -->
       <ng-container matColumnDef="contact_label">
-        <th mat-header-cell
-          *matHeaderCellDef> label </th>
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+           *ngIf="!selection.length">label</th>
+        </ng-container>
         <td mat-cell
           *matCellDef="let element">
           <app-label-select [value]="element.label" (valueChange)="updateLabel($event, element._id)"></app-label-select>
@@ -100,8 +120,10 @@
 
       <!-- Activity Column -->
       <ng-container matColumnDef="activity">
-        <th mat-header-cell
-          *matHeaderCellDef> last activity </th>
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+            *ngIf="!selection.length"> last activity </th>
+        </ng-container>
         <td mat-cell
           *matCellDef="let element"
           (click)="openContact(element)">
@@ -114,8 +136,10 @@
 
       <!-- Tags Column -->
       <ng-container matColumnDef="contact_tags">
-        <th mat-header-cell
-          *matHeaderCellDef> tags </th>
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+            *ngIf="!selection.length"> tags </th>
+        </ng-container>
         <td mat-cell
           *matCellDef="let element"
           (click)="openContact(element)">
@@ -127,8 +151,10 @@
 
       <!-- Email Column -->
       <ng-container matColumnDef="contact_email">
-        <th mat-header-cell
-          *matHeaderCellDef> email address </th>
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+            *ngIf="!selection.length"> email address  </th>
+        </ng-container>
         <td mat-cell
           *matCellDef="let element"
           (click)="openContact(element)">
@@ -138,8 +164,10 @@
 
       <!-- Phone Column -->
       <ng-container matColumnDef="contact_phone">
-        <th mat-header-cell
-          *matHeaderCellDef> phone number </th>
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+            *ngIf="!selection.length"> phone number </th>
+        </ng-container>
         <td mat-cell
           *matCellDef="let element"
           (click)="openContact(element)">
@@ -147,8 +175,20 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="selection_info">
+        <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
+          <span *ngIf="selection.length !== (contactService.total$ | async); else deselectTemplate">
+            All {{pageContacts.length}} contacts are selected. <span class="c-blue font-weight-bold c-pointer" (click)="selectAll()">Select all {{contactService.total$ | async}} contacts</span>
+          </span>
+          <ng-template #deselectTemplate>
+            All {{contactService.total$ | async}} contacts are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>
+          </ng-template>
+        </th>
+      </ng-container>
+
       <tr mat-header-row
-        *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+        *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length"></tr>
+      <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!isAllSelected()" class='selection-info'></tr>
       <tr mat-row
         *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
     </table>
@@ -220,7 +260,7 @@
   </div>
 </div>
 
-<app-actions-bar [actions]="ACTIONS" [isActive]="selection.length + pageSelection.length" (doCommand)="doAction($event)"></app-actions-bar>
+<!-- <app-actions-bar [actions]="ACTIONS" [isActive]="selection.length + pageSelection.length" (doCommand)="doAction($event)"></app-actions-bar> -->
 
 <mat-drawer-container [hasBackdrop]="true">
   <mat-drawer #drawer

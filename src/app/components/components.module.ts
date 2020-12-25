@@ -97,6 +97,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FilterAddComponent } from './filter-add/filter-add.component';
 import { ContactAssignAutomationComponent } from './contact-assign-automation/contact-assign-automation.component';
 import { TaskBulkComponent } from './task-bulk/task-bulk.component';
+import { SendEmailComponent } from './send-email/send-email.component';
+import { ActionsHeaderComponent } from './actions-header/actions-header.component';
 
 @NgModule({
   declarations: [
@@ -193,7 +195,9 @@ import { TaskBulkComponent } from './task-bulk/task-bulk.component';
     ContactAssignAutomationComponent,
     TaskEditComponent,
     FilterAddComponent,
-    TaskBulkComponent
+    TaskBulkComponent,
+    SendEmailComponent,
+    ActionsHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -219,6 +223,7 @@ import { TaskBulkComponent } from './task-bulk/task-bulk.component';
     SlideTabComponent,
     TabOptionComponent,
     ActionsBarComponent,
+    ActionsHeaderComponent,
     ConfirmComponent,
     TeamEditComponent,
     TeamDeleteComponent,
@@ -262,7 +267,8 @@ import { TaskBulkComponent } from './task-bulk/task-bulk.component';
     TaskTypeComponent,
     DealCreateComponent,
     HtmlEditorComponent,
-    AccordionComponent
+    AccordionComponent,
+    SendEmailComponent
   ],
   bootstrap: [
     ContactCreateComponent,
