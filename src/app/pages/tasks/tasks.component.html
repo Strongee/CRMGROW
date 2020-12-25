@@ -44,8 +44,8 @@
               type="checkbox"
               class="custom-control-input"
               id="contact-{{element._id}}"
-              (change)="toggle(element)"
-              [checked]="isSelected(element)"
+              (change)="toggle(element._id)"
+              [checked]="isSelected(element._id)"
             />
             <label
               class="custom-control-label"
@@ -154,11 +154,11 @@
 
       <ng-container matColumnDef="selection_info">
         <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
-          <span *ngIf="selection.length !== (storeService.tasks$ | async); else deselectTemplate">
+          <span *ngIf="selection.length !== (taskService.total$ | async); else deselectTemplate">
             All {{pageTasks.length}} tasks are selected. <span class="c-blue font-weight-bold c-pointer" (click)="selectAll()">Select all {{taskService.total$ | async}} tasks</span>
           </span>
           <ng-template #deselectTemplate>
-            All {{taskService.total$ | async}} tasks are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>
+            All {{selection.length}} tasks are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>
           </ng-template>
         </th>
       </ng-container>

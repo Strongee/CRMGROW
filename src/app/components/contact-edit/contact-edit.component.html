@@ -119,9 +119,12 @@
           </span>
         </div>
       </div>
-      <div class="v-center justify-content-center secondary-contact" (click)="panelOpenState = !panelOpenState">
-        <span class="f-3 font-weight-bold c-blue mr-2">
+      <div class="v-center justify-content-center secondary-contact c-pointer" (click)="panelOpenState = !panelOpenState">
+        <span class="f-3 font-weight-bold c-blue mr-2" *ngIf="!panelOpenState">
           Add secondary contact information
+        </span>
+        <span class="f-3 font-weight-bold c-blue mr-2" *ngIf="panelOpenState">
+          Hide secondary contact information
         </span>
         <i class="d-block i-icon bgc-blue" [ngClass]="{'i-minus': panelOpenState, 'i-plus': !panelOpenState}"></i>
       </div>
