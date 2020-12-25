@@ -24,6 +24,7 @@ export class TaskFilterComponent implements OnInit {
   startDate;
   startTime;
   loading = false;
+  selectedContact;
 
   constructor(public labelService: LabelService) {}
 
@@ -42,4 +43,14 @@ export class TaskFilterComponent implements OnInit {
    * Apply Filter to the Task List
    */
   applyFilters(): void {}
+
+  selectContact($event): void {
+    this.selectedContact = $event;
+    console.log("selected contact =============>", this.selectedContact);
+  }
+
+  clearFilters(): void {
+    console.log("clear filter ===========>");
+    this.selectedContact = null;
+  }
 }

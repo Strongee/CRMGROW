@@ -6,18 +6,23 @@
           <ng-container *ngIf="resultItemTemplate; else defaultResult" [ngTemplateOutlet]="resultItemTemplate" [ngTemplateOutletContext]="{ $implicit: formControl.value }">
           </ng-container>
           <ng-template #defaultResult>
-            <div class="chip d-flex align-items-center">
-              <div class="form-avatar rounded-circle bg-dark mr-1">{{formControl.value.avatarName}}</div>
-              <div class="info">
-                <div class="f-4">{{formControl.value.fullName}}</div>
+            <div class="chip d-flex justify-content-between align-items-center">
+              <div class="v-center">
+                <div class="form-avatar rounded-circle bg-dark mr-1">{{formControl.value.avatarName}}</div>
+                <div class="info">
+                  <div class="f-4">{{formControl.value.fullName}}</div>
+                </div>
+              </div>
+              <div (click)="cancelSelect()">
+                <i class="d-block i-icon i-close bgc-dark"></i>
               </div>
             </div>
           </ng-template>
         </ng-container>
       </mat-select-trigger>
       <mat-option>
-        <ngx-mat-select-search 
-          [formControl]="inputControl" 
+        <ngx-mat-select-search
+          [formControl]="inputControl"
           [searching]="searching"
           [placeholderLabel]="formPlaceholder"
           noEntriesFoundLabel="There is no searched results."
@@ -25,7 +30,7 @@
         </ngx-mat-select-search>
       </mat-option>
       <mat-option *ngFor="let item of filteredResults | async" [value]="item" style="height: unset; line-height: unset;">
-        <div class="d-flex chip py-2">
+        <div class="d-flex justify-content-between chip py-2">
           <div class="form-avatar rounded-circle bg-dark mr-3 mt-1">{{item.avatarName}}</div>
           <div class="info">
             <div class="f-5 font-weight-bold">{{item.fullName}}</div>
