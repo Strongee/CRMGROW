@@ -41,6 +41,7 @@ export class ImportContactMergeComponent implements OnInit {
   notes = 'Both';
 
   mergeActions = ['Both', 'Keep primary', 'Remove'];
+  automationMergeAction = ['Keep primary', 'Remove'];
 
   checkableColumn = [
     'first_name',
