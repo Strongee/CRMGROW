@@ -113,5 +113,6 @@ export class SelectContactComponent
 
   cancelSelect(): void {
     this.formControl.setValue(null, { emitEvent: false });
+    this.onSelect.emit(null);
   }
 }

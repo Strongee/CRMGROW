@@ -23,10 +23,10 @@
           </span>
           <i class="d-block i-icon i-triangle-down bgc-white"></i>
           <div ngbDropdownMenu class="light">
-            <button class="border-0 c-dark dropdown-item">
+            <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">
               <span class="ml-1 f-3 font-weight-bold">Create group call</span>
             </button>
-            <button class="border-0 c-dark dropdown-item">
+            <button class="border-0 c-dark dropdown-item"(click)="openAppointmentDlg()">
               <span class="ml-1 f-3 font-weight-bold">Create appointment</span>
             </button>
             <hr class="my-1">
@@ -62,10 +62,6 @@
       <div class="my-3 py-2">
         <app-label-select [value]="contact.label" type="form"></app-label-select>
       </div>
-      <div class="v-center justify-content-between mb-3 create-actions">
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 mr-1 py-2" (click)="openGroupCallDlg()">Create group call</button>
-        <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm w-50 ml-1 py-2" (click)="openAppointmentDlg()">Create appointment</button>
-      </div>
       <mat-accordion multi class="general-panels">
         <!-- Begin Contact Detail -->
         <mat-expansion-panel class="mat-elevation-z" hideToggle expanded="true">
@@ -74,7 +70,7 @@
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Contact details</span>
-                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center" (click)="editContacts('main')">
                   <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
                   <span>Edit</span>
                 </button>
@@ -109,7 +105,7 @@
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Secondary contacts</span>
-                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center" (click)="editContacts('second')">
                   <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
                   <span>Edit</span>
                 </button>
@@ -137,7 +133,7 @@
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                 <span class="f-6 font-weight-bold ml-2">Additional information</span>
-                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center">
+                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center" (click)="editAdditional()">
                   <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
                   <span>Edit</span>
                 </button>
@@ -266,354 +262,16 @@
       </mat-accordion>
     </div>
     <div class="contact-action-panel flex-grow-1 position-relative">
-      <!-- <div class="action-panel position-relative">
-        <div class="main-actions">
-          <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="action = $event" type="plain">
-          </app-slide-tab>
-          <div class="tab-panel">
-            <div class="email-panel" *ngIf="action.id === 'send_email'">
-              <form #emailForm="ngForm" (ngSubmit)="emailForm.form.valid ? sendEmail() : false">
-                <div class="email-box">
-                  <div class="v-center justify-content-between receiver pl-3 pr-2 py-1 contacts-wrapper">
-                    <div class="v-center w-50">
-                      <label class="f-6 op-56 m-0">To:</label>
-                      <app-input-contacts
-                        [selectedContacts]="emailContacts"
-                        class="w-100 ml-2"
-                      ></app-input-contacts>
-                    </div>
-                    <div class="v-center">
-                      <div class="f-6 c-blue p-1 c-pointer" (click)="ccFlag = !ccFlag">{{ccFlag ? "Disable Cc" : "Add Cc"}}</div>
-                      <div class="f-6 c-blue p-1 c-pointer" (click)="bccFlag = !bccFlag">{{bccFlag ? "Disable Bcc" : "Add Bcc"}}</div>
-                    </div>
-                  </div>
-                  <div class="email-tracking contacts-wrapper" *ngIf="ccFlag || bccFlag">
-                    <div class="v-center pl-3 f-2 py-1">
-                      <mat-icon class="mr-2">warning</mat-icon>
-                      Email tracking is not working if you add cc, bcc.
-                    </div>
-                    <div class="v-center pl-3 py-2 email-cc" *ngIf="ccFlag">
-                      <label class="f-6 text-uppercase op-56 m-0">cc:</label>
-                      <app-input-contacts
-                        [selectedContacts]="ccContacts"
-                        class="w-100 ml-2"
-                      ></app-input-contacts>
-                    </div>
-                    <div class="v-center pl-3 py-2 email-bcc" *ngIf="bccFlag">
-                      <label class="f-6 text-uppercase op-56 m-0">bcc:</label>
-                      <app-input-contacts
-                        [selectedContacts]="bccContacts"
-                        class="w-100 ml-2"
-                      ></app-input-contacts>
-                    </div>
-                  </div>
-                  <div class="email-title px-3 py-2 position-relative">
-                    <input
-                      class="w-100"
-                      type="text"
-                      placeholder="Subject:"
-                      name="emailTitle"
-                      #emailTitle="ngModel"
-                      [(ngModel)]="emailSubject"
-                      required
-                    >
-                    <span
-                      class="invalid-error f-3 c-red inline-error" 
-                      *ngIf="emailTitle.invalid && (emailTitle.touched || emailTitle.dirty)"
-                    >
-                      Required!
-                    </span>
-                  </div>
-                  <div class="email-body">
-                    <app-html-editor 
-                      [(value)]="emailContent" 
-                      placeholder="Start typing here..."
-                      required="true"
-                      hasToken="true"
-                      [style]="{height: '300px'}"
-                      #editor
-                      >
-                    </app-html-editor>
-                  </div>
-                  <div class="p-3 email-setting">
-                    <div class="v-center">
-                      <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue p-2 mr-2 material-button" (click)="openMaterialsDlg()">
-                        <i class="d-block i-icon i-material bgc-blue"></i>
-                        <span class="f-3 font-weight-bold c-blue mx-2">Material</span>
-                        <i class="d-block i-icon i-plus bgc-blue"></i>
-                      </button>
-                      <div ngbDropdown class="email-template px-3 c-pointer">
-                        <div class="v-center" ngbDropdownToggle>
-                          <i class="d-block i-icon i-template bgc-blue"></i>
-                          <div class="ml-2">
-                            <div class="f-3 font-weight-bold c-blue select-title">
-                              Template
-                            </div>
-                            <div class="f-1 font-weight-bold op-64 c-white select-status" *ngIf="selectedTemplate.subject|| selectedTemplate.content">
-                              Selected
-                            </div>
-                          </div>
-                        </div>
-                        <div ngbDropdownMenu class="light p-2">
-                          <app-input-template
-                            [type]="'email'"
-                            [placeholder]="'Search templates'"
-                            [(template)]="selectedTemplate"
-                            (templateChange)="selectTemplate($event)"
-                          ></app-input-template>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="v-center justify-content-between mt-2 mt-sm-0 w-100">
-                      <div class="v-center">
-                        <div ngbDropdown class="email-schedule ml-3">
-                          <div class="v-center" ngbDropdownToggle>
-                            <i class="d-block i-icon i-schedule bgc-blue c-pointer"></i>
-                            <div class="f-1 font-weight-bold p-1 c-dark show-plan ml-1" [class.show]="this.scheduleDateTime != '' && planned">
-                              Planned
-                            </div>
-                          </div>
-                          <div ngbDropdownMenu class="date-picker p-4">
-                            <div class="picker-header v-center justify-content-between mt-2">
-                              <div class="f-24 font-weight-bold">Schedule send</div>
-                              <div class="i-icon i-close bg-dark" ngbDropdownToggle></div>
-                            </div>
-                            <div class="mt-3 mb-1">
-                              <span class="f-6 op-64">Pick date and time</span>
-                            </div>
-                            <div class="picker-body">
-                              <div classs="date-picker">
-                                <ngb-datepicker name="select_date" #dp [(ngModel)]="schedule_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
-                              </div>
-                              <div class="time-picker ml-0 ml-md-3 mt-2 mt-md-0">
-                                <select
-                                  class="form-control f-6 font-weight-bold"
-                                  [(ngModel)]="schedule_time"
-                                  name="time"
-                                  #time="ngModel"
-                                >
-                                  <option value="" disabled>Due Time</option>
-                                  <option *ngFor="let time of times" value="{{ time.id }}">
-                                    {{ time.text }}
-                                  </option>
-                                </select>
-                                <div class="f-3 text-center mt-4">
-                                  Message will be sent
-                                </div>
-                                <div class="f-6 font-weight-bold c-dark text-center show-datetime p-2 mt-1">
-                                  {{ getScheduleDateTime() | date : 'MMMM d, yyyy hh:mm a' }}
-                                </div>
-                                <div class="v-center justify-content-center c-pointer p-2 mt-2 remove-schedule" *ngIf="this.scheduleDateTime != '' && planned" (click)="removeSchedule()">
-                                  <i class="d-block i-icon i-trash bgc-red mr-2"></i>
-                                  <span class="f-3 font-weight-bold c-red">Remove schedule</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="action-button mt-2" align="end">
-                              <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
-                              <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setScheduleDateTime()" ngbDropdownToggle>Set</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="email-reminder ml-3 c-pointer">
-                          <i class="d-block i-icon i-reminder bgc-blue"></i>
-                        </div>
-                      </div>
-                      <button
-                        type="submit"
-                        class="btn btn-blue text-white br-default py-1 f-6 font-weight-bold shadow"
-                        [class.loading]="emailSending"
-                      >
-                        Send
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="text-panel" *ngIf="action.id === 'send_text'">
-            </div>
-            
-            <div class="note-panel" *ngIf="action.id === 'note'">
-              <form #noteForm="ngForm" (ngSubmit)="noteForm.form.valid ? createNote() : false">
-                <div class="note-title px-2 py-2 position-relative">
-                  <input
-                    class="ml-2 w-100"
-                    type="text"
-                    name="noteTitle"
-                    #noteTitle="ngModel"
-                    [(ngModel)]="note.title"
-                    placeholder="Title"
-                    required
-                  >
-                  <span
-                    class="invalid-error f-3 fw-600 c-red pl-2 inline-error"
-                    *ngIf="!note.title && noteForm.submitted"
-                  >
-                    Required!
-                  </span>
-                </div>
-                <div class="note-content p-3 position-relative">
-                  <textarea
-                    class="w-100"
-                    placeholder="Start typing here..."
-                    name="noteContent"
-                    #noteContent="ngModel"
-                    [(ngModel)]="note.content"
-                    rows="7" cols="50"
-                    required
-                  ></textarea>
-                  <span
-                    class="invalid-error f-3 fw-600 c-red inline-error"
-                    *ngIf="!note.content && noteForm.submitted"
-                  >
-                    Required!
-                  </span>
-                  <div class="v-center justify-content-end">
-                    <button
-                      type="submit"
-                      class="btn btn-blue text-white br-default f-6 font-weight-bold"
-                      [class.loading]="noteSaving"
-                    >
-                      Add note
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-
-            <div class="task-panel p-4" *ngIf="action.id === 'add_task'">
-              <form #taskForm="ngForm" (ngSubmit)="taskForm.form.valid ? createTask() : false">
-                <div class="form-group">
-                  <label class="mb-0">type of task</label>
-                  <div>
-                    <app-task-type [(value)]="task.type"></app-task-type>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="v-center">
-                    <label class="mb-0">subject</label>
-                    <span
-                      class="invalid-error f-3 fw-600 c-red ml-auto"
-                      *ngIf="!task.content && taskForm.submitted"
-                    >
-                      Required!
-                    </span>
-                  </div>
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Provide subject"
-                    name="taskSubject"
-                    #taskSubject="ngModel"
-                    [(ngModel)]="task.content"
-                    required>
-                </div>
-                <div class="row task-time">
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <div class="v-center">
-                        <label class="mb-0">date</label>
-                        <span
-                          class="invalid-error f-3 fw-600 c-red ml-auto"
-                          *ngIf="!task_date.year && !task_date.month && !task_date.day && taskForm.submitted"
-                        >
-                          Required!
-                        </span>
-                      </div>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text bgc-blue">
-                            <i class="i-icon i-calendar bgc-white"></i>
-                          </span>
-                        </div>
-                        <div ngbDropdown class="w-100">
-                          <input class="form-control datepicker f-3" placeholder="Select date" name="send_date" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required autocomplete="off"/>
-                          <div ngbDropdownMenu class="date-picker">
-                            <div class="picker-header v-center justify-content-between mt-2">
-                              <div class="f-6 font-weight-bold">Appointment date</div>
-                              <div class="i-icon i-close bg-dark" ngbDropdownToggle></div>
-                            </div>
-                            <hr class="mt-3 mb-1">
-                            <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getTaskDateTime() | date : 'MMMM d yyyy' }}</div>
-                            <div class="picker-body v-center justify-content-between">
-                              <div classs="date-picker">
-                                <ngb-datepicker name="select_date" #dp [(ngModel)]="task_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
-                                <div class="action-button mt-2" align="end">
-                                  <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
-                                  <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setTaskDateTime()" ngbDropdownToggle>Set</div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <label class="mb-0 d-block">time</label>
-                      <select
-                        class="form-control f-3"
-                        [(ngModel)]="task_time"
-                        name="time"
-                        #time="ngModel"
-                      >
-                        <option value="" disabled>Due Time</option>
-                        <option *ngFor="let time of times" value="{{ time.id }}">
-                          {{ time.text }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="task-action">
-                  <div class="v-center task-recurrence">
-                    <div class="custom-control custom-checkbox my-auto">
-                      <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="repeat_tcc"
-                        [checked]="task.is_repeat"
-                        (change)="task.is_repeat = !task.is_repeat"
-                      />
-                      <label
-                        class="custom-control-label f-3 fw-600 pt-1"
-                        for="repeat_tcc"
-                        >Set as recurring event</label
-                      >
-                    </div>
-                    <div class="form-group ml-3 mb-0">
-                      <select class="form-control c-blue font-weight-bold" [(ngModel)]="task.repeat_duration" name="duration" #duration="ngModel" [disabled]="!task.is_repeat">
-                        <option *ngFor="let type of REPEAT_DURATIONS" [value]="type.value">
-                          {{type.label}}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="v-center justify-content-end mt-2 mt-sm-0">
-                    <button
-                      type="submit"
-                      class="btn btn-blue text-white br-default f-6 font-weight-bold"
-                      [class.loading]="taskSaving"
-                    >
-                      Create
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div> -->
       <div class="history-panel pt-3 pl-3 mt-2">
-        <div class="type-headers d-flex">
+        <!-- <div class="type-headers d-flex">
           <div class="type-item rounded px-2 py-1 f-3 font-weight-bold c-pointer" *ngFor="let type of TYPES"
             [ngClass]="{'border': type.id === activeHistory, 'border-primary': type.id === activeHistory, 'c-blue': type.id === activeHistory}"
             [class.op-40]="type.id !== activeHistory" (click)="activeHistory = type.id">
             {{type.label}}
           </div>
-        </div>
+        </div> -->
+        <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
+        </app-slide-tab>
         <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
           <ng-container *ngFor="let activity of mainTimelines">
             <div class="time-line d-flex">
