@@ -18,6 +18,9 @@ import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import 'moment-timezone';
+import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { TaskDeleteComponent } from '../../components/task-delete/task-delete.component';
+import { TaskBulkComponent } from '../../components/task-bulk/task-bulk.component';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -202,7 +205,19 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Do Action
    * @param action: Action Data (ActionItem | ActionSubItem)
    */
-  doAction(action: any): void {}
+  doAction(action: any): void {
+    if (action.command === 'edit') {
+      this.editTasks();
+    } else if (action.command === 'complete') {
+      this.completeTasks();
+    } else if (action.command === 'delete') {
+      this.deleteTasks();
+    } else if (action.command === 'select') {
+      this.selectAll();
+    } else if (action.command === 'deselect') {
+      this.deselectAll();
+    }
+  }
 
   /**
    * Update the Label of the current contact or selected contacts.
@@ -296,7 +311,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   sortByDeadline(): void {
-    const findIndex = this.DEADLINE_TYPES.findIndex((type) => type.id === this.deadline.id);
+    const findIndex = this.DEADLINE_TYPES.findIndex(
+      (type) => type.id === this.deadline.id
+    );
     if (findIndex >= 0) {
       if (findIndex === this.DEADLINE_TYPES.length - 1) {
         this.deadline = this.DEADLINE_TYPES[0];
@@ -304,6 +321,70 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.deadline = this.DEADLINE_TYPES[findIndex + 1];
       }
       this.changeDeadlineType(this.deadline);
+    }
+  }
+
+  deleteTasks(): void {
+    if (this.selection.length) {
+      const dialog = this.dialog.open(TaskDeleteComponent, {
+        data: {
+          ids: this.selection
+        }
+      });
+
+      dialog.afterClosed().subscribe((res) => {
+        if (res && res.status) {
+          this.selection = [];
+          this.pageSelection = [];
+          this.taskService.reload();
+        }
+      });
+    }
+  }
+
+  completeTasks(): void {
+    if (this.selection.length) {
+      const ids = [];
+      for (const id of this.selection) {
+        ids.push(id);
+      }
+      const dialog = this.dialog.open(ConfirmComponent, {
+        data: {
+          message: 'Are you sure to complete follow up(s)?',
+          cancelLabel: 'No',
+          confirmLabel: 'Complete'
+        }
+      });
+      dialog.afterClosed().subscribe((answer) => {
+        if (answer) {
+          this.taskService.complete(ids).subscribe((res) => {
+            if (res && res.status) {
+              this.selection = [];
+              this.pageSelection = [];
+              // this.handlerService.taskEdit(ids);
+            }
+          });
+        }
+      });
+    }
+  }
+
+  editTasks(): void {
+    if (this.selection.length) {
+      const ids = [];
+      for (const id of this.selection) {
+        ids.push(id);
+      }
+      const dialog = this.dialog.open(TaskBulkComponent, {
+        data: {
+          ids
+        }
+      });
+      dialog.afterClosed().subscribe((res) => {
+        if (res.status) {
+          // this.handlerService.taskEdit(ids);
+        }
+      });
     }
   }
 }
