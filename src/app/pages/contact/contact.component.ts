@@ -40,6 +40,9 @@ import * as _ from 'lodash';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { ContactEditComponent } from 'src/app/components/contact-edit/contact-edit.component';
 import { AdditionalEditComponent } from 'src/app/components/additional-edit/additional-edit.component';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { NoteEditComponent } from 'src/app/components/note-edit/note-edit.component';
+import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
 
 @Component({
   selector: 'app-contact',
@@ -505,17 +508,74 @@ export class ContactComponent implements OnInit {
     }
   }
 
-  editFollowUp(): void {}
+  editFollowUp(activity: any): void {
+    // this.dialog
+    //   .open(TaskEditComponent, {
+    //     width: '98vw',
+    //     maxWidth: '394px',
+    //     data: element
+    //   })
+    //   .afterClosed()
+    //   .subscribe((res) => {});
+  }
 
-  completeFollowUp(): void {}
+  completeFollowUp(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Complete Follow up',
+        message: 'Are you sure to complete the follow up?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
-  archiveFollowUp(): void {}
+  archiveFollowUp(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Archive Follow up',
+        message: 'Are you sure to archive the follow up?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
-  deleteFollowUp(): void {}
+  deleteFollowUp(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Delete Follow up',
+        message: 'Are you sure to delete the follow up?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
-  updateNote(): void {}
+  updateNote(activity: any): void {
+    this.dialog.open(NoteEditComponent, {
+      width: '98vw',
+      maxWidth: '394px',
+      data: {
+        note: activity
+      }
+    });
+  }
 
-  deleteNote(): void {}
+  deleteNote(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Delete Note',
+        message: 'Are you sure to delete the note?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
   /**************************************
    * Task Panel Relative Functions

@@ -3,7 +3,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
-import {BulkActions, DialogSettings, STATUS} from 'src/app/constants/variable.constants';
+import {
+  BulkActions,
+  DialogSettings,
+  STATUS
+} from 'src/app/constants/variable.constants';
 import { getCurrentTimezone } from 'src/app/helper';
 import { TaskDurationOption } from 'src/app/models/searchOption.model';
 import { Task, TaskDetail } from 'src/app/models/task.model';
@@ -15,7 +19,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import 'moment-timezone';
-import {ContactActivity} from "../../models/contact.model";
+import { ContactActivity } from '../../models/contact.model';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -172,9 +176,9 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.pageTasks,
           '_id'
         );
-        console.log("page selection =============>", this.pageSelection);
+        console.log('page selection =============>', this.pageSelection);
       }
-    })
+    });
   }
 
   onOverPages(page: number): void {
@@ -193,7 +197,6 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Open Filter Panel
    */
   openFilter(): void {}
-
 
   /**
    * Do Action
@@ -239,18 +242,10 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   toggle(task): void {
     const selectedTask = task;
-    const toggledSelection = _.xorBy(
-      this.pageSelection,
-      [selectedTask],
-      '_id'
-    );
+    const toggledSelection = _.xorBy(this.pageSelection, [selectedTask], '_id');
     this.pageSelection = toggledSelection;
 
-    const toggledAllSelection = _.xorBy(
-      this.selection,
-      [selectedTask],
-      '_id'
-    );
+    const toggledAllSelection = _.xorBy(this.selection, [selectedTask], '_id');
     this.selection = toggledAllSelection;
   }
 
@@ -284,7 +279,9 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Select All Tasks
    */
   selectAll(): void {
-    this.storeService.tasks$.subscribe((res) => console.log("select all ===========>", res));
+    this.storeService.tasks$.subscribe((res) =>
+      console.log('select all ===========>', res)
+    );
     // this.contactService.selectAll().subscribe((contacts) => {
     //   this.selection = _.unionBy(this.selection, contacts, '_id');
     //   this.pageSelection = _.intersectionBy(

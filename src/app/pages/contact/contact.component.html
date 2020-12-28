@@ -294,7 +294,7 @@
                             *ngIf="activity.content.indexOf('completed') == -1"
                             (click)="completeFollowUp()"
                           >
-                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <i class="i-icon i-check bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Complete</span>
                           </button>
                           <button
@@ -302,7 +302,7 @@
                             *ngIf="activity.content.indexOf('completed') == -1"
                             (click)="archiveFollowUp()"
                           >
-                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Archive</span>
                           </button>
                           <button 
@@ -310,17 +310,17 @@
                             *ngIf="activity.content.indexOf('completed') !== -1"
                             (click)="deleteFollowUp()"
                           >
-                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Delete</span>
                           </button>
                         </div>
-                        <div ngbDropdownMenu class="light py-1" *ngSwitchCase="'notes'" (click)="updateNote()">
+                        <div ngbDropdownMenu class="light py-1" *ngSwitchCase="'notes'" (click)="updateNote(activity)">
                           <button class="v-center border-0 py-1 c-dark dropdown-item">
                             <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Update note</span>
                           </button>
                           <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="deleteNote()">
-                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Remove note</span>
                           </button>
                         </div>
