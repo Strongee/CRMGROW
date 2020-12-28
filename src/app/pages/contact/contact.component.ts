@@ -167,6 +167,7 @@ export class ContactComponent implements OnInit {
     this.storeService.selectedContact$.subscribe((res) => {
       if (res && res._id === this._id) {
         this.contact = res;
+        console.log('###', this.contact);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
@@ -503,6 +504,18 @@ export class ContactComponent implements OnInit {
       parent.classList.remove('expanded');
     }
   }
+
+  editFollowUp(): void {}
+
+  completeFollowUp(): void {}
+
+  archiveFollowUp(): void {}
+
+  deleteFollowUp(): void {}
+
+  updateNote(): void {}
+
+  deleteNote(): void {}
 
   /**************************************
    * Task Panel Relative Functions

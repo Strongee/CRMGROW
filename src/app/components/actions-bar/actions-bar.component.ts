@@ -9,6 +9,7 @@ import { ActionItem } from 'src/app/utils/data.types';
 export class ActionsBarComponent implements OnInit {
   isActiveFlag = false;
   isShow = false;
+  @Output() doCommand: EventEmitter<any> = new EventEmitter();
   @Input('actions') actions: ActionItem[] = [];
   @Input()
   public set isActive(val: number) {
@@ -19,7 +20,6 @@ export class ActionsBarComponent implements OnInit {
       this.isShow = true;
     }
   }
-  @Output() doCommand = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}

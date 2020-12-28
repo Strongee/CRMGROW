@@ -8,7 +8,7 @@ import { ActionItem } from 'src/app/utils/data.types';
 })
 export class ActionsHeaderComponent implements OnInit {
   @Input('actions') actions: ActionItem[] = [];
-  @Output() doCommand = new EventEmitter();
+  @Output() doCommand: EventEmitter<any> = new EventEmitter();
 
   showActions: ActionItem[] = [];
   moreActions: ActionItem[] = [];

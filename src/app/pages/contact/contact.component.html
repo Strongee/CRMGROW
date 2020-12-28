@@ -263,13 +263,6 @@
     </div>
     <div class="contact-action-panel flex-grow-1 position-relative">
       <div class="history-panel pt-3 pl-3 mt-2">
-        <!-- <div class="type-headers d-flex">
-          <div class="type-item rounded px-2 py-1 f-3 font-weight-bold c-pointer" *ngFor="let type of TYPES"
-            [ngClass]="{'border': type.id === activeHistory, 'border-primary': type.id === activeHistory, 'c-blue': type.id === activeHistory}"
-            [class.op-40]="type.id !== activeHistory" (click)="activeHistory = type.id">
-            {{type.label}}
-          </div>
-        </div> -->
         <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
         </app-slide-tab>
         <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
@@ -286,12 +279,52 @@
                       <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
                         <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                       </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item">
-                          <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
+                      <ng-container [ngSwitch]="activity.type">
+                        <div ngbDropdownMenu class="light py-1" *ngSwitchCase="'follow_ups'">
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            *ngIf="activity.content.indexOf('completed') == -1"
+                            (click)="editFollowUp()"
+                          >
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Edit</span>
+                          </button>
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            *ngIf="activity.content.indexOf('completed') == -1"
+                            (click)="completeFollowUp()"
+                          >
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Complete</span>
+                          </button>
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item" 
+                            *ngIf="activity.content.indexOf('completed') == -1"
+                            (click)="archiveFollowUp()"
+                          >
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Archive</span>
+                          </button>
+                          <button 
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            *ngIf="activity.content.indexOf('completed') !== -1"
+                            (click)="deleteFollowUp()"
+                          >
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                          </button>
+                        </div>
+                        <div ngbDropdownMenu class="light py-1" *ngSwitchCase="'notes'" (click)="updateNote()">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item">
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Update note</span>
+                          </button>
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="deleteNote()">
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Remove note</span>
+                          </button>
+                        </div>
+                      </ng-container>
                     </div>
                   </div>
                 </div>

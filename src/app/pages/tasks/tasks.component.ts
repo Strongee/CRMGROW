@@ -310,18 +310,9 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.selection = [];
   }
 
-  sortByDeadline(): void {
-    const findIndex = this.DEADLINE_TYPES.findIndex(
-      (type) => type.id === this.deadline.id
-    );
-    if (findIndex >= 0) {
-      if (findIndex === this.DEADLINE_TYPES.length - 1) {
-        this.deadline = this.DEADLINE_TYPES[0];
-      } else {
-        this.deadline = this.DEADLINE_TYPES[findIndex + 1];
-      }
-      this.changeDeadlineType(this.deadline);
-    }
+  changeSort(): void {
+    const sortDir = this.taskService.sortOption.getValue();
+    this.taskService.sortOption.next(sortDir * -1);
   }
 
   deleteTasks(): void {

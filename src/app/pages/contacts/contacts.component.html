@@ -91,7 +91,7 @@
               <th mat-header-cell colspan="7">
                 <div class="v-center">
                   <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
-                  <app-actions-header [actions]="ACTIONS"></app-actions-header>
+                  <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
                 </div>
               </th>
             </ng-template>
