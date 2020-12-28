@@ -284,7 +284,7 @@
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item"
                             *ngIf="activity.content.indexOf('completed') == -1"
-                            (click)="editTask()"
+                            (click)="editTask(activity.activity_detail)"
                           >
                             <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Edit</span>
@@ -292,7 +292,7 @@
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item"
                             *ngIf="activity.content.indexOf('completed') == -1"
-                            (click)="completeTask()"
+                            (click)="completeTask(activity._id)"
                           >
                             <i class="i-icon i-check bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Complete</span>
@@ -300,7 +300,7 @@
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item" 
                             *ngIf="activity.content.indexOf('completed') == -1"
-                            (click)="archiveTask()"
+                            (click)="archiveTask(activity._id)"
                           >
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Archive</span>
@@ -308,18 +308,18 @@
                           <button 
                             class="v-center border-0 py-1 c-dark dropdown-item"
                             *ngIf="activity.content.indexOf('completed') !== -1"
-                            (click)="deleteTask()"
+                            (click)="deleteTask(activity._id)"
                           >
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Delete</span>
                           </button>
                         </div>
-                        <div ngbDropdownMenu class="light py-1" *ngSwitchCase="'notes'" (click)="updateNote(activity)">
-                          <button class="v-center border-0 py-1 c-dark dropdown-item">
+                        <div ngbDropdownMenu class="light py-1" *ngSwitchCase="'notes'">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="updateNote(activity)">
                             <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Update note</span>
                           </button>
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="deleteNote()">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="deleteNote(activity._id)">
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Remove note</span>
                           </button>

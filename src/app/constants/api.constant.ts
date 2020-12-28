@@ -45,8 +45,8 @@ export const FILE = {
 export const NOTE = {
   CREATE: 'note',
   BULK_CREATE: 'note/create',
-  DELETE: 'note',
-  UPDATE: 'note'
+  DELETE: 'note/',
+  UPDATE: 'note/'
 };
 export const TASK = {
   CREATE: 'follow/',

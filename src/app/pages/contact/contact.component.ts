@@ -173,7 +173,6 @@ export class ContactComponent implements OnInit {
     this.storeService.selectedContact$.subscribe((res) => {
       if (res && res._id === this._id) {
         this.contact = res;
-        console.log('###', this.contact);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
@@ -518,41 +517,61 @@ export class ContactComponent implements OnInit {
   }
 
   editTask(activity: any): void {
-    // this.dialog
-    //   .open(TaskEditComponent, {
-    //     width: '98vw',
-    //     maxWidth: '394px',
-    //     data: element
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {});
+    this.dialog
+      .open(TaskEditComponent, {
+        width: '98vw',
+        maxWidth: '394px',
+        data: activity
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
-  completeTask(): void {
-    this.dialog.open(ConfirmComponent, {
-      position: { top: '100px' },
-      data: {
-        title: 'Complete Task',
-        message: 'Are you sure to complete the task?',
-        cancelLabel: 'Cancel',
-        confirmLabel: 'Confirm'
-      }
-    });
+  completeTask(id: string): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Complete Task',
+          message: 'Are you sure to complete the task?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.taskService.complete(id).subscribe((res) => {
+            console.log(res);
+          });
+        }
+      });
   }
 
-  archiveTask(): void {
-    this.dialog.open(ConfirmComponent, {
-      position: { top: '100px' },
-      data: {
-        title: 'Archive Task',
-        message: 'Are you sure to archive the task?',
-        cancelLabel: 'Cancel',
-        confirmLabel: 'Confirm'
-      }
-    });
+  archiveTask(id: string): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Archive Task',
+          message: 'Are you sure to archive the task?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.taskService.archive(id).subscribe((res) => {
+            console.log(res);
+          });
+        }
+      });
   }
 
-  deleteTask(): void {
+  deleteTask(id: string): void {
     this.dialog.open(ConfirmComponent, {
       position: { top: '100px' },
       data: {
@@ -574,16 +593,25 @@ export class ContactComponent implements OnInit {
     });
   }
 
-  deleteNote(): void {
-    this.dialog.open(ConfirmComponent, {
-      position: { top: '100px' },
-      data: {
-        title: 'Delete Note',
-        message: 'Are you sure to delete the note?',
-        cancelLabel: 'Cancel',
-        confirmLabel: 'Confirm'
-      }
-    });
+  deleteNote(id: string): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Delete Note',
+          message: 'Are you sure to delete the note?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.noteService.delete(id).subscribe((res) => {
+            console.log('##', res);
+          });
+        }
+      });
   }
 
   /**************************************
