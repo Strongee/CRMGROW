@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, pipe, Subscription } from 'rxjs';
 import { catchError, filter, map, share } from 'rxjs/operators';
-import { TASK } from '../constants/api.constant';
+import { GUEST, TASK } from '../constants/api.constant';
 import { STATUS } from '../constants/variable.constants';
 import {
   TaskDurationOption,
@@ -150,6 +150,13 @@ export class TaskService extends HttpService {
     );
   }
 
+  update(id: string, data): Observable<boolean> {
+    return this.http.put(this.server + TASK.UPDATE + id, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('UPDATE TASK', null))
+    );
+  }
+
   /**
    * Create Tasks to Bulk Contacts
    * @param data : {type: string, content: string, due_date: date, contacts: contact ids array}
@@ -158,6 +165,31 @@ export class TaskService extends HttpService {
     return this.http.post(this.server + TASK.BULK_CREATE, data).pipe(
       map((res) => res['data']),
       catchError(this.handleError('BULK TASK CREATE', null))
+    );
+  }
+
+  archive(ids: any): Observable<any> {
+    return this.http
+      .post(this.server + TASK.BULK_ARCHIVE, { follow_ups: ids })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('BULK TASK ARCHIVE', null))
+      );
+  }
+
+  complete(ids: any): Observable<any> {
+    return this.http
+      .post(this.server + TASK.BULK_COMPLETE, { follow_ups: ids })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('BULK TASK COMPLETE', null))
+      );
+  }
+
+  bulkUpdate(data): Observable<any> {
+    return this.http.post(this.server + TASK.BULK_UPDATE, { ...data }).pipe(
+      map((res) => res),
+      catchError(this.handleError('BULK TASK UPDATE', null))
     );
   }
 }

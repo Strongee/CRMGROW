@@ -142,4 +142,13 @@ export class HandlerService {
     currentContact.activity.push(activity);
     this.storeService.selectedContact.next(currentContact);
   }
+
+  taskEdit(_ids: string[]): void {
+    const tasks = this.storeService.tasks.getValue();
+    tasks.forEach((e) => {
+      if (_ids.indexOf(e._id) !== -1) {
+        // e.deserialize();
+      }
+    });
+  }
 }

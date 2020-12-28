@@ -101,6 +101,7 @@ import { SendEmailComponent } from './send-email/send-email.component';
 import { ContactEditComponent } from './contact-edit/contact-edit.component';
 import { AdditionalEditComponent } from './additional-edit/additional-edit.component';
 import { ActionsHeaderComponent } from './actions-header/actions-header.component';
+import { TaskDeleteComponent } from './task-delete/task-delete.component';
 
 @NgModule({
   declarations: [
@@ -201,7 +202,8 @@ import { ActionsHeaderComponent } from './actions-header/actions-header.componen
     SendEmailComponent,
     ContactEditComponent,
     AdditionalEditComponent,
-    ActionsHeaderComponent
+    ActionsHeaderComponent,
+    TaskDeleteComponent
   ],
   imports: [
     CommonModule,
