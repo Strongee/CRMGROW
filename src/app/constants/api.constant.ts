@@ -60,7 +60,8 @@ export const TASK = {
   NEXT_WEEK: 'follow/date?due_date=next_week',
   FUTURE: 'follow/date?due_date=future',
   OVERDUE: 'follow/date?due_date=overdue',
-  LOAD: 'follow/load/'
+  LOAD: 'follow/load/',
+  SELECT: 'follow/select-all'
 };
 export const ACTIVITY = {
   LOAD: 'activity/get',
