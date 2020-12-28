@@ -45,6 +45,7 @@ import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { NoteEditComponent } from 'src/app/components/note-edit/note-edit.component';
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 
 @Component({
   selector: 'app-contact',
