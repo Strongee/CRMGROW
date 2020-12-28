@@ -59,7 +59,6 @@ export class CalendarDialogComponent implements OnInit {
   contacts: Contact[] = [];
   isRepeat = false;
   isLoading = false;
-  isUser = false;
   times = TIMES;
   calendar_durations = CALENDAR_DURATION;
   recurrings = RECURRING_TYPE;
@@ -67,6 +66,7 @@ export class CalendarDialogComponent implements OnInit {
   quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
   config = QuillEditor;
   focusEditor = '';
+  type = '';
 
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
@@ -82,10 +82,7 @@ export class CalendarDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
-      if (this.data.user) {
-        this.isUser = this.data.user;
-        this.contacts = [...this.contacts, this.data.contact];
-      }
+      this.type = 'update';
       if (this.data.event) {
         this.event.title = this.data.event.title;
         this.due_date.year = this.data.event.start.getFullYear();
@@ -154,11 +151,10 @@ export class CalendarDialogComponent implements OnInit {
         this.event.recurrence = this.data.event.meta.recurrence;
         this.event.recurrence_id = this.data.event.meta.recurrence_id;
         this.event.calendar_id = this.data.event.meta.calendar_id;
-        if (this.event.is_organizer) {
-          this.isUser = this.event.is_organizer;
-        }
         this.event.event_id = this.data.event.meta.event_id;
       }
+    } else {
+      this.type = 'create';
     }
   }
 
@@ -250,6 +246,53 @@ export class CalendarDialogComponent implements OnInit {
           }
         );
     }
+  }
+
+  create(): void {
+    this.isLoading = true;
+    this.event.contacts = [];
+    this.event.guests = [];
+    const date = moment(
+      this.due_date.year +
+        '-' +
+        this.due_date.month +
+        '-' +
+        this.due_date.day +
+        ' ' +
+        this.due_time
+    ).format();
+    const duration = moment(date)
+      .add(this.duration * 60, 'minutes')
+      .format();
+    this.event.due_start = date;
+    this.event.due_end = duration;
+    if (this.contacts.length > 0) {
+      this.contacts.forEach((contact) => {
+        if (contact._id) {
+          const data = {
+            email: contact.email,
+            _id: contact._id
+          };
+          this.event.contacts.push(data);
+        }
+        this.event.guests.push(contact.email);
+      });
+    }
+    this.appointmentService.createEvents(this.event).subscribe(
+      (res) => {
+        if (res['status'] == true) {
+          this.isLoading = false;
+          const data = {
+            event_id: res['event_id']
+          };
+          this.toast.success('New Event is created successfully');
+          this.dialogRef.close(data);
+        }
+      },
+      (error) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   getDateTime(): any {

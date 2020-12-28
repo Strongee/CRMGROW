@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  // api: 'https://app.crmgrow.com/api/',
+  api: 'https://app.crmgrow.com/api/',
   // api: 'http://localhost:3000/api/',
   api: 'http://192.168.0.62:3000/api/',
   server: 'https://app.crmgrow.com',
