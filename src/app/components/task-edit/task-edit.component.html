@@ -1,5 +1,5 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false">
-  <h1 mat-dialog-title>Add new task</h1>
+  <h1 mat-dialog-title>Update task</h1>
   <mat-dialog-content>
     <div class="form-group">
       <label>type of the task</label>
@@ -7,7 +7,7 @@
         <app-task-type [(value)]="task.type"></app-task-type>
       </div>
     </div>
-    
+
     <div class="form-group">
       <label for="content_tc">task regarding</label>
       <input type="text" class="form-control" id="content_tc" name="content" #content="ngModel" [(ngModel)]="task.content" required>
@@ -15,7 +15,7 @@
         <ng-container *ngIf="content.errors.required">Required!</ng-container>
       </span>
     </div>
-    
+
     <div class="row">
       <div class="col-sm-6 col-12">
         <div class="form-group">
@@ -81,8 +81,17 @@
       </div>
     </div>
   </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button class="btn c-blue" mat-dialog-close>Cancel</button>
-    <button class="btn btn-primary" [class.loading]="saving">Create</button>
+  <mat-dialog-actions>
+    <div class="v-center justify-content-between w-100">
+      <div class="v-center">
+        <i class="i-icon i-trash bgc-red" aria-hidden="true"></i>
+        <button type="button" class="btn ml-1 p-1 c-red" (click)="deleteTask()">Delete task</button>
+      </div>
+      <div>
+        <button type="button" class="btn c-blue" mat-dialog-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" [class.loading]="updating">Update</button>
+      </div>
+    </div>
+
   </mat-dialog-actions>
 </form>

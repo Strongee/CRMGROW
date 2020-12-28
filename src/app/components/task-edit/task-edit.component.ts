@@ -1,5 +1,9 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog
+} from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { REPEAT_DURATIONS, TIMES } from 'src/app/constants/variable.constants';
 import { Task } from 'src/app/models/task.model';
@@ -11,6 +15,7 @@ import 'moment-timezone';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { getCurrentTimezone } from 'src/app/helper';
+import { TaskDeleteComponent } from '../task-delete/task-delete.component';
 
 @Component({
   selector: 'app-task-edit',
@@ -28,14 +33,15 @@ export class TaskEditComponent implements OnInit {
 
   timezone;
 
-  saving = false;
-  saveSubscription: Subscription;
+  updating = false;
+  updateSubscription: Subscription;
 
   constructor(
     private taskService: TaskService,
     private handlerService: HandlerService,
     private userService: UserService,
     private helperService: HelperService,
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<TaskEditComponent>,
     @Inject(MAT_DIALOG_DATA) private data: Task
   ) {
@@ -57,7 +63,7 @@ export class TaskEditComponent implements OnInit {
       }
     });
     if (this.data) {
-      this.task = this.data;
+      this.task = Object.assign({}, this.data);
       if (this.timezone) {
         this.initTime();
       }
@@ -99,30 +105,45 @@ export class TaskEditComponent implements OnInit {
   toggleRepeatSetting(): void {
     this.task.is_repeat = !this.task.is_repeat;
   }
+
+  deleteTask(): void {
+    const dialog = this.dialog.open(TaskDeleteComponent, {
+      data: {
+        ids: [this.task._id]
+      }
+    });
+
+    dialog.afterClosed().subscribe((res) => {
+      if (res && res.status) {
+        this.taskService.reload();
+        this.dialogRef.close();
+      }
+    });
+  }
+
   submit(): void {
-    // if (!this.contacts.length) {
-    //   return;
-    // }
-    // this.saving = true;
-    // const ids = [];
-    // this.contacts.forEach((e) => {
-    //   ids.push(e._id);
-    // });
-    // const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
-    // const due_date = moment.tz(dateStr, 'America/Chicago');
-    // const data = {
-    //   contacts: ids,
-    //   type: this.task.type,
-    //   content: this.task.content,
-    //   due_date: due_date
-    // };
-    // this.saveSubscription && this.saveSubscription.unsubscribe();
-    // this.saveSubscription = this.taskService
-    //   .bulkCreate(data)
-    //   .subscribe((res) => {
-    //     this.saving = false;
-    //     this.handlerService.activityAdd$(ids, 'task');
-    //     this.dialogRef.close();
-    //   });
+    this.updating = true;
+    const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
+    const due_date = moment.tz(dateStr, 'America/Chicago');
+    const data = {
+      ...this.task,
+      due_date
+    };
+
+    this.updateSubscription && this.updateSubscription.unsubscribe();
+    this.updateSubscription = this.taskService
+      .update(this.task._id, data)
+      .subscribe(
+        (res) => {
+          this.updating = false;
+          if (res) {
+            this.dialogRef.close({ status: true });
+          }
+        },
+        (error) => {
+          this.updating = false;
+          this.dialogRef.close();
+        }
+      );
   }
 }

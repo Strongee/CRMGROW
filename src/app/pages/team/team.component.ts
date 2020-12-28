@@ -1113,7 +1113,7 @@ export class TeamComponent implements OnInit {
     this.dialog
       .open(TeamEditComponent, {
         width: '96vw',
-        maxWidth: '500px',
+        maxWidth: '600px',
         disableClose: true,
         data: {
           team: this.team

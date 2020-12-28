@@ -102,6 +102,7 @@ import { ContactEditComponent } from './contact-edit/contact-edit.component';
 import { AdditionalEditComponent } from './additional-edit/additional-edit.component';
 import { ActionsHeaderComponent } from './actions-header/actions-header.component';
 import { NoteEditComponent } from './note-edit/note-edit.component';
+import { TaskDeleteComponent } from './task-delete/task-delete.component';
 
 @NgModule({
   declarations: [
@@ -203,7 +204,8 @@ import { NoteEditComponent } from './note-edit/note-edit.component';
     ContactEditComponent,
     AdditionalEditComponent,
     ActionsHeaderComponent,
-    NoteEditComponent
+    NoteEditComponent,
+    TaskDeleteComponent
   ],
   imports: [
     CommonModule,
