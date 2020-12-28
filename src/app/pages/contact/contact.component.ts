@@ -16,7 +16,8 @@ import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
   TIMES,
-  REPEAT_DURATIONS
+  REPEAT_DURATIONS,
+  DialogSettings
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -40,6 +41,11 @@ import * as _ from 'lodash';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { ContactEditComponent } from 'src/app/components/contact-edit/contact-edit.component';
 import { AdditionalEditComponent } from 'src/app/components/additional-edit/additional-edit.component';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { NoteEditComponent } from 'src/app/components/note-edit/note-edit.component';
+import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
+import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 
 @Component({
   selector: 'app-contact',
@@ -247,6 +253,49 @@ export class ContactComponent implements OnInit {
     }
   }
 
+  /**
+   * Go to Contact List Page
+   */
+  goToBack(): void {}
+
+  /**
+   * Load Previous Contact Detail Information
+   */
+  prevContact(): void {}
+
+  /**
+   * Load Next Contact Detail Information
+   */
+  nextContact(): void {}
+
+  /**
+   * Delete the current contact
+   */
+  deleteContact(): void {}
+
+  /**
+   * Open dialog to merge
+   */
+  openMergeContactDlg(): void {
+    this.dialog.open(ContactMergeComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '700px',
+      maxHeight: '600px',
+      data: {
+        contact: this.contact
+      }
+    });
+  }
+
+  /**
+   * Open the Campagin Dialog to assign the curent contact to the compaign list.
+   */
+  openCampaignAssignDlg(): void {}
+
+  /**
+   * Open the Contact Edit Dialog
+   */
   editContacts(type: string): void {
     if (type == 'main') {
       this.mainPanel = !this.mainPanel;
@@ -293,51 +342,6 @@ export class ContactComponent implements OnInit {
   }
 
   /**
-   * Go to Contact List Page
-   */
-  goToBack(): void {}
-
-  /**
-   * Load Previous Contact Detail Information
-   */
-  prevContact(): void {}
-
-  /**
-   * Load Next Contact Detail Information
-   */
-  nextContact(): void {}
-
-  /**
-   * Delete the current contact
-   */
-  deleteContact(): void {}
-
-  /**
-   * Open dialog to merge
-   */
-  openMergeContactDlg(): void {
-    this.dialog.open(ContactMergeComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '700px',
-      maxHeight: '600px',
-      data: {
-        contact: this.contact
-      }
-    });
-  }
-
-  /**
-   * Open the Campagin Dialog to assign the curent contact to the compaign list.
-   */
-  openCampaignAssignDlg(): void {}
-
-  /**
-   * Open the Contact Edit Dialog
-   */
-  openEditDlg(): void {}
-
-  /**
    * Share Contact to Team
    */
   shareContact(): void {}
@@ -380,6 +384,10 @@ export class ContactComponent implements OnInit {
       });
   }
 
+  openTaskDlg(): void {
+    this.dialog.open(TaskCreateComponent, DialogSettings.TASK);
+  }
+
   openSendEmail(): void {
     this.dialog.open(SendEmailComponent, {
       position: {
@@ -406,6 +414,10 @@ export class ContactComponent implements OnInit {
         this.handlerService.registerActivity$(res);
         this.handlerService.activityAdd$([this._id], 'note');
       });
+  }
+
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
   }
 
   /************************************
@@ -505,17 +517,74 @@ export class ContactComponent implements OnInit {
     }
   }
 
-  editFollowUp(): void {}
+  editTask(activity: any): void {
+    // this.dialog
+    //   .open(TaskEditComponent, {
+    //     width: '98vw',
+    //     maxWidth: '394px',
+    //     data: element
+    //   })
+    //   .afterClosed()
+    //   .subscribe((res) => {});
+  }
 
-  completeFollowUp(): void {}
+  completeTask(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Complete Task',
+        message: 'Are you sure to complete the task?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
-  archiveFollowUp(): void {}
+  archiveTask(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Archive Task',
+        message: 'Are you sure to archive the task?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
-  deleteFollowUp(): void {}
+  deleteTask(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Delete Task',
+        message: 'Are you sure to delete the task?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
-  updateNote(): void {}
+  updateNote(activity: any): void {
+    this.dialog.open(NoteEditComponent, {
+      width: '98vw',
+      maxWidth: '394px',
+      data: {
+        note: activity
+      }
+    });
+  }
 
-  deleteNote(): void {}
+  deleteNote(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Delete Note',
+        message: 'Are you sure to delete the note?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
+  }
 
   /**************************************
    * Task Panel Relative Functions

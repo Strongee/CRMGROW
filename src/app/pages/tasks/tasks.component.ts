@@ -18,6 +18,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import 'moment-timezone';
+import { ContactActivity } from '../../models/contact.model';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TaskDeleteComponent } from '../../components/task-delete/task-delete.component';
 import { TaskBulkComponent } from '../../components/task-bulk/task-bulk.component';
@@ -182,6 +183,17 @@ export class TasksComponent implements OnInit, OnDestroy {
   changePage(page: number): void {
     this.page = page;
     this.taskService.loadPage(page);
+    this.storeService.tasks$.subscribe((res) => {
+      if (res) {
+        this.pageTasks = res;
+        this.pageSelection = _.intersectionBy(
+          this.selection,
+          this.pageTasks,
+          '_id'
+        );
+        console.log('page selection =============>', this.pageSelection);
+      }
+    });
   }
 
   onOverPages(page: number): void {
@@ -299,6 +311,18 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Select All Tasks
    */
   selectAll(): void {
+    this.storeService.tasks$.subscribe((res) =>
+      console.log('select all ===========>', res)
+    );
+    // this.contactService.selectAll().subscribe((contacts) => {
+    //   this.selection = _.unionBy(this.selection, contacts, '_id');
+    //   this.pageSelection = _.intersectionBy(
+    //     this.selection,
+    //     this.pageContacts,
+    //     '_id'
+    //   );
+    //   this.updateActionsStatus('select', false);
+    // });
     this.taskService.selectAll().subscribe((tasks) => {
       this.selection = tasks;
       this.pageSelection = this.pageTasks.map((e) => e._id);
