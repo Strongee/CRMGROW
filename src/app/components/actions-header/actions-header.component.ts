@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { EventEmitter } from 'events';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionItem } from 'src/app/utils/data.types';
 
 @Component({
@@ -9,7 +8,7 @@ import { ActionItem } from 'src/app/utils/data.types';
 })
 export class ActionsHeaderComponent implements OnInit {
   @Input('actions') actions: ActionItem[] = [];
-  @Output() doCommand = new EventEmitter();
+  @Output() doCommand: EventEmitter<any> = new EventEmitter();
 
   showActions: ActionItem[] = [];
   moreActions: ActionItem[] = [];

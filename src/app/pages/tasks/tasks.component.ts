@@ -1,9 +1,12 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
-import {BulkActions, DialogSettings, STATUS} from 'src/app/constants/variable.constants';
+import {
+  BulkActions,
+  DialogSettings,
+  STATUS
+} from 'src/app/constants/variable.constants';
 import { getCurrentTimezone } from 'src/app/helper';
 import { TaskDurationOption } from 'src/app/models/searchOption.model';
 import { Task, TaskDetail } from 'src/app/models/task.model';
@@ -15,7 +18,6 @@ import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import 'moment-timezone';
-import {ContactActivity} from "../../models/contact.model";
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -61,6 +63,8 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   isUpdating = false;
   updateSubscription: Subscription;
+  isLoading = false;
+  loadSubscription: Subscription;
 
   page = 1;
   selection = [];
@@ -82,6 +86,14 @@ export class TasksComponent implements OnInit, OnDestroy {
       } catch (err) {
         const timezone = getCurrentTimezone();
         this.timezone = { zone: user.time_zone || timezone };
+      }
+    });
+
+    this.storeService.tasks$.subscribe((tasks) => {
+      if (tasks) {
+        this.pageTasks = tasks;
+        const ids = tasks.map((e) => e._id);
+        this.pageSelection = _.intersection(this.selection, ids);
       }
     });
   }
@@ -159,22 +171,14 @@ export class TasksComponent implements OnInit, OnDestroy {
 
     this.taskService.page.next(1);
     this.taskService.changeDuration(durationOption);
+
+    this.selection = [];
+    this.pageSelection = [];
   }
 
   changePage(page: number): void {
     this.page = page;
     this.taskService.loadPage(page);
-    this.storeService.tasks$.subscribe((res) => {
-      if (res) {
-        this.pageTasks = res;
-        this.pageSelection = _.intersectionBy(
-          this.selection,
-          this.pageTasks,
-          '_id'
-        );
-        console.log("page selection =============>", this.pageSelection);
-      }
-    })
   }
 
   onOverPages(page: number): void {
@@ -193,7 +197,6 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Open Filter Panel
    */
   openFilter(): void {}
-
 
   /**
    * Do Action
@@ -237,43 +240,40 @@ export class TasksComponent implements OnInit, OnDestroy {
       .subscribe((res) => {});
   }
 
-  toggle(task): void {
-    const selectedTask = task;
-    const toggledSelection = _.xorBy(
-      this.pageSelection,
-      [selectedTask],
-      '_id'
-    );
-    this.pageSelection = toggledSelection;
-
-    const toggledAllSelection = _.xorBy(
-      this.selection,
-      [selectedTask],
-      '_id'
-    );
-    this.selection = toggledAllSelection;
+  toggle(task_id: string): void {
+    const pagePosition = this.pageSelection.indexOf(task_id);
+    const pos = this.selection.indexOf(task_id);
+    if (pos !== -1) {
+      this.selection.splice(pos, 1);
+    } else {
+      this.selection.push(task_id);
+    }
+    if (pagePosition !== -1) {
+      this.pageSelection.splice(pagePosition, 1);
+    } else {
+      this.pageSelection.push(task_id);
+    }
   }
 
-  isSelected(task): boolean {
-    return _.findIndex(this.pageSelection, task, '_id') !== -1;
+  isSelected(task_id: string): boolean {
+    const pos = this.pageSelection.indexOf(task_id);
+    if (pos !== -1) {
+      return true;
+    }
   }
 
   masterToggle(): void {
     if (this.isAllSelected()) {
-      this.selection = _.differenceBy(
-        this.selection,
-        this.pageSelection,
-        '_id'
-      );
+      this.selection = _.difference(this.selection, this.pageSelection);
       this.pageSelection = [];
-      return;
+    } else {
+      this.pageTasks.forEach((e) => {
+        if (!this.isSelected(e._id)) {
+          this.pageSelection.push(e._id);
+          this.selection.push(e._id);
+        }
+      });
     }
-    this.pageTasks.forEach((e) => {
-      if (!this.isSelected(e)) {
-        this.pageSelection.push(e);
-        this.selection.push(e);
-      }
-    });
   }
 
   isAllSelected(): boolean {
@@ -284,20 +284,19 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Select All Tasks
    */
   selectAll(): void {
-    this.storeService.tasks$.subscribe((res) => console.log("select all ===========>", res));
-    // this.contactService.selectAll().subscribe((contacts) => {
-    //   this.selection = _.unionBy(this.selection, contacts, '_id');
-    //   this.pageSelection = _.intersectionBy(
-    //     this.selection,
-    //     this.pageContacts,
-    //     '_id'
-    //   );
-    //   this.updateActionsStatus('select', false);
-    // });
+    this.taskService.selectAll().subscribe((tasks) => {
+      this.selection = tasks;
+      this.pageSelection = this.pageTasks.map((e) => e._id);
+    });
   }
 
   deselectAll(): void {
     this.pageSelection = [];
     this.selection = [];
+  }
+
+  changeSort(): void {
+    const sortDir = this.taskService.sortOption.getValue();
+    this.taskService.sortOption.next(sortDir * -1);
   }
 }
