@@ -102,6 +102,7 @@ import { ContactEditComponent } from './contact-edit/contact-edit.component';
 import { AdditionalEditComponent } from './additional-edit/additional-edit.component';
 import { ActionsHeaderComponent } from './actions-header/actions-header.component';
 import { TaskDeleteComponent } from './task-delete/task-delete.component';
+import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 
 @NgModule({
   declarations: [
