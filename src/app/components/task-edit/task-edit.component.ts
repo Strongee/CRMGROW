@@ -49,7 +49,7 @@ export class TaskEditComponent implements OnInit {
     this.MIN_DATE = {
       year: current.getFullYear(),
       month: current.getMonth() + 1,
-      day: current.getDate()
+      day: current.getDate() - 1
     };
     this.userService.profile$.subscribe((user) => {
       try {
@@ -122,7 +122,6 @@ export class TaskEditComponent implements OnInit {
   }
 
   submit(): void {
-    this.updating = true;
     let due_date = '';
     if (this.timezone.tz_name) {
       const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
@@ -138,6 +137,7 @@ export class TaskEditComponent implements OnInit {
       due_date
     };
 
+    this.updating = true;
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.taskService
       .update(this.task._id, data)
