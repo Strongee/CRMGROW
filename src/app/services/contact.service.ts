@@ -399,4 +399,13 @@ export class ContactService extends HttpService {
         catchError(this.handleError('BULK CREATE CONTACTS', []))
       );
   }
+
+  clear$(): void {
+    this.loadStatus.next(STATUS.NONE);
+    this.total.next(0);
+    this.searchOption.next(new SearchOption());
+    this.searchStr.next('');
+    this.pageIndex.next(1);
+    this.pageSize.next(50);
+  }
 }

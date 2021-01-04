@@ -401,4 +401,11 @@ export class TeamService extends HttpService {
       catchError(this.handleError('CREATE TEAM', []))
     );
   }
+
+  clear$(): void {
+    this.teams.next([]);
+    this.invites.next([]);
+    this.loadStatus.next(STATUS.NONE);
+    this.invitesLoadStatus.next(STATUS.NONE);
+  }
 }

@@ -3,19 +3,39 @@ import { Activity } from '../models/activity.model';
 import { DetailActivity, PureActivity } from '../models/activityDetail.model';
 import { Contact, ContactActivity } from '../models/contact.model';
 import { ActivityService } from './activity.service';
+import { AutomationService } from './automation.service';
 import { ContactService } from './contact.service';
+import { DealsService } from './deals.service';
+import { ErrorService } from './error.service';
+import { LabelService } from './label.service';
+import { MaterialService } from './material.service';
 import { StoreService } from './store.service';
+import { TagService } from './tag.service';
 import { TaskService } from './task.service';
+import { TeamService } from './team.service';
+import { TemplatesService } from './templates.service';
+import { ThemeService } from './theme.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HandlerService {
   constructor(
+    private storeService: StoreService,
     private taskService: TaskService,
     private activityService: ActivityService,
     private contactService: ContactService,
-    private storeService: StoreService
+    private materialService: MaterialService,
+    private templateService: TemplatesService,
+    private automationService: AutomationService,
+    private dealService: DealsService,
+    private teamService: TeamService,
+    private themeService: ThemeService,
+    private errorService: ErrorService,
+    private labelService: LabelService,
+    private userService: UserService,
+    private tagService: TagService
   ) {}
 
   /**
@@ -150,5 +170,20 @@ export class HandlerService {
         e.deserialize(data);
       }
     });
+  }
+
+  clearData(): void {
+    this.activityService.clear$();
+    this.taskService.clear$();
+    this.contactService.clear$();
+    this.storeService.clearData();
+    this.automationService.clear$();
+    this.templateService.clear$();
+    this.dealService.clear$();
+    this.errorService.clear$();
+    this.labelService.clear$();
+    this.tagService.clear$();
+    this.teamService.clear$();
+    this.themeService.clear$();
   }
 }

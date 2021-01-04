@@ -117,4 +117,10 @@ export class TagService extends HttpService {
     };
     return this.httpClient.post(this.server + TAG.DELETE, data);
   }
+
+  clear$(): void {
+    this.tags.next([]);
+    this.sources.next([]);
+    this.companies.next([]);
+  }
 }

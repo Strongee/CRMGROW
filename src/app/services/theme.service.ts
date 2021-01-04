@@ -84,4 +84,9 @@ export class ThemeService extends HttpService {
       catchError(this.handleError('DELETE THEME', null))
     );
   }
+
+  clear$(): void {
+    this.themes.next([]);
+    this.loadStatus.next(STATUS.NONE);
+  }
 }
