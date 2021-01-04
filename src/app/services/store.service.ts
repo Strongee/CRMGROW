@@ -54,6 +54,8 @@ export class StoreService {
     this.pdfs.next([]);
     this.images.next([]);
     this.templates.next([]);
+    this.pageContacts.next([]);
+    this.selectedContact.next(new ContactDetail());
   }
 
   constructor() {}

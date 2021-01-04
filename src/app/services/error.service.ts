@@ -50,4 +50,8 @@ export class ErrorService {
   clearData(): void {
     localStorage.removeItem('token');
   }
+
+  clear$(): void {
+    this.errorSubject.next([]);
+  }
 }
