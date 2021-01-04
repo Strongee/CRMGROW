@@ -1,10 +1,10 @@
-<form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false">
+<form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false" [class.was-validated]="form.submitted">
   <h1 mat-dialog-title>Bulk update tasks</h1>
   <mat-dialog-content>
     <div class="form-group mt-3">
       <label>type of the task</label>
       <div>
-        <app-task-type></app-task-type>
+        <app-task-type [(value)]="type"></app-task-type>
       </div>
     </div>
 
@@ -16,10 +16,14 @@
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" *ngIf="keepSubject === 'new_subject'">
       <label for="subject">Subject</label>
-      <input type="text" id="subject" class="form-control" [(ngModel)]="subject" name="taskSubject" #taskSubject="ngModel" />
+      <input type="text" id="subject" class="form-control" [(ngModel)]="subject" name="taskSubject" #taskSubject="ngModel" required />
+      <span class="error" *ngIf="taskSubject.errors">
+        <ng-container *ngIf="taskSubject.errors.required">Required!</ng-container>
+      </span>
     </div>
+
     <div class="form-group">
       <label>Change due dates?</label>
       <select class="form-control theme-control" [(ngModel)]="keepDate" name="changeDate" #changeDate="ngModel" required>
@@ -28,7 +32,7 @@
       </select>
     </div>
 
-    <div class="row">
+    <div class="row"  *ngIf="keepDate === 'new_date'">
       <div class="col-sm-6 col-12">
         <div class="form-group">
           <label for="date_tc">date</label>
@@ -54,6 +58,9 @@
               (click)="d.toggle()"
             />
           </div>
+          <span class="error" *ngIf="due_date.errors">
+            <ng-container *ngIf="due_date.errors.required">Required!</ng-container>
+          </span>
         </div>
       </div>
       <div class="col-sm-6 col-12">

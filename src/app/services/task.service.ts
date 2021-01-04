@@ -186,8 +186,8 @@ export class TaskService extends HttpService {
       );
   }
 
-  bulkUpdate(data): Observable<any> {
-    return this.http.post(this.server + TASK.BULK_UPDATE, { ...data }).pipe(
+  bulkUpdate(data: any): Observable<any> {
+    return this.http.post(this.server + TASK.BULK_UPDATE, data).pipe(
       map((res) => res),
       catchError(this.handleError('BULK TASK UPDATE', null))
     );

@@ -18,7 +18,6 @@ import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import 'moment-timezone';
-import { ContactActivity } from '../../models/contact.model';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TaskDeleteComponent } from '../../components/task-delete/task-delete.component';
 import { TaskBulkComponent } from '../../components/task-bulk/task-bulk.component';
@@ -191,7 +190,6 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.pageTasks,
           '_id'
         );
-        console.log('page selection =============>', this.pageSelection);
       }
     });
   }
@@ -267,40 +265,54 @@ export class TasksComponent implements OnInit, OnDestroy {
       .subscribe((res) => {});
   }
 
-  toggle(task_id: string): void {
-    const pagePosition = this.pageSelection.indexOf(task_id);
-    const pos = this.selection.indexOf(task_id);
-    if (pos !== -1) {
-      this.selection.splice(pos, 1);
-    } else {
-      this.selection.push(task_id);
-    }
-    if (pagePosition !== -1) {
-      this.pageSelection.splice(pagePosition, 1);
-    } else {
-      this.pageSelection.push(task_id);
-    }
+  toggle(task: TaskDetail): void {
+    const toggledPageSelection = _.xorBy(
+      this.pageSelection,
+      [{ _id: task._id, status: task.status }],
+      '_id'
+    );
+    this.pageSelection = toggledPageSelection;
+
+    const toggledSelection = _.xorBy(
+      this.selection,
+      [{ _id: task._id, status: task.status }],
+      '_id'
+    );
+    this.selection = toggledSelection;
+    // const pagePosition = this.pageSelection.indexOf(task_id);
+    // const pos = this.selection.indexOf(task_id);
+    // if (pos !== -1) {
+    //   this.selection.splice(pos, 1);
+    // } else {
+    //   this.selection.push(task_id);
+    // }
+    // if (pagePosition !== -1) {
+    //   this.pageSelection.splice(pagePosition, 1);
+    // } else {
+    //   this.pageSelection.push(task_id);
+    // }
   }
 
   isSelected(task_id: string): boolean {
-    const pos = this.pageSelection.indexOf(task_id);
-    if (pos !== -1) {
-      return true;
-    }
+    return _.findIndex(this.pageSelection, { _id: task_id }, '_id') !== -1;
   }
 
   masterToggle(): void {
     if (this.isAllSelected()) {
-      this.selection = _.difference(this.selection, this.pageSelection);
+      this.selection = _.differenceBy(
+        this.selection,
+        this.pageSelection,
+        '_id'
+      );
       this.pageSelection = [];
-    } else {
-      this.pageTasks.forEach((e) => {
-        if (!this.isSelected(e._id)) {
-          this.pageSelection.push(e._id);
-          this.selection.push(e._id);
-        }
-      });
+      return;
     }
+    this.pageTasks.forEach((e) => {
+      if (!this.isSelected(e._id)) {
+        this.pageSelection.push({ _id: e._id, status: e.status });
+        this.selection.push({ _id: e._id, status: e.status });
+      }
+    });
   }
 
   isAllSelected(): boolean {
@@ -311,21 +323,12 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Select All Tasks
    */
   selectAll(): void {
-    this.storeService.tasks$.subscribe((res) =>
-      console.log('select all ===========>', res)
-    );
-    // this.contactService.selectAll().subscribe((contacts) => {
-    //   this.selection = _.unionBy(this.selection, contacts, '_id');
-    //   this.pageSelection = _.intersectionBy(
-    //     this.selection,
-    //     this.pageContacts,
-    //     '_id'
-    //   );
-    //   this.updateActionsStatus('select', false);
-    // });
     this.taskService.selectAll().subscribe((tasks) => {
       this.selection = tasks;
-      this.pageSelection = this.pageTasks.map((e) => e._id);
+      this.pageSelection = this.pageTasks.map((e) => ({
+        _id: e._id,
+        status: e.status
+      }));
     });
   }
 
@@ -341,9 +344,10 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   deleteTasks(): void {
     if (this.selection.length) {
+      const selected = this.selection.map((e) => e._id);
       const dialog = this.dialog.open(TaskDeleteComponent, {
         data: {
-          ids: this.selection
+          ids: selected
         }
       });
 
@@ -358,11 +362,13 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   completeTasks(): void {
-    if (this.selection.length) {
-      const ids = [];
-      for (const id of this.selection) {
-        ids.push(id);
+    const selected = [];
+    this.selection.forEach((e) => {
+      if (e.status !== 1) {
+        selected.push(e._id);
       }
+    });
+    if (selected.length) {
       const dialog = this.dialog.open(ConfirmComponent, {
         data: {
           message: 'Are you sure to complete follow up(s)?',
@@ -372,34 +378,33 @@ export class TasksComponent implements OnInit, OnDestroy {
       });
       dialog.afterClosed().subscribe((answer) => {
         if (answer) {
-          this.taskService.complete(ids).subscribe((res) => {
-            if (res && res.status) {
-              this.selection = [];
-              this.pageSelection = [];
-              // this.handlerService.taskEdit(ids);
-            }
+          this.taskService.complete(selected).subscribe((res) => {
+            this.handlerService.updateTasks$(selected, { status: 1 });
           });
         }
       });
+    } else {
+      // TODO: Show the Alert
     }
   }
 
   editTasks(): void {
-    if (this.selection.length) {
-      const ids = [];
-      for (const id of this.selection) {
-        ids.push(id);
+    const selected = [];
+    this.selection.forEach((e) => {
+      if (e.status !== 1) {
+        selected.push(e._id);
       }
-      const dialog = this.dialog.open(TaskBulkComponent, {
+    });
+    if (selected.length) {
+      this.dialog.open(TaskBulkComponent, {
+        width: '100vw',
+        maxWidth: '450px',
         data: {
-          ids
+          ids: selected
         }
       });
-      dialog.afterClosed().subscribe((res) => {
-        if (res.status) {
-          // this.handlerService.taskEdit(ids);
-        }
-      });
+    } else {
+      // TODO: Show the Alert
     }
   }
 }

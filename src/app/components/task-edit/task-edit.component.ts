@@ -14,7 +14,7 @@ import * as moment from 'moment';
 import 'moment-timezone';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { getCurrentTimezone } from 'src/app/helper';
+import { getCurrentTimezone, numPad } from 'src/app/helper';
 import { TaskDeleteComponent } from '../task-delete/task-delete.component';
 
 @Component({
@@ -123,8 +123,16 @@ export class TaskEditComponent implements OnInit {
 
   submit(): void {
     this.updating = true;
-    const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
-    const due_date = moment.tz(dateStr, 'America/Chicago');
+    let due_date = '';
+    if (this.timezone.tz_name) {
+      const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
+      due_date = moment.tz(dateStr, this.timezone.tz_name).format();
+    } else {
+      due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
+        this.date.day
+      )}T${this.time}${this.timezone.zone}`;
+    }
+
     const data = {
       ...this.task,
       due_date

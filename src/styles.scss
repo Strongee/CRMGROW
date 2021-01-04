@@ -731,6 +731,7 @@ button {
 
 form.was-validated {
   .form-group {
+    background-image: unset!important;
     .error {
       display: block;
     }

@@ -143,11 +143,11 @@ export class HandlerService {
     this.storeService.selectedContact.next(currentContact);
   }
 
-  taskEdit(_ids: string[]): void {
+  updateTasks$(_ids: string[], data: any): void {
     const tasks = this.storeService.tasks.getValue();
     tasks.forEach((e) => {
       if (_ids.indexOf(e._id) !== -1) {
-        // e.deserialize();
+        e.deserialize(data);
       }
     });
   }
