@@ -531,16 +531,23 @@ export class ContactComponent implements OnInit {
   }
 
   editTask(activity: any): void {
-    this.dialog
-      .open(TaskEditComponent, {
-        width: '98vw',
-        maxWidth: '394px',
-        data: activity.activity_detail
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        console.log(res);
-      });
+    if (activity && activity.contact.length) {
+      const data = {
+        ...activity,
+        contact: { _id: activity.contact[0] }
+      };
+
+      this.dialog
+        .open(TaskEditComponent, {
+          width: '98vw',
+          maxWidth: '394px',
+          data
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          console.log(res);
+        });
+    }
   }
 
   completeTask(activity: any): void {
