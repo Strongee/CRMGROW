@@ -521,7 +521,7 @@ export class ContactComponent implements OnInit {
     if (activity && activity.contact.length) {
       const data = {
         ...activity,
-        contact: { _id: activity.contact[0] }
+        contact: activity.contact[0]
       };
 
       this.dialog
