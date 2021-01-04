@@ -240,7 +240,7 @@ export class UploadContactsComponent implements OnInit {
 
             this.checkingDuplicate = true;
             const _SELF = this;
-            setTimeout( () => {
+            setTimeout(() => {
               const dupTest = _SELF.checkDuplicate();
               if (dupTest) {
                 _SELF.step = 3;
@@ -253,7 +253,7 @@ export class UploadContactsComponent implements OnInit {
             }, 1000);
           } else {
             this.uploading = false;
-            this.dialogRef.close({status: true});
+            this.dialogRef.close({ status: true });
             this.handlerService.bulkContactAdd$();
           }
 

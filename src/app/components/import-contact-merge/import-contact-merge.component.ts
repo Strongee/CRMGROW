@@ -156,28 +156,34 @@ export class ImportContactMergeComponent implements OnInit {
             }
           }
         }
-        const notesColumns =
-          this.primaryContact['notes'].length >
-          this.secondaryContact['notes'].length
-            ? this.primaryContact['notes'].length
-            : this.secondaryContact['notes'].length;
-        for (let i = 0; i < notesColumns; i++) {
-          if (this.isPrimaryActive()) {
-            if (this.primaryContact['notes'][i] !== '' && this.primaryContact['notes'][i] !== undefined) {
-              this.primaryNotesSelectionModel.push(true);
-            }
-            if (this.secondaryContact['notes'][i] !== '' && this.secondaryContact['notes'][i] !== undefined) {
-              this.secondaryNotesSelectionModel.push(false);
-            }
-          } else {
-            if (this.primaryContact['notes'][i] !== '' && this.primaryContact['notes'][i] !== undefined) {
-              this.primaryNotesSelectionModel.push(false);
-            }
-            if (this.secondaryContact['notes'][i] !== '' && this.secondaryContact['notes'][i] !== undefined) {
-              this.secondaryNotesSelectionModel.push(true);
+        if (this.primaryContact['notes'] && this.primaryContact['notes'].length) {
+          for (let i = 0; i < this.primaryContact['notes'].length; i++) {
+            if (this.isPrimaryActive()) {
+              if (this.primaryContact['notes'][i] !== '' && this.primaryContact['notes'][i] !== undefined) {
+                this.primaryNotesSelectionModel.push(true);
+              }
+            } else {
+              if (this.primaryContact['notes'][i] !== '' && this.primaryContact['notes'][i] !== undefined) {
+                this.primaryNotesSelectionModel.push(false);
+              }
             }
           }
         }
+
+        if (this.secondaryContact['notes'] && this.secondaryContact['notes'].length) {
+          for (let i = 0; i < this.secondaryContact['notes'].length; i++) {
+            if (this.isPrimaryActive()) {
+              if (this.secondaryContact['notes'][i] !== '' && this.secondaryContact['notes'][i] !== undefined) {
+                this.secondaryNotesSelectionModel.push(false);
+              }
+            } else {
+              if (this.secondaryContact['notes'][i] !== '' && this.secondaryContact['notes'][i] !== undefined) {
+                this.secondaryNotesSelectionModel.push(true);
+              }
+            }
+          }
+        }
+
         this.previewContact = Object.assign({}, this.primaryContact);
       } else {
         this.updateColumn = this.contactCSVColumn;
