@@ -21,6 +21,7 @@ import { NoteCreateComponent } from 'src/app/components/note-create/note-create.
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { HandlerService } from 'src/app/services/handler.service';
 import { ContactAssignAutomationComponent } from '../../components/contact-assign-automation/contact-assign-automation.component';
+import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -225,6 +226,11 @@ export class ContactsComponent implements OnInit {
   }
 
   openFilter(): void {}
+
+  createContact(): void {
+    this.dialog.open(ContactCreateComponent, DialogSettings.CONTACT);
+  }
+
   importContacts(): void {
     this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
   }

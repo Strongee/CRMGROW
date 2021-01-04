@@ -7,10 +7,10 @@
     </button>
 </div>
 <div class="email-panel">
-    <form #emailForm="ngForm" (ngSubmit)="emailForm.form.valid ? sendEmail() : false">
+    <form #emailForm="ngForm" (ngSubmit)="emailSubmitted = true; emailForm.form.valid ? sendEmail() : false">
       <div class="email-box">
         <div class="v-center justify-content-between receiver pl-3 pr-2 py-1 contacts-wrapper">
-          <div class="v-center w-50">
+          <div class="v-center" style="width: 70%;">
             <label class="f-6 op-56 m-0">To:</label>
             <app-input-contacts
               [selectedContacts]="emailContacts"
@@ -54,9 +54,9 @@
           >
           <span
             class="invalid-error f-3 c-red inline-error" 
-            *ngIf="emailTitle.invalid && (emailTitle.touched || emailTitle.dirty)"
+            *ngIf="emailTitle.invalid && (emailTitle.touched || emailTitle.dirty || emailSubmitted) && emailSubmitted"
           >
-            Required!
+            Subject required!
           </span>
         </div>
         <div class="email-body">
