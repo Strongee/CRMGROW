@@ -568,9 +568,16 @@ export class ContactComponent implements OnInit {
       .subscribe((confirm) => {
         if (confirm) {
           this.taskService
-            .archive(activity.activity_detail._id)
+            .archive([activity.activity_detail._id])
             .subscribe((res) => {
-              console.log(res);
+              if (res['status']) {
+                const task = this.contact.activity.filter(
+                  (detailActivity) => detailActivity._id != activity._id
+                );
+                this.contact.activity = [];
+                this.contact.activity = task;
+                console.log('####', this.contact);
+              }
             });
         }
       });
