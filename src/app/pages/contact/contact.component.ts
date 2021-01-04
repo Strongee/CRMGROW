@@ -322,12 +322,14 @@ export class ContactComponent implements OnInit {
         }
       })
       .afterClosed()
-      .subscribe(() => {
-        this.storeService.selectedContact$.subscribe((res) => {
-          if (res) {
-            this.contact = res;
-          }
-        });
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.storeService.selectedContact$.subscribe((res) => {
+            if (res) {
+              this.contact = res;
+            }
+          });
+        }
       });
   }
 

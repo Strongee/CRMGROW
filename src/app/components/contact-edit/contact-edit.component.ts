@@ -10,6 +10,7 @@ import { ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
+import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
 
 @Component({
   selector: 'app-contact-edit',
@@ -47,7 +48,7 @@ export class ContactEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
-      this.contact = this.data.contact;
+      this.contact = { ...this.contact, ...this.data.contact };
       if (this.contact['cell_phone']) {
         this.cell_phone = this.contact['cell_phone'];
       }
@@ -65,23 +66,23 @@ export class ContactEditComponent implements OnInit {
   update(): void {
     this.isUpdating = true;
     const contactId = this.contact._id;
-    // let phoneNumber = this.contact['cell_phone'];
-    // let secondPhoneNumber = this.contact['secondary_phone'];
-    // if (this.cell_phone && this.cell_phone['internationalNumber']) {
-    //   phoneNumber = adjustPhoneNumber(this.cell_phone['internationalNumber']);
-    // }
-    // if (
-    //   this.second_cell_phone &&
-    //   this.second_cell_phone['internationalNumber']
-    // ) {
-    //   secondPhoneNumber = adjustPhoneNumber(
-    //     this.second_cell_phone['internationalNumber']
-    //   );
-    // }
-    // const contact = { ...this.contact, phoneNumber };
+    let phoneNumber = this.contact['cell_phone'];
+    let secondPhoneNumber = this.contact['secondary_phone'];
+    if (this.cell_phone && this.cell_phone['internationalNumber']) {
+      phoneNumber = adjustPhoneNumber(this.cell_phone['internationalNumber']);
+    }
+    if (
+      this.second_cell_phone &&
+      this.second_cell_phone['internationalNumber']
+    ) {
+      secondPhoneNumber = adjustPhoneNumber(
+        this.second_cell_phone['internationalNumber']
+      );
+    }
+    const contact = { ...this.contact, phoneNumber };
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService
-      .updateContact(contactId, this.contact)
+      .updateContact(contactId, contact)
       .subscribe((res) => {
         if (res) {
           this.isUpdating = false;
