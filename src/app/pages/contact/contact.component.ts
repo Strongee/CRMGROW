@@ -173,6 +173,7 @@ export class ContactComponent implements OnInit {
     this.storeService.selectedContact$.subscribe((res) => {
       if (res && res._id === this._id) {
         this.contact = res;
+        console.log('res', this.contact);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
@@ -529,7 +530,7 @@ export class ContactComponent implements OnInit {
       });
   }
 
-  completeTask(id: string): void {
+  completeTask(activity: any): void {
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -543,14 +544,16 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.taskService.complete(id).subscribe((res) => {
-            console.log(res);
-          });
+          this.taskService
+            .complete(activity.activity_detail._id)
+            .subscribe((res) => {
+              console.log(res);
+            });
         }
       });
   }
 
-  archiveTask(id: string): void {
+  archiveTask(activity: any): void {
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -564,14 +567,23 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.taskService.archive(id).subscribe((res) => {
-            console.log(res);
-          });
+          this.taskService
+            .archive([activity.activity_detail._id])
+            .subscribe((res) => {
+              if (res['status']) {
+                const task = this.contact.activity.filter(
+                  (detailActivity) => detailActivity._id != activity._id
+                );
+                this.contact.activity = [];
+                this.contact.activity = task;
+                console.log('####', this.contact);
+              }
+            });
         }
       });
   }
 
-  deleteTask(id: string): void {
+  deleteTask(activity: any): void {
     this.dialog.open(ConfirmComponent, {
       position: { top: '100px' },
       data: {
@@ -593,7 +605,7 @@ export class ContactComponent implements OnInit {
     });
   }
 
-  deleteNote(id: string): void {
+  deleteNote(activity: any): void {
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -607,7 +619,7 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.noteService.delete(id).subscribe((res) => {
+          this.noteService.delete(activity._id).subscribe((res) => {
             console.log('##', res);
           });
         }
