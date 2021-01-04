@@ -148,114 +148,7 @@ export class UploadContactsComponent implements OnInit {
           this.uploadRecursive(uploads);
 
         } else {
-          this.firstImport = false;
-          if (this.failedData.length) {
-            this.contacts = [];
-            this.sameContacts = [];
-            this.selectedMergeContacts = [];
-            let tagsKey = 'tags';
-            let noteKey = 'notes';
-            for (const key in this.updateColumn) {
-              if (this.updateColumn[key] === 'primary_email') {
-                for (let i = 0; i < this.columns.length; i++) {
-                  if (this.columns[i] === key) {
-                    this.columns[i] = 'primary_email';
-                  }
-                }
-                this.updateColumn['primary_email'] = 'primary_email';
-                delete this.updateColumn[key];
-              } else if (this.updateColumn[key] === 'primary_phone') {
-                for (let i = 0; i < this.columns.length; i++) {
-                  if (this.columns[i] === key) {
-                    this.columns[i] = 'primary_phone';
-                  }
-                }
-                this.updateColumn['primary_phone'] = 'primary_phone';
-                delete this.updateColumn[key];
-              } else if (this.updateColumn[key] === 'tags') {
-                tagsKey = key;
-              } else if (this.updateColumn[key] === 'notes') {
-                noteKey = key;
-              }
-            }
-
-            this.failedData.forEach((contact, index) => {
-              if (contact.data._id) {
-                contact.data.id = contact.data._id;
-                contact.data.primary_email = contact.data.email;
-                delete contact.data.email;
-                contact.data.primary_phone = contact.data.cell_phone;
-                delete contact.data.cell_phone;
-              } else {
-                contact.data.id = index;
-                contact.data.primary_email = contact.data.email;
-                delete contact.data.email;
-                contact.data.primary_phone = contact.data.cell_phone;
-                delete contact.data.cell_phone;
-                const tags = contact.data[tagsKey];
-                if (tags) {
-                  contact.data[tagsKey] = tags.split(',');
-                }
-              }
-
-              if (contact.data.label !== undefined && contact.data.label._id !== undefined) {
-                const labelName = contact.data.label.name;
-                const labelId = contact.data.label._id;
-                delete contact.data.label;
-                contact.data['label'] = labelName;
-                contact.data['label_id'] = labelId;
-              }
-
-              if (!contact.data._id && contact.data.notes) {
-                const notes = JSON.parse(contact.data.notes);
-                const parseNotes = [];
-
-                for (const note of notes) {
-                  let noteObj = {};
-                  noteObj[note.title] = note.content;
-                  parseNotes.push(noteObj);
-                }
-
-                // const tempNotes = [];
-                // for (let i = 0; i < parseNotes.length; i++) {
-                //   tempNotes.push(parseNotes);
-                // }
-                //
-                // for (let i = 0; i < this.notesColumns.length; i++) {
-                //   const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
-                //   if (columnIndex >= 0) {
-                //     tempNotes.splice(columnIndex, 1);
-                //   }
-                // }
-                // if (tempNotes.length) {
-                //   contact.data['other'] = JSON.stringify(tempNotes);
-                // }
-                contact.data.notes = parseNotes;
-              }
-              this.contacts.push(contact.data);
-            });
-
-            this.uploadPercent = 100;
-            this.uploadSubTitle = this.overallContacts + ' / ' + this.overallContacts + ' contacts';
-
-            this.checkingDuplicate = true;
-            const _SELF = this;
-            setTimeout( () => {
-              const dupTest = _SELF.checkDuplicate();
-              if (dupTest) {
-                _SELF.step = 3;
-                _SELF.checkingDuplicate = false;
-              } else {
-                _SELF.step = 4;
-                _SELF.checkingDuplicate = false;
-                _SELF.contactsToUpload = _SELF.contacts;
-              }
-            }, 1000);
-          } else {
-            this.uploading = false;
-            this.dialogRef.close({status: true});
-            this.handlerService.bulkContactAdd$();
-          }
+          this.confirmDuplicates();
 
           // this.failedRecords = [];
           // const emails = [];
@@ -631,6 +524,7 @@ export class UploadContactsComponent implements OnInit {
           this.contacts[i].id !== contact.id &&
           this.contacts[i][key] === contact[key]
         ) {
+          console.log("duplicate email ===============>", i, this.contacts[i][key]);
           return true;
         }
       }
@@ -1041,10 +935,13 @@ export class UploadContactsComponent implements OnInit {
           this.contactService.bulkCreate(csvContacts).subscribe(
             (res) => {
               this.uploading = false;
-              if (res) {
+              if (res && res.failure && res.failure.length) {
+                this.failedData = res.failure;
+                this.confirmDuplicates();
+              } else {
+                this.dialogRef.close({});
+                this.handlerService.bulkContactAdd$();
               }
-              this.dialogRef.close({});
-              this.handlerService.bulkContactAdd$();
             },
             (error) => {
               this.uploading = false;
@@ -1061,6 +958,99 @@ export class UploadContactsComponent implements OnInit {
 
   goToMatch(): void {
     this.step = 2;
+  }
+
+  confirmDuplicates(): void {
+    this.firstImport = false;
+    if (this.failedData.length) {
+      this.contacts = [];
+      this.sameContacts = [];
+      this.selectedMergeContacts = [];
+      let tagsKey = 'tags';
+      let noteKey = 'notes';
+      for (const key in this.updateColumn) {
+        if (this.updateColumn[key] === 'primary_email') {
+          for (let i = 0; i < this.columns.length; i++) {
+            if (this.columns[i] === key) {
+              this.columns[i] = 'primary_email';
+            }
+          }
+          delete this.updateColumn[key];
+          this.updateColumn['primary_email'] = 'primary_email';
+        } else if (this.updateColumn[key] === 'primary_phone') {
+          for (let i = 0; i < this.columns.length; i++) {
+            if (this.columns[i] === key) {
+              this.columns[i] = 'primary_phone';
+            }
+          }
+          delete this.updateColumn[key];
+          this.updateColumn['primary_phone'] = 'primary_phone';
+        } else if (this.updateColumn[key] === 'tags') {
+          tagsKey = key;
+        } else if (this.updateColumn[key] === 'notes') {
+          noteKey = key;
+        }
+      }
+
+      this.failedData.forEach((contact, index) => {
+        if (contact.data._id) {
+          contact.data.id = contact.data._id;
+          contact.data.primary_email = contact.data.email;
+          delete contact.data.email;
+          contact.data.primary_phone = contact.data.cell_phone;
+          delete contact.data.cell_phone;
+        } else {
+          contact.data.id = index;
+          contact.data.primary_email = contact.data.email;
+          delete contact.data.email;
+          contact.data.primary_phone = contact.data.cell_phone;
+          delete contact.data.cell_phone;
+          const tags = contact.data[tagsKey];
+          if (tags) {
+            contact.data[tagsKey] = tags.split(',');
+          }
+        }
+
+        if (contact.data.label !== undefined && contact.data.label._id !== undefined) {
+          const labelName = contact.data.label.name;
+          const labelId = contact.data.label._id;
+          delete contact.data.label;
+          contact.data['label'] = labelName;
+          contact.data['label_id'] = labelId;
+        }
+
+        if (!contact.data._id && contact.data.notes) {
+          const notes = JSON.parse(contact.data.notes);
+          const parseNotes = [];
+
+          for (const note of notes) {
+            let noteObj = {};
+            noteObj[note.title] = note.content;
+            parseNotes.push(noteObj);
+          }
+
+          contact.data.notes = parseNotes;
+        }
+        this.contacts.push(contact.data);
+      });
+
+      this.uploadPercent = 100;
+      this.uploadSubTitle = this.overallContacts + ' / ' + this.overallContacts + ' contacts';
+
+      this.checkingDuplicate = true;
+      const _SELF = this;
+      setTimeout(() => {
+        const dupTest = _SELF.checkDuplicate();
+        if (dupTest) {
+          _SELF.step = 3;
+          _SELF.checkingDuplicate = false;
+        } else {
+          _SELF.step = 4;
+          _SELF.checkingDuplicate = false;
+          _SELF.contactsToUpload = _SELF.contacts;
+        }
+      }, 1000);
+    }
   }
 
   rebuildContactForNote(): any {
