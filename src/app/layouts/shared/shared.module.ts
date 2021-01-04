@@ -42,6 +42,7 @@ import { PhonePipe } from '../../pipes/phone.pipe';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ColorSwatchesModule } from 'ngx-color/swatches';
 import { ChartsModule } from 'ng2-charts';
+import { SocialLoginModule } from 'angularx-social-login';
 
 @NgModule({
   declarations: [LoadingOverlayComponent, DurationPipe, PhonePipe],
@@ -83,6 +84,7 @@ import { ChartsModule } from 'ng2-charts';
     TimeagoModule.forRoot(),
     OverlayModule,
     ChartsModule,
+    SocialLoginModule
   ],
   exports: [
     FormsModule,
@@ -121,6 +123,7 @@ import { ChartsModule } from 'ng2-charts';
     PhonePipe,
     OverlayModule,
     ChartsModule,
+    SocialLoginModule
   ]
 })
 export class SharedModule {}

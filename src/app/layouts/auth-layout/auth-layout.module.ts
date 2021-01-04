@@ -8,6 +8,8 @@ import { RegisterComponent } from '../../pages/register/register.component';
 import { ForgotPasswordComponent } from '../../pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from '../../pages/reset-password/reset-password.component';
 import { SharedModule } from '../shared/shared.module';
+import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,27 @@ import { SharedModule } from '../shared/shared.module';
     ForgotPasswordComponent,
     ResetPasswordComponent
   ],
-  imports: [CommonModule, SharedModule, RouterModule.forChild(AuthLayoutRoutes)]
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule.forChild(AuthLayoutRoutes)
+  ],
+  providers: [
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
+  ]
 })
 export class AuthLayoutModule {}
+
+const config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider(environment.ClientId.Google)
+  }
+]);
+
+export function provideConfig(): any {
+  return config;
+}

@@ -35,6 +35,18 @@ export class UserService extends HttpService {
       })
       .pipe(catchError(this.handleError('SIGNIN REQUEST')));
   }
+
+  public socialSignIn(user): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(this.server + AUTH.SOCIAL_SIGNIN, JSON.stringify(user), {
+        headers: reqHeader
+      })
+      .pipe(catchError(this.handleError('SOCIAL SIGNIN REQUEST')));
+  }
   /**
    * LOG OUT -> CALL API
    */
@@ -276,4 +288,5 @@ export class UserService extends HttpService {
         catchError(this.handleError('CONNECT SMTP'))
       );
   }
+
 }
