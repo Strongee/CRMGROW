@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewContainerRef,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
@@ -97,6 +103,7 @@ export class ContactComponent implements OnInit {
   action: TabItem = this.tabs[0];
 
   contact: ContactDetail = new ContactDetail();
+  selectedContact: Contact = new Contact();
   groupActions = {};
   mainTimelines: ActivityDetail[] = [];
   details: any = {};
@@ -163,7 +170,8 @@ export class ContactComponent implements OnInit {
     private handlerService: HandlerService,
     private viewContainerRef: ViewContainerRef,
     private materialService: MaterialService,
-    private helperSerivce: HelperService
+    private helperSerivce: HelperService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -173,10 +181,13 @@ export class ContactComponent implements OnInit {
     this.storeService.selectedContact$.subscribe((res) => {
       if (res && res._id === this._id) {
         this.contact = res;
+        this.selectedContact = res;
+        console.log('res', this.contact);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
         this.contact = res;
+        this.selectedContact = res;
         this.groupActivities();
       }
     });
@@ -282,7 +293,7 @@ export class ContactComponent implements OnInit {
       maxWidth: '700px',
       maxHeight: '600px',
       data: {
-        contact: this.contact
+        contact: this.selectedContact
       }
     });
   }
@@ -394,10 +405,13 @@ export class ContactComponent implements OnInit {
         right: '50px'
       },
       width: '100vw',
-      maxWidth: '600px',
+      maxWidth: '650px',
       panelClass: 'send-email',
       backdropClass: 'cdk-send-email',
-      disableClose: false
+      disableClose: false,
+      data: {
+        contact: this.contact
+      }
     });
   }
 
@@ -521,7 +535,7 @@ export class ContactComponent implements OnInit {
       .open(TaskEditComponent, {
         width: '98vw',
         maxWidth: '394px',
-        data: activity
+        data: activity.activity_detail
       })
       .afterClosed()
       .subscribe((res) => {
@@ -529,7 +543,7 @@ export class ContactComponent implements OnInit {
       });
   }
 
-  completeTask(id: string): void {
+  completeTask(activity: any): void {
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -543,14 +557,23 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.taskService.complete(id).subscribe((res) => {
-            console.log(res);
-          });
+          this.taskService
+            .complete([activity.activity_detail._id])
+            .subscribe((res) => {
+              if (res['status']) {
+                this.contact = new ContactDetail();
+                this.storeService.selectedContact$.subscribe((res) => {
+                  this.contact = res;
+                  this.groupActivities();
+                  this.timeLineArrangement();
+                });
+              }
+            });
         }
       });
   }
 
-  archiveTask(id: string): void {
+  archiveTask(activity: any): void {
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -564,14 +587,23 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.taskService.archive(id).subscribe((res) => {
-            console.log(res);
-          });
+          this.taskService
+            .archive([activity.activity_detail._id])
+            .subscribe((res) => {
+              if (res['status']) {
+                const task = this.contact.activity.filter(
+                  (detailActivity) => detailActivity._id != activity._id
+                );
+                this.contact.activity = [];
+                this.contact.activity = task;
+                this.changeDetectorRef.detectChanges();
+              }
+            });
         }
       });
   }
 
-  deleteTask(id: string): void {
+  deleteTask(activity: any): void {
     this.dialog.open(ConfirmComponent, {
       position: { top: '100px' },
       data: {
@@ -593,7 +625,7 @@ export class ContactComponent implements OnInit {
     });
   }
 
-  deleteNote(id: string): void {
+  deleteNote(activity: any): void {
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -607,7 +639,7 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.noteService.delete(id).subscribe((res) => {
+          this.noteService.delete(activity._id).subscribe((res) => {
             console.log('##', res);
           });
         }
