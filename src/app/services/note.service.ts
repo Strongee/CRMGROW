@@ -36,4 +36,18 @@ export class NoteService extends HttpService {
       catchError(this.handleError('BULK NOTE CREATE', null))
     );
   }
+
+  update(id: string, data: any): Observable<any> {
+    return this.httpClient.put(this.server + NOTE.UPDATE + id, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('NOTE UPDATE', null))
+    );
+  }
+
+  delete(id: string): Observable<any> {
+    return this.httpClient.delete(this.server + NOTE.UPDATE + id).pipe(
+      map((res) => res),
+      catchError(this.handleError('NOTE DELETE', null))
+    );
+  }
 }
