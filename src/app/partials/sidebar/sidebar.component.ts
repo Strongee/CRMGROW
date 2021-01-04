@@ -26,7 +26,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'deals',
     title: 'Deals',
-    icon: '',
+    icon: 'i-deals bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -86,7 +86,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'templates',
     title: 'Templates',
-    icon: 'i-lunch bgc-dark',
+    icon: 'i-template bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -96,7 +96,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'teams',
     title: 'Teams',
-    icon: 'i-lunch bgc-dark',
+    icon: 'i-teams bgc-dark',
     class: '',
     beta: false,
     betaClass: '',
@@ -106,7 +106,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'affiliate',
     title: 'Affiliate',
-    icon: 'i-automation bgc-dark',
+    icon: 'i-affiliate bgc-dark',
     class: '',
     beta: false,
     betaClass: '',

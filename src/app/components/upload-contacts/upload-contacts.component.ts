@@ -125,9 +125,13 @@ export class UploadContactsComponent implements OnInit {
         this.uploading = false;
         this.uploadedContacts = response.failure;
         this.isUploading = false;
-        this.isCompleteUpload = this.uploadedCount >= this.overallContacts ? true : false;
-        this.uploadPercent = Math.round(this.uploadedCount / this.overallContacts * 100 ) ;
-        this.uploadSubTitle = this.uploadedCount + ' / ' + this.overallContacts + ' contacts';
+        this.isCompleteUpload =
+          this.uploadedCount >= this.overallContacts ? true : false;
+        this.uploadPercent = Math.round(
+          (this.uploadedCount / this.overallContacts) * 100
+        );
+        this.uploadSubTitle =
+          this.uploadedCount + ' / ' + this.overallContacts + ' contacts';
         if (this.uploadedContacts && this.uploadedContacts.length) {
           for (const contact of this.uploadedContacts) {
             this.failedData.push(contact);
@@ -146,7 +150,6 @@ export class UploadContactsComponent implements OnInit {
           }
 
           this.uploadRecursive(uploads);
-
         } else {
           this.confirmDuplicates();
 
@@ -506,7 +509,11 @@ export class UploadContactsComponent implements OnInit {
         if (j === i) {
           continue;
         } else {
-          if (this.contacts[i][key] && this.contacts[j][key] && this.contacts[i][key] === this.contacts[j][key]) {
+          if (
+            this.contacts[i][key] &&
+            this.contacts[j][key] &&
+            this.contacts[i][key] === this.contacts[j][key]
+          ) {
             return true;
           }
         }
@@ -524,7 +531,6 @@ export class UploadContactsComponent implements OnInit {
           this.contacts[i].id !== contact.id &&
           this.contacts[i][key] === contact[key]
         ) {
-          console.log("duplicate email ===============>", i, this.contacts[i][key]);
           return true;
         }
       }
@@ -686,6 +692,37 @@ export class UploadContactsComponent implements OnInit {
   //   }
   // }
 
+  checkDuplicateColumn(dupIndex, contact, column): any {
+    const key = this.updateColumn[column];
+    if (
+      key === 'primary_email' ||
+      key === 'primary_phone' ||
+      key === 'first_name' ||
+      key === 'last_name'
+    ) {
+      for (const contactItem of this.sameContacts[dupIndex]) {
+        if (
+          !!contactItem[key] &&
+          !!contact[key] &&
+          contactItem[key] === contact[key] &&
+          contactItem.id !== contact.id
+        ) {
+          if (key === 'first_name' || key === 'last_name') {
+            if (
+              contactItem['first_name'] + contactItem['last_name'] ===
+              contact['first_name'] + contact['last_name']
+            ) {
+              return true;
+            }
+          } else {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   keepSeparated(dupItem): void {
     this.contactsToUpload = this.contactsToUpload.concat(dupItem.values);
     this.sameContacts.some((e, index) => {
@@ -753,7 +790,6 @@ export class UploadContactsComponent implements OnInit {
             this.contacts.splice(idxSecondary, 1);
           }
 
-
           if (merged['secondary_email']) {
             let secondaryEmailKey = '';
             for (const key in this.updateColumn) {
@@ -802,7 +838,9 @@ export class UploadContactsComponent implements OnInit {
               }
 
               for (let i = 0; i < this.notesColumns.length; i++) {
-                const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
+                const columnIndex = tempNotes.findIndex(
+                  (item) => item[this.notesColumns[i]]
+                );
                 if (columnIndex >= 0) {
                   tempNotes.splice(columnIndex, 1);
                 }
@@ -896,9 +934,13 @@ export class UploadContactsComponent implements OnInit {
             if (i === j) {
               continue;
             }
-            if (dupItem[i]['primary_email'] !== '' && dupItem[j]['primary_email'] !== '' &&
-              dupItem[i]['primary_email'] !== null && dupItem[j]['primary_email'] !== null &&
-              dupItem[i]['primary_email'] === dupItem[j]['primary_email']) {
+            if (
+              dupItem[i]['primary_email'] !== '' &&
+              dupItem[j]['primary_email'] !== '' &&
+              dupItem[i]['primary_email'] !== null &&
+              dupItem[j]['primary_email'] !== null &&
+              dupItem[i]['primary_email'] === dupItem[j]['primary_email']
+            ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
               return;
@@ -1011,7 +1053,10 @@ export class UploadContactsComponent implements OnInit {
           }
         }
 
-        if (contact.data.label !== undefined && contact.data.label._id !== undefined) {
+        if (
+          contact.data.label !== undefined &&
+          contact.data.label._id !== undefined
+        ) {
           const labelName = contact.data.label.name;
           const labelId = contact.data.label._id;
           delete contact.data.label;
@@ -1024,7 +1069,7 @@ export class UploadContactsComponent implements OnInit {
           const parseNotes = [];
 
           for (const note of notes) {
-            let noteObj = {};
+            const noteObj = {};
             noteObj[note.title] = note.content;
             parseNotes.push(noteObj);
           }
@@ -1035,7 +1080,8 @@ export class UploadContactsComponent implements OnInit {
       });
 
       this.uploadPercent = 100;
-      this.uploadSubTitle = this.overallContacts + ' / ' + this.overallContacts + ' contacts';
+      this.uploadSubTitle =
+        this.overallContacts + ' / ' + this.overallContacts + ' contacts';
 
       this.checkingDuplicate = true;
       const _SELF = this;
@@ -1062,7 +1108,7 @@ export class UploadContactsComponent implements OnInit {
       if (contact.notes && contact.notes.length) {
         const tempNotes = [];
         for (let i = 0; i < contact.notes.length; i++) {
-          for (let key in contact.notes[i]) {
+          for (const key in contact.notes[i]) {
             if (contact.notes[i][key] && contact.notes[i][key] !== '') {
               tempNotes.push({
                 title: key,
@@ -1245,7 +1291,9 @@ export class UploadContactsComponent implements OnInit {
           if (res) {
             const updated = res.contact;
             if (updated) {
-              const contactIndex = this.contacts.findIndex((contact) => contact.id === id);
+              const contactIndex = this.contacts.findIndex(
+                (contact) => contact.id === id
+              );
               if (contactIndex >= 0) {
                 this.contacts.splice(contactIndex, 1, updated);
               }
