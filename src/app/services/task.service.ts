@@ -192,4 +192,14 @@ export class TaskService extends HttpService {
       catchError(this.handleError('BULK TASK UPDATE', null))
     );
   }
+
+  clear$(): void {
+    this.loadStatus.next(STATUS.NONE);
+    this.searchOption.next(new TaskSearchOption());
+    this.durationOption.next(new TaskDurationOption());
+    this.sortOption.next(-1);
+    this.total.next(0);
+    this.page.next(1);
+    this.pageSize.next(20);
+  }
 }

@@ -81,4 +81,11 @@ export class DealsService extends HttpService {
   moveDeal(data: any): any {
     return this.httpClient.post(this.server + DEAL.MOVE, data);
   }
+
+  clear$(): void {
+    this.loadStageStatus.next(STATUS.NONE);
+    this.loadDealStatus.next(STATUS.NONE);
+    this.stages.next([]);
+    this.deals.next([]);
+  }
 }

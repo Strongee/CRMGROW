@@ -14,6 +14,7 @@ import { ChartType } from 'chart.js';
 import { MultiDataSet, Label, Color } from 'ng2-charts';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { SendEmailComponent } from '../../components/send-email/send-email.component';
+import { HandlerService } from 'src/app/services/handler.service';
 
 @Component({
   selector: 'app-navbar',
@@ -118,6 +119,7 @@ export class NavbarComponent implements OnInit {
     public userService: UserService,
     private storeService: StoreService,
     private contactService: ContactService,
+    private handlerService: HandlerService,
     private dialog: MatDialog,
     private router: Router
   ) {}
@@ -169,7 +171,7 @@ export class NavbarComponent implements OnInit {
     this.userService.logout().subscribe(
       () => {
         this.userService.logoutImpl();
-        this.storeService.clearData();
+        this.handlerService.clearData();
         this.router.navigate(['/']);
       },
       () => {
@@ -198,7 +200,6 @@ export class NavbarComponent implements OnInit {
   changeType(type: any): void {
     this.currentSearchType = type;
   }
-
   clear(): void {
     this.sentSms = [];
   }

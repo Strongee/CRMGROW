@@ -79,4 +79,11 @@ export class ActivityService extends HttpService {
       }
     });
   }
+
+  clear$(): void {
+    this.loadStatus.next(STATUS.NONE);
+    this.total.next(0);
+    this.page.next(1);
+    this.pageSize.next(20);
+  }
 }

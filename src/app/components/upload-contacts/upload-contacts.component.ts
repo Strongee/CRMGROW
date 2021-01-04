@@ -125,9 +125,13 @@ export class UploadContactsComponent implements OnInit {
         this.uploading = false;
         this.uploadedContacts = response.failure;
         this.isUploading = false;
-        this.isCompleteUpload = this.uploadedCount >= this.overallContacts ? true : false;
-        this.uploadPercent = Math.round(this.uploadedCount / this.overallContacts * 100 ) ;
-        this.uploadSubTitle = this.uploadedCount + ' / ' + this.overallContacts + ' contacts';
+        this.isCompleteUpload =
+          this.uploadedCount >= this.overallContacts ? true : false;
+        this.uploadPercent = Math.round(
+          (this.uploadedCount / this.overallContacts) * 100
+        );
+        this.uploadSubTitle =
+          this.uploadedCount + ' / ' + this.overallContacts + ' contacts';
         if (this.uploadedContacts && this.uploadedContacts.length) {
           for (const contact of this.uploadedContacts) {
             this.failedData.push(contact);
@@ -146,116 +150,8 @@ export class UploadContactsComponent implements OnInit {
           }
 
           this.uploadRecursive(uploads);
-
         } else {
-          this.firstImport = false;
-          if (this.failedData.length) {
-            this.contacts = [];
-            this.sameContacts = [];
-            this.selectedMergeContacts = [];
-            let tagsKey = 'tags';
-            let noteKey = 'notes';
-            for (const key in this.updateColumn) {
-              if (this.updateColumn[key] === 'primary_email') {
-                for (let i = 0; i < this.columns.length; i++) {
-                  if (this.columns[i] === key) {
-                    this.columns[i] = 'primary_email';
-                  }
-                }
-                this.updateColumn['primary_email'] = 'primary_email';
-                delete this.updateColumn[key];
-              } else if (this.updateColumn[key] === 'primary_phone') {
-                for (let i = 0; i < this.columns.length; i++) {
-                  if (this.columns[i] === key) {
-                    this.columns[i] = 'primary_phone';
-                  }
-                }
-                this.updateColumn['primary_phone'] = 'primary_phone';
-                delete this.updateColumn[key];
-              } else if (this.updateColumn[key] === 'tags') {
-                tagsKey = key;
-              } else if (this.updateColumn[key] === 'notes') {
-                noteKey = key;
-              }
-            }
-
-            this.failedData.forEach((contact, index) => {
-              if (contact.data._id) {
-                contact.data.id = contact.data._id;
-                contact.data.primary_email = contact.data.email;
-                delete contact.data.email;
-                contact.data.primary_phone = contact.data.cell_phone;
-                delete contact.data.cell_phone;
-              } else {
-                contact.data.id = index;
-                contact.data.primary_email = contact.data.email;
-                delete contact.data.email;
-                contact.data.primary_phone = contact.data.cell_phone;
-                delete contact.data.cell_phone;
-                const tags = contact.data[tagsKey];
-                if (tags) {
-                  contact.data[tagsKey] = tags.split(',');
-                }
-              }
-
-              if (contact.data.label !== undefined && contact.data.label._id !== undefined) {
-                const labelName = contact.data.label.name;
-                const labelId = contact.data.label._id;
-                delete contact.data.label;
-                contact.data['label'] = labelName;
-                contact.data['label_id'] = labelId;
-              }
-
-              if (!contact.data._id && contact.data.notes) {
-                const notes = JSON.parse(contact.data.notes);
-                const parseNotes = [];
-
-                for (const note of notes) {
-                  let noteObj = {};
-                  noteObj[note.title] = note.content;
-                  parseNotes.push(noteObj);
-                }
-
-                // const tempNotes = [];
-                // for (let i = 0; i < parseNotes.length; i++) {
-                //   tempNotes.push(parseNotes);
-                // }
-                //
-                // for (let i = 0; i < this.notesColumns.length; i++) {
-                //   const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
-                //   if (columnIndex >= 0) {
-                //     tempNotes.splice(columnIndex, 1);
-                //   }
-                // }
-                // if (tempNotes.length) {
-                //   contact.data['other'] = JSON.stringify(tempNotes);
-                // }
-                contact.data.notes = parseNotes;
-              }
-              this.contacts.push(contact.data);
-            });
-
-            this.uploadPercent = 100;
-            this.uploadSubTitle = this.overallContacts + ' / ' + this.overallContacts + ' contacts';
-
-            this.checkingDuplicate = true;
-            const _SELF = this;
-            setTimeout( () => {
-              const dupTest = _SELF.checkDuplicate();
-              if (dupTest) {
-                _SELF.step = 3;
-                _SELF.checkingDuplicate = false;
-              } else {
-                _SELF.step = 4;
-                _SELF.checkingDuplicate = false;
-                _SELF.contactsToUpload = _SELF.contacts;
-              }
-            }, 1000);
-          } else {
-            this.uploading = false;
-            this.dialogRef.close({status: true});
-            this.handlerService.bulkContactAdd$();
-          }
+          this.confirmDuplicates();
 
           // this.failedRecords = [];
           // const emails = [];
@@ -613,7 +509,11 @@ export class UploadContactsComponent implements OnInit {
         if (j === i) {
           continue;
         } else {
-          if (this.contacts[i][key] && this.contacts[j][key] && this.contacts[i][key] === this.contacts[j][key]) {
+          if (
+            this.contacts[i][key] &&
+            this.contacts[j][key] &&
+            this.contacts[i][key] === this.contacts[j][key]
+          ) {
             return true;
           }
         }
@@ -792,6 +692,37 @@ export class UploadContactsComponent implements OnInit {
   //   }
   // }
 
+  checkDuplicateColumn(dupIndex, contact, column): any {
+    const key = this.updateColumn[column];
+    if (
+      key === 'primary_email' ||
+      key === 'primary_phone' ||
+      key === 'first_name' ||
+      key === 'last_name'
+    ) {
+      for (const contactItem of this.sameContacts[dupIndex]) {
+        if (
+          !!contactItem[key] &&
+          !!contact[key] &&
+          contactItem[key] === contact[key] &&
+          contactItem.id !== contact.id
+        ) {
+          if (key === 'first_name' || key === 'last_name') {
+            if (
+              contactItem['first_name'] + contactItem['last_name'] ===
+              contact['first_name'] + contact['last_name']
+            ) {
+              return true;
+            }
+          } else {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   keepSeparated(dupItem): void {
     this.contactsToUpload = this.contactsToUpload.concat(dupItem.values);
     this.sameContacts.some((e, index) => {
@@ -859,7 +790,6 @@ export class UploadContactsComponent implements OnInit {
             this.contacts.splice(idxSecondary, 1);
           }
 
-
           if (merged['secondary_email']) {
             let secondaryEmailKey = '';
             for (const key in this.updateColumn) {
@@ -908,7 +838,9 @@ export class UploadContactsComponent implements OnInit {
               }
 
               for (let i = 0; i < this.notesColumns.length; i++) {
-                const columnIndex = tempNotes.findIndex((item) => item[this.notesColumns[i]]);
+                const columnIndex = tempNotes.findIndex(
+                  (item) => item[this.notesColumns[i]]
+                );
                 if (columnIndex >= 0) {
                   tempNotes.splice(columnIndex, 1);
                 }
@@ -1002,9 +934,13 @@ export class UploadContactsComponent implements OnInit {
             if (i === j) {
               continue;
             }
-            if (dupItem[i]['primary_email'] !== '' && dupItem[j]['primary_email'] !== '' &&
-              dupItem[i]['primary_email'] !== null && dupItem[j]['primary_email'] !== null &&
-              dupItem[i]['primary_email'] === dupItem[j]['primary_email']) {
+            if (
+              dupItem[i]['primary_email'] !== '' &&
+              dupItem[j]['primary_email'] !== '' &&
+              dupItem[i]['primary_email'] !== null &&
+              dupItem[j]['primary_email'] !== null &&
+              dupItem[i]['primary_email'] === dupItem[j]['primary_email']
+            ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
               return;
@@ -1041,10 +977,13 @@ export class UploadContactsComponent implements OnInit {
           this.contactService.bulkCreate(csvContacts).subscribe(
             (res) => {
               this.uploading = false;
-              if (res) {
+              if (res && res.failure && res.failure.length) {
+                this.failedData = res.failure;
+                this.confirmDuplicates();
+              } else {
+                this.dialogRef.close({});
+                this.handlerService.bulkContactAdd$();
               }
-              this.dialogRef.close({});
-              this.handlerService.bulkContactAdd$();
             },
             (error) => {
               this.uploading = false;
@@ -1063,6 +1002,103 @@ export class UploadContactsComponent implements OnInit {
     this.step = 2;
   }
 
+  confirmDuplicates(): void {
+    this.firstImport = false;
+    if (this.failedData.length) {
+      this.contacts = [];
+      this.sameContacts = [];
+      this.selectedMergeContacts = [];
+      let tagsKey = 'tags';
+      let noteKey = 'notes';
+      for (const key in this.updateColumn) {
+        if (this.updateColumn[key] === 'primary_email') {
+          for (let i = 0; i < this.columns.length; i++) {
+            if (this.columns[i] === key) {
+              this.columns[i] = 'primary_email';
+            }
+          }
+          delete this.updateColumn[key];
+          this.updateColumn['primary_email'] = 'primary_email';
+        } else if (this.updateColumn[key] === 'primary_phone') {
+          for (let i = 0; i < this.columns.length; i++) {
+            if (this.columns[i] === key) {
+              this.columns[i] = 'primary_phone';
+            }
+          }
+          delete this.updateColumn[key];
+          this.updateColumn['primary_phone'] = 'primary_phone';
+        } else if (this.updateColumn[key] === 'tags') {
+          tagsKey = key;
+        } else if (this.updateColumn[key] === 'notes') {
+          noteKey = key;
+        }
+      }
+
+      this.failedData.forEach((contact, index) => {
+        if (contact.data._id) {
+          contact.data.id = contact.data._id;
+          contact.data.primary_email = contact.data.email;
+          delete contact.data.email;
+          contact.data.primary_phone = contact.data.cell_phone;
+          delete contact.data.cell_phone;
+        } else {
+          contact.data.id = index;
+          contact.data.primary_email = contact.data.email;
+          delete contact.data.email;
+          contact.data.primary_phone = contact.data.cell_phone;
+          delete contact.data.cell_phone;
+          const tags = contact.data[tagsKey];
+          if (tags) {
+            contact.data[tagsKey] = tags.split(',');
+          }
+        }
+
+        if (
+          contact.data.label !== undefined &&
+          contact.data.label._id !== undefined
+        ) {
+          const labelName = contact.data.label.name;
+          const labelId = contact.data.label._id;
+          delete contact.data.label;
+          contact.data['label'] = labelName;
+          contact.data['label_id'] = labelId;
+        }
+
+        if (!contact.data._id && contact.data.notes) {
+          const notes = JSON.parse(contact.data.notes);
+          const parseNotes = [];
+
+          for (const note of notes) {
+            const noteObj = {};
+            noteObj[note.title] = note.content;
+            parseNotes.push(noteObj);
+          }
+
+          contact.data.notes = parseNotes;
+        }
+        this.contacts.push(contact.data);
+      });
+
+      this.uploadPercent = 100;
+      this.uploadSubTitle =
+        this.overallContacts + ' / ' + this.overallContacts + ' contacts';
+
+      this.checkingDuplicate = true;
+      const _SELF = this;
+      setTimeout(() => {
+        const dupTest = _SELF.checkDuplicate();
+        if (dupTest) {
+          _SELF.step = 3;
+          _SELF.checkingDuplicate = false;
+        } else {
+          _SELF.step = 4;
+          _SELF.checkingDuplicate = false;
+          _SELF.contactsToUpload = _SELF.contacts;
+        }
+      }, 1000);
+    }
+  }
+
   rebuildContactForNote(): any {
     const uploadContacts = [];
     for (let i = 0; i < this.contactsToUpload.length; i++) {
@@ -1072,7 +1108,7 @@ export class UploadContactsComponent implements OnInit {
       if (contact.notes && contact.notes.length) {
         const tempNotes = [];
         for (let i = 0; i < contact.notes.length; i++) {
-          for (let key in contact.notes[i]) {
+          for (const key in contact.notes[i]) {
             if (contact.notes[i][key] && contact.notes[i][key] !== '') {
               tempNotes.push({
                 title: key,
@@ -1255,7 +1291,9 @@ export class UploadContactsComponent implements OnInit {
           if (res) {
             const updated = res.contact;
             if (updated) {
-              const contactIndex = this.contacts.findIndex((contact) => contact.id === id);
+              const contactIndex = this.contacts.findIndex(
+                (contact) => contact.id === id
+              );
               if (contactIndex >= 0) {
                 this.contacts.splice(contactIndex, 1, updated);
               }

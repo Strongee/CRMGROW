@@ -424,6 +424,12 @@
 .i-analytics {
   mask-image: url('/assets/img/analytics.svg');
 }
+.i-affiliate {
+  mask-image: url('/assets/img/affiliate.svg');
+  &.i-icon {
+    height: 24px;
+  }
+}
 .icon-close {
   background-image: url('/assets/img/close.svg');
   background-position: center;
@@ -541,4 +547,7 @@
 }
 .act-sms_trackers {
   background-image: url('/assets/img/activities/note.svg');
+}
+.act-deals {
+  background-image: url('/assets/img/deals.svg');
 }
