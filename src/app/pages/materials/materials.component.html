@@ -30,8 +30,17 @@
     </div>
   </div>
   <div class="material-folders mt-4 mb-2">
-    <h6 class="f-6 font-weight-bold c-dark mb-3">Folders</h6>
-    <div class="row">
+    <div class="v-center mb-3">
+      <div class="f-6 font-weight-bold c-dark c-pointer mr-1" (click)="backFolders()">
+        <h6 class="f-6 font-weight-bold c-dark m-0">Folders</h6>
+      </div>
+      <div *ngIf="folderFlag">
+        <span class="f-4 fw-600 c-dark" *ngIf="provideFlag">/ Provided Material</span>
+        <span class="f-4 fw-600 c-dark" *ngIf="ownFlag">/ Own Material</span>
+        <span class="f-4 fw-600 c-dark" *ngIf="teamFlag">/ Team Dynasty</span>  
+      </div>
+    </div>
+    <div class="row" *ngIf="!folderFlag">
       <div class="col-md-4">
         <div class="v-center justify-content-between p-3 bgc-dark-trans08 rounded c-pointer" (click)="selectFolder('provide')">
           <div class="v-center c-pointer">

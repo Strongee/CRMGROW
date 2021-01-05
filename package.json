@@ -79,7 +79,6 @@
     "quill-blot-formatter": "^1.0.5",
     "quill-image-drop-module": "^1.0.3",
     "quill-image-resize-module": "^3.0.0",
-    "quill-table-module": "^1.0.1",
     "recordrtc": "^5.6.1",
     "rxjs": "~6.5.5",
     "ts-ebml": "^2.0.2",

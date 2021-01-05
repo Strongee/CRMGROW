@@ -20,6 +20,7 @@ import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component
 import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { MaterialSendComponent } from 'src/app/components/material-send/material-send.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-materials',
@@ -75,6 +76,7 @@ export class MaterialsComponent implements OnInit {
   provideFlag = true;
   ownFlag = false;
   teamFlag = false;
+  folderFlag = false;
 
   constructor(
     private dialog: MatDialog,
@@ -82,6 +84,7 @@ export class MaterialsComponent implements OnInit {
     public materialService: MaterialService,
     private userService: UserService,
     private toast: ToastrService,
+    private location: Location,
     private router: Router
   ) {
     this.loadVideos();
@@ -202,23 +205,35 @@ export class MaterialsComponent implements OnInit {
   }
 
   selectFolder(type: string): void {
+    this.folderFlag = true;
     switch (type) {
       case 'provide':
         this.provideFlag = true;
         this.ownFlag = false;
         this.teamFlag = false;
+        this.location.replaceState('materials/provided');
         break;
       case 'own':
         this.provideFlag = false;
         this.ownFlag = true;
         this.teamFlag = false;
+        this.location.replaceState('materials/own');
         break;
       case 'team':
         this.provideFlag = false;
         this.ownFlag = false;
         this.teamFlag = true;
+        this.location.replaceState('materials/team');
         break;
     }
+  }
+
+  backFolders(): void {
+    this.folderFlag = false;
+    this.location.replaceState('materials');
+    this.provideFlag = true;
+    this.ownFlag = false;
+    this.teamFlag = false;
   }
 
   sendMaterial(material: any): void {
