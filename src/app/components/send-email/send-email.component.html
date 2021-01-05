@@ -53,19 +53,20 @@
             required
           >
           <span
-            class="invalid-error f-3 c-red inline-error" 
+            class="invalid-error f-3 c-red inline-error"
             *ngIf="emailTitle.invalid && (emailTitle.touched || emailTitle.dirty || emailSubmitted) && emailSubmitted"
           >
             Subject required!
           </span>
         </div>
         <div class="email-body">
-          <app-html-editor 
-            [(value)]="emailContent" 
+          <app-html-editor
+            [(value)]="emailContent"
             placeholder="Start typing here..."
             required="true"
             hasToken="true"
             [style]="{height: '300px'}"
+            (attachmentChange)="onAttachmentChange($event)"
             #editor
             >
           </app-html-editor>

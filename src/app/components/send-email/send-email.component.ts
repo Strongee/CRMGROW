@@ -42,6 +42,7 @@ export class SendEmailComponent implements OnInit {
   minDate: any;
   schedule_time = '12:00:00.000';
   times = TIMES;
+  attachments = [];
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
@@ -165,5 +166,9 @@ export class SendEmailComponent implements OnInit {
   removeSchedule(): void {
     this.planned == false;
     this.scheduleDateTime = '';
+  }
+
+  onAttachmentChange(attachments): void {
+    this.attachments = attachments;
   }
 }

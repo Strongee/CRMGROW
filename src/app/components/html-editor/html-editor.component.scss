@@ -35,4 +35,35 @@
     left: 15px;
     font-size: 14px;
   }
+
+  .attach-files {
+    max-height: 100px;
+    overflow: auto;
+
+    .attachment {
+      height: 25px;
+      display: flex;
+      font-size: 14px;
+      background: #f5f5f5;
+      margin-bottom: 3px;
+      padding: 0px 8px;
+
+      &:last-child {
+        margin-bottom: 0px;
+      }
+
+      .name {
+        max-width: calc(100% - 120px);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color: #15c;
+        font-weight: 600;
+        margin-right: 5px;
+      }
+
+      .close {
+        margin-left: auto;
+      }
+    }
+  }
 }

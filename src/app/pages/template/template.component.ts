@@ -8,6 +8,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 import { Template } from 'src/app/models/template.model';
+import { PageCanDeactivate } from '../../variables/abstractors';
 // import ImageResize from 'quill-image-resize-module';
 // Quill.register('modules/imageResize', ImageResize);
 
@@ -16,7 +17,9 @@ import { Template } from 'src/app/models/template.model';
   templateUrl: './template.component.html',
   styleUrls: ['./template.component.scss']
 })
-export class TemplateComponent implements OnInit, OnDestroy {
+export class TemplateComponent
+  extends PageCanDeactivate
+  implements OnInit, OnDestroy {
   template: Template = new Template();
   isNew = true;
   type = true;
@@ -31,7 +34,6 @@ export class TemplateComponent implements OnInit, OnDestroy {
 
   isLoading = false;
   isSaving = false;
-
   submitted = false;
 
   subjectCursorStart = 0;
@@ -44,6 +46,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
   smsContentCursorEnd = 0;
   smsContent = '';
   focusEditor = '';
+  saved = true;
 
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
@@ -52,7 +55,9 @@ export class TemplateComponent implements OnInit, OnDestroy {
     private templatesService: TemplatesService,
     private fileService: FileService,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
@@ -76,6 +81,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       this.emailType = '';
     }
     this.type = type === 'email' ? true : false;
+    this.saved = false;
   }
 
   saveTemplate(): void {
@@ -95,6 +101,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
         (res) => {
           this.router.navigate(['/templates']);
           this.isSaving = false;
+          this.saved = true;
         },
         (err) => {
           this.isSaving = false;
@@ -110,6 +117,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
           (res) => {
             this.router.navigate(['/templates']);
             this.isSaving = false;
+            this.saved = true;
           },
           (err) => {
             this.isSaving = false;
@@ -148,6 +156,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
     );
   }
 
+
   /**=======================================================
    *
    * Subject Field
@@ -176,6 +185,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       );
     this.subjectCursorStart = this.subjectCursorStart + value.length;
     this.subjectCursorEnd = this.subjectCursorStart;
+    this.saved = false;
   }
   getEditorInstance(editorInstance: any): void {
     this.quillEditorRef = editorInstance;
@@ -197,6 +207,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       0,
       'user'
     );
+    this.saved = false;
   }
   insertValue(value): void {
     if (this.focusEditor === 'subject') {
@@ -227,6 +238,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       );
     this.smsContentCursorStart = this.smsContentCursorStart + value.length;
     this.smsContentCursorEnd = this.smsContentCursorStart;
+    this.saved = false;
     // field.focus();
   }
 
@@ -254,7 +266,12 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
     this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
   }
+
   setFocusField(editorType): void {
     this.focusEditor = editorType;
+  }
+
+  stateChanged($event): void {
+    this.saved = false;
   }
 }

@@ -15,15 +15,15 @@
               <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
             </a>
             <div ngbDropdownMenu class="button-more-container light">
-              <div class="actions ml-auto">
-                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1" (click)="insertValue('{user_name}')">Your Name</button>
-                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1" (click)="insertValue('{user_email}')">Your Email</button>
-                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1" (click)="insertValue('{user_phone}')">Your Phone</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_email}')">Contact Email</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{material_title}')">Material Title</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_phone}')">Contact Phone</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_first_name}')">Contact Firstname</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1" (click)="insertValue('{contact_last_name}')">Contact Lastname</button>
+              <div class="actions">
+                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{user_name}')">Your Name</button>
+                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{user_email}')">Your Email</button>
+                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{user_phone}')">Your Phone</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_email}')">Contact Email</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{material_title}')">Material Title</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_phone}')">Contact Phone</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_first_name}')">Contact Firstname</button>
+                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_last_name}')">Contact Lastname</button>
               </div>
             </div>
           </div>
@@ -53,6 +53,7 @@
             class="form-control"
             required
             [(ngModel)]="template.title"
+            (ngModelChange)="stateChanged($event)"
             name="title"
             #title="ngModel"
           />
@@ -76,6 +77,7 @@
               [(ngModel)]="subject"
               (click)="getSubjectCursorPost(subjectField)"
               (keyup)="getSubjectCursorPost(subjectField)"
+              (ngModelChange)="stateChanged($event)"
               name="mailSubject"
               #mailSubject="ngModel"
               required
@@ -103,6 +105,7 @@
               required
               (onEditorCreated)="getEditorInstance($event)"
               (click)="setFocusField('content-email')"
+              (ngModelChange)="stateChanged($event)"
               class="rounded"
               [class.has-error]="
               mailContent.errors &&
@@ -137,6 +140,7 @@
               #smsContentField
               (click)="getSmsContentCursor(smsContentField)"
               (keyup)="getSmsContentCursor(smsContentField)"
+              (ngModelChange)="stateChanged($event)"
             ></textarea>
             <span
               class="invalid-feedback"
