@@ -42,7 +42,7 @@
             [separateDialCode]="true"
             name="phone" 
             #phone="ngModel"
-            [(ngModel)]="cell_phone">
+            [(ngModel)]="contact_phone">
           </ngx-intl-tel-input>
           <span class="error" *ngIf="phone.errors">
             <ng-template #phoneFormat>Wrong phone number!</ng-template>
@@ -112,7 +112,7 @@
             [separateDialCode]="true"
             name="secondPhone" 
             #secondPhone="ngModel"
-            [(ngModel)]="second_cell_phone">
+            [(ngModel)]="second_contact_phone">
           </ngx-intl-tel-input>
           <span class="error" *ngIf="secondPhone.errors">
             <ng-template #secondPhoneFormat>Wrong phone number!</ng-template>

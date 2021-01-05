@@ -10,6 +10,7 @@ import { ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
+import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
 
 @Component({
   selector: 'app-contact-edit',
@@ -30,8 +31,8 @@ export class ContactEditComponent implements OnInit {
   STAGES = STAGES;
 
   // Variables for the processs
-  cell_phone: any = {};
-  second_cell_phone: any = {};
+  contact_phone: any = {};
+  second_contact_phone: any = {};
   contact: ContactDetail = new ContactDetail();
   panelOpenState = false;
 
@@ -47,12 +48,12 @@ export class ContactEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
-      this.contact = this.data.contact;
+      this.contact = { ...this.contact, ...this.data.contact };
       if (this.contact['cell_phone']) {
-        this.cell_phone = this.contact['cell_phone'];
+        this.contact_phone = this.contact['cell_phone'];
       }
       if (this.contact['secondary_phone']) {
-        this.second_cell_phone = this.contact['secondary_phone'];
+        this.second_contact_phone = this.contact['secondary_phone'];
       }
       if (this.data.type == 'second') {
         this.panelOpenState = true;
@@ -65,20 +66,19 @@ export class ContactEditComponent implements OnInit {
   update(): void {
     this.isUpdating = true;
     const contactId = this.contact._id;
-    // let phoneNumber = this.contact['cell_phone'];
-    // let secondPhoneNumber = this.contact['secondary_phone'];
-    // if (this.cell_phone && this.cell_phone['internationalNumber']) {
-    //   phoneNumber = adjustPhoneNumber(this.cell_phone['internationalNumber']);
-    // }
-    // if (
-    //   this.second_cell_phone &&
-    //   this.second_cell_phone['internationalNumber']
-    // ) {
-    //   secondPhoneNumber = adjustPhoneNumber(
-    //     this.second_cell_phone['internationalNumber']
-    //   );
-    // }
-    // const contact = { ...this.contact, phoneNumber };
+    if (this.contact_phone && this.contact_phone['internationalNumber']) {
+      this.contact.cell_phone = adjustPhoneNumber(
+        this.contact_phone['internationalNumber']
+      );
+    }
+    if (
+      this.second_contact_phone &&
+      this.second_contact_phone['internationalNumber']
+    ) {
+      this.contact.secondary_phone = adjustPhoneNumber(
+        this.second_contact_phone['internationalNumber']
+      );
+    }
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService
       .updateContact(contactId, this.contact)
