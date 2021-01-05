@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewContainerRef,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
@@ -97,6 +103,7 @@ export class ContactComponent implements OnInit {
   action: TabItem = this.tabs[0];
 
   contact: ContactDetail = new ContactDetail();
+  selectedContact: Contact = new Contact();
   groupActions = {};
   mainTimelines: ActivityDetail[] = [];
   details: any = {};
@@ -163,7 +170,8 @@ export class ContactComponent implements OnInit {
     private handlerService: HandlerService,
     private viewContainerRef: ViewContainerRef,
     private materialService: MaterialService,
-    private helperSerivce: HelperService
+    private helperSerivce: HelperService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -173,11 +181,13 @@ export class ContactComponent implements OnInit {
     this.storeService.selectedContact$.subscribe((res) => {
       if (res && res._id === this._id) {
         this.contact = res;
+        this.selectedContact = res;
         console.log('res', this.contact);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
         this.contact = res;
+        this.selectedContact = res;
         this.groupActivities();
       }
     });
@@ -283,7 +293,7 @@ export class ContactComponent implements OnInit {
       maxWidth: '700px',
       maxHeight: '600px',
       data: {
-        contact: this.contact
+        contact: this.selectedContact
       }
     });
   }
@@ -395,10 +405,13 @@ export class ContactComponent implements OnInit {
         right: '50px'
       },
       width: '100vw',
-      maxWidth: '600px',
+      maxWidth: '650px',
       panelClass: 'send-email',
       backdropClass: 'cdk-send-email',
-      disableClose: false
+      disableClose: false,
+      data: {
+        contact: this.contact
+      }
     });
   }
 
@@ -518,24 +531,24 @@ export class ContactComponent implements OnInit {
   }
 
   editTask(activity: any): void {
-    if (activity && activity.contact.length) {
-      const data = {
-        ...activity,
-        contact: activity.contact[0]
-      };
-
-      this.dialog
-        .open(TaskEditComponent, {
-          width: '98vw',
-          maxWidth: '394px',
-          data
-        })
-        .afterClosed()
-        .subscribe((res) => {
-          console.log(res);
-        });
+    if (!activity || !activity.activity_detail) {
+      return;
     }
+    const data = {
+      ...activity.activity_detail,
+      contact: { _id: this.contact._id }
+    };
 
+    this.dialog
+      .open(TaskEditComponent, {
+        width: '98vw',
+        maxWidth: '394px',
+        data
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   completeTask(activity: any): void {
@@ -553,9 +566,16 @@ export class ContactComponent implements OnInit {
       .subscribe((confirm) => {
         if (confirm) {
           this.taskService
-            .complete(activity.activity_detail._id)
+            .complete([activity.activity_detail._id])
             .subscribe((res) => {
-              console.log(res);
+              if (res['status']) {
+                this.contact = new ContactDetail();
+                this.storeService.selectedContact$.subscribe((res) => {
+                  this.contact = res;
+                  this.groupActivities();
+                  this.timeLineArrangement();
+                });
+              }
             });
         }
       });
@@ -584,7 +604,7 @@ export class ContactComponent implements OnInit {
                 );
                 this.contact.activity = [];
                 this.contact.activity = task;
-                console.log('####', this.contact);
+                this.changeDetectorRef.detectChanges();
               }
             });
         }

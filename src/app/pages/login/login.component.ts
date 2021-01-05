@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserAgentApplication } from 'msal';
+import { ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-login',
@@ -59,8 +60,7 @@ export class LoginComponent implements OnInit {
         // SOCIAL USER LOGIN ACTION
       } else {
         // Save the user token and profile information
-        this.userService.setToken(res['data']['token']);
-        this.router.navigate([this.returnUrl]);
+        this.goHome(res['data']);
       }
     });
   }
@@ -122,14 +122,18 @@ export class LoginComponent implements OnInit {
     this.loginSubscription = this.userService.socialSignIn(user).subscribe(
       (res) => {
         this.socialLoading = false;
-        this.userService.setToken(res['data']['token']);
-        this.userService.setProfile(res['data']['user']);
-        this.router.navigate([this.returnUrl]);
+        this.goHome(res['data']);
       },
       (err) => {
         this.socialLoading = false;
         this.loading = false;
       }
     );
+  }
+
+  goHome(data: any): void {
+    this.userService.setToken(data['token']);
+    this.userService.setProfile(data['user']);
+    this.router.navigate([this.returnUrl]);
   }
 }

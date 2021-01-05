@@ -1,11 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { Contact } from 'src/app/models/contact.model';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from '../material-add/material-add.component';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import { TIMES } from 'src/app/constants/variable.constants';
 import * as moment from 'moment';
@@ -44,8 +48,11 @@ export class SendEmailComponent implements OnInit {
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<SendEmailComponent>,
     private helperSerivce: HelperService,
-    private materialService: MaterialService
-  ) {}
+    private materialService: MaterialService,
+    @Inject(MAT_DIALOG_DATA) private data: any
+  ) {
+    this.emailContacts = [this.data.contact];
+  }
 
   ngOnInit(): void {}
 

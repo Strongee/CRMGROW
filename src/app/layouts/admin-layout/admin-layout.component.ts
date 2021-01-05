@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Garbage } from 'src/app/models/garbage.model';
 import { User } from 'src/app/models/user.model';
+import { ContactService } from 'src/app/services/contact.service';
 import { LabelService } from 'src/app/services/label.service';
 import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
@@ -16,7 +17,8 @@ export class AdminLayoutComponent implements OnInit {
   constructor(
     private userService: UserService,
     private labelService: LabelService,
-    private tagService: TagService
+    private tagService: TagService,
+    private contactService: ContactService
   ) {
     this.userService.loadProfile().subscribe((res) => {
       this.userService.setProfile(new User().deserialize(res));
@@ -26,6 +28,7 @@ export class AdminLayoutComponent implements OnInit {
     this.tagService.getAllTags();
     this.tagService.getAllCompanies();
     this.tagService.getAllSources();
+    this.contactService.loadPage();
 
     // Open or Close Manage Label
     this.labelService.manageLabel$.subscribe((flg) => {

@@ -146,4 +146,9 @@ export class TemplatesService extends HttpService {
       catchError(this.handleError('LOAD OWN TEMPLATE', []))
     );
   }
+
+  clear$(): void {
+    this.loadStatus.next(STATUS.NONE);
+    this.templates.next([]);
+  }
 }

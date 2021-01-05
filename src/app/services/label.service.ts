@@ -88,4 +88,8 @@ export class LabelService extends HttpService {
     moveItemInArray(labelList, prevIndex, currentIndex);
     this.labels.next(labelList);
   }
+
+  clear$(): void {
+    this.labels.next([]);
+  }
 }

@@ -120,4 +120,9 @@ export class AutomationService extends HttpService {
       catchError(this.handleError('LOAD OWN AUTOMATION', []))
     );
   }
+
+  clear$(): void {
+    this.loadStatus.next(STATUS.NONE);
+    this.automations.next([]);
+  }
 }
