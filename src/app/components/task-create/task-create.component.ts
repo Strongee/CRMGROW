@@ -80,7 +80,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     });
     let due_date = '';
     if (this.timezone.tz_name) {
-      const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
+      const dateStr = `${this.date.year}-${numPad(this.date.month)}-${numPad(
+        this.date.day
+      )} ${this.time}`;
       due_date = moment.tz(dateStr, this.timezone.tz_name).format();
     } else {
       due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(

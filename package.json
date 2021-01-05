@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4201",
+    "host": "ng serve --host 192.168.0.69 --port 4201",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
