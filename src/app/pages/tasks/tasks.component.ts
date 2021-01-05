@@ -21,6 +21,7 @@ import 'moment-timezone';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TaskDeleteComponent } from '../../components/task-delete/task-delete.component';
 import { TaskBulkComponent } from '../../components/task-bulk/task-bulk.component';
+import { ActivityService } from '../../services/activity.service';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -78,6 +79,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   constructor(
     private handlerService: HandlerService,
     public taskService: TaskService,
+    public activityService: ActivityService,
     public storeService: StoreService,
     private contactService: ContactService,
     private userService: UserService,
@@ -262,7 +264,12 @@ export class TasksComponent implements OnInit, OnDestroy {
         data: element
       })
       .afterClosed()
-      .subscribe((res) => {});
+      .subscribe((res) => {
+        if (res) {
+          this.taskService.reload();
+          this.activityService.reload();
+        }
+      });
   }
 
   toggle(task: TaskDetail): void {

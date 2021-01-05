@@ -222,7 +222,8 @@ export const AdminLayoutRoutes: Routes = [
     component: TemplateComponent,
     data: {
       title: 'Template'
-    }
+    },
+    canDeactivate: [PageExitGuard]
   },
   {
     path: 'calendar',

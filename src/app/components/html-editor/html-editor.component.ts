@@ -10,9 +10,10 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { QuillEditorComponent } from 'ngx-quill';
-import { QuillEditor } from 'src/app/constants/variable.constants';
 import { FileService } from 'src/app/services/file.service';
 import * as QuillNamespace from 'quill';
+import { promptForFiles, loadBase64, ByteToSize } from 'src/app/helper';
+
 const Quill: any = QuillNamespace;
 // import ImageResize from 'quill-image-resize-module';
 // Quill.register('modules/imageResize', ImageResize);
@@ -31,11 +32,61 @@ export class HtmlEditorComponent implements OnInit {
 
   @Input() value: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
+  @Output() attachmentChange: EventEmitter<any> = new EventEmitter();
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-  config = QuillEditor;
   quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
+  attachments = [];
+  config = {
+    toolbar: {
+      container: [
+        [{ font: [] }],
+        [{ size: ['small', false, 'large', 'huge'] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ header: 1 }, { header: 2 }],
+        [{ color: [] }, { background: [] }],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ align: [] }],
+        ['link', 'image'],
+        ['attachment']
+      ],
+      handlers: {
+        attachment: () => {
+          promptForFiles().then((files) => {
+            [].forEach.call(files, (file) => {
+              loadBase64(file).then((base64) => {
+                const attachment = {
+                  filename: file.name,
+                  type: file.type,
+                  content: base64.substr(base64.indexOf(',') + 1),
+                  size: ByteToSize(file.size)
+                };
+                this.attachments.splice(this.attachments.length, 1, attachment);
+                this.attachmentChange.emit(this.attachments);
+                this.emailEditor.quillEditor.focus();
+              });
+            });
+          });
+        }
+      }
+    },
+    table: false,
+    'better-table': {
+      operationMenu: {
+        items: {
+          unmergeCells: {
+            text: 'Another unmerge cells name'
+          }
+        },
+        color: {
+          colors: ['green', 'red', 'yellow', 'blue', 'white'],
+          text: 'Background Colors:'
+        }
+      }
+    },
+    blotFormatter: {}
+  };
 
   constructor(
     private fileService: FileService,
@@ -129,5 +180,13 @@ export class HtmlEditorComponent implements OnInit {
       selection += 1;
       this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
     }
+  }
+  removeAttachment(index): void {
+    this.attachments.splice(index, 1);
+    this.attachmentChange.emit(this.attachments);
+  }
+
+  clearAttachments(): void {
+    this.attachments = [];
   }
 }

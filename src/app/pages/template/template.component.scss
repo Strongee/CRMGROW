@@ -14,16 +14,16 @@
   padding: 0;
 
   .template-container {
-    min-height: calc(100vh - 113px);
+    min-height: 700px;
 
     .template-content {
-      width: calc(100% - 250px);
+      width: calc(100% - 190px);
       padding: 2rem;
     }
 
     .variable-button-group {
-      width: 250px;
-      padding: 3rem 1.5rem;
+      width: 190px;
+      padding: 3rem 1rem;
 
       button {
         display: block;
@@ -87,12 +87,17 @@
     .actions {
       padding: 0px 5px;
       text-align: left;
+
+      .dropdown-item {
+        max-width: 130px;
+      }
     }
   }
 
   :host ::ng-deep {
     .dropdown-menu {
-      left: -150px !important;
+      min-width: auto;
+      left: -110px !important;
     }
   }
 }

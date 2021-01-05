@@ -1306,9 +1306,13 @@ export class AutoflowComponent
         })
         .subscribe(
           (res) => {
-            this.isSaving = false;
-            this.saved = true;
-            this.toastr.success('Automation Saved Successfully');
+            if (res) {
+              this.isSaving = false;
+              this.saved = true;
+              this.toastr.success('Automation Saved Successfully');
+              const path = '/autoflow/edit/' + res['_id'];
+              this.router.navigate([path]);
+            }
           },
           (err) => {
             this.isSaving = false;
