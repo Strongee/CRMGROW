@@ -1192,4 +1192,8 @@ export class MaterialsComponent implements OnInit {
         break;
     }
   }
+
+  showAnalytics(material): void {
+
+  }
 }

@@ -161,7 +161,7 @@
                   <span class="f-1 c-dark">NAME</span>
                 </th>
                 <th class="name-col border-top-0">
-  
+
                 </th>
                 <th class="view-col border-top-0 text-right">
                   <span class="f-1 c-dark">ANALYTICS</span>
@@ -173,7 +173,7 @@
                   <span class="f-1 c-dark">LEAD CAPTURE</span>
                 </th>
                 <th class="actions-col border-top-0">
-  
+
                 </th>
               </tr>
             </thead>
@@ -189,7 +189,7 @@
                     <input
                       type="checkbox"
                       class="custom-control-input"
-                      id="video-{{video._id}}" 
+                      id="video-{{video._id}}"
                       (change)="selectedVideoLists.toggle(video._id)"
                       [checked]="selectedVideoLists.isSelected(video._id)"
                     >
@@ -219,10 +219,12 @@
                   </div>
                 </td>
                 <td class="view-col">
-                  <div class="v-center justify-content-end py-2">
-                    <span class="f-3 c-dark mt-2">{{video.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + video._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end py-2">
+                      <span class="f-3 c-dark mt-2">{{video.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="time-col f-3 c-dark">
                   <div class="v-centerf-3 c-dark py-2">
@@ -306,7 +308,7 @@
                     <input
                       type="checkbox"
                       class="custom-control-input"
-                      id="video-{{video._id}}" 
+                      id="video-{{video._id}}"
                       (change)="selectedVideoLists.toggle(video._id)"
                       [checked]="selectedVideoLists.isSelected(video._id)"
                     >
@@ -580,7 +582,7 @@
                   <span class="f-1">NAME</span>
                 </th>
                 <th class="name-col border-top-0">
-  
+
                 </th>
                 <th class="view-col border-top-0 text-right">
                   <span class="f-1">ANALYTICS</span>
@@ -592,7 +594,7 @@
                   <span class="f-1">LEAD CAPTURE</span>
                 </th>
                 <th class="actions-col border-top-0">
-  
+
                 </th>
               </tr>
             </thead>

@@ -265,8 +265,8 @@ export class TasksComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
-          this.taskService.reload();
+        if (res && res.data) {
+          this.handlerService.updateTasks$(res.data._id, res.data);
           this.activityService.reload();
         }
       });

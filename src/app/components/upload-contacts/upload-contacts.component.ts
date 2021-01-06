@@ -349,6 +349,7 @@ export class UploadContactsComponent implements OnInit {
       } else {
         this.step = 4;
         this.contactsToUpload = this.contacts;
+        this.selectAllContacts();
       }
     } else {
       this.importError = true;
@@ -971,6 +972,7 @@ export class UploadContactsComponent implements OnInit {
       if (this.firstImport) {
         this.firstImport = false;
         this.step = 4;
+        this.selectAllContacts();
       } else {
         if (csvContacts.length) {
           this.uploading = true;
@@ -1124,6 +1126,13 @@ export class UploadContactsComponent implements OnInit {
   }
 
   upload(): void {
+    if (
+      this.selectedImportContacts.selected &&
+      this.selectedImportContacts.selected.length <= 0
+    ) {
+      return;
+    }
+
     this.failedData = [];
     let headers = [];
     const lines = [];
