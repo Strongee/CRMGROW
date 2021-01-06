@@ -89,7 +89,7 @@
                   <span class="f-1 c-dark">NAME</span>
                 </th>
                 <th class="name-col border-top-0">
-  
+
                 </th>
                 <th class="view-col border-top-0 text-right">
                   <span class="f-1 c-dark">ANALYTICS</span>
@@ -101,7 +101,7 @@
                   <span class="f-1 c-dark">LEAD CAPTURE</span>
                 </th>
                 <th class="actions-col border-top-0">
-  
+
                 </th>
               </tr>
             </thead>
@@ -111,10 +111,57 @@
                   Common Videos
                 </td>
               </tr>
-              <ng-container *ngIf="provideFlag">
-                <tr *ngFor="let video of adminVideos">
-                  <td class="checkbox-col">
-                    <div class="custom-control custom-checkbox">
+              <tr *ngFor="let video of adminVideos">
+                <td class="checkbox-col">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="video-{{video._id}}"
+                      (change)="selectedVideoLists.toggle(video._id)"
+                      [checked]="selectedVideoLists.isSelected(video._id)"
+                    >
+                    <label class="custom-control-label" for="video-{{video._id}}"></label>
+                  </div>
+                </td>
+                <td class="thumbnail-col">
+                  <a href="{{siteUrl}}/video?video={{video._id}}&user={{user_id}}" target="_blank">
+                    <div class="thumb-prev-wrapper">
+                      <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                      <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    </div>
+                  </a>
+                </td>
+                <td class="name-col">
+                  <a href="{{siteUrl}}/video?video={{video._id}}&user={{user_id}}" target="_blank">
+                    <div class="thumb-prev-wrapper">
+                      <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                      <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                    </div>
+                  </a>
+                  <h5 class="f-3 font-weight-bold c-dark m-0">{{video.title}}</h5>
+                  <span class="f-1 c-dark">{{(video.description || '') | stripTags | shorten: 120: '...'}}</span>
+                  <div class="f-3 c-dark view-field">
+                    <span class="f-3 c-dark mt-2">{{video.views}}</span>
+                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                  </div>
+                </td>
+                <td class="view-col">
+                  <a [routerLink]="['/materials/analytics/' + video._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end py-2">
+                      <span class="f-3 c-dark mt-2">{{video.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
+                </td>
+                <td class="time-col f-3 c-dark">
+                  <div class="v-centerf-3 c-dark py-2">
+                    {{video.created_at | date : 'mediumDate'}}
+                  </div>
+                </td>
+                <td class="capture-col text-right">
+                  <div class="v-center custom-control custom-switch">
+                    <label class="custom-toggle mb-0" placement="top">
                       <input
                         type="checkbox"
                         class="custom-control-input"
@@ -230,10 +277,55 @@
                   My own Videos
                 </td>
               </tr>
-              <ng-container *ngIf="ownFlag">
-                <tr *ngFor="let video of ownVideos">
-                  <td class="checkbox-col">
-                    <div class="custom-control custom-checkbox">
+              <tr *ngFor="let video of ownVideos">
+                <td class="checkbox-col">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="video-{{video._id}}"
+                      (change)="selectedVideoLists.toggle(video._id)"
+                      [checked]="selectedVideoLists.isSelected(video._id)"
+                    >
+                    <label class="custom-control-label" for="video-{{video._id}}"></label>
+                  </div>
+                </td>
+                <td class="thumbnail-col">
+                  <a href="{{siteUrl}}/video?video={{video._id}}&user={{user_id}}" target="_blank">
+                    <div class="thumb-prev-wrapper">
+                      <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                      <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    </div>
+                  </a>
+                </td>
+                <td class="name-col">
+                  <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
+                    <div class="thumb-prev-wrapper">
+                      <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                      <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
+                    </div>
+                  </a>
+                  <h5 class="f-3 font-weight-bold c-dark m-0">{{video.title}}</h5>
+                  <span class="f-1 c-dark">{{(video.description || '') | stripTags | shorten: 120: '...'}}</span>
+                  <div class="f-3 c-dark view-field">
+                    <span class="f-3 c-dark mt-2">{{video.views}}</span>
+                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                  </div>
+                </td>
+                <td class="view-col">
+                  <div class="v-center justify-content-end f-3 c-dark py-2">
+                    <span class="f-3 c-dark mt-2">{{video.views}}</span>
+                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                  </div>
+                </td>
+                <td class="time-col f-3 c-dark">
+                  <div class="v-centerf-3 c-dark py-2">
+                    {{video.created_at | date : 'mediumDate'}}
+                  </div>
+                </td>
+                <td class="capture-col text-right">
+                  <div class="v-center custom-control custom-switch">
+                    <label class="custom-toggle mb-0" placement="top">
                       <input
                         type="checkbox"
                         class="custom-control-input"
@@ -514,7 +606,7 @@
                   <span class="f-1">NAME</span>
                 </th>
                 <th class="name-col border-top-0">
-  
+
                 </th>
                 <th class="view-col border-top-0 text-right">
                   <span class="f-1">ANALYTICS</span>
@@ -526,7 +618,7 @@
                   <span class="f-1">LEAD CAPTURE</span>
                 </th>
                 <th class="actions-col border-top-0">
-  
+
                 </th>
               </tr>
             </thead>
