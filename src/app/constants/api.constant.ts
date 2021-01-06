@@ -23,6 +23,7 @@ export const USER = {
   SYNC_OUTLOOK: 'user/sync-outlook',
   AUTH_GOOGLE: 'user/authorize-gmail',
   AUTH_OUTLOOK: 'user/authorize-outlook',
+  ENABLE_DESKTOP_NOTIFICATION: 'user/desktop-notification',
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',

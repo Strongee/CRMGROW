@@ -1,11 +1,11 @@
 import { Deserializable } from './deserialize.model';
 
 export class User implements Deserializable {
-  _id?: string;
-  user_name?: string;
-  nick_name?: string;
-  email?: string;
-  cell_phone?: string;
+  _id?: string = '';
+  user_name?: string = '';
+  nick_name?: string = '';
+  email?: string = '';
+  cell_phone?: string = '';
   phone?: {
     number?: string;
     internationalNumber?: string;
@@ -13,19 +13,19 @@ export class User implements Deserializable {
     countryCode?: string;
     areaCode?: string;
     dialCode?: string;
-  };
-  payment?: string;
-  time_zone_info?: string;
-  time_zone?: string;
+  } = {};
+  payment?: string = '';
+  time_zone_info?: string = '';
+  time_zone?: string = '';
   location: string;
-  email_signature?: string;
-  proxy_number?: string;
-  proxy_number_id?: string;
-  twilio_number?: string;
+  email_signature?: string = '';
+  proxy_number?: string = '';
+  proxy_number_id?: string = '';
+  twilio_number?: string = '';
   proxy_phone?: {
     number?: string;
     is_released: false;
-  };
+  } = { is_released: false };
   picture_profile: string;
   learn_more: string;
   role: string;

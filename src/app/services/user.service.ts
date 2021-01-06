@@ -174,6 +174,20 @@ export class UserService extends HttpService {
       catchError(this.handleError('UPDATE PROFILE'))
     );
   }
+  public enableDesktopNotification(
+    subscription: any,
+    option: any
+  ): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + USER.ENABLE_DESKTOP_NOTIFICATION, {
+        subscription,
+        option
+      })
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('ENABLE DESKTOP NOTIFICATION', false))
+      );
+  }
   public updateUser(field, value): void {
     const user = JSON.parse(localStorage.getItem('user'));
     user[field] = value;
@@ -221,6 +235,7 @@ export class UserService extends HttpService {
    * @param data: Update Profile Imple
    */
   public updateProfileImpl(data: any): void {
+    console.log('updateProfileImple');
     const profile = this.profile.getValue();
     this.profile.next({ ...profile, ...data });
     return;

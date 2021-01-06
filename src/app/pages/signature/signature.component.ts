@@ -41,6 +41,13 @@ export class SignatureComponent implements OnInit {
     this.userService.profile$.subscribe((profile) => {
       if (profile && profile._id) {
         this.user = profile;
+
+        if (this.quillEditorRef) {
+          const delta = this.quillEditorRef.clipboard.convert({
+            html: this.user.email_signature
+          });
+          this.emailEditor.quillEditor.setContents(delta, 'user');
+        }
       }
     });
   }
@@ -157,11 +164,17 @@ export class SignatureComponent implements OnInit {
   }
 
   getEditorInstance(editorInstance: any): void {
-    console.log('editor is initated', editorInstance);
     this.quillEditorRef = editorInstance;
     const toolbar = this.quillEditorRef.getModule('toolbar');
     toolbar.addHandler('image', this.initImageHandler);
     this.table = this.quillEditorRef.getModule('better-table');
+
+    if (this.user.email_signature) {
+      const delta = this.quillEditorRef.clipboard.convert({
+        html: this.user.email_signature
+      });
+      this.emailEditor.quillEditor.setContents(delta, 'user');
+    }
   }
 
   initImageHandler = (): void => {

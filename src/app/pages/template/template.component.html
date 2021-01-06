@@ -2,224 +2,156 @@
   <div class="template-container d-flex w-100">
     <div class="template-content my-2">
       <div class="v-center justify-content-between">
-        <ng-container *ngIf="isNew; else editTemplate">
+        <ng-container *ngIf="id; else editTemplate">
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Create new template</h6>
         </ng-container>
         <ng-template #editTemplate>
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Edit template</h6>
         </ng-template>
-        <div class="variable-mobile">
-          <span class="c-blue f-3 ml-2 mr-1 font-weight-bold">Insert variables</span>
-          <div ngbDropdown class="justify-content-end field-actions button-more rounded">
-            <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-              <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
-            </a>
-            <div ngbDropdownMenu class="button-more-container light">
-              <div class="actions">
-                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{user_name}')">Your Name</button>
-                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{user_email}')">Your Email</button>
-                <button type="button" class="btn btn-sm btn-blue dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{user_phone}')">Your Phone</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_email}')">Contact Email</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{material_title}')">Material Title</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_phone}')">Contact Phone</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_first_name}')">Contact Firstname</button>
-                <button type="button" class="btn btn-sm btn-orange dropdown-item my-1 f-2 px-2 py-1" (click)="insertValue('{contact_last_name}')">Contact Lastname</button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="v-center mt-3">
         <div class="custom-radio-container">
-          <input class="custom-radio" type="radio" id="template-type-email" name="template-type" [checked]="emailType"  (click)="changeType('email')">
-          <label class="f-6 font-weight-bold" for="template-type-email">E-mail</label>
+          <input class="custom-radio"
+            type="radio"
+            id="template-type-email"
+            name="template-type"
+            [checked]="template.type === 'email'"
+            (click)="changeType('email')">
+          <label class="f-6 font-weight-bold"
+            for="template-type-email">E-mail</label>
         </div>
         <div class="custom-radio-container">
-          <input class="custom-radio" type="radio" id="template-type-text" name="template-type" [checked]="textType" (click)="changeType('text')">
-          <label class="f-6 font-weight-bold" for="template-type-text">Text</label>
+          <input class="custom-radio"
+            type="radio"
+            id="template-type-text"
+            name="template-type"
+            [checked]="template.type === 'text'"
+            (click)="changeType('text')">
+          <label class="f-6 font-weight-bold"
+            for="template-type-text">Text</label>
         </div>
       </div>
-      <form
-        #templateForm="ngForm"
-        (ngSubmit)="
-        submitted = true; templateForm.form.valid ? saveTemplate() : false
-      "
-        [class.was-validated]="submitted"
-      >
+      <form #templateForm="ngForm"
+        (ngSubmit)="templateForm.form.valid ? saveTemplate() : false"
+        [class.was-validated]="templateForm.submitted">
         <div class="form-group mt-3">
           <label>Title</label>
-          <input
-            type="text"
+          <input type="text"
             class="form-control"
             required
             [(ngModel)]="template.title"
-            (ngModelChange)="stateChanged($event)"
+            (ngModelChange)="stateChanged()"
             name="title"
-            #title="ngModel"
-          />
-          <span
-            class="invalid-feedback"
-            *ngIf="
-            title.errors &&
-            (title.touched || title.dirty || submitted) &&
-            submitted
-          "
-          >Please input template name.</span
-          >
+            #title="ngModel" />
+          <span class="invalid-feedback"
+            *ngIf="title.errors &&
+            (title.touched || title.dirty)">Please input template name.</span>
         </div>
-        <ng-container *ngIf="type; else textTemplate">
+        <ng-container *ngIf="template.type === 'email'; else textTemplate">
           <div class="form-group">
             <label>Subject</label>
-            <input
-              type="text"
+            <input type="text"
               class="form-control"
               #subjectField
-              [(ngModel)]="subject"
-              (click)="getSubjectCursorPost(subjectField)"
-              (keyup)="getSubjectCursorPost(subjectField)"
-              (ngModelChange)="stateChanged($event)"
+              [(ngModel)]="template.subject"
+              (click)="setCursorPos(subjectField, 'subject')"
+              (keyup)="setCursorPos(subjectField, 'subject')"
+              (ngModelChange)="stateChanged()"
               name="mailSubject"
               #mailSubject="ngModel"
-              required
-            />
-            <span
-              class="invalid-feedback"
-              *ngIf="
-              mailSubject.errors &&
-              (mailSubject.touched || mailSubject.dirty || submitted) &&
-              submitted
-            "
-            >Please input the email template subject.</span
-            >
+              required />
+            <span class="invalid-feedback"
+              *ngIf="mailSubject.errors &&
+              (mailSubject.touched || mailSubject.dirty)">
+            Please input the email template subject.</span>
           </div>
           <div class="form-group">
             <label>Content</label>
-            <quill-editor
-              image-resize="true"
-              placeholder="Enter Text"
-              [(ngModel)]="template.content"
-              [modules]="config"
-              name="mailContent"
-              [styles]="{ height: '320px' }"
-              #mailContent="ngModel"
-              required
-              (onEditorCreated)="getEditorInstance($event)"
-              (click)="setFocusField('content-email')"
-              (ngModelChange)="stateChanged($event)"
-              class="rounded"
-              [class.has-error]="
-              mailContent.errors &&
-              (mailContent.touched || mailContent.dirty || submitted) &&
-              submitted
-            "
-              #emailEditor
-            >
-            </quill-editor>
-            <span
-              class="text-danger error"
-              *ngIf="
-              mailContent.errors &&
-              (mailContent.touched || mailContent.dirty || submitted) &&
-              submitted
-            "
-            >Please input the email template content.</span
-            >
+            <app-html-editor
+              [(value)]="template.content"
+              placeholder="Enter email content..."
+              required="true"
+              [style]="{height: '320px'}"
+              (onFocus)="focusEditor()"
+              #editor
+              >
+            </app-html-editor>
           </div>
         </ng-container>
         <ng-template #textTemplate>
           <div></div>
           <div class="form-group">
             <label>Content</label>
-            <textarea
-              rows="10"
+            <textarea rows="10"
               class="form-control"
-              [(ngModel)]="smsContent"
+              [(ngModel)]="template.content"
               name="content"
               #content="ngModel"
               required
               #smsContentField
-              (click)="getSmsContentCursor(smsContentField)"
-              (keyup)="getSmsContentCursor(smsContentField)"
-              (ngModelChange)="stateChanged($event)"
-            ></textarea>
-            <span
-              class="invalid-feedback"
+              (click)="setCursorPos(smsContentField, 'content')"
+              (keyup)="setCursorPos(smsContentField, 'content')"
+              (ngModelChange)="stateChanged()"></textarea>
+            <span class="invalid-feedback"
               *ngIf="
               content.errors &&
-              (content.touched || content.dirty || submitted) &&
-              submitted
-            "
-            >Please input the template content.</span
-            >
+              (content.touched || content.dirty)
+            ">Please input the template content.</span>
           </div>
         </ng-template>
 
         <div class="d-flex mt-auto">
-          <a class="btn c-blue font-weight-bold" [routerLink]="['/templates']">Cancel</a>
-          <button class="btn btn-primary font-weight-bold ml-2" [class.loading]="isSaving">Save</button>
+          <a class="btn c-blue font-weight-bold"
+            [routerLink]="['/templates']">Cancel</a>
+          <button class="btn btn-primary font-weight-bold ml-2"
+            [class.loading]="isSaving">Save</button>
         </div>
       </form>
     </div>
     <div class="variable-button-group shadow-2">
       <h5 class="f-4 font-weight-bold upper-text mb-3">Insert Variables</h5>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-blue my-3"
-        (click)="insertValue('{user_name}')"
-      >
+        (click)="insertValue('{user_name}')">
         Your Name
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-blue my-3"
-        (click)="insertValue('{user_email}')"
-      >
+        (click)="insertValue('{user_email}')">
         Your email
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-blue my-3"
-        (click)="insertValue('{user_phone}')"
-      >
+        (click)="insertValue('{user_phone}')">
         Your Phone
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-orange my-3"
-        (click)="insertValue('{contact_email}')"
-      >
+        (click)="insertValue('{contact_email}')">
         Contact E-mail
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-orange my-3"
-        (click)="insertValue('{material_title}')"
-      >
+        (click)="insertValue('{material_title}')">
         Material Title
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-orange my-3"
-        (click)="insertValue('{contact_phone}')"
-      >
+        (click)="insertValue('{contact_phone}')">
         Contact Phone
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-orange my-3"
         (click)="
               insertValue('{contact_first_name}')
-            "
-      >
+            ">
         Contact Firstname
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="btn btn-sm btn-orange my-3"
         (click)="
               insertValue('{contact_last_name}')
-            "
-      >
+            ">
         Contact Lastname
       </button>
     </div>

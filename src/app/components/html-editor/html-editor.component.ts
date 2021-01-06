@@ -32,11 +32,12 @@ export class HtmlEditorComponent implements OnInit {
 
   @Input() value: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
+  @Output() onFocus: EventEmitter<boolean> = new EventEmitter();
   @Output() attachmentChange: EventEmitter<any> = new EventEmitter();
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-  quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
+  quillEditorRef;
   attachments = [];
   config = {
     toolbar: {
@@ -95,6 +96,13 @@ export class HtmlEditorComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  setValue(value: string): void {
+    if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
+      const delta = this.quillEditorRef.clipboard.convert({ html: value });
+      this.emailEditor.quillEditor.setContents(delta, 'user');
+    }
+  }
+
   getEditorInstance(editorInstance: any): void {
     this.quillEditorRef = editorInstance;
     const toolbar = this.quillEditorRef.getModule('toolbar');
@@ -126,11 +134,11 @@ export class HtmlEditorComponent implements OnInit {
   insertEmailContentValue(value: string): void {
     this.emailEditor.quillEditor.focus();
     const range = this.emailEditor.quillEditor.getSelection();
-    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
+    this.emailEditor.quillEditor.insertText(range.index, value, 'api');
     this.emailEditor.quillEditor.setSelection(
       range.index + value.length,
       0,
-      'user'
+      'api'
     );
   }
 
@@ -188,5 +196,9 @@ export class HtmlEditorComponent implements OnInit {
 
   clearAttachments(): void {
     this.attachments = [];
+  }
+
+  onFocusEvt(): void {
+    this.onFocus.emit();
   }
 }
