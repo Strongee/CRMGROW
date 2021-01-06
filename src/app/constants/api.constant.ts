@@ -5,9 +5,9 @@ export const AUTH = {
   RESET_PASSWORD: 'user/reset-password',
   SOCIAL_SIGNIN: 'user/social-login',
   SOCIAL_SIGNUP: 'user/social-signup',
-  OAUTH_REQUEST: '',
-  OUTLOOK_PROFILE_REQUEST: '',
-  GOOGLE_PROFILE_REQUEST: '',
+  OAUTH_REQUEST: 'user/signup-',
+  OUTLOOK_PROFILE_REQUEST: 'user/social-outlook?code=',
+  GOOGLE_PROFILE_REQUEST: 'user/social-gmail?code=',
   LOG_OUT: 'user/logout',
   CHECK_EMAIL: 'user/check',
   CHECK_NICKNAME: 'user/search-nickname',
@@ -96,7 +96,8 @@ export const VIDEO = {
   UPDATE_VIDEO_DETAIL: 'video/detail/',
   UPDATE_ADMIN: 'video/update-admin',
   DELETE: 'video/',
-  LOAD: 'video'
+  LOAD: 'video',
+  ANALYTICS: 'video/analytics/'
 };
 export const PDF = {
   CREATE: 'pdf/create',

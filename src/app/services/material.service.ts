@@ -195,4 +195,18 @@ export class MaterialService extends HttpService {
   checkVideosCount = this.storeService.videos$.pipe(
     filter((val) => val.length > 100)
   );
+
+  getAnalytics(id: string): Observable<Video[]> {
+    return this.httpClient.get(this.server + VIDEO.ANALYTICS + id).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('LOAD VIDEO ANALYTICS', []))
+    );
+  }
+
+  getVideoById(id: string): Observable<Video[]> {
+    return this.httpClient.get(this.server + VIDEO.READ + id).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('LOAD VIDEO DATA', []))
+    );
+  }
 }
