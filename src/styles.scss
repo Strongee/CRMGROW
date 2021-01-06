@@ -243,6 +243,7 @@ ul {
 .page-title {
   font-size: 26px;
   letter-spacing: 1px;
+  font-weight: 800!important;
 }
 .ls-1{
   letter-spacing: 1px;
@@ -597,7 +598,7 @@ button {
   &:hover {
     background-color: $color-white;
     color: $color-blue;
-    border: 2px solid $color-blue;
+    border: 1px solid $color-blue;
   }
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(0, 0, 255, 0.5);
@@ -865,6 +866,9 @@ body{
     .page {
       padding-top: 113px;
     }
+    .variable-button-group {
+      height: calc(100vh - 114px);
+    }
   }
 
   .page-content {
@@ -1022,7 +1026,15 @@ table {
     font-size: 0.8rem;
     border-top: none;
   }
+}
 
+.page-table {
+  thead tr:first-child th {
+    position: sticky;
+    top: 64px;
+    background-color: white;
+    z-index: 2;
+  }
 }
 
 /** ==== Material Component Style === */
@@ -1489,7 +1501,7 @@ mat-expansion-panel {
   position: sticky;
   bottom: 0px;
   background: white;
-  z-index: 996;
+  z-index: 3;
 
   @media screen and (max-width: 670px) {
     display: flex;

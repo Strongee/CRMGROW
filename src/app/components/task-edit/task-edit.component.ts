@@ -141,18 +141,12 @@ export class TaskEditComponent implements OnInit {
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.taskService
       .update(this.task._id, data)
-      .subscribe(
-        (res) => {
-          this.updating = false;
-          if (res) {
-            console.log("update task ============>", data);
-            this.dialogRef.close({ data });
-          }
-        },
-        (error) => {
-          this.updating = false;
+      .subscribe((status) => {
+        this.updating = false;
+        if (status) {
           this.dialogRef.close();
+          this.handlerService.updateTasks$([this.task._id], data);
         }
-      );
+      });
   }
 }

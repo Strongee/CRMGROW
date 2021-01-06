@@ -85,7 +85,7 @@ export class ContactEditComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.isUpdating = false;
-          this.dialogRef.close(res);
+          this.dialogRef.close(res._id);
         }
       });
   }

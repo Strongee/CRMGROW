@@ -235,7 +235,6 @@ export class UserService extends HttpService {
    * @param data: Update Profile Imple
    */
   public updateProfileImpl(data: any): void {
-    console.log('updateProfileImple');
     const profile = this.profile.getValue();
     this.profile.next({ ...profile, ...data });
     return;

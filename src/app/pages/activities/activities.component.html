@@ -1,5 +1,5 @@
 <div class="custom-mat-table position-relative">
-  <table class="w-100"
+  <table class="w-100 page-table"
     mat-table
     [dataSource]="storeService.activities$ | async | paginate: {id: 'activityPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: activityService.total$ | async}">
 
@@ -11,10 +11,10 @@
       <td mat-cell
         *matCellDef="let element"
         class="pl-0">
-        <div class="v-center">
+        <a class="v-center c-pointer" [routerLink]="['/contacts/' + element.contacts._id]">
           <div class="contact-avatar f-3 mr-2">{{element.contacts.avatarName}}</div>
-          <span>{{element.contacts.fullName}}</span>
-        </div>
+          <span class="c-dark">{{element.contacts.fullName}}</span>
+        </a>
       </td>
     </ng-container>
 

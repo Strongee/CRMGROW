@@ -20,7 +20,7 @@ export class AdditionalEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
-      this.contact = this.data.contact;
+      this.contact = { ...this.contact, ...this.data.contact };
     }
   }
 
@@ -35,7 +35,7 @@ export class AdditionalEditComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.isUpdating = false;
-          this.dialogRef.close(res);
+          this.dialogRef.close(res._id);
         }
       });
   }

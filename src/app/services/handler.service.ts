@@ -165,11 +165,36 @@ export class HandlerService {
 
   updateTasks$(_ids: string[], data: any): void {
     const tasks = this.storeService.tasks.getValue();
+    const activities = [];
     tasks.forEach((e) => {
       if (_ids.indexOf(e._id) !== -1) {
         e.deserialize(data);
+        // Create new Activity with task contact
+        const activity = new Activity();
+        if (data.status) {
+          activity.content = 'completed follow up';
+        } else {
+          activity.content = 'updated follow up';
+        }
+        activity.type = 'follow_ups';
+        activity.contacts = e.contact;
+        activities.push(activity);
       }
     });
+    if (activities.length !== _ids.length) {
+      this.activityService.reload();
+    } else {
+      const page = this.activityService.page.getValue();
+      const pageSize = this.activityService.pageSize.getValue();
+      if (page === 1) {
+        let activityList = this.storeService.activities.getValue();
+        activityList = [...activities, ...activityList];
+        activityList.splice(pageSize);
+        this.storeService.activities.next(activityList);
+      } else {
+        this.activityService.reload();
+      }
+    }
   }
 
   clearData(): void {

@@ -88,19 +88,16 @@ export class TaskBulkComponent implements OnInit {
     if (isValid) {
       this.updating = true;
       this.bulkUpdateSubscription && this.bulkUpdateSubscription.unsubscribe();
-      this.taskService.bulkUpdate(data).subscribe(
-        () => {
-          this.updating = false;
+      this.taskService.bulkUpdate(data).subscribe((status) => {
+        this.updating = false;
+        if (status) {
           this.handlerService.updateTasks$(this.ids, {
             ...data,
             ids: undefined
           });
-          this.dialogRef.close({ status: true });
-        },
-        () => {
-          this.dialogRef.close({ status: false });
+          this.dialogRef.close();
         }
-      );
+      });
     }
   }
 }

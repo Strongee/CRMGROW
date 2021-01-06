@@ -53,6 +53,9 @@ export class TaskService extends HttpService {
     this.durationOption.next(duration);
     const searchOption = this.searchOption.getValue();
     searchOption.deserialize(duration);
+    if (duration.status === undefined) {
+      delete searchOption.status;
+    }
     this.searchOption.next(searchOption);
     this.load(1);
   }
@@ -150,10 +153,10 @@ export class TaskService extends HttpService {
     );
   }
 
-  update(id: string, data): Observable<boolean> {
+  update(id: string, data: any): Observable<boolean> {
     return this.http.put(this.server + TASK.UPDATE + id, data).pipe(
-      map((res) => res),
-      catchError(this.handleError('UPDATE TASK', null))
+      map((res) => res['status']),
+      catchError(this.handleError('UPDATE TASK', false))
     );
   }
 
@@ -186,10 +189,10 @@ export class TaskService extends HttpService {
       );
   }
 
-  bulkUpdate(data: any): Observable<any> {
+  bulkUpdate(data: any): Observable<boolean> {
     return this.http.post(this.server + TASK.BULK_UPDATE, data).pipe(
-      map((res) => res),
-      catchError(this.handleError('BULK TASK UPDATE', null))
+      map((res) => res['status']),
+      catchError(this.handleError('BULK TASK UPDATE', false))
     );
   }
 

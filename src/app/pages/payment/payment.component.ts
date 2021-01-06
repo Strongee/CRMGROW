@@ -131,13 +131,13 @@ export class PaymentComponent implements OnInit {
                 plan_id: this.payment.plan_id
               })
               .subscribe(
-                (res) => {
+                () => {
                   this.saving = false;
                   this.toast.success(
                     'Your Billing Information is updated successfully.'
                   );
                 },
-                (err) => {
+                () => {
                   this.saving = false;
                 }
               );
