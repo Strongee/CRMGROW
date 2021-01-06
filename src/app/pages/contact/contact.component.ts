@@ -59,46 +59,17 @@ import { NoteCreateComponent } from 'src/app/components/note-create/note-create.
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
-  TYPES = [
-    {
-      id: 'all',
-      label: 'Activity'
-    },
-    {
-      id: 'note',
-      label: 'Notes'
-    },
-    {
-      id: 'message',
-      label: 'Messages'
-    },
-    {
-      id: 'appointment',
-      label: 'Appointments'
-    },
-    {
-      id: 'group_call',
-      label: 'Group Calls'
-    },
-    {
-      id: 'task',
-      label: 'Tasks'
-    },
-    {
-      id: 'deal',
-      label: 'Deals'
-    }
-  ];
   REPEAT_DURATIONS = REPEAT_DURATIONS;
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
-    { icon: '', label: 'Activity', id: 'activity' },
-    { icon: '', label: 'Notes', id: 'note' },
-    { icon: '', label: 'Messages', id: 'message' },
-    { icon: '', label: 'Appointments', id: 'appointment' },
-    { icon: '', label: 'Group Calls', id: 'group_call' },
-    { icon: '', label: 'Tasks', id: 'task' },
-    { icon: '', label: 'Deals', id: 'deal' }
+    { icon: '', label: 'Activity', id: 'all' },
+    { icon: '', label: 'Notes', id: 'notes' },
+    { icon: '', label: 'Emails', id: 'emails' },
+    { icon: '', label: 'Texts', id: 'texts' },
+    { icon: '', label: 'Appointments', id: 'appointments' },
+    { icon: '', label: 'Group Calls', id: 'group_calls' },
+    { icon: '', label: 'Tasks', id: 'follow_ups' },
+    { icon: '', label: 'Deals', id: 'deals' }
   ];
   action: TabItem = this.tabs[0];
 
@@ -182,7 +153,7 @@ export class ContactComponent implements OnInit {
       if (res && res._id === this._id) {
         this.contact = res;
         this.selectedContact = res;
-        console.log('res', this.contact);
+        console.log('res', res);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
@@ -649,9 +620,11 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.noteService.delete(activity._id).subscribe((res) => {
-            console.log('##', res);
-          });
+          this.noteService
+            .delete(activity.activity_detail._id)
+            .subscribe((res) => {
+              console.log('##', res);
+            });
         }
       });
   }

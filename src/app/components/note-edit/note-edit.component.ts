@@ -25,7 +25,8 @@ export class NoteEditComponent implements OnInit {
   update(): void {
     this.saving = true;
     this.noteService.update(this.note._id, this.note).subscribe((res) => {
-      if (res == true) {
+      console.log('###', res);
+      if (res['status'] == true) {
         this.saving = false;
         this.dialogRef.close();
       }
