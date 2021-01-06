@@ -322,11 +322,23 @@ export class ContactComponent implements OnInit {
         }
       })
       .afterClosed()
-      .subscribe((confirm) => {
-        if (confirm) {
+      .subscribe((id) => {
+        if (id) {
+          this.loadContact(id);
           this.storeService.selectedContact$.subscribe((res) => {
-            if (res) {
+            if (res && res._id === id) {
+              this.contact = new ContactDetail();
+              this.selectedContact = new Contact();
               this.contact = res;
+              this.selectedContact = res;
+              this.groupActivities();
+              this.timeLineArrangement();
+            } else {
+              this.contact = new ContactDetail();
+              this.selectedContact = new Contact();
+              this.contact = res;
+              this.selectedContact = res;
+              this.groupActivities();
             }
           });
         }
@@ -344,12 +356,26 @@ export class ContactComponent implements OnInit {
         }
       })
       .afterClosed()
-      .subscribe(() => {
-        this.storeService.selectedContact$.subscribe((res) => {
-          if (res) {
-            this.contact = res;
-          }
-        });
+      .subscribe((id) => {
+        if (id) {
+          this.loadContact(id);
+          this.storeService.selectedContact$.subscribe((res) => {
+            if (res && res._id === id) {
+              this.contact = new ContactDetail();
+              this.selectedContact = new Contact();
+              this.contact = res;
+              this.selectedContact = res;
+              this.groupActivities();
+              this.timeLineArrangement();
+            } else {
+              this.contact = new ContactDetail();
+              this.selectedContact = new Contact();
+              this.contact = res;
+              this.selectedContact = res;
+              this.groupActivities();
+            }
+          });
+        }
       });
   }
 

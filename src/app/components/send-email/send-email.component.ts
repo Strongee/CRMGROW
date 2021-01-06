@@ -101,7 +101,6 @@ export class SendEmailComponent implements OnInit {
           content
         })
         .subscribe((status) => {
-          console.log('status', status);
           this.dialogRef.close();
         });
     }
