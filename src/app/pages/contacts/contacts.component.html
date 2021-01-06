@@ -49,7 +49,7 @@
     </div>
   </div>
   <div class="custom-mat-table position-relative">
-    <table class="w-100"
+    <table class="w-100 page-table"
       mat-table
       [dataSource]="storeService.pageContacts$ | async | paginate: {id: 'contactPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: contactService.total$ | async}">
       <ng-container matColumnDef="select">
@@ -99,7 +99,7 @@
         <td mat-cell
           *matCellDef="let element"
           (click)="openContact(element)">
-          <div class="v-center">
+          <div class="v-center c-pointer">
             <div class="contact-avatar f-3 mr-2">{{element.avatarName}}</div>
             <span>{{element.fullName}}</span>
           </div>

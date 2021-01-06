@@ -15,7 +15,7 @@ declare interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
   {
     path: 'home',
-    title: 'Tasks',
+    title: 'Dashboard',
     icon: 'i-task bgc-dark',
     class: '',
     beta: false,

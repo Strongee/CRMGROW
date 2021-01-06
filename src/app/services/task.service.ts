@@ -53,6 +53,9 @@ export class TaskService extends HttpService {
     this.durationOption.next(duration);
     const searchOption = this.searchOption.getValue();
     searchOption.deserialize(duration);
+    if (duration.status === undefined) {
+      delete searchOption.status;
+    }
     this.searchOption.next(searchOption);
     this.load(1);
   }

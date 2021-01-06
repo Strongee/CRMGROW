@@ -243,6 +243,7 @@ ul {
 .page-title {
   font-size: 26px;
   letter-spacing: 1px;
+  font-weight: 800!important;
 }
 .ls-1{
   letter-spacing: 1px;
@@ -1022,7 +1023,15 @@ table {
     font-size: 0.8rem;
     border-top: none;
   }
+}
 
+.page-table {
+  thead tr:first-child th {
+    position: sticky;
+    top: 64px;
+    background-color: white;
+    z-index: 2;
+  }
 }
 
 /** ==== Material Component Style === */
@@ -1489,7 +1498,7 @@ mat-expansion-panel {
   position: sticky;
   bottom: 0px;
   background: white;
-  z-index: 996;
+  z-index: 3;
 
   @media screen and (max-width: 670px) {
     display: flex;
