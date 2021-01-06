@@ -53,16 +53,16 @@ export const ROUTES: RouteInfo[] = [
     betaLabel: '',
     protectedRole: null
   },
-  {
-    path: 'campaign',
-    title: 'Campaign',
-    icon: 'i-broadcasts bgc-dark',
-    class: '',
-    beta: false,
-    betaClass: '',
-    betaLabel: '',
-    protectedRole: null
-  },
+  // {
+  //   path: 'campaign',
+  //   title: 'Campaign',
+  //   icon: 'i-broadcasts bgc-dark',
+  //   class: '',
+  //   beta: false,
+  //   betaClass: '',
+  //   betaLabel: '',
+  //   protectedRole: null
+  // },
   {
     path: 'automations',
     title: 'Automations',

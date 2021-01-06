@@ -29,11 +29,11 @@ export class SocialProfileComponent implements OnInit {
     this.saveSocialProfileSubscription = this.userService
       .updateProfile({ social_link })
       .subscribe(
-        (res) => {
+        () => {
           this.socialProfileSaving = false;
-          this.userService.updateUser('social_link', social_link);
+          this.userService.updateProfileImpl({ social_link });
         },
-        (err) => {
+        () => {
           this.socialProfileSaving = false;
         }
       );

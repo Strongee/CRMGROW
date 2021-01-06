@@ -258,18 +258,10 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   openEdit(element: Task): void {
-    this.dialog
-      .open(TaskEditComponent, {
-        ...DialogSettings.TASK,
-        data: element
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && res.data) {
-          this.handlerService.updateTasks$(res.data._id, res.data);
-          this.activityService.reload();
-        }
-      });
+    this.dialog.open(TaskEditComponent, {
+      ...DialogSettings.TASK,
+      data: element
+    });
   }
 
   toggle(task: TaskDetail): void {

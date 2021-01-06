@@ -77,6 +77,10 @@ export class User implements Deserializable {
     facebook: string;
     twitter: string;
     linkedin: string;
+  } = {
+    facebook: '',
+    twitter: '',
+    linkedin: ''
   };
   company = 'eXp Realty';
   affiliate?: {

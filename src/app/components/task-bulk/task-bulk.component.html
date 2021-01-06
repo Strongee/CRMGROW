@@ -11,8 +11,8 @@
     <div class="form-group">
       <label>change subject</label>
       <select class="form-control theme-control" [(ngModel)]="keepSubject" name="changeSubject" #changeSubject="ngModel" required>
-        <option value="new_subject">Set with new content</option>
-        <option value="keep_subject">Keep content</option>
+        <option value="new_subject">Set with new subject</option>
+        <option value="keep_subject">Keep original subject</option>
       </select>
     </div>
 
@@ -27,8 +27,8 @@
     <div class="form-group">
       <label>Change due dates?</label>
       <select class="form-control theme-control" [(ngModel)]="keepDate" name="changeDate" #changeDate="ngModel" required>
-        <option value="new_date">Set with new content</option>
-        <option value="keep_date">Keep content</option>
+        <option value="new_date">Set with new date</option>
+        <option value="keep_date">Keep original date</option>
       </select>
     </div>
 

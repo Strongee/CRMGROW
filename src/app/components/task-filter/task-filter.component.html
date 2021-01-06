@@ -39,7 +39,7 @@
     <div class="form-group">
       <label>status of task</label>
       <div>
-        <app-tab-option [options]="STATUS_OPTIONS" [(value)]="status"></app-tab-option>
+        <app-tab-option [options]="STATUS_OPTIONS" [(value)]="status" (valueChange)="applyFilters()"></app-tab-option>
       </div>
     </div>
     <div class="d-flex mt-4">
@@ -50,7 +50,7 @@
       <div class="custom-checkbox label-item" *ngFor="let item of labelService.labels$ | async"
         style="height: unset; line-height: unset;">
         <input type="checkbox" class="custom-control-input" id="label-{{item._id}}" name="label-{{item._id}}"
-          (change)="selectedLabels.toggle(item._id)" [checked]="selectedLabels.isSelected(item._id)">
+          (change)="selectedLabels.toggle(item._id); applyFilters();" [checked]="selectedLabels.isSelected(item._id)">
         <label class="custom-control-label v-center" for="label-{{item._id}}">
           <i class="i-icon i-label d-block mr-2"
             [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>

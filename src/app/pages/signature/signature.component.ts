@@ -153,10 +153,12 @@ export class SignatureComponent implements OnInit {
 
   update(): void {
     this.saving = true;
-    this.userService.updateProfile(this.user).subscribe((data) => {
-      this.userService.updateProfileImpl(data);
-      this.saving = false;
-    });
+    this.userService
+      .updateProfile({ email_signature: this.user.email_signature })
+      .subscribe((data) => {
+        this.userService.updateProfileImpl(data);
+        this.saving = false;
+      });
   }
 
   updateEditor(event: any): void {
