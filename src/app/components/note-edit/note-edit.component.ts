@@ -17,7 +17,7 @@ export class NoteEditComponent implements OnInit {
     private noteService: NoteService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
-    this.note = this.data.note.activity_detail;
+    this.note = { ...this.note, ...this.data.note.activity_detail };
   }
 
   ngOnInit(): void {}
