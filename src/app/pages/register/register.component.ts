@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { AvatarEditorComponent } from '../../components/avatar-editor/avatar-editor.component';
 import { UserService } from '../../services/user.service';
 import { validateEmail } from 'src/app/utils/functions';
+import { Strings } from '../../constants/strings.constant';
 
 @Component({
   selector: 'app-register',
@@ -54,6 +55,8 @@ export class RegisterComponent implements OnInit {
   checkingPhone = false;
   phoneExisting = false;
   checkPhoneSubscription: Subscription;
+
+  socialLoading = '';
 
   creditCardInput = {
     creditCard: true,
@@ -192,5 +195,24 @@ export class RegisterComponent implements OnInit {
       .catch((err) => {
         this.toast.error('File Select', err);
       });
+  }
+
+  connectService(type): void {
+    this.socialLoading = type;
+    this.userService.requestOAuthUrl(type).subscribe(
+      (res) => {
+        console.log("social oauth ============>", res);
+        this.socialLoading = '';
+        location.href = res['data'];
+      },
+      (err) => {
+        this.socialLoading = '';
+        this.toast.error(
+          `Error: ${err.message || err.error || err.code || err || 'Unknown'}`,
+          Strings.REQUEST_OAUTH_URL,
+          { timeOut: 3000 }
+        );
+      }
+    );
   }
 }

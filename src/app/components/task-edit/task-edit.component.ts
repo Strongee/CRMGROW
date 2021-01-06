@@ -145,7 +145,8 @@ export class TaskEditComponent implements OnInit {
         (res) => {
           this.updating = false;
           if (res) {
-            this.dialogRef.close({ status: true });
+            console.log("update task ============>", data);
+            this.dialogRef.close({ data });
           }
         },
         (error) => {
