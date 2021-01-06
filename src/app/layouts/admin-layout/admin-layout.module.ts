@@ -60,6 +60,7 @@ import { AnalyticsContactsAddedComponent } from '../../pages/analytics-contacts-
 import { ThemesComponent } from '../../pages/themes/themes.component';
 import { ThemeComponent } from '../../pages/theme/theme.component';
 import { EmailEditorModule } from 'angular-email-editor';
+import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +109,8 @@ import { EmailEditorModule } from 'angular-email-editor';
     AnalyticsVideoWatchedComponent,
     AnalyticsContactsAddedComponent,
     ThemesComponent,
-    ThemeComponent
+    ThemeComponent,
+    AnalyticsMaterialComponent
   ],
   imports: [
     CommonModule,

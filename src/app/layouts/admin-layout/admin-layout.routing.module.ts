@@ -25,6 +25,7 @@ import { ThemeComponent } from 'src/app/pages/theme/theme.component';
 import { CampaignListItemComponent } from 'src/app/pages/campaign-list-item/campaign-list-item.component';
 import { CampaignBulkMailingItemComponent } from 'src/app/pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component';
 import { CampaignSmtpComponent } from 'src/app/pages/campaign-smtp/campaign-smtp.component';
+import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -86,6 +87,13 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: 'materials/create',
     component: VideoCreateComponent,
+    data: {
+      title: 'Materials'
+    }
+  },
+  {
+    path: 'materials/analytics/:id',
+    component: AnalyticsMaterialComponent,
     data: {
       title: 'Materials'
     }
