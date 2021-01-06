@@ -455,45 +455,50 @@
                     <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                       <div class="main-history-item">
                         <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
-                          <app-accordion [showIndicator]="show" [hideIndicator]="hide">
-                            <ng-template #show>
-                              <div class="content f-6 position-relative">
-                                <div class="title f-6 font-weight-bold">
-                                  {{details[activity.emails]?.subject}}
+                          <div *ngIf="activity.type == 'videos' || activity.type == 'video_trackers' ? activity.type : ''; else emailActivity">
+                            <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                              <ng-template #show>
+                                <div class="content f-6 position-relative">
+                                  <div class="title f-6 font-weight-bold">
+                                    {{details[activity.emails]?.subject}}
+                                  </div>
+                                  <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                                  <div class="gradient-bottom"></div>
+                                  <div class="f-3 fw-600 c-blue mt-1">
+                                    Expand
+                                  </div>      
                                 </div>
-                                <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
-                                <div class="gradient-bottom"></div>
-                                <div class="f-3 fw-600 c-blue mt-1">
-                                  Expand
-                                </div>      
-                              </div>
-                            </ng-template>
-                            <ng-template #hide>
-                              <div class="content">
-                                <div class="title f-6 font-weight-bold">
-                                  {{details[activity.emails]?.subject}}
+                              </ng-template>
+                              <ng-template #hide>
+                                <div class="content">
+                                  <div class="title f-6 font-weight-bold">
+                                    {{details[activity.emails]?.subject}}
+                                  </div>
+                                  <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                                  <div class="f-3 fw-600 c-blue mt-1">
+                                    Collapse
+                                  </div>
                                 </div>
-                                <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
-                                <div class="f-3 fw-600 c-blue mt-1">
-                                  Collapse
-                                </div>
-                              </div>
-                            </ng-template>
-                          </app-accordion>
-                          <!-- <div class="summary">
-                            <div class="title f-6 font-weight-bold">
-                              {{details[activity.emails]?.subject}}
-                            </div>
-                            <div class="f-6" [innerHTML]="details[activity.emails]?.content"></div>
-                            <div class="c-blue mt-3 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                              </ng-template>
+                            </app-accordion>
                           </div>
-                          <div class="detail">
-                            <div class="title f-6 font-weight-bold">
-                              {{details[activity.emails]?.subject}}
+                          <ng-template #emailActivity>
+                            <div class="summary position-relative">
+                              <div class="title f-6 font-weight-bold">
+                                {{details[activity.emails]?.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                              <div class="gradient-bottom"></div>
+                              <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                             </div>
-                            <div class="f-6" [innerHTML]="details[activity.emails]?.content"></div>
-                            <div class="c-blue mt-3 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Close</div>
-                          </div> -->
+                            <div class="detail">
+                              <div class="title f-6 font-weight-bold">
+                                {{details[activity.emails]?.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                              <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Close</div>
+                            </div>  
+                          </ng-template>
                         </ng-container>
                         <ng-template #multiEmailHistory>
                           <div class="title font-weight-bold">
