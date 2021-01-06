@@ -52,7 +52,9 @@ export class SendEmailComponent implements OnInit {
     private materialService: MaterialService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
-    this.emailContacts = [this.data.contact];
+    if (this.data) {
+      this.emailContacts = [this.data.contact];
+    }
   }
 
   ngOnInit(): void {}
@@ -133,6 +135,9 @@ export class SendEmailComponent implements OnInit {
     this.selectedTemplate = template;
     this.emailSubject = this.selectedTemplate.subject;
     this.emailContent = this.selectedTemplate.content;
+    if (this.htmlEditor) {
+      this.htmlEditor.setValue(this.emailContent);
+    }
     // Attach the Selected Material Content
   }
 

@@ -2,15 +2,9 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TemplatesService } from 'src/app/services/templates.service';
-import { FileService } from '../../services/file.service';
-import { QuillEditor } from '../../constants/variable.constants';
-import { QuillEditorComponent } from 'ngx-quill';
-import * as QuillNamespace from 'quill';
-const Quill: any = QuillNamespace;
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import { Template } from 'src/app/models/template.model';
 import { PageCanDeactivate } from '../../variables/abstractors';
-// import ImageResize from 'quill-image-resize-module';
-// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-template',
@@ -20,40 +14,26 @@ import { PageCanDeactivate } from '../../variables/abstractors';
 export class TemplateComponent
   extends PageCanDeactivate
   implements OnInit, OnDestroy {
+  saved = true;
+
   template: Template = new Template();
-  isNew = true;
-  type = true;
-  emailType = 'checked';
-  textType = '';
-  typeFlag = true;
+  id: string = '';
   role = '';
-  id = '';
 
   loadSubcription: Subscription;
   saveSubscription: Subscription;
 
   isLoading = false;
   isSaving = false;
-  submitted = false;
 
-  subjectCursorStart = 0;
-  subjectCursorEnd = 0;
-  subject = '';
-  config = QuillEditor;
-  quillEditorRef;
+  cursorStart = 0;
+  cursorEnd = 0;
+  focusedField = '';
 
-  smsContentCursorStart = 0;
-  smsContentCursorEnd = 0;
-  smsContent = '';
-  focusEditor = '';
-  saved = true;
-
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-
+  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
     private route: ActivatedRoute,
     private templatesService: TemplatesService,
-    private fileService: FileService,
     private router: Router
   ) {
     super();
@@ -62,7 +42,7 @@ export class TemplateComponent
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
     if (id) {
-      this.isNew = false;
+      this.id = id;
       this.loadData(id);
     }
     window['confirmReload'] = true;
@@ -72,206 +52,104 @@ export class TemplateComponent
     window['confirmReload'] = false;
   }
 
-  changeType(type): void {
-    if (type === 'email') {
-      this.emailType = 'checked';
-      this.textType = '';
-    } else {
-      this.textType = 'checked';
-      this.emailType = '';
-    }
-    this.type = type === 'email' ? true : false;
+  changeType(type: string): void {
+    this.template.type = type;
     this.saved = false;
   }
 
   saveTemplate(): void {
-    if (this.type) {
-      this.template.subject = this.subject;
-    } else {
-      this.template.content = this.smsContent;
-    }
     if (!this.id) {
-      const template = new Template().deserialize({
-        ...this.template,
-        type: this.type ? 'email' : 'text'
-      });
       this.isSaving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
-      this.saveSubscription = this.templatesService.create(template).subscribe(
-        (res) => {
-          this.router.navigate(['/templates']);
-          this.isSaving = false;
-          this.saved = true;
-        },
-        (err) => {
-          this.isSaving = false;
-        }
-      );
+      this.saveSubscription = this.templatesService
+        .create(this.template)
+        .subscribe(
+          () => {
+            this.router.navigate(['/templates']);
+            this.isSaving = false;
+            this.saved = true;
+          },
+          () => {
+            this.isSaving = false;
+          }
+        );
     } else {
-      const template = { ...this.template, type: this.type ? 'email' : 'text' };
+      const template = { ...this.template, _id: undefined };
       this.isSaving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
       this.saveSubscription = this.templatesService
         .update(this.id, template)
         .subscribe(
-          (res) => {
+          () => {
             this.router.navigate(['/templates']);
             this.isSaving = false;
             this.saved = true;
           },
-          (err) => {
+          () => {
             this.isSaving = false;
           }
         );
     }
   }
 
-  loadData(id): void {
+  loadData(id: string): void {
     this.isLoading = true;
     this.loadSubcription && this.loadSubcription.unsubscribe();
     this.loadSubcription = this.templatesService.read(id).subscribe(
       (res) => {
-        this.id = id;
         this.isLoading = false;
-        this.template.title = res.title;
-        this.template.subject = res.subject;
-        this.template.content = res.content;
-        this.role = res.role;
-        this.type = res.type === 'email';
-        if (res.type === 'email') {
-          this.emailType = 'checked';
-          this.textType = '';
-        } else {
-          this.textType = 'checked';
-          this.emailType = '';
+        this.template.deserialize(res);
+        if (this.template.type === 'email') {
+          this.htmlEditor.setValue(this.template.content);
         }
-        if (this.type) {
-          this.subject = this.template.subject;
-        } else {
-          this.smsContent = this.template.content;
-        }
-        this.typeFlag = false;
       },
-      (err) => (this.isLoading = false)
+      () => (this.isLoading = false)
     );
   }
-
 
   /**=======================================================
    *
    * Subject Field
    *
    ========================================================*/
-  /**
-   *
-   * @param field : Input text field of the subject
-   */
-  getSubjectCursorPost(field): void {
-    this.setFocusField('subject');
+  setCursorPos(field, field_name: string): void {
+    this.focusedField = field_name;
     if (field.selectionStart || field.selectionStart === '0') {
-      this.subjectCursorStart = field.selectionStart;
+      this.cursorStart = field.selectionStart;
     }
     if (field.selectionEnd || field.selectionEnd === '0') {
-      this.subjectCursorEnd = field.selectionEnd;
+      this.cursorEnd = field.selectionEnd;
     }
   }
-  insertSubjectValue(value): void {
-    this.subject =
-      this.subject.substr(0, this.subjectCursorStart) +
-      value +
-      this.subject.substr(
-        this.subjectCursorEnd,
-        this.subject.length - this.subjectCursorEnd
-      );
-    this.subjectCursorStart = this.subjectCursorStart + value.length;
-    this.subjectCursorEnd = this.subjectCursorStart;
-    this.saved = false;
-  }
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-  insertEmailContentValue(value): void {
-    // const range = this.quillEditorRef.getSelection();
-    // const el = `<span>${value}</span>`
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, el);
-    this.emailEditor.quillEditor.focus();
-    const range = this.emailEditor.quillEditor.getSelection();
-    if (!range) {
+  insertValue(value: string): void {
+    if (this.focusedField === 'editor') {
+      this.htmlEditor.insertEmailContentValue(value);
       return;
     }
-    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
-    this.emailEditor.quillEditor.setSelection(
-      range.index + value.length,
-      0,
-      'user'
-    );
-    this.saved = false;
-  }
-  insertValue(value): void {
-    if (this.focusEditor === 'subject') {
-      this.insertSubjectValue(value);
-    } else if (this.focusEditor === 'content-email') {
-      this.insertEmailContentValue(value);
-    } else if (this.focusEditor === 'content-text') {
-      this.insertSmsContentValue(value);
+    let text = '';
+    if (this.focusedField === 'subject') {
+      text = this.template.subject;
+    } else {
+      text = this.template.content;
     }
-  }
-  getSmsContentCursor(field): void {
-    this.setFocusField('content-text');
-    if (field.selectionStart || field.selectionStart === '0') {
-      this.smsContentCursorStart = field.selectionStart;
-    }
-    if (field.selectionEnd || field.selectionEnd === '0') {
-      this.smsContentCursorEnd = field.selectionEnd;
-    }
-  }
-
-  insertSmsContentValue(value): void {
-    this.smsContent =
-      this.smsContent.substr(0, this.smsContentCursorStart) +
+    text =
+      text.substr(0, this.cursorStart) +
       value +
-      this.smsContent.substr(
-        this.smsContentCursorEnd,
-        this.smsContent.length - this.smsContentCursorEnd
-      );
-    this.smsContentCursorStart = this.smsContentCursorStart + value.length;
-    this.smsContentCursorEnd = this.smsContentCursorStart;
+      text.substr(this.cursorEnd, text.length - this.cursorEnd);
+    if (this.focusedField === 'subject') {
+      this.template.subject = text;
+    } else {
+      this.template.content = text;
+    }
     this.saved = false;
-    // field.focus();
+    this.cursorStart += value.length;
+    this.cursorEnd = this.cursorStart;
+  }
+  focusEditor(): void {
+    this.focusedField = 'editor';
   }
 
-  initImageHandler = () => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res.url);
-        });
-      }
-    });
-    imageInput.click();
-  };
-
-  insertImageToEditor(url): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-
-  setFocusField(editorType): void {
-    this.focusEditor = editorType;
-  }
-
-  stateChanged($event): void {
+  stateChanged(): void {
     this.saved = false;
   }
 }

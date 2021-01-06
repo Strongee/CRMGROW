@@ -78,10 +78,9 @@ export const promptForFiles = (): Promise<FileList> => {
 };
 
 export const listToTree = (list) => {
-  let map = {},
-    node,
-    roots = [],
-    i;
+  const map = {},
+    roots = [];
+  let node, i;
   for (i = 0; i < list.length; i += 1) {
     map[list[i].ref] = i; // initialize the map
     list[i].children = []; // initialize the children

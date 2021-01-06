@@ -72,6 +72,9 @@ export class MaterialsComponent implements OnInit {
   editedPdfs;
   captureImages = [];
   editedImages;
+  provideFlag = true;
+  ownFlag = false;
+  teamFlag = false;
 
   constructor(
     private dialog: MatDialog,
@@ -198,10 +201,27 @@ export class MaterialsComponent implements OnInit {
     this.router.navigate(['./materials/create']);
   }
 
-  selectFolder(): void {}
+  selectFolder(type: string): void {
+    switch (type) {
+      case 'provide':
+        this.provideFlag = true;
+        this.ownFlag = false;
+        this.teamFlag = false;
+        break;
+      case 'own':
+        this.provideFlag = false;
+        this.ownFlag = true;
+        this.teamFlag = false;
+        break;
+      case 'team':
+        this.provideFlag = false;
+        this.ownFlag = false;
+        this.teamFlag = true;
+        break;
+    }
+  }
 
   sendMaterial(material: any): void {
-    console.log('###', material);
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',

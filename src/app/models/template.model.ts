@@ -7,7 +7,7 @@ export class Template implements Deserializable {
   subject: string = '';
   content: string = '';
   role: string;
-  type: string;
+  type: string = 'email';
   default: boolean;
   created_at: string;
   updated_at: string;

@@ -24,11 +24,12 @@
       [required]="required ? true : false"
       (onEditorCreated)="getEditorInstance($event)"
       [formControl]="editorForm"
+      (click)="onFocusEvt()"
       #emailEditor>
     </quill-editor>
     <span class="c-red error" *ngIf="editorForm.errors && (editorForm.touched || editorForm.dirty)">
     Required!
-  </span>
+    </span>
     <ng-container *ngIf="hasToken">
       <div ngbDropdown class="insert-token">
         <div class="v-center" ngbDropdownToggle>
