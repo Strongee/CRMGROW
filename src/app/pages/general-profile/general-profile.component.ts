@@ -17,6 +17,13 @@ import { environment } from 'src/environments/environment';
 })
 export class GeneralProfileComponent implements OnInit {
   user: User = new User();
+  name = '';
+  userEmail = '';
+  phoneNumber = {};
+  userCompany = '';
+  website = '';
+  timezone = '';
+  address = '';
   timezones = TIMEZONE;
   companies = COMPANIES;
   countries: CountryISO[] = [
@@ -41,6 +48,13 @@ export class GeneralProfileComponent implements OnInit {
   ) {
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
+      this.name = this.user.user_name;
+      this.userEmail = this.user.email;
+      this.phoneNumber = this.user.phone;
+      this.userCompany = this.user.company;
+      this.website = this.user.learn_more;
+      this.timezone = this.user.time_zone_info;
+      this.address = this.user.location;
     });
   }
 
@@ -151,6 +165,7 @@ export class GeneralProfileComponent implements OnInit {
   }
 
   updateProfile(form: any): void {
+    console.log('###', form);
     this.saving = true;
     this.userService.updateProfile(form).subscribe((data) => {
       this.userService.updateProfileImpl(data);
@@ -159,7 +174,7 @@ export class GeneralProfileComponent implements OnInit {
   }
 
   handleAddressChange(evt: any): void {
-    this.user.location = evt.formatted_address;
+    this.address = evt.formatted_address;
   }
 
   confirmPhone(): void {}
