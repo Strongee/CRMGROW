@@ -3,6 +3,10 @@
 .table {
   th, td {
     padding: 10px 0px;
+
+    @media screen and (max-width: 576px) {
+      padding: 10px 5px;
+    }
   }
 
   tbody tr {
@@ -52,7 +56,6 @@
   }
 
   .call-request-table {
-
     .guests {
       text-align: right;
       padding-right: 30px;
@@ -68,7 +71,10 @@
 
   @media screen and (max-width: 576px) {
     .call-request-table {
-
+      .subject {
+        max-width: 120px;
+        overflow: hidden;
+      }
       .avatar {
         display: none;
       }

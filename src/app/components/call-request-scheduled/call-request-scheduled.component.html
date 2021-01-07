@@ -57,12 +57,16 @@
         <label>Description</label>
         <div class="text-wrapper description bgc-silver f-4">{{formData.description || '' | stripTags | shorten: 80: '...'}}</div>
       </div>
-      <div class="my-3" *ngIf="isEditable">
+      <div class="my-3 form-group" *ngIf="isEditable">
         <label>Note</label>
-        <quill-editor placeholder="Enter Text" [(ngModel)]="note" [modules]="config" name="noteContent"
-                      [styles]="{height: '120px'}" #noteContent="ngModel" (onEditorCreated)="getEditorInstance($event)"
-                      [class.has-error]="noteContent.errors && (noteContent.touched || noteContent.dirty )" class="rounded" #noteEditor>
-        </quill-editor>
+        <app-html-editor
+          [(value)]="formData.note"
+          placeholder="Enter Text..."
+          required="true"
+          [style]="{height: '200px'}"
+          #editor
+        >
+        </app-html-editor>
       </div>
       <div class="my-3">
         <label>Duration</label>

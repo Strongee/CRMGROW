@@ -4,7 +4,7 @@
 </div>
 <form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? decideAction() : false"
   [class.was-validated]="submitted">
-  <mat-dialog-content class="content-section">
+  <mat-dialog-content class="content-section" [class]="type">
     <div class="action-list" [class.enable]="stepIndex===1">
       <ul>
         <ng-container>
@@ -44,7 +44,7 @@
                || type == 'send_email_pdf' || type == 'send_text_pdf'
                || type == 'send_email_image' || type == 'send_text_image'
       ">
-        <div class="template-container mr-lg-5 mr-md-0">
+        <div class="template-container mr-lg-5 mr-md-3 mr-sm-0">
           <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
           </app-slide-tab>
           <ng-container *ngIf="selectedTab.label == 'VIDEO'">
@@ -101,10 +101,11 @@
               </ng-container>
             </div>
           </ng-container>
+          <div class="c-red f-3 error mt-3">{{this.materialError}}</div>
         </div>
       </ng-container>
       <!--  *ngIf="!(data.action.condition && data.editFlag)" -->
-      <div class="contents-container w-100 mt-lg-0 mt-md-3">
+      <div class="contents-container w-100 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
         <ng-container
           *ngIf="!(type == 'follow_up' || type == 'update_follow_up' || type == 'note')">
           <div class="row">
@@ -423,7 +424,7 @@
             <div class="form-group has-feedback" [class.has-error]="!action.content && submitted">
               <ng-container *ngIf="type == 'send_email_video' || type == 'send_text_video'
                                    || type == 'send_email_pdf' || type == 'send_text_pdf'
-                                   || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
+                                   || type == 'send_email_image' || type == 'send_text_image'; else noContentMaterial">
                 <div class="v-center label-group">
                   <label class="theme-label">CONTENT</label>
                   <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
@@ -445,7 +446,7 @@
                   </div>
                 </div>
               </ng-container>
-              <ng-template #noMaterial>
+              <ng-template #noContentMaterial>
                 <label class="theme-label">CONTENT</label>
                 <div class="d-flex flex-wrap field-actions mb-2">
                   <button type="button" class="btn btn-sm btn-white-gray font-weight-bold" (click)="insertEmailContentValue('{user_name}')">Your Name</button>
@@ -466,17 +467,14 @@
                   </div>
                 </div>
               </ng-template>
-              <quill-editor placeholder="Enter mail content" [(ngModel)]="action.content" [modules]="config"
-                            name="mailContent" [styles]="{height: '240px'}" #mailContent="ngModel" required
-                            (onEditorCreated)="getEditorInstance($event)"
-                            [class.has-error]="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted"
-                            class="rounded"
-                            #emailEditor
+              <app-html-editor
+                [(value)]="action.content"
+                placeholder="Enter email content..."
+                required="true"
+                [style]="{height: '240px'}"
+                #editor
               >
-              </quill-editor>
-              <span class="error text-danger"
-                    *ngIf="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted">Content
-              is required</span>
+              </app-html-editor>
             </div>
           </div>
         </ng-container>

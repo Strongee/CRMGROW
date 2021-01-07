@@ -79,6 +79,8 @@ export class AutomationsComponent implements OnInit {
         this.automationService.delete(automation._id).subscribe(
           (response) => {
             this.deleting = false;
+            console.log("delete automation ================>");
+            this.automationService.reload();
           },
           (err) => {
             this.deleting = false;

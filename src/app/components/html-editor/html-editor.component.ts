@@ -29,6 +29,7 @@ export class HtmlEditorComponent implements OnInit {
   @Input() class = '';
   @Input() hasToken: boolean = false;
   @Input() required: boolean = false;
+  @Input() hasAttachment: boolean = false;
 
   @Input() value: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
@@ -50,7 +51,7 @@ export class HtmlEditorComponent implements OnInit {
         [{ list: 'ordered' }, { list: 'bullet' }],
         [{ align: [] }],
         ['link', 'image'],
-        ['attachment']
+        this.hasAttachment ? ['attachment'] : []
       ],
       handlers: {
         attachment: () => {
