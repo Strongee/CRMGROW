@@ -6,7 +6,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { FileService } from '../../services/file.service';
 import { ContactService } from 'src/app/services/contact.service';
@@ -23,7 +23,8 @@ import {
   ActionName,
   TIMES,
   REPEAT_DURATIONS,
-  DialogSettings
+  DialogSettings,
+  CALENDAR_DURATION
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -59,46 +60,17 @@ import { NoteCreateComponent } from 'src/app/components/note-create/note-create.
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
-  TYPES = [
-    {
-      id: 'all',
-      label: 'Activity'
-    },
-    {
-      id: 'note',
-      label: 'Notes'
-    },
-    {
-      id: 'message',
-      label: 'Messages'
-    },
-    {
-      id: 'appointment',
-      label: 'Appointments'
-    },
-    {
-      id: 'group_call',
-      label: 'Group Calls'
-    },
-    {
-      id: 'task',
-      label: 'Tasks'
-    },
-    {
-      id: 'deal',
-      label: 'Deals'
-    }
-  ];
   REPEAT_DURATIONS = REPEAT_DURATIONS;
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
-    { icon: '', label: 'Activity', id: 'activity' },
-    { icon: '', label: 'Notes', id: 'note' },
-    { icon: '', label: 'Messages', id: 'message' },
-    { icon: '', label: 'Appointments', id: 'appointment' },
-    { icon: '', label: 'Group Calls', id: 'group_call' },
-    { icon: '', label: 'Tasks', id: 'task' },
-    { icon: '', label: 'Deals', id: 'deal' }
+    { icon: '', label: 'Activity', id: 'all' },
+    { icon: '', label: 'Notes', id: 'notes' },
+    { icon: '', label: 'Emails', id: 'emails' },
+    { icon: '', label: 'Texts', id: 'texts' },
+    { icon: '', label: 'Appointments', id: 'appointments' },
+    { icon: '', label: 'Group Calls', id: 'group_calls' },
+    { icon: '', label: 'Tasks', id: 'follow_ups' },
+    { icon: '', label: 'Deals', id: 'deals' }
   ];
   action: TabItem = this.tabs[0];
 
@@ -157,11 +129,13 @@ export class ContactComponent implements OnInit {
   dataSource = new MatTreeNestedDataSource<any>();
   hasChild = (_: number, node: any) =>
     !!node.children && node.children.length > 0;
+  durations = CALENDAR_DURATION;
 
   constructor(
     private dialog: MatDialog,
     private location: Location,
     private route: ActivatedRoute,
+    private router: Router,
     private contactService: ContactService,
     private noteService: NoteService,
     private taskService: TaskService,
@@ -182,7 +156,7 @@ export class ContactComponent implements OnInit {
       if (res && res._id === this._id) {
         this.contact = res;
         this.selectedContact = res;
-        console.log('res', this.contact);
+        console.log('res', res);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
@@ -266,7 +240,9 @@ export class ContactComponent implements OnInit {
   /**
    * Go to Contact List Page
    */
-  goToBack(): void {}
+  goToBack(): void {
+    this.router.navigate(['contacts']);
+  }
 
   /**
    * Load Previous Contact Detail Information
@@ -446,17 +422,6 @@ export class ContactComponent implements OnInit {
   /**
    * Create Note
    */
-  createNote(): void {
-    this.noteSaving = true;
-    this.noteService
-      .create({ ...this.note, contact: this._id })
-      .subscribe((res) => {
-        this.noteSaving = false;
-        this.handlerService.registerActivity$(res);
-        this.handlerService.activityAdd$([this._id], 'note');
-      });
-  }
-
   openNoteDlg(): void {
     this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
   }
@@ -474,37 +439,7 @@ export class ContactComponent implements OnInit {
     this.emailContent = this.selectedTemplate.content;
     // Attach the Selected Material Content
   }
-  getScheduleDateTime(): any {
-    if (this.schedule_date.day != '' && this.schedule_time != '') {
-      return moment(
-        this.schedule_date.year +
-          '-' +
-          this.schedule_date.month +
-          '-' +
-          this.schedule_date.day +
-          ' ' +
-          this.schedule_time
-      ).format();
-    }
-  }
 
-  setScheduleDateTime(): void {
-    this.scheduleDateTime = moment(
-      this.schedule_date.year +
-        '-' +
-        this.schedule_date.month +
-        '-' +
-        this.schedule_date.day +
-        ' ' +
-        this.schedule_time
-    ).format();
-    this.planned = true;
-  }
-
-  removeSchedule(): void {
-    this.planned == false;
-    this.scheduleDateTime = '';
-  }
   /**
    * Open the Material Select Dialog
    */
@@ -675,30 +610,30 @@ export class ContactComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.noteService.delete(activity._id).subscribe((res) => {
-            console.log('##', res);
-          });
+          this.noteService
+            .delete(activity.activity_detail._id)
+            .subscribe((res) => {
+              console.log('##', res);
+            });
         }
       });
   }
 
   /**************************************
-   * Task Panel Relative Functions
+   * Appointment Activity Relative Functions
    **************************************/
-  getTaskDateTime(): any {
-    if (this.task_date.day != '') {
-      return (
-        this.task_date.year +
-        '-' +
-        this.task_date.month +
-        '-' +
-        this.task_date.day
-      );
+  getTime(start: any, end: any): any {
+    const start_hour = new Date(start).getHours();
+    const end_hour = new Date(end).getHours();
+    const start_minute = new Date(start).getMinutes();
+    const end_minute = new Date(end).getMinutes();
+    const duration = end_hour - start_hour + (end_minute - start_minute) / 60;
+    const durationTime = this.durations.filter(
+      (time) => time.value == duration
+    );
+    if (durationTime) {
+      return durationTime[0].text;
     }
-  }
-  setTaskDateTime(): void {
-    this.selectedDateTime = moment(this.getTaskDateTime()).format('DD.MM.YYYY');
-    close();
   }
 
   /*****************************************
