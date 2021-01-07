@@ -396,11 +396,39 @@
                   <div *ngSwitchCase="'follow_ups'">
                     <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                       <div class="main-history-item" [class.completed]="activity.content.indexOf('completed') !== -1">
-                        <div class="content">
-                          {{activity.activity_detail.content}}
+                        <div class="v-center">
+                          <div class="v-center justify-content-center task-status">
+                            <i class="i-icon i-check bgc-white"></i>
+                          </div>
+                          <div class="f-6 font-weight-bold ml-3 content">
+                            {{activity.activity_detail.content}}
+                          </div>
                         </div>
-                        <div class="time ml-2">
-                          {{activity.activity_detail.due_date | date: 'MMM dd, hh:mm a'}}
+                        <div class="v-center mt-3" *ngIf="activity.content.indexOf('completed') === -1">
+                          <div class="time">
+                            <div class="f-4 fw-600 op-40">
+                              Due date
+                            </div>
+                            <div class="v-center mt-1">
+                              <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                              <span class="f-4">{{activity.activity_detail.due_date | date: 'MM/dd/yyyy'}} at {{activity.activity_detail.due_date | date: 'shortTime'}}</span>
+                            </div>
+                          </div>
+                          <div class="type ml-5">
+                            <div class="f-4 fw-600 op-40">
+                              Type
+                            </div>
+                            <div class="v-center mt-1">
+                              <ng-container [ngSwitch]="activity.activity_detail.type">
+                                <i class="d-block i-icon i-task bgc-dark mr-2" *ngSwitchCase="'task'"></i>
+                                <i class="d-block i-icon i-phone bgc-dark mr-2" *ngSwitchCase="'call'"></i>
+                                <i class="d-block i-icon i-lunch bgc-dark mr-2" *ngSwitchCase="'meeting'"></i>
+                                <i class="d-block i-icon i-message bgc-dark mr-2" *ngSwitchCase="'email'"></i>
+                                <i class="d-block i-icon i-video bgc-dark mr-2" *ngSwitchCase="'material'"></i>
+                              </ng-container>
+                              <span class="f-4 text-capitalize">{{activity.activity_detail.type}}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </ng-container>
@@ -411,15 +439,27 @@
                       </div>
                     </ng-template>
                     <div class="related-history-item" *ngIf="groupActions[activity.group_id].length > 1">
-                      <app-accordion [detail]="result">
-                        <ng-template #result>
-                          <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
-                            <div class="d-flex mb-1">
-                              <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
-                              <div class="mr-2 text-capitalize rounded-pill bgc-green-weak text-white px-3">{{detailActivity.content}}</div>
-                              <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                      <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                        <ng-template #show>
+                          <div class="content">
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              See details
+                            </div>      
+                          </div>
+                        </ng-template>
+                        <ng-template #hide>
+                          <div class="content">
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-green-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Close
                             </div>
-                          </ng-container>
+                          </div>
                         </ng-template>
                       </app-accordion>
                     </div>
@@ -451,54 +491,25 @@
                     </ng-container>
                   </div>
 
-                  <div *ngSwitchCase="activity.type == 'emails' || activity.type == 'email_trackers' ? activity.type : '' || (activity.type == 'videos' && activity.content.indexOf('email') !== -1) || activity.type == 'video_trackers' ? activity.type : ''">
+                  <div *ngSwitchCase="activity.type == 'emails' || activity.type == 'email_trackers' ? activity.type : ''">
                     <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                       <div class="main-history-item">
                         <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
-                          <div *ngIf="activity.type == 'videos' || activity.type == 'video_trackers' ? activity.type : ''; else emailActivity">
-                            <app-accordion [showIndicator]="show" [hideIndicator]="hide">
-                              <ng-template #show>
-                                <div class="content f-6 position-relative">
-                                  <div class="title f-6 font-weight-bold">
-                                    {{details[activity.emails]?.subject}}
-                                  </div>
-                                  <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
-                                  <div class="gradient-bottom"></div>
-                                  <div class="f-3 fw-600 c-blue mt-1">
-                                    Expand
-                                  </div>      
-                                </div>
-                              </ng-template>
-                              <ng-template #hide>
-                                <div class="content">
-                                  <div class="title f-6 font-weight-bold">
-                                    {{details[activity.emails]?.subject}}
-                                  </div>
-                                  <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
-                                  <div class="f-3 fw-600 c-blue mt-1">
-                                    Collapse
-                                  </div>
-                                </div>
-                              </ng-template>
-                            </app-accordion>
-                          </div>
-                          <ng-template #emailActivity>
-                            <div class="summary position-relative">
-                              <div class="title f-6 font-weight-bold">
-                                {{details[activity.emails]?.subject}}
-                              </div>
-                              <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
-                              <div class="gradient-bottom"></div>
-                              <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.emails]?.subject}}
                             </div>
-                            <div class="detail">
-                              <div class="title f-6 font-weight-bold">
-                                {{details[activity.emails]?.subject}}
-                              </div>
-                              <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
-                              <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Close</div>
-                            </div>  
-                          </ng-template>
+                            <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          </div>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.emails]?.subject}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div>  
                         </ng-container>
                         <ng-template #multiEmailHistory>
                           <div class="title font-weight-bold">
@@ -541,24 +552,95 @@
                     </ng-container>
                   </div>
 
-                  <!-- <div *ngSwitchCase="activity.type == 'videos' || activity.type == 'video_trackers' ? activity.type : ''">
+                  <div *ngSwitchCase="activity.type == 'videos' || activity.type == 'video_trackers' ? activity.type : ''">
                     <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                       <div class="main-history-item">
-                        <div class="title font-weight-bold">
-                          {{activity.activity_detail.subject}}
-                        </div>
-                        <app-accordion [detail]="result">
-                          <ng-template #result>
-                            <div>
-                              <h5 class="font-weight-bold">Details</h5>
-                              <div class="mb-2"><span class="font-weight-bold mr-3">Subject:</span>{{activity.activity_detail.subject}}</div>
-                              <div [innerHTML]="activity.activity_detail.content"></div>
-                            </div>  
+                        <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                          <ng-template #show>
+                            <div class="content f-6 position-relative">
+                              <div class="title f-6 font-weight-bold">
+                                {{activity.activity_detail.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                              <div class="gradient-bottom"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Expand
+                              </div>      
+                            </div>
+                          </ng-template>
+                          <ng-template #hide>
+                            <div class="content">
+                              <div class="title f-6 font-weight-bold">
+                                {{activity.activity_detail.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.content || 'No Content'"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Collapse
+                              </div>
+                            </div>
                           </ng-template>
                         </app-accordion>
                       </div>
                     </ng-container>
-                  </div> -->
+                  </div>
+
+                  <div *ngSwitchCase="'appointments'">
+                    <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                      <div class="main-history-item">
+                        <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                          <ng-template #show>
+                            <div class="content f-6 position-relative">
+                              <div class="font-weight-bold">
+                                {{activity.activity_detail.title}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content' | stripTags | shorten: 300: '...'"></div>
+                              <div class="gradient-bottom"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Expand
+                              </div>      
+                            </div>
+                          </ng-template>
+                          <ng-template #hide>
+                            <div class="content">
+                              <div class="f-6 font-weight-bold">
+                                {{activity.activity_detail.title}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content'"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Collapse
+                              </div>
+                            </div>
+                          </ng-template>
+                        </app-accordion>
+                        <div class="v-center mt-3">
+                          <div class="date">
+                            <div class="f-4 fw-600 op-40">
+                              Date
+                            </div>
+                            <div class="v-center mt-1">
+                              <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                              <span class="f-4">{{activity.activity_detail.due_start | date: 'MM/dd/yyyy'}}</span>
+                            </div>
+                          </div>
+                          <div class="time">
+                            <div class="f-4 fw-600 op-40">
+                              Time
+                            </div>
+                            <div class="v-center mt-1">
+                              <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                              <span class="f-4">{{getTime()}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-template #removedTaskTemplate>
+                      <div class="d-flex">
+                        <mat-icon class="mr-2">warning</mat-icon>
+                        <span>Can't see the detail as it is deleted.</span>
+                      </div>
+                    </ng-template>
+                  </div>
                 </ng-container>
               </div>
             </ng-container>

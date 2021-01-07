@@ -648,6 +648,8 @@ export class ContactComponent implements OnInit {
     close();
   }
 
+  getTime(): any {}
+
   /*****************************************
    * Automation Select & Display
    *****************************************/
