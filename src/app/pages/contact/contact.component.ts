@@ -23,7 +23,8 @@ import {
   ActionName,
   TIMES,
   REPEAT_DURATIONS,
-  DialogSettings
+  DialogSettings,
+  CALENDAR_DURATION
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -128,6 +129,7 @@ export class ContactComponent implements OnInit {
   dataSource = new MatTreeNestedDataSource<any>();
   hasChild = (_: number, node: any) =>
     !!node.children && node.children.length > 0;
+  durations = CALENDAR_DURATION;
 
   constructor(
     private dialog: MatDialog,
@@ -391,17 +393,6 @@ export class ContactComponent implements OnInit {
   /**
    * Create Note
    */
-  createNote(): void {
-    this.noteSaving = true;
-    this.noteService
-      .create({ ...this.note, contact: this._id })
-      .subscribe((res) => {
-        this.noteSaving = false;
-        this.handlerService.registerActivity$(res);
-        this.handlerService.activityAdd$([this._id], 'note');
-      });
-  }
-
   openNoteDlg(): void {
     this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
   }
@@ -419,37 +410,7 @@ export class ContactComponent implements OnInit {
     this.emailContent = this.selectedTemplate.content;
     // Attach the Selected Material Content
   }
-  getScheduleDateTime(): any {
-    if (this.schedule_date.day != '' && this.schedule_time != '') {
-      return moment(
-        this.schedule_date.year +
-          '-' +
-          this.schedule_date.month +
-          '-' +
-          this.schedule_date.day +
-          ' ' +
-          this.schedule_time
-      ).format();
-    }
-  }
 
-  setScheduleDateTime(): void {
-    this.scheduleDateTime = moment(
-      this.schedule_date.year +
-        '-' +
-        this.schedule_date.month +
-        '-' +
-        this.schedule_date.day +
-        ' ' +
-        this.schedule_time
-    ).format();
-    this.planned = true;
-  }
-
-  removeSchedule(): void {
-    this.planned == false;
-    this.scheduleDateTime = '';
-  }
   /**
    * Open the Material Select Dialog
    */
@@ -630,25 +591,21 @@ export class ContactComponent implements OnInit {
   }
 
   /**************************************
-   * Task Panel Relative Functions
+   * Appointment Activity Relative Functions
    **************************************/
-  getTaskDateTime(): any {
-    if (this.task_date.day != '') {
-      return (
-        this.task_date.year +
-        '-' +
-        this.task_date.month +
-        '-' +
-        this.task_date.day
-      );
+  getTime(start: any, end: any): any {
+    const start_hour = new Date(start).getHours();
+    const end_hour = new Date(end).getHours();
+    const start_minute = new Date(start).getMinutes();
+    const end_minute = new Date(end).getMinutes();
+    const duration = end_hour - start_hour + (end_minute - start_minute) / 60;
+    const durationTime = this.durations.filter(
+      (time) => time.value == duration
+    );
+    if (durationTime) {
+      return durationTime[0].text;
     }
   }
-  setTaskDateTime(): void {
-    this.selectedDateTime = moment(this.getTaskDateTime()).format('DD.MM.YYYY');
-    close();
-  }
-
-  getTime(): any {}
 
   /*****************************************
    * Automation Select & Display

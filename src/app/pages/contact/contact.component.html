@@ -291,37 +291,37 @@
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'notes'">
-              <div class="v-center justify-content-end">
+              <div class="v-center justify-content-end c-pointer" (click)="openNoteDlg()">
                 <span class="f-3 font-weight-bold c-blue mr-2">Add new note</span>
                 <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'emails'">
-              <div class="v-center justify-content-end">
+              <div class="v-center justify-content-end c-pointer" (click)="openSendEmail()">
                 <span class="f-3 font-weight-bold c-blue mr-2">Create email</span>
                 <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'texts'">
-              <div class="v-center justify-content-end">
+              <div class="v-center justify-content-end c-pointer">
                 <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
                 <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'appointments'">
-              <div class="v-center justify-content-end">
+              <div class="v-center justify-content-end c-pointer" (click)="openAppointmentDlg()">
                 <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
                 <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'follow_ups'">
-              <div class="v-center justify-content-end">
+              <div class="v-center justify-content-end c-pointer" (click)="openTaskDlg()">
                 <span class="f-3 font-weight-bold c-blue mr-2">Create task</span>
                 <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'deals'">
-              <div class="v-center justify-content-end">
+              <div class="v-center justify-content-end c-pointer">
                 <span class="f-3 font-weight-bold c-blue mr-2">Create deal</span>
                 <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
@@ -622,14 +622,31 @@
                               <span class="f-4">{{activity.activity_detail.due_start | date: 'MM/dd/yyyy'}}</span>
                             </div>
                           </div>
-                          <div class="time">
+                          <div class="time ml-5">
                             <div class="f-4 fw-600 op-40">
                               Time
                             </div>
                             <div class="v-center mt-1">
                               <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                              <span class="f-4">{{getTime()}}</span>
+                              <span class="f-4">{{getTime(activity.activity_detail.due_start, activity.activity_detail.due_end)}}</span>
                             </div>
+                          </div>
+                          <div class="location ml-5">
+                            <div class="f-4 fw-600 op-40">
+                              Location
+                            </div>
+                            <div class="v-center mt-1">
+                              <i class="d-block i-icon i-location bgc-dark mr-2"></i>
+                              <span class="f-4">{{activity.activity_detail.location}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mt-4">
+                          <div class="f-4 fw-600 op-40">
+                            Zoom meeting
+                          </div>
+                          <div class="f-4 c-blue mt-1">
+                            https://cebroker-evercheck.zoom.us/j/98078238478
                           </div>
                         </div>
                       </div>
