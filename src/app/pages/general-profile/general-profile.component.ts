@@ -59,13 +59,13 @@ export class GeneralProfileComponent implements OnInit {
     ) => {
       try {
         response = JSON.parse(response);
-        console.log('###', response);
         if (response.status) {
           this.user.picture_profile = response.data.url;
           const picture_profile = this.user.picture_profile;
           this.userService.updateProfile({ picture_profile }).subscribe(() => {
             this.userService.updateProfileImpl({ picture_profile });
           });
+          this.toast.success('Profile picture updating is successfully.');
         } else {
           const error = 'Profile picture updating is failed.';
           this.toast.error(error);
@@ -124,11 +124,10 @@ export class GeneralProfileComponent implements OnInit {
   }
 
   setProfileImage(evt: any): void {
-    this.helperService.generateAvatar(evt).then((data) => {
-      this.user.picture_profile = data;
-      this.urltoFile(data, 'profile.jpg', 'image/jpeg').then((file) => {
-        this.uploader.addToQueue([file]);
-      });
+    this.user.picture_profile = evt;
+    this.urltoFile(evt, 'profile.jpg', 'image/jpeg').then((file) => {
+      this.uploader.addToQueue([file]);
+      this.uploader.uploadAll();
     });
   }
 
