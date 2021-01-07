@@ -6,7 +6,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { FileService } from '../../services/file.service';
 import { ContactService } from 'src/app/services/contact.service';
@@ -135,6 +135,7 @@ export class ContactComponent implements OnInit {
     private dialog: MatDialog,
     private location: Location,
     private route: ActivatedRoute,
+    private router: Router,
     private contactService: ContactService,
     private noteService: NoteService,
     private taskService: TaskService,
@@ -239,7 +240,9 @@ export class ContactComponent implements OnInit {
   /**
    * Go to Contact List Page
    */
-  goToBack(): void {}
+  goToBack(): void {
+    this.router.navigate(['contacts']);
+  }
 
   /**
    * Load Previous Contact Detail Information

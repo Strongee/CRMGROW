@@ -1,5 +1,12 @@
 @import 'src/variables.scss';
 
+.page-header {
+  i {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+  }
+}
 .contact-info-panel {
   min-width: 376px;
   .button-more {
