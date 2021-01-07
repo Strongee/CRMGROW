@@ -1228,7 +1228,5 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-  showAnalytics(material): void {
-
-  }
+  showAnalytics(material): void {}
 }
