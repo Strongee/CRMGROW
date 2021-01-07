@@ -55,5 +55,10 @@
         @media screen and (max-width: 576px) {
             width: 100%;
         }
+        @media screen and (max-width: 400px) {
+            th span{
+                display: none;
+            }
+        }
     }
 }
