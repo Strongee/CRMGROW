@@ -7,6 +7,8 @@ import { TIMEZONE, COMPANIES } from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
+import { FileUploader } from 'ng2-file-upload';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-general-profile',
@@ -25,6 +27,11 @@ export class GeneralProfileComponent implements OnInit {
   ];
   CountryISO = CountryISO;
   saving = false;
+  public uploader: FileUploader = new FileUploader({
+    url: environment.api + 'file',
+    authToken: this.userService.getToken(),
+    itemAlias: 'photo'
+  });
 
   constructor(
     private userService: UserService,
@@ -37,7 +44,38 @@ export class GeneralProfileComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.uploader.onAfterAddingFile = (file) => {
+      file.withCredentials = false;
+      if (this.uploader.queue.length > 1) {
+        this.uploader.queue.splice(0, 1);
+      }
+    };
+    this.uploader.onCompleteItem = (
+      item: any,
+      response: any,
+      status: any,
+      headers: any
+    ) => {
+      try {
+        response = JSON.parse(response);
+        console.log('###', response);
+        if (response.status) {
+          this.user.picture_profile = response.data.url;
+          const picture_profile = this.user.picture_profile;
+          this.userService.updateProfile({ picture_profile }).subscribe(() => {
+            this.userService.updateProfileImpl({ picture_profile });
+          });
+        } else {
+          const error = 'Profile picture updating is failed.';
+          this.toast.error(error);
+        }
+      } catch (e) {
+        const error = 'Profile picture updating is failed.';
+        this.toast.error(error);
+      }
+    };
+  }
 
   openProfilePhoto(): void {
     this.helperService
@@ -59,18 +97,57 @@ export class GeneralProfileComponent implements OnInit {
         const imageEditor = this.dialog.open(AvatarEditorComponent, {
           width: '98vw',
           maxWidth: '400px',
+          disableClose: true,
           data: {
             fileInput: file
           }
         });
         imageEditor.afterClosed().subscribe((res) => {
-          if (res) {
-            this.user.picture_profile = res;
+          if (res != false && res != '') {
+            if (res == null) {
+              this.user.picture_profile = '';
+              const picture_profile = this.user.picture_profile;
+              this.userService
+                .updateProfile({ picture_profile })
+                .subscribe(() => {
+                  this.userService.updateProfileImpl({ picture_profile });
+                });
+            } else {
+              this.setProfileImage(res);
+            }
           }
         });
       })
       .catch((err) => {
         this.toast.error('File Select', err);
+      });
+  }
+
+  setProfileImage(evt: any): void {
+    this.helperService.generateAvatar(evt).then((data) => {
+      this.user.picture_profile = data;
+      this.urltoFile(data, 'profile.jpg', 'image/jpeg').then((file) => {
+        this.uploader.addToQueue([file]);
+      });
+    });
+  }
+
+  urltoFile(url: any, filename: string, mimeType: string): any {
+    mimeType = mimeType || (url.match(/^data:([^;]+);/) || '')[1];
+    return fetch(url)
+      .then(function (res) {
+        return res.arrayBuffer();
+      })
+      .then(function (buf) {
+        let returnFile;
+        try {
+          returnFile = new File([buf], filename, { type: mimeType });
+        } catch {
+          const blob = new Blob([buf], { type: mimeType });
+          Object.assign(blob, {});
+          returnFile = blob as File;
+        }
+        return returnFile;
       });
   }
 

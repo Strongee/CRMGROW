@@ -115,6 +115,7 @@ export class AvatarEditorComponent implements OnInit {
    */
   removePhoto(): void {
     this.fileInput = null;
+    this.dialogRef.close(this.fileInput);
   }
 
   /**
