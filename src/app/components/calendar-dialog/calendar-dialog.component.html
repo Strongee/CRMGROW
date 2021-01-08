@@ -5,7 +5,7 @@
   <div mat-dialog-content>
     <div class="form-group mx-2">
       <input
-        class="form-control f-3 font-weight-bold border-primary"
+        class="form-control border-primary"
         type="text"
         placeholder="Add appointment title"
         name="title"
@@ -31,7 +31,7 @@
               </span>
             </div>
             <div ngbDropdown>
-              <input class="form-control datepicker f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
+              <input class="form-control datepicker" placeholder="Select date" name="send_date" [(ngModel)]="selectedDateTime" ngbDropdownToggle type="text" required/>
               <div ngbDropdownMenu class="date-picker">
                 <div class="picker-header v-center justify-content-between mt-2">
                   <div class="f-6 font-weight-bold">Appointment date</div>
@@ -63,7 +63,7 @@
         <div class="form-group">
           <label class="calendar-label">time</label>
           <select
-            class="form-control f-3 font-weight-bold"
+            class="form-control"
             [(ngModel)]="due_time"
             name="time"
             #time="ngModel"
@@ -79,7 +79,7 @@
         <div class="form-group">
           <label class="calendar-label">duration</label>
           <select
-            class="form-control f-3 font-weight-bold"
+            class="form-control"
             [(ngModel)]="duration"
             name="period"
             #period="ngModel"
@@ -98,8 +98,8 @@
       <div class="col-12">
         <div class="form-group">
           <label class="calendar-label">ASSIGN GUESTS</label>
-          <app-calendar-contacts [selectedContacts]="contacts">
-          </app-calendar-contacts>
+          <app-input-contacts [selectedContacts]="contacts">
+          </app-input-contacts>
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@
         <label class="calendar-label">location</label>
         <div class="form-group mb-0">
           <input
-            class="form-control f-3 font-weight-bold"
+            class="form-control"
             placeholder="Add location"
             [(ngModel)]="event.location"
             name="address"
@@ -145,7 +145,7 @@
           #mailContent="ngModel"
           (onEditorCreated)="getEditorInstance($event)"
           (click)="setFocusField('content-email')"
-          class="f-3 font-weight-bold rounded"
+          class="rounded"
           [class.has-error]="
             mailContent.errors &&
             (mailContent.touched || mailContent.dirty || submitted) &&
@@ -165,7 +165,6 @@
             id="customControlInline"
             [checked]="isRepeat"
             (change)="setRepeatEvent()"
-            disabled
           />
           <label
             class="custom-control-label f-3 font-weight-bold pt-1"
@@ -175,7 +174,7 @@
         </div>
         <div class="form-group mt-3 ml-3">
           <select
-            class="form-control f-3 font-weight-bold text-primary"
+            class="form-control text-primary"
             [(ngModel)]="event.recurrence"
             name="repeat"
             #repeat="ngModel"

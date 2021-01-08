@@ -242,6 +242,9 @@
     app-slide-tab {
         .tab-container {
             width: 293px;
+            @media screen and (max-width: 576px) {
+                width: 275px;
+            }
         }
     }
 }
@@ -342,11 +345,26 @@
             }
         }
     }
+    @media screen and (max-width: 1024px) {
+        .btn {
+            display: none;
+        }
+        .small-button {
+            display: flex;
+            justify-content: center;
+        }
+    }
     @media screen and (max-width: 768px) {
         display: block;
         .view-time {
-            justify-content: start !important;
+            justify-content: center !important;
             margin-top: 1rem;
+        }
+        .btn {
+            display: flex;
+        }
+        .small-button {
+            display: none;
         }
     }
     @media screen and (max-width: 576px) {
@@ -365,6 +383,11 @@
             width: 140px;
             font-size: 16px;
             font-weight: bold;
+        }
+    }
+    @media screen and (max-width: 576px) {
+        .small-button {
+            display: none;
         }
     }
 }
