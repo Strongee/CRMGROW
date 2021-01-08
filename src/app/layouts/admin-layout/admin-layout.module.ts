@@ -17,6 +17,7 @@ import { HomeComponent } from '../../pages/home/home.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
 import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
+import { MaterialComponent } from 'src/app/pages/material/material.component';
 import { ProfileComponent } from '../../pages/profile/profile.component';
 import { GeneralProfileComponent } from '../../pages/general-profile/general-profile.component';
 import { SignatureComponent } from '../../pages/signature/signature.component';
@@ -67,6 +68,7 @@ import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analy
     TasksComponent,
     ContactsComponent,
     MaterialsComponent,
+    MaterialComponent,
     ProfileComponent,
     GeneralProfileComponent,
     SignatureComponent,
