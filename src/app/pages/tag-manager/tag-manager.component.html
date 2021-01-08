@@ -28,7 +28,7 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <div class="tag-col px-1">
-                                    <span class="f-3 bgc-pale px-2 py-1 tag-label">{{tag._id}}</span>
+                                    <div class="f-3 bgc-pale px-2 py-1 tag-label">{{tag._id}}</div>
                                 </div>
                                 <div class="edit-col text-center px-1" (click)="editTag(tag)">
                                     <i class="d-block mx-auto i-icon i-edit bgc-dark"></i>
@@ -37,7 +37,7 @@
                                     {{tag.count}}
                                 </div>
                                 <div class="delete-col text-right px-1" (click)="deleteTag(tag)">
-                                    <i class="d-block mx-auto i-icon i-trash bgc-red"></i>
+                                    <i class="d-block ml-auto i-icon i-trash bgc-red"></i>
                                 </div>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
