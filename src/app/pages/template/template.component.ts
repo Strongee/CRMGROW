@@ -124,6 +124,7 @@ export class TemplateComponent
   insertValue(value: string): void {
     if (this.focusedField === 'editor') {
       this.htmlEditor.insertEmailContentValue(value);
+      console.log("template content =================>", value, this.template.content);
       return;
     }
     let text = '';

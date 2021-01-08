@@ -1,4 +1,10 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  ViewChild,
+  AfterContentChecked
+} from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -20,13 +26,14 @@ import { LabelService } from 'src/app/services/label.service';
 import { UserService } from '../../services/user.service';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-action-edit',
   templateUrl: './action-edit.component.html',
   styleUrls: ['./action-edit.component.scss']
 })
-export class ActionEditComponent implements OnInit {
+export class ActionEditComponent implements OnInit, AfterContentChecked {
   category;
   type = '';
   action;
@@ -44,7 +51,11 @@ export class ActionEditComponent implements OnInit {
   myControl = new FormControl();
   selectedTemplate = { subject: '', content: '' };
 
-  due_date = {};
+  due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
   due_time = '12:00:00.000';
   due_duration = 1;
   times = TIMES;
@@ -81,8 +92,13 @@ export class ActionEditComponent implements OnInit {
   selectedFollow: any;
   followUpdateOption = 'update_follow_up';
   updateFollowDueOption = 'date';
-  update_due_date = {};
+  update_due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
   update_due_time = '12:00:00.000';
+  selectedDate = '';
   update_due_duration = 0;
   task = new Task();
 
@@ -107,6 +123,9 @@ export class ActionEditComponent implements OnInit {
         month: current.getMonth() + 1,
         day: current.getDate()
       };
+
+      this.due_date = this.minDate;
+      this.update_due_date = this.minDate;
     });
 
     this.userService.profile$.subscribe((res) => {
@@ -133,7 +152,6 @@ export class ActionEditComponent implements OnInit {
       this.material = this.data.action.image;
     }
     if (this.data.action.type === 'follow_up') {
-
       this.task.type = this.data.action.task_type;
       if (this.data.action.due_duration) {
         this.due_duration = this.data.action.due_duration;
@@ -147,10 +165,11 @@ export class ActionEditComponent implements OnInit {
         var utc = date.getTime() + date.getTimezoneOffset() * 60000;
         var nd = new Date(utc + 3600000 * timezone);
         this.due_date = {
-          year: nd.getFullYear(),
-          month: nd.getMonth() + 1,
-          day: nd.getDate()
+          year: nd.getFullYear().toString(),
+          month: (nd.getMonth() + 1).toString(),
+          day: nd.getDate().toString()
         };
+        this.setDateTime();
         const hour = nd.getHours();
         const min = nd.getMinutes();
         const hour_s = hour < 10 ? '0' + hour : hour;
@@ -184,10 +203,11 @@ export class ActionEditComponent implements OnInit {
         var utc = date.getTime() + date.getTimezoneOffset() * 60000;
         var nd = new Date(utc + 3600000 * timezone);
         this.update_due_date = {
-          year: nd.getFullYear(),
-          month: nd.getMonth() + 1,
-          day: nd.getDate()
+          year: nd.getFullYear().toString(),
+          month: (nd.getMonth() + 1).toString(),
+          day: nd.getDate().toString()
         };
+        this.setUpdateDateTime();
         const hour = nd.getHours();
         const min = nd.getMinutes();
         const hour_s = hour < 10 ? '0' + hour : hour;
@@ -221,6 +241,14 @@ export class ActionEditComponent implements OnInit {
 
     this.action = { ...this.data.action };
 
+    const _SELF = this;
+    setTimeout(() => {
+      _SELF.action = { ..._SELF.data.action };
+      if (_SELF.htmlEditor && _SELF.action.content) {
+        _SELF.htmlEditor.setValue(_SELF.action.content);
+      }
+    }, 300);
+
     if (
       !(
         this.action['period'] === '0.17' ||
@@ -249,6 +277,8 @@ export class ActionEditComponent implements OnInit {
       this.loadMaterials();
     }
   }
+
+  ngAfterContentChecked(): void {}
 
   loadMaterials(): void {
     if (this.materialType === 'video') {
@@ -472,6 +502,11 @@ export class ActionEditComponent implements OnInit {
       }
       return;
     }
+
+    console.log('update action ====================>', {
+      ...this.action,
+      period
+    });
     this.dialogRef.close({ ...this.action, period });
   }
 
@@ -499,9 +534,9 @@ export class ActionEditComponent implements OnInit {
       const utc = date.getTime() + date.getTimezoneOffset() * 60000;
       const nd = new Date(utc + 3600000 * timezone);
       this.update_due_date = {
-        year: nd.getFullYear(),
-        month: nd.getMonth() + 1,
-        day: nd.getDate()
+        year: nd.getFullYear().toString(),
+        month: (nd.getMonth() + 1).toString(),
+        day: nd.getDate().toString()
       };
       const hour = nd.getHours();
       const min = nd.getMinutes();
@@ -595,6 +630,7 @@ export class ActionEditComponent implements OnInit {
     this.smsContentCursorEnd = this.smsContentCursorStart;
     field.focus();
     this.action['content'] = smsContent;
+    this.htmlEditor.setValue(this.action['content']);
   }
 
   NoLimitActions = ['note', 'follow_up', 'update_contact', 'update_follow_up'];
@@ -604,6 +640,40 @@ export class ActionEditComponent implements OnInit {
       return '0' + num;
     }
     return num + '';
+  }
+
+  getDateTime(): any {
+    if (this.due_date && this.due_date['day'] !== '') {
+      return (
+        this.due_date['year'] +
+        '-' +
+        this.due_date['month'] +
+        '-' +
+        this.due_date['day']
+      );
+    }
+  }
+
+  setDateTime(): void {
+    this.selectedDate = moment(this.getDateTime()).format('YYYY-MM-DD');
+    close();
+  }
+
+  getUpdateDateTime(): any {
+    if (this.update_due_date && this.update_due_date['day'] !== '') {
+      return (
+        this.update_due_date['year'] +
+        '-' +
+        this.update_due_date['month'] +
+        '-' +
+        this.update_due_date['day']
+      );
+    }
+  }
+
+  setUpdateDateTime(): void {
+    this.selectedDate = moment(this.getUpdateDateTime()).format('YYYY-MM-DD');
+    close();
   }
 
   ActionName = ActionName;

@@ -47,6 +47,20 @@
         <div class="template-container mr-lg-5 mr-md-3 mr-sm-0">
           <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
           </app-slide-tab>
+          <ng-container *ngIf="videosLoading && selectedTab.id == 'videos'">
+            <div class="list-loading text-center">
+              <div class="loader mt-5"></div>
+              <h4 class="fw-600 mt-2">Loading videos...</h4>
+            </div>
+          </ng-container>
+          <div class="empty-list" *ngIf="!videosLoading && selectedTab.id == 'videos' && videos.length == 0">
+            <div class="object-icon v-center">
+              <i class="i-icon i-template d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no videos.
+            </h4>
+          </div>
           <ng-container *ngIf="selectedTab.label == 'VIDEO'">
             <div class="material-container mt-3">
               <ng-container *ngFor="let video of videos">
@@ -66,6 +80,20 @@
             </div>
           </ng-container>
           <ng-container *ngIf="selectedTab.label == 'PDF'">
+            <ng-container *ngIf="pdfsLoading && selectedTab.id == 'pdfs'">
+              <div class="list-loading text-center">
+                <div class="loader mt-5"></div>
+                <h4 class="fw-600 mt-2">Loading PDFs...</h4>
+              </div>
+            </ng-container>
+            <div class="empty-list" *ngIf="!pdfsLoading && selectedTab.id == 'pdfs' && pdfs.length == 0">
+              <div class="object-icon v-center">
+                <i class="i-icon i-template d-block bgc-dark"></i>
+              </div>
+              <h4 class="font-weight-bold mt-4 mb-3">
+                There is no PDFs.
+              </h4>
+            </div>
             <div class="material-container mt-3">
               <ng-container *ngFor="let pdf of pdfs">
                 <div class="material-item" (click)="togglePdf(pdf)" [class.active]="action['pdf'] == pdf">
@@ -84,6 +112,20 @@
             </div>
           </ng-container>
           <ng-container *ngIf="selectedTab.label == 'IMAGE'">
+            <ng-container *ngIf="imagesLoading && selectedTab.id == 'image'">
+              <div class="list-loading text-center">
+                <div class="loader mt-5"></div>
+                <h4 class="fw-600 mt-2">Loading images...</h4>
+              </div>
+            </ng-container>
+            <div class="empty-list" *ngIf="!imagesLoading && selectedTab.id == 'images' && images.length == 0">
+              <div class="object-icon v-center">
+                <i class="i-icon i-template d-block bgc-dark"></i>
+              </div>
+              <h4 class="font-weight-bold mt-4 mb-3">
+                There is no images.
+              </h4>
+            </div>
             <div class="material-container mt-3">
               <ng-container *ngFor="let image of images">
                 <div class="material-item" (click)="toggleImage(image)" [class.active]="action['image'] == image">
@@ -248,17 +290,45 @@
                   </div>
                 </div>
               </div>
-              <div class="col-12 mt-2" *ngIf="followDueOption === 'date'; else followTimeDelay">
+              <div class="col-12 mt-3" *ngIf="followDueOption === 'date'; else followTimeDelay">
                 <div class="row">
                   <div class="col-6">
                     <div class="form-group has-feedback calendar position-relative"
                          [class.has-error]="!action.due_date && submitted">
-                      <label class="theme-label">FOLLOW UP DATE</label>
-                      <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
-                             [(ngModel)]="due_date" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"
-                             required [firstDayOfWeek]="7" [disabled]="followDueOption !== 'date'" />
-                      <span class="invalid-feedback"
-                            *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
+                      <div class="form-group">
+                        <label class="theme-label">FOLLOW UP DATE</label>
+                        <div class="v-center">
+                          <div class="input-group-prepend calendar-wrapper">
+                            <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+                          </div>
+                          <div ngbDropdown>
+                            <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDate" ngbDropdownToggle type="text" required/>
+                            <div ngbDropdownMenu class="date-picker p-3">
+                              <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getDateTime() | date : 'MMMM d yyyy' }}</div>
+                              <div class="picker-body v-center justify-content-between">
+                                <div classs="date-picker">
+                                  <ngb-datepicker name="select_date" #dp [(ngModel)]="due_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
+                                  <div class="action-button mt-2" align="end">
+                                    <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
+                                    <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setDateTime()" ngbDropdownToggle>Set</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <span
+                          class="invalid-error f-3 font-weight-bold c-red"
+                          *ngIf="due_date.year == '' && due_date.month == '' && due_date.day == '' && submitted"
+                        >
+                                Date is required
+                              </span>
+                      </div>
+<!--                      <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"-->
+<!--                             [(ngModel)]="due_date" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"-->
+<!--                             required [firstDayOfWeek]="7" [disabled]="followDueOption !== 'date'" />-->
+<!--                      <span class="invalid-feedback"-->
+<!--                            *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>-->
                     </div>
                   </div>
                   <div class="col-6">
@@ -500,7 +570,7 @@
           <ng-container [ngSwitch]="contactUpdateOption">
             <div *ngSwitchCase="'update_label'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(NEW LABEL)</span></label>
-              <app-label-select type="form"></app-label-select>
+              <app-label-select type="form" [value]="commandLabel" (valueChange)="commandLabel = $event"></app-label-select>
             </div>
             <div *ngSwitchCase="'push_tag'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(TAGS TO INSERT)</span></label>
@@ -599,17 +669,45 @@
                         <option value="update_due_duration">Update Due Duration</option>
                       </select>
                     </div>
-                    <div class="col-12 mt-2" *ngIf="updateFollowDueOption === 'update_due_date'">
+                    <div class="col-12 mt-3" *ngIf="updateFollowDueOption === 'update_due_date'">
                       <div class="row">
                         <div class="col-6">
                           <div class="form-group has-feedback calendar position-relative"
                                [class.has-error]="!action.due_date && submitted">
-                            <label class="theme-label">FOLLOW UP DATE</label>
-                            <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
-                                   [(ngModel)]="update_due_date" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"
-                                   required [firstDayOfWeek]="7"/>
-                            <span class="invalid-feedback"
-                                  *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
+                            <div class="form-group">
+                              <label class="theme-label">FOLLOW UP DATE</label>
+                              <div class="v-center">
+                                <div class="input-group-prepend calendar-wrapper">
+                                  <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+                                </div>
+                                <div ngbDropdown>
+                                  <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDate" ngbDropdownToggle type="text" required/>
+                                  <div ngbDropdownMenu class="date-picker p-3">
+                                    <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getUpdateDateTime() | date : 'MMMM d yyyy' }}</div>
+                                    <div class="picker-body v-center justify-content-between">
+                                      <div classs="date-picker">
+                                        <ngb-datepicker name="select_date" #dp [(ngModel)]="update_due_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
+                                        <div class="action-button mt-2" align="end">
+                                          <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
+                                          <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setUpdateDateTime()" ngbDropdownToggle>Set</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <span
+                                class="invalid-error f-3 font-weight-bold c-red"
+                                *ngIf="update_due_date.year == '' && update_due_date.month == '' && update_due_date.day == '' && submitted"
+                              >
+                                Date is required
+                              </span>
+                            </div>
+<!--                            <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"-->
+<!--                                   [(ngModel)]="update_due_date" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"-->
+<!--                                   required [firstDayOfWeek]="7"/>-->
+<!--                            <span class="invalid-feedback"-->
+<!--                                  *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>-->
                           </div>
                         </div>
                         <div class="col-6">
