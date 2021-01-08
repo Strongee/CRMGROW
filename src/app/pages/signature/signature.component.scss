@@ -8,7 +8,7 @@
     height: 90px;
     border: 1px solid gainsboro;
     border-radius: 4px;
-    width: calc(20% - 8px);
+    width: 96px;
     min-width: 76px;
     margin-right: 6px;
     margin-bottom: 6px;
@@ -44,7 +44,7 @@
   .ql-editor {
     padding: 20px 15px;
     @media screen and (max-width: 576px) {
-      width: 350px;
+      width: 285px;
     }
   }
   .quill-better-table td{
