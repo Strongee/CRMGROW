@@ -3,7 +3,6 @@ import {
   OnInit,
   Inject,
   ViewChild,
-  AfterViewInit
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TeamService } from '../../services/team.service';
@@ -17,7 +16,7 @@ import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.
   templateUrl: './call-request-scheduled.component.html',
   styleUrls: ['./call-request-scheduled.component.scss']
 })
-export class CallRequestScheduledComponent implements OnInit, AfterViewInit {
+export class CallRequestScheduledComponent implements OnInit {
   formData: any;
   isOrganizer = false;
   isLeader = false;
@@ -43,13 +42,6 @@ export class CallRequestScheduledComponent implements OnInit, AfterViewInit {
     this.load();
   }
 
-  ngAfterViewInit(): void {
-    if (this.formData.note) {
-      console.log("formdata note =============>", this.formData.note);
-      this.htmlEditor.setValue(this.formData.note);
-    }
-  }
-
   load(): void {
     this.formData = this.data.plan;
     this.selectedDate = this.formData.proposed_at[0];
@@ -69,6 +61,12 @@ export class CallRequestScheduledComponent implements OnInit, AfterViewInit {
           ? '1 hour'
           : this.formData.duration + ' mins';
     });
+    const _SELF = this;
+    setTimeout(() => {
+      if (_SELF.htmlEditor && _SELF.formData.note) {
+        _SELF.htmlEditor.setValue(_SELF.formData.note);
+      }
+    }, 500);
   }
 
   backCall(): void {
