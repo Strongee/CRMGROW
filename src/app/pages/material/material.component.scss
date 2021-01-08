@@ -10,10 +10,6 @@
     font-size: 16px;
 }
 
-.small-button-record {
-    display: none;
-}
-
 .dropdown-menu {
     &.show {
         top: 0px !important;
@@ -234,9 +230,6 @@ td {
     .table-wrapper {
         margin-top: 0px;
     }
-    .material-folder {
-        margin: 0px 10px 10px 10px;
-    }
     .time-col {
         display: none;
     }
@@ -249,15 +242,11 @@ td {
 }
 
 @media screen and (max-width: 575px) {
-    .button-record {
-        display: none;
+    .page-header {
+        display: block;
     }
-    .button-add {
+    .button-record, .button-add {
         font-size: 13px;
-    }
-    .small-button-record {
-        font-size: 13px;
-        display: flex;
     }
     th, td {
       padding: 3px !important;
@@ -292,5 +281,14 @@ td {
         display: flex;
         align-items: center;
       }
+    }
+}
+
+:host ::ng-deep {
+    .tab-container {
+        .tab {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
     }
 }

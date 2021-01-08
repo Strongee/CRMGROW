@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
-import { TeamService } from '../../services/team.service';
 import { User } from 'src/app/models/user.model';
 import { Garbage } from 'src/app/models/garbage.model';
 import { TabItem } from 'src/app/utils/data.types';
@@ -23,11 +22,12 @@ import { STATUS } from 'src/app/constants/variable.constants';
 import { MaterialSendComponent } from 'src/app/components/material-send/material-send.component';
 
 @Component({
-  selector: 'app-materials',
-  templateUrl: './materials.component.html',
-  styleUrls: ['./materials.component.scss']
+  selector: 'app-material',
+  templateUrl: './material.component.html',
+  styleUrls: ['./material.component.scss']
 })
-export class MaterialsComponent implements OnInit {
+export class MaterialComponent implements OnInit {
+  mode = '';
   user: User = new User();
   garbage: Garbage = new Garbage();
   BULK_ACTIONS = BulkActions.Materials;
@@ -73,15 +73,14 @@ export class MaterialsComponent implements OnInit {
   editedPdfs;
   captureImages = [];
   editedImages;
-
   constructor(
     private dialog: MatDialog,
     public storeService: StoreService,
     public materialService: MaterialService,
     private userService: UserService,
-    public teamService: TeamService,
     private toast: ToastrService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.loadVideos();
     this.loadImages();
@@ -102,10 +101,10 @@ export class MaterialsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.mode = this.route.snapshot.params['id'];
     this.materialService.loadVideos(true);
     this.materialService.loadPdfs(true);
     this.materialService.loadImages(true);
-    this.teamService.loadAll(true);
   }
 
   ngOnDestroy(): void {
@@ -201,8 +200,8 @@ export class MaterialsComponent implements OnInit {
     this.router.navigate(['./materials/create']);
   }
 
-  selectFolder(type: string): void {
-    this.router.navigate([`./materials/folder/${type}`]);
+  goToBack(): void {
+    this.router.navigate(['./materials']);
   }
 
   sendMaterial(material: any): void {
