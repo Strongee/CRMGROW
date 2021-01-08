@@ -15,7 +15,6 @@ import { map, catchError } from 'rxjs/operators';
 import { STATUS } from '../constants/variable.constants';
 import { SearchOption } from '../models/searchOption.model';
 import * as _ from 'lodash';
-import { id } from 'date-fns/locale';
 interface LoadResponse {
   contacts: ContactActivity[];
 }
@@ -231,7 +230,9 @@ export class ContactService extends HttpService {
             total: res['data']['count'] || 0
           };
         }),
-        catchError(this.handleError('LOAD CONTACTS', null))
+        catchError(
+          this.handleError('LOAD CONTACTS', { contacts: [], total: 0 })
+        )
       );
   }
 

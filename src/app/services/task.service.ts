@@ -17,18 +17,6 @@ import { StoreService } from './store.service';
   providedIn: 'root'
 })
 export class TaskService extends HttpService {
-  constructor(
-    errorService: ErrorService,
-    private http: HttpClient,
-    private storeService: StoreService
-  ) {
-    super(errorService);
-
-    this.sortOption$.subscribe(() => {
-      this.reload();
-    });
-  }
-
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loading$ = this.loadStatus.asObservable();
   loadSubscription: Subscription;
@@ -48,6 +36,18 @@ export class TaskService extends HttpService {
   page$ = this.page.asObservable();
   pageSize$ = this.pageSize.asObservable();
   sortOption$ = this.sortOption.asObservable();
+
+  constructor(
+    errorService: ErrorService,
+    private http: HttpClient,
+    private storeService: StoreService
+  ) {
+    super(errorService);
+
+    this.sortOption$.subscribe(() => {
+      this.reload();
+    });
+  }
 
   changeDuration(duration: TaskDurationOption): void {
     this.durationOption.next(duration);
@@ -119,7 +119,7 @@ export class TaskService extends HttpService {
             count: res['data']['count'] || 0
           };
         }),
-        catchError(this.handleError('LOAD TASKS', null))
+        catchError(this.handleError('LOAD TASKS', { tasks: [], count: 0 }))
       );
   }
 
@@ -200,7 +200,6 @@ export class TaskService extends HttpService {
     this.loadStatus.next(STATUS.NONE);
     this.searchOption.next(new TaskSearchOption());
     this.durationOption.next(new TaskDurationOption());
-    this.sortOption.next(-1);
     this.total.next(0);
     this.page.next(1);
     this.pageSize.next(20);

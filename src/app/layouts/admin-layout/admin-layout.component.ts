@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwPush } from '@angular/service-worker';
+import { ToastrService } from 'ngx-toastr';
 import { Garbage } from 'src/app/models/garbage.model';
 import { User } from 'src/app/models/user.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -26,7 +27,6 @@ export class AdminLayoutComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.userService.loadProfile().subscribe((res) => {
-      console.log('profile data', res);
       this.userService.setProfile(new User().deserialize(res));
       const garbage = new Garbage().deserialize(res['garbage']);
       this.userService.setGarbage(garbage);
