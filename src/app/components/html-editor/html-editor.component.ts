@@ -135,11 +135,11 @@ export class HtmlEditorComponent implements OnInit {
   insertEmailContentValue(value: string): void {
     this.emailEditor.quillEditor.focus();
     const range = this.emailEditor.quillEditor.getSelection();
-    this.emailEditor.quillEditor.insertText(range.index, value, 'api');
+    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
     this.emailEditor.quillEditor.setSelection(
       range.index + value.length,
       0,
-      'api'
+      'user'
     );
   }
 
