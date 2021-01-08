@@ -47,6 +47,15 @@ export class TeamListComponent implements OnInit {
   load(): void {
     this.teamService.loadAll(true);
     this.teamService.loadInvites(true);
+    this.teamService.teams$.subscribe((res) => {
+      if (res && res.length) {
+        for (const team of res) {
+          if (team.owner && team.owner.length) {
+            this.hasOwnTeam = true;
+          }
+        }
+      }
+    });
   }
 
   status(team: Team): any {

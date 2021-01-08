@@ -2,6 +2,8 @@ import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { NoteQuillEditor } from '../../constants/variable.constants';
 import { QuillEditorComponent } from 'ngx-quill';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+
 @Component({
   selector: 'app-call-request-cancel',
   templateUrl: './call-request-cancel.component.html',
@@ -18,15 +20,13 @@ export class CallRequestCancelComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  @ViewChild('messageEditor') noteEditor: QuillEditorComponent;
+  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
 
   ngOnInit(): void {
-    console.log("cancel call ============>", this.data);
+
   }
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-  }
+
+
   closeDialog(): void {
     this.dialogRef.close();
   }

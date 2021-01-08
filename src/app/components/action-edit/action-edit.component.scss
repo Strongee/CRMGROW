@@ -155,9 +155,20 @@ button:disabled {
 
 .content-section {
   min-height: 300px;
+  width: 500px;
+
+  &.send_email_video,
+  &.send_text_video,
+  &.send_email_pdf,
+  &.send_text_pdf,
+  &.send_email_image,
+  &.send_text_image {
+    width: 90vw;
+    max-width: calc(900px + 4.5rem);
+  }
 
   @media screen and (max-width: 575px) {
-    min-width: calc( 100vw - 80px );
+    width: calc( 100vw - 80px );
   }
 }
 
@@ -256,7 +267,7 @@ button:disabled {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   grid-row-gap: 20px;
-  max-height: calc( 65vh - 20px );
+  max-height: calc( 65vh - 80px );
   overflow: auto;
   width: 450px;
   padding-right: 20px;
