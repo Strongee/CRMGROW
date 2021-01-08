@@ -177,6 +177,9 @@ td {
         .small-button-more {
             display: none;
         }
+        .small {
+            margin: 0 6px;
+        }
     }
 }
 
@@ -210,7 +213,7 @@ td {
         width: 100px;
         .actions-wrapper {
             width: 100px;
-            display: block;
+            flex-wrap: wrap;
             .button-copy {
                 display: none;
             }
@@ -225,6 +228,9 @@ td {
                         left: 0px !important;
                     }
                 }
+            }
+            .small {
+                margin: 0 auto;
             }
         }
     }

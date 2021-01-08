@@ -157,6 +157,9 @@
                       <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
                     </div>
                   </a>
+                  <div class="f-1 c-red mt-1" *ngIf="video.convertingStatus == 'error'">
+                    Video Converting is failed. Please contact support team to solve this error
+                  </div>
                 </td>
                 <td class="view-col">
                   <a [routerLink]="['/materials/analytics/' + video._id]" class="text-decoration-none">
@@ -186,11 +189,19 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(video)">
-                      <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                      <span class="ml-1 f-3 c-dark">Send</span>
-                    </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
+                    <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
+                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
+                        <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-1 f-3 c-dark">Send</span>
+                      </button>
+                    </ng-container>
+                    <ng-template #convertingStatusTemplate>
+                      <div class="c100 p{{video.progress || 0}} small">
+                        <span>{{video.progress || 0}}%</span>
+                        <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+                      </div>
+                    </ng-template>
+                    <button class="v-center bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -236,7 +247,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch px-2 py-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -314,6 +325,9 @@
                       <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
                     </div>
                   </a>
+                  <div class="f-1 c-red mt-1" *ngIf="video.convertingStatus == 'error'">
+                    Video Converting is failed. Please contact support team to solve this error
+                  </div>
                 </td>
                 <td class="view-col">
                   <a [routerLink]="['/materials/analytics/' + video._id]" class="text-decoration-none">
@@ -343,11 +357,19 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(video)">
-                      <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                      <span class="ml-1 f-3 c-dark">Send</span>
-                    </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
+                    <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
+                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
+                        <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-1 f-3 c-dark">Send</span>
+                      </button>
+                    </ng-container>
+                    <ng-template #convertingStatusTemplate>
+                      <div class="c100 p{{video.progress || 0}} small">
+                        <span>{{video.progress || 0}}%</span>
+                        <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+                      </div>
+                    </ng-template>
+                    <button class="v-center bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -393,7 +415,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -471,6 +493,9 @@
                       <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
                     </div>
                   </a>
+                  <div class="f-1 c-red mt-1" *ngIf="video.convertingStatus == 'error'">
+                    Video Converting is failed. Please contact support team to solve this error
+                  </div>
                 </td>
                 <td class="view-col">
                   <a [routerLink]="['/materials/analytics/' + video._id]" class="text-decoration-none">
@@ -500,11 +525,19 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(video)">
-                      <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                      <span class="ml-1 f-3 c-dark">Send</span>
-                    </button>
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
+                    <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
+                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
+                        <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-1 f-3 c-dark">Send</span>
+                      </button>
+                    </ng-container>
+                    <ng-template #convertingStatusTemplate>
+                      <div class="c100 p{{video.progress || 0}} small">
+                        <span>{{video.progress || 0}}%</span>
+                        <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+                      </div>
+                    </ng-template>
+                    <button class="v-center bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
                       <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Copy link</span>
                     </button>
@@ -550,7 +583,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -765,7 +798,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -912,7 +945,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -1059,7 +1092,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -1272,7 +1305,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -1419,7 +1452,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"
@@ -1566,7 +1599,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="custom-control custom-switch p-0">
+                    <div class="custom-control custom-switch p-0 mx-auto">
                       <label class="custom-toggle mb-0" placement="top">
                         <input
                           type="checkbox"

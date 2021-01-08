@@ -97,6 +97,7 @@ export const VIDEO = {
   UPDATE_ADMIN: 'video/update-admin',
   DELETE: 'video/',
   LOAD: 'video',
+  LOAD_CONVERTING_STATUS: 'video/convert-status',
   ANALYTICS: 'video/analytics/'
 };
 export const PDF = {
