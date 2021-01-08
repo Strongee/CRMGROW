@@ -6,6 +6,7 @@ import { NoteQuillEditor } from '../../constants/variable.constants';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Location } from '@angular/common';
 import * as moment from 'moment';
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 
 @Component({
   selector: 'app-call-request-confirm',
@@ -52,8 +53,7 @@ export class CallRequestConfirmComponent implements OnInit {
       minute: current.getMinutes()
     };
   }
-
-  @ViewChild('noteEditor') noteEditor: QuillEditorComponent;
+  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
 
   ngOnInit(): void {
     this.load();
@@ -75,11 +75,15 @@ export class CallRequestConfirmComponent implements OnInit {
       this.note = this.formData.note;
       this.isNoteEditable = this.isLeader && this.formData.status !== 'pending';
     });
+
+    const _SELF = this;
+    setTimeout(() => {
+      if (_SELF.htmlEditor && _SELF.note) {
+        _SELF.htmlEditor.setValue(_SELF.note);
+      }
+    }, 500);
   }
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-  }
+
   isSelectedDate(date): any {
     if (this.selectedDate === date) {
       return true;
@@ -100,7 +104,6 @@ export class CallRequestConfirmComponent implements OnInit {
     };
     this.teamService.acceptCall(data).subscribe(
       (res) => {
-        console.log("accept call =============>", res);
         this.isAcceptLoading = false;
         const result = {
           inquiry_id: this.formData._id,

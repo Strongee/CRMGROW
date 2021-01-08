@@ -21,6 +21,7 @@ import { LabelService } from 'src/app/services/label.service';
 import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-action-dialog',
@@ -58,7 +59,11 @@ export class ActionDialogComponent implements OnInit {
   selectedTemplate = { subject: '', content: '' };
 
   // Follow Create
-  due_date = {};
+  due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
   due_time = '12:00:00.000';
   due_duration = 1;
   times = TIMES;
@@ -93,9 +98,14 @@ export class ActionDialogComponent implements OnInit {
   selectedFollow: any;
   followUpdateOption = 'no_update';
   updateFollowDueOption = 'date';
-  update_due_date = {};
+  update_due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
   update_due_time = '12:00:00.000';
   update_due_duration = 0;
+  selectedDate = '';
 
   constructor(
     private dialogRef: MatDialogRef<ActionDialogComponent>,
@@ -116,6 +126,10 @@ export class ActionDialogComponent implements OnInit {
         month: current.getMonth() + 1,
         day: current.getDate()
       };
+
+      this.due_date = this.minDate;
+      this.update_due_date = this.minDate;
+      this.setDateTime();
     });
 
     this.userService.profile$.subscribe((res) => {
@@ -177,9 +191,9 @@ export class ActionDialogComponent implements OnInit {
       this.selectedFollow = undefined;
       this.followUpdateOption = 'update_follow_up';
       this.updateFollowDueOption = 'no_update';
-      this.update_due_date = {};
       this.update_due_time = '12:00:00.000';
       this.update_due_duration = 0;
+      this.setUpdateDateTime();
     }
     if (
       (action.type === 'send_text_material' ||
@@ -839,6 +853,36 @@ export class ActionDialogComponent implements OnInit {
         this.type = 'send_text_image';
       }
     }
+  }
+
+  getDateTime(): any {
+    if (this.due_date.day !== '') {
+      return (
+        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+      );
+    }
+  }
+
+  setDateTime(): void {
+    this.selectedDate = moment(this.getDateTime()).format('YYYY-MM-DD');
+    close();
+  }
+
+  getUpdateDateTime(): any {
+    if (this.update_due_date.day !== '') {
+      return (
+        this.update_due_date.year +
+        '-' +
+        this.update_due_date.month +
+        '-' +
+        this.update_due_date.day
+      );
+    }
+  }
+
+  setUpdateDateTime(): void {
+    this.selectedDate = moment(this.getUpdateDateTime()).format('YYYY-MM-DD');
+    close();
   }
 
   minDate;
