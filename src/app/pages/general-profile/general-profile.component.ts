@@ -124,10 +124,6 @@ export class GeneralProfileComponent implements OnInit {
   }
 
   setProfileImage(evt: any): void {
-    // console.log('image data', evt);
-    // this.helperService.generateAvatar(evt).then((data) => {
-      
-    // });
     this.user.picture_profile = evt;
     this.urltoFile(evt, 'profile.jpg', 'image/jpeg').then((file) => {
       this.uploader.addToQueue([file]);

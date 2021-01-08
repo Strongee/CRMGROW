@@ -22,6 +22,7 @@ import { TaskCreateComponent } from 'src/app/components/task-create/task-create.
 import { HandlerService } from 'src/app/services/handler.service';
 import { ContactAssignAutomationComponent } from '../../components/contact-assign-automation/contact-assign-automation.component';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -105,6 +106,12 @@ export class ContactsComponent implements OnInit {
       this.selection = [];
       this.load();
     });
+
+    const forceReload = this.contactService.forceReload.getValue();
+    if (forceReload) {
+      this.contactService.reloadPage();
+      this.contactService.forceReload.next(false);
+    }
   }
   /**
    * Load the contacts: Advanced Search, Normal Search, API Call
@@ -282,7 +289,7 @@ export class ContactsComponent implements OnInit {
         this.selectAll();
         break;
       case 'delete':
-        this.delete();
+        this.deleteConfirm();
         break;
       case 'edit':
         this.bulkEdit();
@@ -410,6 +417,24 @@ export class ContactsComponent implements OnInit {
   /**
    * Delete Selected Contacts
    */
+  deleteConfirm(): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Delete contacts',
+          messsage: 'Are you sure to delete contacts?',
+          confirmLabel: 'Delete'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.delete();
+        }
+      });
+  }
+
   delete(): void {
     const ids = [];
     this.selection.forEach((e) => {

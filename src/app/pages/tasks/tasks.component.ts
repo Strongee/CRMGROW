@@ -257,7 +257,7 @@ export class TasksComponent implements OnInit, OnDestroy {
       });
   }
 
-  openEdit(element: Task): void {
+  openEdit(element: TaskDetail): void {
     this.dialog.open(TaskEditComponent, {
       ...DialogSettings.TASK,
       data: element
@@ -370,14 +370,14 @@ export class TasksComponent implements OnInit, OnDestroy {
     if (selected.length) {
       const dialog = this.dialog.open(ConfirmComponent, {
         data: {
-          message: 'Are you sure to complete follow up(s)?',
-          cancelLabel: 'No',
+          title: 'Complete tasks',
+          message: 'Are you sure to complete selected task(s)?',
           confirmLabel: 'Complete'
         }
       });
       dialog.afterClosed().subscribe((answer) => {
         if (answer) {
-          this.taskService.complete(selected).subscribe((res) => {
+          this.taskService.bulkComplete(selected).subscribe((res) => {
             this.handlerService.updateTasks$(selected, { status: 1 });
           });
         }

@@ -621,9 +621,9 @@ export class AutoflowComponent
         maxWidth: '360px',
         width: '96vw',
         data: {
-          message: 'Are you sure to remove this action?',
-          cancelLabel: 'No',
-          confirmLabel: 'REMOVE'
+          title: 'Delete action',
+          message: 'Are you sure to delete this action?',
+          confirmLabel: 'Delete'
         }
       })
       .afterClosed()

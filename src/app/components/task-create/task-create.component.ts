@@ -11,6 +11,7 @@ import { numPad, getCurrentTimezone } from 'src/app/helper';
 import * as moment from 'moment';
 import 'moment-timezone';
 import { UserService } from 'src/app/services/user.service';
+import { DetailActivity } from 'src/app/models/activityDetail.model';
 @Component({
   selector: 'app-task-create',
   templateUrl: './task-create.component.html',
@@ -73,7 +74,6 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     if (!this.contacts.length) {
       return;
     }
-    this.saving = true;
     const ids = [];
     this.contacts.forEach((e) => {
       ids.push(e._id);
@@ -89,19 +89,43 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         this.date.day
       )}T${this.time}${this.timezone.zone}`;
     }
-    const data = {
-      contacts: ids,
-      type: this.task.type,
-      content: this.task.content,
-      due_date: due_date
-    };
-    this.saveSubscription && this.saveSubscription.unsubscribe();
-    this.saveSubscription = this.taskService
-      .bulkCreate(data)
-      .subscribe((res) => {
+    if (ids.length > 1) {
+      const data = {
+        contacts: ids,
+        type: this.task.type,
+        content: this.task.content,
+        due_date: due_date
+      };
+      this.saving = true;
+      this.saveSubscription && this.saveSubscription.unsubscribe();
+      this.saveSubscription = this.taskService
+        .bulkCreate(data)
+        .subscribe((res) => {
+          this.saving = false;
+          if (res) {
+            this.handlerService.activityAdd$(ids, 'task');
+            this.taskService.reload();
+            this.dialogRef.close();
+          }
+        });
+    } else {
+      const data = {
+        contact: ids[0],
+        type: this.task.type,
+        content: this.task.content,
+        due_date: due_date
+      };
+      this.saving = true;
+      this.saveSubscription && this.saveSubscription.unsubscribe();
+      this.saveSubscription = this.taskService.create(data).subscribe((res) => {
         this.saving = false;
-        this.handlerService.activityAdd$(ids, 'task');
-        this.dialogRef.close();
+        if (res) {
+          this.handlerService.activityAdd$(ids, 'task');
+          this.taskService.reload();
+          this.handlerService.registerActivity$(res);
+          this.dialogRef.close();
+        }
       });
+    }
   }
 }

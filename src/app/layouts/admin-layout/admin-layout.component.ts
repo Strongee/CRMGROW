@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwPush } from '@angular/service-worker';
 import { ToastrService } from 'ngx-toastr';
 import { Garbage } from 'src/app/models/garbage.model';
+import { SearchOption } from 'src/app/models/searchOption.model';
 import { User } from 'src/app/models/user.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { LabelService } from 'src/app/services/label.service';
@@ -35,12 +36,14 @@ export class AdminLayoutComponent implements OnInit {
       if (garbage.entire_desktop_notification !== -1) {
         this.subscribeToPushNotification(garbage.desktop_notification);
       }
+
+      this.contactService.searchOption.next(new SearchOption());
+      this.contactService.searchStr.next('');
     });
     this.labelService.loadLabels();
     this.tagService.getAllTags();
     this.tagService.getAllCompanies();
     this.tagService.getAllSources();
-    this.contactService.loadPage();
 
     // Open or Close Manage Label
     this.labelService.manageLabel$.subscribe((flg) => {

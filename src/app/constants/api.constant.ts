@@ -53,6 +53,7 @@ export const TASK = {
   CREATE: 'follow/',
   BULK_CREATE: 'follow/create',
   UPDATE: 'follow/',
+  COMPLETE: 'follow/completed',
   BULK_UPDATE: 'follow/update',
   BULK_COMPLETE: 'follow/checked',
   BULK_ARCHIVE: 'follow/archived',

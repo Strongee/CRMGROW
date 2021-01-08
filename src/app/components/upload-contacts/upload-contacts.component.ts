@@ -1329,9 +1329,9 @@ export class UploadContactsComponent implements OnInit {
   removeContact(id, dupIndex): void {
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
-        message: 'Are you sure to remove the contact?',
-        cancelLabel: 'No',
-        confirmLabel: 'Remove'
+        title: 'Delete contact',
+        message: 'Are you sure to delete the contact?',
+        confirmLabel: 'Delete'
       }
     });
 

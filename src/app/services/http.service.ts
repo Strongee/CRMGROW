@@ -14,6 +14,7 @@ export class HttpService {
     return (error: any): Observable<T> => {
       // error message add to the Error Service
       this.errorService.addError(operation, error);
+      console.log(result, error);
       // Inspect the error
       // default data observable
       return of(result as T);

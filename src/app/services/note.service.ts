@@ -32,22 +32,22 @@ export class NoteService extends HttpService {
    */
   bulkCreate(data: any): Observable<any> {
     return this.httpClient.post(this.server + NOTE.BULK_CREATE, data).pipe(
-      map((res) => res['data']),
-      catchError(this.handleError('BULK NOTE CREATE', null))
+      map((res) => res['status']),
+      catchError(this.handleError('BULK NOTE CREATE', false))
     );
   }
 
-  update(id: string, data: any): Observable<any> {
+  update(id: string, data: any): Observable<boolean> {
     return this.httpClient.put(this.server + NOTE.UPDATE + id, data).pipe(
-      map((res) => res),
-      catchError(this.handleError('NOTE UPDATE', null))
+      map((res) => res['status']),
+      catchError(this.handleError('NOTE UPDATE', false))
     );
   }
 
-  delete(id: string): Observable<any> {
+  delete(id: string): Observable<boolean> {
     return this.httpClient.delete(this.server + NOTE.UPDATE + id).pipe(
-      map((res) => res),
-      catchError(this.handleError('NOTE DELETE', null))
+      map((res) => res['status']),
+      catchError(this.handleError('NOTE DELETE', false))
     );
   }
 }

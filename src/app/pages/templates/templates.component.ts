@@ -82,9 +82,9 @@ export class TemplatesComponent implements OnInit {
   deleteTemplate(template: Template): void {
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
-        message: 'Are you sure to remove the template?',
-        cancelLabel: 'No',
-        confirmLabel: 'Remove'
+        title: 'Delete template',
+        message: 'Are you sure to delete this template?',
+        confirmLabel: 'Delete'
       }
     });
 

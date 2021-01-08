@@ -106,6 +106,9 @@ export class SendEmailComponent implements OnInit {
     }
   }
 
+  /**
+   * Open the Material Select Dialog
+   */
   openMaterialsDlg(): void {
     const content = this.emailContent;
     const materials = this.helperSerivce.getMaterials(content);
@@ -130,6 +133,10 @@ export class SendEmailComponent implements OnInit {
       });
   }
 
+  /**
+   * Populate the selected template content
+   * @param template : Template
+   */
   selectTemplate(template: Template): void {
     this.selectedTemplate = template;
     this.emailSubject = this.selectedTemplate.subject;

@@ -153,9 +153,9 @@ export class TaskService extends HttpService {
     );
   }
 
-  update(id: string, data: any): Observable<boolean> {
+  update(id: string, data: any): Observable<any> {
     return this.http.put(this.server + TASK.UPDATE + id, data).pipe(
-      map((res) => res['status']),
+      map((res) => res['data']),
       catchError(this.handleError('UPDATE TASK', false))
     );
   }
@@ -175,12 +175,19 @@ export class TaskService extends HttpService {
     return this.http
       .post(this.server + TASK.BULK_ARCHIVE, { follow_ups: ids })
       .pipe(
-        map((res) => res),
-        catchError(this.handleError('BULK TASK ARCHIVE', null))
+        map((res) => res['status']),
+        catchError(this.handleError('BULK TASK ARCHIVE', false))
       );
   }
 
-  complete(ids: any): Observable<any> {
+  complete(id: string): Observable<any> {
+    return this.http.post(this.server + TASK.COMPLETE, { follow_up: id }).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('TASK COMPLETE', null))
+    );
+  }
+
+  bulkComplete(ids: any): Observable<any> {
     return this.http
       .post(this.server + TASK.BULK_COMPLETE, { follow_ups: ids })
       .pipe(

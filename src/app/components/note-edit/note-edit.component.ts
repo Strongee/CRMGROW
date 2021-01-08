@@ -11,13 +11,17 @@ import { NoteService } from 'src/app/services/note.service';
 export class NoteEditComponent implements OnInit {
   saving = false;
   note: Note = new Note();
+  contact: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<NoteEditComponent>,
     private noteService: NoteService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
-    this.note = { ...this.note, ...this.data.note.activity_detail };
+    if (this.data) {
+      this.note = { ...this.note, ...this.data.note.activity_detail };
+      this.contact = this.data.contact_name;
+    }
   }
 
   ngOnInit(): void {}
@@ -25,10 +29,9 @@ export class NoteEditComponent implements OnInit {
   update(): void {
     this.saving = true;
     this.noteService.update(this.note._id, this.note).subscribe((res) => {
-      console.log('###', res);
-      if (res['status'] == true) {
+      if (res) {
         this.saving = false;
-        this.dialogRef.close();
+        this.dialogRef.close(this.note);
       }
     });
   }
