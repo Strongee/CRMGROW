@@ -48,8 +48,11 @@ export class LeadCaptureComponent implements OnInit {
       type: 'text'
     }
   ];
+  isChecked = true;
   uploadingIntroVideo = false;
   @ViewChild('introVideo') introVideo: ElementRef;
+  @ViewChild('emailCheckBox') emailCheckBox;
+  @ViewChild('phoneCheckBox') phoneCheckBox;
   introVideoPlaying = false;
 
   videoUploader: FileUploader = new FileUploader({
@@ -152,7 +155,7 @@ export class LeadCaptureComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res && res.mode == 'text') {
-          editData.field_name = res.field;
+          editData.name = res.field;
           editData.placeholder = res.placeholder;
         }
       });
@@ -183,13 +186,25 @@ export class LeadCaptureComponent implements OnInit {
   statusChange(evt: any, type: string): void {
     switch (type) {
       case 'email':
-        this.garbage.capture_field.email = evt.target.checked;
+        if (!this.garbage.capture_field.cell_phone) {
+          this.garbage.capture_field.email = true;
+          this.emailCheckBox.nativeElement.checked = true;
+          this.toast.error('At least Email or Phone should be checked.');
+        } else {
+          this.garbage.capture_field.email = evt;
+        }
         break;
       case 'name':
         this.garbage.capture_field.first_name = evt.target.checked;
         break;
       case 'phone':
-        this.garbage.capture_field.cell_phone = evt.target.checked;
+        if (!this.garbage.capture_field.email) {
+          this.garbage.capture_field.cell_phone = true;
+          this.phoneCheckBox.nativeElement.checked = true;
+          this.toast.error('At least Email or Phone should be checked.');
+        } else {
+          this.garbage.capture_field.cell_phone = evt;
+        }
         break;
     }
   }

@@ -14,13 +14,22 @@
         <div class="v-center required-field mb-2" *ngFor="let field of defaultField">
             <div class="f-3 field-name">{{field.name}}</div>
             <div class="custom-control custom-checkbox">
-                <input
+                <!-- <input
                     type="checkbox"
                     class="custom-control-input"
-                    id="{{field.name}}" 
+                    id="{{field.name}}"
                     [checked]="garbage.capture_field.email"
                     (change)="statusChange($event, 'email')"
                     *ngIf="field.name == 'Email'"
+                /> -->
+                <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{field.name}}"
+                    [(ngModel)]="garbage.capture_field.email"
+                    (ngModelChange)="statusChange($event, 'email')"
+                    *ngIf="field.name == 'Email'"
+                    #emailCheckBox
                 />
                 <input
                     type="checkbox"
@@ -34,9 +43,10 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="{{field.name}}" 
-                    [checked]="garbage.capture_field.cell_phone"
-                    (change)="statusChange($event, 'phone')"
+                    [(ngModel)]="garbage.capture_field.cell_phone"
+                    (ngModelChange)="statusChange($event, 'phone')"
                     *ngIf="field.name == 'Phone'"
+                    #phoneCheckBox
                 />
                 <label class="custom-control-label" for="{{field.name}}"></label>
             </div>

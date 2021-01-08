@@ -23,6 +23,48 @@
             .delete-col {
                 width: 60px;
             }
+            @media screen and (max-width: 576px) {
+                .tag-col {
+                    width: 200px;
+                }
+                .edit-col {
+                    width: 45px;
+                }
+                .time-col {
+                    width: 70px;
+                }
+                .delete-col {
+                    width: 60px;
+                }
+            }
+            @media screen and (max-width: 425px) {
+                .tag-col {
+                    width: 200px;
+                }
+                .edit-col {
+                    width: 40px;
+                }
+                .time-col {
+                    width: 40px;
+                }
+                .delete-col {
+                    width: 50px;
+                }
+            }
+            @media screen and (max-width: 375px) {
+                .tag-col {
+                    width: 140px;
+                }
+                .edit-col {
+                    width: 40px;
+                }
+                .time-col {
+                    width: 40px;
+                }
+                .delete-col {
+                    width: 50px;
+                }
+            }
         }
         .mat-expansion-panel-content {
             max-height: 200px;
@@ -59,20 +101,63 @@
             text-transform: uppercase;
             opacity: 0.6;
             .tag-col {
-                width: 50%;
+                width: 290px;
             }
             .edit-col {
-                width: 10%;
+                width: 45px;
             }
             .time-col {
-                width: 25%;
+                width: 90px;
             }
             .delete-col {
-                width: 15%;
+                width: 60px;
+            }
+            @media screen and (max-width: 576px) {
+                .tag-col {
+                    width: 200px;
+                }
+                .edit-col {
+                    width: 45px;
+                }
+                .time-col {
+                    width: 70px;
+                }
+                .delete-col {
+                    width: 60px;
+                }
+            }
+            @media screen and (max-width: 425px) {
+                .tag-col {
+                    width: 200px;
+                }
+                .edit-col {
+                    width: 40px;
+                }
+                .time-col {
+                    width: 40px;
+                }
+                .delete-col {
+                    width: 50px;
+                }
+            }
+            @media screen and (max-width: 375px) {
+                .tag-col {
+                    width: 140px;
+                }
+                .edit-col {
+                    width: 40px;
+                }
+                .time-col {
+                    width: 40px;
+                }
+                .delete-col {
+                    width: 50px;
+                }
             }
         }
     }
     .tag-label {
         border-radius: 6px;
+        display: inline-block;
     }
 }

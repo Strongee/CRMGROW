@@ -24,7 +24,7 @@ export class SignatureComponent implements OnInit {
     { layout: 'img_text_ver', icon: 'i-signature-4' },
     { layout: 'custom', icon: 'i-signature-5' }
   ];
-  currentTemplate = 'custom';
+  currentTemplate = '';
   submitted = false;
   saving = false;
 
@@ -61,10 +61,10 @@ export class SignatureComponent implements OnInit {
       case 'img_text_hor':
         signature = `
         <div class="quill-better-table-wrapper">
-          <table class="quill-better-table" style="width: 400px;">
+          <table class="quill-better-table" style="width: 270px;">
             <colgroup>
-              <col width="120">
-              <col width="280">
+              <col width="100">
+              <col width="170">
             </colgroup>
             <tbody>
               <tr data-row="row-yu3l">
@@ -83,14 +83,18 @@ export class SignatureComponent implements OnInit {
         </div>
         <p><br></p>
         `;
+        const delta = this.quillEditorRef.clipboard.convert({
+          html: signature
+        });
+        this.emailEditor.quillEditor.setContents(delta, 'user');
         break;
       case 'text_img_hor':
         signature = `
         <div class="quill-better-table-wrapper">
-          <table class="quill-better-table" style="width: 400px;">
+          <table class="quill-better-table" style="width: 270px;">
             <colgroup>
-              <col width="280">
-              <col width="120">
+              <col width="170">
+              <col width="100">
             </colgroup>
             <tbody>
             <tr data-row="row-yu3l">
@@ -109,6 +113,10 @@ export class SignatureComponent implements OnInit {
         </div>
         <p><br></p>
         `;
+        const html = this.quillEditorRef.clipboard.convert({
+          html: signature
+        });
+        this.emailEditor.quillEditor.setContents(html, 'user');
         break;
       case 'text_img_ver':
         signature = `
