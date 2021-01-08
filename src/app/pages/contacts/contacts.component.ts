@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadContactsComponent } from 'src/app/components/upload-contacts/upload-contacts.component';
 import {
   BulkActions,
@@ -73,6 +73,7 @@ export class ContactsComponent implements OnInit {
 
   constructor(
     public router: Router,
+    private route: ActivatedRoute,
     public storeService: StoreService,
     public contactService: ContactService,
     public userService: UserService,
@@ -111,6 +112,11 @@ export class ContactsComponent implements OnInit {
     if (forceReload) {
       this.contactService.reloadPage();
       this.contactService.forceReload.next(false);
+    }
+
+    const action = this.route.snapshot.params['action'];
+    if (action === 'import-csv') {
+      this.importContacts();
     }
   }
   /**

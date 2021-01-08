@@ -71,6 +71,13 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'contacts/:action',
+    component: ContactsComponent,
+    data: {
+      title: 'Contacts'
+    }
+  },
+  {
     path: 'contacts/:id',
     component: ContactComponent,
     data: {
