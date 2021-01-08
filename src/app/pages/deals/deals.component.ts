@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { DealStage } from 'src/app/models/deal-stage.model';
+import { DealStageCreateComponent } from 'src/app/components/deal-stage-create/deal-stage-create.component';
 
 @Component({
   selector: 'app-deals',
@@ -54,19 +55,16 @@ export class DealsComponent implements OnInit {
     this.dealsService.moveDeal(data).subscribe(() => {});
   }
 
-  taskDetail(item: string): void {
+  dealDetail(item: string): void {
     this.router.navigate(['./deals/detail']);
   }
 
-  addColumns(): void {
+  addStages(): void {
     this.dialog
-      .open(DealCreateComponent, {
+      .open(DealStageCreateComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '400px',
-        data: {
-          type: 'deal-stage'
-        }
+        maxWidth: '400px'
       })
       .afterClosed()
       .subscribe((res) => {
@@ -76,15 +74,14 @@ export class DealsComponent implements OnInit {
       });
   }
 
-  addTasks(dealStage: any): void {
+  addDeals(dealStage: any): void {
     this.dialog
       .open(DealCreateComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '400px',
+        maxWidth: '600px',
         data: {
-          id: dealStage._id,
-          type: 'deal'
+          id: dealStage._id
         }
       })
       .afterClosed()

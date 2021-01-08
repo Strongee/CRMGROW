@@ -104,6 +104,7 @@ import { ActionsHeaderComponent } from './actions-header/actions-header.componen
 import { NoteEditComponent } from './note-edit/note-edit.component';
 import { TaskDeleteComponent } from './task-delete/task-delete.component';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.component';
 
 @NgModule({
   declarations: [
@@ -206,7 +207,8 @@ import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
     AdditionalEditComponent,
     ActionsHeaderComponent,
     NoteEditComponent,
-    TaskDeleteComponent
+    TaskDeleteComponent,
+    DealStageCreateComponent
   ],
   imports: [
     CommonModule,
@@ -279,7 +281,8 @@ import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
     AccordionComponent,
     SendEmailComponent,
     ContactEditComponent,
-    AdditionalEditComponent
+    AdditionalEditComponent,
+    DealStageCreateComponent
   ],
   bootstrap: [
     ContactCreateComponent,
