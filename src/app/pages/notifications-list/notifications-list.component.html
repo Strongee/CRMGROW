@@ -1,0 +1,46 @@
+<div class="page-content">
+  <div class="v-center border-bottom pb-3">
+    <h4 class="page-title">NOTIFICATIONS</h4>
+    <a class="ml-auto v-center f-3 font-weight-bold" [routerLink]="['/settings/notifications']">
+      <i class="i-icon i-notification bgc-blue d-block mr-2"></i>
+      <span>Notification Settings</span>
+    </a>
+  </div>
+  <div class="notifications-list">
+    <div *ngIf="notifications.length; else emptyTemplate">
+      <ng-container *ngFor="let item of notifications | paginate: {id: 'notifications', itemsPerPage: 10, currentPage: page, totalItems: count}; let i = index;">
+        <div class="notification-item d-flex" [class.readed]="item.is_read">
+          <div class="icon mr-2">
+            <mat-icon class="notification-icon">error_outline</mat-icon>
+          </div>
+          <div class="content">
+            <div [innerHTML]="item.content"></div>
+            <div *ngIf="item.description" [innerHTML]="item.description" class="description"></div>
+            <div class="time">{{item.created_at | timeago}}</div>
+          </div>
+          <div ngbDropdown placement="bottom-right" class="ml-auto actions-groups" *ngIf="item.type === 'personal'">
+            <a class="notification-action" ngbDropdownToggle>
+              <mat-icon>more_vert</mat-icon>
+            </a>
+            <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
+              <ng-container *ngIf="!item.is_read ;else unreadMark">
+                <a class="dropdown-item" (click)="setAsRead(item)">Set as read</a>
+              </ng-container>
+              <ng-template #unreadMark>
+                <a class="dropdown-item" (click)="setAsUnread(item)">Set as unread</a>
+              </ng-template>
+              <a class="dropdown-item" (click)="delete(item)">Delete notification</a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <ng-template #emptyTemplate>
+      <div *ngIf="!loading; else loadTemplate"></div>
+
+      <ng-template #loadTemplate>
+
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

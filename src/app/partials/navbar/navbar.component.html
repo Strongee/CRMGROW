@@ -183,8 +183,13 @@
         <div class="no-carot" ngbDropdownToggle>
           <i class="i-icon i-notification bgc-blue d-block"></i>
         </div>
-        <div ngbDropdownMenu>
-          
+        <div ngbDropdownMenu class="p-0">
+          <li *ngFor="let item of (notificationService.notifications$ | async); let i = index;" class="notification-item">
+            <p [innerHTML]="item.content"></p>
+          </li>
+          <li class="notification-expand rounded-bottom border-top overflow-hidden">
+            <a routerLinkActive="active" [routerLink]="['/notifications']" class="dropdown-item f-4 text-center text-primary font-weight-bold">See all</a>
+          </li>
         </div>
       </div>
     </div>

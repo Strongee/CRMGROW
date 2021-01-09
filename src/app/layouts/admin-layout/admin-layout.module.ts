@@ -61,6 +61,7 @@ import { ThemesComponent } from '../../pages/themes/themes.component';
 import { ThemeComponent } from '../../pages/theme/theme.component';
 import { EmailEditorModule } from 'angular-email-editor';
 import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
+import { NotificationsListComponent } from '../../pages/notifications-list/notifications-list.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analy
     AnalyticsContactsAddedComponent,
     ThemesComponent,
     ThemeComponent,
-    AnalyticsMaterialComponent
+    AnalyticsMaterialComponent,
+    NotificationsListComponent
   ],
   imports: [
     CommonModule,

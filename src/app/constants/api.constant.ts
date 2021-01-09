@@ -244,3 +244,12 @@ export const DEAL = {
 export const MATERIAL = {
   EMAIL: 'material/bulk-email'
 };
+
+export const NOTIFICATION = {
+  GET: 'notification',
+  LOAD_PAGE: 'notification/list/',
+  READ_MARK: 'notification/bulk-read',
+  UNREAD_MARK: 'notification/bulk-unread',
+  DELETE: 'notification/bulk-remove',
+  DELIVERY_STATUS: 'notification/get-delivery'
+};
