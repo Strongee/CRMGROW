@@ -116,10 +116,13 @@
       <ng-container *ngIf="isNoteEditable">
         <div class="my-3">
           <label>Note</label>
-          <quill-editor placeholder="Enter Text" [(ngModel)]="note" [modules]="config" name="noteContent"
-                        [styles]="{height: '120px'}" #noteContent="ngModel" required (onEditorCreated)="getEditorInstance($event)"
-                        [class.has-error]="noteContent.errors && (noteContent.touched || noteContent.dirty )" class="rounded" #noteEditor>
-          </quill-editor>
+          <app-html-editor
+            [(value)]="note"
+            placeholder="Enter Text..."
+            [style]="{height: '200px'}"
+            #editor
+          >
+          </app-html-editor>
         </div>
       </ng-container>
     </ng-container>

@@ -27,21 +27,49 @@
       </div>
       <div class="my-3">
         <label>Propose date & time</label>
-        <ng-container *ngFor="let dateTime of callDateTimes">
-          <div class="v-center mb-2">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+        <ng-container *ngFor="let dateTime of callDateTimes; let row = index">
+          <div class="row mx-0 v-center mb-2">
+            <div class="col-6 mx-0 px-0">
+              <div class="v-center">
+                <div class="input-group-prepend calendar-wrapper">
+                  <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+                </div>
+                <div ngbDropdown>
+                  <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" [name]="dateTime.id" [(ngModel)]="selectedDate[row]" ngbDropdownToggle type="text" required/>
+                  <div ngbDropdownMenu class="date-picker p-3">
+                    <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getDateTime(row) | date : 'MMMM d yyyy' }}</div>
+                    <div class="picker-body v-center justify-content-between">
+                      <div classs="date-picker">
+                        <ngb-datepicker name="select_date" #dp [(ngModel)]="dateTime.date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
+                        <div class="action-button mt-2" align="end">
+                          <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
+                          <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setDateTime(row)" ngbDropdownToggle>Set</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <input class="form-control datepicker" placeholder="Select date" [name]="dateTime.id"  [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>
+              <span
+                class="invalid-error f-3 font-weight-bold c-red"
+                *ngIf="dateTime.date['year'] == '' && dateTime.date['month'] == '' && dateTime.date['day'] == '' && submitted"
+              >
+                Date is required
+              </span>
             </div>
-            <div class="input-group ml-2">
+<!--            <div class="input-group">-->
+<!--              <div class="input-group-prepend">-->
+<!--                <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>-->
+<!--              </div>-->
+<!--              <input class="form-control datepicker" placeholder="Select date" [name]="dateTime.id"  [(ngModel)]="dateTime.date" ngbDatepicker #duefrom="ngbDatepicker" [minDate]="minDate" (click)="duefrom.toggle()" [firstDayOfWeek]="7" type="text" required/>-->
+<!--            </div>-->
+            <div class="col-5 input-group">
               <select class="form-control" [(ngModel)]="dateTime.time" [name]="dateTime.id + '-time'">
                 <option value="" disabled>From Time</option>
                 <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
               </select>
             </div>
-            <button type="button" class="v-center border-0 bgc-white py-2 ml-2" (click)="removeCallDateTime(dateTime)">
+            <button type="button" class="col-1 v-center border-0 bgc-white ml-auto py-2" (click)="removeCallDateTime(dateTime)" *ngIf="callDateTimes.length > 1">
               <i class="i-icon i-close bgc-dark" aria-hidden="true"></i>
             </button>
           </div>
@@ -63,10 +91,13 @@
       </div>
       <div class="my-3">
         <label>Description (Optional)</label>
-        <quill-editor placeholder="Enter Text" [(ngModel)]="description" [modules]="config" name="descriptionContent"
-                      [styles]="{height: '120px'}" #descriptionContent="ngModel" (onEditorCreated)="getEditorInstance($event)"
-                      [class.has-error]="descriptionContent.errors && (descriptionContent.touched || descriptionContent.dirty )" class="rounded" #descriptionEditor>
-        </quill-editor>
+        <app-html-editor
+          [(value)]="description"
+          placeholder="Enter Text..."
+          [style]="{height: '200px'}"
+          #editor
+        >
+        </app-html-editor>
       </div>
     </ng-container>
   </mat-dialog-content>
