@@ -38,7 +38,8 @@ export const GUEST = {
 };
 export const GARBAGE = {
   SET: 'garbage',
-  UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
+  UPLOAD_INTRO_VIDEO: 'garbage/intro_video',
+  LOAD_DEFAULT: 'garbage/load-default'
 };
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'

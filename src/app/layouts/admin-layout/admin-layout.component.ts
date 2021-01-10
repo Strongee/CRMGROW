@@ -41,6 +41,13 @@ export class AdminLayoutComponent implements OnInit {
 
       this.contactService.searchOption.next(new SearchOption());
       this.contactService.searchStr.next('');
+
+      this.userService.loadDefaults().subscribe((res) => {
+        if (res) {
+          this.userService.email.next(res['email']);
+          this.userService.sms.next(res['sms']);
+        }
+      });
     });
     this.labelService.loadLabels();
     this.tagService.getAllTags();

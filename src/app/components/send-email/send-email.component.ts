@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { Contact } from 'src/app/models/contact.model';
@@ -13,13 +13,14 @@ import {
 import * as _ from 'lodash';
 import { TIMES } from 'src/app/constants/variable.constants';
 import * as moment from 'moment';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-send-email',
   templateUrl: './send-email.component.html',
   styleUrls: ['./send-email.component.scss']
 })
-export class SendEmailComponent implements OnInit {
+export class SendEmailComponent implements OnInit, AfterViewInit {
   emailSubmitted = false;
   emailSending = false;
   ccFlag = false;
@@ -50,6 +51,7 @@ export class SendEmailComponent implements OnInit {
     private dialogRef: MatDialogRef<SendEmailComponent>,
     private helperSerivce: HelperService,
     private materialService: MaterialService,
+    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     if (this.data) {
@@ -58,6 +60,8 @@ export class SendEmailComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngAfterViewInit(): void {}
 
   sendEmail(): void {
     if (this.emailContacts.length) {
@@ -179,6 +183,14 @@ export class SendEmailComponent implements OnInit {
     this.scheduleDateTime = '';
   }
 
+  onInitEditor(): void {
+    const defaultEmail = this.userService.email.getValue();
+    if (defaultEmail) {
+      this.emailContent = defaultEmail.content;
+      this.emailSubject = defaultEmail.subject;
+    }
+    this.htmlEditor.setValue(this.emailContent);
+  }
   onAttachmentChange(attachments): void {
     this.attachments = attachments;
   }

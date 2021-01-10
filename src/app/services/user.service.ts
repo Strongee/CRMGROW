@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, filter, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AUTH, USER } from '../constants/api.constant';
+import { AUTH, GARBAGE, USER } from '../constants/api.constant';
 import { Garbage } from '../models/garbage.model';
+import { Template } from '../models/template.model';
 import { User } from '../models/user.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
@@ -18,6 +19,9 @@ export class UserService extends HttpService {
 
   garbage: BehaviorSubject<Garbage> = new BehaviorSubject(new Garbage());
   garbage$: Observable<Garbage> = this.garbage.asObservable();
+
+  sms: BehaviorSubject<Template> = new BehaviorSubject(new Template());
+  email: BehaviorSubject<Template> = new BehaviorSubject(new Template());
 
   constructor(private httpClient: HttpClient, errorService: ErrorService) {
     super(errorService);
@@ -166,6 +170,12 @@ export class UserService extends HttpService {
     return this.httpClient.get(this.server + USER.PROFILE).pipe(
       map((res) => res['data']),
       catchError(this.handleError('GET PROFILE'))
+    );
+  }
+  public loadDefaults(): Observable<any> {
+    return this.httpClient.get(this.server + GARBAGE.LOAD_DEFAULT).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('LOAD DEFAULT TEMPLATES', null))
     );
   }
   public updateProfile(profile: any): Observable<any> {

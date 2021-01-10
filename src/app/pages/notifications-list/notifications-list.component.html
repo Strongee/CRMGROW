@@ -6,10 +6,10 @@
       <span>Notification Settings</span>
     </a>
   </div>
-  <div class="notifications-list">
+  <div class="notifications-list pt-3">
     <div *ngIf="notifications.length; else emptyTemplate">
       <ng-container *ngFor="let item of notifications | paginate: {id: 'notifications', itemsPerPage: 10, currentPage: page, totalItems: count}; let i = index;">
-        <div class="notification-item d-flex" [class.readed]="item.is_read">
+        <div class="notification-item d-flex py-2 pl-3 pr-2 rounded mb-1" [class.readed]="item.is_read">
           <div class="icon mr-2">
             <mat-icon class="notification-icon">error_outline</mat-icon>
           </div>
@@ -19,7 +19,7 @@
             <div class="time">{{item.created_at | timeago}}</div>
           </div>
           <div ngbDropdown placement="bottom-right" class="ml-auto actions-groups" *ngIf="item.type === 'personal'">
-            <a class="notification-action" ngbDropdownToggle>
+            <a class="notification-action no-carot c-pointer" ngbDropdownToggle>
               <mat-icon>more_vert</mat-icon>
             </a>
             <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
@@ -35,11 +35,24 @@
         </div>
       </ng-container>
     </div>
+    <div *ngIf="total">
+      <div class="pagination-wrapper" [hidden]="total <= 10">
+        <pagination-controls (pageChange)="loadPage($event)" id="notifications" maxSize="5" previousLabel="Prev"
+        nextLabel="Next"></pagination-controls>
+      </div>
+    </div>
     <ng-template #emptyTemplate>
-      <div *ngIf="!loading; else loadTemplate"></div>
-
+      <div *ngIf="!loading; else loadTemplate">
+        <div class="object-icon v-center">
+          <i class="i-icon i-notification d-block bgc-dark"></i>
+        </div>
+        <p class="mb-4">There are no notifications yet.</p>
+      </div>
       <ng-template #loadTemplate>
-
+        <div class="text-center">
+          <div class="loader mt-5 lg"></div>
+          <h4 class="fw-600 mt-2">Loading notifications...</h4>
+        </div>
       </ng-template>
     </ng-template>
   </div>
