@@ -8,6 +8,8 @@
   padding: 4px;
   border-radius: 24px;
   position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   .tab {
     display: flex;
