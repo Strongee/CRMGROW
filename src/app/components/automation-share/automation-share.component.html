@@ -1,30 +1,32 @@
 <h1 mat-dialog-title>Share Automations</h1>
 <mat-dialog-content>
-  <div class="loading" *ngIf="loading; else listTemplate">
-    <app-loading-overlay [type]="'material'"></app-loading-overlay>
-  </div>
-  <ng-template #listTemplate>
-    <ng-container *ngIf="automations.length; else emptyTemplate">
-      <div class="automations-container">
-        <div class="v-center material automation" *ngFor="let automation of automations">
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" id="{{automation._id}}-own-automation" type="checkbox" [checked]="selectedAutomations.indexOf(automation._id) !== -1" (change)="toggleAutomation(automation._id)">
-            <label class="custom-control-label c-label" for="{{automation._id}}-own-automation"> </label>
-          </div>
-          <div class="info">
-            <div class="title">
-              {{automation.title}}
-            </div>
-          </div>
+  <ng-container *ngIf="loading">
+    <div class="list-loading text-center">
+      <div class="loader mt-5"></div>
+      <h4 class="f-8 font-weight-bold mt-2">Loading automations for share to team...</h4>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!loading && !automations.length">
+    <div class="object-icon v-center">
+      <i class="i-icon i-template d-block bgc-dark"></i>
+    </div>
+    <h4 class="font-weight-bold mt-4 mb-3">
+      There is no automations for share yet.
+    </h4>
+  </ng-container>
+  <ng-container *ngIf="!loading && automations.length">
+    <div class="automations-container mt-3">
+      <div class="d-flex material automation mt-2" *ngFor="let automation of automations">
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" id="{{automation._id}}-own-automation" type="checkbox" [checked]="selectedAutomations.indexOf(automation._id) !== -1" (change)="toggleAutomation(automation._id)">
+          <label class="custom-control-label c-label" for="{{automation._id}}-own-automation"> </label>
+        </div>
+        <div class="f-5 font-weight-bold">
+          {{automation.title}}
         </div>
       </div>
-    </ng-container>
-    <ng-template #emptyTemplate>
-      <div class="empty-list">
-        <app-data-empty [type]="'automation'"></app-data-empty>
-      </div>
-    </ng-template>
-  </ng-template>
+    </div>
+  </ng-container>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button type="button" class="btn c-blue" mat-dialog-close>Cancel</button>

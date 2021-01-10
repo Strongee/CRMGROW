@@ -144,6 +144,7 @@ export const TEAM = {
   SHARE_VIDEOS: 'team/share-videos',
   SHARE_PDFS: 'team/share-pdfs',
   SHARE_IMAGES: 'team/share-images',
+  SHARE_MATERIALS: 'team/share-materials',
   SHARE_TEMPLATES: 'team/share-templates',
   SHARE_AUTOMATIONS: 'team/share-automations',
   ACCEPT_INVITATION: 'team/accept/',

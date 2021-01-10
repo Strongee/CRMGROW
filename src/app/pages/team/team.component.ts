@@ -61,8 +61,10 @@ export class TeamComponent implements OnInit {
   ];
   selectedTab: TabItem = this.tabs[0];
   sharedTabs: TabItem[] = [
-    { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
-    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
+    { icon: '', label: 'Materials', id: 'materials' },
+    { icon: '', label: 'Templates', id: 'templates' },
+    { icon: '', label: 'Automations', id: 'automations' },
+    { icon: '', label: 'Contacts', id: 'contacts' }
   ];
   selectedSharedTab: TabItem = this.sharedTabs[0];
   sharedContacts = [
@@ -486,7 +488,7 @@ export class TeamComponent implements OnInit {
       .open(TemplateShareComponent, {
         width: '96vw',
         maxWidth: '500px',
-        height: '70vh',
+        maxHeight: '60vh',
         disableClose: true,
         data: {
           team_id: this.teamId
@@ -910,9 +912,15 @@ export class TeamComponent implements OnInit {
     }
     return 'Viewer';
   }
+
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
   }
+
+  changeSharedTab(tab: TabItem): void {
+    this.selectedSharedTab = tab;
+  }
+
   selectAllPage(): void {
     if (this.isSelectedPage()) {
       this.team.members.forEach((e) => {

@@ -268,6 +268,17 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM SHARE IMAGES', []))
       );
   }
+  shareMaterials(teamId, data): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.SHARE_MATERIALS, {
+        team_id: teamId,
+        ...data
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM SHARE MATERIALS', []))
+      );
+  }
   removeVideo(id): Observable<any> {
     return this.httpClient.post(this.server + TEAM.REMOVE_VIDEO + id, {}).pipe(
       map((res) => res['data'] || []),
