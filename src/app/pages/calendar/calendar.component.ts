@@ -223,6 +223,7 @@ export class CalendarComponent implements OnInit {
   }
 
   newEvent(): void {
+    this.overlayService.close(null);
     this.dialog
       .open(CalendarDialogComponent, {
         position: { top: '100px' },
