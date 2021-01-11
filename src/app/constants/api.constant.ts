@@ -38,7 +38,8 @@ export const GUEST = {
 };
 export const GARBAGE = {
   SET: 'garbage',
-  UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
+  UPLOAD_INTRO_VIDEO: 'garbage/intro_video',
+  LOAD_DEFAULT: 'garbage/load-default'
 };
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'
@@ -98,6 +99,7 @@ export const VIDEO = {
   UPDATE_ADMIN: 'video/update-admin',
   DELETE: 'video/',
   LOAD: 'video',
+  LOAD_CONVERTING_STATUS: 'video/convert-status',
   ANALYTICS: 'video/analytics/'
 };
 export const PDF = {
@@ -142,6 +144,7 @@ export const TEAM = {
   SHARE_VIDEOS: 'team/share-videos',
   SHARE_PDFS: 'team/share-pdfs',
   SHARE_IMAGES: 'team/share-images',
+  SHARE_MATERIALS: 'team/share-materials',
   SHARE_TEMPLATES: 'team/share-templates',
   SHARE_AUTOMATIONS: 'team/share-automations',
   ACCEPT_INVITATION: 'team/accept/',
@@ -243,4 +246,13 @@ export const DEAL = {
 
 export const MATERIAL = {
   EMAIL: 'material/bulk-email'
+};
+
+export const NOTIFICATION = {
+  GET: 'notification',
+  LOAD_PAGE: 'notification/list/',
+  READ_MARK: 'notification/bulk-read',
+  UNREAD_MARK: 'notification/bulk-unread',
+  DELETE: 'notification/bulk-remove',
+  DELIVERY_STATUS: 'notification/get-delivery'
 };

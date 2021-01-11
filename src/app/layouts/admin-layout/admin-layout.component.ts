@@ -8,6 +8,7 @@ import { SearchOption } from 'src/app/models/searchOption.model';
 import { User } from 'src/app/models/user.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { LabelService } from 'src/app/services/label.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
@@ -24,6 +25,7 @@ export class AdminLayoutComponent implements OnInit {
     private labelService: LabelService,
     private tagService: TagService,
     private contactService: ContactService,
+    private notificationService: NotificationService,
     private swPush: SwPush,
     private snackBar: MatSnackBar
   ) {
@@ -39,6 +41,13 @@ export class AdminLayoutComponent implements OnInit {
 
       this.contactService.searchOption.next(new SearchOption());
       this.contactService.searchStr.next('');
+
+      this.userService.loadDefaults().subscribe((res) => {
+        if (res) {
+          this.userService.email.next(res['email']);
+          this.userService.sms.next(res['sms']);
+        }
+      });
     });
     this.labelService.loadLabels();
     this.tagService.getAllTags();
@@ -55,6 +64,8 @@ export class AdminLayoutComponent implements OnInit {
         }
       }
     });
+
+    this.notificationService.loadNotifications();
   }
 
   ngOnInit(): void {}

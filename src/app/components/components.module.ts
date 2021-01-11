@@ -105,6 +105,8 @@ import { NoteEditComponent } from './note-edit/note-edit.component';
 import { TaskDeleteComponent } from './task-delete/task-delete.component';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.component';
+import { TextStatusComponent } from './text-status/text-status.component';
+import { EmailStatusComponent } from './email-status/email-status.component';
 
 @NgModule({
   declarations: [
@@ -208,7 +210,9 @@ import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.
     ActionsHeaderComponent,
     NoteEditComponent,
     TaskDeleteComponent,
-    DealStageCreateComponent
+    DealStageCreateComponent,
+    TextStatusComponent,
+    EmailStatusComponent
   ],
   imports: [
     CommonModule,

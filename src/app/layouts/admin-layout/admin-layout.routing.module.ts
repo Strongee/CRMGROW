@@ -26,6 +26,8 @@ import { CampaignListItemComponent } from 'src/app/pages/campaign-list-item/camp
 import { CampaignBulkMailingItemComponent } from 'src/app/pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component';
 import { CampaignSmtpComponent } from 'src/app/pages/campaign-smtp/campaign-smtp.component';
 import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
+import { NotificationsListComponent } from 'src/app/pages/notifications-list/notifications-list.component';
+import { MaterialComponent } from 'src/app/pages/material/material.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -71,7 +73,7 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'contacts/:action',
+    path: 'contacts/import-csv',
     component: ContactsComponent,
     data: {
       title: 'Contacts'
@@ -89,6 +91,13 @@ export const AdminLayoutRoutes: Routes = [
     component: MaterialsComponent,
     data: {
       title: 'Materials'
+    }
+  },
+  {
+    path: 'materials/folder/:id',
+    component: MaterialComponent,
+    data: {
+      title: 'Material'
     }
   },
   {
@@ -273,6 +282,13 @@ export const AdminLayoutRoutes: Routes = [
     component: ThemeComponent,
     data: {
       title: 'Theme'
+    }
+  },
+  {
+    path: 'notifications',
+    component: NotificationsListComponent,
+    data: {
+      title: 'Notifications'
     }
   }
 ];

@@ -1,9 +1,11 @@
 import { DOCUMENT } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Inject,
   Input,
+  NgZone,
   OnInit,
   Output,
   ViewChild
@@ -29,12 +31,18 @@ export class HtmlEditorComponent implements OnInit {
   @Input() class = '';
   @Input() hasToken: boolean = false;
   @Input() required: boolean = false;
-  @Input() hasAttachment: boolean = false;
+  @Input()
+  public set hasAttachment(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.push(['attachment']);
+    }
+  }
 
   @Input() value: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
   @Output() onFocus: EventEmitter<boolean> = new EventEmitter();
   @Output() attachmentChange: EventEmitter<any> = new EventEmitter();
+  @Output() onInit: EventEmitter<boolean> = new EventEmitter();
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
@@ -50,8 +58,7 @@ export class HtmlEditorComponent implements OnInit {
         [{ color: [] }, { background: [] }],
         [{ list: 'ordered' }, { list: 'bullet' }],
         [{ align: [] }],
-        ['link', 'image'],
-        this.hasAttachment ? ['attachment'] : []
+        ['link', 'image']
       ],
       handlers: {
         attachment: () => {
@@ -64,9 +71,9 @@ export class HtmlEditorComponent implements OnInit {
                   content: base64.substr(base64.indexOf(',') + 1),
                   size: ByteToSize(file.size)
                 };
-                this.attachments.splice(this.attachments.length, 1, attachment);
+                this.attachments.unshift(attachment);
                 this.attachmentChange.emit(this.attachments);
-                this.emailEditor.quillEditor.focus();
+                this.cdr.detectChanges();
               });
             });
           });
@@ -92,7 +99,8 @@ export class HtmlEditorComponent implements OnInit {
 
   constructor(
     private fileService: FileService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {}
@@ -108,6 +116,7 @@ export class HtmlEditorComponent implements OnInit {
     this.quillEditorRef = editorInstance;
     const toolbar = this.quillEditorRef.getModule('toolbar');
     toolbar.addHandler('image', this.initImageHandler);
+    this.onInit.emit();
   }
 
   initImageHandler = (): void => {
@@ -190,13 +199,16 @@ export class HtmlEditorComponent implements OnInit {
       this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
     }
   }
-  removeAttachment(index): void {
+  removeAttachment(index: number): void {
     this.attachments.splice(index, 1);
+    this.cdr.detectChanges();
     this.attachmentChange.emit(this.attachments);
   }
 
   clearAttachments(): void {
     this.attachments = [];
+    this.cdr.detectChanges();
+    this.attachmentChange.emit(this.attachments);
   }
 
   onFocusEvt(): void {

@@ -114,8 +114,8 @@ export class ContactsComponent implements OnInit {
       this.contactService.forceReload.next(false);
     }
 
-    const action = this.route.snapshot.params['action'];
-    if (action === 'import-csv') {
+    const path = this.route.snapshot.routeConfig['path'];
+    if (path.includes('import-csv')) {
       this.importContacts();
     }
   }

@@ -1,17 +1,4 @@
 <div class="html-editor position-relative">
-  <div class="v-center mt-2 px-3" *ngIf="attachments && attachments.length">
-    <i class="i-icon i-attachment d-block bgc-dark"></i>
-    <span class="ml-2">{{ attachments.length }} file(s) attached.</span>
-  </div>
-  <div class="attach-files mt-2 px-3" *ngIf="attachments && attachments.length">
-    <div class="attachment" *ngFor="let attachment of attachments; let i = index">
-      <div class="name">{{ attachment.filename }}</div>
-      <div class="size">{{ attachment.size }}</div>
-      <div class="close" (click)="removeAttachment(i)">
-        &times;
-      </div>
-    </div>
-  </div>
   <div class="position-relative">
     <quill-editor
       [placeholder]="placeholder"
@@ -45,5 +32,18 @@
         </div>
       </div>
     </ng-container>
+  </div>
+  <div class="v-center mt-1 px-3" *ngIf="attachments && attachments.length">
+    <i class="i-icon i-attachment d-block bgc-dark"></i>
+    <span class="ml-2">{{ attachments.length }} file(s) attached.</span>
+  </div>
+  <div class="attach-files my-1 px-3" *ngIf="attachments && attachments.length">
+    <div class="attachment" *ngFor="let attachment of attachments; let i = index">
+      <div class="name">{{ attachment.filename }}</div>
+      <div class="size">{{ attachment.size }}</div>
+      <div class="close c-pointer" (click)="removeAttachment(i)">
+        &times;
+      </div>
+    </div>
   </div>
 </div>
