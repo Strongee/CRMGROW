@@ -107,6 +107,7 @@ import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.component';
 import { TextStatusComponent } from './text-status/text-status.component';
 import { EmailStatusComponent } from './email-status/email-status.component';
+import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
 
 @NgModule({
   declarations: [
@@ -212,7 +213,8 @@ import { EmailStatusComponent } from './email-status/email-status.component';
     TaskDeleteComponent,
     DealStageCreateComponent,
     TextStatusComponent,
-    EmailStatusComponent
+    EmailStatusComponent,
+    TeamContactShareComponent
   ],
   imports: [
     CommonModule,

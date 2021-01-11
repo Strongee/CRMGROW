@@ -46,8 +46,8 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
       return;
     }
     this.loading = true;
-    let automation = this.selectedAutomation._id;
-    let contacts = [];
+    const automation = this.selectedAutomation._id;
+    const contacts = [];
     this.contacts.forEach((e) => {
       contacts.push(e._id);
     });
