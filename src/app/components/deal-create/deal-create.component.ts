@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 export class DealCreateComponent implements OnInit {
   contacts: Contact[] = [];
   title = '';
-  value = '';
+  value: number;
   submitted = false;
   stages: any[] = [];
   selectedStage = '';
