@@ -562,7 +562,7 @@
                               <div class="title f-6 font-weight-bold">
                                 {{activity.activity_detail.subject}}
                               </div>
-                              <div class="f-6" [innerHTML]="activity.activity_detail.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No description' | stripTags | shorten: 300: '...' "></div>
                               <div class="gradient-bottom"></div>
                               <div class="f-3 fw-600 c-blue mt-1">
                                 Expand
@@ -574,7 +574,71 @@
                               <div class="title f-6 font-weight-bold">
                                 {{activity.activity_detail.subject}}
                               </div>
-                              <div class="f-6" [innerHTML]="activity.activity_detail.content || 'No Content'"></div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No description'"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Collapse
+                              </div>
+                            </div>
+                          </ng-template>
+                        </app-accordion>
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <div *ngSwitchCase="activity.type == 'pdfs' || activity.type == 'pdf_trackers' ? activity.type : ''">
+                    <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                      <div class="main-history-item">
+                        <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                          <ng-template #show>
+                            <div class="content f-6 position-relative">
+                              <div class="title f-6 font-weight-bold">
+                                {{activity.activity_detail.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No description' | stripTags | shorten: 300: '...' "></div>
+                              <div class="gradient-bottom"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Expand
+                              </div>      
+                            </div>
+                          </ng-template>
+                          <ng-template #hide>
+                            <div class="content">
+                              <div class="title f-6 font-weight-bold">
+                                {{activity.activity_detail.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No description'"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Collapse
+                              </div>
+                            </div>
+                          </ng-template>
+                        </app-accordion>
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <div *ngSwitchCase="activity.type == 'images' || activity.type == 'image_trackers' ? activity.type : ''">
+                    <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                      <div class="main-history-item">
+                        <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                          <ng-template #show>
+                            <div class="content f-6 position-relative">
+                              <div class="title f-6 font-weight-bold">
+                                {{activity.activity_detail.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No description' | stripTags | shorten: 300: '...' "></div>
+                              <div class="gradient-bottom"></div>
+                              <div class="f-3 fw-600 c-blue mt-1">
+                                Expand
+                              </div>      
+                            </div>
+                          </ng-template>
+                          <ng-template #hide>
+                            <div class="content">
+                              <div class="title f-6 font-weight-bold">
+                                {{activity.activity_detail.subject}}
+                              </div>
+                              <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No description'"></div>
                               <div class="f-3 fw-600 c-blue mt-1">
                                 Collapse
                               </div>
