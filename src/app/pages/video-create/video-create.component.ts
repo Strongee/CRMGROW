@@ -340,7 +340,7 @@ export class VideoCreateComponent implements OnInit {
           this.materialService
             .createVideo({
               ...this.video,
-              duration: this.video.duration * 1000
+              duration: this.video.duration
             })
             .subscribe((res) => {
               this.uploading = false;
@@ -404,7 +404,7 @@ export class VideoCreateComponent implements OnInit {
     delete newVideo._id;
     newVideo.title = this.video.title;
     newVideo.description = this.video.description;
-    newVideo.duration = this.video.duration * 1000;
+    newVideo.duration = this.video.duration;
     newVideo.thumbnail = this.video.thumbnail;
     newVideo.site_image = this.video['site_image'];
     newVideo.custom_thumbnail = this.video['custom_thumbnail'];

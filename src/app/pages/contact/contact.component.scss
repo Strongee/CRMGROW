@@ -287,7 +287,7 @@
         }
       }
     }
-    &.emails-detail {
+    &.emails-detail, &.email_trackers-detail {
       br {display: none;}
 
       .main-history-item {
@@ -310,7 +310,7 @@
         &.expanded {
           .detail {
             height: unset;
-            visibility: visible; 
+            visibility: visible;
           }
           .summary {
             display: none;
@@ -318,11 +318,17 @@
         }
       }
     }
-    &.videos-detail  {
+    &.videos-detail, &.video_trackers-detail  {
       br {display: none;}
 
       .main-history-item {
-        .content {
+        .detail {
+          visibility: hidden;
+          height: 0px;
+          transition: height .3s;
+        }
+        .summary {
+          display: block;
           .gradient-bottom {
             position: absolute;
             bottom: 20px;
@@ -331,14 +337,30 @@
             background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
           }
         }
+
+        &.expanded {
+          .detail {
+            height: unset;
+            visibility: visible;
+          }
+          .summary {
+            display: none;
+          }
+        }
       }
     }
 
-    &.pdfs-detail  {
+    &.pdfs-detail, &.pdf_trackers-detail  {
       br {display: none;}
 
       .main-history-item {
-        .content {
+        .detail {
+          visibility: hidden;
+          height: 0px;
+          transition: height .3s;
+        }
+        .summary {
+          display: block;
           .gradient-bottom {
             position: absolute;
             bottom: 20px;
@@ -347,20 +369,46 @@
             background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
           }
         }
+
+        &.expanded {
+          .detail {
+            height: unset;
+            visibility: visible;
+          }
+          .summary {
+            display: none;
+          }
+        }
       }
     }
 
-    &.images-detail  {
+    &.images-detail, &.image_trackers-detail  {
       br {display: none;}
 
       .main-history-item {
-        .content {
+        .detail {
+          visibility: hidden;
+          height: 0px;
+          transition: height .3s;
+        }
+        .summary {
+          display: block;
           .gradient-bottom {
             position: absolute;
             bottom: 20px;
             width: 100%;
             height: 30px;
             background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
+          }
+        }
+
+        &.expanded {
+          .detail {
+            height: unset;
+            visibility: visible;
+          }
+          .summary {
+            display: none;
           }
         }
       }
