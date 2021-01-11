@@ -455,7 +455,7 @@
                           </div>
                         </ng-template>
                         <ng-template #hide>
-                          <div class="content">
+                          <div class="content w-100">
                             <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                               <div class="d-flex mb-1">
                                 <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
@@ -519,41 +519,28 @@
                           </div>  
                         </ng-container>
                         <ng-template #multiEmailHistory>
-                          <div class="title font-weight-bold">
-                            {{details[activity.activity_detail.email]?.subject}}
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.emails]?.subject}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                           </div>
-                          <app-accordion [detail]="result" [hideIndicator]="emptyHideIndicator">
-                            <ng-template #emptyHideIndicator>
-                              <div></div>
-                            </ng-template>
-                            <ng-template #result>
-                              <div>
-                                <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
-                                  <div class="d-flex mb-1">
-                                    <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
-                                    <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
-                                    <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
-                                  </div>
-                                </ng-container>
-                                <app-accordion [detail]="emailDetail" [showIndicator]="showIndicator" [hideIndicator]="hideIndicator">
-                                  <ng-template #emailDetail>
-                                    <div class="mb-3 f-6">
-                                      <span class="font-weight-bold mr-2">Subject:</span>
-                                      {{details[activity.activity_detail.email]?.subject}}
-                                    </div>
-                                    <div class="f-6" [innerHTML]="details[activity.activity_detail.email]?.content">
-                                    </div>
-                                  </ng-template>
-                                  <ng-template #showIndicator>
-                                    <div class="c-blue f-6 font-weight-bold m-auto">Expand</div>
-                                  </ng-template>
-                                  <ng-template #hideIndicator>
-                                    <div class="c-blue f-6 font-weight-bold m-auto">Collapse</div>
-                                  </ng-template>
-                                </app-accordion>
-                              </div>  
-                            </ng-template>
-                          </app-accordion>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.emails]?.subject}}
+                            </div>
+                            <div class="f-6 mb-2" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                            <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div>
                         </ng-template>
                       </div>
                     </ng-container>
@@ -562,31 +549,143 @@
                   <div *ngSwitchCase="activity.type == 'videos' || activity.type == 'video_trackers' ? activity.type : ''">
                     <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                       <div class="main-history-item">
-                        <app-accordion [showIndicator]="show" [hideIndicator]="hide">
-                          <ng-template #show>
-                            <div class="content f-6 position-relative">
-                              <div class="title f-6 font-weight-bold">
-                                {{activity.activity_detail.subject}}
-                              </div>
-                              <div class="f-6" [innerHTML]="activity.activity_detail.content || 'No Content' | stripTags | shorten: 300: '...' "></div>
-                              <div class="gradient-bottom"></div>
-                              <div class="f-3 fw-600 c-blue mt-1">
-                                Expand
-                              </div>      
+                        <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiVideoHistory">
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.videos]?.title}}
                             </div>
-                          </ng-template>
-                          <ng-template #hide>
-                            <div class="content">
-                              <div class="title f-6 font-weight-bold">
-                                {{activity.activity_detail.subject}}
-                              </div>
-                              <div class="f-6" [innerHTML]="activity.activity_detail.content || 'No Content'"></div>
-                              <div class="f-3 fw-600 c-blue mt-1">
-                                Collapse
-                              </div>
+                            <div class="f-6" [innerHTML]="details[activity.videos]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          </div>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.videos]?.title}}
                             </div>
-                          </ng-template>
-                        </app-accordion>
+                            <div class="f-6" [innerHTML]="details[activity.videos]?.description || 'No Content'"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div> 
+                        </ng-container>
+                        <ng-template #multiVideoHistory>
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.videos]?.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.videos]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          </div>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.videos]?.title}}
+                            </div>
+                            <div class="f-6 mb-2" [innerHTML]="details[activity.videos]?.description || 'No Content'"></div>
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                            <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div>
+                        </ng-template>
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <div *ngSwitchCase="activity.type == 'pdfs' || activity.type == 'pdf_trackers' ? activity.type : ''">
+                    <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                      <div class="main-history-item">
+                        <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiVideoHistory">
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.pdfs]?.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          </div>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.pdfs]?.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || 'No Content'"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div> 
+                        </ng-container>
+                        <ng-template #multiVideoHistory>
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.pdfs]?.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          </div>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.pdfs]?.title}}
+                            </div>
+                            <div class="f-6 mb-2" [innerHTML]="details[activity.pdfs]?.description || 'No Content'"></div>
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                            <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div>
+                        </ng-template>
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <div *ngSwitchCase="activity.type == 'images' || activity.type == 'image_trackers' ? activity.type : ''">
+                    <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                      <div class="main-history-item">
+                        <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiVideoHistory">
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.images]?.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          </div>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.images]?.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div> 
+                        </ng-container>
+                        <ng-template #multiVideoHistory>
+                          <div class="summary position-relative">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.images]?.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                          </div>
+                          <div class="detail">
+                            <div class="title f-6 font-weight-bold">
+                              {{details[activity.images]?.title}}
+                            </div>
+                            <div class="f-6 mb-2" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                            <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div>
+                        </ng-template>
                       </div>
                     </ng-container>
                   </div>
