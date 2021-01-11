@@ -156,8 +156,8 @@ export class NavbarComponent implements OnInit {
       case 'record':
         this.dialog.open(RecordSettingDialogComponent, {
           position: { top: '0px' },
-          width: '0px',
-          height: '0px',
+          width: '100%',
+          height: '100%',
           panelClass: 'trans-modal',
           backdropClass: 'trans'
         });

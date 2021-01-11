@@ -16,6 +16,7 @@
               [selectedContacts]="emailContacts"
               [onlyFromSearch]="true"
               [onlySubscriber]="true"
+              (onSelect)="checkDuplication('to')"
               class="w-100 ml-2"
             ></app-input-contacts>
           </div>
@@ -33,6 +34,7 @@
             <label class="f-6 text-uppercase op-56 m-0">cc:</label>
             <app-input-contacts
               [selectedContacts]="ccContacts"
+              (onSelect)="checkDuplication('cc')"
               class="w-100 ml-2"
             ></app-input-contacts>
           </div>
@@ -40,6 +42,7 @@
             <label class="f-6 text-uppercase op-56 m-0">bcc:</label>
             <app-input-contacts
               [selectedContacts]="bccContacts"
+              (onSelect)="checkDuplication('bcc')"
               class="w-100 ml-2"
             ></app-input-contacts>
           </div>

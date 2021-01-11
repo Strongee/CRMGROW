@@ -1720,6 +1720,7 @@ body {
 
 .trans-modal {
   max-width: unset !important;
+  pointer-events: none!important;
 
   .mat-dialog-container {
     transform: none;
@@ -1744,7 +1745,7 @@ body {
   position: fixed;
   top: 0px;
   left: 0px;
-  background: rgba(43, 43, 43, 0.5);
+  background: rgba(43, 43, 43, 0.2);
   bottom: 0px;
   right: 0px;
 }

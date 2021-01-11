@@ -19,7 +19,7 @@
                     [(ngModel)]="title"
                 >
                 <span
-                    class="invalid-error f-3 font-weight-bold c-red mt-1"
+                    class="invalid-error f-3 c-red mt-1"
                     *ngIf="title == '' && submitted"
                 >
                     Title is required
@@ -40,9 +40,10 @@
             <label>contact person</label>
             <app-input-contacts
                 [selectedContacts]="contacts"
+                [onlyFromSearch]="true"
             ></app-input-contacts>
             <span
-                class="invalid-error f-3 font-weight-bold c-red mt-1"
+                class="invalid-error f-3 c-red mt-1"
                 *ngIf="contacts.length == 0 && submitted"
             >
                 Contact is required

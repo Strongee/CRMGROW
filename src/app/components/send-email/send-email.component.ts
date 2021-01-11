@@ -77,6 +77,8 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
       this.emailContacts.forEach((e) => {
         contacts.push(e._id);
       });
+      this.ccContacts.forEach((e) => cc.push(e.email));
+      this.bccContacts.forEach((e) => bcc.push(e.email));
       const materials = this.helperSerivce.getMaterials(this.emailContent);
       this.materials = _.intersectionBy(this.materials, materials, '_id');
       this.materials.forEach((e) => {
@@ -102,7 +104,8 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
           pdf_ids,
           image_ids,
           subject,
-          content
+          content,
+          attachments: this.attachments
         })
         .subscribe((status) => {
           this.dialogRef.close();
@@ -191,7 +194,71 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     }
     this.htmlEditor.setValue(this.emailContent);
   }
-  onAttachmentChange(attachments): void {
+  onAttachmentChange(attachments: any[]): void {
     this.attachments = attachments;
+  }
+
+  checkDuplication(field: string): void {
+    let newContact;
+    let isChecked = false;
+    switch (field) {
+      case 'to':
+        newContact = this.emailContacts.slice(-1)[0];
+        // cc && bcc check
+        this.ccContacts.some((e) => {
+          if (e.email === newContact.email) {
+            this.emailContacts.splice(-1);
+            isChecked = true;
+            return true;
+          }
+        });
+        if (!isChecked) {
+          this.bccContacts.some((e) => {
+            if (e.email === newContact.email) {
+              this.emailContacts.splice(-1);
+              return true;
+            }
+          });
+        }
+        break;
+      case 'cc':
+        newContact = this.ccContacts.slice(-1)[0];
+        // cc && bcc check
+        this.emailContacts.some((e) => {
+          if (e.email === newContact.email) {
+            this.ccContacts.splice(-1);
+            isChecked = true;
+            return true;
+          }
+        });
+        if (!isChecked) {
+          this.bccContacts.some((e) => {
+            if (e.email === newContact.email) {
+              this.ccContacts.splice(-1);
+              return true;
+            }
+          });
+        }
+        break;
+      case 'bcc':
+        newContact = this.bccContacts.slice(-1)[0];
+        // cc && bcc check
+        this.emailContacts.some((e) => {
+          if (e.email === newContact.email) {
+            this.bccContacts.splice(-1);
+            isChecked = true;
+            return true;
+          }
+        });
+        if (!isChecked) {
+          this.ccContacts.some((e) => {
+            if (e.email === newContact.email) {
+              this.bccContacts.splice(-1);
+              return true;
+            }
+          });
+        }
+        break;
+    }
   }
 }
