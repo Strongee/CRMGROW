@@ -1274,6 +1274,7 @@ export class AutoflowComponent
           }
           action['action'] = {
             type: e.type,
+            task_type: e.task_type,
             content: e.content,
             subject: e.subject,
             due_date: e.due_date,

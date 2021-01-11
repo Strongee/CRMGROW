@@ -72,7 +72,7 @@
 @media screen and (max-width: 576px) {
   .team-info-container {
     .tabs {
-      width: 295px;
+      width: auto;
     }
   }
 }
@@ -426,24 +426,15 @@
 
 
 :host ::ng-deep {
+  .mat-tab-label-container {
+    .mat-tab-label {
+      opacity: 1;
+      color: #000000;
 
-  //.mat-ink-bar {
-  //  border-radius: 20px;
-  //  height: 5px;
-  //}
-  //
-  //.material-share-table {
-  //  .btn {
-  //    padding: 5px;
-  //  }
-  //}
-  //
-  //.sb-group {
-  //  flex-wrap: nowrap;
-  //}
-  //
-  //.dropdown-toggle::after {
-  //  display: none;
-  //}
+      &.mat-tab-label-active {
+        border-bottom: 3px solid #0000ff;
+      }
+    }
+  }
 }
 

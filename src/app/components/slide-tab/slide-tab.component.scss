@@ -8,8 +8,6 @@
   padding: 4px;
   border-radius: 24px;
   position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
 
   .tab {
     display: flex;
@@ -56,8 +54,16 @@
 
 @media screen and (max-width: 576px) {
   .tab-container {
-    .tab .tab-label {
-      font-size: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    .tab, .tab-label {
+      padding-left: 5px;
+      padding-right: 5px;
+      font-size: 13px;
+    }
+    .tab-icon {
+      display: none;
     }
   }
 }

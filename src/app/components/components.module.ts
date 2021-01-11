@@ -106,6 +106,7 @@ import { TaskDeleteComponent } from './task-delete/task-delete.component';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { TextStatusComponent } from './text-status/text-status.component';
 import { EmailStatusComponent } from './email-status/email-status.component';
+import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
 
 @NgModule({
   declarations: [
@@ -210,7 +211,8 @@ import { EmailStatusComponent } from './email-status/email-status.component';
     NoteEditComponent,
     TaskDeleteComponent,
     TextStatusComponent,
-    EmailStatusComponent
+    EmailStatusComponent,
+    TeamContactShareComponent
   ],
   imports: [
     CommonModule,

@@ -244,7 +244,11 @@ ul {
 .page-title {
   font-size: 26px;
   letter-spacing: 1px;
-  font-weight: 800!important;
+  font-weight: bold !important;
+
+  @media screen and (max-width: 575px) {
+    font-size: 22px;
+  }
 }
 .ls-1{
   letter-spacing: 1px;
@@ -1214,7 +1218,7 @@ table {
     font-weight: 400;
     font-size: 13px;
   }
-  
+
   &.toast-success {
     background: #008F6D;
     border-color: #008F6D;
@@ -1493,6 +1497,10 @@ select.theme-control {
 
       @media screen and (max-width: 576px) {
         font-size: 14px;
+      }
+
+      @media screen and (max-width: 575px) {
+        font-size: 12px;
       }
     }
 
