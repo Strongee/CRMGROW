@@ -87,7 +87,7 @@ export class DealsComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          dealStage.deals.push(res);
+          this.dealsService.getStage(true);
         }
       });
   }
