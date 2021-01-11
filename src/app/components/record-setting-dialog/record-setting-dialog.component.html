@@ -1,8 +1,13 @@
 <div class="record-dialog">
   <ng-container *ngIf="recordStep == 1">
-    <div class="config-back-drop"></div>
+    <!-- <div class="config-back-drop"></div> -->
     <div class="setting-screen">
-      <h1 mat-dialog-title>Record Setting</h1>
+      <div class="v-center justify-content-between">
+        <h1 mat-dialog-title class="m-0">Record Setting</h1>
+        <button class="v-center border-0 bgc-trans" mat-dialog-close>
+            <i class="d-block i-icon i-close bgc-dark"></i>
+        </button>
+      </div>
       <div class="form-group">
         <div class="record-mode-wrapper my-3">
           <div class="record-item" [class.active]="mode == 'screenCam'" (click)="setRecordMode('screenCam')">
