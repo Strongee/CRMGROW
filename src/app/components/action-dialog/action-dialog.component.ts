@@ -21,7 +21,7 @@ import { LabelService } from 'src/app/services/label.service';
 import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
-import * as moment from "moment";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-action-dialog',
@@ -329,6 +329,7 @@ export class ActionDialogComponent implements OnInit {
             this.due_date['month']
           )}-${this.numPad(this.due_date['day'])}T${this.due_time}${time_zone}`
         );
+
         this.dialogRef.close({
           ...this.action,
           type: this.type,

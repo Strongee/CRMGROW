@@ -14,6 +14,8 @@ import { DialogSettings, STATUS } from '../../constants/variable.constants';
 import * as _ from 'lodash';
 import { Team } from 'src/app/models/team.model';
 import { User } from 'src/app/models/user.model';
+import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-team-list',
@@ -33,7 +35,8 @@ export class TeamListComponent implements OnInit {
   constructor(
     public teamService: TeamService,
     private dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +119,47 @@ export class TeamListComponent implements OnInit {
       });
   }
 
-  leaveTeam(team): void {}
+  leaveTeam(team): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          title: 'Leave Team',
+          message: 'Are you sure to leave this team?',
+          cancelLabel: 'No',
+          confirmLabel: 'Leave'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const newMembers = [];
+          const newEditors = [];
+          team.members.forEach((e) => {
+            if (e._id !== this.userId) {
+              newMembers.push(e._id);
+            }
+          });
+          if (team.editors && team.editors.length) {
+            team.editors.forEach((e) => {
+              if (e !== this.userId) {
+                newEditors.push(e._id);
+              }
+            });
+          }
+          this.teamService
+            .updateTeam(team._id, { members: newMembers, editors: newEditors })
+            .subscribe(
+              (response) => {
+                this.teamService.loadAll(true);
+                this.toastr.success('You left the team successfully.');
+              },
+              (err) => {}
+            );
+        }
+      });
+  }
 
   openForm(): void {
     this.dialog
@@ -156,8 +199,25 @@ export class TeamListComponent implements OnInit {
         }
       });
       team.members.push(this.userId);
+      this.teamService.updateTeam$(team._id, team);
+      this.teamService.loadInvites(true);
+      this.teamService.loadAll(true);
     });
   }
 
-  declineInvitation(team): void {}
+  declineInvitation(team): void {
+    this.isDeclineInviting = true;
+    this.teamService.declineInvitation(team._id).subscribe((res) => {
+      this.isDeclineInviting = false;
+      team.invites.some((e, index) => {
+        if (e === this.userId) {
+          team.invites.splice(index, 1);
+          return true;
+        }
+      });
+      this.teamService.updateTeam$(team._id, team);
+      this.teamService.loadInvites(true);
+      this.teamService.loadAll(true);
+    });
+  }
 }
