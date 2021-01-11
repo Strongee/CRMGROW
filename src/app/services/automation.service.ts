@@ -52,6 +52,10 @@ export class AutomationService extends HttpService {
     );
   }
 
+  reload(): void {
+    this.loadAll(true);
+  }
+
   search(keyword: string): Observable<Automation[]> {
     return this.httpClient
       .post(this.server + AUTOMATION.SEARCH, { search: keyword })

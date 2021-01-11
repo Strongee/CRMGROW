@@ -15,7 +15,6 @@ import { map, catchError } from 'rxjs/operators';
 import { STATUS } from '../constants/variable.constants';
 import { SearchOption } from '../models/searchOption.model';
 import * as _ from 'lodash';
-import { id } from 'date-fns/locale';
 interface LoadResponse {
   contacts: ContactActivity[];
 }
@@ -23,6 +22,7 @@ interface LoadResponse {
   providedIn: 'root'
 })
 export class ContactService extends HttpService {
+  forceReload: BehaviorSubject<boolean> = new BehaviorSubject(false);
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loading$ = this.loadStatus.asObservable();
   total: BehaviorSubject<number> = new BehaviorSubject(0);
@@ -186,7 +186,10 @@ export class ContactService extends HttpService {
       } else {
         // Call Normal Load
         const page = this.pageIndex.getValue();
-        this.load(page);
+        const pageSize = this.pageSize.getValue();
+        let skip = (page - 1) * pageSize;
+        skip = skip < 0 ? 0 : skip;
+        this.load(skip);
       }
     } else {
       this.advancedSearch(searchStr);
@@ -231,7 +234,9 @@ export class ContactService extends HttpService {
             total: res['data']['count'] || 0
           };
         }),
-        catchError(this.handleError('LOAD CONTACTS', null))
+        catchError(
+          this.handleError('LOAD CONTACTS', { contacts: [], total: 0 })
+        )
       );
   }
 
@@ -403,8 +408,6 @@ export class ContactService extends HttpService {
   clear$(): void {
     this.loadStatus.next(STATUS.NONE);
     this.total.next(0);
-    this.searchOption.next(new SearchOption());
-    this.searchStr.next('');
     this.pageIndex.next(1);
     this.pageSize.next(50);
   }

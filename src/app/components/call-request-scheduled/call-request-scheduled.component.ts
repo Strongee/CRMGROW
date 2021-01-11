@@ -1,11 +1,15 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  ViewChild,
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TeamService } from '../../services/team.service';
 import { UserService } from '../../services/user.service';
-import { NoteQuillEditor } from '../../constants/variable.constants';
-import { QuillEditorComponent } from 'ngx-quill';
 import { Location } from '@angular/common';
 import * as moment from 'moment';
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 
 @Component({
   selector: 'app-call-request-scheduled',
@@ -18,14 +22,13 @@ export class CallRequestScheduledComponent implements OnInit {
   isLeader = false;
   isLoading = false;
   isCancelLoading = false;
-  note = '';
   duration = '';
-  config = NoteQuillEditor;
-  quillEditorRef;
   isAddNoteLoading = false;
   selectedDate;
   submitted = false;
-  isEditable = false;
+  isEditable = true;
+
+  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
 
   constructor(
     private dialogRef: MatDialogRef<CallRequestScheduledComponent>,
@@ -35,11 +38,10 @@ export class CallRequestScheduledComponent implements OnInit {
     private location: Location
   ) {}
 
-  @ViewChild('noteEditor') noteEditor: QuillEditorComponent;
-
   ngOnInit(): void {
     this.load();
   }
+
   load(): void {
     this.formData = this.data.plan;
     this.selectedDate = this.formData.proposed_at[0];
@@ -50,33 +52,32 @@ export class CallRequestScheduledComponent implements OnInit {
         }
         this.isOrganizer = this.formData.user._id === res._id;
 
-        if (this.formData.status === 'planned') {
-          this.isEditable = true;
+        if (this.formData.status !== 'planned') {
+          this.isEditable = false;
         }
       }
       this.duration =
         this.formData.duration === 60
           ? '1 hour'
           : this.formData.duration + ' mins';
-      this.note = this.formData.note;
     });
-  }
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
+    const _SELF = this;
+    setTimeout(() => {
+      if (_SELF.htmlEditor && _SELF.formData.note) {
+        _SELF.htmlEditor.setValue(_SELF.formData.note);
+      }
+    }, 500);
   }
 
   backCall(): void {
     if (this.isEditable) {
       this.isAddNoteLoading = true;
       const data = {
-        ...this.formData,
-        note: this.note
+        ...this.formData
       };
       this.teamService.updateCall(this.formData._id, data).subscribe(
         (res) => {
           this.isAddNoteLoading = false;
-          this.formData.note = this.note;
           this.location.replaceState('/teams');
           this.closeDialog();
         },

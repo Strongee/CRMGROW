@@ -67,9 +67,9 @@ export class AutomationsComponent implements OnInit {
     event.stopPropagation();
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
-        message: 'Are you sure to remove the automation?',
-        cancelLabel: 'No',
-        confirmLabel: 'Remove'
+        title: 'Delete Automation',
+        message: 'Are you sure to delete the automation?',
+        confirmLabel: 'Delete'
       }
     });
 
@@ -79,6 +79,8 @@ export class AutomationsComponent implements OnInit {
         this.automationService.delete(automation._id).subscribe(
           (response) => {
             this.deleting = false;
+            console.log("delete automation ================>");
+            this.automationService.reload();
           },
           (err) => {
             this.deleting = false;

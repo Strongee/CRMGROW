@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
-import { numPad } from "../../helper";
+import { numPad, getCurrentTimezone } from '../../helper';
 import {
   QuillEditor,
   TIMES,
@@ -12,6 +12,8 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { FileService } from '../../services/file.service';
 import { TeamService } from '../../services/team.service';
 import { UserService } from '../../services/user.service';
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-join-call-request',
@@ -27,7 +29,9 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
 
   minDate: any;
   callDateTimes = [];
+  selectedDate = [];
   times = TIMES;
+  timezone;
 
   duration = '30 mins';
   durations = CALL_REQUEST_DURATION;
@@ -53,14 +57,24 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       date: this.minDate,
       time: '15:00:00.000'
     });
+    this.setDateTime(0);
   }
 
-  @ViewChild('descriptionEditor') descriptionEditor: QuillEditorComponent;
+  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
 
   config = QuillEditor;
   quillEditorRef;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.userService.profile$.subscribe((user) => {
+    //   try {
+    //     this.timezone = JSON.parse(user.time_zone_info);
+    //   } catch (err) {
+    //     const timezone = getCurrentTimezone();
+    //     this.timezone = { zone: user.time_zone || timezone };
+    //   }
+    // });
+  }
 
   ngOnDestroy(): void {
     this.requestCreateSubscription &&
@@ -69,13 +83,18 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
   changeLeader(leader): void {
     this.leader = leader;
   }
+
   addCallDateTime(): void {
     this.callDateTimes.push({
       id: Date.now(),
       date: this.minDate,
       time: '15:00:00.000'
     });
+
+    this.selectedDate.push(this.getDateTime(this.callDateTimes.length - 1));
+    this.setDateTime(this.callDateTimes.length - 1);
   }
+
   removeCallDateTime(dateTime): void {
     if (this.callDateTimes.length < 2) {
       return;
@@ -84,40 +103,7 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       (item) => item.id === dateTime.id
     );
     this.callDateTimes.splice(index, 1);
-  }
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-
-  initImageHandler(): void {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res.url);
-        });
-      }
-    });
-    imageInput.click();
-  }
-  insertImageToEditor(url): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.descriptionEditor.quillEditor.insertEmbed(
-      range.index,
-      `image`,
-      url,
-      'user'
-    );
-    this.descriptionEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
+    this.selectedDate.splice(index, 1);
   }
 
   closeDialog(): void {
@@ -186,6 +172,19 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAdding(): void {}
+  setDateTime(index): void {
+    this.selectedDate[index] = moment(this.getDateTime(index)).format(
+      'YYYY-MM-DD'
+    );
+    close();
+  }
 
+  getDateTime(index): any {
+    const date = this.callDateTimes[index].date;
+    if (date.day !== '') {
+      return date.year + '-' + date.month + '-' + date.day;
+    }
+  }
+
+  onAdding(): void {}
 }

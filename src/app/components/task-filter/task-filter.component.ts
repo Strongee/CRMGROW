@@ -70,15 +70,17 @@ export class TaskFilterComponent implements OnInit {
 
       if (option.start_date) {
         const timeObj = convertTimetoObj(option.start_date, this.timezone);
-        console.log(timeObj);
         this.startDate = { ...timeObj, time: undefined };
         this.startTime = timeObj.time;
+      } else {
+        this.startDate = null;
       }
       if (option.end_date) {
         const timeObj = convertTimetoObj(option.end_date, this.timezone);
-        console.log(timeObj);
         this.endDate = { ...timeObj, time: undefined };
         this.endTime = timeObj.time;
+      } else {
+        this.endDate = null;
       }
     });
   }
@@ -90,6 +92,7 @@ export class TaskFilterComponent implements OnInit {
     } else {
       this.types.push(type);
     }
+    this.applyFilters();
   }
 
   selectContact(event: Contact): void {
@@ -98,6 +101,7 @@ export class TaskFilterComponent implements OnInit {
     } else {
       this.contact = null;
     }
+    this.applyFilters();
   }
 
   /**

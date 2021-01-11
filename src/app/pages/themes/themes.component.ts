@@ -33,8 +33,7 @@ export class ThemesComponent implements OnInit {
       data: {
         title: 'Delete Theme',
         message: 'Are you sure to delete this theme?',
-        confirmLabel: 'Delete',
-        cancelLabel: 'Cancel'
+        confirmLabel: 'Delete'
       }
     });
     confirmDialog.afterClosed().subscribe((res) => {

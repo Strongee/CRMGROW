@@ -5,9 +5,9 @@ export const AUTH = {
   RESET_PASSWORD: 'user/reset-password',
   SOCIAL_SIGNIN: 'user/social-login',
   SOCIAL_SIGNUP: 'user/social-signup',
-  OAUTH_REQUEST: '',
-  OUTLOOK_PROFILE_REQUEST: '',
-  GOOGLE_PROFILE_REQUEST: '',
+  OAUTH_REQUEST: 'user/signup-',
+  OUTLOOK_PROFILE_REQUEST: 'user/social-outlook?code=',
+  GOOGLE_PROFILE_REQUEST: 'user/social-gmail?code=',
   LOG_OUT: 'user/logout',
   CHECK_EMAIL: 'user/check',
   CHECK_NICKNAME: 'user/search-nickname',
@@ -23,6 +23,7 @@ export const USER = {
   SYNC_OUTLOOK: 'user/sync-outlook',
   AUTH_GOOGLE: 'user/authorize-gmail',
   AUTH_OUTLOOK: 'user/authorize-outlook',
+  ENABLE_DESKTOP_NOTIFICATION: 'user/desktop-notification',
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',
@@ -37,7 +38,8 @@ export const GUEST = {
 };
 export const GARBAGE = {
   SET: 'garbage',
-  UPLOAD_INTRO_VIDEO: 'garbage/intro_video'
+  UPLOAD_INTRO_VIDEO: 'garbage/intro_video',
+  LOAD_DEFAULT: 'garbage/load-default'
 };
 export const FILE = {
   UPLOAD_IMAGE: 'file/upload?resize=true'
@@ -52,6 +54,7 @@ export const TASK = {
   CREATE: 'follow/',
   BULK_CREATE: 'follow/create',
   UPDATE: 'follow/',
+  COMPLETE: 'follow/completed',
   BULK_UPDATE: 'follow/update',
   BULK_COMPLETE: 'follow/checked',
   BULK_ARCHIVE: 'follow/archived',
@@ -95,7 +98,9 @@ export const VIDEO = {
   UPDATE_VIDEO_DETAIL: 'video/detail/',
   UPDATE_ADMIN: 'video/update-admin',
   DELETE: 'video/',
-  LOAD: 'video'
+  LOAD: 'video',
+  LOAD_CONVERTING_STATUS: 'video/convert-status',
+  ANALYTICS: 'video/analytics/'
 };
 export const PDF = {
   CREATE: 'pdf/create',
@@ -139,9 +144,12 @@ export const TEAM = {
   SHARE_VIDEOS: 'team/share-videos',
   SHARE_PDFS: 'team/share-pdfs',
   SHARE_IMAGES: 'team/share-images',
+  SHARE_MATERIALS: 'team/share-materials',
+  SHARE_CONTACTS: 'team/share-contact',
   SHARE_TEMPLATES: 'team/share-templates',
   SHARE_AUTOMATIONS: 'team/share-automations',
   ACCEPT_INVITATION: 'team/accept/',
+  DECLINE_INVITATION: 'team/decline/',
   SEARCH_TEAM_BY_USER: 'team/user/',
   JOIN_REQUEST: 'team/request',
   ACCEPT_REQUEST: 'team/admin-accept',
@@ -240,4 +248,13 @@ export const DEAL = {
 
 export const MATERIAL = {
   EMAIL: 'material/bulk-email'
+};
+
+export const NOTIFICATION = {
+  GET: 'notification',
+  LOAD_PAGE: 'notification/list/',
+  READ_MARK: 'notification/bulk-read',
+  UNREAD_MARK: 'notification/bulk-unread',
+  DELETE: 'notification/bulk-remove',
+  DELIVERY_STATUS: 'notification/get-delivery'
 };

@@ -1,0 +1,15 @@
+@import "src/variables";
+
+label {
+    opacity: 0.4;
+}
+textarea {
+    background-color: $color-wheat;
+    resize: none;
+    &.form-control {
+        &:focus {
+            background-color: $color-wheat;
+            color: $color-dark;
+        }
+    }
+}

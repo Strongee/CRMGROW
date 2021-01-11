@@ -17,6 +17,7 @@ import { HomeComponent } from '../../pages/home/home.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
 import { ContactsComponent } from 'src/app/pages/contacts/contacts.component';
 import { MaterialsComponent } from 'src/app/pages/materials/materials.component';
+import { MaterialComponent } from 'src/app/pages/material/material.component';
 import { ProfileComponent } from '../../pages/profile/profile.component';
 import { GeneralProfileComponent } from '../../pages/general-profile/general-profile.component';
 import { SignatureComponent } from '../../pages/signature/signature.component';
@@ -60,12 +61,15 @@ import { AnalyticsContactsAddedComponent } from '../../pages/analytics-contacts-
 import { ThemesComponent } from '../../pages/themes/themes.component';
 import { ThemeComponent } from '../../pages/theme/theme.component';
 import { EmailEditorModule } from 'angular-email-editor';
+import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
+import { NotificationsListComponent } from '../../pages/notifications-list/notifications-list.component';
 
 @NgModule({
   declarations: [
     TasksComponent,
     ContactsComponent,
     MaterialsComponent,
+    MaterialComponent,
     ProfileComponent,
     GeneralProfileComponent,
     SignatureComponent,
@@ -108,7 +112,9 @@ import { EmailEditorModule } from 'angular-email-editor';
     AnalyticsVideoWatchedComponent,
     AnalyticsContactsAddedComponent,
     ThemesComponent,
-    ThemeComponent
+    ThemeComponent,
+    AnalyticsMaterialComponent,
+    NotificationsListComponent
   ],
   imports: [
     CommonModule,

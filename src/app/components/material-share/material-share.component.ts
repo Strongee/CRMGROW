@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TeamService } from '../../services/team.service';
 import { StoreService } from 'src/app/services/store.service';
 import { Subscription } from 'rxjs';
+import {image} from "html2canvas/dist/types/css/types/image";
 
 @Component({
   selector: 'app-material-share',
@@ -231,12 +232,18 @@ export class MaterialShareComponent implements OnInit {
       }
     }
 
-    this.teamService.shareVideos(this.teamId, videoIds).subscribe(
+    const data = {
+      videos: videoIds,
+      pdfs: pdfIds,
+      images: imageIds
+    };
+
+    this.teamService.shareMaterials(this.teamId, data).subscribe(
       (res) => {
         if (res) {
           this.sharing = false;
           this.dialogRef.close({
-            videos: res
+            materials: res
           });
         }
       },

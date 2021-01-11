@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SwPush } from '@angular/service-worker';
 import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
 import { REMINDER } from '../../constants/variable.constants';
 
 @Component({
@@ -35,7 +38,14 @@ export class NotificationsComponent implements OnInit {
   garbage: Garbage = new Garbage();
   saving = false;
 
-  constructor(public userService: UserService) {
+  pushInited = false;
+  pushSubscription;
+
+  constructor(
+    public userService: UserService,
+    private swPush: SwPush,
+    private snackBar: MatSnackBar
+  ) {
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
     });
@@ -71,8 +81,112 @@ export class NotificationsComponent implements OnInit {
     }
   }
 
+  toggleDesktopNotification(event: Event, trigger = ''): void {
+    if (trigger) {
+      if (this.garbage.desktop_notification[trigger]) {
+        // disable
+        this.garbage.desktop_notification[trigger] = false;
+      } else {
+        if (!this.pushInited) {
+          this.subscribeToPushNotification()
+            .then(() => {
+              this.garbage.desktop_notification[trigger] = true;
+            })
+            .catch(() => {
+              const target = <HTMLInputElement>event.target;
+              target.checked = false;
+            });
+        } else {
+          this.garbage.desktop_notification[trigger] = true;
+        }
+      }
+    } else {
+      if (this.garbage.entire_desktop_notification === 1) {
+        // disable all desktop notification
+        this.garbage.notification_fields.forEach((e) => {
+          this.garbage.desktop_notification[e] = false;
+        });
+      } else {
+        if (!this.pushInited) {
+          this.subscribeToPushNotification()
+            .then(() => {
+              this.garbage.notification_fields.forEach((e) => {
+                this.garbage.desktop_notification[e] = true;
+              });
+            })
+            .catch(() => {
+              const target = <HTMLInputElement>event.target;
+              target.checked = false;
+            });
+        } else {
+          this.garbage.notification_fields.forEach((e) => {
+            this.garbage.desktop_notification[e] = true;
+          });
+        }
+      }
+    }
+  }
+
   saveReminder(): void {
     this.saving = true;
+    if (this.pushInited) {
+      this.savePushSubscription()
+        .then(() => {
+          this.saveAnotherNotifications();
+        })
+        .catch(() => {
+          this.saveAnotherNotifications();
+        });
+    } else {
+      this.saveAnotherNotifications();
+    }
+  }
+
+  subscribeToPushNotification(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.swPush
+        .requestSubscription({
+          serverPublicKey: environment.API_KEY.Notification
+        })
+        .then((subscription) => {
+          this.pushInited = true;
+          this.pushSubscription = subscription;
+          resolve(null);
+        })
+        .catch((err) => {
+          console.log(`Could not subscribe due to:`, err.message);
+          this.snackBar.open(
+            `Could not subscribe due to ` + err.message,
+            'OK',
+            {
+              verticalPosition: 'bottom',
+              horizontalPosition: 'left',
+              duration: 5000
+            }
+          );
+          reject();
+        });
+    });
+  }
+
+  savePushSubscription(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.userService
+        .enableDesktopNotification(
+          this.pushSubscription,
+          this.garbage.desktop_notification
+        )
+        .subscribe((status) => {
+          if (status) {
+            resolve(null);
+          } else {
+            reject();
+          }
+        });
+    });
+  }
+
+  saveAnotherNotifications(): void {
     this.userService.updateGarbage(this.garbage).subscribe(
       () => {
         this.saving = false;

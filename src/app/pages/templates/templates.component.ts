@@ -62,12 +62,32 @@ export class TemplatesComponent implements OnInit {
       // Enable the Default Sms Template
       cannedMessage.sms = template._id;
     }
+    if (!cannedMessage.email) {
+      delete cannedMessage.email;
+    }
+    if (!cannedMessage.sms) {
+      delete cannedMessage.sms;
+    }
 
     this.isSetting = true;
     this.userService.updateGarbage({ canned_message: cannedMessage }).subscribe(
       () => {
         this.isSetting = false;
         this.userService.updateGarbageImpl({ canned_message: cannedMessage });
+        if (template.type === 'email') {
+          if (cannedMessage['email']) {
+            this.userService.email.next(template);
+          } else {
+            this.userService.email.next(null);
+          }
+        }
+        if (template.type === 'sms') {
+          if (cannedMessage['sms']) {
+            this.userService.sms.next(template);
+          } else {
+            this.userService.sms.next(null);
+          }
+        }
       },
       () => {
         this.isSetting = false;
@@ -82,9 +102,9 @@ export class TemplatesComponent implements OnInit {
   deleteTemplate(template: Template): void {
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
-        message: 'Are you sure to remove the template?',
-        cancelLabel: 'No',
-        confirmLabel: 'Remove'
+        title: 'Delete template',
+        message: 'Are you sure to delete this template?',
+        confirmLabel: 'Delete'
       }
     });
 

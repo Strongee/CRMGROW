@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -69,6 +70,7 @@ import { SocialLoginModule } from 'angularx-social-login';
     MatSidenavModule,
     MatTreeModule,
     MatExpansionModule,
+    MatSnackBarModule,
     DragDropModule,
     ColorSwatchesModule,
     NgxMatSelectSearchModule,
@@ -108,6 +110,7 @@ import { SocialLoginModule } from 'angularx-social-login';
     MatCheckboxModule,
     MatTreeModule,
     MatExpansionModule,
+    MatSnackBarModule,
     DragDropModule,
     ColorSwatchesModule,
     NgxMatSelectSearchModule,

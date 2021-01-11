@@ -60,6 +60,11 @@
                 <div class="icon-button v-center justify-content-center ml-2" (click)="duplicate($event, automation)">
                   <i class="i-icon bgc-black i-duplicate"></i>
                 </div>
+                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
+                  <div class="icon-button v-center justify-content-center ml-2" (click)="deleteAutomation($event, automation)">
+                    <i class="i-icon bgc-black i-trash"></i>
+                  </div>
+                </ng-container>
               </div>
             </td>
           </tr>

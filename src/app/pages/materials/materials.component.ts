@@ -5,6 +5,7 @@ import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
+import { TeamService } from '../../services/team.service';
 import { User } from 'src/app/models/user.model';
 import { Garbage } from 'src/app/models/garbage.model';
 import { TabItem } from 'src/app/utils/data.types';
@@ -55,6 +56,10 @@ export class MaterialsComponent implements OnInit {
   ownImages: any[] = [];
   teamImages: any[] = [];
 
+  convertLoaderTimer;
+  convertingVideos = [];
+  videoConvertingLoadSubscription: Subscription;
+
   videoLoadSubscription: Subscription;
   pdfLoadSubscription: Subscription;
   imageLoadSubscription: Subscription;
@@ -72,15 +77,13 @@ export class MaterialsComponent implements OnInit {
   editedPdfs;
   captureImages = [];
   editedImages;
-  provideFlag = true;
-  ownFlag = false;
-  teamFlag = false;
 
   constructor(
     private dialog: MatDialog,
     public storeService: StoreService,
     public materialService: MaterialService,
     private userService: UserService,
+    public teamService: TeamService,
     private toast: ToastrService,
     private router: Router
   ) {
@@ -106,6 +109,12 @@ export class MaterialsComponent implements OnInit {
     this.materialService.loadVideos(true);
     this.materialService.loadPdfs(true);
     this.materialService.loadImages(true);
+    this.teamService.loadAll(true);
+    this.convertLoaderTimer = setInterval(() => {
+      if (this.convertingVideos.length) {
+        this.loadConvertingStatus();
+      }
+    }, 5000);
   }
 
   ngOnDestroy(): void {
@@ -115,6 +124,7 @@ export class MaterialsComponent implements OnInit {
     this.videoDeleteSubscription && this.videoDeleteSubscription.unsubscribe();
     this.pdfDeleteSubscription && this.pdfDeleteSubscription.unsubscribe();
     this.imageDeleteSubscription && this.imageDeleteSubscription.unsubscribe();
+    clearInterval(this.convertLoaderTimer);
   }
 
   changeTab(tab: TabItem): void {
@@ -133,6 +143,9 @@ export class MaterialsComponent implements OnInit {
         videos.forEach((e) => {
           if (videoIds.indexOf(e._id) !== -1) {
             return;
+          }
+          if (e.converted !== 'completed' && e.converted !== 'disabled') {
+            this.convertingVideos.push(e._id);
           }
           if (e.role == 'admin') {
             this.adminVideos.push(e);
@@ -202,23 +215,7 @@ export class MaterialsComponent implements OnInit {
   }
 
   selectFolder(type: string): void {
-    switch (type) {
-      case 'provide':
-        this.provideFlag = true;
-        this.ownFlag = false;
-        this.teamFlag = false;
-        break;
-      case 'own':
-        this.provideFlag = false;
-        this.ownFlag = true;
-        this.teamFlag = false;
-        break;
-      case 'team':
-        this.provideFlag = false;
-        this.ownFlag = false;
-        this.teamFlag = true;
-        break;
-    }
+    this.router.navigate([`./materials/folder/${type}`]);
   }
 
   sendMaterial(material: any): void {
@@ -1212,4 +1209,92 @@ export class MaterialsComponent implements OnInit {
         break;
     }
   }
+
+  loadConvertingStatus(): void {
+    this.videoConvertingLoadSubscription &&
+      this.videoConvertingLoadSubscription.unsubscribe();
+    this.videoConvertingLoadSubscription = this.materialService
+      .loadConvertingStatus(this.convertingVideos)
+      .subscribe((res) => {
+        this.ownVideos.forEach((e) => {
+          if (e.converted !== 'completed' && e.converted !== 'disabled') {
+            const convertingStatus = res[e._id];
+            if (!convertingStatus) {
+              return;
+            }
+            if (convertingStatus.status && convertingStatus.progress == 100) {
+              e['converted'] = 'completed';
+              const pos = this.convertingVideos.indexOf(e._id);
+              if (pos !== -1) {
+                this.convertingVideos.splice(pos, 1);
+              }
+            }
+            if (convertingStatus.status && convertingStatus.progress < 100) {
+              e['progress'] = convertingStatus.progress;
+            }
+            if (!convertingStatus.status) {
+              e['convertingStatus'] = 'error';
+              const pos = this.convertingVideos.indexOf(e._id);
+              if (pos !== -1) {
+                this.convertingVideos.splice(pos, 1);
+              }
+            }
+          }
+        });
+
+        this.adminVideos.forEach((e) => {
+          if (e.converted !== 'completed' && e.converted !== 'disabled') {
+            const convertingStatus = res[e._id];
+            if (!convertingStatus) {
+              return;
+            }
+            if (convertingStatus.status && convertingStatus.progress == 100) {
+              e['converted'] = 'completed';
+              const pos = this.convertingVideos.indexOf(e._id);
+              if (pos !== -1) {
+                this.convertingVideos.splice(pos, 1);
+              }
+            }
+            if (convertingStatus.status && convertingStatus.progress < 100) {
+              e['progress'] = convertingStatus.progress;
+            }
+            if (!convertingStatus.status) {
+              e['convertingStatus'] = 'error';
+              const pos = this.convertingVideos.indexOf(e._id);
+              if (pos !== -1) {
+                this.convertingVideos.splice(pos, 1);
+              }
+            }
+          }
+        });
+
+        this.teamVideos.forEach((e) => {
+          if (e.converted !== 'completed' && e.converted !== 'disabled') {
+            const convertingStatus = res[e._id];
+            if (!convertingStatus) {
+              return;
+            }
+            if (convertingStatus.status && convertingStatus.progress == 100) {
+              e['converted'] = 'completed';
+              const pos = this.convertingVideos.indexOf(e._id);
+              if (pos !== -1) {
+                this.convertingVideos.splice(pos, 1);
+              }
+            }
+            if (convertingStatus.status && convertingStatus.progress < 100) {
+              e['progress'] = convertingStatus.progress;
+            }
+            if (!convertingStatus.status) {
+              e['convertingStatus'] = 'error';
+              const pos = this.convertingVideos.indexOf(e._id);
+              if (pos !== -1) {
+                this.convertingVideos.splice(pos, 1);
+              }
+            }
+          }
+        });
+      });
+  }
+
+  showAnalytics(material): void {}
 }

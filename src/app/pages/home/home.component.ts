@@ -11,8 +11,8 @@ import { TabItem } from 'src/app/utils/data.types';
 export class HomeComponent implements OnInit {
   STATISTICS_DURATION = STATISTICS_DURATION;
   tabs: TabItem[] = [
-    { icon: 'i-icon i-task', label: 'Tasks', id: 'tasks' },
-    { icon: 'i-icon i-notification', label: 'Activity', id: 'activities' }
+    { label: 'Tasks', id: 'tasks', icon: '' },
+    { label: 'Activity', id: 'activities', icon: '' }
   ];
   selectedTab: TabItem = this.tabs[0];
   // Statistics

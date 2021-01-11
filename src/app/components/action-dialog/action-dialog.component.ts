@@ -20,6 +20,8 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { LabelService } from 'src/app/services/label.service';
 import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-action-dialog',
@@ -32,7 +34,6 @@ export class ActionDialogComponent implements OnInit {
   category; // ACTION CATEGORY
   action = {}; // ACTION CONTENT
   submitted = false; // SUBMITTING FALSE
-
   conditionAction; // Condition Case Action corresponds the prev action
   material_type = '';
 
@@ -58,7 +59,11 @@ export class ActionDialogComponent implements OnInit {
   selectedTemplate = { subject: '', content: '' };
 
   // Follow Create
-  due_date = {};
+  due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
   due_time = '12:00:00.000';
   due_duration = 1;
   times = TIMES;
@@ -87,16 +92,20 @@ export class ActionDialogComponent implements OnInit {
   currentUser;
   task = new Task();
 
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-
+  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   error = '';
 
   selectedFollow: any;
   followUpdateOption = 'no_update';
   updateFollowDueOption = 'date';
-  update_due_date = {};
+  update_due_date = {
+    year: '',
+    month: '',
+    day: ''
+  };
   update_due_time = '12:00:00.000';
   update_due_duration = 0;
+  selectedDate = '';
 
   constructor(
     private dialogRef: MatDialogRef<ActionDialogComponent>,
@@ -117,6 +126,10 @@ export class ActionDialogComponent implements OnInit {
         month: current.getMonth() + 1,
         day: current.getDate()
       };
+
+      this.due_date = this.minDate;
+      this.update_due_date = this.minDate;
+      this.setDateTime();
     });
 
     this.userService.profile$.subscribe((res) => {
@@ -178,9 +191,9 @@ export class ActionDialogComponent implements OnInit {
       this.selectedFollow = undefined;
       this.followUpdateOption = 'update_follow_up';
       this.updateFollowDueOption = 'no_update';
-      this.update_due_date = {};
       this.update_due_time = '12:00:00.000';
       this.update_due_duration = 0;
+      this.setUpdateDateTime();
     }
     if (
       (action.type === 'send_text_material' ||
@@ -211,7 +224,6 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.videosLoading = false;
         this.videos = res;
-        console.log('material videos ===========>', res);
       },
       (err) => {
         this.videosLoading = false;
@@ -226,7 +238,6 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.pdfsLoading = false;
         this.pdfs = res;
-        console.log('material pdfs ===========>', res);
       },
       (err) => {
         this.pdfsLoading = false;
@@ -241,7 +252,6 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.imagesLoading = false;
         this.images = res;
-        console.log('material images ===========>', res);
       },
       (err) => {
         this.imagesLoading = false;
@@ -319,6 +329,7 @@ export class ActionDialogComponent implements OnInit {
             this.due_date['month']
           )}-${this.numPad(this.due_date['day'])}T${this.due_time}${time_zone}`
         );
+
         this.dialogRef.close({
           ...this.action,
           type: this.type,
@@ -563,6 +574,9 @@ export class ActionDialogComponent implements OnInit {
     this.selectedTemplate = event;
     this.action['subject'] = this.selectedTemplate.subject;
     this.action['content'] = this.selectedTemplate.content;
+    if (this.action['content'] && this.htmlEditor) {
+      this.htmlEditor.setValue(this.action['content']);
+    }
   }
 
   /**=======================================================
@@ -585,6 +599,11 @@ export class ActionDialogComponent implements OnInit {
       this.subjectCursorEnd = field.selectionEnd;
     }
   }
+
+  insertEmailContentValue(value: string): void {
+    this.htmlEditor.insertEmailContentValue(value);
+  }
+
   insertSubjectValue(value, field): void {
     let subject = this.action['subject'] || '';
     subject =
@@ -625,20 +644,6 @@ export class ActionDialogComponent implements OnInit {
     this.smsContentCursorStart = this.smsContentCursorStart + value.length;
     this.smsContentCursorEnd = this.smsContentCursorStart;
     field.focus();
-  }
-
-  insertEmailContentValue(value): void {
-    this.emailEditor.quillEditor.focus();
-    const range = this.emailEditor.quillEditor.getSelection();
-    // if (!range) {
-    //   return;
-    // }
-    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
-    this.emailEditor.quillEditor.setSelection(
-      range.index + value.length,
-      0,
-      'user'
-    );
   }
 
   DisplayActions = [
@@ -823,37 +828,6 @@ export class ActionDialogComponent implements OnInit {
 
   NoLimitActions = ['note', 'follow_up', 'update_contact', 'update_follow_up'];
 
-  config = QuillEditor;
-  quillEditorRef;
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-  initImageHandler = () => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res['url']);
-        });
-      }
-    });
-    imageInput.click();
-  };
-  insertImageToEditor(url): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-
   numPad(num): any {
     if (num < 10) {
       return '0' + num;
@@ -880,6 +854,36 @@ export class ActionDialogComponent implements OnInit {
         this.type = 'send_text_image';
       }
     }
+  }
+
+  getDateTime(): any {
+    if (this.due_date.day !== '') {
+      return (
+        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
+      );
+    }
+  }
+
+  setDateTime(): void {
+    this.selectedDate = moment(this.getDateTime()).format('YYYY-MM-DD');
+    close();
+  }
+
+  getUpdateDateTime(): any {
+    if (this.update_due_date.day !== '') {
+      return (
+        this.update_due_date.year +
+        '-' +
+        this.update_due_date.month +
+        '-' +
+        this.update_due_date.day
+      );
+    }
+  }
+
+  setUpdateDateTime(): void {
+    this.selectedDate = moment(this.getUpdateDateTime()).format('YYYY-MM-DD');
+    close();
   }
 
   minDate;

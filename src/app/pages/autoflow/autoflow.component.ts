@@ -148,153 +148,159 @@ export class AutoflowComponent
     const edges = [];
     const caseNodes = {}; // Case nodes pair : Parent -> Sub case actions
     const edgesBranches = []; // Edge Branches
-    actions.forEach((e) => {
-      const idStr = (e.id + '').replace('a_', '');
-      const id = parseInt(idStr);
-      if (maxId < id) {
-        maxId = id;
-      }
-      currentIds.push(id);
-    });
+    if (actions) {
+      actions.forEach((e) => {
+        const idStr = (e.id + '').replace('a_', '');
+        const id = parseInt(idStr);
+        if (maxId < id) {
+          maxId = id;
+        }
+        currentIds.push(id);
+      });
+    }
     for (let i = 1; i <= maxId; i++) {
       ids.push(i);
     }
     missedIds = ids.filter(function (n) {
       return currentIds.indexOf(n) === -1;
     });
-    actions.forEach((e) => {
-      if (e.condition) {
-        const node = {
-          id: e.id,
-          index: this.genIndex(e.id),
-          period: e.period
-        };
-        if (e.action) {
-          node['type'] = e.action.type;
-          node['content'] = e.action.content;
-          node['subject'] = e.action.subject;
-          node['due_date'] = e.action.due_date;
-          node['due_duration'] = e.action.due_duration;
-          node['video'] = e.action.video;
-          node['pdf'] = e.action.pdf;
-          node['image'] = e.action.image;
-          node['label'] = this.ACTIONS[e.action.type];
-          node['category'] = ACTION_CAT.NORMAL;
-          node['command'] = e.action.command;
-          node['ref_id'] = e.action.ref_id;
-        }
-        nodes.push(node);
-        let conditionType;
-        if (e.watched_video) {
-          conditionType = 'watched_video';
-        } else if (e.watched_pdf) {
-          conditionType = 'watched_pdf';
-        } else if (e.watched_image) {
-          conditionType = 'watched_image';
+
+    if (actions) {
+      actions.forEach((e) => {
+        if (e.condition) {
+          const node = {
+            id: e.id,
+            index: this.genIndex(e.id),
+            period: e.period
+          };
+          if (e.action) {
+            node['type'] = e.action.type;
+            node['content'] = e.action.content;
+            node['subject'] = e.action.subject;
+            node['due_date'] = e.action.due_date;
+            node['due_duration'] = e.action.due_duration;
+            node['video'] = e.action.video;
+            node['pdf'] = e.action.pdf;
+            node['image'] = e.action.image;
+            node['label'] = this.ACTIONS[e.action.type];
+            node['category'] = ACTION_CAT.NORMAL;
+            node['command'] = e.action.command;
+            node['ref_id'] = e.action.ref_id;
+          }
+          nodes.push(node);
+          let conditionType;
+          if (e.watched_video) {
+            conditionType = 'watched_video';
+          } else if (e.watched_pdf) {
+            conditionType = 'watched_pdf';
+          } else if (e.watched_image) {
+            conditionType = 'watched_image';
+          } else {
+            conditionType = 'opened_email';
+          }
+          if (e.condition.answer) {
+            const yesNodeIndex = missedIds.splice(-1)[0];
+            const yesNodeId = 'a_' + yesNodeIndex;
+            const yesNode = {
+              id: yesNodeId,
+              index: yesNodeIndex,
+              label: 'YES',
+              leaf: false,
+              category: ACTION_CAT.CONDITION,
+              condition: { case: conditionType, answer: true }
+            };
+            nodes.push(yesNode);
+            const bSource = e.parent;
+            const bTarget = yesNodeId;
+            const target = e.id;
+            edges.push({
+              id: bSource + '_' + bTarget,
+              source: bSource,
+              target: bTarget,
+              category: 'case',
+              answer: 'yes'
+            });
+            edges.push({
+              id: bTarget + '_' + target,
+              source: bTarget,
+              target: target
+            });
+            edgesBranches.push(bSource);
+            edgesBranches.push(bTarget);
+            if (caseNodes[bSource]) {
+              caseNodes[bSource].push(yesNode);
+            } else {
+              caseNodes[bSource] = [yesNode];
+            }
+          }
+          if (!e.condition.answer) {
+            const noNodeIndex = missedIds.splice(-1)[0];
+            const noNodeId = 'a_' + noNodeIndex;
+            const noNode = {
+              id: noNodeId,
+              index: noNodeIndex,
+              label: 'NO',
+              leaf: false,
+              category: ACTION_CAT.CONDITION,
+              condition: { case: conditionType, answer: false }
+            };
+            nodes.push(noNode);
+            const bSource = e.parent;
+            const bTarget = noNodeId;
+            const target = e.id;
+            edges.push({
+              id: bSource + '_' + bTarget,
+              source: bSource,
+              target: bTarget,
+              category: 'case',
+              answer: 'no',
+              hasLabel: true,
+              type: conditionType
+            });
+            edges.push({
+              id: bTarget + '_' + target,
+              source: bTarget,
+              target: target
+            });
+            edgesBranches.push(bSource);
+            edgesBranches.push(bTarget);
+            if (caseNodes[bSource]) {
+              caseNodes[bSource].push(noNode);
+            } else {
+              caseNodes[bSource] = [noNode];
+            }
+          }
         } else {
-          conditionType = 'opened_email';
-        }
-        if (e.condition.answer) {
-          const yesNodeIndex = missedIds.splice(-1)[0];
-          const yesNodeId = 'a_' + yesNodeIndex;
-          const yesNode = {
-            id: yesNodeId,
-            index: yesNodeIndex,
-            label: 'YES',
-            leaf: false,
-            category: ACTION_CAT.CONDITION,
-            condition: { case: conditionType, answer: true }
+          const node = {
+            id: e.id,
+            index: this.genIndex(e.id),
+            period: e.period
           };
-          nodes.push(yesNode);
-          const bSource = e.parent;
-          const bTarget = yesNodeId;
-          const target = e.id;
-          edges.push({
-            id: bSource + '_' + bTarget,
-            source: bSource,
-            target: bTarget,
-            category: 'case',
-            answer: 'yes'
-          });
-          edges.push({
-            id: bTarget + '_' + target,
-            source: bTarget,
-            target: target
-          });
-          edgesBranches.push(bSource);
-          edgesBranches.push(bTarget);
-          if (caseNodes[bSource]) {
-            caseNodes[bSource].push(yesNode);
-          } else {
-            caseNodes[bSource] = [yesNode];
+          if (e.action) {
+            node['type'] = e.action.type;
+            node['content'] = e.action.content;
+            node['subject'] = e.action.subject;
+            node['due_date'] = e.action.due_date;
+            node['due_duration'] = e.action.due_duration;
+            node['video'] = e.action.video;
+            node['pdf'] = e.action.pdf;
+            node['image'] = e.action.image;
+            node['label'] = this.ACTIONS[e.action.type];
+            node['category'] = ACTION_CAT.NORMAL;
+            node['command'] = e.action.command;
+            node['ref_id'] = e.action.ref_id;
+          }
+          nodes.push(node);
+          if (e.parent !== '0') {
+            const source = e.parent;
+            const target = e.id;
+            edges.push({ id: source + '_' + target, source, target });
+            edgesBranches.push(source);
           }
         }
-        if (!e.condition.answer) {
-          const noNodeIndex = missedIds.splice(-1)[0];
-          const noNodeId = 'a_' + noNodeIndex;
-          const noNode = {
-            id: noNodeId,
-            index: noNodeIndex,
-            label: 'NO',
-            leaf: false,
-            category: ACTION_CAT.CONDITION,
-            condition: { case: conditionType, answer: false }
-          };
-          nodes.push(noNode);
-          const bSource = e.parent;
-          const bTarget = noNodeId;
-          const target = e.id;
-          edges.push({
-            id: bSource + '_' + bTarget,
-            source: bSource,
-            target: bTarget,
-            category: 'case',
-            answer: 'no',
-            hasLabel: true,
-            type: conditionType
-          });
-          edges.push({
-            id: bTarget + '_' + target,
-            source: bTarget,
-            target: target
-          });
-          edgesBranches.push(bSource);
-          edgesBranches.push(bTarget);
-          if (caseNodes[bSource]) {
-            caseNodes[bSource].push(noNode);
-          } else {
-            caseNodes[bSource] = [noNode];
-          }
-        }
-      } else {
-        const node = {
-          id: e.id,
-          index: this.genIndex(e.id),
-          period: e.period
-        };
-        if (e.action) {
-          node['type'] = e.action.type;
-          node['content'] = e.action.content;
-          node['subject'] = e.action.subject;
-          node['due_date'] = e.action.due_date;
-          node['due_duration'] = e.action.due_duration;
-          node['video'] = e.action.video;
-          node['pdf'] = e.action.pdf;
-          node['image'] = e.action.image;
-          node['label'] = this.ACTIONS[e.action.type];
-          node['category'] = ACTION_CAT.NORMAL;
-          node['command'] = e.action.command;
-          node['ref_id'] = e.action.ref_id;
-        }
-        nodes.push(node);
-        if (e.parent !== '0') {
-          const source = e.parent;
-          const target = e.id;
-          edges.push({ id: source + '_' + target, source, target });
-          edgesBranches.push(source);
-        }
-      }
-    });
+      });
+    }
+
     // Uncompleted Case Branch Make
     for (const branch in caseNodes) {
       if (caseNodes[branch].length === 1) {
@@ -561,6 +567,8 @@ export class AutoflowComponent
 
     this.dialog
       .open(ActionEditComponent, {
+        maxWidth: '90vw',
+        minHeight: '300px',
         data: {
           action: node,
           conditionHandler,
@@ -621,9 +629,9 @@ export class AutoflowComponent
         maxWidth: '360px',
         width: '96vw',
         data: {
-          message: 'Are you sure to remove this action?',
-          cancelLabel: 'No',
-          confirmLabel: 'REMOVE'
+          title: 'Delete action',
+          message: 'Are you sure to delete this action?',
+          confirmLabel: 'Delete'
         }
       })
       .afterClosed()
@@ -1266,6 +1274,7 @@ export class AutoflowComponent
           }
           action['action'] = {
             type: e.type,
+            task_type: e.task_type,
             content: e.content,
             subject: e.subject,
             due_date: e.due_date,

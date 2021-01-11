@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { Contact } from 'src/app/models/contact.model';
 import { Note } from 'src/app/models/note.model';
 import { HandlerService } from 'src/app/services/handler.service';
 import { NoteService } from 'src/app/services/note.service';
-import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-note-create',
@@ -41,23 +41,41 @@ export class NoteCreateComponent implements OnInit {
     if (!this.contacts.length) {
       return;
     }
-    this.saving = true;
     const ids = [];
     this.contacts.forEach((e) => {
       ids.push(e._id);
     });
-    const data = {
-      contacts: ids,
-      title: this.note.title,
-      content: this.note.content
-    };
-    this.saveSubscription && this.saveSubscription.unsubscribe();
-    this.saveSubscription = this.noteService
-      .bulkCreate(data)
-      .subscribe((res) => {
+    if (ids.length > 1) {
+      const data = {
+        contacts: ids,
+        title: this.note.title,
+        content: this.note.content
+      };
+      this.saving = true;
+      this.saveSubscription && this.saveSubscription.unsubscribe();
+      this.saveSubscription = this.noteService
+        .bulkCreate(data)
+        .subscribe(() => {
+          this.saving = false;
+          this.handlerService.activityAdd$(ids, 'note');
+          this.dialogRef.close();
+        });
+    } else {
+      const data = {
+        contact: ids[0],
+        title: this.note.title,
+        content: this.note.content
+      };
+      this.saving = true;
+      this.saveSubscription && this.saveSubscription.unsubscribe();
+      this.saveSubscription = this.noteService.create(data).subscribe((res) => {
         this.saving = false;
-        this.handlerService.activityAdd$(ids, 'note');
-        this.dialogRef.close();
+        if (res) {
+          this.handlerService.activityAdd$(ids, 'note');
+          this.handlerService.registerActivity$(res);
+          this.dialogRef.close();
+        }
       });
+    }
   }
 }

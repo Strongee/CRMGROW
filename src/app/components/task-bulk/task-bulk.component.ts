@@ -8,6 +8,7 @@ import { TaskService } from '../../services/task.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { HandlerService } from 'src/app/services/handler.service';
+import { ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-task-bulk',
@@ -35,9 +36,9 @@ export class TaskBulkComponent implements OnInit {
     private dialogRef: MatDialogRef<TaskBulkComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
-    private helperService: HelperService,
     private handlerService: HandlerService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private contactService: ContactService
   ) {
     const current = new Date();
     this.MIN_DATE = {
@@ -88,19 +89,17 @@ export class TaskBulkComponent implements OnInit {
     if (isValid) {
       this.updating = true;
       this.bulkUpdateSubscription && this.bulkUpdateSubscription.unsubscribe();
-      this.taskService.bulkUpdate(data).subscribe(
-        () => {
-          this.updating = false;
+      this.taskService.bulkUpdate(data).subscribe((status) => {
+        this.updating = false;
+        if (status) {
           this.handlerService.updateTasks$(this.ids, {
             ...data,
             ids: undefined
           });
-          this.dialogRef.close({ status: true });
-        },
-        () => {
-          this.dialogRef.close({ status: false });
+          this.contactService.forceReload.next(true);
+          this.dialogRef.close();
         }
-      );
+      });
     }
   }
 }

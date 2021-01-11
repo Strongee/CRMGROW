@@ -20,7 +20,8 @@ import { MaterialShareComponent } from '../../components/material-share/material
 import { TemplateShareComponent } from '../../components/template-share/template-share.component';
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { NotifyComponent } from '../../components/notify/notify.component';
-import {AutomationAssignComponent} from "../../components/automation-assign/automation-assign.component";
+import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
+import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 
 @Component({
   selector: 'app-team',
@@ -61,8 +62,10 @@ export class TeamComponent implements OnInit {
   ];
   selectedTab: TabItem = this.tabs[0];
   sharedTabs: TabItem[] = [
-    { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
-    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
+    { icon: '', label: 'Materials', id: 'materials' },
+    { icon: '', label: 'Templates', id: 'templates' },
+    { icon: '', label: 'Automations', id: 'automations' },
+    { icon: '', label: 'Contacts', id: 'contacts' }
   ];
   selectedSharedTab: TabItem = this.sharedTabs[0];
   sharedContacts = [
@@ -192,30 +195,6 @@ export class TeamComponent implements OnInit {
         }
       }
     });
-    this.loadAffiliateSubscription &&
-      this.loadAffiliateSubscription.unsubscribe();
-    // this.loadAffiliateSubscription = this.userService
-    //   .loadAffiliate()
-    //   .subscribe((res) => {
-    //     let affiliate = {};
-    //     if (res) {
-    //       affiliate = res;
-    //     }
-    //     if (affiliate['id']) {
-    //       this.shareUrl = affiliate['links'][0]['url'];
-    //     } else {
-    //       this.createAffiliateSubscription &&
-    //         this.createAffiliateSubscription.unsubscribe();
-    //       this.createAffiliateSubscription = this.userService
-    //         .createAffiliate()
-    //         .subscribe((response) => {
-    //           if (response) {
-    //             affiliate = response;
-    //             this.shareUrl = affiliate['links'][0]['url'];
-    //           }
-    //         });
-    //     }
-    //   });
   }
   acceptInvitation(): void {
     this.accepting = true;
@@ -265,7 +244,7 @@ export class TeamComponent implements OnInit {
         const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
         if (ownerIndex !== -1) {
           this.role = 'owner';
-        } else if (this.team.editors.indexOf(this.userId) !== -1) {
+        } else if (this.team.editors && this.team.editors.indexOf(this.userId) !== -1) {
           this.role = 'editor';
         } else {
           this.role = 'viewer';
@@ -478,7 +457,19 @@ export class TeamComponent implements OnInit {
   }
 
   shareContact(): void {
-
+    this.dialog
+      .open(TeamContactShareComponent, {
+        width: '500px',
+        maxWidth: '90vw',
+        data: {
+          team: this.team
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+        }
+      });
   }
 
   shareEmailTemplate(): void {
@@ -486,7 +477,7 @@ export class TeamComponent implements OnInit {
       .open(TemplateShareComponent, {
         width: '96vw',
         maxWidth: '500px',
-        height: '70vh',
+        maxHeight: '60vh',
         disableClose: true,
         data: {
           team_id: this.teamId
@@ -647,10 +638,13 @@ export class TeamComponent implements OnInit {
   cancelInvite(member): void {
     this.dialog
       .open(ConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
         data: {
+          title: 'Cancel Invitation',
           message: 'Are you sure to cancel this invitation?',
           cancelLabel: 'No',
-          confirmLabel: 'Cancel'
+          confirmLabel: 'Ok'
         }
       })
       .afterClosed()
@@ -711,7 +705,10 @@ export class TeamComponent implements OnInit {
   removeMember(member): void {
     this.dialog
       .open(ConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
         data: {
+          title: 'Remove Member',
           message: 'Are you sure to remove this member?',
           cancelLabel: 'No',
           confirmLabel: 'Remove'
@@ -768,6 +765,7 @@ export class TeamComponent implements OnInit {
   declineRequest(user): void {
 
   }
+
   acceptOutRequest(teamId, memberId): void {
     this.accepting = true;
     this.teamService.acceptRequest(teamId, memberId).subscribe(
@@ -910,9 +908,15 @@ export class TeamComponent implements OnInit {
     }
     return 'Viewer';
   }
+
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
   }
+
+  changeSharedTab(tab: TabItem): void {
+    this.selectedSharedTab = tab;
+  }
+
   selectAllPage(): void {
     if (this.isSelectedPage()) {
       this.team.members.forEach((e) => {
@@ -1131,15 +1135,29 @@ export class TeamComponent implements OnInit {
    * Open Invite member modal and do action
    */
   inviteMember(): void {
-    this.dialog.open(InviteTeamComponent, {
-      ...DialogSettings.INVITE_TEAM,
-      data: { ...this.team }
-    });
+    this.dialog
+      .open(InviteTeamComponent, {
+        ...DialogSettings.INVITE_TEAM,
+        data: { ...this.team }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.invitations) {
+            for (const invitation of res.invitations) {
+              this.team.invites.push(invitation);
+            }
+          }
+          if (res.referrals) {
+            for (const referral of res.referrals) {
+              this.team.referrals.push(referral);
+            }
+          }
+        }
+      });
   }
 
-  changeShareStatus(contact): void {
-
-  }
+  changeShareStatus(contact): void {}
 
   getAvatarName(contact): any {
     if (contact.first_name && contact.last_name) {

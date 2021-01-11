@@ -25,6 +25,9 @@ import { ThemeComponent } from 'src/app/pages/theme/theme.component';
 import { CampaignListItemComponent } from 'src/app/pages/campaign-list-item/campaign-list-item.component';
 import { CampaignBulkMailingItemComponent } from 'src/app/pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component';
 import { CampaignSmtpComponent } from 'src/app/pages/campaign-smtp/campaign-smtp.component';
+import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
+import { NotificationsListComponent } from 'src/app/pages/notifications-list/notifications-list.component';
+import { MaterialComponent } from 'src/app/pages/material/material.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -70,6 +73,13 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'contacts/import-csv',
+    component: ContactsComponent,
+    data: {
+      title: 'Contacts'
+    }
+  },
+  {
     path: 'contacts/:id',
     component: ContactComponent,
     data: {
@@ -84,8 +94,22 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'materials/folder/:id',
+    component: MaterialComponent,
+    data: {
+      title: 'Material'
+    }
+  },
+  {
     path: 'materials/create',
     component: VideoCreateComponent,
+    data: {
+      title: 'Materials'
+    }
+  },
+  {
+    path: 'materials/analytics/:id',
+    component: AnalyticsMaterialComponent,
     data: {
       title: 'Materials'
     }
@@ -258,6 +282,13 @@ export const AdminLayoutRoutes: Routes = [
     component: ThemeComponent,
     data: {
       title: 'Theme'
+    }
+  },
+  {
+    path: 'notifications',
+    component: NotificationsListComponent,
+    data: {
+      title: 'Notifications'
     }
   }
 ];

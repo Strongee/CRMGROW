@@ -15,6 +15,7 @@ import { MultiDataSet, Label, Color } from 'ng2-charts';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { SendEmailComponent } from '../../components/send-email/send-email.component';
 import { HandlerService } from 'src/app/services/handler.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -117,6 +118,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     public userService: UserService,
+    public notificationService: NotificationService,
     private storeService: StoreService,
     private contactService: ContactService,
     private handlerService: HandlerService,

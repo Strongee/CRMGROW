@@ -14,6 +14,8 @@
             <label class="f-6 op-56 m-0">To:</label>
             <app-input-contacts
               [selectedContacts]="emailContacts"
+              [onlyFromSearch]="true"
+              [onlySubscriber]="true"
               class="w-100 ml-2"
             ></app-input-contacts>
           </div>
@@ -65,8 +67,10 @@
             placeholder="Start typing here..."
             required="true"
             hasToken="true"
+            [hasAttachment]="true"
             [style]="{height: '300px'}"
             (attachmentChange)="onAttachmentChange($event)"
+            (onInit)="onInitEditor()"
             #editor
             >
           </app-html-editor>

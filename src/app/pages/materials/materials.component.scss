@@ -10,6 +10,10 @@
     font-size: 16px;
 }
 
+.small-button-record {
+    display: none;
+}
+
 .dropdown-menu {
     &.show {
         top: 0px !important;
@@ -166,10 +170,16 @@ td {
 .actions-col {
     width: 350px;
     .actions-wrapper {
-      width: 350px;
-      .custom-control {
-          display: none;
-      }
+        width: 350px;
+        .custom-control {
+            display: none;
+        }
+        .small-button-more {
+            display: none;
+        }
+        .small {
+            margin: 0 6px;
+        }
     }
 }
 
@@ -202,11 +212,26 @@ td {
     .actions-col {
         width: 100px;
         .actions-wrapper {
-          width: 100px;
-          display: block;
-          .button-more {
-            display: none;
-          }
+            width: 100px;
+            flex-wrap: wrap;
+            .button-copy {
+                display: none;
+            }
+            .button-more {
+                display: none;
+            }
+            .small-button-more {
+                display: block;
+                .dropdown-menu {
+                    &.show {
+                        top: 0px !important;
+                        left: 0px !important;
+                    }
+                }
+            }
+            .small {
+                margin: 0 auto;
+            }
         }
     }
 }
@@ -226,13 +251,19 @@ td {
     }
     .actions-col .actions-wrapper .custom-control {
         display: block;
-        text-align: center;
     }
 }
 
 @media screen and (max-width: 575px) {
-    .button-record, .button-add {
+    .button-record {
+        display: none;
+    }
+    .button-add {
         font-size: 13px;
+    }
+    .small-button-record {
+        font-size: 13px;
+        display: flex;
     }
     th, td {
       padding: 3px !important;
@@ -243,6 +274,11 @@ td {
     .name-col {
       .thumbnail {
         display: block;
+        width: 150px;
+        height: 90px;
+        margin-bottom: 10px;
+      }
+      .preview {
         width: 150px;
         height: 90px;
         margin-bottom: 10px;

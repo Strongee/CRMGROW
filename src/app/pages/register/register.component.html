@@ -6,11 +6,17 @@
       <h4 class="text-center font-weight-bold mb-4">Sign Up!</h4>
       <p class="f-3 text-center">Please complete your basic information <br/> for your account</p>
       <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
-      <button type="button" class="v-center social-btn btn border-primary w-100 mt-4 font-weight-bold">
+      <button type="button"
+        class="v-center social-btn btn border-primary w-100 mt-4 font-weight-bold"
+        (click)="connectService('gmail')"
+      >
         <img class="social-icon" src="../../../assets/img/google.svg" alt="">
         <div class="social-text">Sign Up with Google</div>
       </button>
-      <button type="button" class="v-center social-btn btn border-primary w-100 mt-2 font-weight-bold">
+      <button type="button"
+        class="v-center social-btn btn border-primary w-100 mt-2 font-weight-bold"
+        (click)="connectService('outlook')"
+      >
         <img class="social-icon" src="../../../assets/img/outlook.svg" alt="">
         <div class="social-text">Sign Up with Outlook</div>
       </button>

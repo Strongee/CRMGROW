@@ -1,5 +1,5 @@
 <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
-  <button class="btn btn-primary shadow py-2 v-center" (click)="joinCallRequest()">
+  <button class="v-center btn btn-primary shadow py-2" (click)="joinCallRequest()">
     <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
     <span class="fw-600 f-3">New group call inquiry</span>
   </button>
@@ -245,17 +245,17 @@
                       <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="light">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editGroupCall(plan)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="scheduleCall(plan)">
                         <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4">Edit group call</span>
+                        <span class="ml-3 f-3 font-weight-bold">Edit group call</span>
                       </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="addToCalendar(plan)">
                         <i class="i-icon i-calendar bg-dark ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4">Add to calendar</span>
+                        <span class="ml-3 f-3 font-weight-bold">Add to calendar</span>
                       </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deletePlan(plan)">
                         <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-4">Delete</span>
+                        <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>
                     </div>
                   </div>

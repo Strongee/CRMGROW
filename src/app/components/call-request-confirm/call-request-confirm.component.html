@@ -116,10 +116,13 @@
       <ng-container *ngIf="isNoteEditable">
         <div class="my-3">
           <label>Note</label>
-          <quill-editor placeholder="Enter Text" [(ngModel)]="note" [modules]="config" name="noteContent"
-                        [styles]="{height: '120px'}" #noteContent="ngModel" required (onEditorCreated)="getEditorInstance($event)"
-                        [class.has-error]="noteContent.errors && (noteContent.touched || noteContent.dirty )" class="rounded" #noteEditor>
-          </quill-editor>
+          <app-html-editor
+            [(value)]="note"
+            placeholder="Enter Text..."
+            [style]="{height: '200px'}"
+            #editor
+          >
+          </app-html-editor>
         </div>
       </ng-container>
     </ng-container>
@@ -147,24 +150,24 @@
     </ng-template>
   </ng-container>
   <ng-container *ngIf="formData.status == 'pending' || isCancelLoading || isAcceptLoading">
-    <mat-dialog-actions class="justify-content-between mx-0">
+    <mat-dialog-actions class="button-group justify-content-between mx-0">
       <button type="button" class="btn bgc-trans font-weight-bold c-blue" (click)="addNote()">
         Back
       </button>
-      <div>
-        <button type="button" class="btn bgc-trans font-weight-bold c-blue">
-          Send organizer a message
-        </button>
+      <button type="button" class="btn bgc-trans font-weight-bold c-blue">
+        Send organizer a message
+      </button>
+      <div class="v-center">
         <button type="button" class="btn btn-decline font-weight-bold mr-2"
-          [class.loading]="(isLeader || isOrganizer) && isCancelLoading"
-          [class.bgc-red]="(isLeader || isOrganizer) && isCancelLoading" (click)="cancelRequest()"
-          *ngIf="isLeader || isOrganizer"
+                [class.loading]="(isLeader || isOrganizer) && isCancelLoading"
+                [class.bgc-red]="(isLeader || isOrganizer) && isCancelLoading" (click)="cancelRequest()"
+                *ngIf="isLeader || isOrganizer"
         >
           Decline
         </button>
         <button type="submit" class="btn btn-accept font-weight-bold"
-          [class.loading]="isLeader && isAcceptLoading"
-          *ngIf="isLeader"
+                [class.loading]="isLeader && isAcceptLoading"
+                *ngIf="isLeader"
         >
           Accept
         </button>

@@ -20,6 +20,13 @@ export const AuthLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'signup/:social',
+    component: RegisterComponent,
+    data: {
+      title: 'Sign Up'
+    }
+  },
+  {
     path: 'forgot-password',
     component: ForgotPasswordComponent,
     data: {

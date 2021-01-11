@@ -14,7 +14,7 @@
             <ng-container *ngIf="user_name.errors.required">Required!</ng-container>
           </span>
         </div>
-        <input type="text" class="form-control" [(ngModel)]="user.user_name" id="user_name" name="user_name" #user_name="ngModel" required>
+        <input type="text" class="form-control" [(ngModel)]="name" id="user_name" name="user_name" #user_name="ngModel" required>
       </div>
     </div>
     <div class="col-sm-6 col-12">
@@ -26,7 +26,7 @@
             <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
           </span>
         </div>
-        <input type="text" class="form-control" [(ngModel)]="user.email" id="email" name="email" #email="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$">
+        <input type="text" class="form-control" [(ngModel)]="userEmail" id="email" name="email" #email="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$">
       </div>
     </div>
   </div>
@@ -52,7 +52,7 @@
           [separateDialCode]="true"
           name="phone" 
           #phone="ngModel"
-          [(ngModel)]="user.phone"
+          [(ngModel)]="phoneNumber"
           (ngModelChange)="phone.errors ? false : confirmPhone();"
           required>
         </ngx-intl-tel-input>
@@ -66,7 +66,7 @@
             <ng-container *ngIf="company.errors.required">Required!</ng-container>
           </span>
         </div>
-        <select class="form-control c-blue f-5" [(ngModel)]="user.company" name="company" id="company" required #company="ngModel">
+        <select class="form-control c-blue f-5" [(ngModel)]="userCompany" name="company" id="company" required #company="ngModel">
           <option *ngFor="let company_info of companies" value="{{company_info}}">
             {{company_info}}
           </option>
@@ -83,7 +83,7 @@
             <ng-container *ngIf="learn_more.errors.required">Required!</ng-container>
           </span>
         </div>
-        <input type="text" class="form-control" [(ngModel)]="user.learn_more" id="learn_more" name="learn_more" #learn_more="ngModel" required>
+        <input type="text" class="form-control" [(ngModel)]="website" id="learn_more" name="learn_more" #learn_more="ngModel" required>
       </div>
     </div>
     <div class="col-sm-6 col-12">
@@ -94,7 +94,7 @@
             <ng-container *ngIf="time_zone_info.errors.required">Required!</ng-container>
           </span>
         </div>
-        <select class="form-control c-blue f-5" [(ngModel)]="user.time_zone_info" name="time_zone_info" id="time_zone_info" required #time_zone_info="ngModel">
+        <select class="form-control c-blue f-5" [(ngModel)]="timezone" name="time_zone_info" id="time_zone_info" required #time_zone_info="ngModel">
           <optgroup *ngFor="let timezone_group of timezones" label="{{timezone_group.country}}">
             <option *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
               {{timezone.name}}
@@ -113,7 +113,7 @@
             <ng-container *ngIf="location.errors.required">Required!</ng-container>
           </span>
         </div>
-        <input class="form-control" placeholder="Add location" [(ngModel)]="user.location" name="location"
+        <input class="form-control" placeholder="Add location" [(ngModel)]="address" name="location"
             #location="ngModel" ngx-google-places-autocomplete #addressplacesRef="ngx-places" [options]="{
               types: [],
               componentRestrictions: { country: 'US' }

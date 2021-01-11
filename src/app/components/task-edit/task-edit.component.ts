@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, resolveForwardRef } from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -6,7 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { REPEAT_DURATIONS, TIMES } from 'src/app/constants/variable.constants';
-import { Task } from 'src/app/models/task.model';
+import { Task, TaskDetail } from 'src/app/models/task.model';
 import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TaskService } from 'src/app/services/task.service';
@@ -29,7 +29,7 @@ export class TaskEditComponent implements OnInit {
 
   date;
   time = '12:00:00.000';
-  task = new Task();
+  task = new TaskDetail();
 
   timezone;
 
@@ -43,7 +43,7 @@ export class TaskEditComponent implements OnInit {
     private helperService: HelperService,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<TaskEditComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: Task
+    @Inject(MAT_DIALOG_DATA) private data: TaskDetail
   ) {
     const current = new Date();
     this.MIN_DATE = {
@@ -63,7 +63,7 @@ export class TaskEditComponent implements OnInit {
       }
     });
     if (this.data) {
-      this.task = Object.assign({}, this.data);
+      this.task = this.task.deserialize(this.data);
       if (this.timezone) {
         this.initTime();
       }
@@ -141,17 +141,17 @@ export class TaskEditComponent implements OnInit {
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.taskService
       .update(this.task._id, data)
-      .subscribe(
-        (res) => {
-          this.updating = false;
-          if (res) {
-            this.dialogRef.close({ status: true });
-          }
-        },
-        (error) => {
-          this.updating = false;
+      .subscribe((res) => {
+        this.updating = false;
+        if (resolveForwardRef) {
           this.dialogRef.close();
+          this.handlerService.updateTasks$([this.task._id], data);
+          this.handlerService.updateLastActivities$(
+            [this.task.contact._id],
+            'task_update'
+          );
+          this.handlerService.registerActivity$(res);
         }
-      );
+      });
   }
 }

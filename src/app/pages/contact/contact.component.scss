@@ -7,6 +7,12 @@
     min-width: 10px;
   }
 }
+
+.action-menu {
+  right: 0px;
+  left: unset!important;
+}
+
 .contact-info-panel {
   min-width: 376px;
   .button-more {
@@ -14,9 +20,6 @@
       width: 10px;
       height: 10px;
       min-width: 10px;
-    }
-    .dropdown-menu.show {
-      transform: translate(-60px, 36px) !important;
     }
   }
   .info-title {
@@ -117,7 +120,7 @@
     background: $color-dark;
     content: "";
     position: absolute;
-    top: 54px;
+    top: 0px;
     opacity: 0.2;
   }
 }
@@ -418,6 +421,14 @@
       background: $color-wheat;
       .main-history-item {
         .content {
+          .note-content {
+            white-space: pre-line;
+            max-height: 72px;
+            overflow: hidden;
+            &.opened {
+              max-height: unset;
+            }
+          }
           .gradient-bottom {
             position: absolute;
             bottom: 25px;

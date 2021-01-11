@@ -21,6 +21,7 @@ $custom-checkbox-indicator-border-radius: 3px;
 @import "src/assets/scss/custom-mat-drawer";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 @import '~@angular/cdk/overlay-prebuilt.css';
+@import "./assets/css/circular.css";
 
 /* Material Theme Basic Setting  */
 html, body { height: 100%; }
@@ -243,6 +244,11 @@ ul {
 .page-title {
   font-size: 26px;
   letter-spacing: 1px;
+  font-weight: bold !important;
+
+  @media screen and (max-width: 575px) {
+    font-size: 22px;
+  }
 }
 .ls-1{
   letter-spacing: 1px;
@@ -597,7 +603,7 @@ button {
   &:hover {
     background-color: $color-white;
     color: $color-blue;
-    border: 2px solid $color-blue;
+    border: 1px solid $color-blue;
   }
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(0, 0, 255, 0.5);
@@ -679,7 +685,6 @@ button {
   }
   .error {
     font-size: 11px;
-    font-weight: bold;
     color: $color-red;
   }
   &:not(.invalid) {
@@ -865,6 +870,9 @@ body{
     .page {
       padding-top: 113px;
     }
+    .variable-button-group {
+      height: calc(100vh - 114px);
+    }
   }
 
   .page-content {
@@ -1022,7 +1030,15 @@ table {
     font-size: 0.8rem;
     border-top: none;
   }
+}
 
+.page-table {
+  thead tr:first-child th {
+    position: sticky;
+    top: 64px;
+    background-color: white;
+    z-index: 2;
+  }
 }
 
 /** ==== Material Component Style === */
@@ -1167,7 +1183,67 @@ table {
   }
 }
 
+/** ==== Toast Alert Style === */
+.toast-container .ngx-toastr{
+  box-shadow: 0px 8px 24px -8px rgba(16,19,54,0.72);
+  padding-left: 1rem;
+  color: white;
+  width: unset;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  min-width: 270px;
 
+  .toast-close-button {
+    top: 0rem;
+    right: 0rem;
+    opacity: 1;
+    text-shadow: none;
+    font-size: 16px;
+    font-weight: 700;
+
+    span {
+      display: none;
+    }
+
+    &::after {
+      content: 'Dismiss';
+    }
+  }
+
+  .toast-title {
+    font-weight: 600;
+    margin-right: 75px;
+  }
+  .toast-message {
+    font-weight: 400;
+    font-size: 13px;
+  }
+
+  &.toast-success {
+    background: #008F6D;
+    border-color: #008F6D;
+  }
+
+  &.toast-error {
+    background: #FF0000;
+    border-color: #FF0000;
+  }
+
+  &.toast-info {
+    background: #101336;
+    border-color: #101336;
+  }
+}
+
+.toast-container.toast-top-center .ngx-toastr{
+  .toast-title {
+    margin-right: 0;
+    text-align: center;
+  }
+  .toast-message {
+    text-align: center;
+  }
+}
 
 /** ==== Custom Component Style === */
 .status-description {
@@ -1422,6 +1498,10 @@ select.theme-control {
       @media screen and (max-width: 576px) {
         font-size: 14px;
       }
+
+      @media screen and (max-width: 575px) {
+        font-size: 12px;
+      }
     }
 
     input:checked ~ .custom-theme-label {
@@ -1489,7 +1569,7 @@ mat-expansion-panel {
   position: sticky;
   bottom: 0px;
   background: white;
-  z-index: 996;
+  z-index: 3;
 
   @media screen and (max-width: 670px) {
     display: flex;
@@ -1688,3 +1768,6 @@ body {
   background-size: 18px 18px !important;
   text-align: center;
 }
+
+
+

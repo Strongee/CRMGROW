@@ -24,7 +24,7 @@ export class SignatureComponent implements OnInit {
     { layout: 'img_text_ver', icon: 'i-signature-4' },
     { layout: 'custom', icon: 'i-signature-5' }
   ];
-  currentTemplate = 'custom';
+  currentTemplate = '';
   submitted = false;
   saving = false;
 
@@ -41,6 +41,13 @@ export class SignatureComponent implements OnInit {
     this.userService.profile$.subscribe((profile) => {
       if (profile && profile._id) {
         this.user = profile;
+
+        if (this.quillEditorRef) {
+          const delta = this.quillEditorRef.clipboard.convert({
+            html: this.user.email_signature
+          });
+          this.emailEditor.quillEditor.setContents(delta, 'user');
+        }
       }
     });
   }
@@ -54,10 +61,10 @@ export class SignatureComponent implements OnInit {
       case 'img_text_hor':
         signature = `
         <div class="quill-better-table-wrapper">
-          <table class="quill-better-table" style="width: 400px;">
+          <table class="quill-better-table" style="width: 270px;">
             <colgroup>
-              <col width="120">
-              <col width="280">
+              <col width="100">
+              <col width="170">
             </colgroup>
             <tbody>
               <tr data-row="row-yu3l">
@@ -76,14 +83,18 @@ export class SignatureComponent implements OnInit {
         </div>
         <p><br></p>
         `;
+        const delta = this.quillEditorRef.clipboard.convert({
+          html: signature
+        });
+        this.emailEditor.quillEditor.setContents(delta, 'user');
         break;
       case 'text_img_hor':
         signature = `
         <div class="quill-better-table-wrapper">
-          <table class="quill-better-table" style="width: 400px;">
+          <table class="quill-better-table" style="width: 270px;">
             <colgroup>
-              <col width="280">
-              <col width="120">
+              <col width="170">
+              <col width="100">
             </colgroup>
             <tbody>
             <tr data-row="row-yu3l">
@@ -102,6 +113,10 @@ export class SignatureComponent implements OnInit {
         </div>
         <p><br></p>
         `;
+        const html = this.quillEditorRef.clipboard.convert({
+          html: signature
+        });
+        this.emailEditor.quillEditor.setContents(html, 'user');
         break;
       case 'text_img_ver':
         signature = `
@@ -146,10 +161,12 @@ export class SignatureComponent implements OnInit {
 
   update(): void {
     this.saving = true;
-    this.userService.updateProfile(this.user).subscribe((data) => {
-      this.userService.updateProfileImpl(data);
-      this.saving = false;
-    });
+    this.userService
+      .updateProfile({ email_signature: this.user.email_signature })
+      .subscribe((data) => {
+        this.userService.updateProfileImpl(data);
+        this.saving = false;
+      });
   }
 
   updateEditor(event: any): void {
@@ -157,11 +174,17 @@ export class SignatureComponent implements OnInit {
   }
 
   getEditorInstance(editorInstance: any): void {
-    console.log('editor is initated', editorInstance);
     this.quillEditorRef = editorInstance;
     const toolbar = this.quillEditorRef.getModule('toolbar');
     toolbar.addHandler('image', this.initImageHandler);
     this.table = this.quillEditorRef.getModule('better-table');
+
+    if (this.user.email_signature) {
+      const delta = this.quillEditorRef.clipboard.convert({
+        html: this.user.email_signature
+      });
+      this.emailEditor.quillEditor.setContents(delta, 'user');
+    }
   }
 
   initImageHandler = (): void => {

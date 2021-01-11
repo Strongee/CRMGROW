@@ -8,6 +8,9 @@ import { Subscription } from 'rxjs';
 import { AvatarEditorComponent } from '../../components/avatar-editor/avatar-editor.component';
 import { UserService } from '../../services/user.service';
 import { validateEmail } from 'src/app/utils/functions';
+import { Strings } from '../../constants/strings.constant';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -55,6 +58,10 @@ export class RegisterComponent implements OnInit {
   phoneExisting = false;
   checkPhoneSubscription: Subscription;
 
+  socialLoading = '';
+  isSocialUser = false;
+  fullNameRequire = false;
+
   creditCardInput = {
     creditCard: true,
     onCreditCardTypeChanged: (type) => {
@@ -85,10 +92,94 @@ export class RegisterComponent implements OnInit {
     private dialog: MatDialog,
     private helperService: HelperService,
     private toast: ToastrService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
     private userService: UserService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.socialHandle();
+  }
+
+  socialHandle(): void {
+    this.route.queryParams.subscribe((params) => {
+      console.log("outlook params ==============>", params);
+      if (params['code']) {
+        const socialType = this.route.snapshot.params['social'];
+        switch (socialType) {
+          case 'outlook':
+            this.socialLoading = socialType;
+            this.userService.requestOutlookProfile(params['code']).subscribe(
+              (res) => {
+                this.socialLoading = '';
+                this.location.replaceState('/signup');
+                this.user = {
+                  ...this.user,
+                  ...res['data']
+                };
+                this.isSocialUser = true;
+                if (!this.user.user_name) {
+                  this.fullNameRequire = true;
+                }
+                this.step = 2;
+              },
+              (err) => {
+                this.socialLoading = '';
+                this.location.replaceState('/signup');
+                this.toast.error(
+                  `Error: ${
+                    err.message ||
+                    err.error ||
+                    (err.code) ||
+                    err ||
+                    'Unknown'
+                  }`,
+                  Strings.SOCIAL_SIGNUP_ERROR,
+                  { timeOut: 3000 }
+                );
+              }
+            );
+            break;
+          case 'gmail':
+            this.socialLoading = socialType;
+            this.userService.requestGoogleProfile(params['code']).subscribe(
+              (res) => {
+                this.socialLoading = '';
+                this.location.replaceState('/signup');
+                this.user = {
+                  ...this.user,
+                  ...res['data']
+                };
+                this.isSocialUser = true;
+                if (!this.user.user_name) {
+                  this.fullNameRequire = true;
+                }
+                this.step = 2;
+              },
+              (err) => {
+                this.socialLoading = '';
+                this.location.replaceState('/signup');
+                this.toast.error(
+                  `Error: ${
+                    err.message ||
+                    err.error ||
+                    (err.code) ||
+                    err ||
+                    'Unknown'
+                  }`,
+                  Strings.SOCIAL_SIGNUP_ERROR,
+                  { timeOut: 3000 }
+                );
+              }
+            );
+            break;
+          default:
+            this.step = 1;
+        }
+      }
+    });
+  }
 
   fillBasic(): any {
     if (!this.checkingUser && this.existing) {
@@ -192,5 +283,23 @@ export class RegisterComponent implements OnInit {
       .catch((err) => {
         this.toast.error('File Select', err);
       });
+  }
+
+  connectService(type): void {
+    this.socialLoading = type;
+    this.userService.requestOAuthUrl(type).subscribe(
+      (res) => {
+        this.socialLoading = '';
+        location.href = res['data'];
+      },
+      (err) => {
+        this.socialLoading = '';
+        this.toast.error(
+          `Error: ${err.message || err.error || err.code || err || 'Unknown'}`,
+          Strings.REQUEST_OAUTH_URL,
+          { timeOut: 3000 }
+        );
+      }
+    );
   }
 }

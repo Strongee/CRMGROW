@@ -17,18 +17,6 @@ import { StoreService } from './store.service';
   providedIn: 'root'
 })
 export class TaskService extends HttpService {
-  constructor(
-    errorService: ErrorService,
-    private http: HttpClient,
-    private storeService: StoreService
-  ) {
-    super(errorService);
-
-    this.sortOption$.subscribe(() => {
-      this.reload();
-    });
-  }
-
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loading$ = this.loadStatus.asObservable();
   loadSubscription: Subscription;
@@ -49,10 +37,25 @@ export class TaskService extends HttpService {
   pageSize$ = this.pageSize.asObservable();
   sortOption$ = this.sortOption.asObservable();
 
+  constructor(
+    errorService: ErrorService,
+    private http: HttpClient,
+    private storeService: StoreService
+  ) {
+    super(errorService);
+
+    this.sortOption$.subscribe(() => {
+      this.reload();
+    });
+  }
+
   changeDuration(duration: TaskDurationOption): void {
     this.durationOption.next(duration);
     const searchOption = this.searchOption.getValue();
     searchOption.deserialize(duration);
+    if (duration.status === undefined) {
+      delete searchOption.status;
+    }
     this.searchOption.next(searchOption);
     this.load(1);
   }
@@ -116,7 +119,7 @@ export class TaskService extends HttpService {
             count: res['data']['count'] || 0
           };
         }),
-        catchError(this.handleError('LOAD TASKS', null))
+        catchError(this.handleError('LOAD TASKS', { tasks: [], count: 0 }))
       );
   }
 
@@ -150,10 +153,10 @@ export class TaskService extends HttpService {
     );
   }
 
-  update(id: string, data): Observable<boolean> {
+  update(id: string, data: any): Observable<any> {
     return this.http.put(this.server + TASK.UPDATE + id, data).pipe(
-      map((res) => res),
-      catchError(this.handleError('UPDATE TASK', null))
+      map((res) => res['data']),
+      catchError(this.handleError('UPDATE TASK', false))
     );
   }
 
@@ -172,12 +175,19 @@ export class TaskService extends HttpService {
     return this.http
       .post(this.server + TASK.BULK_ARCHIVE, { follow_ups: ids })
       .pipe(
-        map((res) => res),
-        catchError(this.handleError('BULK TASK ARCHIVE', null))
+        map((res) => res['status']),
+        catchError(this.handleError('BULK TASK ARCHIVE', false))
       );
   }
 
-  complete(ids: any): Observable<any> {
+  complete(id: string): Observable<any> {
+    return this.http.post(this.server + TASK.COMPLETE, { follow_up: id }).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('TASK COMPLETE', null))
+    );
+  }
+
+  bulkComplete(ids: any): Observable<any> {
     return this.http
       .post(this.server + TASK.BULK_COMPLETE, { follow_ups: ids })
       .pipe(
@@ -186,10 +196,10 @@ export class TaskService extends HttpService {
       );
   }
 
-  bulkUpdate(data: any): Observable<any> {
+  bulkUpdate(data: any): Observable<boolean> {
     return this.http.post(this.server + TASK.BULK_UPDATE, data).pipe(
-      map((res) => res),
-      catchError(this.handleError('BULK TASK UPDATE', null))
+      map((res) => res['status']),
+      catchError(this.handleError('BULK TASK UPDATE', false))
     );
   }
 
@@ -197,7 +207,6 @@ export class TaskService extends HttpService {
     this.loadStatus.next(STATUS.NONE);
     this.searchOption.next(new TaskSearchOption());
     this.durationOption.next(new TaskDurationOption());
-    this.sortOption.next(-1);
     this.total.next(0);
     this.page.next(1);
     this.pageSize.next(20);

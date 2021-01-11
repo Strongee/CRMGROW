@@ -1,0 +1,26 @@
+.notification-item > .icon {
+  mat-icon {
+    width: 40px;
+    font-size: 40px;
+    color: red;
+  }
+}
+.notification-item {
+  &:hover {
+    background-color: aliceblue;
+  }
+
+  .content {
+    .time {
+      font-size: 12px;
+      opacity: 0.56;
+    }
+    a {
+      font-weight: 700;
+    }
+  }
+
+  &:not(.readed) {
+    background-color: aliceblue;
+  }
+}

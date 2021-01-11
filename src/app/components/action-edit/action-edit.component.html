@@ -3,17 +3,27 @@
 </div>
 <form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? updateAction() : false"
   [class.was-validated]="submitted">
-  <mat-dialog-content class="content-section">
+  <mat-dialog-content class="content-section" [class]="type">
     <div class="action-setting">
       <ng-container
         *ngIf="type == 'send_email_video' || type == 'send_text_video' || type == 'send_email_pdf' || type == 'send_text_pdf' || type == 'send_email_image' || type == 'send_text_image' ">
-        <ng-container *ngIf="materialsLoading">
-          <app-loading-overlay [type]="'material_1'"></app-loading-overlay>
-        </ng-container>
-        <div class="temlate-container mr-lg-5 mr-md-0">
-          <ng-container *ngIf="!materialsLoading">
-            <app-data-empty [type]="'material'" *ngIf="!materials.length"></app-data-empty>
-            <div class="material-container mt-2">
+        <div class="temlate-container mr-lg-5 mr-md-3 mr-sm-0">
+          <ng-container *ngIf="materialsLoading">
+            <div class="list-loading text-center">
+              <div class="loader mt-5"></div>
+              <h4 class="fw-600 mt-2">Loading materials...</h4>
+            </div>
+          </ng-container>
+          <div class="empty-list" *ngIf="!materialsLoading && materials.length == 0">
+            <div class="object-icon v-center">
+              <i class="i-icon i-template d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no materials.
+            </h4>
+          </div>
+          <div class="material-container mt-2">
+            <ng-container *ngIf="!materialsLoading">
               <ng-container *ngFor="let materialItem of materials">
                 <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material._id == materialItem._id">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material._id == materialItem._id">
@@ -28,15 +38,12 @@
                   </div>
                 </div>
               </ng-container>
-            </div>
-            <!--          <ng-container *ngIf="materials.length">-->
-            <!--            <app-carousel [materials]="materials" [value]="material ? material['_id'] : ''" (select)="toggleMaterial($event)"></app-carousel>-->
-            <!--          </ng-container>-->
-          </ng-container>
+            </ng-container>
+          </div>
+          <div class="text-danger error" *ngIf="materialError">{{materialError}}</div>
         </div>
       </ng-container>
-      <div class="text-danger error" *ngIf="materialError">{{materialError}}</div>
-      <div class="contents-container w-100 mt-lg-0 mt-md-3 mt-sm-3 mt-3">
+      <div class="contents-container w-100 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
         <ng-container *ngIf="!action['condition']">
           <div class="row">
             <div class="col-12">
@@ -143,7 +150,7 @@
                 </div>
               </div>
             </ng-container>
-            <div class="col-12" *ngIf="action['period'] == 'custom_date'">
+            <div class="col-12" *ngIf="action['period'] == 'custom_date' && type != 'note'">
               <div class="d-flex m-0">
                 <div class="form-group mb-0">
                   <label class="theme-label">CUSTOM TIME DELAY <span class="description">(IN DAYS)</span></label>
@@ -183,17 +190,46 @@
                   </div>
                 </div>
               </div>
-              <div class="col-12 mt-2" *ngIf="followDueOption === 'date'; else followTimeDelay">
+              <div class="col-12 mt-3" *ngIf="followDueOption === 'date'; else followTimeDelay">
                 <div class="row">
                   <div class="col-6">
                     <div class="form-group has-feedback calendar position-relative"
                          [class.has-error]="!action['due_date'] && submitted">
-                      <label class="theme-label">FOLLOW UP DATE</label>
-                      <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
-                             [(ngModel)]="due_date" ngbDatepicker #d="ngbDatepicker" [firstDayOfWeek]="7" (click)="d.toggle()" type="text"
-                             [required]="followDueOption === 'date'" [disabled]="followDueOption !== 'date'" />
-                      <span class="invalid-feedback"
-                            *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
+                      <div class="form-group">
+                        <label class="theme-label">FOLLOW UP DATE</label>
+                        <div class="v-center">
+                          <div class="input-group-prepend calendar-wrapper">
+                            <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+                          </div>
+                          <div ngbDropdown>
+                            <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDate" ngbDropdownToggle type="text" required/>
+                            <div ngbDropdownMenu class="date-picker p-3">
+                              <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getDateTime() | date : 'MMMM d yyyy' }}</div>
+                              <div class="picker-body v-center justify-content-between">
+                                <div classs="date-picker">
+                                  <ngb-datepicker name="select_date" #dp [(ngModel)]="due_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
+                                  <div class="action-button mt-2" align="end">
+                                    <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
+                                    <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setDateTime()" ngbDropdownToggle>Set</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <span
+                          class="invalid-error f-3 font-weight-bold c-red"
+                          *ngIf="due_date['year'] == '' && due_date['month'] == '' && due_date['day'] == '' && submitted"
+                        >
+                          Date is required
+                        </span>
+                      </div>
+<!--                      <label class="theme-label">FOLLOW UP DATE</label>-->
+<!--                      <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"-->
+<!--                             [(ngModel)]="due_date" ngbDatepicker #d="ngbDatepicker" [firstDayOfWeek]="7" (click)="d.toggle()" type="text"-->
+<!--                             [required]="followDueOption === 'date'" [disabled]="followDueOption !== 'date'" />-->
+<!--                      <span class="invalid-feedback"-->
+<!--                            *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>-->
                     </div>
                   </div>
                   <div class="col-6">
@@ -211,7 +247,7 @@
                 </div>
               </div>
               <ng-template #followTimeDelay>
-                <div class="col-12">
+                <div class="col-12 mt-2">
                   <div class="form-group has-feedback">
                     <label class="theme-label">TIME UNTIL FOLLOW UP IS DO <span class="description">(IN HOURS)</span></label>
                     <input type="number" class="form-control theme-control" [(ngModel)]="due_duration" name="duration" #duration="ngModel"
@@ -225,14 +261,14 @@
             </div>
           </div>
         </ng-container>
-        <ng-container *ngIf="type==='note'">
+        <ng-container *ngIf="type=='note'">
           <div class="action-form">
             <div class="form-group has-feedback"
                  [class.has-error]="note.errors && (note.touched || note.dirty|| submitted) && submitted">
-              <label class="theme-label mt-3">Title</label>
-              <input type="text" class="form-control" [(ngModel)]="action['title']" name="title" #title="ngModel" required>
-              <span class="invalid-feedback"
-                    *ngIf="title.errors && (title.dirty || title.touched || submitted) && submitted">Title is required.</span>
+<!--              <label class="theme-label mt-3">Title</label>-->
+<!--              <input type="text" class="form-control" [(ngModel)]="action['title']" name="title" #title="ngModel" required>-->
+<!--              <span class="invalid-feedback"-->
+<!--                    *ngIf="title.errors && (title.dirty || title.touched || submitted) && submitted">Title is required.</span>-->
               <label class="theme-label mt-3">NOTE CONTENT</label>
               <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in note."
                         name="note" #note="ngModel" rows="6" required></textarea>
@@ -360,7 +396,7 @@
             <div class="form-group has-feedback" [class.has-error]="!action['content'] && submitted">
               <ng-container *ngIf="type == 'send_email_video' || type == 'send_text_video'
                                    || type == 'send_email_pdf' || type == 'send_text_pdf'
-                                   || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
+                                   || type == 'send_email_image' || type == 'send_text_image'; else noContentMaterial">
                 <div class="v-center label-group">
                   <label class="theme-label">CONTENT</label>
                   <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
@@ -389,7 +425,7 @@
                   </div>
                 </div>
               </ng-container>
-              <ng-template #noMaterial>
+              <ng-template #noContentMaterial>
                 <label class="theme-label">CONTENT</label>
                 <div class="d-flex flex-wrap field-actions mb-2">
                   <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
@@ -417,15 +453,14 @@
                   </div>
                 </div>
               </ng-template>
-              <quill-editor placeholder="Enter mail content" [(ngModel)]="action['content']" [modules]="config"
-                            name="mailContent" [styles]="{height: '240px'}" #mailContent="ngModel" required
-                            (onEditorCreated)="getEditorInstance($event)"
-                            [class.has-error]="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted"
-                            class="rounded" #emailEditor>
-              </quill-editor>
-              <span class="error text-danger"
-                    *ngIf="mailContent.errors && (mailContent.touched || mailContent.dirty || submitted) && submitted">Content
-              is required</span>
+              <app-html-editor
+                [(value)]="action.content"
+                placeholder="Enter email content..."
+                required="true"
+                [style]="{height: '240px'}"
+                #editor
+              >
+              </app-html-editor>
             </div>
           </div>
         </ng-container>
@@ -451,7 +486,7 @@
           <ng-container [ngSwitch]="contactUpdateOption">
             <div *ngSwitchCase="'update_label'">
               <label class="theme-label mt-3">UPDATE DETAILS <span class="description">(NEW LABEL)</span></label>
-              <app-label-select type="form"></app-label-select>
+              <app-label-select type="form" [value]="commandLabel" (valueChange)="commandLabel = $event"></app-label-select>
 <!--              <select class="form-control theme-control" (change)="changeLabel($event.target.value)"-->
 <!--                      [ngStyle]="{'background-color': getLabelById(commandLabel).color, 'color': getLabelById(commandLabel).font_color}">-->
 <!--                <option selected *ngFor="let label of labels" [selected]="commandLabel === label._id"-->
@@ -531,17 +566,40 @@
                         <option value="update_due_duration">Update Due Duration</option>
                       </select>
                     </div>
-                    <div class="col-12 mt-2" *ngIf="updateFollowDueOption === 'update_due_date'">
+                    <div class="col-12 mt-3" *ngIf="updateFollowDueOption === 'update_due_date'">
                       <div class="row">
                         <div class="col-6">
                           <div class="form-group has-feedback calendar position-relative"
                                [class.has-error]="!action.due_date && submitted">
-                            <label class="theme-label">FOLLOW UP DATE</label>
-                            <input class="form-control datepicker right theme-control" placeholder="Select date" name="dp" #dp="ngModel"
-                                   [(ngModel)]="update_due_date" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"
-                                   required [firstDayOfWeek]="7"/>
-                            <span class="invalid-feedback"
-                                  *ngIf="dp.errors && ( dp.touched || dp.dirty || submitted ) &&submitted">Due date is required.</span>
+                            <div class="form-group">
+                              <label class="theme-label">FOLLOW UP DATE</label>
+                              <div class="v-center">
+                                <div class="input-group-prepend calendar-wrapper">
+                                  <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
+                                </div>
+                                <div ngbDropdown>
+                                  <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDate" ngbDropdownToggle type="text" required/>
+                                  <div ngbDropdownMenu class="date-picker p-3">
+                                    <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getUpdateDateTime() | date : 'MMMM d yyyy' }}</div>
+                                    <div class="picker-body v-center justify-content-between">
+                                      <div classs="date-picker">
+                                        <ngb-datepicker name="select_date" #dp [(ngModel)]="update_due_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
+                                        <div class="action-button mt-2" align="end">
+                                          <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
+                                          <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setUpdateDateTime()" ngbDropdownToggle>Set</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <span
+                                class="invalid-error f-3 font-weight-bold c-red"
+                                *ngIf="update_due_date['year'] == '' && update_due_date['month'] == '' && update_due_date['day'] == '' && submitted"
+                              >
+                                Date is required
+                              </span>
+                            </div>
                           </div>
                         </div>
                         <div class="col-6">
@@ -602,7 +660,7 @@
       </div>
     </div>
   </mat-dialog-content>
-  <mat-dialog-actions align="end" class="mx-0">
+  <mat-dialog-actions align="end" class="mx-0 mt-2">
     <button class="btn c-blue ml-1 mr-0" type="button" mat-dialog-close>Close</button>
     <button class="btn btn-primary ml-1 mr-0" type="submit">Update</button>
   </mat-dialog-actions>

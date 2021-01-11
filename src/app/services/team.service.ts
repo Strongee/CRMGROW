@@ -235,6 +235,14 @@ export class TeamService extends HttpService {
         catchError(this.handleError('ACCEPT TEAM INVITATION', []))
       );
   }
+  declineInvitation(teamId): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.DECLINE_INVITATION + teamId, {})
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('DECLINE TEAM INVITATION', []))
+      );
+  }
   shareVideos(teamId, videoIds): Observable<any> {
     return this.httpClient
       .post(this.server + TEAM.SHARE_VIDEOS, {
@@ -266,6 +274,28 @@ export class TeamService extends HttpService {
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('TEAM SHARE IMAGES', []))
+      );
+  }
+  shareMaterials(teamId, data): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.SHARE_MATERIALS, {
+        team_id: teamId,
+        ...data
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM SHARE MATERIALS', []))
+      );
+  }
+  shareContacts(userId, contacts): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.SHARE_CONTACTS, {
+        user: userId,
+        contacts
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM SHARE CONTACTS', []))
       );
   }
   removeVideo(id): Observable<any> {

@@ -556,10 +556,6 @@ export const DialogSettings = {
     width: '98vw',
     maxWidth: '394px'
   },
-  CONFIRM: {
-    width: '98vw',
-    maxWidth: '400px'
-  },
   ASSISTANT: {
     width: '98vw',
     maxWidth: '394px'
@@ -568,6 +564,11 @@ export const DialogSettings = {
     width: '98vw',
     maxWidth: '840px',
     disableClose: true
+  },
+  CONFIRM: {
+    position: { top: '100px' },
+    width: '98vw',
+    maxWidth: '400px'
   }
 };
 

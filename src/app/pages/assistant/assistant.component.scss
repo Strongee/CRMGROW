@@ -35,6 +35,7 @@
             align-items: center;
             width: 40px;
             height: 40px;
+            min-width: unset;
           
             .avatar {
               display: flex;
@@ -53,6 +54,11 @@
         }
         @media screen and (max-width: 576px) {
             width: 100%;
+        }
+        @media screen and (max-width: 400px) {
+            th span{
+                display: none;
+            }
         }
     }
 }

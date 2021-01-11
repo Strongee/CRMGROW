@@ -104,6 +104,10 @@ import { ActionsHeaderComponent } from './actions-header/actions-header.componen
 import { NoteEditComponent } from './note-edit/note-edit.component';
 import { TaskDeleteComponent } from './task-delete/task-delete.component';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.component';
+import { TextStatusComponent } from './text-status/text-status.component';
+import { EmailStatusComponent } from './email-status/email-status.component';
+import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
 
 @NgModule({
   declarations: [
@@ -206,7 +210,11 @@ import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
     AdditionalEditComponent,
     ActionsHeaderComponent,
     NoteEditComponent,
-    TaskDeleteComponent
+    TaskDeleteComponent,
+    DealStageCreateComponent,
+    TextStatusComponent,
+    EmailStatusComponent,
+    TeamContactShareComponent
   ],
   imports: [
     CommonModule,
@@ -279,7 +287,8 @@ import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
     AccordionComponent,
     SendEmailComponent,
     ContactEditComponent,
-    AdditionalEditComponent
+    AdditionalEditComponent,
+    DealStageCreateComponent
   ],
   bootstrap: [
     ContactCreateComponent,

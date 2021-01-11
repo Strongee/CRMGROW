@@ -8,7 +8,6 @@ import {
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
-import { FileService } from '../../services/file.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { OverlayService } from 'src/app/services/overlay.service';
@@ -21,7 +20,6 @@ import { ContactMergeComponent } from 'src/app/components/contact-merge/contact-
 import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
-  TIMES,
   REPEAT_DURATIONS,
   DialogSettings,
   CALENDAR_DURATION
@@ -34,13 +32,10 @@ import * as moment from 'moment';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
 import { TabItem } from 'src/app/utils/data.types';
-import { Task } from 'src/app/models/task.model';
-import { Note } from 'src/app/models/note.model';
+import { TaskDetail } from 'src/app/models/task.model';
 import { NoteService } from 'src/app/services/note.service';
 import { TaskService } from 'src/app/services/task.service';
 import { HandlerService } from 'src/app/services/handler.service';
-import { Template } from 'src/app/models/template.model';
-import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -77,7 +72,7 @@ export class ContactComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   selectedContact: Contact = new Contact();
   groupActions = {};
-  mainTimelines: ActivityDetail[] = [];
+  mainTimelines: DetailActivity[] = [];
   details: any = {};
   _id = '';
   next: string = null;
@@ -86,41 +81,6 @@ export class ContactComponent implements OnInit {
   mainPanel = true;
   secondPanel = true;
   additionalPanel = true;
-
-  task: Task = new Task();
-  task_date = {
-    year: '',
-    month: '',
-    day: ''
-  };
-  schedule_date = {
-    year: '',
-    month: '',
-    day: ''
-  };
-  scheduleDateTime = '';
-  planned = false;
-  selectedDateTime;
-  minDate: any;
-  task_time = '12:00:00.000';
-  schedule_time = '12:00:00.000';
-  times = TIMES;
-  taskSaving = false;
-
-  note: Note = new Note();
-  noteSaving = false;
-
-  emailSubmitted = false;
-  emailSending = false;
-  ccFlag = false;
-  bccFlag = false;
-  emailContacts: Contact[] = [];
-  ccContacts: Contact[] = [];
-  bccContacts: Contact[] = [];
-  emailSubject = '';
-  emailContent = '';
-  selectedTemplate: Template = new Template();
-  materials = [];
 
   selectedAutomation: Automation;
   ActionName = ActionName;
@@ -156,7 +116,6 @@ export class ContactComponent implements OnInit {
       if (res && res._id === this._id) {
         this.contact = res;
         this.selectedContact = res;
-        console.log('res', res);
         this.groupActivities();
         this.timeLineArrangement();
       } else {
@@ -298,13 +257,9 @@ export class ContactComponent implements OnInit {
         }
       })
       .afterClosed()
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.storeService.selectedContact$.subscribe((res) => {
-            if (res) {
-              this.contact = res;
-            }
-          });
+      .subscribe((id) => {
+        if (id) {
+          this.loadContact(id);
         }
       });
   }
@@ -320,12 +275,10 @@ export class ContactComponent implements OnInit {
         }
       })
       .afterClosed()
-      .subscribe(() => {
-        this.storeService.selectedContact$.subscribe((res) => {
-          if (res) {
-            this.contact = res;
-          }
-        });
+      .subscribe((id) => {
+        if (id) {
+          this.loadContact(id);
+        }
       });
   }
 
@@ -361,19 +314,25 @@ export class ContactComponent implements OnInit {
   /**
    * Open Dialog to create new task
    */
-  createTask(): void {
-    this.taskSaving = true;
-    this.taskService
-      .create({ ...this.task, contact: this._id })
-      .subscribe((res) => {
-        this.taskSaving = false;
-        this.handlerService.registerActivity$(res);
-        this.handlerService.activityAdd$([this._id], 'task');
-      });
+  openTaskDlg(): void {
+    this.dialog.open(TaskCreateComponent, {
+      ...DialogSettings.TASK,
+      data: {
+        contacts: [this.selectedContact]
+      }
+    });
   }
 
-  openTaskDlg(): void {
-    this.dialog.open(TaskCreateComponent, DialogSettings.TASK);
+  /**
+   * Create Note
+   */
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.NOTE,
+      data: {
+        contacts: [this.selectedContact]
+      }
+    });
   }
 
   openSendEmail(): void {
@@ -393,54 +352,16 @@ export class ContactComponent implements OnInit {
     });
   }
 
-  /**
-   * Create Note
-   */
-  openNoteDlg(): void {
-    this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
+  insertActivity(activity: DetailActivity): void {
+    const group = this.generateUniqueId(activity);
+    if (this.groupActions[group]) {
+      this.groupActions[group].push(activity);
+    } else {
+      activity.group_id = group;
+      this.groupActions[group] = [activity];
+      this.mainTimelines.unshift(activity);
+    }
   }
-
-  /************************************
-   * Email Sending Panel Relative Functions
-   ************************************/
-  /**
-   * Populate the selected template content
-   * @param template : Template
-   */
-  selectTemplate(template: Template): void {
-    this.selectedTemplate = template;
-    this.emailSubject = this.selectedTemplate.subject;
-    this.emailContent = this.selectedTemplate.content;
-    // Attach the Selected Material Content
-  }
-
-  /**
-   * Open the Material Select Dialog
-   */
-  openMaterialsDlg(): void {
-    const content = this.emailContent;
-    const materials = this.helperSerivce.getMaterials(content);
-    this.dialog
-      .open(MaterialAddComponent, {
-        width: '98vw',
-        maxWidth: '500px',
-        data: {
-          hideMaterials: materials
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && res.materials) {
-          this.materials = _.intersectionBy(this.materials, materials, '_id');
-          this.materials = [...this.materials, ...res.materials];
-          for (let i = 0; i < res.materials.length; i++) {
-            const material = res.materials[i];
-            this.htmlEditor.insertMaterials(material);
-          }
-        }
-      });
-  }
-
   /**************************************
    * Timeline Actions
    **************************************/
@@ -480,7 +401,7 @@ export class ContactComponent implements OnInit {
       .open(TaskEditComponent, {
         width: '98vw',
         maxWidth: '394px',
-        data
+        data: new TaskDetail().deserialize(data)
       })
       .afterClosed()
       .subscribe((res) => {
@@ -496,22 +417,21 @@ export class ContactComponent implements OnInit {
           title: 'Complete Task',
           message: 'Are you sure to complete the task?',
           cancelLabel: 'Cancel',
-          confirmLabel: 'Confirm'
+          confirmLabel: 'Complete'
         }
       })
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
           this.taskService
-            .complete([activity.activity_detail._id])
+            .complete(activity.activity_detail._id)
             .subscribe((res) => {
-              if (res['status']) {
-                this.contact = new ContactDetail();
-                this.storeService.selectedContact$.subscribe((res) => {
-                  this.contact = res;
-                  this.groupActivities();
-                  this.timeLineArrangement();
-                });
+              if (res) {
+                this.handlerService.updateTasks$(
+                  [activity.activity_detail._id],
+                  { status: 1 }
+                );
+                this.handlerService.registerActivity$(res);
               }
             });
         }
@@ -521,7 +441,7 @@ export class ContactComponent implements OnInit {
   archiveTask(activity: any): void {
     this.dialog
       .open(ConfirmComponent, {
-        position: { top: '100px' },
+        ...DialogSettings.CONFIRM,
         data: {
           title: 'Archive Task',
           message: 'Are you sure to archive the task?',
@@ -534,40 +454,31 @@ export class ContactComponent implements OnInit {
         if (confirm) {
           this.taskService
             .archive([activity.activity_detail._id])
-            .subscribe((res) => {
-              if (res['status']) {
-                const task = this.contact.activity.filter(
-                  (detailActivity) => detailActivity._id != activity._id
-                );
-                this.contact.activity = [];
-                this.contact.activity = task;
-                this.changeDetectorRef.detectChanges();
+            .subscribe((status) => {
+              if (status) {
+                this.handlerService.archiveTask$(activity.activity_detail._id);
               }
             });
         }
       });
   }
 
-  deleteTask(activity: any): void {
-    this.dialog.open(ConfirmComponent, {
-      position: { top: '100px' },
-      data: {
-        title: 'Delete Task',
-        message: 'Are you sure to delete the task?',
-        cancelLabel: 'Cancel',
-        confirmLabel: 'Confirm'
-      }
-    });
-  }
-
   updateNote(activity: any): void {
-    this.dialog.open(NoteEditComponent, {
-      width: '98vw',
-      maxWidth: '394px',
-      data: {
-        note: activity
-      }
-    });
+    this.dialog
+      .open(NoteEditComponent, {
+        width: '98vw',
+        maxWidth: '394px',
+        data: {
+          note: activity,
+          contact_name: this.contact.fullName
+        }
+      })
+      .afterClosed()
+      .subscribe((note) => {
+        if (note) {
+          activity.activity_detail = note;
+        }
+      });
   }
 
   deleteNote(activity: any): void {
@@ -587,7 +498,14 @@ export class ContactComponent implements OnInit {
           this.noteService
             .delete(activity.activity_detail._id)
             .subscribe((res) => {
-              console.log('##', res);
+              if (res) {
+                this.mainTimelines.some((e, index) => {
+                  if (e._id === activity._id) {
+                    e.activity_detail = null;
+                    return true;
+                  }
+                });
+              }
             });
         }
       });

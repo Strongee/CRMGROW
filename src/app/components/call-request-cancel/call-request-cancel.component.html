@@ -5,10 +5,13 @@
     <div class="my-3 f-3">Inform organizer why you are cancelling this call</div>
     <div class="my-3 form-group">
       <label>Message</label>
-      <quill-editor placeholder="Enter Text" [(ngModel)]="message" [modules]="config" name="messageContent"
-                    [styles]="{height: '120px'}" #messageContent="ngModel" required (onEditorCreated)="getEditorInstance($event)"
-                    [class.has-error]="messageContent.errors && (messageContent.touched || messageContent.dirty )" class="rounded" #messageEditor>
-      </quill-editor>
+      <app-html-editor
+        [(value)]="message"
+        placeholder="Enter Text..."
+        [style]="{height: '200px'}"
+        #editor
+      >
+      </app-html-editor>
       <div class="invalid-feedback" [class.invalid]="!message && submitted">Message is required.</div>
     </div>
   </mat-dialog-content>

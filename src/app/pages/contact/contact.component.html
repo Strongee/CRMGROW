@@ -1,5 +1,5 @@
-<div class="page-content">
-  <div class="v-center page-header pb-4c">
+<div class="page-content pt-0">
+  <!-- <div class="v-center page-header pb-4c">
     <div class="v-center op-64 c-pointer" (click)="goToBack()">
       <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
       <span class="f-5 font-weight-bold">Back to contacts</span>
@@ -7,9 +7,13 @@
     <div class="v-center ml-auto">
       <span>Person 1 of 20</span>
     </div>
-  </div>
+  </div> -->
   <div class="contact-panel d-flex">
     <div class="contact-info-panel pr-3">
+      <div class="v-center op-56 c-pointer mb-4 mt-3" (click)="goToBack()">
+        <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
+        <span class="f-5 font-weight-bold">Back to contacts</span>
+      </div>
       <div class="contact-main v-center">
         <div class="contact-avatar lg font-weight-bold">
           {{contact.avatarName}}
@@ -18,12 +22,14 @@
           <div class="f-20 font-weight-bold">{{contact.fullName}}</div>
           <div class="f-3 op-40">{{contact.last_activity_time | date :'MM/dd/yyyy'}}</div>
         </div>
-        <div ngbDropdown class="v-center btn btn-blue ml-auto button-more">
-          <span class="f-6 font-weight-bold text-white c-pointer mr-2" ngbDropdownToggle>
-            Actions
-          </span>
-          <i class="d-block i-icon i-triangle-down bgc-white"></i>
-          <div ngbDropdownMenu class="light">
+        <div ngbDropdown class="ml-auto button-more p-0">
+          <div class="v-center btn btn-blue" ngbDropdownToggle>
+            <span class="f-6 font-weight-bold text-white c-pointer px-2">
+              Actions
+            </span>
+            <i class="d-block i-icon i-triangle-down bgc-white ml-2"></i>
+          </div>
+          <div ngbDropdownMenu class="light action-menu">
             <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">
               <span class="ml-1 f-3 font-weight-bold">Create group call</span>
             </button>
@@ -340,7 +346,7 @@
                   </div>
                   <div class="v-center">
                     <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
-                    <div ngbDropdown class="button-more p-1 rounded">
+                    <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                       <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
                         <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                       </a>
@@ -373,10 +379,10 @@
                           <button 
                             class="v-center border-0 py-1 c-dark dropdown-item"
                             *ngIf="activity.content.indexOf('completed') !== -1"
-                            (click)="deleteTask(activity)"
+                            (click)="archiveTask(activity)"
                           >
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                            <span class="ml-3 f-2 font-weight-bold">Archive</span>
                           </button>
                         </div>
                         <div ngbDropdownMenu class="light py-1" *ngSwitchCase="'notes'">
@@ -472,16 +478,16 @@
                         <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail.content">
                           <ng-template #show>
                             <div class="content f-6 position-relative">
-                              <div>{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
+                              <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
                               <div class="gradient-bottom"></div>
                               <div class="f-3 fw-600 c-blue mt-1">
                                 Expand
-                              </div>      
+                              </div>
                             </div>
                           </ng-template>
                           <ng-template #hide>
                             <div class="content">
-                              <div class="f-6">{{activity.activity_detail.content}}</div>
+                              <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
                               <div class="f-3 fw-600 c-blue mt-1">
                                 Collapse
                               </div>

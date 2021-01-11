@@ -1,8 +1,16 @@
 <div class="page-content bg-white">
   <div class="page-header mb-2">
+    <h1 class="page-title mb-3">Dashboard</h1>
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
     </app-slide-tab>
-    <!-- <div class="statistics-wrapper mb-3 d-flex flex-column mx-2">
+  </div>
+  <div>
+    <app-tasks [class.d-none]="selectedTab.id !== 'tasks'"></app-tasks>
+    <app-activities [class.d-none]="selectedTab.id === 'tasks'"></app-activities>
+  </div>
+</div>
+
+<!-- <div class="statistics-wrapper mb-3 d-flex flex-column mx-2">
       <div class="small ml-auto mr-1 c-pointer" ngbDropdown>
         <div class="text-uppercase opacity-8 f-1" ngbDropdownToggle>
           {{duration}}
@@ -40,15 +48,6 @@
         </div>
       </div>
     </div> -->
-  </div>
-  <div>
-    <app-tasks [class.d-none]="selectedTab.id !== 'tasks'"></app-tasks>
-    <app-activities [class.d-none]="selectedTab.id === 'tasks'"></app-activities>
-  </div>
-
-</div>
-
-
   <!-- <div class="mt-5">
     <div class="v-center">
       <app-slide-tab [tabs]="analyticsTabs" [selected]="selectedAnalyticsTab" (onChange)="changeAnalyticsTab($event)">

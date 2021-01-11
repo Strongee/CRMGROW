@@ -122,7 +122,7 @@ export class HandlerService {
     // this.storeService.tasks.next(tasks);
   }
 
-  activityAdd$(_ids: string[], type: string): void {
+  updateLastActivities$(_ids: string[], type: string): void {
     const activity = new PureActivity();
     switch (type) {
       case 'note':
@@ -149,6 +149,11 @@ export class HandlerService {
         e.last_activity = activity;
       }
     });
+  }
+
+  activityAdd$(_ids: string[], type: string): void {
+    // Contacts list update
+    this.updateLastActivities$(_ids, type);
     // Detail Page update
 
     // Activities Page Update
@@ -159,18 +164,62 @@ export class HandlerService {
     const activity = new DetailActivity().deserialize(data['activity']);
     activity.activity_detail = { ...data, activity: undefined };
     const currentContact = this.storeService.selectedContact.getValue();
-    currentContact.activity.push(activity);
+    let contact = '';
+    if (data.contact instanceof Array) {
+      contact = data.contact[0];
+    } else {
+      contact = data.contact;
+    }
+    if (currentContact._id === contact) {
+      currentContact.activity.push(activity);
+      this.storeService.selectedContact.next(currentContact);
+    }
+  }
+  archiveTask$(task_id: string): void {
+    const currentContact = this.storeService.selectedContact.getValue();
+    currentContact.activity.forEach((e) => {
+      const detail = e.activity_detail;
+      if (detail && detail._id === task_id) {
+        delete e.activity_detail;
+      }
+    });
     this.storeService.selectedContact.next(currentContact);
   }
 
   updateTasks$(_ids: string[], data: any): void {
     const tasks = this.storeService.tasks.getValue();
+    const activities = [];
     tasks.forEach((e) => {
       if (_ids.indexOf(e._id) !== -1) {
         e.deserialize(data);
+        // Create new Activity with task contact
+        const activity = new Activity();
+        if (data.status) {
+          activity.content = 'completed follow up';
+        } else {
+          activity.content = 'updated follow up';
+        }
+        activity.type = 'follow_ups';
+        activity.contacts = e.contact;
+        activities.push(activity);
       }
     });
+    if (activities.length !== _ids.length) {
+      this.activityService.reload();
+    } else {
+      const page = this.activityService.page.getValue();
+      const pageSize = this.activityService.pageSize.getValue();
+      if (page === 1) {
+        let activityList = this.storeService.activities.getValue();
+        activityList = [...activities, ...activityList];
+        activityList.splice(pageSize);
+        this.storeService.activities.next(activityList);
+      } else {
+        this.activityService.reload();
+      }
+    }
   }
+  createTask$(contacts: any, task: any): void {}
 
   clearData(): void {
     this.activityService.clear$();

@@ -1,10 +1,10 @@
 <div class="page-content p-0">
     <div class="v-center justify-content-between mb-3">
         <h6 class="f-3 font-weight-bold mb-0">Tag manager</h6>
-        <button class="v-center btn btn-blue f-3 font-weight-bold text-white add-tag">
+        <!-- <button class="v-center btn btn-blue f-3 font-weight-bold text-white add-tag">
             <i class="i-icon i-plus bg-white d-block mr-2"></i>
             New tag
-        </button>
+        </button> -->
     </div>
     <div class="table">
         <div class="v-center pt-3 pb-2 table-header">
@@ -28,7 +28,7 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <div class="tag-col px-1">
-                                    <span class="f-3 bgc-pale px-2 py-1 tag-label">{{tag._id}}</span>
+                                    <div class="f-3 bgc-pale px-2 py-1 tag-label">{{tag._id}}</div>
                                 </div>
                                 <div class="edit-col text-center px-1" (click)="editTag(tag)">
                                     <i class="d-block mx-auto i-icon i-edit bgc-dark"></i>
@@ -37,7 +37,7 @@
                                     {{tag.count}}
                                 </div>
                                 <div class="delete-col text-right px-1" (click)="deleteTag(tag)">
-                                    <i class="d-block mx-auto i-icon i-trash bgc-red"></i>
+                                    <i class="d-block ml-auto i-icon i-trash bgc-red"></i>
                                 </div>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
