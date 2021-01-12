@@ -108,6 +108,7 @@ import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.
 import { TextStatusComponent } from './text-status/text-status.component';
 import { EmailStatusComponent } from './email-status/email-status.component';
 import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
+import { SelectMemberComponent } from './select-member/select-member.component';
 import { PlanSelectComponent } from './plan-select/plan-select.component';
 import { PlanBuyComponent } from './plan-buy/plan-buy.component';
 
@@ -217,6 +218,7 @@ import { PlanBuyComponent } from './plan-buy/plan-buy.component';
     TextStatusComponent,
     EmailStatusComponent,
     TeamContactShareComponent,
+    SelectMemberComponent,
     PlanSelectComponent,
     PlanBuyComponent
   ],
@@ -292,6 +294,7 @@ import { PlanBuyComponent } from './plan-buy/plan-buy.component';
     SendEmailComponent,
     ContactEditComponent,
     AdditionalEditComponent,
+    SelectMemberComponent,
     DealStageCreateComponent,
     PlanSelectComponent,
     PlanBuyComponent

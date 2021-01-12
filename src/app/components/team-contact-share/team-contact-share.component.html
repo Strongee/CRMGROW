@@ -9,6 +9,14 @@
         </div>
       </div>
       <div class="my-3">
+        <label>Select member</label>
+        <app-select-member
+          [members]="allMembers()"
+          (onSelect)="selectMember($event)"
+        >
+        </app-select-member>
+      </div>
+      <div class="my-3">
         <label>Invite contacts</label>
         <app-select-contact
           (onSelect)="addContacts($event)"
