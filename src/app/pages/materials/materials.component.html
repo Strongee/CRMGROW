@@ -2,11 +2,11 @@
   <div class="page-header">
     <h1 class="f-24 font-weight-bold m-0">Materials</h1>
     <div class="v-center justify-content-between ml-2">
-      <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record p-2" (click)="recordSetting()">
+      <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record p-2" (click)="recordSetting()" [disabled]="recording">
         <i class="bgc-white i-icon i-record mr-2"></i>
         Record new video
       </button>
-      <button class="v-center btn btn-blue shadow font-weight-bold text-white small-button-record p-2" (click)="recordSetting()">
+      <button class="v-center btn btn-blue shadow font-weight-bold text-white small-button-record p-2" (click)="recordSetting()" [disabled]="recording">
         <i class="bgc-white i-icon i-record mr-2"></i>
         Record
       </button>
@@ -190,7 +190,7 @@
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
                     <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
-                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
+                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video, 'video')">
                         <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-1 f-3 c-dark">Send</span>
                       </button>
@@ -358,7 +358,7 @@
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
                     <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
-                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
+                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video, 'video')">
                         <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-1 f-3 c-dark">Send</span>
                       </button>
@@ -526,7 +526,7 @@
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
                     <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
-                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
+                      <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video, 'video')">
                         <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-1 f-3 c-dark">Send</span>
                       </button>
@@ -748,7 +748,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf)">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -895,7 +895,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf)">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -1042,7 +1042,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf)">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -1255,7 +1255,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image)">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -1402,7 +1402,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image)">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>
@@ -1549,7 +1549,7 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image)">
+                    <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                       <span class="ml-1 f-3 c-dark">Send</span>
                     </button>

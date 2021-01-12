@@ -32,9 +32,9 @@ export class MaterialsComponent implements OnInit {
   garbage: Garbage = new Garbage();
   BULK_ACTIONS = BulkActions.Materials;
   tabs: TabItem[] = [
-    { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
-    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
-    { icon: 'i-icon i-image', label: 'IMAGE', id: 'images' }
+    { icon: 'i-icon i-video', label: 'VIDEO', id: 'video' },
+    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdf' },
+    { icon: 'i-icon i-image', label: 'IMAGE', id: 'image' }
   ];
   selectedTab: TabItem = this.tabs[0];
   siteUrl = environment.website;
@@ -77,6 +77,7 @@ export class MaterialsComponent implements OnInit {
   editedPdfs;
   captureImages = [];
   editedImages;
+  recording = false;
 
   constructor(
     private dialog: MatDialog,
@@ -218,14 +219,15 @@ export class MaterialsComponent implements OnInit {
     this.router.navigate([`./materials/folder/${type}`]);
   }
 
-  sendMaterial(material: any): void {
+  sendMaterial(material: any, type: string): void {
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',
       maxWidth: '600px',
       disableClose: false,
       data: {
-        material: [material]
+        material: [material],
+        materialType: type
       }
     });
   }
@@ -896,6 +898,7 @@ export class MaterialsComponent implements OnInit {
   }
 
   recordSetting(): void {
+    this.recording = true;
     this.dialog
       .open(RecordSettingDialogComponent, {
         position: { top: '0px' },
@@ -906,6 +909,7 @@ export class MaterialsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        this.recording = false;
         if (res) {
           this.ownVideos.push(res.data);
         }
@@ -943,7 +947,8 @@ export class MaterialsComponent implements OnInit {
           disableClose: false,
           data: {
             material: emailMaterial,
-            type: 'email'
+            mediaType: 'email',
+            materialType: this.selectedTab.id
           }
         });
         break;
@@ -977,14 +982,24 @@ export class MaterialsComponent implements OnInit {
           disableClose: false,
           data: {
             material: textMaterial,
-            type: 'text'
+            mediaType: 'text',
+            materialType: this.selectedTab.id
           }
         });
         break;
       case 'Select all':
-        this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
-        this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-        this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        this.selectedVideoLists.clear();
+        this.selectedPdfLists.clear();
+        this.selectedImageLists.clear();
+        if (this.selectedTab.id == 'video') {
+          this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
+        }
+        if (this.selectedTab.id == 'pdf') {
+          this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+        }
+        if (this.selectedTab.id == 'image') {
+          this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        }
         break;
       case 'Deselect':
         this.selectedVideoLists.clear();
