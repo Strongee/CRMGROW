@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import {TeamService} from "../../services/team.service";
 import {UserService} from "../../services/user.service";
+import {ContactService} from "../../services/contact.service";
 
 @Component({
   selector: 'app-team-contact-share',
@@ -13,6 +14,7 @@ export class TeamContactShareComponent implements OnInit {
 
   team: any;
   contacts: any[] = [];
+  member;
 
   submitted = false;
   contactOverflow = false;
@@ -22,6 +24,7 @@ export class TeamContactShareComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<TeamContactShareComponent>,
     private teamService: TeamService,
+    private contactService: ContactService,
     private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -39,7 +42,7 @@ export class TeamContactShareComponent implements OnInit {
 
   shareContacts(): void {
     this.submitted = true;
-    if (!this.team || !this.contacts.length) {
+    if (!this.team || !this.contacts.length || !this.member) {
       return;
     }
     this.loading = true;
@@ -48,13 +51,17 @@ export class TeamContactShareComponent implements OnInit {
       contacts.push(e._id);
     });
 
-    this.teamService
-      .shareContacts(this.userId, contacts)
+    this.contactService
+      .shareContacts(this.member._id, contacts)
       .subscribe((res) => {
         if (res) {
-          console.log("shared contacts ====================>", res);
+
         }
       });
+  }
+
+  selectMember(member): any {
+    this.member = member;
   }
 
   addContacts(contact): any {
@@ -75,5 +82,16 @@ export class TeamContactShareComponent implements OnInit {
       this.contacts.splice(index, 1);
       this.contactOverflow = false;
     }
+  }
+
+  allMembers(): any {
+    const members = [];
+    for (const owner of this.team.owner) {
+      members.push(owner);
+    }
+    for (const member of this.team.members) {
+      members.push(member);
+    }
+    return members;
   }
 }
