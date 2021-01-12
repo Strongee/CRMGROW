@@ -1042,10 +1042,6 @@ table {
 .page-table {
   thead tr:first-child th {
     position: sticky;
-    position: -webkit-sticky;
-    position: -moz-stikcy;
-    position: -o-stikcy;
-    position: -ms-stikcy;
     top: 64px;
     background-color: white;
     z-index: 2;
@@ -1578,10 +1574,6 @@ mat-expansion-panel {
   display: grid;
   grid-template-columns: 200px auto 200px;
   position: sticky;
-  position: -webkit-sticky;
-  position: -moz-stikcy;
-  position: -o-stikcy;
-  position: -ms-stikcy;
   bottom: 0px;
   background: white;
   z-index: 3;
