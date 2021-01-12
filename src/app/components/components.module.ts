@@ -107,6 +107,7 @@ import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { TextStatusComponent } from './text-status/text-status.component';
 import { EmailStatusComponent } from './email-status/email-status.component';
 import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
+import { SelectMemberComponent } from './select-member/select-member.component';
 
 @NgModule({
   declarations: [
@@ -212,7 +213,8 @@ import { TeamContactShareComponent } from './team-contact-share/team-contact-sha
     TaskDeleteComponent,
     TextStatusComponent,
     EmailStatusComponent,
-    TeamContactShareComponent
+    TeamContactShareComponent,
+    SelectMemberComponent
   ],
   imports: [
     CommonModule,
@@ -285,7 +287,8 @@ import { TeamContactShareComponent } from './team-contact-share/team-contact-sha
     AccordionComponent,
     SendEmailComponent,
     ContactEditComponent,
-    AdditionalEditComponent
+    AdditionalEditComponent,
+    SelectMemberComponent
   ],
   bootstrap: [
     ContactCreateComponent,
