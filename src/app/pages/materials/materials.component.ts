@@ -77,7 +77,6 @@ export class MaterialsComponent implements OnInit {
   editedPdfs;
   captureImages = [];
   editedImages;
-  recording = false;
 
   constructor(
     private dialog: MatDialog,
@@ -898,7 +897,9 @@ export class MaterialsComponent implements OnInit {
   }
 
   recordSetting(): void {
-    this.recording = true;
+    if (this.dialog.openDialogs.length > 0) {
+      return;
+    }
     this.dialog
       .open(RecordSettingDialogComponent, {
         position: { top: '0px' },
@@ -909,7 +910,6 @@ export class MaterialsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        this.recording = false;
         if (res) {
           this.ownVideos.push(res.data);
         }
