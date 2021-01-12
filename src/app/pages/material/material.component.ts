@@ -895,6 +895,9 @@ export class MaterialComponent implements OnInit {
   }
 
   recordSetting(): void {
+    if (this.dialog.openDialogs.length > 0) {
+      return;
+    }
     this.dialog
       .open(RecordSettingDialogComponent, {
         position: { top: '0px' },
