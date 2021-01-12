@@ -1,0 +1,64 @@
+<div class="page-content p-2">
+    <div class="sms-type">
+        <div class="custom-radio-container p-1" [class.selected]="smsType === 'third-party'">
+            <input class="custom-radio"
+                type="radio"
+                id="sms-type-third-party"
+                name="sms-type"
+                [checked]="smsType === 'third-party'"
+                (click)="changeType('third-party')"
+            >
+            <label
+                class="f-3 c-dark m-0"
+                for="sms-type-third-party"
+            >
+                Third party Provided Number
+            </label>
+        </div>
+        <div class="custom-radio-container mt-2 p-1" [class.selected]="smsType === 'cell-number'">
+            <input class="custom-radio"
+                type="radio"
+                id="sms-type-cell-number"
+                name="sms-type"
+                [checked]="smsType === 'cell-number'"
+                (click)="changeType('cell-number')"
+            >
+            <label
+                class="f-3 c-dark m-0"
+                for="sms-type-cell-number"
+            >
+                Your personal cell number
+            </label>
+        </div>
+    </div>
+    <div class="upload-progress-wrapper my-3">
+        <circle-progress
+          [percent]="smsPercent"
+          [radius]="60"
+          [showInnerStroke]="false"
+          [showTitle]="false"
+          [showSubtitle]="false"
+          [showUnits]="false"
+          [clockwise]="false"
+          [outerStrokeWidth]="4"
+          [outerStrokeColor]="'#0000FF'"
+          [backgroundOpacity]="0"
+          [animation]="true"
+          [animationDuration]="0"
+        ></circle-progress>
+        <div class="sms-status text-center mt-3">
+            <div class="f-24 font-weight-bold">
+                {{leftSms}}
+            </div>
+            <div class="f-3 op-56">
+                out of
+            </div>
+            <div class="f-6 font-weight-bold">
+                {{totalSms}} <span class="f-3 op-56">left!</span>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-blue f-3 font-weight-bold px-4 py-2" (click)="buyMore()">
+        Buy more
+    </button>
+</div>

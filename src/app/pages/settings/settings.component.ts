@@ -24,7 +24,8 @@ export class SettingsComponent implements OnInit {
       icon: 'i-auto-video',
       label: 'Auto Resend Video'
     },
-    { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' }
+    { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' },
+    { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS Limits' }
   ];
   defaultPage = 'notifications';
   currentPage: string;

@@ -45,7 +45,7 @@ export class DealCreateComponent implements OnInit {
       this.saving = true;
       const data = {
         deal_stage: this.selectedStage,
-        contact: this.contacts[0],
+        contact: this.contacts,
         title: this.title,
         value: this.value,
         note: this.note
