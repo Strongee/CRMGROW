@@ -104,10 +104,13 @@ import { ActionsHeaderComponent } from './actions-header/actions-header.componen
 import { NoteEditComponent } from './note-edit/note-edit.component';
 import { TaskDeleteComponent } from './task-delete/task-delete.component';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.component';
 import { TextStatusComponent } from './text-status/text-status.component';
 import { EmailStatusComponent } from './email-status/email-status.component';
 import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
 import { SelectMemberComponent } from './select-member/select-member.component';
+import { PlanSelectComponent } from './plan-select/plan-select.component';
+import { PlanBuyComponent } from './plan-buy/plan-buy.component';
 
 @NgModule({
   declarations: [
@@ -211,10 +214,13 @@ import { SelectMemberComponent } from './select-member/select-member.component';
     ActionsHeaderComponent,
     NoteEditComponent,
     TaskDeleteComponent,
+    DealStageCreateComponent,
     TextStatusComponent,
     EmailStatusComponent,
     TeamContactShareComponent,
-    SelectMemberComponent
+    SelectMemberComponent,
+    PlanSelectComponent,
+    PlanBuyComponent
   ],
   imports: [
     CommonModule,
@@ -288,7 +294,10 @@ import { SelectMemberComponent } from './select-member/select-member.component';
     SendEmailComponent,
     ContactEditComponent,
     AdditionalEditComponent,
-    SelectMemberComponent
+    SelectMemberComponent,
+    DealStageCreateComponent,
+    PlanSelectComponent,
+    PlanBuyComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -25,7 +25,7 @@
                     <div
                         class="task mt-3 mr-3 p-3 c-pointer"
                         *ngFor="let deal of dealStage.deals" cdkDrag
-                        (click)="taskDetail(deal)"
+                        (click)="dealDetail(deal)"
                     >
                         <div class="v-center justify-content-between">
                             <div class="f-6 font-weight-bold">
@@ -54,15 +54,15 @@
                             </div>
                         </div>
                         <div class="f-3 op-64 mt-2">
-                            $100,000
+                            ${{deal.value}}
                         </div>
                     </div>
                     <div class="v-center justify-content-center add-task mt-3 mr-3">
-                        <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addTasks(dealStage)"></i>
+                        <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addDeals(dealStage)"></i>
                     </div>
                 </div>
             </div>
-            <div class="v-center justify-content-center c-pointer add-column p-3" (click)="addColumns()">
+            <div class="v-center justify-content-center c-pointer add-column p-3" (click)="addStages()">
                 <i class="i-icon i-plus d-block bgc-blue"></i>
             </div>
         </div>
@@ -77,7 +77,7 @@
                     There are no deal stages yet.
                 </h4>
                 <p>Please create new deal stage.</p>
-                <button class="v-center btn btn-blue text-white br-default py-2" (click)="addColumns()">
+                <button class="v-center btn btn-blue text-white br-default py-2" (click)="addStages()">
                     <i class="d-block i-icon i-plus bgc-white"></i>
                     <span class="f-6 font-weight-bold ml-2">Create new</span>
                 </button>
@@ -90,7 +90,7 @@
                     There are no deal stages yet.
                 </h4>
                 <p>Please create new deal stage.</p>
-                <button class="v-center btn btn-blue text-white br-default py-2" (click)="addColumns()">
+                <button class="v-center btn btn-blue text-white br-default py-2" (click)="addStages()">
                     <i class="d-block i-icon i-plus bgc-white"></i>
                     <span class="f-6 font-weight-bold ml-2">Create new</span>
                 </button>

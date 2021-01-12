@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Contact } from 'src/app/models/contact.model';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DealStage } from 'src/app/models/deal-stage.model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -12,7 +13,11 @@ import { Subscription } from 'rxjs';
 export class DealCreateComponent implements OnInit {
   contacts: Contact[] = [];
   title = '';
+  value: number;
   submitted = false;
+  stages: any[] = [];
+  selectedStage = '';
+  note = '';
   saving = false;
   createSubscription: Subscription;
 
@@ -22,28 +27,15 @@ export class DealCreateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit(): void {}
-
-  createStages(): void {
-    if (this.title == '') {
-      return;
-    } else {
-      this.saving = true;
-      const data = {
-        title: this.title
-      };
-      this.createSubscription = this.dealsService.createStage(data).subscribe(
-        (res) => {
-          if (res) {
-            this.saving = false;
-            this.dialogRef.close(res);
-          }
-        },
-        (err) => {
-          this.saving = false;
+  ngOnInit(): void {
+    this.dealsService.stages$.subscribe((res) => {
+      this.stages = [...this.stages, ...res];
+      this.stages.forEach((stage) => {
+        if (stage._id == this.data.id) {
+          this.selectedStage = stage._id;
         }
-      );
-    }
+      });
+    });
   }
 
   createDeals(): void {
@@ -52,9 +44,11 @@ export class DealCreateComponent implements OnInit {
     } else {
       this.saving = true;
       const data = {
-        deal_stage: this.data.id,
-        contact: this.contacts[0],
-        title: this.contacts[0].fullName + ' deal'
+        deal_stage: this.selectedStage,
+        contact: this.contacts,
+        title: this.title,
+        value: this.value,
+        note: this.note
       };
       this.dealsService.createDeal(data).subscribe((res) => {
         if (res) {

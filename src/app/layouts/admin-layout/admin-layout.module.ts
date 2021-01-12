@@ -63,6 +63,8 @@ import { ThemeComponent } from '../../pages/theme/theme.component';
 import { EmailEditorModule } from 'angular-email-editor';
 import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
 import { NotificationsListComponent } from '../../pages/notifications-list/notifications-list.component';
+import { SmsLimitsComponent } from '../../pages/sms-limits/sms-limits.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   declarations: [
@@ -114,7 +116,8 @@ import { NotificationsListComponent } from '../../pages/notifications-list/notif
     ThemesComponent,
     ThemeComponent,
     AnalyticsMaterialComponent,
-    NotificationsListComponent
+    NotificationsListComponent,
+    SmsLimitsComponent
   ],
   imports: [
     CommonModule,
@@ -129,7 +132,16 @@ import { NotificationsListComponent } from '../../pages/notifications-list/notif
     NgxGraphModule,
     PdfViewerModule,
     OverlayModule,
-    EmailEditorModule
+    EmailEditorModule,
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: '#78C000',
+      innerStrokeColor: '#C7E596',
+      animationDuration: 300
+    })
   ],
   schemas: []
 })

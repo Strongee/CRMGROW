@@ -203,8 +203,10 @@ export class InputContactsComponent implements OnInit {
     if (index === -1) {
       if (contact instanceof Contact) {
         this.selectedContacts.push(contact);
+        this.onSelect.emit();
       } else {
         this.selectedContacts.push(new Contact().deserialize(contact));
+        this.onSelect.emit();
       }
     }
     this.inputField.nativeElement.value = '';

@@ -47,35 +47,6 @@
   .input-group {
     max-width: 400px;
   }
-  .delivery {
-    .delivery-button {
-      &::after {
-        content: none;
-      }
-    }
-    .delivery-dropdown {
-      width: 350px;
-      .sms-wrapper {
-        height: 250px;
-        overflow-y: auto;
-        .deliver-status {
-            color: #008F6D;
-            background-color: #d5ece6;
-            border-radius: 3px;
-            padding-top: 2px;
-        }
-        .fail-status {
-            color: #ff0000;
-            background-color: #fed5d5;
-            border-radius: 3px;
-            padding-top: 2px;
-        }
-      }
-      @media screen and (max-width: 680px) {
-        width: calc(100vw - 30px);
-      }
-    }
-  }
 }
 
 /* Main Nav Bar Wrapper Style*/
@@ -155,11 +126,6 @@
   display: none;
 }
 
-.delivery-mobile-wrapper {
-  display: none;
-}
-
-
 // Mobile Responsive : Tablet
 @media screen and (max-width: 992px) {
   .navbar {
@@ -205,15 +171,7 @@
       margin-left: 36px;
     }
 
-    .search-form-wrapper {
-      display: none;
-    }
-
-    .delivery-mobile-wrapper {
-      display: block;
-    }
-
-    .search-dropdown-menu, .delivery-dropdown {
+    .search-dropdown-menu {
       position: fixed !important;
       left: 15px !important;
       top: 35px !important;
@@ -235,3 +193,14 @@
   }
 }
 
+@media screen and (max-width: 575px) {
+  .search-form-wrapper {
+    flex-grow: 1;
+    .search-box {
+      display: none;
+    }
+    .deliver-status{
+      margin-left: auto;
+    }
+  }
+}
