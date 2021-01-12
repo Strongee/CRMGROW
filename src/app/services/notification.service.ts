@@ -15,6 +15,12 @@ export class NotificationService extends HttpService {
   notifications$ = this.notifications.asObservable();
   systemAlerts$ = this.systemAlerts.asObservable();
 
+  lastTextSend: BehaviorSubject<number> = new BehaviorSubject(0);
+  lastTextSend$ = this.lastTextSend.asObservable();
+
+  lastEmailSend: BehaviorSubject<number> = new BehaviorSubject(0);
+  lastEmailSend$ = this.lastEmailSend.asObservable();
+
   constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
   }
@@ -67,4 +73,13 @@ export class NotificationService extends HttpService {
         catchError(this.handleError('DELETE NOTIFICATIONS', false))
       );
   }
+
+  getTextDeliverStatus(): Observable<any> {
+    return this.httpClient.get(this.server + NOTIFICATION.TEXT_DELIVERY).pipe(
+      map((res) => res['notification']),
+      catchError(this.handleError('GET TEXT DELIVERY STATUS', null))
+    );
+  }
+
+  getEmailDeliverStatus(): void {}
 }

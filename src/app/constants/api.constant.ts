@@ -256,5 +256,5 @@ export const NOTIFICATION = {
   READ_MARK: 'notification/bulk-read',
   UNREAD_MARK: 'notification/bulk-unread',
   DELETE: 'notification/bulk-remove',
-  DELIVERY_STATUS: 'notification/get-delivery'
+  TEXT_DELIVERY: 'notification/get-delivery'
 };
