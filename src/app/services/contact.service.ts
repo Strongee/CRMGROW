@@ -411,4 +411,14 @@ export class ContactService extends HttpService {
     this.pageIndex.next(1);
     this.pageSize.next(50);
   }
+
+  checkEmail(email: string): any {
+    return this.httpClient.post(this.server + CONTACT.CHECK_EMAIL, { email });
+  }
+
+  checkPhone(cell_phone: string): any {
+    return this.httpClient.post(this.server + CONTACT.CHECK_PHONE, {
+      cell_phone
+    });
+  }
 }

@@ -36,6 +36,14 @@ export class ContactEditComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   panelOpenState = false;
 
+  // Variables for the checking duplicate
+  sameEmailContacts = [];
+  sameCellPhoneContacts = [];
+  contactEmailSubscription: Subscription;
+  contactPhoneSubscription: Subscription;
+  sameEmailsFlag = false;
+  samePhonesFlag = false;
+
   isUpdating = false;
   updateSubscription: Subscription;
 
@@ -64,6 +72,12 @@ export class ContactEditComponent implements OnInit {
   ngOnInit(): void {}
 
   update(): void {
+    if (
+      this.sameEmailContacts.length > 0 ||
+      this.sameCellPhoneContacts.length > 0
+    ) {
+      return;
+    }
     this.isUpdating = true;
     const contactId = this.contact._id;
     if (this.contact_phone && this.contact_phone['internationalNumber']) {
@@ -92,6 +106,65 @@ export class ContactEditComponent implements OnInit {
 
   updateLabel(label: string): void {
     this.contact.label = label;
+  }
+
+  checkEmailDuplicate(evt: any): void {
+    this.sameEmailContacts = [];
+    if (!evt) {
+      return;
+    }
+    this.sameEmailsFlag = true;
+    this.contactEmailSubscription &&
+      this.contactEmailSubscription.unsubscribe();
+    this.contactEmailSubscription = this.contactService
+      .checkEmail(evt)
+      .subscribe(
+        (res) => {
+          res['data'].forEach((e) => {
+            if (e._id != this.data.contact._id) {
+              this.sameEmailContacts.push(e);
+            }
+          });
+        },
+        (err) => {}
+      );
+  }
+
+  checkPhoneDuplicate(evt: any): any {
+    this.sameCellPhoneContacts = [];
+    if (!evt) {
+      return;
+    }
+    let phone = evt;
+    if (typeof evt == 'object' && evt['internationalNumber']) {
+      phone = evt['internationalNumber'].replace(/\D/g, '');
+      phone = '+' + phone;
+    }
+    if (phone.length < 4) {
+      return;
+    }
+    this.samePhonesFlag = true;
+    this.contactPhoneSubscription &&
+      this.contactPhoneSubscription.unsubscribe();
+    this.contactPhoneSubscription = this.contactService
+      .checkPhone(phone)
+      .subscribe(
+        (res) => {
+          res['data'].forEach((e) => {
+            if (e._id != this.data.contact._id) {
+              this.sameCellPhoneContacts.push(e);
+            }
+          });
+        },
+        (err) => {}
+      );
+  }
+
+  toggleSameEmails(): void {
+    this.sameEmailsFlag = !this.sameEmailsFlag;
+  }
+  toggleSamePhones(): void {
+    this.samePhonesFlag = !this.samePhonesFlag;
   }
 
   handleAddressChange(evt: any): void {

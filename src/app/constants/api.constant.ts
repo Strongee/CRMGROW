@@ -89,7 +89,9 @@ export const CONTACT = {
   LATEST_CONTACTS: 'video/latest-sent',
   UPDATE: 'contact/update-contact',
   MERGE: 'contact/contact-merge',
-  BULK_CREATE: 'contact/bulk-create'
+  BULK_CREATE: 'contact/bulk-create',
+  CHECK_EMAIL: 'contact/check-email',
+  CHECK_PHONE: 'contact/check-phone'
 };
 export const VIDEO = {
   CREATE: 'video/create',

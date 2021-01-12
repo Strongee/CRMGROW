@@ -39,6 +39,14 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   cell_phone: any = {};
   contact = new Contact();
 
+  // Variables for the checking duplicate
+  sameEmailContacts = [];
+  sameCellPhoneContacts = [];
+  contactEmailSubscription: Subscription;
+  contactPhoneSubscription: Subscription;
+  sameEmailsFlag = false;
+  samePhonesFlag = false;
+
   isCreating = false;
   createSubscription: Subscription;
 
@@ -51,10 +59,18 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     private handlerService: HandlerService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.contact.tags = [];
+  }
   ngOnDestroy(): void {}
 
-  create(): void {
+  create(): any {
+    if (
+      this.sameEmailContacts.length > 0 ||
+      this.sameCellPhoneContacts.length > 0
+    ) {
+      return;
+    }
     this.isCreating = true;
     this.createSubscription && this.createSubscription.unsubscribe();
     this.createSubscription = this.contactService
@@ -67,6 +83,57 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
           this.dialogRef.close();
         }
       });
+  }
+
+  checkEmailDuplicate(evt: any): void {
+    this.sameEmailContacts = [];
+    if (!evt) {
+      return;
+    }
+    this.sameEmailsFlag = true;
+    this.contactEmailSubscription &&
+      this.contactEmailSubscription.unsubscribe();
+    this.contactEmailSubscription = this.contactService
+      .checkEmail(evt)
+      .subscribe(
+        (res) => {
+          this.sameEmailContacts = res['data'];
+        },
+        (err) => {}
+      );
+  }
+
+  checkPhoneDuplicate(evt: any): any {
+    this.sameCellPhoneContacts = [];
+    if (!evt) {
+      return;
+    }
+    let phone = evt;
+    if (typeof evt == 'object' && evt['internationalNumber']) {
+      phone = evt['internationalNumber'].replace(/\D/g, '');
+      phone = '+' + phone;
+    }
+    if (phone.length < 4) {
+      return;
+    }
+    this.samePhonesFlag = true;
+    this.contactPhoneSubscription &&
+      this.contactPhoneSubscription.unsubscribe();
+    this.contactPhoneSubscription = this.contactService
+      .checkPhone(phone)
+      .subscribe(
+        (res) => {
+          this.sameCellPhoneContacts = res['data'];
+        },
+        (err) => {}
+      );
+  }
+
+  toggleSameEmails(): void {
+    this.sameEmailsFlag = !this.sameEmailsFlag;
+  }
+  toggleSamePhones(): void {
+    this.samePhonesFlag = !this.samePhonesFlag;
   }
 
   handleAddressChange(evt: any): void {
