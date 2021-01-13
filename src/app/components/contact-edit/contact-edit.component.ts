@@ -115,20 +115,25 @@ export class ContactEditComponent implements OnInit {
     if (!evt) {
       return;
     }
-    const regularExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regularExpression = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/;
     const result = regularExpression.test(String(evt).toLowerCase());
     if (result) {
-      this.sameEmailsFlag = true;
       this.contactEmailSubscription &&
         this.contactEmailSubscription.unsubscribe();
       this.contactEmailSubscription = this.contactService
         .checkEmail(evt)
-        .subscribe(
-          (res) => {
-            this.sameEmailContacts = res['data'];
-          },
-          (err) => {}
-        );
+        .subscribe((res) => {
+          this.sameEmailContacts = res;
+          this.sameEmailContacts.some((e, index) => {
+            if (e._id === this.contact._id) {
+              this.sameEmailContacts.splice(index, 1);
+              return true;
+            }
+          });
+          if (this.sameEmailContacts.length) {
+            this.sameEmailsFlag = true;
+          }
+        });
     }
   }
 
@@ -142,20 +147,24 @@ export class ContactEditComponent implements OnInit {
       phone = evt['internationalNumber'].replace(/\D/g, '');
       phone = '+' + phone;
     }
-    if (phone.length < 4) {
-      return;
+    if (this.phoneInput.valid) {
+      this.contactPhoneSubscription &&
+        this.contactPhoneSubscription.unsubscribe();
+      this.contactPhoneSubscription = this.contactService
+        .checkPhone(phone)
+        .subscribe((res) => {
+          this.sameCellPhoneContacts = res;
+          this.sameCellPhoneContacts.some((e, index) => {
+            if (e._id === this.contact._id) {
+              this.sameCellPhoneContacts.splice(index, 1);
+              return true;
+            }
+          });
+          if (this.sameCellPhoneContacts.length) {
+            this.samePhonesFlag = true;
+          }
+        });
     }
-    this.samePhonesFlag = true;
-    this.contactPhoneSubscription &&
-      this.contactPhoneSubscription.unsubscribe();
-    this.contactPhoneSubscription = this.contactService
-      .checkPhone(phone)
-      .subscribe(
-        (res) => {
-          this.sameCellPhoneContacts = res['data'];
-        },
-        (err) => {}
-      );
   }
 
   toggleSameEmails(): void {
