@@ -90,9 +90,9 @@ export const listToTree = (list) => {
     if (node.parent_ref !== '0') {
       if (
         list[map[node.parent_ref]] &&
-        list[map[node.parent_ref]].status === 'disabled'
+        list[map[node.parent_ref]]['status'] === 'disabled'
       ) {
-        node.status = 'disabled';
+        node['status'] = 'disabled';
       }
       list[map[node.parent_ref]].children.push(node);
     } else {

@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
@@ -18,6 +11,7 @@ import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
 import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-contact-edit',
@@ -54,7 +48,7 @@ export class ContactEditComponent implements OnInit {
   isUpdating = false;
   updateSubscription: Subscription;
 
-  @ViewChild('phone') phoneInput: ElementRef;
+  phoneInput: FormControl = new FormControl();
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 

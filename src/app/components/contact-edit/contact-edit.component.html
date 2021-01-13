@@ -62,12 +62,11 @@
             [maxLength]="15"
             [phoneValidation]="true"
             [separateDialCode]="true"
-            name="phone" 
-            #phone="ngModel"
+            [formControl]="phoneInput"
             [(ngModel)]="contact_phone"
             (ngModelChange)="checkPhoneDuplicate($event)">
           </ngx-intl-tel-input>
-          <span class="error" *ngIf="phone.errors">
+          <span class="error" *ngIf="contact_phone && phoneInput.valid">
             <ng-template #phoneFormat>Wrong phone number!</ng-template>
           </span>
           <span class="form-append-icon c-pointer" (click)="toggleSamePhones()" *ngIf="sameCellPhoneContacts.length">
