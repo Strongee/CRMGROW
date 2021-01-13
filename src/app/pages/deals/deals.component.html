@@ -25,7 +25,7 @@
                     <div
                         class="task mt-3 mr-3 p-3 c-pointer"
                         *ngFor="let deal of dealStage.deals" cdkDrag
-                        (click)="dealDetail(deal)"
+                        (click)="dealDetail(deal._id)"
                     >
                         <div class="v-center justify-content-between">
                             <div class="f-6 font-weight-bold">

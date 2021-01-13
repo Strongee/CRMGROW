@@ -1,5 +1,11 @@
 @import '../../../variables';
 
+.i-triangle-left {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+}
+
 :host ::ng-deep{
     mat-expansion-panel {
         box-shadow: none !important;

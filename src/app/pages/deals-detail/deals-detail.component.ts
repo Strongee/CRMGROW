@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Contact } from 'src/app/models/contact.model';
 import { Task } from 'src/app/models/task.model';
 import { Note } from 'src/app/models/note.model';
@@ -20,6 +20,7 @@ const Quill: any = QuillNamespace;
 // import ImageResize from 'quill-image-resize-module';
 // Quill.register('modules/imageResize', ImageResize);
 import { QuillEditorComponent } from 'ngx-quill';
+import { DealsService } from 'src/app/services/deals.service';
 
 @Component({
   selector: 'app-deals-detail',
@@ -112,13 +113,17 @@ export class DealsDetailComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private fileService: FileService,
     private noteService: NoteService,
     private taskService: TaskService,
+    public dealsService: DealsService,
     private storeService: StoreService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+  }
 
   backTasks(): void {
     this.router.navigate(['./deals']);
