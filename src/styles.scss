@@ -888,6 +888,7 @@ body{
     min-width: 1000px;
   }
 }
+
 @media screen and (max-width: 992px) and (min-width: 681px) {
   body {
     .sidebar {
@@ -1779,3 +1780,15 @@ body {
 
 
 
+// Browser Matching
+.samsung-app {
+  .mat-table-wrapper {
+    overflow: hidden;
+
+    .page-table {
+      thead tr:first-child th {
+        position: static;
+      }
+    }
+  }
+}

@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
     this.titleHandle();
 
     if (navigator.userAgent.indexOf('SamsungBrowser') !== -1) {
-      this.document.body.classList.add('samsung');
+      this.document.body.classList.add('samsung-app');
     }
   }
 
