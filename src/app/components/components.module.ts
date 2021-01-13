@@ -111,6 +111,7 @@ import { TeamContactShareComponent } from './team-contact-share/team-contact-sha
 import { SelectMemberComponent } from './select-member/select-member.component';
 import { PlanSelectComponent } from './plan-select/plan-select.component';
 import { PlanBuyComponent } from './plan-buy/plan-buy.component';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
   declarations: [
@@ -228,6 +229,7 @@ import { PlanBuyComponent } from './plan-buy/plan-buy.component';
     RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule,
+    NgxGraphModule,
     ColorPickerModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
