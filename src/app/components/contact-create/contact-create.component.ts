@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
@@ -55,7 +49,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   isCreating = false;
   createSubscription: Subscription;
 
-  @ViewChild('phone') phoneInput: ElementRef;
+  phoneInput: FormControl = new FormControl();
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
