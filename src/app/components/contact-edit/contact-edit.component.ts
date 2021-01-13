@@ -1,4 +1,11 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
@@ -36,9 +43,18 @@ export class ContactEditComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   panelOpenState = false;
 
+  // Variables for the checking duplicate
+  sameEmailContacts = [];
+  sameCellPhoneContacts = [];
+  contactEmailSubscription: Subscription;
+  contactPhoneSubscription: Subscription;
+  sameEmailsFlag = false;
+  samePhonesFlag = false;
+
   isUpdating = false;
   updateSubscription: Subscription;
 
+  @ViewChild('phone') phoneInput: ElementRef;
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
@@ -64,6 +80,12 @@ export class ContactEditComponent implements OnInit {
   ngOnInit(): void {}
 
   update(): void {
+    if (
+      this.sameEmailContacts.length > 0 ||
+      this.sameCellPhoneContacts.length > 0
+    ) {
+      return;
+    }
     this.isUpdating = true;
     const contactId = this.contact._id;
     if (this.contact_phone && this.contact_phone['internationalNumber']) {
@@ -92,6 +114,63 @@ export class ContactEditComponent implements OnInit {
 
   updateLabel(label: string): void {
     this.contact.label = label;
+  }
+
+  checkEmailDuplicate(evt: any): void {
+    this.sameEmailContacts = [];
+    if (!evt) {
+      return;
+    }
+    const regularExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const result = regularExpression.test(String(evt).toLowerCase());
+    if (result) {
+      this.sameEmailsFlag = true;
+      this.contactEmailSubscription &&
+        this.contactEmailSubscription.unsubscribe();
+      this.contactEmailSubscription = this.contactService
+        .checkEmail(evt)
+        .subscribe(
+          (res) => {
+            this.sameEmailContacts = res['data'];
+          },
+          (err) => {}
+        );
+    }
+  }
+
+  checkPhoneDuplicate(evt: any): any {
+    this.sameCellPhoneContacts = [];
+    if (!evt) {
+      return;
+    }
+    let phone = evt;
+    if (typeof evt == 'object' && evt['internationalNumber']) {
+      phone = evt['internationalNumber'].replace(/\D/g, '');
+      phone = '+' + phone;
+    }
+    if (phone.length < 4) {
+      return;
+    }
+    if (this.phoneInput.valid) {
+      this.samePhonesFlag = true;
+      this.contactPhoneSubscription &&
+        this.contactPhoneSubscription.unsubscribe();
+      this.contactPhoneSubscription = this.contactService
+        .checkPhone(phone)
+        .subscribe(
+          (res) => {
+            this.sameCellPhoneContacts = res['data'];
+          },
+          (err) => {}
+        );
+    }
+  }
+
+  toggleSameEmails(): void {
+    this.sameEmailsFlag = !this.sameEmailsFlag;
+  }
+  toggleSamePhones(): void {
+    this.samePhonesFlag = !this.samePhonesFlag;
   }
 
   handleAddressChange(evt: any): void {

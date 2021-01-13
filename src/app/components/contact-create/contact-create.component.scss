@@ -1,0 +1,17 @@
+.form-append-icon {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+.form-checking-result {
+    position: absolute;
+    z-index: 113;
+    box-shadow: 0px 0px 2px #aaa;
+    max-height: 150px;
+    overflow-y: scroll;
+    bottom: 0px;
+    transform: translateY(100%);
+    right: 10px;
+    background: #ffffff;
+    border-radius: 4px;
+}

@@ -412,6 +412,16 @@ export class ContactService extends HttpService {
     this.pageSize.next(50);
   }
 
+  checkEmail(email: string): any {
+    return this.httpClient.post(this.server + CONTACT.CHECK_EMAIL, { email });
+  }
+
+  checkPhone(cell_phone: string): any {
+    return this.httpClient.post(this.server + CONTACT.CHECK_PHONE, {
+      cell_phone
+    });
+  }
+  
   shareContacts(userId, contacts): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.SHARE_CONTACT, {
