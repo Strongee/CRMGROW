@@ -68,95 +68,8 @@ export class TeamComponent implements OnInit {
     { icon: '', label: 'Contacts', id: 'contacts' }
   ];
   selectedSharedTab: TabItem = this.sharedTabs[0];
-  sharedContacts = [
-    {
-      first_name: 'Ace',
-      last_name: 'Tanoue',
-      email: 'rcihawaii01@gmail.com',
-      cell_phone: '+18084877281',
-      last_activity: {
-        send_type: 0,
-        _id: '5fce9b8d9104550d64c544f5',
-        content: 'added contact',
-        contacts: '5fce9b8d9104550d64c54407',
-        user: '5e9a0285efb6b2a3449245da',
-        type: 'contacts'
-      },
-      share_at: '2020-12-07T21:15:57.368Z',
-      shared_members: [
-        {
-          first_name: 'Jone',
-          last_name: 'Doe',
-          email: 'jonedoe@gmail.com',
-          cell_phone: '+18084877281'
-        },
-        {
-          first_name: 'Jone',
-          last_name: 'Doe',
-          email: 'jonedoe@gmail.com',
-          cell_phone: '+18084877281'
-        }
-      ]
-    },
-    {
-      first_name: 'Ace',
-      last_name: 'Tanoue',
-      email: 'rcihawaii01@gmail.com',
-      cell_phone: '+18084877281',
-      last_activity: {
-        send_type: 0,
-        _id: '5fce9b8d9104550d64c544f5',
-        content: 'added contact',
-        contacts: '5fce9b8d9104550d64c54407',
-        user: '5e9a0285efb6b2a3449245da',
-        type: 'contacts'
-      },
-      share_at: '2020-12-07T21:15:57.368Z',
-      shared_members: [
-        {
-          first_name: 'Jone',
-          last_name: 'Doe',
-          email: 'jonedoe@gmail.com',
-          cell_phone: '+18084877281'
-        },
-        {
-          first_name: 'Jone',
-          last_name: 'Doe',
-          email: 'jonedoe@gmail.com',
-          cell_phone: '+18084877281'
-        }
-      ]
-    },
-    {
-      first_name: 'Ace',
-      last_name: 'Tanoue',
-      email: 'rcihawaii01@gmail.com',
-      cell_phone: '+18084877281',
-      last_activity: {
-        send_type: 0,
-        _id: '5fce9b8d9104550d64c544f5',
-        content: 'added contact',
-        contacts: '5fce9b8d9104550d64c54407',
-        user: '5e9a0285efb6b2a3449245da',
-        type: 'contacts'
-      },
-      share_at: '2020-12-07T21:15:57.368Z',
-      shared_members: [
-        {
-          first_name: 'Jone',
-          last_name: 'Doe',
-          email: 'jonedoe@gmail.com',
-          cell_phone: '+18084877281'
-        },
-        {
-          first_name: 'Jone',
-          last_name: 'Doe',
-          email: 'jonedoe@gmail.com',
-          cell_phone: '+18084877281'
-        }
-      ]
-    }
-  ];
+  sharedContacts;
+
   constructor(
     private teamService: TeamService,
     private userService: UserService,
@@ -240,19 +153,32 @@ export class TeamComponent implements OnInit {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
-        this.loading = false;
         const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
         if (ownerIndex !== -1) {
           this.role = 'owner';
-        } else if (this.team.editors && this.team.editors.indexOf(this.userId) !== -1) {
+        } else if (
+          this.team.editors &&
+          this.team.editors.indexOf(this.userId) !== -1
+        ) {
           this.role = 'editor';
         } else {
           this.role = 'viewer';
         }
+        this.teamService.loadSharedContacts().subscribe(
+          (contacts) => {
+            this.loading = false;
+            if (contacts) {
+              this.sharedContacts = contacts;
+            }
+            console.log("shared contacts ===============>", this.sharedContacts);
+          },
+          (err) => {
+            this.loading = false;
+          }
+        );
       },
       (err) => {
         this.loading = false;
-        // this.loadError = true;
       }
     );
   }
@@ -762,9 +688,7 @@ export class TeamComponent implements OnInit {
       }
     );
   }
-  declineRequest(user): void {
-
-  }
+  declineRequest(user): void {}
 
   acceptOutRequest(teamId, memberId): void {
     this.accepting = true;
@@ -1126,7 +1050,11 @@ export class TeamComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.team = res;
+          this.team = {
+            ...this.team,
+            name: res.name,
+            picture: res.picture
+          };
         }
       });
   }
@@ -1160,7 +1088,14 @@ export class TeamComponent implements OnInit {
   changeShareStatus(contact): void {}
 
   getAvatarName(contact): any {
-    if (contact.first_name && contact.last_name) {
+    if (contact.user_name) {
+      const names = contact.user_name.split(' ');
+      if (names.length > 1) {
+        return names[0][0] + names[1][0];
+      } else {
+        return names[0][0];
+      }
+    } else if (contact.first_name && contact.last_name) {
       return contact.first_name[0] + contact.last_name[0];
     } else if (contact.first_name && !contact.last_name) {
       return contact.first_name[0];
@@ -1168,31 +1103,5 @@ export class TeamComponent implements OnInit {
       return contact.last_name[0];
     }
     return 'UC';
-  }
-  inviteMemberOld(): void {
-    // this.dialog
-    //   .open(InviteUserComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: '70vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.teamId,
-    //       share_url: this.shareUrl
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res['invites']) {
-    //       this.team.invites = [...res['invites'], ...this.team.invites];
-    //     }
-    //     if (res['referrals']) {
-    //       if (this.team.referrals && this.team.referrals.length) {
-    //         this.team.referrals = [...res['referrals'], ...this.team.referrals];
-    //       } else {
-    //         this.team.referrals = [...res['referrals']];
-    //       }
-    //     }
-    //   });
   }
 }

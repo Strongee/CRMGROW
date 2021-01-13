@@ -3,7 +3,7 @@
   [class.was-validated]="submitted">
   <mat-dialog-content>
     <div class="form-group">
-      <div class="v-center my-3">
+      <div class="upload-wrapper my-3">
         <ng-container *ngIf="picture; else emptyAvatar">
           <div class="avatar-wrapper">
             <img class="avatar rectangle f-1 font-weight-bold" [src]="picture" alt="NO LOGO ADDED"/>
@@ -17,7 +17,7 @@
             <div class="f-1 font-weight-bold text-uppercase">No Logo Added</div>
           </div>
         </ng-template>
-        <div class="description ml-4" (click)="openAvatar()">
+        <div class="description ml-md-4 ml-sm-0 ml-0" (click)="openAvatar()">
           <div class="v-center">
             <i class="i-icon i-upload bgc-black d-block"></i>
             <div class="ml-3">

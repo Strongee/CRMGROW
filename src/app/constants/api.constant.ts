@@ -91,7 +91,8 @@ export const CONTACT = {
   MERGE: 'contact/contact-merge',
   BULK_CREATE: 'contact/bulk-create',
   CHECK_EMAIL: 'contact/check-email',
-  CHECK_PHONE: 'contact/check-phone'
+  CHECK_PHONE: 'contact/check-phone',
+  SHARE_CONTACT: 'contact/share-contact'
 };
 export const VIDEO = {
   CREATE: 'video/create',
@@ -147,7 +148,7 @@ export const TEAM = {
   SHARE_PDFS: 'team/share-pdfs',
   SHARE_IMAGES: 'team/share-images',
   SHARE_MATERIALS: 'team/share-materials',
-  SHARE_CONTACTS: 'team/share-contact',
+  LOAD_SHARE_CONTACTS: 'team/shared-contacts',
   SHARE_TEMPLATES: 'team/share-templates',
   SHARE_AUTOMATIONS: 'team/share-automations',
   ACCEPT_INVITATION: 'team/accept/',

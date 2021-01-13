@@ -881,6 +881,13 @@ body{
 }
 
 //* Body Tablelet style
+.mat-table-wrapper {
+  width: 100%;
+
+  table {
+    min-width: 1000px;
+  }
+}
 @media screen and (max-width: 992px) and (min-width: 681px) {
   body {
     .sidebar {
@@ -1580,11 +1587,11 @@ mat-expansion-panel {
     grid-column: 2/3;
   }
 }
-.page-size-control {
-  @media screen and (max-width: 420px) {
-    padding: 0.75rem 0.5rem;
-  }
-}
+// .page-size-control {
+//   @media screen and (max-width: 420px) {
+//     padding: 0.75rem 0.5rem;
+//   }
+// }
 
 
 /** ===== Shadow Dropdown ==== */

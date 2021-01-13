@@ -421,4 +421,16 @@ export class ContactService extends HttpService {
       cell_phone
     });
   }
+  
+  shareContacts(userId, contacts): Observable<any> {
+    return this.httpClient
+      .post(this.server + CONTACT.SHARE_CONTACT, {
+        user: userId,
+        contacts
+      })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('BULK CREATE CONTACTS', []))
+      );
+  }
 }
