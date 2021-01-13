@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
@@ -16,9 +10,9 @@ import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
-import { StoreService } from 'src/app/services/store.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact-create',
@@ -55,14 +49,15 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   isCreating = false;
   createSubscription: Subscription;
 
-  @ViewChild('phone') phoneInput: ElementRef;
+  phoneInput: FormControl = new FormControl();
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
     private contactService: ContactService,
-    private handlerService: HandlerService
+    private handlerService: HandlerService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -104,12 +99,9 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
         this.contactEmailSubscription.unsubscribe();
       this.contactEmailSubscription = this.contactService
         .checkEmail(evt)
-        .subscribe(
-          (res) => {
-            this.sameEmailContacts = res['data'];
-          },
-          (err) => {}
-        );
+        .subscribe((res) => {
+          this.sameEmailContacts = res;
+        });
     }
   }
 
@@ -123,21 +115,15 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       phone = evt['internationalNumber'].replace(/\D/g, '');
       phone = '+' + phone;
     }
-    if (phone.length < 4) {
-      return;
-    }
     if (this.phoneInput.valid) {
       this.samePhonesFlag = true;
       this.contactPhoneSubscription &&
         this.contactPhoneSubscription.unsubscribe();
       this.contactPhoneSubscription = this.contactService
         .checkPhone(phone)
-        .subscribe(
-          (res) => {
-            this.sameCellPhoneContacts = res['data'];
-          },
-          (err) => {}
-        );
+        .subscribe((res) => {
+          this.sameCellPhoneContacts = res;
+        });
     }
   }
 
@@ -184,4 +170,9 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     this.addressPlacesRef.reset();
   }
   setContactCountry(): void {}
+
+  goToContact(item: Contact): void {
+    this.router.navigate(['/contacts/' + item._id]);
+    this.dialogRef.close();
+  }
 }

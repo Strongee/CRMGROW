@@ -79,9 +79,11 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
     this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
-      this.loadInquiriesPage(1);
-      this.loadPlannedPage(1);
-      this.loadFinishedPage(1);
+      if (this.userId) {
+        this.loadInquiriesPage(1);
+        this.loadPlannedPage(1);
+        this.loadFinishedPage(1);
+      }
     });
   }
 
