@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
@@ -12,6 +18,7 @@ import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
 import { StoreService } from 'src/app/services/store.service';
 import { HandlerService } from 'src/app/services/handler.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-contact-create',
@@ -33,8 +40,6 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   STAGES = STAGES;
 
   // Variables for the processs
-  checkingEmail = false;
-  checkingPhone = false;
   creating = false;
   cell_phone: any = {};
   contact = new Contact();
@@ -50,6 +55,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   isCreating = false;
   createSubscription: Subscription;
 
+  @ViewChild('phone') phoneInput: ElementRef;
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
@@ -90,17 +96,21 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     if (!evt) {
       return;
     }
-    this.sameEmailsFlag = true;
-    this.contactEmailSubscription &&
-      this.contactEmailSubscription.unsubscribe();
-    this.contactEmailSubscription = this.contactService
-      .checkEmail(evt)
-      .subscribe(
-        (res) => {
-          this.sameEmailContacts = res['data'];
-        },
-        (err) => {}
-      );
+    const regularExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const result = regularExpression.test(String(evt).toLowerCase());
+    if (result) {
+      this.sameEmailsFlag = true;
+      this.contactEmailSubscription &&
+        this.contactEmailSubscription.unsubscribe();
+      this.contactEmailSubscription = this.contactService
+        .checkEmail(evt)
+        .subscribe(
+          (res) => {
+            this.sameEmailContacts = res['data'];
+          },
+          (err) => {}
+        );
+    }
   }
 
   checkPhoneDuplicate(evt: any): any {
@@ -116,17 +126,19 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     if (phone.length < 4) {
       return;
     }
-    this.samePhonesFlag = true;
-    this.contactPhoneSubscription &&
-      this.contactPhoneSubscription.unsubscribe();
-    this.contactPhoneSubscription = this.contactService
-      .checkPhone(phone)
-      .subscribe(
-        (res) => {
-          this.sameCellPhoneContacts = res['data'];
-        },
-        (err) => {}
-      );
+    if (this.phoneInput.valid) {
+      this.samePhonesFlag = true;
+      this.contactPhoneSubscription &&
+        this.contactPhoneSubscription.unsubscribe();
+      this.contactPhoneSubscription = this.contactService
+        .checkPhone(phone)
+        .subscribe(
+          (res) => {
+            this.sameCellPhoneContacts = res['data'];
+          },
+          (err) => {}
+        );
+    }
   }
 
   toggleSameEmails(): void {

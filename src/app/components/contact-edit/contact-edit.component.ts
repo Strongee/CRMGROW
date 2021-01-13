@@ -1,4 +1,11 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
@@ -47,6 +54,7 @@ export class ContactEditComponent implements OnInit {
   isUpdating = false;
   updateSubscription: Subscription;
 
+  @ViewChild('phone') phoneInput: ElementRef;
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
@@ -113,21 +121,21 @@ export class ContactEditComponent implements OnInit {
     if (!evt) {
       return;
     }
-    this.sameEmailsFlag = true;
-    this.contactEmailSubscription &&
-      this.contactEmailSubscription.unsubscribe();
-    this.contactEmailSubscription = this.contactService
-      .checkEmail(evt)
-      .subscribe(
-        (res) => {
-          res['data'].forEach((e) => {
-            if (e._id != this.data.contact._id) {
-              this.sameEmailContacts.push(e);
-            }
-          });
-        },
-        (err) => {}
-      );
+    const regularExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const result = regularExpression.test(String(evt).toLowerCase());
+    if (result) {
+      this.sameEmailsFlag = true;
+      this.contactEmailSubscription &&
+        this.contactEmailSubscription.unsubscribe();
+      this.contactEmailSubscription = this.contactService
+        .checkEmail(evt)
+        .subscribe(
+          (res) => {
+            this.sameEmailContacts = res['data'];
+          },
+          (err) => {}
+        );
+    }
   }
 
   checkPhoneDuplicate(evt: any): any {
@@ -143,21 +151,19 @@ export class ContactEditComponent implements OnInit {
     if (phone.length < 4) {
       return;
     }
-    this.samePhonesFlag = true;
-    this.contactPhoneSubscription &&
-      this.contactPhoneSubscription.unsubscribe();
-    this.contactPhoneSubscription = this.contactService
-      .checkPhone(phone)
-      .subscribe(
-        (res) => {
-          res['data'].forEach((e) => {
-            if (e._id != this.data.contact._id) {
-              this.sameCellPhoneContacts.push(e);
-            }
-          });
-        },
-        (err) => {}
-      );
+    if (this.phoneInput.valid) {
+      this.samePhonesFlag = true;
+      this.contactPhoneSubscription &&
+        this.contactPhoneSubscription.unsubscribe();
+      this.contactPhoneSubscription = this.contactService
+        .checkPhone(phone)
+        .subscribe(
+          (res) => {
+            this.sameCellPhoneContacts = res['data'];
+          },
+          (err) => {}
+        );
+    }
   }
 
   toggleSameEmails(): void {
