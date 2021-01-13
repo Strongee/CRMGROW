@@ -151,19 +151,17 @@ export class ContactEditComponent implements OnInit {
     if (phone.length < 4) {
       return;
     }
-    if (this.phoneInput.valid) {
-      this.samePhonesFlag = true;
-      this.contactPhoneSubscription &&
-        this.contactPhoneSubscription.unsubscribe();
-      this.contactPhoneSubscription = this.contactService
-        .checkPhone(phone)
-        .subscribe(
-          (res) => {
-            this.sameCellPhoneContacts = res['data'];
-          },
-          (err) => {}
-        );
-    }
+    this.samePhonesFlag = true;
+    this.contactPhoneSubscription &&
+      this.contactPhoneSubscription.unsubscribe();
+    this.contactPhoneSubscription = this.contactService
+      .checkPhone(phone)
+      .subscribe(
+        (res) => {
+          this.sameCellPhoneContacts = res['data'];
+        },
+        (err) => {}
+      );
   }
 
   toggleSameEmails(): void {
