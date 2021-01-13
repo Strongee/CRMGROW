@@ -7,6 +7,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { Location } from '@angular/common';
 import * as moment from 'moment';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+import { numPad } from '../../helper';
 
 @Component({
   selector: 'app-call-request-confirm',
@@ -33,6 +34,7 @@ export class CallRequestConfirmComponent implements OnInit {
   datetime = '';
   minDate;
   calendaryLink = '';
+  timezone;
 
   constructor(
     private dialogRef: MatDialogRef<CallRequestConfirmComponent>,
@@ -62,6 +64,7 @@ export class CallRequestConfirmComponent implements OnInit {
     this.formData = this.data.inquiry;
     this.selectedDate = this.formData.proposed_at[0];
     this.userService.profile$.subscribe((res) => {
+      this.timezone = res['time_zone'];
       if (this.formData) {
         if (this.formData.leader) {
           this.isLeader = this.formData.leader._id === res._id;
@@ -95,13 +98,23 @@ export class CallRequestConfirmComponent implements OnInit {
   }
   acceptRequest(): void {
     this.isAcceptLoading = true;
+    const ownDateTime = moment(this.ownDateTime);
+    const desired = new Date(
+      `${ownDateTime.year()}-${numPad(ownDateTime.month() + 1)}-${numPad(
+        ownDateTime.date()
+      )}T${numPad(ownDateTime.hour())}:${numPad(ownDateTime.minute())}:00.000${
+        this.timezone
+      }`
+    ).toISOString();
+
     const data = {
       call_id: this.formData._id,
       note: this.note,
-      proposed_at: this.selectedDate,
-      desired_at: this.ownDateTime,
+      confirmed_at: this.selectedDate,
+      desired_at: desired,
       schedule_link: this.calendaryLink
     };
+
     this.teamService.acceptCall(data).subscribe(
       (res) => {
         this.isAcceptLoading = false;
@@ -196,21 +209,21 @@ export class CallRequestConfirmComponent implements OnInit {
   }
 
   setDateTime(): void {
-    this.ownDateTime = moment(this.getDateTime()).format(
-      'YYYY-MM-DD hh:mm A'
-    );
+    this.ownDateTime = moment(this.getDateTime()).format('YYYY-MM-DD hh:mm A');
     close();
   }
 
   calendarLink(): void {
     this.userService.profile$.subscribe((res) => {
-      if (res['garbage'] && res['garbage'].calendly && res['garbage'].calendly.link) {
+      if (
+        res['garbage'] &&
+        res['garbage'].calendly &&
+        res['garbage'].calendly.link
+      ) {
         this.calendaryLink = res['garbage'].calendly.link;
       }
     });
   }
 
-  pickOwnDateTime(): void {
-
-  }
+  pickOwnDateTime(): void {}
 }

@@ -502,7 +502,7 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
   editGroupCall(plan): void {}
   addToCalendar(plan): void {
     this.router.navigate(['/calendar']);
-    const startDate = new Date(plan.proposed_at[plan.proposed_at.length - 1]);
+    const startDate = new Date(plan.confirmed_at);
     const endDate = moment(startDate).add(plan.duration, 'm').toISOString();
     const calendarData = {
       title: plan.subject,

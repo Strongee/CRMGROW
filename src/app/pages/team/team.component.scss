@@ -38,10 +38,6 @@
 
   flex-wrap: wrap;
 
-  .tabs {
-    width: 440px;
-  }
-
   .status {
     padding: 4px 5px;
     border-radius: 4px;
@@ -194,8 +190,7 @@
 
 .material-share-table {
   th, td {
-    vertical-align: middle !important;
-    background-color: white;
+
     &.checkbox-col {
       opacity: 1;
     }
@@ -309,9 +304,7 @@
   }
 
   @media screen and (max-width: 1400px) {
-    th, td {
-      vertical-align: top !important;
-    }
+
     .name-col {
       h5 {
         max-width: unset;
@@ -322,9 +315,6 @@
         display: unset;
         white-space: normal;
       }
-    }
-    .time-col {
-      width: 100px;
     }
   }
 
@@ -352,7 +342,7 @@
       display: none;
     }
     .actions-wrapper {
-      width: 30px;
+      width: 50px;
     }
   }
 
@@ -438,6 +428,7 @@
 
       &.mat-tab-label-active {
         border-bottom: 3px solid #0000ff;
+        font-weight: bold;
       }
     }
   }

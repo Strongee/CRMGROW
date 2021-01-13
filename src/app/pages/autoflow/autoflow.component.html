@@ -65,7 +65,7 @@
             <i class="bgc-blue i-icon i-remove"></i>
           </button>
         </div>
-        <div class="count-container">
+        <div class="count-container" *ngIf="automation">
           <div class="actions-count">
             <label class="f-1 text-uppercase">Actions</label>
             <div class="content actions">
@@ -75,7 +75,7 @@
           <div class="contacts-count mt-3" *ngIf="editMode == 'edit'">
             <label class="f-1 text-uppercase">Contacts</label>
             <div class="content contacts">
-              <p class="count font-weight-bold">0</p>
+              <p class="count font-weight-bold">{{automation.contacts}}</p>
             </div>
           </div>
         </div>
