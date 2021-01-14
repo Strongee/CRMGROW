@@ -1,483 +1,105 @@
 @import '../../../variables';
 
-.i-triangle-left {
-    width: 10px;
-    height: 10px;
-    min-width: 10px;
+.deal-info-panel {
+    min-width: 376px;
+    .i-triangle-left {
+        width: 10px;
+        height: 10px;
+        min-width: 10px;
+    }
+    .button-more {
+        i {
+          width: 10px;
+          height: 10px;
+          min-width: 10px;
+        }
+    }
 }
 
-:host ::ng-deep{
-    mat-expansion-panel {
-        box-shadow: none !important;
-        mat-expansion-panel-header {
-            &:hover {
-                background-color: #ffffff !important;
-            }
-        }
-        .avatar-wrapper {
-            display: flex;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-          
-            .avatar {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              width: 40px;
-              min-width: 40px;
-              height: 40px;
-              min-height: 40px;
-              background-color: $color-dark;
-              color: #ffffff;
-              font-size: 16px;
-              margin-right: 10px;
-              box-shadow: unset;
-            }
-        }
-        .mat-expansion-panel-body {
-            padding: 0;
-        }
-    }
-}
-.title {
-    font-size: 24px;
-}
-.stages {
-    .stage {
-        width: 20vw;
-        padding: 10px 0px 10px 20px;
-        position: relative;
-        background: #D9D9DF;
-        &:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            height: 0;
-            width: 0;
-            border-bottom: 10px solid #fff;
-            border-top: 30px solid transparent;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            -webkit-transform: rotate(90deg);
-            transform: rotate(90deg);
-        }
-        &:after {
-            content: "";
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            height: 0;
-            width: 0;
-            border-bottom: 10px solid #D9D9DF;
-            border-top: 30px solid transparent;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            -webkit-transform: rotate(90deg) translateY(-40px);
-            transform: rotate(90deg) translateY(-40px);
-        }
-        &:first-child {
-            background: #04B800;
-            margin-left: 0 !important;
-            &::before {
-                border-bottom: unset;
-            }
-            &::after {
-                border-bottom: 10px solid #04B800;
-            }
-        }
-        &:last-child {
-            margin-right: 0 !important;
-            &::after {
-                border-bottom: unset;
-            }
-        }
-    }
-}
-.contact-info-panel {
-    min-width: 376px;
-}
-.contact-action-panel {
+.deal-action-panel {
     &::before {
-        width: 1px;
-        height: 100%;
-        background: $color-dark;
-        content: "";
-        position: absolute;
-        top: 54px;
-        opacity: 0.2;
-    }
-}
-// Action Panels
-.secondary-actions {
-    position: absolute;
-    top: 8px;
-    right: 0px;
-}
-.main-actions {
-    .tab-panel {
-        border: 1px solid #c6c7cf;
-        .email-panel {
-            .email-box {
-                .receiver {
-                    background-color: rgba(16,19,54,0.04);
-                    border-bottom: 1px solid #c6c7cf;
-                }
-                .email-tracking {
-                    .mat-icon {
-                        color: #c6c7cf;
-                    }
-                    .email-cc, .email-bcc {
-                        border-bottom: 1px solid #c6c7cf;
-                    }
-                }
-                .email-title {
-                    input {
-                        border: none;
-                        outline: none;
-                    }
-                    border-bottom: 1px solid #c6c7cf;
-                }
-                .email-body {
-                    position: relative;
-                    border-bottom: 1px solid #c6c7cf;
-                    .insert-token {
-                        position: absolute;
-                        top: 15px;
-                        right: 20px;
-                        .dropdown-toggle {
-                            .i-triangle-up {
-                                display: none !important;
-                            }
-                        }
-                        &.show {
-                            .dropdown-toggle {
-                                color: $color-blue;
-                                .i-triangle-down {
-                                    display: none !important;
-                                }
-                                .i-triangle-up {
-                                    display: block !important;
-                                }
-                            }
-                        }
-                        i {
-                            width: 10px;
-                            height: 10px;
-                            min-width: 10px;
-                        }
-                    }
-                }
-                .email-setting {
-                    .material-button {
-                        border-radius: 24px;
-                        border-width: 2px;
-                        .i-material {
-                            width: 16px;
-                            height: 16px;
-                            min-width: 16px;
-                        }
-                        .i-plus {
-                            width: 12px;
-                            height: 12px;
-                            min-width: 12px;
-                        }
-                    }
-                    .email-template {
-                        border: 2px solid $color-blue;
-                        border-radius: 24px;
-                        padding-top: 0.5rem;
-                        padding-bottom: 0.5rem;
-                        &.show {
-                            border: 2px solid $color-dark;
-                            background-color: $color-dark;
-                            i {
-                                background-color: white;
-                            }
-                            .select-title {
-                                color: white;
-                            }
-                            .dropdown-menu.show {
-                                top: 10px !important;
-                            }
-                        }
-                        &.selected {
-                            border: 2px solid $color-blue;
-                            background-color: $color-blue;
-                            padding-top: 0;
-                            padding-bottom: 0;
-                            i {
-                                background-color: white;
-                            }
-                            .select-title {
-                                color: white;
-                            }
-                        }
-                        i {
-                            width: 16px;
-                            height: 16px;
-                            min-width: 16px;
-                        }
-                    }
-                    .email-schedule, .email-reminder {
-                        i {
-                            width: 28px;
-                            height: 28px;
-                            min-width: 28px;
-                        }
-                    }
-                }
-            }
-        }
-        .note-panel {
-            .note-title {
-                background-color:rgba(16,19,54,0.04);
-                border-bottom: 1px solid #C6C7CF;
-                input {
-                    border: none;
-                    outline: none;
-                    background: transparent;
-                }
-                .inline-error {
-                    position: absolute;
-                    right: 12px;
-                    top: 12px;
-                }
-            }
-            .note-content {
-                background-color: #fff7d1;
-                textarea {
-                    resize: none;
-                    border: none;
-                    outline: none;
-                    background: transparent;
-                }
-                .inline-error {
-                    position: absolute;
-                    right: 12px;
-                    top: 20px;
-                }
-            }
-        }
-        .task-panel {
-            .task-time {
-                .form-group {
-                    .form-control {
-                        background-position: calc(100% - 20px) calc(1em + 5px), calc(100% - 15px) calc(1em + 5px), calc(100% - 2.5em) 0.5em;
-                    }
-                    .input-group-text {
-                        border: none;
-                    }
-                }
-                .input-group {
-                    flex-wrap: nowrap;
-                    .dropdown {
-                        input {
-                            border-top-left-radius: unset;
-                            border-bottom-left-radius: unset;
-                        }
-                    }
-                }
-                .btn {
-                    height: 40px;
-                }
-                .date-picker {
-                    padding: 1rem;
-                }
-            }
-        }
-    }
-}
-  
-// History Panel
-.type-headers {
-    justify-content: space-between;
-    padding-right: 48px;
-}
-.history-list {
-    &::before {
-        border-left: 2px dashed gainsboro;
-        content: "";
-        position: absolute;
-        top: 0px;
-        left: 10px;
-        height: 100%;
-        width: 1px;
-        z-index: -1;
-    }
-  
-    .time-line {
-        margin-bottom: 2rem;
-        .history-icon {
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 4px;
-        }
-        .history-info {
-            flex: 1;  
-            .history-header {
-                display: flex;
-                .history-time {
-                    width: 150px;
-                }
-            }
-            .history-detail {
-                margin-top: 0.5rem;
-                padding: 1rem;
-                border-radius: 8px;
-                border: 1px solid $color-trans28;
-                transition: box-shadow .2s;
-                word-break: break-all;
-                &:hover {
-                    box-shadow: 0px 2px 10px $color-trans28;
-                }
-            }
-        }
-    }
-}
-.btn-accept, .btn-red {
-    &:hover {
-        color: #fff;;
+      width: 1px;
+      height: 100%;
+      background: $color-dark;
+      content: "";
+      position: absolute;
+      top: 0px;
+      opacity: 0.2;
     }
 }
 
 :host ::ng-deep {
-    quill-editor {
-        .ql-toolbar {
-            border: 0;
-            border-bottom: 1px solid #c6c7cf;
-            padding-right: 90px;
-        }
-        .ql-container {
-            border: none;
-        }
-    }
     .general-panels {
         .mat-expansion-panel-header {
-            padding: 0px;
+          padding: 0px;
     
-            &.mat-expanded {
-                height: 48px;
-            }
-  
-            .mat-expansion-panel-header-title {
-                margin-right: 0px;
-            }
+          &.mat-expanded {
+            height: 48px;
+          }
+    
+          .mat-expansion-panel-header-title {
+            margin-right: 0px;
+          }
         }
-  
+    
         .mat-expansion-panel-body {
-            padding: 0px;
+          padding: 0px;
         }
-  
-        .toggle-icon {
-            width: 12px;
-            height: 12px;
-            min-width: 12px;
-        }
-    }
-    .picker-body {
-        ngb-datepicker {
-            border: none;
-            background-color: white;
-            .ngb-dp-header, .ngb-dp-weekdays {
-                background-color: white;
-                border-bottom: none;
-            }
-            .ngb-dp-weekday {
-                color: #101336;
-                font-style: normal;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            .ngb-dp-day {
-                &:focus {
-                    outline: unset;
+
+        .contact {
+            border: 1px solid #DCDCDC;
+            border-radius: 4px;
+            .avatar-wrapper {
+                width: 100%;
+                height: 100%;
+                .avatar {
+                  width: 40px;
+                  min-width: 40px;
+                  height: 40px;
+                  min-height: 40px;
+                  background-color: $color-dark;
+                  margin-right: 10px;
+                  box-shadow: unset;
                 }
             }
-        }
-        .custom-select {
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            text-align-last: center;
-            color: #101336;
-            &:focus {
-                box-shadow: none;
+            .contact-more {
+                position: absolute;
+                top: 10px;
+                right: 10px;
             }
         }
-        .btn-light {
-            color: #101336;
-            font-size: 13px;
-        }
-        .ngb-dp-navigation-chevron {
-            border-bottom: 6px solid #101336;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            transform: none;
-            width: 0;
-            height: 0;
-            border-top-width: 0;
-        }
-        .ngb-dp-arrow {
-            transform: rotate(-90deg);
-            margin-top: 2px;
-        }
-        .ngb-dp-arrow.right {
-            transform: rotate(90deg);
-        }
-        .ngb-dp-arrow-btn:focus {
-            outline-width: 0;
+    
+        .toggle-icon {
+          width: 12px;
+          height: 12px;
+          min-width: 12px;
         }
     }
     .dropdown-toggle::after {
       display: none;
     }
-}
-  
-:host ::ng-deep {
-    .tab-container {
-        padding: 0px!important;
-
-        .tab {
-            text-transform: none!important;
-            letter-spacing: 0px!important;
-            padding-left: 12px!important;
-            padding-right: 12px!important;
-            &:nth-child(2) {
-                padding-left: 6px!important;
+    app-slide-tab {
+        .tab-container {
+            padding: 0px!important;
+            .tab {
+                text-transform: none!important;
+                letter-spacing: 0px!important;
+                padding-left: 12px!important;
+                padding-right: 12px!important;
+                &:nth-child(2) {
+                  padding-left: 6px!important;
+                }
+                .tab-label {
+                    font-weight: normal;
+                    opacity: 0.64;
+                }
+                &.active {
+                    .tab-label {
+                        font-weight: bold;
+                        opacity: 1;
+                    }
+                }
             }
         }
-    }
-}
-
-// Responsive Design
-@media screen and (max-width: 1200px) {
-    .contact-panel {
-        flex-direction: column;
-  
-        .contact-info-panel {
-            padding-right: 0px!important;
-            min-width: unset;
-        }
-  
-        .type-headers {
-            flex-wrap: wrap;
-        }
-        .contact-action-panel {
-            &::before {
-                display: none;
-            }
-        }
-        .history-panel {
-            padding-left: 0px!important;
-        }
-    }
-  }
-@media screen and (max-width: 380px) {
-    .create-actions button {
-        font-size: 13px;
     }
 }

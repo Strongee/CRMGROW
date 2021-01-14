@@ -1,11 +1,14 @@
 <div class="page-content position-relative">
+    <div class="f-26 font-weight-bold mb-3">
+        Deals
+    </div>
     <ng-container *ngIf="(dealsService.stages$ | async).length; else emptyListStage">
-        <div class="d-flex columns" cdkDropListGroup>
+        <div class="d-flex stages" cdkDropListGroup>
             <div class="updating-status" *ngIf="(dealsService.loadingStage$ | async) === STATUS.REQUEST">
                 LOADING
             </div>
-            <div class="column" *ngFor="let dealStage of dealsService.stages$ | async">
-                <div class="column-title bgc-pale p-4">
+            <div class="stage" *ngFor="let dealStage of dealsService.stages$ | async">
+                <div class="stage-title bgc-pale p-4">
                     <div class="f-4 font-weight-bold">
                         {{dealStage.title}}
                     </div>
@@ -17,13 +20,13 @@
                     </div>
                 </div>
                 <div
-                    class="tasks-container mt-4"
+                    class="deals-container mt-4"
                     cdkDropList
                     [cdkDropListData]="dealStage.deals"
                     (cdkDropListDropped)="drop($event, dealStage._id)"
                 >
                     <div
-                        class="task mt-3 mr-3 p-3 c-pointer"
+                        class="deal mt-3 mr-3 p-3 c-pointer"
                         *ngFor="let deal of dealStage.deals" cdkDrag
                         (click)="dealDetail(deal._id)"
                     >
@@ -31,7 +34,7 @@
                             <div class="f-6 font-weight-bold">
                                 {{ deal.title }}
                             </div>
-                            <div *ngIf="deal.title == 'Real Estate 1'">
+                            <!-- <div *ngIf="deal.title == 'Real Estate 1'">
                                 <img src="/assets/img/status_green.svg" alt="">
                             </div>
                             <div *ngIf="deal.title == 'Real Estate 2'">
@@ -45,24 +48,30 @@
                             </div>
                             <div *ngIf="deal.title != 'Real Estate 1' && deal.title != 'Real Estate 2' && deal.title != 'Real Estate 3' && deal.title != 'Real Estate 4'">
                                 <img src="/assets/img/status_gray.svg" alt="">
-                            </div>
+                            </div> -->
                         </div>
-                        <div class="v-center mt-2">
-                            <div class="avatar"></div>
-                            <div class="ml-2 f-3">
-                                Thomas Anderson
+                        <div class="v-center justify-content-between mt-2 contacts-info">
+                            <div class="v-center">
+                                <div class="avatar"></div>
+                                <div class="ml-2 f-3">
+                                    {{deal.contacts[0]?.first_name}} {{deal.contacts[0]?.last_name}}
+                                </div>
+                            </div>
+                            <div class="v-center" *ngIf="deal.contacts.length > 1">
+                                <i class="d-block i-icon i-plus bgc-dark mr-1"></i>
+                                <div class="f-3">{{deal.contacts.length - 1}}</div>
                             </div>
                         </div>
                         <div class="f-3 op-64 mt-2">
                             ${{deal.value}}
                         </div>
                     </div>
-                    <div class="v-center justify-content-center add-task mt-3 mr-3">
+                    <div class="v-center justify-content-center add-deal mt-3 mr-3">
                         <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addDeals(dealStage)"></i>
                     </div>
                 </div>
             </div>
-            <div class="v-center justify-content-center c-pointer add-column p-3" (click)="addStages()">
+            <div class="v-center justify-content-center c-pointer add-stage p-3" (click)="addStages()">
                 <i class="i-icon i-plus d-block bgc-blue"></i>
             </div>
         </div>
