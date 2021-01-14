@@ -44,3 +44,13 @@
 .panel {
   max-width: 480px;
 }
+
+@media screen and (max-width: 400px) {
+  .color-label {
+    display: none;
+  }
+  .panel {
+    padding-left: 1rem!important;
+    padding-right: 1rem!important;
+  }
+}
