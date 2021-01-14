@@ -14,6 +14,28 @@
           min-width: 10px;
         }
     }
+    .deal-stage {
+        .stage-title {
+            min-width: 150px;
+        }
+        i {
+            width: 10px;
+            height: 10px;
+            min-width: 10px;
+        }
+        .stage-status {
+            border: 3px solid #D9D9DF;
+            border-radius: 5px;
+            width: 20%;
+            height: 2px;
+            &:last-child {
+                margin-right: 0;
+            }
+            &.stage-0, &.stage-1 {
+                border: 3px solid #04B800; 
+            }
+        }
+    }
 }
 
 .deal-action-panel {
@@ -99,6 +121,22 @@
                         opacity: 1;
                     }
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .deal-panel {
+        flex-direction: column;
+  
+        .deal-info-panel {
+            padding-right: 0px!important;
+            min-width: unset;
+        }
+        .deal-action-panel {
+            &::before {
+                display: none;
             }
         }
     }

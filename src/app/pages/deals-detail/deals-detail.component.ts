@@ -19,6 +19,7 @@ export class DealsDetailComponent implements OnInit {
   };
   stages: any[] = [];
   selectedStage = '';
+  selectedStageId = '';
   dealPanel = true;
   contactsPanel = true;
   tabs: TabItem[] = [
@@ -56,6 +57,7 @@ export class DealsDetailComponent implements OnInit {
           this.stages.forEach((stage) => {
             if (stage._id == res['data'].main.deal_stage) {
               this.selectedStage = stage.title;
+              this.selectedStageId = stage._id;
             }
           });
         }
