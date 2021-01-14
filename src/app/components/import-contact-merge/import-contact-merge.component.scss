@@ -13,6 +13,23 @@
   min-width: 70px;
 }
 
+.selected-option-text {
+  color: #0000ff;
+}
+
+.contact-row {
+
+  .contact-header {
+    width: 30%;
+    max-width: 200px;
+  }
+
+  .contact-field {
+    width: 70%;
+    max-width: 300px;
+  }
+}
+
 :host ::ng-deep {
   .check-wrapper {
     .custom-radio:checked, .custom-radio:not(:checked) {
@@ -47,5 +64,15 @@
       width: 0.75rem;
       height: 0.75rem;
     }
+  }
+
+  .mat-select {
+    border: 1px solid #aaa;
+    padding: 8px 12px;
+    border-radius: 5px;
+  }
+
+  .mat-select-value-text {
+    color: #000;
   }
 }

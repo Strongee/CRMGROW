@@ -400,8 +400,9 @@ export class TeamComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res && res.data) {
-          console.log('share contact =============>', this.sharedContacts, res);
-          this.sharedContacts.push(res.data);
+          for (const contact of res.data) {
+            this.sharedContacts.push(contact);
+          }
         }
       });
   }

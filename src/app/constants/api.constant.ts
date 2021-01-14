@@ -228,7 +228,8 @@ export const SEND = {
   GMAIL: 'email/bulk-gmail',
   OUTLOOK: 'email/bulk-outlook',
   TEXT: '',
-  SHARE: 'email/share-platform'
+  SHARE: 'email/share-platform',
+  SEND_EMAIL: 'email/send-email'
 };
 export const TAG = {
   ALL: 'tag/getAll',

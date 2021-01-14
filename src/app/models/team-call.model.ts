@@ -2,7 +2,6 @@ import { Deserializable } from './deserialize.model';
 
 export class TeamCall implements Deserializable {
   _id: string;
-  user: string;
   leader: string;
   team: string;
   guests: string[];
@@ -15,8 +14,10 @@ export class TeamCall implements Deserializable {
   note: string;
   status: string;
   link: string;
-  due_start: string;
-  due_end: string;
+  schedule_link: string;
+  proposed_at: string[];
+  confirmed_at: string;
+  desired_at: string;
   updated_at: string;
   created_at: string;
 
