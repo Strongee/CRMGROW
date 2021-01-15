@@ -1354,6 +1354,26 @@ ul.ngx-pagination {
   }
 }
 
+.date-picker-overlay {
+  ngb-datepicker {
+    .ngb-dp-header, .ngb-dp-weekdays {
+      background-color: white;
+      border-bottom: none;
+    }
+    .ngb-dp-weekday {
+      color: #101336;
+      font-style: normal;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .ngb-dp-day {
+      &:focus {
+        outline: unset;
+      }
+    }
+  }
+}
+
 .dialog-container{
   padding: 1.5rem 1rem;
 

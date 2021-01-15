@@ -24,7 +24,7 @@
     [cdkConnectedOverlayOpen]="isOpen"
     (overlayOutsideClick)="closeOverlay($event)"
   >
-    <div class="bg-white" [class.prepend-wrapper]="type=='prepend'">
+    <div class="bg-white date-picker-overlay" [class.prepend-wrapper]="type=='prepend'">
       <ngb-datepicker name="select_date" #dp [(ngModel)]="value" [minDate]="minDate" [firstDayOfWeek]="7" (ngModelChange)="changeDate()"></ngb-datepicker>
     </div>
   </ng-template>
