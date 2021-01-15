@@ -2,23 +2,15 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   TIMES,
   CALENDAR_DURATION,
-  RECURRING_TYPE,
-  QuillEditor
+  RECURRING_TYPE
 } from 'src/app/constants/variable.constants';
 import { MatDialog } from '@angular/material/dialog';
-import { QuillEditorComponent } from 'ngx-quill';
-import { FileService } from '../../services/file.service';
-import { ContactService } from 'src/app/services/contact.service';
 import { OverlayService } from 'src/app/services/overlay.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
-import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { Contact } from 'src/app/models/contact.model';
 import * as moment from 'moment';
-import * as QuillNamespace from 'quill';
-const Quill: any = QuillNamespace;
-// import ImageResize from 'quill-image-resize-module';
-// Quill.register('modules/imageResize', ImageResize);
+import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 
 @Component({
   selector: 'app-calendar-overlay',
@@ -61,17 +53,13 @@ export class CalendarOverlayComponent implements OnInit {
   calendar_durations = CALENDAR_DURATION;
   recurrings = RECURRING_TYPE;
 
-  quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
-  config = QuillEditor;
-  focusEditor = '';
+  focusedField = '';
 
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
   constructor(
     private dialog: MatDialog,
-    private fileService: FileService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
-    private contactService: ContactService,
     private overlayService: OverlayService
   ) {}
 
@@ -168,38 +156,8 @@ export class CalendarOverlayComponent implements OnInit {
     this.event.location = evt.formatted_address;
   }
 
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-
-  initImageHandler = (): void => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res.url);
-        });
-      }
-    });
-    imageInput.click();
-  };
-
-  insertImageToEditor(url: string): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-  setFocusField(editorType: string): void {
-    this.focusEditor = editorType;
+  focusEditor(): void {
+    this.focusedField = 'editor';
   }
 
   setRepeatEvent(): void {

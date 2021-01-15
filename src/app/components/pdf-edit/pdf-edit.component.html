@@ -40,25 +40,15 @@
         <div class="row mx-0">
             <div class="col-12 px-0">
                 <div class="form-group">
-                <quill-editor
-                    image-resize="true"
-                    placeholder="PDF Description"
-                    [(ngModel)]="pdf.description"
-                    [modules]="config"
-                    name="mailContent"
-                    [styles]="{ height: '150px' }"
-                    #mailContent="ngModel"
-                    (onEditorCreated)="getEditorInstance($event)"
-                    (click)="setFocusField('content-email')"
-                    class="rounded"
-                    [class.has-error]="
-                    mailContent.errors &&
-                    (mailContent.touched || mailContent.dirty || submitted) &&
-                    submitted
-                    "
-                    #emailEditor
-                >
-                </quill-editor>
+                    <app-html-editor
+                        [(value)]="pdf.description"
+                        placeholder="PDF Description"
+                        required="true"
+                        [style]="{height: '150px'}"
+                        (onFocus)="focusEditor()"
+                        #emailEditor
+                        >
+                    </app-html-editor>
                 </div>
             </div>
         </div>

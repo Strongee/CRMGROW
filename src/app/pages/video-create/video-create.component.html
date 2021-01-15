@@ -98,25 +98,15 @@
                     </div>
                     <div class="video-description">
                         <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
-                        <quill-editor
-                            image-resize="true"
+                        <app-html-editor
+                            [(value)]="video.description"
                             placeholder="Enter Text"
-                            [(ngModel)]="video.description"
-                            [modules]="config"
-                            name="mailContent"
-                            [styles]="{ height: '150px' }"
-                            #mailContent="ngModel"
-                            (onEditorCreated)="getEditorInstance($event)"
-                            (click)="setFocusField('content-email')"
-                            class="rounded"
-                            [class.has-error]="
-                            mailContent.errors &&
-                            (mailContent.touched || mailContent.dirty || submitted) &&
-                            submitted
-                            "
+                            required="true"
+                            [style]="{height: '150px'}"
+                            (onFocus)="focusEditor()"
                             #emailEditor
-                        >
-                        </quill-editor>
+                            >
+                        </app-html-editor>
                     </div>
                     <div class="v-center justify-content-end mt-4">
                         <a class="btn f-6 font-weight-bold text-primary px-4 py-2 mr-3" (click)="backUpload()">
@@ -276,25 +266,15 @@
                     </div>
                     <div class="video-description">
                         <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
-                        <quill-editor
-                            image-resize="true"
+                        <app-html-editor
+                            [(value)]="pdf.description"
                             placeholder="Enter Text"
-                            [(ngModel)]="pdf.description"
-                            [modules]="config"
-                            name="mailContent"
-                            [styles]="{ height: '150px' }"
-                            #mailContent="ngModel"
-                            (onEditorCreated)="getEditorInstance($event)"
-                            (click)="setFocusField('content-email')"
-                            class="rounded"
-                            [class.has-error]="
-                            mailContent.errors &&
-                            (mailContent.touched || mailContent.dirty || submitted) &&
-                            submitted
-                            "
+                            required="true"
+                            [style]="{height: '150px'}"
+                            (onFocus)="focusEditor()"
                             #emailEditor
-                        >
-                        </quill-editor>
+                            >
+                        </app-html-editor>
                     </div>
                     <div class="v-center justify-content-end mt-4">
                         <a class="btn f-6 font-weight-bold text-primary px-4 py-2 mr-3" (click)="backUpload()">
@@ -441,25 +421,15 @@
                     </div>
                     <div class="video-description">
                         <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
-                        <quill-editor
-                            image-resize="true"
+                        <app-html-editor
+                            [(value)]="image.description"
                             placeholder="Enter Text"
-                            [(ngModel)]="image.description"
-                            [modules]="config"
-                            name="mailContent"
-                            [styles]="{ height: '150px' }"
-                            #mailContent="ngModel"
-                            (onEditorCreated)="getEditorInstance($event)"
-                            (click)="setFocusField('content-email')"
-                            class="rounded"
-                            [class.has-error]="
-                            mailContent.errors &&
-                            (mailContent.touched || mailContent.dirty || submitted) &&
-                            submitted
-                            "
+                            required="true"
+                            [style]="{height: '150px'}"
+                            (onFocus)="focusEditor()"
                             #emailEditor
-                        >
-                        </quill-editor>
+                            >
+                        </app-html-editor>
                     </div>
                     <div class="v-center justify-content-end mt-4">
                         <a class="btn f-6 font-weight-bold text-primary px-4 py-2 mr-3" (click)="backUpload()">
