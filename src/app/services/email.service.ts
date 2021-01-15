@@ -63,4 +63,11 @@ export class EmailService extends HttpService {
       catchError(this.handleError('SEND MATERIAL OF AFFILIATE', []))
     );
   }
+
+  sendEmail(data): Observable<any> {
+    return this.httpClient.post(this.server + SEND.SEND_EMAIL, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('SEND EMAIL OF CANCELING CALL', []))
+    );
+  }
 }

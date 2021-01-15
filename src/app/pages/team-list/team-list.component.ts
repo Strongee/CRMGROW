@@ -27,7 +27,7 @@ export class TeamListComponent implements OnInit {
 
   userId = '';
   currentUser: User;
-  hasOwnTeam = false;
+  hasOwnTeam = true;
 
   isAcceptInviting = false;
   isDeclineInviting = false;
@@ -55,9 +55,11 @@ export class TeamListComponent implements OnInit {
         for (const team of res) {
           if (team.owner && team.owner.length) {
             this.hasOwnTeam = true;
+            return;
           }
         }
       }
+      this.hasOwnTeam = false;
     });
   }
 
@@ -115,6 +117,14 @@ export class TeamListComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.teamService.deleteTeam$(team._id);
+          const teams = this.teamService.teams.getValue();
+          for (const item of teams) {
+            if (item.owner && item.owner.length) {
+              this.hasOwnTeam = true;
+              return;
+            }
+          }
+          this.hasOwnTeam = false;
         }
       });
   }
