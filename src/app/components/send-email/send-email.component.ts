@@ -59,7 +59,13 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const defaultEmail = this.userService.email.getValue();
+    if (defaultEmail) {
+      this.emailContent = defaultEmail.content;
+      this.emailSubject = defaultEmail.subject;
+    }
+  }
 
   ngAfterViewInit(): void {}
 
@@ -186,14 +192,9 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     this.scheduleDateTime = '';
   }
 
-  onInitEditor(): void {
-    const defaultEmail = this.userService.email.getValue();
-    if (defaultEmail) {
-      this.emailContent = defaultEmail.content;
-      this.emailSubject = defaultEmail.subject;
-    }
-    this.htmlEditor.setValue(this.emailContent);
-  }
+  // onInitEditor(): void {
+    
+  // }
   onAttachmentChange(attachments: any[]): void {
     this.attachments = attachments;
   }
