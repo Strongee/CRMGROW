@@ -75,7 +75,7 @@
           </div>
         </div>
         <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
-          <div class="tabs">
+          <div class="d-flex tabs">
             <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
             </app-slide-tab>
           </div>
@@ -289,14 +289,13 @@
       <div class="share-table-container mt-5" *ngIf="selectedTab.id === 'shared'">
         <div class="material-tabs">
           <mat-tab-group animationDuration="0ms">
-            <mat-tab label="videos">
+            <mat-tab label="video">
               <ng-template mat-tab-label>
-                Materials
+                VIDEO
               </ng-template>
               <div class="materials-list-wrapper list-wrapper tab-panel">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareMaterial()">Share material</button>
+                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareMaterial('video')">Share Video</button>
                 <div class="materials mt-3">
-                  <h6 class="f-6 font-weight-bold text-uppercase c-dark mt-3">Video</h6>
                   <ng-container *ngIf="team.videos.length; else emptyVideoListTemplate">
                     <ng-container *ngIf="role=='editor' || role == 'owner'">
                       <table class="table material-share-table mt-3">
@@ -402,13 +401,20 @@
                         <h5 class="font-weight-bold mt-4 mb-3">
                           There is no videos for share yet.
                         </h5>
-                        <p class="mb-4">Please add material to use for sharing.</p>
+                        <p class="mb-4">Please add video to use for sharing.</p>
                       </div>
                     </div>
                   </ng-template>
                 </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="pdf">
+              <ng-template mat-tab-label>
+                PDF
+              </ng-template>
+              <div class="materials-list-wrapper list-wrapper tab-panel">
+                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareMaterial('pdf')">Share PDF</button>
                 <div class="materials mt-3">
-                  <h6 class="f-6 font-weight-bold c-dark">PDF</h6>
                   <ng-container *ngIf="team.pdfs.length; else emptyPdfListTemplate">
                     <ng-container *ngIf="role=='editor' || role == 'owner'">
                       <table class="table material-share-table mt-3">
@@ -468,7 +474,7 @@
                             </div>
                           </td>
                           <td class="actions-col">
-                            <div class="v-center">
+                            <div class="actions-wrapper v-center justify-content-end">
                               <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterials('pdf', 'text', pdf)">
                                 <i class="bgc-dark i-icon i-send mr-2"></i>
                                 <span class="button-label">Send</span>
@@ -509,14 +515,21 @@
                           <h5 class="font-weight-bold mt-4 mb-3">
                             There is no PDFs for share yet.
                           </h5>
-                          <p class="mb-4">Please add material to use for sharing.</p>
+                          <p class="mb-4">Please add PDF to use for sharing.</p>
                         </div>
                       </div>
                     </div>
                   </ng-template>
                 </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="image">
+              <ng-template mat-tab-label>
+                IMAGE
+              </ng-template>
+              <div class="materials-list-wrapper list-wrapper tab-panel">
+                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareMaterial('image')">Share image</button>
                 <div class="materials mt-3">
-                  <h6 class="f-6 font-weight-bold c-dark">IMAGE</h6>
                   <ng-container *ngIf="team.images.length; else emptyImageListTemplate">
                     <ng-container *ngIf="role=='editor' || role == 'owner'">
                       <table class="table material-share-table mt-3">
@@ -576,7 +589,7 @@
                             </div>
                           </td>
                           <td class="actions-col">
-                            <div class="v-center">
+                            <div class="actions-wrapper v-center justify-content-end">
                               <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterials('image', 'text', image)">
                                 <i class="bgc-dark i-icon i-send mr-2"></i>
                                 <span class="button-label">Send</span>
@@ -616,16 +629,16 @@
                         <h5 class="font-weight-bold mt-4 mb-3">
                           There is no images for share yet.
                         </h5>
-                        <p class="mb-4">Please add material to use for sharing.</p>
+                        <p class="mb-4">Please add image to use for sharing.</p>
                       </div>
                     </div>
                   </ng-template>
                 </div>
               </div>
             </mat-tab>
-            <mat-tab label="Templates">
+            <mat-tab label="template">
               <ng-template mat-tab-label>
-                Templates
+                TEMPLATE
               </ng-template>
               <div class="template-list-wrapper list-wrapper tab-panel mt-3">
                 <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareEmailTemplate()">Share template</button>
@@ -690,9 +703,9 @@
                 </ng-template>
               </div>
             </mat-tab>
-            <mat-tab label="Automation">
+            <mat-tab label="automation">
               <ng-template mat-tab-label>
-                Automations
+                AUTOMATION
               </ng-template>
               <div class="automation-list-wrapper list-wrapper tab-panel mt-3">
                 <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareAutomation()">Share automation</button>
@@ -755,9 +768,9 @@
                 </ng-template>
               </div>
             </mat-tab>
-            <mat-tab label="Automation">
+            <mat-tab label="contact">
               <ng-template mat-tab-label>
-                Contacts
+                CONTACT
               </ng-template>
               <div class="contact-list-wrapper list-wrapper tab-panel mt-3">
                 <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto" (click)="shareContact()">Share Contact</button>

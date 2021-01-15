@@ -75,6 +75,9 @@ export class NavbarComponent implements OnInit {
         });
         break;
       case 'record':
+        if (this.dialog.openDialogs.length > 0) {
+          return;
+        }
         this.dialog.open(RecordSettingDialogComponent, {
           position: { top: '0px' },
           width: '100%',

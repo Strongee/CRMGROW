@@ -6,11 +6,7 @@ import {
   PositionStrategy,
   OverlayConfig
 } from '@angular/cdk/overlay';
-import {
-  PortalInjector,
-  ComponentPortal,
-  TemplatePortal
-} from '@angular/cdk/portal';
+import { TemplatePortal } from '@angular/cdk/portal';
 import { fromEvent, Subscription, Subject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 

@@ -57,12 +57,14 @@ export class TeamComponent implements OnInit {
   shareUrl = 'https://www.crmgrow.com/';
   tabs: TabItem[] = [
     { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
-    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' },
-    { icon: 'i-icon i-deals', label: 'DEALS', id: 'deals' }
+    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
+    // { icon: 'i-icon i-deals', label: 'DEALS', id: 'deals' }
   ];
   selectedTab: TabItem = this.tabs[0];
   sharedTabs: TabItem[] = [
-    { icon: '', label: 'Materials', id: 'materials' },
+    { icon: '', label: 'Video', id: 'video' },
+    { icon: '', label: 'PDF', id: 'pdf' },
+    { icon: '', label: 'Image', id: 'image' },
     { icon: '', label: 'Templates', id: 'templates' },
     { icon: '', label: 'Automations', id: 'automations' },
     { icon: '', label: 'Contacts', id: 'contacts' }
@@ -170,7 +172,6 @@ export class TeamComponent implements OnInit {
             if (contacts) {
               this.sharedContacts = contacts;
             }
-            console.log("shared contacts ===============>", this.sharedContacts);
           },
           (err) => {
             this.loading = false;
@@ -182,21 +183,26 @@ export class TeamComponent implements OnInit {
       }
     );
   }
-  shareMaterial(): void {
+  shareMaterial(type): void {
     this.dialog
       .open(MaterialShareComponent, {
         width: '96vw',
         maxWidth: '500px',
         disableClose: true,
         data: {
-          team_id: this.teamId
+          team_id: this.teamId,
+          type
         }
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
-          if (res.videos) {
-            this.team.videos = [...this.team.videos, ...res.videos];
+        if (res && res.materials) {
+          if (type === 'video') {
+            this.team.videos = [...this.team.videos, ...res.materials];
+          } else if (type === 'pdf') {
+            this.team.pdfs = [...this.team.pdfs, ...res.materials];
+          } else if (type === 'image') {
+            this.team.images = [...this.team.images, ...res.materials];
           }
         }
       });
@@ -393,7 +399,10 @@ export class TeamComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
+        if (res && res.data) {
+          for (const contact of res.data) {
+            this.sharedContacts.push(contact);
+          }
         }
       });
   }

@@ -1,9 +1,14 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? update() : false;">
-    <div class="v-center justify-content-between">
-      <h1 mat-dialog-title >Edit contact details</h1>
-      <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
-          <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
-      </button>
+    <div mat-dialog-title class="title">
+      <div class="v-center justify-content-between">
+        <h1 class="mb-0">Edit contact details</h1>
+        <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
+            <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
+        </button>
+      </div>
+      <span class="error mb-1" *ngIf="form.submitted && (sameEmailContacts.length || sameCellPhoneContacts.length)">
+        Please input another contact information or edit the existing contact.
+      </span>
     </div>
     <mat-dialog-content>
       <div class="row">
@@ -25,29 +30,28 @@
           <input type="email" id="email_cc" class="form-control" name="email"
             [(ngModel)]="contact.email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$"
             #email="ngModel" (ngModelChange)="checkEmailDuplicate($event)"/>
-          <span class="form-append-icon c-pointer" (click)="toggleSameEmails()" *ngIf="sameEmailContacts.length">
-            <i class="d-block i-icon i-menu-more bgc-dark" *ngIf="!sameEmailsFlag"></i>
-            <i class="d-block i-icon i-menu-more bgc-dark" *ngIf="sameEmailsFlag"></i>
-          </span>
-          <div class="form-checking-result p-2" [hidden]="!sameEmailsFlag"
-            *ngIf="sameEmailContacts.length">
-            <div class="contact-item" *ngFor="let contact of sameEmailContacts">
-              <div class="v-center email">
-                <i class="d-block i-icon i-message bgc-dark mr-2"></i>{{ contact.email || "No Email" }}
-              </div>
-              <div class="v-center cell-phone">
-                <i class="d-block i-icon i-contact-phone bgc-dark mr-2"></i>{{ contact.cell_phone || "No Phone" }}
+            <span class="form-append-icon c-pointer" (click)="toggleSameEmails()" *ngIf="sameEmailContacts.length">
+              <i class="d-block i-icon i-close bgc-dark" *ngIf="sameEmailsFlag"></i>
+              <i class="d-block i-icon i-triangle-down bgc-dark sm" style="margin-right: 2px;" *ngIf="!sameEmailsFlag"></i>
+            </span>
+            <div class="form-checking-result p-2" [hidden]="!sameEmailsFlag"
+              *ngIf="sameEmailContacts.length">
+              <div class="contact-item" *ngFor="let item of sameEmailContacts">
+                <div class="d-flex chip py-2">
+                  <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
+                  <div class="info">
+                    <div class="f-5 font-weight-bold text-primary c-pointer" (click)="goToContact(item)">
+                      {{item.fullName}}
+                    </div>
+                    <div class="f-2">{{item['email'] || 'Undefined'}}</div>
+                    <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="text-right">
-              <button type="button" class="btn btn-primary" (click)="toggleSameEmails()">
-                Close
-              </button>
-            </div>
-          </div>
-          <span class="error" *ngIf="email.errors">
-            <ng-container *ngIf="email.errors.pattern">Email is invalid!</ng-container>
-          </span>
+            <span class="error" *ngIf="email.errors">
+              <ng-container *ngIf="email.errors.pattern">Email is invalid!</ng-container>
+            </span>
         </div>
         <div class="col-sm-6 col-12 form-group phone-form position-relative">
           <label for="cell_phone_cc">phone number</label>
@@ -62,32 +66,28 @@
             [maxLength]="15"
             [phoneValidation]="true"
             [separateDialCode]="true"
-            name="phone" 
-            #phone="ngModel"
+            [formControl]="phoneInput"
             [(ngModel)]="contact_phone"
             (ngModelChange)="checkPhoneDuplicate($event)">
           </ngx-intl-tel-input>
-          <span class="error" *ngIf="phone.errors">
+          <span class="error" *ngIf="contact_phone && phoneInput.valid">
             <ng-template #phoneFormat>Wrong phone number!</ng-template>
           </span>
           <span class="form-append-icon c-pointer" (click)="toggleSamePhones()" *ngIf="sameCellPhoneContacts.length">
-            <i class="d-block i-icon i-menu-more bgc-dark" *ngIf="!samePhonesFlag"></i>
-            <i class="d-block i-icon i-menu-more bgc-dark" *ngIf="samePhonesFlag"></i>
+            <i class="d-block i-icon i-close bgc-dark" *ngIf="samePhonesFlag"></i>
+            <i class="d-block i-icon i-triangle-down bgc-dark sm" style="margin-right: 2px;" *ngIf="!samePhonesFlag"></i>
           </span>
           <div class="form-checking-result p-2" [hidden]="!samePhonesFlag"
             *ngIf="sameCellPhoneContacts.length">
-            <div class="contact-item" *ngFor="let contact of sameCellPhoneContacts">
-              <div class="v-center email">
-                <i class="d-block i-icon i-message bgc-dark mr-2"></i>{{ contact.email || "No Email" }}
+            <div class="contact-item" *ngFor="let item of sameCellPhoneContacts">
+              <div class="d-flex chip py-2">
+                <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
+                <div class="info">
+                  <div class="f-5 font-weight-bold text-primary c-pointer" (click)="goToContact(item)">{{item.fullName}}</div>
+                  <div class="f-2">{{item['email'] || 'Undefined'}}</div>
+                  <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
+                </div>
               </div>
-              <div class="v-center cell-phone">
-                <i class="d-block i-icon i-contact-phone bgc-dark mr-2"></i>{{ contact.cell_phone || "No Phone" }}
-              </div>
-            </div>
-            <div class="text-right">
-              <button type="button" class="btn btn-primary" (click)="toggleSamePhones()">
-                Close
-              </button>
             </div>
           </div>
         </div>

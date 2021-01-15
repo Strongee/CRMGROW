@@ -243,6 +243,6 @@
 
 <mat-drawer-container [hasBackdrop]="true">
   <mat-drawer #drawer position="end">
-    <app-task-filter></app-task-filter>
+    <app-task-filter (onClose)="drawer.close()"></app-task-filter>
   </mat-drawer>
 </mat-drawer-container>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { TeamService } from '../../services/team.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
@@ -12,13 +12,14 @@ import { CallRequestScheduledComponent } from '../../components/call-request-sch
 import { JoinCallRequestComponent } from '../../components/join-call-request/join-call-request.component';
 import * as moment from 'moment';
 import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-team-call',
   templateUrl: './team-call.component.html',
   styleUrls: ['./team-call.component.scss']
 })
-export class TeamCallComponent implements OnInit, AfterViewInit {
+export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   loading = true;
   isLoading = false;
   currentUser: any;
@@ -31,7 +32,7 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
   inquiriesCount: any;
   currentInquiriesPage: any = 1;
   inquiriesCurrentPage;
-  inquiriesSubscription;
+  inquiriesSubscription: Subscription;
   isInquiryLoading = false;
   isInquiryTableLoading = false;
 
@@ -41,7 +42,7 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
   plannedCount: any;
   currentPlannedPage: any = 1;
   plannedCurrentPage;
-  plannedSubscription;
+  plannedSubscription: Subscription;
   isPlannedLoading = false;
   isPlannedTableLoading = false;
 
@@ -51,7 +52,7 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
   finishedCount: any;
   currentFinishedPage: any = 1;
   finishedCurrentPage;
-  finishedSubscription;
+  finishedSubscription: Subscription;
   isFinishedLoading = false;
   isFinishedTableLoading = false;
 
@@ -79,12 +80,10 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
     this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
-      if (this.userId) {
-        this.loadInquiriesPage(1);
-        this.loadPlannedPage(1);
-        this.loadFinishedPage(1);
-      }
     });
+    this.loadInquiriesPage(1);
+    this.loadPlannedPage(1);
+    this.loadFinishedPage(1);
   }
 
   ngAfterViewInit(): void {
@@ -99,6 +98,12 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
         });
       }
     }, 2000);
+  }
+
+  ngOnDestroy(): void {
+    this.inquiriesSubscription && this.inquiriesSubscription.unsubscribe();
+    this.plannedSubscription && this.plannedSubscription.unsubscribe();
+    this.finishedSubscription && this.finishedSubscription.unsubscribe();
   }
 
   loadInquiriesPage(page): void {
@@ -146,10 +151,14 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
       (res) => {
         this.isPlannedLoading = false;
         this.isPlannedTableLoading = false;
-        this.plannedData = res.data;
-        this.pagePlannedData = res.data;
-        this.totalPlanned = res.total;
-        this.plannedCount = res.total;
+        this.plannedData = res;
+        this.pagePlannedData = res;
+        this.totalPlanned = res.length;
+        this.plannedCount = res.length;
+        // this.plannedData = res.data;
+        // this.pagePlannedData = res.data;
+        // this.totalPlanned = res.total;
+        // this.plannedCount = res.total;
       },
       (err) => {
         this.isPlannedTableLoading = false;
@@ -457,7 +466,7 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
                   height: 'auto',
                   disableClose: true,
                   data: {
-                    date: plan
+                    data: plan
                   }
                 })
                 .afterClosed()
@@ -504,7 +513,7 @@ export class TeamCallComponent implements OnInit, AfterViewInit {
   editGroupCall(plan): void {}
   addToCalendar(plan): void {
     this.router.navigate(['/calendar']);
-    const startDate = new Date(plan.proposed_at[plan.proposed_at.length - 1]);
+    const startDate = new Date(plan.confirmed_at);
     const endDate = moment(startDate).add(plan.duration, 'm').toISOString();
     const calendarData = {
       title: plan.subject,

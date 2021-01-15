@@ -1,0 +1,31 @@
+<div>
+  <div class="input-group bgc-dark-trans08 rounded">
+    <ng-container *ngIf="type=='prepend'">
+      <div class="input-group-prepend rounded" (click)="openOverlay()">
+        <span class="input-group-text bgc-blue border-0">
+          <i class="i-icon i-calendar bgc-white"></i>
+        </span>
+      </div>
+    </ng-container>
+    <input
+      class="form-control datepicker"
+      [placeholder]="placeholder"
+      [(ngModel)]="dateString"
+      [required]="required"
+      [formControl]="dateInput"
+      type="text"
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      (click)="openOverlay()"/>
+  </div>
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpen"
+    (overlayOutsideClick)="closeOverlay($event)"
+  >
+    <div class="bg-white date-picker-overlay" [class.prepend-wrapper]="type=='prepend'">
+      <ngb-datepicker name="select_date" #dp [(ngModel)]="value" [minDate]="minDate" [firstDayOfWeek]="7" (ngModelChange)="changeDate()"></ngb-datepicker>
+    </div>
+  </ng-template>
+</div>

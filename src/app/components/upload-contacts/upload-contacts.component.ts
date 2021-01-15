@@ -326,13 +326,20 @@ export class UploadContactsComponent implements OnInit {
           const newColumn = this.updateColumn[originColumn];
           if (newColumn) {
             if (newColumn === 'notes') {
-              const obj = {};
-              obj[originColumn] = e;
-              if (Array.isArray(contact[newColumn])) {
-                contact[newColumn].push(obj);
-              } else {
-                contact[newColumn] = [obj];
+              if (!!e) {
+                if (Array.isArray(contact[newColumn])) {
+                  contact[newColumn].push(e);
+                } else {
+                  contact[newColumn] = [e];
+                }
               }
+              // const obj = {};
+              // obj[originColumn] = e;
+              // if (Array.isArray(contact[newColumn])) {
+              //   contact[newColumn].push(obj);
+              // } else {
+              //   contact[newColumn] = [obj];
+              // }
             } else {
               contact[newColumn] = e;
             }
@@ -369,7 +376,13 @@ export class UploadContactsComponent implements OnInit {
     const rebuildColumns = [];
     for (let i = 0; i < this.columns.length; i++) {
       if (this.updateColumn[this.columns[i]] === 'notes') {
-        this.notesColumns.push(this.columns[i]);
+        delete this.updateColumn[this.columns[i]];
+        if (!this.updateColumn['notes']) {
+          this.updateColumn['notes'] = 'notes';
+          if (rebuildColumns.indexOf('notes') < 0) {
+            rebuildColumns.push('notes');
+          }
+        }
       } else {
         rebuildColumns.push(this.columns[i]);
       }
@@ -468,32 +481,19 @@ export class UploadContactsComponent implements OnInit {
     let result = '';
     const updateColumn = this.updateColumn[column];
 
-    if (updateColumn === 'tags') {
-      const content = contact[column];
-      if (content) {
-        for (let i = 0; i < content.length; i++) {
-          if (!result.includes(content[i])) {
-            if (i === content.length - 1) {
-              result = result + content[i];
-            } else {
-              result = result + content[i] + '<br/>';
-            }
+    const content = contact[updateColumn];
+    if (content) {
+      for (let i = 0; i < content.length; i++) {
+        if (!result.includes(content[i])) {
+          if (i === content.length - 1) {
+            result = result + content[i];
+          } else {
+            result = result + content[i] + '<br/>';
           }
         }
       }
-      return result;
-    } else if (updateColumn === 'notes') {
-      if (contact['notes']) {
-        const columnIndex = contact['notes'].findIndex((item) => item[column]);
-        if (columnIndex >= 0) {
-          return contact['notes'][columnIndex][column];
-        } else {
-          return '';
-        }
-      } else {
-        return '';
-      }
     }
+    return result;
   }
 
   isContact(contact): any {

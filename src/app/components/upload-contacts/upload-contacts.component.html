@@ -4,7 +4,7 @@
       <div class="f-22 font-weight-bold c-black">Import Contacts</div>
     </ng-container>
     <ng-container *ngIf="step == 2">
-      <div class="f-22 font-weight-bold c-black">Import contacts</div>
+      <div class="f-22 font-weight-bold c-black">Import Contacts</div>
     </ng-container>
     <ng-container *ngIf="step == 3">
       <div class="f-22 font-weight-bold c-black">
@@ -93,10 +93,16 @@
             </td>
             <td class="crmgrow-property">
               <div class="form-group mb-0">
-                <select class="form-control" [(ngModel)]="updateColumn[column]">
-                  <option value="">Select Property</option>
-                  <option *ngFor="let field of fields" value="{{field.value}}">{{field.label}}</option>
-                </select>
+                <mat-select [(ngModel)]="updateColumn[column]">
+                  <mat-option value="">Select Property</mat-option>
+                  <mat-option *ngFor="let field of fields" value="{{field.value}}">
+                    <div class="f-3 c-black" [class.selected-option-text]="updateColumn[column] == field.value">{{field.label}}</div>
+                  </mat-option>
+                </mat-select>
+<!--                <select class="form-control" [(ngModel)]="updateColumn[column]">-->
+<!--                  <option value="">Select Property</option>-->
+<!--                  <option *ngFor="let field of fields" value="{{field.value}}">{{field.label}}</option>-->
+<!--                </select>-->
               </div>
             </td>
           </tr>
@@ -115,17 +121,9 @@
               <th class="check-cell"></th>
               <th>Type</th>
               <ng-container *ngFor="let column of columns">
-                <th [class]="column" *ngIf="updateColumn[column] && updateColumn[column] != 'notes'">
+                <th [class]="column" *ngIf="updateColumn[column]">
                   {{column}}
                 </th>
-              </ng-container>
-              <ng-container *ngFor="let column of notesColumns">
-                <th [class]="column">
-                  {{column + ' (Notes)'}}
-                </th>
-              </ng-container>
-              <ng-container *ngIf="checkOtherColumn()">
-                <th class="other">Other (Notes)</th>
               </ng-container>
               <th class="actions"></th>
             </tr>
@@ -149,22 +147,14 @@
                   <div class="f-3 c-blue font-weight-bold">{{isContact(contact) ? 'Contact' : 'CSV'}}</div>
                 </td>
                 <ng-container *ngFor="let column of columns; let i = index;">
-                  <td
-                    *ngIf="updateColumn[column] && updateColumn[column] != 'notes'"
-                    class="{{column}} f-3 font-weight-bold last-row"
+                  <td class="{{column}} f-3 font-weight-bold last-row"
+                      *ngIf="updateColumn[column]"
                   >
-                    <div [class]="column" [class.c-red]="checkDuplicateColumn(dupIndex, contact, column)" [innerHTML]="isSelectableColumn(updateColumn[column]) ?
-                      selectableContent(column, contact) : contact[updateColumn[column]]"></div>
-                  </td>
-                </ng-container>
-                <ng-container *ngFor="let column of notesColumns; let i = index;">
-                  <td class="{{column}} f-3 font-weight-bold last-row">
-                    <div [class]="column" [innerHTML]="getNotesContent(i, column, contact) || '' | stripTags | shorten: 40: '...'"></div>
-                  </td>
-                </ng-container>
-                <ng-container *ngIf="checkOtherColumn()">
-                  <td class="other f-3 font-weight-bold last-row">
-                    <div [class]="'other'" [innerHTML]="getOtherContent(contact) || '' | stripTags | shorten: 40: '...'"></div>
+                    <div [class]="column" [class.c-red]="checkDuplicateColumn(dupIndex, contact, column)">
+                      {{isSelectableColumn(updateColumn[column]) ?
+                      (selectableContent(column, contact) || '' | stripTags | shorten: 80: '...') :
+                      (contact[updateColumn[column]] || '' | stripTags | shorten: 80: '...')}}
+                    </div>
                   </td>
                 </ng-container>
                 <td class="actions">
