@@ -30,7 +30,11 @@ export class DealsComponent implements OnInit {
     this.dealsService.getStage(true);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dealsService.stages$.subscribe((res) => {
+      console.log('stage', res);
+    });
+  }
 
   drop(event: CdkDragDrop<string[]>, id: string): void {
     const data = {
@@ -55,8 +59,8 @@ export class DealsComponent implements OnInit {
     this.dealsService.moveDeal(data).subscribe(() => {});
   }
 
-  dealDetail(item: string): void {
-    this.router.navigate(['./deals/detail']);
+  dealDetail(id: string): void {
+    this.router.navigate([`./deals/${id}`]);
   }
 
   addStages(): void {
@@ -80,6 +84,7 @@ export class DealsComponent implements OnInit {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '600px',
+        disableClose: true,
         data: {
           id: dealStage._id
         }
