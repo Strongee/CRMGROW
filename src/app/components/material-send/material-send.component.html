@@ -123,16 +123,12 @@
                     <app-html-editor
                         [(value)]="selectedTemplate.content"
                         placeholder="Enter Text"
+                        required="true"
                         [style]="{height: '120px'}"
                         (onFocus)="focusEditor()"
-                        #editor
-                    ></app-html-editor>
-                    <span
-                        class="invalid-error f-3 c-red mt-1"
-                        *ngIf="selected.value == 1 && selectedTemplate.content == '' && submitted"
-                    >
-                        Please input the template content.
-                    </span>
+                        #emailEditor
+                        >
+                    </app-html-editor>
                 </div>
             </mat-tab>
         </mat-tab-group>

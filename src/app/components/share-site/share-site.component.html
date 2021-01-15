@@ -88,10 +88,15 @@
               </div>
             </div>
           </div>
-          <quill-editor placeholder="Enter Text" [(ngModel)]="email.content" [modules]="config"
-                        [styles]="{ height: '270px' }" name="mailContent" #mailContent="ngModel"
-                        (onEditorCreated)="getEditorInstance($event)" required #emailEditor>
-          </quill-editor>
+          <app-html-editor
+              [(value)]="email.content"
+              placeholder="Enter Text"
+              required="true"
+              [style]="{height: '270px'}"
+              (onFocus)="focusEditor()"
+              #emailEditor
+              >
+          </app-html-editor>
         </div>
       </div>
     </div>

@@ -1,21 +1,9 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-  ValueProvider,
-  ViewChild
-} from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { QuillEditorComponent } from 'ngx-quill';
-import { FileService } from 'src/app/services/file.service';
-import { QuillEditor } from '../../constants/variable.constants';
-import * as QuillNamespace from 'quill';
-const Quill: any = QuillNamespace;
-// import ImageResize from 'quill-image-resize-module';
-// Quill.register('modules/imageResize', ImageResize);
+import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 
 @Component({
   selector: 'app-image-edit',
@@ -34,19 +22,16 @@ export class ImageEditComponent implements OnInit {
   };
   saving = false;
   thumbnailLoading = false;
-  quillEditorRef;
-  config = QuillEditor;
-  focusEditor = '';
+  focusedField = '';
 
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
 
   constructor(
     private dialogRef: MatDialogRef<ImageEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private toast: ToastrService,
     private materialService: MaterialService,
-    private helperService: HelperService,
-    private fileService: FileService
+    private helperService: HelperService
   ) {}
 
   ngOnInit(): void {
@@ -136,37 +121,7 @@ export class ImageEditComponent implements OnInit {
       });
   }
 
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-
-  initImageHandler = (): void => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res.url);
-        });
-      }
-    });
-    imageInput.click();
-  };
-
-  insertImageToEditor(url): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-  setFocusField(editorType): void {
-    this.focusEditor = editorType;
+  focusEditor(): void {
+    this.focusedField = 'editor';
   }
 }

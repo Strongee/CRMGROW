@@ -1,12 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ContactService } from '../../services/contact.service';
-import { EmailService } from '../../services/email.service';
-import { UserService } from '../../services/user.service';
 import { Contact } from 'src/app/models/contact.model';
 import { FormControl } from '@angular/forms';
 import { HtmlEditorComponent } from '../html-editor/html-editor.component';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-material-send',
@@ -24,13 +20,11 @@ export class MaterialSendComponent implements OnInit {
   user_id = '';
   siteUrl = environment.website;
 
-  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
+  focusedField = '';
+  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
 
   constructor(
     private dialogRef: MatDialogRef<MaterialSendComponent>,
-    private contactService: ContactService,
-    private emailService: EmailService,
-    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.userService.profile$.subscribe((profile) => {
@@ -143,7 +137,6 @@ export class MaterialSendComponent implements OnInit {
       }
     }
   }
-
   focusEditor(): void {
     this.focusedField = 'editor';
   }
