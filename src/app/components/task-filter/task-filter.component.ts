@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TaskStatus, TIMES } from 'src/app/constants/variable.constants';
 import {
   convertTimetoObj,
@@ -39,6 +39,8 @@ export class TaskFilterComponent implements OnInit {
   endDate;
   endTime = '23:30:00.000';
   loading = false;
+
+  @Output() onClose = new EventEmitter();
 
   constructor(
     public labelService: LabelService,
@@ -148,5 +150,9 @@ export class TaskFilterComponent implements OnInit {
     this.selectedLabels.clear();
     this.contact = null;
     this.taskService.clearSearchOption();
+  }
+
+  close(): void {
+    this.onClose.emit();
   }
 }

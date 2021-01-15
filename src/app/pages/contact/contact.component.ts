@@ -538,17 +538,17 @@ export class ContactComponent implements OnInit {
   selectAutomation(evt: any): void {
     this.selectedAutomation = evt.Automation;
   }
-  timeLineArrangement(): void {
-    if (!this.contact.time_lines || this.contact.time_lines.length == 0) {
+  timeLineArrangement(): any {
+    if (!this.contact['time_lines'] || this.contact['time_lines'].length == 0) {
       return;
     }
-    this.allDataSource.data = listToTree(this.contact.time_lines);
+    this.allDataSource.data = listToTree(this.contact['time_lines']);
     let root = null;
     if (this.allDataSource.data?.length == 0) {
       return;
     }
     if (this.allDataSource.data[0]?.status == 'completed') {
-      root = this.allDataSource.data[0];
+      root = JSON.parse(JSON.stringify(this.allDataSource.data[0]));
     }
     while (true) {
       if (root.children[0]?.status == 'completed') {
@@ -569,9 +569,9 @@ export class ContactComponent implements OnInit {
       position: { top: '100px' },
       width: '100vw',
       maxWidth: '700px',
-      maxHeight: '600px',
       data: {
-        automation: this.allDataSource.data
+        id: this.contact.automation._id,
+        automations: this.contact.time_lines
       }
     });
   }

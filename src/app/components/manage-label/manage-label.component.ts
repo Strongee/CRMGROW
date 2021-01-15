@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { LabelService } from '../../services/label.service';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ export class ManageLabelComponent implements OnInit {
     name: ''
   });
   labelLength = 0;
+  @Output() onClose = new EventEmitter();
   constructor(private dialog: MatDialog, public labelService: LabelService) {}
 
   ngOnInit(): void {
@@ -96,5 +97,9 @@ export class ManageLabelComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>): void {
     this.labelService.changeOrder(event.previousIndex, event.currentIndex);
+  }
+
+  close(): void {
+    this.onClose.emit();
   }
 }

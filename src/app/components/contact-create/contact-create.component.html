@@ -1,5 +1,10 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? create() : false;">
-  <h1 mat-dialog-title>Add new contact</h1>
+  <div mat-dialog-title class="title">
+    <h1 class="mb-0">Add new contact</h1>
+    <span class="error mb-1" *ngIf="form.submitted && (sameEmailContacts.length || sameCellPhoneContacts.length)">
+      Please input another contact information or edit the existing contact.
+    </span>
+  </div>
   <mat-dialog-content>
     <div class="row">
       <div class="col-sm-6 col-12 form-group" [ngClass]="{invalid: form.submitted && first_name.invalid && (first_name.dirty || first_name.touched || form.submitted)}">
@@ -15,14 +20,37 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6 col-12 form-group" [ngClass]="{invalid: form.submitted && email.invalid && (email.dirty || email.touched || form.submitted)}">
+      <div class="col-sm-6 col-12 form-group position-relative" [ngClass]="{invalid: form.submitted && email.invalid && (email.dirty || email.touched || form.submitted)}" >
         <label for="email_cc">email</label>
-        <input type="email" id="email_cc" class="form-control" name="email" #email="ngModel" [(ngModel)]="contact.email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
+        <input type="email" id="email_cc" class="form-control" name="email"
+          [(ngModel)]="contact.email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$"
+          #email="ngModel" (ngModelChange)="checkEmailDuplicate($event)"
+          (focus)="sameEmailsFlag = true" autocomplete="off"
+        />
+        <span class="form-append-icon c-pointer" (click)="toggleSameEmails()" *ngIf="sameEmailContacts.length">
+          <i class="d-block i-icon i-close bgc-dark" *ngIf="sameEmailsFlag"></i>
+          <i class="d-block i-icon i-triangle-down bgc-dark sm" style="margin-right: 2px;" *ngIf="!sameEmailsFlag"></i>
+        </span>
+        <div class="form-checking-result p-2" [hidden]="!sameEmailsFlag"
+          *ngIf="sameEmailContacts.length">
+          <div class="contact-item" *ngFor="let item of sameEmailContacts">
+            <div class="d-flex chip py-2">
+              <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
+              <div class="info">
+                <div class="f-5 font-weight-bold text-primary c-pointer" (click)="goToContact(item)">
+                  {{item.fullName}}
+                </div>
+                <div class="f-2">{{item['email'] || 'Undefined'}}</div>
+                <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
         <span class="error" *ngIf="email.errors">
           <ng-container *ngIf="email.errors.pattern">Email is invalid!</ng-container>
         </span>
       </div>
-      <div class="col-sm-6 col-12 form-group phone-form">
+      <div class="col-sm-6 col-12 form-group phone-form position-relative">
         <label for="cell_phone_cc">phone number</label>
         <ngx-intl-tel-input
           id="cell_phone_cc"
@@ -35,13 +63,32 @@
           [maxLength]="15"
           [phoneValidation]="true"
           [separateDialCode]="true"
-          name="phone" 
-          #phone="ngModel"
-          [(ngModel)]="cell_phone">
+          name="phone"
+          [formControl]="phoneInput"
+          [(ngModel)]="cell_phone"
+          (ngModelChange)="checkPhoneDuplicate($event)"
+          autocomplete="off">
         </ngx-intl-tel-input>
-        <span class="error" *ngIf="phone.errors">
+        <span class="error" *ngIf="cell_phone && phoneInput.valid">
           <ng-template #phoneFormat>Wrong phone number!</ng-template>
         </span>
+        <span class="form-append-icon c-pointer" (click)="toggleSamePhones()" *ngIf="sameCellPhoneContacts.length">
+          <i class="d-block i-icon i-close bgc-dark" *ngIf="samePhonesFlag"></i>
+          <i class="d-block i-icon i-triangle-down bgc-dark sm" style="margin-right: 2px;" *ngIf="!samePhonesFlag"></i>
+        </span>
+        <div class="form-checking-result p-2" [hidden]="!samePhonesFlag"
+          *ngIf="sameCellPhoneContacts.length">
+          <div class="contact-item" *ngFor="let item of sameCellPhoneContacts">
+            <div class="d-flex chip py-2">
+              <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
+              <div class="info">
+                <div class="f-5 font-weight-bold text-primary c-pointer" (click)="goToContact(item)">{{item.fullName}}</div>
+                <div class="f-2">{{item['email'] || 'Undefined'}}</div>
+                <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -101,11 +148,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6 col-12 form-group">
-        
-      </div>
-      <div class="col-sm-6 col-12 form-group">
-  
+      <div class="col-12 form-group">
+        <label>tags</label>
+        <app-input-tag [selectedTags]="contact.tags"></app-input-tag>
       </div>
     </div>
     <div class="row">

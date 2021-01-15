@@ -5,3 +5,35 @@
         min-width: 12px;
     }
 }
+
+.form-append-icon {
+    position: absolute;
+    right: 16px;
+    bottom: 20px;
+    transform: translateY(50%);
+}
+.form-checking-result {
+    position: absolute;
+    z-index: 113;
+    box-shadow: 0px 0px 2px #aaa;
+    max-height: 150px;
+    overflow-y: scroll;
+    bottom: 0px;
+    transform: translateY(100%);
+    right: 10px;
+    background: #ffffff;
+    border-radius: 4px;
+    width: calc(100% - 18px);
+    right: 9px;
+}
+.title .error {
+    font-size: 12px;
+    color: red;
+    display: block;
+    line-height: 1;
+    font-weight: 600;
+}
+.title h1 {
+    font-size: 24px;
+    font-weight: bold;
+}

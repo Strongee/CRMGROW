@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
@@ -11,6 +11,7 @@ import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
 import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-contact-edit',
@@ -36,9 +37,18 @@ export class ContactEditComponent implements OnInit {
   contact: ContactDetail = new ContactDetail();
   panelOpenState = false;
 
+  // Variables for the checking duplicate
+  sameEmailContacts = [];
+  sameCellPhoneContacts = [];
+  contactEmailSubscription: Subscription;
+  contactPhoneSubscription: Subscription;
+  sameEmailsFlag = false;
+  samePhonesFlag = false;
+
   isUpdating = false;
   updateSubscription: Subscription;
 
+  phoneInput: FormControl = new FormControl();
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
@@ -64,6 +74,12 @@ export class ContactEditComponent implements OnInit {
   ngOnInit(): void {}
 
   update(): void {
+    if (
+      this.sameEmailContacts.length > 0 ||
+      this.sameCellPhoneContacts.length > 0
+    ) {
+      return;
+    }
     this.isUpdating = true;
     const contactId = this.contact._id;
     if (this.contact_phone && this.contact_phone['internationalNumber']) {
@@ -92,6 +108,70 @@ export class ContactEditComponent implements OnInit {
 
   updateLabel(label: string): void {
     this.contact.label = label;
+  }
+
+  checkEmailDuplicate(evt: any): void {
+    this.sameEmailContacts = [];
+    if (!evt) {
+      return;
+    }
+    const regularExpression = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/;
+    const result = regularExpression.test(String(evt).toLowerCase());
+    if (result) {
+      this.contactEmailSubscription &&
+        this.contactEmailSubscription.unsubscribe();
+      this.contactEmailSubscription = this.contactService
+        .checkEmail(evt)
+        .subscribe((res) => {
+          this.sameEmailContacts = res;
+          this.sameEmailContacts.some((e, index) => {
+            if (e._id === this.contact._id) {
+              this.sameEmailContacts.splice(index, 1);
+              return true;
+            }
+          });
+          if (this.sameEmailContacts.length) {
+            this.sameEmailsFlag = true;
+          }
+        });
+    }
+  }
+
+  checkPhoneDuplicate(evt: any): any {
+    this.sameCellPhoneContacts = [];
+    if (!evt) {
+      return;
+    }
+    let phone = evt;
+    if (typeof evt == 'object' && evt['internationalNumber']) {
+      phone = evt['internationalNumber'].replace(/\D/g, '');
+      phone = '+' + phone;
+    }
+    if (this.phoneInput.valid) {
+      this.contactPhoneSubscription &&
+        this.contactPhoneSubscription.unsubscribe();
+      this.contactPhoneSubscription = this.contactService
+        .checkPhone(phone)
+        .subscribe((res) => {
+          this.sameCellPhoneContacts = res;
+          this.sameCellPhoneContacts.some((e, index) => {
+            if (e._id === this.contact._id) {
+              this.sameCellPhoneContacts.splice(index, 1);
+              return true;
+            }
+          });
+          if (this.sameCellPhoneContacts.length) {
+            this.samePhonesFlag = true;
+          }
+        });
+    }
+  }
+
+  toggleSameEmails(): void {
+    this.sameEmailsFlag = !this.sameEmailsFlag;
+  }
+  toggleSamePhones(): void {
+    this.samePhonesFlag = !this.samePhonesFlag;
   }
 
   handleAddressChange(evt: any): void {

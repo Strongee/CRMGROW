@@ -90,6 +90,8 @@ export const CONTACT = {
   UPDATE: 'contact/update-contact',
   MERGE: 'contact/contact-merge',
   BULK_CREATE: 'contact/bulk-create',
+  CHECK_EMAIL: 'contact/check-email',
+  CHECK_PHONE: 'contact/check-phone',
   SHARE_CONTACT: 'contact/share-contact'
 };
 export const VIDEO = {
