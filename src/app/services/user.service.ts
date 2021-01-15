@@ -312,5 +312,16 @@ export class UserService extends HttpService {
         catchError(this.handleError('CONNECT SMTP'))
       );
   }
-
+  public getUserInfoItem(type: string): any {
+    const user = this.getUser();
+    return user[type];
+  }
+  public getUser(): any {
+    const user = localStorage.getItem('user');
+    if (user) {
+      return JSON.parse(localStorage.getItem('user'));
+    } else {
+      return {};
+    }
+  }
 }

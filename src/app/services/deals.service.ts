@@ -70,8 +70,8 @@ export class DealsService extends HttpService {
     this.stages.next(stages);
   }
 
-  getDeal(): any {
-    return this.httpClient.get(this.server + DEAL.GET);
+  getDeal(id: string): any {
+    return this.httpClient.get(this.server + DEAL.GET + id);
   }
 
   createDeal(deal: any): any {
