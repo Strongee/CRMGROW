@@ -112,6 +112,7 @@ import { SelectMemberComponent } from './select-member/select-member.component';
 import { PlanSelectComponent } from './plan-select/plan-select.component';
 import { PlanBuyComponent } from './plan-buy/plan-buy.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { DateInputComponent } from './date-input/date-input.component';
 
 @NgModule({
   declarations: [
@@ -221,7 +222,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     TeamContactShareComponent,
     SelectMemberComponent,
     PlanSelectComponent,
-    PlanBuyComponent
+    PlanBuyComponent,
+    DateInputComponent
   ],
   imports: [
     CommonModule,
@@ -299,7 +301,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     SelectMemberComponent,
     DealStageCreateComponent,
     PlanSelectComponent,
-    PlanBuyComponent
+    PlanBuyComponent,
+    DateInputComponent
   ],
   bootstrap: [
     ContactCreateComponent,

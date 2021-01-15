@@ -737,8 +737,18 @@ button {
 form.was-validated {
   .form-group {
     background-image: unset!important;
+    .form-control {
+      background-image: unset!important;
+      padding-right: 0.75rem;
+    }
     .error {
       display: block;
+    }
+  }
+
+  &.general {
+    .form-control {
+      border-color: #ced4da;
     }
   }
 }

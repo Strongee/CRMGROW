@@ -1,4 +1,4 @@
-<form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false">
+<form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false" [class.was-validated]="form.submitted" class="general">
   <h1 mat-dialog-title>Add new task</h1>
   <mat-dialog-content>
     <ng-container *ngIf="isSelected">
@@ -12,58 +12,48 @@
     </ng-container>
     
     <div class="form-group">
-      <label>type of the task</label>
+      <label class="mb-0">type of the task</label>
       <div>
         <app-task-type [(value)]="task.type"></app-task-type>
       </div>
     </div>
     
     <div class="form-group">
-      <label for="content_tc">task regarding</label>
+      <div class="v-center">
+        <label for="content_tc" class="mb-0">task regarding</label>
+        <span class="error ml-auto" *ngIf="content.errors">
+          <ng-container *ngIf="content.errors.required">Required!</ng-container>
+        </span>
+      </div>
       <input type="text" class="form-control" id="content_tc" name="content" #content="ngModel" [(ngModel)]="task.content" required>
-      <span class="error" *ngIf="content.errors">
-        <ng-container *ngIf="content.errors.required">Required!</ng-container>
-      </span>
     </div>
 
     <ng-container *ngIf="!isSelected">
       <div class="form-group">
-        <label for="contact_tc">assign to contact</label>
+        <div class="v-center">
+          <label for="contact_tc" class="mb-0">assign to contact</label>
+          <span class="error ml-auto" *ngIf="!contacts.length">
+            <ng-container>Required!</ng-container>
+          </span>
+        </div>
         <app-select-contact (onSelect)="selectContact($event)"></app-select-contact>
       </div>  
     </ng-container>
-    
     <div class="row">
       <div class="col-sm-6 col-12">
         <div class="form-group">
-          <label for="date_tc">date</label>
-          <div class="input-group bgc-dark-trans08 rounded">
-            <div class="input-group-prepend rounded" (click)="d.toggle()">
-              <span class="input-group-text bgc-blue border-0">
-                <i class="i-icon i-calendar bgc-white"></i>
-              </span>
-            </div>
-            <input
-              type="text"
-              id="date_tc"
-              class="form-control datepicker"
-              placeholder="Select date"
-              name="due_date"
-              #due_date="ngModel"
-              [minDate]="MIN_DATE"
-              [(ngModel)]="date"
-              ngbDatepicker
-              #d="ngbDatepicker"
-              [firstDayOfWeek]="7"
-              required
-              (click)="d.toggle()"
-            />
+          <div class="v-center">
+            <label class="mb-0">date</label>
+            <span class="error ml-auto" *ngIf="!date">
+              <ng-container>Required!</ng-container>
+            </span>
           </div>
+          <app-date-input type="prepend" [(value)]="date" [minDate]="MIN_DATE"></app-date-input>
         </div>
       </div>
       <div class="col-sm-6 col-12">
         <div class="form-group">
-          <label for="time_tc">time</label>
+          <label for="time_tc" class="mb-0 d-block">time</label>
           <select class="form-control" name="due_time" #due_time="ngModel" [(ngModel)]="time">
             <option *ngFor="let time of TIMES" [value]="time.id">
               {{time.text}}
