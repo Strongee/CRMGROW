@@ -11,25 +11,9 @@
                 <i class="bgc-white i-icon i-record mr-2"></i>
                 Record new video
             </button>
-            <div ngbDropdown class="ml-1 ml-sm-3 actions-groups border border-primary rounded">
-                <div class="font-weight-bold c-dark c-pointer px-2 px-sm-3 py-2 button-add" ngbDropdownToggle>
+            <div class="ml-1 ml-sm-3 actions-groups border border-primary rounded">
+                <div class="font-weight-bold c-dark c-pointer px-2 px-sm-3 py-2 button-add" (click)="createVideo()">
                     Add new
-                </div>
-                <div ngbDropdownMenu class="light">
-                    <div class="d-flex c-dark dropdown-item py-2" (click)="createVideo()">
-                        <i class="i-icon i-upload bgc-dark mt-1" aria-hidden="true"></i>
-                        <div class="ml-1 px-2">
-                            <div class="f-6 font-weight-bold">New file upload</div>
-                            <div class="f-1 op-56">You can upload Video, PDF or Image</div>
-                        </div>
-                    </div>
-                    <div class="d-flex c-dark dropdown-item py-2">
-                        <i class="i-icon i-folder bgc-dark mt-1" aria-hidden="true"></i>
-                        <div class="ml-1 px-2">
-                            <div class="f-6 font-weight-bold">New folder</div>
-                            <div class="f-1 op-56">Add new folder to organize your files</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -157,9 +141,9 @@
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
                                             <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
-                                                <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
-                                                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                    <span class="ml-1 f-3 c-dark">Send</span>
+                                                <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(video)">
+                                                    <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                    <span class="f-3 c-dark">Send</span>
                                                 </button>
                                             </ng-container>
                                             <ng-template #convertingStatusTemplate>
@@ -168,11 +152,11 @@
                                                     <div class="slice"><div class="bar"></div><div class="fill"></div></div>
                                                 </div>
                                             </ng-template>
-                                            <button class="v-center bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -189,7 +173,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(video, 'video')">
@@ -327,9 +312,9 @@
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
                                             <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
-                                                <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
-                                                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                    <span class="ml-1 f-3 c-dark">Send</span>
+                                                <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(video)">
+                                                    <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                    <span class="f-3 c-dark">Send</span>
                                                 </button>
                                             </ng-container>
                                             <ng-template #convertingStatusTemplate>
@@ -338,11 +323,11 @@
                                                     <div class="slice"><div class="bar"></div><div class="fill"></div></div>
                                                 </div>
                                             </ng-template>
-                                            <button class="v-center bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -359,7 +344,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(video, 'video')">
@@ -497,9 +483,9 @@
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
                                             <ng-container *ngIf="video.converted == 'completed' || video.converted == 'disabled'; else convertingStatusTemplate">
-                                                <button class="v-center bgc-white border-0 py-2 rounded" (click)="sendMaterial(video)">
-                                                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                    <span class="ml-1 f-3 c-dark">Send</span>
+                                                <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(video)">
+                                                    <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                    <span class="f-3 c-dark">Send</span>
                                                 </button>
                                             </ng-container>
                                             <ng-template #convertingStatusTemplate>
@@ -508,11 +494,11 @@
                                                     <div class="slice"><div class="bar"></div><div class="fill"></div></div>
                                                 </div>
                                             </ng-template>
-                                            <button class="v-center bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(video, 'video')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -529,7 +515,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(video, 'video')">
@@ -721,15 +708,15 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf)">
-                                                <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Send</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf)">
+                                                <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -746,7 +733,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(pdf, 'pdf')">
@@ -870,15 +858,15 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf)">
-                                                <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Send</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf)">
+                                                <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -895,7 +883,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(pdf, 'pdf')">
@@ -1019,15 +1008,15 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(pdf)">
-                                                <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Send</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf)">
+                                                <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -1043,7 +1032,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(pdf, 'pdf')">
@@ -1233,15 +1223,15 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image)">
-                                                <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Send</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image)">
+                                                <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -1258,7 +1248,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(image, 'image')">
@@ -1382,15 +1373,15 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image)">
-                                                <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Send</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image)">
+                                                <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -1407,7 +1398,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(image, 'image')">
@@ -1531,15 +1523,15 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded" (click)="sendMaterial(image)">
-                                                <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Send</span>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image)">
+                                                <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
+                                                <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
-                                                <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                                                <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="ml-1 f-3 c-dark">Copy link</span>
                                             </button>
-                                            <div ngbDropdown class="material-action">
+                                            <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
                                                     <i class="bgc-dark i-icon i-share mr-2"></i>
                                                     <span class="button-label">Share</span>
@@ -1556,7 +1548,8 @@
                                             </div>
                                             <div ngbDropdown class="small-button-more rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                                                  <span class="button-label">More</span>
+                                                    <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                                                    <span class="button-label">More</span>
                                                 </a>
                                                 <div ngbDropdownMenu class="light">
                                                     <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(image, 'image')">
