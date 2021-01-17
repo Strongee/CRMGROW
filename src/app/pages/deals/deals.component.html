@@ -18,6 +18,18 @@
                     <div class="title-triangle">
                         <i class="d-block i-icon i-triangle-right bgc-dark"></i>
                     </div>
+                    <div ngbDropdown class="action-more c-pointer">
+                        <i ngbDropdownToggle class="d-block i-icon i-menu-more bgc-dark"></i>
+                        <div ngbDropdownMenu class="light action-menu">
+                            <button class="border-0 c-dark dropdown-item">
+                                <span class="ml-1 f-3 font-weight-bold">Edit stage</span>
+                            </button>
+                            <hr class="my-1">
+                            <button class="border-0 c-dark dropdown-item">
+                                <span class="ml-1 f-3 font-weight-bold c-red">Delete stage</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div
                     class="deals-container mt-4"
@@ -26,7 +38,7 @@
                     (cdkDropListDropped)="drop($event, dealStage._id)"
                 >
                     <div
-                        class="deal mt-3 mr-3 p-3 c-pointer"
+                        class="deal mt-3 mr-3 p-3 c-pointer position-relative"
                         *ngFor="let deal of dealStage.deals" cdkDrag
                         (click)="dealDetail(deal._id)"
                     >
@@ -64,6 +76,18 @@
                         </div>
                         <div class="f-3 op-64 mt-2">
                             ${{deal.value}}
+                        </div>
+                        <div ngbDropdown class="action-more c-pointer">
+                            <i ngbDropdownToggle class="d-block i-icon i-menu-more bgc-dark"></i>
+                            <div ngbDropdownMenu class="light action-menu">
+                                <button class="border-0 c-dark dropdown-item">
+                                    <span class="ml-1 f-3 font-weight-bold">Edit deal</span>
+                                </button>
+                                <hr class="my-1">
+                                <button class="border-0 c-dark dropdown-item">
+                                    <span class="ml-1 f-3 font-weight-bold c-red">Delete deal</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="v-center justify-content-center add-deal mt-3 mr-3">
