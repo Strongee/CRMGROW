@@ -14,10 +14,11 @@ export class MaterialSendComponent implements OnInit {
   contacts: Contact[] = [];
   selectedTemplate = { subject: '', content: '' };
   submitted = false;
-  saving = false;
-  videos: any[] = [];
-  pdfs: any[] = [];
-  images: any[] = [];
+  isSending = false;
+  materials: any[] = [];
+  focusedField = '';
+  user_id = '';
+  siteUrl = environment.website;
 
   focusedField = '';
   @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
@@ -25,24 +26,17 @@ export class MaterialSendComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.userService.profile$.subscribe((profile) => {
+      this.user_id = profile._id;
+    });
+  }
 
   ngOnInit(): void {
-    if (this.data.material.length > 1) {
-      this.data.material.forEach((material) => {
-        if (material.type && material.type.startsWith('video')) {
-          this.videos.push(material);
-        }
-        if (material.type && material.type.endsWith('pdf')) {
-          this.pdfs.push(material);
-        }
-        if (material.type && material.type.startsWith('image')) {
-          this.images.push(material);
-        }
-      });
-    }
-    if (this.data.type) {
-      if (this.data.type == 'email') {
+    this.materials = this.data.material;
+
+    if (this.data.mediaType) {
+      if (this.data.mediaType == 'email') {
         this.selected.setValue(1);
       } else {
         this.selected.setValue(0);
@@ -50,21 +44,99 @@ export class MaterialSendComponent implements OnInit {
     }
   }
 
-  selectTemplate(event): void {
+  selectTemplate(event: any): void {
     this.selectedTemplate = event;
-  }
-
-  send(): void {
-    if (this.contacts.length == 0) {
-      this.submitted = false;
-      return;
-    } else {
-      // this.saving = true;
-      if (this.selected.value == 0) {
-      }
+    if (this.htmlEditor) {
+      this.htmlEditor.setValue(this.selectedTemplate.content);
     }
   }
 
+  sendMessage(): any {
+    const contacts = [];
+    const newContacts = [];
+
+    this.contacts.forEach((e) => {
+      if (e._id) {
+        contacts.push(e._id);
+      } else {
+        newContacts.push(e);
+      }
+    });
+    if (!contacts.length && !newContacts.length) {
+      return false;
+    }
+
+    if (newContacts.length) {
+      this.contactService.bulkCreate(newContacts).subscribe(
+        (res) => {
+          if (res['failure'].length) {
+          }
+          if (res['succeed']) {
+            if (res['succeed'].length) {
+              res['succeed'].forEach((e) => {
+                contacts.push(e._id);
+              });
+              this.sendMessageImpl(contacts);
+            } else {
+              if (contacts.length) {
+                this.sendMessageImpl(contacts);
+              } else {
+                this.dialogRef.close();
+              }
+            }
+          }
+        },
+        (err) => {
+          if (contacts.length) {
+            this.sendMessageImpl(contacts);
+          } else {
+            this.dialogRef.close();
+          }
+        }
+      );
+    }
+  }
+
+  sendMessageImpl(contacts: any): void {
+    let mediaType;
+    if (this.selected.value == 0) {
+      mediaType = 'text';
+    } else {
+      mediaType = 'email';
+    }
+    const emailType = this.userService.getUserInfoItem('connected_email_type');
+    const primaryConnected = this.userService.getUserInfoItem(
+      'primary_connected'
+    );
+    if (primaryConnected || emailType === 'email') {
+      mediaType = emailType;
+    }
+    if (mediaType == 'text') {
+      if (this.selectedTemplate.content == '') {
+        return;
+      }
+      this.isSending = true;
+      this.emailService
+        .sendMaterial(
+          this.materials,
+          this.data.materialType,
+          mediaType,
+          this.selectedTemplate,
+          contacts
+        )
+        .subscribe((res) => {
+          this.isSending = false;
+          this.dialogRef.close({ status: true });
+        });
+    } else {
+      if (
+        this.selectedTemplate.content == '' ||
+        this.selectedTemplate.subject == ''
+      ) {
+        return;
+      }
+    }
+  }
   focusEditor(): void {
     this.focusedField = 'editor';
   }

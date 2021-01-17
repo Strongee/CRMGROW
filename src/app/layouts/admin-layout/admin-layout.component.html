@@ -7,7 +7,7 @@
   </div>
   <mat-drawer-container [hasBackdrop]="true">
     <mat-drawer #drawer position="end">
-      <app-manage-label></app-manage-label>
+      <app-manage-label (onClose)="drawer.close();"></app-manage-label>
     </mat-drawer>
   </mat-drawer-container>
 </div>

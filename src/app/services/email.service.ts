@@ -19,7 +19,7 @@ export class EmailService extends HttpService {
     super(errorService);
   }
 
-  send(mail, mailType= 'email'): Observable<any[]> {
+  send(mail, mailType = 'email'): Observable<any[]> {
     const type = mailType.toUpperCase();
     return this.httpClient.post(this.server + SEND[type], mail).pipe(
       map((res) => res['data'] || []),
@@ -34,7 +34,13 @@ export class EmailService extends HttpService {
     );
   }
 
-  sendMaterial( materials, materialType, mediaType, media, contacts, team) {
+  sendMaterial(
+    materials: any,
+    materialType: string,
+    mediaType: string,
+    media: any,
+    contacts: any
+  ): any {
     let materialsArray = [];
     if (materialType === 'video') {
       materials.forEach((e) => {
@@ -50,12 +56,18 @@ export class EmailService extends HttpService {
       subject: media.subject,
       content: media.content,
       contacts,
-      [materialParamName]: materialsArray,
-      team
+      [materialParamName]: materialsArray
     };
     return this.httpClient.post(this.server + api, param).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('SEND MATERIAL OF AFFILIATE', []))
+    );
+  }
+
+  sendEmail(data): Observable<any> {
+    return this.httpClient.post(this.server + SEND.SEND_EMAIL, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('SEND EMAIL OF CANCELING CALL', []))
     );
   }
 }

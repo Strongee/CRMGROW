@@ -112,6 +112,8 @@ import { SelectMemberComponent } from './select-member/select-member.component';
 import { PlanSelectComponent } from './plan-select/plan-select.component';
 import { PlanBuyComponent } from './plan-buy/plan-buy.component';
 import { DealEditComponent } from './deal-edit/deal-edit.component';
+import { DateInputComponent } from './date-input/date-input.component';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
   declarations: [
@@ -222,7 +224,8 @@ import { DealEditComponent } from './deal-edit/deal-edit.component';
     SelectMemberComponent,
     PlanSelectComponent,
     PlanBuyComponent,
-    DealEditComponent
+    DealEditComponent,
+    DateInputComponent
   ],
   imports: [
     CommonModule,
@@ -230,6 +233,7 @@ import { DealEditComponent } from './deal-edit/deal-edit.component';
     RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule,
+    NgxGraphModule,
     ColorPickerModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
@@ -300,7 +304,8 @@ import { DealEditComponent } from './deal-edit/deal-edit.component';
     DealStageCreateComponent,
     PlanSelectComponent,
     PlanBuyComponent,
-    DealEditComponent
+    DealEditComponent,
+    DateInputComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -65,4 +65,38 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-6 col-12 mb-3">
+      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
+        <div class="f-4 font-weight-bold mb-2">Google Calendar Sync</div>
+        <!-- <div class="f-2 connect-status" *ngIf="user.connected_email_type=='gmail' && user.primary_connected">
+          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
+        </div> -->
+        <div class="d-flex mt-auto mb-2">
+          <img src="../../../assets/img/google.svg">
+          <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
+        </div>
+        <button type="button" class="v-center social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('gmail')">
+          <img class="social-icon" src="../../../assets/img/google.svg" alt="">
+          <div class="social-text f-4">Sign in with Google Calendar</div>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-6 col-12 mb-3">
+      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
+        <div class="f-4 font-weight-bold mb-2">Outlook Calendar Sync</div>
+        <!-- <div class="f-2 connect-status" *ngIf="user.connected_email_type=='outlook' && user.primary_connected">
+          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
+        </div> -->
+        <div class="d-flex mt-auto mb-2">
+          <img src="../../../assets/img/outlook.svg">
+          <p class="mb-0 f-0">Our Platform can deliver the emails through your outlook email. Email Deliverity will be upgraded.</p>
+        </div>
+        <button type="button" class="v-center social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('outlook')">
+          <img class="social-icon" src="../../../assets/img/outlook.svg" alt="">
+          <div class="social-text f-4">Sign in with Outlook Calendar</div>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

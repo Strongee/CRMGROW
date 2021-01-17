@@ -895,6 +895,9 @@ export class MaterialComponent implements OnInit {
   }
 
   recordSetting(): void {
+    if (this.dialog.openDialogs.length > 0) {
+      return;
+    }
     this.dialog
       .open(RecordSettingDialogComponent, {
         position: { top: '0px' },
@@ -981,9 +984,18 @@ export class MaterialComponent implements OnInit {
         });
         break;
       case 'Select all':
-        this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
-        this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-        this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        this.selectedVideoLists.clear();
+        this.selectedPdfLists.clear();
+        this.selectedImageLists.clear();
+        if (this.selectedTab.id == 'videos') {
+          this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
+        }
+        if (this.selectedTab.id == 'pdfs') {
+          this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+        }
+        if (this.selectedTab.id == 'images') {
+          this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        }
         break;
       case 'Deselect':
         this.selectedVideoLists.clear();

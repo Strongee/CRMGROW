@@ -91,16 +91,18 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     if (!evt) {
       return;
     }
-    const regularExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regularExpression = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/;
     const result = regularExpression.test(String(evt).toLowerCase());
     if (result) {
-      this.sameEmailsFlag = true;
       this.contactEmailSubscription &&
         this.contactEmailSubscription.unsubscribe();
       this.contactEmailSubscription = this.contactService
         .checkEmail(evt)
         .subscribe((res) => {
           this.sameEmailContacts = res;
+          if (this.sameEmailContacts.length) {
+            this.sameEmailsFlag = true;
+          }
         });
     }
   }
@@ -116,13 +118,15 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       phone = '+' + phone;
     }
     if (this.phoneInput.valid) {
-      this.samePhonesFlag = true;
       this.contactPhoneSubscription &&
         this.contactPhoneSubscription.unsubscribe();
       this.contactPhoneSubscription = this.contactService
         .checkPhone(phone)
         .subscribe((res) => {
           this.sameCellPhoneContacts = res;
+          if (this.sameCellPhoneContacts.length) {
+            this.samePhonesFlag = true;
+          }
         });
     }
   }

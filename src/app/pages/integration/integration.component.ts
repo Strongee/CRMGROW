@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 export class IntegrationComponent implements OnInit {
   user: User = new User();
   connectingMail = '';
+  connectingCalendar = '';
 
   constructor(private userService: UserService, private toast: ToastrService) {
     this.userService.profile$.subscribe((profile) => {
@@ -42,7 +43,13 @@ export class IntegrationComponent implements OnInit {
     }
   }
 
-  showError(msg) {
+  connectCalendar(type: string): void {
+    if (type == 'gmail' || type == 'outlook') {
+      this.connectingCalendar = type;
+    }
+  }
+
+  showError(msg: string): void {
     this.toast.error(msg);
   }
 }
