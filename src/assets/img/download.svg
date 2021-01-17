@@ -1,9 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Icons / Table / Download Black</title>
-    <g id="Icons-/-Table-/-Download-Black" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.1" stroke-linejoin="round">
-        <g id="Download2" transform="translate(2.000000, 1.000000)" fill="#101336" stroke="#101336" stroke-width="2">
-            <path d="M1.59904,7.67742 L3.5,7.67742 C3.5,7.67742 3,6.32258 3,3.83871 C3,2.376 3.17339,1.30481 3.31596,0.67128 C3.4079,0.26274 3.77812,0 4.19688,0 L7.80312,0 C8.22188,0 8.5921,0.26273 8.68404,0.67128 C8.82661,1.30481 9,2.376 9,3.83871 C9,6.32258 8.5,7.67742 8.5,7.67742 L10.401,7.67742 C11.3166,7.67742 11.7507,8.8058 11.0712,9.4195 L7.34057,12.7892 C6.57916,13.4769 5.42084,13.4769 4.65943,12.7892 L0.92876,9.4195 C0.24928,8.8058 0.68343,7.67742 1.59904,7.67742 Z" id="Path"></path>
-        </g>
-    </g>
-</svg>
+<svg height="512pt" viewBox="0 0 512 512" width="512pt" xmlns="http://www.w3.org/2000/svg"><path d="m409.785156 278.5-153.785156 153.785156-153.785156-153.785156 28.285156-28.285156 105.5 105.5v-355.714844h40v355.714844l105.5-105.5zm102.214844 193.5h-512v40h512zm0 0"/></svg>

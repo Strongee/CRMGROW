@@ -1825,3 +1825,33 @@ body {
     }
   }
 }
+
+////////////////// mat-select ///////////////
+.mat-pseudo-checkbox-checked::after {
+  top: 4px;
+  left: 2px;
+  width: 10px;
+  height: 3px;
+}
+
+.mat-pseudo-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate {
+  background-color: #0000ff;
+}
+
+///////////// progress bar /////////////
+.custom-progress {
+  &.mat-progress-bar {
+    height: 10px;
+    border-radius: 3px;
+
+    .mat-progress-bar-fill::after {
+      background-color: #0000ff;
+    }
+  }
+}
