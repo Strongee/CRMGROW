@@ -72,6 +72,7 @@ export class UploadContactsComponent implements OnInit {
   filePlaceholder = 'Drag your csv files here or click in this area.';
   isCSVFile = false;
   fileSize;
+  fileName = '';
 
   previewEmails = []; // Emails to merge contacts
   previewPhones = []; // Phones to merge contacts
@@ -131,7 +132,7 @@ export class UploadContactsComponent implements OnInit {
           (this.uploadedCount / this.overallContacts) * 100
         );
         this.uploadSubTitle =
-          this.uploadedCount + ' / ' + this.overallContacts + ' contacts';
+          this.uploadedCount + ' / ' + this.overallContacts + ' imported';
         if (this.uploadedContacts && this.uploadedContacts.length) {
           for (const contact of this.uploadedContacts) {
             this.failedData.push(contact);
@@ -219,6 +220,7 @@ export class UploadContactsComponent implements OnInit {
 
     this.isCSVFile = true;
     this.filePlaceholder = 'File uploaded "' + file.name.toLowerCase() + '".';
+    this.fileName = file.name;
     this.fileSize = this.humanFileSize(file.size);
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
@@ -299,6 +301,7 @@ export class UploadContactsComponent implements OnInit {
 
   initImport(): void {
     this.isCSVFile = false;
+    this.fileName = '';
     this.filePlaceholder = 'Drag your csv files here or click in this area.';
   }
 
@@ -311,6 +314,7 @@ export class UploadContactsComponent implements OnInit {
     this.groupRecordsByPhone = {};
     this.previewEmails = [];
     this.previewPhones = [];
+    this.sameContacts = [];
     let importField = false;
     this.columns.some((e) => {
       if (this.updateColumn[e]) {
@@ -488,7 +492,7 @@ export class UploadContactsComponent implements OnInit {
           if (i === content.length - 1) {
             result = result + content[i];
           } else {
-            result = result + content[i] + '<br/>';
+            result = result + content[i] + ', ';
           }
         }
       }
@@ -825,33 +829,6 @@ export class UploadContactsComponent implements OnInit {
             }
           }
 
-          if (res.type === 'csv') {
-            if (merged['notes']) {
-              const tempNotes = [];
-              for (let i = 0; i < merged['notes'].length; i++) {
-                if (!!merged['notes'][i]) {
-                  for (const key in merged['notes'][i]) {
-                    if (!!merged['notes'][i][key]) {
-                      tempNotes.push(merged['notes'][i]);
-                    }
-                  }
-                }
-              }
-
-              for (let i = 0; i < this.notesColumns.length; i++) {
-                const columnIndex = tempNotes.findIndex(
-                  (item) => item[this.notesColumns[i]]
-                );
-                if (columnIndex >= 0) {
-                  tempNotes.splice(columnIndex, 1);
-                }
-              }
-              if (tempNotes.length) {
-                merged['other'] = tempNotes;
-              }
-            }
-          }
-
           let count = this.sameContacts[dupIndex].length;
           this.sameContacts[dupIndex].splice(count, 1, merged);
           count = this.contacts.length;
@@ -1051,7 +1028,11 @@ export class UploadContactsComponent implements OnInit {
           delete contact.data.cell_phone;
           const tags = contact.data[tagsKey];
           if (tags) {
-            contact.data[tagsKey] = tags.split(',');
+            if (Array.isArray(tags)) {
+              contact.data[tagsKey] = tags;
+            } else {
+              contact.data[tagsKey] = tags.split(',');
+            }
           }
         }
 
@@ -1067,18 +1048,16 @@ export class UploadContactsComponent implements OnInit {
         }
 
         if (!contact.data._id && contact.data.notes) {
-          const notes = JSON.parse(contact.data.notes);
-          const parseNotes = [];
-
-          for (const note of notes) {
-            const noteObj = {};
-            noteObj[note.title] = note.content;
-            parseNotes.push(noteObj);
-          }
-
-          contact.data.notes = parseNotes;
+          // if (Array.isArray(contact.data.notes)) {
+            contact.data.notes = JSON.parse(contact.data.notes);
+          // } else {
+          //   contact.data.notes = JSON.stringify(contact.data.notes);
+          // }
         }
-        this.contacts.push(contact.data);
+        const contactIndex = this.contacts.findIndex((item) => item.id === contact.data.id);
+        if (contactIndex < 0) {
+          this.contacts.push(contact.data);
+        }
       });
 
       this.uploadPercent = 100;
@@ -1097,7 +1076,10 @@ export class UploadContactsComponent implements OnInit {
           _SELF.checkingDuplicate = false;
           _SELF.contactsToUpload = _SELF.contacts;
         }
-      }, 1000);
+      }, 2000);
+    } else {
+      this.dialogRef.close({});
+      this.handlerService.bulkContactAdd$();
     }
   }
 
@@ -1141,7 +1123,7 @@ export class UploadContactsComponent implements OnInit {
         headers.push(this.updateColumn[key]);
       }
     }
-    const uploadContacts = this.rebuildContactForNote();
+    const uploadContacts = this.contactsToUpload;
 
     if (uploadContacts.length < 0) {
       return;
@@ -1164,37 +1146,29 @@ export class UploadContactsComponent implements OnInit {
             const email = contact['primary_email'];
             record.push(email || '');
           } else if (key === 'notes') {
-            continue;
+            if (contact['notes'] && contact['notes'].length) {
+              record.push(JSON.stringify(contact['notes']));
+            } else {
+              record.push([]);
+            }
           } else {
             record.push(contact[key] || '');
-          }
-        }
-        if (contact['notes']) {
-          if (contact['notes'].length) {
-            record.push(JSON.stringify(contact['notes']));
           }
         }
         lines.push(record);
       }
     }
     headers = [];
-    let isNotesExist = false;
     for (const key in this.updateColumn) {
       if (this.updateColumn[key]) {
         if (this.updateColumn[key] === 'primary_email') {
           headers.push('email');
         } else if (this.updateColumn[key] === 'primary_phone') {
           headers.push('cell_phone');
-        } else if (this.updateColumn[key] === 'notes') {
-          isNotesExist = true;
-          continue;
         } else {
           headers.push(this.updateColumn[key]);
         }
       }
-    }
-    if (isNotesExist) {
-      headers.push('notes');
     }
 
     this.uploadLines = lines;
@@ -1402,6 +1376,10 @@ export class UploadContactsComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  back(): void {
+    this.step = this.step - 1;
   }
 
   fields = [

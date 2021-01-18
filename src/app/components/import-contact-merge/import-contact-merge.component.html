@@ -1,202 +1,6 @@
 <h1 mat-dialog-title>Contacts merge</h1>
 <mat-dialog-content>
   <div class="contact-wrapper">
-<!--    <table class="table my-3">-->
-<!--      <thead>-->
-<!--      <th></th>-->
-<!--      <th>-->
-<!--        <ng-container *ngIf="mergeType() == MERGETYPE.CSV; else csvMerge">-->
-<!--          <div class="check-wrapper">-->
-<!--            <div class="custom-control custom-radio ml-auto">-->
-<!--              <input type="radio" class="custom-control-input" id="primary-contact" name="contact-select"-->
-<!--                     [checked]="selectedContact == 'Primary'" (change)="changeContact($event)">-->
-<!--              <label class="custom-control-label f-4 font-weight-bold" for="primary-contact">Primary Contact</label>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </ng-container>-->
-<!--        <ng-template #csvMerge>-->
-<!--          <div class="f-4 font-weight-bold text-center c-black">{{primaryContact._id ? 'Contact' : 'CSV'}}</div>-->
-<!--        </ng-template>-->
-<!--      </th>-->
-<!--      <th>-->
-<!--        <ng-container *ngIf="mergeType() == MERGETYPE.CSV; else csvSecondMerge">-->
-<!--          <div class="check-wrapper">-->
-<!--            <div class="custom-control custom-radio ml-auto">-->
-<!--              <input type="radio" class="custom-control-input" id="secondary-contact" name="contact-select"-->
-<!--                     [checked]="selectedContact == 'Secondary'" (change)="changeContact($event)">-->
-<!--              <label class="custom-control-label f-4 font-weight-bold" for="secondary-contact">Secondary Contact</label>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </ng-container>-->
-<!--        <ng-template #csvSecondMerge>-->
-<!--          <div class="f-4 font-weight-bold text-center c-black">{{secondaryContact._id ? 'Contact' : 'CSV'}}</div>-->
-<!--        </ng-template>-->
-<!--      </th>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--      <tr>-->
-<!--        <td colspan="3"></td>-->
-<!--      </tr>-->
-<!--      <tr *ngFor="let column of columns let row = index">-->
-<!--        <ng-container *ngIf="updateColumn[column] && updateColumn[column] != 'notes'">-->
-<!--          <ng-container *ngIf="isCheckable(updateColumn[column]) else selectableColumn">-->
-<!--            <td>-->
-<!--              <div class="f-3 op-75 text-uppercase">{{column}}</div>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <div class="check-wrapper" *ngIf="isShowColumn(primaryContact, column)">-->
-<!--                <div class="custom-control custom-radio ml-auto">-->
-<!--                  <input type="radio" class="custom-control-input" id="primary-{{column}}" name="contact-{{column}}"-->
-<!--                         [checked]="primarySelectionModel[row]" (change)="changeCheck(row, column)"-->
-<!--                         [disabled]="primaryContact[updateColumn[column]] == '' || primaryContact[updateColumn[column]] == undefined"-->
-<!--                  >-->
-<!--                  <label class="custom-control-label f-3 font-weight-bold" for="primary-{{column}}">{{primaryContact[updateColumn[column]]}}</label>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <div class="check-wrapper" *ngIf="isShowColumn(secondaryContact, column)">-->
-<!--                <div class="custom-control custom-radio ml-auto">-->
-<!--                  <input type="radio" class="custom-control-input" id="secondary-{{column}}" name="contact-{{column}}"-->
-<!--                         [checked]="secondarySelectionModel[row]" (change)="changeCheck(row, column)"-->
-<!--                         [disabled]="secondaryContact[updateColumn[column]] == '' || secondaryContact[updateColumn[column]] == undefined"-->
-<!--                  >-->
-<!--                  <label class="custom-control-label f-3 font-weight-bold" for="secondary-{{column}}">{{secondaryContact[updateColumn[column]]}}</label>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </ng-container>-->
-<!--          <ng-template #selectableColumn>-->
-<!--            <td>-->
-<!--              <div class="f-3 op-75 text-uppercase">{{column}}</div>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <div class="custom-control custom-checkbox" *ngIf="isShowColumn(primaryContact, column)">-->
-<!--                <input type="checkbox" class="custom-control-input" id="primary-{{column}}"-->
-<!--                       [checked]="primarySelectionModel[row]"-->
-<!--                       (change)="$event ? changePrimarySelection(row, column) : null"-->
-<!--                       [disabled]="primaryContact[updateColumn[column]] == '' || primaryContact[updateColumn[column]] == undefined"-->
-<!--                >-->
-<!--                <ng-container *ngIf="isSelectableColumn(updateColumn[column]); else nonSelectablePrimaryColumn">-->
-<!--                  <label class="custom-control-label"-->
-<!--                         for="primary-{{column}}"-->
-<!--                         [innerHTML]="isSelectableColumn(updateColumn[column]) ?-->
-<!--                      selectableContent(column, primaryContact) : primaryContact[updateColumn[column]]"-->
-<!--                  ></label>-->
-<!--                </ng-container>-->
-<!--                <ng-template #nonSelectablePrimaryColumn>-->
-<!--                  <label class="custom-control-label" for="primary-{{column}}">{{primaryContact[updateColumn[column]]}}</label>-->
-<!--                </ng-template>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <div class="custom-control custom-checkbox" *ngIf="isShowColumn(secondaryContact, column)">-->
-<!--                <input type="checkbox" class="custom-control-input" id="secondary-{{column}}"-->
-<!--                       [checked]="secondarySelectionModel[row]"-->
-<!--                       (change)="$event ? changeSecondarySelection(row, column) : null"-->
-<!--                       [disabled]="secondaryContact[updateColumn[column]] == '' || secondaryContact[updateColumn[column]] == undefined"-->
-<!--                >-->
-<!--                <ng-container *ngIf="isSelectableColumn(updateColumn[column]); else nonSelectableSecondaryColumn">-->
-<!--                  <label class="custom-control-label"-->
-<!--                         for="secondary-{{column}}"-->
-<!--                         [innerHTML]="isSelectableColumn(updateColumn[column]) ?-->
-<!--                      selectableContent(column, secondaryContact) : secondaryContact[updateColumn[column]]"-->
-<!--                  ></label>-->
-<!--                </ng-container>-->
-<!--                <ng-template #nonSelectableSecondaryColumn>-->
-<!--                  <label class="custom-control-label" for="secondary-{{column}}">{{secondaryContact[updateColumn[column]]}}</label>-->
-<!--                </ng-template>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </ng-template>-->
-<!--        </ng-container>-->
-<!--      </tr>-->
-<!--      <ng-container *ngIf="getPrimaryNotes().length || getSecondaryNotes().length">-->
-<!--        <tr>-->
-<!--          <td colspan="3"></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--          <td>-->
-<!--            <div class="f-3 op-75 text-uppercase">Notes</div>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <ng-container *ngFor="let note of getPrimaryNotes(); let row = index">-->
-<!--              <div class="v-center my-2" *ngIf="primaryContact['notes'][row][note] != ''">-->
-<!--                <div class="notes-label f-3 op-75 text-uppercase mr-3">{{note}}</div>-->
-<!--                <div class="custom-control custom-checkbox">-->
-<!--                  <input type="checkbox" class="custom-control-input" id="primary-note-{{row}}"-->
-<!--                         [checked]="primaryNotesSelectionModel[row]"-->
-<!--                         (change)="$event ? changePrimaryNotesSelection(row) : null"-->
-<!--                  >-->
-<!--                  <label class="custom-control-label" for="primary-note-{{row}}">{{getNotesContents(row, primaryContact) || '' | stripTags | shorten: 40: '...'}}</label>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </ng-container>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <ng-container *ngFor="let note of getSecondaryNotes(); let row = index">-->
-<!--              <div class="v-center my-2" *ngIf="secondaryContact['notes'][row][note] != ''">-->
-<!--                <div class="notes-label f-3 op-75 text-uppercase mr-3">{{note}}</div>-->
-<!--                <div class="custom-control custom-checkbox">-->
-<!--                  <input type="checkbox" class="custom-control-input" id="secondary-note-{{row}}"-->
-<!--                         [checked]="secondaryNotesSelectionModel[row]"-->
-<!--                         (change)="$event ? changeSecondaryNotesSelection(row) : null"-->
-<!--                  >-->
-<!--                  <label class="custom-control-label" for="secondary-note-{{row}}">{{getNotesContents(row, secondaryContact) || '' | stripTags | shorten: 40: '...'}}</label>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </ng-container>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--      </ng-container>-->
-<!--      <ng-container *ngIf="mergeType() == MERGETYPE.CONTACT">-->
-<!--        <tr>-->
-<!--          <td>-->
-<!--            <div class="f-3 op-75 text-uppercase">Activity</div>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <select class="form-control theme-control" [(ngModel)]="activity" name="last_activity" #last_activity="ngModel">-->
-<!--              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>-->
-<!--            </select>-->
-<!--          </td>-->
-<!--          <td></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--          <td>-->
-<!--            <div class="f-3 op-75 text-uppercase">Follow up</div>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <select class="form-control theme-control" [(ngModel)]="followup" name="follow_up" #follow_up="ngModel">-->
-<!--              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>-->
-<!--            </select>-->
-<!--          </td>-->
-<!--          <td></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--          <td>-->
-<!--            <div class="f-3 op-75 text-uppercase">Automation</div>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <select class="form-control theme-control" [(ngModel)]="automation" name="automation_merge" #automation_merge="ngModel">-->
-<!--              <option *ngFor="let action of automationMergeAction; let index = index;" value="{{action}}">{{action}}</option>-->
-<!--            </select>-->
-<!--          </td>-->
-<!--          <td></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--          <td>-->
-<!--            <div class="f-3 op-75 text-uppercase">Notes</div>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <select class="form-control theme-control" [(ngModel)]="notes" name="notes_merge" #notes_merge="ngModel">-->
-<!--              <option *ngFor="let action of mergeActions; let index = index;" value="{{action}}">{{action}}</option>-->
-<!--            </select>-->
-<!--          </td>-->
-<!--          <td></td>-->
-<!--        </tr>-->
-<!--      </ng-container>-->
-<!--      </tbody>-->
-<!--    </table>-->
     <div class="mt-3">
       <ng-container *ngFor="let column of columns let row = index">
         <ng-container *ngIf="isCheckable(updateColumn[column]) else selectableColumn">
@@ -221,6 +25,7 @@
                 <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
                 <div class="contact-field">
                   <mat-select [(ngModel)]="previewContact[updateColumn[column]]">
+                    <mat-option value=""></mat-option>
                     <mat-option *ngFor="let value of getOtherEmails(updateColumn[column])" value="{{value}}">
                       <div class="f-3 c-black"
                            [class.selected-option-text]="previewContact[updateColumn[column]] == value">
@@ -236,6 +41,7 @@
                 <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
                 <div class="contact-field">
                   <mat-select [(ngModel)]="previewContact[updateColumn[column]]">
+                    <mat-option value=""></mat-option>
                     <mat-option *ngFor="let value of getOtherPhones(updateColumn[column])" value="{{value}}">
                       <div class="f-3 c-black"
                            [class.selected-option-text]="previewContact[updateColumn[column]] == value">
@@ -249,7 +55,7 @@
           </ng-template>
         </ng-container>
         <ng-template #selectableColumn>
-          <div class="v-center contact-row w-100 my-2" *ngIf="collection[updateColumn[column]]">
+          <div class="v-center contact-row w-100 my-2" *ngIf="collection[updateColumn[column]] && collection[updateColumn[column]].length">
             <div class="contact-header f-3 text-uppercase">{{column}}</div>
             <div class="contact-field">
               <mat-select [(ngModel)]="previewContact[updateColumn[column]]" multiple>
@@ -264,43 +70,48 @@
           </div>
         </ng-template>
       </ng-container>
+      <ng-container *ngIf="mergeType() == MERGETYPE.CONTACT">
+        <div class="v-center contact-row w-100 my-2">
+          <div class="contact-header f-3 text-uppercase">Activity</div>
+          <div class="contact-field">
+            <mat-select [(ngModel)]="activity">
+              <mat-option *ngFor="let action of mergeActions" value="{{action}}">
+                <div class="f-3 c-black"
+                     [class.selected-option-text]="activity == action">
+                  {{action}}
+                </div>
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="v-center contact-row w-100 my-2">
+          <div class="contact-header f-3 text-uppercase">Follow up</div>
+          <div class="contact-field">
+            <mat-select [(ngModel)]="followup">
+              <mat-option *ngFor="let action of mergeActions" value="{{action}}">
+                <div class="f-3 c-black"
+                     [class.selected-option-text]="followup == action">
+                  {{action}}
+                </div>
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="v-center contact-row w-100 my-2">
+          <div class="contact-header f-3 text-uppercase">Automation</div>
+          <div class="contact-field">
+            <mat-select [(ngModel)]="automation">
+              <mat-option *ngFor="let action of automationMergeAction" value="{{action}}">
+                <div class="f-3 c-black"
+                     [class.selected-option-text]="automation == action">
+                  {{action}}
+                </div>
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+      </ng-container>
     </div>
-<!--    <ng-container *ngIf="previewContact">-->
-<!--      <div class="f-5 font-weight-bold text-center w-100 mt-5">Preview Contact</div>-->
-<!--      <table class="table">-->
-<!--        <thead>-->
-<!--        <th></th>-->
-<!--        <th></th>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr *ngFor="let column of getExceptNotesColumns() let row = index">-->
-<!--          <td>-->
-<!--            <div class="f-3 op-75 text-uppercase">{{updateColumn[column] == 'notes' ? column + ' (Notes)' : column}}</div>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <div class="f-3 font-weight-bold"-->
-<!--                 [innerHTML]="isSelectableColumn(updateColumn[column]) ?-->
-<!--                      selectableContent(column, previewContact) : previewContact[updateColumn[column]]"-->
-<!--            >-->
-<!--            </div>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        <tr *ngFor="let note of getPreviewNotes() let row = index">-->
-<!--          <ng-container *ngIf="previewContact['notes'][row][note] != ''">-->
-<!--            <td>-->
-<!--              <div class="f-3 op-75 text-uppercase">{{getNotesColumn(row) + ' (Notes)'}}</div>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <div class="f-3 font-weight-bold"-->
-<!--                   [innerHTML]="getNotesContents(row, previewContact) || '' | stripTags | shorten: 40: '...'"-->
-<!--              >-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </ng-container>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-<!--    </ng-container>-->
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
