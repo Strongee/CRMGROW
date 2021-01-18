@@ -107,7 +107,7 @@
             </div>
           </div>
           <div class="v-center justify-content-between mt-2 mt-sm-0 w-100">
-            <div class="v-center">
+            <!-- <div class="v-center">
               <div ngbDropdown class="email-schedule ml-3">
                 <div class="v-center" ngbDropdownToggle>
                   <i class="d-block i-icon i-schedule bgc-blue c-pointer"></i>
@@ -140,12 +140,12 @@
                         </option>
                       </select>
                       <div class="f-3 text-center mt-4">
-                        Message will be sent
+                        {{scheduleDateTime ? 'Message will be sent' : 'Please select time' }}
                       </div>
-                      <div class="f-6 font-weight-bold c-dark text-center show-datetime p-2 mt-1">
+                      <div class="f-6 font-weight-bold c-dark text-center show-datetime mt-1" [class.p-2]="scheduleDateTime != '' && planned">
                         {{ getScheduleDateTime() | date : 'MMMM d, yyyy hh:mm a' }}
                       </div>
-                      <div class="v-center justify-content-center c-pointer p-2 mt-2 remove-schedule" *ngIf="this.scheduleDateTime != '' && planned" (click)="removeSchedule()">
+                      <div class="v-center justify-content-center c-pointer p-2 mt-2 remove-schedule" *ngIf="scheduleDateTime != '' && planned" (click)="removeSchedule()">
                         <i class="d-block i-icon i-trash bgc-red mr-2"></i>
                         <span class="f-3 font-weight-bold c-red">Remove schedule</span>
                       </div>
@@ -160,10 +160,10 @@
               <div class="email-reminder ml-3 c-pointer">
                 <i class="d-block i-icon i-reminder bgc-blue"></i>
               </div>
-            </div>
+            </div> -->
             <button
               type="submit"
-              class="btn btn-blue text-white br-default py-1 f-6 font-weight-bold shadow"
+              class="btn btn-blue text-white br-default py-1 f-6 font-weight-bold shadow ml-auto"
               [class.loading]="emailSending"
             >
               Send
