@@ -65,6 +65,7 @@
       </div>
     </div>
   </div>
+  <hr>
   <div class="row">
     <div class="col-md-6 col-12 mb-3">
       <div class="integration-card border rounded py-3 px-3 my-2 h-100">
@@ -76,10 +77,14 @@
           <img src="../../../assets/img/google.svg">
           <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
         </div>
-        <button type="button" class="v-center social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('gmail')">
-          <img class="social-icon" src="../../../assets/img/google.svg" alt="">
-          <div class="social-text f-4">Sign in with Google Calendar</div>
-        </button>
+        <div class="v-center">
+          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold mr-2" (click)="connectCalendar('gmail')">
+            <div class="f-4">Connect</div>
+          </button>
+          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold">
+            <div class="f-4">Disconnect</div>
+          </button>
+        </div>
       </div>
     </div>
     <div class="col-md-6 col-12 mb-3">
@@ -92,10 +97,14 @@
           <img src="../../../assets/img/outlook.svg">
           <p class="mb-0 f-0">Our Platform can deliver the emails through your outlook email. Email Deliverity will be upgraded.</p>
         </div>
-        <button type="button" class="v-center social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('outlook')">
-          <img class="social-icon" src="../../../assets/img/outlook.svg" alt="">
-          <div class="social-text f-4">Sign in with Outlook Calendar</div>
-        </button>
+        <div class="v-center">
+          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold mr-2" (click)="connectCalendar('outlook')">
+            <div class="f-4">Connect</div>
+          </button>
+          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold">
+            <div class="f-4">Disconnect</div>
+          </button>
+        </div>
       </div>
     </div>
   </div>
