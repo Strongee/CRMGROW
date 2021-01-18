@@ -222,8 +222,13 @@ td {
             }
             .small-button-more {
                 display: block;
+                width: 100% !important;
+                height: 36px !important;
+                border: 1px solid $color-blue !important;
+                margin-bottom: 0.25rem;
                 .dropdown-menu {
                     &.show {
+                        transform: translate(-50px, 32px) !important;
                         top: 0px !important;
                         left: 0px !important;
                     }
@@ -231,6 +236,12 @@ td {
             }
             .small {
                 margin: 0 auto;
+            }
+            .button-send, .material-action {
+                width: 100% !important;
+                height: 36px !important;
+                border: 1px solid $color-blue !important;
+                margin-bottom: 0.25rem;
             }
         }
     }
