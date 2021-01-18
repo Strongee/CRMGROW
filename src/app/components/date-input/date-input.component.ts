@@ -21,7 +21,8 @@ export class DateInputComponent implements OnInit {
   @Output() valueChange = new EventEmitter();
   @Input() minDate = null;
   @Input() type = '';
-
+  @Input() uiType = 'default';
+  @Input() title = '';
   isOpen = false;
   dateInput: FormControl = new FormControl();
   @ViewChild('trigger') triggerElement: CdkOverlayOrigin;
@@ -61,4 +62,33 @@ export class DateInputComponent implements OnInit {
     this.valueChange.emit(this.value);
     this.isOpen = false;
   }
+
+  dateFormat(): string {
+    if (this.value) {
+      return (
+        this.MONTHS[this.value.month - 1] +
+        ' ' +
+        this.value.day +
+        ' ' +
+        this.value.year
+      );
+    } else {
+      return 'Select date';
+    }
+  }
+
+  MONTHS = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
 }

@@ -62,6 +62,9 @@ export class TaskBulkComponent implements OnInit {
   submit(): void {
     let due_date = '';
     if (this.keepDate === 'new_date') {
+      if (!this.date) {
+        return;
+      }
       if (this.timezone.tz_name) {
         const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
         due_date = moment.tz(dateStr, this.timezone.tz_name).format();

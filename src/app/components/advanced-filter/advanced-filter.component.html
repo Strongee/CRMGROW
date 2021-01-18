@@ -187,21 +187,9 @@
     <div class="form-group my-3 pb-2">
       <label>Select Date</label>
       <div class="v-center">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
-          </div>
-          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityStart" ngbDatepicker
-            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text" name="activityStartDate"/>
-        </div>
+        <app-date-input type="prepend" [(value)]="searchOption.activityStart" (valueChange)="updateFilter()"></app-date-input>
         <div class="mx-2">-</div>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
-          </div>
-          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityEnd" ngbDatepicker
-            #dueto="ngbDatepicker" (click)="dueto.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text"  name="activityEndDate"/>
-        </div>
+        <app-date-input type="prepend" [(value)]="searchOption.activityEnd" (valueChange)="updateFilter()"></app-date-input>
       </div>
     </div>
     <div class="mt-4 d-flex">

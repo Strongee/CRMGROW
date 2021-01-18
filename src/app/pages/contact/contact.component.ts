@@ -338,11 +338,10 @@ export class ContactComponent implements OnInit {
   openSendEmail(): void {
     this.dialog.open(SendEmailComponent, {
       position: {
-        bottom: '50px',
-        right: '50px'
+        bottom: '0px',
+        right: '0px'
       },
       width: '100vw',
-      maxWidth: '650px',
       panelClass: 'send-email',
       backdropClass: 'cdk-send-email',
       disableClose: false,

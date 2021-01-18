@@ -69,13 +69,7 @@
       <div class="col-6">
         <div class="form-group">
           <label>start date</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text bgc-blue border-0"><i class="bgc-white i-icon i-calendar"></i></span>
-            </div>
-            <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="startDate" name="taskDate" ngbDatepicker
-              #start_date="ngbDatepicker" (click)="start_date.toggle()" [firstDayOfWeek]="7" type="text" />
-          </div>
+          <app-date-input type="prepend" [(value)]="startDate"></app-date-input>
         </div>
       </div>
       <div class="col-6">
@@ -93,13 +87,7 @@
       <div class="col-6">
         <div class="form-group">
           <label>end date</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text bgc-blue border-0"><i class="bgc-white i-icon i-calendar"></i></span>
-            </div>
-            <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="endDate" name="taskEndDate" ngbDatepicker
-              #end_date="ngbDatepicker" (click)="end_date.toggle()" [firstDayOfWeek]="7" type="text" />
-          </div>
+          <app-date-input type="prepend" [(value)]="endDate"></app-date-input>
         </div>
       </div>
       <div class="col-6">

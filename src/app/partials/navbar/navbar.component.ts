@@ -64,11 +64,10 @@ export class NavbarComponent implements OnInit {
       case 'message':
         this.dialog.open(SendEmailComponent, {
           position: {
-            bottom: '50px',
-            right: '50px'
+            bottom: '0px',
+            right: '0px'
           },
           width: '100vw',
-          maxWidth: '600px',
           panelClass: 'send-email',
           backdropClass: 'cdk-send-email',
           disableClose: false
