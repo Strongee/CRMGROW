@@ -16,6 +16,7 @@ export class IntegrationComponent implements OnInit {
   constructor(private userService: UserService, private toast: ToastrService) {
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
+      console.log('###', this.user);
     });
   }
 
@@ -46,6 +47,23 @@ export class IntegrationComponent implements OnInit {
   connectCalendar(type: string): void {
     if (type == 'gmail' || type == 'outlook') {
       this.connectingCalendar = type;
+      this.userService.requestCalendarSyncUrl(type).subscribe(
+        (res) => {
+          console.log('###', res);
+          if (res['status']) {
+            location.href = res['data'];
+          }
+          this.connectingCalendar = '';
+        },
+        (err) => {
+          this.connectingCalendar = '';
+          this.showError('Request authorization url Error is happened.');
+        }
+      );
+    } else {
+      this.showError(
+        'We are improving with the platform with this calendar Services. So please use another service while we are developing.'
+      );
     }
   }
 
