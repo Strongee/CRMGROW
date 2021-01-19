@@ -127,7 +127,7 @@ button:disabled {
 }
 
 .error {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .field-actions {
@@ -171,10 +171,14 @@ button:disabled {
   &.send_text_image {
     width: 90vw;
     max-width: calc(900px + 4.5rem);
+
+    @media screen and (max-width: 575px) {
+      width: 98vw;
+    }
   }
 
   @media screen and (max-width: 575px) {
-    width: calc( 100vw - 80px );
+    width: 98vw;
   }
 }
 

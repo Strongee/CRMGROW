@@ -131,9 +131,9 @@ export class MaterialShareComponent implements OnInit {
     if (this.share_type === 'video') {
       return './assets/img/video_thumb.jpg';
     } else if (this.share_type === 'pdf') {
-      return './assets/img/pdf_thumb.jpg';
+      return './assets/img/pdf_overlay.png';
     } else if (this.share_type === 'image') {
-      return './assets/img/image_thumb.jpg';
+      return './assets/img/image_overlay.png';
     }
   }
 

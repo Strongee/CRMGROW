@@ -68,13 +68,15 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
   }
 
   addContacts(contact): any {
-    if (this.contacts.length === 15) {
-      this.contactOverflow = true;
-      return;
-    } else if (contact && this.contacts.length < 15) {
-      const index = this.contacts.findIndex((item) => item._id === contact._id);
-      if (index < 0) {
-        this.contacts.push(contact);
+    if (contact) {
+      if (this.contacts.length === 15) {
+        this.contactOverflow = true;
+        return;
+      } else if (contact && this.contacts.length < 15) {
+        const index = this.contacts.findIndex((item) => item._id === contact._id);
+        if (index < 0) {
+          this.contacts.push(contact);
+        }
       }
     }
   }

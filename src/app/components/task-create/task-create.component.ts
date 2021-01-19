@@ -68,7 +68,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     this.task.is_repeat = !this.task.is_repeat;
   }
   selectContact(event: Contact): void {
-    this.contacts = [event];
+    if (event) {
+      this.contacts = [event];
+    }
   }
   submit(): void {
     if (!this.contacts.length || !this.date) {

@@ -250,7 +250,13 @@ export const DEALSTAGE = {
 export const DEAL = {
   GET: 'deal/',
   MOVE: 'deal/move-deal',
-  ADD_NOTE: 'deal/add-note'
+  ADD_NOTE: 'deal/add-note',
+  SEND_EMAIL: 'deal/send-email',
+  GET_EMAILS: 'deal/get-email',
+  GET_NOTES: 'deal/get-note',
+  ADD_FOLLOWUP: 'deal/add-follow',
+  GET_FOLLOWUP: 'deal/get-follow',
+  GET_ACTIVITY: 'deal/get-activity'
 };
 
 export const MATERIAL = {
