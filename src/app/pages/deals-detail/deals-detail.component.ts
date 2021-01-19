@@ -25,6 +25,7 @@ export class DealsDetailComponent implements OnInit {
     activities: [],
     contacts: []
   };
+  dealId;
   stages: any[] = [];
   selectedStage = '';
   selectedStageId = '';
@@ -55,13 +56,18 @@ export class DealsDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     if (id) {
+      this.dealId = id;
       this.dealsService.getDeal(id).subscribe((res) => {
-        this.deal = res['data'];
-        this.deal.contacts = (res['data']['contacts'] || []).map((e) =>
-          new Contact().deserialize(e)
-        );
-        this.getStage(res['data'].main.deal_stage);
-        console.log('###', this.deal);
+        console.log("get deal ==================>", res);
+        if (res) {
+          this.deal = res;
+          this.deal.contacts = (res['contacts'] || []).map((e) =>
+            new Contact().deserialize(e)
+          );
+          if (this.deal.main.deal_stage) {
+            this.getStage(this.deal.main.deal_stage);
+          }
+        }
       });
     }
   }
@@ -136,7 +142,12 @@ export class DealsDetailComponent implements OnInit {
 
   openNoteDlg(): void {
     this.dialog.open(NoteCreateComponent, {
-      ...DialogSettings.NOTE
+      ...DialogSettings.NOTE,
+      data: {
+        type: 'deal',
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
     });
   }
 
