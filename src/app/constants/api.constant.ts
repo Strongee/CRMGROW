@@ -184,6 +184,8 @@ export const AUTOMATION = {
   UPDATE: 'automation/',
   CREATE: 'automation',
   ASSIGN: 'timeline/create',
+  ASSIGN_NEW: 'timeline/create_new',
+  CANCEL: 'timeline/cancel/',
   LOAD_OWN: 'automation/list/own'
 };
 export const APPOINTMENT = {
@@ -244,7 +246,8 @@ export const TAG = {
   LOAD_COMPANIES: 'contact/brokerage'
 };
 export const DEALSTAGE = {
-  GET: 'deal-stage'
+  GET: 'deal-stage',
+  DELETE: 'deal-stage/'
 };
 
 export const DEAL = {

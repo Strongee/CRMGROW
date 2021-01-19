@@ -221,6 +221,8 @@ export class HandlerService {
   }
   createTask$(contacts: any, task: any): void {}
 
+  reload$(): void {}
+
   clearData(): void {
     this.activityService.clear$();
     this.taskService.clear$();

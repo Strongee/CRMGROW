@@ -6,7 +6,7 @@
             <h6 class="f-6 font-weight-bold c-dark m-0" *ngIf="mode == 'own'">/ Own Material</h6>
             <h6 class="f-6 font-weight-bold c-dark m-0" *ngIf="mode != 'provided' && mode != 'own'">/ {{mode}}</h6>
         </div>
-        <div class="v-center justify-content-between mt-2 mt-sm-0" *ngIf="mode == 'own'">
+        <div class="v-center create-actions mt-2 mt-sm-0" *ngIf="mode == 'own'">
             <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record p-2" (click)="recordSetting()">
                 <i class="bgc-white i-icon i-record mr-2"></i>
                 Record new video
@@ -29,41 +29,66 @@
                     </div>
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th class="checkbox-col border-top-0">
+                            <tr *ngIf="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length > 0; else selectTable">
+                                <th colspan="7">
+                                  <div class="v-center">
                                     <div class="custom-control custom-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            class="custom-control-input"
-                                            id="selectAllVideos"
-                                            (change)="selectAllPage('video')"
-                                            [checked]="isSelectedPage('video')"
-                                        />
-                                        <label
-                                            class="custom-control-label"
-                                            for="selectAllVideos"
-                                        ></label>
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        id="selectAllVideos"
+                                        (change)="selectAllPage('all')"
+                                        [checked]="isSelectedPage('all')"
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="selectAllVideos"
+                                      ></label>
                                     </div>
-                                </th>
-                                <th class="thumbnail-col border-top-0">
-                                    <span class="f-1 c-dark">NAME</span>
-                                </th>
-                                <th class="name-col border-top-0">
-                
-                                </th>
-                                <th class="view-col border-top-0 text-right">
-                                    <span class="f-1 c-dark">ANALYTICS</span>
-                                </th>
-                                <th class="time-col border-top-0">
-                                    <span class="f-1 c-dark">ADDED</span>
-                                </th>
-                                <th class="capture-col text-right border-top-0 px-0">
-                                    <span class="f-1 c-dark">LEAD CAPTURE</span>
-                                </th>
-                                <th class="actions-col border-top-0">
-                
+                                    <div class="f-3 font-weight-bold text-lowercase ml-3">
+                                      {{selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length}} selected
+                                    </div>
+                                    <app-actions-header [actions]="BULK_ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
+                                  </div>
                                 </th>
                             </tr>
+                            <ng-template #selectTable>
+                                <tr>
+                                    <th class="checkbox-col border-top-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                class="custom-control-input"
+                                                id="selectAllVideos"
+                                                (change)="selectAllPage('video')"
+                                                [checked]="isSelectedPage('video')"
+                                            />
+                                            <label
+                                                class="custom-control-label"
+                                                for="selectAllVideos"
+                                            ></label>
+                                        </div>
+                                    </th>
+                                    <th class="thumbnail-col border-top-0">
+                                        <span class="f-1 c-dark">NAME</span>
+                                    </th>
+                                    <th class="name-col border-top-0">
+                    
+                                    </th>
+                                    <th class="view-col border-top-0 text-right">
+                                        <span class="f-1 c-dark">ANALYTICS</span>
+                                    </th>
+                                    <th class="time-col border-top-0">
+                                        <span class="f-1 c-dark">ADDED</span>
+                                    </th>
+                                    <th class="capture-col text-right border-top-0 px-0">
+                                        <span class="f-1 c-dark">LEAD CAPTURE</span>
+                                    </th>
+                                    <th class="actions-col border-top-0">
+                    
+                                    </th>
+                                </tr>
+                            </ng-template>
                         </thead>
                         <tbody>
                             <tr class="section-header" *ngIf="(adminVideos.length || editedVideos.length) && mode == 'provided'">
@@ -131,7 +156,7 @@
                                                 <input
                                                     type="checkbox"
                                                     (change)="setCapture(video._id, 'video')"
-                                                    [checked]="capturePdfs.indexOf(video._id)!==-1"
+                                                    [checked]="captureVideos.indexOf(video._id)!==-1"
                                                     id="capture-{{video._id}}"
                                                 />
                                                 <span class="custom-toggle-slider rounded-circle"></span>
@@ -204,7 +229,7 @@
                                                     <input
                                                         type="checkbox"
                                                         (change)="setCapture(video._id, 'video')"
-                                                        [checked]="capturePdfs.indexOf(video._id)!==-1"
+                                                        [checked]="captureVideos.indexOf(video._id)!==-1"
                                                         id="capture-{{video._id}}"
                                                     />
                                                     <span class="custom-toggle-slider rounded-circle"></span>
@@ -302,7 +327,7 @@
                                                 <input
                                                     type="checkbox"
                                                     (change)="setCapture(video._id, 'video')"
-                                                    [checked]="capturePdfs.indexOf(video._id)!==-1"
+                                                    [checked]="captureVideos.indexOf(video._id)!==-1"
                                                     id="capture-{{video._id}}"
                                                 />
                                                 <span class="custom-toggle-slider rounded-circle"></span>
@@ -375,7 +400,7 @@
                                                     <input
                                                         type="checkbox"
                                                         (change)="setCapture(video._id, 'video')"
-                                                        [checked]="capturePdfs.indexOf(video._id)!==-1"
+                                                        [checked]="captureVideos.indexOf(video._id)!==-1"
                                                         id="capture-{{video._id}}"
                                                     />
                                                     <span class="custom-toggle-slider rounded-circle"></span>
@@ -473,7 +498,7 @@
                                                 <input
                                                     type="checkbox"
                                                     (change)="setCapture(video._id, 'video')"
-                                                    [checked]="capturePdfs.indexOf(video._id)!==-1"
+                                                    [checked]="captureVideos.indexOf(video._id)!==-1"
                                                     id="capture-{{video._id}}"
                                                 />
                                                 <span class="custom-toggle-slider rounded-circle"></span>
@@ -546,7 +571,7 @@
                                                     <input
                                                         type="checkbox"
                                                         (change)="setCapture(video._id, 'video')"
-                                                        [checked]="capturePdfs.indexOf(video._id)!==-1"
+                                                        [checked]="captureVideos.indexOf(video._id)!==-1"
                                                         id="capture-{{video._id}}"
                                                     />
                                                     <span class="custom-toggle-slider rounded-circle"></span>
@@ -610,41 +635,66 @@
                     </div>
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th class="checkbox-col border-top-0">
+                            <tr *ngIf="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length > 0; else selectTable">
+                                <th colspan="7">
+                                  <div class="v-center">
                                     <div class="custom-control custom-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            class="custom-control-input"
-                                            id="selectAllPdfs"
-                                            (change)="selectAllPage('pdf')"
-                                            [checked]="isSelectedPage('pdf')"
-                                        />
-                                        <label
-                                            class="custom-control-label"
-                                            for="selectAllPdfs"
-                                        ></label>
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        id="selectAllVideos"
+                                        (change)="selectAllPage('all')"
+                                        [checked]="isSelectedPage('all')"
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="selectAllVideos"
+                                      ></label>
                                     </div>
-                                </th>
-                                <th class="thumbnail-col border-top-0">
-                                    <span class="f-1">NAME</span>
-                                </th>
-                                <th class="name-col border-top-0">
-                
-                                </th>
-                                <th class="view-col border-top-0 text-right">
-                                    <span class="f-1">ANALYTICS</span>
-                                </th>
-                                <th class="time-col border-top-0">
-                                    <span class="f-1">ADDED</span>
-                                </th>
-                                <th class="capture-col border-top-0 px-0">
-                                    <span class="f-1">LEAD CAPTURE</span>
-                                </th>
-                                <th class="actions-col border-top-0">
-                
+                                    <div class="f-3 font-weight-bold text-lowercase ml-3">
+                                      {{selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length}} selected
+                                    </div>
+                                    <app-actions-header [actions]="BULK_ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
+                                  </div>
                                 </th>
                             </tr>
+                            <ng-template #selectTable>
+                                <tr>
+                                    <th class="checkbox-col border-top-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                class="custom-control-input"
+                                                id="selectAllPdfs"
+                                                (change)="selectAllPage('pdf')"
+                                                [checked]="isSelectedPage('pdf')"
+                                            />
+                                            <label
+                                                class="custom-control-label"
+                                                for="selectAllPdfs"
+                                            ></label>
+                                        </div>
+                                    </th>
+                                    <th class="thumbnail-col border-top-0">
+                                        <span class="f-1">NAME</span>
+                                    </th>
+                                    <th class="name-col border-top-0">
+                    
+                                    </th>
+                                    <th class="view-col border-top-0 text-right">
+                                        <span class="f-1">ANALYTICS</span>
+                                    </th>
+                                    <th class="time-col border-top-0">
+                                        <span class="f-1">ADDED</span>
+                                    </th>
+                                    <th class="capture-col border-top-0 px-0">
+                                        <span class="f-1">LEAD CAPTURE</span>
+                                    </th>
+                                    <th class="actions-col border-top-0">
+                    
+                                    </th>
+                                </tr>
+                            </ng-template>
                         </thead>
                         <tbody>
                             <tr class="section-header" *ngIf="(adminPdfs.length || editedPdfs.length) && mode == 'provided'">
@@ -1127,39 +1177,64 @@
                     </div>
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th class="checkbox-col border-top-0">
+                            <tr *ngIf="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length > 0; else selectTable">
+                                <th colspan="7">
+                                  <div class="v-center">
                                     <div class="custom-control custom-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            class="custom-control-input"
-                                            id="selectAllImages"
-                                            (change)="selectAllPage('image')"
-                                            [checked]="isSelectedPage('image')"
-                                        />
-                                        <label
-                                            class="custom-control-label"
-                                            for="selectAllImages"
-                                        ></label>
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        id="selectAllVideos"
+                                        (change)="selectAllPage('all')"
+                                        [checked]="isSelectedPage('all')"
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="selectAllVideos"
+                                      ></label>
                                     </div>
-                                </th>
-                                <th class="thumbnail-col border-top-0">
-                                    <span class="f-1">NAME</span>
-                                </th>
-                                <th class="name-col border-top-0">
-                                </th>
-                                <th class="view-col border-top-0 text-right">
-                                    <span class="f-1">ANALYTICS</span>
-                                </th>
-                                <th class="time-col border-top-0">
-                                    <span class="f-1">ADDED</span>
-                                </th>
-                                <th class="capture-col border-top-0 px-0">
-                                    <span class="f-1">LEAD CAPTURE</span>
-                                </th>
-                                <th class="actions-col border-top-0">
+                                    <div class="f-3 font-weight-bold text-lowercase ml-3">
+                                      {{selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length}} selected
+                                    </div>
+                                    <app-actions-header [actions]="BULK_ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
+                                  </div>
                                 </th>
                             </tr>
+                            <ng-template #selectTable>
+                                <tr>
+                                    <th class="checkbox-col border-top-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                class="custom-control-input"
+                                                id="selectAllImages"
+                                                (change)="selectAllPage('image')"
+                                                [checked]="isSelectedPage('image')"
+                                            />
+                                            <label
+                                                class="custom-control-label"
+                                                for="selectAllImages"
+                                            ></label>
+                                        </div>
+                                    </th>
+                                    <th class="thumbnail-col border-top-0">
+                                        <span class="f-1">NAME</span>
+                                    </th>
+                                    <th class="name-col border-top-0">
+                                    </th>
+                                    <th class="view-col border-top-0 text-right">
+                                        <span class="f-1">ANALYTICS</span>
+                                    </th>
+                                    <th class="time-col border-top-0">
+                                        <span class="f-1">ADDED</span>
+                                    </th>
+                                    <th class="capture-col border-top-0 px-0">
+                                        <span class="f-1">LEAD CAPTURE</span>
+                                    </th>
+                                    <th class="actions-col border-top-0">
+                                    </th>
+                                </tr>
+                            </ng-template>
                         </thead>
                         <tbody>
                             <tr class="section-header" *ngIf="(adminImages.length || editedImages.length) && mode == 'provided'">

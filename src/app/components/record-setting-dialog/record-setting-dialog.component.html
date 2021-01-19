@@ -10,15 +10,15 @@
       </div>
       <div class="form-group">
         <div class="record-mode-wrapper my-3">
-          <div class="record-item" [class.active]="mode == 'screenCam'" (click)="setRecordMode('screenCam')">
+          <div class="record-item c-pointer" [class.active]="mode == 'screenCam'" (click)="setRecordMode('screenCam')">
             <i class="i-icon i-screen-camera both" aria-hidden="true"></i>
             <div class="text f-1 font-weight-bold mt-2">Screen and Cam</div>
           </div>
-          <div class="record-item" [class.active]="mode == 'screen'" (click)="setRecordMode('screen')">
+          <div class="record-item c-pointer" [class.active]="mode == 'screen'" (click)="setRecordMode('screen')">
             <i class="i-icon i-screen single" aria-hidden="true"></i>
             <div class="text f-1 font-weight-bold mt-2">Screen Only</div>
           </div>
-          <div class="record-item" [class.active]="mode == 'camera'" (click)="setRecordMode('camera')">
+          <div class="record-item c-pointer" [class.active]="mode == 'camera'" (click)="setRecordMode('camera')">
             <i class="i-icon i-camera single" aria-hidden="true"></i>
             <div class="text f-1 font-weight-bold mt-2">Cam only</div>
           </div>

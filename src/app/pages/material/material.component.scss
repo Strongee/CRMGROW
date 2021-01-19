@@ -57,9 +57,7 @@ table {
     th, td {
         vertical-align: middle !important;
         background-color: white;
-        &.checkbox-col {
-            opacity: 1;
-        }
+        opacity: 1;
     }
     tr {
         &.section-header {
@@ -260,6 +258,14 @@ td {
 @media screen and (max-width: 575px) {
     .page-header {
         display: block;
+
+        .create-actions {
+            & > * {
+                width: 50%;
+                justify-content: center;
+                text-align: center;
+            }
+        }
     }
     .button-record, .button-add {
         font-size: 13px;

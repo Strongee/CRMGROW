@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 import { HandlerService } from 'src/app/services/handler.service';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Automation } from 'src/app/models/automation.model';
+import { AutomationService } from 'src/app/services/automation.service';
 
 @Component({
   selector: 'app-contact-create',
@@ -48,15 +50,19 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
 
   isCreating = false;
   createSubscription: Subscription;
+  assignSubscription: Subscription;
 
   phoneInput: FormControl = new FormControl();
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
+  automation: Automation = new Automation();
+
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
     private contactService: ContactService,
     private handlerService: HandlerService,
+    private automationService: AutomationService,
     private router: Router
   ) {}
 
@@ -77,9 +83,22 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     this.createSubscription = this.contactService
       .create(this.contact)
       .subscribe((contact) => {
-        console.log('contact created', contact);
         this.isCreating = false;
         if (contact) {
+          // If automation is enabled please assign the automation.
+          if (this.automation._id) {
+            this.isCreating = true;
+            this.assignSubscription && this.assignSubscription.unsubscribe();
+            this.assignSubscription = this.automationService
+              .bulkAssign([contact._id], this.automation._id)
+              .subscribe((status) => {
+                this.isCreating = false;
+                if (status) {
+                  // Reload the Current List
+                  this.handlerService.reload$();
+                }
+              });
+          }
           this.handlerService.addContact$(contact);
           this.dialogRef.close();
         }
@@ -178,5 +197,10 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   goToContact(item: Contact): void {
     this.router.navigate(['/contacts/' + item._id]);
     this.dialogRef.close();
+  }
+
+  selectAutomation(automation: Automation): void {
+    this.automation = automation;
+    return;
   }
 }

@@ -14,18 +14,19 @@ export class SettingsComponent implements OnInit {
     { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
     { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
     { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
-    {
-      id: 'status-automation',
-      icon: 'i-status',
-      label: 'Status Automation'
-    },
+    // {
+    //   id: 'status-automation',
+    //   icon: 'i-status',
+    //   label: 'Status Automation'
+    // },
     {
       id: 'auto-resend-video',
       icon: 'i-auto-video',
       label: 'Auto Resend Video'
     },
     { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' },
-    { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS Limits' }
+    { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS Limits' },
+    { id: 'deals-setting', icon: 'i-deals', label: 'Deals' }
   ];
   defaultPage = 'notifications';
   currentPage: string;
