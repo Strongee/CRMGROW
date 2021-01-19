@@ -2,7 +2,7 @@
   <div class="automation-container">
     <form #automationForm="ngForm" (ngSubmit)="submitted=true; automationForm.form.valid ? storeData() : false;"
           [class.was-validated]="submitted">
-      <div class="v-center mt-3">
+      <div class="v-center">
         <a [routerLink]="['/automations']" class="c-dark mr-2">
           <h6 class="page-title font-weight-bold">Automations</h6>
         </a>
