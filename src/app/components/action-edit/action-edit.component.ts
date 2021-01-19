@@ -123,9 +123,6 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
         month: current.getMonth() + 1,
         day: current.getDate()
       };
-
-      this.due_date = this.minDate;
-      this.update_due_date = this.minDate;
     });
 
     this.userService.profile$.subscribe((res) => {
@@ -383,18 +380,20 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     if (this.type === 'follow_up') {
       if (this.followDueOption === 'date') {
         const time_zone = this.currentUser.time_zone;
-        const due_date = new Date(
-          `${this.due_date['year']}-${this.numPad(
-            this.due_date['month']
-          )}-${this.numPad(this.due_date['day'])}T${this.due_time}${time_zone}`
-        );
-        this.dialogRef.close({
-          ...this.action,
-          task_type: this.task.type,
-          due_date: due_date,
-          period,
-          due_duration: undefined
-        });
+        if (this.due_date.year !== '' && this.due_date.month !== '' && this.due_date.day !== '') {
+          const due_date = new Date(
+            `${this.due_date['year']}-${this.numPad(
+              this.due_date['month']
+            )}-${this.numPad(this.due_date['day'])}T${this.due_time}${time_zone}`
+          );
+          this.dialogRef.close({
+            ...this.action,
+            task_type: this.task.type,
+            due_date: due_date,
+            period,
+            due_duration: undefined
+          });
+        }
       } else {
         this.dialogRef.close({
           ...this.action,
@@ -463,22 +462,24 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
           });
         } else if (this.updateFollowDueOption === 'update_due_date') {
           const time_zone = this.currentUser.time_zone;
-          const due_date = new Date(
-            `${this.update_due_date['year']}-${this.numPad(
-              this.update_due_date['month']
-            )}-${this.numPad(this.update_due_date['day'])}T${
-              this.update_due_time
-            }${time_zone}`
-          );
-          this.dialogRef.close({
-            ...this.action,
-            type: this.type,
-            task_type: this.task.type,
-            due_date: due_date,
-            period,
-            command: 'update_follow_up',
-            ref_id: this.selectedFollow.id
-          });
+          if (this.update_due_date.year !== '' && this.update_due_date.month !== '' && this.update_due_date.day !== '') {
+            const due_date = new Date(
+              `${this.update_due_date['year']}-${this.numPad(
+                this.update_due_date['month']
+              )}-${this.numPad(this.update_due_date['day'])}T${
+                this.update_due_time
+              }${time_zone}`
+            );
+            this.dialogRef.close({
+              ...this.action,
+              type: this.type,
+              task_type: this.task.type,
+              due_date: due_date,
+              period,
+              command: 'update_follow_up',
+              ref_id: this.selectedFollow.id
+            });
+          }
         } else {
           this.dialogRef.close({
             ...this.action,

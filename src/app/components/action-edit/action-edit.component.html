@@ -194,14 +194,14 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="form-group has-feedback calendar position-relative"
-                         [class.has-error]="!action['due_date'] && submitted">
+                         [class.has-error]="due_date['year'] == '' && due_date['month'] == '' && due_date['day'] == '' && submitted">
                       <div class="form-group">
                         <label class="theme-label">FOLLOW UP DATE</label>
                         <div class="v-center">
                           <app-date-input type="prepend" [(value)]="due_date"></app-date-input>
                         </div>
                         <span
-                          class="invalid-error f-3 font-weight-bold c-red"
+                          class="invalid-error f-3 c-red"
                           *ngIf="due_date['year'] == '' && due_date['month'] == '' && due_date['day'] == '' && submitted"
                         >
                           Date is required
@@ -548,14 +548,14 @@
                       <div class="row">
                         <div class="col-6">
                           <div class="form-group has-feedback calendar position-relative"
-                               [class.has-error]="!action.due_date && submitted">
+                               [class.has-error]="update_due_date['year'] == '' && update_due_date['month'] == '' && update_due_date['day'] == '' && submitted">
                             <div class="form-group">
                               <label class="theme-label">FOLLOW UP DATE</label>
                               <div class="v-center">
                                 <app-date-input type="prepend" [(value)]="update_due_date"></app-date-input>
                               </div>
                               <span
-                                class="invalid-error f-3 font-weight-bold c-red"
+                                class="invalid-error f-3 c-red"
                                 *ngIf="update_due_date['year'] == '' && update_due_date['month'] == '' && update_due_date['day'] == '' && submitted"
                               >
                                 Date is required

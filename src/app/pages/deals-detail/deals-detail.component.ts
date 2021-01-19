@@ -60,6 +60,7 @@ export class DealsDetailComponent implements OnInit {
   tasks = [];
   deals = [];
 
+  activitySubscription: Subscription;
   noteSubscription: Subscription;
   emailSubscription: Subscription;
   textSubscription: Subscription;
@@ -105,6 +106,30 @@ export class DealsDetailComponent implements OnInit {
         if (res) {
           this.notes = res;
           console.log("deal notes ==============>", this.notes);
+        }
+      });
+  }
+
+  loadEmails(): void {
+    this.emailSubscription && this.emailSubscription.unsubscribe();
+    this.emailSubscription = this.dealsService
+      .getEmails({ deal: this.dealId })
+      .subscribe((res) => {
+        if (res) {
+          this.notes = res;
+          console.log("deal emails ==============>", this.notes);
+        }
+      });
+  }
+
+  loadActivity(): void {
+    this.activitySubscription && this.activitySubscription.unsubscribe();
+    this.activitySubscription = this.dealsService
+      .getActivity({ deal: this.dealId })
+      .subscribe((res) => {
+        if (res) {
+          this.notes = res;
+          console.log("deal emails ==============>", this.notes);
         }
       });
   }
