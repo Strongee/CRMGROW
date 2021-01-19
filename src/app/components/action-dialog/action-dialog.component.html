@@ -45,7 +45,7 @@
                || type == 'send_email_image' || type == 'send_text_image'
       ">
         <div class="template-container mr-lg-5 mr-md-3 mr-sm-0">
-          <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
+          <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" type="same">
           </app-slide-tab>
           <ng-container *ngIf="videosLoading && selectedTab.id == 'videos'">
             <div class="list-loading text-center">
@@ -294,14 +294,14 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="form-group has-feedback calendar position-relative"
-                         [class.has-error]="!action.due_date && submitted">
+                         [class.has-error]="due_date.year == '' && due_date.month == '' && due_date.day == '' && submitted">
                       <div class="form-group">
                         <label class="theme-label">FOLLOW UP DATE</label>
                         <div class="v-center">
                           <app-date-input type="prepend" [(value)]="due_date"></app-date-input>
                         </div>
                         <span
-                          class="invalid-error f-3 font-weight-bold c-red"
+                          class="invalid-error f-3 c-red"
                           *ngIf="due_date.year == '' && due_date.month == '' && due_date.day == '' && submitted"
                         >
                                 Date is required
@@ -651,7 +651,7 @@
                       <div class="row">
                         <div class="col-6">
                           <div class="form-group has-feedback calendar position-relative"
-                               [class.has-error]="!action.due_date && submitted">
+                               [class.has-error]="update_due_date.year == '' && update_due_date.month == '' && update_due_date.day == '' && submitted">
                             <div class="form-group">
                               <label class="theme-label">FOLLOW UP DATE</label>
                               <div class="v-center">
