@@ -2,15 +2,20 @@
     <div class="f-3 font-weight-bold">
         Stage name
     </div>
-    <div class="stages mt-2">
-        <div class="v-center justify-content-between py-2 stage" *ngFor="let dealStage of dealsService.stages$ | async">
+    <div
+        cdkDropList
+        [cdkDropListData]="stages"
+        (cdkDropListDropped)="drop($event)"
+        class="stages mt-2"
+    >
+        <div cdkDrag class="stage py-2" *ngFor="let stage of stages">
             <div class="v-center">
-                <i class="d-block i-icon i-list-circle"></i>
+                <i cdkDragHandle class="d-block i-icon i-list-circle c-pointer"></i>
                 <div class="v-center f-3 fw-600 ml-1 p-2 stage-title">
-                    {{dealStage.title}}
+                    {{stage.title}}
                 </div>
+                <i class="d-block i-icon i-trash bgc-dark ml-auto c-pointer" (click)="moveDelete(stage._id)"></i>
             </div>
-            <i class="d-block i-icon i-trash bgc-dark c-pointer" (click)="moveDelete(dealStage._id)"></i>
         </div>
         <div class="v-center px-2 py-3 stage add">
             <i class="d-block i-icon i-plus bgc-blue mr-1"></i>
