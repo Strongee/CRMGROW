@@ -110,6 +110,7 @@ import { EmailStatusComponent } from './email-status/email-status.component';
 import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
 import { PlanSelectComponent } from './plan-select/plan-select.component';
 import { PlanBuyComponent } from './plan-buy/plan-buy.component';
+import { DealStageDeleteComponent } from './deal-stage-delete/deal-stage-delete.component';
 
 @NgModule({
   declarations: [
@@ -218,7 +219,8 @@ import { PlanBuyComponent } from './plan-buy/plan-buy.component';
     EmailStatusComponent,
     TeamContactShareComponent,
     PlanSelectComponent,
-    PlanBuyComponent
+    PlanBuyComponent,
+    DealStageDeleteComponent
   ],
   imports: [
     CommonModule,
@@ -294,7 +296,8 @@ import { PlanBuyComponent } from './plan-buy/plan-buy.component';
     AdditionalEditComponent,
     DealStageCreateComponent,
     PlanSelectComponent,
-    PlanBuyComponent
+    PlanBuyComponent,
+    DealStageDeleteComponent
   ],
   bootstrap: [
     ContactCreateComponent,
