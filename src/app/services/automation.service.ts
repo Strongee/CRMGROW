@@ -80,13 +80,13 @@ export class AutomationService extends HttpService {
         catchError(this.handleError('GET AUTOMATION STATUS', []))
       );
   }
-  delete(id): Observable<Automation[]> {
+  delete(id: string): Observable<Automation[]> {
     return this.httpClient.delete(this.server + AUTOMATION.DELETE + id).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('DELETE AUTOMATION', []))
     );
   }
-  get(id): Observable<Automation[]> {
+  get(id: string): Observable<Automation[]> {
     return this.httpClient.get(this.server + AUTOMATION.READ + id).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('READ AUTOMATION', []))
@@ -106,16 +106,36 @@ export class AutomationService extends HttpService {
       catchError(this.handleError('GET AUTOMATION STATUS', []))
     );
   }
-  bulkAssign(contacts, automation): Observable<Automation[]> {
+
+  bulkAssign(contacts: string[], automation: string): Observable<boolean> {
     return this.httpClient
       .post(this.server + AUTOMATION.ASSIGN, {
         contacts,
         automation_id: automation
       })
       .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('AUTOMATION BULK ASSIGN', []))
+        map((res) => res['status']),
+        catchError(this.handleError('AUTOMATION BULK ASSIGN', false))
       );
+  }
+
+  reAssign(contact: string, automation: string): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + AUTOMATION.ASSIGN_NEW, {
+        contact,
+        automation_id: automation
+      })
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('AUTOMATION ASSIGN', false))
+      );
+  }
+
+  unAssign(contact: string): Observable<boolean> {
+    return this.httpClient.get(this.server + AUTOMATION.CANCEL + contact).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('UNASSIGN AUTOMATION', false))
+    );
   }
 
   loadOwn(): Observable<Automation[]> {

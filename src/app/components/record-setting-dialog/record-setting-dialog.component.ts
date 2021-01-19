@@ -782,7 +782,7 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
   openApplication(): void {
     this.dialog
       .open(ConfirmComponent, {
-        maxWidth: '360px',
+        maxWidth: '400px',
         width: '96vw',
         data: {
           title: 'CRM Record',
@@ -800,7 +800,9 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
           dom.click();
         } else if (res === false) {
           const dom = document.createElement('a');
-          dom.href = '';
+          dom.href =
+            'https://teamgrow.s3.us-east-2.amazonaws.com/recorder/CRMRecord.exe';
+          dom.click();
         }
       });
   }

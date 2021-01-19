@@ -6,7 +6,7 @@
             <h6 class="f-6 font-weight-bold c-dark m-0" *ngIf="mode == 'own'">/ Own Material</h6>
             <h6 class="f-6 font-weight-bold c-dark m-0" *ngIf="mode != 'provided' && mode != 'own'">/ {{mode}}</h6>
         </div>
-        <div class="v-center justify-content-between mt-2 mt-sm-0" *ngIf="mode == 'own'">
+        <div class="v-center create-actions mt-2 mt-sm-0" *ngIf="mode == 'own'">
             <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record p-2" (click)="recordSetting()">
                 <i class="bgc-white i-icon i-record mr-2"></i>
                 Record new video

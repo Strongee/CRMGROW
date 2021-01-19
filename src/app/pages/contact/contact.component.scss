@@ -486,6 +486,15 @@
   }
 }
 
+.canceling.loader {
+  border: 2px solid blue;
+  border-radius: 4px;
+}
+.assigning.loader {
+  border: 2px solid #46d3a9;
+  border-radius: 4px;
+}
+
 .tag-el {
   padding: 2px 6px;
   background-color: gainsboro;

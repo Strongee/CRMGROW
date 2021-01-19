@@ -39,6 +39,8 @@ import { NoteEditComponent } from 'src/app/components/note-edit/note-edit.compon
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
+import { AutomationService } from 'src/app/services/automation.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact',
@@ -89,6 +91,11 @@ export class ContactComponent implements OnInit {
     !!node.children && node.children.length > 0;
   durations = CALENDAR_DURATION;
 
+  canceling = false;
+  assigning = false;
+  cancelSubscription: Subscription;
+  assignSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -100,6 +107,7 @@ export class ContactComponent implements OnInit {
     private overlayService: OverlayService,
     private handlerService: HandlerService,
     private dealsService: DealsService,
+    private automationService: AutomationService,
     private viewContainerRef: ViewContainerRef
   ) {
     this.dealsService.getStage(true);
@@ -113,7 +121,6 @@ export class ContactComponent implements OnInit {
       if (res && res._id === this._id) {
         this.contact = res;
         this.selectedContact = res;
-        console.log('###', this.contact);
         this.groupActivities();
         this.getActivityCount();
         this.timeLineArrangement();
@@ -571,8 +578,8 @@ export class ContactComponent implements OnInit {
    * Select Automation To assign
    * @param evt :Automation
    */
-  selectAutomation(evt: any): void {
-    this.selectedAutomation = evt.Automation;
+  selectAutomation(evt: Automation): void {
+    this.selectedAutomation = evt;
   }
   timeLineArrangement(): any {
     if (!this.contact['time_lines'] || this.contact['time_lines'].length == 0) {
@@ -622,7 +629,80 @@ export class ContactComponent implements OnInit {
       }
     );
   }
-  createAutomation(): void {}
+
+  assignAutomation(): void {
+    if (this.allDataSource.data.length) {
+      this.dialog
+        .open(ConfirmComponent, {
+          maxWidth: '400px',
+          width: '96vw',
+          data: {
+            title: 'Reassign new automation',
+            message:
+              'Are you sure to stop the current automation and start new automation?',
+            cancelLabel: 'Cancel',
+            confirmLabel: 'Assign'
+          }
+        })
+        .afterClosed()
+        .subscribe((status) => {
+          if (status) {
+            this.assigning = true;
+            this.assignSubscription && this.assignSubscription.unsubscribe();
+            this.automationService
+              .reAssign(this.contact._id, this.selectedAutomation._id)
+              .subscribe((status) => {
+                this.assigning = false;
+                if (status) {
+                  this.handlerService.reload$();
+                }
+              });
+          }
+        });
+    } else {
+      this.assigning = true;
+      this.assignSubscription && this.assignSubscription.unsubscribe();
+      this.automationService
+        .bulkAssign([this.contact._id], this.selectedAutomation._id)
+        .subscribe((status) => {
+          this.assigning = false;
+          if (status) {
+            this.handlerService.reload$();
+          }
+        });
+    }
+  }
+  closeAutomation(): void {
+    if (!this.allDataSource.data.length) {
+      return;
+    }
+    this.dialog
+      .open(ConfirmComponent, {
+        maxWidth: '400px',
+        width: '96vw',
+        data: {
+          title: 'Unassign automation',
+          message: 'Are you sure to stop the automation?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Unassign'
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.canceling = true;
+          this.cancelSubscription && this.cancelSubscription.unsubscribe();
+          this.automationService
+            .unAssign(this.contact._id)
+            .subscribe((status) => {
+              this.canceling = false;
+              if (status) {
+                this.handlerService.reload$();
+              }
+            });
+        }
+      });
+  }
 
   ICONS = {
     follow_up: '../../assets/img/automations/follow_up.svg',
