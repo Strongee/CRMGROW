@@ -159,7 +159,10 @@
             <div class="d-flex py-2">
               <span class="f-6 fw-600 op-40 info-title">Tags</span>
               <div class="f-3 tags-wrapper flex-grow-1">
-                <app-input-tag [selectedTags]="contact.tags"></app-input-tag>
+                <!-- <app-input-tag [selectedTags]="contact.tags"></app-input-tag> -->
+                <span *ngFor="let tag of contact.tags" class="tag-el">
+                  {{tag}}
+                </span>
               </div>
             </div>
           </div>
