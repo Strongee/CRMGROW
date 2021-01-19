@@ -70,6 +70,13 @@ export class DealsService extends HttpService {
     this.stages.next(stages);
   }
 
+  deleteStage(sourceId: string, targetId: string): any {
+    return this.httpClient.post(
+      this.server + DEALSTAGE.DELETE + sourceId,
+      targetId
+    );
+  }
+
   getDeal(id: string): any {
     return this.httpClient.get(this.server + DEAL.GET + id).pipe(
       map((res) => res['data'] || []),

@@ -111,6 +111,7 @@ import { TeamContactShareComponent } from './team-contact-share/team-contact-sha
 import { SelectMemberComponent } from './select-member/select-member.component';
 import { PlanSelectComponent } from './plan-select/plan-select.component';
 import { PlanBuyComponent } from './plan-buy/plan-buy.component';
+import { DealStageDeleteComponent } from './deal-stage-delete/deal-stage-delete.component';
 import { DealEditComponent } from './deal-edit/deal-edit.component';
 import { DateInputComponent } from './date-input/date-input.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
@@ -224,6 +225,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     SelectMemberComponent,
     PlanSelectComponent,
     PlanBuyComponent,
+    DealStageDeleteComponent,
     DealEditComponent,
     DateInputComponent
   ],
@@ -304,6 +306,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     DealStageCreateComponent,
     PlanSelectComponent,
     PlanBuyComponent,
+    DealStageDeleteComponent,
     DealEditComponent,
     DateInputComponent
   ],

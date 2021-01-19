@@ -246,7 +246,8 @@ export const TAG = {
   LOAD_COMPANIES: 'contact/brokerage'
 };
 export const DEALSTAGE = {
-  GET: 'deal-stage'
+  GET: 'deal-stage',
+  DELETE: 'deal-stage/'
 };
 
 export const DEAL = {
