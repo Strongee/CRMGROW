@@ -12,6 +12,7 @@
         <label>Invite contacts</label>
         <app-select-contact
           (onSelect)="addContacts($event)"
+          #contactSelector
         >
         </app-select-contact>
       </div>
@@ -32,7 +33,7 @@
                   <div class="f-5">{{contact.fullName}}</div>
                 </div>
                 <button type="button" class="v-center border-0 bgc-trans ml-1" (click)="removeContact(contact)">
-                  <i class="i-icon i-close bgc-black"></i>
+                  <span class="text-danger f-3 fw-600">Unassign</span>
                 </button>
               </div>
             </div>

@@ -411,4 +411,40 @@ export class ContactService extends HttpService {
     this.pageIndex.next(1);
     this.pageSize.next(50);
   }
+
+  checkEmail(email: string): any {
+    return this.httpClient
+      .post(this.server + CONTACT.CHECK_EMAIL, { email })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new Contact().deserialize(e))
+        ),
+        catchError(this.handleError('EMAIL CHECKING', []))
+      );
+  }
+
+  checkPhone(cell_phone: string): any {
+    return this.httpClient
+      .post(this.server + CONTACT.CHECK_PHONE, {
+        cell_phone
+      })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new Contact().deserialize(e))
+        ),
+        catchError(this.handleError('PHONE CHECKING', []))
+      );
+  }
+
+  shareContacts(userId, contacts): Observable<any> {
+    return this.httpClient
+      .post(this.server + CONTACT.SHARE_CONTACT, {
+        user: userId,
+        contacts
+      })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('BULK CREATE CONTACTS', []))
+      );
+  }
 }

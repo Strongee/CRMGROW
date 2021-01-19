@@ -1,10 +1,12 @@
 import { Deserializable } from './deserialize.model';
 import { Activity } from './activity.model';
+import { Contact } from './contact.model';
 
 export class Deal implements Deserializable {
   _id: string;
   user: string;
-  activity: Activity[];
+  contact: string;
+  contacts: Contact[];
   deal_stage: string;
   title: string;
   value: number;

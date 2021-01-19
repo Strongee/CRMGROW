@@ -138,8 +138,8 @@ export class SidebarComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.router.events.subscribe(() => {
-      this.isCollapsed = true;
-    });
+    // this.router.events.subscribe(() => {
+    //   this.isCollapsed = true;
+    // });
   }
 }

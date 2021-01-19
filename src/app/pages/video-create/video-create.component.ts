@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { QuillEditorComponent } from 'ngx-quill';
 import { FileUploader, FileItem, FileUploaderOptions } from 'ng2-file-upload';
-import { QuillEditor } from '../../constants/variable.constants';
 import { UserService } from '../../services/user.service';
 import { FileService } from '../../services/file.service';
 import { MaterialService } from '../../services/material.service';
@@ -12,12 +10,9 @@ import canvas from 'html2canvas';
 import { environment } from 'src/environments/environment';
 import { Garbage } from 'src/app/models/garbage.model';
 import { TabItem } from 'src/app/utils/data.types';
-import * as QuillNamespace from 'quill';
-const Quill: any = QuillNamespace;
 import { Subscription, timer } from 'rxjs';
 import { Router } from '@angular/router';
-// import ImageResize from 'quill-image-resize-module';
-// Quill.register('modules/imageResize', ImageResize);
+import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 
 @Component({
   selector: 'app-video-create',
@@ -64,11 +59,8 @@ export class VideoCreateComponent implements OnInit {
   ];
   selectedTab: TabItem = this.tabs[0];
 
-  quillEditorRef;
-  config = QuillEditor;
   vimeoVideoMetaSubscription: Subscription;
   youtubeVideoMetaSubscription: Subscription;
-  focusEditor = '';
   urlChecked = false;
   videoId = '';
   loadedData = false;
@@ -80,6 +72,7 @@ export class VideoCreateComponent implements OnInit {
   uploadTimeSubscriber: any;
   uploaded_time = 0;
   themeSaving = false;
+  focusedField = '';
 
   themes = [
     {
@@ -109,7 +102,7 @@ export class VideoCreateComponent implements OnInit {
     }
   ];
 
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
   @ViewChild('videoFile') videoFileInput;
   @ViewChild('pdfFile') pdfFileInput;
   @ViewChild('imageFile') imageFileInput;
@@ -890,38 +883,8 @@ export class VideoCreateComponent implements OnInit {
     return duration;
   }
 
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-
-  initImageHandler = (): void => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res.url);
-        });
-      }
-    });
-    imageInput.click();
-  };
-
-  insertImageToEditor(url): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-  setFocusField(editorType): void {
-    this.focusEditor = editorType;
+  focusEditor(): void {
+    this.focusedField = 'editor';
   }
 }
 

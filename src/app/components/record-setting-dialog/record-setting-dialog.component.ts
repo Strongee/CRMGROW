@@ -122,19 +122,25 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
       navigator['enumerateDevices'] = function (callback) {
         navigator.mediaDevices.enumerateDevices().then(callback);
       };
-    }
-    // Camera and Mic and Display Mode capture
-    this.checkDeviceSupport(() => {
-      if (this.hasCamera) {
-        this.deviceConstraint['video'] = { width: 1280, height: 800 };
-      }
-      if (this.hasMic) {
-        this.deviceConstraint['audio'] = true;
-      }
-    });
 
-    this.initDeviceList();
+      this.checkDeviceSupport(() => {
+        if (this.hasCamera) {
+          this.deviceConstraint['video'] = {};
+        }
+        if (this.hasMic) {
+          this.deviceConstraint['audio'] = {};
+        }
+      });
+
+      this.initDeviceList();
+    } else {
+      this.showAlert(
+        'This browser or webpage does not support the media devices(Camera and Microphone).'
+      );
+    }
   }
+
+  ngAfterViewInit(): void {}
 
   openPreviewDialog(): void {
     this.helperService
@@ -243,13 +249,6 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngAfterViewInit(): void {
-    // const video: HTMLVideoElement = this.video.nativeElement;
-    // video.muted = false;
-    // video.controls = false;
-    // video.autoplay = false;
-  }
-
   toggleRecording(): void {
     this.pauseFlag = !this.pauseFlag;
     if (this.pauseFlag) {
@@ -261,7 +260,7 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
 
   count(): void {
     this.countNum = 3;
-    const counter = setInterval((count) => {
+    const counter = setInterval(() => {
       this.countNum--;
       if (this.countNum === 0) {
         this.recordStep = 3;
@@ -273,48 +272,7 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  initDeviceList(): void {
-    const constraints = {
-      audio: true,
-      video: false
-    };
-
-    navigator.mediaDevices
-      .enumerateDevices()
-      .then((devices) => {
-        devices.forEach((device) => {
-          if (
-            device.kind === 'audioinput' &&
-            device.deviceId !== 'default' &&
-            device.deviceId !== 'communications'
-          ) {
-            this.micList.push(device);
-          }
-
-          if (
-            device.kind === 'videoinput' &&
-            device.deviceId !== 'default' &&
-            device.deviceId !== 'communications'
-          ) {
-            this.cameraList.push(device);
-          }
-        });
-      })
-      .catch((err) => {
-        this.cameraList = [];
-        this.micList = [];
-      });
-    // navigator.mediaDevices
-    //   .getUserMedia(constraints)
-    //   .then((stream) => {
-    //     console.log('devices ===========>', stream);
-    //   })
-    //   .catch((err) => {
-    //     console.log('device error ===========>', err);
-    //   });
-  }
-
-  setRecordMode(mode): void {
+  setRecordMode(mode: string): void {
     if (mode === 'screenCam') {
       this.mode = mode;
       this.openApplication();
@@ -325,16 +283,16 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         } else {
           navigator.mediaDevices
             .getUserMedia({ video: true })
-            .then((stream) => {
+            .then(() => {
               this.mode = 'camera';
             })
-            .catch((err) => {
+            .catch(() => {
               this.dialog.open(NotifyComponent, {
                 position: { top: '100px' },
                 width: '100vw',
                 maxWidth: '400px',
                 data: {
-                  message: 'Camera is not allowed on this platform.'
+                  message: 'Camera is denied on this page.'
                 }
               });
             });
@@ -444,7 +402,6 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         });
       }
       this.dialogRef.close();
-      // this.closeEvent.emit()
     });
   }
 
@@ -475,14 +432,6 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
       }
 
       this.recordedFile = window.URL.createObjectURL(blob);
-      // this.helperService.generateThumbnail(blob).then(data =>{
-      //   this.videoObj['thumbnail'] = data.image;
-      //   this.videoObj['duration'] = data.duration;
-      //   this.thumbnailLoading = false;
-      // })
-      // document.querySelector('video').srcObject = null;
-      // document.querySelector('video').src = URL.createObjectURL(blob);
-      // document.querySelector('video').muted = false;
       this.recording = false;
       this.recordStep = 4;
       this.recordedData = blob;
@@ -504,26 +453,6 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
             });
         })
         .catch((e) => {});
-      // this.getSeekableBlob(blob, (newBlob) => {
-      //   this.recordedData = newBlob;
-      //   this.recordedFile = window.URL.createObjectURL(newBlob);
-      //   this.helperService
-      //     .generateThumbnail(newBlob)
-      //     .then((data) => {
-      //       this.videoObj['thumbnail'] = data.image;
-      //       this.videoObj['duration'] = data.duration;
-      //       const imageBlob = this.helperService.b64toBlob(data.image);
-      //       this.helperService
-      //         .generateImageThumbnail(imageBlob, 'video_play')
-      //         .then((image) => {
-      //           this.videoObj['site_image'] = image;
-      //         })
-      //         .catch((err) => {
-      //           console.log('Video Meta Image Load', err);
-      //         });
-      //     })
-      //     .catch((e) => {});
-      // });
       this.recorder = undefined;
     });
   }
@@ -536,6 +465,9 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
     if (this.mode === 'screen') {
       if (this.cameraStream) {
         this.screenStream.addTrack(this.cameraStream.getTracks()[0]);
+      } else {
+        this.micRecording = false;
+        this.micFlag = false;
       }
       this.screenStream.width = window.screen.width;
       this.screenStream.height = window.screen.height;
@@ -551,17 +483,11 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
       video.muted = true;
       video.srcObject = this.screenStream;
       video.play();
-
-      this.screenFlag = true;
-      this.cameraFlag = false;
-      this.mode = 'screen';
-
-      this.micRecording = false;
-      this.micFlag = false;
     }
     if (this.mode === 'camera') {
-      this.cameraStream.width = window.screen.width;
-      this.cameraStream.height = window.screen.height;
+      const { width, height } = this.cameraStream.getTracks()[0].getSettings();
+      this.cameraStream.width = width;
+      this.cameraStream.height = height;
       this.cameraStream.fullcanvas = true;
 
       this.recorder = RecordRTC(this.cameraStream, {
@@ -574,9 +500,6 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
       video.muted = true;
       video.srcObject = this.cameraStream;
       video.play();
-
-      this.cameraFlag = true;
-      this.mode = 'camera';
 
       if (this.deviceConstraint['audio']) {
         this.micRecording = true;
@@ -588,124 +511,17 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
       this.recording = true;
     }
     return;
-    if (this.screenStream && this.cameraStream) {
-      if (!this.deviceConstraint['video']) {
-        this.screenStream.width = window.screen.width;
-        this.screenStream.height = window.screen.height;
-        this.screenStream.fullcanvas = true;
-
-        this.recorder = RecordRTC([this.screenStream, this.cameraStream], {
-          type: 'video',
-          mimeType: 'video/webm',
-          video: videoSize,
-          recorderType: RecordRTC.WhammyRecorder,
-          previewStream: (s) => {
-            const video: HTMLVideoElement = this.video.nativeElement;
-            video.muted = true;
-            video.srcObject = s;
-            video.play();
-          }
-        });
-
-        this.screenFlag = true;
-        this.cameraFlag = false;
-        this.micFlag = true;
-        this.micRecording = true;
-        this.mode = 'screen';
-      } else {
-        this.screenStream.width = window.screen.width;
-        this.screenStream.height = window.screen.height;
-        this.screenStream.fullcanvas = true;
-
-        this.cameraStream.width = 320;
-        this.cameraStream.height = 240;
-        this.cameraStream.top = 15;
-        this.cameraStream.left =
-          this.screenStream.width - this.cameraStream.width;
-
-        this.recorder = RecordRTC([this.screenStream, this.cameraStream], {
-          type: 'video',
-          mimeType: 'video/webm',
-          video: videoSize,
-          previewStream: (s) => {
-            const video: HTMLVideoElement = this.video.nativeElement;
-            video.muted = true;
-            video.srcObject = s;
-            video.play();
-          }
-        });
-
-        this.screenFlag = true;
-        this.cameraFlag = true;
-        this.mode = 'screenCam';
-
-        if (this.deviceConstraint['audio']) {
-          this.micRecording = true;
-          this.micFlag = true;
-        }
-      }
-    } else if (this.screenStream) {
-      this.screenStream.width = window.screen.width;
-      this.screenStream.height = window.screen.height;
-      this.screenStream.fullcanvas = true;
-
-      this.recorder = RecordRTC(this.screenStream, {
-        type: 'video',
-        mimeType: 'video/webm',
-        video: videoSize
-      });
-
-      const video: HTMLVideoElement = this.video.nativeElement;
-      video.muted = true;
-      video.srcObject = this.screenStream;
-      video.play();
-
-      this.screenFlag = true;
-      this.cameraFlag = false;
-      this.mode = 'screen';
-
-      this.micRecording = false;
-      this.micFlag = false;
-    } else if (this.cameraStream) {
-      this.cameraStream.width = window.screen.width;
-      this.cameraStream.height = window.screen.height;
-      this.cameraStream.fullcanvas = true;
-
-      this.recorder = RecordRTC(this.cameraStream, {
-        type: 'video',
-        mimeType: 'video/webm',
-        video: videoSize
-      });
-
-      const video: HTMLVideoElement = this.video.nativeElement;
-      video.muted = true;
-      video.srcObject = this.cameraStream;
-      video.play();
-
-      this.cameraFlag = true;
-      this.mode = 'camera';
-
-      if (this.deviceConstraint['audio']) {
-        this.micRecording = true;
-        this.micFlag = true;
-      }
-    }
-
-    if (this.recorder) {
-      this.recorder.startRecording();
-      this.recording = true;
-    }
   }
 
-  captureCamera(camera = false): void {
-    if (!this.screenStream && !this.deviceConstraint['video']) {
-      this.showAlert('Please connect camera at least.');
-      return;
-    }
+  captureCamera(): void {
     const constraint = { ...this.deviceConstraint };
-    if (!camera) {
-      constraint['video'] = false;
+    if (this.selectedCamera) {
+      constraint['video']['deviceId'] = { exact: this.selectedCamera };
     }
+    if (this.selectedMic) {
+      constraint['audio']['deviceId'] = { exact: this.selectedMic };
+    }
+    console.log(constraint);
     navigator.mediaDevices
       .getUserMedia(constraint)
       .then((stream) => {
@@ -714,6 +530,25 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         this.count();
       })
       .catch((err) => {
+        console.log('camera stream error', err, err.message);
+        this.showAlert(`Couldn't get the video from this camera`);
+      });
+  }
+
+  captureMicro(): void {
+    const constraint = { ...this.deviceConstraint };
+    constraint['video'] = false;
+    if (this.selectedMic) {
+      constraint['audio']['deviceId'] = { exact: this.selectedMic };
+    }
+    navigator.mediaDevices
+      .getUserMedia(constraint)
+      .then((stream) => {
+        this.cameraStream = stream;
+        this.recordStep = 2;
+        this.count();
+      })
+      .catch(() => {
         this.count();
         this.recordStep = 2;
       });
@@ -724,24 +559,18 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
       (screen) => {
         this.addStreamStopListener(screen, this.stopRecording);
         this.screenStream = screen;
-        this.captureCamera();
+        this.captureMicro();
       },
-      (error) => {
-        console.log('Capture Screen Error', error);
-        // Only Camera Record
-        this.captureCamera();
-      }
+      () => {}
     );
   }
 
   record(): void {
-    // this.captureScreen()
-
     if (this.mode === 'screen') {
       this.captureScreen();
     }
     if (this.mode === 'camera') {
-      this.captureCamera(true);
+      this.captureCamera();
     }
   }
 
@@ -759,14 +588,6 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         .then(success)
         .catch(error);
     }
-  }
-
-  keepStreamActive(stream): void {
-    const video: HTMLVideoElement = this.video.nativeElement;
-    video.muted = true;
-    video.controls = false;
-    video.autoplay = false;
-    video.srcObject = stream;
   }
 
   addStreamStopListener(stream, callback): void {
@@ -800,37 +621,6 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         false
       );
     });
-  }
-
-  getSeekableBlob(inputBlob, callback): void {
-    if (typeof ebml === 'undefined') {
-      throw new Error('Please link: https://www.webrtc-experiment.com/EBML.js');
-    }
-
-    const reader = new ebml.Reader();
-    const decoder = new ebml.Decoder();
-    const tools = ebml.tools;
-
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      const ebmlElms = decoder.decode(fileReader.result as ArrayBuffer);
-      ebmlElms.forEach((element) => {
-        reader.read(element);
-      });
-      reader.stop();
-      const refinedMetadataBuf = tools.makeMetadataSeekable(
-        reader.metadatas,
-        reader.duration,
-        reader.cues
-      );
-      const body = fileReader.result.slice(reader.metadataSize);
-      const newBlob = new Blob([refinedMetadataBuf, body], {
-        type: 'video/webm'
-      });
-
-      callback(newBlob);
-    };
-    fileReader.readAsArrayBuffer(inputBlob);
   }
 
   checkDeviceSupport(callback): void {
@@ -876,7 +666,7 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         }
 
         if (device['kind'] === 'video') {
-          device['kine'] = 'videoinput';
+          device['kind'] = 'videoinput';
         }
 
         let skip;
@@ -935,8 +725,42 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
     });
   }
 
-  showAlert(msg): void {
-    this.dialog.open(NotifyComponent, {
+  initDeviceList(): void {
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) => {
+        devices.forEach((device) => {
+          if (
+            device.kind === 'audioinput' &&
+            device.deviceId !== 'default' &&
+            device.deviceId !== 'communications'
+          ) {
+            this.micList.push(device);
+          }
+
+          if (
+            device.kind === 'videoinput' &&
+            device.deviceId !== 'default' &&
+            device.deviceId !== 'communications'
+          ) {
+            this.cameraList.push(device);
+          }
+        });
+        if (this.cameraList && this.cameraList.length) {
+          this.selectedCamera = this.cameraList[0]['deviceId'];
+        }
+        if (this.micList && this.micList.length) {
+          this.selectedMic = this.micList[0]['deviceId'];
+        }
+      })
+      .catch((err) => {
+        this.cameraList = [];
+        this.micList = [];
+      });
+  }
+
+  showAlert(msg: string): MatDialogRef<NotifyComponent> {
+    const dialogRef = this.dialog.open(NotifyComponent, {
       position: { top: '100px' },
       width: '100vw',
       maxWidth: '400px',
@@ -944,19 +768,11 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         message: msg
       }
     });
-  }
-
-  showSnack(msg): void {
-    // this.snackBar.open(msg, 'OK', {
-    //   verticalPosition: 'bottom',
-    //   horizontalPosition: 'left',
-    //   duration: 5000
-    // });
+    return dialogRef;
   }
 
   close(): void {
     this.dialogRef.close();
-    // this.closeEvent.emit()
   }
 
   collapseVideo(): void {
@@ -966,7 +782,7 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
   openApplication(): void {
     this.dialog
       .open(ConfirmComponent, {
-        maxWidth: '360px',
+        maxWidth: '400px',
         width: '96vw',
         data: {
           title: 'CRM Record',
@@ -984,7 +800,9 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
           dom.click();
         } else if (res === false) {
           const dom = document.createElement('a');
-          dom.href = '';
+          dom.href =
+            'https://teamgrow.s3.us-east-2.amazonaws.com/recorder/CRMRecord.exe';
+          dom.click();
         }
       });
   }

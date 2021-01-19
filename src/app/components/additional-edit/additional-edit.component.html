@@ -7,12 +7,9 @@
     </div>
     <mat-dialog-content>
         <div class="row">
-            <div class="col-sm-6 col-12 form-group" [ngClass]="{invalid: form.submitted && source.invalid && (source.dirty || source.touched || form.submitted)}">
+            <div class="col-sm-6 col-12 form-group">
                 <label for="source">source</label>
-                <input type="text" id="source" class="form-control" required name="source"  #source="ngModel" [(ngModel)]="contact.source" />
-                <span class="error" *ngIf="source.errors">
-                  <ng-container *ngIf="source.errors.required">Source is required!</ng-container>
-                </span>
+                <input type="text" id="source" class="form-control" name="source"  #source="ngModel" [(ngModel)]="contact.source" />
             </div>
             <div class="col-sm-6 col-12 form-group">
                 <label for="company">current company</label>

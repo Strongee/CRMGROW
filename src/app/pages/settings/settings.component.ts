@@ -14,11 +14,11 @@ export class SettingsComponent implements OnInit {
     { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
     { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
     { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
-    {
-      id: 'status-automation',
-      icon: 'i-status',
-      label: 'Status Automation'
-    },
+    // {
+    //   id: 'status-automation',
+    //   icon: 'i-status',
+    //   label: 'Status Automation'
+    // },
     {
       id: 'auto-resend-video',
       icon: 'i-auto-video',

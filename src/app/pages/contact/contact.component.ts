@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewContainerRef,
-  ViewChild,
-  ChangeDetectorRef
-} from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -28,17 +21,15 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { listToTree } from 'src/app/helper';
 import { AutomationShowFullComponent } from 'src/app/components/automation-show-full/automation-show-full.component';
-import * as moment from 'moment';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
 import { TabItem } from 'src/app/utils/data.types';
 import { TaskDetail } from 'src/app/models/task.model';
 import { NoteService } from 'src/app/services/note.service';
+import { DealsService } from 'src/app/services/deals.service';
 import { TaskService } from 'src/app/services/task.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
-import { MaterialService } from 'src/app/services/material.service';
-import { HelperService } from 'src/app/services/helper.service';
 import * as _ from 'lodash';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { ContactEditComponent } from 'src/app/components/contact-edit/contact-edit.component';
@@ -48,6 +39,8 @@ import { NoteEditComponent } from 'src/app/components/note-edit/note-edit.compon
 import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
+import { AutomationService } from 'src/app/services/automation.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact',
@@ -59,13 +52,13 @@ export class ContactComponent implements OnInit {
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
-    { icon: '', label: 'Notes', id: 'notes' },
-    { icon: '', label: 'Emails', id: 'emails' },
-    { icon: '', label: 'Texts', id: 'texts' },
-    { icon: '', label: 'Appointments', id: 'appointments' },
-    { icon: '', label: 'Group Calls', id: 'group_calls' },
-    { icon: '', label: 'Tasks', id: 'follow_ups' },
-    { icon: '', label: 'Deals', id: 'deals' }
+    { icon: '', label: 'Notes', id: 'note' },
+    { icon: '', label: 'Emails', id: 'email' },
+    { icon: '', label: 'Texts', id: 'text' },
+    { icon: '', label: 'Appointments', id: 'appointment' },
+    { icon: '', label: 'Group Calls', id: 'group_call' },
+    { icon: '', label: 'Tasks', id: 'follow_up' },
+    { icon: '', label: 'Deals', id: 'deal' }
   ];
   action: TabItem = this.tabs[0];
 
@@ -81,6 +74,13 @@ export class ContactComponent implements OnInit {
   mainPanel = true;
   secondPanel = true;
   additionalPanel = true;
+  noteActivity = 0;
+  emailActivity = 0;
+  textActivity = 0;
+  appointmentActivity = 0;
+  groupCallActivity = 0;
+  taskActivity = 0;
+  dealActivity = 0;
 
   selectedAutomation: Automation;
   ActionName = ActionName;
@@ -91,9 +91,13 @@ export class ContactComponent implements OnInit {
     !!node.children && node.children.length > 0;
   durations = CALENDAR_DURATION;
 
+  canceling = false;
+  assigning = false;
+  cancelSubscription: Subscription;
+  assignSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
-    private location: Location,
     private route: ActivatedRoute,
     private router: Router,
     private contactService: ContactService,
@@ -102,11 +106,12 @@ export class ContactComponent implements OnInit {
     private storeService: StoreService,
     private overlayService: OverlayService,
     private handlerService: HandlerService,
-    private viewContainerRef: ViewContainerRef,
-    private materialService: MaterialService,
-    private helperSerivce: HelperService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+    private dealsService: DealsService,
+    private automationService: AutomationService,
+    private viewContainerRef: ViewContainerRef
+  ) {
+    this.dealsService.getStage(true);
+  }
 
   ngOnInit(): void {
     this._id = this.route.snapshot.params['id'];
@@ -117,11 +122,13 @@ export class ContactComponent implements OnInit {
         this.contact = res;
         this.selectedContact = res;
         this.groupActivities();
+        this.getActivityCount();
         this.timeLineArrangement();
       } else {
         this.contact = res;
         this.selectedContact = res;
         this.groupActivities();
+        this.getActivityCount();
       }
     });
   }
@@ -151,6 +158,43 @@ export class ContactComponent implements OnInit {
         this.groupActions[group] = [e];
         this.mainTimelines.push(e);
       }
+    }
+  }
+
+  getActivityCount(): void {
+    if (this.contact.activity.length > 0) {
+      this.contact.activity.forEach((activity) => {
+        if (activity.type == 'notes') {
+          this.noteActivity++;
+        }
+        if (
+          activity.type == 'emails' ||
+          activity.type == 'email_trackers' ||
+          activity.type == 'videos' ||
+          activity.type == 'video_trackers' ||
+          activity.type == 'pdfs' ||
+          activity.type == 'pdf_trackers' ||
+          activity.type == 'images' ||
+          activity.type == 'image_trackers'
+        ) {
+          this.emailActivity++;
+        }
+        if (activity.type == 'texts') {
+          this.textActivity++;
+        }
+        if (activity.type == 'appointments') {
+          this.appointmentActivity++;
+        }
+        if (activity.type == 'group_calls') {
+          this.groupCallActivity++;
+        }
+        if (activity.type == 'follow_ups') {
+          this.taskActivity++;
+        }
+        if (activity.type == 'deals') {
+          this.dealActivity++;
+        }
+      });
     }
   }
 
@@ -338,11 +382,10 @@ export class ContactComponent implements OnInit {
   openSendEmail(): void {
     this.dialog.open(SendEmailComponent, {
       position: {
-        bottom: '50px',
-        right: '50px'
+        bottom: '0px',
+        right: '0px'
       },
       width: '100vw',
-      maxWidth: '650px',
       panelClass: 'send-email',
       backdropClass: 'cdk-send-email',
       disableClose: false,
@@ -535,20 +578,20 @@ export class ContactComponent implements OnInit {
    * Select Automation To assign
    * @param evt :Automation
    */
-  selectAutomation(evt: any): void {
-    this.selectedAutomation = evt.Automation;
+  selectAutomation(evt: Automation): void {
+    this.selectedAutomation = evt;
   }
-  timeLineArrangement(): void {
-    if (!this.contact.time_lines || this.contact.time_lines.length == 0) {
+  timeLineArrangement(): any {
+    if (!this.contact['time_lines'] || this.contact['time_lines'].length == 0) {
       return;
     }
-    this.allDataSource.data = listToTree(this.contact.time_lines);
+    this.allDataSource.data = listToTree(this.contact['time_lines']);
     let root = null;
     if (this.allDataSource.data?.length == 0) {
       return;
     }
     if (this.allDataSource.data[0]?.status == 'completed') {
-      root = this.allDataSource.data[0];
+      root = JSON.parse(JSON.stringify(this.allDataSource.data[0]));
     }
     while (true) {
       if (root.children[0]?.status == 'completed') {
@@ -569,9 +612,9 @@ export class ContactComponent implements OnInit {
       position: { top: '100px' },
       width: '100vw',
       maxWidth: '700px',
-      maxHeight: '600px',
       data: {
-        automation: this.allDataSource.data
+        id: this.contact.automation._id,
+        automations: this.contact.time_lines
       }
     });
   }
@@ -586,7 +629,80 @@ export class ContactComponent implements OnInit {
       }
     );
   }
-  createAutomation(): void {}
+
+  assignAutomation(): void {
+    if (this.allDataSource.data.length) {
+      this.dialog
+        .open(ConfirmComponent, {
+          maxWidth: '400px',
+          width: '96vw',
+          data: {
+            title: 'Reassign new automation',
+            message:
+              'Are you sure to stop the current automation and start new automation?',
+            cancelLabel: 'Cancel',
+            confirmLabel: 'Assign'
+          }
+        })
+        .afterClosed()
+        .subscribe((status) => {
+          if (status) {
+            this.assigning = true;
+            this.assignSubscription && this.assignSubscription.unsubscribe();
+            this.automationService
+              .reAssign(this.contact._id, this.selectedAutomation._id)
+              .subscribe((status) => {
+                this.assigning = false;
+                if (status) {
+                  this.handlerService.reload$();
+                }
+              });
+          }
+        });
+    } else {
+      this.assigning = true;
+      this.assignSubscription && this.assignSubscription.unsubscribe();
+      this.automationService
+        .bulkAssign([this.contact._id], this.selectedAutomation._id)
+        .subscribe((status) => {
+          this.assigning = false;
+          if (status) {
+            this.handlerService.reload$();
+          }
+        });
+    }
+  }
+  closeAutomation(): void {
+    if (!this.allDataSource.data.length) {
+      return;
+    }
+    this.dialog
+      .open(ConfirmComponent, {
+        maxWidth: '400px',
+        width: '96vw',
+        data: {
+          title: 'Unassign automation',
+          message: 'Are you sure to stop the automation?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Unassign'
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.canceling = true;
+          this.cancelSubscription && this.cancelSubscription.unsubscribe();
+          this.automationService
+            .unAssign(this.contact._id)
+            .subscribe((status) => {
+              this.canceling = false;
+              if (status) {
+                this.handlerService.reload$();
+              }
+            });
+        }
+      });
+  }
 
   ICONS = {
     follow_up: '../../assets/img/automations/follow_up.svg',

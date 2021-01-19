@@ -17,7 +17,6 @@ export class DealCreateComponent implements OnInit {
   submitted = false;
   stages: any[] = [];
   selectedStage = '';
-  note = '';
   saving = false;
   createSubscription: Subscription;
 
@@ -43,19 +42,27 @@ export class DealCreateComponent implements OnInit {
       return;
     } else {
       this.saving = true;
+      const contactId = [];
+      this.contacts.forEach((contact) => {
+        contactId.push(contact._id);
+      });
       const data = {
         deal_stage: this.selectedStage,
-        contact: this.contacts,
+        contacts: contactId,
         title: this.title,
-        value: this.value,
-        note: this.note
+        value: this.value
       };
-      this.dealsService.createDeal(data).subscribe((res) => {
-        if (res) {
+      this.dealsService.createDeal(data).subscribe(
+        (res) => {
+          if (res) {
+            this.saving = false;
+            this.dialogRef.close(res['data']);
+          }
+        },
+        (err) => {
           this.saving = false;
-          this.dialogRef.close(res['data']);
         }
-      });
+      );
     }
   }
 }

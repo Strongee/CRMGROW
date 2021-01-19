@@ -1,4 +1,5 @@
-import { ApplicationRef, Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ApplicationRef, Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -24,7 +25,8 @@ export class AppComponent implements OnInit {
     private titleService: Title,
     private translateService: TranslateService,
     private swUpdate: SwUpdate,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.translateService.addLangs(this.langs);
     this.translateService.setDefaultLang('en');
@@ -41,7 +43,6 @@ export class AppComponent implements OnInit {
     const everySixHour$ = interval(6 * 60 * 60 * 1000);
     const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHour$);
     everySixHoursOnceAppIsStable$.subscribe(() => {
-      console.log('app is stable status');
       try {
         swUpdate.checkForUpdate();
       } catch (err) {
@@ -80,6 +81,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleHandle();
+
+    if (navigator.userAgent.indexOf('SamsungBrowser') !== -1) {
+      this.document.body.classList.add('samsung-app');
+    }
   }
 
   titleHandle(): void {

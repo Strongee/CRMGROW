@@ -2,18 +2,23 @@
   <ng-container *ngIf="recordStep == 1">
     <div class="config-back-drop"></div>
     <div class="setting-screen">
-      <h1 mat-dialog-title>Record Setting</h1>
+      <div class="v-center justify-content-between">
+        <h1 mat-dialog-title class="m-0">Record Setting</h1>
+        <button class="v-center border-0 bgc-trans" mat-dialog-close>
+            <i class="d-block i-icon i-close bgc-dark"></i>
+        </button>
+      </div>
       <div class="form-group">
         <div class="record-mode-wrapper my-3">
-          <div class="record-item" [class.active]="mode == 'screenCam'" (click)="setRecordMode('screenCam')">
+          <div class="record-item c-pointer" [class.active]="mode == 'screenCam'" (click)="setRecordMode('screenCam')">
             <i class="i-icon i-screen-camera both" aria-hidden="true"></i>
             <div class="text f-1 font-weight-bold mt-2">Screen and Cam</div>
           </div>
-          <div class="record-item" [class.active]="mode == 'screen'" (click)="setRecordMode('screen')">
+          <div class="record-item c-pointer" [class.active]="mode == 'screen'" (click)="setRecordMode('screen')">
             <i class="i-icon i-screen single" aria-hidden="true"></i>
             <div class="text f-1 font-weight-bold mt-2">Screen Only</div>
           </div>
-          <div class="record-item" [class.active]="mode == 'camera'" (click)="setRecordMode('camera')">
+          <div class="record-item c-pointer" [class.active]="mode == 'camera'" (click)="setRecordMode('camera')">
             <i class="i-icon i-camera single" aria-hidden="true"></i>
             <div class="text f-1 font-weight-bold mt-2">Cam only</div>
           </div>
@@ -23,14 +28,14 @@
             <i class="i-icon i-camera bgc-record" aria-hidden="true"></i>
             <select class="form-control theme-control ml-2" [(ngModel)]="selectedCamera" name="camera_type" #camera_type="ngModel">
               <option value="" disabled *ngIf="!cameraList.length">Camera not found</option>
-              <option *ngFor="let camera of cameraList" value="{{camera.text}}">{{camera.text}}</option>
+              <option *ngFor="let camera of cameraList; let i = index;" [value]="camera.deviceId">{{camera.label ? camera.label : 'Camera Input ' + (i + 1)}}</option>
             </select>
           </div>
           <div class="type-item v-center mt-2">
             <i class="i-icon i-mic bgc-record" aria-hidden="true"></i>
             <select class="form-control theme-control ml-2" [(ngModel)]="selectedMic" name="mic_type" #mic_type="ngModel">
               <option value="" disabled *ngIf="!micList.length">Mic not found</option>
-              <option *ngFor="let mic of micList" value="{{mic.label}}">{{mic.label}}</option>
+              <option *ngFor="let mic of micList; let i = index;" [value]="mic.deviceId">{{mic.label ? mic.label : 'Microphone Input ' + (i + 1)}}</option>
             </select>
           </div>
         </div>
@@ -99,7 +104,7 @@
         <div class="tooltip-box" *ngIf="hovered == 'toggle_mic'">
           <span class="tip tip-right"></span>
           <div class="f-1 font-weight-bold c-white">
-            {{micFlag == true ? 'Disable' : 'Enable'}} microphone
+            {{micRecording == true ? 'Disable' : 'Enable'}} microphone
           </div>
         </div>
         <button class="v-center justify-content-center"
@@ -140,22 +145,7 @@
           <i class="i-icon i-record-arrow"></i>
         </button>
       </div>
-      <div class="v-center mb-1">
-        <div class="tooltip-box" *ngIf="hovered == 'screenCam'">
-          <span class="tip tip-right"></span>
-          <div class="f-1 font-weight-bold c-white">
-            Use Screen + Cam
-          </div>
-        </div>
-        <button class="v-center justify-content-center"
-                (click)="screenCameraMode()"
-                (mouseenter)="hoverButton('screenCam')"
-                (mouseleave)="blurButton()"
-                [class.disable]="mode != 'screenCam'">
-          <i class="i-icon i-record-screen-cam"></i>
-        </button>
-      </div>
-      <div class="v-center mb-1">
+      <!-- <div class="v-center mb-1">
         <div class="tooltip-box" *ngIf="hovered == 'screen'">
           <span class="tip tip-right"></span>
           <div class="f-1 font-weight-bold c-white">
@@ -197,7 +187,7 @@
                 (mouseleave)="blurButton()">
           <i class="i-icon i-record-more"></i>
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
   <ng-container *ngIf="recordStep === 4">

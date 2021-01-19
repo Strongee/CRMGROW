@@ -20,28 +20,7 @@
       <div class="col-sm-6 col-12">
         <div class="form-group">
           <label for="date_tc">date</label>
-          <div class="input-group bgc-dark-trans08 rounded">
-            <div class="input-group-prepend rounded" (click)="d.toggle()">
-              <span class="input-group-text bgc-blue border-0">
-                <i class="i-icon i-calendar bgc-white"></i>
-              </span>
-            </div>
-            <input
-              type="text"
-              id="date_tc"
-              class="form-control datepicker"
-              placeholder="Select date"
-              name="due_date"
-              #due_date="ngModel"
-              [minDate]="MIN_DATE"
-              [(ngModel)]="date"
-              ngbDatepicker
-              #d="ngbDatepicker"
-              [firstDayOfWeek]="7"
-              required
-              (click)="d.toggle()"
-            />
-          </div>
+          <app-date-input type="prepend" [(value)]="date" [minDate]="MIN_DATE"></app-date-input>
         </div>
       </div>
       <div class="col-sm-6 col-12">

@@ -47,6 +47,51 @@
             *ngIf="title.errors &&
             (title.touched || title.dirty)">Please input template name.</span>
         </div>
+
+        <!-- Token List for Mobile Devices -->
+        <div class="mobile-variables-group">
+          <h5 class="f-4 font-weight-bold upper-text mb-1">Insert Variables for {{template.type === 'text' ? 'text subject.' : 'email subject and content'}}</h5>
+          <button type="button"
+            class="btn btn-sm btn-blue text-white"
+            (click)="insertValue('{user_name}')">
+            Your Name
+          </button>
+          <button type="button"
+            class="btn btn-sm btn-blue text-white"
+            (click)="insertValue('{user_email}')">
+            Your email
+          </button>
+          <button type="button"
+            class="btn btn-sm btn-blue text-white"
+            (click)="insertValue('{user_phone}')">
+            Your Phone
+          </button>
+          <button type="button"
+            class="btn btn-sm btn-orange text-white"
+            (click)="insertValue('{contact_email}')">
+            Contact E-mail
+          </button>
+          <button type="button"
+            class="btn btn-sm btn-orange text-white"
+            (click)="insertValue('{contact_phone}')">
+            Contact Phone
+          </button>
+          <button type="button"
+            class="btn btn-sm btn-orange text-white"
+            (click)="
+                  insertValue('{contact_first_name}')
+                ">
+            Contact Firstname
+          </button>
+          <button type="button"
+            class="btn btn-sm btn-orange text-white"
+            (click)="
+                  insertValue('{contact_last_name}')
+                ">
+            Contact Lastname
+          </button>
+        </div>
+
         <ng-container *ngIf="template.type === 'email'; else textTemplate">
           <div class="form-group">
             <label>Subject</label>

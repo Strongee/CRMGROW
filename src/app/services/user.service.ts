@@ -280,6 +280,14 @@ export class UserService extends HttpService {
         return this.httpClient.get(this.server + USER.SYNC_OUTLOOK);
     }
   }
+  public requestCalendarSyncUrl(type: string): Observable<any> {
+    switch (type) {
+      case 'gmail':
+        return this.httpClient.get(this.server + USER.SYNC_GMAIL);
+      case 'outlook':
+        return this.httpClient.get(this.server + USER.SYNC_OUTLOOK);
+    }
+  }
   public loadAffiliate(): Observable<any> {
     return this.httpClient.get(this.server + USER.LOAD_AFFILIATE).pipe(
       map((res) => res),
@@ -312,5 +320,16 @@ export class UserService extends HttpService {
         catchError(this.handleError('CONNECT SMTP'))
       );
   }
-
+  public getUserInfoItem(type: string): any {
+    const user = this.getUser();
+    return user[type];
+  }
+  public getUser(): any {
+    const user = localStorage.getItem('user');
+    if (user) {
+      return JSON.parse(localStorage.getItem('user'));
+    } else {
+      return {};
+    }
+  }
 }

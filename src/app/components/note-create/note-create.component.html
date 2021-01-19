@@ -1,22 +1,47 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid? submit() : false;" [class.was-validated]="form.submitted">
   <h1 mat-dialog-title>Add new note</h1>
   <mat-dialog-content>
-    <ng-container *ngIf="isSelected; else selectContactTemplate">
-      <div class="f-6 mb-2">
-        adding to 
-        <span class="f-6 c-blue font-weight-bold">{{contacts[0].fullName}}</span>
-        <ng-container *ngIf="contacts.length > 1">
-          and <span class="f-6 c-blue font-weight-bold">{{contacts.length - 1}} contact(s)</span>
-        </ng-container>
-      </div>
+    <ng-container *ngIf="type != 'deal' else dealContacts">
+      <ng-container *ngIf="isSelected; else selectContactTemplate">
+        <div class="f-6 mb-2">
+          adding to
+          <span class="f-6 c-blue font-weight-bold">{{contacts[0].fullName}}</span>
+          <ng-container *ngIf="contacts.length > 1">
+            and <span class="f-6 c-blue font-weight-bold">{{contacts.length - 1}} contact(s)</span>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-template #selectContactTemplate>
+        <div class="form-group">
+          <label>contact</label>
+          <app-select-contact (onSelect)="selectContact($event)"></app-select-contact>
+        </div>
+      </ng-template>
     </ng-container>
-    <ng-template #selectContactTemplate>
+    <ng-template #dealContacts>
       <div class="form-group">
-        <label>contact</label>
+        <div class="v-center">
+          <label>Contact(s)</label>
+          <span class="error ml-auto" *ngIf="!contacts.length && form.submitted">Required!</span>
+        </div>
         <app-select-contact (onSelect)="selectContact($event)"></app-select-contact>
+        <div class="new-contacts-wrapper mt-2">
+          <div class="new-member v-center my-1" *ngFor="let contact of contacts">
+            <div class="v-center justify-content-between w-100">
+              <div class="v-center">
+                <div class="form-avatar rounded-circle bg-dark">{{contact.avatarName}}</div>
+                <div class="f-3 ml-3">{{contact.fullName}}</div>
+                <div class="f-3 ml-3">{{contact.email}}</div>
+              </div>
+              <button type="button" class="v-center border-0 bgc-trans ml-1" (click)="removeContact(contact)">
+                <i class="i-icon i-close bgc-black"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </ng-template>
-    <div class="form-group has-feedback">
+    <div class="form-group has-feedback mt-2">
       <div class="d-flex">
         <label for="noteContent" class="mb-0">content</label>
         <span class="ml-auto error" *ngIf="content.errors">Required!</span>

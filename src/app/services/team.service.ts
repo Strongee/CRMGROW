@@ -287,16 +287,11 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM SHARE MATERIALS', []))
       );
   }
-  shareContacts(userId, contacts): Observable<any> {
-    return this.httpClient
-      .post(this.server + TEAM.SHARE_CONTACTS, {
-        user: userId,
-        contacts
-      })
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('TEAM SHARE CONTACTS', []))
-      );
+  loadSharedContacts(): Observable<any> {
+    return this.httpClient.get(this.server + TEAM.LOAD_SHARE_CONTACTS).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('TEAM LOAD SHARED CONTACTS', []))
+    );
   }
   removeVideo(id): Observable<any> {
     return this.httpClient.post(this.server + TEAM.REMOVE_VIDEO + id, {}).pipe(
@@ -354,7 +349,7 @@ export class TeamService extends HttpService {
   }
   getPageInquiries(page): Observable<any> {
     return this.httpClient.get(this.server + TEAM.INQUIRY + page).pipe(
-      map((res) => res),
+      map((res) => res || []),
       catchError(this.handleError('LOAD PAGE INQUIRIES CALL', []))
     );
   }

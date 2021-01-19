@@ -1,25 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { Contact } from 'src/app/models/contact.model';
-import { Task } from 'src/app/models/task.model';
-import { Note } from 'src/app/models/note.model';
-import { ActivityDetail } from 'src/app/models/activityDetail.model';
-import { TabItem } from 'src/app/utils/data.types';
-import {
-  TIMES,
-  REPEAT_DURATIONS,
-  QuillEditor
-} from 'src/app/constants/variable.constants';
-import { FileService } from '../../services/file.service';
-import { NoteService } from 'src/app/services/note.service';
-import { TaskService } from 'src/app/services/task.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from 'src/app/services/store.service';
-import * as moment from 'moment';
-import * as QuillNamespace from 'quill';
-const Quill: any = QuillNamespace;
-// import ImageResize from 'quill-image-resize-module';
-// Quill.register('modules/imageResize', ImageResize);
-import { QuillEditorComponent } from 'ngx-quill';
+import { DealsService } from 'src/app/services/deals.service';
+import { Deal } from 'src/app/models/deal.model';
+import { Contact } from 'src/app/models/contact.model';
+import { TabItem } from 'src/app/utils/data.types';
+import { MatDialog } from '@angular/material/dialog';
+import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
+import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
+import { DialogSettings } from 'src/app/constants/variable.constants';
+import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
+import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
+import { DealEditComponent } from 'src/app/components/deal-edit/deal-edit.component';
 
 @Component({
   selector: 'app-deals-detail',
@@ -27,190 +20,136 @@ import { QuillEditorComponent } from 'ngx-quill';
   styleUrls: ['./deals-detail.component.scss']
 })
 export class DealsDetailComponent implements OnInit {
-  stages = [
-    'New lead - Working',
-    '50% Commited',
-    'Opportunity Fully Presented',
-    'ICA Completed',
-    'Join Company'
-  ];
-  contacts: Contact[] = [];
-  leaderContacts: Contact[] = [];
-  teamContacts: Contact[] = [];
-
-  TYPES = [
-    {
-      id: 'all',
-      label: 'All actions'
-    },
-    {
-      id: 'note',
-      label: 'Notes'
-    },
-    {
-      id: 'message',
-      label: 'Messages'
-    },
-    {
-      id: 'appointment',
-      label: 'Appointments'
-    },
-    {
-      id: 'group_call',
-      label: 'Group Calls'
-    },
-    {
-      id: 'task',
-      label: 'Tasks'
-    },
-    {
-      id: 'deal',
-      label: 'Deals'
-    }
-  ];
-  REPEAT_DURATIONS = REPEAT_DURATIONS;
+  deal = {
+    main: new Deal(),
+    activities: [],
+    contacts: []
+  };
+  dealId;
+  stages: any[] = [];
+  selectedStage = '';
+  selectedStageId = '';
+  dealPanel = true;
+  contactsPanel = true;
   tabs: TabItem[] = [
-    { icon: '', label: 'Send Email', id: 'send_email' },
-    { icon: '', label: 'Send Text', id: 'send_text' },
-    { icon: '', label: 'Note', id: 'note' },
-    { icon: '', label: 'Add new task', id: 'add_task' }
+    { icon: '', label: 'Activity', id: 'all' },
+    { icon: '', label: 'Notes', id: 'notes' },
+    { icon: '', label: 'Emails', id: 'emails' },
+    { icon: '', label: 'Texts', id: 'texts' },
+    { icon: '', label: 'Appointments', id: 'appointments' },
+    { icon: '', label: 'Group Calls', id: 'group_calls' },
+    { icon: '', label: 'Tasks', id: 'follow_ups' },
+    { icon: '', label: 'Deals', id: 'deals' }
   ];
   action: TabItem = this.tabs[0];
-  mainTimelines: ActivityDetail[] = [];
-  _id = '';
-  activeHistory = 'all';
-
-  task: Task = new Task();
-  due_date = {
-    year: '',
-    month: '',
-    day: ''
-  };
-  selectedDateTime;
-  minDate: any;
-  due_time = '12:00:00.000';
-  times = TIMES;
-  taskSaving = false;
-  emailSubmitted = false;
-  note: Note = new Note();
-  noteSaving = false;
-
-  emailSending = false;
-  ccFlag = false;
-  bccFlag = false;
-  emailContacts: Contact[] = [];
-  ccContacts: Contact[] = [];
-  bccContacts: Contact[] = [];
-  emailSubject = '';
-  emailContent = '';
-  selectedTemplate = { subject: '', content: '' };
-  quillEditorRef: { getModule: (arg0: string) => any; getSelection: () => any };
-  config = QuillEditor;
-  focusEditor = '';
-
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
   constructor(
+    private dialog: MatDialog,
     private router: Router,
-    private fileService: FileService,
-    private noteService: NoteService,
-    private taskService: TaskService,
+    private route: ActivatedRoute,
+    public dealsService: DealsService,
     private storeService: StoreService
-  ) {}
+  ) {
+    this.dealsService.getStage(true);
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+    if (id) {
+      this.dealId = id;
+      this.dealsService.getDeal(id).subscribe((res) => {
+        console.log("get deal ==================>", res);
+        if (res) {
+          this.deal = res;
+          this.deal.contacts = (res['contacts'] || []).map((e) =>
+            new Contact().deserialize(e)
+          );
+          if (this.deal.main.deal_stage) {
+            this.getStage(this.deal.main.deal_stage);
+          }
+        }
+      });
+    }
+  }
+
+  getStage(id: string): void {
+    this.dealsService.stages$.subscribe((res) => {
+      this.stages = res;
+      if (this.stages.length) {
+        this.stages.forEach((stage) => {
+          if (stage._id == id) {
+            this.selectedStage = stage.title;
+            this.selectedStageId = stage._id;
+          }
+        });
+      }
+    });
+  }
 
   backTasks(): void {
     this.router.navigate(['./deals']);
   }
 
-  sendEmail(): void {}
-
-  createTask(): void {
-    this.taskSaving = true;
-    this.taskService
-      .create({ ...this.task, contact: this._id })
-      .subscribe((res) => {
-        this.taskSaving = false;
-        // this.storeService.registerActivity$(res);
-        // this.storeService.activityAdd$([this._id], 'task');
-      });
-  }
-
-  createNote(): void {
-    this.noteSaving = true;
-    this.noteService
-      .create({ ...this.note, contact: this._id })
-      .subscribe((res) => {
-        this.noteSaving = false;
-        // this.storeService.registerActivity$(res);
-        // this.storeService.activityAdd$([this._id], 'note');
-      });
-  }
-
-  insertEmailContentValue(value: string): void {
-    this.emailEditor.quillEditor.focus();
-    const range = this.emailEditor.quillEditor.getSelection();
-    if (!range) {
-      return;
-    }
-    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
-    this.emailEditor.quillEditor.setSelection(
-      range.index + value.length,
-      0,
-      'user'
-    );
-  }
-
-  getDateTime(): any {
-    if (this.due_date.day != '') {
-      return (
-        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
-      );
-    }
-  }
-  setDateTime(): void {
-    this.selectedDateTime = moment(this.getDateTime()).format('DD.MM.YYYY');
-    close();
-  }
-
-  selectTemplate(event: any): void {
-    this.selectedTemplate = event;
-    this.emailSubject = this.selectedTemplate.subject;
-    this.emailContent = this.selectedTemplate.content;
-  }
-
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-  }
-
-  initImageHandler = (): void => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res.url);
-        });
+  editDeal(): void {
+    this.dealPanel = !this.dealPanel;
+    this.dialog.open(DealEditComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      disableClose: true,
+      data: {
+        deal: this.deal
       }
     });
-    imageInput.click();
-  };
+  }
 
-  insertImageToEditor(url: string): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
+  addContact(): void {
+    this.contactsPanel = !this.contactsPanel;
   }
-  setFocusField(editorType: string): void {
-    this.focusEditor = editorType;
+
+  changeTab(tab: TabItem): void {
+    this.action = tab;
   }
+
+  openAppointmentDlg(): void {
+    this.dialog.open(CalendarDialogComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      maxHeight: '700px'
+    });
+  }
+
+  openEmailDlg(): void {
+    this.dialog.open(SendEmailComponent, {
+      position: {
+        bottom: '50px',
+        right: '50px'
+      },
+      width: '100vw',
+      maxWidth: '650px',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-2email',
+      disableClose: false
+    });
+  }
+
+  openTaskDlg(): void {
+    this.dialog.open(TaskCreateComponent, {
+      ...DialogSettings.TASK
+    });
+  }
+
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.NOTE,
+      data: {
+        type: 'deal',
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
+    });
+  }
+
+  deleteDealDlg(): void {}
 }

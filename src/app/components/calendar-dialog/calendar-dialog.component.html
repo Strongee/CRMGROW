@@ -135,25 +135,15 @@
     <div class="row mx-0">
       <div class="col-12 form-group mb-0">
         <label class="calendar-label">DESCRIPTION</label>
-        <quill-editor
-          image-resize="true"
+        <app-html-editor
+          [(value)]="event.description"
           placeholder="Add description"
-          [(ngModel)]="event.description"
-          [modules]="config"
-          name="mailContent"
-          [styles]="{ height: '90px' }"
-          #mailContent="ngModel"
-          (onEditorCreated)="getEditorInstance($event)"
-          (click)="setFocusField('content-email')"
-          class="rounded"
-          [class.has-error]="
-            mailContent.errors &&
-            (mailContent.touched || mailContent.dirty || submitted) &&
-            submitted
-          "
+          required="true"
+          [style]="{height: '90px'}"
+          (onFocus)="focusEditor()"
           #emailEditor
-        >
-        </quill-editor>
+          >
+        </app-html-editor>
       </div>
     </div>
     <div class="row mx-0">

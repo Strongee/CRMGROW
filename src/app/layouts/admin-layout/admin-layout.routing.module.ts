@@ -59,7 +59,7 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'deals/detail',
+    path: 'deals/:id',
     component: DealsDetailComponent,
     data: {
       title: 'Deals'

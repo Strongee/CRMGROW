@@ -1,8 +1,9 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import {TeamService} from "../../services/team.service";
-import {UserService} from "../../services/user.service";
+import { TeamService } from '../../services/team.service';
+import { UserService } from '../../services/user.service';
+import { ContactService } from '../../services/contact.service';
 
 @Component({
   selector: 'app-team-contact-share',
@@ -10,9 +11,9 @@ import {UserService} from "../../services/user.service";
   styleUrls: ['./team-contact-share.component.scss']
 })
 export class TeamContactShareComponent implements OnInit {
-
   team: any;
   contacts: any[] = [];
+  member;
 
   submitted = false;
   contactOverflow = false;
@@ -22,7 +23,9 @@ export class TeamContactShareComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<TeamContactShareComponent>,
     private teamService: TeamService,
+    private contactService: ContactService,
     private userService: UserService,
+    private toastr: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -39,7 +42,7 @@ export class TeamContactShareComponent implements OnInit {
 
   shareContacts(): void {
     this.submitted = true;
-    if (!this.team || !this.contacts.length) {
+    if (!this.team || !this.contacts.length || !this.member) {
       return;
     }
     this.loading = true;
@@ -48,13 +51,25 @@ export class TeamContactShareComponent implements OnInit {
       contacts.push(e._id);
     });
 
-    this.teamService
-      .shareContacts(this.userId, contacts)
+    this.contactService
+      .shareContacts(this.member._id, contacts)
       .subscribe((res) => {
+        this.loading = false;
         if (res) {
-          console.log("shared contacts ====================>", res);
+          if (res.status) {
+            this.dialogRef.close({ data: res.data });
+          } else {
+            this.toastr.error(res.error, 'Share contacts to team', {
+              timeOut: 3000
+            });
+            this.dialogRef.close();
+          }
         }
       });
+  }
+
+  selectMember(member): any {
+    this.member = member;
   }
 
   addContacts(contact): any {
@@ -75,5 +90,16 @@ export class TeamContactShareComponent implements OnInit {
       this.contacts.splice(index, 1);
       this.contactOverflow = false;
     }
+  }
+
+  allMembers(): any {
+    const members = [];
+    for (const owner of this.team.owner) {
+      members.push(owner);
+    }
+    for (const member of this.team.members) {
+      members.push(member);
+    }
+    return members;
   }
 }

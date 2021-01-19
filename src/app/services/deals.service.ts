@@ -77,8 +77,11 @@ export class DealsService extends HttpService {
     );
   }
 
-  getDeal(): any {
-    return this.httpClient.get(this.server + DEAL.GET);
+  getDeal(id: string): any {
+    return this.httpClient.get(this.server + DEAL.GET + id).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET DEAL', null))
+    );
   }
 
   createDeal(deal: any): any {
@@ -94,5 +97,12 @@ export class DealsService extends HttpService {
     this.loadDealStatus.next(STATUS.NONE);
     this.stages.next([]);
     this.deals.next([]);
+  }
+
+  addNote(data: any): Observable<any> {
+    return this.httpClient.post(this.server + DEAL.ADD_NOTE, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('ADD DEAL NOTE', []))
+    );
   }
 }

@@ -9,6 +9,7 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AutomationService } from 'src/app/services/automation.service';
 import { ToastrService } from 'ngx-toastr';
+import { SelectContactComponent } from '../select-contact/select-contact.component';
 
 @Component({
   selector: 'app-automation-assign',
@@ -16,7 +17,6 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./automation-assign.component.scss']
 })
 export class AutomationAssignComponent implements OnInit, OnDestroy {
-
   selectedAutomation: any;
 
   contacts: any[] = [];
@@ -24,6 +24,8 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
   submitted = false;
   contactOverflow = false;
   loading = false;
+
+  @ViewChild('contactSelector') contactSelector: SelectContactComponent;
 
   constructor(
     private dialogRef: MatDialogRef<AutomationAssignComponent>,
@@ -68,14 +70,16 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
   }
 
   addContacts(contact): any {
-    if (this.contacts.length === 15) {
+    if (this.contacts.length >= 15) {
       this.contactOverflow = true;
+      this.contactSelector.clear();
       return;
     } else if (contact && this.contacts.length < 15) {
       const index = this.contacts.findIndex((item) => item._id === contact._id);
       if (index < 0) {
         this.contacts.push(contact);
       }
+      this.contactSelector.clear();
     }
   }
 

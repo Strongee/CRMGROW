@@ -71,7 +71,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     this.contacts = [event];
   }
   submit(): void {
-    if (!this.contacts.length) {
+    if (!this.contacts.length || !this.date) {
       return;
     }
     const ids = [];

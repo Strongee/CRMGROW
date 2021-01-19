@@ -108,9 +108,13 @@ import { DealStageCreateComponent } from './deal-stage-create/deal-stage-create.
 import { TextStatusComponent } from './text-status/text-status.component';
 import { EmailStatusComponent } from './email-status/email-status.component';
 import { TeamContactShareComponent } from './team-contact-share/team-contact-share.component';
+import { SelectMemberComponent } from './select-member/select-member.component';
 import { PlanSelectComponent } from './plan-select/plan-select.component';
 import { PlanBuyComponent } from './plan-buy/plan-buy.component';
 import { DealStageDeleteComponent } from './deal-stage-delete/deal-stage-delete.component';
+import { DealEditComponent } from './deal-edit/deal-edit.component';
+import { DateInputComponent } from './date-input/date-input.component';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
   declarations: [
@@ -218,9 +222,12 @@ import { DealStageDeleteComponent } from './deal-stage-delete/deal-stage-delete.
     TextStatusComponent,
     EmailStatusComponent,
     TeamContactShareComponent,
+    SelectMemberComponent,
     PlanSelectComponent,
     PlanBuyComponent,
-    DealStageDeleteComponent
+    DealStageDeleteComponent,
+    DealEditComponent,
+    DateInputComponent
   ],
   imports: [
     CommonModule,
@@ -228,6 +235,7 @@ import { DealStageDeleteComponent } from './deal-stage-delete/deal-stage-delete.
     RouterModule,
     TranslateModule.forChild({ extend: true }),
     NgxCropperJsModule,
+    NgxGraphModule,
     ColorPickerModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
@@ -294,10 +302,13 @@ import { DealStageDeleteComponent } from './deal-stage-delete/deal-stage-delete.
     SendEmailComponent,
     ContactEditComponent,
     AdditionalEditComponent,
+    SelectMemberComponent,
     DealStageCreateComponent,
     PlanSelectComponent,
     PlanBuyComponent,
-    DealStageDeleteComponent
+    DealStageDeleteComponent,
+    DealEditComponent,
+    DateInputComponent
   ],
   bootstrap: [
     ContactCreateComponent,

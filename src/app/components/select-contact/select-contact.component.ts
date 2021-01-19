@@ -115,4 +115,8 @@ export class SelectContactComponent
     this.formControl.setValue(null, { emitEvent: false });
     this.onSelect.emit(null);
   }
+
+  clear(): void {
+    this.formControl.setValue(null, { emitEvent: false });
+  }
 }

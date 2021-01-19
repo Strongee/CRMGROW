@@ -105,27 +105,15 @@
                     <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                         message
                     </span>
-                    <quill-editor
-                        image-resize="true"
+                    <app-html-editor
+                        [(value)]="selectedTemplate.content"
                         placeholder="Enter Text"
-                        [(ngModel)]="selectedTemplate.content"
-                        [modules]="config"
-                        name="mailContent"
-                        [styles]="{ height: '120px' }"
-                        #mailContent="ngModel"
-                        (onEditorCreated)="getEditorInstance($event)"
-                        (click)="setFocusField('content-email')"
-                        class="f-3 fw-600 rounded"
+                        required="true"
+                        [style]="{height: '120px'}"
+                        (onFocus)="focusEditor()"
                         #emailEditor
-                        [required]="selected.value == 1 && selectedTemplate.content == '' && submitted"
-                    >
-                    </quill-editor>
-                    <span
-                        class="invalid-feedback"
-                        *ngIf="selected.value == 1 && selectedTemplate.content == '' && submitted"
-                    >
-                        Please input the template content.
-                    </span>
+                        >
+                    </app-html-editor>
                 </div>
             </mat-tab>
         </mat-tab-group>

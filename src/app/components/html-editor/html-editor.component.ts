@@ -116,6 +116,9 @@ export class HtmlEditorComponent implements OnInit {
     this.quillEditorRef = editorInstance;
     const toolbar = this.quillEditorRef.getModule('toolbar');
     toolbar.addHandler('image', this.initImageHandler);
+    if (this.value) {
+      this.setValue(this.value);
+    }
     this.onInit.emit();
   }
 

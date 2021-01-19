@@ -57,9 +57,7 @@ table {
     th, td {
         vertical-align: middle !important;
         background-color: white;
-        &.checkbox-col {
-            opacity: 1;
-        }
+        opacity: 1;
     }
     tr {
         &.section-header {
@@ -218,6 +216,10 @@ td {
             }
             .small-button-more {
                 display: block;
+                width: 100% !important;
+                height: 36px !important;
+                border: 1px solid $color-blue !important;
+                margin-bottom: 0.25rem;
                 .dropdown-menu {
                     &.show {
                         top: 0px !important;
@@ -227,6 +229,12 @@ td {
             }
             .small {
                 margin: 0 auto;
+            }
+            .button-send, .material-action {
+                width: 100% !important;
+                height: 36px !important;
+                border: 1px solid $color-blue !important;
+                margin-bottom: 0.25rem;
             }
         }
     }
@@ -250,6 +258,14 @@ td {
 @media screen and (max-width: 575px) {
     .page-header {
         display: block;
+
+        .create-actions {
+            & > * {
+                width: 50%;
+                justify-content: center;
+                text-align: center;
+            }
+        }
     }
     .button-record, .button-add {
         font-size: 13px;

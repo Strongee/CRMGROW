@@ -1,12 +1,12 @@
 @import 'src/variables.scss';
 
-.columns {
+.stages {
     flex-wrap: nowrap;
     max-width: calc(100vw-160px);
-    .column {
+    .stage {
         width: 240px;
         min-width: 240px;
-        .column-title {
+        .stage-title {
             position: relative;
             border: 1px solid #D9D9DF;
             height: 100px;
@@ -20,22 +20,27 @@
                     min-width: 10px;
                 }
             }
+            .action-more {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
         }
         &:first-child {
-            .column-title {
+            .stage-title {
                 border-top-left-radius: 5px;
                 border-bottom-left-radius: 5px;
             }
         }
         &:last-child {
-            .column-title {
+            .stage-title {
                 border-top-right-radius: 5px;
                 border-bottom-right-radius: 5px;
             }
         }
-        .tasks-container {
+        .deals-container {
             height: 700px;
-            .task {
+            .deal {
                 border: 1px solid #D9D9DF;
                 border-radius: 5px;
                 box-shadow: 5px 5px 20px 1px rgba(0,0,0,0.05);
@@ -46,10 +51,22 @@
                     border-radius: 50%;
                     background-color: $color-dark;
                 }
+                .contacts-info {
+                    i {
+                        width: 12px;
+                        height: 12px;
+                        min-width: 12px;
+                    }
+                }
+                .action-more {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                }
             }
         }
     }
-    .add-column {
+    .add-stage {
         border-radius: 5px;
         border: 1px solid #0000FF;
         height: 100px;

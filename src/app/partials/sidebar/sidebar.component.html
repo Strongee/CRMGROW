@@ -1,11 +1,11 @@
-<a class="navbar-toggler" type="button" (click)="isCollapsed = true"
+<a class="navbar-toggler" (click)="isCollapsed = true"
   aria-controls="sidenav-collapse-main">
   <span class="i-icon i-menu bgc-dark d-block"></span>
 </a>
 <div class="sidebar">
   <div class="sidebar-content d-flex flex-column">
     <div class="sidebar-header v-center">
-      <a class="navbar-brand m-0 p-0" routerLinkActive="active" [routerLink]="['/home']">
+      <a class="navbar-brand m-0 p-0" [routerLink]="['/home']">
         <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">
       </a>
     </div>
@@ -31,7 +31,7 @@
   <mat-sidenav #sidenav [opened]="isCollapsed">
     <div class="sidebar-content">
       <div class="sidebar-header v-center">
-        <a class="navbar-brand m-0 p-0" routerLinkActive="active" [routerLink]="['/home']">
+        <a class="navbar-brand mobile m-0 p-0" [routerLink]="['/home']">
           <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">
         </a>
         <!--      <a class="navbar-close ml-auto c-pointer" (click)="isCollapsed = true">-->

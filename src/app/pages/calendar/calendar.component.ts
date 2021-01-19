@@ -15,7 +15,6 @@ import { Location } from '@angular/common';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { UserService } from 'src/app/services/user.service';
 import { TabItem } from 'src/app/utils/data.types';
-// import { CalendarConnectDialogComponent } from 'src/app/components/calendar-connect-dialog/calendar-connect-dialog.component';
 
 @Component({
   selector: 'app-calendar',

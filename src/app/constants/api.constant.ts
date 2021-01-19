@@ -19,8 +19,10 @@ export const USER = {
   UPDATE_PROFILE: 'user/me',
   UPDATE_PAYMENT: 'payment',
   UPDATE_PASSWORD: 'user/new-password',
-  SYNC_GMAIL: 'user/sync-gmail',
-  SYNC_OUTLOOK: 'user/sync-outlook',
+  SYNC_GMAIL: 'user/sync-google-calendar',
+  SYNC_OUTLOOK: 'user/sync-outlook-calendar',
+  CALENDAR_SYNC_GMAIL: 'user/sync-gmail',
+  CALENDAR_SYNC_OUTLOOK: 'user/sync-outlook',
   AUTH_GOOGLE: 'user/authorize-gmail',
   AUTH_OUTLOOK: 'user/authorize-outlook',
   ENABLE_DESKTOP_NOTIFICATION: 'user/desktop-notification',
@@ -89,7 +91,10 @@ export const CONTACT = {
   LATEST_CONTACTS: 'video/latest-sent',
   UPDATE: 'contact/update-contact',
   MERGE: 'contact/contact-merge',
-  BULK_CREATE: 'contact/bulk-create'
+  BULK_CREATE: 'contact/bulk-create',
+  CHECK_EMAIL: 'contact/check-email',
+  CHECK_PHONE: 'contact/check-phone',
+  SHARE_CONTACT: 'contact/share-contact'
 };
 export const VIDEO = {
   CREATE: 'video/create',
@@ -145,7 +150,7 @@ export const TEAM = {
   SHARE_PDFS: 'team/share-pdfs',
   SHARE_IMAGES: 'team/share-images',
   SHARE_MATERIALS: 'team/share-materials',
-  SHARE_CONTACTS: 'team/share-contact',
+  LOAD_SHARE_CONTACTS: 'team/shared-contacts',
   SHARE_TEMPLATES: 'team/share-templates',
   SHARE_AUTOMATIONS: 'team/share-automations',
   ACCEPT_INVITATION: 'team/accept/',
@@ -179,6 +184,8 @@ export const AUTOMATION = {
   UPDATE: 'automation/',
   CREATE: 'automation',
   ASSIGN: 'timeline/create',
+  ASSIGN_NEW: 'timeline/create_new',
+  CANCEL: 'timeline/cancel/',
   LOAD_OWN: 'automation/list/own'
 };
 export const APPOINTMENT = {
@@ -227,7 +234,8 @@ export const SEND = {
   GMAIL: 'email/bulk-gmail',
   OUTLOOK: 'email/bulk-outlook',
   TEXT: '',
-  SHARE: 'email/share-platform'
+  SHARE: 'email/share-platform',
+  SEND_EMAIL: 'email/send-email'
 };
 export const TAG = {
   ALL: 'tag/getAll',
@@ -243,8 +251,9 @@ export const DEALSTAGE = {
 };
 
 export const DEAL = {
-  GET: 'deal',
-  MOVE: 'deal/move-deal'
+  GET: 'deal/',
+  MOVE: 'deal/move-deal',
+  ADD_NOTE: 'deal/add-note'
 };
 
 export const MATERIAL = {
@@ -257,5 +266,5 @@ export const NOTIFICATION = {
   READ_MARK: 'notification/bulk-read',
   UNREAD_MARK: 'notification/bulk-unread',
   DELETE: 'notification/bulk-remove',
-  DELIVERY_STATUS: 'notification/get-delivery'
+  TEXT_DELIVERY: 'notification/get-delivery'
 };

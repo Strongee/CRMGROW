@@ -1,7 +1,10 @@
 <div class="p-4c panel">
   <div class="v-center mb-3">
-    <h4 class="font-weight-bold mb-0">Advanced Filter</h4>
+    <h4 class="font-weight-bold mb-0 title">Advanced Filter</h4>
     <div class="c-blue f-1 text-uppercase ml-2 mt-2 c-pointer" (click)="clearAllFilters()">Clear All Filters</div>
+    <button class="v-center border-0 bgc-trans ml-auto" type="button" (click)="close()">
+      <i class="d-block i-icon i-close bgc-dark"></i>
+    </button>
   </div>
   <form #actionForm="ngForm" (ngSubmit)="actionForm.form.valid ? applyFilters() : false"
     [class.was-validated]="actionForm.submitted">
@@ -38,29 +41,29 @@
         <div class="f-3 fw-600 c-dark">Exclude</div>
       </div>
     </div>
-    <div class="checkbox-wrapper my-3 w-100">
+    <div class="checkbox-wrapper label-options my-3 w-100">
       <div class="custom-checkbox label-item" *ngFor="let item of labelService.labels$ | async"
         style="height: unset; line-height: unset;">
         <input type="checkbox" class="custom-control-input" id="label-{{item._id}}" name="label-{{item._id}}"
           (change)="toggleLabels(item._id)" [checked]="searchOption.labelCondition.indexOf(item._id) !== -1">
-        <label class="custom-control-label v-center" for="label-{{item._id}}">
+        <label class="custom-control-label d-flex" for="label-{{item._id}}">
           <i class="i-icon i-label d-block mr-2"
             [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color"></i>
-          <span class="f-3 fw-600">{{item.name}}</span>
+          <span class="f-3 fw-600 mt-1">{{item.name}}</span>
         </label>
       </div>
     </div>
 
-    <div class="checkbox-wrapper w-100 my-3">
+    <div class="checkbox-wrapper materials w-100 my-3">
       <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
         style="height: unset; line-height: unset;">
         <input type="checkbox" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
           (click)="selectMaterialAction(item.title)" [checked]="selectedMaterialActions == item.title">
         <label class="custom-control-label v-center" for="material-{{item._id}}">
           <div class="f-3 fw-600 material-action-title">{{item.title}}</div>
-          <div class="count f-3 font-weight-bold c-white bgc-blue ml-2 text-center rounded-circle" *ngIf="item.count">{{item.count}}</div>
+          <div class="count f-3 font-weight-bold c-white bgc-blue ml-2 mr-2 text-center rounded-circle" *ngIf="item.count">{{item.count}}</div>
           <button type="button" 
-            class="list f-1 font-weight-bold ml-2 border border-primary rounded c-blue c-pointer bgc-white"
+            class="list f-1 font-weight-bold border border-primary rounded c-blue c-pointer bgc-white"
             [disabled]="selectedMaterialActions != item.title"
             (click)="selectMaterial()"
           >
@@ -184,25 +187,13 @@
     <div class="form-group my-3 pb-2">
       <label>Select Date</label>
       <div class="v-center">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
-          </div>
-          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityStart" ngbDatepicker
-            #duefrom="ngbDatepicker" (click)="duefrom.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text" name="activityStartDate"/>
-        </div>
+        <app-date-input type="prepend" [(value)]="searchOption.activityStart" (valueChange)="updateFilter()"></app-date-input>
         <div class="mx-2">-</div>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
-          </div>
-          <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="searchOption.activityEnd" ngbDatepicker
-            #dueto="ngbDatepicker" (click)="dueto.toggle()" (ngModelChange)="updateFilter()" [firstDayOfWeek]="7" type="text"  name="activityEndDate"/>
-        </div>
+        <app-date-input type="prepend" [(value)]="searchOption.activityEnd" (valueChange)="updateFilter()"></app-date-input>
       </div>
     </div>
     <div class="mt-4 d-flex">
-      <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button">Cancel</button>
+      <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="close()">Cancel</button>
       <button type="submit" class="btn btn-primary ml-2" [class.loading]="loading">Apply filters</button>
     </div>
   </form>

@@ -4,7 +4,6 @@ import { ContactService } from 'src/app/services/contact.service';
 import { validateEmail } from 'src/app/helper';
 import { Labels, TeamLabel } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
-import { QuillEditorComponent } from 'ngx-quill';
 import { FileService } from 'src/app/services/file.service';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -14,6 +13,7 @@ import {
 } from '@angular/material/dialog';
 import { EmailService } from 'src/app/services/email.service';
 import { NotifyComponent } from '../notify/notify.component';
+import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 
 @Component({
   selector: 'app-share-site',
@@ -53,8 +53,10 @@ export class ShareSiteComponent implements OnInit {
   showLabelSearchedResult = false;
 
   hoverIndex = 0;
-
   sharing = false;
+  focusedField = '';
+
+  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
 
   constructor(
     private contactService: ContactService,
@@ -317,60 +319,6 @@ export class ShareSiteComponent implements OnInit {
   }
 
   labels = [{ id: 'unset', text: 'Unset' }, ...Labels];
-  config = {
-    toolbar: {
-      container: [
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ color: [] }, { background: [] }],
-        [{ align: [] }],
-        ['link', 'image']
-      ]
-    }
-  };
-  quillEditorRef;
-  @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-  getEditorInstance(editorInstance: any): void {
-    this.quillEditorRef = editorInstance;
-    const toolbar = this.quillEditorRef.getModule('toolbar');
-    toolbar.addHandler('image', this.initImageHandler);
-    // this.attachSignature()
-  }
-  initImageHandler = () => {
-    const imageInput = document.createElement('input');
-    imageInput.setAttribute('type', 'file');
-    imageInput.setAttribute('accept', 'image/*');
-    imageInput.classList.add('ql-image');
-
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files != null && imageInput.files[0] != null) {
-        const file = imageInput.files[0];
-        this.fileService.attachImage(file).then((res) => {
-          this.insertImageToEditor(res['url']);
-        });
-      }
-    });
-    imageInput.click();
-  };
-  insertImageToEditor(url): void {
-    const range = this.quillEditorRef.getSelection();
-    // const img = `<img src="${url}" alt="attached-image-${new Date().toISOString()}"/>`;
-    // this.quillEditorRef.clipboard.dangerouslyPasteHTML(range.index, img);
-    this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
-    this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
-  }
-  insertEmailContentValue(value): void {
-    this.emailEditor.quillEditor.focus();
-    const range = this.quillEditorRef.getSelection();
-    if (!range) {
-      return;
-    }
-    this.emailEditor.quillEditor.insertText(range.index, value, 'user');
-    this.emailEditor.quillEditor.setSelection(
-      range.index + value.length,
-      0,
-      'user'
-    );
-  }
 
   toggleVideo(video): void {
     const pos = this.selectedVideoIds.indexOf(video._id);
@@ -410,5 +358,9 @@ export class ShareSiteComponent implements OnInit {
   hideSearchedResultFn(event): void {
     this.showLabelSearchedResult = false;
     this.showSearchedResult = false;
+  }
+
+  focusEditor(): void {
+    this.focusedField = 'editor';
   }
 }

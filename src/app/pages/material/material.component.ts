@@ -268,6 +268,27 @@ export class MaterialComponent implements OnInit {
 
   selectAllPage(type: string): void {
     switch (type) {
+      case 'all':
+        if (this.isSelectedPage(type)) {
+          this.selectedVideoLists.clear();
+          this.selectedPdfLists.clear();
+          this.selectedImageLists.clear();
+        } else {
+          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
+          this.adminVideos.forEach((e) =>
+            this.selectedVideoLists.select(e._id)
+          );
+          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
+          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
+          this.adminImages.forEach((e) =>
+            this.selectedImageLists.select(e._id)
+          );
+          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
+        }
+        break;
       case 'video':
         if (this.isSelectedPage(type)) {
           this.selectedVideoLists.clear();
@@ -304,6 +325,22 @@ export class MaterialComponent implements OnInit {
 
   isSelectedPage(type: string): any {
     switch (type) {
+      case 'all':
+        const allCounts =
+          this.adminVideos.length +
+          this.ownVideos.length +
+          this.teamVideos.length +
+          this.adminPdfs.length +
+          this.ownPdfs.length +
+          this.teamPdfs.length +
+          this.adminImages.length +
+          this.ownImages.length +
+          this.teamImages.length;
+        const selectedCounts =
+          this.selectedVideoLists.selected.length +
+          this.selectedPdfLists.selected.length +
+          this.selectedImageLists.selected.length;
+        return allCounts == selectedCounts;
       case 'video':
         const videoCounts =
           this.adminVideos.length +
@@ -895,11 +932,14 @@ export class MaterialComponent implements OnInit {
   }
 
   recordSetting(): void {
+    if (this.dialog.openDialogs.length > 0) {
+      return;
+    }
     this.dialog
       .open(RecordSettingDialogComponent, {
         position: { top: '0px' },
-        width: '0px',
-        height: '0px',
+        width: '100%',
+        height: '100%',
         panelClass: 'trans-modal',
         backdropClass: 'trans'
       })
@@ -948,27 +988,33 @@ export class MaterialComponent implements OnInit {
         break;
       case 'Send via SMS':
         const textMaterial = [];
-        this.selectedVideoLists.selected.forEach((id) => {
-          this.videos.forEach((video) => {
-            if (video._id == id) {
-              textMaterial.push(video);
-            }
+        if (this.selectedVideoLists.selected.length) {
+          this.selectedVideoLists.selected.forEach((id) => {
+            this.videos.forEach((video) => {
+              if (video._id == id) {
+                textMaterial.push(video);
+              }
+            });
           });
-        });
-        this.selectedPdfLists.selected.forEach((id) => {
-          this.pdfs.forEach((pdf) => {
-            if (pdf._id == id) {
-              textMaterial.push(pdf);
-            }
+        }
+        if (this.selectedPdfLists.selected.length) {
+          this.selectedPdfLists.selected.forEach((id) => {
+            this.pdfs.forEach((pdf) => {
+              if (pdf._id == id) {
+                textMaterial.push(pdf);
+              }
+            });
           });
-        });
-        this.selectedImageLists.selected.forEach((id) => {
-          this.images.forEach((image) => {
-            if (image._id == id) {
-              textMaterial.push(image);
-            }
+        }
+        if (this.selectedImageLists.selected.length) {
+          this.selectedImageLists.selected.forEach((id) => {
+            this.images.forEach((image) => {
+              if (image._id == id) {
+                textMaterial.push(image);
+              }
+            });
           });
-        });
+        }
         this.dialog.open(MaterialSendComponent, {
           position: { top: '5vh' },
           width: '100vw',
@@ -976,7 +1022,8 @@ export class MaterialComponent implements OnInit {
           disableClose: false,
           data: {
             material: textMaterial,
-            type: 'text'
+            mediaType: 'text',
+            materialType: this.selectedTab.id
           }
         });
         break;

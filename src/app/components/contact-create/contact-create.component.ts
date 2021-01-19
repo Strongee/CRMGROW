@@ -10,8 +10,11 @@ import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
-import { StoreService } from 'src/app/services/store.service';
 import { HandlerService } from 'src/app/services/handler.service';
+import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Automation } from 'src/app/models/automation.model';
+import { AutomationService } from 'src/app/services/automation.service';
 
 @Component({
   selector: 'app-contact-create',
@@ -33,40 +36,125 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   STAGES = STAGES;
 
   // Variables for the processs
-  checkingEmail = false;
-  checkingPhone = false;
   creating = false;
   cell_phone: any = {};
   contact = new Contact();
 
+  // Variables for the checking duplicate
+  sameEmailContacts = [];
+  sameCellPhoneContacts = [];
+  contactEmailSubscription: Subscription;
+  contactPhoneSubscription: Subscription;
+  sameEmailsFlag = false;
+  samePhonesFlag = false;
+
   isCreating = false;
   createSubscription: Subscription;
+  assignSubscription: Subscription;
 
+  phoneInput: FormControl = new FormControl();
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
+
+  automation: Automation = new Automation();
 
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
     private contactService: ContactService,
-    private handlerService: HandlerService
+    private handlerService: HandlerService,
+    private automationService: AutomationService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.contact.tags = [];
+  }
   ngOnDestroy(): void {}
 
-  create(): void {
+  create(): any {
+    if (
+      this.sameEmailContacts.length > 0 ||
+      this.sameCellPhoneContacts.length > 0
+    ) {
+      return;
+    }
     this.isCreating = true;
     this.createSubscription && this.createSubscription.unsubscribe();
     this.createSubscription = this.contactService
       .create(this.contact)
       .subscribe((contact) => {
-        console.log('contact created', contact);
         this.isCreating = false;
         if (contact) {
+          // If automation is enabled please assign the automation.
+          if (this.automation._id) {
+            this.isCreating = true;
+            this.assignSubscription && this.assignSubscription.unsubscribe();
+            this.assignSubscription = this.automationService
+              .bulkAssign([contact._id], this.automation._id)
+              .subscribe((status) => {
+                this.isCreating = false;
+                if (status) {
+                  // Reload the Current List
+                  this.handlerService.reload$();
+                }
+              });
+          }
           this.handlerService.addContact$(contact);
           this.dialogRef.close();
         }
       });
+  }
+
+  checkEmailDuplicate(evt: any): void {
+    this.sameEmailContacts = [];
+    if (!evt) {
+      return;
+    }
+    const regularExpression = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/;
+    const result = regularExpression.test(String(evt).toLowerCase());
+    if (result) {
+      this.contactEmailSubscription &&
+        this.contactEmailSubscription.unsubscribe();
+      this.contactEmailSubscription = this.contactService
+        .checkEmail(evt)
+        .subscribe((res) => {
+          this.sameEmailContacts = res;
+          if (this.sameEmailContacts.length) {
+            this.sameEmailsFlag = true;
+          }
+        });
+    }
+  }
+
+  checkPhoneDuplicate(evt: any): any {
+    this.sameCellPhoneContacts = [];
+    if (!evt) {
+      return;
+    }
+    let phone = evt;
+    if (typeof evt == 'object' && evt['internationalNumber']) {
+      phone = evt['internationalNumber'].replace(/\D/g, '');
+      phone = '+' + phone;
+    }
+    if (this.phoneInput.valid) {
+      this.contactPhoneSubscription &&
+        this.contactPhoneSubscription.unsubscribe();
+      this.contactPhoneSubscription = this.contactService
+        .checkPhone(phone)
+        .subscribe((res) => {
+          this.sameCellPhoneContacts = res;
+          if (this.sameCellPhoneContacts.length) {
+            this.samePhonesFlag = true;
+          }
+        });
+    }
+  }
+
+  toggleSameEmails(): void {
+    this.sameEmailsFlag = !this.sameEmailsFlag;
+  }
+  toggleSamePhones(): void {
+    this.samePhonesFlag = !this.samePhonesFlag;
   }
 
   handleAddressChange(evt: any): void {
@@ -105,4 +193,14 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     this.addressPlacesRef.reset();
   }
   setContactCountry(): void {}
+
+  goToContact(item: Contact): void {
+    this.router.navigate(['/contacts/' + item._id]);
+    this.dialogRef.close();
+  }
+
+  selectAutomation(automation: Automation): void {
+    this.automation = automation;
+    return;
+  }
 }

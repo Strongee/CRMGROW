@@ -6,6 +6,7 @@ import { Contact } from 'src/app/models/contact.model';
 import { Note } from 'src/app/models/note.model';
 import { HandlerService } from 'src/app/services/handler.service';
 import { NoteService } from 'src/app/services/note.service';
+import { DealsService } from '../../services/deals.service';
 
 @Component({
   selector: 'app-note-create',
@@ -18,23 +19,43 @@ export class NoteCreateComponent implements OnInit {
   note: Note = new Note();
   saving = false;
   saveSubscription: Subscription;
+  type = '';
+  dealId;
 
   constructor(
     private noteService: NoteService,
     private handlerService: HandlerService,
+    private dealService: DealsService,
     private dialogRef: MatDialogRef<NoteCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
-    if (this.data && this.data.contacts) {
-      this.isSelected = true;
-      this.contacts = this.data.contacts;
+    if (this.data) {
+      this.type = this.data.type;
+
+      if (this.type === 'deal') {
+        this.dealId = this.data.dealId;
+      }
+
+      if (this.data.contacts) {
+        this.isSelected = true;
+        for (const contact of this.data.contacts) {
+          this.contacts.push(contact);
+        }
+      }
     }
   }
 
   ngOnInit(): void {}
 
   selectContact(event: Contact): void {
-    this.contacts = [event];
+    this.contacts.push(event);
+  }
+
+  removeContact(contact: Contact): void {
+    const index = this.contacts.findIndex((item) => item._id === contact._id);
+    if (index >= 0) {
+      this.contacts.splice(index, 1);
+    }
   }
 
   submit(): void {
@@ -46,20 +67,36 @@ export class NoteCreateComponent implements OnInit {
       ids.push(e._id);
     });
     if (ids.length > 1) {
-      const data = {
-        contacts: ids,
-        title: this.note.title,
-        content: this.note.content
-      };
-      this.saving = true;
-      this.saveSubscription && this.saveSubscription.unsubscribe();
-      this.saveSubscription = this.noteService
-        .bulkCreate(data)
-        .subscribe(() => {
-          this.saving = false;
-          this.handlerService.activityAdd$(ids, 'note');
-          this.dialogRef.close();
-        });
+      if (this.type === 'deal') {
+        const data = {
+          contacts: ids,
+          content: this.note.content,
+          deal: this.dealId
+        };
+        this.saving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.dealService
+          .addNote(data)
+          .subscribe((res) => {
+            this.saving = false;
+            this.dialogRef.close();
+          });
+      } else {
+        const data = {
+          contacts: ids,
+          title: this.note.title,
+          content: this.note.content
+        };
+        this.saving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.noteService
+          .bulkCreate(data)
+          .subscribe(() => {
+            this.saving = false;
+            this.handlerService.activityAdd$(ids, 'note');
+            this.dialogRef.close();
+          });
+      }
     } else {
       const data = {
         contact: ids[0],

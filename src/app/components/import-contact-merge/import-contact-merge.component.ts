@@ -18,6 +18,9 @@ import { ContactService } from '../../services/contact.service';
 export class ImportContactMergeComponent implements OnInit {
   primaryContact;
   secondaryContact;
+  collection = {};
+  emails = [];
+  phones = [];
 
   primarySelectionModel = [];
   secondarySelectionModel = [];
@@ -37,7 +40,7 @@ export class ImportContactMergeComponent implements OnInit {
   merging = false;
   activity = 'Keep primary';
   followup = 'Both';
-  automation = 'Both';
+  automation = 'Keep primary';
   notes = 'Both';
 
   mergeActions = ['Both', 'Keep primary', 'Remove'];
@@ -53,7 +56,18 @@ export class ImportContactMergeComponent implements OnInit {
     'zip',
     'label',
     'brokerage',
-    'source'
+    'source',
+    'primary_email',
+    'primary_phone',
+    'secondary_email',
+    'secondary_phone'
+  ];
+
+  emailPhoneColumn = [
+    'primary_email',
+    'primary_phone',
+    'secondary_email',
+    'secondary_phone'
   ];
 
   contactCSVColumn = {
@@ -102,173 +116,247 @@ export class ImportContactMergeComponent implements OnInit {
     if (this.data) {
       this.primaryContact = this.data.primary;
       this.secondaryContact = this.data.secondary;
-
       // load primary columns
-      if (this.mergeType() === this.MERGETYPE.CSV) {
-        this.updateColumn = this.data.updateColumn;
-        for (const name in this.updateColumn) {
-          if (this.updateColumn[name] !== 'notes') {
-            if (
-              (Array.isArray(this.primaryContact[this.updateColumn[name]]) &&
-                this.primaryContact[this.updateColumn[name]].length) ||
-              (Array.isArray(this.secondaryContact[this.updateColumn[name]]) &&
-                this.secondaryContact[this.updateColumn[name]].length) ||
-              (!Array.isArray(this.primaryContact[this.updateColumn[name]]) &&
-                this.primaryContact[this.updateColumn[name]]) ||
-              (!Array.isArray(this.secondaryContact[this.updateColumn[name]]) &&
-                this.secondaryContact[this.updateColumn[name]])
-            ) {
-              this.columns.push(name);
-              this.previewColumns.push(name);
-              if (this.isPrimaryActive()) {
-                if (
-                  (Array.isArray(
-                    this.primaryContact[this.updateColumn[name]]
-                  ) &&
-                    this.primaryContact[this.updateColumn[name]].length) ||
-                  (!Array.isArray(
-                    this.primaryContact[this.updateColumn[name]]
-                  ) &&
-                    this.primaryContact[this.updateColumn[name]])
-                ) {
-                  this.primarySelectionModel.push(true);
-                } else {
-                  this.primarySelectionModel.push(false);
-                }
-                this.secondarySelectionModel.push(false);
-              } else {
-                if (
-                  (Array.isArray(
-                    this.secondaryContact[this.updateColumn[name]]
-                  ) &&
-                    this.secondaryContact[this.updateColumn[name]].length) ||
-                  (!Array.isArray(
-                    this.secondaryContact[this.updateColumn[name]]
-                  ) &&
-                    this.secondaryContact[this.updateColumn[name]])
-                ) {
-                  this.secondarySelectionModel.push(true);
-                } else {
-                  this.secondarySelectionModel.push(false);
-                }
-                this.primarySelectionModel.push(false);
-              }
-            }
-          }
-        }
-        if (this.primaryContact['notes'] && this.primaryContact['notes'].length) {
-          for (let i = 0; i < this.primaryContact['notes'].length; i++) {
-            if (this.isPrimaryActive()) {
-              if (this.primaryContact['notes'][i] !== '' && this.primaryContact['notes'][i] !== undefined) {
-                this.primaryNotesSelectionModel.push(true);
-              }
-            } else {
-              if (this.primaryContact['notes'][i] !== '' && this.primaryContact['notes'][i] !== undefined) {
-                this.primaryNotesSelectionModel.push(false);
-              }
-            }
-          }
-        }
-
-        if (this.secondaryContact['notes'] && this.secondaryContact['notes'].length) {
-          for (let i = 0; i < this.secondaryContact['notes'].length; i++) {
-            if (this.isPrimaryActive()) {
-              if (this.secondaryContact['notes'][i] !== '' && this.secondaryContact['notes'][i] !== undefined) {
-                this.secondaryNotesSelectionModel.push(false);
-              }
-            } else {
-              if (this.secondaryContact['notes'][i] !== '' && this.secondaryContact['notes'][i] !== undefined) {
-                this.secondaryNotesSelectionModel.push(true);
-              }
-            }
-          }
-        }
-
-        this.previewContact = Object.assign({}, this.primaryContact);
-      } else {
+      if (this.mergeType() === this.MERGETYPE.CONTACT_CSV) {
         this.updateColumn = this.contactCSVColumn;
-        for (const name in this.updateColumn) {
-          if (
-            (Array.isArray(this.primaryContact[this.updateColumn[name]]) &&
-              this.primaryContact[this.updateColumn[name]].length) ||
-            (Array.isArray(this.secondaryContact[this.updateColumn[name]]) &&
-              this.secondaryContact[this.updateColumn[name]].length) ||
-            (!Array.isArray(this.primaryContact[this.updateColumn[name]]) &&
-              this.primaryContact[this.updateColumn[name]]) ||
-            (!Array.isArray(this.secondaryContact[this.updateColumn[name]]) &&
-              this.secondaryContact[this.updateColumn[name]])
-          ) {
-            this.columns.push(name);
-            this.previewColumns.push(name);
-            if (this.isContact(this.primaryContact)) {
-              if (
-                (Array.isArray(this.primaryContact[this.updateColumn[name]]) &&
-                  this.primaryContact[this.updateColumn[name]].length) ||
-                (!Array.isArray(this.primaryContact[this.updateColumn[name]]) &&
-                  this.primaryContact[this.updateColumn[name]])
-              ) {
-                this.primarySelectionModel.push(true);
-              } else {
-                this.primarySelectionModel.push(false);
-              }
-              this.secondarySelectionModel.push(false);
-            } else {
-              if (
-                (Array.isArray(
-                  this.secondaryContact[this.updateColumn[name]]
-                ) &&
-                  this.secondaryContact[this.updateColumn[name]].length) ||
-                (!Array.isArray(
-                  this.secondaryContact[this.updateColumn[name]]
-                ) &&
-                  this.secondaryContact[this.updateColumn[name]])
-              ) {
-                this.secondarySelectionModel.push(true);
-              } else {
-                this.secondarySelectionModel.push(false);
-              }
-              this.primarySelectionModel.push(false);
-            }
-          }
-        }
         if (this.isContact(this.primaryContact)) {
           this.previewContact = Object.assign({}, this.primaryContact);
         } else {
           this.previewContact = Object.assign({}, this.secondaryContact);
         }
+      } else if (this.mergeType() === this.MERGETYPE.CONTACT) {
+        this.updateColumn = this.contactCSVColumn;
+        this.previewContact = Object.assign({}, this.primaryContact);
+      } else if (this.mergeType() === this.MERGETYPE.CSV) {
+        this.updateColumn = this.data.updateColumn;
+        this.previewContact = Object.assign({}, this.primaryContact);
+      }
 
-        const previewIndex = this.previewColumns.indexOf('notes');
-        if (previewIndex >= 0) {
-          this.previewColumns.splice(previewIndex, 1);
+      for (const name in this.updateColumn) {
+        ////////////////////////////
+        this.columns.push(name);
+        if (this.isCheckable(this.updateColumn[name])) {
+          if (this.isEmailPhoneColumn(this.updateColumn[name])) {
+            if (this.updateColumn[name].indexOf('email') >= 0) {
+              if (
+                this.primaryContact[this.updateColumn[name]] &&
+                this.emails.indexOf(
+                  this.primaryContact[this.updateColumn[name]]
+                ) < 0
+              ) {
+                this.emails.push(this.primaryContact[this.updateColumn[name]]);
+              }
+              if (
+                this.secondaryContact[this.updateColumn[name]] &&
+                this.emails.indexOf(
+                  this.secondaryContact[this.updateColumn[name]]
+                ) < 0
+              ) {
+                this.emails.push(this.secondaryContact[this.updateColumn[name]]);
+              }
+            }
+            if (this.updateColumn[name].indexOf('phone') >= 0) {
+              if (
+                this.primaryContact[this.updateColumn[name]] &&
+                this.phones.indexOf(
+                  this.primaryContact[this.updateColumn[name]]
+                ) < 0
+              ) {
+                this.phones.push(this.primaryContact[this.updateColumn[name]]);
+              }
+              if (
+                this.secondaryContact[this.updateColumn[name]] &&
+                this.phones.indexOf(
+                  this.secondaryContact[this.updateColumn[name]]
+                ) < 0
+              ) {
+                this.phones.push(this.secondaryContact[this.updateColumn[name]]);
+              }
+            }
+          } else {
+            if (this.collection[this.updateColumn[name]]) {
+              if (this.primaryContact[this.updateColumn[name]]) {
+                if (
+                  this.collection[this.updateColumn[name]].indexOf(
+                    this.primaryContact[this.updateColumn[name]]
+                  ) < 0
+                ) {
+                  this.collection[this.updateColumn[name]].push(
+                    this.primaryContact[this.updateColumn[name]]
+                  );
+                }
+              }
+            } else {
+              if (this.primaryContact[this.updateColumn[name]]) {
+                this.collection[this.updateColumn[name]] = [
+                  this.primaryContact[this.updateColumn[name]]
+                ];
+              }
+            }
+            if (this.collection[this.updateColumn[name]]) {
+              if (this.secondaryContact[this.updateColumn[name]]) {
+                if (
+                  this.collection[this.updateColumn[name]].indexOf(
+                    this.secondaryContact[this.updateColumn[name]]
+                  ) < 0
+                ) {
+                  this.collection[this.updateColumn[name]].push(
+                    this.secondaryContact[this.updateColumn[name]]
+                  );
+                }
+              }
+            } else {
+              if (this.secondaryContact[this.updateColumn[name]]) {
+                this.collection[this.updateColumn[name]] = [
+                  this.secondaryContact[this.updateColumn[name]]
+                ];
+              }
+            }
+          }
+        } else {
+          if (this.primaryContact[this.updateColumn[name]]) {
+            this.collection[this.updateColumn[name]] = this.primaryContact[this.updateColumn[name]];
+          }
+          if (this.secondaryContact[this.updateColumn[name]]) {
+            if (this.collection[this.updateColumn[name]]) {
+              for (const value of this.secondaryContact[this.updateColumn[name]]) {
+                if (this.collection[this.updateColumn[name]].indexOf(value) < 0) {
+                  this.collection[this.updateColumn[name]].push(value);
+                }
+              }
+            } else {
+              this.collection[this.updateColumn[name]] = this.secondaryContact[this.updateColumn[name]];
+            }
+          }
         }
       }
-      let isSecondaryEmail = false;
-      let isSecondaryPhone = false;
-      for (const key in this.updateColumn) {
-        if (this.updateColumn[key] === 'secondary_email') {
-          isSecondaryEmail = true;
+
+      if (this.emails.length > 1) {
+        let isSecondaryEmail = false;
+        for (const name in this.updateColumn) {
+          if (this.updateColumn[name] === 'secondary_email') {
+            isSecondaryEmail = true;
+            break;
+          }
         }
-        if (this.updateColumn[key] === 'secondary_phone') {
-          isSecondaryPhone = true;
+        if (isSecondaryEmail) {
+          if (!this.previewContact['secondary_email']) {
+            this.previewContact['secondary_email'] = this.emails[1];
+          }
+        } else {
+          this.updateColumn['secondary_email'] = 'secondary_email';
+          if (this.columns.indexOf('secondary_email') < 0) {
+            this.columns.push('secondary_email');
+          }
+          if (!this.previewContact['secondary_email']) {
+            this.previewContact['secondary_email'] = this.emails[1];
+          }
+        }
+      } else {
+        if (this.previewContact['secondary_email']) {
+          delete this.previewContact['secondary_email'];
+        }
+
+        let secondaryEmailColumn = '';
+        for (const name in this.updateColumn) {
+          if (this.updateColumn[name] === 'secondary_email') {
+            secondaryEmailColumn = name;
+            break;
+          }
+        }
+        if (secondaryEmailColumn !== '') {
+          delete this.columns[secondaryEmailColumn];
+          delete this.updateColumn[secondaryEmailColumn];
         }
       }
-      if (!isSecondaryEmail) {
-        this.updateColumn['secondary_email'] = 'secondary_email';
-      }
-      if (!isSecondaryPhone) {
-        this.updateColumn['secondary_phone'] = 'secondary_phone';
-      }
-      if (
-        this.previewColumns.indexOf(this.updateColumn['secondary_email']) < 0
-      ) {
-        this.previewColumns.push('secondary_email');
-      }
-      if (
-        this.previewColumns.indexOf(this.updateColumn['secondary_phone']) < 0
-      ) {
-        this.previewColumns.push('secondary_phone');
+
+      if (this.phones.length > 1) {
+        let isSecondaryPhone = false;
+        for (const name in this.updateColumn) {
+          if (this.updateColumn[name] === 'secondary_phone') {
+            isSecondaryPhone = true;
+            break;
+          }
+        }
+        if (isSecondaryPhone) {
+          if (!this.previewContact['secondary_phone']) {
+            this.previewContact['secondary_phone'] = this.phones[1];
+          }
+        } else {
+          this.updateColumn['secondary_phone'] = 'secondary_phone';
+          if (this.columns.indexOf('secondary_phone') < 0) {
+            this.columns.push('secondary_phone');
+          }
+          if (!this.previewContact['secondary_phone']) {
+            this.previewContact['secondary_phone'] = this.phones[1];
+          }
+        }
+      } else {
+        if (this.previewContact['secondary_phone']) {
+          delete this.previewContact['secondary_phone'];
+        }
+
+        let secondaryPhoneColumn = '';
+        for (const name in this.updateColumn) {
+          if (this.updateColumn[name] === 'secondary_phone') {
+            secondaryPhoneColumn = name;
+            break;
+          }
+        }
+        if (secondaryPhoneColumn !== '') {
+          delete this.columns[secondaryPhoneColumn];
+          delete this.updateColumn[secondaryPhoneColumn];
+        }
       }
     }
+  }
+
+  isEmailPhoneColumn(column): any {
+    if (this.emailPhoneColumn.indexOf(column) >= 0) {
+      return true;
+    }
+    return false;
+  }
+
+  isEmailColumn(column): any {
+    if (column.indexOf('email') >= 0) {
+      return true;
+    }
+    return false;
+  }
+
+  getOtherEmails(column): any {
+    let email = '';
+    if (column === 'primary_email') {
+      email = this.previewContact['secondary_email'];
+    } else if (column === 'secondary_email') {
+      email = this.previewContact['primary_email'];
+    }
+
+    const emails = [];
+    for (const value of this.emails) {
+      if (value !== email) {
+        emails.push(value);
+      }
+    }
+    return emails;
+  }
+
+  getOtherPhones(column): any {
+    let phone = '';
+    if (column === 'primary_phone') {
+      phone = this.previewContact['secondary_phone'];
+    } else if (column === 'secondary_phone') {
+      phone = this.previewContact['primary_phone'];
+    }
+
+    const phones = [];
+    for (const value of this.phones) {
+      if (value !== phone) {
+        phones.push(value);
+      }
+    }
+    return phones;
   }
 
   isContact(contact): any {
@@ -287,7 +375,6 @@ export class ImportContactMergeComponent implements OnInit {
         }
       }
     }
-
     return result;
   }
 
@@ -370,8 +457,7 @@ export class ImportContactMergeComponent implements OnInit {
       secondary_contact: this.secondaryContact._id,
       activity_merge: this.activity,
       followup_merge: this.followup,
-      automation_merge: this.automation,
-      notes: this.notes
+      automation_merge: this.automation
     };
 
     let labelName = this.previewContact.label;
@@ -507,12 +593,16 @@ export class ImportContactMergeComponent implements OnInit {
   }
 
   changePrimaryNotesSelection(row): void {
-    this.primaryNotesSelectionModel[row] = !this.primaryNotesSelectionModel[row];
+    this.primaryNotesSelectionModel[row] = !this.primaryNotesSelectionModel[
+      row
+    ];
     this.mergeNotesPreview(row, 'primary');
   }
 
   changeSecondaryNotesSelection(row): void {
-    this.secondaryNotesSelectionModel[row] = !this.secondaryNotesSelectionModel[row];
+    this.secondaryNotesSelectionModel[row] = !this.secondaryNotesSelectionModel[
+      row
+    ];
     this.mergeNotesPreview(row, 'secondary');
   }
 
