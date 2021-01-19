@@ -20,7 +20,8 @@ export class DealsSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.dealsService.stages$.subscribe((res) => {
-      this.stages = [...this.stages, ...res];
+      this.stages = res;
+      console.log('###', this.stages);
     });
   }
 
