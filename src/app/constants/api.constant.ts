@@ -249,7 +249,8 @@ export const DEALSTAGE = {
 
 export const DEAL = {
   GET: 'deal/',
-  MOVE: 'deal/move-deal'
+  MOVE: 'deal/move-deal',
+  ADD_NOTE: 'deal/add-note'
 };
 
 export const MATERIAL = {
