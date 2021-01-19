@@ -21,7 +21,7 @@
                         <span class="ml-1 f-3 font-weight-bold">Create appointment</span>
                       </button>
                       <hr class="my-1">
-                      <button class="border-0 c-dark dropdown-item" (click)="openEmailDlg()">
+                      <button class="border-0 c-dark dropdown-item" (click)="openSendEmail()">
                         <span class="ml-1 f-3 font-weight-bold">Send email</span>
                       </button>
                       <hr class="my-1">
@@ -141,10 +141,121 @@
             </mat-accordion>
         </div>
         <div class="deal-action-panel flex-grow-1 position-relative">
-            <div class="history-panel pt-3 pl-3 mt-2">
-                <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
-                </app-slide-tab>
+          <div class="history-panel pt-3 pl-3 mt-2">
+            <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
+            </app-slide-tab>
+            <div class="history-list mt-3 position-relative">
+              <ng-container [ngSwitch]="action.id">
+                <div class="history-list-header" *ngSwitchCase="'all'">
+                  <div ngbDropdown class="v-center">
+                    <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
+                      All activity
+                    </span>
+                    <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+                    <div ngbDropdownMenu class="light">
+                      <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
+                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
+                          All activity
+                        </div>
+                        <ng-template #others>
+                          <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
+                            {{tab.label}}
+                          </div>
+                        </ng-template>
+                        <div *ngIf="tab.id == action.id">
+                          <i class="d-block i-icon i-check bgc-blue"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="history-list-header" *ngSwitchCase="'notes'">
+                  <div class="v-center justify-content-end c-pointer" (click)="openNoteDlg()">
+                    <span class="f-3 font-weight-bold c-blue mr-2">Add new note</span>
+                    <i class="d-block i-icon i-plus bgc-blue"></i>
+                  </div>
+                  <div class="empty-list" *ngIf="noteActivity == 0">
+                    <div class="object-icon v-center">
+                      <i class="i-icon i-template d-block bgc-dark"></i>
+                    </div>
+                    <h4 class="font-weight-bold mt-4 mb-3">
+                      There is no note activities yet.
+                    </h4>
+                  </div>
+                </div>
+                <div class="history-list-header" *ngSwitchCase="'emails'">
+                  <div class="v-center justify-content-end c-pointer" (click)="openSendEmail()">
+                    <span class="f-3 font-weight-bold c-blue mr-2">Create email</span>
+                    <i class="d-block i-icon i-plus bgc-blue"></i>
+                  </div>
+                  <div class="empty-list" *ngIf="emailActivity == 0">
+                    <div class="object-icon v-center">
+                      <i class="i-icon i-template d-block bgc-dark"></i>
+                    </div>
+                    <h4 class="font-weight-bold mt-4 mb-3">
+                      There is no email activities yet.
+                    </h4>
+                  </div>
+                </div>
+                <div class="history-list-header" *ngSwitchCase="'texts'">
+                  <div class="v-center justify-content-end c-pointer">
+                    <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
+                    <i class="d-block i-icon i-plus bgc-blue"></i>
+                  </div>
+                  <div class="empty-list" *ngIf="textActivity == 0">
+                    <div class="object-icon v-center">
+                      <i class="i-icon i-template d-block bgc-dark"></i>
+                    </div>
+                    <h4 class="font-weight-bold mt-4 mb-3">
+                      There is no text activities yet.
+                    </h4>
+                  </div>
+                </div>
+                <div class="history-list-header" *ngSwitchCase="'appointments'">
+                  <div class="v-center justify-content-end c-pointer" (click)="openAppointmentDlg()">
+                    <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
+                    <i class="d-block i-icon i-plus bgc-blue"></i>
+                  </div>
+                  <div class="empty-list" *ngIf="appointmentActivity == 0">
+                    <div class="object-icon v-center">
+                      <i class="i-icon i-template d-block bgc-dark"></i>
+                    </div>
+                    <h4 class="font-weight-bold mt-4 mb-3">
+                      There is no appointment activities yet.
+                    </h4>
+                  </div>
+                </div>
+                <div class="history-list-header" *ngSwitchCase="'follow_ups'">
+                  <div class="v-center justify-content-end c-pointer" (click)="openTaskDlg()">
+                    <span class="f-3 font-weight-bold c-blue mr-2">Create task</span>
+                    <i class="d-block i-icon i-plus bgc-blue"></i>
+                  </div>
+                  <div class="empty-list" *ngIf="taskActivity == 0">
+                    <div class="object-icon v-center">
+                      <i class="i-icon i-template d-block bgc-dark"></i>
+                    </div>
+                    <h4 class="font-weight-bold mt-4 mb-3">
+                      There is no task activities yet.
+                    </h4>
+                  </div>
+                </div>
+                <div class="history-list-header" *ngSwitchCase="'deals'">
+                  <div class="v-center justify-content-end c-pointer">
+                    <span class="f-3 font-weight-bold c-blue mr-2">Create deal</span>
+                    <i class="d-block i-icon i-plus bgc-blue"></i>
+                  </div>
+                  <div class="empty-list" *ngIf="dealActivity == 0">
+                    <div class="object-icon v-center">
+                      <i class="i-icon i-template d-block bgc-dark"></i>
+                    </div>
+                    <h4 class="font-weight-bold mt-4 mb-3">
+                      There is no deal activities yet.
+                    </h4>
+                  </div>
+                </div>
+              </ng-container>
             </div>
+          </div>
         </div>
-    </div>  
+    </div>
 </div>

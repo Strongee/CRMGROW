@@ -31,24 +31,25 @@
           <div class="row mx-0 v-center mb-2">
             <div class="col-6 mx-0 px-0">
               <div class="v-center">
-                <div class="input-group-prepend calendar-wrapper">
-                  <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
-                </div>
-                <div ngbDropdown>
-                  <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" [name]="dateTime.id" [(ngModel)]="selectedDate[row]" ngbDropdownToggle type="text" required/>
-                  <div ngbDropdownMenu class="date-picker p-3">
-                    <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getDateTime(row) | date : 'MMMM d yyyy' }}</div>
-                    <div class="picker-body v-center justify-content-between">
-                      <div classs="date-picker">
-                        <ngb-datepicker name="select_date" #dp [(ngModel)]="dateTime.date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
-                        <div class="action-button mt-2" align="end">
-                          <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
-                          <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setDateTime(row)" ngbDropdownToggle>Set</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <app-date-input type="prepend" [(value)]="dateTime.date"></app-date-input>
+<!--                <div class="input-group-prepend calendar-wrapper">-->
+<!--                  <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>-->
+<!--                </div>-->
+<!--                <div ngbDropdown>-->
+<!--                  <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" [name]="dateTime.id" [(ngModel)]="selectedDate[row]" ngbDropdownToggle type="text" required/>-->
+<!--                  <div ngbDropdownMenu class="date-picker p-3">-->
+<!--                    <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getDateTime(row) | date : 'MMMM d yyyy' }}</div>-->
+<!--                    <div class="picker-body v-center justify-content-between">-->
+<!--                      <div classs="date-picker">-->
+<!--                        <ngb-datepicker name="select_date" #dp [(ngModel)]="dateTime.date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>-->
+<!--                        <div class="action-button mt-2" align="end">-->
+<!--                          <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>-->
+<!--                          <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setDateTime(row)" ngbDropdownToggle>Set</div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
               </div>
               <span
                 class="invalid-error f-3 font-weight-bold c-red"

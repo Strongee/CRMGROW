@@ -203,12 +203,12 @@ export class TeamListComponent implements OnInit {
     this.teamService.acceptInvitation(team._id).subscribe((res) => {
       this.isAcceptInviting = false;
       team.invites.some((e, index) => {
-        if (e === this.userId) {
+        if (e._id === this.userId) {
           team.invites.splice(index, 1);
           return true;
         }
       });
-      team.members.push(this.userId);
+      team.members.push(team);
       this.teamService.updateTeam$(team._id, team);
       this.teamService.loadInvites(true);
       this.teamService.loadAll(true);

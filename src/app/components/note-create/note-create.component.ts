@@ -48,7 +48,9 @@ export class NoteCreateComponent implements OnInit {
   ngOnInit(): void {}
 
   selectContact(event: Contact): void {
-    this.contacts.push(event);
+    if (event) {
+      this.contacts.push(event);
+    }
   }
 
   removeContact(contact: Contact): void {

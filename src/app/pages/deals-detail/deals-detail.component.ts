@@ -13,6 +13,8 @@ import { SendEmailComponent } from 'src/app/components/send-email/send-email.com
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { DealEditComponent } from 'src/app/components/deal-edit/deal-edit.component';
+import { DetailActivity } from '../../models/activityDetail.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-deals-detail',
@@ -42,6 +44,29 @@ export class DealsDetailComponent implements OnInit {
     { icon: '', label: 'Deals', id: 'deals' }
   ];
   action: TabItem = this.tabs[0];
+  mainTimelines: DetailActivity[] = [];
+  noteActivity = 0;
+  emailActivity = 0;
+  textActivity = 0;
+  appointmentActivity = 0;
+  groupCallActivity = 0;
+  taskActivity = 0;
+  dealActivity = 0;
+  notes = [];
+  emails = [];
+  texts = [];
+  appointments = [];
+  groupCalls = [];
+  tasks = [];
+  deals = [];
+
+  noteSubscription: Subscription;
+  emailSubscription: Subscription;
+  textSubscription: Subscription;
+  appointmentSubscription: Subscription;
+  groupCallSubscription: Subscription;
+  taskSubscription: Subscription;
+  dealSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -58,7 +83,6 @@ export class DealsDetailComponent implements OnInit {
     if (id) {
       this.dealId = id;
       this.dealsService.getDeal(id).subscribe((res) => {
-        console.log("get deal ==================>", res);
         if (res) {
           this.deal = res;
           this.deal.contacts = (res['contacts'] || []).map((e) =>
@@ -69,7 +93,20 @@ export class DealsDetailComponent implements OnInit {
           }
         }
       });
+      this.loadNotes();
     }
+  }
+
+  loadNotes(): void {
+    this.noteSubscription && this.noteSubscription.unsubscribe();
+    this.noteSubscription = this.dealsService
+      .getNotes({ deal: this.dealId })
+      .subscribe((res) => {
+        if (res) {
+          this.notes = res;
+          console.log("deal notes ==============>", this.notes);
+        }
+      });
   }
 
   getStage(id: string): void {
@@ -120,7 +157,7 @@ export class DealsDetailComponent implements OnInit {
     });
   }
 
-  openEmailDlg(): void {
+  openSendEmail(): void {
     this.dialog.open(SendEmailComponent, {
       position: {
         bottom: '50px',
@@ -130,7 +167,12 @@ export class DealsDetailComponent implements OnInit {
       maxWidth: '650px',
       panelClass: 'send-email',
       backdropClass: 'cdk-send-2email',
-      disableClose: false
+      disableClose: false,
+      data: {
+        type: 'deal',
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
     });
   }
 

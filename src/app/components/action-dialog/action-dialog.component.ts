@@ -886,6 +886,11 @@ export class ActionDialogComponent implements OnInit {
     close();
   }
 
+  changeCommandLabel($event): void {
+    this.commandLabel = $event;
+    this.error = '';
+  }
+
   minDate;
   days = Array(29).fill(0);
   hours = Array(23).fill(0);

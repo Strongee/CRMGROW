@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { Contact } from 'src/app/models/contact.model';
@@ -14,6 +20,7 @@ import * as _ from 'lodash';
 import { TIMES } from 'src/app/constants/variable.constants';
 import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
+import { DealsService } from '../../services/deals.service';
 
 @Component({
   selector: 'app-send-email',
@@ -44,6 +51,8 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   schedule_time = '12:00:00.000';
   times = TIMES;
   attachments = [];
+  type = '';
+  dealId;
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
@@ -52,10 +61,19 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     private helperSerivce: HelperService,
     private materialService: MaterialService,
     private userService: UserService,
+    private dealService: DealsService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     if (this.data) {
-      this.emailContacts = [this.data.contact];
+      this.type = this.data.type;
+      if (this.type === 'deal') {
+        this.dealId = this.data.deal;
+        for (const contact of this.data.contacts) {
+          this.emailContacts.push(contact);
+        }
+      } else {
+        this.emailContacts = [this.data.contact];
+      }
     }
   }
 
@@ -101,21 +119,41 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
             break;
         }
       });
-      this.materialService
-        .sendMaterials({
-          contacts,
-          cc,
-          bcc,
-          video_ids,
-          pdf_ids,
-          image_ids,
-          subject,
-          content,
-          attachments: this.attachments
-        })
-        .subscribe((status) => {
-          this.dialogRef.close();
-        });
+
+      if (this.type === 'deal') {
+        this.dealService
+          .sendEmail({
+            deal: this.dealId,
+            contacts,
+            cc,
+            bcc,
+            video_ids,
+            pdf_ids,
+            image_ids,
+            subject,
+            content,
+            attachments: this.attachments
+          })
+          .subscribe((status) => {
+            this.dialogRef.close();
+          });
+      } else {
+        this.materialService
+          .sendMaterials({
+            contacts,
+            cc,
+            bcc,
+            video_ids,
+            pdf_ids,
+            image_ids,
+            subject,
+            content,
+            attachments: this.attachments
+          })
+          .subscribe((status) => {
+            this.dialogRef.close();
+          });
+      }
     }
   }
 
@@ -193,7 +231,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   }
 
   // onInitEditor(): void {
-    
+
   // }
   onAttachmentChange(attachments: any[]): void {
     this.attachments = attachments;

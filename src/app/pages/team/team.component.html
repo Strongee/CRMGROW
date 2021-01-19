@@ -453,12 +453,12 @@
                           </td>
                           <td class="thumbnail-col">
                             <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
-                              <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                              <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
                             </a>
                           </td>
                           <td class="name-col">
                             <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
-                              <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                              <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
                             </a>
                             <h5 class="f-4 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
                             <span class="f-1 c-dark">{{(pdf.description || '') | stripTags | shorten: 120: '...'}}</span>
@@ -568,12 +568,12 @@
                           </td>
                           <td class="thumbnail-col">
                             <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
-                              <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                              <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
                             </a>
                           </td>
                           <td class="name-col">
                             <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
-                              <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                              <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
                             </a>
                             <h5 class="f-4 font-weight-bold c-dark m-0">{{image.title}}</h5>
                             <span class="f-1 c-dark">{{(image.description || '') | stripTags | shorten: 120: '...'}}</span>

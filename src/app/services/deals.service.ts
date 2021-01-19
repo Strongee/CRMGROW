@@ -8,7 +8,9 @@ import { DEALSTAGE, DEAL } from '../constants/api.constant';
 import { STATUS } from '../constants/variable.constants';
 import { DealStage } from '../models/deal-stage.model';
 import { Deal } from '../models/deal.model';
-import * as _ from 'lodash';
+import { Email } from '../models/email.model';
+import { Note } from '../models/note.model';
+import {Activity} from "../models/activity.model";
 
 @Injectable({
   providedIn: 'root'
@@ -103,6 +105,48 @@ export class DealsService extends HttpService {
     return this.httpClient.post(this.server + DEAL.ADD_NOTE, data).pipe(
       map((res) => res),
       catchError(this.handleError('ADD DEAL NOTE', []))
+    );
+  }
+
+  getNotes(data: any): Observable<Note[]> {
+    return this.httpClient.post(this.server + DEAL.GET_NOTES, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET DEAL NOTE', []))
+    );
+  }
+
+  sendEmail(data: any): Observable<any> {
+    return this.httpClient.post(this.server + DEAL.SEND_EMAIL, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('DEAL SEND EMAIL', []))
+    );
+  }
+
+  getEmails(data: any): Observable<Email[]> {
+    return this.httpClient.post(this.server + DEAL.GET_EMAILS, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET DEAL EMAILS', []))
+    );
+  }
+
+  addFollowUp(data: any): Observable<any> {
+    return this.httpClient.post(this.server + DEAL.ADD_FOLLOWUP, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('ADD DEAL FOLLOWUP', []))
+    );
+  }
+
+  getFollowUp(data: any): Observable<any[]> {
+    return this.httpClient.post(this.server + DEAL.GET_FOLLOWUP, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET DEAL FOLLOWUP', []))
+    );
+  }
+
+  getActivity(data: any): Observable<Activity[]> {
+    return this.httpClient.post(this.server + DEAL.GET_ACTIVITY, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET DEAL ACTIVITY', []))
     );
   }
 }
