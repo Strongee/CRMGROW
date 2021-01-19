@@ -57,9 +57,7 @@ table {
     th, td {
         vertical-align: middle !important;
         background-color: white;
-        &.checkbox-col {
-            opacity: 1;
-        }
+        opacity: 1;
     }
     tr {
         &.section-header {
