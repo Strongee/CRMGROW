@@ -24,17 +24,29 @@
 }
 
 .card-body {
-  min-height: calc(100vh - 250px);
+  height: calc(100vh - 270px);
   flex: unset;
   padding: 0px;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+
+  @media screen and (max-width: 767px) {
+    height: calc(100vh - 335px);
+  }
+
+  @media screen and (max-width: 680px) {
+    height: calc(100vh - 300px);
+  }
+
+  @media screen and (max-width: 576px) {
+    height: calc(100vh - 280px);
+  }
 }
 
 .flows-container {
   flex: 1;
-  max-height: 687px;
+  height: 100%;
   background-image: url(../../../assets/img/bg_pattern_1.png);
   background-color: #f4f6f8;
   position: relative;
@@ -143,6 +155,10 @@
 
 .h-40 {
   height: 40px;
+
+  @media screen and (max-width: 767px) {
+    height: 20px;
+  }
 }
 
 .status {
@@ -219,14 +235,14 @@
     }
   }
 
-  @media screen and (max-width: 576px) {
+  @media screen and (max-width: 992px) {
     .content {
       width: 40px;
       height: 40px;
 
       p {
-        padding: 5px 0px;
-        font-size: 20px;
+        padding: 7px 0px;
+        font-size: 18px;
       }
     }
   }

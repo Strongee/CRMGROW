@@ -13,7 +13,10 @@ import { stepRound } from '../../variables/customStepCurved';
 import { Layout, Edge, Node } from '@swimlane/ngx-graph';
 import { ActionDialogComponent } from 'src/app/components/action-dialog/action-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ACTION_CAT } from 'src/app/constants/variable.constants';
+import {
+  ACTION_CAT,
+  DialogSettings
+} from 'src/app/constants/variable.constants';
 import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { CaseConfirmComponent } from 'src/app/components/case-confirm/case-confirm.component';
@@ -390,8 +393,7 @@ export class AutoflowComponent
       });
 
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        maxWidth: '90vw',
-        minHeight: '300px',
+        ...DialogSettings.AUTOMATION,
         data: {
           follows: prevFollowUps
         }
@@ -444,8 +446,7 @@ export class AutoflowComponent
         }
       }
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        maxWidth: '90vw',
-        minHeight: '300px',
+        ...DialogSettings.AUTOMATION,
         data: {
           currentAction: node.type,
           conditionHandler,
@@ -519,8 +520,7 @@ export class AutoflowComponent
       });
     } else {
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        maxWidth: '90vw',
-        minHeight: '300px',
+        ...DialogSettings.AUTOMATION,
         data: {}
       });
       actionDlg.afterClosed().subscribe((res) => {
@@ -567,8 +567,7 @@ export class AutoflowComponent
 
     this.dialog
       .open(ActionEditComponent, {
-        maxWidth: '90vw',
-        minHeight: '300px',
+        ...DialogSettings.AUTOMATION,
         data: {
           action: node,
           conditionHandler,

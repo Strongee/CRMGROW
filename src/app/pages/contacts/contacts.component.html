@@ -10,10 +10,11 @@
         {{contactService.total$ | async}} contacts
       </div>
     </div>
-    <div class="ml-auto v-center">
+    <div class="ml-auto v-center create-actions">
       <button class="v-center btn btn-blue f-6 font-weight-bold text-white rounded shadow mr-2 px-3 py-2" (click)="createContact()">
         <i class="d-block i-icon i-plus bgc-white mr-2"></i>
-        Create new contact
+        <span class="normal">Create new contact</span>
+        <span class="mobile">New Contact</span>
       </button>
       <button class="btn btn-white border border-primary f-6 font-weight-bold rounded px-3 py-2" (click)="importContacts()">
         Import

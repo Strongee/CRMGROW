@@ -1,14 +1,14 @@
 <div class="page-content">
-  <div class="automation-container my-3">
+  <div class="automation-container">
     <form #automationForm="ngForm" (ngSubmit)="submitted=true; automationForm.form.valid ? storeData() : false;"
           [class.was-validated]="submitted">
-      <div class="v-center my-2">
+      <div class="v-center">
         <a [routerLink]="['/automations']" class="c-dark mr-2">
           <h6 class="page-title font-weight-bold">Automations</h6>
         </a>
         <div class="f-8 font-weight-bold text-uppercase" *ngIf="editMode=='new'"> / Create Template</div>
       </div>
-      <div class="align-items-top automation-name-wrapper mt-3">
+      <div class="align-items-top automation-name-wrapper">
         <div class="row">
           <div class="col-md-7 col-sm-12">
             <div class="form-group d-flex align-items-end">
@@ -27,7 +27,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-5 col-sm-12 mt-md-0 mt-sm-3">
+          <div class="col-md-5 col-sm-12">
             <div class="form-group v-center justify-content-end">
               <div class="auth">
                 <label>Owner</label>
@@ -69,7 +69,7 @@
           <div class="actions-count">
             <label class="f-1 text-uppercase">Actions</label>
             <div class="content actions">
-              <p class="count font-weight-bold">{{automation && automation.automations.length ? automation.automations.length : 0}}</p>
+              <p class="count font-weight-bold">{{automation && automation.automations && automation.automations.length ? automation.automations.length : 0}}</p>
             </div>
           </div>
           <div class="contacts-count mt-3" *ngIf="editMode == 'edit'">

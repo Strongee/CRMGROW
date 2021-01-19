@@ -31,15 +31,17 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    const tabIndex = _.findIndex(this.tabs, { id: this.selected.id });
-    const tabBound = this.container.nativeElement.children[
-      tabIndex + 1
-    ].getBoundingClientRect();
-    const wrapper = this.container.nativeElement.getBoundingClientRect();
-    this.indicator.nativeElement.style.left =
-      Math.floor(tabBound.x - wrapper.x) + 'px';
-    this.indicator.nativeElement.style.width =
-      Math.floor(tabBound.width) + 'px';
+    if (this.tabs.length < 5) {
+      const tabIndex = _.findIndex(this.tabs, { id: this.selected.id });
+      const tabBound = this.container.nativeElement.children[
+        tabIndex + 1
+      ].getBoundingClientRect();
+      const wrapper = this.container.nativeElement.getBoundingClientRect();
+      this.indicator.nativeElement.style.left =
+        Math.floor(tabBound.x - wrapper.x) + 'px';
+      this.indicator.nativeElement.style.width =
+        Math.floor(tabBound.width) + 'px';
+    }
   }
 
   changeTab(event: Event, item: TabItem): void {
@@ -51,6 +53,11 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
       Math.floor(tabBound.x - wrapper.x) + 'px';
     this.indicator.nativeElement.style.width =
       Math.floor(tabBound.width) + 'px';
+    this.onChange.emit(item);
+  }
+
+  changeTabIndex(index: number): void {
+    const item = this.tabs[index];
     this.onChange.emit(item);
   }
 }

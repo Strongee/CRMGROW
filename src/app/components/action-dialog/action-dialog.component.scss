@@ -223,10 +223,14 @@ button:disabled {
   &.send_text_image {
     width: 90vw;
     max-width: calc(900px + 4.5rem);
+
+    @media screen and (max-width: 575px) {
+      width: 98vw;
+    }
   }
 
   @media screen and (max-width: 575px) {
-    width: calc( 100vw - 80px );
+    width: 98vw;
   }
 }
 
@@ -258,6 +262,10 @@ button:disabled {
     &.mat-form-field-appearance-fill .mat-select-arrow-wrapper  {
       transform: none;
     }
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0.5rem;
   }
 }
 

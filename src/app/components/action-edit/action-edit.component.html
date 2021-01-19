@@ -194,31 +194,14 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="form-group has-feedback calendar position-relative"
-                         [class.has-error]="!action['due_date'] && submitted">
+                         [class.has-error]="due_date['year'] == '' && due_date['month'] == '' && due_date['day'] == '' && submitted">
                       <div class="form-group">
                         <label class="theme-label">FOLLOW UP DATE</label>
                         <div class="v-center">
-                          <div class="input-group-prepend calendar-wrapper">
-                            <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
-                          </div>
-                          <div ngbDropdown>
-                            <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDate" ngbDropdownToggle type="text" required/>
-                            <div ngbDropdownMenu class="date-picker p-3">
-                              <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getDateTime() | date : 'MMMM d yyyy' }}</div>
-                              <div class="picker-body v-center justify-content-between">
-                                <div classs="date-picker">
-                                  <ngb-datepicker name="select_date" #dp [(ngModel)]="due_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
-                                  <div class="action-button mt-2" align="end">
-                                    <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
-                                    <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setDateTime()" ngbDropdownToggle>Set</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          <app-date-input type="prepend" [(value)]="due_date"></app-date-input>
                         </div>
                         <span
-                          class="invalid-error f-3 font-weight-bold c-red"
+                          class="invalid-error f-3 c-red"
                           *ngIf="due_date['year'] == '' && due_date['month'] == '' && due_date['day'] == '' && submitted"
                         >
                           Date is required
@@ -278,9 +261,9 @@
                  [class.has-error]="content.errors && (content.touched || content.dirty|| submitted) && submitted">
               <div class="v-center label-group mt-3">
                 <label class="theme-label">CONTENT</label>
-                <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
                 <div ngbDropdown class="justify-content-end field-actions button-more rounded">
-                  <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                  <a class="v-center justify-content-end text-decoration-none c-pointer" ngbDropdownToggle>
+                    <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
                     <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
                   </a>
                   <div ngbDropdownMenu class="button-more-container light">
@@ -306,7 +289,7 @@
               <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in sms content."
                         name="content" #content="ngModel" rows="6" required #smsContentField
                         (click)="getSmsContentCursor(smsContentField)" (keyup)="getSmsContentCursor(smsContentField)"></textarea>
-              <span class="text-danger"
+              <span class="error text-danger"
                     *ngIf="content.errors && (content.dirty || content.touched || submitted) && submitted">Content content is
               required.</span>
             </div>
@@ -322,9 +305,9 @@
                                    || type == 'send_email_image' || type == 'send_text_image'; else noMaterial">
                 <div class="v-center label-group">
                   <label class="theme-label">SUBJECT</label>
-                  <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
                   <div ngbDropdown class="justify-content-end field-actions button-more rounded">
-                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                    <a class="v-center justify-content-end text-decoration-none c-pointer" ngbDropdownToggle>
+                      <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
                       <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="button-more-container light">
@@ -383,7 +366,7 @@
               <input type="text" class="form-control" [(ngModel)]="action['subject']" placeholder="Email Subject"
                      name="subject" #subject="ngModel" required #subjectField (click)="getSubjectCursorPost(subjectField)"
                      (keyup)="getSubjectCursorPost(subjectField)" />
-              <span class="text-danger"
+              <span class="error text-danger"
                     *ngIf="subject.errors && (subject.dirty || subject.touched || submitted) && submitted">Subject is
               required.</span>
             </div>
@@ -393,9 +376,9 @@
                                    || type == 'send_email_image' || type == 'send_text_image'; else noContentMaterial">
                 <div class="v-center label-group">
                   <label class="theme-label">CONTENT</label>
-                  <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
                   <div ngbDropdown class="justify-content-end field-actions button-more rounded">
-                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                    <a class="v-center justify-content-end text-decoration-none c-pointer" ngbDropdownToggle>
+                      <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
                       <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
                     </a>
                     <div ngbDropdownMenu class="button-more-container light">
@@ -525,6 +508,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <div class="c-red f-3 error" *ngIf="!selectedFollow && submitted">Follow up is required!</div>
           <ng-container *ngIf="selectedFollow">
             <div class="theme-radios">
               <div class="theme-radio">
@@ -564,31 +548,14 @@
                       <div class="row">
                         <div class="col-6">
                           <div class="form-group has-feedback calendar position-relative"
-                               [class.has-error]="!action.due_date && submitted">
+                               [class.has-error]="update_due_date['year'] == '' && update_due_date['month'] == '' && update_due_date['day'] == '' && submitted">
                             <div class="form-group">
                               <label class="theme-label">FOLLOW UP DATE</label>
                               <div class="v-center">
-                                <div class="input-group-prepend calendar-wrapper">
-                                  <span class="input-group-text border-dark bgc-blue"><i class="bgc-white i-icon i-calendar"></i></span>
-                                </div>
-                                <div ngbDropdown>
-                                  <input class="form-control datepicker calendar-input f-3 font-weight-bold" placeholder="Select date" name="send_date" [(ngModel)]="selectedDate" ngbDropdownToggle type="text" required/>
-                                  <div ngbDropdownMenu class="date-picker p-3">
-                                    <div class="f-8 c-blue font-weight-bold text-center mt-3">{{ getUpdateDateTime() | date : 'MMMM d yyyy' }}</div>
-                                    <div class="picker-body v-center justify-content-between">
-                                      <div classs="date-picker">
-                                        <ngb-datepicker name="select_date" #dp [(ngModel)]="update_due_date" [minDate]="minDate" [firstDayOfWeek]="7" ></ngb-datepicker>
-                                        <div class="action-button mt-2" align="end">
-                                          <button class="btn btn-white f-6 font-weight-bold" type="button" ngbDropdownToggle>Cancel</button>
-                                          <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="setUpdateDateTime()" ngbDropdownToggle>Set</div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                <app-date-input type="prepend" [(value)]="update_due_date"></app-date-input>
                               </div>
                               <span
-                                class="invalid-error f-3 font-weight-bold c-red"
+                                class="invalid-error f-3 c-red"
                                 *ngIf="update_due_date['year'] == '' && update_due_date['month'] == '' && update_due_date['day'] == '' && submitted"
                               >
                                 Date is required

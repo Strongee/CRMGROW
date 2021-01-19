@@ -8,6 +8,7 @@ export class DealStage implements Deserializable {
   deals: Deal[];
   created_at: Date;
   updated_at: Date;
+  static deserilize: any;
 
   deserialize(input: any): this {
     return Object.assign(this, input);

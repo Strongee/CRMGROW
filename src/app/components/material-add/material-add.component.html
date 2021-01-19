@@ -39,7 +39,7 @@
         </ng-container>
       </ng-template>
     </ng-container>
-    
+
     <ng-container *ngIf="selectedTab.label == 'PDF'">
       <ng-container *ngIf="(storeService.pdfs$ | async).length; else emptyPdfs">
         <div class="material-container mt-3">
@@ -47,7 +47,7 @@
             <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1"  [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
               <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
-                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
               </div>
               <div class="material-title f-1 font-weight-bold mt-3">
                 {{material.title}}
@@ -84,7 +84,7 @@
             <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1"  [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
               <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
               <div class="thumb-wrapper">
-                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
               </div>
               <div class="material-title f-1 font-weight-bold mt-3">
                 {{material.title}}
