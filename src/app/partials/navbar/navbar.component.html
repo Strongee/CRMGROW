@@ -43,17 +43,6 @@
   
   <!-- Navbar Main Wrapper -->
   <div class="navbar-nav v-center ml-md-auto ml-sm-3">
-    <!-- Incoming Chat Message Wrapper -->
-    <!-- <div class="nav-item">
-      <div class="chat-messages-wrapper detail-wrapper" ngbDropdown display="dynamic" placement="bottom-right">
-        <div class="no-carot" ngbDropdownToggle>
-          <i class="i-icon i-sms-sent bgc-blue d-block"></i>
-        </div>
-        <div ngbDropdownMenu>
-
-        </div>
-      </div>
-    </div> -->
     <!-- Notification Wrapper -->
     <div class="nav-item">
       <div class="search-wrapper-mobile" ngbDropdown display="dynamic">
@@ -80,6 +69,14 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <!-- Incoming Chat Message Wrapper -->
+    <div class="nav-item">
+      <div class="chat-messages-wrapper detail-wrapper" ngbDropdown display="dynamic" placement="bottom-right">
+        <a [routerLink]="['/messages']" class="no-carot">
+          <i class="i-icon i-sms-sent bgc-blue d-block"></i>
+        </a>
       </div>
     </div>
     <div class="nav-item">
