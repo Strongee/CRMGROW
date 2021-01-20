@@ -12,6 +12,19 @@
         }
     }
 }
+.back-contacts {
+    display: none;
+    @media screen and (max-width: 576px) {
+        &.show {
+            display: flex;
+            i {
+                width: 12px;
+                height: 12px;
+                min-width: 12px;
+            }
+        }
+    }
+}
 .message-container {
     .contact-list {
         min-width: 250px;
@@ -159,9 +172,13 @@
             min-width: 250px;
             max-width: 250px;
         }
+        @media screen and (max-width: 576px) {
+            min-width: 100%;
+            max-width: unset;
+        }
     }
     @media screen and (max-width: 576px) {
-        display: block;
+        display: block !important;
     }
 }
 .contact-avatar {

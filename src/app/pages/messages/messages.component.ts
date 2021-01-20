@@ -58,4 +58,8 @@ export class MessagesComponent implements OnInit {
   }
 
   openMaterialsDlg(): void {}
+
+  goToBack(): void {
+    this.showMessage = false;
+  }
 }
