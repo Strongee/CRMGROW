@@ -10,7 +10,7 @@ import { DealStage } from '../models/deal-stage.model';
 import { Deal } from '../models/deal.model';
 import { Email } from '../models/email.model';
 import { Note } from '../models/note.model';
-import {Activity} from "../models/activity.model";
+import { Activity } from '../models/activity.model';
 
 @Injectable({
   providedIn: 'root'

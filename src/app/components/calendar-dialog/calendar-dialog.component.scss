@@ -86,4 +86,8 @@
     .dropdown-toggle::after {
         display: none;
     }
+    mat-dialog-content {
+        min-height: 580px;
+        max-height: 580px;
+    }
 }

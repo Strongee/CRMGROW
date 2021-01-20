@@ -1,13 +1,186 @@
+@import 'src/variables.scss';
+
 .page-header {
-    i {
-        width: 14px;
-        height: 14px;
-        min-width: 14px;
+    button {
+        &:hover {
+            color: white;
+        }
+        i {
+            width: 14px;
+            height: 14px;
+            min-width: 14px;
+        }
     }
 }
-.message-box {
+.back-contacts {
+    display: none;
+    @media screen and (max-width: 576px) {
+        &.show {
+            display: flex;
+            i {
+                width: 12px;
+                height: 12px;
+                min-width: 12px;
+            }
+        }
+    }
+}
+.message-container {
     .contact-list {
         min-width: 250px;
         max-width: 250px;
+        .contact {
+            &.selected {
+                background-color: #F3F3F3;
+            }
+        }
+        @media screen and (max-width: 1100px) {
+            min-width: unset;
+            max-width: unset;
+            .contact-name {
+                display: none;
+            }
+        }
+        @media screen and (max-width: 576px) {
+            min-width: 100%;
+            &.hide {
+                display: none;
+            }
+            .contact-name {
+                display: block;
+                width: 100%;
+            }
+        }
     }
+    .message-box {
+        width: 100%;
+        &::before {
+            width: 1px;
+            height: 100%;
+            background: $color-dark;
+            content: "";
+            position: absolute;
+            top: 0px;
+            opacity: 0.2;
+        }
+        .message-box-header {
+            height: 65px;
+            background-color: #F6F6F7;
+            .contact-info {
+                i {
+                    width: 10px;
+                    height: 10px;
+                    min-width: 10px;
+                }
+            }
+            .show-list {
+                width: 32px;
+                height: 32px;
+                border-radius: 3px;
+                background-color: rgba(0,0,0,0.08);
+            }
+        }
+        .select-template {
+            i {
+                width: 10px;
+                height: 10px;
+                min-width: 10px;
+            }
+        }
+        .message-list {
+            height: 500px;
+            overflow-y: auto;
+            .message {
+                padding: 0.5rem 1rem;
+                max-width: 350px;
+                &:first-child {
+                    margin-top: 0 !important;
+                }
+                &:nth-child(odd) {
+                    border-radius: 22px 22px 6px 22px;
+                    background-color: $color-blue;
+                    color: white;
+                    margin-left: auto;
+                }
+                &:nth-child(even) {
+                    border-radius: 22px 22px 22px 6px;
+                    background-color: #EFF1F4;
+                    color: $color-dark;
+                    border: 1px solid rgba(16,19,54,0.24);
+                }
+            }
+        }
+        .message-action {
+            input {
+                border-radius: 20px;
+            }
+            .material-button {
+                border-radius: 24px;
+                border-width: 2px;
+                .i-material {
+                    width: 16px;
+                    height: 16px;
+                    min-width: 16px;
+                }
+                .i-plus {
+                    width: 12px;
+                    height: 12px;
+                    min-width: 12px;
+                }
+            }
+        }
+        @media screen and (max-width: 576px) {
+            display: none;
+            &.show {
+                display: block;
+            }
+        }
+    }
+    .file-list {
+        display: none;
+        min-width: 350px;
+        max-width: 350px;
+        &.show {
+            display: block;
+        }
+        &::before {
+            width: 1px;
+            height: 100%;
+            background: $color-dark;
+            content: "";
+            position: absolute;
+            top: 0px;
+            opacity: 0.2;
+        }
+        .file-list-header {
+            height: 65px;
+            background-color: #F6F6F7;
+        }
+        .files {
+            .file {
+                border: 1px solid #D9D9DF;
+                .thumbnail {
+                    img {
+                        width: 100%;
+                        height: 100px;
+                        object-fit: cover;
+                    }
+                }
+            }
+        }
+        @media screen and (max-width: 1200px) {
+            min-width: 250px;
+            max-width: 250px;
+        }
+        @media screen and (max-width: 576px) {
+            min-width: 100%;
+            max-width: unset;
+        }
+    }
+    @media screen and (max-width: 576px) {
+        display: block !important;
+    }
+}
+.contact-avatar {
+    min-width: 32px;
 }

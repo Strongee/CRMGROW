@@ -283,9 +283,9 @@ export class UserService extends HttpService {
   public requestCalendarSyncUrl(type: string): Observable<any> {
     switch (type) {
       case 'gmail':
-        return this.httpClient.get(this.server + USER.SYNC_GMAIL);
+        return this.httpClient.get(this.server + USER.CALENDAR_SYNC_GMAIL);
       case 'outlook':
-        return this.httpClient.get(this.server + USER.SYNC_OUTLOOK);
+        return this.httpClient.get(this.server + USER.CALENDAR_SYNC_OUTLOOK);
     }
   }
   public loadAffiliate(): Observable<any> {
