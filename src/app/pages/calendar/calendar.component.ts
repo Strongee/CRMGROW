@@ -15,6 +15,7 @@ import { Location } from '@angular/common';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { UserService } from 'src/app/services/user.service';
 import { TabItem } from 'src/app/utils/data.types';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -38,6 +39,7 @@ export class CalendarComponent implements OnInit {
     { icon: '', label: 'MONTH', id: 'month' }
   ];
   selectedTab: TabItem = this.tabs[0];
+  queryParamSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -54,6 +56,28 @@ export class CalendarComponent implements OnInit {
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
     });
+    this.queryParamSubscription && this.queryParamSubscription.unsubscribe();
+    this.queryParamSubscription = this.router.queryParams.subscribe(
+      (params) => {
+        if (params['code']) {
+          const action = this.router.snapshot.params['action'];
+          if (action == 'outlook') {
+            this.userService
+              .authorizeOutlookCalendar(params['code'])
+              .subscribe((res) => {
+                console.log('###', res);
+              });
+          }
+          if (action == 'google') {
+            this.userService
+              .authorizeGoogleCalendar(params['code'])
+              .subscribe((res) => {
+                console.log('###', res);
+              });
+          }
+        }
+      }
+    );
     let mode, year, month, day;
     mode = this.router.snapshot.params['mode'];
     if (mode) {

@@ -132,6 +132,16 @@ export class UserService extends HttpService {
       this.server + USER.AUTH_GOOGLE + '?code=' + code
     );
   }
+  public authorizeOutlookCalendar(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_OUTLOOK_CALENDAR + '?code=' + code
+    );
+  }
+  public authorizeGoogleCalendar(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_GOOGLE_CALENDAR + '?code=' + code
+    );
+  }
   public requestResetPassword(email): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
