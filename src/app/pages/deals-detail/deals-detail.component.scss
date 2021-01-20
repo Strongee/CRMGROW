@@ -357,6 +357,29 @@
     }
 }
 
+:host ::ng-deep {
+  .history-detail {
+    .mat-expansion-panel {
+      .mat-expansion-panel-header {
+        height: unset!important;
+        padding: 0px;
+        .mat-expansion-indicator {
+          display: none;
+        }
+      }
+      .mat-expansion-panel-content {
+        padding: 0px;
+        .mat-expansion-panel-body {
+          padding: 0px;
+        }
+      }
+      .mat-expansion-panel-header {
+        background: transparent!important;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 1200px) {
     .deal-panel {
         flex-direction: column;
