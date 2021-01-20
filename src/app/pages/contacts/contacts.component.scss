@@ -31,3 +31,34 @@ tr.mat-row {
   }
 }
 
+.status-header .create-actions .mobile {
+  display: none;
+}
+@media screen and (max-width: 480px) {
+  .status-header {
+    display: block!important;
+
+    .create-actions {
+      margin-top: 6px;
+      & > * {
+        width: 50%;
+        text-align: center;
+        justify-content: center;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 384px) {
+  .status-header {
+    .create-actions {
+      .normal {
+        display: none;
+      }
+      .mobile {
+        display: block;
+      }
+    }
+  }
+}

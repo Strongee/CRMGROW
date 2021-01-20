@@ -115,6 +115,7 @@ import { DealStageDeleteComponent } from './deal-stage-delete/deal-stage-delete.
 import { DealEditComponent } from './deal-edit/deal-edit.component';
 import { DateInputComponent } from './date-input/date-input.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { AutomationStatusComponent } from './automation-status/automation-status.component';
 
 @NgModule({
   declarations: [
@@ -227,7 +228,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     PlanBuyComponent,
     DealStageDeleteComponent,
     DealEditComponent,
-    DateInputComponent
+    DateInputComponent,
+    AutomationStatusComponent
   ],
   imports: [
     CommonModule,
@@ -308,7 +310,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     PlanBuyComponent,
     DealStageDeleteComponent,
     DealEditComponent,
-    DateInputComponent
+    DateInputComponent,
+    AutomationStatusComponent
   ],
   bootstrap: [
     ContactCreateComponent,
