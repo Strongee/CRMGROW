@@ -28,6 +28,7 @@ import { CampaignSmtpComponent } from 'src/app/pages/campaign-smtp/campaign-smtp
 import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
 import { NotificationsListComponent } from 'src/app/pages/notifications-list/notifications-list.component';
 import { MaterialComponent } from 'src/app/pages/material/material.component';
+import { MessagesComponent } from 'src/app/pages/messages/messages.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -289,6 +290,13 @@ export const AdminLayoutRoutes: Routes = [
     component: NotificationsListComponent,
     data: {
       title: 'Notifications'
+    }
+  },
+  {
+    path: 'messages',
+    component: MessagesComponent,
+    data: {
+      title: 'Messages'
     }
   }
 ];

@@ -366,6 +366,20 @@
                 </h4>
               </div>
             </div>
+            <div class="history-list-header" *ngSwitchCase="'group_call'">
+              <div class="v-center justify-content-end c-pointer" (click)="openGroupCallDlg()">
+                <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>
+                <i class="d-block i-icon i-plus bgc-blue"></i>
+              </div>
+              <div class="empty-list" *ngIf="appointmentActivity == 0">
+                <div class="object-icon v-center">
+                  <i class="i-icon i-template d-block bgc-dark"></i>
+                </div>
+                <h4 class="font-weight-bold mt-4 mb-3">
+                  There is no group call activities yet.
+                </h4>
+              </div>
+            </div>
             <div class="history-list-header" *ngSwitchCase="'follow_up'">
               <div class="v-center justify-content-end c-pointer" (click)="openTaskDlg()">
                 <span class="f-3 font-weight-bold c-blue mr-2">Create task</span>

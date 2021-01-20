@@ -1,0 +1,117 @@
+<div class="page-content">
+    <div class="v-center justify-content-between border-bottom pb-3 page-header">
+        <h4 class="page-title m-0">MESSAGES</h4>
+        <button class="v-center btn btn-blue f-6 font-weight-bold">
+            <i class="d-block i-icon i-plus bgc-white mr-2"></i>
+            New message
+        </button>
+    </div>
+    <div class="d-flex message-container position-relative">
+        <div class="contact-list">
+            <div class="d-flex p-2 c-pointer contact" [ngClass]="{'selected': contact._id == selectedContact._id}" *ngFor="let contact of contacts" (click)="selectContact(contact)">
+                <div class="contact-avatar f-3 font-weight-bold mr-2">{{contact.avatarName}}</div>
+                <div class="contact-name">
+                    <div class="v-center justify-content-between">
+                        <span class="f-3 fw-600">{{contact.fullName}}</span>
+                        <span class="f-1 op-56">{{contact.received_at}}</span>
+                    </div>
+                    <div class="f-1 mt-1">
+                        {{contact.latest_message}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="message-box">
+            <div class="v-center justify-content-between border-bottom p-3 message-box-header">
+                <div class="v-center">
+                    <div class="contact-avatar f-3 font-weight-bold mr-2">
+                        {{selectedContact.avatarName}}
+                    </div>
+                    <div class="contact-info">
+                        <div class="f-3">{{selectedContact.fullName}}</div>
+                        <div class="v-center f-1 font-weight-bold c-blue c-pointer">
+                            {{selectedContact.cell_phone | phone_format}}
+                            <i class="d-block i-icon i-triangle-down bgc-dark ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="v-center justify-content-center c-pointer show-list" (click)="showFileList = !showFileList">
+                    <i class="d-block i-icon i-list bgc-dark"></i>
+                </div>
+            </div>
+            <div class="px-3 py-2 border-bottom select-template">
+                <div class="v-center f-3 font-weight-bold c-blue c-pointer">
+                    Insert template
+                    <i class="d-block i-icon i-triangle-down bgc-blue ml-2"></i>
+                </div>
+            </div>
+            <div class="p-3 border-bottom message-list">
+                <div class="message mt-3" *ngFor="let message of messages">
+                    {{message}}
+                </div>
+            </div>
+            <div class="px-4 py-3 message-action">
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Message"
+                        [ngModel]="messageText"
+                    >
+                </div>
+                <div class="v-center justify-content-between">
+                    <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue px-3 py-2 mr-2 material-button" (click)="openMaterialsDlg()">
+                        <i class="d-block i-icon i-material bgc-blue"></i>
+                        <span class="f-3 font-weight-bold c-blue ml-1 mr-3">Material</span>
+                        <i class="d-block i-icon i-plus bgc-blue ml-auto"></i>
+                    </button>
+                    <button class="btn btn-blue f-6 font-weight-bold">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="file-list" [class.show]="showFileList">
+            <div class="v-center border-bottom p-3 file-list-header">
+                <div class="f-5 fw-600 ml-auto">Files</div>
+                <button type="button" class="v-center border-0 bgc-trans ml-auto" (click)="showFileList = false">
+                    <i class="i-icon i-close bgc-dark ml-1" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="p-3 files">
+                <div class="file rounded mb-3">
+                    <div class="thumbnail">
+                        <img src="./assets/img/video_thumb.jpg">
+                    </div>
+                    <div class="p-2">
+                        <div class="f-1 font-weight-bold">
+                            eXp Realty eXplained in 9 Minutes
+                        </div>
+                        <div class="f-1 font-weight-bold op-40 mt-2">
+                            02:08PM 12.09
+                        </div>
+                        <div class="d-inline-block f-1 font-weight-bold bgc-blue c-white rounded px-1 mt-3">
+                            WATCHED 80%
+                        </div>
+                    </div>
+                </div>
+                <div class="file rounded">
+                    <div class="thumbnail">
+                        <img src="./assets/img/video_thumb.jpg">
+                    </div>
+                    <div class="p-2">
+                        <div class="f-1 font-weight-bold">
+                            eXp Realty eXplained in 9 Minutes
+                        </div>
+                        <div class="f-1 font-weight-bold op-40 mt-2">
+                            02:08PM 12.09
+                        </div>
+                        <div class="d-inline-block f-1 font-weight-bold bgc-blue c-white rounded px-1 mt-3">
+                            WATCHED 80%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
