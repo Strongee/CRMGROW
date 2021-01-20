@@ -10,12 +10,13 @@ import { AppointmentService } from 'src/app/services/appointment.service';
 import { OverlayService } from 'src/app/services/overlay.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { UserService } from 'src/app/services/user.service';
 import { TabItem } from 'src/app/utils/data.types';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-calendar',
@@ -46,10 +47,12 @@ export class CalendarComponent implements OnInit {
     private appointmentService: AppointmentService,
     private overlayService: OverlayService,
     private userService: UserService,
-    private router: ActivatedRoute,
+    private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
     private changeDetectorRef: ChangeDetectorRef,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -57,34 +60,42 @@ export class CalendarComponent implements OnInit {
       this.user = profile;
     });
     this.queryParamSubscription && this.queryParamSubscription.unsubscribe();
-    this.queryParamSubscription = this.router.queryParams.subscribe(
-      (params) => {
-        if (params['code']) {
-          const action = this.router.snapshot.params['action'];
-          if (action == 'outlook') {
-            this.userService
-              .authorizeOutlookCalendar(params['code'])
-              .subscribe((res) => {
-                console.log('###', res);
-              });
-          }
-          if (action == 'google') {
-            this.userService
-              .authorizeGoogleCalendar(params['code'])
-              .subscribe((res) => {
-                console.log('###', res);
-              });
-          }
+    this.queryParamSubscription = this.route.queryParams.subscribe((params) => {
+      if (params['code']) {
+        const action = this.route.snapshot.params['action'];
+        if (action == 'outlook') {
+          this.userService
+            .authorizeOutlookCalendar(params['code'])
+            .subscribe((res) => {
+              if (res['status']) {
+                this.toast.success(
+                  'Your Outlook Calendar is connected successfully.'
+                );
+                this.router.navigate(['/profile/integration']);
+              }
+            });
+        }
+        if (action == 'google') {
+          this.userService
+            .authorizeGoogleCalendar(params['code'])
+            .subscribe((res) => {
+              if (res['status']) {
+                this.toast.success(
+                  'Your Google Calendar is connected successfully.'
+                );
+                this.router.navigate(['/profile/integration']);
+              }
+            });
         }
       }
-    );
+    });
     let mode, year, month, day;
-    mode = this.router.snapshot.params['mode'];
+    mode = this.route.snapshot.params['mode'];
     if (mode) {
       this.view = mode;
-      year = this.router.snapshot.params['year'];
-      month = this.router.snapshot.params['month'];
-      day = this.router.snapshot.params['day'];
+      year = this.route.snapshot.params['year'];
+      month = this.route.snapshot.params['month'];
+      day = this.route.snapshot.params['day'];
       this.viewDate.setFullYear(year);
       this.viewDate.setMonth(month - 1);
       this.viewDate.setDate(day);
