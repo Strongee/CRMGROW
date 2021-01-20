@@ -13,62 +13,103 @@
       <div class="updating-status" *ngIf="(automationService.loading$ | async) === STATUS.REQUEST">
         LOADING
       </div>
-      <table class="table automation-table">
-        <thead>
-          <th class="title">Title</th>
-          <th class="auth">Owner</th>
-          <th class="action-count">Actions</th>
-          <th class="contacts">Contacts</th>
-          <th class="created">Created</th>
-          <th class="actions"></th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let automation of automationService.automations$ | async | paginate: {itemsPerPage: 10, currentPage: page, id: 'automationTable', total: (automationService.automations$ | async).length}">
-            <td class="title">
-              <div class="f-3 font-weight-bold">{{automation.title}}</div>
-            </td>
-            <td class="auth">
-              <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === userId" [class.shared]="automation.role === 'team' && automation.user !== userId"></div>
-            </td>
-            <td class="action-count">
-              <div class="f-3">{{automation.automations && automation.automations.length}}</div>
-            </td>
-            <td class="contacts">
-              <div class="f-3">{{automation.contacts.length}}</div>
-            </td>
-            <td class="created">
-              <div class="f-3">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
-            </td>
-            <td class="actions">
-              <div class="v-center justify-content-end">
-                <button type="button" class="btn btn-white f-3 font-weight-bold p-1" (click)="assignAutomation($event, automation)">
-                  Assign
-                </button>
-                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
-                  <div class="icon-button v-center justify-content-center ml-2" (click)="openAutomation($event, automation)">
-                    <i class="i-icon bgc-black i-edit"></i>
-                  </div>
-                </ng-container>
-                <ng-template #noneEditable>
-                  <div class="icon-button v-center justify-content-center ml-2">
-                    <i class="i-icon bgc-white i-edit"></i>
-                  </div>
-                </ng-template>
+      <table
+        mat-table
+        class="table automation-table" multiTemplateDataRows
+        [dataSource]="automationService.automations$ | async | paginate: {itemsPerPage: 10, currentPage: page, id: 'automationTable', total: (automationService.automations$ | async).length}">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef class="title">Title</th>
+          <td mat-cell *matCellDef="let automation" class="title">
+            <div class="f-3 font-weight-bold">{{automation.title}}</div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="owner">
+          <th mat-header-cell *matHeaderCellDef class="auth">Owner</th>
+          <td mat-cell *matCellDef="let automation" class="auth">
+            <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === userId" [class.shared]="automation.role === 'team' && automation.user !== userId"></div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action-count">
+          <th mat-header-cell *matHeaderCellDef class="action-count">Actions</th>
+          <td mat-cell *matCellDef="let automation" class="action-count">
+            <div class="f-3">{{automation.automations && automation.automations.length}}</div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="contacts">
+          <th mat-header-cell *matHeaderCellDef class="contacts">Contacts</th>
+          <td mat-cell *matCellDef="let automation" class="contacts">
+            <div class="f-3">{{automation.contacts.length}}</div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="created">
+          <th mat-header-cell *matHeaderCellDef class="created">Title</th>
+          <td mat-cell *matCellDef="let automation" class="created">
+            <div class="f-3">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions"></th>
+          <td mat-cell *matCellDef="let automation" class="title">
+            <div class="v-center justify-content-end">
+              <button type="button" class="btn btn-white f-3 font-weight-bold p-1" (click)="assignAutomation($event, automation)">
+                Assign
+              </button>
+              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
+                <div class="icon-button v-center justify-content-center ml-2" (click)="openAutomation($event, automation)">
+                  <i class="i-icon bgc-black i-edit"></i>
+                </div>
+              </ng-container>
+              <ng-template #noneEditable>
                 <div class="icon-button v-center justify-content-center ml-2">
-                  <i class="i-icon bgc-black sm i-triangle-up"></i>
+                  <i class="i-icon bgc-white i-edit"></i>
                 </div>
-                <div class="icon-button v-center justify-content-center ml-2" (click)="duplicate($event, automation)">
-                  <i class="i-icon bgc-black i-duplicate"></i>
-                </div>
-                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
-                  <div class="icon-button v-center justify-content-center ml-2" (click)="deleteAutomation($event, automation)">
-                    <i class="i-icon bgc-black i-trash"></i>
-                  </div>
-                </ng-container>
+              </ng-template>
+              <div class="icon-button v-center justify-content-center ml-2">
+                <i class="i-icon bgc-black sm i-triangle-up" [class.disabled]="!automation.contacts.length" (click)="expandElement(automation)"></i>
               </div>
-            </td>
-          </tr>
-        </tbody>
+              <div class="icon-button v-center justify-content-center ml-2" (click)="duplicate($event, automation)">
+                <i class="i-icon bgc-black i-duplicate"></i>
+              </div>
+              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
+                <div class="icon-button v-center justify-content-center ml-2" (click)="deleteAutomation($event, automation)">
+                  <i class="i-icon bgc-black i-trash"></i>
+                </div>
+              </ng-container>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="DISPLAY_COLUMNS.length">
+            <div class="automation-detail"
+                  [@detailExpand]="element._id == selectedAutomation ? 'expanded' : 'collapsed'">
+              <ng-container *ngIf="detailLoading; else contactsList">
+                <div class="loader"></div>
+                <div class="text-center f-8 font-weight-bold">
+                  Loading the assigned contacts
+                </div>
+              </ng-container>
+              <ng-template #contactsList>
+                <h5 class="font-weight-bold border-bottom pb-2">Assigned Contacts</h5>
+                <div class="chip d-flex p-1 contact-chip c-pointer" *ngFor="let contact of contacts" (click)="openContact(contact)">
+                  <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
+                  <div class="info">
+                    <div class="f-5 font-weight-bold">{{contact.fullName}}</div>
+                    <div class="f-2">{{contact.email}}</div>
+                    <div class="f-2">{{contact.cell_phone}}</div>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+        <tr mat-row *matRowDef="let element; columns: DISPLAY_COLUMNS;"
+            class="example-element-row"
+            [class.example-expanded-row]="selectedAutomation === element._id">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="automation-detail-row"></tr>
       </table>
       <div class="d-flex justify-content-center align-items-center mt-4">
         <div class="ml-3 pagination-wrapper">
@@ -99,3 +140,8 @@
     </ng-template>
   </div>
 </div>
+<mat-drawer-container [hasBackdrop]="true">
+  <mat-drawer #drawer position="end">
+    <app-automation-status (onClose)="drawer.close();" #detailPanel></app-automation-status>
+  </mat-drawer>
+</mat-drawer-container>

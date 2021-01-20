@@ -610,8 +610,9 @@ export class ContactComponent implements OnInit {
   showFullAutomation(): void {
     this.dialog.open(AutomationShowFullComponent, {
       position: { top: '100px' },
-      width: '100vw',
+      width: '98vw',
       maxWidth: '700px',
+      height: 'calc(65vh + 70px)',
       data: {
         id: this.contact.automation._id,
         automations: this.contact.time_lines

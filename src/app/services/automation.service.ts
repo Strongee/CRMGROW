@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { AUTOMATION } from '../constants/api.constant';
 import { STATUS } from '../constants/variable.constants';
 import { Automation } from '../models/automation.model';
+import { Contact } from '../models/contact.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 
@@ -78,6 +79,24 @@ export class AutomationService extends HttpService {
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('GET AUTOMATION STATUS', []))
+      );
+  }
+  getAssignedContacts(id: string): Observable<Contact[]> {
+    return this.httpClient.get(this.server + AUTOMATION.CONTACTS + id).pipe(
+      map((res) =>
+        (res['data'] || []).map((e) => new Contact().deserialize(e))
+      ),
+      catchError(this.handleError('GET AUTOMATION STATUS', []))
+    );
+  }
+  getContactDetail(contact: string): Observable<any> {
+    return this.httpClient
+      .post(this.server + AUTOMATION.CONTACT_DETAIL, {
+        contact
+      })
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('GET CONTACT STATUS DETAIL', null))
       );
   }
   delete(id: string): Observable<Automation[]> {

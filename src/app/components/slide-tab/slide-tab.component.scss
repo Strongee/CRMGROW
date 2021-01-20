@@ -86,3 +86,26 @@
     justify-content: center;
   }
 }
+
+
+:host ::ng-deep {
+  .mat-tab-label {
+    height: 40px;
+    padding: 0px 12px;
+    min-width: unset;
+    font-size: 16px;
+
+    &.mat-tab-label-active {
+      color: blue;
+      font-weight: 700;
+    }
+
+    @media screen and (max-width: 1280px) and (min-width: 1200px) {
+      padding: 0px 10px;
+      font-size: 14px;
+    }
+  }
+  .mat-ink-bar {
+    background-color: blue!important;
+  }
+}

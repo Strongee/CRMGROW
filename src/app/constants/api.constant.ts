@@ -179,6 +179,8 @@ export const AUTOMATION = {
   LOAD_PAGE: 'automation/list/',
   LOAD_ALL: 'automation/',
   DETAIL: 'automation/detail/',
+  CONTACTS: 'automation/assigned-contacts/',
+  CONTACT_DETAIL: 'automation/contact-detail',
   DELETE: 'automation/',
   READ: 'automation/',
   UPDATE: 'automation/',

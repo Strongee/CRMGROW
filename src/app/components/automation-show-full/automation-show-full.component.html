@@ -4,7 +4,7 @@
         <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
     </button>
 </div>
-<mat-dialog-content class="mt-3 p-0 m-0">
+<mat-dialog-content class="mt-1 p-0">
     <div class="card-body">
         <div class="flows-container" #wrapper>
           <div class="zoom-button-wrapper">
@@ -86,7 +86,7 @@
               </ng-template>
               <ng-template #linkTemplate let-link>
                 <svg:g class="edge">
-                  <svg:path class="line {{link.status}}" stroke="#aaa" stroke-width="1" marker-start="url(#arrow)">
+                  <svg:path class="line {{link.status}}" stroke="#aaa" stroke-width="2" marker-start="url(#arrow)">
                   </svg:path>
                 </svg:g>
                 <svg:g class="label" *ngIf="link.hasLabel && link.points && link.points[0]" [attr.transform]="'translate(' + (link.points[0].x - 40) + ',' + (link.points[0].y + 40) + ')'">
