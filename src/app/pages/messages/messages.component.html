@@ -7,7 +7,7 @@
         </button>
     </div>
     <div class="d-flex message-container position-relative">
-        <div class="contact-list">
+        <div class="contact-list" [class.hide]="showMessage">
             <div class="d-flex p-2 c-pointer contact" [ngClass]="{'selected': contact._id == selectedContact._id}" *ngFor="let contact of contacts" (click)="selectContact(contact)">
                 <div class="contact-avatar f-3 font-weight-bold mr-2">{{contact.avatarName}}</div>
                 <div class="contact-name">
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="message-box">
+        <div class="message-box" [class.show]="showMessage">
             <div class="v-center justify-content-between border-bottom p-3 message-box-header">
                 <div class="v-center">
                     <div class="contact-avatar f-3 font-weight-bold mr-2">

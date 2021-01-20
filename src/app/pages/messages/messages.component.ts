@@ -44,6 +44,7 @@ export class MessagesComponent implements OnInit {
   ];
   messageText = '';
   showFileList = false;
+  showMessage = false;
 
   constructor() {}
 
@@ -53,6 +54,7 @@ export class MessagesComponent implements OnInit {
 
   selectContact(contact: any): void {
     this.selectedContact = { ...this.selectedContact, ...contact };
+    this.showMessage = true;
   }
 
   openMaterialsDlg(): void {}
