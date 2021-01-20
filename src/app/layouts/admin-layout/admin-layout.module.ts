@@ -64,7 +64,6 @@ import { EmailEditorModule } from 'angular-email-editor';
 import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
 import { NotificationsListComponent } from '../../pages/notifications-list/notifications-list.component';
 import { SmsLimitsComponent } from '../../pages/sms-limits/sms-limits.component';
-import { MessagesComponent } from '../../pages/messages/messages.component';
 import { DealsSettingComponent } from '../../pages/deals-setting/deals-setting.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MessagesComponent } from '../../pages/messages/messages.component';
@@ -122,7 +121,6 @@ import { MessagesComponent } from '../../pages/messages/messages.component';
     NotificationsListComponent,
     SmsLimitsComponent,
     DealsSettingComponent,
-    MessagesComponent,
     MessagesComponent,
     DealsSettingComponent
   ],
