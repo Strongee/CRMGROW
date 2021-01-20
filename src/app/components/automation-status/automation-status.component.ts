@@ -1,32 +1,28 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
-  HostListener,
-  Inject,
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef
+  Output,
+  EventEmitter
 } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ACTION_CAT } from 'src/app/constants/variable.constants';
 import { DagreNodesOnlyLayout } from '../../variables/customDagreNodesOnly';
 import { stepRound } from '../../variables/customStepCurved';
-import { AutomationService } from 'src/app/services/automation.service';
-import { OverlayService } from 'src/app/services/overlay.service';
-import { PageCanDeactivate } from 'src/app/variables/abstractors';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Layout } from '@swimlane/ngx-graph';
+import { AutomationService } from 'src/app/services/automation.service';
 
 @Component({
-  selector: 'app-automation-show-full',
-  templateUrl: './automation-show-full.component.html',
-  styleUrls: ['./automation-show-full.component.scss']
+  selector: 'app-automation-status',
+  templateUrl: './automation-status.component.html',
+  styleUrls: ['./automation-status.component.scss']
 })
-export class AutomationShowFullComponent
-  extends PageCanDeactivate
-  implements OnInit, OnDestroy, AfterViewInit {
+export class AutomationStatusComponent implements OnInit, OnDestroy {
+  @Output() onClose = new EventEmitter();
+  loading = false;
+  loadSubscription: Subscription;
   layoutSettings = {
     orientation: 'TB'
   };
@@ -49,60 +45,30 @@ export class AutomationShowFullComponent
   offsetX = 0;
   offsetY = 0;
 
-  constructor(
-    private dialogRef: MatDialogRef<AutomationShowFullComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private automationService: AutomationService,
-    private overlayService: OverlayService,
-    private viewContainerRef: ViewContainerRef
-  ) {
-    super();
+  constructor(private automationService: AutomationService) {}
+
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
   }
 
-  ngOnInit(): void {
-    const id = this.data.id;
-    this.loadData(id);
-    window['confirmReload'] = true;
-
-    document.body.classList.add('overflow-hidden');
+  loadStatus(contact: string): void {
     if (window.innerWidth < 576) {
       this.zoomLevel = 0.6;
     }
-  }
 
-  ngOnDestroy(): void {
-    // this.storeData();
-    window['confirmReload'] = false;
-
-    document.body.classList.remove('overflow-hidden');
-  }
-
-  ngAfterViewInit(): void {
-    this.onResize(null);
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event): void {
-    this.wrapperWidth = this.wrapper.nativeElement.offsetWidth;
-  }
-
-  loadData(id: string): void {
-    this.automationService.get(id).subscribe(
-      (res) => {
-        this.automation = res;
-        console.log('$$$', this.automation);
-        const actions = res['automations'];
-        actions.forEach((action) => {
-          this.data.automations.forEach((automation) => {
-            if (action.id == automation.ref) {
-              action.status = automation.status;
-            }
-          });
-        });
-        this.composeGraph(actions);
-      },
-      (err) => {}
-    );
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.automationService.getContactDetail(contact).subscribe((res) => {
+      this.loading = false;
+      const actions = res;
+      actions.forEach((e) => {
+        e.id = e.ref;
+        e.parent = e.parent_ref;
+      });
+      this.composeGraph(actions);
+    });
   }
 
   composeGraph(actions: any): void {
@@ -344,24 +310,11 @@ export class AutomationShowFullComponent
     this.identity = maxId;
     this.nodes = [...nodes];
     this.edges = [...edges];
-    console.log('!@#', this.edges);
   }
 
   genIndex(id: string): any {
     const idStr = (id + '').replace('a_', '');
     return parseInt(idStr);
-  }
-
-  easyView(node: any, origin: any, content: any): void {
-    this.overlayService.open(
-      origin,
-      content,
-      this.viewContainerRef,
-      'automation',
-      {
-        data: node
-      }
-    );
   }
 
   zoomIn(): void {
@@ -378,6 +331,10 @@ export class AutomationShowFullComponent
         this.autoZoom = true;
       }
     }
+  }
+
+  close(): void {
+    this.onClose.emit();
   }
 
   ICONS = {

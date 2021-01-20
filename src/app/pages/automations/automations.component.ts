@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { AutomationService } from 'src/app/services/automation.service';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
@@ -9,18 +16,51 @@ import { Location } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 import { Automation } from 'src/app/models/automation.model';
+import { Contact } from 'src/app/models/contact.model';
+import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-automations',
   templateUrl: './automations.component.html',
-  styleUrls: ['./automations.component.scss']
+  styleUrls: ['./automations.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state(
+        'collapsed',
+        style({ height: '0px', minHeight: '0', display: 'none' })
+      ),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      )
+    ])
+  ]
 })
 export class AutomationsComponent implements OnInit {
+  DISPLAY_COLUMNS = [
+    'title',
+    'owner',
+    'action-count',
+    'contacts',
+    'created',
+    'actions'
+  ];
   STATUS = STATUS;
 
   userId = '';
   page = 1;
   deleting = false;
+
+  selectedAutomation: string = '';
+
+  detailLoading = false;
+  detailLoadSubscription: Subscription;
+  contacts: Contact[] = [];
+
+  @ViewChild('drawer') drawer: MatDrawer;
+  @ViewChild('detailPanel') detailPanel: AutomationStatusComponent;
 
   constructor(
     public automationService: AutomationService,
@@ -79,7 +119,6 @@ export class AutomationsComponent implements OnInit {
         this.automationService.delete(automation._id).subscribe(
           (response) => {
             this.deleting = false;
-            console.log("delete automation ================>");
             this.automationService.reload();
           },
           (err) => {
@@ -110,5 +149,35 @@ export class AutomationsComponent implements OnInit {
         if (res) {
         }
       });
+  }
+
+  expandElement(element: Automation): void {
+    if (this.selectedAutomation === element._id) {
+      this.selectedAutomation = null;
+    } else {
+      this.selectedAutomation = element._id;
+      if (element['contacts'].length) {
+        this.detailLoad();
+      }
+    }
+  }
+
+  detailLoad(): void {
+    this.detailLoading = true;
+    this.detailLoadSubscription && this.detailLoadSubscription.unsubscribe();
+    this.detailLoadSubscription = this.automationService
+      .getAssignedContacts(this.selectedAutomation)
+      .subscribe((contacts) => {
+        this.detailLoading = false;
+        if (contacts) {
+          this.contacts = contacts;
+        }
+      });
+  }
+
+  openContact(contact: Contact): void {
+    console.log('open contact', contact);
+    this.detailPanel.loadStatus(contact._id);
+    this.drawer.open();
   }
 }
