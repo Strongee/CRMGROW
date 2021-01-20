@@ -50,9 +50,9 @@ export class IntegrationComponent implements OnInit {
       this.userService.requestCalendarSyncUrl(type).subscribe(
         (res) => {
           console.log('###', res);
-          // if (res['status']) {
-          //   location.href = res['data'];
-          // }
+          if (res['status']) {
+            location.href = res['data'];
+          }
           this.connectingCalendar = '';
         },
         (err) => {
