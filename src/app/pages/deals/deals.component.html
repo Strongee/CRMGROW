@@ -38,55 +38,57 @@
                     (cdkDropListDropped)="drop($event, dealStage._id)"
                 >
                     <div
-                        class="deal mt-3 mr-3 p-3 c-pointer position-relative"
+                        class="deal mt-3 mr-3 p-3 c-pointer"
                         *ngFor="let deal of dealStage.deals" cdkDrag
                         (click)="dealDetail(deal._id)"
                     >
-                        <div class="v-center justify-content-between">
-                            <div class="f-6 font-weight-bold">
-                                {{ deal.title }}
+                        <div class="deal-detail position-relative">
+                            <div class="v-center justify-content-between">
+                                <div class="f-6 font-weight-bold">
+                                    {{ deal.title }}
+                                </div>
+                                <!-- <div *ngIf="deal.title == 'Real Estate 1'">
+                                    <img src="/assets/img/status_green.svg" alt="">
+                                </div>
+                                <div *ngIf="deal.title == 'Real Estate 2'">
+                                    <img src="/assets/img/status_red.svg" alt="">
+                                </div>
+                                <div *ngIf="deal.title == 'Real Estate 3'">
+                                    <img src="/assets/img/status_yellow.svg" alt="">
+                                </div>
+                                <div *ngIf="deal.title == 'Real Estate 4'">
+                                    <img src="/assets/img/status_gray.svg" alt="">
+                                </div>
+                                <div *ngIf="deal.title != 'Real Estate 1' && deal.title != 'Real Estate 2' && deal.title != 'Real Estate 3' && deal.title != 'Real Estate 4'">
+                                    <img src="/assets/img/status_gray.svg" alt="">
+                                </div> -->
                             </div>
-                            <!-- <div *ngIf="deal.title == 'Real Estate 1'">
-                                <img src="/assets/img/status_green.svg" alt="">
-                            </div>
-                            <div *ngIf="deal.title == 'Real Estate 2'">
-                                <img src="/assets/img/status_red.svg" alt="">
-                            </div>
-                            <div *ngIf="deal.title == 'Real Estate 3'">
-                                <img src="/assets/img/status_yellow.svg" alt="">
-                            </div>
-                            <div *ngIf="deal.title == 'Real Estate 4'">
-                                <img src="/assets/img/status_gray.svg" alt="">
-                            </div>
-                            <div *ngIf="deal.title != 'Real Estate 1' && deal.title != 'Real Estate 2' && deal.title != 'Real Estate 3' && deal.title != 'Real Estate 4'">
-                                <img src="/assets/img/status_gray.svg" alt="">
-                            </div> -->
-                        </div>
-                        <div class="v-center justify-content-between mt-2 contacts-info">
-                            <div class="v-center">
-                                <div class="avatar"></div>
-                                <div class="ml-2 f-3">
-                                    {{deal.contacts[0]?.first_name}} {{deal.contacts[0]?.last_name}}
+                            <div class="v-center justify-content-between mt-2 contacts-info">
+                                <div class="v-center">
+                                    <div class="avatar"></div>
+                                    <div class="ml-2 f-3">
+                                        {{deal.contacts[0]?.first_name}} {{deal.contacts[0]?.last_name}}
+                                    </div>
+                                </div>
+                                <div class="v-center" *ngIf="deal.contacts.length > 1">
+                                    <i class="d-block i-icon i-plus bgc-dark mr-1"></i>
+                                    <div class="f-3">{{deal.contacts.length - 1}}</div>
                                 </div>
                             </div>
-                            <div class="v-center" *ngIf="deal.contacts.length > 1">
-                                <i class="d-block i-icon i-plus bgc-dark mr-1"></i>
-                                <div class="f-3">{{deal.contacts.length - 1}}</div>
+                            <div class="f-3 op-64 mt-2">
+                                ${{deal.value}}
                             </div>
-                        </div>
-                        <div class="f-3 op-64 mt-2">
-                            ${{deal.value}}
-                        </div>
-                        <div ngbDropdown class="action-more c-pointer">
-                            <i ngbDropdownToggle class="d-block i-icon i-menu-more bgc-dark"></i>
-                            <div ngbDropdownMenu class="light action-menu">
-                                <button class="border-0 c-dark dropdown-item">
-                                    <span class="ml-1 f-3 font-weight-bold">Edit deal</span>
-                                </button>
-                                <hr class="my-1">
-                                <button class="border-0 c-dark dropdown-item">
-                                    <span class="ml-1 f-3 font-weight-bold c-red">Delete deal</span>
-                                </button>
+                            <div class="action-more c-pointer">
+                                <i class="d-block i-icon i-menu-more bgc-dark"></i>
+                                <!-- <div ngbDropdownMenu class="light action-menu">
+                                    <button class="border-0 c-dark dropdown-item">
+                                        <span class="ml-1 f-3 font-weight-bold">Edit deal</span>
+                                    </button>
+                                    <hr class="my-1">
+                                    <button class="border-0 c-dark dropdown-item">
+                                        <span class="ml-1 f-3 font-weight-bold c-red">Delete deal</span>
+                                    </button>
+                                </div> -->
                             </div>
                         </div>
                     </div>

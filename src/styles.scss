@@ -1828,6 +1828,18 @@ body {
   text-align: center;
 }
 
+.ql-tooltip[data-mode="link"] {
+  left: 0px !important;
+  top: -85px !important;
+  margin-top: 0 !important;
+
+  @media screen and (max-width: 400px) {
+    &::before {
+      display: none;
+    }
+  }
+}
+
 
 
 // Browser Matching
