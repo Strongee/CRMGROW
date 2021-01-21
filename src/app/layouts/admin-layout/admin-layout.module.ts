@@ -120,7 +120,6 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     NotificationsListComponent,
     SmsLimitsComponent,
     DealsSettingComponent,
-    MessagesComponent,
     DealsSettingComponent
   ],
   imports: [
