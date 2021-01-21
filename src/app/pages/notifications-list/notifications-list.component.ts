@@ -30,7 +30,11 @@ export class NotificationsListComponent implements OnInit {
         if (res['notifications'] && res['notifications'].length) {
           this.notifications = res['notifications'];
         }
-        this.total = res['total'];
+        if (res['notifications'] && res['notifications'].length === 0) {
+          this.total = 0;
+        } else {
+          this.total = res['total'];
+        }
       },
       (err) => {
         this.loading = false;

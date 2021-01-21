@@ -19,6 +19,7 @@ export const USER = {
   UPDATE_PROFILE: 'user/me',
   UPDATE_PAYMENT: 'payment',
   UPDATE_PASSWORD: 'user/new-password',
+  CREATE_PASSWORD: 'user/create-password',
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
   CALENDAR_SYNC_GMAIL: 'user/sync-google-calendar',

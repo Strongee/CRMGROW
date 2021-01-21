@@ -88,6 +88,7 @@ export class User implements Deserializable {
     link?: string;
     paypal?: string;
   };
+  hasPassword?: boolean;
 
   deserialize(input: any): this {
     return Object.assign(this, input);

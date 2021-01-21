@@ -213,6 +213,17 @@ export class UserService extends HttpService {
       JSON.stringify(data)
     );
   }
+  public createPassword(password: string): Observable<boolean> {
+    const data = {
+      password: password
+    };
+    return this.httpClient
+      .post(this.server + USER.CREATE_PASSWORD, JSON.stringify(data))
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('CREATE PASSWORD', false))
+      );
+  }
   /**
    * Load the User Payment Informationi
    * @param id : Payment Information Id

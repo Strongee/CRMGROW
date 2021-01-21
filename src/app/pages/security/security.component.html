@@ -1,5 +1,5 @@
 <form #profileForm="ngForm" (ngSubmit)="profileForm.form.valid ? saveChange() : false" style="max-width: 300px;">
-  <div class="form-group mt-2 mt-sm-0" [ngClass]="{invalid: profileForm.submitted && oldPassword.invalid && (oldPassword.dirty || oldPassword.touched || profileForm.submitted)}">
+  <div class="form-group mt-2 mt-sm-0" [ngClass]="{invalid: profileForm.submitted && oldPassword.invalid && (oldPassword.dirty || oldPassword.touched || profileForm.submitted)}" *ngIf="(userService.profile$ | async).hasPassword">
     <div class="d-flex">
       <label for="oldPassword" class="mr-auto">current password</label>
       <span class="error" *ngIf="oldPassword.errors">
@@ -35,6 +35,13 @@
     <input type="password" class="form-control" [(ngModel)]="confirm_password" id="confirmPassword" name="confirmPassword" #confirmPassword="ngModel" required minlength="8">
   </div>
   <div class="row">
-    <button type="submit" class="btn btn-primary font-weight-bold ml-auto mr-2 mt-4" [class.loading]="saving">Save changes</button>
+    <button type="submit" class="btn btn-primary font-weight-bold ml-auto mr-2 mt-4" [class.loading]="saving">
+      <ng-container *ngIf="(userService.profile$ | async).hasPassword; else createTemplate">
+        Save changes
+      </ng-container>
+      <ng-template #createTemplate>
+        Create Password
+      </ng-template>
+    </button>
   </div>
 </form>
