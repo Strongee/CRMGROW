@@ -15,6 +15,9 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
 import { DealEditComponent } from 'src/app/components/deal-edit/deal-edit.component';
 import { DetailActivity } from '../../models/activityDetail.model';
 import { Subscription } from 'rxjs';
+import { NoteEditComponent } from '../../components/note-edit/note-edit.component';
+import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { NoteService } from '../../services/note.service';
 
 @Component({
   selector: 'app-deals-detail',
@@ -40,11 +43,9 @@ export class DealsDetailComponent implements OnInit {
     { icon: '', label: 'Texts', id: 'texts' },
     { icon: '', label: 'Appointments', id: 'appointments' },
     { icon: '', label: 'Group Calls', id: 'group_calls' },
-    { icon: '', label: 'Tasks', id: 'follow_ups' },
-    { icon: '', label: 'Deals', id: 'deals' }
+    { icon: '', label: 'Tasks', id: 'follow_ups' }
   ];
   action: TabItem = this.tabs[0];
-  mainTimelines: DetailActivity[] = [];
   noteActivity = 0;
   emailActivity = 0;
   textActivity = 0;
@@ -58,7 +59,7 @@ export class DealsDetailComponent implements OnInit {
   appointments = [];
   groupCalls = [];
   tasks = [];
-  deals = [];
+  activities = [];
 
   activitySubscription: Subscription;
   noteSubscription: Subscription;
@@ -74,19 +75,20 @@ export class DealsDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public dealsService: DealsService,
+    private noteService: NoteService,
     private storeService: StoreService
   ) {
     this.dealsService.getStage(true);
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
+    const id = this.route.snapshot.params.id;
     if (id) {
       this.dealId = id;
       this.dealsService.getDeal(id).subscribe((res) => {
         if (res) {
           this.deal = res;
-          this.deal.contacts = (res['contacts'] || []).map((e) =>
+          this.deal.contacts = (res.contacts || []).map((e) =>
             new Contact().deserialize(e)
           );
           if (this.deal.main.deal_stage) {
@@ -94,7 +96,9 @@ export class DealsDetailComponent implements OnInit {
           }
         }
       });
-      this.loadNotes();
+      // this.loadNotes();
+      this.loadActivity();
+      // this.loadEmails();
     }
   }
 
@@ -105,7 +109,6 @@ export class DealsDetailComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.notes = res;
-          console.log("deal notes ==============>", this.notes);
         }
       });
   }
@@ -116,8 +119,7 @@ export class DealsDetailComponent implements OnInit {
       .getEmails({ deal: this.dealId })
       .subscribe((res) => {
         if (res) {
-          this.notes = res;
-          console.log("deal emails ==============>", this.notes);
+          this.emails = res;
         }
       });
   }
@@ -128,8 +130,14 @@ export class DealsDetailComponent implements OnInit {
       .getActivity({ deal: this.dealId })
       .subscribe((res) => {
         if (res) {
-          this.notes = res;
-          console.log("deal emails ==============>", this.notes);
+          this.activities = res;
+          for (const activity of this.activities) {
+            if (activity.type === 'notes') {
+              this.noteActivity++;
+            } else if (activity.type === 'email') {
+              this.emailActivity++;
+            }
+          }
         }
       });
   }
@@ -160,7 +168,8 @@ export class DealsDetailComponent implements OnInit {
       maxWidth: '600px',
       disableClose: true,
       data: {
-        deal: this.deal
+        type: 'deal',
+        dealId: this.dealId
       }
     });
   }
@@ -219,4 +228,82 @@ export class DealsDetailComponent implements OnInit {
   }
 
   deleteDealDlg(): void {}
+
+  showDetail(event: any): void {
+    const target: HTMLElement = event.target as HTMLElement;
+    const parent: HTMLElement = (
+      target.closest('.main-history-item')
+    ) as HTMLElement;
+    if (parent) {
+      parent.classList.add('expanded');
+    }
+  }
+  hideDetail(event: any): void {
+    const target: HTMLElement = event.target as HTMLElement;
+    const parent: HTMLElement = (
+      target.closest('.main-history-item')
+    ) as HTMLElement;
+    if (parent) {
+      parent.classList.remove('expanded');
+    }
+  }
+
+  updateNote(activity: any): void {
+    let contact_name = '';
+    if (this.deal.contacts && this.deal.contacts.length) {
+      contact_name = this.deal.contacts[0].fullName;
+      if (this.deal.contacts.length > 1) {
+        contact_name += ` +${this.deal.contacts.length - 1}`;
+      }
+    }
+
+    this.dialog
+      .open(NoteEditComponent, {
+        width: '98vw',
+        maxWidth: '394px',
+        data: {
+          type: 'deal',
+          note: activity,
+          contact_name
+        }
+      })
+      .afterClosed()
+      .subscribe((note) => {
+        if (note) {
+          activity.activity_detail[0] = note;
+        }
+      });
+  }
+
+  deleteNote(activity: any): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Delete Note',
+          message: 'Are you sure to delete the note?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.noteService
+            .delete(activity.activity_detail[0]._id)
+            .subscribe((res) => {
+              if (res) {
+                const index = this.activities.findIndex(
+                  (item) =>
+                    item.activity_detail[0]._id ===
+                    activity.activity_detail[0]._id
+                );
+                if (index >= 0) {
+                  this.activities[index].activity_detail = null;
+                }
+              }
+            });
+        }
+      });
+  }
 }

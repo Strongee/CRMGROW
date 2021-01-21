@@ -19,7 +19,11 @@ export class NoteEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     if (this.data) {
-      this.note = { ...this.note, ...this.data.note.activity_detail };
+      if (this.data.type === 'deal') {
+        this.note = { ...this.note, ...this.data.note.activity_detail[0] };
+      } else {
+        this.note = { ...this.note, ...this.data.note.activity_detail };
+      }
       this.contact = this.data.contact_name;
     }
   }

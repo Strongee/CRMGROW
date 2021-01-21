@@ -553,8 +553,7 @@ export const DialogSettings = {
     maxWidth: '394px'
   },
   AUTOMATION: {
-    width: '98vw',
-    maxWidth: '394px',
+    maxWidth: '98vw',
     minHeight: '300px'
   },
   ASSISTANT: {
