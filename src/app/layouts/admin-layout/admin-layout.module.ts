@@ -66,7 +66,6 @@ import { NotificationsListComponent } from '../../pages/notifications-list/notif
 import { SmsLimitsComponent } from '../../pages/sms-limits/sms-limits.component';
 import { DealsSettingComponent } from '../../pages/deals-setting/deals-setting.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { MessagesComponent } from '../../pages/messages/messages.component';
 
 @NgModule({
   declarations: [

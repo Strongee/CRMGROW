@@ -258,6 +258,13 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'calendar/:action',
+    component: CalendarComponent,
+    data: {
+      title: 'Calendar'
+    }
+  },
+  {
     path: 'calendar/:mode/:year/:month/:day',
     component: CalendarComponent,
     data: {

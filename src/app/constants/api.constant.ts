@@ -26,6 +26,8 @@ export const USER = {
   CALENDAR_SYNC_OUTLOOK: 'user/sync-outlook-calendar',
   AUTH_GOOGLE: 'user/authorize-gmail',
   AUTH_OUTLOOK: 'user/authorize-outlook',
+  AUTH_GOOGLE_CALENDAR: 'user/authorize-google-calendar',
+  AUTH_OUTLOOK_CALENDAR: 'user/authorize-outlook-calendar',
   ENABLE_DESKTOP_NOTIFICATION: 'user/desktop-notification',
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',
