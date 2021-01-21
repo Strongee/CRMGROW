@@ -309,7 +309,9 @@
     </ng-container>
     <ng-container *ngIf="step == 3">
       <div class="d-flex justify-content-between w-100">
-        <button type="button" class="v-center btn btn-white-blue" (click)="back()">
+        <button type="button" class="v-center btn btn-white-blue"
+            [disabled]="failedData.length"
+            (click)="back()">
           <i class="i-icon i-back sm bgc-blue ml-1" aria-hidden="true"></i>
           <span class="ml-2">Back</span>
         </button>
