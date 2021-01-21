@@ -1026,12 +1026,12 @@ export class UploadContactsComponent implements OnInit {
           delete contact.data.email;
           contact.data.primary_phone = contact.data.cell_phone;
           delete contact.data.cell_phone;
-          const tags = contact.data[tagsKey];
+          const tags = contact.data.tags;
           if (tags) {
             if (Array.isArray(tags)) {
-              contact.data[tagsKey] = tags;
+              contact.data.tags = tags;
             } else {
-              contact.data[tagsKey] = tags.split(',');
+              contact.data.tags = [tags];
             }
           }
         }
@@ -1049,12 +1049,14 @@ export class UploadContactsComponent implements OnInit {
 
         if (!contact.data._id && contact.data.notes) {
           // if (Array.isArray(contact.data.notes)) {
-            contact.data.notes = JSON.parse(contact.data.notes);
+          contact.data.notes = JSON.parse(contact.data.notes);
           // } else {
           //   contact.data.notes = JSON.stringify(contact.data.notes);
           // }
         }
-        const contactIndex = this.contacts.findIndex((item) => item.id === contact.data.id);
+        const contactIndex = this.contacts.findIndex(
+          (item) => item.id === contact.data.id
+        );
         if (contactIndex < 0) {
           this.contacts.push(contact.data);
         }
@@ -1379,7 +1381,15 @@ export class UploadContactsComponent implements OnInit {
   }
 
   back(): void {
-    this.step = this.step - 1;
+    if (this.step === 4) {
+      if (this.sameContacts.length) {
+        this.step--;
+      } else {
+        this.step -= 2;
+      }
+    } else {
+      this.step--;
+    }
   }
 
   fields = [

@@ -138,6 +138,7 @@ export class DealsDetailComponent implements OnInit {
               this.emailActivity++;
             }
           }
+          console.log("activity =============>", this.activities);
         }
       });
   }
@@ -212,7 +213,12 @@ export class DealsDetailComponent implements OnInit {
 
   openTaskDlg(): void {
     this.dialog.open(TaskCreateComponent, {
-      ...DialogSettings.TASK
+      ...DialogSettings.TASK,
+      data: {
+        type: 'deal',
+        contacts: this.deal.contacts,
+        deal: this.dealId
+      }
     });
   }
 

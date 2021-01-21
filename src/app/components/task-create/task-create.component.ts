@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import 'moment-timezone';
 import { UserService } from 'src/app/services/user.service';
 import { DetailActivity } from 'src/app/models/activityDetail.model';
+import { DealsService } from '../../services/deals.service';
 @Component({
   selector: 'app-task-create',
   templateUrl: './task-create.component.html',
@@ -30,13 +31,15 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
 
   saving = false;
   saveSubscription: Subscription;
-
   timezone;
+  type = '';
+  dealId;
 
   constructor(
     private taskService: TaskService,
     private handlerService: HandlerService,
     private userService: UserService,
+    private dealService: DealsService,
     private dialogRef: MatDialogRef<TaskCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -46,9 +49,15 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       month: current.getMonth() + 1,
       day: current.getDate()
     };
-    if (this.data && this.data.contacts) {
+    if (this.data) {
       this.isSelected = true;
-      this.contacts = this.data.contacts;
+      if (this.data.type === 'deal') {
+        this.type = 'deal';
+        this.dealId = this.data.deal;
+      }
+      if (this.data.contacts) {
+        this.contacts = this.data.contacts;
+      }
     }
     this.userService.profile$.subscribe((user) => {
       try {
@@ -91,8 +100,10 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         this.date.day
       )}T${this.time}${this.timezone.zone}`;
     }
-    if (ids.length > 1) {
+
+    if (this.type === 'deal') {
       const data = {
+        deal: this.dealId,
         contacts: ids,
         type: this.task.type,
         content: this.task.content,
@@ -100,34 +111,56 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       };
       this.saving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
-      this.saveSubscription = this.taskService
-        .bulkCreate(data)
+      this.saveSubscription = this.dealService
+        .addFollowUp(data)
         .subscribe((res) => {
           this.saving = false;
           if (res) {
-            this.handlerService.activityAdd$(ids, 'task');
-            this.taskService.reload();
+            console.log('add followup ==============>', res);
             this.dialogRef.close();
           }
         });
     } else {
-      const data = {
-        contact: ids[0],
-        type: this.task.type,
-        content: this.task.content,
-        due_date: due_date
-      };
-      this.saving = true;
-      this.saveSubscription && this.saveSubscription.unsubscribe();
-      this.saveSubscription = this.taskService.create(data).subscribe((res) => {
-        this.saving = false;
-        if (res) {
-          this.handlerService.activityAdd$(ids, 'task');
-          this.taskService.reload();
-          this.handlerService.registerActivity$(res);
-          this.dialogRef.close();
-        }
-      });
+      if (ids.length > 1) {
+        const data = {
+          contacts: ids,
+          type: this.task.type,
+          content: this.task.content,
+          due_date: due_date
+        };
+        this.saving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.taskService
+          .bulkCreate(data)
+          .subscribe((res) => {
+            this.saving = false;
+            if (res) {
+              this.handlerService.activityAdd$(ids, 'task');
+              this.taskService.reload();
+              this.dialogRef.close();
+            }
+          });
+      } else {
+        const data = {
+          contact: ids[0],
+          type: this.task.type,
+          content: this.task.content,
+          due_date: due_date
+        };
+        this.saving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.taskService
+          .create(data)
+          .subscribe((res) => {
+            this.saving = false;
+            if (res) {
+              this.handlerService.activityAdd$(ids, 'task');
+              this.taskService.reload();
+              this.handlerService.registerActivity$(res);
+              this.dialogRef.close();
+            }
+          });
+      }
     }
   }
 }
