@@ -26,13 +26,11 @@ import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 export class CalendarDialogComponent implements OnInit {
   submitted = false;
   due_time = '12:00:00.000';
-  due_date = {
+  selectedDateTime = {
     year: '',
     month: '',
     day: ''
   };
-  selectedDateTime;
-  minDate: any;
   event = {
     title: '',
     due_start: '',
@@ -76,20 +74,26 @@ export class CalendarDialogComponent implements OnInit {
       this.type = 'update';
       if (this.data.event) {
         this.event.title = this.data.event.title;
-        this.due_date.year = this.data.event.start.getFullYear();
-        this.due_date.month = this.data.event.start.getMonth() + 1;
-        this.due_date.day = this.data.event.start.getDate();
-        this.selectedDateTime = moment(
-          this.due_date.year +
+        this.selectedDateTime.year = this.data.event.start
+          .getFullYear()
+          .toString();
+        this.selectedDateTime.month = (
+          this.data.event.start.getMonth() + 1
+        ).toString();
+        this.selectedDateTime.day = this.data.event.start.getDate().toString();
+        const date = moment(
+          this.selectedDateTime.year +
             '-' +
-            this.due_date.month +
+            this.selectedDateTime.month +
             '-' +
-            this.due_date.day
-        ).format('YYYY-MM-DD');
-        const duration = moment(this.selectedDateTime)
+            this.selectedDateTime.day +
+            ' ' +
+            this.due_time
+        ).format();
+        const duration = moment(date)
           .add(this.duration * 60, 'minutes')
           .format();
-        this.event.due_start = this.selectedDateTime;
+        this.event.due_start = date;
         this.event.due_end = duration;
         let hour, minute;
         if (this.data.event.start.getHours().toString().length == 1) {
@@ -151,13 +155,19 @@ export class CalendarDialogComponent implements OnInit {
 
   update(): void {
     this.isLoading = true;
-    this.selectedDateTime = moment(
-      this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
-    ).format('YYYY-MM-DD');
-    const duration = moment(this.selectedDateTime)
+    const date = moment(
+      this.selectedDateTime.year +
+        '-' +
+        this.selectedDateTime.month +
+        '-' +
+        this.selectedDateTime.day +
+        ' ' +
+        this.due_time
+    ).format();
+    const duration = moment(date)
       .add(this.duration * 60, 'minutes')
       .format();
-    this.event.due_start = this.selectedDateTime;
+    this.event.due_start = date;
     this.event.due_end = duration;
     if (this.contacts.length > 0) {
       this.event.contacts.forEach((eventContact) => {
@@ -244,11 +254,11 @@ export class CalendarDialogComponent implements OnInit {
     this.event.contacts = [];
     this.event.guests = [];
     const date = moment(
-      this.due_date.year +
+      this.selectedDateTime.year +
         '-' +
-        this.due_date.month +
+        this.selectedDateTime.month +
         '-' +
-        this.due_date.day +
+        this.selectedDateTime.day +
         ' ' +
         this.due_time
     ).format();
@@ -284,19 +294,6 @@ export class CalendarDialogComponent implements OnInit {
         this.isLoading = false;
       }
     );
-  }
-
-  getDateTime(): any {
-    if (this.due_date.day != '') {
-      return (
-        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
-      );
-    }
-  }
-
-  setDateTime(): void {
-    this.selectedDateTime = moment(this.getDateTime()).format('YYYY-MM-DD');
-    close();
   }
 
   handleAddressChange(evt: any): void {
