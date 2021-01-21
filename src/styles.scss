@@ -1121,6 +1121,7 @@ table {
 }
 .form-avatar {
   width: 26px;
+  min-width: 26px;
   height: 26px;
   color: white;
   text-align: center;
@@ -1809,7 +1810,7 @@ body {
     @media screen and (max-width: 700px) {
       margin-bottom: 15px;
       margin-right: 5px;
-    } 
+    }
     @media screen and (max-width: 610px){
       margin-left: 10px;
       margin-right: 10px;

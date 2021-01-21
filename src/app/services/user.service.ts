@@ -132,6 +132,16 @@ export class UserService extends HttpService {
       this.server + USER.AUTH_GOOGLE + '?code=' + code
     );
   }
+  public authorizeOutlookCalendar(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_OUTLOOK_CALENDAR + '?code=' + code
+    );
+  }
+  public authorizeGoogleCalendar(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.server + USER.AUTH_GOOGLE_CALENDAR + '?code=' + code
+    );
+  }
   public requestResetPassword(email): Observable<any> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -212,6 +222,17 @@ export class UserService extends HttpService {
       this.server + USER.UPDATE_PASSWORD,
       JSON.stringify(data)
     );
+  }
+  public createPassword(password: string): Observable<boolean> {
+    const data = {
+      password: password
+    };
+    return this.httpClient
+      .post(this.server + USER.CREATE_PASSWORD, JSON.stringify(data))
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('CREATE PASSWORD', false))
+      );
   }
   /**
    * Load the User Payment Informationi

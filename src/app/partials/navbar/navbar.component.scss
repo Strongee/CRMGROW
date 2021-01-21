@@ -120,6 +120,22 @@
       background-color: #eee;
     }
   }
+
+  .has-notifications {
+    position: relative;
+    &::after {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: red;
+      content: "";
+      display: block;
+      top: -4px;
+      right: -4px;
+      border-radius: 50%;
+      border: none;
+    }
+  }
 }
 
 .search-wrapper-mobile {
@@ -204,3 +220,5 @@
     }
   }
 }
+
+

@@ -81,13 +81,20 @@
     </div>
     <div class="nav-item">
       <div class="notifications-wrapper detail-wrapper" ngbDropdown display="dynamic">
-        <div class="no-carot" ngbDropdownToggle>
+        <div class="no-carot" ngbDropdownToggle [class.has-notifications]="(notificationService.notifications$ | async).length">
           <i class="i-icon i-notification bgc-blue d-block"></i>
         </div>
         <div ngbDropdownMenu class="p-0">
-          <li *ngFor="let item of (notificationService.notifications$ | async); let i = index;" class="notification-item">
-            <p [innerHTML]="item.content"></p>
-          </li>
+          <ng-container *ngIf="!(notificationService.notifications$ | async).length; else notificationListTemplate">
+            <p class="text-center mt-3">
+              There are no notifications in your account.
+            </p>
+          </ng-container>
+          <ng-template #notificationListTemplate>
+            <li *ngFor="let item of (notificationService.notifications$ | async); let i = index;" class="notification-item">
+              <p [innerHTML]="item.content"></p>
+            </li>
+          </ng-template>
           <li class="notification-expand rounded-bottom border-top overflow-hidden">
             <a [routerLink]="['/notifications']" class="dropdown-item f-4 text-center text-primary font-weight-bold">See all</a>
           </li>
