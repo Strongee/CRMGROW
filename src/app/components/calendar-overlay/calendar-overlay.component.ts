@@ -22,13 +22,11 @@ export class CalendarOverlayComponent implements OnInit {
   @Input('type') type = '';
   submitted = false;
   due_time = '12:00:00.000';
-  due_date = {
+  selectedDateTime = {
     year: '',
     month: '',
     day: ''
   };
-  selectedDateTime;
-  minDate: any;
   event = {
     title: '',
     due_start: '',
@@ -65,12 +63,9 @@ export class CalendarOverlayComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.start_date) {
-      this.due_date.year = this.start_date.getFullYear().toString();
-      this.due_date.month = (this.start_date.getMonth() + 1).toString();
-      this.due_date.day = this.start_date.getDate().toString();
-      this.selectedDateTime = moment(
-        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
-      ).format('YYYY-MM-DD');
+      this.selectedDateTime.year = this.start_date.getFullYear().toString();
+      this.selectedDateTime.month = (this.start_date.getMonth() + 1).toString();
+      this.selectedDateTime.day = this.start_date.getDate().toString();
       if (this.type != 'month') {
         let hour: string, minute: string;
         if (this.start_date.getHours().toString().length == 1) {
@@ -93,11 +88,11 @@ export class CalendarOverlayComponent implements OnInit {
     this.event.contacts = [];
     this.event.guests = [];
     const date = moment(
-      this.due_date.year +
+      this.selectedDateTime.year +
         '-' +
-        this.due_date.month +
+        this.selectedDateTime.month +
         '-' +
-        this.due_date.day +
+        this.selectedDateTime.day +
         ' ' +
         this.due_time
     ).format();
@@ -133,19 +128,6 @@ export class CalendarOverlayComponent implements OnInit {
         this.isLoading = false;
       }
     );
-  }
-
-  getDateTime(): any {
-    if (this.due_date.day != '') {
-      return (
-        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
-      );
-    }
-  }
-
-  setDateTime(): void {
-    this.selectedDateTime = moment(this.getDateTime()).format('YYYY-MM-DD');
-    close();
   }
 
   overlayClose(): void {

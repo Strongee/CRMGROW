@@ -121,7 +121,6 @@ import { MessagesComponent } from 'src/app/pages/messages/messages.component';
     NotificationsListComponent,
     SmsLimitsComponent,
     DealsSettingComponent,
-    MessagesComponent,
     DealsSettingComponent
   ],
   imports: [
