@@ -29,7 +29,7 @@
                     </div>
                     <table class="table">
                         <thead>
-                            <tr *ngIf="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length > 0; else selectTable">
+                            <tr *ngIf="selectedVideoLists.selected.length > 0; else selectTable">
                                 <th class="selectHeader" colspan="7">
                                   <div class="v-center">
                                     <div class="custom-control custom-checkbox">
@@ -37,8 +37,8 @@
                                         type="checkbox"
                                         class="custom-control-input"
                                         id="selectAllVideos"
-                                        (change)="selectAllPage('all')"
-                                        [checked]="isSelectedPage('all')"
+                                        (change)="selectAllPage('video')"
+                                        [checked]="isSelectedPage('video')"
                                       />
                                       <label
                                         class="custom-control-label"
@@ -46,7 +46,7 @@
                                       ></label>
                                     </div>
                                     <div class="f-3 font-weight-bold text-lowercase ml-3">
-                                      {{selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length}} selected
+                                      {{selectedVideoLists.selected.length}} selected
                                     </div>
                                     <app-actions-header [actions]="BULK_ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
                                   </div>
@@ -635,24 +635,24 @@
                     </div>
                     <table class="table">
                         <thead>
-                            <tr *ngIf="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length > 0; else selectTable">
+                            <tr *ngIf="selectedPdfLists.selected.length > 0; else selectTable">
                                 <th class="selectHeader" colspan="7">
                                   <div class="v-center">
                                     <div class="custom-control custom-checkbox">
                                       <input
                                         type="checkbox"
                                         class="custom-control-input"
-                                        id="selectAllVideos"
-                                        (change)="selectAllPage('all')"
-                                        [checked]="isSelectedPage('all')"
+                                        id="selectAllPdfs"
+                                        (change)="selectAllPage('pdf')"
+                                        [checked]="isSelectedPage('pdf')"
                                       />
                                       <label
                                         class="custom-control-label"
-                                        for="selectAllVideos"
+                                        for="selectAllPdfs"
                                       ></label>
                                     </div>
                                     <div class="f-3 font-weight-bold text-lowercase ml-3">
-                                      {{selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length}} selected
+                                      {{selectedPdfLists.selected.length}} selected
                                     </div>
                                     <app-actions-header [actions]="BULK_ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
                                   </div>
@@ -1177,24 +1177,24 @@
                     </div>
                     <table class="table">
                         <thead>
-                            <tr *ngIf="selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length > 0; else selectTable">
+                            <tr *ngIf="selectedImageLists.selected.length > 0; else selectTable">
                                 <th class="selectHeader" colspan="7">
                                   <div class="v-center">
                                     <div class="custom-control custom-checkbox">
                                       <input
                                         type="checkbox"
                                         class="custom-control-input"
-                                        id="selectAllVideos"
-                                        (change)="selectAllPage('all')"
-                                        [checked]="isSelectedPage('all')"
+                                        id="selectAllImages"
+                                        (change)="selectAllPage('image')"
+                                        [checked]="isSelectedPage('image')"
                                       />
                                       <label
                                         class="custom-control-label"
-                                        for="selectAllVideos"
+                                        for="selectAllImages"
                                       ></label>
                                     </div>
                                     <div class="f-3 font-weight-bold text-lowercase ml-3">
-                                      {{selectedVideoLists.selected.length + selectedPdfLists.selected.length + selectedImageLists.selected.length}} selected
+                                      {{selectedImageLists.selected.length}} selected
                                     </div>
                                     <app-actions-header [actions]="BULK_ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
                                   </div>
