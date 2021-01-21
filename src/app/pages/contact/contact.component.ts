@@ -121,6 +121,7 @@ export class ContactComponent implements OnInit {
       if (res && res._id === this._id) {
         this.contact = res;
         this.selectedContact = res;
+        console.log('###', res);
         this.groupActivities();
         this.getActivityCount();
         this.timeLineArrangement();
