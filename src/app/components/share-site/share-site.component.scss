@@ -1,3 +1,8 @@
+.title-desc {
+  line-height: 1;
+  font-weight: 400;
+}
+
 .popup {
   flex-direction: column;
 }
@@ -44,41 +49,6 @@
     max-height: 210px;
     overflow: auto;
     margin: 0px;
-
-    li {
-      padding: 8px 8px;
-      background: #f9f9f9;
-      position: relative;
-      padding-right: 30px;
-      cursor: pointer;
-      margin: 10px 8px;
-      border: 1px solid #dcdcdc;
-      border-radius: 5px;
-
-      &.active {
-        background-color: #eaeaea;
-      }
-
-      .name {
-        font-size: 14px;
-      }
-
-      .email {
-        font-size: 13px;
-      }
-
-      .added-icon {
-        content: "";
-        width: 20px;
-        height: 10px;
-        border-left: 3px solid blue;
-        border-bottom: 3px solid blue;
-        transform: rotate(-45deg);
-        position: absolute;
-        top: 20px;
-        right: 5px;
-      }
-    }
 
     li.empty {
       text-align: center;
@@ -129,72 +99,6 @@
     padding: 0px;
 
     ul {
-      list-style: none;
-      padding: 0px;
-      height: 100%;
-      overflow: auto;
-      margin: 0px;
-      max-height: 210px;
-      display: flex;
-      flex-wrap: wrap;
-
-      li {
-        padding: 3px 25px 3px 8px;
-        background: #f9f9f9;
-        position: relative;
-        cursor: pointer;
-        margin: 3px 3px 3px 0px;
-        border: 1px solid #dcdcdc;
-        box-shadow: 0px 0px 5px #eee;
-        border-radius: 16px;
-        display: flex;
-
-        .name {
-          font-size: 13px;
-          font-weight: 400;
-          user-select: none;
-        }
-
-        .email {
-          font-size: 12px;
-          font-weight: 400;
-          user-select: none;
-        }
-
-        .remove-icon {
-          width: 16px;
-          height: 16px;
-          border-radius: 8px;
-          background-color: #6f6f6f;
-          position: absolute;
-          top: 50%;
-          right: 5px;
-          transform: translateY(-8px);
-
-          &::after {
-            position: absolute;
-            width: 2px;
-            height: 12px;
-            transform: rotate(45deg);
-            content: "";
-            background: white;
-            top: 2px;
-            left: 7px;
-          }
-
-          &::before {
-            position: absolute;
-            width: 2px;
-            height: 12px;
-            transform: rotate(-45deg);
-            content: "";
-            background: white;
-            top: 2px;
-            left: 7px;
-          }
-        }
-      }
-
       li.empty {
         text-align: center;
         border-radius: 5px;
@@ -450,5 +354,133 @@ p {
   .dropdown-menu {
     padding: 0;
     min-width: 8rem;
+  }
+}
+
+
+
+.search-form {
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 1px solid gainsboro;
+  border-radius: 4px;
+  padding: 4px 8px;
+  align-items: center;
+  min-height: 40px;
+
+  input {
+    width: unset;
+    min-width: 67px;
+    border: none;
+    font-size: 14px;
+    height: unset;
+    padding: 4px 0px 4px 6px;
+    outline: none!important;
+    flex-grow: 1;
+    background: transparent!important;
+  }
+
+  .contact-chip {
+    padding: 2px 24px 2px 6px;
+    background: blue;
+    position: relative;
+    cursor: pointer;
+    margin: 2px 2px 2px 0px;
+    border: 1px solid #0000ff;
+    box-shadow: 0px 0px 5px #eee;
+    border-radius: 16px;
+    display: flex;
+    color: white;
+
+    .name {
+      font-size: 13px;
+      font-weight: 400;
+      user-select: none;
+    }
+
+    .email {
+      font-size: 12px;
+      font-weight: 400;
+      user-select: none;
+    }
+
+    .remove-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      background-color: #ffffff;
+      position: absolute;
+      top: 50%;
+      right: 5px;
+      transform: translateY(-8px);
+
+      &::after {
+        position: absolute;
+        width: 2px;
+        height: 12px;
+        transform: rotate(45deg);
+        content: "";
+        background: blue;
+        top: 2px;
+        left: 7px;
+      }
+
+      &::before {
+        position: absolute;
+        width: 2px;
+        height: 12px;
+        transform: rotate(-45deg);
+        content: "";
+        background: blue;
+        top: 2px;
+        left: 7px;
+      }
+    }
+  }
+
+  .label-search {
+    font-size: 13px;
+    margin-left: auto;
+    background: #1fb34c;
+    color: white;
+    padding: 0px 4px;
+    border-radius: 4px;
+  }
+}
+
+.searched-contacts {
+  padding: 25px 16px 8px 16px;
+  max-height: 210px;
+  overflow: auto;
+  border: 1px solid gainsboro;
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px #aaa8;
+
+  .chip {
+    cursor: pointer;
+  }
+
+  .action {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: calc(100% - 2px);
+    text-align: center;
+    background: white;
+    font-size: 14px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  div.empty {
+    text-align: center;
+    border-radius: 5px;
+    margin: 0px;
+    border: none;
+
+    .manual {
+      font-weight: 600;
+      color: #5e72e4;
+    }
   }
 }

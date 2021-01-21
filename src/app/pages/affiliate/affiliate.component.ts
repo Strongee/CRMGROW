@@ -120,7 +120,6 @@ export class AffiliateComponent implements OnInit {
   openShare(): void {
     this.dialog
       .open(ShareSiteComponent, {
-        maxHeight: 'calc(100vh - 50px)',
         width: '96vw',
         maxWidth: '800px',
         disableClose: true,

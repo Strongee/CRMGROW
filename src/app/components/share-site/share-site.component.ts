@@ -56,7 +56,12 @@ export class ShareSiteComponent implements OnInit {
   sharing = false;
   focusedField = '';
 
+  showType = 'normal';
+  isOpen = false;
+
   @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
+  @ViewChild('inputTrigger') inputTrigger: HTMLInputElement;
+  @ViewChild('teamTrigger') teamTrigger: HTMLElement;
 
   constructor(
     private contactService: ContactService,
@@ -362,5 +367,27 @@ export class ShareSiteComponent implements OnInit {
 
   focusEditor(): void {
     this.focusedField = 'editor';
+  }
+
+  openLabelContacts(): void {
+    this.isOpen = true;
+    this.showType = 'team';
+  }
+  openNormalContacts(): void {
+    this.isOpen = true;
+    this.showType = 'normal';
+  }
+  openOverlay(): void {
+    this.isOpen = !this.isOpen;
+  }
+  closeOverlay(event: MouseEvent): void {
+    const target = <HTMLInputElement>event.target;
+    if (target === this.inputTrigger) {
+      return;
+    }
+    if (target === this.teamTrigger) {
+      return;
+    }
+    this.isOpen = false;
   }
 }
