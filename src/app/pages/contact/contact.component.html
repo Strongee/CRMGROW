@@ -653,7 +653,7 @@
                               <td class="session-col">
                                 <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
                               </td>
-                              <td class="duration-col"></td>
+                              <td class="duration-col">{{details[activity.emails]?.duration || ''}}</td>
                               <td class="date-col">
                                 <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
                                   {{detailActivity.created_at | date: 'MMMM dd'}}
