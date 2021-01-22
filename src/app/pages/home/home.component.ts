@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { STATISTICS_DURATION } from 'src/app/constants/variable.constants';
+import { HandlerService } from 'src/app/services/handler.service';
 import { TabItem } from 'src/app/utils/data.types';
 
 @Component({
@@ -8,7 +9,7 @@ import { TabItem } from 'src/app/utils/data.types';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   STATISTICS_DURATION = STATISTICS_DURATION;
   tabs: TabItem[] = [
     { label: 'Tasks', id: 'tasks', icon: '' },
@@ -18,14 +19,22 @@ export class HomeComponent implements OnInit {
   // Statistics
   duration = STATISTICS_DURATION[0];
 
-  constructor(private location: Location) {}
+  constructor(
+    private location: Location,
+    private handlerService: HandlerService
+  ) {}
 
   ngOnInit(): void {
+    this.handlerService.pageName.next('dashboard');
     // Load the Last Tab Variable from Storage
     const page = localStorage.getItem('homeTab');
     if (page === 'activities') {
       this.selectedTab = this.tabs[1];
     }
+  }
+
+  ngOnDestroy(): void {
+    this.handlerService.pageName.next('');
   }
 
   /**
@@ -44,26 +53,5 @@ export class HomeComponent implements OnInit {
    */
   changeDuration(value: string): void {
     this.duration = value;
-  }
-
-  //////////////////// analytics page ////////////////////
-  analyticsTabs: TabItem[] = [
-    { icon: 'i-icon i-video', label: 'Video Sent', id: 'video-sent' },
-    {
-      icon: 'i-icon i-notification',
-      label: 'Video watched',
-      id: 'video-watched'
-    },
-    {
-      icon: 'i-icon i-group-call',
-      label: 'Contacts Added',
-      id: 'contacts-added'
-    }
-  ];
-
-  selectedAnalyticsTab: TabItem = this.analyticsTabs[0];
-
-  changeAnalyticsTab(tab: TabItem): void {
-    this.selectedAnalyticsTab = tab;
   }
 }

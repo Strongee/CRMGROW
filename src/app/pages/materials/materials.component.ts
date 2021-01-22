@@ -984,7 +984,7 @@ export class MaterialsComponent implements OnInit {
           disableClose: false,
           data: {
             material: emailMaterial,
-            mediaType: 'email',
+            type: 'email',
             materialType: this.selectedTab.id
           }
         });
@@ -1025,7 +1025,7 @@ export class MaterialsComponent implements OnInit {
           disableClose: false,
           data: {
             material: textMaterial,
-            mediaType: 'text',
+            type: 'text',
             materialType: this.selectedTab.id
           }
         });

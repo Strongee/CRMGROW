@@ -28,68 +28,27 @@
 }
 .material-preivew {
     position: relative;
+    margin-bottom: 30px;
     img {
         width: 160px;
         height: 90px;
     }
-    .material-count {
+    .material-more {
         position: absolute;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        top: 0px;
-        left: 0px;
-        .dropdown-toggle {
-            &::after {
-                content: none;
-            }
+        background: white;
+        padding: 4px 8px;
+        border-radius: 100px;
+        bottom: 0px;
+        transform: translate(-50%, 50%);
+        box-shadow: 0px 0px 10px #888;
+        font-size: 12px;
+        font-weight: bold;
+        left: 80px;
+        
+        i {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
         }
-        .dropdown-menu {
-            &.show {
-                min-width: 25rem;
-                max-height: 20rem;
-                overflow: auto;
-                @media screen and (max-width: 576px) {
-                    min-width: 16rem;
-                }
-            }
-            .dropdown-item {
-                white-space: none;
-                .thumb-col {
-                    .thumb-prev-wrapper img {
-                        width: 96px;
-                        height: 54px;
-                        object-fit: cover;
-                        @media screen and (max-width: 576px) {
-                            width: 128px;
-                            height: 72px;
-                        }
-                    }
-                    
-                    .thumb-prev-wrapper .preview {
-                        display: none;
-                    }
-                    
-                    .thumb-prev-wrapper {
-                        &:hover .preview {
-                            display: block;
-                        }
-                        &:hover .thumbnail {
-                            display: none;
-                        }
-                    }
-                }
-                @media screen and (max-width: 576px) {
-                    display: block;
-                }
-            }
-        }
-    }
-}
-.material-more {
-    i {
-        width: 20px;
-        height: 20px;
-        min-width: 20px;
-    }
+    }   
 }
