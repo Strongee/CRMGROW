@@ -300,6 +300,14 @@
           visibility: hidden;
           height: 0px;
           transition: height .3s;
+          .detail-content {
+            div {
+              display: none;
+              &:has(a) {
+                display: block;
+              }
+            }
+          }
         }
         .summary {
           display: block;
@@ -508,10 +516,17 @@
       }
     }
   }
-  .material-object {
-    img {
-      width: 160px;
-      height: 90px;
+  .detail-content {
+    div {
+      &:not(a) {
+        display: none;
+      }
+      a {
+        img {
+          width: 160px;
+          height: 90px;
+        }
+      }
     }
   }
   br {
