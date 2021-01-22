@@ -517,15 +517,12 @@
     }
   }
   .detail-content {
-    div {
-      &:not(a) {
-        display: none;
-      }
-      a {
-        img {
-          width: 160px;
-          height: 90px;
-        }
+    .material-object {
+      img {
+        width: 160px;
+        height: 90px;
+        margin-right: 10px;
+        margin-top: 10px;  
       }
     }
   }
