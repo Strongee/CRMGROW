@@ -792,7 +792,7 @@
                         <div class="title f-6 font-weight-bold">
                           {{details[activity.emails]?.subject}}
                         </div>
-                        <div class="f-6 detail-content" [innerHTML]="details[activity.emails]?.content || ''"></div>
+                        <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>

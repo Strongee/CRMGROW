@@ -705,6 +705,17 @@ export class ContactComponent implements OnInit {
       });
   }
 
+  convertContent(content: any): any {
+    const htmlContent = content.split('<div>');
+    let convertString = '';
+    htmlContent.forEach((html) => {
+      if (html.indexOf('material-object') !== -1) {
+        convertString = convertString + html.match('<a(.*)a>')[0];
+      }
+    });
+    return convertString;
+  }
+
   ICONS = {
     follow_up: '../../assets/img/automations/follow_up.svg',
     update_follow_up:
