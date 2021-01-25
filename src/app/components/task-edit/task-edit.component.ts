@@ -32,7 +32,7 @@ export class TaskEditComponent implements OnInit {
   task = new TaskDetail();
 
   timezone;
-
+  type = '';
   updating = false;
   updateSubscription: Subscription;
 
@@ -63,6 +63,10 @@ export class TaskEditComponent implements OnInit {
       }
     });
     if (this.data) {
+      if (this.data.type === 'deal') {
+        this.type = 'deal';
+      }
+
       this.task = this.task.deserialize(this.data);
       if (this.timezone) {
         this.initTime();
@@ -146,10 +150,18 @@ export class TaskEditComponent implements OnInit {
         if (resolveForwardRef) {
           this.dialogRef.close();
           this.handlerService.updateTasks$([this.task._id], data);
-          this.handlerService.updateLastActivities$(
-            [this.task.contact._id],
-            'task_update'
-          );
+          if (this.type === 'deal') {
+            this.handlerService.updateLastActivities$(
+              [this.task.contact._id],
+              'task_update'
+            );
+          } else {
+            this.handlerService.updateLastActivities$(
+              [this.task.contact._id],
+              'task_update'
+            );
+          }
+
           this.handlerService.registerActivity$(res);
         }
       });

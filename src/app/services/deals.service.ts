@@ -149,4 +149,11 @@ export class DealsService extends HttpService {
       catchError(this.handleError('GET DEAL ACTIVITY', []))
     );
   }
+
+  addAppointment(data: any): Observable<any> {
+    return this.httpClient.post(this.server + DEAL.ADD_APPOINTMENT, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('ADD DEAL APPOINTMENT', []))
+    );
+  }
 }
