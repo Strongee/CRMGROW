@@ -1,4 +1,4 @@
-<div class="d-flex align-items-start justify-content-between">
+<!-- <div class="d-flex align-items-start justify-content-between">
     <div class="v-center">
         <div>
             <h1 class="f-24 font-weight-bold m-0">Contacts merge</h1>
@@ -452,4 +452,98 @@
           </button>
         </div>
     </div>
+</mat-dialog-actions> -->
+<div class="v-center justify-content-between">
+  <h1 class="mat-dialog-title m-0">
+    Merge contact
+  </h1>
+  <button class="v-center border-0 bgc-trans" mat-dialog-close>
+    <i class="d-block i-icon i-close bgc-dark"></i>
+  </button>
+</div>
+<mat-dialog-content>
+  <div class="f-6 mt-3">
+    Select who will be merged into Andrew Johson
+  </div>
+  <div class="v-center select-contact my-3">
+    <app-select-contact (onSelect)="addContacts($event)"></app-select-contact>
+    <mat-icon class="mx-2">arrow_forward</mat-icon>
+    <app-select-contact (onSelect)="addContacts($event)"></app-select-contact>
+  </div>
+  <div class="f-6">
+    Select primary data to be preserved in new record
+  </div>
+  <div class="contact-detail mt-2">
+    <div class="row">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Name
+        </span>
+      </div>
+      <div class="col-sm-8">
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Label
+        </span>
+      </div>
+      <div class="col-sm-8">
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Address
+        </span>
+      </div>
+      <div class="col-sm-8">
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Website
+        </span>
+      </div>
+      <div class="col-sm-8">
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Phone numbers
+        </span>
+      </div>
+      <div class="col-sm-8">
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Emails
+        </span>
+      </div>
+      <div class="col-sm-8">
+
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="v-center justify-content-between w-100">
+    <div class="f-6">
+      This action can't be undone.
+    </div>
+    <div class="v-center">
+      <button class="btn btn-white f-6 font-weight-bold mr-2" type="button" mat-dialog-close>Cancel</button>
+      <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Merge</button>
+    </div>
+  </div>
 </mat-dialog-actions>
