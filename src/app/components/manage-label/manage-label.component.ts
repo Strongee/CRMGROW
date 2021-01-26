@@ -71,6 +71,7 @@ export class ManageLabelComponent implements OnInit {
       width: '100vw',
       maxWidth: '400px',
       maxHeight: '400px',
+      disableClose: true,
       data: label
     });
   }

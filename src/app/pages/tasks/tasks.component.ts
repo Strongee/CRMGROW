@@ -22,6 +22,8 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TaskDeleteComponent } from '../../components/task-delete/task-delete.component';
 import { TaskBulkComponent } from '../../components/task-bulk/task-bulk.component';
 import { ActivityService } from '../../services/activity.service';
+import { NotifyComponent } from 'src/app/components/notify/notify.component';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -83,7 +85,8 @@ export class TasksComponent implements OnInit, OnDestroy {
     public storeService: StoreService,
     private contactService: ContactService,
     private userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toast: ToastrService
   ) {
     this.userService.profile$.subscribe((user) => {
       try {
@@ -379,11 +382,23 @@ export class TasksComponent implements OnInit, OnDestroy {
         if (answer) {
           this.taskService.bulkComplete(selected).subscribe((res) => {
             this.handlerService.updateTasks$(selected, { status: 1 });
+            this.toast.success(
+              '',
+              'Selected tasks are completed successfully.',
+              { closeButton: true }
+            );
           });
         }
       });
     } else {
       // TODO: Show the Alert
+      this.dialog.open(NotifyComponent, {
+        ...DialogSettings.ALERT,
+        data: {
+          message: 'Selected Tasks are completed already!',
+          label: 'OK'
+        }
+      });
     }
   }
 

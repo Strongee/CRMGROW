@@ -34,7 +34,7 @@
 
         <!-- Select Column -->
         <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef class="pl-2">
+          <th mat-header-cell *matHeaderCellDef class="pl-2 checkbox-col">
             <div class="custom-control custom-checkbox" [class.indeterminate]="selection.length && !isAllSelected()">
               <input
                 type="checkbox"
