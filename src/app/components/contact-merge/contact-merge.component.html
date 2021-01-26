@@ -1,458 +1,3 @@
-<!-- <div class="d-flex align-items-start justify-content-between">
-    <div class="v-center">
-        <div>
-            <h1 class="f-24 font-weight-bold m-0">Contacts merge</h1>
-            <span class="f-3 op-56">
-                Select data to be preserved in new record
-            </span>
-        </div>
-        <div class="ml-5">
-            <span class="f-1 op-40 text-uppercase">
-                Contact to merge
-            </span>
-            <app-select-contact (onSelect)="addContacts($event)"></app-select-contact>
-        </div>
-    </div>
-    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>
-        <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>
-    </button>
-</div>
-<mat-dialog-content class="mt-4">
-    <div class="d-flex">
-        <div class="source-contact mr-5">
-            <div class="v-center select-all">
-                <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="sourceSelectAll"
-                      (change)="selectAll('source')"
-                      [checked]="isSelected('source')"
-                    />
-                    <label
-                      class="custom-control-label"
-                      for="sourceSelectAll"
-                    ></label>
-                </div>
-                <span class="f-3">Select all data</span>
-            </div>
-            <div class="f-1 font-weight-bold op-40 text-uppercase my-2 source-detail">
-                source contact
-            </div>
-            <div class="v-center contact-name">
-                <div class="labels">
-                    name
-                </div>
-                <div class="v-center">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="sourceName"
-                          (change)="selectedSourceLists.toggle('sourceName')"
-                          [checked]="selectedSourceLists.isSelected('sourceName')"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="sourceName"
-                        ></label>
-                    </div>
-                    <span class="f-6 font-weight-bold">{{sourceContact.fullName}}</span>
-                </div>
-            </div>
-            <div class="v-center contact-label">
-                <div class="labels">
-                    label
-                </div>
-                <div class="v-center">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="sourceLabel"
-                          (change)="selectedSourceLists.toggle('sourceLabel')"
-                          [checked]="selectedSourceLists.isSelected('sourceLabel')"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="sourceLabel"
-                        ></label>
-                    </div>
-                    <app-label-select [value]="sourceContact.label"></app-label-select>
-                </div>
-            </div>
-            <div class="source-primary">
-                <div class="v-center my-2 contact-primary">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="sourcePrimary"
-                          (change)="selectedSourceLists.toggle('sourcePrimary')"
-                          [checked]="selectedSourceLists.isSelected('sourcePrimary')"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="sourcePrimary"
-                        ></label>
-                    </div>
-                    <span class="f-6 font-weight-bold">Primary contacts</span>
-                </div>
-                <div class="v-center primary-phone">
-                    <div class="labels">
-                        number
-                    </div>
-                    <div class="v-center">
-                        <div class="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              class="custom-control-input"
-                              id="sourcePrimaryPhone"
-                              (change)="selectedSourceLists.toggle('sourcePrimaryPhone')"
-                              [checked]="selectedSourceLists.isSelected('sourcePrimaryPhone')"
-                            />
-                            <label
-                              class="custom-control-label"
-                              for="sourcePrimaryPhone"
-                            ></label>
-                        </div>
-                        <span class="f-6">{{sourceContact.cell_phone}}</span>
-                    </div>
-                </div>
-                <div class="v-center mt-1 primary-email">
-                    <div class="labels">
-                        e-mail
-                    </div>
-                    <div class="v-center">
-                        <div class="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              class="custom-control-input"
-                              id="sourcePrimaryEmail"
-                              (change)="selectedSourceLists.toggle('sourcePrimaryEmail')"
-                              [checked]="selectedSourceLists.isSelected('sourcePrimaryEmail')"
-                            />
-                            <label
-                              class="custom-control-label"
-                              for="sourcePrimaryEmail"
-                            ></label>
-                        </div>
-                        <span class="f-6">{{sourceContact.email}}</span>
-                    </div>
-                </div>
-                <div class="v-center mt-1 primary-address">
-                    <div class="labels">
-                        address
-                    </div>
-                    <div class="v-center">
-                        <div class="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              class="custom-control-input"
-                              id="sourcePrimaryAddress"
-                              (change)="selectedSourceLists.toggle('sourcePrimaryAddress')"
-                              [checked]="selectedSourceLists.isSelected('sourcePrimaryAddress')"
-                            />
-                            <label
-                              class="custom-control-label"
-                              for="sourcePrimaryAddress"
-                            ></label>
-                        </div>
-                        <span class="f-6">{{sourceContact.fullAddress}}</span>
-                    </div>
-                </div>
-                <div class="v-center mt-1 primary-website">
-                    <div class="labels">
-                        website
-                    </div>
-                    <div class="v-center">
-                        <div class="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              class="custom-control-input"
-                              id="sourcePrimaryWebsite"
-                              (change)="selectedSourceLists.toggle('sourcePrimaryWebsite')"
-                              [checked]="selectedSourceLists.isSelected('sourcePrimaryWebsite')"
-                            />
-                            <label
-                              class="custom-control-label"
-                              for="sourcePrimaryWebsite"
-                            ></label>
-                        </div>
-                        <span class="f-6">{{sourceContact.website}}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-3 source-second">
-                <div class="v-center my-2 contact-second">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="sourceSecond"
-                          (change)="selectedSourceLists.toggle('sourceSecond')"
-                          [checked]="selectedSourceLists.isSelected('sourceSecond')"
-                        />
-                        <label
-                          class="custom-control-label"
-                          for="sourceSecond"
-                        ></label>
-                    </div>
-                    <span class="f-6 font-weight-bold">Secondary contacts</span>
-                </div>
-                <div class="v-center second-phone">
-                    <div class="labels">
-                        number
-                    </div>
-                    <div class="v-center">
-                        <div class="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              class="custom-control-input"
-                              id="sourceSecondPhone"
-                              (change)="selectedSourceLists.toggle('sourceSecondPhone')"
-                              [checked]="selectedSourceLists.isSelected('sourceSecondPhone')"
-                            />
-                            <label
-                              class="custom-control-label"
-                              for="sourceSecondPhone"
-                            ></label>
-                        </div>
-                        <span class="f-6"></span>
-                    </div>
-                </div>
-                <div class="v-center mt-1 second-email">
-                    <div class="labels">
-                        e-mail
-                    </div>
-                    <div class="v-center">
-                        <div class="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              class="custom-control-input"
-                              id="sourceSecondEmail"
-                              (change)="selectedSourceLists.toggle('sourceSecondEmail')"
-                              [checked]="selectedSourceLists.isSelected('sourceSecondEmail')"
-                            />
-                            <label
-                              class="custom-control-label"
-                              for="sourceSecondEmail"
-                            ></label>
-                        </div>
-                        <span class="f-6"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="merge-contact ml-5">
-            <div class="v-center select-all">
-                <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="mergeSelectAll"
-                      (change)="selectAll('merge')"
-                      [checked]="isSelected('merge')"
-                    />
-                    <label
-                      class="custom-control-label"
-                      for="mergeSelectAll"
-                    ></label>
-                </div>
-                <span class="f-3">Select all data</span>
-            </div>
-            <div class="f-1 font-weight-bold op-40 text-uppercase my-2 source-detail">
-                contact to merge
-            </div>
-            <div *ngIf="contactSelected">
-              <div class="v-center contact-name">
-                  <div class="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="mergeName"
-                        (change)="selectedMergeLists.toggle('mergeName')"
-                        [checked]="selectedMergeLists.isSelected('mergeName')"
-                      />
-                      <label
-                        class="custom-control-label"
-                        for="mergeName"
-                      ></label>
-                  </div>
-                  <span class="f-6 font-weight-bold">{{mergeContact.fullName}}</span>
-              </div>
-              <div class="v-center contact-label">
-                  <div class="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="mergeLabel"
-                        (change)="selectedMergeLists.toggle('mergeLabel')"
-                        [checked]="selectedMergeLists.isSelected('mergeLabel')"
-                      />
-                      <label
-                        class="custom-control-label"
-                        for="mergeLabel"
-                      ></label>
-                  </div>
-                  <app-label-select [value]="mergeContact.label"></app-label-select>
-              </div>
-              <div class="merge-primary">
-                  <div class="v-center my-2 contact-primary">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergePrimary"
-                            (change)="selectedMergeLists.toggle('mergePrimary')"
-                            [checked]="selectedMergeLists.isSelected('mergePrimary')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergePrimary"
-                          ></label>
-                      </div>
-                      <span class="f-6 font-weight-bold">Primary contacts</span>
-                  </div>
-                  <div class="v-center primary-phone">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergePrimaryPhone"
-                            (change)="selectedMergeLists.toggle('mergePrimaryPhone')"
-                            [checked]="selectedMergeLists.isSelected('mergePrimaryPhone')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergePrimaryPhone"
-                          ></label>
-                      </div>
-                      <span class="f-6">{{mergeContact.cell_phone}}</span>
-                  </div>
-                  <div class="v-center mt-1 primary-email">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergePrimaryEmail"
-                            (change)="selectedMergeLists.toggle('mergePrimaryEmail')"
-                            [checked]="selectedMergeLists.isSelected('mergePrimaryEmail')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergePrimaryEmail"
-                          ></label>
-                      </div>
-                      <span class="f-6">{{mergeContact.email}}</span>
-                  </div>
-                  <div class="v-center mt-1 primary-address">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergePrimaryAddress"
-                            (change)="selectedMergeLists.toggle('mergePrimaryAddress')"
-                            [checked]="selectedMergeLists.isSelected('mergePrimaryAddress')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergePrimaryAddress"
-                          ></label>
-                      </div>
-                      <span class="f-6">{{mergeContact.fullAddress}}</span>
-                  </div>
-                  <div class="v-center mt-1 primary-website">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergePrimaryWebsite"
-                            (change)="selectedMergeLists.toggle('mergePrimaryWebsite')"
-                            [checked]="selectedMergeLists.isSelected('mergePrimaryWebsite')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergePrimaryWebsite"
-                          ></label>
-                      </div>
-                      <span class="f-6">{{mergeContact.website}}</span>
-                  </div>
-              </div>
-              <div class="mt-3 merge-second">
-                  <div class="v-center my-2 contact-second">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergeSecond"
-                            (change)="selectedMergeLists.toggle('mergeSecond')"
-                            [checked]="selectedMergeLists.isSelected('mergeSecond')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergeSecond"
-                          ></label>
-                      </div>
-                      <span class="f-6 font-weight-bold">Secondary contacts</span>
-                  </div>
-                  <div class="v-center second-phone">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergeSecondPhone"
-                            (change)="selectedMergeLists.toggle('mergeSecondPhone')"
-                            [checked]="selectedMergeLists.isSelected('mergeSecondPhone')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergeSecondPhone"
-                          ></label>
-                      </div>
-                      <span class="f-6"></span>
-                  </div>
-                  <div class="v-center mt-1 second-email">
-                      <div class="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="mergeSecondEmail"
-                            (change)="selectedMergeLists.toggle('mergeSecondEmail')"
-                            [checked]="selectedMergeLists.isSelected('mergeSecondEmail')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="mergeSecondEmail"
-                          ></label>
-                      </div>
-                      <span class="f-6"></span>
-                  </div>
-              </div>
-            </div>
-        </div>
-    </div>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-    <div class="row mx-0">
-        <div class="col-12">
-          <button
-            type="button"
-            mat-dialog-close
-            class="btn btn-white py-2 f-6 font-weight-bold mr-2"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="btn btn-blue text-white br-default py-2 f-6 font-weight-bold"
-            [class.loading]="saving"
-          >
-            Merge
-          </button>
-        </div>
-    </div>
-</mat-dialog-actions> -->
 <div class="v-center justify-content-between">
   <h1 class="mat-dialog-title m-0">
     Merge contact
@@ -467,71 +12,154 @@
   </div>
   <div class="v-center select-contact my-3">
     <app-select-contact (onSelect)="addContacts($event)"></app-select-contact>
-    <mat-icon class="mx-2">arrow_forward</mat-icon>
-    <app-select-contact (onSelect)="addContacts($event)"></app-select-contact>
+    <mat-icon class="mx-3">arrow_forward</mat-icon>
+    <div class="v-center">
+      <div class="form-avatar rounded-circle bg-dark mr-1">{{sourceContact.avatarName}}</div>
+      <div class="info">
+        <div class="f-4">{{sourceContact.fullName}}</div>
+      </div>
+    </div>
   </div>
   <div class="f-6">
     Select primary data to be preserved in new record
   </div>
   <div class="contact-detail mt-2">
-    <div class="row">
+    <div class="v-center row">
       <div class="col-sm-3">
         <span class="f-6 fw-600 op-40">
           Name
         </span>
       </div>
-      <div class="col-sm-8">
-
+      <div class="col-sm-7 form-group m-0">
+        <select class="form-control" name="contactName" #contactName="ngModel" [(ngModel)]="selectName">
+          <option value="{{sourceContact.fullName}}">{{sourceContact?.fullName || 'No name'}}</option>
+          <option value="{{mergeContact.fullName}}" *ngIf="contactSelected">{{mergeContact.fullName || 'No name'}}</option>
+        </select>
       </div>
     </div>
-    <div class="row">
+    <div class="v-center row mt-2">
       <div class="col-sm-3">
         <span class="f-6 fw-600 op-40">
           Label
         </span>
       </div>
-      <div class="col-sm-8">
-
+      <div class="col-sm-7 form-group m-0">
+        <app-contact-merge-label
+          [source]="sourceContact.label"
+          [merge]="mergeContact.label"
+        ></app-contact-merge-label>
       </div>
     </div>
-    <div class="row">
+    <div class="v-center row mt-2">
       <div class="col-sm-3">
         <span class="f-6 fw-600 op-40">
           Address
         </span>
       </div>
-      <div class="col-sm-8">
-
+      <div class="col-sm-7 form-group m-0">
+        <select class="form-control" name="contactAddress" #contactAddress="ngModel" [(ngModel)]="selectAddress">
+          <option value="{{sourceContact.address}}">
+            {{sourceContact?.address || 'No address'}}
+          </option>
+          <option value="{{mergeContact.address}}" *ngIf="contactSelected">
+            {{mergeContact?.address || 'No address'}}
+          </option>
+        </select>
       </div>
     </div>
-    <div class="row">
+    <div class="v-center row mt-2">
       <div class="col-sm-3">
         <span class="f-6 fw-600 op-40">
           Website
         </span>
       </div>
-      <div class="col-sm-8">
-
+      <div class="col-sm-7 form-group m-0">
+        <select class="form-control" name="contactWebsite" #contactWebsite="ngModel" [(ngModel)]="selectWebsite">
+          <option value="{{sourceContact.website}}">
+            {{sourceContact?.website || 'No website'}}
+          </option>
+          <option value="{{mergeContact.website}}" *ngIf="contactSelected">
+            {{mergeContact?.website || 'No website'}}
+          </option>
+        </select>
       </div>
     </div>
-    <div class="row">
+    <div class="v-center row mt-2">
       <div class="col-sm-3">
         <span class="f-6 fw-600 op-40">
           Phone numbers
         </span>
       </div>
-      <div class="col-sm-8">
-
+      <div class="col-sm-7 form-group m-0">
+        <select class="form-control" name="contactPhone" #contactPhone="ngModel" [(ngModel)]="selectPrimaryPhone">
+          <option value="{{sourceContact.cell_phone}}">
+            {{sourceContact?.cell_phone || 'No primary phone'}}
+          </option>
+          <option value="{{mergeContact.cell_phone}}" *ngIf="contactSelected">
+            {{mergeContact?.cell_phone || 'No primary phone'}}
+          </option>
+        </select>
       </div>
     </div>
-    <div class="row">
+    <div class="v-center row mt-2">
       <div class="col-sm-3">
         <span class="f-6 fw-600 op-40">
           Emails
         </span>
       </div>
-      <div class="col-sm-8">
-
+      <div class="col-sm-7 form-group m-0">
+        <select class="form-control" name="contactEmail" #contactEmail="ngModel" [(ngModel)]="selectPrimaryEmail">
+          <option value="{{sourceContact.email}}">
+            {{sourceContact?.email || 'No primary email'}}
+          </option>
+          <option value="{{mergeContact.email}}" *ngIf="contactSelected">
+            {{mergeContact?.email || 'No primary email'}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="v-center row mt-2">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Second phone numbers
+        </span>
+      </div>
+      <div class="col-sm-7 form-group m-0">
+        <select class="form-control" name="contactSecondPhone" #contactSecondPhone="ngModel" [(ngModel)]="selectSecondPhone">
+          <option value="{{sourceContact.secondary_phone}}">
+            {{sourceContact?.secondary_phone || 'No secondary phone'}}
+          </option>
+          <option value="{{mergeContact.secondary_phone}}" *ngIf="contactSelected">
+            {{mergeContact?.secondary_phone || 'No secondary phone'}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="v-center row mt-2">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Second emails
+        </span>
+      </div>
+      <div class="col-sm-7 form-group m-0">
+        <select class="form-control" name="contactSecondEmail" #contactSecondEmail="ngModel" [(ngModel)]="selectSecondEmail">
+          <option value="{{sourceContact.secondary_email}}">
+            {{sourceContact?.secondary_email || 'No secondary email'}}
+          </option>
+          <option value="{{mergeContact.secondary_email}}" *ngIf="contactSelected">
+            {{mergeContact?.secondary_email || 'No secondary phone'}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="v-center row mt-2">
+      <div class="col-sm-3">
+        <span class="f-6 fw-600 op-40">
+          Tag
+        </span>
+      </div>
+      <div class="col-sm-7 form-group m-0">
+        <app-input-tag [selectedTags]="selectTags"></app-input-tag>
       </div>
     </div>
   </div>
