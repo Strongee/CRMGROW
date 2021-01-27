@@ -106,7 +106,7 @@ export class SearchOption implements Deserializable {
   _id: string;
   str: any = '';
   recruitingStageCondition: string[] = [];
-  countryCondition: string;
+  countryCondition: string[] = [];
   regionCondition: string[] = [];
   cityCondition: string[] = [];
   zipcodeCondition: string = '';

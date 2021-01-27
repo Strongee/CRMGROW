@@ -151,6 +151,7 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   updateFilter(): void {
+    console.log('###', this.searchOption.countryCondition);
     this.contactService.searchOption.next(this.searchOption);
   }
 
