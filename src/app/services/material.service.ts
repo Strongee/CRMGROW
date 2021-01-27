@@ -182,6 +182,25 @@ export class MaterialService extends HttpService {
     );
   }
 
+  sendText(data: any, materialType: string): Observable<boolean> {
+    let api = '';
+    switch (materialType) {
+      case 'video':
+        api = MATERIAL.VIDEO_TEXT;
+        break;
+      case 'pdf':
+        api = MATERIAL.PDF_TEXT;
+        break;
+      case 'image':
+        api = MATERIAL.IMAGE_TEXT;
+        break;
+    }
+    return this.httpClient.post(this.server + api, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('SEND TEXT MATERIALS', false))
+    );
+  }
+
   getVimeoMeta(id: string): any {
     return this.httpClient.get(`https://vimeo.com/api/v2/video/${id}.json`);
   }

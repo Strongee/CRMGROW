@@ -401,7 +401,7 @@ export class ContactService extends HttpService {
       .post(this.server + CONTACT.BULK_CREATE, { contacts })
       .pipe(
         map((res) => res),
-        catchError(this.handleError('BULK CREATE CONTACTS', []))
+        catchError(this.handleError('BULK CREATE CONTACTS', null))
       );
   }
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Activity } from '../models/activity.model';
 import { DetailActivity, PureActivity } from '../models/activityDetail.model';
 import { Contact, ContactActivity } from '../models/contact.model';
@@ -21,6 +22,8 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class HandlerService {
+  pageName: BehaviorSubject<string> = new BehaviorSubject('');
+
   constructor(
     private storeService: StoreService,
     private taskService: TaskService,
@@ -221,7 +224,31 @@ export class HandlerService {
   }
   createTask$(contacts: any, task: any): void {}
 
-  reload$(): void {}
+  reload$(): void {
+    const page = this.pageName.getValue();
+    switch (page) {
+      case 'dashboard':
+        this.reloadTasks$();
+        this.reloadActivities$();
+        break;
+      case 'contacts':
+        this.reloadContacts$();
+        break;
+      case 'detail':
+        this.reloadDetail$();
+        break;
+    }
+  }
+
+  reloadTasks$(): void {}
+
+  reloadActivities$(): void {}
+
+  reloadContacts$(): void {
+    this.contactService.reloadPage();
+  }
+
+  reloadDetail$(): void {}
 
   clearData(): void {
     this.activityService.clear$();

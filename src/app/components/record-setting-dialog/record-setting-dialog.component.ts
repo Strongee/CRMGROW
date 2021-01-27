@@ -800,9 +800,15 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
           dom.click();
         } else if (res === false) {
           const dom = document.createElement('a');
-          dom.href =
-            'https://teamgrow.s3.us-east-2.amazonaws.com/recorder/CRMRecord.exe';
-          dom.click();
+          if (window.navigator.userAgent.indexOf('Win') !== -1) {
+            dom.href =
+              'https://teamgrow.s3.us-east-2.amazonaws.com/recorder/CRMRecord.exe';
+            dom.click();
+          } else {
+            dom.href =
+              'https://teamgrow.s3.us-east-2.amazonaws.com/recorder/CRMRecord-0.0.1.dmg';
+            dom.click();
+          }
         }
       });
   }

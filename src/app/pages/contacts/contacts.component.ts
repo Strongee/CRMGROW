@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadContactsComponent } from 'src/app/components/upload-contacts/upload-contacts.component';
@@ -28,7 +28,7 @@ import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss']
 })
-export class ContactsComponent implements OnInit {
+export class ContactsComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
   ACTIONS = BulkActions.Contacts;
   DISPLAY_COLUMNS = [
@@ -81,7 +81,13 @@ export class ContactsComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
+  ngOnDestroy(): void {
+    this.handlerService.pageName.next('');
+  }
+
   ngOnInit(): void {
+    this.handlerService.pageName.next('contacts');
+
     this.storeService.pageContacts$.subscribe((contacts) => {
       if (!this.searchStr && this.searchOption.isEmpty()) {
         this.pageContacts = contacts;

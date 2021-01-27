@@ -1,7 +1,11 @@
 <div class="page-content position-relative">
-    <div class="f-26 font-weight-bold mb-3">
-        Deals
+    <div class="v-center mb-3">
+        <div class="f-26 font-weight-bold">
+            Deals
+        </div>
+        <a class="btn text-primary border border-primary bg-white font-weight-bold ml-auto" [routerLink]="['/settings/deals-setting']">Edit stages</a>
     </div>
+
     <ng-container *ngIf="(dealsService.stages$ | async).length; else emptyListStage">
         <div class="d-flex stages" cdkDropListGroup>
             <div class="updating-status" *ngIf="(dealsService.loadingStage$ | async) === STATUS.REQUEST">

@@ -270,7 +270,6 @@ export class ContactComponent implements OnInit {
       position: { top: '100px' },
       width: '100vw',
       maxWidth: '700px',
-      maxHeight: '600px',
       data: {
         contact: this.selectedContact
       }
@@ -703,6 +702,17 @@ export class ContactComponent implements OnInit {
             });
         }
       });
+  }
+
+  convertContent(content: any): any {
+    const htmlContent = content.split('<div>');
+    let convertString = '';
+    htmlContent.forEach((html) => {
+      if (html.indexOf('material-object') !== -1) {
+        convertString = convertString + html.match('<a(.*)a>')[0];
+      }
+    });
+    return convertString;
   }
 
   ICONS = {

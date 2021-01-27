@@ -274,50 +274,82 @@ export class MaterialComponent implements OnInit {
           this.selectedPdfLists.clear();
           this.selectedImageLists.clear();
         } else {
-          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.adminVideos.forEach((e) =>
-            this.selectedVideoLists.select(e._id)
-          );
-          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
-          this.adminImages.forEach((e) =>
-            this.selectedImageLists.select(e._id)
-          );
-          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
+          if (this.mode == 'provided') {
+            this.adminVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+            this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+            this.adminImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          } else if (this.mode == 'own') {
+            this.ownVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+            this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+            this.ownImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          } else {
+            this.teamVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+            this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+            this.teamImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          }
         }
         break;
       case 'video':
         if (this.isSelectedPage(type)) {
           this.selectedVideoLists.clear();
         } else {
-          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.adminVideos.forEach((e) =>
-            this.selectedVideoLists.select(e._id)
-          );
-          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
+          if (this.mode == 'provided') {
+            this.adminVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+          } else if (this.mode == 'own') {
+            this.ownVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+          } else {
+            this.teamVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+          }
         }
         break;
       case 'pdf':
         if (this.isSelectedPage(type)) {
           this.selectedPdfLists.clear();
         } else {
-          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          if (this.mode == 'provided') {
+            this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          } else if (this.mode == 'own') {
+            this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          } else {
+            this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          }
         }
         break;
       case 'image':
         if (this.isSelectedPage(type)) {
           this.selectedImageLists.clear();
         } else {
-          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
-          this.adminImages.forEach((e) =>
-            this.selectedImageLists.select(e._id)
-          );
-          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
+          if (this.mode == 'provided') {
+            this.adminImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          } else if (this.mode == 'own') {
+            this.ownImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          } else {
+            this.teamImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          }
         }
         break;
     }
@@ -326,40 +358,81 @@ export class MaterialComponent implements OnInit {
   isSelectedPage(type: string): any {
     switch (type) {
       case 'all':
-        const allCounts =
-          this.adminVideos.length +
-          this.ownVideos.length +
-          this.teamVideos.length +
-          this.adminPdfs.length +
-          this.ownPdfs.length +
-          this.teamPdfs.length +
-          this.adminImages.length +
-          this.ownImages.length +
-          this.teamImages.length;
-        const selectedCounts =
-          this.selectedVideoLists.selected.length +
-          this.selectedPdfLists.selected.length +
-          this.selectedImageLists.selected.length;
-        return allCounts == selectedCounts;
+        let allCounts, selectedCounts;
+        if (this.mode == 'provided') {
+          allCounts =
+            this.adminVideos.length +
+            this.adminPdfs.length +
+            this.adminImages.length;
+          selectedCounts =
+            this.selectedVideoLists.selected.length +
+            this.selectedPdfLists.selected.length +
+            this.selectedImageLists.selected.length;
+          return allCounts == selectedCounts;
+        } else if (this.mode == 'own') {
+          allCounts =
+            this.ownVideos.length + this.ownPdfs.length + this.ownImages.length;
+          selectedCounts =
+            this.selectedVideoLists.selected.length +
+            this.selectedPdfLists.selected.length +
+            this.selectedImageLists.selected.length;
+          return allCounts == selectedCounts;
+        } else {
+          allCounts =
+            this.teamVideos.length +
+            this.teamPdfs.length +
+            this.teamImages.length;
+          selectedCounts =
+            this.selectedVideoLists.selected.length +
+            this.selectedPdfLists.selected.length +
+            this.selectedImageLists.selected.length;
+          return allCounts == selectedCounts;
+        }
       case 'video':
-        const videoCounts =
-          this.adminVideos.length +
-          this.ownVideos.length +
-          this.teamVideos.length;
-        const selectedVideoCounts = this.selectedVideoLists.selected.length;
-        return videoCounts == selectedVideoCounts;
+        let videoCounts, selectedVideoCounts;
+        if (this.mode == 'provided') {
+          videoCounts = this.adminVideos.length;
+          selectedVideoCounts = this.selectedVideoLists.selected.length;
+          return videoCounts == selectedVideoCounts;
+        } else if (this.mode == 'own') {
+          videoCounts = this.ownVideos.length;
+          selectedVideoCounts = this.selectedVideoLists.selected.length;
+          return videoCounts == selectedVideoCounts;
+        } else {
+          videoCounts = this.teamVideos.length;
+          selectedVideoCounts = this.selectedVideoLists.selected.length;
+          return videoCounts == selectedVideoCounts;
+        }
       case 'pdf':
-        const pdfCounts =
-          this.adminPdfs.length + this.ownPdfs.length + this.teamPdfs.length;
-        const selectedPdfCounts = this.selectedPdfLists.selected.length;
-        return pdfCounts == selectedPdfCounts;
+        let pdfCounts, selectedPdfCounts;
+        if (this.mode == 'provided') {
+          pdfCounts = this.adminPdfs.length;
+          selectedPdfCounts = this.selectedPdfLists.selected.length;
+          return pdfCounts == selectedPdfCounts;
+        } else if (this.mode == 'own') {
+          pdfCounts = this.ownPdfs.length;
+          selectedPdfCounts = this.selectedPdfLists.selected.length;
+          return pdfCounts == selectedPdfCounts;
+        } else {
+          pdfCounts = this.teamPdfs.length;
+          selectedPdfCounts = this.selectedPdfLists.selected.length;
+          return pdfCounts == selectedPdfCounts;
+        }
       case 'image':
-        const imageCounts =
-          this.adminImages.length +
-          this.ownImages.length +
-          this.teamImages.length;
-        const selectedImageCounts = this.selectedImageLists.selected.length;
-        return imageCounts == selectedImageCounts;
+        let imageCounts, selectedImageCounts;
+        if (this.mode == 'provided') {
+          imageCounts = this.adminImages.length;
+          selectedImageCounts = this.selectedImageLists.selected.length;
+          return imageCounts == selectedImageCounts;
+        } else if (this.mode == 'own') {
+          imageCounts = this.ownImages.length;
+          selectedImageCounts = this.selectedImageLists.selected.length;
+          return imageCounts == selectedImageCounts;
+        } else {
+          imageCounts = this.teamImages.length;
+          selectedImageCounts = this.selectedImageLists.selected.length;
+          return imageCounts == selectedImageCounts;
+        }
     }
   }
 
@@ -1028,9 +1101,23 @@ export class MaterialComponent implements OnInit {
         });
         break;
       case 'Select all':
-        this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
-        this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-        this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        if (this.mode == 'provided') {
+          this.adminVideos.forEach((e) =>
+            this.selectedVideoLists.select(e._id)
+          );
+          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.adminImages.forEach((e) =>
+            this.selectedImageLists.select(e._id)
+          );
+        } else if (this.mode == 'own') {
+          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
+          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
+        } else {
+          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
+          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
+        }
         break;
       case 'Deselect':
         this.selectedVideoLists.clear();

@@ -96,6 +96,10 @@ export const COUNTRY_CODES = {
 };
 export const COUNTRIES = [
   {
+    code: '',
+    name: 'None'
+  },
+  {
     code: 'US',
     name: 'United States'
   },
@@ -105,6 +109,7 @@ export const COUNTRIES = [
   }
 ];
 export const REGIONS = {
+  None: ['None'],
   US: [
     'Alabama',
     'Alaska',
@@ -533,32 +538,39 @@ export const LABEL_COLORS = [
 export const DialogSettings = {
   CONTACT: {
     width: '98vw',
-    maxWidth: '600px'
+    maxWidth: '600px',
+    disableClose: true
   },
   JOIN_TEAM: {
     width: '98vw',
-    maxWidth: '600px'
+    maxWidth: '600px',
+    disableClose: true
   },
   INVITE_TEAM: {
     width: '98vw',
     maxWidth: '600px',
-    height: 'calc(65vh + 114px)'
+    height: 'calc(65vh + 114px)',
+    disableClose: true
   },
   TASK: {
     width: '98vw',
-    maxWidth: '394px'
+    maxWidth: '394px',
+    disableClose: true
   },
   NOTE: {
     width: '98vw',
-    maxWidth: '394px'
+    maxWidth: '394px',
+    disableClose: true
   },
   AUTOMATION: {
     maxWidth: '98vw',
-    minHeight: '300px'
+    minHeight: '300px',
+    disableClose: true
   },
   ASSISTANT: {
     width: '98vw',
-    maxWidth: '394px'
+    maxWidth: '394px',
+    disableClose: true
   },
   UPLOAD: {
     width: '98vw',
@@ -568,7 +580,12 @@ export const DialogSettings = {
   CONFIRM: {
     position: { top: '100px' },
     width: '98vw',
-    maxWidth: '400px'
+    maxWidth: '400px',
+    disableClose: true
+  },
+  ALERT: {
+    width: '98vw',
+    maxWidth: '380px'
   }
 };
 

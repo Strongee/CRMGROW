@@ -6,9 +6,9 @@
         <i class="d-block i-icon i-close bgc-dark"></i>
     </button>
 </div>
-<form #sendForm="ngForm" (ngSubmit)="submitted = true; sendForm.form.valid ? send() : false">
+<form #sendForm="ngForm" (ngSubmit)="sendForm.form.valid ? send() : false">
     <mat-dialog-content>
-        <div class="d-flex mt-3 material-preivew">
+        <div class="d-flex mt-2 material-preivew">
             <img [src]="data.material[0].thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );">
             <div class="ml-4">
                 <div class="f-6 font-weight-bold material-title">
@@ -18,98 +18,107 @@
                     {{data.material[0].description}}
                 </div>
             </div>
+            <div class="v-center mt-3 material-more" *ngIf="data.material.length > 1">
+                <div class="v-center" *ngIf="videos.length > 1">
+                    <i class="d-block i-icon act-videos mr-1"></i>
+                    + {{videos.length - 1}} Videos More
+                </div>
+                <div class="v-center mx-2" *ngIf="pdfs.length > 1">
+                    <i class="d-block i-icon act-pdfs mr-1"></i>
+                     + {{pdfs.length - 1}} Pdfs More
+                </div>
+                <div class="v-center" *ngIf="images.length > 1">
+                    <i class="d-block i-icon act-images mr-1"></i>
+                    + {{images.length - 1}} Images More
+                </div>
+            </div>
         </div>
-        <div class="v-center mt-3 material-more" *ngIf="data.material.length > 1">
-            <div class="v-center" *ngIf="videos.length > 0">
-                <i class="d-block i-icon act-videos mr-1"></i>
-                {{videos.length}} Videos
-            </div>
-            <div class="v-center mx-2" *ngIf="pdfs.length > 0">
-                <i class="d-block i-icon act-pdfs mr-1"></i>
-                {{pdfs.length}} Pdfs
-            </div>
-            <div class="v-center" *ngIf="images.length > 0">
-                <i class="d-block i-icon act-images mr-1"></i>
-                {{images.length}} Images
-            </div>
-        </div>
+        
         <div class="mt-3">
             <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                 select contact to who you want to send material
             </span>
             <app-input-contacts
                 [placeholder]="'Search for Contact'"
+                [display]="selectedTab === 0 ? 'cell_phone' : 'email'"
                 [selectedContacts]="contacts"
             ></app-input-contacts>
-            <span></span>
+            <span class="d-block f-2 c-red pl-2" *ngIf="sendForm.submitted && !contacts.length">
+                Please select contacts
+            </span>
         </div>
-        <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
+        <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="changeTab($event)">
             <mat-tab label="Send via Text">
                 <div class="mt-2">
                     <app-input-template
                         [placeholder]="'Search for Template to use'"
-                        [(template)]="selectedTemplate"
+                        [(template)]="textTemplate"
                         [type]="'text'"
-                        (templateChange)="selectTemplate($event)"
+                        (templateChange)="selectTextTemplate($event)"
                     ></app-input-template>
                 </div>
                 <div class="mt-2">
-                    <span class="f-1 fw-600 op-40 text-uppercase mb-1">
-                        message
-                    </span>
+                    <div class="v-center">
+                        <span class="f-1 fw-600 op-40 text-uppercase mb-1">
+                            message
+                        </span>
+                        <span
+                            class="c-red f-2 ml-auto"
+                            *ngIf="sendForm.submitted && content.errors"
+                        >
+                            Required!
+                        </span>
+                    </div>
                     <textarea
                         rows="10"
                         class="form-control"
-                        [(ngModel)]="selectedTemplate.content"
+                        [(ngModel)]="textContent"
                         name="content"
                         #content="ngModel"
-                        [required]="selected.value == 0 && selectedTemplate.content == '' && submitted"
+                        [required]="selectedTab === 0"
                     ></textarea>
-                    <span
-                        class="invalid-feedback"
-                        *ngIf="selected.value == 0 && selectedTemplate.content == '' && submitted"
-                    >
-                        Please input the template content.
-                    </span>
+                    
                 </div>
             </mat-tab>
             <mat-tab label="Send via Email">
                 <div class="mt-2">
                     <app-input-template
                         [placeholder]="'Search for Template to use'"
-                        [(template)]="selectedTemplate"
+                        [(template)]="emailTemplate"
                         [type]="'email'"
-                        (templateChange)="selectTemplate($event)"
+                        (templateChange)="selectEmailTemplate($event)"
                     ></app-input-template>
                 </div>
-                <div class="mt-2">
-                    <span class="f-1 fw-600 op-40 text-uppercase mb-1">
-                        subject
-                    </span>
+                <div class="form-group mt-2">
+                    <div class="v-center">
+                        <span class="f-1 fw-600 op-40 text-uppercase mb-1">
+                            subject
+                        </span>
+                        <span
+                            class="c-red f-2 ml-auto"
+                            *ngIf="sendForm.submitted && mailSubject.errors"
+                        >
+                            Required!
+                        </span>
+                    </div>
                     <input
                         type="text"
                         class="form-control"
-                        [(ngModel)]="selectedTemplate.subject"
+                        [(ngModel)]="subject"
                         name="mailSubject"
                         #mailSubject="ngModel"
-                        [required]="selected.value == 1 && selectedTemplate.subject == '' && submitted"
+                        [required]="selectedTab === 1"
                     />
-                    <span
-                        class="invalid-feedback"
-                        *ngIf="selected.value == 1 && selectedTemplate.subject == '' && submitted"
-                    >
-                        Please input the template subject.
-                    </span>
                 </div>
                 <div class="mt-2">
                     <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                         message
                     </span>
                     <app-html-editor
-                        [(value)]="selectedTemplate.content"
+                        [(value)]="emailContent"
                         placeholder="Enter Text"
                         required="true"
-                        [style]="{height: '120px'}"
+                        [style]="{height: '200px'}"
                         (onFocus)="focusEditor()"
                         #emailEditor
                         >
@@ -120,6 +129,6 @@
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button class="btn btn-white f-6 font-weight-bold c-blue mr-2" type="button" mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving">Send</button>
+        <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="sending">Send</button>
     </mat-dialog-actions>
 </form>
