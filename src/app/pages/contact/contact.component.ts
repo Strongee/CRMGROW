@@ -1,5 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewContainerRef,
+  ViewChild,
+  OnDestroy
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -48,7 +54,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
   REPEAT_DURATIONS = REPEAT_DURATIONS;
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
@@ -133,6 +139,12 @@ export class ContactComponent implements OnInit {
         this.getActivityCount();
       }
     });
+
+    this.handlerService.pageName.next('detail');
+  }
+
+  ngOnDestroy(): void {
+    this.handlerService.pageName.next('');
   }
 
   /**
@@ -585,6 +597,7 @@ export class ContactComponent implements OnInit {
   }
   timeLineArrangement(): any {
     if (!this.contact['time_lines'] || this.contact['time_lines'].length == 0) {
+      this.allDataSource.data = [];
       return;
     }
     this.allDataSource.data = listToTree(this.contact['time_lines']);

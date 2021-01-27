@@ -248,7 +248,9 @@ export class HandlerService {
     this.contactService.reloadPage();
   }
 
-  reloadDetail$(): void {}
+  reloadDetail$(): void {
+    this.contactService.reloadDetail();
+  }
 
   clearData(): void {
     this.activityService.clear$();

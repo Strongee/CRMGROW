@@ -1,0 +1,6 @@
+.automation-name {
+  flex-grow: 1;
+  max-width: calc(100% - 90px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
