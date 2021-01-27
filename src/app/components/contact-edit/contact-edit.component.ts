@@ -65,6 +65,9 @@ export class ContactEditComponent implements OnInit {
       if (this.contact['secondary_phone']) {
         this.second_contact_phone = this.contact['secondary_phone'];
       }
+      if (this.contact['state'] == '') {
+        this.contact['state'] = 'None';
+      }
       if (this.data.type == 'second') {
         this.panelOpenState = true;
       }
@@ -74,6 +77,9 @@ export class ContactEditComponent implements OnInit {
   ngOnInit(): void {}
 
   update(): void {
+    if (this.contact.state == 'None') {
+      this.contact.state = '';
+    }
     if (
       this.sameEmailContacts.length > 0 ||
       this.sameCellPhoneContacts.length > 0
