@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { Contact } from 'src/app/models/contact.model';
 import { HtmlEditorComponent } from '../html-editor/html-editor.component';
+import { DealsService } from '../../services/deals.service';
 
 @Component({
   selector: 'app-calendar-dialog',
@@ -24,6 +25,7 @@ import { HtmlEditorComponent } from '../html-editor/html-editor.component';
   styleUrls: ['./calendar-dialog.component.scss']
 })
 export class CalendarDialogComponent implements OnInit {
+
   submitted = false;
   due_time = '12:00:00.000';
   selectedDateTime = {
@@ -56,6 +58,8 @@ export class CalendarDialogComponent implements OnInit {
 
   focusedField = '';
   type = '';
+  isDeal = false;
+  deal;
 
   @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
 
@@ -66,11 +70,12 @@ export class CalendarDialogComponent implements OnInit {
     private toast: ToastrService,
     private appointmentService: AppointmentService,
     private contactService: ContactService,
+    private dealsService: DealsService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
-    if (this.data) {
+    if (this.data && this.data.type !== 'deal') {
       this.type = 'update';
       if (this.data.event) {
         this.event.title = this.data.event.title;
@@ -150,6 +155,16 @@ export class CalendarDialogComponent implements OnInit {
       }
     } else {
       this.type = 'create';
+    }
+
+    if (this.data && this.data.type === 'deal') {
+      this.isDeal = true;
+      this.deal = this.data.deal;
+      if (this.data.contacts && this.data.contacts.length) {
+        for (const contact of this.data.contacts) {
+          this.contacts.push(contact);
+        }
+      }
     }
   }
 
@@ -279,21 +294,43 @@ export class CalendarDialogComponent implements OnInit {
         this.event.guests.push(contact.email);
       });
     }
-    this.appointmentService.createEvents(this.event).subscribe(
-      (res) => {
-        if (res['status'] == true) {
-          this.isLoading = false;
-          const data = {
-            event_id: res['event_id']
-          };
+
+    if (this.isDeal) {
+      const dealContacts = [];
+      if (this.contacts.length > 0) {
+        for (const item of this.contacts) {
+          dealContacts.push(item._id);
+        }
+      }
+      const data = {
+        ...this.event,
+        contacts: dealContacts,
+        deal: this.deal
+      };
+      this.dealsService.addAppointment(data).subscribe((res) => {
+        if (res) {
           this.toast.success('New Event is created successfully');
+          console.log("add appointment for deal ===========>", data);
           this.dialogRef.close(data);
         }
-      },
-      (error) => {
-        this.isLoading = false;
-      }
-    );
+      });
+    } else {
+      this.appointmentService.createEvents(this.event).subscribe(
+        (res) => {
+          if (res['status'] == true) {
+            this.isLoading = false;
+            const data = {
+              event_id: res['event_id']
+            };
+            this.toast.success('New Event is created successfully');
+            this.dialogRef.close(data);
+          }
+        },
+        (error) => {
+          this.isLoading = false;
+        }
+      );
+    }
   }
 
   handleAddressChange(evt: any): void {

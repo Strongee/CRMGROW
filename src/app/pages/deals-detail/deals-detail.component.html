@@ -325,6 +325,124 @@
                   </div>
                 </div>
                 <div *ngIf="(action.id == 'all' || action.id == 'follow_ups') && activity.type == 'follow_ups'">
+                  <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+                    <div class="v-center justify-content-between mb-3">
+                      <div class="v-center">
+                        <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail[0]?.type}}" ></i></div>
+                        <div class="f-6">
+                          <span>{{activity.content}}</span>
+                        </div>
+                      </div>
+                      <div class="v-center">
+                        <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                        <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                          <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                            <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                          </a>
+                          <div ngbDropdownMenu class="light py-1">
+                            <button
+                              class="v-center border-0 py-1 c-dark dropdown-item"
+                              *ngIf="activity.content.indexOf('completed') == -1"
+                              (click)="editTask(activity)"
+                            >
+                              <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                              <span class="ml-3 f-2 font-weight-bold">Edit</span>
+                            </button>
+                            <button
+                              class="v-center border-0 py-1 c-dark dropdown-item"
+                              *ngIf="activity.content.indexOf('completed') == -1"
+                              (click)="completeTask(activity)"
+                            >
+                              <i class="i-icon i-check bgc-dark ml-1" aria-hidden="true"></i>
+                              <span class="ml-3 f-2 font-weight-bold">Complete</span>
+                            </button>
+                            <button
+                              class="v-center border-0 py-1 c-dark dropdown-item"
+                              (click)="archiveTask(activity)"
+                            >
+                              <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                              <span class="ml-3 f-2 font-weight-bold">Archive</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="activity.activity_detail.length; else removedTaskTemplate">
+                      <div class="main-history-item" [class.completed]="activity.content.indexOf('completed') !== -1">
+                        <div class="v-center">
+                          <div class="v-center justify-content-center c-pointer task-status" (click)="completeTask(activity)"
+                               *ngIf="activity.content.indexOf('completed') === -1; else taskComplete">
+                            <i class="i-icon i-check bgc-white"></i>
+                          </div>
+                          <ng-template #taskComplete>
+                            <div class="v-center justify-content-center task-status">
+                              <i class="i-icon i-check bgc-white"></i>
+                            </div>
+                          </ng-template>
+                          <div class="f-6 font-weight-bold ml-3 content">
+                            {{activity.activity_detail[0].content}}
+                          </div>
+                        </div>
+                        <div class="v-center mt-3" *ngIf="activity.content.indexOf('completed') === -1">
+                          <div class="time">
+                            <div class="f-4 fw-600 op-40">
+                              Due date
+                            </div>
+                            <div class="v-center mt-1">
+                              <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                              <span class="f-4">{{activity.activity_detail[0].due_date | date: 'MM/dd/yyyy'}} at {{activity.activity_detail[0].due_date | date: 'shortTime'}}</span>
+                            </div>
+                          </div>
+                          <div class="type ml-5">
+                            <div class="f-4 fw-600 op-40">
+                              Type
+                            </div>
+                            <div class="v-center mt-1">
+                              <ng-container [ngSwitch]="activity.activity_detail[0].type">
+                                <i class="d-block i-icon i-task bgc-dark mr-2" *ngSwitchCase="'task'"></i>
+                                <i class="d-block i-icon i-phone bgc-dark mr-2" *ngSwitchCase="'call'"></i>
+                                <i class="d-block i-icon i-lunch bgc-dark mr-2" *ngSwitchCase="'meeting'"></i>
+                                <i class="d-block i-icon i-message bgc-dark mr-2" *ngSwitchCase="'email'"></i>
+                                <i class="d-block i-icon i-video bgc-dark mr-2" *ngSwitchCase="'material'"></i>
+                              </ng-container>
+                              <span class="f-4 text-capitalize">{{activity.activity_detail[0].type}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-template #removedTaskTemplate>
+                      <div class="d-flex">
+                        <mat-icon class="mr-2">warning</mat-icon>
+                        <span>Can't see the detail as it is deleted.</span>
+                      </div>
+                    </ng-template>
+                    <div class="related-history-item" *ngIf="activity.activity_detail.length > 1">
+                      <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                        <ng-template #show>
+                          <div class="content">
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              See details
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #hide>
+                          <div class="content w-100">
+                            <ng-container *ngFor="let detailActivity of activity.activity_detail; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 font-weight-bold"># {{activity.activity_detail.length - i}}</div>
+                                <div class="mr-2 text-capitalize rounded-pill bgc-green-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Close
+                            </div>
+                          </div>
+                        </ng-template>
+                      </app-accordion>
+                    </div>
+                  </div>
                 </div>
                 <div *ngIf="(action.id == 'all' || action.id == 'texts') && activity.type == 'texts'">
                 </div>

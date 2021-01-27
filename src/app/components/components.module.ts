@@ -116,6 +116,7 @@ import { DealEditComponent } from './deal-edit/deal-edit.component';
 import { DateInputComponent } from './date-input/date-input.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { AutomationStatusComponent } from './automation-status/automation-status.component';
+import { AutomationCreateComponent } from './automation-create/automation-create.component';
 import { ContactMergeLabelComponent } from './contact-merge-label/contact-merge-label.component';
 
 @NgModule({
@@ -231,6 +232,7 @@ import { ContactMergeLabelComponent } from './contact-merge-label/contact-merge-
     DealEditComponent,
     DateInputComponent,
     AutomationStatusComponent,
+    AutomationCreateComponent,
     ContactMergeLabelComponent
   ],
   imports: [
