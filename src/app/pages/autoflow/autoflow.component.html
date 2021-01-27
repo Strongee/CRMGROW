@@ -2,6 +2,10 @@
   <div class="automation-container">
     <form #automationForm="ngForm" (ngSubmit)="submitted=true; automationForm.form.valid ? storeData() : false;"
           [class.was-validated]="submitted">
+      <div class="v-center op-56 c-pointer mb-4 mt-3" (click)="goToBack()">
+        <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
+        <span class="f-5 font-weight-bold">Back to automations</span>
+      </div>
       <div class="v-center">
         <a [routerLink]="['/automations']" class="c-dark mr-2">
           <h6 class="page-title font-weight-bold">Automations</h6>
@@ -9,8 +13,8 @@
         <div class="f-8 font-weight-bold text-uppercase" *ngIf="editMode=='new'"> / Create Template</div>
       </div>
       <div class="align-items-top automation-name-wrapper">
-        <div class="row">
-          <div class="col-md-7 col-sm-12">
+        <div class="row align-items-center">
+          <div class="col-md-6 col-sm-12 col-12">
             <div class="form-group d-flex align-items-end">
               <div class="title w-100">
                 <label for="automation-title">Title</label>
@@ -27,8 +31,8 @@
               </div>
             </div>
           </div>
-          <div class="col-md-5 col-sm-12">
-            <div class="form-group v-center justify-content-end">
+          <div class="col-md-3 col-sm-6 col-6">
+            <div class="form-group v-center justify-content-sm-end justify-content-start">
               <div class="auth">
                 <label>Owner</label>
                 <div class="h-40 v-center">
@@ -50,10 +54,35 @@
               </div>
             </div>
           </div>
+          <div class="col-md-3 col-sm-6 col-6">
+            <div class="v-center justify-content-end">
+              <button type="button" class="v-center btn btn-primary py-2 shadow">
+                <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
+                <span class="font-weight-bold f-3">Assign</span>
+              </button>
+              <div ngbDropdown class="d-flex p-2 button-more py-2 rounded">
+                <button type="button" class="v-center btn btn-white-blue py-2" ngbDropdownToggle>
+                  <span class="font-weight-bold f-3 c-blue">More</span>
+                  <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
+                </button>
+                <div ngbDropdownMenu class="light">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item">
+                    <span class="f-3 font-weight-bold">Clone</span>
+                  </button>
+                  <hr class="my-1">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item">
+                    <span class="c-red f-3 font-weight-bold">Delete automation</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </form>
-    <div class="card-body">
+    <app-slide-tab [tabs]="tabs" [selected]="selectedTab" type="plain" (onChange)="changeTab($event)" class="border-bottom pl-0 rounded-0">
+    </app-slide-tab>
+    <div class="card-body mt-3" [class.d-none]="selectedTab.id !== 'activity'">
       <button class="d-none" (click)="clearAllNodes()">Clear</button>
       <!-- <div class="" draggable="true" (dragstart)="dragAction($event)">DRAG</div> -->
       <div class="flows-container" #wrapper>
@@ -220,6 +249,9 @@
 
         <!--  -->
       </div>
+    </div>
+    <div class="card-body mt-3" [class.d-none]="selectedTab.id !== 'contacts'">
+
     </div>
   </div>
 </div>

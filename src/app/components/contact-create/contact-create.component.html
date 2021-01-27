@@ -29,7 +29,7 @@
         />
         <span class="form-append-icon c-pointer" (click)="toggleSameEmails()" *ngIf="sameEmailContacts.length">
           <i class="d-block i-icon i-close bgc-dark" *ngIf="sameEmailsFlag"></i>
-          <i class="d-block i-icon i-triangle-down bgc-dark sm" style="margin-right: 2px;" *ngIf="!sameEmailsFlag"></i>
+          <i class="d-block i-icon i-triangle-down bgc-blue sm" style="margin-right: 2px;" *ngIf="!sameEmailsFlag"></i>
         </span>
         <div class="form-checking-result p-2" [hidden]="!sameEmailsFlag"
           *ngIf="sameEmailContacts.length">
@@ -74,7 +74,7 @@
         </span>
         <span class="form-append-icon c-pointer" (click)="toggleSamePhones()" *ngIf="sameCellPhoneContacts.length">
           <i class="d-block i-icon i-close bgc-dark" *ngIf="samePhonesFlag"></i>
-          <i class="d-block i-icon i-triangle-down bgc-dark sm" style="margin-right: 2px;" *ngIf="!samePhonesFlag"></i>
+          <i class="d-block i-icon i-triangle-down bgc-blue sm" style="margin-right: 2px;" *ngIf="!samePhonesFlag"></i>
         </span>
         <div class="form-checking-result p-2" [hidden]="!samePhonesFlag"
           *ngIf="sameCellPhoneContacts.length">

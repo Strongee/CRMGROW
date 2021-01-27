@@ -264,7 +264,8 @@ export const DEAL = {
   GET_NOTES: 'deal/get-note',
   ADD_FOLLOWUP: 'deal/add-follow',
   GET_FOLLOWUP: 'deal/get-follow',
-  GET_ACTIVITY: 'deal/get-activity'
+  GET_ACTIVITY: 'deal/get-activity',
+  ADD_APPOINTMENT: 'deal/create-appointment'
 };
 
 export const MATERIAL = {

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
@@ -100,6 +101,7 @@ export class ContactComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
     private contactService: ContactService,
     private noteService: NoteService,
     private taskService: TaskService,
@@ -244,7 +246,7 @@ export class ContactComponent implements OnInit {
    * Go to Contact List Page
    */
   goToBack(): void {
-    this.router.navigate(['contacts']);
+    this.location.back();
   }
 
   /**
@@ -294,6 +296,7 @@ export class ContactComponent implements OnInit {
       .open(ContactEditComponent, {
         width: '98vw',
         maxWidth: '600px',
+        disableClose: true,
         data: {
           contact: this.contact,
           type: type

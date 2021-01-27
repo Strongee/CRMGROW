@@ -12,9 +12,9 @@
         <td mat-cell
           *matCellDef="let element"
           class="pl-0">
-          <a class="v-center c-pointer" [routerLink]="['/contacts/' + element.contacts._id]">
+          <a class="v-center c-pointer undecoration" [routerLink]="['/contacts/' + element.contacts._id]">
             <div class="contact-avatar f-3 mr-2">{{element.contacts.avatarName}}</div>
-            <span class="c-dark">{{element.contacts.fullName}}</span>
+            <span class="c-dark fw-600">{{element.contacts.fullName}}</span>
           </a>
         </td>
       </ng-container>
