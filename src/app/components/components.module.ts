@@ -116,6 +116,7 @@ import { DealEditComponent } from './deal-edit/deal-edit.component';
 import { DateInputComponent } from './date-input/date-input.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { AutomationStatusComponent } from './automation-status/automation-status.component';
+import { AutomationCreateComponent } from './automation-create/automation-create.component';
 
 @NgModule({
   declarations: [
@@ -229,7 +230,8 @@ import { AutomationStatusComponent } from './automation-status/automation-status
     DealStageDeleteComponent,
     DealEditComponent,
     DateInputComponent,
-    AutomationStatusComponent
+    AutomationStatusComponent,
+    AutomationCreateComponent
   ],
   imports: [
     CommonModule,

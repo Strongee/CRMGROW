@@ -26,6 +26,7 @@ import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { PageCanDeactivate } from 'src/app/variables/abstractors';
 import { UserService } from '../../services/user.service';
+import { TabItem } from '../../utils/data.types';
 
 @Component({
   selector: 'app-autoflow',
@@ -62,6 +63,13 @@ export class AutoflowComponent
 
   editMode = 'new';
 
+  tabs: TabItem[] = [
+    { icon: '', label: 'Activity', id: 'activity' },
+    { icon: '', label: 'Assigned contacts', id: 'contacts' }
+  ];
+
+  selectedTab: TabItem = this.tabs[0];
+
   @ViewChild('wrapper') wrapper: ElementRef;
   wrapperWidth = 0;
   wrapperHeight = 0;
@@ -81,10 +89,15 @@ export class AutoflowComponent
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
+    const title = this.route.snapshot.params['title'];
+    if (title) {
+      this.automation_title = title;
+    }
     if (id) {
       this.userService.profile$.subscribe((res) => {
         this.user_id = res._id;
-        this.loadData(id);
+        this.loadAutomation(id);
+        this.loadContacts(id);
         if (this.automation) {
           if (this.automation.role === 'admin') {
             this.auth = 'admin';
@@ -126,7 +139,7 @@ export class AutoflowComponent
     this.wrapperWidth = this.wrapper.nativeElement.offsetWidth;
   }
 
-  loadData(id): void {
+  loadAutomation(id): void {
     this.automationService.get(id).subscribe(
       (res) => {
         this.automation = res;
@@ -137,9 +150,19 @@ export class AutoflowComponent
         this.automation_title = res['title'];
         const actions = res['automations'];
         this.composeGraph(actions);
+        console.log('automation ============>', this.automation);
       },
       (err) => {}
     );
+  }
+
+  loadContacts(id): void {
+    this.automationService.getAssignedContacts(id).subscribe((res) => {
+      console.log("assigned contacts =============>", res);
+      if (res) {
+
+      }
+    });
   }
 
   composeGraph(actions): void {
@@ -1357,6 +1380,14 @@ export class AutoflowComponent
         this.autoZoom = true;
       }
     }
+  }
+
+  goToBack(): void {
+    this.router.navigate(['automations']);
+  }
+
+  changeTab(tab: TabItem): void {
+    this.selectedTab = tab;
   }
 
   ICONS = {
