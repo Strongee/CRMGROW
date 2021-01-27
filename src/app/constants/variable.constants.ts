@@ -96,6 +96,10 @@ export const COUNTRY_CODES = {
 };
 export const COUNTRIES = [
   {
+    code: '',
+    name: 'None'
+  },
+  {
     code: 'US',
     name: 'United States'
   },
@@ -105,6 +109,7 @@ export const COUNTRIES = [
   }
 ];
 export const REGIONS = {
+  None: ['None'],
   US: [
     'Alabama',
     'Alaska',

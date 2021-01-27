@@ -272,7 +272,6 @@ export class ContactComponent implements OnInit {
       position: { top: '100px' },
       width: '100vw',
       maxWidth: '700px',
-      maxHeight: '600px',
       data: {
         contact: this.selectedContact
       }

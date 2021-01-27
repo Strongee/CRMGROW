@@ -40,7 +40,7 @@
                 <div class="d-flex chip py-2">
                   <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
                   <div class="info">
-                    <div class="f-5 font-weight-bold text-primary c-pointer" (click)="goToContact(item)">
+                    <div class="f-5 font-weight-bold text-primary c-pointer">
                       {{item.fullName}}
                     </div>
                     <div class="f-2">{{item['email'] || 'Undefined'}}</div>
@@ -83,7 +83,7 @@
               <div class="d-flex chip py-2">
                 <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
                 <div class="info">
-                  <div class="f-5 font-weight-bold text-primary c-pointer" (click)="goToContact(item)">{{item.fullName}}</div>
+                  <div class="f-5 font-weight-bold text-primary c-pointer">{{item.fullName}}</div>
                   <div class="f-2">{{item['email'] || 'Undefined'}}</div>
                   <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
                 </div>
