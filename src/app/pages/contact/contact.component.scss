@@ -529,6 +529,15 @@
   br {
     display: none;
   }
+  .automation {
+    .custom-mat-field {
+      .selected-value {
+        @media screen and (min-width: 1200px) {
+          width: 90%;
+        }
+      }
+    }
+  }
 }
 
 .canceling.loader {
