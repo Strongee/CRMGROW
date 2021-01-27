@@ -6,10 +6,24 @@
           <ng-container *ngIf="resultItemTemplate; else defaultResult" [ngTemplateOutlet]="resultItemTemplate" [ngTemplateOutletContext]="{ $implicit: formControl.value }">
           </ng-container>
           <ng-template #defaultResult>
-            <div class="v-center selected-value">
-              <div class="f-3 font-weight-bold">{{formControl.value.title}}</div>
-              <div class="f-1 c-badge circle bgc-leafy-green mx-2">{{formControl.value.automations.length}}</div>
-              <div class="f-1 c-badge rect text-uppercase" [class]="formControl.value.role || 'own'">{{formControl.value.role || 'own'}}</div>
+            <!-- <mat-basic-chip
+              [removable]="true"
+              (removed)="remove()"
+            >
+              <div class="v-center selected-value">
+                <div class="f-3 font-weight-bold">{{formControl.value.title}}</div>
+                <div class="f-1 c-badge circle bgc-leafy-green mx-2">{{formControl.value.automations.length}}</div>
+                <div class="f-1 c-badge rect text-uppercase" [class]="formControl.value.role || 'own'">{{formControl.value.role || 'own'}}</div>
+                <div class="icon-close" matChipRemove></div>
+              </div>
+            </mat-basic-chip> -->
+            <div class="v-center">
+              <div class="v-center selected-value">
+                <div class="f-3 font-weight-bold">{{formControl.value.title}}</div>
+                <div class="f-1 c-badge circle bgc-leafy-green mx-2">{{formControl.value.automations.length}}</div>
+                <div class="f-1 c-badge rect text-uppercase" [class]="formControl.value.role || 'own'">{{formControl.value.role || 'own'}}</div>
+              </div>
+              <div class="icon-close ml-1" (click)="remove()"></div>
             </div>
           </ng-template>
         </ng-container>

@@ -127,4 +127,8 @@ export class InputAutomationComponent
   }
 
   ngOnDestroy(): void {}
+
+  remove(): void {
+    this.formControl = new FormControl();
+  }
 }

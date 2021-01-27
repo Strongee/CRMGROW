@@ -75,14 +75,11 @@
 
     <div class="form-group my-3">
       <label for="country_cc">country</label>
-      <select id="country_cc" class="form-control" [(ngModel)]="searchOption.countryCondition" name="country" #country="ngModel">
-        <option *ngFor="let country of COUNTRIES" value="{{country.code}}">{{country.name}}</option>
-      </select>
+      <app-input-country [selectedCountries]="searchOption.countryCondition" (onSelect)="updateFilter()"></app-input-country>
     </div>
     <div class="form-group my-3">
       <label for="state">State</label>
-      <input type="text" class="form-control" [(ngModel)]="searchOption.regionCondition" (ngModelChange)="updateFilter()" placeholder="" id="state" name="state"
-        #state="ngModel" />
+      <app-input-state [selectedRegions]="searchOption.regionCondition" (onSelect)="updateFilter()"></app-input-state>
     </div>
     <div class="form-group my-3">
       <label for="city">City</label>
