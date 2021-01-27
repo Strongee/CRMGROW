@@ -151,14 +151,10 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       (res) => {
         this.isPlannedLoading = false;
         this.isPlannedTableLoading = false;
-        this.plannedData = res;
-        this.pagePlannedData = res;
-        this.totalPlanned = res.length;
-        this.plannedCount = res.length;
-        // this.plannedData = res.data;
-        // this.pagePlannedData = res.data;
-        // this.totalPlanned = res.total;
-        // this.plannedCount = res.total;
+        this.plannedData = res.data;
+        this.pagePlannedData = res.data;
+        this.totalPlanned = res.total;
+        this.plannedCount = res.total;
       },
       (err) => {
         this.isPlannedTableLoading = false;

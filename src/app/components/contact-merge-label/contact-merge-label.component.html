@@ -6,7 +6,7 @@
             <div class="v-center py-1">
               <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="formControl.value.color === '#FFF' ? '#000' : formControl.value.color"></i>
               <span class="f-3 fw-600">{{formControl.value.name}}</span>
-            </div>  
+            </div>
           </ng-container>
           <ng-template #emptyLabel>
             <div class="v-center py-1">
@@ -39,7 +39,7 @@
                 </div>
             </ng-template>
         </mat-option>
-        <mat-option style="height: unset; line-height: unset;">
+        <mat-option style="height: unset; line-height: unset;" *ngIf="mergeLabelId && sourceLabelId != mergeLabelId">
             <ng-container *ngIf="mergeLabelId; else emptyLabel">
                 <div class="v-center py-1 f-3 fw-600">
                     <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="mergeLabel.color === '#FFF' ? '#000' : mergeLabel.color"></i>
