@@ -1,0 +1,40 @@
+<div class="custom-mat-field">
+    <mat-form-field appearance="outline" floatLabel="never" class="d-block">
+        <mat-chip-list aria-label="Contact Selection" #countryList>
+            <mat-basic-chip
+                *ngFor="let region of selectedRegions"
+                [removable]="true"
+                (removed)="remove(region)"
+            >
+                <div class="v-center chip p-1 bgc-blue rounded-pill mr-1">
+                    <div class="info text-white ml-1">
+                        {{region}}
+                    </div>
+                    <div class="close-icon-wrapper rounded-circle bg-white ml-1 c-pointer">
+                        <div class="i-icon i-close bgc-blue" matChipRemove></div>
+                    </div>
+                </div>
+            </mat-basic-chip>
+            <input
+                #inputField
+                [formControl]="formControl"
+                [matChipInputFor]="countryList"
+                [matAutocomplete]="auto"
+            >
+        </mat-chip-list>
+        <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="onSelectOption($event)"
+        >
+            <mat-optgroup *ngFor="let country of COUNTRY_REGIONS | keyvalue" label="{{country.key}}">
+                <mat-option *ngFor="let region of country.value" value="{{region}}">
+                    <div class="d-flex chip py-2">
+                        <div class="info">
+                            <div class="f-4 fw-600">{{region}}</div>
+                        </div>
+                    </div>
+                </mat-option>
+            </mat-optgroup>
+        </mat-autocomplete>
+    </mat-form-field>
+</div>

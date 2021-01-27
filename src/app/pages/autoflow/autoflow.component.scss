@@ -24,7 +24,7 @@
 }
 
 .card-body {
-  height: calc(100vh - 270px);
+  height: calc(100vh - 380px);
   flex: unset;
   padding: 0px;
   overflow-x: auto;
@@ -32,15 +32,15 @@
   flex-direction: column;
 
   @media screen and (max-width: 767px) {
-    height: calc(100vh - 335px);
+    height: calc(100vh - 450px);
   }
 
   @media screen and (max-width: 680px) {
-    height: calc(100vh - 300px);
+    height: calc(100vh - 410px);
   }
 
   @media screen and (max-width: 576px) {
-    height: calc(100vh - 280px);
+    height: calc(100vh - 400px);
   }
 }
 
@@ -76,6 +76,7 @@
     line-height: 18px;
   }
 }
+
 
 @media screen and (max-width: 420px) {
   .automation-name-wrapper {

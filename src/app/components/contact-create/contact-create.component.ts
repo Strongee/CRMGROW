@@ -72,6 +72,9 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   create(): any {
+    if (this.contact.state == 'None') {
+      this.contact.state = '';
+    }
     if (
       this.sameEmailContacts.length > 0 ||
       this.sameCellPhoneContacts.length > 0
