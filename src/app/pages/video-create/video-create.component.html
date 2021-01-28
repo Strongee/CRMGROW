@@ -169,9 +169,8 @@
                             <img class="w-100 mt-2" src="{{selectedTheme.thumbnail}}">
                         </div>
                         <div class="col-sm-6">
-                            <label class="f-1 font-weight-bold text-uppercase small-label">preview duration</label>
-                            <span class="v-center f-3 font-weight-bold text-c-dark">{{video.duration}} seconds</span>
-                            <span class="v-center f-1 small-label mt-2">Chooses default of preview video played while hovering on thumbnail.</span>
+                            <label class="f-1 font-weight-bold text-uppercase small-label">video duration</label>
+                            <span class="v-center f-3 font-weight-bold text-c-dark">{{video.duration/1000 | number}} seconds</span>
                         </div>
                     </div>
                     <div class="v-center justify-content-end mt-4">

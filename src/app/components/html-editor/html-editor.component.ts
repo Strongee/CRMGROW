@@ -34,7 +34,7 @@ export class HtmlEditorComponent implements OnInit {
   @Input()
   public set hasAttachment(val: boolean) {
     if (val) {
-      this.config.toolbar.container.push(['attachment']);
+      this.config.toolbar.container.unshift(['attachment']);
     }
   }
 
@@ -51,13 +51,8 @@ export class HtmlEditorComponent implements OnInit {
   config = {
     toolbar: {
       container: [
-        [{ font: [] }],
-        [{ size: ['small', false, 'large', 'huge'] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ header: 1 }, { header: 2 }],
-        [{ color: [] }, { background: [] }],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        [{ align: [] }],
+        ['bold', 'italic', 'underline'],
+        [{ list: 'bullet' }],
         ['link', 'image']
       ],
       handlers: {
@@ -218,3 +213,11 @@ export class HtmlEditorComponent implements OnInit {
     this.onFocus.emit();
   }
 }
+// [{ font: [] }],
+// [{ size: ['small', false, 'large', 'huge'] }],
+// ['bold', 'italic', 'underline', 'strike'],
+// [{ header: 1 }, { header: 2 }],
+// [{ color: [] }, { background: [] }],
+// [{ list: 'ordered' }, { list: 'bullet' }],
+// [{ align: [] }],
+// ['link', 'image']

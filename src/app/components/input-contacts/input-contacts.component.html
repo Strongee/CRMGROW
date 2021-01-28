@@ -22,12 +22,15 @@
         [matChipInputFor]="contactList"
         [matAutocomplete]="auto"
         [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+        [matChipInputAddOnBlur]="false"
+        (matChipInputTokenEnd)="onAdd($event)"
       >
     </mat-chip-list>
     <mat-autocomplete
       #auto="matAutocomplete"
       (optionSelected)="onSelectOption($event)"
-      [autoActiveFirstOption]="true"
+      (optionActivated)="onActiveOption($event)"
+      [autoActiveFirstOption]="onlyFromSearch"
     >
       <mat-option *ngFor="let item of filteredResults | async" [value]="item">
         <div class="d-flex chip py-2">

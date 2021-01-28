@@ -67,3 +67,10 @@
     }
   }
 }
+
+
+:host ::ng-deep {
+  .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 0px;
+  }
+}

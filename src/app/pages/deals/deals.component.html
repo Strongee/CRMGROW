@@ -36,13 +36,13 @@
                     </div> -->
                 </div>
                 <div
-                    class="deals-container mt-4"
+                    class="deals-container pt-1 pr-1"
                     cdkDropList
                     [cdkDropListData]="dealStage.deals"
                     (cdkDropListDropped)="drop($event, dealStage._id)"
                 >
                     <div
-                        class="deal mt-3 mr-3 p-3 c-pointer"
+                        class="deal mt-2 mr-2 p-3 c-pointer"
                         *ngFor="let deal of dealStage.deals" cdkDrag
                         (click)="dealDetail(deal._id)"
                     >

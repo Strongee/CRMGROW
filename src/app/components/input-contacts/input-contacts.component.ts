@@ -10,7 +10,9 @@ import {
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
   MatAutocompleteSelectedEvent,
-  MatAutocomplete
+  MatAutocomplete,
+  MatAutocompleteTrigger,
+  MatAutocompleteActivatedEvent
 } from '@angular/material/autocomplete';
 import { FormControl } from '@angular/forms';
 import {
@@ -26,6 +28,7 @@ import { ContactService } from 'src/app/services/contact.service';
 import * as _ from 'lodash';
 import { validateEmail } from 'src/app/utils/functions';
 import { Contact } from 'src/app/models/contact.model';
+import { MatChipInputEvent } from '@angular/material/chips';
 const phone = require('phone');
 
 @Component({
@@ -38,6 +41,7 @@ export class InputContactsComponent implements OnInit {
   keyword = '';
   searching = false;
   addOnBlur = false;
+  optionsFocused = false;
 
   @Input('placeholder') placeholder = 'Add Contacts';
   @Input('display') display = 'email'; // Which field is enabled when display the item.
@@ -48,12 +52,15 @@ export class InputContactsComponent implements OnInit {
   @Output() onSelect = new EventEmitter();
 
   formControl: FormControl = new FormControl();
+  @ViewChild(MatAutocompleteTrigger)
+  autoCompleteTrigger: MatAutocompleteTrigger;
   @ViewChild('inputField') inputField: ElementRef;
   @ViewChild('auto') autoComplete: MatAutocomplete;
 
   protected _onDestroy = new Subject<void>();
 
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
+  filteredContacts: Contact[] = [];
 
   constructor(private contactService: ContactService) {}
 
@@ -94,27 +101,26 @@ export class InputContactsComponent implements OnInit {
             if (this.keyword) {
               if (res.length) {
                 this.filteredResults.next(res);
+                this.filteredContacts = res;
               } else {
                 if (!this.onlyFromSearch) {
                   if (this.display === 'email' && validateEmail(this.keyword)) {
                     const first_name = this.keyword.split('@')[0];
                     const email = this.keyword;
-                    this.filteredResults.next([
-                      new Contact().deserialize({
-                        first_name,
-                        email
-                      })
-                    ]);
+                    const newContact = new Contact().deserialize({
+                      first_name,
+                      email
+                    });
+                    this.filteredResults.next([newContact]);
                   }
                   if (this.display === 'cell_phone') {
                     const cell_phone = phone(this.keyword)[0];
                     if (cell_phone) {
-                      this.filteredResults.next([
-                        new Contact().deserialize({
-                          first_name: cell_phone,
-                          cell_phone
-                        })
-                      ]);
+                      const newContact = new Contact().deserialize({
+                        first_name: cell_phone,
+                        cell_phone
+                      });
+                      this.filteredResults.next([newContact]);
                     }
                   }
                 }
@@ -212,5 +218,81 @@ export class InputContactsComponent implements OnInit {
     this.inputField.nativeElement.value = '';
     this.formControl.setValue(null);
     this.keyword = '';
+    this.optionsFocused = false;
+  }
+
+  onActiveOption(event: MatAutocompleteActivatedEvent): void {
+    if (event && event.option) {
+      this.optionsFocused = true;
+    } else {
+      this.optionsFocused = false;
+    }
+  }
+
+  onAdd(event: MatChipInputEvent): void {
+    if (this.optionsFocused || !event.value) {
+      return;
+    }
+    const newContact = new Contact();
+    if (this.display === 'email') {
+      if (!validateEmail(event.value)) {
+        return;
+      }
+      newContact.deserialize({
+        first_name: event.value.split('@')[0],
+        email: event.value
+      });
+    }
+    if (this.display === 'cell_phone') {
+      const cell_phone = phone(event.value)[0];
+      if (!cell_phone) {
+        return;
+      }
+      newContact.deserialize({
+        first_name: event.value,
+        cell_phone: event.value
+      });
+    }
+    let existContact;
+    this.filteredContacts.some((e) => {
+      if (e[this.display] === newContact[this.display]) {
+        existContact = e;
+        return true;
+      }
+    });
+    let addToContact;
+    if (existContact) {
+      addToContact = existContact;
+    } else {
+      addToContact = newContact;
+    }
+    let index;
+    if (addToContact._id) {
+      index = _.findIndex(this.selectedContacts, function (e) {
+        return e._id == addToContact._id;
+      });
+    } else {
+      index = _.findIndex(this.selectedContacts, (e) => {
+        if (this.display === 'email') {
+          return e.email == addToContact.email;
+        } else if (this.display === 'cell_phone') {
+          return e.cell_phone === addToContact.cell_phone;
+        }
+      });
+    }
+    if (index === -1) {
+      if (addToContact instanceof Contact) {
+        this.selectedContacts.push(addToContact);
+        this.onSelect.emit();
+      } else {
+        this.selectedContacts.push(new Contact().deserialize(addToContact));
+        this.onSelect.emit();
+      }
+    }
+    this.inputField.nativeElement.value = '';
+    this.autoCompleteTrigger.closePanel();
+    this.formControl.setValue(null);
+    this.keyword = '';
+    this.optionsFocused = false;
   }
 }
