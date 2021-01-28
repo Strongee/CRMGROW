@@ -32,9 +32,9 @@ export class MaterialComponent implements OnInit {
   garbage: Garbage = new Garbage();
   BULK_ACTIONS = BulkActions.Materials;
   tabs: TabItem[] = [
-    { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
-    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
-    { icon: 'i-icon i-image', label: 'IMAGE', id: 'images' }
+    { icon: 'i-icon i-video', label: 'VIDEO', id: 'video' },
+    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdf' },
+    { icon: 'i-icon i-image', label: 'IMAGE', id: 'image' }
   ];
   selectedTab: TabItem = this.tabs[0];
   siteUrl = environment.website;
@@ -217,14 +217,15 @@ export class MaterialComponent implements OnInit {
     this.router.navigate(['./materials']);
   }
 
-  sendMaterial(material: any): void {
+  sendMaterial(material: any, type: string): void {
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',
       maxWidth: '600px',
       disableClose: false,
       data: {
-        material: [material]
+        material: [material],
+        materialType: type
       }
     });
   }
@@ -267,40 +268,10 @@ export class MaterialComponent implements OnInit {
   }
 
   selectAllPage(type: string): void {
+    const bulkSetCapture = this.BULK_ACTIONS.filter(
+      (action) => action.label == 'Lead Capture'
+    );
     switch (type) {
-      case 'all':
-        if (this.isSelectedPage(type)) {
-          this.selectedVideoLists.clear();
-          this.selectedPdfLists.clear();
-          this.selectedImageLists.clear();
-        } else {
-          if (this.mode == 'provided') {
-            this.adminVideos.forEach((e) =>
-              this.selectedVideoLists.select(e._id)
-            );
-            this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-            this.adminImages.forEach((e) =>
-              this.selectedImageLists.select(e._id)
-            );
-          } else if (this.mode == 'own') {
-            this.ownVideos.forEach((e) =>
-              this.selectedVideoLists.select(e._id)
-            );
-            this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-            this.ownImages.forEach((e) =>
-              this.selectedImageLists.select(e._id)
-            );
-          } else {
-            this.teamVideos.forEach((e) =>
-              this.selectedVideoLists.select(e._id)
-            );
-            this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-            this.teamImages.forEach((e) =>
-              this.selectedImageLists.select(e._id)
-            );
-          }
-        }
-        break;
       case 'video':
         if (this.isSelectedPage(type)) {
           this.selectedVideoLists.clear();
@@ -319,6 +290,14 @@ export class MaterialComponent implements OnInit {
             );
           }
         }
+        const videoCaptureStatus = this.selectedVideoLists.selected.every(
+          (video) => this.captureVideos.includes(video)
+        );
+        if (videoCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
       case 'pdf':
         if (this.isSelectedPage(type)) {
@@ -331,6 +310,14 @@ export class MaterialComponent implements OnInit {
           } else {
             this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
           }
+        }
+        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
+          this.capturePdfs.includes(pdf)
+        );
+        if (pdfCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
         }
         break;
       case 'image':
@@ -351,43 +338,20 @@ export class MaterialComponent implements OnInit {
             );
           }
         }
+        const imageCaptureStatus = this.selectedImageLists.selected.every(
+          (image) => this.captureImages.includes(image)
+        );
+        if (imageCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
     }
   }
 
   isSelectedPage(type: string): any {
     switch (type) {
-      case 'all':
-        let allCounts, selectedCounts;
-        if (this.mode == 'provided') {
-          allCounts =
-            this.adminVideos.length +
-            this.adminPdfs.length +
-            this.adminImages.length;
-          selectedCounts =
-            this.selectedVideoLists.selected.length +
-            this.selectedPdfLists.selected.length +
-            this.selectedImageLists.selected.length;
-          return allCounts == selectedCounts;
-        } else if (this.mode == 'own') {
-          allCounts =
-            this.ownVideos.length + this.ownPdfs.length + this.ownImages.length;
-          selectedCounts =
-            this.selectedVideoLists.selected.length +
-            this.selectedPdfLists.selected.length +
-            this.selectedImageLists.selected.length;
-          return allCounts == selectedCounts;
-        } else {
-          allCounts =
-            this.teamVideos.length +
-            this.teamPdfs.length +
-            this.teamImages.length;
-          selectedCounts =
-            this.selectedVideoLists.selected.length +
-            this.selectedPdfLists.selected.length +
-            this.selectedImageLists.selected.length;
-          return allCounts == selectedCounts;
-        }
       case 'video':
         let videoCounts, selectedVideoCounts;
         if (this.mode == 'provided') {
@@ -436,10 +400,48 @@ export class MaterialComponent implements OnInit {
     }
   }
 
+  selectMaterial(material_id: string, type: string): void {
+    const bulkSetCapture = this.BULK_ACTIONS.filter(
+      (action) => action.label == 'Lead Capture'
+    );
+    switch (type) {
+      case 'video':
+        this.selectedVideoLists.toggle(material_id);
+        const videoCaptureStatus = this.selectedVideoLists.selected.every(
+          (video) => this.captureVideos.includes(video)
+        );
+        if (videoCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
+        break;
+      case 'pdf':
+        this.selectedPdfLists.toggle(material_id);
+        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
+          this.capturePdfs.includes(pdf)
+        );
+        if (pdfCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
+        break;
+      case 'image':
+        this.selectedImageLists.toggle(material_id);
+        const imageCaptureStatus = this.selectedImageLists.selected.every(
+          (image) => this.captureImages.includes(image)
+        );
+        if (imageCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
+        break;
+    }
+  }
+
   setCapture(material_id: string, type: string): void {
-    let setCaptureList;
-    const materialList =
-      this.videos.length + this.pdfs.length + this.images.length;
     const bulkSetCapture = this.BULK_ACTIONS.filter(
       (action) => action.label == 'Lead Capture'
     );
@@ -464,11 +466,11 @@ export class MaterialComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        if (setCaptureList == materialList) {
+
+        const videoCaptureStatus = this.selectedVideoLists.selected.every(
+          (video) => this.captureVideos.includes(video)
+        );
+        if (videoCaptureStatus) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -494,11 +496,11 @@ export class MaterialComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        if (setCaptureList == materialList) {
+
+        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
+          this.capturePdfs.includes(pdf)
+        );
+        if (pdfCaptureStatus) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -524,11 +526,11 @@ export class MaterialComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        if (setCaptureList == materialList) {
+
+        const imageCaptureStatus = this.selectedImageLists.selected.every(
+          (image) => this.captureImages.includes(image)
+        );
+        if (imageCaptureStatus) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -1023,31 +1025,90 @@ export class MaterialComponent implements OnInit {
         }
       });
   }
+
   doAction(evt: any): void {
     switch (evt.label) {
       case 'Send via e-mail':
         const emailMaterial = [];
-        this.selectedVideoLists.selected.forEach((id) => {
-          this.videos.forEach((video) => {
-            if (video._id == id) {
-              emailMaterial.push(video);
-            }
-          });
-        });
-        this.selectedPdfLists.selected.forEach((id) => {
-          this.pdfs.forEach((pdf) => {
-            if (pdf._id == id) {
-              emailMaterial.push(pdf);
-            }
-          });
-        });
-        this.selectedImageLists.selected.forEach((id) => {
-          this.images.forEach((image) => {
-            if (image._id == id) {
-              emailMaterial.push(image);
-            }
-          });
-        });
+        if (this.selectedTab.id == 'video') {
+          if (this.mode == 'provided') {
+            this.selectedVideoLists.selected.forEach((id) => {
+              this.adminVideos.forEach((video) => {
+                if (video._id == id) {
+                  emailMaterial.push(video);
+                }
+              });
+            });
+          } else if (this.mode == 'own') {
+            this.selectedVideoLists.selected.forEach((id) => {
+              this.ownVideos.forEach((video) => {
+                if (video._id == id) {
+                  emailMaterial.push(video);
+                }
+              });
+            });
+          } else {
+            this.selectedVideoLists.selected.forEach((id) => {
+              this.teamVideos.forEach((video) => {
+                if (video._id == id) {
+                  emailMaterial.push(video);
+                }
+              });
+            });
+          }
+        } else if (this.selectedTab.id == 'pdf') {
+          if (this.mode == 'provided') {
+            this.selectedPdfLists.selected.forEach((id) => {
+              this.adminPdfs.forEach((pdf) => {
+                if (pdf._id == id) {
+                  emailMaterial.push(pdf);
+                }
+              });
+            });
+          } else if (this.mode == 'own') {
+            this.selectedPdfLists.selected.forEach((id) => {
+              this.ownPdfs.forEach((pdf) => {
+                if (pdf._id == id) {
+                  emailMaterial.push(pdf);
+                }
+              });
+            });
+          } else {
+            this.selectedPdfLists.selected.forEach((id) => {
+              this.teamPdfs.forEach((pdf) => {
+                if (pdf._id == id) {
+                  emailMaterial.push(pdf);
+                }
+              });
+            });
+          }
+        } else {
+          if (this.mode == 'provided') {
+            this.selectedImageLists.selected.forEach((id) => {
+              this.adminImages.forEach((image) => {
+                if (image._id == id) {
+                  emailMaterial.push(image);
+                }
+              });
+            });
+          } else if (this.mode == 'own') {
+            this.selectedImageLists.selected.forEach((id) => {
+              this.ownImages.forEach((image) => {
+                if (image._id == id) {
+                  emailMaterial.push(image);
+                }
+              });
+            });
+          } else {
+            this.selectedImageLists.selected.forEach((id) => {
+              this.teamImages.forEach((image) => {
+                if (image._id == id) {
+                  emailMaterial.push(image);
+                }
+              });
+            });
+          }
+        }
         this.dialog.open(MaterialSendComponent, {
           position: { top: '5vh' },
           width: '100vw',
@@ -1055,38 +1116,91 @@ export class MaterialComponent implements OnInit {
           disableClose: false,
           data: {
             material: emailMaterial,
-            type: 'email'
+            type: 'email',
+            materialType: this.selectedTab.id
           }
         });
         break;
       case 'Send via SMS':
         const textMaterial = [];
-        if (this.selectedVideoLists.selected.length) {
-          this.selectedVideoLists.selected.forEach((id) => {
-            this.videos.forEach((video) => {
-              if (video._id == id) {
-                textMaterial.push(video);
-              }
+        if (this.selectedTab.id == 'video') {
+          if (this.mode == 'provided') {
+            this.selectedVideoLists.selected.forEach((id) => {
+              this.adminVideos.forEach((video) => {
+                if (video._id == id) {
+                  textMaterial.push(video);
+                }
+              });
             });
-          });
-        }
-        if (this.selectedPdfLists.selected.length) {
-          this.selectedPdfLists.selected.forEach((id) => {
-            this.pdfs.forEach((pdf) => {
-              if (pdf._id == id) {
-                textMaterial.push(pdf);
-              }
+          } else if (this.mode == 'own') {
+            this.selectedVideoLists.selected.forEach((id) => {
+              this.ownVideos.forEach((video) => {
+                if (video._id == id) {
+                  textMaterial.push(video);
+                }
+              });
             });
-          });
-        }
-        if (this.selectedImageLists.selected.length) {
-          this.selectedImageLists.selected.forEach((id) => {
-            this.images.forEach((image) => {
-              if (image._id == id) {
-                textMaterial.push(image);
-              }
+          } else {
+            this.selectedVideoLists.selected.forEach((id) => {
+              this.teamVideos.forEach((video) => {
+                if (video._id == id) {
+                  textMaterial.push(video);
+                }
+              });
             });
-          });
+          }
+        } else if (this.selectedTab.id == 'pdf') {
+          if (this.mode == 'provided') {
+            this.selectedPdfLists.selected.forEach((id) => {
+              this.adminPdfs.forEach((pdf) => {
+                if (pdf._id == id) {
+                  textMaterial.push(pdf);
+                }
+              });
+            });
+          } else if (this.mode == 'own') {
+            this.selectedPdfLists.selected.forEach((id) => {
+              this.ownPdfs.forEach((pdf) => {
+                if (pdf._id == id) {
+                  textMaterial.push(pdf);
+                }
+              });
+            });
+          } else {
+            this.selectedPdfLists.selected.forEach((id) => {
+              this.teamPdfs.forEach((pdf) => {
+                if (pdf._id == id) {
+                  textMaterial.push(pdf);
+                }
+              });
+            });
+          }
+        } else {
+          if (this.mode == 'provided') {
+            this.selectedImageLists.selected.forEach((id) => {
+              this.adminImages.forEach((image) => {
+                if (image._id == id) {
+                  textMaterial.push(image);
+                }
+              });
+            });
+          } else if (this.mode == 'own') {
+            this.selectedImageLists.selected.forEach((id) => {
+              this.ownImages.forEach((image) => {
+                if (image._id == id) {
+                  textMaterial.push(image);
+                }
+              });
+            });
+          } else {
+            this.selectedImageLists.selected.forEach((id) => {
+              this.teamImages.forEach((image) => {
+                if (image._id == id) {
+                  textMaterial.push(image);
+                }
+              });
+            });
+          }
         }
         this.dialog.open(MaterialSendComponent, {
           position: { top: '5vh' },
@@ -1095,91 +1209,175 @@ export class MaterialComponent implements OnInit {
           disableClose: false,
           data: {
             material: textMaterial,
-            mediaType: 'text',
+            type: 'text',
             materialType: this.selectedTab.id
           }
         });
         break;
       case 'Select all':
-        if (this.mode == 'provided') {
-          this.adminVideos.forEach((e) =>
-            this.selectedVideoLists.select(e._id)
-          );
-          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.adminImages.forEach((e) =>
-            this.selectedImageLists.select(e._id)
-          );
-        } else if (this.mode == 'own') {
-          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
+        if (this.selectedTab.id == 'video') {
+          if (this.mode == 'provided') {
+            this.adminVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+          } else if (this.mode == 'own') {
+            this.ownVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+          } else {
+            this.teamVideos.forEach((e) =>
+              this.selectedVideoLists.select(e._id)
+            );
+          }
+        } else if (this.selectedTab.id == 'pdf') {
+          if (this.mode == 'provided') {
+            this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          } else if (this.mode == 'own') {
+            this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          } else {
+            this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+          }
         } else {
-          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
+          if (this.mode == 'provided') {
+            this.adminImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          } else if (this.mode == 'own') {
+            this.ownImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          } else {
+            this.teamImages.forEach((e) =>
+              this.selectedImageLists.select(e._id)
+            );
+          }
         }
         break;
       case 'Deselect':
-        this.selectedVideoLists.clear();
-        this.selectedPdfLists.clear();
-        this.selectedImageLists.clear();
+        if (this.selectedTab.id == 'video') {
+          this.selectedVideoLists.clear();
+        } else if (this.selectedTab.id == 'pdf') {
+          this.selectedPdfLists.clear();
+        } else {
+          this.selectedImageLists.clear();
+        }
         break;
       case 'Lead Capture':
-        const setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        const materialList =
-          this.videos.length + this.pdfs.length + this.images.length;
-        if (setCaptureList == materialList) {
-          this.captureVideos = [];
-          this.garbage.capture_videos = [];
-          this.capturePdfs = [];
-          this.garbage.capture_pdfs = [];
-          this.captureImages = [];
-          this.garbage.capture_images = [];
-          this.userService
-            .updateGarbage({
-              capture_videos: this.captureVideos,
-              capture_pdfs: this.capturePdfs,
-              capture_images: this.captureImages
-            })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-          evt.status = false;
-        } else {
-          this.videos.forEach((e) => {
-            if (this.captureVideos.indexOf(e._id) === -1) {
-              this.captureVideos.push(e._id);
+        const bulkSetCapture = this.BULK_ACTIONS.filter(
+          (action) => action.label == 'Lead Capture'
+        );
+        switch (this.selectedTab.id) {
+          case 'video':
+            if (bulkSetCapture[0].status) {
+              this.selectedVideoLists.selected.forEach((video) => {
+                const pos = this.captureVideos.indexOf(video);
+                if (pos != -1) {
+                  this.captureVideos.splice(pos, 1);
+                }
+              });
+              this.garbage.capture_videos = [];
+              this.garbage.capture_videos = this.captureVideos;
+              this.userService
+                .updateGarbage({
+                  capture_videos: this.captureVideos
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = false;
+            } else {
+              this.selectedVideoLists.selected.forEach((video) => {
+                const pos = this.captureVideos.indexOf(video);
+                if (pos == -1) {
+                  this.captureVideos.push(video);
+                }
+              });
+              this.garbage.capture_videos = [];
+              this.garbage.capture_videos = this.captureVideos;
+              this.userService
+                .updateGarbage({
+                  capture_videos: this.captureVideos
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = true;
             }
-          });
-          this.pdfs.forEach((e) => {
-            if (this.capturePdfs.indexOf(e._id) === -1) {
-              this.capturePdfs.push(e._id);
+            break;
+          case 'pdf':
+            if (bulkSetCapture[0].status) {
+              this.selectedPdfLists.selected.forEach((pdf) => {
+                const pos = this.capturePdfs.indexOf(pdf);
+                if (pos != -1) {
+                  this.capturePdfs.splice(pos, 1);
+                }
+              });
+              this.garbage.capture_pdfs = [];
+              this.garbage.capture_pdfs = this.capturePdfs;
+              this.userService
+                .updateGarbage({
+                  capture_pdfs: this.capturePdfs
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = false;
+            } else {
+              this.selectedPdfLists.selected.forEach((pdf) => {
+                const pos = this.capturePdfs.indexOf(pdf);
+                if (pos == -1) {
+                  this.capturePdfs.push(pdf);
+                }
+              });
+              this.garbage.capture_pdfs = [];
+              this.garbage.capture_pdfs = this.capturePdfs;
+              this.userService
+                .updateGarbage({
+                  capture_pdfs: this.capturePdfs
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = true;
             }
-          });
-          this.images.forEach((e) => {
-            if (this.captureImages.indexOf(e._id) === -1) {
-              this.captureImages.push(e._id);
+            break;
+          case 'image':
+            if (bulkSetCapture[0].status) {
+              this.selectedImageLists.selected.forEach((image) => {
+                const pos = this.captureImages.indexOf(image);
+                if (pos != -1) {
+                  this.captureImages.splice(pos, 1);
+                }
+              });
+              this.garbage.capture_images = [];
+              this.garbage.capture_images = this.captureImages;
+              this.userService
+                .updateGarbage({
+                  capture_images: this.captureImages
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = false;
+            } else {
+              this.selectedImageLists.selected.forEach((image) => {
+                const pos = this.captureImages.indexOf(image);
+                if (pos == -1) {
+                  this.captureImages.push(image);
+                }
+              });
+              this.garbage.capture_images = [];
+              this.garbage.capture_images = this.captureImages;
+              this.userService
+                .updateGarbage({
+                  capture_images: this.captureImages
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = true;
             }
-          });
-          this.garbage.capture_videos = [];
-          this.garbage.capture_pdfs = [];
-          this.garbage.capture_images = [];
-          this.garbage.capture_videos = this.captureVideos;
-          this.garbage.capture_pdfs = this.capturePdfs;
-          this.garbage.capture_images = this.captureImages;
-          this.userService
-            .updateGarbage({
-              capture_videos: this.captureVideos,
-              capture_pdfs: this.capturePdfs,
-              capture_images: this.captureImages
-            })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-          evt.status = true;
+            break;
         }
         break;
       case 'Delete':

@@ -21,7 +21,6 @@ import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component
 import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { MaterialSendComponent } from 'src/app/components/material-send/material-send.component';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-materials',
@@ -270,6 +269,9 @@ export class MaterialsComponent implements OnInit {
   }
 
   selectAllPage(type: string): void {
+    const bulkSetCapture = this.BULK_ACTIONS.filter(
+      (action) => action.label == 'Lead Capture'
+    );
     switch (type) {
       case 'video':
         if (this.isSelectedPage(type)) {
@@ -281,6 +283,14 @@ export class MaterialsComponent implements OnInit {
           );
           this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
         }
+        const videoCaptureStatus = this.selectedVideoLists.selected.every(
+          (video) => this.captureVideos.includes(video)
+        );
+        if (videoCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
       case 'pdf':
         if (this.isSelectedPage(type)) {
@@ -289,6 +299,14 @@ export class MaterialsComponent implements OnInit {
           this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
           this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
           this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+        }
+        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
+          this.capturePdfs.includes(pdf)
+        );
+        if (pdfCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
         }
         break;
       case 'image':
@@ -300,6 +318,14 @@ export class MaterialsComponent implements OnInit {
             this.selectedImageLists.select(e._id)
           );
           this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
+        }
+        const imageCaptureStatus = this.selectedImageLists.selected.every(
+          (image) => this.captureImages.includes(image)
+        );
+        if (imageCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
         }
         break;
     }
@@ -336,13 +362,36 @@ export class MaterialsComponent implements OnInit {
     switch (type) {
       case 'video':
         this.selectedVideoLists.toggle(material_id);
+        const videoCaptureStatus = this.selectedVideoLists.selected.every(
+          (video) => this.captureVideos.includes(video)
+        );
+        if (videoCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
       case 'pdf':
         this.selectedPdfLists.toggle(material_id);
+        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
+          this.capturePdfs.includes(pdf)
+        );
+        if (pdfCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
       case 'image':
         this.selectedImageLists.toggle(material_id);
-        if ()
+        const imageCaptureStatus = this.selectedImageLists.selected.every(
+          (image) => this.captureImages.includes(image)
+        );
+        if (imageCaptureStatus) {
+          bulkSetCapture[0].status = true;
+        } else {
+          bulkSetCapture[0].status = false;
+        }
         break;
     }
   }
@@ -372,7 +421,10 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        if (this.captureVideos.length == this.videos.length) {
+        const videoCaptureStatus = this.selectedVideoLists.selected.every(
+          (video) => this.captureVideos.includes(video)
+        );
+        if (videoCaptureStatus) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -398,7 +450,10 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        if (this.capturePdfs.length == this.pdfs.length) {
+        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
+          this.capturePdfs.includes(pdf)
+        );
+        if (pdfCaptureStatus) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -424,7 +479,10 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        if (this.captureImages.length == this.images.length) {
+        const imageCaptureStatus = this.selectedImageLists.selected.every(
+          (image) => this.captureImages.includes(image)
+        );
+        if (imageCaptureStatus) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -919,6 +977,7 @@ export class MaterialsComponent implements OnInit {
         }
       });
   }
+
   doAction(evt: any): void {
     switch (evt.label) {
       case 'Send via e-mail':
@@ -1018,61 +1077,121 @@ export class MaterialsComponent implements OnInit {
         }
         break;
       case 'Lead Capture':
-        const setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        const materialList =
-          this.videos.length + this.pdfs.length + this.images.length;
-        if (setCaptureList == materialList) {
-          this.captureVideos = [];
-          this.garbage.capture_videos = [];
-          this.capturePdfs = [];
-          this.garbage.capture_pdfs = [];
-          this.captureImages = [];
-          this.garbage.capture_images = [];
-          this.userService
-            .updateGarbage({
-              capture_videos: this.captureVideos,
-              capture_pdfs: this.capturePdfs,
-              capture_images: this.captureImages
-            })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-          evt.status = false;
-        } else {
-          this.videos.forEach((e) => {
-            if (this.captureVideos.indexOf(e._id) === -1) {
-              this.captureVideos.push(e._id);
+        const bulkSetCapture = this.BULK_ACTIONS.filter(
+          (action) => action.label == 'Lead Capture'
+        );
+        switch (this.selectedTab.id) {
+          case 'video':
+            if (bulkSetCapture[0].status) {
+              this.selectedVideoLists.selected.forEach((video) => {
+                const pos = this.captureVideos.indexOf(video);
+                if (pos != -1) {
+                  this.captureVideos.splice(pos, 1);
+                }
+              });
+              this.garbage.capture_videos = [];
+              this.garbage.capture_videos = this.captureVideos;
+              this.userService
+                .updateGarbage({
+                  capture_videos: this.captureVideos
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = false;
+            } else {
+              this.selectedVideoLists.selected.forEach((video) => {
+                const pos = this.captureVideos.indexOf(video);
+                if (pos == -1) {
+                  this.captureVideos.push(video);
+                }
+              });
+              this.garbage.capture_videos = [];
+              this.garbage.capture_videos = this.captureVideos;
+              this.userService
+                .updateGarbage({
+                  capture_videos: this.captureVideos
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = true;
             }
-          });
-          this.pdfs.forEach((e) => {
-            if (this.capturePdfs.indexOf(e._id) === -1) {
-              this.capturePdfs.push(e._id);
+            break;
+          case 'pdf':
+            if (bulkSetCapture[0].status) {
+              this.selectedPdfLists.selected.forEach((pdf) => {
+                const pos = this.capturePdfs.indexOf(pdf);
+                if (pos != -1) {
+                  this.capturePdfs.splice(pos, 1);
+                }
+              });
+              this.garbage.capture_pdfs = [];
+              this.garbage.capture_pdfs = this.capturePdfs;
+              this.userService
+                .updateGarbage({
+                  capture_pdfs: this.capturePdfs
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = false;
+            } else {
+              this.selectedPdfLists.selected.forEach((pdf) => {
+                const pos = this.capturePdfs.indexOf(pdf);
+                if (pos == -1) {
+                  this.capturePdfs.push(pdf);
+                }
+              });
+              this.garbage.capture_pdfs = [];
+              this.garbage.capture_pdfs = this.capturePdfs;
+              this.userService
+                .updateGarbage({
+                  capture_pdfs: this.capturePdfs
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = true;
             }
-          });
-          this.images.forEach((e) => {
-            if (this.captureImages.indexOf(e._id) === -1) {
-              this.captureImages.push(e._id);
+            break;
+          case 'image':
+            if (bulkSetCapture[0].status) {
+              this.selectedImageLists.selected.forEach((image) => {
+                const pos = this.captureImages.indexOf(image);
+                if (pos != -1) {
+                  this.captureImages.splice(pos, 1);
+                }
+              });
+              this.garbage.capture_images = [];
+              this.garbage.capture_images = this.captureImages;
+              this.userService
+                .updateGarbage({
+                  capture_images: this.captureImages
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = false;
+            } else {
+              this.selectedImageLists.selected.forEach((image) => {
+                const pos = this.captureImages.indexOf(image);
+                if (pos == -1) {
+                  this.captureImages.push(image);
+                }
+              });
+              this.garbage.capture_images = [];
+              this.garbage.capture_images = this.captureImages;
+              this.userService
+                .updateGarbage({
+                  capture_images: this.captureImages
+                })
+                .subscribe(() => {
+                  this.userService.updateGarbageImpl(this.garbage);
+                });
+              bulkSetCapture[0].status = true;
             }
-          });
-          this.garbage.capture_videos = [];
-          this.garbage.capture_pdfs = [];
-          this.garbage.capture_images = [];
-          this.garbage.capture_videos = this.captureVideos;
-          this.garbage.capture_pdfs = this.capturePdfs;
-          this.garbage.capture_images = this.captureImages;
-          this.userService
-            .updateGarbage({
-              capture_videos: this.captureVideos,
-              capture_pdfs: this.capturePdfs,
-              capture_images: this.captureImages
-            })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-          evt.status = true;
+            break;
         }
         break;
       case 'Delete':
