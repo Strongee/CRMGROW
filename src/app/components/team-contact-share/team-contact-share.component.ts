@@ -69,7 +69,9 @@ export class TeamContactShareComponent implements OnInit {
   }
 
   selectMember(member): any {
-    this.member = member;
+    if (member) {
+      this.member = member;
+    }
   }
 
   addContacts(contact): any {

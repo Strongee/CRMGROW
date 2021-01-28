@@ -48,6 +48,7 @@ import { TaskCreateComponent } from 'src/app/components/task-create/task-create.
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { AutomationService } from 'src/app/services/automation.service';
 import { Subscription } from 'rxjs';
+import { ContactShareComponent } from '../../components/contact-share/contact-share.component';
 
 @Component({
   selector: 'app-contact',
@@ -403,6 +404,16 @@ export class ContactComponent implements OnInit, OnDestroy {
       panelClass: 'send-email',
       backdropClass: 'cdk-send-email',
       disableClose: false,
+      data: {
+        contact: this.contact
+      }
+    });
+  }
+
+  openShareContactDlg(): void {
+    this.dialog.open(ContactShareComponent, {
+      width: '500px',
+      maxWidth: '90vw',
       data: {
         contact: this.contact
       }

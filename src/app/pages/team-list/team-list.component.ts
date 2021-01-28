@@ -28,6 +28,7 @@ export class TeamListComponent implements OnInit {
   userId = '';
   currentUser: User;
   hasOwnTeam = true;
+  role = '';
 
   isAcceptInviting = false;
   isDeclineInviting = false;

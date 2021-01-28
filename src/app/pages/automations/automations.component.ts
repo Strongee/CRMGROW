@@ -147,8 +147,8 @@ export class AutomationsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
-          console.log('assigned contacts ==============>', res);
+        if (res && res.status) {
+          this.automationService.reload();
         }
       });
   }
@@ -161,7 +161,6 @@ export class AutomationsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        console.log('automation new =========>', res);
         if (res) {
         }
       });

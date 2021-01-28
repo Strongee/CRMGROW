@@ -211,7 +211,7 @@ export class MaterialsComponent implements OnInit {
   }
 
   createVideo(): void {
-    this.router.navigate(['./materials/create']);
+    this.router.navigate([`./materials/${this.selectedTab.id}`]);
   }
 
   selectFolder(type: string): void {

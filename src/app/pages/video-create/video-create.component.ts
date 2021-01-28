@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 import { Garbage } from 'src/app/models/garbage.model';
 import { TabItem } from 'src/app/utils/data.types';
 import { Subscription, timer } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 
 @Component({
@@ -51,11 +51,12 @@ export class VideoCreateComponent implements OnInit {
   thumbnail_loading = false;
   upload_thumbnail;
   customTitle: '';
+  mode = '';
 
   tabs: TabItem[] = [
-    { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
-    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
-    { icon: 'i-icon i-notification', label: 'IMAGE', id: 'images' }
+    { icon: 'i-icon i-video', label: 'VIDEO', id: 'video' },
+    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdf' },
+    { icon: 'i-icon i-notification', label: 'IMAGE', id: 'image' }
   ];
   selectedTab: TabItem = this.tabs[0];
 
@@ -129,7 +130,8 @@ export class VideoCreateComponent implements OnInit {
     private toast: ToastrService,
     private helperService: HelperService,
     private themeService: ThemeService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
@@ -140,6 +142,12 @@ export class VideoCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.mode = this.route.snapshot.params['mode'];
+    this.tabs.forEach((tab) => {
+      if (tab.id == this.mode) {
+        this.changeTab(tab);
+      }
+    });
     this.videoUploader.onAfterAddingFile = (file) => {
       file.withCredentials = false;
       if (this.videoUploader.queue.length > 1) {
