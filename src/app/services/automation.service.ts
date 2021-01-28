@@ -126,14 +126,14 @@ export class AutomationService extends HttpService {
     );
   }
 
-  bulkAssign(contacts: string[], automation: string): Observable<boolean> {
+  bulkAssign(contacts: string[], automation: string): Observable<any> {
     return this.httpClient
       .post(this.server + AUTOMATION.ASSIGN, {
         contacts,
         automation_id: automation
       })
       .pipe(
-        map((res) => res['status']),
+        map((res) => res),
         catchError(this.handleError('AUTOMATION BULK ASSIGN', false))
       );
   }

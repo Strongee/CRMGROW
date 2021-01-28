@@ -62,6 +62,7 @@ export class AutoflowComponent
   zoomLevel = 1;
 
   editMode = 'new';
+  contacts = [];
 
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'activity' },
@@ -97,7 +98,6 @@ export class AutoflowComponent
       this.userService.profile$.subscribe((res) => {
         this.user_id = res._id;
         this.loadAutomation(id);
-        this.loadContacts(id);
         if (this.automation) {
           if (this.automation.role === 'admin') {
             this.auth = 'admin';
@@ -144,13 +144,20 @@ export class AutoflowComponent
       (res) => {
         this.automation = res;
         const mode = this.route.snapshot.params['mode'];
+
+        if (this.automation.contacts.length) {
+          this.automationService.getStatus(this.automation._id, this.automation.contacts).subscribe((contacts) => {
+            console.log("automation contacts ==============>", contacts);
+          })
+        }
+
         if (mode === 'edit') {
           this.automation_id = res['_id'];
         }
         this.automation_title = res['title'];
         const actions = res['automations'];
         this.composeGraph(actions);
-        console.log('automation ============>', this.automation);
+
       },
       (err) => {}
     );
