@@ -145,7 +145,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="video-{{video._id}}"
-                      (change)="selectedVideoLists.toggle(video._id)"
+                      (change)="selectMaterial(video._id, 'video')"
                       [checked]="selectedVideoLists.isSelected(video._id)"
                     >
                     <label class="custom-control-label" for="video-{{video._id}}"></label>
@@ -314,7 +314,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="video-{{video._id}}"
-                      (change)="selectedVideoLists.toggle(video._id)"
+                      (change)="selectMaterial(video._id, 'video')"
                       [checked]="selectedVideoLists.isSelected(video._id)"
                     >
                     <label class="custom-control-label" for="video-{{video._id}}"></label>
@@ -483,7 +483,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="video-{{video._id}}"
-                      (change)="selectedVideoLists.toggle(video._id)"
+                      (change)="selectMaterial(video._id, 'video')"
                       [checked]="selectedVideoLists.isSelected(video._id)"
                     >
                     <label class="custom-control-label" for="video-{{video._id}}"></label>
@@ -757,7 +757,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="pdf-{{pdf._id}}"
-                      (change)="selectedPdfLists.toggle(pdf._id)"
+                      (change)="selectMaterial(pdf._id, 'pdf')"
                       [checked]="selectedPdfLists.isSelected(pdf._id)"
                     >
                     <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
@@ -909,7 +909,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="pdf-{{pdf._id}}"
-                      (change)="selectedPdfLists.toggle(pdf._id)"
+                      (change)="selectMaterial(pdf._id, 'pdf')"
                       [checked]="selectedPdfLists.isSelected(pdf._id)"
                     >
                     <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
@@ -1061,7 +1061,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="pdf-{{pdf._id}}"
-                      (change)="selectedPdfLists.toggle(pdf._id)"
+                      (change)="selectMaterial(pdf._id, 'pdf')"
                       [checked]="selectedPdfLists.isSelected(pdf._id)"
                     >
                     <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
@@ -1316,7 +1316,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="image-{{image._id}}"
-                      (change)="selectedImageLists.toggle(image._id)"
+                      (change)="selectMaterial(image._id, 'image')"
                       [checked]="selectedImageLists.isSelected(image._id)"
                     >
                     <label class="custom-control-label" for="image-{{image._id}}"></label>
@@ -1468,7 +1468,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="image-{{image._id}}"
-                      (change)="selectedImageLists.toggle(image._id)"
+                      (change)="selectMaterial(image._id, 'image')"
                       [checked]="selectedImageLists.isSelected(image._id)"
                     >
                     <label class="custom-control-label" for="image-{{image._id}}"></label>
@@ -1620,7 +1620,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="image-{{image._id}}"
-                      (change)="selectedImageLists.toggle(image._id)"
+                      (change)="selectMaterial(image._id, 'image')"
                       [checked]="selectedImageLists.isSelected(image._id)"
                     >
                     <label class="custom-control-label" for="image-{{image._id}}"></label>
