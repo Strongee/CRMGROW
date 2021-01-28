@@ -121,9 +121,21 @@
               </ng-template>
             </thead>
             <tbody>
-              <tr class="section-header" *ngIf="adminVideos.length || editedVideos.length">
+              <tr class="section-header">
                 <td colspan="7" class="f-3 font-weight-bold">
-                  Common Videos
+                  <div class="v-center">
+                    <span class="f-3 font-weight-bold">Common Videos</span>
+                    <div class="f-3 font-weight-bold c-blue ml-auto c-pointer" *ngIf="editedVideos.length">
+                      <a (click)="showAllCommonVideos()">Show hidden Videos({{editedVideos.length}})</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!adminVideos.length && editedVideos.length">
+                <td colspan="7">
+                  <div class="f-6 font-weigth-bold text-center">
+                    All default videos are hidden. If you want to see them again, please make them enable again
+                  </div>
                 </td>
               </tr>
               <tr *ngFor="let video of adminVideos">
@@ -721,9 +733,21 @@
               </ng-template>
             </thead>
             <tbody>
-              <tr class="section-header" *ngIf="adminPdfs.length || editedPdfs.length">
+              <tr class="section-header">
                 <td colspan="7" class="f-3 font-weight-bold">
-                  Common PDFs
+                  <div class="v-center">
+                    <span class="f-3 font-weight-bold">Common PDFs</span>
+                    <div class="f-3 font-weight-bold c-blue ml-auto c-pointer" *ngIf="editedPdfs.length">
+                      <a (click)="showAllCommonPdfs()">Show hidden Pdfs({{editedPdfs.length}})</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!adminPdfs.length && editedPdfs.length">
+                <td colspan="7">
+                  <div class="f-6 font-weigth-bold text-center">
+                    All default pdfs are hidden. If you want to see them again, please make them enable again
+                  </div>
                 </td>
               </tr>
               <tr *ngFor="let pdf of adminPdfs">
@@ -750,16 +774,20 @@
                   </a>
                   <h5 class="f-3 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
                   <span class="f-1 c-dark">{{(pdf.description || '') | stripTags | shorten: 120: '...'}}</span>
-                  <div class="f-3 c-dark view-field">
-                    <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + pdf._id]" class="text-decoration-none">
+                    <div class="f-3 c-dark view-field">
+                      <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="view-col">
-                  <div class="v-center justify-content-end f-3 c-dark py-2">
-                    <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + pdf._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end f-3 c-dark py-2">
+                      <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="time-col f-3 c-dark">
                   <div class="v-centerf-3 c-dark py-2">
@@ -781,11 +809,11 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf, 'pdf')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
                       <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Copy link</span>
                     </button>
@@ -898,16 +926,20 @@
                   </a>
                   <h5 class="f-3 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
                   <span class="f-1 c-dark">{{(pdf.description || '') | stripTags | shorten: 120: '...'}}</span>
-                  <div class="f-3 c-dark view-field">
-                    <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + pdf._id]" class="text-decoration-none">
+                    <div class="f-3 c-dark view-field">
+                      <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="view-col">
-                  <div class="v-center justify-content-end f-3 c-dark py-2">
-                    <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + pdf._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end f-3 c-dark py-2">
+                      <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="time-col f-3 c-dark">
                   <div class="v-centerf-3 c-dark py-2">
@@ -929,11 +961,11 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf, 'pdf')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
                       <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Copy link</span>
                     </button>
@@ -1046,16 +1078,20 @@
                   </a>
                   <h5 class="f-3 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
                   <span class="f-1 c-dark">{{(pdf.description || '') | stripTags | shorten: 120: '...'}}</span>
-                  <div class="f-3 c-dark view-field">
-                    <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + pdf._id]" class="text-decoration-none">
+                    <div class="f-3 c-dark view-field">
+                      <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="view-col">
-                  <div class="v-center justify-content-end f-3 c-dark py-2">
-                    <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + pdf._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end f-3 c-dark py-2">
+                      <span class="f-3 c-dark mt-2">{{pdf.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="time-col f-3 c-dark">
                   <div class="v-centerf-3 c-dark py-2">
@@ -1077,11 +1113,11 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf, 'pdf')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(pdf, 'pdf')">
                       <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
                       <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Copy link</span>
                     </button>
@@ -1256,9 +1292,21 @@
               </ng-template>
             </thead>
             <tbody>
-              <tr class="section-header" *ngIf="adminImages.length || editedImages.length">
+              <tr class="section-header">
                 <td colspan="7" class="f-3 font-weight-bold">
-                  Common Images
+                  <div class="v-center">
+                    <span class="f-3 font-weight-bold">Common Images</span>
+                    <div class="f-3 font-weight-bold c-blue ml-auto c-pointer" *ngIf="editedImages.length">
+                      <a (click)="showAllCommonImages()">Show hidden Images({{editedImages.length}})</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!adminImages.length && editedImages.length">
+                <td colspan="7">
+                  <div class="f-6 font-weigth-bold text-center">
+                    All default images are hidden. If you want to see them again, please make them enable again
+                  </div>
                 </td>
               </tr>
               <tr *ngFor="let image of adminImages">
@@ -1285,16 +1333,20 @@
                   </a>
                   <h5 class="f-3 font-weight-bold c-dark m-0">{{image.title}}</h5>
                   <span class="f-1 c-dark">{{(image.description || '') | stripTags | shorten: 120: '...'}}</span>
-                  <div class="f-3 c-dark view-field">
-                    <span class="f-3 c-dark mt-2">{{image.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + image._id]" class="text-decoration-none">
+                    <div class="f-3 c-dark view-field">
+                      <span class="f-3 c-dark mt-2">{{image.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="view-col">
-                  <div class="v-center justify-content-end f-3 c-dark py-2">
-                    <span class="f-3 c-dark mt-2">{{image.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + image._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end f-3 c-dark py-2">
+                      <span class="f-3 c-dark mt-2">{{image.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="time-col f-3 c-dark">
                   <div class="v-centerf-3 c-dark py-2">
@@ -1316,11 +1368,11 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image, 'image')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
                       <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Copy link</span>
                     </button>
@@ -1433,16 +1485,20 @@
                   </a>
                   <h5 class="f-3 font-weight-bold c-dark m-0">{{image.title}}</h5>
                   <span class="f-1 c-dark">{{(image.description || '') | stripTags | shorten: 120: '...'}}</span>
-                  <div class="f-3 c-dark view-field">
-                    <span class="f-3 c-dark mt-2">{{image.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + image._id]" class="text-decoration-none">
+                    <div class="f-3 c-dark view-field">
+                      <span class="f-3 c-dark mt-2">{{image.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="view-col">
-                  <div class="v-center justify-content-end f-3 c-dark py-2">
-                    <span class="f-3 c-dark mt-2">{{image.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + image._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end f-3 c-dark py-2">
+                      <span class="f-3 c-dark mt-2">{{image.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="time-col f-3 c-dark">
                   <div class="v-centerf-3 c-dark py-2">
@@ -1464,11 +1520,11 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image, 'image')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
                       <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Copy link</span>
                     </button>
@@ -1581,16 +1637,20 @@
                   </a>
                   <h5 class="f-3 font-weight-bold c-dark m-0">{{image.title}}</h5>
                   <span class="f-1 c-dark">{{(image.description || '') | stripTags | shorten: 120: '...'}}</span>
-                  <div class="f-3 c-dark view-field">
-                    <span class="f-3 c-dark mt-2">{{image.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + image._id]" class="text-decoration-none">
+                    <div class="f-3 c-dark view-field">
+                      <span class="f-3 c-dark mt-2">{{image.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="view-col">
-                  <div class="v-center justify-content-end f-3 c-dark py-2">
-                    <span class="f-3 c-dark mt-2">{{image.views}}</span>
-                    <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
-                  </div>
+                  <a [routerLink]="['/materials/analytics/' + image._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end f-3 c-dark py-2">
+                      <span class="f-3 c-dark mt-2">{{image.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                    </div>
+                  </a>
                 </td>
                 <td class="time-col f-3 c-dark">
                   <div class="v-centerf-3 c-dark py-2">
@@ -1612,11 +1672,11 @@
                 </td>
                 <td class="actions-col">
                   <div class="v-center justify-content-between actions-wrapper">
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image, 'image')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(image, 'image')">
                       <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Send</span>
                     </button>
-                    <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                    <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
                       <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                       <span class="f-3 c-dark">Copy link</span>
                     </button>
