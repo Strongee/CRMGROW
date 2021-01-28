@@ -270,27 +270,6 @@ export class MaterialsComponent implements OnInit {
 
   selectAllPage(type: string): void {
     switch (type) {
-      case 'all':
-        if (this.isSelectedPage(type)) {
-          this.selectedVideoLists.clear();
-          this.selectedPdfLists.clear();
-          this.selectedImageLists.clear();
-        } else {
-          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.adminVideos.forEach((e) =>
-            this.selectedVideoLists.select(e._id)
-          );
-          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
-          this.adminImages.forEach((e) =>
-            this.selectedImageLists.select(e._id)
-          );
-          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
-        }
-        break;
       case 'video':
         if (this.isSelectedPage(type)) {
           this.selectedVideoLists.clear();
@@ -327,22 +306,6 @@ export class MaterialsComponent implements OnInit {
 
   isSelectedPage(type: string): any {
     switch (type) {
-      case 'all':
-        const allCounts =
-          this.adminVideos.length +
-          this.ownVideos.length +
-          this.teamVideos.length +
-          this.adminPdfs.length +
-          this.ownPdfs.length +
-          this.teamPdfs.length +
-          this.adminImages.length +
-          this.ownImages.length +
-          this.teamImages.length;
-        const selectedCounts =
-          this.selectedVideoLists.selected.length +
-          this.selectedPdfLists.selected.length +
-          this.selectedImageLists.selected.length;
-        return allCounts == selectedCounts;
       case 'video':
         const videoCounts =
           this.adminVideos.length +
@@ -366,9 +329,6 @@ export class MaterialsComponent implements OnInit {
   }
 
   setCapture(material_id: string, type: string): void {
-    let setCaptureList;
-    const materialList =
-      this.videos.length + this.pdfs.length + this.images.length;
     const bulkSetCapture = this.BULK_ACTIONS.filter(
       (action) => action.label == 'Lead Capture'
     );
@@ -393,11 +353,7 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        if (setCaptureList == materialList) {
+        if (this.captureVideos.length == this.videos.length) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -423,11 +379,7 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        if (setCaptureList == materialList) {
+        if (this.capturePdfs.length == this.pdfs.length) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -453,11 +405,7 @@ export class MaterialsComponent implements OnInit {
               this.userService.updateGarbageImpl(this.garbage);
             });
         }
-        setCaptureList =
-          this.captureVideos.length +
-          this.capturePdfs.length +
-          this.captureImages.length;
-        if (setCaptureList == materialList) {
+        if (this.captureImages.length == this.images.length) {
           bulkSetCapture[0].status = true;
         } else {
           bulkSetCapture[0].status = false;
@@ -956,27 +904,31 @@ export class MaterialsComponent implements OnInit {
     switch (evt.label) {
       case 'Send via e-mail':
         const emailMaterial = [];
-        this.selectedVideoLists.selected.forEach((id) => {
-          this.videos.forEach((video) => {
-            if (video._id == id) {
-              emailMaterial.push(video);
-            }
+        if (this.selectedTab.id == 'video') {
+          this.selectedVideoLists.selected.forEach((id) => {
+            this.videos.forEach((video) => {
+              if (video._id == id) {
+                emailMaterial.push(video);
+              }
+            });
           });
-        });
-        this.selectedPdfLists.selected.forEach((id) => {
-          this.pdfs.forEach((pdf) => {
-            if (pdf._id == id) {
-              emailMaterial.push(pdf);
-            }
+        } else if (this.selectedTab.id == 'pdf') {
+          this.selectedPdfLists.selected.forEach((id) => {
+            this.pdfs.forEach((pdf) => {
+              if (pdf._id == id) {
+                emailMaterial.push(pdf);
+              }
+            });
           });
-        });
-        this.selectedImageLists.selected.forEach((id) => {
-          this.images.forEach((image) => {
-            if (image._id == id) {
-              emailMaterial.push(image);
-            }
+        } else {
+          this.selectedImageLists.selected.forEach((id) => {
+            this.images.forEach((image) => {
+              if (image._id == id) {
+                emailMaterial.push(image);
+              }
+            });
           });
-        });
+        }
         this.dialog.open(MaterialSendComponent, {
           position: { top: '5vh' },
           width: '100vw',
@@ -991,7 +943,7 @@ export class MaterialsComponent implements OnInit {
         break;
       case 'Send via SMS':
         const textMaterial = [];
-        if (this.selectedVideoLists.selected.length) {
+        if (this.selectedTab.id == 'video') {
           this.selectedVideoLists.selected.forEach((id) => {
             this.videos.forEach((video) => {
               if (video._id == id) {
@@ -999,8 +951,7 @@ export class MaterialsComponent implements OnInit {
               }
             });
           });
-        }
-        if (this.selectedPdfLists.selected.length) {
+        } else if (this.selectedTab.id == 'pdf') {
           this.selectedPdfLists.selected.forEach((id) => {
             this.pdfs.forEach((pdf) => {
               if (pdf._id == id) {
@@ -1008,8 +959,7 @@ export class MaterialsComponent implements OnInit {
               }
             });
           });
-        }
-        if (this.selectedImageLists.selected.length) {
+        } else {
           this.selectedImageLists.selected.forEach((id) => {
             this.images.forEach((image) => {
               if (image._id == id) {

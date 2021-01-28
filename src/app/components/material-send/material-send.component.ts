@@ -40,17 +40,17 @@ export class MaterialSendComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.material.length > 1) {
-      this.data.material.forEach((material) => {
-        if (material.type && material.type.indexOf('video') !== -1) {
-          this.videos.push(material);
-        }
-        if (material.type && material.type.indexOf('pdf') !== -1) {
-          this.pdfs.push(material);
-        }
-        if (material.type && material.type.indexOf('image') !== -1) {
-          this.images.push(material);
-        }
-      });
+      switch (this.data.materialType) {
+        case 'video':
+          this.videos = [...this.videos, ...this.data.material];
+          break;
+        case 'pdf':
+          this.pdfs = [...this.videos, ...this.data.material];
+          break;
+        case 'image':
+          this.images = [...this.videos, ...this.data.material];
+          break;
+      }
     }
     if (this.data.type) {
       if (this.data.type === 'email') {
