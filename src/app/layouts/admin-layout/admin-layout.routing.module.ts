@@ -102,7 +102,7 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'materials/create',
+    path: 'materials/:mode',
     component: VideoCreateComponent,
     data: {
       title: 'Materials'
