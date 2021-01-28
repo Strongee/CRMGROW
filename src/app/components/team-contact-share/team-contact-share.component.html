@@ -25,7 +25,7 @@
       </div>
       <div class="my-3">
         <label>Contacts to Share</label>
-        <div class="status-description text-center f-2 mx-auto mt-sm-3" *ngIf="!contacts.length; else contactList">
+        <div class="status-description text-center f-2 c-red mx-auto mt-sm-3" *ngIf="!contacts.length; else contactList">
           There are no contacts. Please add by searching above.
         </div>
         <ng-template #contactList>

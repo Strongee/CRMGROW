@@ -66,11 +66,11 @@
                   <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
                 </button>
                 <div ngbDropdownMenu class="light">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item">
+                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item">
                     <span class="f-3 font-weight-bold">Clone</span>
                   </button>
                   <hr class="my-1">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item">
+                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item">
                     <span class="c-red f-3 font-weight-bold">Delete automation</span>
                   </button>
                 </div>
@@ -104,7 +104,7 @@
           <div class="contacts-count mt-3" *ngIf="editMode == 'edit'">
             <label class="f-1 text-uppercase">Contacts</label>
             <div class="content contacts">
-              <p class="count font-weight-bold">{{automation.contacts}}</p>
+              <p class="count font-weight-bold">{{automation.contacts && automation.contacts.length}}</p>
             </div>
           </div>
         </div>
@@ -251,7 +251,6 @@
       </div>
     </div>
     <div class="card-body mt-3" [class.d-none]="selectedTab.id !== 'contacts'">
-
     </div>
   </div>
 </div>

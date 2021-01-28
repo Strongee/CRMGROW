@@ -53,7 +53,7 @@
             <button class="border-0 c-dark dropdown-item" (click)="openMergeContactDlg()">
               <span class="ml-1 f-3 font-weight-bold">Merge</span>
             </button>
-            <button class="border-0 c-dark dropdown-item">
+            <button class="border-0 c-dark dropdown-item" (click)="openShareContactDlg()">
               <span class="ml-1 f-3 font-weight-bold">Share contact</span>
             </button>
             <hr class="my-1">
@@ -192,7 +192,7 @@
                   <i class="d-block assigning loader"></i>
                 </ng-template>
                 <ng-container *ngIf="!canceling; else cancelingTemplate">
-                  <i class="d-block i-icon i-automation-cancel bgc-blue ml-2 c-pointer" (click)="closeAutomation()"></i>  
+                  <i class="d-block i-icon i-automation-cancel bgc-blue ml-2 c-pointer" (click)="closeAutomation()"></i>
                 </ng-container>
                 <ng-template #cancelingTemplate>
                   <i class="d-block canceling loader ml-2"></i>
@@ -304,7 +304,7 @@
                       <i class="d-block i-icon i-check bgc-blue"></i>
                     </div>
                   </div>
-                </div>  
+                </div>
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'note'">
@@ -328,7 +328,7 @@
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="v-center justify-content-end c-pointer" (click)="openNoteDlg()">
                   <span class="f-3 font-weight-bold c-blue mr-2">Add new note</span>
@@ -365,7 +365,7 @@
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="v-center justify-content-end c-pointer" (click)="openSendEmail()">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create email</span>
@@ -402,7 +402,7 @@
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="v-center justify-content-end c-pointer">
                   <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
@@ -439,7 +439,7 @@
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="v-center justify-content-end c-pointer" (click)="openAppointmentDlg()">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
@@ -476,7 +476,7 @@
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="v-center justify-content-end c-pointer" (click)="openGroupCallDlg()">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>
@@ -513,7 +513,7 @@
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="v-center justify-content-end c-pointer" (click)="openTaskDlg()">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create task</span>
@@ -550,7 +550,7 @@
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                 </div>
                 <div class="v-center justify-content-end c-pointer">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create deal</span>
@@ -613,7 +613,7 @@
                           <span class="ml-3 f-2 font-weight-bold">Complete</span>
                         </button>
                         <button
-                          class="v-center border-0 py-1 c-dark dropdown-item" 
+                          class="v-center border-0 py-1 c-dark dropdown-item"
                           (click)="archiveTask(activity)"
                         >
                           <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
@@ -679,7 +679,7 @@
                       <div class="content">
                         <div class="f-3 fw-600 c-blue mt-1">
                           See details
-                        </div>      
+                        </div>
                       </div>
                     </ng-template>
                     <ng-template #hide>
@@ -752,7 +752,7 @@
                     </app-accordion>
                   </div>
                 </ng-container>
-              </div> 
+              </div>
             </div>
 
             <div *ngIf="(action.id == 'all' || action.id == 'email') && (activity.type == 'emails' || activity.type == 'email_trackers')">
@@ -782,7 +782,7 @@
                         </div>
                         <div class="f-6 mt-2" [innerHTML]="details[activity.emails]?.content || ''"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>  
+                      </div>
                     </ng-container>
                     <ng-template #multiEmailHistory>
                       <div class="summary position-relative">
@@ -803,7 +803,7 @@
                             <tr>
                               <th class="session-col">session</th>
                               <th class="duration-col">duration</th>
-                              <th class="date-col">date</th>  
+                              <th class="date-col">date</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1025,7 +1025,7 @@
                           <div class="gradient-bottom"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Expand
-                          </div>      
+                          </div>
                         </div>
                       </ng-template>
                       <ng-template #hide>
@@ -1078,7 +1078,7 @@
                       </div>
                     </div>
                   </div>
-                </ng-container>  
+                </ng-container>
               </div>
             </div>
 
