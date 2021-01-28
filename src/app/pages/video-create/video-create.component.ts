@@ -172,7 +172,6 @@ export class VideoCreateComponent implements OnInit {
         response = JSON.parse(response);
         if (response['status']) {
           const video = { ...response['data'] };
-          console.log('###', video);
           this.updateVideo(video);
         } else {
           this.toast.error('Video uploading is failed.');
@@ -305,18 +304,18 @@ export class VideoCreateComponent implements OnInit {
   }
 
   setTheme(theme: any): void {
-    this.themeSaving = true;
+    // this.themeSaving = true;
     this.selectedTheme = theme;
-    this.garbage.material_theme = this.selectedTheme.id;
-    this.userService.updateGarbage(this.garbage).subscribe(
-      () => {
-        this.themeSaving = false;
-        this.userService.updateGarbageImpl(this.garbage);
-      },
-      () => {
-        this.themeSaving = false;
-      }
-    );
+    // this.garbage.material_theme = this.selectedTheme.id;
+    // this.userService.updateGarbage(this.garbage).subscribe(
+    //   () => {
+    //     this.themeSaving = false;
+    //     this.userService.updateGarbageImpl(this.garbage);
+    //   },
+    //   () => {
+    //     this.themeSaving = false;
+    //   }
+    // );
   }
 
   backDetail(): void {
