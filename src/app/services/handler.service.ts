@@ -224,12 +224,18 @@ export class HandlerService {
   }
   createTask$(contacts: any, task: any): void {}
 
-  reload$(): void {
+  reload$(tab = ''): void {
     const page = this.pageName.getValue();
     switch (page) {
       case 'dashboard':
-        this.reloadTasks$();
-        this.reloadActivities$();
+        if (tab === 'tasks') {
+          this.reloadTasks$();
+        } else if (tab === 'activities') {
+          this.reloadActivities$();
+        } else {
+          this.reloadTasks$();
+          this.reloadActivities$();
+        }
         break;
       case 'contacts':
         this.reloadContacts$();
@@ -240,9 +246,13 @@ export class HandlerService {
     }
   }
 
-  reloadTasks$(): void {}
+  reloadTasks$(): void {
+    this.taskService.reload();
+  }
 
-  reloadActivities$(): void {}
+  reloadActivities$(): void {
+    this.activityService.reload();
+  }
 
   reloadContacts$(): void {
     this.contactService.reloadPage();
