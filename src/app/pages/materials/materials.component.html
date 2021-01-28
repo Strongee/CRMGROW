@@ -1316,7 +1316,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="image-{{image._id}}"
-                      (change)="selectedImageLists.toggle(image._id)"
+                      (change)="selectMaterial(image._id, 'image')"
                       [checked]="selectedImageLists.isSelected(image._id)"
                     >
                     <label class="custom-control-label" for="image-{{image._id}}"></label>

@@ -21,6 +21,7 @@ import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component
 import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { MaterialSendComponent } from 'src/app/components/material-send/material-send.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-materials',
@@ -325,6 +326,24 @@ export class MaterialsComponent implements OnInit {
           this.teamImages.length;
         const selectedImageCounts = this.selectedImageLists.selected.length;
         return imageCounts == selectedImageCounts;
+    }
+  }
+
+  selectMaterial(material_id: string, type: string): void {
+    const bulkSetCapture = this.BULK_ACTIONS.filter(
+      (action) => action.label == 'Lead Capture'
+    );
+    switch (type) {
+      case 'video':
+        this.selectedVideoLists.toggle(material_id);
+        break;
+      case 'pdf':
+        this.selectedPdfLists.toggle(material_id);
+        break;
+      case 'image':
+        this.selectedImageLists.toggle(material_id);
+        if ()
+        break;
     }
   }
 
