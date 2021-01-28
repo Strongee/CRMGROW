@@ -67,6 +67,13 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         this.timezone = { zone: user.time_zone || timezone };
       }
     });
+
+    const today = new Date();
+    this.date = {
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      day: today.getDate()
+    };
   }
 
   ngOnInit(): void {}

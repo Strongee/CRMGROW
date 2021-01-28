@@ -50,6 +50,7 @@ export class InputContactsComponent implements OnInit {
   @Input('onlyFromSearch') onlyFromSearch = false;
   @Input('selectedContacts') selectedContacts: Contact[] = [];
   @Output() onSelect = new EventEmitter();
+  @Output() onRemove = new EventEmitter();
 
   formControl: FormControl = new FormControl();
   @ViewChild(MatAutocompleteTrigger)
@@ -177,6 +178,7 @@ export class InputContactsComponent implements OnInit {
         return e.cell_phone === contact.cell_phone;
       }
     });
+    this.onRemove.emit(contact);
   }
 
   onSelectOption(evt: MatAutocompleteSelectedEvent): void {

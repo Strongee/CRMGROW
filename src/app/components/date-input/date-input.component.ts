@@ -17,7 +17,17 @@ import { FormControl } from '@angular/forms';
 export class DateInputComponent implements OnInit {
   @Input() placeholder = 'Select Date';
   @Input() required = true;
-  @Input() value = null;
+  @Input()
+  public set value(val: number) {
+    if (val) {
+      this.dateObj = val;
+      this.dateString =
+        this.dateObj.year + '-' + this.dateObj.month + '-' + this.dateObj.day;
+    } else {
+      this.dateObj = null;
+      this.dateString = '';
+    }
+  }
   @Output() valueChange = new EventEmitter();
   @Input() minDate = null;
   @Input() type = '';
@@ -27,6 +37,7 @@ export class DateInputComponent implements OnInit {
   dateInput: FormControl = new FormControl();
   @ViewChild('trigger') triggerElement: CdkOverlayOrigin;
 
+  dateObj = null;
   dateString;
   constructor() {}
 
@@ -53,24 +64,24 @@ export class DateInputComponent implements OnInit {
   }
 
   changeDate(): void {
-    if (this.value) {
+    if (this.dateObj) {
       this.dateString =
-        this.value.year + '-' + this.value.month + '-' + this.value.day;
+        this.dateObj.year + '-' + this.dateObj.month + '-' + this.dateObj.day;
     } else {
       this.dateString = '';
     }
-    this.valueChange.emit(this.value);
+    this.valueChange.emit(this.dateObj);
     this.isOpen = false;
   }
 
   dateFormat(): string {
-    if (this.value) {
+    if (this.dateObj) {
       return (
-        this.MONTHS[this.value.month - 1] +
+        this.MONTHS[this.dateObj.month - 1] +
         ' ' +
-        this.value.day +
+        this.dateObj.day +
         ' ' +
-        this.value.year
+        this.dateObj.year
       );
     } else {
       return 'Select date';

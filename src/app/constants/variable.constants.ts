@@ -558,7 +558,8 @@ export const DialogSettings = {
     disableClose: true
   },
   AUTOMATION: {
-    maxWidth: '98vw',
+    width: '98vw',
+    maxWidth: '394px',
     minHeight: '300px',
     disableClose: true
   },

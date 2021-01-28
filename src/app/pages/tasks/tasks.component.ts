@@ -5,7 +5,8 @@ import { TaskEditComponent } from 'src/app/components/task-edit/task-edit.compon
 import {
   BulkActions,
   DialogSettings,
-  STATUS
+  STATUS,
+  TaskStatus
 } from 'src/app/constants/variable.constants';
 import { getCurrentTimezone } from 'src/app/helper';
 import { TaskDurationOption } from 'src/app/models/searchOption.model';
@@ -30,6 +31,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit, OnDestroy {
+  TASK_STATUS = TaskStatus;
   STATUS = STATUS;
   ACTIONS = BulkActions.Tasks;
   DISPLAY_COLUMNS = [
@@ -66,7 +68,6 @@ export class TasksComponent implements OnInit, OnDestroy {
   pageSize = this.PAGE_COUNTS[2];
   // Task Filter Type
   deadline = this.DEADLINE_TYPES[0];
-
   isUpdating = false;
   updateSubscription: Subscription;
   isLoading = false;

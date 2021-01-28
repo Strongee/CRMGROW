@@ -53,6 +53,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   attachments = [];
   type = '';
   dealId;
+  mainContact;
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
@@ -72,7 +73,13 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
           this.emailContacts.push(contact);
         }
       } else {
-        this.emailContacts = [this.data.contact];
+        if (this.data.contact) {
+          this.emailContacts = [this.data.contact];
+          this.mainContact = this.data.contact;
+        }
+        if (this.data.contacts) {
+          this.emailContacts = this.data.contacts;
+        }
       }
     }
   }
@@ -235,6 +242,14 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   // }
   onAttachmentChange(attachments: any[]): void {
     this.attachments = attachments;
+  }
+
+  removeContact(contact: Contact): void {
+    if (this.mainContact) {
+      if (this.mainContact._id === contact._id) {
+        this.emailContacts.unshift(this.mainContact);
+      }
+    }
   }
 
   checkDuplication(field: string): void {
