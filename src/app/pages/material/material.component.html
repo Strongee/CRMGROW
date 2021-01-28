@@ -91,9 +91,21 @@
                             </ng-template>
                         </thead>
                         <tbody>
-                            <tr class="section-header" *ngIf="(adminVideos.length || editedVideos.length) && mode == 'provided'">
+                            <tr class="section-header" *ngIf="mode == 'provided'">
                                 <td colspan="7" class="f-3 font-weight-bold">
-                                    Common Videos
+                                    <div class="v-center">
+                                        <span class="f-3 font-weight-bold">Common Videos</span>
+                                        <div class="f-3 font-weight-bold c-blue ml-auto c-pointer" *ngIf="editedVideos.length">
+                                            <a (click)="showAllCommonVideos()">Show hidden Videos({{editedVideos.length}})</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="(!adminVideos.length || editedVideos.length) && mode == 'provided'">
+                                <td colspan="7">
+                                    <div class="f-6 font-weigth-bold text-center">
+                                        All default videos are hidden. If you want to see them again, please make them enable again
+                                    </div>
                                 </td>
                             </tr>
                             <ng-container *ngIf="mode == 'provided'">
@@ -697,9 +709,21 @@
                             </ng-template>
                         </thead>
                         <tbody>
-                            <tr class="section-header" *ngIf="(adminPdfs.length || editedPdfs.length) && mode == 'provided'">
+                            <tr class="section-header" *ngIf="mode == 'provided'">
                                 <td colspan="7" class="f-3 font-weight-bold">
-                                    Common PDFs
+                                    <div class="v-center">
+                                        <span class="f-3 font-weight-bold">Common PDFs</span>
+                                        <div class="f-3 font-weight-bold c-blue ml-auto c-pointer" *ngIf="editedPdfs.length">
+                                            <a (click)="showAllCommonPdfs()">Show hidden Pdfs({{editedPdfs.length}})</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="(!adminPdfs.length || editedPdfs.length) && mode == 'provided'">
+                                <td colspan="7">
+                                    <div class="f-6 font-weigth-bold text-center">
+                                        All default pdfs are hidden. If you want to see them again, please make them enable again
+                                    </div>
                                 </td>
                             </tr>
                             <ng-container *ngIf="mode == 'provided'">
@@ -758,11 +782,11 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf)">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(pdf)">
                                                 <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
                                                 <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Copy link</span>
                                             </button>
@@ -908,11 +932,11 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf)">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(pdf)">
                                                 <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
                                                 <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Copy link</span>
                                             </button>
@@ -1058,11 +1082,11 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(pdf)">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(pdf)">
                                                 <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(pdf, 'pdf')">
                                                 <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Copy link</span>
                                             </button>
@@ -1237,9 +1261,21 @@
                             </ng-template>
                         </thead>
                         <tbody>
-                            <tr class="section-header" *ngIf="(adminImages.length || editedImages.length) && mode == 'provided'">
+                            <tr class="section-header" *ngIf="mode == 'provided'">
                                 <td colspan="7" class="f-3 font-weight-bold">
-                                    Common Images
+                                    <div class="v-center">
+                                        <span class="f-3 font-weight-bold">Common Images</span>
+                                        <div class="f-3 font-weight-bold c-blue ml-auto c-pointer" *ngIf="editedImages.length">
+                                            <a (click)="showAllCommonImages()">Show hidden Images({{editedImages.length}})</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="(!adminImages.length || editedImages.length) && mode == 'provided'">
+                                <td colspan="7">
+                                    <div class="f-6 font-weigth-bold text-center">
+                                        All default images are hidden. If you want to see them again, please make them enable again
+                                    </div>
                                 </td>
                             </tr>
                             <ng-container *ngIf="mode == 'provided'">
@@ -1298,11 +1334,11 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image)">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(image)">
                                                 <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
                                                 <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Copy link</span>
                                             </button>
@@ -1448,11 +1484,11 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image)">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(image)">
                                                 <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
                                                 <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Copy link</span>
                                             </button>
@@ -1598,13 +1634,13 @@
                                     </td>
                                     <td class="actions-col">
                                         <div class="v-center justify-content-between actions-wrapper">
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-send" (click)="sendMaterial(image)">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-send" (click)="sendMaterial(image)">
                                                 <i class="i-icon i-sent bgc-dark mr-2" aria-hidden="true"></i>
                                                 <span class="f-3 c-dark">Send</span>
                                             </button>
-                                            <button class="v-center btn bgc-white border-0 w-100 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
+                                            <button class="v-center btn bgc-white border-0 py-2 rounded button-copy" (click)="copyLink(image, 'image')">
                                                 <i class="i-icon i-copy bgc-dark mr-2" aria-hidden="true"></i>
-                                                <span class="ml-1 f-3 c-dark">Copy link</span>
+                                                <span class="f-3 c-dark">Copy link</span>
                                             </button>
                                             <div ngbDropdown class="material-action rounded">
                                                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">

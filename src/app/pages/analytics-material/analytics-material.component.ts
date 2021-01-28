@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
 import { Subscription } from 'rxjs';
 import { MaterialService } from '../../services/material.service';
-import {LabelService} from "../../services/label.service";
+import { LabelService } from '../../services/label.service';
 
 @Component({
   selector: 'app-analytics-material',
@@ -40,7 +40,6 @@ export class AnalyticsMaterialComponent implements OnInit {
       .subscribe((res) => {
         this.isLoading = false;
         if (res) {
-          console.log("analytics ==================>", res);
           this.analytics = res;
           for (const activity of this.analytics.watched_activity) {
             if (activity.contact && activity.contact.length) {
@@ -51,7 +50,6 @@ export class AnalyticsMaterialComponent implements OnInit {
               this.contacts.push(contact);
             }
           }
-          console.log("analytics contacts ==================>", this.contacts);
         }
       });
   }

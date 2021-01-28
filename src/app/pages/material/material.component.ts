@@ -1430,4 +1430,28 @@ export class MaterialComponent implements OnInit {
   }
 
   showAnalytics(material): void {}
+
+  showAllCommonVideos(): void {
+    this.userService.updateGarbage({ edited_video: [] }).subscribe(() => {
+      this.editedVideos = [];
+      this.userService.updateGarbageImpl({ edited_video: [] });
+      this.materialService.loadVideos(true);
+    });
+  }
+
+  showAllCommonPdfs(): void {
+    this.userService.updateGarbage({ edited_pdf: [] }).subscribe(() => {
+      this.editedPdfs = [];
+      this.userService.updateGarbageImpl({ edited_pdf: [] });
+      this.materialService.loadPdfs(true);
+    });
+  }
+
+  showAllCommonImages(): void {
+    this.userService.updateGarbage({ edited_image: [] }).subscribe(() => {
+      this.editedImages = [];
+      this.userService.updateGarbageImpl({ edited_image: [] });
+      this.materialService.loadImages(true);
+    });
+  }
 }

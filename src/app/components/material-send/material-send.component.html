@@ -15,7 +15,7 @@
                     {{data.material[0].title}}
                 </div>
                 <div class="f-3 op-64 mt-2">
-                    {{data.material[0].description}}
+                    {{(data.material[0]?.description || '') | stripTags | shorten: 100: '...'}}
                 </div>
             </div>
             <div class="v-center mt-3 material-more" *ngIf="data.material.length > 1">

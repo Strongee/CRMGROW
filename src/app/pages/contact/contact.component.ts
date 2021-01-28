@@ -596,8 +596,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.selectedAutomation = evt;
   }
   timeLineArrangement(): any {
+    this.allDataSource = new MatTreeNestedDataSource<any>();
     if (!this.contact['time_lines'] || this.contact['time_lines'].length == 0) {
-      this.allDataSource.data = [];
       return;
     }
     this.allDataSource.data = listToTree(this.contact['time_lines']);
@@ -607,6 +607,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
     if (this.allDataSource.data[0]?.status == 'completed') {
       root = JSON.parse(JSON.stringify(this.allDataSource.data[0]));
+    } else {
+      return;
     }
     while (true) {
       if (root.children[0]?.status == 'completed') {
@@ -619,7 +621,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     for (const firstChild of root.children)
       for (const secondChild of firstChild.children) secondChild.children = [];
 
-    this.dataSource.data = [];
+    this.dataSource = new MatTreeNestedDataSource<any>();
     this.dataSource.data.push(root);
   }
   showFullAutomation(): void {
@@ -647,6 +649,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   assignAutomation(): void {
+    if (!this.selectedAutomation) {
+      return;
+    }
     if (this.allDataSource.data.length) {
       this.dialog
         .open(ConfirmComponent, {
@@ -664,7 +669,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         .subscribe((status) => {
           if (status) {
             this.assigning = true;
-            this.assignSubscription && this.assignSubscription.unsubscribe();
+            // this.assignSubscription && this.assignSubscription.unsubscribe();
             this.automationService
               .reAssign(this.contact._id, this.selectedAutomation._id)
               .subscribe((status) => {

@@ -1031,14 +1031,22 @@ export class MaterialsComponent implements OnInit {
         });
         break;
       case 'Select all':
-        this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
-        this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-        this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        if (this.selectedTab.id == 'video') {
+          this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
+        } else if (this.selectedTab.id == 'pdf') {
+          this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
+        } else {
+          this.images.forEach((e) => this.selectedImageLists.select(e._id));
+        }
         break;
       case 'Deselect':
-        this.selectedVideoLists.clear();
-        this.selectedPdfLists.clear();
-        this.selectedImageLists.clear();
+        if (this.selectedTab.id == 'video') {
+          this.selectedVideoLists.clear();
+        } else if (this.selectedTab.id == 'pdf') {
+          this.selectedPdfLists.clear();
+        } else {
+          this.selectedImageLists.clear();
+        }
         break;
       case 'Lead Capture':
         const setCaptureList =
@@ -1346,4 +1354,28 @@ export class MaterialsComponent implements OnInit {
   }
 
   showAnalytics(material): void {}
+
+  showAllCommonVideos(): void {
+    this.userService.updateGarbage({ edited_video: [] }).subscribe(() => {
+      this.editedVideos = [];
+      this.userService.updateGarbageImpl({ edited_video: [] });
+      this.materialService.loadVideos(true);
+    });
+  }
+
+  showAllCommonPdfs(): void {
+    this.userService.updateGarbage({ edited_pdf: [] }).subscribe(() => {
+      this.editedPdfs = [];
+      this.userService.updateGarbageImpl({ edited_pdf: [] });
+      this.materialService.loadPdfs(true);
+    });
+  }
+
+  showAllCommonImages(): void {
+    this.userService.updateGarbage({ edited_image: [] }).subscribe(() => {
+      this.editedImages = [];
+      this.userService.updateGarbageImpl({ edited_image: [] });
+      this.materialService.loadImages(true);
+    });
+  }
 }
