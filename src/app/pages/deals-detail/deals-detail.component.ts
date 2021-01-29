@@ -22,6 +22,7 @@ import { TaskEditComponent } from '../../components/task-edit/task-edit.componen
 import { TaskDetail } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { HandlerService } from '../../services/handler.service';
+import { DealContactComponent } from 'src/app/components/deal-contact/deal-contact.component';
 
 @Component({
   selector: 'app-deals-detail',
@@ -171,20 +172,64 @@ export class DealsDetailComponent implements OnInit {
 
   editDeal(): void {
     this.dealPanel = !this.dealPanel;
-    this.dialog.open(DealEditComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '600px',
-      disableClose: true,
-      data: {
-        type: 'deal',
-        deal: this.deal
-      }
-    });
+    this.dialog
+      .open(DealEditComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '600px',
+        disableClose: true,
+        data: {
+          type: 'deal',
+          deal: this.deal
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.deal = res;
+          this.dealsService
+            .editDeal(this.deal.main._id, this.deal)
+            .subscribe((res) => {
+              console.log('###', res);
+            });
+        }
+      });
+  }
+
+  contactDetail(contact: any): void {
+    this.router.navigate([`contacts/${contact._id}`]);
   }
 
   addContact(): void {
     this.contactsPanel = !this.contactsPanel;
+    this.dialog
+      .open(DealContactComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '500px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        this.deal.contacts = [...this.deal.contacts, ...res];
+        this.dealsService
+          .editDeal(this.deal.main._id, this.deal)
+          .subscribe((res) => {
+            console.log('###', res);
+          });
+      });
+  }
+
+  removeContact(): void {
+    this.dialog.open(ConfirmComponent, {
+      position: { top: '100px' },
+      data: {
+        title: 'Delete Contact',
+        message: 'Are you sure to delete this contact?',
+        cancelLabel: 'Cancel',
+        confirmLabel: 'Confirm'
+      }
+    });
   }
 
   changeTab(tab: TabItem): void {
