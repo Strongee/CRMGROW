@@ -69,7 +69,7 @@
       <div class="col-6">
         <div class="form-group">
           <label>start date</label>
-          <app-date-input type="prepend" [(value)]="startDate"></app-date-input>
+          <app-date-input type="prepend" [clearable]="true" [(value)]="startDate"></app-date-input>
         </div>
       </div>
       <div class="col-6">
@@ -87,7 +87,7 @@
       <div class="col-6">
         <div class="form-group">
           <label>end date</label>
-          <app-date-input type="prepend" [(value)]="endDate"></app-date-input>
+          <app-date-input type="prepend" [clearable]="true" [(value)]="endDate"></app-date-input>
         </div>
       </div>
       <div class="col-6">

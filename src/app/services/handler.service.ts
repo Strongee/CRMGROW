@@ -8,6 +8,7 @@ import { AutomationService } from './automation.service';
 import { ContactService } from './contact.service';
 import { DealsService } from './deals.service';
 import { ErrorService } from './error.service';
+import { FilterService } from './filter.service';
 import { LabelService } from './label.service';
 import { MaterialService } from './material.service';
 import { StoreService } from './store.service';
@@ -38,7 +39,8 @@ export class HandlerService {
     private errorService: ErrorService,
     private labelService: LabelService,
     private userService: UserService,
-    private tagService: TagService
+    private tagService: TagService,
+    private filterService: FilterService
   ) {}
 
   /**
@@ -275,5 +277,6 @@ export class HandlerService {
     this.tagService.clear$();
     this.teamService.clear$();
     this.themeService.clear$();
+    this.filterService.clear$();
   }
 }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { LabelService } from '../../services/label.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { COUNTRIES } from '../../constants/variable.constants';
+import { COUNTRIES, DialogSettings } from '../../constants/variable.constants';
 import {
   SearchOption,
   MaterialCondition
@@ -11,6 +11,10 @@ import { ContactService } from 'src/app/services/contact.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterAddComponent } from '../filter-add/filter-add.component';
 import { MaterialShareComponent } from '../material-share/material-share.component';
+import { NotifyComponent } from '../notify/notify.component';
+import { ConfirmComponent } from '../confirm/confirm.component';
+import { FilterService } from 'src/app/services/filter.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -36,26 +40,24 @@ export class AdvancedFilterComponent implements OnInit {
   selectedMaterial = [];
   searchOption: SearchOption = new SearchOption();
 
+  removing = false;
+  removeSubscription: Subscription;
+
+  currentFilterId = '';
+
   @Output() onClose = new EventEmitter();
 
   constructor(
     private dialog: MatDialog,
     public labelService: LabelService,
     public contactService: ContactService,
-    public userService: UserService
+    public userService: UserService,
+    private filterService: FilterService
   ) {
     this.searchOption = this.contactService.searchOption.getValue();
   }
 
   ngOnInit(): void {
-    this.savedFilters.push('Default');
-    this.savedFilters.push('Hot leads with 1 material sent');
-    this.savedFilters.push('Last month best contacts');
-    this.savedFilters.push('Filter 1 test');
-    this.savedFilters.push('Filter 3 test');
-    this.savedFilters.push('Filter 2 test');
-    this.selectedSavedFilter = this.savedFilters[0];
-
     this.materialActions = [
       {
         _id: 1,
@@ -166,22 +168,27 @@ export class AdvancedFilterComponent implements OnInit {
   applyFilters(): void {}
 
   saveFilters(): void {
-    this.dialog
-      .open(FilterAddComponent, {
-        position: { top: '100px' },
-        width: '100vw',
-        maxWidth: '600px',
+    const searchOption = this.contactService.searchOption.getValue();
+    if (searchOption.isEmpty()) {
+      this.dialog.open(NotifyComponent, {
+        ...DialogSettings.ALERT,
         data: {
-          searchOption: this.searchOption,
-          material: this.selectedMaterial
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          this.savedFilters.push(res);
+          title: 'Advanced Filter',
+          message: 'Please set the filter option at least one.',
+          cancelLabel: 'Close'
         }
       });
+      return;
+    }
+    this.dialog.open(FilterAddComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      data: {
+        searchOption: this.searchOption,
+        material: this.selectedMaterial
+      }
+    });
   }
 
   selectMaterialAction(title: string): void {
@@ -362,6 +369,66 @@ export class AdvancedFilterComponent implements OnInit {
 
   close(): void {
     this.onClose.emit();
+  }
+
+  changeCurrentFilter(filter: any): void {
+    if (filter && filter._id) {
+      this.currentFilterId = filter._id;
+      this.contactService.searchOption.next(
+        new SearchOption().deserialize(filter.content)
+      );
+      this.searchOption = new SearchOption().deserialize(filter.content);
+    } else {
+      this.currentFilterId = '';
+      this.clearAllFilters();
+    }
+  }
+
+  updateFilters(): void {
+    if (this.currentFilterId) {
+      this.dialog.open(FilterAddComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '600px',
+        data: {
+          searchOption: this.searchOption,
+          material: this.selectedMaterial,
+          _id: this.currentFilterId
+        }
+      });
+    }
+  }
+
+  removeFilters(): void {
+    if (this.currentFilterId) {
+      this.dialog
+        .open(ConfirmComponent, {
+          data: {
+            title: 'Delete label',
+            message: 'Are you sure to delete the label?',
+            cancelLabel: 'No',
+            confirmLabel: 'Delete'
+          }
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            this.removing = true;
+            this.removeSubscription && this.removeSubscription.unsubscribe();
+            this.removeSubscription = this.filterService
+              .remove(this.currentFilterId)
+              .subscribe((status) => {
+                this.removing = false;
+                if (status) {
+                  this.currentFilterId = '';
+                  this.clearAllFilters();
+                  // Remove from Service Subject
+                  this.filterService.remove$(this.currentFilterId);
+                }
+              });
+          }
+        });
+    }
   }
 
   activityDefine = {

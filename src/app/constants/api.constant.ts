@@ -283,3 +283,7 @@ export const NOTIFICATION = {
   DELETE: 'notification/bulk-remove',
   TEXT_DELIVERY: 'notification/get-delivery'
 };
+
+export const FILTER = {
+  API: 'filter/'
+};

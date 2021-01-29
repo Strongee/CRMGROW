@@ -281,14 +281,21 @@ export class ContactComponent implements OnInit, OnDestroy {
    * Open dialog to merge
    */
   openMergeContactDlg(): void {
-    this.dialog.open(ContactMergeComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '700px',
-      data: {
-        contact: this.selectedContact
-      }
-    });
+    this.dialog
+      .open(ContactMergeComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '700px',
+        data: {
+          contact: this.selectedContact
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.handlerService.reload$();
+        }
+      });
   }
 
   /**

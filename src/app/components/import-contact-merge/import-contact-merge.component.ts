@@ -152,7 +152,9 @@ export class ImportContactMergeComponent implements OnInit {
                   this.secondaryContact[this.updateColumn[name]]
                 ) < 0
               ) {
-                this.emails.push(this.secondaryContact[this.updateColumn[name]]);
+                this.emails.push(
+                  this.secondaryContact[this.updateColumn[name]]
+                );
               }
             }
             if (this.updateColumn[name].indexOf('phone') >= 0) {
@@ -170,7 +172,9 @@ export class ImportContactMergeComponent implements OnInit {
                   this.secondaryContact[this.updateColumn[name]]
                 ) < 0
               ) {
-                this.phones.push(this.secondaryContact[this.updateColumn[name]]);
+                this.phones.push(
+                  this.secondaryContact[this.updateColumn[name]]
+                );
               }
             }
           } else {

@@ -6,3 +6,10 @@
   border: 1px solid gainsboro;
   border-radius: 4px;
 }
+.clear-action {
+  background: transparent;
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+}

@@ -401,8 +401,8 @@ export class ContactService extends HttpService {
    */
   mergeContacts(data): Observable<Contact> {
     return this.httpClient.post(this.server + CONTACT.MERGE, { ...data }).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('MERGE CONTACTS', []))
+      map((res) => res['data']),
+      catchError(this.handleError('MERGE CONTACTS', null))
     );
   }
 

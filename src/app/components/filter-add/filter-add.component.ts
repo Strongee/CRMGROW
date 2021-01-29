@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { LabelService } from '../../services/label.service';
 import { SearchOption } from 'src/app/models/searchOption.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FilterService } from 'src/app/services/filter.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-filter-add',
@@ -11,20 +13,33 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class FilterAddComponent implements OnInit {
   submitted = false;
   saving = false;
+  saveSubscription: Subscription;
   filterName = '';
   filterCount = 0;
   selectedLabels = [];
   selectedAction = '';
   selectedMaterial = [];
   searchOption: SearchOption = new SearchOption();
+  filterId = '';
 
   constructor(
     public labelService: LabelService,
+    public filterService: FilterService,
     private dialogRef: MatDialogRef<FilterAddComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.searchOption = this.data.searchOption;
     this.selectedMaterial.push(this.data.material[0]);
+    if (this.data && this.data._id) {
+      this.filterId = this.data._id;
+      const filters = this.filterService.filters.getValue();
+      filters.some((e) => {
+        if (e._id === this.filterId) {
+          this.filterName = e.title;
+          return true;
+        }
+      });
+    }
     this.labelService.getLabels().subscribe((res) => {
       if (res) {
         this.searchOption.labelCondition.forEach((selectLabel) => {
@@ -135,7 +150,37 @@ export class FilterAddComponent implements OnInit {
   }
 
   saveFilter(): void {
-    this.dialogRef.close(this.filterName);
+    this.saving = true;
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    if (!this.filterId) {
+      this.saveSubscription = this.filterService
+        .create({
+          title: this.filterName,
+          content: this.searchOption
+        })
+        .subscribe((result) => {
+          this.saving = false;
+          if (result) {
+            this.dialogRef.close();
+          }
+        });
+    } else {
+      this.saveSubscription = this.filterService
+        .update(this.filterId, {
+          title: this.filterName,
+          content: this.searchOption
+        })
+        .subscribe((result) => {
+          this.saving = false;
+          if (result) {
+            this.dialogRef.close();
+            this.filterService.update$(this.filterId, {
+              title: this.filterName,
+              content: this.searchOption
+            });
+          }
+        });
+    }
   }
 
   activityDefine = {
