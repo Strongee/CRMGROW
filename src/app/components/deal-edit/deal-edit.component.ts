@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Deal } from 'src/app/models/deal.model';
+import { Contact } from 'src/app/models/contact.model';
 
 @Component({
   selector: 'app-deal-edit',
@@ -24,7 +25,10 @@ export class DealEditComponent implements OnInit {
     private dialogRef: MatDialogRef<DealEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.deal = this.data.deal;
+    this.deal = JSON.parse(JSON.stringify(this.data.deal));
+    this.deal.contacts = (this.deal.contacts || []).map((e) =>
+      new Contact().deserialize(e)
+    );
   }
 
   ngOnInit(): void {
@@ -39,6 +43,6 @@ export class DealEditComponent implements OnInit {
   }
 
   editDeals(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.deal);
   }
 }

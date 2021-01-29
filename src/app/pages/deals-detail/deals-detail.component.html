@@ -111,7 +111,7 @@
                     </mat-expansion-panel-header>
                     <div class="contact-detail mt-2" *ngFor="let contact of deal.contacts">
                         <div class="contact p-3 position-relative">
-                            <div class="v-center py-2 avatar-wrapper">
+                            <div class="v-center py-2 avatar-wrapper c-pointer" (click)="contactDetail(contact)">
                                 <div class="v-center justify-content-center f-6 font-weight-bold text-white avatar">
                                     {{contact.avatarName}}
                                 </div>
@@ -127,8 +127,15 @@
                                 <i class="d-block i-icon i-message bgc-dark mx-2"></i>
                                 <span class="f-6">{{contact.email}}</span>
                             </div>
-                            <div class="contact-more c-pointer">
+                            <div ngbDropdown class="contact-more c-pointer">
+                              <div class="c-pointer" ngbDropdownToggle>
                                 <i class="d-block i-icon i-menu-more bgc-dark"></i>
+                              </div>
+                              <div ngbDropdownMenu class="light">
+                                  <button class="border-0 c-dark dropdown-item" (click)="removeContact()">
+                                      Remove contact
+                                  </button>
+                              </div>
                             </div>
                         </div>
                     </div>

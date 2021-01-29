@@ -319,6 +319,11 @@
                 position: absolute;
                 top: 10px;
                 right: 10px;
+                .dropdown-menu {
+                  &.show {
+                    transform: translate(-140px, 18px) !important;
+                  }
+                }
             }
         }
 

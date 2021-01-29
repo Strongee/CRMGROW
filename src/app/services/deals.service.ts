@@ -86,6 +86,13 @@ export class DealsService extends HttpService {
     );
   }
 
+  editDeal(id: string, deal: any): any {
+    return this.httpClient.put(this.server + DEAL.GET + id, deal).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('Edit DEAL', null))
+    );
+  }
+
   createDeal(deal: any): any {
     return this.httpClient.post(this.server + DEAL.GET, deal);
   }
