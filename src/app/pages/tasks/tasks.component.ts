@@ -73,6 +73,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   isLoading = false;
   loadSubscription: Subscription;
 
+  selecting = false;
+  selectSubscription: Subscription;
+  selectSource = '';
   page = 1;
   selection = [];
   pageSelection = [];
@@ -229,7 +232,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     } else if (action.command === 'delete') {
       this.deleteTasks();
     } else if (action.command === 'select') {
-      this.selectAll();
+      this.selectAll(true);
     } else if (action.command === 'deselect') {
       this.deselectAll();
     }
@@ -325,14 +328,35 @@ export class TasksComponent implements OnInit, OnDestroy {
   /**
    * Select All Tasks
    */
-  selectAll(): void {
-    this.taskService.selectAll().subscribe((tasks) => {
-      this.selection = tasks;
-      this.pageSelection = this.pageTasks.map((e) => ({
-        _id: e._id,
-        status: e.status
-      }));
-    });
+  selectAll(source = false): void {
+    if (source) {
+      // Update the Actions Header
+      for (let i = this.ACTIONS.length - 1; i >= 0; i--) {
+        if (this.ACTIONS[i].command === 'select') {
+          this.ACTIONS[i]['loading'] = true;
+        }
+      }
+      this.selectSource = 'header';
+    } else {
+      this.selectSource = 'page';
+    }
+    this.selecting = true;
+    this.selectSubscription && this.selectSubscription.unsubscribe();
+    this.selectSubscription = this.taskService
+      .selectAll()
+      .subscribe((tasks) => {
+        this.selecting = false;
+        this.selection = tasks;
+        this.pageSelection = this.pageTasks.map((e) => ({
+          _id: e._id,
+          status: e.status
+        }));
+        for (let i = this.ACTIONS.length - 1; i >= 0; i--) {
+          if (this.ACTIONS[i].command === 'select') {
+            this.ACTIONS[i]['loading'] = false;
+          }
+        }
+      });
   }
 
   deselectAll(): void {

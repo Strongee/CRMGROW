@@ -211,7 +211,7 @@ export class MaterialsComponent implements OnInit {
   }
 
   createVideo(): void {
-    this.router.navigate(['./materials/create']);
+    this.router.navigate([`./materials/${this.selectedTab.id}`]);
   }
 
   selectFolder(type: string): void {
@@ -223,7 +223,7 @@ export class MaterialsComponent implements OnInit {
       position: { top: '5vh' },
       width: '100vw',
       maxWidth: '600px',
-      disableClose: false,
+      disableClose: true,
       data: {
         material: [material],
         materialType: type
@@ -1011,7 +1011,7 @@ export class MaterialsComponent implements OnInit {
           position: { top: '5vh' },
           width: '100vw',
           maxWidth: '600px',
-          disableClose: false,
+          disableClose: true,
           data: {
             material: emailMaterial,
             type: 'email',
@@ -1050,7 +1050,7 @@ export class MaterialsComponent implements OnInit {
           position: { top: '5vh' },
           width: '100vw',
           maxWidth: '600px',
-          disableClose: false,
+          disableClose: true,
           data: {
             material: textMaterial,
             type: 'text',

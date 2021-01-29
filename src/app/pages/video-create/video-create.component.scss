@@ -137,9 +137,16 @@
 
 .progress-wrapper{
     position: absolute;
-    top: 50%;
-    width: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
+    background: rgba(255, 255, 255, 0.6);
+    width: 100%;
+    top: 50px;
+    padding: 5px 10px;
+}
+
+
+:host ::ng-deep {
+    .ng2-pdf-viewer-container .page {
+        min-height: unset;
+        padding:0px;
+    }
 }

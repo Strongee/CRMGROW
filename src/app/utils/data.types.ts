@@ -22,4 +22,5 @@ export interface ActionItem {
   status?: boolean;
   spliter?: boolean;
   command?: string;
+  loadingLabel?: string;
 }

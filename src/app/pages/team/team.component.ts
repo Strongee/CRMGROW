@@ -70,7 +70,7 @@ export class TeamComponent implements OnInit {
     { icon: '', label: 'Contacts', id: 'contacts' }
   ];
   selectedSharedTab: TabItem = this.sharedTabs[0];
-  sharedContacts;
+  sharedContacts = [];
 
   constructor(
     private teamService: TeamService,
@@ -169,6 +169,7 @@ export class TeamComponent implements OnInit {
         this.teamService.loadSharedContacts().subscribe(
           (contacts) => {
             this.loading = false;
+            console.log("load shared contacts ===========>", contacts);
             if (contacts) {
               this.sharedContacts = contacts;
             }
@@ -399,6 +400,7 @@ export class TeamComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        console.log("team share contacts ==============>", res);
         if (res && res.data) {
           for (const contact of res.data) {
             this.sharedContacts.push(contact);

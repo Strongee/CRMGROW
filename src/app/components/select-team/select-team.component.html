@@ -8,13 +8,8 @@
           <ng-template #defaultResult>
             <div class="chip d-flex justify-content-between align-items-center">
               <div class="v-center">
-                <img *ngIf="formControl.value.picture_profile; else avatarNameTemplate" [src]="formControl.value.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
-                <ng-template #avatarNameTemplate>
-                  <div class="form-avatar rounded-circle bg-dark mr-3">{{getAvatarName(formControl.value)}}</div>
-                </ng-template>
-                <div class="info">
-                  <div class="f-4">{{formControl.value.user_name}}</div>
-                </div>
+                <img class="team-avatar sm rounded mr-2" [src]="formControl.value.picture" onerror="(this.src = './assets/img/team_placeholder.png')" />
+                <div class="f-4 font-weight-bold">{{formControl.value.name}}</div>
               </div>
               <div (click)="cancelSelect()">
                 <i class="d-block i-icon i-close bgc-dark"></i>
@@ -33,16 +28,10 @@
         </ngx-mat-select-search>
       </mat-option>
       <mat-option *ngFor="let item of filteredResults | async" [value]="item" style="height: unset; line-height: unset;">
-        <div class="d-flex chip py-2">
-          <img *ngIf="item.picture_profile; else avatarNameTemplate" [src]="item.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
-          <ng-template #avatarNameTemplate>
-            <div class="form-avatar rounded-circle bg-dark mr-3">{{getAvatarName(item)}}</div>
-          </ng-template>
-          <div class="info ml-1">
-            <div class="f-5 font-weight-bold">{{item.user_name}}</div>
-            <div class="f-2">{{item['email'] || 'Undefined'}}</div>
-            <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
-          </div>
+        <div class="v-center chip py-2">
+          <img class="team-avatar md rounded mr-2" [src]="item.picture" onerror="(this.src = './assets/img/team_placeholder.png')" />
+          <div class="f-4 font-weight-bold">{{item.name}}</div>
+          <div class="bgc-azure c-badge rect f-1 ml-auto">Team</div>
         </div>
       </mat-option>
     </mat-select>

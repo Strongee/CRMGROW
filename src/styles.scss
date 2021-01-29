@@ -1122,6 +1122,11 @@ table {
     width: 36px;
     height: 36px;
   }
+
+  &.sm {
+    width: 26px;
+    height: 26px;
+  }
 }
 .form-avatar {
   width: 26px;
@@ -1206,6 +1211,29 @@ table {
   &.lg {
     width: 100px;
     height: 100px;
+  }
+}
+
+.small-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid blue;
+  border-radius: 50%;
+  border-top: none;
+  border-left: none;
+  animation-name: spinnerEffect;
+  display: inline-block;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-delay: 0s;;
+}
+
+@keyframes spinnerEffect {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
