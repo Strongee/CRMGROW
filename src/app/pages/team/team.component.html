@@ -366,7 +366,7 @@
                         </td>
                         <td class="actions-col">
                           <div class="actions-wrapper v-center justify-content-end">
-                            <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterials('video', 'text', video)">
+                            <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterial(video, 'video')">
                               <i class="bgc-dark i-icon i-send mr-2"></i>
                               <span class="button-label">Send</span>
                             </button>
@@ -386,7 +386,7 @@
                               </div>
                             </div>
                             <button class="v-center btn bgc-white c-dark f-3"
-                              (click)="editMaterial('video', video)"
+                              (click)="editTemplate(video._id)"
                               *ngIf="role=='editor' || role == 'owner'"
                             >
                               <i class="bgc-dark i-icon i-edit-template mr-2"></i>
@@ -485,7 +485,7 @@
                         </td>
                         <td class="actions-col">
                           <div class="actions-wrapper v-center justify-content-end">
-                            <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterials('pdf', 'text', pdf)">
+                            <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterial(pdf, 'pdf')">
                               <i class="bgc-dark i-icon i-send mr-2"></i>
                               <span class="button-label">Send</span>
                             </button>
@@ -505,7 +505,7 @@
                               </div>
                             </div>
                             <button class="v-center btn bgc-white c-dark f-3"
-                              (click)="editMaterial('pdf', pdf)"
+                              (click)="editTemplate(pdf._id)"
                               *ngIf="role=='editor' || role == 'owner'"
                             >
                               <i class="bgc-dark i-icon i-edit-template mr-2"></i>
@@ -606,7 +606,7 @@
                         </td>
                         <td class="actions-col">
                           <div class="actions-wrapper v-center justify-content-end">
-                            <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterials('image', 'text', image)">
+                            <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterial(image, 'image')">
                               <i class="bgc-dark i-icon i-send mr-2"></i>
                               <span class="button-label">Send</span>
                             </button>
@@ -626,7 +626,7 @@
                               </div>
                             </div>
                             <button class="v-center btn bgc-white c-dark f-3"
-                              (click)="editMaterial('image', image)"
+                              (click)="editTemplate(image._id)"
                               *ngIf="role=='editor' || role == 'owner'"
                             >
                               <i class="bgc-dark i-icon i-edit-template mr-2"></i>
@@ -848,12 +848,16 @@
                           </div>
                           <div ngbDropdownMenu class="light">
                             <ng-container *ngFor="let member of contact.shared_members">
-                              <button class="border-0 py-2 c-blue f-3 font-weight-bold dropdown-item">
-                                {{member.cell_phone | phone_format }}
-                              </button>
-                              <button class="border-0 py-2 c-dark f-3 dropdown-item">
-                                {{member.email}}
-                              </button>
+                              <div class="my-1 p-2">
+                                <div class="d-flex">
+                                  <div class="form-avatar rounded-circle bg-dark">{{getAvatarName(member)}}</div>
+                                  <div class="info ml-1">
+                                    <div class="f-5 font-weight-bold">{{member.user_name}}</div>
+                                    <div class="f-2">{{member['email'] || 'Undefined'}}</div>
+                                    <div class="f-2">{{member['cell_phone'] || 'Undefined'}}</div>
+                                  </div>
+                                </div>
+                              </div>
                             </ng-container>
                           </div>
                         </div>

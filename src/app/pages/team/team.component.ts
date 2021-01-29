@@ -22,6 +22,8 @@ import { AutomationShareComponent } from '../../components/automation-share/auto
 import { NotifyComponent } from '../../components/notify/notify.component';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
+import { MaterialSendComponent } from '../../components/material-send/material-send.component';
+import {MaterialEditTemplateComponent} from "../../components/material-edit-template/material-edit-template.component";
 
 @Component({
   selector: 'app-team',
@@ -731,39 +733,32 @@ export class TeamComponent implements OnInit {
       }
     );
   }
-  sendMaterials(materialType, mediaType, material): void {
-    // let materials = [];
-    // if (material) {
-    //   materials = [material];
-    // } else {
-    //   switch (materialType) {
-    //     case 'video':
-    //       materials = this.selectedVideos.selected;
-    //       break;
-    //     case 'pdf':
-    //       materials = this.selectedPdfs.selected;
-    //       break;
-    //     case 'image':
-    //       materials = this.selectedImages.selected;
-    //       break;
-    //   }
-    // }
-    // this.dialog.open(MaterialDialogComponent, {
-    //   position: { top: '5vh' },
-    //   width: '100vw',
-    //   maxWidth: '600px',
-    //   data: {
-    //     materialType,
-    //     mediaType,
-    //     contacts: [],
-    //     fromContact: false,
-    //     materials,
-    //     modalType: false,
-    //     team: this.teamId
-    //   }
-    // });
+  sendMaterial(material: any, type: string): void {
+    this.dialog.open(MaterialSendComponent, {
+      position: { top: '5vh' },
+      width: '100vw',
+      maxWidth: '600px',
+      disableClose: false,
+      data: {
+        material: [material],
+        materialType: type
+      }
+    });
   }
-  editMaterial(mediaType, material): void {}
+
+  editTemplate(material_id: string): void {
+    this.dialog.open(MaterialEditTemplateComponent, {
+      position: { top: '10vh' },
+      width: '100vw',
+      maxWidth: '600px',
+      height: '550px',
+      disableClose: true,
+      data: {
+        id: material_id
+      }
+    });
+  }
+
   copyLink(material, type): void {
     let url;
 

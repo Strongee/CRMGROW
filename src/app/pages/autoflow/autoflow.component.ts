@@ -7,7 +7,7 @@ import {
   ElementRef,
   AfterViewInit
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import { DagreNodesOnlyLayout } from '../../variables/customDagreNodesOnly';
 import { stepRound } from '../../variables/customStepCurved';
 import { Layout, Edge, Node } from '@swimlane/ngx-graph';
@@ -27,6 +27,9 @@ import { ToastrService } from 'ngx-toastr';
 import { PageCanDeactivate } from 'src/app/variables/abstractors';
 import { UserService } from '../../services/user.service';
 import { TabItem } from '../../utils/data.types';
+import { SelectionModel } from '@angular/cdk/collections';
+import { LabelService } from '../../services/label.service';
+import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 
 @Component({
   selector: 'app-autoflow',
@@ -63,6 +66,11 @@ export class AutoflowComponent
 
   editMode = 'new';
   contacts = [];
+  selectedContacts = new SelectionModel<any>(true, []);
+  labels = [];
+  assignedContactLoading = false;
+  deleting = false;
+  loadSubscription: Subscription;
 
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'activity' },
@@ -83,14 +91,17 @@ export class AutoflowComponent
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private labelService: LabelService
   ) {
     super();
   }
 
   ngOnInit(): void {
+    this.getLabels();
     const id = this.route.snapshot.params['id'];
     const title = this.route.snapshot.params['title'];
+    const mode = this.route.snapshot.params['mode'];
     if (title) {
       this.automation_title = title;
     }
@@ -115,13 +126,14 @@ export class AutoflowComponent
           this.created_at = curDate.toISOString();
         }
       });
-      this.editMode = 'edit';
     } else {
       this.auth = 'owner';
       const curDate = new Date();
       this.created_at = curDate.toISOString();
       this.editMode = 'new';
     }
+    this.editMode = mode;
+
     window['confirmReload'] = true;
   }
 
@@ -140,15 +152,21 @@ export class AutoflowComponent
   }
 
   loadAutomation(id): void {
-    this.automationService.get(id).subscribe(
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.automationService.get(id).subscribe(
       (res) => {
         this.automation = res;
         const mode = this.route.snapshot.params['mode'];
 
         if (this.automation.contacts.length) {
-          this.automationService.getStatus(this.automation._id, this.automation.contacts).subscribe((contacts) => {
-            console.log("automation contacts ==============>", contacts);
-          })
+          this.assignedContactLoading = true;
+          this.automationService
+            .getStatus(this.automation._id, this.automation.contacts)
+            .subscribe((contacts) => {
+              this.assignedContactLoading = false;
+              this.contacts = contacts;
+              console.log('automation contacts ==============>', contacts);
+            });
         }
 
         if (mode === 'edit') {
@@ -157,7 +175,6 @@ export class AutoflowComponent
         this.automation_title = res['title'];
         const actions = res['automations'];
         this.composeGraph(actions);
-
       },
       (err) => {}
     );
@@ -165,9 +182,8 @@ export class AutoflowComponent
 
   loadContacts(id): void {
     this.automationService.getAssignedContacts(id).subscribe((res) => {
-      console.log("assigned contacts =============>", res);
+      console.log('assigned contacts =============>', res);
       if (res) {
-
       }
     });
   }
@@ -1395,6 +1411,122 @@ export class AutoflowComponent
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+  }
+
+  assignContacts(): void {
+    this.dialog
+      .open(AutomationAssignComponent, {
+        width: '500px',
+        maxWidth: '90vw',
+        data: {
+          automation: this.automation
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        console.log("autoflow assign ============>", res);
+        if (res && res.data && res.data.length) {
+          this.contacts = [...this.contacts, ...res.data];
+        }
+      });
+  }
+
+  delete(): void {
+    const dialog = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Delete Automation',
+        message: 'Are you sure to delete the automation?',
+        confirmLabel: 'Delete'
+      }
+    });
+
+    dialog.afterClosed().subscribe((res) => {
+      if (res) {
+        this.deleting = true;
+        this.automationService.delete(this.automation_id).subscribe(
+          (response) => {
+            this.deleting = false;
+            this.goToBack();
+            this.automationService.reload();
+          },
+          (err) => {
+            this.deleting = false;
+          }
+        );
+      }
+    });
+  }
+
+  unassign(contact): void {
+
+  }
+
+  selectAllPage(): void {
+    if (this.isSelectedPage()) {
+      this.contacts.forEach((e) => {
+        if (this.selectedContacts.isSelected(e._id)) {
+          this.selectedContacts.deselect(e._id);
+        }
+      });
+    } else {
+      this.contacts.forEach((e) => {
+        if (!this.selectedContacts.isSelected(e._id)) {
+          this.selectedContacts.select(e._id);
+        }
+      });
+    }
+  }
+
+  isSelectedPage(): any {
+    if (this.contacts.length) {
+      for (let i = 0; i < this.contacts.length; i++) {
+        const e = this.contacts[i];
+        if (!this.selectedContacts.isSelected(e._id)) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return false;
+    }
+    return false;
+  }
+
+  getLabels(): any {
+    // this.isLoading = true;
+    this.labelService.getLabels().subscribe(async (res: any) => {
+      this.labels = res.sort((a, b) => {
+        return a.priority - b.priority;
+      });
+    });
+  }
+  getLabelById(id): any {
+    let retVal = { color: 'white', font_color: 'black' };
+    let i;
+    for (i = 0; i < this.labels.length; i++) {
+      if (this.labels[i]._id === id) {
+        retVal = this.labels[i];
+      }
+    }
+    return retVal;
+  }
+
+  getAvatarName(contact): any {
+    if (contact.user_name) {
+      const names = contact.user_name.split(' ');
+      if (names.length > 1) {
+        return names[0][0] + names[1][0];
+      } else {
+        return names[0][0];
+      }
+    } else if (contact.first_name && contact.last_name) {
+      return contact.first_name[0] + contact.last_name[0];
+    } else if (contact.first_name && !contact.last_name) {
+      return contact.first_name[0];
+    } else if (!contact.first_name && contact.last_name) {
+      return contact.last_name[0];
+    }
+    return 'UC';
   }
 
   ICONS = {
