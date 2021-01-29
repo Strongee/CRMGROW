@@ -178,7 +178,7 @@ export class DealsDetailComponent implements OnInit {
       disableClose: true,
       data: {
         type: 'deal',
-        dealId: this.dealId
+        deal: this.deal
       }
     });
   }
