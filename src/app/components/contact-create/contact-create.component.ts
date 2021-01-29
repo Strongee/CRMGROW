@@ -81,10 +81,22 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     ) {
       return;
     }
+    let cell_phone;
+    if (this.phoneInput.valid) {
+      if (
+        typeof this.cell_phone == 'object' &&
+        this.cell_phone['internationalNumber']
+      ) {
+        cell_phone = this.cell_phone['internationalNumber'].replace(/\D/g, '');
+        cell_phone = '+' + cell_phone;
+      }
+    }
+    const contactData = this.contact;
+    contactData.cell_phone = cell_phone;
     this.isCreating = true;
     this.createSubscription && this.createSubscription.unsubscribe();
     this.createSubscription = this.contactService
-      .create(this.contact)
+      .create(contactData)
       .subscribe((contact) => {
         this.isCreating = false;
         if (contact) {
