@@ -144,15 +144,35 @@
                     </div>
                 </form>
             </div>
-            <div class="step-body-4 ml-sm-5" [class.active]="isStep == 4">
+            <div class="step-body-4 ml-sm-5 position-relative" [class.active]="isStep == 4">
                 <form
                     #finishUploadForm="ngForm" 
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('video') : false"
                     [class.was-validated]="submitted"
                 >
-                    <span class="f-3 font-weight-bold text-c-dark">Final Review</span>
+                    <div class="v-center">
+                        <span class="f-3 font-weight-bold c-dark">Final Review</span>
+                        <span class="f-3 c-dark ml-3" *ngIf="uploading">
+                            Uploading ({{
+                                videoUploader.progress != 0 ? videoUploader.progress.toFixed(0) : uploaded_time.toFixed(0)
+                            }}%)...
+                        </span>
+                    </div>
                     <div class="my-4">
                         <img class="w-100" [src]="video.thumbnail">
+                    </div>
+                    <div class="progress-wrapper" *ngIf="uploading">
+                        <div class="progress">
+                            <div
+                              class="progress-bar bg-primary"
+                              role="progressbar"
+                              [style.width]="
+                              videoUploader.progress != 0
+                                ? videoUploader.progress + '%'
+                                : uploaded_time + '%'
+                            "
+                            ></div>
+                        </div>
                     </div>
                     <div class="mt-3">
                         <label class="f-1 font-weight-bold text-uppercase small-label">title</label>
@@ -181,7 +201,7 @@
                             Finish
                         </button>
                     </div>
-                    <ng-container *ngIf="uploading">
+                    <!-- <ng-container *ngIf="uploading">
                         <div class="progress-wrapper">
                           <div class="progress-info">
                             <div class="progress-label">
@@ -209,7 +229,7 @@
                             ></div>
                           </div>
                         </div>
-                    </ng-container>
+                    </ng-container> -->
                 </form>
             </div>
         </div>
@@ -348,9 +368,29 @@
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('pdf') : false"
                     [class.was-validated]="submitted"
                 >
-                    <span class="f-3 font-weight-bold text-c-dark">Final Review</span>
+                    <div class="v-center">
+                        <span class="f-3 font-weight-bold c-dark">Final Review</span>
+                        <span class="f-3 c-dark ml-3" *ngIf="uploading">
+                            Uploading ({{
+                                pdfUploader.progress != 0 ? pdfUploader.progress.toFixed(0) : uploaded_time.toFixed(0)
+                            }}%)...
+                        </span>
+                    </div>
                     <div class="my-4">
                         <img class="w-100" src="{{upload_thumbnail}}">
+                    </div>
+                    <div class="progress-wrapper" *ngIf="uploading">
+                        <div class="progress">
+                            <div
+                              class="progress-bar bg-primary"
+                              role="progressbar"
+                              [style.width]="
+                              pdfUploader.progress != 0
+                                ? pdfUploader.progress + '%'
+                                : uploaded_time + '%'
+                            "
+                            ></div>
+                        </div>
                     </div>
                     <div class="mt-3">
                         <label class="f-1 font-weight-bold text-uppercase small-label">title</label>
@@ -375,35 +415,6 @@
                             Finish
                         </button>
                     </div>
-                    <ng-container *ngIf="uploading">
-                        <div class="progress-wrapper">
-                          <div class="progress-info">
-                            <div class="progress-label">
-                              <span>Pdf uploading...</span>
-                            </div>
-                            <div class="progress-percentage">
-                            <span
-                            >{{
-                              pdfUploader.progress != 0
-                                ? pdfUploader.progress.toFixed(0)
-                                : uploaded_time.toFixed(0)
-                              }}%</span
-                            >
-                            </div>
-                          </div>
-                          <div class="progress">
-                            <div
-                              class="progress-bar bg-primary"
-                              role="progressbar"
-                              [style.width]="
-                              pdfUploader.progress != 0
-                                ? pdfUploader.progress + '%'
-                                : uploaded_time + '%'
-                            "
-                            ></div>
-                          </div>
-                        </div>
-                    </ng-container>
                 </form>
             </div>
         </div>
@@ -532,9 +543,29 @@
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('image') : false"
                     [class.was-validated]="submitted"
                 >
-                    <span class="f-3 font-weight-bold text-c-dark">Final Review</span>
+                    <div class="v-center">
+                        <span class="f-3 font-weight-bold c-dark">Final Review</span>
+                        <span class="f-3 c-dark ml-3" *ngIf="uploading">
+                            Uploading ({{
+                                imageUploader.progress != 0 ? imageUploader.progress.toFixed(0) : uploaded_time.toFixed(0)
+                            }}%)...
+                        </span>
+                    </div>
                     <div class="my-4">
                         <img class="w-100" src="{{upload_thumbnail}}">
+                    </div>
+                    <div class="progress-wrapper" *ngIf="uploading">
+                        <div class="progress">
+                            <div
+                              class="progress-bar bg-primary"
+                              role="progressbar"
+                              [style.width]="
+                              imageUploader.progress != 0
+                                ? imageUploader.progress + '%'
+                                : uploaded_time + '%'
+                            "
+                            ></div>
+                        </div>
                     </div>
                     <div class="mt-3">
                         <label class="f-1 font-weight-bold text-uppercase small-label">title</label>
@@ -559,35 +590,6 @@
                             Finish
                         </button>
                     </div>
-                    <ng-container *ngIf="uploading">
-                        <div class="progress-wrapper">
-                          <div class="progress-info">
-                            <div class="progress-label">
-                              <span>Images uploading...</span>
-                            </div>
-                            <div class="progress-percentage">
-                            <span
-                            >{{
-                              imageUploader.progress != 0
-                                ? imageUploader.progress.toFixed(0)
-                                : uploaded_time.toFixed(0)
-                              }}%</span
-                            >
-                            </div>
-                          </div>
-                          <div class="progress">
-                            <div
-                              class="progress-bar bg-primary"
-                              role="progressbar"
-                              [style.width]="
-                              imageUploader.progress != 0
-                                ? imageUploader.progress + '%'
-                                : uploaded_time + '%'
-                            "
-                            ></div>
-                          </div>
-                        </div>
-                    </ng-container>
                 </form>
             </div>
         </div>
