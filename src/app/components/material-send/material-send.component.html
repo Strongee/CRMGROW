@@ -54,6 +54,7 @@
                         [placeholder]="'Search for Template to use'"
                         [(template)]="textTemplate"
                         [type]="'text'"
+                        [hasNewLink]="false"
                         (templateChange)="selectTextTemplate($event)"
                     ></app-input-template>
                 </div>
@@ -86,6 +87,7 @@
                         [placeholder]="'Search for Template to use'"
                         [(template)]="emailTemplate"
                         [type]="'email'"
+                        [hasNewLink]="false"
                         (templateChange)="selectEmailTemplate($event)"
                     ></app-input-template>
                 </div>

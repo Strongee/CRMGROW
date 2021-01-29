@@ -64,6 +64,9 @@ export class ContactsComponent implements OnInit, OnDestroy {
   searchOption: SearchOption = new SearchOption();
   searchStr = '';
 
+  selecting = false;
+  selectSubscription: Subscription;
+  selectSource = '';
   selection: Contact[] = [];
   pageSelection: Contact[] = [];
   pageContacts: ContactActivity[] = [];
@@ -125,6 +128,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
     if (path.includes('import-csv')) {
       this.importContacts();
     }
+
+    this.contactService.reloadPage();
   }
   /**
    * Load the contacts: Advanced Search, Normal Search, API Call
@@ -299,7 +304,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
         this.deselectAll();
         break;
       case 'select':
-        this.selectAll();
+        this.selectAll(true);
         break;
       case 'delete':
         this.deleteConfirm();
@@ -399,7 +404,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   /**
    * Select All Contacts
    */
-  selectAll(): void {
+  selectAll(source = false): void {
     if (this.searchStr || !this.searchOption.isEmpty()) {
       const contacts = this.storeService.pageContacts.getValue();
       contacts.forEach((e) => {
@@ -410,16 +415,26 @@ export class ContactsComponent implements OnInit, OnDestroy {
       });
       return;
     }
-    this.updateActionsStatus('select', true);
-    this.contactService.selectAll().subscribe((contacts) => {
-      this.selection = _.unionBy(this.selection, contacts, '_id');
-      this.pageSelection = _.intersectionBy(
-        this.selection,
-        this.pageContacts,
-        '_id'
-      );
-      this.updateActionsStatus('select', false);
-    });
+    if (source) {
+      this.updateActionsStatus('select', true);
+      this.selectSource = 'header';
+    } else {
+      this.selectSource = 'page';
+    }
+    this.selecting = true;
+    this.selectSubscription && this.selectSubscription.unsubscribe();
+    this.selectSubscription = this.contactService
+      .selectAll()
+      .subscribe((contacts) => {
+        this.selecting = false;
+        this.selection = _.unionBy(this.selection, contacts, '_id');
+        this.pageSelection = _.intersectionBy(
+          this.selection,
+          this.pageContacts,
+          '_id'
+        );
+        this.updateActionsStatus('select', false);
+      });
   }
 
   deselectAll(): void {
@@ -436,7 +451,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
         ...DialogSettings.CONFIRM,
         data: {
           title: 'Delete contacts',
-          messsage: 'Are you sure to delete contacts?',
+          message: 'Are you sure to delete contacts?',
           confirmLabel: 'Delete'
         }
       })
@@ -444,6 +459,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           this.delete();
+          this.handlerService.reload$();
         }
       });
   }

@@ -165,8 +165,15 @@
   
         <ng-container matColumnDef="selection_info">
           <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
-            <span *ngIf="selection.length !== (taskService.total$ | async); else deselectTemplate">
-              All {{pageTasks.length}} tasks are selected. <span class="c-blue font-weight-bold c-pointer" (click)="selectAll()">Select all {{taskService.total$ | async}} tasks</span>
+            <span *ngIf="selection.length !== (taskService.total$ | async); else deselectTemplate" class="">
+              All {{pageTasks.length}} tasks are selected. 
+              <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
+                <i class="small-spinner"></i>
+                <span>Selecting all. . .</span>
+              </span>
+              <span class="c-blue font-weight-bold c-pointer" *ngIf="!selecting" (click)="selectAll()">
+                Select all {{taskService.total$ | async}} tasks
+              </span>
             </span>
             <ng-template #deselectTemplate>
               All {{selection.length}} tasks are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>

@@ -589,6 +589,7 @@ export const BulkActions = {
   Tasks: [
     {
       label: 'Edit tasks',
+      loadingLabel: 'Editing...',
       type: 'button',
       icon: 'i-edit',
       command: 'edit',
@@ -596,6 +597,7 @@ export const BulkActions = {
     },
     {
       label: 'Complete tasks',
+      loadingLabel: 'Completing...',
       type: 'button',
       icon: 'i-check',
       command: 'complete',
@@ -603,6 +605,7 @@ export const BulkActions = {
     },
     {
       label: 'Delete tasks',
+      loadingLabel: 'Deleting...',
       type: 'button',
       icon: 'i-trash',
       command: 'delete',
@@ -611,12 +614,14 @@ export const BulkActions = {
     {
       spliter: true,
       label: 'Select all',
+      loadingLabel: 'Selecting...',
       type: 'button',
       command: 'select',
       loading: false
     },
     {
       label: 'Deselect',
+      loadingLabel: 'Deselecting...',
       type: 'button',
       command: 'deselect',
       loading: false
@@ -635,6 +640,13 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-message',
       command: 'message',
+      loading: false
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select',
       loading: false
     },
     {
@@ -670,13 +682,6 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-download',
       command: 'download',
-      loading: false
-    },
-    {
-      spliter: true,
-      label: 'Select all',
-      type: 'button',
-      command: 'select',
       loading: false
     },
     {

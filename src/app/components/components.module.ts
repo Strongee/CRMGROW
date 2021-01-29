@@ -121,6 +121,8 @@ import { ContactMergeLabelComponent } from './contact-merge-label/contact-merge-
 import { InputCountryComponent } from './input-country/input-country.component';
 import { InputStateComponent } from './input-state/input-state.component';
 import { DealContactComponent } from './deal-contact/deal-contact.component';
+import { SelectTeamComponent } from './select-team/select-team.component';
+import { ContactShareComponent } from './contact-share/contact-share.component';
 
 @NgModule({
   declarations: [
@@ -240,7 +242,9 @@ import { DealContactComponent } from './deal-contact/deal-contact.component';
     InputStateComponent,
     AutomationCreateComponent,
     ContactMergeLabelComponent,
-    DealContactComponent
+    DealContactComponent,
+    SelectTeamComponent,
+    ContactShareComponent
   ],
   imports: [
     CommonModule,
@@ -332,7 +336,8 @@ import { DealContactComponent } from './deal-contact/deal-contact.component';
     JoinCallRequestComponent,
     CallRequestConfirmComponent,
     CallRequestCancelComponent,
-    VideoShareComponent
+    VideoShareComponent,
+    SelectTeamComponent
   ]
 })
 export class ComponentsModule {}
