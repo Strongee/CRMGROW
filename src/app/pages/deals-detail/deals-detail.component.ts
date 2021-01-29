@@ -187,8 +187,15 @@ export class DealsDetailComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.deal = res;
-          const editDeal = JSON.parse(JSON.stringify(this.deal));
-          delete editDeal.main._id;
+          const contactIds = [];
+          this.deal.contacts.forEach((contact) => {
+            contactIds.push(contact._id);
+          });
+          const editDeal = {
+            contacts: contactIds,
+            title: this.deal.main.title,
+            value: this.deal.main.value
+          };
           this.dealsService
             .editDeal(this.deal.main._id, editDeal)
             .subscribe((res) => {
