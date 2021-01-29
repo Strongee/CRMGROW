@@ -187,8 +187,10 @@ export class DealsDetailComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.deal = res;
+          const editDeal = JSON.parse(JSON.stringify(this.deal));
+          delete editDeal.main._id;
           this.dealsService
-            .editDeal(this.deal.main._id, this.deal)
+            .editDeal(this.deal.main._id, editDeal)
             .subscribe((res) => {
               console.log('###', res);
             });
