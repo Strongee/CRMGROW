@@ -180,7 +180,14 @@
         <ng-container matColumnDef="selection_info">
           <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
             <span *ngIf="selection.length !== (contactService.total$ | async); else deselectTemplate">
-              All {{pageContacts.length}} contacts are selected. <span class="c-blue font-weight-bold c-pointer" (click)="selectAll()">Select all {{contactService.total$ | async}} contacts</span>
+              All {{pageContacts.length}} contacts are selected. 
+              <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
+                <i class="small-spinner"></i>
+                <span class="ml-1">Selecting all. . .</span>
+              </span>
+              <span class="c-blue font-weight-bold c-pointer" *ngIf="!selecting" (click)="selectAll()">
+                Select all {{contactService.total$ | async}} contacts
+              </span>
             </span>
             <ng-template #deselectTemplate>
               All {{contactService.total$ | async}} contacts are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>
