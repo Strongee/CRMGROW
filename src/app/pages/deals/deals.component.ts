@@ -98,7 +98,6 @@ export class DealsComponent implements OnInit {
   }
 
   getAvatarName(contact: any): string {
-    console.log('###', contact);
     if (contact) {
       if (contact.first_name && contact.last_name) {
         return contact.first_name[0] + contact.last_name[0];
