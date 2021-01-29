@@ -308,32 +308,9 @@
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'note'">
-              <div class="v-center justify-content-between">
-                <div ngbDropdown class="v-center">
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
-                    Notes
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                  <div ngbDropdownMenu class="light">
-                    <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
-                        All activity
-                      </div>
-                      <ng-template #others>
-                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
-                          {{tab.label}}
-                        </div>
-                      </ng-template>
-                      <div *ngIf="tab.id == action.id">
-                        <i class="d-block i-icon i-check bgc-blue"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="v-center justify-content-end c-pointer" (click)="openNoteDlg()">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Add new note</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
-                </div>
+              <div class="v-center justify-content-end c-pointer" (click)="openNoteDlg()">
+                <span class="f-3 font-weight-bold c-blue mr-2">Add new note</span>
+                <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
               <div class="empty-list" *ngIf="noteActivity == 0">
                 <div class="object-icon v-center">
@@ -345,32 +322,9 @@
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'email'">
-              <div class="v-center justify-content-between">
-                <div ngbDropdown class="v-center">
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
-                    Emails
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                  <div ngbDropdownMenu class="light">
-                    <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
-                        All activity
-                      </div>
-                      <ng-template #others>
-                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
-                          {{tab.label}}
-                        </div>
-                      </ng-template>
-                      <div *ngIf="tab.id == action.id">
-                        <i class="d-block i-icon i-check bgc-blue"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="v-center justify-content-end c-pointer" (click)="openSendEmail()">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Create email</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
-                </div>
+              <div class="v-center justify-content-end c-pointer" (click)="openSendEmail()">
+                <span class="f-3 font-weight-bold c-blue mr-2">Create email</span>
+                <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
               <div class="empty-list" *ngIf="emailActivity == 0">
                 <div class="object-icon v-center">
@@ -382,32 +336,9 @@
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'text'">
-              <div class="v-center justify-content-between">
-                <div ngbDropdown class="v-center">
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
-                    Texts
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                  <div ngbDropdownMenu class="light">
-                    <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
-                        All activity
-                      </div>
-                      <ng-template #others>
-                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
-                          {{tab.label}}
-                        </div>
-                      </ng-template>
-                      <div *ngIf="tab.id == action.id">
-                        <i class="d-block i-icon i-check bgc-blue"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="v-center justify-content-end c-pointer">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
-                </div>
+              <div class="v-center justify-content-end c-pointer">
+                <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
+                <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
               <div class="empty-list" *ngIf="textActivity == 0">
                 <div class="object-icon v-center">
@@ -419,32 +350,9 @@
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'appointment'">
-              <div class="v-center justify-content-between">
-                <div ngbDropdown class="v-center">
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
-                    Appointments
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                  <div ngbDropdownMenu class="light">
-                    <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
-                        All activity
-                      </div>
-                      <ng-template #others>
-                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
-                          {{tab.label}}
-                        </div>
-                      </ng-template>
-                      <div *ngIf="tab.id == action.id">
-                        <i class="d-block i-icon i-check bgc-blue"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="v-center justify-content-end c-pointer" (click)="openAppointmentDlg()">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
-                </div>
+              <div class="v-center justify-content-end c-pointer" (click)="openAppointmentDlg()">
+                <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
+                <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
               <div class="empty-list" *ngIf="appointmentActivity == 0">
                 <div class="object-icon v-center">
@@ -456,32 +364,9 @@
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'group_call'">
-              <div class="v-center justify-content-between">
-                <div ngbDropdown class="v-center">
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
-                    Group Calls
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                  <div ngbDropdownMenu class="light">
-                    <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
-                        All activity
-                      </div>
-                      <ng-template #others>
-                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
-                          {{tab.label}}
-                        </div>
-                      </ng-template>
-                      <div *ngIf="tab.id == action.id">
-                        <i class="d-block i-icon i-check bgc-blue"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="v-center justify-content-end c-pointer" (click)="openGroupCallDlg()">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
-                </div>
+              <div class="v-center justify-content-end c-pointer" (click)="openGroupCallDlg()">
+                <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>
+                <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
               <div class="empty-list" *ngIf="appointmentActivity == 0">
                 <div class="object-icon v-center">
@@ -495,21 +380,18 @@
             <div class="history-list-header" *ngSwitchCase="'follow_up'">
               <div class="v-center justify-content-between">
                 <div ngbDropdown class="v-center">
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
-                    Tasks
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+                  <div class="v-center" ngbDropdownToggle>
+                    <span class="f-3 font-weight-bold c-dark c-pointer mr-2">
+                      {{selectedTimeSort.label}}
+                    </span>
+                    <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+                  </div>
                   <div ngbDropdownMenu class="light">
-                    <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
-                        All activity
+                    <div class="v-center justify-content-between dropdown-item" *ngFor="let timeSort of timeSorts" (click)="changeSort(timeSort)">
+                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': timeSort.id == selectedTimeSort.id}">
+                        {{timeSort.label}}
                       </div>
-                      <ng-template #others>
-                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
-                          {{tab.label}}
-                        </div>
-                      </ng-template>
-                      <div *ngIf="tab.id == action.id">
+                      <div *ngIf="timeSort.id == selectedTimeSort.id">
                         <i class="d-block i-icon i-check bgc-blue"></i>
                       </div>
                     </div>
@@ -530,32 +412,9 @@
               </div>
             </div>
             <div class="history-list-header" *ngSwitchCase="'deal'">
-              <div class="v-center justify-content-between">
-                <div ngbDropdown class="v-center">
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2" ngbDropdownToggle>
-                    Deals
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                  <div ngbDropdownMenu class="light">
-                    <div class="v-center justify-content-between dropdown-item" *ngFor="let tab of tabs" (click)="changeTab(tab)">
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}" *ngIf="tab.id == 'all'; else others">
-                        All activity
-                      </div>
-                      <ng-template #others>
-                        <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tab.id == action.id}">
-                          {{tab.label}}
-                        </div>
-                      </ng-template>
-                      <div *ngIf="tab.id == action.id">
-                        <i class="d-block i-icon i-check bgc-blue"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="v-center justify-content-end c-pointer">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Create deal</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
-                </div>
+              <div class="v-center justify-content-end c-pointer">
+                <span class="f-3 font-weight-bold c-blue mr-2">Create deal</span>
+                <i class="d-block i-icon i-plus bgc-blue"></i>
               </div>
               <div class="empty-list" *ngIf="dealActivity == 0">
                 <div class="object-icon v-center">
@@ -581,13 +440,23 @@
               </div>
             </div>
             <div *ngIf="(action.id == 'all' || action.id == 'follow_up') && activity.type == 'follow_ups'">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="history-icon mr-3">
+                      <i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i>
+                    </div>
+                    <div class="f-6" *ngIf="action.id == 'all'">
                       <span>{{activity.content}}</span>
                     </div>
+                    <ng-container *ngIf="action.id == 'follow_up'">
+                      <div class="f-6" *ngIf="activity.content.indexOf('completed') !== -1">
+                        Completed task
+                      </div>
+                      <div class="f-6" *ngIf="activity.content.indexOf('completed') == -1">
+                        Task
+                      </div>
+                    </ng-container>
                   </div>
                   <div class="v-center">
                     <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
@@ -623,56 +492,48 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item" [class.completed]="activity.content.indexOf('completed') !== -1">
-                    <div class="v-center">
-                      <div class="v-center justify-content-center c-pointer task-status" (click)="completeTask(activity)"
-                        *ngIf="activity.content.indexOf('completed') === -1; else taskComplete">
+                <div class="main-history-item" [class.completed]="activity.content.indexOf('completed') !== -1">
+                  <div class="v-center">
+                    <div class="v-center justify-content-center c-pointer task-status" (click)="completeTask(activity)"
+                      *ngIf="activity.content.indexOf('completed') === -1; else taskComplete">
+                      <i class="i-icon i-check bgc-white"></i>
+                    </div>
+                    <ng-template #taskComplete>
+                      <div class="v-center justify-content-center task-status">
                         <i class="i-icon i-check bgc-white"></i>
                       </div>
-                      <ng-template #taskComplete>
-                        <div class="v-center justify-content-center task-status">
-                          <i class="i-icon i-check bgc-white"></i>
-                        </div>
-                      </ng-template>
-                      <div class="f-6 font-weight-bold ml-3 content">
-                        {{activity.activity_detail.content}}
+                    </ng-template>
+                    <div class="f-6 font-weight-bold ml-3 content">
+                      {{activity.activity_detail.content}}
+                    </div>
+                  </div>
+                  <div class="v-center mt-3" *ngIf="activity.content.indexOf('completed') === -1">
+                    <div class="time">
+                      <div class="f-4 fw-600 op-40">
+                        Due date
+                      </div>
+                      <div class="v-center mt-1">
+                        <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                        <span class="f-4">{{activity.activity_detail.due_date | date: 'MM/dd/yyyy'}} at {{activity.activity_detail.due_date | date: 'shortTime'}}</span>
                       </div>
                     </div>
-                    <div class="v-center mt-3" *ngIf="activity.content.indexOf('completed') === -1">
-                      <div class="time">
-                        <div class="f-4 fw-600 op-40">
-                          Due date
-                        </div>
-                        <div class="v-center mt-1">
-                          <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.due_date | date: 'MM/dd/yyyy'}} at {{activity.activity_detail.due_date | date: 'shortTime'}}</span>
-                        </div>
+                    <div class="type ml-5">
+                      <div class="f-4 fw-600 op-40">
+                        Type
                       </div>
-                      <div class="type ml-5">
-                        <div class="f-4 fw-600 op-40">
-                          Type
-                        </div>
-                        <div class="v-center mt-1">
-                          <ng-container [ngSwitch]="activity.activity_detail.type">
-                            <i class="d-block i-icon i-task bgc-dark mr-2" *ngSwitchCase="'task'"></i>
-                            <i class="d-block i-icon i-phone bgc-dark mr-2" *ngSwitchCase="'call'"></i>
-                            <i class="d-block i-icon i-lunch bgc-dark mr-2" *ngSwitchCase="'meeting'"></i>
-                            <i class="d-block i-icon i-message bgc-dark mr-2" *ngSwitchCase="'email'"></i>
-                            <i class="d-block i-icon i-video bgc-dark mr-2" *ngSwitchCase="'material'"></i>
-                          </ng-container>
-                          <span class="f-4 text-capitalize">{{activity.activity_detail.type}}</span>
-                        </div>
+                      <div class="v-center mt-1">
+                        <ng-container [ngSwitch]="activity.activity_detail.type">
+                          <i class="d-block i-icon i-task bgc-dark mr-2" *ngSwitchCase="'task'"></i>
+                          <i class="d-block i-icon i-phone bgc-dark mr-2" *ngSwitchCase="'call'"></i>
+                          <i class="d-block i-icon i-lunch bgc-dark mr-2" *ngSwitchCase="'meeting'"></i>
+                          <i class="d-block i-icon i-message bgc-dark mr-2" *ngSwitchCase="'email'"></i>
+                          <i class="d-block i-icon i-video bgc-dark mr-2" *ngSwitchCase="'material'"></i>
+                        </ng-container>
+                        <span class="f-4 text-capitalize">{{activity.activity_detail.type}}</span>
                       </div>
                     </div>
                   </div>
-                </ng-container>
-                <ng-template #removedTaskTemplate>
-                  <div class="d-flex">
-                    <mat-icon class="mr-2">warning</mat-icon>
-                    <span>Can't see the detail as it is deleted.</span>
-                  </div>
-                </ng-template>
+                </div>
                 <div class="related-history-item" *ngIf="groupActions[activity.group_id].length > 1">
                   <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                     <ng-template #show>
@@ -702,12 +563,15 @@
             </div>
 
             <div *ngIf="(action.id == 'all' || action.id == 'note') && activity.type == 'notes'">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-6" *ngIf="action.id == 'all'">
                       <span>{{activity.content}}</span>
+                    </div>
+                    <div class="f-6" *ngIf="action.id == 'note'">
+                      Note
                     </div>
                   </div>
                   <div class="v-center">
@@ -729,396 +593,222 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item">
-                    <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail.content">
-                      <ng-template #show>
-                        <div class="content f-6 position-relative">
-                          <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
-                          <div class="gradient-bottom"></div>
-                          <div class="f-3 fw-600 c-blue mt-1">
-                            Expand
-                          </div>
+                <div class="main-history-item">
+                  <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                    <ng-template #show>
+                      <div class="content f-6 position-relative">
+                        <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
+                        <div class="gradient-bottom"></div>
+                        <div class="f-3 fw-600 c-blue mt-1">
+                          Expand
                         </div>
-                      </ng-template>
-                      <ng-template #hide>
-                        <div class="content">
-                          <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
-                          <div class="f-3 fw-600 c-blue mt-1">
-                            Collapse
-                          </div>
+                      </div>
+                    </ng-template>
+                    <ng-template #hide>
+                      <div class="content">
+                        <div class="f-6 note-content opened">{{activity.activity_detail.content || 'No Content Note'}}</div>
+                        <div class="f-3 fw-600 c-blue mt-1">
+                          Collapse
                         </div>
-                      </ng-template>
-                    </app-accordion>
-                  </div>
-                </ng-container>
+                      </div>
+                    </ng-template>
+                  </app-accordion>
+                </div>
               </div>
             </div>
 
             <div *ngIf="(action.id == 'all' || action.id == 'email') && (activity.type == 'emails' || activity.type == 'email_trackers')">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-6" *ngIf="action.id == 'all'">
                       <span>{{activity.content}}</span>
+                    </div>
+                    <div class="f-6" *ngIf="action.id == 'email'">
+                      Email
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item">
-                    <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
-                      <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.emails]?.subject}}
-                        </div>
-                        <div class="f-6 detail-content" [innerHTML]="details[activity.emails]?.content || ''"></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                <div class="main-history-item">
+                  <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
+                    <div class="summary position-relative">
+                      <div class="title f-6 font-weight-bold">
+                        {{details[activity.emails]?.subject}}
                       </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.emails]?.subject}}
-                        </div>
-                        <div class="f-6 mt-2" [innerHTML]="details[activity.emails]?.content || ''"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>
-                    </ng-container>
-                    <ng-template #multiEmailHistory>
-                      <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.emails]?.subject}}
-                        </div>
-                        <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
-                      </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.emails]?.subject}}
-                        </div>
-                        <div class="f-6 mb-2 mt-2" [innerHTML]="details[activity.emails]?.content || ''"></div>
-                        <table class="table">
-                          <thead>
-                            <tr>
-                              <th class="session-col">session</th>
-                              <th class="duration-col">duration</th>
-                              <th class="date-col">date</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
-                              <td class="session-col">
-                                <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
-                              </td>
-                              <td class="duration-col">{{details[activity.emails]?.duration || ''}}</td>
-                              <td class="date-col">
-                                <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
-                                  {{detailActivity.created_at | date: 'MMMM dd'}}
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <!-- <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
-                          <div class="d-flex mb-1">
-                            <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
-                            <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
-                            <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
-                          </div>
-                        </ng-container> -->
-                        <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>
-                    </ng-template>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-
-            <div *ngIf="(action.id == 'all' || action.id == 'email') && (activity.type == 'videos' || activity.type == 'video_trackers')">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="groupActions[activity.group_id].length > 1">
-                <div class="v-center justify-content-between mb-3">
-                  <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
-                      <span>{{activity.content}}</span>
+                      <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
+                      <div class="gradient-bottom"></div>
+                      <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                     </div>
-                  </div>
-                </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item">
-                    <ng-container *ngIf="groupActions[activity.group_id].length > 1">
-                      <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.videos]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                    <div class="detail">
+                      <div class="title f-6 font-weight-bold">
+                        {{details[activity.emails]?.subject}}
                       </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.videos]?.title}}
-                        </div>
-                        <div class="f-6 mb-2" [innerHTML]="details[activity.videos]?.description || ''"></div>
-                        <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
-                          <div class="d-flex mb-1">
-                            <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
-                            <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
-                            <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
-                          </div>
-                        </ng-container>
-                        <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>
-                      <!-- <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.videos]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.videos]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
-                      </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.videos]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.videos]?.description || 'No Content'"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>  -->
-                    </ng-container>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-
-            <div *ngIf="(action.id == 'all' || action.id == 'email') && (activity.type == 'pdfs' || activity.type == 'pdf_trackers')">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="groupActions[activity.group_id].length > 1">
-                <div class="v-center justify-content-between mb-3">
-                  <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
-                      <span>{{activity.content}}</span>
+                      <div class="f-6 mt-2" [innerHTML]="details[activity.emails]?.content || ''"></div>
+                      <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                     </div>
-                  </div>
-                </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item">
-                    <ng-container *ngIf="groupActions[activity.group_id].length > 1">
-                      <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.pdfs]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                  </ng-container>
+                  <ng-template #multiEmailHistory>
+                    <div class="summary position-relative">
+                      <div class="title f-6 font-weight-bold">
+                        {{details[activity.emails]?.subject}}
                       </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.pdfs]?.title}}
-                        </div>
-                        <div class="f-6 mb-2" [innerHTML]="details[activity.pdfs]?.description || ''"></div>
-                        <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
-                          <div class="d-flex mb-1">
-                            <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
-                            <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
-                            <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
-                          </div>
-                        </ng-container>
-                        <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>
-                      <!-- <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.pdfs]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
-                      </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.pdfs]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || 'No Content'"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>  -->
-                    </ng-container>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-
-            <div *ngIf="(action.id == 'all' || action.id == 'email') && (activity.type == 'images' || activity.type == 'image_trackers')">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="groupActions[activity.group_id].length > 1">
-                <div class="v-center justify-content-between mb-3">
-                  <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
-                      <span>{{activity.content}}</span>
+                      <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
+                      <div class="gradient-bottom"></div>
+                      <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                     </div>
-                  </div>
+                    <div class="detail">
+                      <div class="title f-6 font-weight-bold">
+                        {{details[activity.emails]?.subject}}
+                      </div>
+                      <div class="f-6 mb-2 mt-2" [innerHTML]="details[activity.emails]?.content || ''"></div>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="session-col">session</th>
+                            <th class="duration-col">duration</th>
+                            <th class="date-col">date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                            <td class="session-col">
+                              <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
+                            </td>
+                            <td class="duration-col">{{details[activity.emails]?.duration || ''}}</td>
+                            <td class="date-col">
+                              <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
+                                {{detailActivity.created_at | date: 'MMMM dd'}}
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                    </div>
+                  </ng-template>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item">
-                    <ng-container  *ngIf="groupActions[activity.group_id].length > 1">
-                      <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.images]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
-                      </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.images]?.title}}
-                        </div>
-                        <div class="f-6 mb-2" [innerHTML]="details[activity.images]?.description || ''"></div>
-                        <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
-                          <div class="d-flex mb-1">
-                            <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
-                            <div class="mr-2 text-capitalize rounded-pill bgc-orange-weak text-white px-3">{{detailActivity.content}}</div>
-                            <div class="ml-auto c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
-                          </div>
-                        </ng-container>
-                        <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>
-                      <!-- <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.images]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
-                        <div class="gradient-bottom"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
-                      </div>
-                      <div class="detail">
-                        <div class="title f-6 font-weight-bold">
-                          {{details[activity.images]?.title}}
-                        </div>
-                        <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
-                        <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                      </div>  -->
-                    </ng-container>
-                  </div>
-                </ng-container>
               </div>
             </div>
 
             <div *ngIf="(action.id == 'all' || action.id == 'appointment') && activity.type == 'appointments'">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-6" *ngIf="action.id == 'all'">
                       <span>{{activity.content}}</span>
+                    </div>
+                    <div class="f-6" *ngIf="action.id == 'appointment'">
+                      Appointment
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item">
-                    <app-accordion [showIndicator]="show" [hideIndicator]="hide">
-                      <ng-template #show>
-                        <div class="content f-6 position-relative">
-                          <div class="font-weight-bold">
-                            {{activity.activity_detail.title}}
-                          </div>
-                          <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content' | stripTags | shorten: 300: '...'"></div>
-                          <div class="gradient-bottom"></div>
-                          <div class="f-3 fw-600 c-blue mt-1">
-                            Expand
-                          </div>
+                <div class="main-history-item">
+                  <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                    <ng-template #show>
+                      <div class="content f-6 position-relative">
+                        <div class="font-weight-bold">
+                          {{activity.activity_detail.title}}
                         </div>
-                      </ng-template>
-                      <ng-template #hide>
-                        <div class="content">
-                          <div class="f-6 font-weight-bold">
-                            {{activity.activity_detail.title}}
-                          </div>
-                          <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content'"></div>
-                          <div class="f-3 fw-600 c-blue mt-1">
-                            Collapse
-                          </div>
-                        </div>
-                      </ng-template>
-                    </app-accordion>
-                    <div class="v-center mt-3">
-                      <div class="date">
-                        <div class="f-4 fw-600 op-40">
-                          Date
-                        </div>
-                        <div class="v-center mt-1">
-                          <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.due_start | date: 'MM/dd/yyyy'}}</span>
+                        <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content' | stripTags | shorten: 300: '...'"></div>
+                        <div class="gradient-bottom"></div>
+                        <div class="f-3 fw-600 c-blue mt-1">
+                          Expand
                         </div>
                       </div>
-                      <div class="time ml-5">
-                        <div class="f-4 fw-600 op-40">
-                          Time
+                    </ng-template>
+                    <ng-template #hide>
+                      <div class="content">
+                        <div class="f-6 font-weight-bold">
+                          {{activity.activity_detail.title}}
                         </div>
-                        <div class="v-center mt-1">
-                          <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                          <span class="f-4">{{getTime(activity.activity_detail.due_start, activity.activity_detail.due_end)}}</span>
+                        <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content'"></div>
+                        <div class="f-3 fw-600 c-blue mt-1">
+                          Collapse
                         </div>
                       </div>
-                      <div class="location ml-5">
-                        <div class="f-4 fw-600 op-40">
-                          Location
-                        </div>
-                        <div class="v-center mt-1">
-                          <i class="d-block i-icon i-location bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.location}}</span>
-                        </div>
+                    </ng-template>
+                  </app-accordion>
+                  <div class="v-center mt-3">
+                    <div class="date">
+                      <div class="f-4 fw-600 op-40">
+                        Date
+                      </div>
+                      <div class="v-center mt-1">
+                        <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                        <span class="f-4">{{activity.activity_detail.due_start | date: 'MM/dd/yyyy'}}</span>
                       </div>
                     </div>
-                    <div class="mt-4">
+                    <div class="time ml-5">
                       <div class="f-4 fw-600 op-40">
-                        Zoom meeting
+                        Time
                       </div>
-                      <div class="f-4 c-blue mt-1">
-                        https://cebroker-evercheck.zoom.us/j/98078238478
+                      <div class="v-center mt-1">
+                        <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                        <span class="f-4">{{getTime(activity.activity_detail.due_start, activity.activity_detail.due_end)}}</span>
+                      </div>
+                    </div>
+                    <div class="location ml-5">
+                      <div class="f-4 fw-600 op-40">
+                        Location
+                      </div>
+                      <div class="v-center mt-1">
+                        <i class="d-block i-icon i-location bgc-dark mr-2"></i>
+                        <span class="f-4">{{activity.activity_detail.location}}</span>
                       </div>
                     </div>
                   </div>
-                </ng-container>
+                  <div class="mt-4">
+                    <div class="f-4 fw-600 op-40">
+                      Zoom meeting
+                    </div>
+                    <div class="f-4 c-blue mt-1">
+                      https://cebroker-evercheck.zoom.us/j/98078238478
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div *ngIf="(action.id == 'all' || action.id == 'deal') && activity.type == 'deals'">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-6" *ngIf="action.id == 'all'">
                       <span>{{activity.content}}</span>
+                    </div>
+                    <div class="f-6" *ngIf="action.id == 'deal'">
+                      Deal
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
-                  <div class="main-history-item">
-                    <div class="f-6 font-weight-bold">
-                      {{activity.activity_detail.title}}
-                    </div>
-                    <div class="v-center mt-3">
-                      <div class="stage">
-                        <div class="f-4 fw-600 op-40">
-                          Stage
-                        </div>
-                        <ng-container *ngFor="let dealStage of dealsService.stages$ | async">
-                          <div class="f-4 mt-1" *ngIf="dealStage._id == activity.activity_detail.deal_stage">
-                            {{dealStage.title}}
-                          </div>
-                        </ng-container>
+                <div class="main-history-item">
+                  <div class="f-6 font-weight-bold">
+                    {{activity.activity_detail.title}}
+                  </div>
+                  <div class="v-center mt-3">
+                    <div class="stage">
+                      <div class="f-4 fw-600 op-40">
+                        Stage
                       </div>
-                      <div class="value ml-5">
-                        <div class="f-4 fw-600 op-40">
-                          Value
+                      <ng-container *ngFor="let dealStage of dealsService.stages$ | async">
+                        <div class="f-4 mt-1" *ngIf="dealStage._id == activity.activity_detail.deal_stage">
+                          {{dealStage.title}}
                         </div>
-                        <div class="f-4 mt-1">
-                          $ {{activity.activity_detail.value}}
-                        </div>
+                      </ng-container>
+                    </div>
+                    <div class="value ml-5">
+                      <div class="f-4 fw-600 op-40">
+                        Value
+                      </div>
+                      <div class="f-4 mt-1">
+                        $ {{activity.activity_detail.value}}
                       </div>
                     </div>
                   </div>
-                </ng-container>
+                </div>
               </div>
             </div>
           </ng-container>
