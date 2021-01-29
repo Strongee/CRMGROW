@@ -272,7 +272,6 @@
                 >
                     <div class="video-default mb-4">
                         <div class="thumbnail" id="pdf-selector">
-                            <img class="image" src="{{upload_thumbnail}}">
                             <pdf-viewer
                                 [src]="file"
                                 [show-all]="false"
@@ -281,7 +280,10 @@
                                 [hidden]="!thumbnail_loading"
                             >
                             </pdf-viewer>
-                            <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog('pdf')"><i class="d-block i-icon i-edit bgc-white"></i></a>
+                            <img class="image" src="{{upload_thumbnail}}">
+                            <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog('pdf')" *ngIf="upload_thumbnail">
+                                <i class="d-block i-icon i-edit bgc-white"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="form-group has-feedback mb-4">

@@ -143,3 +143,11 @@
     transform: translate(-50%, -50%);
     background: white;
 }
+
+
+:host ::ng-deep {
+    .ng2-pdf-viewer-container .page {
+        min-height: unset;
+        padding:0px;
+    }
+}
