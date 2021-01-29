@@ -26,7 +26,7 @@ import {
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { listToTree } from 'src/app/helper';
+import { getCurrentTimezone, listToTree } from 'src/app/helper';
 import { AutomationShowFullComponent } from 'src/app/components/automation-show-full/automation-show-full.component';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
@@ -49,6 +49,8 @@ import { NoteCreateComponent } from 'src/app/components/note-create/note-create.
 import { AutomationService } from 'src/app/services/automation.service';
 import { Subscription } from 'rxjs';
 import { ContactShareComponent } from '../../components/contact-share/contact-share.component';
+import { UserService } from 'src/app/services/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-contact',
@@ -70,6 +72,16 @@ export class ContactComponent implements OnInit, OnDestroy {
   ];
   action: TabItem = this.tabs[0];
 
+  timeSorts = [
+    { label: 'Overdue', id: 'overdue' },
+    { label: 'Today', id: 'today' },
+    { label: 'Tomorrow', id: 'tomorrow' },
+    { label: 'This week', id: 'this_week' },
+    { label: 'Next Week', id: 'next_week' }
+  ];
+
+  selectedTimeSort = this.timeSorts[0];
+
   contact: ContactDetail = new ContactDetail();
   selectedContact: Contact = new Contact();
   groupActions = {};
@@ -89,6 +101,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   groupCallActivity = 0;
   taskActivity = 0;
   dealActivity = 0;
+  timezone;
 
   selectedAutomation: Automation;
   ActionName = ActionName;
@@ -110,6 +123,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private contactService: ContactService,
+    private userService: UserService,
     private noteService: NoteService,
     private taskService: TaskService,
     private storeService: StoreService,
@@ -120,6 +134,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     private viewContainerRef: ViewContainerRef
   ) {
     this.dealsService.getStage(true);
+    this.userService.profile$.subscribe((user) => {
+      try {
+        this.timezone = JSON.parse(user.time_zone_info);
+      } catch (err) {
+        const timezone = getCurrentTimezone();
+        this.timezone = { zone: user.time_zone || timezone };
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -435,6 +457,72 @@ export class ContactComponent implements OnInit, OnDestroy {
    **************************************/
   changeTab(tab: TabItem): void {
     this.action = tab;
+    this.selectedTimeSort = this.timeSorts[0];
+    this.groupActivities();
+  }
+
+  changeSort(timeSort: any): void {
+    this.groupActivities();
+    let today;
+    let weekDay;
+    this.selectedTimeSort = timeSort;
+    if (this.timezone.tz_name) {
+      today = moment().tz(this.timezone.tz_name).startOf('day');
+      weekDay = moment().tz(this.timezone.tz_name).startOf('week');
+    } else {
+      today = moment().utcOffset(this.timezone.zone).startOf('day');
+      weekDay = moment().utcOffset(this.timezone.zone).startOf('week');
+    }
+    let start_date = new Date();
+    let end_date = new Date();
+    switch (this.selectedTimeSort.id) {
+      case 'overdue':
+        end_date = today.format();
+        this.mainTimelines = this.mainTimelines.filter(
+          (timeLine) =>
+            !(
+              timeLine.activity_detail?.due_date > end_date ||
+              timeLine.activity_detail?.status == 1
+            )
+        );
+        break;
+      case 'today':
+        start_date = today.format();
+        end_date = today.add('day', 1).format();
+        this.mainTimelines = this.mainTimelines.filter(
+          (timeLine) =>
+            timeLine.activity_detail?.due_date > start_date &&
+            timeLine.activity_detail?.due_date < end_date
+        );
+        break;
+      case 'tomorrow':
+        start_date = today.add('day', 1).format();
+        end_date = today.add('day', 2).format();
+        this.mainTimelines = this.mainTimelines.filter(
+          (timeLine) =>
+            timeLine.activity_detail?.due_date > start_date &&
+            timeLine.activity_detail?.due_date < end_date
+        );
+        break;
+      case 'this_week':
+        start_date = weekDay.format();
+        end_date = weekDay.add('week', 1).format();
+        this.mainTimelines = this.mainTimelines.filter(
+          (timeLine) =>
+            timeLine.activity_detail?.due_date > start_date &&
+            timeLine.activity_detail?.due_date < end_date
+        );
+        break;
+      case 'next_week':
+        start_date = weekDay.add('week', 1).format();
+        end_date = weekDay.add('week', 2).format();
+        this.mainTimelines = this.mainTimelines.filter(
+          (timeLine) =>
+            timeLine.activity_detail?.due_date > start_date &&
+            timeLine.activity_detail?.due_date < end_date
+        );
+        break;
+    }
   }
 
   showDetail(event: any): void {
