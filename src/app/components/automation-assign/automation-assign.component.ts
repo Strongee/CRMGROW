@@ -54,19 +54,22 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
       contacts.push(e._id);
     });
 
-    console.log("assign ===========>", contacts, automation);
-
     this.automationService.bulkAssign(contacts, automation).subscribe(
       (res) => {
         this.loading = false;
-        this.dialogRef.close({ status: true });
-        this.toastr.success(
-          'Automation is assigned to selected contacts successfully.'
-        );
+        if (res) {
+          this.dialogRef.close({ status: true });
+          this.toastr.success(
+            'Automation is assigned to selected contacts successfully.'
+          );
+        }
+        console.log("assign automation ============>", res);
+        this.dialogRef.close(res);
       },
       (err) => {
+        console.log("assign error ==========>", err);
         this.loading = false;
-        this.dialogRef.close({ status: true });
+        this.dialogRef.close({ status: false });
       }
     );
   }

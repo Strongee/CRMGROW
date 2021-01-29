@@ -113,7 +113,6 @@ export class ContactMergeComponent implements OnInit {
   }
 
   submit(): void {
-
     if (!this.mergeContact._id) {
       return;
     }
