@@ -166,7 +166,7 @@ export class TaskService extends HttpService {
    */
   bulkCreate(data: any): Observable<any> {
     return this.http.post(this.server + TASK.BULK_CREATE, data).pipe(
-      map((res) => res['data']),
+      map((res) => res['status']),
       catchError(this.handleError('BULK TASK CREATE', null))
     );
   }

@@ -10,7 +10,9 @@ import {
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
   MatAutocompleteSelectedEvent,
-  MatAutocomplete
+  MatAutocomplete,
+  MatAutocompleteActivatedEvent,
+  MatAutocompleteTrigger
 } from '@angular/material/autocomplete';
 import { FormControl } from '@angular/forms';
 import {
@@ -24,6 +26,7 @@ import {
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import * as _ from 'lodash';
 import { TagService } from 'src/app/services/tag.service';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 interface Tag {
   _id: string;
@@ -40,6 +43,7 @@ export class InputTagComponent implements OnInit {
   keyword = '';
   searching = false;
   addOnBlur = false;
+  optionsFocused = false;
 
   @Input('placeholder') placeholder = 'Add Tags';
   @Input('onlyFromSearch') onlyFromSearch = false;
@@ -47,7 +51,8 @@ export class InputTagComponent implements OnInit {
   @Output() onSelect = new EventEmitter();
 
   formControl: FormControl = new FormControl();
-  @ViewChild('inputField') inputField: ElementRef;
+  @ViewChild(MatAutocompleteTrigger) inputField: MatAutocompleteTrigger;
+  @ViewChild('inputField') inputFieldRef: ElementRef;
   @ViewChild('auto') autoComplete: MatAutocomplete;
 
   protected _onDestroy = new Subject<void>();
@@ -118,7 +123,8 @@ export class InputTagComponent implements OnInit {
     if (index === -1) {
       this.selectedTags.push(tag._id);
     }
-    this.inputField.nativeElement.value = '';
+    this.inputFieldRef.nativeElement.value = '';
+    this.optionsFocused = false;
     this.formControl.setValue(null);
     this.keyword = '';
     this.onSelect.emit();
@@ -127,5 +133,31 @@ export class InputTagComponent implements OnInit {
   focusField(): void {
     // Focus The field
     console.log('focus field');
+  }
+
+  onActiveOption(event: MatAutocompleteActivatedEvent): void {
+    if (event && event.option) {
+      this.optionsFocused = true;
+    } else {
+      this.optionsFocused = false;
+    }
+  }
+  onAdd(event: MatChipInputEvent): void {
+    if (this.optionsFocused || !event.value) {
+      return;
+    }
+    const tag: Tag = { _id: event.value };
+    const index = _.findIndex(this.selectedTags, function (e) {
+      return e === tag;
+    });
+    if (index === -1) {
+      this.selectedTags.push(tag._id);
+    }
+    this.inputField.closePanel();
+    this.inputFieldRef.nativeElement.value = '';
+    this.optionsFocused = false;
+    this.formControl.setValue(null);
+    this.keyword = '';
+    this.onSelect.emit();
   }
 }

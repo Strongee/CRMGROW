@@ -19,6 +19,7 @@ import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
+import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 
 @Component({
   selector: 'app-automations',
@@ -146,38 +147,22 @@ export class AutomationsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        if (res && res.status) {
+          this.automationService.reload();
+        }
+      });
+  }
+
+  create(): void {
+    this.dialog
+      .open(AutomationCreateComponent, {
+        width: '360px',
+        maxWidth: '90vw'
+      })
+      .afterClosed()
+      .subscribe((res) => {
         if (res) {
         }
       });
-  }
-
-  expandElement(element: Automation): void {
-    if (this.selectedAutomation === element._id) {
-      this.selectedAutomation = null;
-    } else {
-      this.selectedAutomation = element._id;
-      if (element['contacts'].length) {
-        this.detailLoad();
-      }
-    }
-  }
-
-  detailLoad(): void {
-    this.detailLoading = true;
-    this.detailLoadSubscription && this.detailLoadSubscription.unsubscribe();
-    this.detailLoadSubscription = this.automationService
-      .getAssignedContacts(this.selectedAutomation)
-      .subscribe((contacts) => {
-        this.detailLoading = false;
-        if (contacts) {
-          this.contacts = contacts;
-        }
-      });
-  }
-
-  openContact(contact: Contact): void {
-    console.log('open contact', contact);
-    this.detailPanel.loadStatus(contact._id);
-    this.drawer.open();
   }
 }

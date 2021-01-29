@@ -6,10 +6,13 @@
           <ng-container *ngIf="resultItemTemplate; else defaultResult" [ngTemplateOutlet]="resultItemTemplate" [ngTemplateOutletContext]="{ $implicit: formControl.value }">
           </ng-container>
           <ng-template #defaultResult>
-            <div class="v-center selected-value">
-              <div class="f-3 font-weight-bold">{{formControl.value.title}}</div>
-              <div class="f-1 c-badge circle bgc-leafy-green mx-2">{{formControl.value.automations.length}}</div>
-              <div class="f-1 c-badge rect text-uppercase" [class]="formControl.value.role || 'own'">{{formControl.value.role || 'own'}}</div>
+            <div class="v-center">
+              <div class="v-center selected-value">
+                <div class="f-3 font-weight-bold automation-name" title="{{formControl.value.title}}">{{formControl.value.title}}</div>
+                <div class="f-1 c-badge circle bgc-leafy-green mx-1">{{formControl.value.automations.length}}</div>
+                <div class="f-1 c-badge rect text-uppercase mr-1" [class]="formControl.value.role || 'own'">{{formControl.value.role || 'own'}}</div>
+              </div>
+              <div class="icon-close ml-auto" (click)="remove()"></div>
             </div>
           </ng-template>
         </ng-container>
@@ -25,7 +28,7 @@
       </mat-option>
       <mat-option *ngFor="let item of filteredResults | async" [value]="item" style="height: unset; line-height: unset;">
         <div class="v-center py-3">
-          <div class="f-3 font-weight-bold">{{item.title}}</div>
+          <div class="f-3 font-weight-bold automation-name" title="{{item.title}}">{{item.title}}</div>
           <div class="f-1 c-badge circle bgc-leafy-green mx-2">{{item.automations.length}}</div>
           <div class="f-1 c-badge rect text-uppercase ml-auto" [class]="item.role || 'own'">{{item.role || 'own'}}</div>
         </div>

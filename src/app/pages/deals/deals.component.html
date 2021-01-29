@@ -36,13 +36,13 @@
                     </div> -->
                 </div>
                 <div
-                    class="deals-container mt-4"
+                    class="deals-container pt-1 pr-1"
                     cdkDropList
                     [cdkDropListData]="dealStage.deals"
                     (cdkDropListDropped)="drop($event, dealStage._id)"
                 >
                     <div
-                        class="deal mt-3 mr-3 p-3 c-pointer"
+                        class="deal mt-2 mr-2 p-3 c-pointer"
                         *ngFor="let deal of dealStage.deals" cdkDrag
                         (click)="dealDetail(deal._id)"
                     >
@@ -69,30 +69,18 @@
                             </div>
                             <div class="v-center justify-content-between mt-2 contacts-info">
                                 <div class="v-center">
-                                    <div class="avatar"></div>
+                                    <div class="v-center justify-content-center avatar f-3 font-weight-bold c-white">{{getAvatarName(deal.contacts[0])}}</div>
                                     <div class="ml-2 f-3">
                                         {{deal.contacts[0]?.first_name}} {{deal.contacts[0]?.last_name}}
                                     </div>
                                 </div>
-                                <div class="v-center" *ngIf="deal.contacts.length > 1">
-                                    <i class="d-block i-icon i-plus bgc-dark mr-1"></i>
-                                    <div class="f-3">{{deal.contacts.length - 1}}</div>
+                                <div class="v-center justify-content-center avatar" *ngIf="deal.contacts.length > 1">
+                                    <i class="d-block i-icon i-plus bgc-white"></i>
+                                    <div class="f-3 c-white">{{deal.contacts.length - 1}}</div>
                                 </div>
                             </div>
                             <div class="f-3 op-64 mt-2">
                                 ${{deal.value}}
-                            </div>
-                            <div class="action-more c-pointer">
-                                <i class="d-block i-icon i-menu-more bgc-dark"></i>
-                                <!-- <div ngbDropdownMenu class="light action-menu">
-                                    <button class="border-0 c-dark dropdown-item">
-                                        <span class="ml-1 f-3 font-weight-bold">Edit deal</span>
-                                    </button>
-                                    <hr class="my-1">
-                                    <button class="border-0 c-dark dropdown-item">
-                                        <span class="ml-1 f-3 font-weight-bold c-red">Delete deal</span>
-                                    </button>
-                                </div> -->
                             </div>
                         </div>
                     </div>

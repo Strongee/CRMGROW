@@ -90,6 +90,16 @@ export class ContactService extends HttpService {
         catchError(this.handleError('CONTACT DETAIL', null))
       );
   }
+  reloadDetail(): void {
+    const contact = this.storeService.selectedContact.getValue();
+    if (contact && contact._id) {
+      this.readImpl(contact._id, {}).subscribe((res) => {
+        if (res) {
+          this.storeService.selectedContact.next(res);
+        }
+      });
+    }
+  }
 
   update(contact): Observable<any> {
     return this.httpClient

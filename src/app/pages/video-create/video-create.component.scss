@@ -142,3 +142,11 @@
     top: 50px;
     padding: 5px 10px;
 }
+
+
+:host ::ng-deep {
+    .ng2-pdf-viewer-container .page {
+        min-height: unset;
+        padding:0px;
+    }
+}

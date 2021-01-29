@@ -96,10 +96,6 @@ export const COUNTRY_CODES = {
 };
 export const COUNTRIES = [
   {
-    code: '',
-    name: 'None'
-  },
-  {
     code: 'US',
     name: 'United States'
   },
@@ -109,7 +105,6 @@ export const COUNTRIES = [
   }
 ];
 export const REGIONS = {
-  None: ['None'],
   US: [
     'Alabama',
     'Alaska',
@@ -563,7 +558,8 @@ export const DialogSettings = {
     disableClose: true
   },
   AUTOMATION: {
-    maxWidth: '98vw',
+    width: '98vw',
+    maxWidth: '394px',
     minHeight: '300px',
     disableClose: true
   },

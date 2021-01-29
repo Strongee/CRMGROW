@@ -810,7 +810,7 @@ export class VideoCreateComponent implements OnInit {
             res['items'][0]['contentDetails']
           ) {
             const duration = res['items'][0]['contentDetails']['duration'];
-            this.video.duration = this.YTDurationToSeconds(duration);
+            this.video.duration = this.YTDurationToSeconds(duration) * 1000;
           }
           if (res['items'] && res['items'][0] && res['items'][0]['snippet']) {
             const thumbnail =
@@ -841,7 +841,7 @@ export class VideoCreateComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.video.thumbnail = res[0]['thumbnail_large'];
-          this.video.duration = res[0]['duration'];
+          this.video.duration = res[0]['duration'] * 1000;
           this.loadedData = true;
           this.videoType = 'web';
           this.uploadVideo();

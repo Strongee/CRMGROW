@@ -229,7 +229,24 @@
             <i class="i-icon i-task d-block bgc-dark"></i>
           </div>
           <h4 class="font-weight-bold mt-4 mb-3">
-            There is no task in your account.
+            <ng-container *ngIf="(taskService.durationOption$ | async).name === 'overdue'; else anotherResult;">
+              <ng-container [ngSwitch]="(taskService.searchOption$ | async).status">
+                <div *ngSwitchCase="1">
+                  You did not have completed any {{(taskService.searchOption$ | async).types ? (taskService.searchOption$ | async).types.join(', ') : '' }} tasks before.
+                </div>
+                <div *ngSwitchCase="0">
+                  You completed all any {{(taskService.searchOption$ | async).types ? (taskService.searchOption$ | async).types.join(', ') : '' }} tasks before.
+                </div>
+                <div *ngSwitchDefault>
+                  You did not have any {{(taskService.searchOption$ | async).types ? (taskService.searchOption$ | async).types.join(', ') : '' }} tasks before.
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-template #anotherResult>
+              There are no {{(taskService.searchOption$ | async).status === TASK_STATUS.TODO ? 'todo' : (taskService.searchOption$ | async).status === TASK_STATUS.COMPLETED ? 'completed' : ''}} 
+              {{(taskService.searchOption$ | async).types ? (taskService.searchOption$ | async).types.join(', ') : '' }} tasks 
+              {{((taskService.durationOption$ | async).name || 'all') !== 'all' ? ' for ' + (taskService.durationOption$ | async).name : 'in your account'}}.
+            </ng-template>
           </h4>
         </div>
         <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">

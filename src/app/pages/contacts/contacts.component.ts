@@ -23,6 +23,7 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { ContactAssignAutomationComponent } from '../../components/contact-assign-automation/contact-assign-automation.component';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -124,6 +125,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
     if (path.includes('import-csv')) {
       this.importContacts();
     }
+
+    this.contactService.reloadPage();
   }
   /**
    * Load the contacts: Advanced Search, Normal Search, API Call
@@ -435,7 +438,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
         ...DialogSettings.CONFIRM,
         data: {
           title: 'Delete contacts',
-          messsage: 'Are you sure to delete contacts?',
+          message: 'Are you sure to delete contacts?',
           confirmLabel: 'Delete'
         }
       })
@@ -443,6 +446,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           this.delete();
+          this.handlerService.reload$();
         }
       });
   }
@@ -493,7 +497,19 @@ export class ContactsComponent implements OnInit, OnDestroy {
   }
 
   openMessageDlg(): void {
-    // this.dialog.open(Message)
+    this.dialog.open(SendEmailComponent, {
+      position: {
+        bottom: '0px',
+        right: '0px'
+      },
+      width: '100vw',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
+      disableClose: false,
+      data: {
+        contacts: this.selection
+      }
+    });
   }
 
   openNoteDlg(): void {

@@ -1,5 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewContainerRef,
+  ViewChild,
+  OnDestroy
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -42,13 +48,14 @@ import { TaskCreateComponent } from 'src/app/components/task-create/task-create.
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { AutomationService } from 'src/app/services/automation.service';
 import { Subscription } from 'rxjs';
+import { ContactShareComponent } from '../../components/contact-share/contact-share.component';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
   REPEAT_DURATIONS = REPEAT_DURATIONS;
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
@@ -133,6 +140,12 @@ export class ContactComponent implements OnInit {
         this.getActivityCount();
       }
     });
+
+    this.handlerService.pageName.next('detail');
+  }
+
+  ngOnDestroy(): void {
+    this.handlerService.pageName.next('');
   }
 
   /**
@@ -397,6 +410,16 @@ export class ContactComponent implements OnInit {
     });
   }
 
+  openShareContactDlg(): void {
+    this.dialog.open(ContactShareComponent, {
+      width: '500px',
+      maxWidth: '90vw',
+      data: {
+        contact: this.contact
+      }
+    });
+  }
+
   insertActivity(activity: DetailActivity): void {
     const group = this.generateUniqueId(activity);
     if (this.groupActions[group]) {
@@ -584,6 +607,7 @@ export class ContactComponent implements OnInit {
     this.selectedAutomation = evt;
   }
   timeLineArrangement(): any {
+    this.allDataSource = new MatTreeNestedDataSource<any>();
     if (!this.contact['time_lines'] || this.contact['time_lines'].length == 0) {
       return;
     }
@@ -594,6 +618,8 @@ export class ContactComponent implements OnInit {
     }
     if (this.allDataSource.data[0]?.status == 'completed') {
       root = JSON.parse(JSON.stringify(this.allDataSource.data[0]));
+    } else {
+      return;
     }
     while (true) {
       if (root.children[0]?.status == 'completed') {
@@ -606,7 +632,7 @@ export class ContactComponent implements OnInit {
     for (const firstChild of root.children)
       for (const secondChild of firstChild.children) secondChild.children = [];
 
-    this.dataSource.data = [];
+    this.dataSource = new MatTreeNestedDataSource<any>();
     this.dataSource.data.push(root);
   }
   showFullAutomation(): void {
@@ -634,6 +660,9 @@ export class ContactComponent implements OnInit {
   }
 
   assignAutomation(): void {
+    if (!this.selectedAutomation) {
+      return;
+    }
     if (this.allDataSource.data.length) {
       this.dialog
         .open(ConfirmComponent, {
@@ -651,7 +680,7 @@ export class ContactComponent implements OnInit {
         .subscribe((status) => {
           if (status) {
             this.assigning = true;
-            this.assignSubscription && this.assignSubscription.unsubscribe();
+            // this.assignSubscription && this.assignSubscription.unsubscribe();
             this.automationService
               .reAssign(this.contact._id, this.selectedAutomation._id)
               .subscribe((status) => {

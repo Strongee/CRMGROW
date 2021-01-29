@@ -37,6 +37,7 @@ export class InputTemplateComponent
   @Input('formPlaceholder') formPlaceholder = 'Search templates';
   @Input('automation') automation = null;
   @Input('type') type = ''; // 'email' | 'text'
+  @Input('hasNewLink') hasNewLink = true;
 
   @Input() id: string = '';
   @Output() idChange = new EventEmitter<string>();

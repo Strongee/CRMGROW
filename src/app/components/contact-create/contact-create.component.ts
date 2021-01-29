@@ -72,6 +72,9 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   create(): any {
+    if (this.contact.state == 'None') {
+      this.contact.state = '';
+    }
     if (
       this.sameEmailContacts.length > 0 ||
       this.sameCellPhoneContacts.length > 0
@@ -86,7 +89,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
         this.isCreating = false;
         if (contact) {
           // If automation is enabled please assign the automation.
-          if (this.automation._id) {
+          if (this.automation && this.automation._id) {
             this.isCreating = true;
             this.assignSubscription && this.assignSubscription.unsubscribe();
             this.assignSubscription = this.automationService

@@ -116,7 +116,12 @@ import { DealEditComponent } from './deal-edit/deal-edit.component';
 import { DateInputComponent } from './date-input/date-input.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { AutomationStatusComponent } from './automation-status/automation-status.component';
+import { AutomationCreateComponent } from './automation-create/automation-create.component';
 import { ContactMergeLabelComponent } from './contact-merge-label/contact-merge-label.component';
+import { InputCountryComponent } from './input-country/input-country.component';
+import { InputStateComponent } from './input-state/input-state.component';
+import { SelectTeamComponent } from './select-team/select-team.component';
+import { ContactShareComponent } from './contact-share/contact-share.component';
 
 @NgModule({
   declarations: [
@@ -231,7 +236,13 @@ import { ContactMergeLabelComponent } from './contact-merge-label/contact-merge-
     DealEditComponent,
     DateInputComponent,
     AutomationStatusComponent,
-    ContactMergeLabelComponent
+    ContactMergeLabelComponent,
+    InputCountryComponent,
+    InputStateComponent,
+    AutomationCreateComponent,
+    ContactMergeLabelComponent,
+    SelectTeamComponent,
+    ContactShareComponent
   ],
   imports: [
     CommonModule,
@@ -322,7 +333,8 @@ import { ContactMergeLabelComponent } from './contact-merge-label/contact-merge-
     JoinCallRequestComponent,
     CallRequestConfirmComponent,
     CallRequestCancelComponent,
-    VideoShareComponent
+    VideoShareComponent,
+    SelectTeamComponent
   ]
 })
 export class ComponentsModule {}

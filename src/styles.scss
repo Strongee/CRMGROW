@@ -1122,6 +1122,11 @@ table {
     width: 36px;
     height: 36px;
   }
+
+  &.sm {
+    width: 26px;
+    height: 26px;
+  }
 }
 .form-avatar {
   width: 26px;
@@ -1300,7 +1305,7 @@ ul.ngx-pagination {
   color: #FFFFFF;
   width: 60px;
   text-align: center;
-  font-size: 11px;
+  font-size: 10px;
   cursor: pointer;
 
   .pending {
@@ -1308,7 +1313,7 @@ ul.ngx-pagination {
     border-radius: 5px;
     padding: 3px 5px;
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .canceled {
@@ -1324,7 +1329,7 @@ ul.ngx-pagination {
     border-radius: 5px;
     padding: 3px 5px;
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .finished, .SENT {
@@ -1332,7 +1337,7 @@ ul.ngx-pagination {
     border-radius: 5px;
     padding: 3px 5px;
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
   }
 }
 // DatePicker Style
@@ -1887,4 +1892,11 @@ body {
       background-color: #0000ff;
     }
   }
+}
+
+/////////// mat select optgroup ///////////
+.mat-optgroup-label {
+  height: 32px !important;
+  font-size: 16px;
+  font-weight: bold;
 }

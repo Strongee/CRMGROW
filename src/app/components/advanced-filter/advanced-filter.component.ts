@@ -26,13 +26,6 @@ export class AdvancedFilterComponent implements OnInit {
   status = 'clear';
   materialActions = [];
   COUNTRIES = COUNTRIES;
-  searchCountry = '';
-  searchState = '';
-  searchCity = '';
-  searchZipCode = '';
-  searchSource = '';
-  searchCompany = '';
-  searchTag = '';
   activities = [];
   fromDate = '';
   toDate = '';

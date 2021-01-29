@@ -127,4 +127,9 @@ export class InputAutomationComponent
   }
 
   ngOnDestroy(): void {}
+
+  remove(): void {
+    this.formControl.setValue(null, { emitEvent: false });
+    this.automationChange.emit(null);
+  }
 }

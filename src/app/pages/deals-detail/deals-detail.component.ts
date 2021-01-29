@@ -18,6 +18,10 @@ import { Subscription } from 'rxjs';
 import { NoteEditComponent } from '../../components/note-edit/note-edit.component';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { NoteService } from '../../services/note.service';
+import { TaskEditComponent } from '../../components/task-edit/task-edit.component';
+import { TaskDetail } from '../../models/task.model';
+import { TaskService } from '../../services/task.service';
+import { HandlerService } from '../../services/handler.service';
 
 @Component({
   selector: 'app-deals-detail',
@@ -76,6 +80,8 @@ export class DealsDetailComponent implements OnInit {
     private route: ActivatedRoute,
     public dealsService: DealsService,
     private noteService: NoteService,
+    private taskService: TaskService,
+    private handlerService: HandlerService,
     private storeService: StoreService
   ) {
     this.dealsService.getStage(true);
@@ -134,11 +140,13 @@ export class DealsDetailComponent implements OnInit {
           for (const activity of this.activities) {
             if (activity.type === 'notes') {
               this.noteActivity++;
-            } else if (activity.type === 'email') {
+            } else if (activity.type === 'emails') {
               this.emailActivity++;
+            } else if (activity.type === 'follow_ups') {
+              this.taskActivity++;
             }
           }
-          console.log("activity =============>", this.activities);
+          console.log('activity =============>', this.activities);
         }
       });
   }
@@ -170,7 +178,7 @@ export class DealsDetailComponent implements OnInit {
       disableClose: true,
       data: {
         type: 'deal',
-        dealId: this.dealId
+        deal: this.deal
       }
     });
   }
@@ -188,7 +196,12 @@ export class DealsDetailComponent implements OnInit {
       position: { top: '100px' },
       width: '100vw',
       maxWidth: '600px',
-      maxHeight: '700px'
+      maxHeight: '700px',
+      data: {
+        type: 'deal',
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
     });
   }
 
@@ -237,8 +250,8 @@ export class DealsDetailComponent implements OnInit {
 
   showDetail(event: any): void {
     const target: HTMLElement = event.target as HTMLElement;
-    const parent: HTMLElement = (
-      target.closest('.main-history-item')
+    const parent: HTMLElement = target.closest(
+      '.main-history-item'
     ) as HTMLElement;
     if (parent) {
       parent.classList.add('expanded');
@@ -246,8 +259,8 @@ export class DealsDetailComponent implements OnInit {
   }
   hideDetail(event: any): void {
     const target: HTMLElement = event.target as HTMLElement;
-    const parent: HTMLElement = (
-      target.closest('.main-history-item')
+    const parent: HTMLElement = target.closest(
+      '.main-history-item'
     ) as HTMLElement;
     if (parent) {
       parent.classList.remove('expanded');
@@ -307,6 +320,84 @@ export class DealsDetailComponent implements OnInit {
                 if (index >= 0) {
                   this.activities[index].activity_detail = null;
                 }
+              }
+            });
+        }
+      });
+  }
+
+  editTask(activity: any): void {
+    if (!activity || !activity.activity_detail.length) {
+      return;
+    }
+    const data = {
+      ...activity.activity_detail[0],
+      contacts: { _id: this.deal.contacts }
+    };
+
+    this.dialog
+      .open(TaskEditComponent, {
+        width: '98vw',
+        maxWidth: '394px',
+        data: {
+          type: 'deal',
+          task: new TaskDetail().deserialize(data)
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        console.log(res);
+      });
+  }
+
+  completeTask(activity: any): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Complete Task',
+          message: 'Are you sure to complete the task?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Complete'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.taskService
+            .complete(activity.activity_detail._id)
+            .subscribe((res) => {
+              if (res) {
+                this.handlerService.updateTasks$(
+                  [activity.activity_detail._id],
+                  { status: 1 }
+                );
+                this.handlerService.registerActivity$(res);
+              }
+            });
+        }
+      });
+  }
+
+  archiveTask(activity: any): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Archive Task',
+          message: 'Are you sure to archive the task?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.taskService
+            .archive([activity.activity_detail._id])
+            .subscribe((status) => {
+              if (status) {
+                this.handlerService.archiveTask$(activity.activity_detail._id);
               }
             });
         }

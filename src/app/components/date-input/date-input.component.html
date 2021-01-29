@@ -26,7 +26,7 @@
   > 
     <ng-container [ngSwitch]="uiType">
       <div class="bg-white date-picker-overlay" [class.prepend-wrapper]="type=='prepend'" *ngSwitchCase="'default'">
-        <ngb-datepicker name="select_date" #dp [(ngModel)]="value" [minDate]="minDate" [firstDayOfWeek]="7" (ngModelChange)="changeDate()"></ngb-datepicker>
+        <ngb-datepicker name="select_date" #dp [(ngModel)]="dateObj" [minDate]="minDate" [firstDayOfWeek]="7" (ngModelChange)="changeDate()"></ngb-datepicker>
       </div>
       <div class="bg-white date-picker-overlay mode1" [class.prepend-wrapper]="type=='prepend'" *ngSwitchCase="'mode1'">
         <ng-container *ngIf="title">
@@ -38,7 +38,7 @@
         <div class="f-6 c-blue font-weight-bold text-center my-2">
           {{dateFormat()}}
         </div>
-        <ngb-datepicker name="select_date" class="border-0" #dp [(ngModel)]="value" [minDate]="minDate" [firstDayOfWeek]="7"></ngb-datepicker>
+        <ngb-datepicker name="select_date" class="border-0" #dp [(ngModel)]="dateObj" [minDate]="minDate" [firstDayOfWeek]="7"></ngb-datepicker>
         <div class="v-center mt-2">
           <button class="btn btn-white f-6 font-weight-bold ml-auto" type="button" (click)="closeOverlay()">Cancel</button>
           <div class="btn btn-primary f-6 font-weight-bold ml-2" (click)="changeDate()">Set</div>

@@ -189,9 +189,8 @@
                             <img class="w-100 mt-2" src="{{selectedTheme.thumbnail}}">
                         </div>
                         <div class="col-sm-6">
-                            <label class="f-1 font-weight-bold text-uppercase small-label">preview duration</label>
-                            <span class="v-center f-3 font-weight-bold text-c-dark">{{video.duration / 1000}} seconds</span>
-                            <span class="v-center f-1 small-label mt-2">Chooses default of preview video played while hovering on thumbnail.</span>
+                            <label class="f-1 font-weight-bold text-uppercase small-label">video duration</label>
+                            <span class="v-center f-3 font-weight-bold text-c-dark">{{video.duration/1000 | number}} seconds</span>
                         </div>
                     </div>
                     <div class="v-center justify-content-end mt-4">
@@ -293,7 +292,6 @@
                 >
                     <div class="video-default mb-4">
                         <div class="thumbnail" id="pdf-selector">
-                            <img class="image" src="{{upload_thumbnail}}">
                             <pdf-viewer
                                 [src]="file"
                                 [show-all]="false"
@@ -302,7 +300,10 @@
                                 [hidden]="!thumbnail_loading"
                             >
                             </pdf-viewer>
-                            <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog('pdf')"><i class="d-block i-icon i-edit bgc-white"></i></a>
+                            <img class="image" src="{{upload_thumbnail}}">
+                            <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog('pdf')" *ngIf="upload_thumbnail">
+                                <i class="d-block i-icon i-edit bgc-white"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="form-group has-feedback mb-4">

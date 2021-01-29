@@ -2,10 +2,14 @@
   <div class="my-3">
     <div class="v-center justify-content-between">
       <h6 class="page-title font-weight-bold">Automations</h6>
-      <a class="btn btn-primary shadow py-2 v-center mb-2 border-0" [routerLink]="['/autoflow/new']">
+      <button type="button" class="v-center btn btn-primary py-2 shadow" (click)="create()">
         <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
-        <span class="fw-600 f-3">Create automation</span>
-      </a>
+        <span class="fw-600 f-3">New automation</span>
+      </button>
+<!--      <a class="btn btn-primary shadow py-2 v-center mb-2 border-0" [routerLink]="['/autoflow/new']">-->
+<!--        <i class="i-icon i-plus bg-white d-block sm mr-2"></i>-->
+<!--        <span class="fw-600 f-3">New automation</span>-->
+<!--      </a>-->
     </div>
   </div>
   <div class="my-3 position-relative">
@@ -38,44 +42,68 @@
         <ng-container matColumnDef="contacts">
           <th mat-header-cell *matHeaderCellDef class="contacts">Contacts</th>
           <td mat-cell *matCellDef="let automation" class="contacts">
-            <div class="f-3">{{automation.contacts.length}}</div>
+            <div class="f-3">{{automation.contacts}}</div>
           </td>
         </ng-container>
         <ng-container matColumnDef="created">
-          <th mat-header-cell *matHeaderCellDef class="created">Title</th>
+          <th mat-header-cell *matHeaderCellDef class="created">Created</th>
           <td mat-cell *matCellDef="let automation" class="created">
             <div class="f-3">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
           </td>
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="actions"></th>
-          <td mat-cell *matCellDef="let automation" class="title">
-            <div class="v-center justify-content-end">
-              <button type="button" class="btn btn-white f-3 font-weight-bold p-1" (click)="assignAutomation($event, automation)">
-                Assign
-              </button>
-              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
-                <div class="icon-button v-center justify-content-center ml-2" (click)="openAutomation($event, automation)">
-                  <i class="i-icon bgc-black i-edit"></i>
-                </div>
-              </ng-container>
-              <ng-template #noneEditable>
-                <div class="icon-button v-center justify-content-center ml-2">
-                  <i class="i-icon bgc-white i-edit"></i>
-                </div>
-              </ng-template>
-              <div class="icon-button v-center justify-content-center ml-2">
-                <i class="i-icon bgc-black sm i-triangle-up" [class.disabled]="!automation.contacts.length" (click)="expandElement(automation)"></i>
+          <td mat-cell *matCellDef="let automation" class="actions">
+            <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
+              <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+              </a>
+              <div ngbDropdownMenu class="light">
+                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="assignAutomation($event, automation)">
+                  <span class="f-3 font-weight-bold">Assign</span>
+                </button>
+                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="openAutomation($event, automation)">
+                  <span class="f-3 font-weight-bold">Edit</span>
+                </button>
+                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
+                  <span class="f-3 font-weight-bold">Clone</span>
+                </button>
+                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId">
+                  <hr class="my-0">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item"
+                          (click)="deleteAutomation($event, automation)"
+                  >
+                    <span class="f-3 c-red font-weight-bold">Delete automation</span>
+                  </button>
+                </ng-container>
               </div>
-              <div class="icon-button v-center justify-content-center ml-2" (click)="duplicate($event, automation)">
-                <i class="i-icon bgc-black i-duplicate"></i>
-              </div>
-              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">
-                <div class="icon-button v-center justify-content-center ml-2" (click)="deleteAutomation($event, automation)">
-                  <i class="i-icon bgc-black i-trash"></i>
-                </div>
-              </ng-container>
             </div>
+<!--            <div class="v-center justify-content-end">-->
+<!--              <button type="button" class="btn btn-white f-3 font-weight-bold p-1" (click)="assignAutomation($event, automation)">-->
+<!--                Assign-->
+<!--              </button>-->
+<!--              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">-->
+<!--                <div class="icon-button v-center justify-content-center ml-2" (click)="openAutomation($event, automation)">-->
+<!--                  <i class="i-icon bgc-black i-edit"></i>-->
+<!--                </div>-->
+<!--              </ng-container>-->
+<!--              <ng-template #noneEditable>-->
+<!--                <div class="icon-button v-center justify-content-center ml-2">-->
+<!--                  <i class="i-icon bgc-white i-edit"></i>-->
+<!--                </div>-->
+<!--              </ng-template>-->
+<!--              <div class="icon-button v-center justify-content-center ml-2">-->
+<!--                <i class="i-icon bgc-black sm i-triangle-up" [class.disabled]="!automation.contacts.length" (click)="expandElement(automation)"></i>-->
+<!--              </div>-->
+<!--              <div class="icon-button v-center justify-content-center ml-2" (click)="duplicate($event, automation)">-->
+<!--                <i class="i-icon bgc-black i-duplicate"></i>-->
+<!--              </div>-->
+<!--              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">-->
+<!--                <div class="icon-button v-center justify-content-center ml-2" (click)="deleteAutomation($event, automation)">-->
+<!--                  <i class="i-icon bgc-black i-trash"></i>-->
+<!--                </div>-->
+<!--              </ng-container>-->
+<!--            </div>-->
           </td>
         </ng-container>
 
@@ -91,7 +119,7 @@
               </ng-container>
               <ng-template #contactsList>
                 <h5 class="font-weight-bold border-bottom pb-2">Assigned Contacts</h5>
-                <div class="chip d-flex p-1 contact-chip c-pointer" *ngFor="let contact of contacts" (click)="openContact(contact)">
+                <div class="chip d-flex p-1 contact-chip c-pointer" *ngFor="let contact of contacts">
                   <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
                   <div class="info">
                     <div class="f-5 font-weight-bold">{{contact.fullName}}</div>
@@ -140,8 +168,4 @@
     </ng-template>
   </div>
 </div>
-<mat-drawer-container [hasBackdrop]="true">
-  <mat-drawer #drawer position="end">
-    <app-automation-status (onClose)="drawer.close();" #detailPanel></app-automation-status>
-  </mat-drawer>
-</mat-drawer-container>
+
