@@ -113,7 +113,6 @@ export class ContactMergeComponent implements OnInit {
   }
 
   submit(): void {
-
     if (!this.mergeContact._id) {
       return;
     }
@@ -147,7 +146,7 @@ export class ContactMergeComponent implements OnInit {
     this.contactService.mergeContacts(data).subscribe((res) => {
       this.saving = false;
       if (res) {
-
+        this.dialogRef.close(true);
       }
       console.log("merged contact ==============>", res);
     });

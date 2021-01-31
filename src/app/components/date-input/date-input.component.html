@@ -17,6 +17,11 @@
       cdkOverlayOrigin
       #trigger="cdkOverlayOrigin"
       (click)="openOverlay()"/>
+    <ng-container *ngIf="clearable && dateObj">
+      <div class="clear-action" (click)="clearDate()">
+        <i class="d-block i-icon i-close bgc-dark"></i>
+      </div>
+    </ng-container>
   </div>
   <ng-template
     cdkConnectedOverlay

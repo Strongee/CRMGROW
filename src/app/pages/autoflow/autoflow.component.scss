@@ -248,3 +248,38 @@
     }
   }
 }
+
+.assigned-contact-table {
+  overflow: hidden;
+
+  .label-container {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+
+    .label-rectangle {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      opacity: 0.2;
+    }
+
+    .label-circle {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+  }
+
+  .button-more {
+    a {
+      &::after {
+        content: none;
+      }
+    }
+  }
+}

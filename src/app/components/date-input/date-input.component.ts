@@ -17,6 +17,7 @@ import { FormControl } from '@angular/forms';
 export class DateInputComponent implements OnInit {
   @Input() placeholder = 'Select Date';
   @Input() required = true;
+  @Input() clearable = false;
   @Input()
   public set value(val: number) {
     if (val) {
@@ -86,6 +87,12 @@ export class DateInputComponent implements OnInit {
     } else {
       return 'Select date';
     }
+  }
+
+  clearDate(): void {
+    this.dateString = '';
+    this.dateObj = null;
+    this.valueChange.emit(null);
   }
 
   MONTHS = [

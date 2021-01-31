@@ -62,9 +62,13 @@
                 <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="assignAutomation($event, automation)">
                   <span class="f-3 font-weight-bold">Assign</span>
                 </button>
-                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="openAutomation($event, automation)">
-                  <span class="f-3 font-weight-bold">Edit</span>
-                </button>
+                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item"
+                    (click)="openAutomation($event, automation)"
+                  >
+                    <span class="f-3 font-weight-bold">Edit</span>
+                  </button>
+                </ng-container>
                 <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
                   <span class="f-3 font-weight-bold">Clone</span>
                 </button>

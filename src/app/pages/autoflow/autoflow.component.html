@@ -6,12 +6,6 @@
         <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
         <span class="f-5 font-weight-bold">Back to automations</span>
       </div>
-      <div class="v-center">
-        <a [routerLink]="['/automations']" class="c-dark mr-2">
-          <h6 class="page-title font-weight-bold">Automations</h6>
-        </a>
-        <div class="f-8 font-weight-bold text-uppercase" *ngIf="editMode=='new'"> / Create Template</div>
-      </div>
       <div class="align-items-top automation-name-wrapper">
         <div class="row align-items-center">
           <div class="col-md-6 col-sm-12 col-12">
@@ -54,9 +48,10 @@
               </div>
             </div>
           </div>
-          <div class="col-md-3 col-sm-6 col-6">
+          <div class="col-md-3 col-sm-6 col-6" *ngIf="automation && editMode == 'edit'">
             <div class="v-center justify-content-end">
-              <button type="button" class="v-center btn btn-primary py-2 shadow">
+              <button type="button" class="v-center btn btn-primary py-2 shadow"
+                (click)="assignContacts()">
                 <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
                 <span class="font-weight-bold f-3">Assign</span>
               </button>
@@ -70,7 +65,7 @@
                     <span class="f-3 font-weight-bold">Clone</span>
                   </button>
                   <hr class="my-1">
-                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item">
+                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete()">
                     <span class="c-red f-3 font-weight-bold">Delete automation</span>
                   </button>
                 </div>
@@ -251,6 +246,96 @@
       </div>
     </div>
     <div class="card-body mt-3" [class.d-none]="selectedTab.id !== 'contacts'">
+      <ng-container *ngIf="assignedContactLoading">
+        <div class="list-loading text-center">
+          <div class="loader mt-5"></div>
+          <h4 class="fw-600 mt-2">Loading assigned contacts in this automation...</h4>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!assignedContactLoading && !contacts.length">
+        <div class="empty-list">
+          <div class="object-icon v-center">
+            <i class="i-icon i-group-call d-block bgc-dark"></i>
+          </div>
+          <h4 class="font-weight-bold mt-4 mb-3">
+            There is no assigned contacts.
+          </h4>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!assignedContactLoading && contacts.length">
+        <table class="table w-100 assigned-contact-table">
+          <thead>
+          <tr>
+            <th class="check-cell border-top-0">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="selectcontacts" (change)="selectAllPage()" [checked]="isSelectedPage()">
+                <label class="custom-control-label" for="selectcontacts"></label>
+              </div>
+            </th>
+            <th class="contact-name">Contact Name</th>
+            <th class="contact-label">Label</th>
+            <th class="contact-last-activity">Last Activity</th>
+            <th class="contact-email">Email Address</th>
+            <th class="contact-action"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="contacts.length">
+            <tr *ngFor="let contact of contacts">
+              <td class="check-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="contact-{{contact._id}}" (change)="selectedContacts.toggle(contact._id)" [checked]="selectedContacts.isSelected(contact._id)">
+                  <label class="custom-control-label" for="contact-{{contact._id}}"></label>
+                </div>
+              </td>
+              <td class="contact-name">
+                <div class="v-center">
+                  <img *ngIf="contact.picture_profile; else avatarNameTemplate" [src]="contact.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+                  <ng-template #avatarNameTemplate>
+                    <div class="contact-avatar f-3 mr-2">{{getAvatarName(contact)}}</div>
+                  </ng-template>
+                  <span class="fw-600">{{contact.first_name + ' ' + contact.last_name}}</span>
+                </div>
+              </td>
+              <td class="contact-label">
+                <ng-container *ngIf="contact.label; else emptyLabel">
+                  <div class="v-center">
+                    <div class="label-container">
+                      <div class="label-rectangle" [ngStyle]="{'background-color': getLabelById(contact.label).color}"></div>
+                      <div class="label-circle" [ngStyle]="{'background-color': getLabelById(contact.label).color}"></div>
+                    </div>
+                    <span class="f-3 font-weight-bold ml-2">{{getLabelById(contact.label).name}}</span>
+                  </div>
+                </ng-container>
+                <ng-template #emptyLabel>
+                  <div class="v-center py-1">
+                    <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
+                    <span class="f-3 fw-600">No Label</span>
+                  </div>
+                </ng-template>
+              </td>
+              <td class="contact-last-activity">
+
+              </td>
+              <td class="contact-email">
+                <span>{{contact.email}}</span>
+              </td>
+              <td class="contact-action">
+                <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
+                  <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                    <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                  </a>
+                  <div ngbDropdownMenu class="light">
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="unassign(contact)">
+                      <span class="f-3 c-red font-weight-bold">Unassign</span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </table>
+      </ng-container>
     </div>
   </div>
 </div>

@@ -11,13 +11,16 @@
     <div class="form-group">
       <label>Saved Filters</label>
       <div class="v-center">
-        <select class="form-control" [(ngModel)]="selectedSavedFilter" name="filterSearch">
-          <option *ngFor="let filter of savedFilters; let index = index;" value="{{filter}}" [class.c-blue]="index == 0"
-            class="my-1 f-3">
-            {{filter}}
-          </option>
-        </select>
-        <button type="button" class="btn btn-primary ml-2" (click)="saveFilters()">Save</button>
+        <div class="flex-grow-1">
+          <app-filter-input (onSelect)="changeCurrentFilter($event)" [filter]="currentFilterId"></app-filter-input>
+        </div>
+        <ng-container *ngIf="!currentFilterId; else updateFilterActions;">
+          <button type="button" class="btn btn-primary ml-2" (click)="saveFilters()">Save</button>
+        </ng-container>
+        <ng-template #updateFilterActions>
+          <button type="button" class="btn btn-primary ml-2" (click)="updateFilters()">Update</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="removeFilters()">Remove</button>
+        </ng-template>
       </div>
       <div class="my-3">
         <label>Global Search</label>
@@ -184,9 +187,9 @@
     <div class="form-group my-3 pb-2">
       <label>Select Date</label>
       <div class="v-center">
-        <app-date-input type="prepend" [(value)]="searchOption.activityStart" (valueChange)="updateFilter()"></app-date-input>
+        <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityStart" (valueChange)="updateFilter()"></app-date-input>
         <div class="mx-2">-</div>
-        <app-date-input type="prepend" [(value)]="searchOption.activityEnd" (valueChange)="updateFilter()"></app-date-input>
+        <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityEnd" (valueChange)="updateFilter()"></app-date-input>
       </div>
     </div>
     <div class="mt-4 d-flex">

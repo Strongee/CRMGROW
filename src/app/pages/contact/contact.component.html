@@ -10,7 +10,7 @@
   </div> -->
   <div class="contact-panel d-flex">
     <div class="contact-info-panel pr-3">
-      <div class="v-center op-56 c-pointer mb-4 mt-3" (click)="goToBack()">
+      <div class="v-center op-56 c-pointer mb-4 mt-3 back-menu" (click)="goToBack()">
         <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
         <span class="f-5 font-weight-bold">Back to contacts</span>
       </div>
@@ -57,7 +57,7 @@
               <span class="ml-1 f-3 font-weight-bold">Share contact</span>
             </button>
             <hr class="my-1">
-            <button class="border-0 c-dark dropdown-item">
+            <button class="border-0 c-dark dropdown-item" (click)="deleteContact()">
               <span class="ml-1 f-3 font-weight-bold c-red">Delete</span>
             </button>
           </div>

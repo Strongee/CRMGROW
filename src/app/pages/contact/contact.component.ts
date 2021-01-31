@@ -305,20 +305,51 @@ export class ContactComponent implements OnInit, OnDestroy {
   /**
    * Delete the current contact
    */
-  deleteContact(): void {}
+  deleteContact(): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Delete contact',
+          message: 'Are you sure to delete this contact?',
+          confirmLabel: 'Delete'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.contactService
+            .bulkDelete([this.contact._id])
+            .subscribe((status) => {
+              if (!status) {
+                return;
+              }
+              this.storeService.selectedContact.next(new ContactDetail());
+              this.goToBack();
+            });
+        }
+      });
+  }
 
   /**
    * Open dialog to merge
    */
   openMergeContactDlg(): void {
-    this.dialog.open(ContactMergeComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '700px',
-      data: {
-        contact: this.selectedContact
-      }
-    });
+    this.dialog
+      .open(ContactMergeComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '700px',
+        data: {
+          contact: this.selectedContact
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.handlerService.reload$();
+        }
+      });
   }
 
   /**
