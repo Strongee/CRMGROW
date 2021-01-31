@@ -328,7 +328,7 @@
               th, td {
                 height: 40px;
                 &.session-col {
-                  width: 20%;
+                  width: 40%;
                 }
                 &.date-col {
                   width: 40%;
@@ -482,6 +482,17 @@
             width: 100%;
             height: 25px;
             background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
+          }
+        }
+      }
+    }
+    &.deals-detail {
+      .main-history-item {
+        .contacts {
+          i {
+            width: 16px;
+            height: 16px;
+            min-width: 16px;
           }
         }
       }

@@ -73,6 +73,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   action: TabItem = this.tabs[0];
 
   timeSorts = [
+    { label: 'All', id: 'all' },
     { label: 'Overdue', id: 'overdue' },
     { label: 'Today', id: 'today' },
     { label: 'Tomorrow', id: 'tomorrow' },
@@ -199,8 +200,15 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   getActivityCount(): void {
-    if (this.contact.activity.length > 0) {
-      this.contact.activity.forEach((activity) => {
+    this.noteActivity = 0;
+    this.emailActivity = 0;
+    this.textActivity = 0;
+    this.appointmentActivity = 0;
+    this.groupCallActivity = 0;
+    this.taskActivity = 0;
+    this.dealActivity = 0;
+    if (this.mainTimelines.length > 0) {
+      this.mainTimelines.forEach((activity) => {
         if (activity.type == 'notes') {
           this.noteActivity++;
         }
@@ -459,6 +467,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.action = tab;
     this.selectedTimeSort = this.timeSorts[0];
     this.groupActivities();
+    if (this.action.id == 'note') {
+      const noteTimelines = this.mainTimelines.filter(
+        (timeLine) => timeLine.type == 'notes'
+      );
+      this.mainTimelines = noteTimelines.sort((a, b) => {
+        return (
+          <any>new Date(b.activity_detail.updated_at) -
+          <any>new Date(a.activity_detail.updated_at)
+        );
+      });
+    }
+    this.getActivityCount();
   }
 
   changeSort(timeSort: any): void {
@@ -476,6 +496,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     let start_date = new Date();
     let end_date = new Date();
     switch (this.selectedTimeSort.id) {
+      case 'all':
+        this.groupActivities();
+        break;
       case 'overdue':
         end_date = today.format();
         this.mainTimelines = this.mainTimelines.filter(
@@ -523,6 +546,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         );
         break;
     }
+    this.getActivityCount();
   }
 
   showDetail(event: any): void {

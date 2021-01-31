@@ -282,7 +282,7 @@
       <div class="history-panel pt-3 pl-3 mt-2">
         <app-slide-tab [tabs]="tabs" [selected]="action" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
         </app-slide-tab>
-        <div class="history-list mt-3 position-relative" *ngIf="mainTimelines && mainTimelines.length">
+        <div class="history-list mt-3 position-relative" *ngIf="contact.activity && contact.activity.length">
           <ng-container [ngSwitch]="action.id">
             <div class="history-list-header" *ngSwitchCase="'all'">
               <div ngbDropdown class="v-center">
@@ -449,14 +449,9 @@
                     <div class="f-6" *ngIf="action.id == 'all'">
                       <span>{{activity.content}}</span>
                     </div>
-                    <ng-container *ngIf="action.id == 'follow_up'">
-                      <div class="f-6" *ngIf="activity.content.indexOf('completed') !== -1">
-                        Completed task
-                      </div>
-                      <div class="f-6" *ngIf="activity.content.indexOf('completed') == -1">
-                        Task
-                      </div>
-                    </ng-container>
+                    <div class="f-6" *ngIf="action.id == 'follow_up'">
+                      Task
+                    </div>
                   </div>
                   <div class="v-center">
                     <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
@@ -634,6 +629,7 @@
                       Email
                     </div>
                   </div>
+                  <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                 </div>
                 <div class="main-history-item">
                   <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
@@ -679,6 +675,7 @@
                           <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                             <td class="session-col">
                               <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
+                              <span class="f-3 font-weight-bold c-blue ml-2">{{detailActivity.content}}</span>
                             </td>
                             <td class="duration-col">{{details[activity.emails]?.duration || ''}}</td>
                             <td class="date-col">
@@ -708,6 +705,7 @@
                       Appointment
                     </div>
                   </div>
+                  <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                 </div>
                 <div class="main-history-item">
                   <app-accordion [showIndicator]="show" [hideIndicator]="hide">
@@ -788,6 +786,7 @@
                       Deal
                     </div>
                   </div>
+                  <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                 </div>
                 <div class="main-history-item">
                   <div class="f-6 font-weight-bold">
@@ -803,6 +802,15 @@
                           {{dealStage.title}}
                         </div>
                       </ng-container>
+                    </div>
+                    <div class="contacts ml-5">
+                      <div class="f-4 fw-600 op-40">
+                        Contacts
+                      </div>
+                      <div class="v-center">
+                        <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
+                        <span class="f-4 mt-1">{{activity.activity_detail.contacts.length}}</span>
+                      </div>
                     </div>
                     <div class="value ml-5">
                       <div class="f-4 fw-600 op-40">
