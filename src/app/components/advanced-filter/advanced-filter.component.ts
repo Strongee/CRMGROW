@@ -10,7 +10,7 @@ import { UserService } from '../../services/user.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterAddComponent } from '../filter-add/filter-add.component';
-import { MaterialShareComponent } from '../material-share/material-share.component';
+import { MaterialAddComponent } from '../material-add/material-add.component';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -200,7 +200,7 @@ export class AdvancedFilterComponent implements OnInit {
 
   selectMaterial(): void {
     this.dialog
-      .open(MaterialShareComponent, {
+      .open(MaterialAddComponent, {
         width: '96vw',
         maxWidth: '500px',
         disableClose: true,

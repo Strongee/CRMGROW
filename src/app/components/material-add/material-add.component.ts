@@ -25,6 +25,7 @@ export class MaterialAddComponent implements OnInit {
   selectedMaterials = [];
   selectedMaterialIds = [];
   hideMaterials = [];
+  mode = '';
 
   constructor(
     private dialogRef: MatDialogRef<MaterialAddComponent>,
@@ -34,6 +35,9 @@ export class MaterialAddComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.data && this.data.type) {
+      this.mode = this.data.type;
+    }
     if (this.data && this.data.hideMaterials) {
       this.data.hideMaterials.forEach((e) => {
         this.hideMaterials.push(e._id);
@@ -70,8 +74,15 @@ export class MaterialAddComponent implements OnInit {
       this.selectedMaterials.splice(index, 1);
       this.selectedMaterialIds.splice(index, 1);
     } else {
-      this.selectedMaterials.push(material);
-      this.selectedMaterialIds.push(material._id);
+      if (this.mode == 'filter') {
+        this.selectedMaterials = [];
+        this.selectedMaterialIds = [];
+        this.selectedMaterials.push(material);
+        this.selectedMaterialIds.push(material._id);
+      } else {
+        this.selectedMaterials.push(material);
+        this.selectedMaterialIds.push(material._id);
+      }
     }
   }
 
@@ -104,6 +115,10 @@ export class MaterialAddComponent implements OnInit {
     if (!this.selectedMaterials.length) {
       return;
     }
-    this.dialogRef.close({ materials: this.selectedMaterials });
+    if (this.mode == 'filter') {
+      this.dialogRef.close(this.selectedMaterials);
+    } else {
+      this.dialogRef.close({ materials: this.selectedMaterials });
+    }
   }
 }

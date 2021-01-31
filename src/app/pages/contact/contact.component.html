@@ -621,7 +621,12 @@
               <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3" *ngIf="action.id == 'all'">
+                      <i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i>
+                    </div>
+                    <div class="history-icon mr-3" *ngIf="action.id == 'email'">
+                      <i class="act-icon act-emails" ></i>
+                    </div>
                     <div class="f-6" *ngIf="action.id == 'all'">
                       <span>{{activity.content}}</span>
                     </div>
