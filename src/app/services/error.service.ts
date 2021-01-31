@@ -74,6 +74,18 @@ export class ErrorService {
           this.router.navigate(['/']);
         }
         break;
+      case 402:
+        console.log('402', error);
+        break;
+      case 403:
+        console.log('403', error);
+        break;
+      case 405:
+        console.log(error);
+        break;
+      case 406:
+        console.log('406', error);
+        break;
       default:
         this.toast.error(errorObj.message, errorObj.operation, {
           closeButton: true
