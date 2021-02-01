@@ -47,7 +47,7 @@
     </div>
     <div class="d-flex mt-4">
       <label class="f-1 op-75 mb-0">CONTACT STATUS</label>
-      <a class="f-1 c-blue ml-2">CLEAR</a>
+      <a class="f-1 c-blue ml-2 c-pointer undecoration" (click)="clearLabels()">CLEAR</a>
     </div>
     <div class="labels-wrapper">
       <div class="custom-checkbox label-item" *ngFor="let item of labelService.labels$ | async"

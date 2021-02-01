@@ -56,16 +56,6 @@ export class ContactService extends HttpService {
   }
 
   /**
-   * Create Contact
-   * @param contact
-   */
-  create(contact: Contact): Observable<Contact> {
-    return this.httpClient.post(this.server + CONTACT.CREATE, contact).pipe(
-      map((res) => new Contact().deserialize(res['data'])),
-      catchError(this.handleError('CONTACT CREATE', null))
-    );
-  }
-  /**
    * Read the Detail information of the contact and Emit the Behavior Subject
    * @param _id: Contact Id to read the detail information
    * @param sortInfo: Page sort information for the next and prev contact
@@ -101,6 +91,21 @@ export class ContactService extends HttpService {
     }
   }
 
+  /**
+   * Create Contact
+   * @param contact
+   */
+  create(contact: Contact): Observable<Contact> {
+    return this.httpClient.post(this.server + CONTACT.CREATE, contact).pipe(
+      map((res) => new Contact().deserialize(res['data'])),
+      catchError(this.handleError('CONTACT CREATE', null))
+    );
+  }
+
+  /**
+   * Update Contact
+   * @param contact
+   */
   update(contact): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.UPDATE, { ...contact })
@@ -110,6 +115,11 @@ export class ContactService extends HttpService {
       );
   }
 
+  /**
+   * Update contact
+   * @param id : id of contact to update
+   * @param contact : data to update
+   */
   updateContact(id: string, contact: any): Observable<any> {
     return this.httpClient.put(this.server + CONTACT.READ + id, contact).pipe(
       map((res) => res['data']),
@@ -117,7 +127,10 @@ export class ContactService extends HttpService {
     );
   }
 
-  delete(_id: string): void {}
+  /**
+   * Delete bulk contacts
+   * @param _ids : ids array of contacts to remove
+   */
   bulkDelete(_ids: string[]): Observable<boolean> {
     return this.httpClient
       .post(this.server + CONTACT.BULK_DELETE, { ids: _ids })
@@ -126,18 +139,7 @@ export class ContactService extends HttpService {
         catchError(this.handleError('DELETE CONTACTS', false))
       );
   }
-  delete$(contacts: Contact[]): any {
-    const pageContacts = this.storeService.pageContacts.getValue();
-    const remainedContacts = _.differenceBy(pageContacts, contacts, '_id');
-    this.storeService.pageContacts.next(remainedContacts);
 
-    const total = this.total.getValue();
-    this.total.next(total - contacts.length);
-    return {
-      page: remainedContacts.length,
-      total: total - contacts.length
-    };
-  }
   /**
    *
    * @param _ids : contact id array
@@ -156,6 +158,7 @@ export class ContactService extends HttpService {
         catchError(this.handleError('BULK UPDATE', false))
       );
   }
+
   /**
    * download the csv of selected contacts
    * @param _ids : contact id array
@@ -249,7 +252,6 @@ export class ContactService extends HttpService {
         )
       );
   }
-
   /**
    * Advanced Search Call
    * @param str : keyword in the advanced search
@@ -281,7 +283,6 @@ export class ContactService extends HttpService {
         catchError(this.handleError('ADVANCED FILTER', null))
       );
   }
-
   /**
    * Normal Search Call
    * @param str : keyword in the normal search
@@ -329,21 +330,6 @@ export class ContactService extends HttpService {
         map((res) => res['data'] || []),
         catchError(this.handleError('LOAD CONTACTS', []))
       );
-  }
-  // getSearchedContacts(query): Observable<any> {
-  //   return this.httpClient.post(this.server + CONTACT.LOAD_SERACH, query).pipe(
-  //     map((res) => res),
-  //     catchError(this.handleError('SEARCH CONTACTS', []))
-  //   );
-  // }
-  /**
-   * Reduce the Page size
-   * @param pageSize : New Page size of the Contacts
-   */
-  resizePage(pageSize: number): void {
-    const contacts = this.storeService.pageContacts.getValue();
-    const reduced = contacts.slice(0, pageSize);
-    this.storeService.pageContacts.next(reduced);
   }
   /**
    * Search the contacts using keyword.
@@ -406,6 +392,10 @@ export class ContactService extends HttpService {
     );
   }
 
+  /**
+   * Create Bulk Contact
+   * @param contacts : contacts data to create
+   */
   bulkCreate(contacts): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.BULK_CREATE, { contacts })
@@ -415,13 +405,10 @@ export class ContactService extends HttpService {
       );
   }
 
-  clear$(): void {
-    this.loadStatus.next(STATUS.NONE);
-    this.total.next(0);
-    this.pageIndex.next(1);
-    this.pageSize.next(50);
-  }
-
+  /**
+   * Check Email duplication
+   * @param email : email
+   */
   checkEmail(email: string): any {
     return this.httpClient
       .post(this.server + CONTACT.CHECK_EMAIL, { email })
@@ -429,10 +416,14 @@ export class ContactService extends HttpService {
         map((res) =>
           (res['data'] || []).map((e) => new Contact().deserialize(e))
         ),
-        catchError(this.handleError('EMAIL CHECKING', []))
+        catchError(this.handleError('CHECKING EMAIL DUPLICATION', []))
       );
   }
 
+  /**
+   * checking cell phone number
+   * @param cell_phone : cell phone number
+   */
   checkPhone(cell_phone: string): any {
     return this.httpClient
       .post(this.server + CONTACT.CHECK_PHONE, {
@@ -442,7 +433,7 @@ export class ContactService extends HttpService {
         map((res) =>
           (res['data'] || []).map((e) => new Contact().deserialize(e))
         ),
-        catchError(this.handleError('PHONE CHECKING', []))
+        catchError(this.handleError('CHECKING PHONE DUPLICATION', []))
       );
   }
 
@@ -456,5 +447,23 @@ export class ContactService extends HttpService {
         map((res) => res),
         catchError(this.handleError('BULK CREATE CONTACTS', []))
       );
+  }
+  delete$(contacts: Contact[]): any {
+    const pageContacts = this.storeService.pageContacts.getValue();
+    const remainedContacts = _.differenceBy(pageContacts, contacts, '_id');
+    this.storeService.pageContacts.next(remainedContacts);
+
+    const total = this.total.getValue();
+    this.total.next(total - contacts.length);
+    return {
+      page: remainedContacts.length,
+      total: total - contacts.length
+    };
+  }
+  clear$(): void {
+    this.loadStatus.next(STATUS.NONE);
+    this.total.next(0);
+    this.pageIndex.next(1);
+    this.pageSize.next(50);
   }
 }

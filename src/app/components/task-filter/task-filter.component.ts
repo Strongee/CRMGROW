@@ -143,6 +143,13 @@ export class TaskFilterComponent implements OnInit {
     this.taskService.changeSearchOption(searchOption);
   }
 
+  clearLabels(): void {
+    this.selectedLabels.clear();
+    const currentSearchOption = this.taskService.searchOption.getValue();
+    currentSearchOption.labels = [];
+    this.taskService.changeSearchOption(currentSearchOption);
+  }
+
   clearFilter(): void {
     this.types = [];
     this.search = '';

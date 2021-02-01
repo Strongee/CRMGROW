@@ -123,21 +123,9 @@ export class TaskService extends HttpService {
       );
   }
 
-  loadToday(): void {
-    this.loadTodayImpl().subscribe((tasks) => {
-      this.storeService.tasks.next(tasks);
-    });
-  }
-
-  loadTodayImpl(): Observable<TaskDetail[]> {
-    return this.http.get(this.server + TASK.NEXT_WEEK).pipe(
-      map((res) =>
-        (res['data'] || []).map((e) => new TaskDetail().deserialize(e))
-      ),
-      catchError(this.handleError('LOAD TODAY TASKS', []))
-    );
-  }
-
+  /**
+   * Select All tasks for the current search option
+   */
   selectAll(): Observable<string[]> {
     const searchOption = this.searchOption.getValue();
     return this.http.post(this.server + TASK.SELECT, searchOption).pipe(
@@ -146,17 +134,14 @@ export class TaskService extends HttpService {
     );
   }
 
+  /**
+   * Create One Task
+   * @param data : Task Data
+   */
   create(data: any): Observable<any> {
     return this.http.post(this.server + TASK.CREATE, data).pipe(
       map((res) => res['data']),
       catchError(this.handleError('TASK CREATE', null))
-    );
-  }
-
-  update(id: string, data: any): Observable<any> {
-    return this.http.put(this.server + TASK.UPDATE + id, data).pipe(
-      map((res) => res['data']),
-      catchError(this.handleError('UPDATE TASK', false))
     );
   }
 
@@ -171,7 +156,34 @@ export class TaskService extends HttpService {
     );
   }
 
-  archive(ids: any): Observable<any> {
+  /**
+   * Update the specified task
+   * @param id : Id of task to update
+   * @param data: data of task to update
+   */
+  update(id: string, data: any): Observable<any> {
+    return this.http.put(this.server + TASK.UPDATE + id, data).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('UPDATE TASK', false))
+    );
+  }
+
+  /**
+   * update the bulk tasks
+   * @param data : data of task to update -> contains the id array
+   */
+  bulkUpdate(data: any): Observable<boolean> {
+    return this.http.post(this.server + TASK.BULK_UPDATE, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('BULK TASK UPDATE', false))
+    );
+  }
+
+  /**
+   * Remove tasks
+   * @param ids : id array of tasks to remove
+   */
+  archive(ids: string[]): Observable<any> {
     return this.http
       .post(this.server + TASK.BULK_ARCHIVE, { follow_ups: ids })
       .pipe(
@@ -180,6 +192,10 @@ export class TaskService extends HttpService {
       );
   }
 
+  /**
+   * complete one task
+   * @param id : id of task to complete
+   */
   complete(id: string): Observable<any> {
     return this.http.post(this.server + TASK.COMPLETE, { follow_up: id }).pipe(
       map((res) => res['data']),
@@ -187,20 +203,17 @@ export class TaskService extends HttpService {
     );
   }
 
-  bulkComplete(ids: any): Observable<any> {
+  /**
+   * complete bulk tasks
+   * @param ids : id array of tasks to complete
+   */
+  bulkComplete(ids: string[]): Observable<any> {
     return this.http
       .post(this.server + TASK.BULK_COMPLETE, { follow_ups: ids })
       .pipe(
         map((res) => res),
         catchError(this.handleError('BULK TASK COMPLETE', null))
       );
-  }
-
-  bulkUpdate(data: any): Observable<boolean> {
-    return this.http.post(this.server + TASK.BULK_UPDATE, data).pipe(
-      map((res) => res['status']),
-      catchError(this.handleError('BULK TASK UPDATE', false))
-    );
   }
 
   clear$(): void {

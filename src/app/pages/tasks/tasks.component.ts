@@ -369,11 +369,21 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.taskService.sortOption.next(sortDir * -1);
   }
 
-  taskComplete(task: any): void {
+  taskComplete(task: TaskDetail): void {
     if (task.status == 1) {
+      this.dialog.open(NotifyComponent, {
+        width: '98vw',
+        maxWidth: '390px',
+        data: {
+          title: 'Complete Task',
+          message: 'This task is completed already.'
+        }
+      });
       return;
     } else {
       const dialog = this.dialog.open(ConfirmComponent, {
+        width: '98vw',
+        maxWidth: '390px',
         data: {
           title: 'Complete task',
           message: 'Are you sure to complete this task?',
@@ -383,7 +393,7 @@ export class TasksComponent implements OnInit, OnDestroy {
       dialog.afterClosed().subscribe((answer) => {
         if (answer) {
           this.taskService.complete(task._id).subscribe((res) => {
-            if (res) {
+            if (res && res['status']) {
               this.handlerService.updateTasks$([task._id], {
                 status: 1
               });
