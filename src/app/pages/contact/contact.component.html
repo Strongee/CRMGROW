@@ -440,7 +440,7 @@
               </div>
             </div>
             <div *ngIf="(action.id == 'all' || action.id == 'follow_up') && activity.type == 'follow_ups'">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
+              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail; else removedTaskTemplate">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3">
@@ -555,10 +555,31 @@
                   </app-accordion>
                 </div>
               </div>
+              <ng-template #removedTaskTemplate>
+                <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="action.id == 'all'">
+                  <div class="v-center justify-content-between mb-3">
+                    <div class="v-center">
+                      <div class="history-icon mr-3">
+                        <i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i>
+                      </div>
+                      <div class="f-6">
+                        <span>{{activity.content}}</span>
+                      </div>
+                    </div>
+                    <div class="v-center">
+                      <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                    </div>
+                  </div>
+                  <div class="d-flex">
+                    <mat-icon class="mr-2">warning</mat-icon>
+                    <span>Can't see the detail as it is deleted.</span>
+                  </div>
+                </div>
+              </ng-template>
             </div>
 
             <div *ngIf="(action.id == 'all' || action.id == 'note') && activity.type == 'notes'">
-              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail">
+              <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="activity.activity_detail; else removedNoteTemplate">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
@@ -610,6 +631,27 @@
                   </app-accordion>
                 </div>
               </div>
+              <ng-template #removedNoteTemplate>
+                <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngIf="action.id == 'all'">
+                  <div class="v-center justify-content-between mb-3">
+                    <div class="v-center">
+                      <div class="history-icon mr-3">
+                        <i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i>
+                      </div>
+                      <div class="f-6">
+                        <span>{{activity.content}}</span>
+                      </div>
+                    </div>
+                    <div class="v-center">
+                      <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                    </div>
+                  </div>
+                  <div class="d-flex">
+                    <mat-icon class="mr-2">warning</mat-icon>
+                    <span>Can't see the detail as it is deleted.</span>
+                  </div>
+                </div>
+              </ng-template>
             </div>
 
             <div *ngIf="(action.id == 'all' || action.id == 'email') && (activity.type == 'emails' || activity.type == 'email_trackers')">
@@ -807,9 +849,9 @@
                       <div class="f-4 fw-600 op-40">
                         Contacts
                       </div>
-                      <div class="v-center">
+                      <div class="v-center mt-1">
                         <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
-                        <span class="f-4 mt-1">{{activity.activity_detail.contacts.length}}</span>
+                        <span class="f-4">{{activity.activity_detail.contacts?.length || 0}}</span>
                       </div>
                     </div>
                     <div class="value ml-5">
