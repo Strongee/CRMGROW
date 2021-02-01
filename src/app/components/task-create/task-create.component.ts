@@ -143,7 +143,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
             this.saving = false;
             if (res) {
               this.handlerService.activityAdd$(ids, 'task');
-              this.taskService.reload();
+              this.handlerService.reload$('tasks');
               this.dialogRef.close();
             }
           });
@@ -162,8 +162,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
             this.saving = false;
             if (res) {
               this.handlerService.activityAdd$(ids, 'task');
-              this.taskService.reload();
-              this.handlerService.registerActivity$(res);
+              this.handlerService.reload$('tasks');
               this.dialogRef.close();
             }
           });

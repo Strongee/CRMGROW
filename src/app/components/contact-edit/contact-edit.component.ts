@@ -23,7 +23,11 @@ export class ContactEditComponent implements OnInit {
     CountryISO.UnitedStates,
     CountryISO.UnitedKingdom,
     CountryISO.Canada,
-    CountryISO.SouthAfrica
+    CountryISO.SouthAfrica,
+    CountryISO.India,
+    CountryISO.Mexico,
+    CountryISO.Portugal,
+    CountryISO.France
   ];
   CountryISO = CountryISO;
   COUNTRIES = COUNTRIES;

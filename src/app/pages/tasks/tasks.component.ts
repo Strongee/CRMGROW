@@ -417,7 +417,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         if (res && res.status) {
           this.selection = [];
           this.pageSelection = [];
-          this.taskService.reload();
+          this.handlerService.reload$('tasks');
         }
       });
     }

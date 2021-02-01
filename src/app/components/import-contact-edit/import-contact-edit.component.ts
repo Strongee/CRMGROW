@@ -20,7 +20,11 @@ export class ImportContactEditComponent implements OnInit, OnDestroy {
     CountryISO.UnitedStates,
     CountryISO.UnitedKingdom,
     CountryISO.Canada,
-    CountryISO.SouthAfrica
+    CountryISO.SouthAfrica,
+    CountryISO.India,
+    CountryISO.Mexico,
+    CountryISO.Portugal,
+    CountryISO.France
   ];
   CountryISO = CountryISO;
   COUNTRIES = COUNTRIES;

@@ -27,7 +27,11 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     CountryISO.UnitedStates,
     CountryISO.UnitedKingdom,
     CountryISO.Canada,
-    CountryISO.SouthAfrica
+    CountryISO.SouthAfrica,
+    CountryISO.India,
+    CountryISO.Mexico,
+    CountryISO.Portugal,
+    CountryISO.France
   ];
   CountryISO = CountryISO;
   COUNTRIES = COUNTRIES;
@@ -82,7 +86,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       return;
     }
     let cell_phone;
-    if (this.phoneInput.valid) {
+    if (this.phoneInput.valid && this.cell_phone) {
       if (
         typeof this.cell_phone == 'object' &&
         this.cell_phone['internationalNumber']
@@ -100,6 +104,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       .subscribe((contact) => {
         this.isCreating = false;
         if (contact) {
+          this.handlerService.addContact$(contact);
           // If automation is enabled please assign the automation.
           if (this.automation && this.automation._id) {
             this.isCreating = true;
@@ -112,10 +117,11 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
                   // Reload the Current List
                   this.handlerService.reload$();
                 }
+                this.dialogRef.close();
               });
+          } else {
+            this.dialogRef.close();
           }
-          this.handlerService.addContact$(contact);
-          this.dialogRef.close();
         }
       });
   }

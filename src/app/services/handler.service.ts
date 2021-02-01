@@ -72,14 +72,20 @@ export class HandlerService {
     // this.storeService.activities.next([...activities]);
     // *** TODO(Update above Logic): If activity page is 1, prepend the new activity
     // *** Else activity page is not 1, reload the current page
-    this.activityService.reload();
+    this.reload$('activities');
   }
 
   bulkContactAdd$(): void {
     // Reload the Contact page
-    this.contactService.reloadPage();
+    // this.contactService.reloadPage();
     // Reload the Activity Page
-    this.activityService.reload();
+    // this.activityService.reload();
+    const page = this.pageName.getValue();
+    if (page === 'dashboard') {
+      this.reloadActivities$();
+    } else if (page === 'contacts') {
+      this.reloadContacts$();
+    }
   }
 
   bulkContactUpdate$(_ids: string[], contact: any, tagData: any): void {
@@ -162,7 +168,7 @@ export class HandlerService {
     // Detail Page update
 
     // Activities Page Update
-    this.activityService.reload();
+    this.reload$('activities');
   }
 
   registerActivity$(data: any): void {
@@ -180,6 +186,10 @@ export class HandlerService {
       this.storeService.selectedContact.next(currentContact);
     }
   }
+  /**
+   * Update the Contact Detail Page after archive task in Contact Detail Page
+   * @param task_id : Remove Task from Contact detail page
+   */
   archiveTask$(task_id: string): void {
     const currentContact = this.storeService.selectedContact.getValue();
     currentContact.activity.forEach((e) => {
@@ -191,6 +201,11 @@ export class HandlerService {
     this.storeService.selectedContact.next(currentContact);
   }
 
+  /**
+   * Update the tasks list and activity list (reload or unshift) after update, bulk update, complete bulk complete
+   * @param _ids : ids of task that has updated
+   * @param data : data of task that has updated
+   */
   updateTasks$(_ids: string[], data: any): void {
     const tasks = this.storeService.tasks.getValue();
     const activities = [];
@@ -240,10 +255,14 @@ export class HandlerService {
         }
         break;
       case 'contacts':
-        this.reloadContacts$();
+        if (!tab || tab === 'contacts') {
+          this.reloadContacts$();
+        }
         break;
       case 'detail':
-        this.reloadDetail$();
+        if (!tab || tab === 'detail') {
+          this.reloadDetail$();
+        }
         break;
     }
   }

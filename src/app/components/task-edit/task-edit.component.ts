@@ -119,7 +119,7 @@ export class TaskEditComponent implements OnInit {
 
     dialog.afterClosed().subscribe((res) => {
       if (res && res.status) {
-        this.taskService.reload();
+        this.handlerService.reload$('tasks');
         this.dialogRef.close();
       }
     });
@@ -150,19 +150,19 @@ export class TaskEditComponent implements OnInit {
         if (resolveForwardRef) {
           this.dialogRef.close();
           this.handlerService.updateTasks$([this.task._id], data);
-          if (this.type === 'deal') {
-            this.handlerService.updateLastActivities$(
-              [this.task.contact._id],
-              'task_update'
-            );
-          } else {
-            this.handlerService.updateLastActivities$(
-              [this.task.contact._id],
-              'task_update'
-            );
-          }
+          // if (this.type === 'deal') {
+          //   this.handlerService.updateLastActivities$(
+          //     [this.task.contact._id],
+          //     'task_update'
+          //   );
+          // } else {
+          //   this.handlerService.updateLastActivities$(
+          //     [this.task.contact._id],
+          //     'task_update'
+          //   );
+          // }
 
-          this.handlerService.registerActivity$(res);
+          // this.handlerService.registerActivity$(res);
         }
       });
   }

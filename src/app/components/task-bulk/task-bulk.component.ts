@@ -37,8 +37,7 @@ export class TaskBulkComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
     private handlerService: HandlerService,
-    private taskService: TaskService,
-    private contactService: ContactService
+    private taskService: TaskService
   ) {
     const current = new Date();
     this.MIN_DATE = {
@@ -99,7 +98,6 @@ export class TaskBulkComponent implements OnInit {
             ...data,
             ids: undefined
           });
-          this.contactService.forceReload.next(true);
           this.dialogRef.close();
         }
       });

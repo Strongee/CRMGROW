@@ -24,7 +24,11 @@ export class RegisterComponent implements OnInit {
     CountryISO.UnitedStates,
     CountryISO.UnitedKingdom,
     CountryISO.Canada,
-    CountryISO.SouthAfrica
+    CountryISO.SouthAfrica,
+    CountryISO.India,
+    CountryISO.Mexico,
+    CountryISO.Portugal,
+    CountryISO.France
   ];
   CountryISO = CountryISO;
 
