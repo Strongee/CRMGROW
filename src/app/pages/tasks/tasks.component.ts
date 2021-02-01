@@ -369,6 +369,31 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.taskService.sortOption.next(sortDir * -1);
   }
 
+  taskComplete(task: any): void {
+    if (task.status == 1) {
+      return;
+    } else {
+      const dialog = this.dialog.open(ConfirmComponent, {
+        data: {
+          title: 'Complete task',
+          message: 'Are you sure to complete this task?',
+          confirmLabel: 'Complete'
+        }
+      });
+      dialog.afterClosed().subscribe((answer) => {
+        if (answer) {
+          this.taskService.complete(task._id).subscribe((res) => {
+            if (res) {
+              this.handlerService.updateTasks$([task._id], {
+                status: 1
+              });
+            }
+          });
+        }
+      });
+    }
+  }
+
   deleteTasks(): void {
     if (this.selection.length) {
       const selected = this.selection.map((e) => e._id);
