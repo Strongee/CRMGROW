@@ -82,7 +82,7 @@
           </ng-container>
           <th mat-header-cell *matHeaderCellDef class="done-cell">DONE</th>
           <td mat-cell *matCellDef="let element" class="done-cell">
-            <i class="i-icon d-block {{element.status === 1 ? 'i-round-check bgc-accept' : 'i-round bgc-dark op-40'}} done-status"></i>
+            <i class="i-icon d-block {{element.status === 1 ? 'i-round-check bgc-accept' : 'i-round bgc-dark op-40 c-pointer'}} done-status" (click)="taskComplete(element)"></i>
           </td>
         </ng-container>
   
@@ -118,10 +118,12 @@
                 *ngIf="!selection.length"> subject </th>
           </ng-container>
           <td mat-cell *matCellDef="let element">
-            <div class="v-center">
-              <i class="i-icon {{TASK_ICONS[element.type] || 'i-task'}} d-block bgc-dark mr-2"></i>
-              <span>{{element.content}}</span>
-            </div>
+            <a class="v-center c-pointer undecoration" [routerLink]="['/contacts/' + element.contact._id]">
+              <div class="v-center">
+                <i class="i-icon {{TASK_ICONS[element.type] || 'i-task'}} d-block bgc-dark mr-2"></i>
+                <span class="c-dark">{{element.content}}</span>
+              </div>
+            </a>
           </td>
         </ng-container>
   
@@ -132,7 +134,9 @@
                 *ngIf="!selection.length"> phone number </th>
           </ng-container>
           <td mat-cell *matCellDef="let element">
-            <span class="c-blue font-weight-bold">{{element.contact.cell_phone | phone_format}}</span>
+            <a class="v-center c-pointer undecoration" [routerLink]="['/contacts/' + element.contact._id]">
+              <span class="c-blue font-weight-bold">{{element.contact.cell_phone | phone_format}}</span>
+            </a>
           </td>
         </ng-container>
   
@@ -148,7 +152,9 @@
             </th>
           </ng-container>
           <td mat-cell *matCellDef="let element">
-            {{element.due_date | date: 'MMM dd, hh:mm a'}}
+            <a class="v-center c-pointer undecoration" [routerLink]="['/contacts/' + element.contact._id]">
+              <span class="c-dark">{{element.due_date | date: 'MMM dd, hh:mm a'}}</span>
+            </a>
           </td>
         </ng-container>
   
