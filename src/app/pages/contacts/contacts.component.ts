@@ -24,6 +24,7 @@ import { ContactAssignAutomationComponent } from '../../components/contact-assig
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
+import { NotifyComponent } from 'src/app/components/notify/notify.component';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -544,12 +545,23 @@ export class ContactsComponent implements OnInit, OnDestroy {
   }
 
   openAutomationDlg(): void {
-    this.dialog.open(ContactAssignAutomationComponent, {
-      ...DialogSettings.AUTOMATION,
-      data: {
-        contacts: this.selection
-      }
-    });
+    if (this.selection.length <= 10) {
+      this.dialog.open(ContactAssignAutomationComponent, {
+        ...DialogSettings.AUTOMATION,
+        data: {
+          contacts: this.selection
+        }
+      });
+    } else {
+      this.dialog.open(NotifyComponent, {
+        width: '98vw',
+        maxWidth: '390px',
+        data: {
+          title: 'Add Automation',
+          message: 'You can assign to at most 10 contacts.'
+        }
+      });
+    }
   }
 
   /**

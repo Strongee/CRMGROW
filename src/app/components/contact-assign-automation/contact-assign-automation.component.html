@@ -14,11 +14,8 @@
         </div>
         <div class="contact-list" *ngIf="contacts.length">
           <div class="v-center my-2" *ngFor="let contact of contacts">
-            <img *ngIf="contact.picture_profile; else avatarNameTemplate" [src]="contact.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
-            <ng-template #avatarNameTemplate>
-              <div class="form-avatar rounded-circle bg-dark mr-3">{{getAvatarName(contact)}}</div>
-            </ng-template>
-            <div class="f-5">{{contact.first_name + ' ' + contact.last_name}}</div>
+            <div class="form-avatar rounded-circle bg-dark mr-3">{{contact.avatarName}}</div>
+            <div class="f-3">{{contact.fullName}}</div>
           </div>
         </div>
       </div>
