@@ -134,7 +134,7 @@ export class AutomationService extends HttpService {
       })
       .pipe(
         map((res) => res),
-        catchError(this.handleError('AUTOMATION BULK ASSIGN', false))
+        catchError(this.handleError('AUTOMATION BULK ASSIGN', null))
       );
   }
 

@@ -35,7 +35,7 @@ export class Contact implements Deserializable {
       return this.first_name + ' ' + this.last_name;
     } else if (this.first_name) {
       return this.first_name;
-    } else if (this.last_activity) {
+    } else if (this.last_name) {
       return this.last_name;
     } else {
       return 'Unnamed Contact';
@@ -47,7 +47,7 @@ export class Contact implements Deserializable {
       return this.first_name[0] + this.last_name[0];
     } else if (this.first_name) {
       return this.first_name.substring(0, 2);
-    } else if (this.last_activity) {
+    } else if (this.last_name) {
       return this.last_name.substring(0, 2);
     } else {
       return 'UN';
@@ -59,7 +59,7 @@ export class Contact implements Deserializable {
       return this.first_name + ' ' + this.last_name[0];
     } else if (this.first_name) {
       return this.first_name;
-    } else if (this.last_activity) {
+    } else if (this.last_name) {
       return this.last_name;
     } else {
       return 'Unnamed';
@@ -105,7 +105,7 @@ export class ContactActivity implements Deserializable {
       return this.first_name + ' ' + this.last_name;
     } else if (this.first_name) {
       return this.first_name;
-    } else if (this.last_activity) {
+    } else if (this.last_name) {
       return this.last_name;
     } else {
       return 'Unnamed Contact';
@@ -117,7 +117,7 @@ export class ContactActivity implements Deserializable {
       return this.first_name[0] + this.last_name[0];
     } else if (this.first_name) {
       return this.first_name.substring(0, 2);
-    } else if (this.last_activity) {
+    } else if (this.last_name) {
       return this.last_name.substring(0, 2);
     } else {
       return 'UN';
@@ -129,7 +129,7 @@ export class ContactActivity implements Deserializable {
       return this.first_name + ' ' + this.last_name[0];
     } else if (this.first_name) {
       return this.first_name;
-    } else if (this.last_activity) {
+    } else if (this.last_name) {
       return this.last_name;
     } else {
       return 'Unnamed';
