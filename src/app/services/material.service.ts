@@ -183,7 +183,7 @@ export class MaterialService extends HttpService {
   }
 
   sendText(data: any, materialType: string): Observable<boolean> {
-    let api = '';
+    let api = 'video/bulk-text';
     switch (materialType) {
       case 'video':
         api = MATERIAL.VIDEO_TEXT;
