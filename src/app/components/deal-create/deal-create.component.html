@@ -9,23 +9,26 @@
 <form #dealForm="ngForm" (ngSubmit)="submitted = true; dealForm.form.valid ? createDeals() : false">
     <mat-dialog-content>
         <div class="form-group mt-2">
-            <label>Name</label>
+            <div class="v-center">
+                <label class="mb-0">Name</label>
+                <span
+                    class="invalid-error f-3 c-red ml-auto"
+                    *ngIf="title == '' && submitted"
+                >
+                    Required!
+                </span>
+            </div>
             <input
                 class="form-control"
                 type="text"
                 name="dealTitle"
                 #dealTitle="ngModel"
                 [(ngModel)]="title"
+                required
             >
-            <span
-                class="invalid-error f-3 c-red mt-1"
-                *ngIf="title == '' && submitted"
-            >
-                Name is required
-            </span>
         </div>
         <div class="form-group">
-            <label>select stage</label>
+            <label class="d-block mb-0">stage</label>
             <select
                 class="form-control"
                 [(ngModel)]="selectedStage"
@@ -41,30 +44,43 @@
             </select>
         </div>
         <div class="form-group">
-            <label>value</label>
+            <div class="v-center">
+                <label class="d-block mb-0">value</label>
+                <span
+                    class="invalid-error f-3 c-red ml-auto"
+                    *ngIf="dealForm.submitted && dealValue.invalid && (dealValue.dirty || dealValue.touched || dealForm.submitted)"
+                >
+                    Required!
+                </span>
+            </div>
             <input
                 class="form-control"
                 type="number"
                 name="dealValue"
                 #dealValue="ngModel"
                 [(ngModel)]="value"
+                required
             >
         </div>
-        <div class="f-6 font-weight-bold mb-1">
+        <div class="f-6 font-weight-bold mb-3">
             Associate deal with
         </div>
         <div class="form-group">
-            <label>contacts</label>
+            <div class="v-center">
+                <label class="mb-0">contacts</label>
+                <span
+                    class="invalid-error f-3 c-red ml-auto"
+                    *ngIf="contacts.length == 0 && dealForm.submitted"
+                >
+                    Required!
+                </span>
+            </div>
             <app-input-contacts
                 [selectedContacts]="contacts"
                 [onlyFromSearch]="true"
-            ></app-input-contacts>
-            <span
-                class="invalid-error f-3 c-red mt-1"
-                *ngIf="contacts.length == 0 && submitted"
+                [chipType]="'inline'"
             >
-                Contact is required
-            </span>
+            </app-input-contacts>
         </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">

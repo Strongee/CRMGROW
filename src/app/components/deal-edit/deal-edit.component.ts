@@ -3,6 +3,7 @@ import { DealsService } from 'src/app/services/deals.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Deal } from 'src/app/models/deal.model';
 import { Contact } from 'src/app/models/contact.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-deal-edit',
@@ -10,39 +11,37 @@ import { Contact } from 'src/app/models/contact.model';
   styleUrls: ['./deal-edit.component.scss']
 })
 export class DealEditComponent implements OnInit {
-  stages: any[] = [];
-  selectedStage = '';
-  deal = {
-    main: new Deal(),
-    activities: [],
-    contacts: []
-  };
+  deal = new Deal();
   saving = false;
-  submitted = false;
+  saveSubscription: Subscription;
 
   constructor(
-    private dealsService: DealsService,
+    public dealsService: DealsService,
     private dialogRef: MatDialogRef<DealEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.deal = JSON.parse(JSON.stringify(this.data.deal));
-    this.deal.contacts = (this.deal.contacts || []).map((e) =>
-      new Contact().deserialize(e)
-    );
+    if (this.data && this.data.deal) {
+      this.deal.deserialize(this.data.deal);
+    }
   }
 
-  ngOnInit(): void {
-    this.dealsService.stages$.subscribe((res) => {
-      this.stages = [...this.stages, ...res];
-      this.stages.forEach((stage) => {
-        if (stage._id == this.deal.main.deal_stage) {
-          this.selectedStage = stage._id;
-        }
-      });
-    });
-  }
+  ngOnInit(): void {}
 
   editDeals(): void {
-    this.dialogRef.close(this.deal);
+    const data = {
+      title: this.deal.title,
+      deal_stage: this.deal.deal_stage,
+      value: this.deal.value
+    };
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    this.saving = true;
+    this.saveSubscription = this.dealsService
+      .editDeal(this.deal._id, data)
+      .subscribe((res) => {
+        this.saving = false;
+        if (res) {
+          this.dialogRef.close(data);
+        }
+      });
   }
 }

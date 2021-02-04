@@ -4,7 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DealStage } from 'src/app/models/deal-stage.model';
 import { DealStageCreateComponent } from 'src/app/components/deal-stage-create/deal-stage-create.component';
 import { DealStageDeleteComponent } from 'src/app/components/deal-stage-delete/deal-stage-delete.component';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-deals-setting',
@@ -13,6 +14,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 })
 export class DealsSettingComponent implements OnInit {
   stages: any[] = [];
+  changeOrderSubscription: Subscription;
 
   constructor(private dialog: MatDialog, public dealsService: DealsService) {
     this.dealsService.getStage(true);
@@ -30,6 +32,15 @@ export class DealsSettingComponent implements OnInit {
       event.previousIndex,
       event.currentIndex
     );
+    const stageOrder = {};
+    this.stages.forEach((e, index) => {
+      stageOrder[e._id] = index;
+    });
+
+    this.changeOrderSubscription && this.changeOrderSubscription.unsubscribe();
+    this.changeOrderSubscription = this.dealsService
+      .changeStageOrder(stageOrder)
+      .subscribe((res) => {});
   }
 
   moveDelete(id: string): void {
@@ -46,7 +57,11 @@ export class DealsSettingComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.dealsService.getStage(true);
+          this.stages.some((e, index) => {
+            if (e._id === id) {
+              this.stages.splice(index, 1);
+            }
+          })
         }
       });
   }

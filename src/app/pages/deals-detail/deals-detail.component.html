@@ -20,17 +20,18 @@
                       <button class="border-0 c-dark dropdown-item" (click)="openAppointmentDlg()">
                         <span class="ml-1 f-3 font-weight-bold">Create appointment</span>
                       </button>
-                      <hr class="my-1">
                       <button class="border-0 c-dark dropdown-item" (click)="openSendEmail()">
                         <span class="ml-1 f-3 font-weight-bold">Send email</span>
                       </button>
-                      <hr class="my-1">
                       <button class="border-0 c-dark dropdown-item" (click)="openTaskDlg()">
                         <span class="ml-1 f-3 font-weight-bold">Add task</span>
                       </button>
-                      <hr class="my-1">
                       <button class="border-0 c-dark dropdown-item" (click)="openNoteDlg()">
                         <span class="ml-1 f-3 font-weight-bold">Add note</span>
+                      </button>
+                      <hr class="my-1">
+                      <button class="border-0 dropdown-item" (click)="removeDeal()">
+                        <span class="ml-1 f-3 font-weight-bold c-red">Delete</span>
                       </button>
                     </div>
                 </div>
@@ -54,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="v-center justify-content-between mt-3">
+                <div class="v-center justify-content-between mt-3" style="height: 6px;">
                     <div class="stage-status stage-{{index}} mr-1" *ngFor="let stage of stages; let index=index">
                     </div>
                 </div>
@@ -77,10 +78,10 @@
                     <div class="deal-detail">
                         <div class="row">
                             <div class="col-sm-6">
-                                <span class="f-6 fw-600 op-40">value</span>
+                                <span class="f-6 fw-600 op-40">Value</span>
                             </div>
                             <div class="col-sm-6">
-                                <span class="f-6">${{deal.main.value}}</span>
+                                <span class="f-6">{{deal.main.value ? '$' + deal.main.value : ''}}</span>
                             </div>
                         </div>
                         <div class="row mt-1">
@@ -111,7 +112,7 @@
                     </mat-expansion-panel-header>
                     <div class="contact-detail mt-2" *ngFor="let contact of deal.contacts">
                         <div class="contact p-3 position-relative">
-                            <div class="v-center py-2 avatar-wrapper c-pointer" (click)="contactDetail(contact)">
+                            <div class="v-center pb-2 avatar-wrapper c-pointer" (click)="contactDetail(contact)">
                                 <div class="v-center justify-content-center f-6 font-weight-bold text-white avatar">
                                     {{contact.avatarName}}
                                 </div>
@@ -127,12 +128,12 @@
                                 <i class="d-block i-icon i-message bgc-dark mx-2"></i>
                                 <span class="f-6">{{contact.email}}</span>
                             </div>
-                            <div ngbDropdown class="contact-more c-pointer">
+                            <div ngbDropdown class="contact-more c-pointer" placement="bottom-right">
                               <div class="c-pointer" ngbDropdownToggle>
                                 <i class="d-block i-icon i-menu-more bgc-dark"></i>
                               </div>
-                              <div ngbDropdownMenu class="light">
-                                  <button class="border-0 c-dark dropdown-item" (click)="removeContact()">
+                              <div ngbDropdownMenu class="light py-1">
+                                  <button class="border-0 c-dark dropdown-item f-3 fw-600" (click)="removeContact(contact)">
                                       Remove contact
                                   </button>
                               </div>

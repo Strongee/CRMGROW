@@ -69,14 +69,13 @@
                             </div>
                             <div class="v-center justify-content-between mt-2 contacts-info">
                                 <div class="v-center">
-                                    <div class="v-center justify-content-center avatar f-3 font-weight-bold c-white">{{getAvatarName(deal.contacts[0])}}</div>
-                                    <div class="ml-2 f-3">
+                                    <div class="v-center justify-content-center avatar fw-600 c-white">{{getAvatarName(deal.contacts[0])}}</div>
+                                    <div class="ml-2 f-3 fw-600">
                                         {{deal.contacts[0]?.first_name}} {{deal.contacts[0]?.last_name}}
                                     </div>
                                 </div>
                                 <div class="v-center justify-content-center avatar" *ngIf="deal.contacts.length > 1">
-                                    <i class="d-block i-icon i-plus bgc-white"></i>
-                                    <div class="f-3 c-white">{{deal.contacts.length - 1}}</div>
+                                    <div class="c-white">+{{deal.contacts.length - 1}}</div>
                                 </div>
                             </div>
                             <div class="f-3 op-64 mt-2">

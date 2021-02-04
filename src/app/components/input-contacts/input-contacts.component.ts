@@ -5,7 +5,8 @@ import {
   Output,
   EventEmitter,
   ViewChild,
-  ElementRef
+  ElementRef,
+  TemplateRef
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
@@ -43,12 +44,14 @@ export class InputContactsComponent implements OnInit {
   addOnBlur = false;
   optionsFocused = false;
 
+  @Input('resultItem') resultItemTemplate: TemplateRef<HTMLElement>;
   @Input('placeholder') placeholder = 'Add Contacts';
   @Input('display') display = 'email'; // Which field is enabled when display the item.
   @Input('material') material: any = null;
   @Input('onlySubscriber') onlySubscriber = true;
   @Input('onlyFromSearch') onlyFromSearch = false;
   @Input('selectedContacts') selectedContacts: Contact[] = [];
+  @Input('chipType') chipType = 'block';
   @Output() onSelect = new EventEmitter();
   @Output() onRemove = new EventEmitter();
 

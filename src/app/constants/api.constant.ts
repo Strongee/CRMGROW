@@ -252,7 +252,9 @@ export const TAG = {
 };
 export const DEALSTAGE = {
   GET: 'deal-stage',
-  DELETE: 'deal-stage/'
+  DELETE: 'deal-stage/remove',
+  EDIT: 'deal-stage/',
+  CHANGE_ORDER: 'deal-stage/change-order'
 };
 
 export const DEAL = {
@@ -265,7 +267,8 @@ export const DEAL = {
   ADD_FOLLOWUP: 'deal/add-follow',
   GET_FOLLOWUP: 'deal/get-follow',
   GET_ACTIVITY: 'deal/get-activity',
-  ADD_APPOINTMENT: 'deal/create-appointment'
+  ADD_APPOINTMENT: 'deal/create-appointment',
+  UPDATE_CONTACT: 'deal/update-contact/'
 };
 
 export const MATERIAL = {

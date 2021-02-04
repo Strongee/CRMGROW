@@ -6,7 +6,7 @@
         <i class="d-block i-icon i-close bgc-dark"></i>
     </button>
 </div>
-<form #contactForm="ngForm" (ngSubmit)="submitted = true; contactForm.form.valid ? addContacts() : false">
+<form #contactForm="ngForm" (ngSubmit)="submitted = true; contacts.length ? addContacts() : false">
     <mat-dialog-content>
         <div class="contact">
             <div class="form-group mt-2 mb-0">
@@ -19,7 +19,7 @@
                     class="invalid-error f-3 c-red mt-1"
                     *ngIf="contacts.length == 0 && submitted"
                 >
-                    Contact is required
+                    Please select contacts to add.
                 </span>
             </div>
         </div>

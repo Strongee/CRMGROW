@@ -29,17 +29,14 @@ export class DealStageCreateComponent implements OnInit {
       const data = {
         title: this.title
       };
-      this.createSubscription = this.dealsService.createStage(data).subscribe(
-        (res) => {
+      this.createSubscription = this.dealsService
+        .createStage(data)
+        .subscribe((res) => {
+          this.saving = false;
           if (res) {
-            this.saving = false;
             this.dialogRef.close(res);
           }
-        },
-        (err) => {
-          this.saving = false;
-        }
-      );
+        });
     }
   }
 }

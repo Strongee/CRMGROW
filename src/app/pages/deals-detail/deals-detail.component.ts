@@ -23,7 +23,8 @@ import { TaskDetail } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { HandlerService } from '../../services/handler.service';
 import { DealContactComponent } from 'src/app/components/deal-contact/deal-contact.component';
-
+import * as _ from 'lodash';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -83,7 +84,8 @@ export class DealsDetailComponent implements OnInit {
     private noteService: NoteService,
     private taskService: TaskService,
     private handlerService: HandlerService,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private location: Location
   ) {
     this.dealsService.getStage(true);
   }
@@ -174,33 +176,20 @@ export class DealsDetailComponent implements OnInit {
     this.dealPanel = !this.dealPanel;
     this.dialog
       .open(DealEditComponent, {
-        position: { top: '100px' },
+        position: { top: '60px' },
         width: '100vw',
-        maxWidth: '600px',
+        maxWidth: '420px',
         disableClose: true,
         data: {
           type: 'deal',
-          deal: this.deal
+          deal: this.deal.main
         }
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.deal = res;
-          const contactIds = [];
-          this.deal.contacts.forEach((contact) => {
-            contactIds.push(contact._id);
-          });
-          const editDeal = {
-            contacts: contactIds,
-            title: this.deal.main.title,
-            value: this.deal.main.value
-          };
-          this.dealsService
-            .editDeal(this.deal.main._id, editDeal)
-            .subscribe((res) => {
-              console.log('###', res);
-            });
+          this.deal.main = { ...this.deal.main, ...res };
+          this.getStage(this.deal.main.deal_stage);
         }
       });
   }
@@ -216,29 +205,69 @@ export class DealsDetailComponent implements OnInit {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '500px',
-        disableClose: true
+        disableClose: true,
+        data: {
+          deal: this.dealId
+        }
       })
       .afterClosed()
       .subscribe((res) => {
-        this.deal.contacts = [...this.deal.contacts, ...res];
-        this.dealsService
-          .editDeal(this.deal.main._id, this.deal)
-          .subscribe((res) => {
-            console.log('###', res);
-          });
+        if (res && res.data && res.data.length) {
+          this.deal.contacts = _.unionWith(
+            this.deal.contacts,
+            res.data,
+            _.isEqual
+          );
+        }
       });
   }
 
-  removeContact(): void {
-    this.dialog.open(ConfirmComponent, {
-      position: { top: '100px' },
-      data: {
-        title: 'Delete Contact',
-        message: 'Are you sure to delete this contact?',
-        cancelLabel: 'Cancel',
-        confirmLabel: 'Confirm'
-      }
-    });
+  removeContact(contact: Contact): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Delete Contact',
+          message: 'Are you sure to delete this contact?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.dealsService
+            .updateContact(this.dealId, 'remove', [contact._id])
+            .subscribe((status) => {
+              if (status) {
+                _.pullAllBy(this.deal.contacts, [{ _id: contact._id }], '_id');
+              }
+            });
+        }
+      });
+  }
+
+  removeDeal(): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Delete Deal',
+          message: 'Are you sure to delete this deal?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.dealsService.deleteDeal(this.dealId).subscribe((status) => {
+            if (status) {
+              this.location.back();
+            }
+          });
+        }
+      });
   }
 
   changeTab(tab: TabItem): void {

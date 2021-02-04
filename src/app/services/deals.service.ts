@@ -61,8 +61,8 @@ export class DealsService extends HttpService {
 
   createStage(stage: any): Observable<any> {
     return this.httpClient.post(this.server + DEALSTAGE.GET, stage).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('CREATE STAGE', []))
+      map((res) => res['data']),
+      catchError(this.handleError('CREATE STAGE', null))
     );
   }
 
@@ -73,10 +73,33 @@ export class DealsService extends HttpService {
   }
 
   deleteStage(sourceId: string, targetId: string): any {
-    return this.httpClient.post(
-      this.server + DEALSTAGE.DELETE + sourceId,
-      targetId
-    );
+    return this.httpClient
+      .post(this.server + DEALSTAGE.DELETE, {
+        remove_stage: sourceId,
+        move_stage: targetId
+      })
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('STAGE REMOVE', false))
+      );
+  }
+
+  updateStage(id: string, title: string): any {
+    return this.httpClient
+      .put(this.server + DEALSTAGE.EDIT + id, { title })
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('UPDATE DEAL STAGE', false))
+      );
+  }
+
+  changeStageOrder(data: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + DEALSTAGE.CHANGE_ORDER, data)
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('CHANGE ORDER', false))
+      );
   }
 
   getDeal(id: string): any {
@@ -93,8 +116,31 @@ export class DealsService extends HttpService {
     );
   }
 
+  updateContact(
+    dealId: string,
+    action: string,
+    ids: string[]
+  ): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + DEAL.UPDATE_CONTACT + dealId, {
+        action,
+        contacts: ids
+      })
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('EDIT DEAL CONTACTS', false))
+      );
+  }
+
   createDeal(deal: any): any {
     return this.httpClient.post(this.server + DEAL.GET, deal);
+  }
+
+  deleteDeal(deal: string): Observable<boolean> {
+    return this.httpClient.delete(this.server + DEAL.GET + deal).pipe(
+      map((res) => !!res['status']),
+      catchError(this.handleError('DELETE DEAL', false))
+    );
   }
 
   moveDeal(data: any): any {

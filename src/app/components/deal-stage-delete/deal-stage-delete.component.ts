@@ -40,16 +40,11 @@ export class DealStageDeleteComponent implements OnInit {
     this.saving = true;
     this.dealsService
       .deleteStage(this.data.deleteId, this.targetStage)
-      .subscribe(
-        (res) => {
-          if (res['status']) {
-            this.saving = false;
-            this.dialogRef.close(res['status']);
-          }
-        },
-        (err) => {
-          this.saving = false;
+      .subscribe((res) => {
+        this.saving = false;
+        if (res) {
+          this.dialogRef.close(true);
         }
-      );
+      });
   }
 }

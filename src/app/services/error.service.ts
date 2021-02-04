@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
+import { NotifyComponent } from '../components/notify/notify.component';
 import { Strings } from '../constants/strings.constant';
 
 @Injectable({
@@ -21,7 +23,11 @@ export class ErrorService {
   };
   lastTime = new Date().getTime();
 
-  constructor(private router: Router, private toast: ToastrService) {}
+  constructor(
+    private router: Router,
+    private toast: ToastrService,
+    private dialog: MatDialog
+  ) {}
   addError(operation: string, error: any) {
     const errorObj = {
       operation,
@@ -81,7 +87,14 @@ export class ErrorService {
         console.log('403', error);
         break;
       case 405:
-        console.log(error);
+        this.dialog.closeAll();
+        this.dialog.open(NotifyComponent, {
+          width: '98vw',
+          maxWidth: '390px',
+          data: {
+            message: JSON.stringify(error)
+          }
+        });
         break;
       case 406:
         console.log('406', error);

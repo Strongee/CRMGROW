@@ -450,6 +450,10 @@
   display: block;
   width: 16px;
   height: 16px;
+
+  &.primary {
+    background-image: url('/assets/img/close-blue.svg');
+  }
 }
 
 ///////////// Activity List Icons //////////////////

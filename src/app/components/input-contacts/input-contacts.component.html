@@ -6,14 +6,25 @@
         [selectable]="selectable"
         [removable]="true"
         (removed)="remove(contact)">
-        <div class="d-flex chip p-1">
-          <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
-          <div class="info">
-            <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
-            <div class="f-1">{{contact[display]}}</div>
+        <ng-container *ngIf="chipType === 'block'; else inlineTemplate;">
+          <div class="d-flex chip p-1">
+            <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
+            <div class="info">
+              <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
+              <div class="f-1">{{contact[display]}}</div>
+            </div>
+            <div class="icon-close" matChipRemove></div>
           </div>
-          <div class="icon-close" matChipRemove></div>
-        </div>
+        </ng-container>
+        <ng-template #inlineTemplate>
+          <div class="d-flex chip p-1">
+            <div class="info v-center">
+              <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
+              <div class="f-2">{{contact[display] ? '(' + contact[display] + ')' : ''}}</div>
+            </div>
+            <div class="icon-close primary" matChipRemove></div>
+          </div>
+        </ng-template>
       </mat-basic-chip>
       <input
         [placeholder]="placeholder"

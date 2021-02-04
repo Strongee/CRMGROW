@@ -1,8 +1,5 @@
 @import "src/variables";
 
-label {
-    opacity: 0.4;
-}
 textarea {
     background-color: $color-wheat;
     resize: none;
@@ -10,6 +7,18 @@ textarea {
         &:focus {
             background-color: $color-wheat;
             color: $color-dark;
+        }
+    }
+}
+
+
+:host ::ng-deep {
+    .chip {
+        background-color: blue!important;
+        color: white!important;
+
+        .info {
+            padding: 2px;
         }
     }
 }

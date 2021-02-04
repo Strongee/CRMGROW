@@ -26,7 +26,7 @@
         .stage-status {
             border: 3px solid #D9D9DF;
             border-radius: 5px;
-            width: 20%;
+            flex: 1;
             height: 2px;
             &:last-child {
                 margin-right: 0;
@@ -320,9 +320,7 @@
                 top: 10px;
                 right: 10px;
                 .dropdown-menu {
-                  &.show {
-                    transform: translate(-140px, 18px) !important;
-                  }
+                  min-width: 140px;
                 }
             }
         }

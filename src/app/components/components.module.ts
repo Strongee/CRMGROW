@@ -124,6 +124,7 @@ import { DealContactComponent } from './deal-contact/deal-contact.component';
 import { SelectTeamComponent } from './select-team/select-team.component';
 import { ContactShareComponent } from './contact-share/contact-share.component';
 import { FilterInputComponent } from './filter-input/filter-input.component';
+import { StageInputComponent } from './stage-input/stage-input.component';
 
 @NgModule({
   declarations: [
@@ -246,7 +247,8 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
     DealContactComponent,
     SelectTeamComponent,
     ContactShareComponent,
-    FilterInputComponent
+    FilterInputComponent,
+    StageInputComponent
   ],
   imports: [
     CommonModule,
@@ -330,7 +332,8 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
     DateInputComponent,
     AutomationStatusComponent,
     DealContactComponent,
-    FilterInputComponent
+    FilterInputComponent,
+    StageInputComponent
   ],
   bootstrap: [
     ContactCreateComponent,
