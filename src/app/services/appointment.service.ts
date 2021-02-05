@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { HttpService } from './http.service';
 import { ErrorService } from './error.service';
 import { APPOINTMENT } from '../constants/api.constant';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +14,15 @@ export class AppointmentService extends HttpService {
     super(errorService);
   }
 
-  public getEvents(date: string, mode: string): any {
-    return this.httpClient.get(
-      this.server + APPOINTMENT.GET_EVENT + '?date=' + date + '&mode=' + mode
-    );
+  public getEvents(date: string, mode: string): Observable<any> {
+    return this.httpClient
+      .get(
+        this.server + APPOINTMENT.GET_EVENT + '?date=' + date + '&mode=' + mode
+      )
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('LOAD EVENTS', null))
+      );
   }
   public createEvents(event: any): any {
     return this.httpClient.post(this.server + APPOINTMENT.GET_EVENT, event);
