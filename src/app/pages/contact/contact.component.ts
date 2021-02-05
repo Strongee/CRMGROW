@@ -36,7 +36,6 @@ import { NoteService } from 'src/app/services/note.service';
 import { DealsService } from 'src/app/services/deals.service';
 import { TaskService } from 'src/app/services/task.service';
 import { HandlerService } from 'src/app/services/handler.service';
-import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as _ from 'lodash';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { ContactEditComponent } from 'src/app/components/contact-edit/contact-edit.component';
@@ -58,8 +57,6 @@ import * as moment from 'moment';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit, OnDestroy {
-  REPEAT_DURATIONS = REPEAT_DURATIONS;
-  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
     { icon: '', label: 'Notes', id: 'note' },
@@ -70,7 +67,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     { icon: '', label: 'Tasks', id: 'follow_up' },
     { icon: '', label: 'Deals', id: 'deal' }
   ];
-  action: TabItem = this.tabs[0];
+  tab: TabItem = this.tabs[0];
+  activityType: TabItem = this.tabs[0];
 
   timeSorts = [
     { label: 'All', id: 'all' },
@@ -80,7 +78,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     { label: 'This week', id: 'this_week' },
     { label: 'Next Week', id: 'next_week' }
   ];
-
   selectedTimeSort = this.timeSorts[0];
 
   contact: ContactDetail = new ContactDetail();
@@ -88,10 +85,12 @@ export class ContactComponent implements OnInit, OnDestroy {
   groupActions = {};
   mainTimelines: DetailActivity[] = [];
   details: any = {};
+  detailData: any = {};
+  sendActions = {};
+  showingDetails = [];
   _id = '';
   next: string = null;
   prev: string = null;
-  activeHistory = 'all';
   mainPanel = true;
   secondPanel = true;
   additionalPanel = true;
@@ -277,11 +276,19 @@ export class ContactComponent implements OnInit, OnDestroy {
           activity.activity_detail['subject'] = activity.subject;
         }
         this.details[material_id] = activity.activity_detail;
-        return `${material_id}_${activity._id}`;
+        const group_id = `${material_id}_${activity._id}`;
+        this.detailData[group_id] = activity.activity_detail;
+        this.detailData[group_id]['data_type'] = activity.type;
+        this.detailData[group_id]['group_id'] = group_id;
+        this.detailData[group_id]['emails'] = activity.emails;
+        return group_id;
       case 'texts':
         return activity._id;
       default:
-        return activity.activity_detail['_id'];
+        const detailKey = activity.activity_detail['_id'];
+        this.detailData[detailKey] = activity.activity_detail;
+        this.detailData[detailKey]['data_type'] = activity.type;
+        return detailKey;
     }
   }
 
@@ -471,6 +478,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
+  openDealDlg(): void {}
+
   openShareContactDlg(): void {
     this.dialog.open(ContactShareComponent, {
       width: '500px',
@@ -495,25 +504,82 @@ export class ContactComponent implements OnInit, OnDestroy {
    * Timeline Actions
    **************************************/
   changeTab(tab: TabItem): void {
-    this.action = tab;
-    this.selectedTimeSort = this.timeSorts[0];
-    this.groupActivities();
-    if (this.action.id == 'note') {
-      const noteTimelines = this.mainTimelines.filter(
-        (timeLine) => timeLine.type == 'notes'
-      );
-      this.mainTimelines = noteTimelines.sort((a, b) => {
-        return (
-          <any>new Date(b.activity_detail.updated_at) -
-          <any>new Date(a.activity_detail.updated_at)
-        );
+    this.tab = tab;
+
+    if (this.tab.id !== 'all') {
+      this.showingDetails = [];
+      this.sendActions = {};
+      let dataType = '';
+      switch (tab.id) {
+        case 'note':
+          dataType = 'notes';
+          break;
+        case 'email':
+          dataType = 'emails';
+          break;
+        case 'text':
+          dataType = 'texts';
+          break;
+        case 'appointment':
+          dataType = 'appointments';
+          break;
+        case 'group_call':
+          dataType = 'group_calls';
+          break;
+        case 'follow_up':
+          this.selectedTimeSort = this.timeSorts[0];
+          dataType = 'follow_ups';
+          break;
+        case 'deal':
+          dataType = 'deals';
+          break;
+      }
+      const details = Object.values(this.detailData);
+      details.forEach((e) => {
+        if (dataType === 'emails') {
+          if (e['data_type'] === 'emails') {
+            this.showingDetails.push(e);
+            if (this.sendActions[e['_id']]) {
+              this.sendActions[e['_id']] = [
+                ...this.sendActions[e['_id']],
+                ...this.groupActions[e['group_id']]
+              ];
+            } else {
+              this.sendActions[e['_id']] = this.groupActions[e['group_id']];
+            }
+          }
+          if (
+            e['data_type'] === 'videos' ||
+            e['data_type'] === 'pdfs' ||
+            e['data_type'] === 'images'
+          ) {
+            if (e['emails']) {
+              if (this.sendActions[e['emails']]) {
+                this.sendActions[e['emails']] = [
+                  ...this.sendActions[e['emails']],
+                  ...this.groupActions[e['group_id']]
+                ];
+              } else {
+                this.sendActions[e['emails']] = this.groupActions[e['group_id']];
+              }
+            } else {
+              this.showingDetails.push(e);
+              this.sendActions[e['group_id']] = this.groupActions[e['group_id']];
+            }
+          }
+        } else if (e['data_type'] === dataType) {
+          this.showingDetails.push(e);
+        }
       });
     }
-    this.getActivityCount();
+  }
+
+  changeActivityTypes(type: TabItem): void {
+    this.activityType = type;
   }
 
   changeSort(timeSort: any): void {
-    this.groupActivities();
+    this.changeTab(this.tab);
     let today;
     let weekDay;
     this.selectedTimeSort = timeSort;
@@ -527,57 +593,41 @@ export class ContactComponent implements OnInit, OnDestroy {
     let start_date = new Date();
     let end_date = new Date();
     switch (this.selectedTimeSort.id) {
-      case 'all':
-        this.groupActivities();
-        break;
       case 'overdue':
         end_date = today.format();
-        this.mainTimelines = this.mainTimelines.filter(
-          (timeLine) =>
-            !(
-              timeLine.activity_detail?.due_date > end_date ||
-              timeLine.activity_detail?.status == 1
-            )
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date < end_date && !detail.status
         );
         break;
       case 'today':
         start_date = today.format();
         end_date = today.add('day', 1).format();
-        this.mainTimelines = this.mainTimelines.filter(
-          (timeLine) =>
-            timeLine.activity_detail?.due_date > start_date &&
-            timeLine.activity_detail?.due_date < end_date
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
         );
         break;
       case 'tomorrow':
         start_date = today.add('day', 1).format();
         end_date = today.add('day', 2).format();
-        this.mainTimelines = this.mainTimelines.filter(
-          (timeLine) =>
-            timeLine.activity_detail?.due_date > start_date &&
-            timeLine.activity_detail?.due_date < end_date
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
         );
         break;
       case 'this_week':
         start_date = weekDay.format();
         end_date = weekDay.add('week', 1).format();
-        this.mainTimelines = this.mainTimelines.filter(
-          (timeLine) =>
-            timeLine.activity_detail?.due_date > start_date &&
-            timeLine.activity_detail?.due_date < end_date
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
         );
         break;
       case 'next_week':
         start_date = weekDay.add('week', 1).format();
         end_date = weekDay.add('week', 2).format();
-        this.mainTimelines = this.mainTimelines.filter(
-          (timeLine) =>
-            timeLine.activity_detail?.due_date > start_date &&
-            timeLine.activity_detail?.due_date < end_date
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
         );
         break;
     }
-    this.getActivityCount();
   }
 
   showDetail(event: any): void {
@@ -801,7 +851,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     );
   }
-
   assignAutomation(): void {
     if (!this.selectedAutomation) {
       return;
@@ -879,7 +928,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
-  convertContent(content: any): any {
+  convertContent(content = ''): any {
     const htmlContent = content.split('<div>');
     let convertString = '';
     htmlContent.forEach((html) => {

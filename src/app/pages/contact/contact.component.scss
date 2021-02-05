@@ -245,6 +245,9 @@
       height: 12px;
       min-width: 12px;
     }
+    .dropdown-item:active .c-dark {
+      color: white;
+    }
   }
   .history-detail {
     border-radius: 8px;
@@ -288,7 +291,6 @@
             }
           }
           .content {text-decoration-line: line-through;}
-          .time {text-decoration-line: line-through;}
         }
       }
     }
@@ -568,4 +570,43 @@
   margin-bottom: 4px;
   font-weight: 600;
   display: inline-block;
+}
+
+.mr-span {
+  margin-right: 26px;
+}
+
+table.table {
+  td {
+    padding: 4px 2px;
+    height: unset!important;
+    text-align: right;
+    
+    &.session-col {
+      text-align: left;
+    }
+  }
+  th {
+    padding: 4px 2px;
+    height: unset;
+    text-align: right;
+    &.session-col {
+      text-align: left;
+    }
+  }
+  .date-col {
+    div {
+      font-size: 11px!important;
+      line-height: 1.1;
+      border: 1px solid blue;
+      border-radius: 20px;
+      color: blue;
+      display: inline-block;
+      transition: all .2s;
+      &:hover {
+        color: white;
+        background-color: blue;
+      }
+    }
+  }
 }

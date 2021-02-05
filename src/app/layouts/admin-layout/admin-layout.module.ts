@@ -47,6 +47,7 @@ import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.comp
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
 import { MoneyPipe } from '../../pipes/money.pipe';
+import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
 import { CampaignListItemComponent } from '../../pages/campaign-list-item/campaign-list-item.component';
 import { CampaignBulkMailingItemComponent } from '../../pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component';
 import { AutoResendVideoComponent } from '../../pages/auto-resend-video/auto-resend-video.component';
@@ -106,6 +107,7 @@ import { MessagesComponent } from 'src/app/pages/messages/messages.component';
     AutoflowComponent,
     VideoCreateComponent,
     MoneyPipe,
+    TimeDurationPipe,
     CampaignListItemComponent,
     CampaignBulkMailingItemComponent,
     ContactComponent,

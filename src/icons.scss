@@ -325,6 +325,28 @@
 .i-back {
   mask-image: url('/assets/img/back.svg')
 }
+.i-notes {
+  mask-image: url('/assets/img/template.svg')
+}
+.i-emails {
+  mask-image: url('/assets/img/delivered_mail.svg')
+}
+.i-texts {
+  mask-image: url('/assets/img/sms_sent.svg')
+}
+.i-appointments {
+  mask-image: url('/assets/img/calendar.svg')
+}
+.i-group_calls {
+  mask-image: url('/assets/img/group_call.svg')
+}
+.i-follow_ups {
+  mask-image: url('/assets/img/tasks.svg')
+}
+.i-deals {
+  mask-image: url('/assets/img/flame.svg')
+}
+
 .i-icon.i-label{
   width: 24px;
   height: 24px;
