@@ -3,7 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { ToastrService } from 'ngx-toastr';
 import { AvatarEditorComponent } from 'src/app/components/avatar-editor/avatar-editor.component';
-import { TIMEZONE, COMPANIES } from 'src/app/constants/variable.constants';
+import {
+  TIMEZONE,
+  COMPANIES,
+  PHONE_COUNTRIES
+} from 'src/app/constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
@@ -26,16 +30,7 @@ export class GeneralProfileComponent implements OnInit {
   address = '';
   timezones = TIMEZONE;
   companies = COMPANIES;
-  countries: CountryISO[] = [
-    CountryISO.UnitedStates,
-    CountryISO.UnitedKingdom,
-    CountryISO.Canada,
-    CountryISO.SouthAfrica,
-    CountryISO.India,
-    CountryISO.Mexico,
-    CountryISO.Portugal,
-    CountryISO.France
-  ];
+  countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
   saving = false;
   public uploader: FileUploader = new FileUploader({

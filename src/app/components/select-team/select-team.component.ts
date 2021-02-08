@@ -33,8 +33,8 @@ import {
 })
 export class SelectTeamComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input('resultItem') resultItemTemplate: TemplateRef<HTMLElement>;
-  @Input('placeholder') placeholder = 'Search contact';
-  @Input('formPlaceholder') formPlaceholder = 'Search contacts';
+  @Input('placeholder') placeholder = 'Select team';
+  @Input('formPlaceholder') formPlaceholder = 'Search team';
   @Input('mustField') mustField = '';
   @Input()
   public set team(val: string) {

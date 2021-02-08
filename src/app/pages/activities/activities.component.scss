@@ -11,3 +11,18 @@ td .c-dark {
 td .c-blue {
   color: $color-blue!important;
 }
+
+.pagination-wrapper .i-icon{
+  background-color: black;
+  width: 20px;
+  height: 20px;
+}
+
+.pagination-wrapper a {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.pagination-wrapper .disabled .i-icon{
+  background-color: #cacaca;
+}

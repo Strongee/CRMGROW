@@ -24,6 +24,7 @@ export class Activity implements Deserializable {
   send_type: number;
   subject: string;
   description: string;
+  additional_field: any[];
   created_at: Date;
   updated_at: Date;
 

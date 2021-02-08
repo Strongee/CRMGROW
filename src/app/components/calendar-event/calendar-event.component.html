@@ -33,7 +33,7 @@
         <div class="form-group mb-1">
             <label for="description" class="mb-1">description</label>
             <div class="f-1 font-weight-bold">
-                {{event.meta.description | stripTags }}
+                {{(event.meta.description || '') | stripTags }}
             </div>
         </div>
         <div class="form-group mb-1">

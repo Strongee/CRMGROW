@@ -63,24 +63,28 @@
 table {
     th {
         position: sticky;
-        top: 0px;
+        top: 64px;
         background-color: white;
         z-index: 11;
+        height: 44px;
     }    
     th, td {
         vertical-align: middle !important;
         background-color: white;
         opacity: 1;
         &.selectHeader {
-            background-color: #f3f3f3 !important;
-            height: 50px;
+            // background-color: #f3f3f3 !important;
+            height: 44px;
         }
     }
     tr {
         &.section-header {
             td {
                 background-color: #f3f3f3 !important;
-                height: 50px;
+                height: 44px;
+                position: sticky;
+                top: 106px;
+                z-index: 12;
             }
         }
     }

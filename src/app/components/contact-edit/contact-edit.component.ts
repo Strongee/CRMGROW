@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
+  PHONE_COUNTRIES,
   REGIONS,
   STAGES
 } from 'src/app/constants/variable.constants';
@@ -19,16 +20,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./contact-edit.component.scss']
 })
 export class ContactEditComponent implements OnInit {
-  countries: CountryISO[] = [
-    CountryISO.UnitedStates,
-    CountryISO.UnitedKingdom,
-    CountryISO.Canada,
-    CountryISO.SouthAfrica,
-    CountryISO.India,
-    CountryISO.Mexico,
-    CountryISO.Portugal,
-    CountryISO.France
-  ];
+  countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
   COUNTRIES = COUNTRIES;
   COUNTRY_REGIONS = REGIONS;

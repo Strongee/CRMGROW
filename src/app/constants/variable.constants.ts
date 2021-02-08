@@ -1,3 +1,5 @@
+import { CountryISO } from 'ngx-intl-tel-input';
+
 export const STATUS = {
   NONE: 'none',
   REQUEST: 'request',
@@ -87,6 +89,21 @@ export const TIMES = [
   { id: '22:30:00.000', text: '10:30 PM' },
   { id: '23:00:00.000', text: '11:00 PM' },
   { id: '23:30:00.000', text: '11:30 PM' }
+];
+export const PHONE_COUNTRIES = [
+  CountryISO.UnitedStates,
+  CountryISO.UnitedKingdom,
+  CountryISO.Canada,
+  CountryISO.Australia,
+  CountryISO.SouthAfrica,
+  CountryISO.India,
+  CountryISO.Mexico,
+  CountryISO.Portugal,
+  CountryISO.France,
+  CountryISO.Germany,
+  CountryISO.Italy,
+  CountryISO.Spain,
+  CountryISO.Switzerland
 ];
 export const COUNTRY_CODES = {
   USA: 'US',

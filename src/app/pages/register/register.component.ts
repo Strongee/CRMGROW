@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { TIMEZONE } from 'src/app/constants/variable.constants';
+import { PHONE_COUNTRIES, TIMEZONE } from 'src/app/constants/variable.constants';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { MatDialog } from '@angular/material/dialog';
 import { HelperService } from '../../services/helper.service';
@@ -20,16 +20,7 @@ import { Location } from '@angular/common';
 export class RegisterComponent implements OnInit {
   // Constant Variables
   timezones = TIMEZONE;
-  countries: CountryISO[] = [
-    CountryISO.UnitedStates,
-    CountryISO.UnitedKingdom,
-    CountryISO.Canada,
-    CountryISO.SouthAfrica,
-    CountryISO.India,
-    CountryISO.Mexico,
-    CountryISO.Portugal,
-    CountryISO.France
-  ];
+  countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
 
   step = 1;

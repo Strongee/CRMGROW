@@ -27,7 +27,7 @@ export class CalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
-  events: CalendarEvent[] = [];
+
   @Input() locale = 'en';
   public user: any = {};
   weekStart;
@@ -43,6 +43,14 @@ export class CalendarComponent implements OnInit {
   ];
   selectedTab: TabItem = this.tabs[0];
   queryParamSubscription: Subscription;
+
+  events: CalendarEvent[] = [];
+  dayEvents: any = {};
+  showingEvents: CalendarEvent[] = [];
+  accounts: string[] = [];
+  accountCalendars: any = {};
+  calendars: any = {};
+  selectedCalendars = [];
 
   constructor(
     private dialog: MatDialog,
@@ -145,13 +153,31 @@ export class CalendarComponent implements OnInit {
         this.isLoading = false;
         if (res) {
           this.events = [];
+          this.dayEvents = {};
+          this.accounts = [];
+          this.accountCalendars = {};
+          this.selectedCalendars = [];
           res.forEach((calendar) => {
             if (calendar['status']) {
               const accountEmail =
                 calendar['calendar'] && calendar['calendar']['email'];
+              this.accounts.push(accountEmail);
               const subCalendars =
                 calendar['calendar'] && calendar['calendar']['data'];
               subCalendars.forEach((subCalendar) => {
+                const subCalendarInfo = {
+                  title: subCalendar.title,
+                  time_zone: subCalendar.time_zone,
+                  id: subCalendar.id,
+                  color: subCalendar.color
+                };
+                this.calendars[subCalendar.id] = subCalendarInfo;
+                this.selectedCalendars.push(subCalendar.id);
+                if (this.accountCalendars[accountEmail]) {
+                  this.accountCalendars[accountEmail].push(subCalendarInfo);
+                } else {
+                  this.accountCalendars[accountEmail] = [subCalendarInfo];
+                }
                 const events = subCalendar.items;
                 events.forEach((event) => {
                   const _formattedEvent = {
@@ -172,13 +198,76 @@ export class CalendarComponent implements OnInit {
                       organizer: event.organizer
                     }
                   };
+                  if (event.due_start === event.due_end) {
+                    if (this.dayEvents[event.due_start]) {
+                      this.dayEvents[event.due_start].push(_formattedEvent);
+                    } else {
+                      this.dayEvents[event.due_start] = [_formattedEvent];
+                    }
+                  }
                   this.events.push(_formattedEvent);
                 });
               });
             }
           });
+          this.filterEvents();
         }
       });
+  }
+
+  getDayEvent(date: any): any {
+    if (date) {
+      try {
+        const key = date.toISOString().split('T')[0];
+        return this.dayEvents[key];
+      } catch (err) {
+        return [];
+      }
+    } else {
+      const datesArr = Object.values(this.dayEvents);
+      if (datesArr && datesArr.length) {
+        return datesArr[0];
+      } else {
+        return [];
+      }
+    }
+  }
+
+  isSelectedCalendar(calendar): boolean {
+    if (this.selectedCalendars.indexOf(calendar.id) === -1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  toggleCalendar(calendar): void {
+    const pos = this.selectedCalendars.indexOf(calendar.id);
+    if (pos === -1) {
+      this.selectedCalendars.push(calendar.id);
+    } else {
+      this.selectedCalendars.splice(pos, 1);
+    }
+    this.filterEvents();
+  }
+
+  filterEvents(): void {
+    this.dayEvents = {};
+    this.showingEvents = [];
+    this.events.forEach((e) => {
+      if (this.selectedCalendars.indexOf(e.meta.calendar_id) !== -1) {
+        this.showingEvents.push(e);
+        if (e.start === e.end) {
+          const key = e.start.toISOString();
+          if (this.dayEvents[key]) {
+            this.dayEvents[key].push(e);
+          } else {
+            this.dayEvents[key] = [e];
+          }
+        }
+      }
+    });
+    // this.changeDetectorRef.detectChanges();
   }
 
   createEvent(event: any, origin: any, content: any): void {

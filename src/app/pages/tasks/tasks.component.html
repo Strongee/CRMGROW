@@ -32,6 +32,16 @@
     <div class="mat-table-wrapper">
       <table class="w-100 page-table" mat-table [dataSource]="storeService.tasks$ | async | paginate: {id: 'tasks', itemsPerPage: pageSize.id, currentPage: page, totalItems: taskService.total$ | async}">
 
+        <ng-container matColumnDef="loader-cell">
+          <th mat-header-cell
+            *matHeaderCellDef colspan="12" class="loader-cell">
+            <div class="updating-status"
+            *ngIf="(storeService.tasks$ | async).length && (taskService.loading$ | async) === STATUS.REQUEST">
+              LOADING
+            </div>
+          </th>
+        </ng-container>
+
         <!-- Select Column -->
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef class="pl-2 checkbox-col">
@@ -188,7 +198,9 @@
         </ng-container>
   
         <tr mat-header-row
-            *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length"></tr>
+          *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
+        <tr mat-header-row
+          *matHeaderRowDef="DISPLAY_COLUMNS" class="table-header" [class.selected]="selection.length"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']"
             [class.d-none]="!isAllSelected() || !selection.length" class='selection-info'></tr>
         <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
@@ -197,10 +209,10 @@
 
 
     <ng-container *ngIf="(storeService.tasks$ | async).length || (taskService.total$ | async); else emptyListTemplate">
-      <div class="updating-status"
+      <!-- <div class="updating-status"
         *ngIf="(taskService.loading$ | async) === STATUS.REQUEST">
         LOADING
-      </div>
+      </div> -->
       <div class="my-2 table-control mode-1">
         <div class="pagination-wrapper m-auto">
           <pagination-controls (pageChange)="changePage($event)"

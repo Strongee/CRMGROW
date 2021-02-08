@@ -464,6 +464,18 @@
 .i-attachment {
   mask-image: url('/assets/img/attachment.svg');
 }
+.i-first {
+  mask-image: url('/assets/img/page_first.svg');
+}
+.i-prev {
+  mask-image: url('/assets/img/prev.svg');
+}
+.i-next {
+  mask-image: url('/assets/img/next.svg');
+}
+.i-end {
+  mask-image: url('/assets/img/page_end.svg');
+}
 .icon-close {
   background-image: url('/assets/img/close.svg');
   background-position: center;
@@ -490,6 +502,9 @@
 .act-icon.normal {
   width: 18px;
   height: 18px;
+}
+.act-bell {
+  background-image: url('/assets/img/notification.svg');
 }
 .act-videos {
   background-image: url('/assets/img/activities/video.svg');

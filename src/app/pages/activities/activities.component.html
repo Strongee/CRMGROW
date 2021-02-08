@@ -2,7 +2,17 @@
   <div class="mat-table-wrapper">
     <table class="w-100 page-table"
       mat-table
-      [dataSource]="storeService.activities$ | async | paginate: {id: 'activityPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: activityService.total$ | async}">
+      [dataSource]="storeService.activities$ | async">
+
+      <ng-container matColumnDef="loader-cell">
+        <th mat-header-cell
+          *matHeaderCellDef colspan="12" class="loader-cell">
+          <div class="updating-status"
+          *ngIf="(storeService.activities$ | async).length && (activityService.loading$ | async) === STATUS.REQUEST">
+            LOADING
+          </div>
+        </th>
+      </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="contact_name">
@@ -37,8 +47,14 @@
         <td mat-cell
           *matCellDef="let element">
           <a class="v-center c-pointer undecoration c-dark" [routerLink]="['/contacts/' + element.contacts._id]">
-            <i class="act-icon normal {{'act-' + element.type}} d-block mr-2"></i>
-            <span>{{element.content}}</span>
+            <ng-container *ngIf="element.additional_field; else singleActivity">
+              <i class="act-icon normal act-bell d-block mr-2"></i>
+              <span class="c-red fw-600">{{element.additional_field.length + 1}} activities</span>
+            </ng-container>
+            <ng-template #singleActivity>
+              <i class="act-icon normal {{'act-' + element.type}} d-block mr-2"></i>
+              <span>{{element.content}}</span>
+            </ng-template>
           </a>
         </td>
       </ng-container>
@@ -64,25 +80,31 @@
       </ng-container>
 
       <tr mat-header-row
-        *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+        *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
+      <tr mat-header-row
+        *matHeaderRowDef="DISPLAY_COLUMNS" class="table-header"></tr>
       <tr mat-row
         *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
     </table>
   </div>
   <ng-container *ngIf="(storeService.activities$ | async).length || (activityService.total$ | async); else emptyListTemplate">
-    <div class="updating-status"
+    <!-- <div class="updating-status"
       *ngIf="(activityService.loading$ | async) === STATUS.REQUEST">
       LOADING
-    </div>
+    </div> -->
     <div class="my-2 table-control mode-1">
-      <div class="pagination-wrapper m-auto">
-        <pagination-controls (pageChange)="changePage($event)"
+      <div class="pagination-wrapper m-auto v-center">
+        <!-- <pagination-controls (pageChange)="changePage($event)"
           (pageBoundsCorrection)="onOverPages($event)"
           id="activityPages"
           maxSize="5"
           previousLabel=""
           nextLabel="">
-        </pagination-controls>
+        </pagination-controls> -->
+        <a (click)="loadPage('first')" [class.disabled]="(activityService.startSkip$ | async) <= 0"><i class="i-icon i-first d-block"></i></a>
+        <!-- <a (click)="loadPage('prev')"  [class.disabled]="(activityService.startSkip$ | async) <= 0"><i class="i-icon i-prev d-block"></i></a> -->
+        <a (click)="loadPage('next')"><i class="i-icon i-next d-block"></i></a>
+        <!-- <a (click)="loadPage('last')"><i class="i-icon i-end d-block"></i></a> -->
       </div>
       <div class="shadow-dropdown ml-auto page-size-control"
         ngbDropdown
@@ -125,3 +147,5 @@
     </ng-container>
   </ng-template>
 </div>
+
+<!-- | paginate: {id: 'activityPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: activityService.total$ | async} -->

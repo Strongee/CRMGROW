@@ -21,6 +21,10 @@ export class ActivityService extends HttpService {
   loadSubscription: Subscription;
   page: BehaviorSubject<number> = new BehaviorSubject(1);
   page$ = this.page.asObservable();
+  startSkip: BehaviorSubject<number> = new BehaviorSubject(0);
+  startSkip$ = this.startSkip.asObservable();
+  endSkip: BehaviorSubject<number> = new BehaviorSubject(0);
+  endSkip$ = this.endSkip.asObservable();
   pageSize: BehaviorSubject<number> = new BehaviorSubject(20);
   pageSize$ = this.pageSize.asObservable();
 
@@ -32,33 +36,47 @@ export class ActivityService extends HttpService {
     super(errorService);
   }
 
-  load(page: number): void {
-    this.page.next(page);
+  load(skip: number = 0): void {
     this.loadStatus.next(STATUS.REQUEST);
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.loadImpl(page).subscribe((res) => {
+    this.loadSubscription = this.loadImpl(skip).subscribe((res) => {
       res
         ? this.loadStatus.next(STATUS.SUCCESS)
         : this.loadStatus.next(STATUS.FAILURE);
       if (res && res['activities']) {
         this.storeService.activities.next(res['activities']);
-        this.total.next(res['count']);
+        this.startSkip.next(skip);
+        this.endSkip.next(res['skip']);
       }
     });
   }
 
-  loadImpl(page: number): Observable<any> {
+  // load(page: number): void {
+  //   this.page.next(page);
+  //   this.loadStatus.next(STATUS.REQUEST);
+  //   this.loadSubscription && this.loadSubscription.unsubscribe();
+  //   this.loadSubscription = this.loadImpl(page).subscribe((res) => {
+  //     res
+  //       ? this.loadStatus.next(STATUS.SUCCESS)
+  //       : this.loadStatus.next(STATUS.FAILURE);
+  //     if (res && res['activities']) {
+  //       this.storeService.activities.next(res['activities']);
+  //       this.skip.next(res['skip']);
+  //     }
+  //   });
+  // }
+
+  loadImpl(skip: number): Observable<any> {
     const pageSize = this.pageSize.getValue();
-    const skip = (page - 1) * pageSize;
     return this.http
       .post(this.server + ACTIVITY.LOAD, { skip, size: pageSize })
       .pipe(
         map((res) => {
           return {
-            activities: (res['data']['activity'] || []).map((e) =>
+            activities: (res['data']['activity_list'] || []).map((e) =>
               new Activity().deserialize(e)
             ),
-            count: res['data']['count'] || 0
+            skip: res['data']['skip'] || 0
           };
         }),
         catchError(this.handleError('LOAD ACTIVITY', null))
@@ -66,18 +84,19 @@ export class ActivityService extends HttpService {
   }
 
   reload(): void {
-    const page = this.page.getValue();
-    this.loadStatus.next(STATUS.REQUEST);
-    this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.loadImpl(page).subscribe((res) => {
-      res
-        ? this.loadStatus.next(STATUS.SUCCESS)
-        : this.loadStatus.next(STATUS.FAILURE);
-      if (res && res['activities']) {
-        this.storeService.activities.next(res['activities']);
-        this.total.next(res['count']);
-      }
-    });
+    const currentSkip = this.startSkip.getValue();
+    this.load(currentSkip);
+    // this.loadStatus.next(STATUS.REQUEST);
+    // this.loadSubscription && this.loadSubscription.unsubscribe();
+    // this.loadSubscription = this.loadImpl(currentSkip).subscribe((res) => {
+    //   res
+    //     ? this.loadStatus.next(STATUS.SUCCESS)
+    //     : this.loadStatus.next(STATUS.FAILURE);
+    //   if (res && res['activities']) {
+    //     this.storeService.activities.next(res['activities']);
+    //     this.total.next(res['count']);
+    //   }
+    // });
   }
 
   clear$(): void {

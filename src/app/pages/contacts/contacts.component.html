@@ -54,6 +54,17 @@
       <table class="w-100 page-table"
         mat-table
         [dataSource]="storeService.pageContacts$ | async | paginate: {id: 'contactPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: contactService.total$ | async}">
+
+        <ng-container matColumnDef="loader-cell">
+          <th mat-header-cell
+            *matHeaderCellDef colspan="12" class="loader-cell">
+            <div class="updating-status"
+            *ngIf="(storeService.pageContacts$ | async).length && (contactService.loading$ | async) === STATUS.REQUEST">
+              LOADING
+            </div>
+          </th>
+        </ng-container>
+        
         <ng-container matColumnDef="select">
           <th mat-header-cell
             *matHeaderCellDef
@@ -196,17 +207,19 @@
         </ng-container>
 
         <tr mat-header-row
-          *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length"></tr>
+          *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
+        <tr mat-header-row
+          *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length || !isAllSelected()" class='selection-info'></tr>
         <tr mat-row
           *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
     </div>
     <ng-container *ngIf="(storeService.pageContacts$ | async).length; else emptyListTemplate">
-      <div class="updating-status"
+      <!-- <div class="updating-status"
         *ngIf="(contactService.loading$ | async) === STATUS.REQUEST">
         LOADING
-      </div>
+      </div> -->
       <div class="my-2 table-control mode-1">
         <div class="pagination-wrapper m-auto">
           <pagination-controls (pageChange)="changePage($event)"

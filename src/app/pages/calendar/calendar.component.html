@@ -56,71 +56,19 @@
             <div class="form-group p-2 m-0" ngbDropdown>
                 <i class="d-block i-icon i-calendar bgc-blue" ngbDropdownToggle></i>
                 <div ngbDropdownMenu class="light px-3">
-                    <div class="first-calendar">
-                        <div class="v-center justify-content-between">
-                            <label class="f-1 font-weight-bold m-0">gsteve@gmail.com</label>
-                            <button class="btn btn-white f-3 font-weight-bold p-0">Hide</button>
-                        </div>
-                        <div class="v-center mt-1">
-                            <div class="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  class="custom-control-input"
-                                  id="first-calendar-1"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="first-calendar-1"
-                                ></label>
-                            </div>
-                            <span class="f-3 font-weight-bold">Calendar 1</span>
-                        </div>
-                        <div class="v-center mt-1">
-                            <div class="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  class="custom-control-input"
-                                  id="first-calendar-2"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="first-calendar-2"
-                                ></label>
-                            </div>
-                            <span class="f-3 font-weight-bold">Calendar 2</span>
-                        </div>
-                    </div>
-                    <div class="second-calendar mt-2">
-                        <div class="v-center justify-content-between">
-                            <label class="f-1 font-weight-bold m-0">gsteve@yahoo.com</label>
-                        </div>
-                        <div class="v-center mt-1">
-                            <div class="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  class="custom-control-input"
-                                  id="second-calendar-1"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="second-calendar-1"
-                                ></label>
-                            </div>
-                            <span class="f-3 font-weight-bold">Calendar 1</span>
-                        </div>
-                        <div class="v-center mt-1">
-                            <div class="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  class="custom-control-input"
-                                  id="second-calendar-2"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="second-calendar-2"
-                                ></label>
-                            </div>
-                            <span class="f-3 font-weight-bold">Calendar 2</span>
+                    <button class="btn btn-white f-3 font-weight-bold p-0">Hide</button>
+                    <div class="first-calendar" *ngFor="let account of accounts">
+                        <label class="f-1 font-weight-bold m-0">{{account}}</label>
+                        <div class="v-center mt-1" *ngFor="let calendar of accountCalendars[account]">
+                            <ng-container *ngIf="!isSelectedCalendar(calendar); else selectedTemplate">
+                                <div class="unchecked-calendar" (click)="toggleCalendar(calendar)"></div>
+                            </ng-container>
+                            <ng-template #selectedTemplate>
+                                <div class="checked-calendar" (click)="toggleCalendar(calendar)" [ngStyle]="{'background-color': calendar.color}">
+                                    <i class="i-icon i-check bgc-white sm" aria-hidden="true"></i>
+                                </div>
+                            </ng-template>
+                            <span class="f-3 font-weight-bold">{{calendar.title}}</span>
                         </div>
                     </div>
                 </div>
@@ -131,7 +79,7 @@
         <div *ngSwitchCase="'month'">
             <mwl-calendar-month-view
                 [viewDate]="viewDate"
-                [events]="events"
+                [events]="showingEvents"
                 [cellTemplate]="monthCellTemplate"
                 [headerTemplate]="monthHeaderTemplate"
             >
@@ -143,7 +91,10 @@
                             {{ day.date | calendarDate:'monthViewDayNumber':locale }}
                         </span>
                     </div>
-                    <div class="cal-event m-0" *ngFor="let event of day.events" #monthEventView (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
+                    <div class="cal-event m-0" *ngFor="let event of day.events"
+                        [ngStyle]="{'background-color': calendars[event.meta.calendar_id]?.color}"
+                        #monthEventView
+                        (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
                         <div class="f-2 font-weight-bold c-white p-1 cal-event-body">
                             {{event.title | stripTags | shorten: 20: '...'}}
                         </div>
@@ -164,7 +115,7 @@
         <div *ngSwitchCase="'week'">
             <mwl-calendar-week-view
                 [viewDate]="viewDate"
-                [events]="events"
+                [events]="showingEvents"
                 [eventTemplate]="weekEventTemplate"
                 [headerTemplate]="weekHeaderTemplate"
                 [hourSegmentHeight]="60"
@@ -173,7 +124,11 @@
             >
             </mwl-calendar-week-view>
             <ng-template #weekEventTemplate let-weekEvent="weekEvent" let-locale="locale" let-eventClicked="eventClicked">
-                <div class="cal-event" #weekEventView (mwlClick)="handleEvent(weekEvent.event, weekEventView, viewOverlay)">
+                <div
+                    class="cal-event"
+                    #weekEventView 
+                    [ngStyle]="{'background-color': calendars[weekEvent.event.meta.calendar_id]?.color}"
+                    (mwlClick)="handleEvent(weekEvent.event, weekEventView, viewOverlay)">
                     <div class="f-1 font-weight-bold c-white cal-event-title">
                         {{weekEvent.event.title}}
                     </div>
@@ -218,14 +173,28 @@
                         <span class="mobile f-1 font-weight-bold text-uppercase">
                             {{ day.date | date:'EEE' }}
                         </span>
+                        <div class="global-events">
+                            <div class="event" *ngFor="let event of getDayEvent(day.date)">
+                                <div class="event-cell" [ngStyle]="{'background-color': calendars[event.meta.calendar_id]?.color}">
+                                    {{(event.title || '') | shorten: 20: '...'}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </ng-template>
         </div>
         <div *ngSwitchCase="'day'">
+            <div class="global-events day-events">
+                <div class="event" *ngFor="let event of getDayEvent(null)">
+                    <div class="event-cell" [ngStyle]="{'background-color': calendars[event.meta.calendar_id]?.color}">
+                        {{(event.title || '') | shorten: 40: '...'}}
+                    </div>
+                </div>
+            </div>
             <mwl-calendar-day-view
                 [viewDate]="viewDate"
-                [events]="events"
+                [events]="showingEvents"
                 [hourSegmentHeight]="60"
                 [hourSegments]="1"
                 [hourSegmentTemplate]="dayHourTemplate"
@@ -233,7 +202,7 @@
             >
             </mwl-calendar-day-view>
             <ng-template #dayEventTemplate let-dayEvent="weekEvent" let-locale="locale" let-eventClicked="eventClicked">
-                <div class="cal-event" #dayEventView (mwlClick)="handleEvent(dayEvent.event, dayEventView, viewOverlay)">
+                <div class="cal-event" #dayEventView [ngStyle]="{'background-color': calendars[dayEvent.event.meta.calendar_id]?.color}" (mwlClick)="handleEvent(dayEvent.event, dayEventView, viewOverlay)">
                     <div class="f-2 font-weight-bold c-white cal-event-title">
                         {{dayEvent.event.title}}
                     </div>

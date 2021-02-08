@@ -2,6 +2,7 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
+  PHONE_COUNTRIES,
   REGIONS,
   STAGES
 } from 'src/app/constants/variable.constants';
@@ -16,16 +17,7 @@ import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 })
 export class ImportContactEditComponent implements OnInit, OnDestroy {
   // Setting Variable for the UI
-  countries: CountryISO[] = [
-    CountryISO.UnitedStates,
-    CountryISO.UnitedKingdom,
-    CountryISO.Canada,
-    CountryISO.SouthAfrica,
-    CountryISO.India,
-    CountryISO.Mexico,
-    CountryISO.Portugal,
-    CountryISO.France
-  ];
+  countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
   COUNTRIES = COUNTRIES;
   COUNTRY_REGIONS = REGIONS;

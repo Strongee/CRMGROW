@@ -40,21 +40,22 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const currentPage = this.activityService.page.getValue();
-    this.changePage(currentPage || 1);
+    // const currentPage = this.activityService.page.getValue();
+    // this.changePage(currentPage || 1);
 
-    const currentPageSize = this.activityService.pageSize.getValue();
-    this.PAGE_COUNTS.some((e) => {
-      if (e.id === currentPageSize) {
-        this.pageSize = e;
-        return true;
-      }
-    });
+    // const currentPageSize = this.activityService.pageSize.getValue();
+    // this.PAGE_COUNTS.some((e) => {
+    //   if (e.id === currentPageSize) {
+    //     this.pageSize = e;
+    //     return true;
+    //   }
+    // });
+    this.activityService.load(0);
   }
 
   ngOnDestroy(): void {
     // Page Size and Page Index Save
-    this.activityService.page.next(this.page);
+    // this.activityService.page.next(this.page);
     this.activityService.pageSize.next(this.pageSize.id);
   }
 
@@ -90,5 +91,21 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
           this.handlerService.bulkContactUpdate$(ids, { label: newLabel }, {});
         }
       });
+  }
+
+  loadPage(param: string): void {
+    if (param === 'first') {
+      this.activityService.load(0);
+      return;
+    }
+    if (param === 'next') {
+      const skip = this.activityService.endSkip.getValue();
+      this.activityService.load(skip);
+      return;
+    }
+    if (param === 'prev') {
+      // this.activityService.load(0);
+      return;
+    }
   }
 }
