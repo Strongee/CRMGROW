@@ -3,9 +3,10 @@
   (ngSubmit)="submitted = true; eventForm.form.valid ? type == 'create' ? create() : update() : false"
 >
   <mat-dialog-content>
-    <div class="form-group mx-2">
+    <app-select-calendar [(calendar)]="calendar"></app-select-calendar>
+    <div class="form-group">
       <input
-        class="form-control border-primary"
+        class="form-control"
         type="text"
         placeholder="Add appointment title"
         name="title"
@@ -20,22 +21,26 @@
         Title is required
       </span>
     </div>
-    <div class="row mx-0 date-time">
+    <div class="row date-time">
       <div class="col-12 col-sm-5">
         <div class="form-group">
-          <label class="calendar-label">date</label>
+          <div class="v-center">
+            <label class="calendar-label mb-0">date</label>
+            <span
+              class="invalid-error f-3 font-weight-bold c-red"
+              *ngIf="selectedDateTime.year == '' && selectedDateTime.month == '' && selectedDateTime.day == '' && submitted"
+            >
+              Required!
+            </span>
+          </div>
           <app-date-input type="prepend" [(value)]="selectedDateTime"></app-date-input>
-          <span
-            class="invalid-error f-3 font-weight-bold c-red"
-            *ngIf="selectedDateTime.year == '' && selectedDateTime.month == '' && selectedDateTime.day == '' && submitted"
-          >
-            Date is required
-          </span>
         </div>
       </div>
       <div class="col-12 col-sm-3">
         <div class="form-group">
-          <label class="calendar-label">time</label>
+          <div class="v-center">
+            <label class="calendar-label mb-0">time</label>
+          </div>
           <select
             class="form-control"
             [(ngModel)]="due_time"
@@ -51,7 +56,7 @@
       </div>
       <div class="col-12 col-sm-4">
         <div class="form-group">
-          <label class="calendar-label">duration</label>
+          <label class="calendar-label d-block mb-0">duration</label>
           <select
             class="form-control"
             [(ngModel)]="duration"
@@ -68,18 +73,20 @@
         </div>
       </div>
     </div>
-    <div class="row mx-0">
+    <div class="row">
       <div class="col-12">
         <div class="form-group">
-          <label class="calendar-label">ASSIGN GUESTS</label>
+          <div class="v-center">
+            <label class="calendar-label mb-0">ASSIGN GUESTS</label>
+          </div>
           <app-input-contacts [selectedContacts]="contacts">
           </app-input-contacts>
         </div>
       </div>
     </div>
-    <div class="row mx-0">
+    <div class="row">
       <div class="col-12 col-sm-4 form-group">
-        <label class="calendar-label">video conference</label>
+        <label class="calendar-label  d-block mb-0">video conference</label>
         <div class="form-group mb-0">
           <button class="btn btn-blue text-white f-6 font-weight-bold w-100">
             Add Zoom Link
@@ -87,7 +94,7 @@
         </div>
       </div>
       <div class="col-12 col-sm-8 form-group">
-        <label class="calendar-label">location</label>
+        <label class="calendar-label d-block mb-0">location</label>
         <div class="form-group mb-0">
           <input
             class="form-control"
@@ -106,9 +113,9 @@
         </div>
       </div>
     </div>
-    <div class="row mx-0">
+    <div class="row">
       <div class="col-12 form-group mb-0">
-        <label class="calendar-label">DESCRIPTION</label>
+        <label class="calendar-label d-block mb-0">DESCRIPTION</label>
         <app-html-editor
           [(value)]="event.description"
           placeholder="Add description"
@@ -120,7 +127,7 @@
         </app-html-editor>
       </div>
     </div>
-    <div class="row mx-0">
+    <div class="row">
       <div class="col-12 v-center justify-content-between">
         <div class="custom-control custom-checkbox my-auto">
           <input
@@ -156,7 +163,7 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <div class="row mx-0">
+    <div class="row">
       <div class="col-12">
         <button
           type="button"

@@ -125,6 +125,7 @@ import { SelectTeamComponent } from './select-team/select-team.component';
 import { ContactShareComponent } from './contact-share/contact-share.component';
 import { FilterInputComponent } from './filter-input/filter-input.component';
 import { StageInputComponent } from './stage-input/stage-input.component';
+import { SelectCalendarComponent } from './select-calendar/select-calendar.component';
 
 @NgModule({
   declarations: [
@@ -248,7 +249,8 @@ import { StageInputComponent } from './stage-input/stage-input.component';
     SelectTeamComponent,
     ContactShareComponent,
     FilterInputComponent,
-    StageInputComponent
+    StageInputComponent,
+    SelectCalendarComponent
   ],
   imports: [
     CommonModule,
@@ -333,7 +335,8 @@ import { StageInputComponent } from './stage-input/stage-input.component';
     AutomationStatusComponent,
     DealContactComponent,
     FilterInputComponent,
-    StageInputComponent
+    StageInputComponent,
+    SelectCalendarComponent
   ],
   bootstrap: [
     ContactCreateComponent,

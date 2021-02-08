@@ -51,6 +51,8 @@ import { ContactShareComponent } from '../../components/contact-share/contact-sh
 import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
 import { TeamService } from 'src/app/services/team.service';
+import { NotifyComponent } from 'src/app/components/notify/notify.component';
+import { AppointmentService } from 'src/app/services/appointment.service';
 
 @Component({
   selector: 'app-contact',
@@ -118,6 +120,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   cancelSubscription: Subscription;
   assignSubscription: Subscription;
 
+  sharable: boolean = false;
+  hasCalendar: false;
+
   profileSubscription: Subscription;
   teamSubscription: Subscription;
 
@@ -135,10 +140,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     private handlerService: HandlerService,
     private dealsService: DealsService,
     private automationService: AutomationService,
+    private appointmentService: AppointmentService,
     private teamService: TeamService,
     private viewContainerRef: ViewContainerRef
   ) {
-    this.teamService.loadAll(false);
+    this.teamService.loadAll(true);
+    this.appointmentService.loadCalendars(false);
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
@@ -147,11 +154,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         const timezone = getCurrentTimezone();
         this.timezone = { zone: user.time_zone || timezone };
       }
+      this.checkSharable();
     });
 
     this.teamSubscription && this.teamSubscription.unsubscribe();
-    this.teamSubscription = this.teamService.teams$.subscribe((teams) => {
-      
+    this.teamSubscription = this.teamService.teams$.subscribe(() => {
+      this.checkSharable();
     });
   }
 
@@ -441,6 +449,19 @@ export class ContactComponent implements OnInit, OnDestroy {
    * Open Dialog to create new appointment
    */
   openAppointmentDlg(): void {
+    // Check Calendars
+    const calendars = this.appointmentService.calendars.getValue();
+    if (!calendars || !calendars.length) {
+      this.dialog.open(NotifyComponent, {
+        ...DialogSettings.ALERT,
+        data: {
+          title: 'Calendar',
+          message:
+            'You did not connected with your calendars. Please connect with your calendar.'
+        }
+      });
+      return;
+    }
     this.dialog.open(CalendarDialogComponent, {
       position: { top: '100px' },
       width: '100vw',
@@ -491,14 +512,44 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   openDealDlg(): void {}
 
-  openShareContactDlg(): void {
-    this.dialog.open(ContactShareComponent, {
-      width: '500px',
-      maxWidth: '90vw',
-      data: {
-        contact: this.contact
+  checkSharable(): void {
+    const userId = this.userService.profile.getValue()._id;
+    const teams = this.teamService.teams.getValue();
+    if (!teams || !teams.length) {
+      this.sharable = false;
+      return;
+    }
+    let isValid = false;
+    teams.some((e) => {
+      if (e.isActive(userId)) {
+        isValid = true;
+        return true;
       }
     });
+    if (isValid) {
+      this.sharable = true;
+      return;
+    }
+  }
+
+  openShareContactDlg(): void {
+    if (this.sharable) {
+      this.dialog.open(ContactShareComponent, {
+        width: '500px',
+        maxWidth: '90vw',
+        data: {
+          contact: this.contact
+        }
+      });
+    } else {
+      this.dialog.open(NotifyComponent, {
+        ...DialogSettings.ALERT,
+        data: {
+          title: 'Share Contact',
+          message: 'You have no active teams.'
+        }
+      });
+    }
   }
 
   insertActivity(activity: DetailActivity): void {

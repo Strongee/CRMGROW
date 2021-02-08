@@ -34,14 +34,17 @@ export class SelectMemberComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input('placeholder') placeholder = 'Search member';
   @Input('formPlaceholder') formPlaceholder = 'Search members';
   @Input('mustField') mustField = '';
-  @Input('members') members: User[] = [];
-  public set contact(val: string) {
-    if (!val) {
-      this.formControl.setValue(null, { emitEvent: false });
+  @Input()
+  public set members(value: User[]) {
+    if (value) {
+      this._members = value;
+      this.filteredResults.next(this._members);
+      this.cancelSelect();
     }
   }
   @Output() onSelect = new EventEmitter();
 
+  _members: User[] = [];
   formControl: FormControl = new FormControl();
   inputControl: FormControl = new FormControl();
   @ViewChild('inputField') inputField: ElementRef;
@@ -55,12 +58,12 @@ export class SelectMemberComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private teamService: TeamService) {}
 
   ngOnInit(): void {
-    this.filteredResults.next(this.members);
+    this.filteredResults.next(this._members);
 
     this.inputControl.valueChanges.subscribe((search) => {
       if (search) {
         const members = [];
-        for (const member of this.members) {
+        for (const member of this._members) {
           if (
             (member.user_name && member.user_name.indexOf(search) >= 0) ||
             (member.email && member.email.indexOf(search) >= 0)
@@ -73,7 +76,7 @@ export class SelectMemberComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.filteredResults.next(members);
       } else {
-        this.filteredResults.next(this.members);
+        this.filteredResults.next(this._members);
       }
     });
 

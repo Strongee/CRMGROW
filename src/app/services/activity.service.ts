@@ -63,7 +63,6 @@ export class ActivityService extends HttpService {
   // }
 
   loadImpl(command: any): Observable<any> {
-    console.log("comand", command);
     const pageSize = this.pageSize.getValue();
     return this.http
       .post(this.server + ACTIVITY.LOAD, { ...command, size: pageSize })
@@ -82,17 +81,6 @@ export class ActivityService extends HttpService {
   reload(): void {
     const command = this.command.getValue();
     this.load(command);
-    // this.loadStatus.next(STATUS.REQUEST);
-    // this.loadSubscription && this.loadSubscription.unsubscribe();
-    // this.loadSubscription = this.loadImpl(currentSkip).subscribe((res) => {
-    //   res
-    //     ? this.loadStatus.next(STATUS.SUCCESS)
-    //     : this.loadStatus.next(STATUS.FAILURE);
-    //   if (res && res['activities']) {
-    //     this.storeService.activities.next(res['activities']);
-    //     this.total.next(res['count']);
-    //   }
-    // });
   }
 
   clear$(): void {

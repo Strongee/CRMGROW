@@ -47,13 +47,13 @@ export class Team implements Deserializable {
         }
       }
     }
-    if (this.members && this.members.length) {
-      if (typeof this.members[0] === 'string') {
-        if (this.members.indexOf(id) !== -1) {
+    if (this.editors && this.editors.length) {
+      if (typeof this.editors[0] === 'string') {
+        if (this.editors.indexOf(id) !== -1) {
           return true;
         }
       } else {
-        const pos = _.findIndex(this.members, (e) => e._id === id);
+        const pos = _.findIndex(this.editors, (e) => e._id === id);
         if (pos !== -1) {
           return true;
         }

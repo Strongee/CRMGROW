@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { TeamService } from '../../services/team.service';
@@ -23,13 +23,13 @@ export class ContactShareComponent implements OnInit {
     private teamService: TeamService,
     private contactService: ContactService,
     private toastr: ToastrService,
+    private changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
     if (this.data) {
       this.contact = this.data.contact;
-      console.log("contact ===============>", this.contact);
     }
   }
 
@@ -43,6 +43,7 @@ export class ContactShareComponent implements OnInit {
       for (const member of this.selectedTeam.members) {
         this.members.push(member);
       }
+      this.changeDetectorRef.detectChanges();
     } else {
       this.selectedTeam = null;
       this.members = [];

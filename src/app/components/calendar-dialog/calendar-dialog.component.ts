@@ -25,7 +25,6 @@ import { DealsService } from '../../services/deals.service';
   styleUrls: ['./calendar-dialog.component.scss']
 })
 export class CalendarDialogComponent implements OnInit {
-
   submitted = false;
   due_time = '12:00:00.000';
   selectedDateTime = {
@@ -60,6 +59,8 @@ export class CalendarDialogComponent implements OnInit {
   type = '';
   isDeal = false;
   deal;
+
+  calendar;
 
   @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
 
