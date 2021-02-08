@@ -95,16 +95,26 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   loadPage(param: string): void {
     if (param === 'first') {
-      this.activityService.load(0);
+      this.activityService.load(null);
       return;
     }
     if (param === 'next') {
-      const skip = this.activityService.endSkip.getValue();
-      this.activityService.load(skip);
+      const last_activity = this.storeService.activities
+        .getValue()
+        .slice(-1)[0];
+      let id;
+      if (last_activity.additional_field) {
+        id = last_activity.additional_field.slice(-1)[0]._id;
+      } else {
+        id = last_activity._id;
+      }
+      this.activityService.load({ starting_after: id });
       return;
     }
     if (param === 'prev') {
       // this.activityService.load(0);
+      const first_activity = this.storeService.activities.getValue()[0];
+      this.activityService.load({ before_ending: first_activity._id });
       return;
     }
   }

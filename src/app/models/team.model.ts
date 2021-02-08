@@ -1,5 +1,5 @@
 import { Deserializable } from './deserialize.model';
-
+import * as _ from 'lodash';
 export class Team implements Deserializable {
   _id: string;
   owner: any[];
@@ -32,5 +32,33 @@ export class Team implements Deserializable {
   }
   get materialCount(): number {
     return this.videos.length + this.pdfs.length + this.images.length;
+  }
+
+  public isActive(id: string): boolean {
+    if (this.owner && this.owner.length) {
+      if (typeof this.owner[0] === 'string') {
+        if (this.owner.indexOf(id) !== -1) {
+          return true;
+        }
+      } else {
+        const pos = _.findIndex(this.owner, (e) => e._id === id);
+        if (pos !== -1) {
+          return true;
+        }
+      }
+    }
+    if (this.members && this.members.length) {
+      if (typeof this.members[0] === 'string') {
+        if (this.members.indexOf(id) !== -1) {
+          return true;
+        }
+      } else {
+        const pos = _.findIndex(this.members, (e) => e._id === id);
+        if (pos !== -1) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

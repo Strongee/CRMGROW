@@ -66,6 +66,7 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.appointmentService.loadCalendars(true);
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
     });

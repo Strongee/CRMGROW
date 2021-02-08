@@ -50,6 +50,7 @@ import { Subscription } from 'rxjs';
 import { ContactShareComponent } from '../../components/contact-share/contact-share.component';
 import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
+import { TeamService } from 'src/app/services/team.service';
 
 @Component({
   selector: 'app-contact',
@@ -117,6 +118,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   cancelSubscription: Subscription;
   assignSubscription: Subscription;
 
+  profileSubscription: Subscription;
+  teamSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -131,16 +135,23 @@ export class ContactComponent implements OnInit, OnDestroy {
     private handlerService: HandlerService,
     private dealsService: DealsService,
     private automationService: AutomationService,
+    private teamService: TeamService,
     private viewContainerRef: ViewContainerRef
   ) {
-    this.dealsService.getStage(true);
-    this.userService.profile$.subscribe((user) => {
+    this.teamService.loadAll(false);
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
       } catch (err) {
         const timezone = getCurrentTimezone();
         this.timezone = { zone: user.time_zone || timezone };
       }
+    });
+
+    this.teamSubscription && this.teamSubscription.unsubscribe();
+    this.teamSubscription = this.teamService.teams$.subscribe((teams) => {
+      
     });
   }
 

@@ -21,10 +21,7 @@ export class ActivityService extends HttpService {
   loadSubscription: Subscription;
   page: BehaviorSubject<number> = new BehaviorSubject(1);
   page$ = this.page.asObservable();
-  startSkip: BehaviorSubject<number> = new BehaviorSubject(0);
-  startSkip$ = this.startSkip.asObservable();
-  endSkip: BehaviorSubject<number> = new BehaviorSubject(0);
-  endSkip$ = this.endSkip.asObservable();
+  command: BehaviorSubject<any> = new BehaviorSubject(null);
   pageSize: BehaviorSubject<number> = new BehaviorSubject(20);
   pageSize$ = this.pageSize.asObservable();
 
@@ -36,17 +33,16 @@ export class ActivityService extends HttpService {
     super(errorService);
   }
 
-  load(skip: number = 0): void {
+  load(command: any): void {
     this.loadStatus.next(STATUS.REQUEST);
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.loadImpl(skip).subscribe((res) => {
+    this.loadSubscription = this.loadImpl(command).subscribe((res) => {
       res
         ? this.loadStatus.next(STATUS.SUCCESS)
         : this.loadStatus.next(STATUS.FAILURE);
       if (res && res['activities']) {
         this.storeService.activities.next(res['activities']);
-        this.startSkip.next(skip);
-        this.endSkip.next(res['skip']);
+        this.command.next(command);
       }
     });
   }
@@ -66,17 +62,17 @@ export class ActivityService extends HttpService {
   //   });
   // }
 
-  loadImpl(skip: number): Observable<any> {
+  loadImpl(command: any): Observable<any> {
+    console.log("comand", command);
     const pageSize = this.pageSize.getValue();
     return this.http
-      .post(this.server + ACTIVITY.LOAD, { skip, size: pageSize })
+      .post(this.server + ACTIVITY.LOAD, { ...command, size: pageSize })
       .pipe(
         map((res) => {
           return {
-            activities: (res['data']['activity_list'] || []).map((e) =>
-              new Activity().deserialize(e)
-            ),
-            skip: res['data']['skip'] || 0
+            activities: (res['data']['activity_list'] || [])
+              .slice(0, pageSize)
+              .map((e) => new Activity().deserialize(e))
           };
         }),
         catchError(this.handleError('LOAD ACTIVITY', null))
@@ -84,8 +80,8 @@ export class ActivityService extends HttpService {
   }
 
   reload(): void {
-    const currentSkip = this.startSkip.getValue();
-    this.load(currentSkip);
+    const command = this.command.getValue();
+    this.load(command);
     // this.loadStatus.next(STATUS.REQUEST);
     // this.loadSubscription && this.loadSubscription.unsubscribe();
     // this.loadSubscription = this.loadImpl(currentSkip).subscribe((res) => {

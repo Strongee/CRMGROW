@@ -4,7 +4,8 @@ import { HttpService } from './http.service';
 import { ErrorService } from './error.service';
 import { APPOINTMENT } from '../constants/api.constant';
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { STATUS } from '../constants/variable.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,36 @@ import { Observable } from 'rxjs';
 export class AppointmentService extends HttpService {
   constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
+  }
+
+  loadCalendarsStatus: BehaviorSubject<string> = new BehaviorSubject(
+    STATUS.NONE
+  );
+  loadingCalendars$ = this.loadCalendarsStatus.asObservable();
+  calendars: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  calendars$ = this.calendars.asObservable();
+
+  public loadCalendars(force = false): void {
+    if (!force) {
+      const loadStatus = this.loadCalendarsStatus.getValue();
+      if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadCalendarsStatus.next(STATUS.REQUEST);
+    this.loadCalendarsImpl().subscribe((calendars) => {
+      calendars
+        ? this.loadCalendarsStatus.next(STATUS.SUCCESS)
+        : this.loadCalendarsStatus.next(STATUS.FAILURE);
+      this.calendars.next(calendars);
+    });
+  }
+
+  public loadCalendarsImpl(): Observable<any> {
+    return this.httpClient.get(this.server + APPOINTMENT.LOAD_CALENDARS).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('LOAD CALENDARS', null))
+    );
   }
 
   public getEvents(date: string, mode: string): Observable<any> {

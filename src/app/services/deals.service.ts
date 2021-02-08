@@ -34,7 +34,7 @@ export class DealsService extends HttpService {
    * @param force Flag to load force
    */
 
-  getStage(force = false): Observable<DealStage[]> {
+  getStage(force = false): void {
     if (!force) {
       const loadStatus = this.loadStageStatus.getValue();
       if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {

@@ -194,6 +194,7 @@ export const AUTOMATION = {
   LOAD_OWN: 'automation/list/own'
 };
 export const APPOINTMENT = {
+  LOAD_CALENDARS: 'appointment/calendar',
   GET_EVENT: 'appointment',
   UPDATE_EVENT: 'appointment/',
   DELETE_EVENT: 'appointment/delete'
