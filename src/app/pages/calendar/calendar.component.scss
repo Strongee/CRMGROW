@@ -1,5 +1,8 @@
 @import '../../../variables';
-
+.calendar-controls i {
+    width: 36px;
+    height: 36px;
+}
 :host ::ng-deep {
     mat-icon {
         cursor: pointer;

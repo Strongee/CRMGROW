@@ -17,25 +17,23 @@
                     {{viewDate | date:'EEE, MMM d y'}}
                 </span>
             </div>
-            <div class="v-center">
-                <mat-icon
-                    class="text-primary"
+            <div class="v-center calendar-controls">
+                <i
+                    class="i-icon d-block i-chev-left bgc-blue"
                     mwlCalendarPreviousView
                     [view]="view"
                     [(viewDate)]="viewDate"
                     (viewDateChange)="calendarDateChange()"
                 >
-                keyboard_arrow_left
-                </mat-icon>
-                <mat-icon
-                    class="text-primary"
+                </i>
+                <i
+                    class="i-icon d-block i-chev-right bgc-blue"
                     mwlCalendarNextView
                     [view]="view"
                     [(viewDate)]="viewDate"
                     (viewDateChange)="calendarDateChange()"
                 >
-                keyboard_arrow_right
-                </mat-icon>
+                </i>
                 <div
                     class="text-primary text-center font-weight-bold c-pointer border border-primary rounded py-1 px-3 mr-2"
                     mwlCalendarToday
