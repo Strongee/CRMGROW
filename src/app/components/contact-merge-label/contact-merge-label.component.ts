@@ -1,5 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  EventEmitter
+} from '@angular/core';
 import { Label } from 'src/app/models/label.model';
 import { LabelService } from 'src/app/services/label.service';
 import * as _ from 'lodash';
@@ -15,7 +22,8 @@ export class ContactMergeLabelComponent implements OnInit {
     this.sourceLabelId = val;
     const labels = this.labelService.labels.getValue();
     this.sourceLabel = _.find(labels, (e) => e._id === val);
-    this.formControl.setValue(this.sourceLabel, { emitEvent: false });
+    this.label = this.sourceLabel;
+    this.labelChange.emit(this.label);
   }
   @Input()
   public set merge(val: string) {
@@ -29,13 +37,18 @@ export class ContactMergeLabelComponent implements OnInit {
   mergeLabel: Label = new Label();
   sourceLabelId: string = '';
   mergeLabelId: string = '';
-  formControl: FormControl = new FormControl();
+  @Input() label: Label = new Label();
+  @Output() labelChange: EventEmitter<Label> = new EventEmitter(null);
   constructor(public labelService: LabelService) {}
 
   ngOnInit(): void {}
 
   focusField(): void {
-    this.trigger.nativeElement.focus();
-    this.trigger.nativeElement.blur();
+    // this.trigger.nativeElement.focus();
+    // this.trigger.nativeElement.blur();
+  }
+
+  changeLabel(): void {
+    this.labelChange.emit(this.label);
   }
 }

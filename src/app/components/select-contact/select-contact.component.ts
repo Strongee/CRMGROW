@@ -24,7 +24,7 @@ import {
   distinctUntilChanged
 } from 'rxjs/operators';
 import { validateEmail } from 'src/app/utils/functions';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-select-contact',
   templateUrl: './select-contact.component.html',
@@ -37,6 +37,7 @@ export class SelectContactComponent
   @Input('formPlaceholder') formPlaceholder = 'Search contacts';
   @Input('mustField') mustField = '';
   @Input('fromSearch') fromSearch = true;
+  @Input('excludeContacts') excludeContacts: Contact[] = [];
   @Input()
   public set contact(val: string) {
     if (!val) {
@@ -89,6 +90,9 @@ export class SelectContactComponent
               result = res;
             }
             if (result.length) {
+              if (this.excludeContacts && this.excludeContacts.length) {
+                _.pullAllBy(result, this.excludeContacts, '_id');
+              }
               this.filteredResults.next(result);
             } else {
               if (!this.fromSearch) {

@@ -4,6 +4,7 @@ import { ContactDetail } from 'src/app/models/contact.model';
 import { LabelService } from 'src/app/services/label.service';
 import * as _ from 'lodash';
 import { ContactService } from '../../services/contact.service';
+import { Label } from 'src/app/models/label.model';
 
 @Component({
   selector: 'app-contact-merge',
@@ -24,6 +25,7 @@ export class ContactMergeComponent implements OnInit {
   followup = 'Both';
   automation = 'Keep primary';
   notes = 'Both';
+  label: Label = new Label();
 
   mergeActions = [
     { label: 'Both', value: 'both' },
@@ -127,6 +129,9 @@ export class ContactMergeComponent implements OnInit {
       this.previewContact.last_name = lastName;
     } else {
       this.previewContact.first_name = this.previewName;
+    }
+    if (this.label && this.label._id) {
+      this.previewContact.label = this.label._id;
     }
     this.saving = true;
     const activityIndex = this.mergeActions.findIndex((item) => item.label === this.activity);

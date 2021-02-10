@@ -12,7 +12,7 @@
       Select who will be merged into Andrew Johson
     </div>
     <div class="v-center select-contact mt-3">
-      <app-select-contact (onSelect)="addContacts($event)"></app-select-contact>
+      <app-select-contact (onSelect)="addContacts($event)" [excludeContacts]="[sourceContact]"></app-select-contact>
       <mat-icon class="mx-3">arrow_forward</mat-icon>
       <div class="v-center">
         <div class="form-avatar rounded-circle bg-dark mr-1">{{sourceContact.avatarName}}</div>
@@ -59,6 +59,7 @@
           <app-contact-merge-label
             [source]="sourceContact.label"
             [merge]="mergeContact ? mergeContact.label: null"
+            [(label)]="label"
           ></app-contact-merge-label>
         </div>
       </div>

@@ -9,14 +9,12 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
-import { FileService } from '../../services/file.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { Contact } from 'src/app/models/contact.model';
-import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 import { DealsService } from '../../services/deals.service';
 
 @Component({
@@ -25,9 +23,17 @@ import { DealsService } from '../../services/deals.service';
   styleUrls: ['./calendar-dialog.component.scss']
 })
 export class CalendarDialogComponent implements OnInit {
+  times = TIMES;
+  calendar_durations = CALENDAR_DURATION;
+  recurrings = RECURRING_TYPE;
+
   submitted = false;
+  calendar;
   due_time = '12:00:00.000';
   selectedDateTime;
+  duration = 0.5;
+  contacts: Contact[] = [];
+  keepContacts: Contact[] = [];
   event = {
     title: '',
     due_start: '',
@@ -43,28 +49,17 @@ export class CalendarDialogComponent implements OnInit {
     remove_contacts: [],
     is_organizer: false
   };
-  duration = 0.5;
-  contacts: Contact[] = [];
-  keepContacts: Contact[] = [];
+
   isRepeat = false;
   isLoading = false;
-  times = TIMES;
-  calendar_durations = CALENDAR_DURATION;
-  recurrings = RECURRING_TYPE;
 
-  focusedField = '';
   type = '';
   isDeal = false;
   deal;
 
-  calendar;
-
-  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
-
   constructor(
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarDialogComponent>,
-    private fileService: FileService,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
     private contactService: ContactService,
@@ -275,6 +270,10 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   create(): void {
+    if (!this.calendar) {
+      console.log('please select calendar');
+      return;
+    }
     this.isLoading = true;
     this.event.contacts = [];
     this.event.guests = [];
@@ -345,10 +344,6 @@ export class CalendarDialogComponent implements OnInit {
 
   handleAddressChange(evt: any): void {
     this.event.location = evt.formatted_address;
-  }
-
-  focusEditor(): void {
-    this.focusedField = 'editor';
   }
 
   setRepeatEvent(): void {
