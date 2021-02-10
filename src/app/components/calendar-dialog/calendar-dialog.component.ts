@@ -81,8 +81,8 @@ export class CalendarDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data && this.data.type !== 'deal') {
-      this.type = 'update';
       if (this.data.event) {
+        this.type = 'update';
         this.event.title = this.data.event.title;
         this.selectedDateTime.year = this.data.event.start
           .getFullYear()
@@ -274,6 +274,8 @@ export class CalendarDialogComponent implements OnInit {
       console.log('please select calendar');
       return;
     }
+    const connected_email = this.calendar.account;
+    const calendar_id = this.calendar.id;
     this.isLoading = true;
     this.event.contacts = [];
     this.event.guests = [];
@@ -314,17 +316,23 @@ export class CalendarDialogComponent implements OnInit {
       const data = {
         ...this.event,
         contacts: dealContacts,
-        deal: this.deal
+        deal: this.deal,
+        connected_email,
+        calendar_id
       };
       this.dealsService.addAppointment(data).subscribe((res) => {
         if (res) {
           this.toast.success('New Event is created successfully');
-          console.log("add appointment for deal ===========>", data);
           this.dialogRef.close(data);
         }
       });
     } else {
-      this.appointmentService.createEvents(this.event).subscribe(
+      const data = {
+        ...this.event,
+        connected_email,
+        calendar_id
+      };
+      this.appointmentService.createEvents(data).subscribe(
         (res) => {
           if (res['status'] == true) {
             this.isLoading = false;

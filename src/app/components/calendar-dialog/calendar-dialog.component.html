@@ -3,7 +3,15 @@
   (ngSubmit)="submitted = true; eventForm.form.valid ? type == 'create' ? create() : update() : false"
 >
   <mat-dialog-content>
-    <app-select-calendar [(calendar)]="calendar"></app-select-calendar>
+    <div class="form-group">
+      <app-select-calendar [(calendar)]="calendar"></app-select-calendar>
+      <span
+        class="invalid-error f-3 c-red"
+        *ngIf="submitted && !calendar"
+      >
+        Please select calendar
+      </span>
+    </div>
     <div class="form-group">
       <input
         class="form-control"
@@ -15,10 +23,10 @@
         required
       />
       <span
-        class="invalid-error f-3 font-weight-bold c-red"
+        class="invalid-error f-3 c-red"
         *ngIf="event.title == '' && submitted"
       >
-        Title is required
+        Please input event title
       </span>
     </div>
     <div class="row date-time">

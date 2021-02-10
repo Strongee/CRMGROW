@@ -104,7 +104,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
         .slice(-1)[0];
       let id;
       if (last_activity.additional_field) {
-        id = last_activity.additional_field.slice(-1)[0]._id;
+        id = last_activity.additional_field.slice(-1)[0];
       } else {
         id = last_activity._id;
       }
