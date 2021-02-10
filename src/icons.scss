@@ -7,6 +7,9 @@
 .i-calendar{
   mask-image: url('/assets/img/calendar.svg');
 }
+.i-timer{
+  mask-image: url('/assets/img/timer.svg');
+}
 .i-copy{
   mask-image: url('/assets/img/copy.svg');
 }
@@ -609,4 +612,7 @@
 }
 .act-deals {
   background-image: url('/assets/img/flame.svg');
+}
+.act-team_calls {
+  background-image: url('/assets/img/group_call.svg');
 }

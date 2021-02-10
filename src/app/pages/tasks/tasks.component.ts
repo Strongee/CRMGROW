@@ -155,7 +155,6 @@ export class TasksComponent implements OnInit, OnDestroy {
         break;
       case 'overdue':
         end_date = today.format();
-        durationOption.status = 0;
         break;
       case 'today':
         start_date = today.format();
@@ -180,7 +179,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     }
     durationOption.start_date = start_date;
     durationOption.end_date = end_date;
-
+    durationOption.status = 0;
     this.taskService.page.next(1);
     this.taskService.changeDuration(durationOption);
 

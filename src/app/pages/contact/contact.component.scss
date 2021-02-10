@@ -553,12 +553,36 @@
   }
 }
 
+.call-status {
+  .tag {
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.2;
+
+    &.planned {
+      background-color: $color-green-weak;
+      color: white;
+    }
+    &.declined {
+      background-color: $color-red;
+      color: white;
+    }
+    &.pending {
+      background-color: $color-yellow;
+      color: white;
+    }
+  }
+}
+
 .canceling.loader {
   border: 2px solid blue;
   border-radius: 4px;
 }
 .assigning.loader {
-  border: 2px solid #46d3a9;
+  border: 2px solid $color-green-weak;
   border-radius: 4px;
 }
 

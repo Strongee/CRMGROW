@@ -98,13 +98,15 @@ export class ContactComponent implements OnInit, OnDestroy {
   mainPanel = true;
   secondPanel = true;
   additionalPanel = true;
-  noteActivity = 0;
-  emailActivity = 0;
-  textActivity = 0;
-  appointmentActivity = 0;
-  groupCallActivity = 0;
-  taskActivity = 0;
-  dealActivity = 0;
+  activityCounts = {
+    note: 0,
+    email: 0,
+    text: 0,
+    appointment: 0,
+    group_call: 0,
+    follow_up: 0,
+    deal: 0
+  };
   timezone;
 
   selectedAutomation: Automation;
@@ -222,17 +224,19 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   getActivityCount(): void {
-    this.noteActivity = 0;
-    this.emailActivity = 0;
-    this.textActivity = 0;
-    this.appointmentActivity = 0;
-    this.groupCallActivity = 0;
-    this.taskActivity = 0;
-    this.dealActivity = 0;
+    this.activityCounts = {
+      note: 0,
+      email: 0,
+      text: 0,
+      appointment: 0,
+      group_call: 0,
+      follow_up: 0,
+      deal: 0
+    };
     if (this.mainTimelines.length > 0) {
       this.mainTimelines.forEach((activity) => {
         if (activity.type == 'notes') {
-          this.noteActivity++;
+          this.activityCounts.note++;
         }
         if (
           activity.type == 'emails' ||
@@ -244,22 +248,22 @@ export class ContactComponent implements OnInit, OnDestroy {
           activity.type == 'images' ||
           activity.type == 'image_trackers'
         ) {
-          this.emailActivity++;
+          this.activityCounts.email++;
         }
         if (activity.type == 'texts') {
-          this.textActivity++;
+          this.activityCounts.text++;
         }
         if (activity.type == 'appointments') {
-          this.appointmentActivity++;
+          this.activityCounts.appointment++;
         }
-        if (activity.type == 'group_calls') {
-          this.groupCallActivity++;
+        if (activity.type == 'team_calls') {
+          this.activityCounts.group_call++;
         }
         if (activity.type == 'follow_ups') {
-          this.taskActivity++;
+          this.activityCounts.follow_up++;
         }
         if (activity.type == 'deals') {
-          this.dealActivity++;
+          this.activityCounts.deal++;
         }
       });
     }
@@ -452,15 +456,22 @@ export class ContactComponent implements OnInit, OnDestroy {
       cell_phone: this.contact.cell_phone
     });
 
-    this.dialog.open(JoinCallRequestComponent, {
-      width: '98vw',
-      maxWidth: '530px',
-      height: 'auto',
-      disableClose: true,
-      data: {
-        contacts: [contact]
-      }
-    });
+    this.dialog
+      .open(JoinCallRequestComponent, {
+        width: '98vw',
+        maxWidth: '530px',
+        height: 'auto',
+        disableClose: true,
+        data: {
+          contacts: [contact]
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.handlerService.reload$();
+        }
+      });
   }
 
   /**
@@ -489,14 +500,21 @@ export class ContactComponent implements OnInit, OnDestroy {
       cell_phone: this.contact.cell_phone
     });
 
-    this.dialog.open(CalendarDialogComponent, {
-      width: '100vw',
-      maxWidth: '600px',
-      maxHeight: '700px',
-      data: {
-        contacts: [contact]
-      }
-    });
+    this.dialog
+      .open(CalendarDialogComponent, {
+        width: '100vw',
+        maxWidth: '600px',
+        maxHeight: '700px',
+        data: {
+          contacts: [contact]
+        }
+      })
+      .afterClosed()
+      .subscribe((event) => {
+        if (event) {
+          this.handlerService.reload$();
+        }
+      });
   }
 
   /**
@@ -536,14 +554,21 @@ export class ContactComponent implements OnInit, OnDestroy {
       cell_phone: this.contact.cell_phone
     });
 
-    this.dialog.open(DealCreateComponent, {
-      width: '100vw',
-      maxWidth: '600px',
-      disableClose: true,
-      data: {
-        contact
-      }
-    });
+    this.dialog
+      .open(DealCreateComponent, {
+        width: '100vw',
+        maxWidth: '600px',
+        disableClose: true,
+        data: {
+          contact
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.handlerService.reload$();
+        }
+      });
   }
 
   checkSharable(): void {
@@ -620,7 +645,7 @@ export class ContactComponent implements OnInit, OnDestroy {
           dataType = 'appointments';
           break;
         case 'group_call':
-          dataType = 'group_calls';
+          dataType = 'team_calls';
           break;
         case 'follow_up':
           this.selectedTimeSort = this.timeSorts[0];

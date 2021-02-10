@@ -350,6 +350,16 @@
             </div>
           </div>
           <ng-container *ngIf="tab.id === 'all'; else detailsTemplate">
+            <ng-container *ngIf="activityType.id !== 'all' && !activityCounts[activityType.id]">
+              <div class="empty-list">
+                <div class="object-icon v-center">
+                  <i class="i-icon i-{{activityType.id}}s d-block bgc-dark"></i>
+                </div>
+                <h4 class="font-weight-bold mt-4 mb-3">
+                  There are no {{activityType.label | lowercase}} with this contact yet.
+                </h4>
+              </div>
+            </ng-container>
             <ng-container *ngFor="let activity of mainTimelines">
               <div *ngIf="activityType.id == 'all' && activity.type == 'contacts'">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
@@ -644,7 +654,7 @@
                 </div>
               </div>
   
-              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'videos' || activity.type == 'video_trackers')">
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'videos' || activity.type == 'video_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
@@ -701,7 +711,7 @@
                                   <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
                                   <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
                                 </td>
-                                <td class="duration-col">{{detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '' | timeDuration}</td>
+                                <td class="duration-col">{{detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '' | timeDuration}}</td>
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
                                     {{detailActivity.created_at | date: 'MMMM dd'}}
@@ -867,7 +877,7 @@
                             <div class="font-weight-bold">
                               {{activity.activity_detail.title}}
                             </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content' | stripTags | shorten: 300: '...'"></div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
@@ -879,7 +889,7 @@
                             <div class="f-6 font-weight-bold">
                               {{activity.activity_detail.title}}
                             </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || 'No Content'"></div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || ''"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
@@ -901,7 +911,7 @@
                             Time
                           </div>
                           <div class="v-center mt-1">
-                            <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                            <i class="d-block i-icon i-timer bgc-dark mr-2"></i>
                             <span class="f-4">{{getTime(activity.activity_detail.due_start, activity.activity_detail.due_end)}}</span>
                           </div>
                         </div>
@@ -915,12 +925,130 @@
                           </div>
                         </div>
                       </div>
-                      <div class="mt-4">
+                      <div class="mt-4" *ngIf="activity.activity_detail.zoom_link">
                         <div class="f-4 fw-600 op-40">
                           Zoom meeting
                         </div>
                         <div class="f-4 c-blue mt-1">
-                          https://cebroker-evercheck.zoom.us/j/98078238478
+                          {{activity.activity_detail.zoom_link}}
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>  
+                  <ng-template #removedAppointmentTemplate>
+                    <div class="d-flex">
+                      <mat-icon class="mr-2">warning</mat-icon>
+                      <span>Can't see the detail as it is deleted.</span>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'group_call') && activity.type == 'team_calls'">
+                <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+                  <div class="v-center justify-content-between mb-3">
+                    <div class="v-center">
+                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                      <div class="f-6">
+                        <span>{{activity.content}}</span>
+                      </div>
+                    </div>
+                    <div class="v-center">
+                      <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                      <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                        <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                        </a>
+                        <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="removeActivity(activity)">
+                            <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Delete activity</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="activity.activity_detail; else removedGroupCallTemplate">
+                    <div class="main-history-item">
+                      <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                        <ng-template #show>
+                          <div class="content f-6 position-relative">
+                            <div class="font-weight-bold">
+                              {{activity.activity_detail.subject}}
+                            </div>
+                            <div class="call-status mb-3">
+                              <div class="tag {{activity.activity_detail.status}}">{{activity.activity_detail.status}}</div>
+                              <ng-container *ngIf="activity.activity_detail.status === 'planned'">
+                              <span class="f-3"> on </span><span class="time f-3 font-weight-bold">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
+                              </ng-container>
+                            </div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Expand
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #hide>
+                          <div class="content">
+                            <div class="f-6 font-weight-bold">
+                              {{activity.activity_detail.subject}}
+                            </div>
+                            <div class="call-status mb-3">
+                              <div class="tag {{activity.activity_detail.status}}">{{activity.activity_detail.status}}</div>
+                              <ng-container *ngIf="activity.activity_detail.status === 'planned'">
+                                on <span class="time">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
+                              </ng-container>
+                            </div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || ''"></div>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Collapse
+                            </div>
+                          </div>
+                        </ng-template>
+                      </app-accordion>
+                      <div class="v-center mt-3">
+                        <div class="contacts">
+                          <div class="f-4 fw-600 op-40">
+                            Contacts
+                          </div>
+                          <div class="v-center mt-1">
+                            <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
+                            <span class="f-4">{{activity.activity_detail.contacts?.length || 0}}</span>
+                          </div>
+                        </div>
+                        <div class="time ml-5">
+                          <div class="f-4 fw-600 op-40">
+                            Duration
+                          </div>
+                          <div class="v-center mt-1">
+                            <i class="d-block i-icon i-timer bgc-dark mr-2"></i>
+                            <span class="f-4">{{activity.activity_detail.duration}}mins</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mt-4" *ngIf="activity.activity_detail.desired_at">
+                        <div class="f-4 fw-600 op-40">
+                          Desired time
+                        </div>
+                        <div class="f-3 mt-1 fw-600">
+                          {{activity.activity_detail.desired_at | date :'MMM d, hh:mm a'}}
+                        </div>
+                      </div>
+                      <div class="mt-4" *ngIf="activity.activity_detail.proposed_at && activity.activity_detail.proposed_at.length">
+                        <div class="f-4 fw-600 op-40">
+                          Proposed times
+                        </div>
+                        <div class="f-3 mt-1 fw-600" *ngFor="let time of activity.activity_detail.proposed_at">
+                          {{time | date :'MMM d, hh:mm a'}}
+                        </div>
+                      </div>
+                      <div class="mt-4" *ngIf="activity.activity_detail.schedule_link">
+                        <div class="f-4 fw-600 op-40">
+                          Calendar Link
+                        </div>
+                        <div class="f-3 mt-1 c-blue">
+                          {{activity.activity_detail.schedule_link}}
                         </div>
                       </div>
                     </div>
@@ -1138,11 +1266,231 @@
                   </div>
 
                   <div class="history-detail appointments-detail p-3 mt-3" *ngSwitchCase="'appointment'">
-
+                    <div class="v-center justify-content-between mb-3">
+                      <div class="history-icon mr-3"><i class="act-icon act-appointments"></i></div>
+                      <div class="">appointment</div>
+                      <div class="ml-auto f-3 op-56">
+                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                      </div>
+                      <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                        <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                        </a>
+                        <div ngbDropdownMenu class="light py-1">
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            *ngIf="!detail.status"
+                            (click)="editTask(detail, true)"
+                          >
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Edit</span>
+                          </button>
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            *ngIf="!detail.status"
+                            (click)="completeTask(detail, true)"
+                          >
+                            <i class="i-icon i-check bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">complete</span>
+                          </button>
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            (click)="archiveTask(detail, true)"
+                          >
+                            <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                          </button>
+                        </div>
+                      </div> -->
+                    </div>
+                    <div class="main-history-item">
+                      <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                        <ng-template #show>
+                          <div class="content f-6 position-relative">
+                            <div class="font-weight-bold">
+                              {{detail.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Expand
+                            </div>      
+                          </div>
+                        </ng-template>
+                        <ng-template #hide>
+                          <div class="content">
+                            <div class="f-6 font-weight-bold">
+                              {{detail.title}}
+                            </div>
+                            <div class="f-6" [innerHTML]="detail.description || ''"></div>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Collapse
+                            </div>
+                          </div>
+                        </ng-template>
+                      </app-accordion>
+                      <div class="v-center mt-3">
+                        <div class="date">
+                          <div class="f-4 fw-600 op-40">
+                            Date
+                          </div>
+                          <div class="v-center mt-1">
+                            <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
+                            <span class="f-4">{{detail.due_start | date: 'MM/dd/yyyy'}}</span>
+                          </div>
+                        </div>
+                        <div class="time ml-5">
+                          <div class="f-4 fw-600 op-40">
+                            Time
+                          </div>
+                          <div class="v-center mt-1">
+                            <i class="d-block i-icon i-timer bgc-dark mr-2"></i>
+                            <span class="f-4">{{getTime(detail.due_start,detail.due_end)}}</span>
+                          </div>
+                        </div>
+                        <div class="location ml-5">
+                          <div class="f-4 fw-600 op-40">
+                            Location
+                          </div>
+                          <div class="v-center mt-1">
+                            <i class="d-block i-icon i-location bgc-dark mr-2"></i>
+                            <span class="f-4">{{detail.location}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mt-4" *ngIf="detail.zoom_link">
+                        <div class="f-4 fw-600 op-40">
+                          Zoom meeting
+                        </div>
+                        <div class="f-4 c-blue mt-1">
+                          {{detail.zoom_link}}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   
                   <div class="history-detail group_calls-detail p-3 mt-3" *ngSwitchCase="'group_call'">
+                    <div class="v-center justify-content-between mb-3">
+                      <div class="history-icon mr-3"><i class="act-icon act-team_calls"></i></div>
+                      <div class="">group call</div>
+                      <div class="ml-auto f-3 op-56">
+                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                      </div>
+                      <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                        <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                        </a>
+                        <div ngbDropdownMenu class="light py-1">
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            *ngIf="!detail.status"
+                            (click)="editTask(detail, true)"
+                          >
+                            <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Edit</span>
+                          </button>
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            *ngIf="!detail.status"
+                            (click)="completeTask(detail, true)"
+                          >
+                            <i class="i-icon i-check bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">complete</span>
+                          </button>
+                          <button
+                            class="v-center border-0 py-1 c-dark dropdown-item"
+                            (click)="archiveTask(detail, true)"
+                          >
+                            <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-2 font-weight-bold">Delete</span>
+                          </button>
+                        </div>
+                      </div> -->
+                    </div>
 
+                    <div class="main-history-item">
+                      <app-accordion [showIndicator]="show" [hideIndicator]="hide">
+                        <ng-template #show>
+                          <div class="content f-6 position-relative">
+                            <div class="font-weight-bold">
+                              {{detail.subject}}
+                            </div>
+                            <div class="call-status mb-3">
+                              <div class="tag {{detail.status}}">{{detail.status}}</div>
+                              <ng-container *ngIf="detail.status === 'planned'">
+                              <span class="f-3"> on </span><span class="time f-3 font-weight-bold">{{detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
+                              </ng-container>
+                            </div>
+                            <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                            <div class="gradient-bottom"></div>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Expand
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #hide>
+                          <div class="content">
+                            <div class="f-6 font-weight-bold">
+                              {{detail.subject}}
+                            </div>
+                            <div class="call-status mb-3">
+                              <div class="tag {{detail.status}}">{{detail.status}}</div>
+                              <ng-container *ngIf="detail.status === 'planned'">
+                                on <span class="time">{{detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
+                              </ng-container>
+                            </div>
+                            <div class="f-6" [innerHTML]="detail.description || ''"></div>
+                            <div class="f-3 fw-600 c-blue mt-1">
+                              Collapse
+                            </div>
+                          </div>
+                        </ng-template>
+                      </app-accordion>
+                      <div class="v-center mt-3">
+                        <div class="contacts">
+                          <div class="f-4 fw-600 op-40">
+                            Contacts
+                          </div>
+                          <div class="v-center mt-1">
+                            <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
+                            <span class="f-4">{{detail.contacts?.length || 0}}</span>
+                          </div>
+                        </div>
+                        <div class="time ml-5">
+                          <div class="f-4 fw-600 op-40">
+                            Duration
+                          </div>
+                          <div class="v-center mt-1">
+                            <i class="d-block i-icon i-timer bgc-dark mr-2"></i>
+                            <span class="f-4">{{detail.duration}}mins</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mt-4" *ngIf="detail.desired_at">
+                        <div class="f-4 fw-600 op-40">
+                          Desired time
+                        </div>
+                        <div class="f-3 mt-1 fw-600">
+                          {{detail.desired_at | date :'MMM d, hh:mm a'}}
+                        </div>
+                      </div>
+                      <div class="mt-4" *ngIf="detail.proposed_at && detail.proposed_at.length">
+                        <div class="f-4 fw-600 op-40">
+                          Proposed times
+                        </div>
+                        <div class="f-3 mt-1 fw-600" *ngFor="let time of detail.proposed_at">
+                          {{time | date :'MMM d, hh:mm a'}}
+                        </div>
+                      </div>
+                      <div class="mt-4" *ngIf="detail.schedule_link">
+                        <div class="f-4 fw-600 op-40">
+                          Calendar Link
+                        </div>
+                        <div class="f-3 mt-1 c-blue">
+                          {{detail.schedule_link}}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   
                   <div class="history-detail follow_ups-detail p-3 mt-3" *ngSwitchCase="'follow_up'">

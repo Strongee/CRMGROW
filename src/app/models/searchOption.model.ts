@@ -158,7 +158,7 @@ export class SearchOption implements Deserializable {
 
 export class TaskSearchOption implements Deserializable {
   str: string;
-  status: number;
+  status: number = 0;
   contact: string;
   types: string[];
   labels: string[];
