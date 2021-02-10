@@ -711,7 +711,7 @@
                                   <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
                                   <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
                                 </td>
-                                <td class="duration-col">{{detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '' | timeDuration}}</td>
+                                <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
                                     {{detailActivity.created_at | date: 'MMMM dd'}}
