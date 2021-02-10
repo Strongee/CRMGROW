@@ -163,6 +163,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
             if (res) {
               this.handlerService.activityAdd$(ids, 'task');
               this.handlerService.reload$('tasks');
+              this.handlerService.createTaskInDetail$(res);
               this.dialogRef.close();
             }
           });

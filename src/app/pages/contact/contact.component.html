@@ -1008,6 +1008,8 @@
               </div>
             </ng-container>
           </ng-container>
+
+          <!-- Details Template -->
           <ng-template #detailsTemplate>
             <ng-container *ngIf="showingDetails.length; else emptyDetails">
               <ng-container *ngFor="let detail of showingDetails">
@@ -1026,14 +1028,14 @@
                         <div ngbDropdownMenu class="light py-1">
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item"
-                            (click)="updateNote(detail)"
+                            (click)="updateNoteDetail(detail)"
                           >
                             <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Edit</span>
                           </button>
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item"
-                            (click)="deleteNote(detail)"
+                            (click)="deleteNoteDetail(detail)"
                           >
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Delete</span>
@@ -1158,7 +1160,7 @@
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item"
                             *ngIf="!detail.status"
-                            (click)="editTask(detail)"
+                            (click)="editTask(detail, true)"
                           >
                             <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Edit</span>
@@ -1166,14 +1168,14 @@
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item"
                             *ngIf="!detail.status"
-                            (click)="completeTask(detail)"
+                            (click)="completeTask(detail, true)"
                           >
                             <i class="i-icon i-check bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">complete</span>
                           </button>
                           <button
                             class="v-center border-0 py-1 c-dark dropdown-item"
-                            (click)="deleteNote(detail)"
+                            (click)="archiveTask(detail, true)"
                           >
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Delete</span>
@@ -1183,7 +1185,7 @@
                     </div>
                     <div class="main-history-item" [class.completed]="detail.status">
                       <div class="v-center">
-                        <div class="v-center justify-content-center c-pointer task-status" (click)="completeTask(activity)"
+                        <div class="v-center justify-content-center c-pointer task-status" (click)="completeTask(detail, true)"
                           *ngIf="!detail.status; else completedTaskMark">
                           <i class="i-icon i-check bgc-white"></i>
                         </div>
@@ -1222,7 +1224,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="related-history-item" *ngIf="groupActions[detail._id].length > 1">
+                      <div class="related-history-item" *ngIf="groupActions[detail._id] && groupActions[detail._id].length > 1">
                         <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                           <ng-template #show>
                             <div class="">

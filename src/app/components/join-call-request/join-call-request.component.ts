@@ -3,25 +3,25 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 import { numPad, getCurrentTimezone } from '../../helper';
 import {
-  QuillEditor,
   TIMES,
   CALL_REQUEST_DURATION
 } from 'src/app/constants/variable.constants';
-
-import { QuillEditorComponent } from 'ngx-quill';
-import { FileService } from '../../services/file.service';
 import { TeamService } from '../../services/team.service';
 import { UserService } from '../../services/user.service';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
-
+import { Contact } from 'src/app/models/contact.model';
+import { SelectContactComponent } from '../select-contact/select-contact.component';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-join-call-request',
   templateUrl: './join-call-request.component.html',
   styleUrls: ['./join-call-request.component.scss']
 })
 export class JoinCallRequestComponent implements OnInit, OnDestroy {
-  contacts = [];
+  contacts: Contact[] = [];
+  keepContacts: Contact[] = [];
+  keepContactIds: string[] = [];
   leader = null;
   subject = '';
 
@@ -39,12 +39,13 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
   submitted = false;
   isLoading = false;
   requestCreateSubscription: Subscription;
+
+  @ViewChild('contactSelector') contactSelector: SelectContactComponent;
   constructor(
     private dialogRef: MatDialogRef<JoinCallRequestComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private teamService: TeamService,
-    private userService: UserService,
-    private fileService: FileService
+    private userService: UserService
   ) {
     const current = new Date();
     this.minDate = {
@@ -58,12 +59,17 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       time: '15:00:00.000'
     });
     this.setDateTime(0);
+
+    if (this.data && this.data.contacts) {
+      this.keepContacts = this.data.contacts;
+      this.keepContacts.forEach((e) => {
+        this.keepContactIds.push(e._id);
+      });
+      this.contacts = [...this.data.contacts];
+    }
   }
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
-
-  config = QuillEditor;
-  quillEditorRef;
 
   ngOnInit(): void {
     // this.userService.profile$.subscribe((user) => {
@@ -186,5 +192,18 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
     }
   }
 
-  onAdding(): void {}
+  selectContact(contact: Contact): void {
+    const index = this.contacts.findIndex((item) => item._id === contact._id);
+    if (index < 0) {
+      this.contacts.push(contact);
+    }
+    this.contactSelector.clear();
+  }
+  removeContact(contact: Contact): void {
+    if (contact._id) {
+      _.pullAllBy(this.contacts, [contact], '_id');
+    } else {
+      _.pullAllBy(this.contacts, [contact], 'email');
+    }
+  }
 }

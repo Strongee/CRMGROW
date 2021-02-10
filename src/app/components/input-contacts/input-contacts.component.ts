@@ -52,6 +52,7 @@ export class InputContactsComponent implements OnInit {
   @Input('onlyFromSearch') onlyFromSearch = false;
   @Input('selectedContacts') selectedContacts: Contact[] = [];
   @Input('chipType') chipType = 'block';
+  @Input('keepContacts') keepContacts: Contact[] = [];
   @Output() onSelect = new EventEmitter();
   @Output() onRemove = new EventEmitter();
 
@@ -172,6 +173,10 @@ export class InputContactsComponent implements OnInit {
   }
 
   remove(contact: Contact): void {
+    const pos = _.findIndex(this.keepContacts, contact, '_id');
+    if (pos !== -1) {
+      return;
+    }
     _.remove(this.selectedContacts, (e) => {
       if (contact._id) {
         return e._id === contact._id;

@@ -27,11 +27,7 @@ import { DealsService } from '../../services/deals.service';
 export class CalendarDialogComponent implements OnInit {
   submitted = false;
   due_time = '12:00:00.000';
-  selectedDateTime = {
-    year: '',
-    month: '',
-    day: ''
-  };
+  selectedDateTime;
   event = {
     title: '',
     due_start: '',
@@ -49,6 +45,7 @@ export class CalendarDialogComponent implements OnInit {
   };
   duration = 0.5;
   contacts: Contact[] = [];
+  keepContacts: Contact[] = [];
   isRepeat = false;
   isLoading = false;
   times = TIMES;
@@ -73,7 +70,19 @@ export class CalendarDialogComponent implements OnInit {
     private contactService: ContactService,
     private dealsService: DealsService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    const today = new Date();
+    this.selectedDateTime = {
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      day: today.getDate()
+    };
+
+    if (this.data && this.data.contacts) {
+      this.keepContacts = this.data.contacts;
+      this.contacts = [...this.data.contacts];
+    }
+  }
 
   ngOnInit(): void {
     if (this.data && this.data.type !== 'deal') {

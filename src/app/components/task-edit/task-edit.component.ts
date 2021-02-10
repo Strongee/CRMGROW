@@ -1,4 +1,10 @@
-import { Component, Inject, OnDestroy, OnInit, resolveForwardRef } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  resolveForwardRef
+} from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -147,9 +153,10 @@ export class TaskEditComponent implements OnInit {
       .update(this.task._id, data)
       .subscribe((res) => {
         this.updating = false;
-        if (resolveForwardRef) {
+        if (res) {
           this.dialogRef.close();
           this.handlerService.updateTasks$([this.task._id], data);
+          this.handlerService.updateTaskInDetail$(res);
           // if (this.type === 'deal') {
           //   this.handlerService.updateLastActivities$(
           //     [this.task.contact._id],

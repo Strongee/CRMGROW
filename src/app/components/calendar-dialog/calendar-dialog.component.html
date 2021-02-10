@@ -79,7 +79,7 @@
           <div class="v-center">
             <label class="calendar-label mb-0">ASSIGN GUESTS</label>
           </div>
-          <app-input-contacts [selectedContacts]="contacts">
+          <app-input-contacts [selectedContacts]="contacts" [keepContacts]="keepContacts">
           </app-input-contacts>
         </div>
       </div>
@@ -88,7 +88,7 @@
       <div class="col-12 col-sm-4 form-group">
         <label class="calendar-label  d-block mb-0">video conference</label>
         <div class="form-group mb-0">
-          <button class="btn btn-blue text-white f-6 font-weight-bold w-100">
+          <button class="btn btn-blue text-white f-6 font-weight-bold w-100" type="button">
             Add Zoom Link
           </button>
         </div>

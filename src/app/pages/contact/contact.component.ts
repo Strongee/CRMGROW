@@ -53,6 +53,7 @@ import * as moment from 'moment';
 import { TeamService } from 'src/app/services/team.service';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 
 @Component({
   selector: 'app-contact',
@@ -180,6 +181,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.groupActivities();
         this.getActivityCount();
       }
+      if (this.tab.id !== 'all') {
+        this.changeTab(this.tab);
+      }
     });
 
     this.handlerService.pageName.next('detail');
@@ -267,6 +271,9 @@ export class ContactComponent implements OnInit, OnDestroy {
    */
   generateUniqueId(activity: DetailActivity): string {
     if (!activity.activity_detail) {
+      if (activity.type === 'follow_ups' && activity.follow_ups) {
+        return activity.follow_ups;
+      }
       return activity._id;
     }
     let material_id;
@@ -437,11 +444,22 @@ export class ContactComponent implements OnInit, OnDestroy {
    * Open dialog to create new group call
    */
   openGroupCallDlg(): void {
+    const contact = new Contact().deserialize({
+      _id: this.contact._id,
+      first_name: this.contact.first_name,
+      last_name: this.contact.last_name,
+      email: this.contact.email,
+      cell_phone: this.contact.cell_phone
+    });
+
     this.dialog.open(JoinCallRequestComponent, {
-      width: '96vw',
-      maxWidth: '500px',
+      width: '98vw',
+      maxWidth: '530px',
       height: 'auto',
-      disableClose: true
+      disableClose: true,
+      data: {
+        contacts: [contact]
+      }
     });
   }
 
@@ -462,11 +480,22 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
       return;
     }
+
+    const contact = new Contact().deserialize({
+      _id: this.contact._id,
+      first_name: this.contact.first_name,
+      last_name: this.contact.last_name,
+      email: this.contact.email,
+      cell_phone: this.contact.cell_phone
+    });
+
     this.dialog.open(CalendarDialogComponent, {
-      position: { top: '100px' },
       width: '100vw',
       maxWidth: '600px',
-      maxHeight: '700px'
+      maxHeight: '700px',
+      data: {
+        contacts: [contact]
+      }
     });
   }
 
@@ -476,18 +505,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   openTaskDlg(): void {
     this.dialog.open(TaskCreateComponent, {
       ...DialogSettings.TASK,
-      data: {
-        contacts: [this.selectedContact]
-      }
-    });
-  }
-
-  /**
-   * Create Note
-   */
-  openNoteDlg(): void {
-    this.dialog.open(NoteCreateComponent, {
-      ...DialogSettings.NOTE,
       data: {
         contacts: [this.selectedContact]
       }
@@ -510,7 +527,24 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
-  openDealDlg(): void {}
+  openDealDlg(): void {
+    const contact = new Contact().deserialize({
+      _id: this.contact._id,
+      first_name: this.contact.first_name,
+      last_name: this.contact.last_name,
+      email: this.contact.email,
+      cell_phone: this.contact.cell_phone
+    });
+
+    this.dialog.open(DealCreateComponent, {
+      width: '100vw',
+      maxWidth: '600px',
+      disableClose: true,
+      data: {
+        contact
+      }
+    });
+  }
 
   checkSharable(): void {
     const userId = this.userService.profile.getValue()._id;
@@ -711,28 +745,37 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
   }
 
-  editTask(activity: any): void {
-    if (!activity || !activity.activity_detail) {
-      return;
+  editTask(activity: any, isReal: boolean = false): void {
+    let data;
+    if (isReal) {
+      data = {
+        ...activity,
+        contact: { _id: this.contact._id }
+      };
+    } else {
+      if (!activity || !activity.activity_detail) {
+        return;
+      }
+      data = {
+        ...activity.activity_detail,
+        contact: { _id: this.contact._id }
+      };
     }
-    const data = {
-      ...activity.activity_detail,
-      contact: { _id: this.contact._id }
-    };
 
-    this.dialog
-      .open(TaskEditComponent, {
-        width: '98vw',
-        maxWidth: '394px',
-        data: new TaskDetail().deserialize(data)
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        console.log(res);
-      });
+    this.dialog.open(TaskEditComponent, {
+      width: '98vw',
+      maxWidth: '394px',
+      data: new TaskDetail().deserialize(data)
+    });
   }
 
-  completeTask(activity: any): void {
+  completeTask(activity: any, isReal: boolean = false): void {
+    let taskId;
+    if (isReal) {
+      taskId = activity._id;
+    } else {
+      taskId = activity.activity_detail._id;
+    }
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -746,22 +789,23 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.taskService
-            .complete(activity.activity_detail._id)
-            .subscribe((res) => {
-              if (res) {
-                this.handlerService.updateTasks$(
-                  [activity.activity_detail._id],
-                  { status: 1 }
-                );
-                this.handlerService.registerActivity$(res);
-              }
-            });
+          this.taskService.complete(taskId).subscribe((res) => {
+            if (res) {
+              this.handlerService.updateTasks$([taskId], { status: 1 });
+              this.handlerService.updateTaskInDetail$(res);
+            }
+          });
         }
       });
   }
 
-  archiveTask(activity: any): void {
+  archiveTask(activity: any, isReal: boolean = false): void {
+    let taskId;
+    if (isReal) {
+      taskId = activity._id;
+    } else {
+      taskId = activity.activity_detail._id;
+    }
     this.dialog
       .open(ConfirmComponent, {
         ...DialogSettings.CONFIRM,
@@ -775,31 +819,94 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.taskService
-            .archive([activity.activity_detail._id])
-            .subscribe((status) => {
-              if (status) {
-                this.handlerService.archiveTask$(activity.activity_detail._id);
-              }
-            });
+          this.taskService.archive([taskId]).subscribe((status) => {
+            if (status) {
+              delete this.detailData[taskId];
+              _.pullAllBy(this.showingDetails, { _id: taskId }, '_id');
+              this.handlerService.archiveTask$(taskId);
+            }
+          });
         }
       });
   }
 
+  /**
+   * Create Note
+   */
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.NOTE,
+      data: {
+        contacts: [this.selectedContact]
+      }
+    });
+  }
+  /**
+   * Edit the Note from Activity
+   * @param activity : Note Activity
+   */
   updateNote(activity: any): void {
+    if (!activity || !activity.activity_detail) {
+      return;
+    }
+    const data = {
+      note: activity.activity_detail,
+      contact: { _id: this.contact._id },
+      contact_name: this.contact.fullName
+    };
     this.dialog
       .open(NoteEditComponent, {
         width: '98vw',
         maxWidth: '394px',
-        data: {
-          note: activity,
-          contact_name: this.contact.fullName
-        }
+        data
       })
       .afterClosed()
       .subscribe((note) => {
         if (note) {
           activity.activity_detail = note;
+          if (this.detailData && this.detailData[note._id]) {
+            this.detailData[note._id].content = note.content;
+          }
+          this.changeTab(this.tab);
+        }
+      });
+  }
+  /**
+   * Edit the Note Content
+   * @param detail : Note Detail
+   */
+  updateNoteDetail(detail: any): void {
+    if (!detail) {
+      return;
+    }
+    const data = {
+      note: detail,
+      contact: { _id: this.contact._id },
+      contact_name: this.contact.fullName
+    };
+    this.dialog
+      .open(NoteEditComponent, {
+        width: '98vw',
+        maxWidth: '394px',
+        data
+      })
+      .afterClosed()
+      .subscribe((note) => {
+        if (note) {
+          detail.content = note.content;
+          this.mainTimelines.some((e) => {
+            if (e.type !== 'notes') {
+              return;
+            }
+            if (e.activity_detail && e.activity_detail._id === detail._id) {
+              e.activity_detail.content = note.content;
+              return true;
+            }
+          });
+          if (this.detailData && this.detailData[note._id]) {
+            this.detailData[note._id].content = note.content;
+          }
+          this.changeTab(this.tab);
         }
       });
   }
@@ -822,6 +929,12 @@ export class ContactComponent implements OnInit, OnDestroy {
             .delete(activity.activity_detail._id)
             .subscribe((res) => {
               if (res) {
+                delete this.detailData[activity.activity_detail._id];
+                _.pullAllBy(
+                  this.showingDetails,
+                  { _id: activity.activity_detail._id },
+                  '_id'
+                );
                 this.mainTimelines.some((e, index) => {
                   if (e._id === activity._id) {
                     e.activity_detail = null;
@@ -830,6 +943,38 @@ export class ContactComponent implements OnInit, OnDestroy {
                 });
               }
             });
+        }
+      });
+  }
+  deleteNoteDetail(detail: any): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Delete Note',
+          message: 'Are you sure to delete the note?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Confirm'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.noteService.delete(detail._id).subscribe((res) => {
+            if (res) {
+              this.mainTimelines.some((e) => {
+                if (e.type !== 'notes') {
+                  return;
+                }
+                if (e.activity_detail && e.activity_detail._id === detail._id) {
+                  e.activity_detail = null;
+                  return true;
+                }
+              });
+              delete this.detailData[detail._id];
+              this.changeTab(this.tab);
+            }
+          });
         }
       });
   }

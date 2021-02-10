@@ -19,21 +19,30 @@ export class DealCreateComponent implements OnInit {
   selectedStage = '';
   saving = false;
   createSubscription: Subscription;
+  keepContacts: Contact[] = [];
 
   constructor(
     private dealsService: DealsService,
     private dialogRef: MatDialogRef<DealCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    if (this.data && this.data.contact) {
+      this.keepContacts = [this.data.contact];
+      this.contacts = [...this.keepContacts];
+    }
+    this.dealsService.getStage(false);
+  }
 
   ngOnInit(): void {
     this.dealsService.stages$.subscribe((res) => {
       this.stages = [...this.stages, ...res];
-      this.stages.forEach((stage) => {
-        if (stage._id == this.data.id) {
-          this.selectedStage = stage._id;
-        }
-      });
+      if (this.data && this.data.id) {
+        this.stages.forEach((stage) => {
+          if (stage._id == this.data.id) {
+            this.selectedStage = stage._id;
+          }
+        });
+      }
     });
   }
 

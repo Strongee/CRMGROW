@@ -22,7 +22,7 @@ export class NoteEditComponent implements OnInit {
       if (this.data.type === 'deal') {
         this.note = { ...this.note, ...this.data.note.activity_detail[0] };
       } else {
-        this.note = { ...this.note, ...this.data.note.activity_detail };
+        this.note = { ...this.note, ...this.data.note };
       }
       this.contact = this.data.contact_name;
     }

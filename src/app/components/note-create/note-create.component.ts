@@ -34,7 +34,6 @@ export class NoteCreateComponent implements OnInit {
 
       if (this.type === 'deal') {
         this.dealId = this.data.deal;
-        console.log("deal id =============>", this.dealId);
       }
 
       if (this.data.contacts) {

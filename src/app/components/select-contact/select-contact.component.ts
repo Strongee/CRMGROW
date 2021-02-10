@@ -23,6 +23,7 @@ import {
   map,
   distinctUntilChanged
 } from 'rxjs/operators';
+import { validateEmail } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-select-contact',
@@ -35,6 +36,7 @@ export class SelectContactComponent
   @Input('placeholder') placeholder = 'Search contact';
   @Input('formPlaceholder') formPlaceholder = 'Search contacts';
   @Input('mustField') mustField = '';
+  @Input('fromSearch') fromSearch = true;
   @Input()
   public set contact(val: string) {
     if (!val) {
@@ -50,6 +52,7 @@ export class SelectContactComponent
 
   protected _onDestroy = new Subject<void>();
   searching = false;
+  keyword = '';
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
 
   constructor(private contactService: ContactService) {}
@@ -61,7 +64,10 @@ export class SelectContactComponent
         takeUntil(this._onDestroy),
         debounceTime(200),
         distinctUntilChanged(),
-        tap(() => (this.searching = true)),
+        tap((search) => {
+          this.searching = true;
+          this.keyword = search;
+        }),
         map((search) => {
           return this.contactService.easySearch(search);
         })
@@ -70,6 +76,7 @@ export class SelectContactComponent
         (api) => {
           api.subscribe((res) => {
             this.searching = false;
+            let result;
             if (this.mustField) {
               const data = [];
               res.map((e) => {
@@ -77,9 +84,24 @@ export class SelectContactComponent
                   data.push(e);
                 }
               });
-              this.filteredResults.next(data);
+              result = data;
             } else {
-              this.filteredResults.next(res);
+              result = res;
+            }
+            if (result.length) {
+              this.filteredResults.next(result);
+            } else {
+              if (!this.fromSearch) {
+                if (validateEmail(this.keyword)) {
+                  const first_name = this.keyword.split('@')[0];
+                  const email = this.keyword;
+                  const newContact = new Contact().deserialize({
+                    first_name,
+                    email
+                  });
+                  this.filteredResults.next([newContact]);
+                }
+              }
             }
           });
         },

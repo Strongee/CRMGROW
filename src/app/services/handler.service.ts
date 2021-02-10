@@ -165,7 +165,6 @@ export class HandlerService {
   activityAdd$(_ids: string[], type: string): void {
     // Contacts list update
     this.updateLastActivities$(_ids, type);
-    // Detail Page update
 
     // Activities Page Update
     this.reload$('activities');
@@ -207,6 +206,10 @@ export class HandlerService {
    * @param data : data of task that has updated
    */
   updateTasks$(_ids: string[], data: any): void {
+    const page = this.pageName.getValue();
+    if (page === 'detail') {
+      return;
+    }
     const tasks = this.storeService.tasks.getValue();
     const activities = [];
     tasks.forEach((e) => {
@@ -239,7 +242,44 @@ export class HandlerService {
       }
     }
   }
-  createTask$(contacts: any, task: any): void {}
+  updateTaskInDetail$(data: any): void {
+    const page = this.pageName.getValue();
+    if (page !== 'detail') {
+      return;
+    }
+    if (data && data.activity) {
+      const activity = new DetailActivity().deserialize({ ...data.activity });
+      activity.activity_detail = { ...data, activity: undefined };
+      const currentContact = this.storeService.selectedContact.getValue();
+      currentContact.activity.push(activity);
+      currentContact.activity.forEach((e) => {
+        if (e.type !== 'follow_ups') {
+          return;
+        }
+        if (
+          e &&
+          e.activity_detail &&
+          e.activity_detail._id === activity.activity_detail._id
+        ) {
+          e.activity_detail = activity.activity_detail;
+        }
+      });
+      this.storeService.selectedContact.next(currentContact);
+    }
+  }
+  createTaskInDetail$(data: any): void {
+    const page = this.pageName.getValue();
+    if (page !== 'detail') {
+      return;
+    }
+    if (data && data.activity) {
+      const activity = new DetailActivity().deserialize({ ...data.activity });
+      activity.activity_detail = { ...data, activity: undefined };
+      const currentContact = this.storeService.selectedContact.getValue();
+      currentContact.activity.push(activity);
+      this.storeService.selectedContact.next(currentContact);
+    }
+  }
 
   reload$(tab = ''): void {
     const page = this.pageName.getValue();
