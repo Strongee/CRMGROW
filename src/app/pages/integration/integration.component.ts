@@ -16,7 +16,6 @@ export class IntegrationComponent implements OnInit {
   constructor(private userService: UserService, private toast: ToastrService) {
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
-      console.log('###', this.user);
     });
   }
 

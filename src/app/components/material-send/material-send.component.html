@@ -82,7 +82,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="Send via Email">
-                <div class="mt-2">
+                <!-- <div class="mt-2">
                     <app-input-template
                         [placeholder]="'Search for Template to use'"
                         [(template)]="emailTemplate"
@@ -90,7 +90,7 @@
                         [hasNewLink]="false"
                         (templateChange)="selectEmailTemplate($event)"
                     ></app-input-template>
-                </div>
+                </div> -->
                 <div class="form-group mt-2">
                     <div class="v-center">
                         <span class="f-1 fw-600 op-40 text-uppercase mb-1">
@@ -121,7 +121,9 @@
                         placeholder="Enter Text"
                         required="true"
                         [style]="{height: '200px'}"
+                        [hasTemplates]="true"
                         (onFocus)="focusEditor()"
+                        (onChangeTemplate)="onChangeTemplate($event)"
                         #emailEditor
                         >
                     </app-html-editor>

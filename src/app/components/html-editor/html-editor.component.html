@@ -1,5 +1,31 @@
 <div class="html-editor position-relative">
   <div class="position-relative">
+    <button
+      class="templates-action"
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      (click)="showTemplates = true">
+      OPEN
+    </button>
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOpen]="showTemplates"
+      (overlayOutsideClick)="closeTemplates($event)"
+    >
+      <div class="templates-container">
+        <ng-container *ngFor="let template of (templateService.templates$ | async)">
+          <div class="template" *ngIf="template.type === 'email'" (click)="selectTemplate(template)">
+            <div class="v-center">
+              <div class="f-3 font-weight-bold">{{template.title}}</div>
+              <div class="c-badge rect ml-auto text-uppercase" [class]="template.role || 'own'">{{template.role || 'own'}}</div>
+            </div>
+            <div class="f-2 font-weight-bold">{{template.subject}}</div>
+            <div class="f-1">{{template.content | stripTags | shorten: 40: '...'}}</div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-template>
     <quill-editor
       [placeholder]="placeholder"
       [ngModel]="value"
@@ -14,6 +40,7 @@
       (click)="onFocusEvt()"
       #emailEditor>
     </quill-editor>
+    
     <span class="c-red error" *ngIf="editorForm.errors && (editorForm.touched || editorForm.dirty)">
     Required!
     </span>

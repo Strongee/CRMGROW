@@ -82,6 +82,9 @@ export class MaterialSendComponent implements OnInit {
       this.htmlEditor.setValue(this.emailContent);
     }
   }
+  onChangeTemplate(event: Template): void {
+    this.subject = event.subject;
+  }
 
   send(): void {
     if (this.contacts.length == 0) {

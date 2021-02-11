@@ -87,8 +87,8 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     const defaultEmail = this.userService.email.getValue();
     if (defaultEmail) {
-      this.emailContent = defaultEmail.content;
       this.emailSubject = defaultEmail.subject;
+      this.emailContent = defaultEmail.content;
     }
   }
 
@@ -203,6 +203,9 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
       this.htmlEditor.setValue(this.emailContent);
     }
     // Attach the Selected Material Content
+  }
+  onChangeTemplate(template: Template): void {
+    this.emailSubject = template.subject;
   }
 
   getScheduleDateTime(): any {

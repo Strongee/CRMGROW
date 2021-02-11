@@ -73,4 +73,65 @@
   .ql-toolbar.ql-snow .ql-formats {
     margin-right: 0px;
   }
+  button.ql-template{
+    position: relative;
+    width: 100px;
+  }
+  button.ql-template::before {
+    content: "Insert template";
+    font-size: 12px;
+    color: blue;
+    font-weight: 600;
+    line-height: 1;
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    white-space: nowrap;
+  }
+  button.ql-template::after {
+    content: "";
+    mask-image: url('../../../assets/img/next.svg');
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    width: 12px;
+    height: 12px;
+    background-color: blue;
+    position: absolute;
+    left: 90px;
+    top: 5px;
+    transform: rotate(90deg);
+  }
+}
+
+.templates-container {
+  background: white;
+  border: 1px solid gainsboro;
+  padding: 0px 0px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 6px #bbb8;
+  width: 280px;
+  max-height: 250px;
+  overflow: auto;
+
+  .template {
+    padding: 4px 6px;
+    border-top: 1px solid gainsboro;
+    cursor: pointer;
+  }
+
+  .c-badge {
+    padding: 2px 4px;
+    font-size: 10px!important;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+}
+
+.templates-action {
+  position: absolute;
+  top: 5px;
+  left: 210px;
+  visibility: hidden;
+  pointer-events: none;
 }

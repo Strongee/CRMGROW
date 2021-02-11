@@ -13,6 +13,17 @@ import { STATUS } from '../constants/variable.constants';
 export class AppointmentService extends HttpService {
   constructor(errorService: ErrorService, private httpClient: HttpClient) {
     super(errorService);
+    this.calendars$.subscribe((calendars) => {
+      const subCalendars = {};
+      calendars.forEach((account) => {
+        if (account.data) {
+          account.data.forEach((e) => {
+            subCalendars[e.id] = { ...e, account: account.email };
+          });
+        }
+      });
+      this.subCalendars.next(subCalendars);
+    });
   }
 
   loadCalendarsStatus: BehaviorSubject<string> = new BehaviorSubject(
@@ -21,6 +32,8 @@ export class AppointmentService extends HttpService {
   loadingCalendars$ = this.loadCalendarsStatus.asObservable();
   calendars: BehaviorSubject<any[]> = new BehaviorSubject([]);
   calendars$ = this.calendars.asObservable();
+  subCalendars: BehaviorSubject<any> = new BehaviorSubject(null);
+  subCalendars$ = this.subCalendars.asObservable();
 
   public loadCalendars(force = false): void {
     if (!force) {
@@ -67,12 +80,14 @@ export class AppointmentService extends HttpService {
   public removeEvents(
     event_id: string,
     recurrence_id: string,
-    calendar_id: string
+    calendar_id: string,
+    connected_email: string
   ): any {
     const recurrence = {
       event_id: event_id,
       recurrence_id: recurrence_id,
-      calendar_id: calendar_id
+      calendar_id: calendar_id,
+      connected_email
     };
     return this.httpClient.post(
       this.server + APPOINTMENT.DELETE_EVENT,

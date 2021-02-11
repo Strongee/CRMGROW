@@ -73,16 +73,23 @@
         <!-- <div class="f-2 connect-status" *ngIf="user.connected_email_type=='gmail' && user.primary_connected">
           Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
         </div> -->
-        <div class="d-flex mt-auto mb-2">
+        <div class="d-flex mt-2 mb-2">
           <img src="../../../assets/img/google.svg">
           <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
         </div>
-        <div class="v-center">
-          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold mr-2" (click)="connectCalendar('gmail')">
+        
+        <ng-container *ngFor="let calendar of user?.calendar_list">
+          <div class="v-center mb-2" *ngIf="calendar.connected_calendar_type === 'google'">
+            <div class="f-3 font-weight-bold flex-grow-1">{{calendar.connected_email}}</div>
+            <button type="button" class="social-btn btn border-dark w-100 font-weight-bold ml-2 sm" (click)="disconnectCalendar(calendar)">
+              <div class="f-3">Disconnect</div>
+            </button>
+          </div>
+        </ng-container>
+
+        <div class="v-center mt-auto">
+          <button type="button" class="social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('gmail')">
             <div class="f-4">Connect</div>
-          </button>
-          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold">
-            <div class="f-4">Disconnect</div>
           </button>
         </div>
       </div>
@@ -93,16 +100,21 @@
         <!-- <div class="f-2 connect-status" *ngIf="user.connected_email_type=='outlook' && user.primary_connected">
           Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
         </div> -->
-        <div class="d-flex mt-auto mb-2">
+        <div class="d-flex mt-2 mb-2">
           <img src="../../../assets/img/outlook.svg">
           <p class="mb-0 f-0">Our Platform can deliver the emails through your outlook email. Email Deliverity will be upgraded.</p>
         </div>
-        <div class="v-center">
-          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold mr-2" (click)="connectCalendar('outlook')">
+        <ng-container *ngFor="let calendar of user?.calendar_list">
+          <div class="v-center mb-2" *ngIf="calendar.connected_calendar_type === 'outlook'">
+            <div class="f-3 font-weight-bold flex-grow-1">{{calendar.connected_email}}</div>
+            <button type="button" class="social-btn btn border-dark w-100 font-weight-bold ml-2 sm" (click)="disconnectCalendar(calendar)">
+              <div class="f-3">Disconnect</div>
+            </button>
+          </div>
+        </ng-container>
+        <div class="v-center mt-auto">
+          <button type="button" class="social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('outlook')">
             <div class="f-4">Connect</div>
-          </button>
-          <button type="button" class="social-btn btn border-dark w-50 font-weight-bold">
-            <div class="f-4">Disconnect</div>
           </button>
         </div>
       </div>

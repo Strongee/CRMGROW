@@ -136,19 +136,22 @@
                     }
                 }
             }
-            @media screen and (max-width: 480px) {
-                display: block;
-            }
         }
     }
 }
 
 :host ::ng-deep {
+    .templates-action {
+      @media screen and (max-width: 429px) {
+        left: 5px!important;
+        top: 30px!important;
+      }
+    }
     quill-editor {
       .ql-toolbar {
         border: 0;
         border-bottom: 1px solid #c6c7cf;
-        padding-right: 90px;
+        padding-right: 100px;
       }
       .ql-container {
         border: none;

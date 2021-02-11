@@ -47,9 +47,8 @@ export class CalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
   dayEvents: any = {};
   showingEvents: CalendarEvent[] = [];
-  accounts: string[] = [];
-  accountCalendars: any = {};
-  calendars: any = {};
+  accounts: any[] = [];
+  calendars = {};
   selectedCalendars = [];
 
   constructor(
@@ -67,6 +66,21 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.appointmentService.loadCalendars(true);
+    this.appointmentService.calendars$.subscribe((data) => {
+      data.forEach((account) => {
+        const acc = { email: account.email };
+        if (account.data) {
+          const calendars = [];
+          account.data.forEach((e) => {
+            calendars.push({ ...e, account: account.email });
+            this.selectedCalendars.push(e.id);
+            this.calendars[e.id] = e;
+          });
+          acc['calendars'] = calendars;
+          this.accounts.push(acc);
+        }
+      });
+    });
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
     });
@@ -155,30 +169,11 @@ export class CalendarComponent implements OnInit {
         if (res) {
           this.events = [];
           this.dayEvents = {};
-          this.accounts = [];
-          this.accountCalendars = {};
-          this.selectedCalendars = [];
           res.forEach((calendar) => {
             if (calendar['status']) {
-              const accountEmail =
-                calendar['calendar'] && calendar['calendar']['email'];
-              this.accounts.push(accountEmail);
               const subCalendars =
                 calendar['calendar'] && calendar['calendar']['data'];
               subCalendars.forEach((subCalendar) => {
-                const subCalendarInfo = {
-                  title: subCalendar.title,
-                  time_zone: subCalendar.time_zone,
-                  id: subCalendar.id,
-                  color: subCalendar.color
-                };
-                this.calendars[subCalendar.id] = subCalendarInfo;
-                this.selectedCalendars.push(subCalendar.id);
-                if (this.accountCalendars[accountEmail]) {
-                  this.accountCalendars[accountEmail].push(subCalendarInfo);
-                } else {
-                  this.accountCalendars[accountEmail] = [subCalendarInfo];
-                }
                 const events = subCalendar.items;
                 events.forEach((event) => {
                   const _formattedEvent = {

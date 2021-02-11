@@ -53,7 +53,7 @@ export class CalendarDialogComponent implements OnInit {
   isRepeat = false;
   isLoading = false;
 
-  type = '';
+  type = 'create';
   isDeal = false;
   deal;
 
@@ -76,6 +76,10 @@ export class CalendarDialogComponent implements OnInit {
     if (this.data && this.data.contacts) {
       this.keepContacts = this.data.contacts;
       this.contacts = [...this.data.contacts];
+    }
+
+    if (this.data && this.data.event) {
+      this.type = 'update';
     }
   }
 
@@ -158,8 +162,6 @@ export class CalendarDialogComponent implements OnInit {
         this.event.calendar_id = this.data.event.meta.calendar_id;
         this.event.event_id = this.data.event.meta.event_id;
       }
-    } else {
-      this.type = 'create';
     }
 
     if (this.data && this.data.type === 'deal') {
@@ -174,6 +176,14 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   update(): void {
+    const calendars = this.appointmentService.subCalendars.getValue();
+    const currentCalendar = calendars[this.event.calendar_id];
+    if (!currentCalendar) {
+      // OPEN ALERT & CLOSE OVERLAY
+      return;
+    }
+    const connected_email = currentCalendar.account;
+
     this.isLoading = true;
     const date = moment(
       this.selectedDateTime.year +
@@ -249,7 +259,7 @@ export class CalendarDialogComponent implements OnInit {
     } else {
       delete this.event['recurrence_id'];
       this.appointmentService
-        .updateEvents(this.event, this.event.event_id)
+        .updateEvents({ ...this.event, connected_email }, this.event.event_id)
         .subscribe(
           (res) => {
             if (res['status'] == true) {

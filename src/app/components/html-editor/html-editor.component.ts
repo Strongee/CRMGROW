@@ -15,6 +15,8 @@ import { QuillEditorComponent } from 'ngx-quill';
 import { FileService } from 'src/app/services/file.service';
 import * as QuillNamespace from 'quill';
 import { promptForFiles, loadBase64, ByteToSize } from 'src/app/helper';
+import { TemplatesService } from 'src/app/services/templates.service';
+import { Template } from 'src/app/models/template.model';
 
 const Quill: any = QuillNamespace;
 // import ImageResize from 'quill-image-resize-module';
@@ -37,15 +39,23 @@ export class HtmlEditorComponent implements OnInit {
       this.config.toolbar.container.unshift(['attachment']);
     }
   }
+  @Input()
+  public set hasTemplates(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.push(['template']);
+    }
+  }
 
   @Input() value: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
   @Output() onFocus: EventEmitter<boolean> = new EventEmitter();
   @Output() attachmentChange: EventEmitter<any> = new EventEmitter();
   @Output() onInit: EventEmitter<boolean> = new EventEmitter();
+  @Output() onChangeTemplate: EventEmitter<Template> = new EventEmitter();
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+  showTemplates: boolean = false;
   quillEditorRef;
   attachments = [];
   config = {
@@ -72,6 +82,10 @@ export class HtmlEditorComponent implements OnInit {
               });
             });
           });
+        },
+        template: () => {
+          this.showTemplates = !this.showTemplates;
+          this.cdr.detectChanges();
         }
       }
     },
@@ -94,9 +108,12 @@ export class HtmlEditorComponent implements OnInit {
 
   constructor(
     private fileService: FileService,
+    public templateService: TemplatesService,
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.templateService.loadAll(false);
+  }
 
   ngOnInit(): void {}
 
@@ -211,6 +228,20 @@ export class HtmlEditorComponent implements OnInit {
 
   onFocusEvt(): void {
     this.onFocus.emit();
+  }
+
+  closeTemplates(event: MouseEvent): void {
+    const target = <HTMLElement>event.target;
+    if (target.classList.contains('ql-template')) {
+      return;
+    }
+    this.showTemplates = false;
+  }
+
+  selectTemplate(template: Template): void {
+    console.log('seelect template', template);
+    this.onChangeTemplate.emit(template);
+    this.setValue(template.content);
   }
 }
 // [{ font: [] }],

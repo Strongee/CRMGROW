@@ -6,6 +6,7 @@ import { OverlayService } from 'src/app/services/overlay.service';
 import { ToastrService } from 'ngx-toastr';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
 import { CalendarDeclineComponent } from '../calendar-decline/calendar-decline.component';
+import { connected } from 'process';
 
 @Component({
   selector: 'app-calendar-event',
@@ -58,6 +59,14 @@ export class CalendarEventComponent implements OnInit {
   }
 
   remove(): void {
+    const calendars = this.appointmentService.subCalendars.getValue();
+    const currentCalendar = calendars[this.event.meta.calendar_id];
+    if (!currentCalendar) {
+      // OPEN ALERT & CLOSE OVERLAY
+      return;
+    }
+    const connected_email = currentCalendar.account;
+
     if (this.event.meta.recurrence_id) {
       this.dialog
         .open(CalendarRecurringDialogComponent, {
@@ -76,7 +85,8 @@ export class CalendarEventComponent implements OnInit {
               .removeEvents(
                 this.event.meta.event_id,
                 this.event.meta.recurrence_id,
-                this.event.meta.calendar_id
+                this.event.meta.calendar_id,
+                connected_email
               )
               .subscribe(
                 (res) => {
@@ -100,7 +110,8 @@ export class CalendarEventComponent implements OnInit {
         .removeEvents(
           this.event.meta.event_id,
           this.event.meta.recurrence_id,
-          this.event.meta.calendar_id
+          this.event.meta.calendar_id,
+          connected_email
         )
         .subscribe(
           (res) => {

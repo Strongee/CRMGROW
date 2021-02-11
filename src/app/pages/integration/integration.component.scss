@@ -17,6 +17,11 @@
 .social-btn {
   height: 40px;
 
+  &.sm {
+    height: 28px;
+    max-width: 86px;
+  }
+
   .social-icon {
     width: 20px;
     height: 20px;

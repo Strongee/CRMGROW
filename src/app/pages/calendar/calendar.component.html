@@ -53,11 +53,11 @@
             </button>
             <div class="form-group p-2 m-0" ngbDropdown>
                 <i class="d-block i-icon i-calendar bgc-blue" ngbDropdownToggle></i>
-                <div ngbDropdownMenu class="light px-3">
+                <div ngbDropdownMenu class="light px-3" *ngIf="accounts.length">
                     <button class="btn btn-white f-3 font-weight-bold p-0">Hide</button>
                     <div class="first-calendar" *ngFor="let account of accounts">
-                        <label class="f-1 font-weight-bold m-0">{{account}}</label>
-                        <div class="v-center mt-1" *ngFor="let calendar of accountCalendars[account]">
+                        <label class="f-1 font-weight-bold m-0">{{account.email}}</label>
+                        <div class="v-center mt-1" *ngFor="let calendar of account.calendars">
                             <ng-container *ngIf="!isSelectedCalendar(calendar); else selectedTemplate">
                                 <div class="unchecked-calendar" (click)="toggleCalendar(calendar)"></div>
                             </ng-container>
@@ -94,7 +94,7 @@
                         #monthEventView
                         (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
                         <div class="f-2 font-weight-bold c-white p-1 cal-event-body">
-                            {{event.title | stripTags | shorten: 20: '...'}}
+                            {{(event.title || '(No Title)') | stripTags | shorten: 20: '...'}}
                         </div>
                     </div>
                 </div>

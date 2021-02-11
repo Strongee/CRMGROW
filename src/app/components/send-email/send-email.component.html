@@ -72,8 +72,10 @@
             required="true"
             hasToken="true"
             [hasAttachment]="true"
+            [hasTemplates]="true"
             [style]="{height: '300px'}"
             (attachmentChange)="onAttachmentChange($event)"
+            (onChangeTemplate)="onChangeTemplate($event)"
             #editor
             >
           </app-html-editor>
@@ -85,7 +87,7 @@
               <span class="f-3 font-weight-bold c-blue mx-2">Material</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </button>
-            <div ngbDropdown class="email-template px-3 c-pointer" [class.selected]="selectedTemplate.subject && selectedTemplate.content">
+            <!-- <div ngbDropdown class="email-template px-3 c-pointer" [class.selected]="selectedTemplate.subject && selectedTemplate.content">
               <div class="v-center" ngbDropdownToggle>
                 <i class="d-block i-icon i-template bgc-blue"></i>
                 <div class="ml-2">
@@ -105,7 +107,7 @@
                   (templateChange)="selectTemplate($event)"
                 ></app-input-template>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="v-center justify-content-between mt-2 mt-sm-0 w-100">
             <!-- <div class="v-center">

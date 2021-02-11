@@ -89,6 +89,12 @@ export class User implements Deserializable {
     paypal?: string;
   };
   hasPassword?: boolean;
+  calendar_list?: {
+    connected_email: string;
+    connected_calendar_type: string;
+    google_refresh_token?: string;
+    outlook_refresh_token?: string;
+  }[];
 
   deserialize(input: any): this {
     return Object.assign(this, input);
