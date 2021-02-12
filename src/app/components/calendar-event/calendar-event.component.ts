@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
@@ -6,7 +6,6 @@ import { OverlayService } from 'src/app/services/overlay.service';
 import { ToastrService } from 'ngx-toastr';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
 import { CalendarDeclineComponent } from '../calendar-decline/calendar-decline.component';
-import { connected } from 'process';
 
 @Component({
   selector: 'app-calendar-event',
@@ -15,6 +14,7 @@ import { connected } from 'process';
 })
 export class CalendarEventComponent implements OnInit {
   @Input('event') viewEvent;
+  @Output() onClose: EventEmitter<any> = new EventEmitter();
   event = {
     title: '',
     start: '',
@@ -136,7 +136,13 @@ export class CalendarEventComponent implements OnInit {
     this.dialog.open(CalendarDeclineComponent, {
       position: { top: '40vh' },
       width: '100vw',
-      maxWidth: '300px'
+      maxWidth: '300px',
+      panelClass: 'decline-panel',
+      backdropClass: 'decline-backdrop'
     });
+  }
+
+  close(): void {
+    this.onClose.emit();
   }
 }

@@ -1,16 +1,14 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   TIMES,
   CALENDAR_DURATION,
   RECURRING_TYPE
 } from 'src/app/constants/variable.constants';
-import { MatDialog } from '@angular/material/dialog';
 import { OverlayService } from 'src/app/services/overlay.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
 import { Contact } from 'src/app/models/contact.model';
 import * as moment from 'moment';
-import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 
 @Component({
   selector: 'app-calendar-overlay',
@@ -18,8 +16,11 @@ import { HtmlEditorComponent } from '../html-editor/html-editor.component';
   styleUrls: ['./calendar-overlay.component.scss']
 })
 export class CalendarOverlayComponent implements OnInit {
+  calendar;
   @Input('start_date') start_date: Date;
   @Input('type') type = '';
+  @Output() onClose: EventEmitter<any> = new EventEmitter();
+  @Output() onCreate: EventEmitter<any> = new EventEmitter();
   submitted = false;
   due_time = '12:00:00.000';
   selectedDateTime = {
@@ -51,11 +52,7 @@ export class CalendarOverlayComponent implements OnInit {
   calendar_durations = CALENDAR_DURATION;
   recurrings = RECURRING_TYPE;
 
-  focusedField = '';
-
-  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
   constructor(
-    private dialog: MatDialog,
     private toast: ToastrService,
     private appointmentService: AppointmentService,
     private overlayService: OverlayService
@@ -84,6 +81,11 @@ export class CalendarOverlayComponent implements OnInit {
   }
 
   create(): void {
+    if (!this.calendar) {
+      return;
+    }
+    const connected_email = this.calendar.account;
+    const calendar_id = this.calendar.id;
     this.isLoading = true;
     this.event.contacts = [];
     this.event.guests = [];
@@ -113,15 +115,21 @@ export class CalendarOverlayComponent implements OnInit {
         this.event.guests.push(contact.email);
       });
     }
-    this.appointmentService.createEvents(this.event).subscribe(
+    const data = {
+      ...this.event,
+      connected_email,
+      calendar_id
+    };
+    this.appointmentService.createEvents(data).subscribe(
       (res) => {
         if (res['status'] == true) {
           this.isLoading = false;
-          const data = {
-            event_id: res['event_id']
-          };
           this.toast.success('New Event is created successfully');
-          this.overlayService.close(data);
+          this.onCreate.emit({
+            ...data,
+            event_id: res['event_id']
+          });
+          this.close();
         }
       },
       (error) => {
@@ -138,11 +146,11 @@ export class CalendarOverlayComponent implements OnInit {
     this.event.location = evt.formatted_address;
   }
 
-  focusEditor(): void {
-    this.focusedField = 'editor';
-  }
-
   setRepeatEvent(): void {
     this.isRepeat = !this.isRepeat;
+  }
+
+  close(): void {
+    this.onClose.emit();
   }
 }

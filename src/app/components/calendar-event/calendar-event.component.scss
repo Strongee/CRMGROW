@@ -1,16 +1,54 @@
 .event-container {
-    padding: 2.25rem;
+    max-height: 100%;
+    padding: 0px;
     background: white;
     box-shadow: -8px 0 24px -5px rgba(16,19,54,0.24);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-top: 40px;
+
+    &.other {
+        padding-top: 50px;
+    }
+
+    .header {
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        left: 0px;
+    }
+
     .event-detail {
         width: 100%;
-        max-width: 300px;
-        max-height: 350px;
+        flex-grow: 1;
         overflow: auto;
+    }
+    .description {
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        ul {
+            list-style: inherit;
+        }
     }
 }
 .btn-red {
     &:hover {
         color: #fff;
+    }
+}
+
+:host ::ng-deep {
+    .description {
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        ul {
+            list-style: inherit;
+        }
     }
 }

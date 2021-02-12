@@ -196,10 +196,16 @@
         }
     }
     mwl-calendar-month-cell {
+        &:focus {
+            outline: none;
+
+            .cal-month-cell {
+                border: 1px solid blue;
+            }
+        }
         &.cal-cell.cal-day-cell {
             min-height: 140px;
             background-color: white;
-            padding: 0 5px;
             &.cal-today {
                 .cal-day-number {
                     background-color: #0000FF;
@@ -241,6 +247,9 @@
                 width: 100%;
                 height: 20px;
             }
+        }
+        .cal-month-cell {
+            padding: 0px 4px;
         }
     }
     app-slide-tab {
@@ -372,4 +381,14 @@
     margin-right: 4px;
     border-radius: 3px;
     border: 2px solid gainsboro;
+}
+
+.overlay-test {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+}
+
+.overlay-trigger {
+    position: fixed;
 }

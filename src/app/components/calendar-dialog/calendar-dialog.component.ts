@@ -247,7 +247,7 @@ export class CalendarDialogComponent implements OnInit {
                     this.dialogRef.close(data);
                   }
                 },
-                (err) => {
+                () => {
                   this.isLoading = false;
                   this.dialogRef.close();
                 }
@@ -281,7 +281,6 @@ export class CalendarDialogComponent implements OnInit {
 
   create(): void {
     if (!this.calendar) {
-      console.log('please select calendar');
       return;
     }
     const connected_email = this.calendar.account;
@@ -344,16 +343,13 @@ export class CalendarDialogComponent implements OnInit {
       };
       this.appointmentService.createEvents(data).subscribe(
         (res) => {
+          this.isLoading = false;
           if (res['status'] == true) {
-            this.isLoading = false;
-            const data = {
-              event_id: res['event_id']
-            };
             this.toast.success('New Event is created successfully');
-            this.dialogRef.close(data);
+            this.dialogRef.close({ ...data, event_id: res['event_id'] });
           }
         },
-        (error) => {
+        () => {
           this.isLoading = false;
         }
       );

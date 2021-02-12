@@ -2,24 +2,24 @@
     <div class="f-3 font-weight-bold mb-3">
         You are <span class="c-red">DECLINING</span> an invitation!
     </div>
-    <div class="f-1 font-weight-bold mb-4">
+    <div class="f-2 mb-4">
         Let know guests and organizer whe are you declining invitation for this meeting
     </div>
     <div class="form-group">
-        <label class="font-weight-bold">message</label>
+        <label class="mb-0">message</label>
         <textarea
-            class="f-1 font-weight-bold p-2"
+            class="f-3 p-2 form-control"
             name="message"
             #message="ngModel"
             [(ngModel)]="decline_message"
             cols="30"
-            rows="10"
+            rows="5"
             placeholder="Write reason for declining"
         >
         </textarea>
     </div>
     <div class="v-center justify-content-end">
-        <button class="btn btn-white f-1 font-weight-bold">Skip</button>
+        <button class="btn btn-white f-1 font-weight-bold" mat-dialog-close>Skip</button>
         <button class="btn btn-blue f-1 font-weight-bold">Send</button>
     </div>
 </div>

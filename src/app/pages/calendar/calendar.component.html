@@ -83,7 +83,7 @@
             >
             </mwl-calendar-month-view>
             <ng-template #monthCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
-                <div class="cal-month-cell h-100" #eventCell (click)="createEvent(day, eventCell, createOverlay)">
+                <div class="cal-month-cell h-100" #eventCell (click)="openOverlay(day, eventCell, $event)">
                     <div class="cal-cell-top mt-1 mb-2">
                         <span class="cal-day-number">
                             {{ day.date | calendarDate:'monthViewDayNumber':locale }}
@@ -92,7 +92,7 @@
                     <div class="cal-event m-0" *ngFor="let event of day.events"
                         [ngStyle]="{'background-color': calendars[event.meta.calendar_id]?.color}"
                         #monthEventView
-                        (mwlClick)="handleEvent(event, monthEventView, viewOverlay)">
+                        (mwlClick)="openDetail(event, monthEventView)">
                         <div class="f-2 font-weight-bold c-white p-1 cal-event-body">
                             {{(event.title || '(No Title)') | stripTags | shorten: 20: '...'}}
                         </div>
@@ -126,7 +126,7 @@
                     class="cal-event"
                     #weekEventView 
                     [ngStyle]="{'background-color': calendars[weekEvent.event.meta.calendar_id]?.color}"
-                    (mwlClick)="handleEvent(weekEvent.event, weekEventView, viewOverlay)">
+                    (mwlClick)="openDetail(weekEvent.event, weekEventView)">
                     <div class="f-1 font-weight-bold c-white cal-event-title">
                         {{weekEvent.event.title}}
                     </div>
@@ -149,7 +149,7 @@
                     </div>
                 </div>
                 <ng-template #calHourCell let-close="close" let-data>
-                    <div class="cal-hour h-100" #createWeek (click)="hourClicked(segment.date, createWeek, createOverlay)">
+                    <div class="cal-hour h-100" #createWeek (click)="openOverlay(segment.date, createWeek)">
                     </div>
                 </ng-template>
             </ng-template>
@@ -200,7 +200,7 @@
             >
             </mwl-calendar-day-view>
             <ng-template #dayEventTemplate let-dayEvent="weekEvent" let-locale="locale" let-eventClicked="eventClicked">
-                <div class="cal-event" #dayEventView [ngStyle]="{'background-color': calendars[dayEvent.event.meta.calendar_id]?.color}" (mwlClick)="handleEvent(dayEvent.event, dayEventView, viewOverlay)">
+                <div class="cal-event" #dayEventView [ngStyle]="{'background-color': calendars[dayEvent.event.meta.calendar_id]?.color}" (mwlClick)="openDetail(dayEvent.event, dayEventView)">
                     <div class="f-2 font-weight-bold c-white cal-event-title">
                         {{dayEvent.event.title}}
                     </div>
@@ -210,7 +210,7 @@
                 </div>
             </ng-template>
             <ng-template #dayHourTemplate let-segment="segment" let-locale="locale" let-isTimeLabel="isTimeLabel">
-                <div class="h-100" #createDay (click)="hourClicked(segment.date, createDay, createOverlay)">
+                <div class="h-100" #createDay (click)="openOverlay(segment.date, createDay)">
                     <div class="cal-day-timelabel">
                         <div class="cal-hour-segment">
                             <span class="cal-time f-1 font-weight-bold op-64">
@@ -226,19 +226,6 @@
                 </div>
             </ng-template>
         </div>
-        <ng-template #createOverlay let-close="close" let-data>
-            <app-calendar-overlay
-                [start_date]="data.data.start_date"
-                [type]="data.data.type"
-            >
-            </app-calendar-overlay>
-        </ng-template>
-        <ng-template #viewOverlay let-close="close" let-data>
-            <app-calendar-event
-                [event]="data.data.event"
-            >
-            </app-calendar-event>
-        </ng-template>
     </div>
     <ng-container *ngIf="isLoading">
         <div class="px-3 pb-3">
@@ -247,4 +234,13 @@
             </div>
         </div>
     </ng-container>
+
+    <ng-template #creatPortalContent>
+        <app-calendar-overlay (onClose)="closeOverlay()" (onCreate)="createEvent($event)" [start_date]="selectedDate">
+        </app-calendar-overlay>
+    </ng-template>
+    <ng-template #detailPortalContent>
+        <app-calendar-event [event]="event" (onClose)="closeOverlay()" >
+        </app-calendar-event>
+    </ng-template>
 </div>

@@ -3,7 +3,10 @@ import {
   OnInit,
   ChangeDetectorRef,
   Input,
-  ViewContainerRef
+  ViewContainerRef,
+  ViewChild,
+  TemplateRef,
+  HostListener
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppointmentService } from 'src/app/services/appointment.service';
@@ -17,6 +20,8 @@ import { UserService } from 'src/app/services/user.service';
 import { TabItem } from 'src/app/utils/data.types';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-calendar',
@@ -47,9 +52,19 @@ export class CalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
   dayEvents: any = {};
   showingEvents: CalendarEvent[] = [];
+
+  // Calendars
   accounts: any[] = [];
   calendars = {};
   selectedCalendars = [];
+
+  // Overlay Relative
+  @ViewChild('detailPortalContent') detailPortalContent: TemplateRef<unknown>;
+  @ViewChild('creatPortalContent') creatPortalContent: TemplateRef<unknown>;
+  overlayRef: OverlayRef;
+  templatePortal: TemplatePortal;
+  event: any;
+  selectedDate: any;
 
   constructor(
     private dialog: MatDialog,
@@ -61,8 +76,17 @@ export class CalendarComponent implements OnInit {
     private location: Location,
     private changeDetectorRef: ChangeDetectorRef,
     private viewContainerRef: ViewContainerRef,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private overlay: Overlay,
+    private _viewContainerRef: ViewContainerRef
   ) {}
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.overlayRef && this.overlayRef.hasAttached()) {
+      this.overlayRef.detach();
+    }
+  }
 
   ngOnInit(): void {
     this.appointmentService.loadCalendars(true);
@@ -263,10 +287,30 @@ export class CalendarComponent implements OnInit {
         }
       }
     });
-    // this.changeDetectorRef.detectChanges();
   }
 
-  createEvent(event: any, origin: any, content: any): void {
+  newEvent(): void {
+    this.overlayService.close(null);
+    this.dialog
+      .open(CalendarDialogComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '600px',
+        maxHeight: '700px'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const event = this._convertStandard2Mine(res);
+          this.events.push(event);
+          // const eventDate = this.viewDate.toISOString();
+          // this.loadEvent(eventDate, this.selectedTab.id);
+          this.changeDetectorRef.detectChanges();
+        }
+      });
+  }
+
+  createEvent(event: any, origin: any, content: any, $event: MouseEvent): void {
     this.overlayService
       .open(origin, content, this.viewContainerRef, 'create', {
         data: {
@@ -300,26 +344,7 @@ export class CalendarComponent implements OnInit {
       });
   }
 
-  newEvent(): void {
-    this.overlayService.close(null);
-    this.dialog
-      .open(CalendarDialogComponent, {
-        position: { top: '100px' },
-        width: '100vw',
-        maxWidth: '600px',
-        maxHeight: '700px'
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          const eventDate = this.viewDate.toISOString();
-          this.loadEvent(eventDate, this.selectedTab.id);
-          this.changeDetectorRef.detectChanges();
-        }
-      });
-  }
-
-  handleEvent(event: any, origin: any, content: any): void {
+  handleEvent(event: any, origin: any, content: any, $event: MouseEvent): void {
     this.overlayService
       .open(origin, content, this.viewContainerRef, 'edit', {
         data: {
@@ -431,5 +456,227 @@ export class CalendarComponent implements OnInit {
     }
     const date = this.viewDate.toISOString();
     this.loadEvent(date, this.selectedTab.id);
+  }
+
+  openOverlay(day: any, trigger: any): void {
+    const triggerEl = <HTMLElement>trigger;
+    const originBounding = triggerEl.getBoundingClientRect();
+    const originX = originBounding.x;
+    const originY = originBounding.y;
+    const originW = originBounding.width;
+    const originH = originBounding.height;
+    const originEndX = originX + originW;
+    let originEndY = originY + originH;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+    originEndY = originEndY > screenH - 30 ? screenH - 30 : originEndY;
+
+    const size = {
+      maxWidth: '550px',
+      minWidth: '300px',
+      maxHeight: 700,
+      minHeight: 320
+    };
+    const positionStrategy = this.overlay.position().global();
+    if (originX > 570) {
+      // Set Right of overlay
+      positionStrategy.left(originX - 570 + 'px');
+    } else if (originX > 500) {
+      positionStrategy.left(10 + 'px');
+    } else if (screenW - originEndX > 570) {
+      positionStrategy.left(originEndX + 20 + 'px');
+    } else if (screenW - originEndX > 500) {
+      positionStrategy.left(originEndX + 20 + 'px');
+    } else {
+      positionStrategy.centerHorizontally();
+    }
+
+    if (screenH < 600) {
+      positionStrategy.centerVertically();
+      size['height'] = screenH - 70;
+    } else if (screenH - originY > 710) {
+      positionStrategy.top(originY - 10 + 'px');
+      size['height'] = 690;
+    } else if (originEndY > 710) {
+      positionStrategy.bottom(screenH - originEndY - 10 + 'px');
+      size['height'] = 690;
+    } else {
+      positionStrategy.top('100px');
+      size['height'] = screenH - 120;
+    }
+
+    this.templatePortal = new TemplatePortal(
+      this.creatPortalContent,
+      this._viewContainerRef
+    );
+
+    if (day && day.date) {
+      this.selectedDate = day.date;
+    } else {
+      this.selectedDate = day;
+    }
+
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+        return;
+      } else {
+        this.overlayRef.updatePositionStrategy(positionStrategy);
+        this.overlayRef.updateSize(size);
+        this.overlayRef.attach(this.templatePortal);
+        return;
+      }
+    } else {
+      this.overlayRef = this.overlay.create({
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        positionStrategy,
+        ...size
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((event) => {
+        const targetEl = <HTMLElement>event.target;
+        if (targetEl.closest('.cal-event')) {
+          return;
+        }
+        if (targetEl.closest('.cal-month-cell')) {
+          return;
+        }
+        if (targetEl.closest('.decline-backdrop')) {
+          return;
+        }
+        if (targetEl.closest('.decline-panel')) {
+          return;
+        }
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
+    }
+  }
+
+  openDetail(event: any, trigger: any): void {
+    this.event = event;
+
+    const triggerEl = <HTMLElement>trigger;
+    const originBounding = triggerEl.getBoundingClientRect();
+    const originX = originBounding.x;
+    const originY = originBounding.y;
+    const originW = originBounding.width;
+    const originH = originBounding.height;
+    const originEndX = originX + originW;
+    let originEndY = originY + originH;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+    originEndY = originEndY > screenH - 30 ? screenH - 30 : originEndY;
+
+    const size = {
+      maxWidth: '360px',
+      minWidth: '300px',
+      maxHeight: 410,
+      minHeight: 320
+    };
+    const positionStrategy = this.overlay.position().global();
+    if (originX > 380) {
+      // Set Right of overlay
+      positionStrategy.left(originX - 380 + 'px');
+    } else if (originX > 320) {
+      positionStrategy.left(10 + 'px');
+    } else if (screenW - originEndX > 380) {
+      positionStrategy.left(originEndX + 20 + 'px');
+    } else if (screenW - originEndX > 320) {
+      positionStrategy.left(originEndX + 20 + 'px');
+    } else {
+      positionStrategy.centerHorizontally();
+    }
+
+    if (screenH < 380) {
+      positionStrategy.centerVertically();
+      // size['height'] = screenH - 40;
+    } else if (screenH - originY > 420) {
+      positionStrategy.top(originY + 'px');
+      // size['height'] = 420;
+    } else if (originEndY > 420) {
+      positionStrategy.bottom(screenH - originEndY + 'px');
+      // size['height'] = 420;
+    } else {
+      positionStrategy.top('30px');
+      // size['height'] = screenH - 50;
+    }
+    size['height'] = 'unset';
+
+    this.templatePortal = new TemplatePortal(
+      this.detailPortalContent,
+      this._viewContainerRef
+    );
+
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+      }
+      this.overlayRef.updatePositionStrategy(positionStrategy);
+      this.overlayRef.updateSize(size);
+      this.overlayRef.attach(this.templatePortal);
+      return;
+    } else {
+      this.overlayRef = this.overlay.create({
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        positionStrategy,
+        ...size
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((event) => {
+        const targetEl = <HTMLElement>event.target;
+        if (targetEl.closest('.cal-event')) {
+          return;
+        }
+        if (targetEl.closest('.cal-month-cell')) {
+          return;
+        }
+        if (targetEl.closest('.decline-backdrop')) {
+          return;
+        }
+        if (targetEl.closest('.decline-panel')) {
+          return;
+        }
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
+    }
+  }
+
+  closeOverlay(): void {
+    if (this.overlayRef) {
+      this.overlayRef.detach();
+    }
+  }
+
+  addEvent(event): void {
+    const _formatted = this._convertStandard2Mine(event);
+    this.events.push(_formatted);
+  }
+
+  _convertMine2Standard(event: any) {
+    const res = {};
+  }
+
+  _convertStandard2Mine(event: any) {
+    const res = {
+      title: event.title,
+      start: new Date(event.due_start),
+      end: new Date(event.due_end),
+      meta: {
+        contacts: event.contacts,
+        calendar_id: event.calendar_id,
+        description: event.description,
+        location: event.location,
+        type: event.type,
+        guests: event.guests,
+        event_id: event.event_id,
+        recurrence: event.recurrence,
+        recurrence_id: event.recurrence_id,
+        is_organizer: event.is_organizer,
+        organizer: event.organizer
+      }
+    };
+    return res;
   }
 }
