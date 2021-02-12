@@ -80,7 +80,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   selection = [];
   pageSelection = [];
   pageTasks = [];
-
+  completedTasks = [];
   timezone;
   constructor(
     private handlerService: HandlerService,
@@ -379,28 +379,37 @@ export class TasksComponent implements OnInit, OnDestroy {
         }
       });
       return;
-    } else {
-      const dialog = this.dialog.open(ConfirmComponent, {
-        width: '98vw',
-        maxWidth: '390px',
-        data: {
-          title: 'Complete task',
-          message: 'Are you sure to complete this task?',
-          confirmLabel: 'Complete'
-        }
-      });
-      dialog.afterClosed().subscribe((answer) => {
-        if (answer) {
-          this.taskService.complete(task._id).subscribe((res) => {
-            if (res && res['status']) {
-              this.handlerService.updateTasks$([task._id], {
-                status: 1
-              });
-            }
-          });
-        }
-      });
     }
+    this.taskService.complete(task._id).subscribe((res) => {
+      if (res && res['status']) {
+        this.handlerService.updateTasks$([task._id], {
+          status: 1
+        });
+        const searchOption = this.taskService.searchOption.getValue();
+        if (searchOption.status === 0) {
+          this.completedTasks.push(task._id);
+          setTimeout(() => {
+            const pos = this.completedTasks.indexOf(task._id);
+            if (pos !== -1) {
+              this.completedTasks.splice(pos, 1);
+            }
+            this.taskService.removeTask$([task._id], this.pageSize.id);
+          }, 1000);
+        }
+      }
+    });
+    // const dialog = this.dialog.open(ConfirmComponent, {
+    //   width: '98vw',
+    //   maxWidth: '390px',
+    //   data: {
+    //     title: 'Complete task',
+    //     message: 'Are you sure to complete this task?',
+    //     confirmLabel: 'Complete'
+    //   }
+    // });
+    // dialog.afterClosed().subscribe((answer) => {
+    //   if (answer) {}
+    // });
   }
 
   deleteTasks(): void {
@@ -446,6 +455,18 @@ export class TasksComponent implements OnInit, OnDestroy {
               'Selected tasks are completed successfully.',
               { closeButton: true }
             );
+            const searchOption = this.taskService.searchOption.getValue();
+            if (searchOption.status === 0) {
+              this.completedTasks = [...this.completedTasks, ...selected];
+              setTimeout(() => {
+                this.completedTasks = _.difference(
+                  this.completedTasks,
+                  selected
+                );
+                this.taskService.removeTask$(selected, this.pageSize.id);
+                this.deselectAll();
+              }, 1000);
+            }
           });
         }
       });

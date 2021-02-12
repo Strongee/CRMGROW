@@ -12,3 +12,21 @@ i.done-status {
 th.checkbox-col {
   width: 40px;
 }
+tr.completed-extension {
+  height: 0px;
+  .completed-cell {
+    position: relative;
+  }
+  .completed-cell .completed-mark {
+    width: 0px;
+    position: absolute;  
+    height: 2px;
+    background: #888;
+    bottom: 24px;
+    left: 70px;
+    transition: width .6s;
+  }
+}
+tr.completed + tr.completed-extension .completed-cell .completed-mark {
+  width: calc(100% - 70px);
+}

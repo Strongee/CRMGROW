@@ -153,7 +153,7 @@ export class TaskFilterComponent implements OnInit {
   clearFilter(): void {
     this.types = [];
     this.search = '';
-    this.status = this.STATUS_OPTIONS[1];
+    this.status = this.STATUS_OPTIONS[0];
     this.selectedLabels.clear();
     this.contact = null;
     this.taskService.clearSearchOption();

@@ -30,7 +30,7 @@
   </div>
   <div class="position-relative">
     <div class="mat-table-wrapper">
-      <table class="w-100 page-table" mat-table [dataSource]="storeService.tasks$ | async | paginate: {id: 'tasks', itemsPerPage: pageSize.id, currentPage: page, totalItems: taskService.total$ | async}">
+      <table class="w-100 page-table" mat-table multiTemplateDataRows [dataSource]="storeService.tasks$ | async | paginate: {id: 'tasks', itemsPerPage: pageSize.id, currentPage: page, totalItems: taskService.total$ | async}">
 
         <ng-container matColumnDef="loader-cell">
           <th mat-header-cell
@@ -196,6 +196,12 @@
             </ng-template>
           </th>
         </ng-container>
+
+        <ng-container matColumnDef="completed_info">
+          <td mat-cell *matCellDef="let element" class="p-0 completed-cell" colspan="10">
+            <div class="completed-mark"></div>
+          </td>
+        </ng-container>
   
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
@@ -203,7 +209,8 @@
           *matHeaderRowDef="DISPLAY_COLUMNS" class="table-header" [class.selected]="selection.length"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']"
             [class.d-none]="!isAllSelected() || !selection.length" class='selection-info'></tr>
-        <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+        <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;" [class.completed]="completedTasks.indexOf(row._id) !== -1"></tr>
+        <tr mat-row *matRowDef="let task; columns: ['completed_info'];" class="completed-extension"></tr>
       </table>
     </div>
 

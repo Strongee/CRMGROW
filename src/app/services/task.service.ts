@@ -12,6 +12,7 @@ import { Task, TaskDetail } from '../models/task.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import { StoreService } from './store.service';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -214,6 +215,24 @@ export class TaskService extends HttpService {
         map((res) => res),
         catchError(this.handleError('BULK TASK COMPLETE', null))
       );
+  }
+
+  removeTask$(ids: string[], pageSize: number): void {
+    const tasks = this.storeService.tasks.getValue();
+    const taskObjects = [];
+    ids.forEach((id) => {
+      taskObjects.push({ _id: id });
+    });
+    _.pullAllBy(tasks, taskObjects, '_id');
+    this.storeService.tasks.next([...tasks]);
+
+    const currentTotal = this.total.getValue();
+    if (currentTotal <= pageSize) {
+      return;
+    }
+    if (tasks.length < (pageSize * 2) / 3) {
+      this.reload();
+    }
   }
 
   clear$(): void {

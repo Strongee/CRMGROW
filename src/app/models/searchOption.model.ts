@@ -1,3 +1,4 @@
+import { TaskStatus } from '../constants/variable.constants';
 import { Deserializable } from './deserialize.model';
 
 class LastMaterialCondition implements Deserializable {
@@ -172,7 +173,7 @@ export class TaskSearchOption implements Deserializable {
 export class TaskDurationOption implements Deserializable {
   start_date: string;
   end_date: string;
-  status: number;
+  status: number = 0;
   name: string;
 
   deserialize(input: any): this {
