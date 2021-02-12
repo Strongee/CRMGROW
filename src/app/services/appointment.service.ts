@@ -94,4 +94,23 @@ export class AppointmentService extends HttpService {
       recurrence
     );
   }
+
+  public acceptEvent(
+    event_id: string,
+    recurrence_id: string,
+    calendar_id: string,
+    connected_email: string
+  ): Observable<boolean> {
+    const event = {
+      event_id,
+      recurrence_id,
+      calendar_id,
+      connected_email
+    };
+
+    return this.httpClient.post(this.server + APPOINTMENT.ACCEPT, event).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('ACCEPT EVENT', false))
+    );
+  }
 }

@@ -91,6 +91,9 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     this.appointmentService.loadCalendars(true);
     this.appointmentService.calendars$.subscribe((data) => {
+      this.accounts = [];
+      this.calendars = {};
+      this.selectedCalendars = [];
       data.forEach((account) => {
         const acc = { email: account.email };
         if (account.data) {
@@ -540,10 +543,10 @@ export class CalendarComponent implements OnInit {
         if (targetEl.closest('.cal-month-cell')) {
           return;
         }
-        if (targetEl.closest('.decline-backdrop')) {
+        if (targetEl.closest('.event-backdrop')) {
           return;
         }
-        if (targetEl.closest('.decline-panel')) {
+        if (targetEl.closest('.event-panel')) {
           return;
         }
         this.overlayRef.detach();
@@ -630,10 +633,10 @@ export class CalendarComponent implements OnInit {
         if (targetEl.closest('.cal-month-cell')) {
           return;
         }
-        if (targetEl.closest('.decline-backdrop')) {
+        if (targetEl.closest('.event-backdrop')) {
           return;
         }
-        if (targetEl.closest('.decline-panel')) {
+        if (targetEl.closest('.event-panel')) {
           return;
         }
         this.overlayRef.detach();
