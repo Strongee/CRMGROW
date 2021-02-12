@@ -250,6 +250,7 @@
         }
         .cal-month-cell {
             padding: 0px 4px;
+            border: 1px solid transparent;
         }
     }
     app-slide-tab {
@@ -391,4 +392,8 @@
 
 .overlay-trigger {
     position: fixed;
+}
+
+app-calendar-event {
+    width: 100%;
 }
