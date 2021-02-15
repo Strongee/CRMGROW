@@ -78,100 +78,92 @@ export class CalendarDialogComponent implements OnInit {
       this.contacts = [...this.data.contacts];
     }
 
+    if (this.data && this.data.deal) {
+      this.isDeal = true;
+      this.deal = this.data.deal;
+    }
+
     if (this.data && this.data.event) {
       this.type = 'update';
     }
   }
 
   ngOnInit(): void {
-    if (this.data && this.data.type !== 'deal') {
-      if (this.data.event) {
-        this.type = 'update';
-        this.event.title = this.data.event.title;
-        this.selectedDateTime.year = this.data.event.start
-          .getFullYear()
-          .toString();
-        this.selectedDateTime.month = (
-          this.data.event.start.getMonth() + 1
-        ).toString();
-        this.selectedDateTime.day = this.data.event.start.getDate().toString();
-        const date = moment(
-          this.selectedDateTime.year +
-            '-' +
-            this.selectedDateTime.month +
-            '-' +
-            this.selectedDateTime.day +
-            ' ' +
-            this.due_time
-        ).format();
-        const duration = moment(date)
-          .add(this.duration * 60, 'minutes')
-          .format();
-        this.event.due_start = date;
-        this.event.due_end = duration;
-        let hour, minute;
-        if (this.data.event.start.getHours().toString().length == 1) {
-          hour = `0${this.data.event.start.getHours()}`;
-        } else {
-          hour = this.data.event.start.getHours();
-        }
-        if (this.data.event.start.getMinutes().toString().length == 1) {
-          minute = `0${this.data.event.start.getMinutes()}`;
-        } else {
-          minute = this.data.event.start.getMinutes();
-        }
-        this.due_time = `${hour}:${minute}:00.000`;
-        const start_hour = this.data.event.start.getHours();
-        const end_hour = this.data.event.end.getHours();
-        const start_minute = this.data.event.start.getMinutes();
-        const end_minute = this.data.event.end.getMinutes();
-        this.duration =
-          end_hour - start_hour + (end_minute - start_minute) / 60;
-        this.event.is_organizer = this.data.event.meta.is_organizer;
-        this.event.contacts = this.data.event.meta.contacts;
-        this.event.guests = this.data.event.meta.guests;
-        if (this.data.event.meta.guests.length > 0) {
-          this.data.event.meta.guests.forEach(
-            (guest: { email: any; response: any }) => {
-              this.contactService
-                .getNormalSearch(guest.email)
-                .subscribe((res) => {
-                  if (res['status'] == true) {
-                    if (res['data'].contacts.length > 0) {
-                      res['data'].contacts[0].email_status = guest.response;
-                      let contacts = new Contact();
-                      contacts = res['data'].contacts[0];
-                      this.contacts = [...this.contacts, contacts];
-                    } else {
-                      const firstname = res['data'].search.split('@')[0];
-                      const guests = new Contact().deserialize({
-                        first_name: firstname,
-                        email: res['data'].search
-                      });
-                      this.contacts = [...this.contacts, guests];
-                    }
+    if (this.data.event) {
+      this.type = 'update';
+      this.event.title = this.data.event.title;
+      this.selectedDateTime.year = this.data.event.start
+        .getFullYear()
+        .toString();
+      this.selectedDateTime.month = (
+        this.data.event.start.getMonth() + 1
+      ).toString();
+      this.selectedDateTime.day = this.data.event.start.getDate().toString();
+      const date = moment(
+        this.selectedDateTime.year +
+          '-' +
+          this.selectedDateTime.month +
+          '-' +
+          this.selectedDateTime.day +
+          ' ' +
+          this.due_time
+      ).format();
+      const duration = moment(date)
+        .add(this.duration * 60, 'minutes')
+        .format();
+      this.event.due_start = date;
+      this.event.due_end = duration;
+      let hour, minute;
+      if (this.data.event.start.getHours().toString().length == 1) {
+        hour = `0${this.data.event.start.getHours()}`;
+      } else {
+        hour = this.data.event.start.getHours();
+      }
+      if (this.data.event.start.getMinutes().toString().length == 1) {
+        minute = `0${this.data.event.start.getMinutes()}`;
+      } else {
+        minute = this.data.event.start.getMinutes();
+      }
+      this.due_time = `${hour}:${minute}:00.000`;
+      const start_hour = this.data.event.start.getHours();
+      const end_hour = this.data.event.end.getHours();
+      const start_minute = this.data.event.start.getMinutes();
+      const end_minute = this.data.event.end.getMinutes();
+      this.duration = end_hour - start_hour + (end_minute - start_minute) / 60;
+      this.event.is_organizer = this.data.event.meta.is_organizer;
+      this.event.contacts = this.data.event.meta.contacts;
+      this.event.guests = this.data.event.meta.guests;
+      if (this.data.event.meta.guests.length > 0) {
+        this.data.event.meta.guests.forEach(
+          (guest: { email: any; response: any }) => {
+            this.contactService
+              .getNormalSearch(guest.email)
+              .subscribe((res) => {
+                if (res['status'] == true) {
+                  if (res['data'].contacts.length > 0) {
+                    res['data'].contacts[0].email_status = guest.response;
+                    let contacts = new Contact();
+                    contacts = res['data'].contacts[0];
+                    this.contacts = [...this.contacts, contacts];
+                  } else {
+                    const firstname = res['data'].search.split('@')[0];
+                    const guests = new Contact().deserialize({
+                      first_name: firstname,
+                      email: res['data'].search
+                    });
+                    this.contacts = [...this.contacts, guests];
                   }
-                });
-            }
-          );
-        }
-        this.event.location = this.data.event.meta.location;
-        this.event.description = this.data.event.meta.description;
-        this.event.recurrence = this.data.event.meta.recurrence;
-        this.event.recurrence_id = this.data.event.meta.recurrence_id;
-        this.event.calendar_id = this.data.event.meta.calendar_id;
-        this.event.event_id = this.data.event.meta.event_id;
+                }
+              });
+          }
+        );
       }
-    }
-
-    if (this.data && this.data.type === 'deal') {
-      this.isDeal = true;
-      this.deal = this.data.deal;
-      if (this.data.contacts && this.data.contacts.length) {
-        for (const contact of this.data.contacts) {
-          this.contacts.push(contact);
-        }
-      }
+      this.event.location = this.data.event.meta.location;
+      this.event.description = this.data.event.meta.description;
+      this.event.recurrence = this.data.event.meta.recurrence;
+      this.event.recurrence_id = this.data.event.meta.recurrence_id;
+      this.event.calendar_id = this.data.event.meta.calendar_id;
+      this.event.event_id = this.data.event.meta.event_id;
     }
   }
 

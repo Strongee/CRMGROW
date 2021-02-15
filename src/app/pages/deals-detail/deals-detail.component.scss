@@ -303,8 +303,9 @@
             border: 1px solid #DCDCDC;
             border-radius: 4px;
             .avatar-wrapper {
-                width: 100%;
+                width: fit-content;
                 height: 100%;
+
                 .avatar {
                   width: 40px;
                   min-width: 40px;

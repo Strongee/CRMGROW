@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import { Contact } from 'src/app/models/contact.model';
 import { SelectContactComponent } from '../select-contact/select-contact.component';
 import * as _ from 'lodash';
+import { DealsService } from 'src/app/services/deals.service';
 @Component({
   selector: 'app-join-call-request',
   templateUrl: './join-call-request.component.html',
@@ -40,12 +41,16 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
   isLoading = false;
   requestCreateSubscription: Subscription;
 
+  isDeal = false;
+  dealId = '';
+
   @ViewChild('contactSelector') contactSelector: SelectContactComponent;
   constructor(
     private dialogRef: MatDialogRef<JoinCallRequestComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private teamService: TeamService,
-    private userService: UserService
+    private userService: UserService,
+    private dealService: DealsService
   ) {
     const current = new Date();
     this.minDate = {
@@ -66,6 +71,11 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
         this.keepContactIds.push(e._id);
       });
       this.contacts = [...this.data.contacts];
+    }
+
+    if (this.data && this.data.deal) {
+      this.isDeal = true;
+      this.dealId = this.data.deal;
     }
   }
 
@@ -171,10 +181,19 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
         status,
         proposed_at: dueDateTimes
       };
-      this.teamService.requestCall(data).subscribe((response) => {
-        this.isLoading = false;
-        this.dialogRef.close({ data: response });
-      });
+      if (this.isDeal) {
+        data['deal'] = this.dealId;
+        this.dealService.addGroupCall(data).subscribe((response) => {
+          console.log('deal group call response', response);
+          this.isLoading = false;
+          this.dialogRef.close(response);
+        });
+      } else {
+        this.teamService.requestCall(data).subscribe((response) => {
+          this.isLoading = false;
+          this.dialogRef.close({ data: response });
+        });
+      }
     });
   }
 

@@ -209,4 +209,25 @@ export class DealsService extends HttpService {
       catchError(this.handleError('ADD DEAL APPOINTMENT', []))
     );
   }
+
+  getAppointments(data: any): Observable<any[]> {
+    return this.httpClient.post(this.server + DEAL.GET_APPOINTMENT, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET DEAL APPOINTMENT', []))
+    );
+  }
+
+  addGroupCall(data: any): Observable<any> {
+    return this.httpClient.post(this.server + DEAL.ADD_GROUP_CALL, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('ADD DEAL GROUP CALL', []))
+    );
+  }
+
+  getGroupCalls(data: any): Observable<any[]> {
+    return this.httpClient.post(this.server + DEAL.GET_GROUP_CALL, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET DEAL GROUP CALL', []))
+    );
+  }
 }

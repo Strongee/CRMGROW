@@ -65,21 +65,19 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     private dealService: DealsService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
-    if (this.data) {
-      this.type = this.data.type;
-      if (this.type === 'deal') {
-        this.dealId = this.data.deal;
-        for (const contact of this.data.contacts) {
-          this.emailContacts.push(contact);
-        }
-      } else {
-        if (this.data.contact) {
-          this.emailContacts = [this.data.contact];
-          this.mainContact = this.data.contact;
-        }
-        if (this.data.contacts) {
-          this.emailContacts = this.data.contacts;
-        }
+    if (this.data && this.data.deal) {
+      this.dealId = this.data.deal;
+      this.type = 'deal';
+      for (const contact of this.data.contacts) {
+        this.emailContacts.push(contact);
+      }
+    } else {
+      if (this.data.contact) {
+        this.emailContacts = [this.data.contact];
+        this.mainContact = this.data.contact;
+      }
+      if (this.data.contacts) {
+        this.emailContacts = this.data.contacts;
       }
     }
   }

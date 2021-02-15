@@ -49,16 +49,15 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       month: current.getMonth() + 1,
       day: current.getDate()
     };
-    if (this.data) {
-      this.isSelected = true;
-      if (this.data.type === 'deal') {
-        this.type = 'deal';
-        this.dealId = this.data.deal;
-      }
-      if (this.data.contacts) {
-        this.contacts = this.data.contacts;
-      }
+    if (this.data && this.data.deal) {
+      this.type = 'deal';
+      this.dealId = this.data.deal;
     }
+    if (this.data && this.data.contacts) {
+      this.isSelected = true;
+      this.contacts = [...this.data.contacts];
+    }
+
     this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
@@ -86,6 +85,12 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   selectContact(event: Contact): void {
     if (event) {
       this.contacts = [event];
+    }
+  }
+  removeContact(contact: Contact): void {
+    const index = this.contacts.findIndex((item) => item._id === contact._id);
+    if (index >= 0) {
+      this.contacts.splice(index, 1);
     }
   }
   submit(): void {

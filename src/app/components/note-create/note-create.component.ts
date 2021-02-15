@@ -29,18 +29,14 @@ export class NoteCreateComponent implements OnInit {
     private dialogRef: MatDialogRef<NoteCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
-    if (this.data) {
-      this.type = this.data.type;
-
-      if (this.type === 'deal') {
-        this.dealId = this.data.deal;
-      }
-
-      if (this.data.contacts) {
-        this.isSelected = true;
-        for (const contact of this.data.contacts) {
-          this.contacts.push(contact);
-        }
+    if (this.data && this.data.deal) {
+      this.type = 'deal';
+      this.dealId = this.data.deal;
+    }
+    if (this.data && this.data.contacts) {
+      this.isSelected = true;
+      for (const contact of this.data.contacts) {
+        this.contacts.push(contact);
       }
     }
   }
@@ -86,7 +82,6 @@ export class NoteCreateComponent implements OnInit {
       } else {
         const data = {
           contacts: ids,
-          title: this.note.title,
           content: this.note.content
         };
         this.saving = true;
@@ -102,7 +97,6 @@ export class NoteCreateComponent implements OnInit {
     } else {
       const data = {
         contact: ids[0],
-        title: this.note.title,
         content: this.note.content
       };
       this.saving = true;

@@ -270,6 +270,9 @@ export const DEAL = {
   GET_FOLLOWUP: 'deal/get-follow',
   GET_ACTIVITY: 'deal/get-activity',
   ADD_APPOINTMENT: 'deal/create-appointment',
+  GET_APPOINTMENT: 'deal/get-appointments',
+  ADD_GROUP_CALL: 'deal/create-team-call',
+  GET_GROUP_CALL: 'deal/get-team-calls',
   UPDATE_CONTACT: 'deal/update-contact/'
 };
 

@@ -25,6 +25,10 @@ import { HandlerService } from '../../services/handler.service';
 import { DealContactComponent } from 'src/app/components/deal-contact/deal-contact.component';
 import * as _ from 'lodash';
 import { Location } from '@angular/common';
+import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
+import { AppointmentService } from 'src/app/services/appointment.service';
+import { NotifyComponent } from 'src/app/components/notify/notify.component';
+import { TeamService } from 'src/app/services/team.service';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -83,11 +87,31 @@ export class DealsDetailComponent implements OnInit {
     public dealsService: DealsService,
     private noteService: NoteService,
     private taskService: TaskService,
+    private appointmentService: AppointmentService,
+    private teamService: TeamService,
     private handlerService: HandlerService,
     private storeService: StoreService,
     private location: Location
   ) {
     this.dealsService.getStage(true);
+
+    this.teamService.loadAll(true);
+    this.appointmentService.loadCalendars(false);
+    // this.profileSubscription && this.profileSubscription.unsubscribe();
+    // this.profileSubscription = this.userService.profile$.subscribe((user) => {
+    //   try {
+    //     this.timezone = JSON.parse(user.time_zone_info);
+    //   } catch (err) {
+    //     const timezone = getCurrentTimezone();
+    //     this.timezone = { zone: user.time_zone || timezone };
+    //   }
+    //   this.checkSharable();
+    // });
+
+    // this.teamSubscription && this.teamSubscription.unsubscribe();
+    // this.teamSubscription = this.teamService.teams$.subscribe(() => {
+    //   this.checkSharable();
+    // });
   }
 
   ngOnInit(): void {
@@ -275,13 +299,37 @@ export class DealsDetailComponent implements OnInit {
   }
 
   openAppointmentDlg(): void {
+    const calendars = this.appointmentService.calendars.getValue();
+    if (!calendars || !calendars.length) {
+      this.dialog.open(NotifyComponent, {
+        ...DialogSettings.ALERT,
+        data: {
+          title: 'Calendar',
+          message:
+            'You did not connected with your calendars. Please connect with your calendar.'
+        }
+      });
+      return;
+    }
+
     this.dialog.open(CalendarDialogComponent, {
       position: { top: '100px' },
       width: '100vw',
       maxWidth: '600px',
       maxHeight: '700px',
       data: {
-        type: 'deal',
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
+    });
+  }
+
+  openGroupCallDlg(): void {
+    this.dialog.open(JoinCallRequestComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '530px',
+      data: {
         deal: this.dealId,
         contacts: this.deal.contacts
       }
@@ -291,16 +339,14 @@ export class DealsDetailComponent implements OnInit {
   openSendEmail(): void {
     this.dialog.open(SendEmailComponent, {
       position: {
-        bottom: '50px',
-        right: '50px'
+        bottom: '0px',
+        right: '0px'
       },
       width: '100vw',
-      maxWidth: '650px',
       panelClass: 'send-email',
-      backdropClass: 'cdk-send-2email',
+      backdropClass: 'cdk-send-email',
       disableClose: false,
       data: {
-        type: 'deal',
         deal: this.dealId,
         contacts: this.deal.contacts
       }
@@ -311,7 +357,6 @@ export class DealsDetailComponent implements OnInit {
     this.dialog.open(TaskCreateComponent, {
       ...DialogSettings.TASK,
       data: {
-        type: 'deal',
         contacts: this.deal.contacts,
         deal: this.dealId
       }
@@ -322,7 +367,6 @@ export class DealsDetailComponent implements OnInit {
     this.dialog.open(NoteCreateComponent, {
       ...DialogSettings.NOTE,
       data: {
-        type: 'deal',
         deal: this.dealId,
         contacts: this.deal.contacts
       }
