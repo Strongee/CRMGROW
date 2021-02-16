@@ -25,6 +25,12 @@ export class ContactService extends HttpService {
   forceReload: BehaviorSubject<boolean> = new BehaviorSubject(false);
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loading$ = this.loadStatus.asObservable();
+  readDetailStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  readingDetail$ = this.readDetailStatus.asObservable();
+  latestUpdateStatus: BehaviorSubject<string> = new BehaviorSubject(
+    STATUS.NONE
+  );
+  latestUpdating$ = this.latestUpdateStatus.asObservable();
   total: BehaviorSubject<number> = new BehaviorSubject(0);
   total$ = this.total.asObservable();
   searchOption: BehaviorSubject<SearchOption> = new BehaviorSubject(
@@ -61,7 +67,9 @@ export class ContactService extends HttpService {
    * @param sortInfo: Page sort information for the next and prev contact
    */
   read(_id: string, sortInfo = {}): void {
+    this.readDetailStatus.next(STATUS.REQUEST);
     this.readImpl(_id, sortInfo).subscribe((res) => {
+      this.readDetailStatus.next(STATUS.SUCCESS);
       if (res) {
         this.storeService.selectedContact.next(res);
       }
@@ -83,12 +91,43 @@ export class ContactService extends HttpService {
   reloadDetail(): void {
     const contact = this.storeService.selectedContact.getValue();
     if (contact && contact._id) {
+      this.readDetailStatus.next(STATUS.REQUEST);
       this.readImpl(contact._id, {}).subscribe((res) => {
+        this.readDetailStatus.next(STATUS.SUCCESS);
         if (res) {
           this.storeService.selectedContact.next(res);
         }
       });
     }
+  }
+  addLatestActivity(count: number): void {
+    const contact = this.storeService.selectedContact.getValue();
+    if (contact && contact._id) {
+      this.latestUpdateStatus.next(STATUS.REQUEST);
+      this.loadLatestActivity(contact._id, count).subscribe((res) => {
+        this.latestUpdateStatus.next(STATUS.SUCCESS);
+        if (res) {
+          const currentContact = this.storeService.selectedContact.getValue();
+          if (res._id === currentContact._id) {
+            const newActivities = res.activity.reverse();
+            currentContact.activity = _.unionBy(
+              currentContact.activity,
+              newActivities,
+              '_id'
+            );
+            this.storeService.selectedContact.next(currentContact);
+          }
+        }
+      });
+    }
+  }
+  loadLatestActivity(id: string, count: number): Observable<ContactDetail> {
+    return this.httpClient
+      .post(this.server + CONTACT.READ + id, { count })
+      .pipe(
+        map((res) => new ContactDetail().deserialize(res['data'])),
+        catchError(this.handleError('CONTACT DETAIL', null))
+      );
   }
 
   /**
@@ -123,7 +162,7 @@ export class ContactService extends HttpService {
   updateContact(id: string, contact: any): Observable<any> {
     return this.httpClient.put(this.server + CONTACT.READ + id, contact).pipe(
       map((res) => res['data']),
-      catchError(this.handleError('UPDATE CONTACT', []))
+      catchError(this.handleError('UPDATE CONTACT', null))
     );
   }
 

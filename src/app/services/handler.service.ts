@@ -307,6 +307,21 @@ export class HandlerService {
     }
   }
 
+  addLatestActivities$(count: number): void {
+    const page = this.pageName.getValue();
+    switch (page) {
+      case 'dashboard':
+        this.reloadActivities$();
+        break;
+      case 'contacts':
+        this.reloadContacts$();
+        break;
+      case 'detail':
+        this.contactService.addLatestActivity(count);
+        break;
+    }
+  }
+
   reloadTasks$(): void {
     this.taskService.reload();
   }

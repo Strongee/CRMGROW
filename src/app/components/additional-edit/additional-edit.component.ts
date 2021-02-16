@@ -19,8 +19,9 @@ export class AdditionalEditComponent implements OnInit {
     private contactService: ContactService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    if (this.data) {
+    if (this.data && this.data.contact) {
       this.contact = { ...this.contact, ...this.data.contact };
+      this.contact.tags = [...this.contact.tags];
     }
   }
 
@@ -33,9 +34,9 @@ export class AdditionalEditComponent implements OnInit {
     this.updateSubscription = this.contactService
       .updateContact(contactId, this.contact)
       .subscribe((res) => {
+        this.isUpdating = false;
         if (res) {
-          this.isUpdating = false;
-          this.dialogRef.close(res._id);
+          this.dialogRef.close(res);
         }
       });
   }

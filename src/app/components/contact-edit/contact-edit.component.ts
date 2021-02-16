@@ -101,9 +101,9 @@ export class ContactEditComponent implements OnInit {
     this.updateSubscription = this.contactService
       .updateContact(contactId, this.contact)
       .subscribe((res) => {
+        this.isUpdating = false;
         if (res) {
-          this.isUpdating = false;
-          this.dialogRef.close(res._id);
+          this.dialogRef.close(res);
         }
       });
   }

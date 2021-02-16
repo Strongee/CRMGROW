@@ -39,7 +39,20 @@
 }
 
 :host ::ng-deep {
-    mat-dialog-content {
-        overflow: unset;
+    .bottom-phone {
+        .country-dropdown {
+            top: 0px!important;
+            transform: translateY(-102%)!important;
+        }
+    }
+
+    .top-phone {
+        .country-dropdown {
+            @media screen and (max-height: 569px) {
+                ul {
+                    max-height: 140px;
+                }
+            }
+        }
     }
 }

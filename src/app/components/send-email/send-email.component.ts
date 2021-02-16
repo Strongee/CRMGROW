@@ -21,6 +21,7 @@ import { TIMES } from 'src/app/constants/variable.constants';
 import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
 import { DealsService } from '../../services/deals.service';
+import { HandlerService } from 'src/app/services/handler.service';
 
 @Component({
   selector: 'app-send-email',
@@ -62,6 +63,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     private helperSerivce: HelperService,
     private materialService: MaterialService,
     private userService: UserService,
+    private handlerService: HandlerService,
     private dealService: DealsService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -72,11 +74,11 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         this.emailContacts.push(contact);
       }
     } else {
-      if (this.data.contact) {
+      if (this.data && this.data.contact) {
         this.emailContacts = [this.data.contact];
         this.mainContact = this.data.contact;
       }
-      if (this.data.contacts) {
+      if (this.data && this.data.contacts) {
         this.emailContacts = this.data.contacts;
       }
     }
@@ -125,37 +127,52 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         }
       });
 
+      const data = {
+        contacts,
+        cc,
+        bcc,
+        video_ids,
+        pdf_ids,
+        image_ids,
+        subject,
+        content,
+        attachments: this.attachments
+      };
+      if (!data.video_ids) {
+        delete data.video_ids;
+      }
+      if (!data.pdf_ids) {
+        delete data.pdf_ids;
+      }
+      if (!data.image_ids) {
+        delete data.image_ids;
+      }
+
       if (this.type === 'deal') {
+        this.emailSending = true;
         this.dealService
           .sendEmail({
             deal: this.dealId,
-            contacts,
-            cc,
-            bcc,
-            video_ids,
-            pdf_ids,
-            image_ids,
-            subject,
-            content,
-            attachments: this.attachments
+            ...data
           })
           .subscribe((status) => {
+            this.emailSending = false;
             this.dialogRef.close();
           });
       } else {
+        this.emailSending = true;
         this.materialService
           .sendMaterials({
-            contacts,
-            cc,
-            bcc,
-            video_ids,
-            pdf_ids,
-            image_ids,
-            subject,
-            content,
-            attachments: this.attachments
+            ...data
           })
           .subscribe((status) => {
+            this.emailSending = false;
+            const length =
+              (data.video_ids ? data.video_ids.length : 0) +
+              (data.pdf_ids ? data.pdf_ids.length : 0) +
+              (data.image_ids ? data.image_ids.length : 0) +
+              1;
+            this.handlerService.addLatestActivities$(length);
             this.dialogRef.close();
           });
       }

@@ -102,9 +102,9 @@ export class DealsService extends HttpService {
       );
   }
 
-  getDeal(id: string): any {
+  getDeal(id: string): Observable<any> {
     return this.httpClient.get(this.server + DEAL.GET + id).pipe(
-      map((res) => res['data'] || []),
+      map((res) => res['data']),
       catchError(this.handleError('GET DEAL', null))
     );
   }

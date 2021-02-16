@@ -191,18 +191,30 @@ export class MaterialSendComponent implements OnInit {
       const html = `<div><strong>${e.title}</strong></div><div><a href="{${e._id}}"><img src="${e.preview}" width="320" height="176" alt="preview image of material" /></a></div><br/>`;
       email += html;
     });
+    const data = {
+      contacts,
+      cc: [],
+      bcc: [],
+      video_ids,
+      pdf_ids,
+      image_ids,
+      subject: this.subject,
+      content: email,
+      attachment: ''
+    };
+    if (!data.video_ids) {
+      delete data.video_ids;
+    }
+    if (!data.pdf_ids) {
+      delete data.pdf_ids;
+    }
+    if (!data.image_ids) {
+      delete data.image_ids;
+    }
     this.sending = true;
     this.materialService
       .sendMaterials({
-        contacts,
-        cc: [],
-        bcc: [],
-        video_ids,
-        pdf_ids,
-        image_ids,
-        subject: this.subject,
-        content: email,
-        attachment: ''
+        ...data
       })
       .subscribe((status) => {
         this.sending = false;

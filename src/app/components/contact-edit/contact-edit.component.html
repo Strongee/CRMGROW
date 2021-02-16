@@ -53,7 +53,7 @@
               <ng-container *ngIf="email.errors.pattern">Email is invalid!</ng-container>
             </span>
         </div>
-        <div class="col-sm-6 col-12 form-group phone-form position-relative">
+        <div class="col-sm-6 col-12 form-group phone-form position-relative top-phone">
           <label for="cell_phone_cc">phone number</label>
           <ngx-intl-tel-input
             id="cell_phone_cc"
@@ -142,7 +142,7 @@
             <ng-container *ngIf="secondEmail.errors.pattern">Email is invalid!</ng-container>
           </span>
         </div>
-        <div class="col-sm-6 col-12 form-group phone-form">
+        <div class="col-sm-6 col-12 form-group phone-form bottom-phone">
           <label for="second_phone_call">secondary phone number (optional)</label>
           <ngx-intl-tel-input
             id="second_phone_call"

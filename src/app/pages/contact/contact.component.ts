@@ -22,7 +22,8 @@ import {
   ActionName,
   REPEAT_DURATIONS,
   DialogSettings,
-  CALENDAR_DURATION
+  CALENDAR_DURATION,
+  STATUS
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -61,6 +62,7 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit, OnDestroy {
+  STATUS = STATUS;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
     { icon: '', label: 'Notes', id: 'note' },
@@ -134,7 +136,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private contactService: ContactService,
+    public contactService: ContactService,
     private userService: UserService,
     private noteService: NoteService,
     private taskService: TaskService,
@@ -171,18 +173,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.loadContact(this._id);
 
     this.storeService.selectedContact$.subscribe((res) => {
-      if (res && res._id === this._id) {
-        this.contact = res;
-        this.selectedContact = res;
-        this.groupActivities();
-        this.getActivityCount();
-        this.timeLineArrangement();
-      } else {
-        this.contact = res;
-        this.selectedContact = res;
-        this.groupActivities();
-        this.getActivityCount();
-      }
+      this.contact = res;
+      this.selectedContact = res;
+      this.groupActivities();
+      this.getActivityCount();
+      this.timeLineArrangement();
       if (this.tab.id !== 'all') {
         this.changeTab(this.tab);
       }
@@ -193,6 +188,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
+    this.storeService.selectedContact.next(new ContactDetail());
   }
 
   /**
@@ -414,9 +410,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
       })
       .afterClosed()
-      .subscribe((id) => {
-        if (id) {
-          this.loadContact(id);
+      .subscribe((res) => {
+        if (res) {
+          for (const key in res) {
+            this.contact[key] = res[key];
+          }
         }
       });
   }
@@ -432,9 +430,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
       })
       .afterClosed()
-      .subscribe((id) => {
-        if (id) {
-          this.loadContact(id);
+      .subscribe((res) => {
+        if (res) {
+          for (const key in res) {
+            this.contact[key] = res[key];
+          }
         }
       });
   }
@@ -469,7 +469,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.handlerService.reload$();
+          this.contactService.addLatestActivity(4);
         }
       });
   }
@@ -512,7 +512,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((event) => {
         if (event) {
-          this.handlerService.reload$();
+          this.contactService.addLatestActivity(4);
         }
       });
   }
@@ -566,7 +566,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.handlerService.reload$();
+          this.contactService.addLatestActivity(4);
         }
       });
   }
@@ -608,17 +608,6 @@ export class ContactComponent implements OnInit, OnDestroy {
           message: 'You have no active teams.'
         }
       });
-    }
-  }
-
-  insertActivity(activity: DetailActivity): void {
-    const group = this.generateUniqueId(activity);
-    if (this.groupActions[group]) {
-      this.groupActions[group].push(activity);
-    } else {
-      activity.group_id = group;
-      this.groupActions[group] = [activity];
-      this.mainTimelines.unshift(activity);
     }
   }
   /**************************************
@@ -692,6 +681,10 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.showingDetails.push(e);
         }
       });
+      this.showingDetails = this.showingDetails.sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      );
     }
   }
 
