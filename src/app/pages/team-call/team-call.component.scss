@@ -198,3 +198,50 @@
     border-radius: 8px;
   }
 }
+
+
+.sub-sidebar {
+  .selected {
+    color: $color-blue;
+    font-weight: 700!important;
+    .c-dark {
+      color: $color-blue!important;
+    }
+  }
+}
+
+.sub-sidebar-mobile {
+  display: none;
+  .sidebar-menu {
+      border: 2px solid #c6c7cf;
+      border-radius: 3px;
+      .dropdown-toggle {
+          &::after {
+              margin-left: 0.5rem;
+              color: $color-blue;
+          }
+      }
+      .dropdown-menu.show {
+          top: 8px !important;
+          left: -8px !important;
+          width: 100%;
+      }
+  }
+  @media screen and (max-width: 576px) {
+      display: block;
+  }
+}
+.sub-sidebar.desktop {
+  @media screen and (max-width: 576px) {
+    display: none;
+  }
+}
+
+.sub-container {
+  flex-grow: 1;
+  padding-left: 36px;
+
+  @media screen and (max-width: 576px) {
+    padding-left: 0px;
+  }
+}

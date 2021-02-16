@@ -175,7 +175,8 @@ export const TEAM = {
   REJECT_CALL: '/team/reject-call/',
   ACCEPT_CALL: '/team/accept-call/',
   UPDATE_CALL: '/team/call/',
-  DELETE_CALL: '/team/call/'
+  DELETE_CALL: '/team/call/',
+  TEAM_CALL_LOAD: '/team/load-call'
 };
 export const AUTOMATION = {
   SEARCH: 'automation/search',

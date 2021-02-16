@@ -4,7 +4,7 @@
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" type="plain" (onChange)="changeTab($event)" class="border-bottom pl-0 rounded-0">
     </app-slide-tab>
   </div>
-  <div class="mt-3 overflow-hidden">
+  <div class="mt-3">
     <app-team-list [class.d-none]="selectedTab.id !== 'teams'"></app-team-list>
     <app-team-call [class.d-none]="selectedTab.id !== 'calls'"></app-team-call>
   </div>

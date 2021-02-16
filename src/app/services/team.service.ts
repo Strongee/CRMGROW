@@ -341,11 +341,53 @@ export class TeamService extends HttpService {
         catchError(this.handleError('UPDATE TEAM', []))
       );
   }
+  shareTemplates(teamId, templateIds): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.SHARE_TEMPLATES, {
+        team_id: teamId,
+        template_ids: templateIds
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('SHARE TEMPLATES', []))
+      );
+  }
+
+  shareAutomations(teamId, automationIds): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.SHARE_AUTOMATIONS, {
+        team_id: teamId,
+        automation_ids: automationIds
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('SHARE AUTOMATION', []))
+      );
+  }
+
+  create(data): Observable<any> {
+    return this.httpClient.post(this.server + TEAM.CREATE, data).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('CREATE TEAM', []))
+    );
+  }
+
   getInquiry(id): Observable<any> {
     return this.httpClient.get(this.server + TEAM.CALL + id).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD INQUIRY CALL', []))
     );
+  }
+  loadTeamCalls(type: string, skip: number): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.TEAM_CALL_LOAD, {
+        type,
+        skip
+      })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('LOAD GROUP CALLS', null))
+      );
   }
   getPageInquiries(page): Observable<any> {
     return this.httpClient.get(this.server + TEAM.INQUIRY + page).pipe(
@@ -396,36 +438,7 @@ export class TeamService extends HttpService {
     );
   }
 
-  shareTemplates(teamId, templateIds): Observable<any> {
-    return this.httpClient
-      .post(this.server + TEAM.SHARE_TEMPLATES, {
-        team_id: teamId,
-        template_ids: templateIds
-      })
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('SHARE TEMPLATES', []))
-      );
-  }
-
-  shareAutomations(teamId, automationIds): Observable<any> {
-    return this.httpClient
-      .post(this.server + TEAM.SHARE_AUTOMATIONS, {
-        team_id: teamId,
-        automation_ids: automationIds
-      })
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('SHARE AUTOMATION', []))
-      );
-  }
-
-  create(data): Observable<any> {
-    return this.httpClient.post(this.server + TEAM.CREATE, data).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('CREATE TEAM', []))
-    );
-  }
+  
 
   clear$(): void {
     this.teams.next([]);
