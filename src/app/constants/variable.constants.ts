@@ -1,5 +1,11 @@
 import { CountryISO } from 'ngx-intl-tel-input';
 
+export const CONTACT_SORT_OPTIONS = {
+  alpha_down: { dir: false, field: 'name', name: 'alpha_down' },
+  alpha_up: { dir: true, field: 'name', name: 'alpha_up' },
+  last_added: { dir: true, field: 'updated_at', name: 'last_added' },
+  last_active: { dir: false, field: 'updated_at', name: 'last_active' }
+};
 export const STATUS = {
   NONE: 'none',
   REQUEST: 'request',

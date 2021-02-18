@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import 'moment-timezone';
 import { CallRequestCancelComponent } from '../call-request-cancel/call-request-cancel.component';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
+import { AppointmentService } from 'src/app/services/appointment.service';
 
 @Component({
   selector: 'app-call-request-detail',
@@ -39,6 +40,7 @@ export class CallRequestDetailComponent implements OnInit {
   constructor(
     private profileService: UserService,
     private teamService: TeamService,
+    private appointmentService: AppointmentService,
     private dialogRef: MatDialogRef<CallRequestDetailComponent>,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -213,7 +215,18 @@ export class CallRequestDetailComponent implements OnInit {
         this.accepting = false;
         if (status) {
           // Check the Calendar Connection
-
+          const calendars = this.appointmentService.calendars.getValue();
+          if (!calendars || !calendars.length) {
+            this.dialogRef.close({
+              action: 'update',
+              data: {
+                status: 'planned',
+                confirmed_at: callTime
+              },
+              id: this.call._id
+            });
+            return;
+          }
           this.dialog
             .open(ConfirmComponent, {
               ...DialogSettings.CONFIRM,
@@ -237,21 +250,12 @@ export class CallRequestDetailComponent implements OnInit {
                 id: this.call._id
               });
             });
-
-          this.dialogRef.close({
-            action: 'update',
-            data: {
-              status: 'planned',
-              confirmed_at: callTime
-            },
-            id: this.call._id
-          });
         }
       });
   }
 
   addToCalendar(): void {
-    let contacts = [];
+    const contacts = [];
     // if (this.isOrganizer) {
     //   contacts.push();
     // } else {

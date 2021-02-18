@@ -12,7 +12,7 @@ import {
 } from '../models/contact.model';
 import { ActivityDetail } from '../models/activityDetail.model';
 import { map, catchError } from 'rxjs/operators';
-import { STATUS } from '../constants/variable.constants';
+import { CONTACT_SORT_OPTIONS, STATUS } from '../constants/variable.constants';
 import { SearchOption } from '../models/searchOption.model';
 import * as _ from 'lodash';
 interface LoadResponse {
@@ -43,6 +43,10 @@ export class ContactService extends HttpService {
   pageIndex$ = this.pageIndex.asObservable();
   pageSize: BehaviorSubject<number> = new BehaviorSubject(50);
   pageSize$ = this.pageSize.asObservable();
+  sort: BehaviorSubject<any> = new BehaviorSubject(
+    CONTACT_SORT_OPTIONS['alpha_up']
+  );
+  sort$ = this.sort.asObservable();
 
   loadSubscription: Subscription;
 
@@ -58,6 +62,22 @@ export class ContactService extends HttpService {
 
     this.searchStr$.subscribe(() => {
       this.loadPage();
+    });
+
+    this.sort$.subscribe(() => {
+      const searchOption = this.searchOption.getValue();
+      const searchStr = this.searchStr.getValue();
+      if (searchOption.isEmpty()) {
+        if (searchStr) {
+          // Call Normal Search
+          this.sortContacts();
+        } else {
+          // Call Normal Load
+          this.load(0);
+        }
+      } else {
+        this.sortContacts();
+      }
     });
   }
 
@@ -269,11 +289,12 @@ export class ContactService extends HttpService {
    * @param page
    */
   loadImpl(page: number): Observable<any> {
+    const sort = this.sort.getValue();
     this.loadStatus.next(STATUS.REQUEST);
     return this.httpClient
       .post(this.server + CONTACT.LOAD_PAGE + page, {
-        field: 'name',
-        dir: true
+        ...sort,
+        name: undefined
       })
       .pipe(
         map((res) => {
@@ -305,6 +326,7 @@ export class ContactService extends HttpService {
           : this.loadStatus.next(STATUS.FAILURE);
         this.storeService.pageContacts.next(contacts || []);
         this.total.next((contacts || []).length);
+        this.sortContacts();
       }
     );
   }
@@ -335,6 +357,7 @@ export class ContactService extends HttpService {
         : this.loadStatus.next(STATUS.FAILURE);
       this.storeService.pageContacts.next(contacts || []);
       this.total.next((contacts || []).length);
+      this.sortContacts();
     });
   }
   normalSearchImpl(str: string): Observable<ContactActivity[]> {
@@ -369,6 +392,38 @@ export class ContactService extends HttpService {
         map((res) => res['data'] || []),
         catchError(this.handleError('LOAD CONTACTS', []))
       );
+  }
+  sortContacts(): void {
+    const sortInfo = this.sort.getValue();
+    const sortGrav = sortInfo.dir == true ? 1 : -1;
+    const sortField = sortInfo.field;
+    const contacts = this.storeService.pageContacts.getValue();
+    if (sortField == 'name') {
+      contacts.sort((a, b) => {
+        const aName = ((a['first_name'] || '') + ' ' + (a['last_name'] || '')).trim();
+        const bName = ((b['first_name'] || '') + ' ' + (b['last_name'] || '')).trim();
+        if (aName > bName) {
+          return 1 * sortGrav;
+        } else if (aName == bName) {
+          return 0;
+        } else {
+          return -1 * sortGrav;
+        }
+      });
+    }
+    if (sortField == 'updated_at') {
+      contacts.sort((a, b) => {
+        const aDate = new Date(a['last_activity']['updated_at'] + '').getTime();
+        const bDate = new Date(b['last_activity']['updated_at'] + '').getTime();
+        if (aDate > bDate) {
+          return 1 * sortGrav;
+        } else if (aDate == bDate) {
+          return 0;
+        } else {
+          return -1 * sortGrav;
+        }
+      });
+    }
   }
   /**
    * Search the contacts using keyword.

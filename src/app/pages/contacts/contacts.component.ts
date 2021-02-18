@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadContactsComponent } from 'src/app/components/upload-contacts/upload-contacts.component';
 import {
   BulkActions,
+  CONTACT_SORT_OPTIONS,
   DialogSettings,
   STATUS
 } from 'src/app/constants/variable.constants';
@@ -195,6 +196,18 @@ export class ContactsComponent implements OnInit, OnDestroy {
    */
   changeSort(type: any): void {
     this.sortType = type;
+    this.contactService.sort.next(CONTACT_SORT_OPTIONS[type.id]);
+  }
+
+  /**
+   * Change the search str
+   */
+  changeSearchStr(): void {
+    this.contactService.searchStr.next(this.searchStr);
+  }
+
+  clearSearchStr(): void {
+    this.contactService.searchStr.next('');
   }
 
   /**

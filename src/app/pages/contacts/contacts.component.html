@@ -21,8 +21,19 @@
       </button>
     </div>
   </div>
-  <div class="v-center justify-content-end">
-    <div class=""
+  <div class="v-center contact-list-controls">
+    <div class="form-group mb-0 search-form">
+      <div class="input-group-prepend">
+        <i class="i-icon i-search d-block bgc-dark"></i>
+      </div>
+      <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="changeSearchStr()">
+      <ng-container *ngIf="searchStr">
+        <div class="cancel-action" (click)="clearSearchStr()">
+          <i class="i-icon i-close d-block bgc-dark"></i>
+        </div>
+      </ng-container>
+    </div>
+    <div class="ml-auto"
       ngbDropdown
       placement="bottom-right">
       <div class="v-center c-pointer f-3 p-3 mr-2 font-weight-bold"
@@ -44,9 +55,12 @@
         </div>
       </div>
     </div>
-    <div class="border-left px-3 py-1 text-center mx-3">
-      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer"
-        (click)="drawer.toggle()">Filter</a>
+    <div class="border-left pl-3 pr-0 py-1 text-center ml-3 mr-2">
+      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer v-center"
+        (click)="drawer.toggle()">
+        <span>Filter</span>
+        <img class="ml-1" src="../../../assets/img/filter.svg" alt="filter-icon" style="width: 23px;"/>
+      </a>
     </div>
   </div>
   <div class="custom-mat-table position-relative">

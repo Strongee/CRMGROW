@@ -136,6 +136,10 @@ export class AdvancedFilterComponent implements OnInit {
         title: 'Reviewed image'
       }
     ];
+
+    this.contactService.searchStr$.subscribe((searchStr) => {
+      this.searchOption.str = searchStr;
+    });
   }
 
   /**
@@ -144,6 +148,9 @@ export class AdvancedFilterComponent implements OnInit {
    */
   updateSearchStr(str: string): void {
     this.contactService.searchStr.next(str);
+  }
+  clearSearchStr(): void {
+    this.contactService.searchStr.next('');
   }
 
   updateFilter(): void {

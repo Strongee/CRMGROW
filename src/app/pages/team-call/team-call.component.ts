@@ -16,6 +16,7 @@ import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
 import { CallRequestDetailComponent } from 'src/app/components/call-request-detail/call-request-detail.component';
 import * as _ from 'lodash';
+import { AppointmentService } from 'src/app/services/appointment.service';
 @Component({
   selector: 'app-team-call',
   templateUrl: './team-call.component.html',
@@ -74,6 +75,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     private teamService: TeamService,
     private dialog: MatDialog,
     private userService: UserService,
+    private appointmentService: AppointmentService,
     private location: Location,
     private route: ActivatedRoute,
     private toastr: ToastrService,
@@ -81,6 +83,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.appointmentService.loadCalendars(false);
+
     this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;

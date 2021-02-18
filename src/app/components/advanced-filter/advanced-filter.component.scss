@@ -68,3 +68,18 @@
     font-size: 18px;
   }
 }
+
+.search-string {
+  position: relative;
+
+  input {
+    padding-right: 28px;
+  }
+
+  .cancel-action {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+  }
+}

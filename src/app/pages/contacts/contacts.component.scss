@@ -62,3 +62,34 @@ tr.mat-row {
     }
   }
 }
+
+.search-form {
+  position: relative;
+  .input-group-prepend {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  .cancel-action {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+  }
+  input {
+    padding-left: 36px;
+    padding-right: 26px;
+    height: 36px;
+  }
+}
+
+@media screen and (max-width: 468px) {
+  .contact-list-controls {
+    flex-wrap: wrap;
+    .search-form {
+      width: 100%;
+      margin-top: 4px;
+    }
+  }
+}
