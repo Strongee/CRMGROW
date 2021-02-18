@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { CallRequestCancelComponent } from '../../components/call-request-cancel/call-request-cancel.component';
 import { CallRequestConfirmComponent } from '../../components/call-request-confirm/call-request-confirm.component';
@@ -13,7 +12,10 @@ import { JoinCallRequestComponent } from '../../components/join-call-request/joi
 import * as moment from 'moment';
 import { CalendarDialogComponent } from '../../components/calendar-dialog/calendar-dialog.component';
 import { Subscription } from 'rxjs';
-
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { DialogSettings } from 'src/app/constants/variable.constants';
+import { CallRequestDetailComponent } from 'src/app/components/call-request-detail/call-request-detail.component';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-team-call',
   templateUrl: './team-call.component.html',
@@ -158,50 +160,165 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  openCall(call): void {}
+  openCall(call): void {
+    this.dialog
+      .open(CallRequestDetailComponent, {
+        width: '98vw',
+        maxWidth: '500px',
+        height: 'auto',
+        data: {
+          call
+        }
+      })
+      .afterClosed()
+      .subscribe((data) => {
+        if (data) {
+          const currentTab = this.selectedTab.id;
+          if (data.action === 'delete') {
+            _.remove(this.pageData[currentTab], (e) => {
+              return e._id === call._id;
+            });
+            this.total[currentTab]--;
+          } else if (data.action === 'update') {
+            let newTab;
+            if (data.data.status === 'finished') {
+              newTab = 'completed';
+            } else if (data.data.status === 'planned') {
+              newTab = 'scheduled';
+            } else if (data.data.status === 'declined') {
+              newTab = 'denied';
+            }
+            this.pageData[newTab].unshift({
+              ...call,
+              ...data.data
+            });
+            _.remove(this.pageData[currentTab], (e) => {
+              return e._id === call._id;
+            });
+            this.total[currentTab]--;
+            this.total[newTab]++;
+            if (
+              this.pageData[currentTab].length < 5 &&
+              this.total[currentTab] > 8
+            ) {
+              this.loadPageCalls(currentTab, this.page[currentTab]);
+            }
+          }
+        }
+      });
+  }
 
   edit(call): void {}
 
-  delete(call): void {}
-
   complete(call): void {}
 
-  decline(call): void {}
-
-  cancel(call): void {}
-
-  finishedInquiry(inquiry): void {
-    inquiry.status = 'finished';
-    this.teamService.updateCall(inquiry._id, inquiry).subscribe(
-      (res) => {
-        if (res) {
-          const result = {
-            inquiry_id: inquiry._id,
-            status: 'finished'
-          };
-          // this.loadInquiriesPage(this.currentInquiriesPage);
-          // this.loadFinishedPage(this.currentFinishedPage);
+  delete(call): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Delete group call',
+          message: 'Are you sure to delete this group call?',
+          confirmLabel: 'Delete'
         }
-      },
-      (error) => {}
-    );
+      })
+      .afterClosed()
+      .subscribe((answer) => {
+        if (answer) {
+          const currentTab = this.selectedTab.id;
+          this.teamService.deleteCall(call._id).subscribe((status) => {
+            if (status) {
+              _.remove(this.pageData[currentTab], (e) => {
+                return e._id === call._id;
+              });
+              this.total[currentTab]--;
+              if (
+                this.pageData[currentTab].length < 5 &&
+                this.total[currentTab] > 8
+              ) {
+                this.loadPageCalls(currentTab, this.page[currentTab]);
+              }
+            }
+          });
+        }
+      });
   }
 
-  deleteInquiry(inquiry): void {
-    inquiry.status = 'deleted';
-    this.teamService.deleteCall(inquiry._id).subscribe(
-      (res) => {
-        if (res) {
-          const result = {
-            inquiry_id: inquiry._id,
-            status: 'canceled'
-          };
-          // this.loadInquiriesPage(this.currentInquiriesPage);
-          // this.signalService.inquiryUpdateSignal(result)
+  decline(call): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Decline group call',
+          message: 'Are you sure to decline this group call?',
+          confirmLabel: 'Decline'
         }
-      },
-      (error) => {}
-    );
+      })
+      .afterClosed()
+      .subscribe((answer) => {
+        if (answer) {
+          this.teamService
+            .updateCall(call._id, { status: 'declined' })
+            .subscribe((status) => {
+              if (status) {
+                this.pageData['denied'].unshift({
+                  ...call,
+                  status: 'declined'
+                });
+                _.remove(this.pageData['inquiry'], (e) => {
+                  return e._id === call._id;
+                });
+                this.total['inquiry']--;
+                this.total['denied']++;
+                if (
+                  this.pageData['inquiry'].length < 5 &&
+                  this.total['inquiry'] > 8
+                ) {
+                  this.loadPageCalls('inquiry', this.page['inquiry']);
+                }
+              }
+            });
+        }
+      });
+  }
+
+  cancel(call): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Cancel group call',
+          message: 'Are you sure to cancel this group call?',
+          confirmLabel: 'Cancel'
+        }
+      })
+      .afterClosed()
+      .subscribe((answer) => {
+        if (answer) {
+          const currentTab = this.selectedTab.id;
+          this.teamService
+            .updateCall(call._id, { status: 'canceled' })
+            .subscribe((status) => {
+              if (status) {
+                this.pageData['canceled'].unshift({
+                  ...call,
+                  status: 'canceled'
+                });
+                _.remove(this.pageData[currentTab], (e) => {
+                  return e._id === call._id;
+                });
+                this.total[currentTab]--;
+                this.total['canceled']++;
+                if (
+                  this.pageData[currentTab].length < 5 &&
+                  this.total[currentTab] > 8
+                ) {
+                  this.loadPageCalls(currentTab, this.page[currentTab]);
+                }
+              }
+            });
+        }
+      });
   }
 
   cancelInquiry(inquiry): void {
@@ -233,76 +350,6 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
           // this.loadInquiriesPage(this.currentInquiriesPage);
           // this.loadFinishedPage(this.currentFinishedPage);
           // this.signalService.inquiryUpdateSignal(result)
-        }
-      },
-      (error) => {}
-    );
-  }
-
-  finishedPlan(plan): void {
-    plan.status = 'finished';
-    this.teamService.updateCall(plan._id, plan).subscribe(
-      (res) => {
-        if (res) {
-          const result = {
-            plan_id: plan._id,
-            status: 'finished'
-          };
-          // this.loadPlannedPage(this.currentPlannedPage);
-          // this.loadFinishedPage(this.currentFinishedPage);
-          // this.signalService.plannedUpdateSignal(result)
-        }
-      },
-      (error) => {}
-    );
-  }
-
-  cancelPlan(plan): void {
-    plan.status = 'canceled';
-    this.teamService.updateCall(plan._id, plan).subscribe(
-      (res) => {
-        if (res) {
-          const result = {
-            plan_id: plan._id,
-            status: 'canceled'
-          };
-          // this.loadPlannedPage(this.currentPlannedPage);
-          // this.loadFinishedPage(this.currentFinishedPage);
-          // this.signalService.plannedUpdateSignal(result);
-        }
-      },
-      (error) => {}
-    );
-  }
-
-  deletePlan(plan): void {
-    plan.status = 'deleted';
-    this.teamService.deleteCall(plan._id).subscribe(
-      (res) => {
-        if (res) {
-          const result = {
-            plan_id: plan._id,
-            status: 'deleted'
-          };
-          // this.loadPlannedPage(this.currentPlannedPage);
-          // this.signalService.inquiryUpdateSignal(result);
-        }
-      },
-      (error) => {}
-    );
-  }
-
-  deleteFinished(finished): void {
-    finished.status = 'deleted';
-    this.teamService.deleteCall(finished._id).subscribe(
-      (res) => {
-        if (res) {
-          const result = {
-            finished_id: finished._id,
-            status: 'deleted'
-          };
-          // this.loadFinishedPage(this.currentFinishedPage);
-          // this.signalService.inquiryUpdateSignal(result);
         }
       },
       (error) => {}

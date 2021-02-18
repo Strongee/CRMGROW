@@ -58,21 +58,28 @@ export class TeamComponent implements OnInit {
   selectedJoinRequest = new SelectionModel(true, []);
   shareUrl = 'https://www.crmgrow.com/';
   tabs: TabItem[] = [
-    { icon: 'i-icon i-teams', label: 'MEMBERS', id: 'members' },
-    { icon: 'i-icon i-share', label: 'SHARED', id: 'shared' }
-    // { icon: 'i-icon i-deals', label: 'DEALS', id: 'deals' }
+    { icon: '', label: 'Members', id: 'members' },
+    { icon: '', label: 'Materials', id: 'materials' },
+    { icon: '', label: 'Contacts', id: 'contacts' },
+    { icon: '', label: 'Automations', id: 'automations' },
+    { icon: '', label: 'Templates', id: 'templates' }
   ];
   selectedTab: TabItem = this.tabs[0];
-  sharedTabs: TabItem[] = [
+  materialTabs: TabItem[] = [
     { icon: '', label: 'Video', id: 'video' },
     { icon: '', label: 'PDF', id: 'pdf' },
-    { icon: '', label: 'Image', id: 'image' },
-    { icon: '', label: 'Templates', id: 'templates' },
-    { icon: '', label: 'Automations', id: 'automations' },
-    { icon: '', label: 'Contacts', id: 'contacts' }
+    { icon: '', label: 'Image', id: 'image' }
   ];
-  selectedSharedTab: TabItem = this.sharedTabs[0];
+  selectedMaterialTab: TabItem = this.materialTabs[0];
+  contactTabs: TabItem[] = [
+    { icon: '', label: 'SHARED WITH ME', id: 'share-with' },
+    { icon: '', label: 'SHARED BY ME', id: 'share-by' }
+  ];
+  selectedContactTab: TabItem = this.contactTabs[0];
+  selectedSharedTab: TabItem;
   sharedContacts = [];
+  myContacts = [];
+  otherContacts = [];
 
   constructor(
     private teamService: TeamService,
@@ -112,6 +119,9 @@ export class TeamComponent implements OnInit {
         }
       }
     });
+  }
+  goToBack(): void {
+    this.location.back();
   }
   acceptInvitation(): void {
     this.accepting = true;
@@ -171,9 +181,16 @@ export class TeamComponent implements OnInit {
         this.teamService.loadSharedContacts().subscribe(
           (contacts) => {
             this.loading = false;
-            console.log("load shared contacts ===========>", contacts);
             if (contacts) {
               this.sharedContacts = contacts;
+              this.sharedContacts.forEach((e) => {
+                if (e.user[0]._id === this.userId) {
+                  this.myContacts.push(e);
+                } else {
+                  this.otherContacts.push(e);
+                }
+              });
+              console.log('MyContacts', this.myContacts, this.otherContacts);
             }
           },
           (err) => {
@@ -210,164 +227,7 @@ export class TeamComponent implements OnInit {
         }
       });
   }
-  createTeamVideo(): void {
-    this.dialog
-      .open(VideoShareComponent, {
-        width: '96vw',
-        maxWidth: '500px',
-        height: '70vh',
-        disableClose: true,
-        data: {
-          team_id: this.teamId
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          if (res.materials) {
-            this.team.videos = [...this.team.videos, ...res.materials];
-          }
-          // else if (res.command === 'create_new') {
-          //   this.dialog
-          //     .open(VideoCreateV2Component, {
-          //       width: '96vw',
-          //       maxWidth: '500px',
-          //       height: 'calc(100vh - 50px)',
-          //       maxHeight: '690px',
-          //       disableClose: true,
-          //       data: {
-          //         team_id: this.teamId
-          //       }
-          //     })
-          //     .afterClosed()
-          //     .subscribe((response) => {
-          //       if (response) {
-          //         if (response._id) {
-          //           this.creating = true;
-          //           this.createubscription &&
-          //             this.createubscription.unsubscribe();
-          //           this.createubscription = this.teamService
-          //             .shareVideos(this.teamId, [response._id])
-          //             .subscribe(
-          //               (result) => {
-          //                 this.creating = false;
-          //                 this.team.videos.push(result['data'][0]);
-          //               },
-          //               (err) => {
-          //                 this.creating = false;
-          //               }
-          //             );
-          //         }
-          //       }
-          //     });
-          // }
-        }
-      });
-  }
-  createTeamPdf(): void {
-    // this.dialog
-    //   .open(PdfShareComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: '70vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.teamId
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       if (res.materials) {
-    //         this.team.pdfs = [...this.team.pdfs, ...res.materials];
-    //       } else if (res.command === 'create_new') {
-    //         this.dialog
-    //           .open(PdfCreateComponent, {
-    //             width: '96vw',
-    //             maxWidth: '500px',
-    //             disableClose: true,
-    //             data: {
-    //               team_id: this.teamId
-    //             }
-    //           })
-    //           .afterClosed()
-    //           .subscribe((response) => {
-    //             if (response) {
-    //               if (response._id) {
-    //                 this.creating = true;
-    //                 this.createubscription &&
-    //                   this.createubscription.unsubscribe();
-    //                 this.createubscription = this.teamService
-    //                   .sharePdfs(this.teamId, [response._id])
-    //                   .subscribe(
-    //                     (result) => {
-    //                       this.creating = false;
-    //                       this.team.pdfs.push(result['data'][0]);
-    //                     },
-    //                     (err) => {
-    //                       this.creating = false;
-    //                     }
-    //                   );
-    //               }
-    //             }
-    //           });
-    //       }
-    //     } else {
-    //     }
-    //   });
-  }
-  createTeamImage(): void {
-    // this.dialog
-    //   .open(ImageShareComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     height: '70vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.teamId
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       if (res.materials) {
-    //         this.team.images = [...this.team.images, ...res.materials];
-    //       } else if (res.command === 'create_new') {
-    //         this.dialog
-    //           .open(ImageCreateComponent, {
-    //             width: '96vw',
-    //             maxWidth: '500px',
-    //             disableClose: true,
-    //             data: {
-    //               team_id: this.teamId
-    //             }
-    //           })
-    //           .afterClosed()
-    //           .subscribe((response) => {
-    //             if (response) {
-    //               if (response._id) {
-    //                 this.creating = true;
-    //                 this.createubscription &&
-    //                   this.createubscription.unsubscribe();
-    //                 this.createubscription = this.teamService
-    //                   .shareImages(this.teamId, [response._id])
-    //                   .subscribe(
-    //                     (result) => {
-    //                       this.creating = false;
-    //                       this.team.images.push(result['data'][0]);
-    //                     },
-    //                     (err) => {
-    //                       this.creating = false;
-    //                     }
-    //                   );
-    //               }
-    //             }
-    //           });
-    //       }
-    //     } else {
-    //     }
-    //   });
-  }
+
   shareAutomation(): void {
     this.dialog
       .open(AutomationShareComponent, {
@@ -402,11 +262,9 @@ export class TeamComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        console.log("team share contacts ==============>", res);
         if (res && res.data) {
-          for (const contact of res.data) {
-            this.sharedContacts.push(contact);
-          }
+          this.sharedContacts = _.unionBy(res.data, this.sharedContacts, '_id');
+          this.myContacts = _.unionBy(res.data, this.myContacts, '_id');
         }
       });
   }
@@ -434,115 +292,6 @@ export class TeamComponent implements OnInit {
         }
       });
   }
-  removeTeamVideo(material): void {
-    // this.dialog
-    //   .open(ConfirmComponent, {
-    //     data: {
-    //       message: 'Are you sure to remove this video?',
-    //       cancelLabel: 'No',
-    //       confirmLabel: 'Remove'
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.teamService.removeVideo(material._id).subscribe(
-    //         (response) => {
-    //           this.team.videos.some((e, index) => {
-    //             if (e._id === material._id) {
-    //               this.team.videos.splice(index, 1);
-    //               return true;
-    //             }
-    //           });
-    //           this.toast.success('You removed the video successfully.');
-    //         },
-    //         (err) => {}
-    //       );
-    //     }
-    //   });
-  }
-  removeTeamPdf(material): void {
-    // this.dialog
-    //   .open(ConfirmComponent, {
-    //     data: {
-    //       message: 'Are you sure to remove this pdf?',
-    //       cancelLabel: 'No',
-    //       confirmLabel: 'Remove'
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.teamService.removePdf(material._id).subscribe(
-    //         (respose) => {
-    //           this.team.pdfs.some((e, index) => {
-    //             if (e._id === material._id) {
-    //               this.team.pdfs.splice(index, 1);
-    //               return true;
-    //             }
-    //           });
-    //           this.toast.success('You removed the pdf successfully.');
-    //         },
-    //         (err) => {}
-    //       );
-    //     }
-    //   });
-  }
-  removeTeamImage(material): void {
-    // this.dialog
-    //   .open(ConfirmComponent, {
-    //     data: {
-    //       message: 'Are you sure to remove this image?',
-    //       cancelLabel: 'No',
-    //       confirmLabel: 'Remove'
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.teamService.removeImage(material._id).subscribe(
-    //         (respose) => {
-    //           this.team.images.some((e, index) => {
-    //             if (e._id === material._id) {
-    //               this.team.images.splice(index, 1);
-    //               return true;
-    //             }
-    //           });
-    //           this.toast.success('You removed the image successfully.');
-    //         },
-    //         (err) => {
-    //         }
-    //       );
-    //     }
-    //   });
-  }
-  removeTeamTemplate(material): void {
-    // this.dialog
-    //   .open(ConfirmComponent, {
-    //     data: {
-    //       message: 'Are you sure to remove this template?',
-    //       cancelLabel: 'No',
-    //       confirmLabel: 'Remove'
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.teamService.removeTemplate(material._id).subscribe(
-    //         (response) => {
-    //           this.team.email_templates.some((e, index) => {
-    //             if (e._id === material._id) {
-    //               this.team.email_templates.splice(index, 1);
-    //               return true;
-    //             }
-    //           });
-    //           this.toast.success('You removed the template successfully.');
-    //         },
-    //         (err) => {}
-    //       );
-    //     }
-    //   });
-  }
   cancelReferral(member): void {
     this.dialog
       .open(ConfirmComponent, {
@@ -565,7 +314,7 @@ export class TeamComponent implements OnInit {
             (response) => {
               this.updating = false;
               this.team.referrals = referrals;
-              this.toast.success('You cancelled the invitation successfully.');
+              this.toast.success('You canceled the invitation successfully.');
             },
             (err) => {
               this.updating = false;
@@ -816,12 +565,6 @@ export class TeamComponent implements OnInit {
         }
       });
   }
-  showLoader(): void {
-    this.spinner.show('sp5');
-  }
-  hideLoader(): void {
-    this.spinner.show('sp5');
-  }
   status(team): any {
     let index;
     if (team.owner.length) {
@@ -842,7 +585,12 @@ export class TeamComponent implements OnInit {
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
   }
-
+  changeMaterialTab(tab: TabItem): void {
+    this.selectedMaterialTab = tab;
+  }
+  changeContactTab(tab: TabItem): void {
+    this.selectedContactTab = tab;
+  }
   changeSharedTab(tab: TabItem): void {
     this.selectedSharedTab = tab;
   }

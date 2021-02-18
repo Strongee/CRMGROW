@@ -1,9 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { TeamService } from '../../services/team.service';
 import { UserService } from '../../services/user.service';
 import { ContactService } from '../../services/contact.service';
+import { SelectContactComponent } from '../select-contact/select-contact.component';
 
 @Component({
   selector: 'app-team-contact-share',
@@ -12,6 +13,7 @@ import { ContactService } from '../../services/contact.service';
 })
 export class TeamContactShareComponent implements OnInit {
   team: any;
+  members: any[] = [];
   contacts: any[] = [];
   member;
 
@@ -19,6 +21,8 @@ export class TeamContactShareComponent implements OnInit {
   contactOverflow = false;
   loading = false;
   userId;
+
+  @ViewChild('contactSelector') contactSelector: SelectContactComponent;
 
   constructor(
     private dialogRef: MatDialogRef<TeamContactShareComponent>,
@@ -37,6 +41,15 @@ export class TeamContactShareComponent implements OnInit {
           this.userId = res._id;
         }
       });
+
+      const members = [];
+      for (const owner of this.team.owner) {
+        members.push(owner);
+      }
+      for (const member of this.team.members) {
+        members.push(member);
+      }
+      this.members = members;
     }
   }
 
@@ -80,12 +93,15 @@ export class TeamContactShareComponent implements OnInit {
         this.contactOverflow = true;
         return;
       } else if (contact && this.contacts.length < 15) {
-        const index = this.contacts.findIndex((item) => item._id === contact._id);
+        const index = this.contacts.findIndex(
+          (item) => item._id === contact._id
+        );
         if (index < 0) {
           this.contacts.push(contact);
         }
       }
     }
+    this.contactSelector.clear();
   }
 
   removeContact(contact): void {
@@ -94,16 +110,5 @@ export class TeamContactShareComponent implements OnInit {
       this.contacts.splice(index, 1);
       this.contactOverflow = false;
     }
-  }
-
-  allMembers(): any {
-    const members = [];
-    for (const owner of this.team.owner) {
-      members.push(owner);
-    }
-    for (const member of this.team.members) {
-      members.push(member);
-    }
-    return members;
   }
 }

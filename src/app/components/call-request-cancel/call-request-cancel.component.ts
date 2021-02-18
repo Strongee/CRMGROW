@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { NoteQuillEditor } from '../../constants/variable.constants';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import { EmailService } from '../../services/email.service';
@@ -11,12 +10,11 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./call-request-cancel.component.scss']
 })
 export class CallRequestCancelComponent implements OnInit {
-  message = '';
-  config = NoteQuillEditor;
-  quillEditorRef;
   submitted = false;
   title = '';
-  plan;
+  message = '';
+  call;
+  type = 'organizer';
   isSending = false;
 
   constructor(
@@ -26,22 +24,24 @@ export class CallRequestCancelComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  @ViewChild('editor') htmlEditor: HtmlEditorComponent;
-
   ngOnInit(): void {
     if (this.data) {
-      this.plan = this.data.data;
+      this.call = this.data.call;
+      this.type = this.data.type;
+      console.log('call data', this.data.call);
     }
   }
 
   sendMessage(): void {
+    if (!this.title || !this.message) {
+      return;
+    }
     const emails = [];
     this.isSending = true;
-    for (const contact of this.plan.contacts) {
-      emails.push(contact.email);
-    }
-    if (this.plan.leader && this.plan.leader.email) {
-      emails.push(this.plan.leader.email);
+    if (this.type === 'organizer') {
+      emails.push(this.call.user.email);
+    } else {
+      emails.push(this.call.leader.email);
     }
 
     const data = {

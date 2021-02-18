@@ -17,7 +17,7 @@
         <th class="team-materials">Materials</th>
         <th class="team-owner">Owner</th>
         <th class="team-status">Your status</th>
-        <th class="team-actions">Quick Actions</th>
+        <th class="team-actions"></th>
       </thead>
       <tbody class="position-relative">
         <tr
@@ -88,19 +88,19 @@
             <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
               <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
             </a>
-            <div ngbDropdownMenu class="light">
+            <div ngbDropdownMenu class="light py-1">
               <div class="actions ml-auto" *ngIf="status(team) == 'Owner'; else leaveActions">
-                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTeam(team)">
+                <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="editTeam(team)">
                   <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
                   <span class="ml-3 f-3 font-weight-bold">Edit</span>
                 </button>
-                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteTeam(team)">
+                <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="deleteTeam(team)">
                   <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                   <span class="ml-3 f-3 font-weight-bold">Delete</span>
                 </button>
               </div>
               <ng-template #leaveActions>
-                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="leaveTeam(team)">
+                <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="leaveTeam(team)">
                   <i class="i-icon i-block bg-dark ml-1" aria-hidden="true"></i>
                   <span class="ml-3 f-3 font-weight-bold">Block</span>
                 </button>

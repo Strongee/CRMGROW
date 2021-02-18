@@ -37,6 +37,7 @@ export class SelectMemberComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input()
   public set members(value: User[]) {
     if (value) {
+      console.log('member list received');
       this._members = value;
       this.filteredResults.next(this._members);
       this.cancelSelect();

@@ -96,13 +96,17 @@
   }
 }
 
-:host ::ng-deep {
-  mat-expansion-panel {
-    overflow: visible;
+@media screen and (max-width: 480px) {
+  .team-name {
+    a {
+      display: block;
 
-    mat-expansion-panel-header,
-    .mat-expansion-panel-body {
-      padding: 0;
+      .invite-count {
+        width: fit-content;
+        margin-left: 0px!important;
+        padding: 1px 5px;
+        font-size: 10px!important;
+      }
     }
   }
 }

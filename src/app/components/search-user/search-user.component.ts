@@ -119,5 +119,6 @@ export class SearchUserComponent implements OnInit, OnDestroy {
   onSelectOption(event: MatAutocompleteSelectedEvent): void {
     const value = event.option.value;
     this.onSelect.emit(value);
+    this.inputField.nativeElement.value = '';
   }
 }

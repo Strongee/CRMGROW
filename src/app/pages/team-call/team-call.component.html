@@ -111,7 +111,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.user.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                       </div>
                     </td>
                     <td class="date-time" (click)="openCall(call)">
@@ -127,15 +127,19 @@
                     </td>
                     <td class="team-actions">
                       <div class="v-center">
-                        <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold" (click)="openCall(call)">Review</button>
+                        <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold ml-auto" (click)="openCall(call)">Review</button>
                         <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
                           <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                             <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                           </a>
-                          <div ngbDropdownMenu class="light">
-                            <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="decline(call)">
-                              <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                              <span class="ml-3 f-4 font-weight-bold">Decline</span>
+                          <div ngbDropdownMenu class="light py-1">
+                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="addToCalendar(call)">
+                              <i class="i-icon i-calendar bg-dark sm ml-1" aria-hidden="true"></i>
+                              <span class="ml-3 f-3 font-weight-bold">Add to calendar</span>
+                            </button>
+                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="decline(call)">
+                              <i class="i-icon i-trash bg-dark ml-1 sm" aria-hidden="true"></i>
+                              <span class="ml-3 f-3 font-weight-bold">Decline</span>
                             </button>
                           </div>
                         </div>
@@ -159,7 +163,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.leader.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                       </div>
                     </td>
                     <td class="date-time" (click)="openCall(call)">
@@ -178,14 +182,14 @@
                         <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
-                        <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="edit(call)">
-                            <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4 font-weight-bold">Edit</span>
+                        <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="edit(call)">
+                            <i class="i-icon i-edit bg-dark sm ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-3 font-weight-bold">Edit</span>
                           </button>
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete(call)">
-                            <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4 font-weight-bold">Delete</span>
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
+                            <i class="i-icon i-trash sm bg-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-3 font-weight-bold">Delete</span>
                           </button>
                         </div>
                       </div>
@@ -208,7 +212,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.user.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                       </div>
                     </td>
                     <td class="leader" (click)="openCall(call)">
@@ -223,7 +227,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.leader.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                       </div>
                     </td>
                     <td class="date-time" (click)="openCall(call)">
@@ -236,23 +240,19 @@
                     </td>
                     <td class="team-actions">
                       <div class="v-center">
-                        <button type="button" class="btn bgc-red text-white ml-2 f-3 py-2 font-weight-bold" (click)="openCall(call)">Complete</button>
+                        <button type="button" class="btn bgc-green text-white ml-auto f-3 py-2 font-weight-bold" (click)="openCall(call)">Complete</button>
                         <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
                           <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                             <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                           </a>
-                          <div ngbDropdownMenu class="light">
-                            <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="complete(call)">
-                              <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
-                              <span class="ml-3 f-4 font-weight-bold">Complete</span>
+                          <div ngbDropdownMenu class="light py-1">
+                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="complete(call)">
+                              <i class="i-icon i-check bg-dark sm ml-1" aria-hidden="true"></i>
+                              <span class="ml-3 f-3 font-weight-bold">Complete</span>
                             </button>
-                            <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="addToCalendar(call)">
+                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="cancel(call)">
                               <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                              <span class="ml-3 f-4 font-weight-bold">Add to calendar</span>
-                            </button>
-                            <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="cancel(call)">
-                              <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                              <span class="ml-3 f-4 font-weight-bold">Cancel</span>
+                              <span class="ml-3 f-3 font-weight-bold">Cancel</span>
                             </button>
                           </div>
                         </div>
@@ -276,7 +276,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.user.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                       </div>
                     </td>
                     <td class="leader" (click)="openCall(call)">
@@ -291,7 +291,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.leader.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                       </div>
                     </td>
                     <td class="date-time" (click)="openCall(call)">
@@ -305,8 +305,8 @@
                         <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
-                        <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete(call)">
+                        <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
                             <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4 font-weight-bold">Delete</span>
                           </button>
@@ -331,7 +331,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.user.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                       </div>
                     </td>
                     <td class="leader" (click)="openCall(call)">
@@ -346,7 +346,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.leader.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                       </div>
                     </td>
                     <td class="date-time" (click)="openCall(call)">
@@ -360,8 +360,8 @@
                         <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
-                        <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete(call)">
+                        <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
                             <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4 font-weight-bold">Delete</span>
                           </button>
@@ -386,7 +386,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.user.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                       </div>
                     </td>
                     <td class="leader" (click)="openCall(call)">
@@ -401,7 +401,7 @@
                             </div>
                           </ng-template>
                         </div>
-                        <div class="f-3 ml-2">{{call.leader.user_name}}</div>
+                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                       </div>
                     </td>
                     <td class="date-time" (click)="openCall(call)">
@@ -415,8 +415,8 @@
                         <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
-                        <div ngbDropdownMenu class="light">
-                          <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete(call)">
+                        <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
                             <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-4 font-weight-bold">Delete</span>
                           </button>

@@ -9,7 +9,7 @@
       (onSelect)="addMember($event)">
     </app-search-user>
   </div>
-  <div class="new-list">
+  <div class="new-list" *ngIf="newMembers.length">
     <label class="f-1">MEMBERS TO SEND INVITATION</label>
     <hr class="my-0">
     <div class="list-content py-1">
@@ -18,18 +18,21 @@
       </div>
       <ng-template #newMemberList>
         <div class="new-member v-center py-2" *ngFor="let member of newMembers">
-          <img *ngIf="member.picture_profile; else avatarNameTemplate" [src]="member.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+          <img *ngIf="member.picture_profile; else avatarNameTemplate" [src]="member.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-2" />
           <ng-template #avatarNameTemplate>
-            <div class="form-avatar rounded-circle bg-dark mr-3">{{member.avatarName}}</div>
+            <div class="form-avatar rounded-circle bg-dark mr-2">{{member.avatarName}}</div>
           </ng-template>
           <div class="info">
             <div class="f-5">{{member.user_name}}</div>
           </div>
+          <a class="ml-auto c-pointer" (click)="removeMember(member)">
+            <i class="i-icon i-close bgc-dark d-block"></i>
+          </a>
         </div>
       </ng-template>
     </div>
   </div>
-  <div class="old-list">
+  <div class="old-list" *ngIf="oldMembers.length">
     <label class="f-1">INVITATION IN PROGRESS</label>
     <hr class="my-0">
     <div class="list-content py-1">
@@ -64,5 +67,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn c-blue" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary" [class.loading]="inviting" (click)="sendInvitation()">Save</button>
+  <button class="btn btn-primary" [class.loading]="inviting" (click)="sendInvitation()">Send</button>
 </mat-dialog-actions>

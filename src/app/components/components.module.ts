@@ -126,6 +126,7 @@ import { ContactShareComponent } from './contact-share/contact-share.component';
 import { FilterInputComponent } from './filter-input/filter-input.component';
 import { StageInputComponent } from './stage-input/stage-input.component';
 import { SelectCalendarComponent } from './select-calendar/select-calendar.component';
+import { CallRequestDetailComponent } from './call-request-detail/call-request-detail.component';
 
 @NgModule({
   declarations: [
@@ -250,7 +251,8 @@ import { SelectCalendarComponent } from './select-calendar/select-calendar.compo
     ContactShareComponent,
     FilterInputComponent,
     StageInputComponent,
-    SelectCalendarComponent
+    SelectCalendarComponent,
+    CallRequestDetailComponent
   ],
   imports: [
     CommonModule,
@@ -345,6 +347,7 @@ import { SelectCalendarComponent } from './select-calendar/select-calendar.compo
     JoinCallRequestComponent,
     CallRequestConfirmComponent,
     CallRequestCancelComponent,
+    CallRequestDetailComponent,
     VideoShareComponent,
     SelectTeamComponent
   ]

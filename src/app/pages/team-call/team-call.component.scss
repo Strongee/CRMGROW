@@ -3,10 +3,6 @@
 .table {
   th, td {
     padding: 10px 0px;
-
-    @media screen and (max-width: 576px) {
-      padding: 10px 5px;
-    }
   }
 
   tbody tr {
@@ -38,23 +34,7 @@
   }
 }
 
-.mat-form-field + .mat-form-field {
-  margin-left: 8px;
-}
-
 .group-call-container {
-  .mat-accordion {
-    .mat-expansion-panel {
-      box-shadow: none;
-
-      .mat-expansion-panel-header {
-        .mat-content {
-          order: 2;
-        }
-      }
-    }
-  }
-
   .call-request-table {
     .guests {
       text-align: right;
@@ -101,18 +81,6 @@
     .completed-call-table {
       .leader {
         display: none;
-      }
-    }
-  }
-
-  .expand {
-    .i-icon {
-      transition: all .3s;
-      width: 10px;
-      height: 10px;
-
-      &.expand {
-        transform: rotate(90deg);
       }
     }
   }
@@ -243,5 +211,17 @@
 
   @media screen and (max-width: 576px) {
     padding-left: 0px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .organizer .member-name {
+    display: none;
+  }
+  .leader .member-name {
+    display: none;
+  }
+  .call-status {
+    display: none;
   }
 }

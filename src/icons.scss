@@ -93,6 +93,12 @@
 }
 .i-plus {
   mask-image: url('/assets/img/plus.svg');
+
+  &.sm.i-icon {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+  }
 }
 .i-minus {
   mask-image: url('assets/img/minus.svg');
@@ -349,11 +355,11 @@
 .i-deals {
   mask-image: url('/assets/img/flame.svg')
 }
-
 .i-icon.i-label{
   width: 24px;
   height: 24px;
 }
+
 
 
 

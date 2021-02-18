@@ -409,14 +409,14 @@ export class TeamService extends HttpService {
   }
   updateCall(id, data): Observable<TeamCall[]> {
     return this.httpClient.put(this.server + TEAM.UPDATE_CALL + id, data).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('UPDATE TEAM CALL', []))
+      map((res) => res['status']),
+      catchError(this.handleError('UPDATE TEAM CALL'))
     );
   }
   deleteCall(id): Observable<TeamCall[]> {
     return this.httpClient.delete(this.server + TEAM.DELETE_CALL + id).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('DELETE TEAM CALL', []))
+      map((res) => res['status']),
+      catchError(this.handleError('DELETE TEAM CALL', false))
     );
   }
   requestCall(data): Observable<any> {

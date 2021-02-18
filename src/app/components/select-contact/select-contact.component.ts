@@ -144,5 +144,6 @@ export class SelectContactComponent
 
   clear(): void {
     this.formControl.setValue(null, { emitEvent: false });
+    this.filteredResults.next([]);
   }
 }
