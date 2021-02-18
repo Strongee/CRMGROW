@@ -443,16 +443,34 @@
         <div class="list-loading text-center"
           *ngIf="loading[selectedTab.id]; else emptyList">
           <div class="loader mt-5 lg"></div>
-          <h4 class="fw-600 mt-2">Loading calls...</h4>
+          <ng-container [ngSwitch]="selectedTab.id">
+            <h4 class="fw-600 mt-2" *ngSwitchCase="'inquiry'">Loading call requests from others...</h4>
+            <h4 class="fw-600 mt-2" *ngSwitchCase="'sent'">Loading my call requests...</h4>
+            <h4 class="fw-600 mt-2" *ngSwitchCase="'scheduled'">Loading scheduled calls...</h4>
+            <h4 class="fw-600 mt-2" *ngSwitchCase="'completed'">Loading completed calls...</h4>
+            <h4 class="fw-600 mt-2" *ngSwitchCase="'canceled'">Loading canceled calls...</h4>
+            <h4 class="fw-600 mt-2" *ngSwitchCase="'denied'">Loading declined calls...</h4>
+          </ng-container>
         </div>
         <ng-template #emptyList>
           <div class="empty-list py-5">
             <div class="object-icon v-center">
               <i class="i-icon i-lunch d-block bgc-dark"></i>
             </div>
-            <h4 class="font-weight-bold mt-4 mb-3">
-              There are no calls.
-            </h4>
+            <ng-container [ngSwitch]="selectedTab.id">
+              <h4 class="font-weight-bold mt-4 mb-3" *ngSwitchCase="'inquiry'">
+                There is no call request from others</h4>
+              <h4 class="font-weight-bold mt-4 mb-3" *ngSwitchCase="'sent'">
+                You did not make any call requests.</h4>
+              <h4 class="font-weight-bold mt-4 mb-3" *ngSwitchCase="'scheduled'">
+                There is no scheduled calls.</h4>
+              <h4 class="font-weight-bold mt-4 mb-3" *ngSwitchCase="'completed'">
+                There is no completed calls yet.</h4>
+              <h4 class="font-weight-bold mt-4 mb-3" *ngSwitchCase="'canceled'">
+                There is no canceled calls.</h4>
+              <h4 class="font-weight-bold mt-4 mb-3" *ngSwitchCase="'denied'">
+                There is no declined calls.</h4>
+            </ng-container>
           </div>
         </ng-template>
       </ng-template>

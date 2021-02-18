@@ -1,116 +1,44 @@
-<div mat-dialog-title class="title v-center">
+<div mat-dialog-title class="title v-center d-flex">
   <h4 class="mb-0 font-weight-bold f-24">Share CRMGROW</h4>
   <i class="d-block i-icon i-close bgc-dark ml-auto" mat-dialog-close></i>
 </div>
 
 <mat-dialog-content>
-  <!-- <div class="search-form">
-    <div class="selected-contacts">
-      <div class="contact-list">
-        <ul>
-          <li *ngFor="let contact of selectedContacts; let i = index">
-            <div class="remove-icon" (click)="removeContact(i, contact.email)"></div>
-            <div class="name" *ngIf="contact.name">{{contact.name}}</div>
-            <div class="email ml-1" *ngIf="contact.name; else onlyEmail">({{contact.email}})</div>
-            <ng-template #onlyEmail><div class="email">{{contact.email}}</div></ng-template>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="form-group search-group">
-      <div class="input-group">
-        <input class="form-control" [(ngModel)]="searchStr" placeholder="Add Referrals"
-                (ngModelChange)="searchContacts()" aria-describedby="validationTooltipUsernamePrepend"
-                (keyup)="manualAddContact($event)" (focus)="showLabelSearchedResult = false; hideSearchedResult()" (click)="showLabelSearchedResult = false; hideSearchedResult()"
-        />
-        
-      </div>
-      <div class="searched-result mt-0" [hidden]="!showSearchedResult">
-        <ul>
-          <li *ngIf="searchedContacts.length" class="action mr-0">
-            <a (click)="addAllSearched()">Select All</a>
-          </li>
-          <ng-container *ngFor="let contact of searchedContacts; let i = index;">
-            <li [class.active]="i === hoverIndex" (click)="addContact(contact)">
-              <div class="added-icon" *ngIf="selectedEmails.indexOf(contact.email) !== -1"></div>
-              <div class="name">{{contact.name}}</div>
-              <div class="email">{{contact.email}}</div>
-            </li>
-          </ng-container>
-          <li *ngIf="!searchedContacts.length" class="empty">
-            <p class="mb-0" style="font-size: 12px; font-weight: 400;">
-              <span *ngIf="!isValid(searchStr); else emailAddTemplate">There is no searched Contacts.</span>
-              <ng-template #emailAddTemplate><span>Please click "Enter" to <a class="manual" (click)="manualAdd()">insert</a> the current email</span></ng-template>
-            </p>
-          </li>
-        </ul>
-      </div>
-      <div class="searched-result label-searched mt-0" [hidden]="!showLabelSearchedResult || showSearchedResult">
-        <ul>
-          <li *ngIf="labelSearchedContacts.length" class="action mr-0">
-            <a (click)="addAllLabelSearched()">Select All</a>
-          </li>
-          <li *ngFor="let contact of labelSearchedContacts" (click)="addContact(contact)">
-            <div class="added-icon" *ngIf="selectedEmails.indexOf(contact.email) !== -1"></div>
-            <div class="name">{{contact.name}}</div>
-            <div class="email">{{contact.email}}</div>
-          </li>
-          <li *ngIf="!labelSearchedContacts.length" class="empty">
-            <p class="mb-0" style="font-size: 12px; font-weight: 400;">
-              <span>There is no searched Contacts.</span>
-            </p>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div> -->
-  
-  
-  <div class="search-form" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
-    <div class="contact-chip" *ngFor="let contact of selectedContacts; let i = index;">
-      <div class="remove-icon" (click)="removeContact(i, contact.email)"></div>
-      <div class="name" *ngIf="contact.name">{{contact.name}}</div>
-      <div class="email ml-1" *ngIf="contact.name; else onlyEmail">({{contact.email}})</div>
-      <ng-template #onlyEmail><div class="email">{{contact.email}}</div></ng-template>
-    </div>
-    <input [(ngModel)]="searchStr" placeholder="Add Referrals"
-      (ngModelChange)="searchContacts()"
-      (keyup)="manualAddContact($event)"
-      (click)="openNormalContacts()"
-      #inputTrigger
-    />
-    <a class="label-search" *ngIf="labelSearchedContacts.length" (click)="openLabelContacts()" #teamTrigger>Team</a>
-  </div>
 
+  <div class="form-group contacts-form">
+    <div class="v-center mb-1">
+      <label class="mb-0">Referrals to share</label>
+      <a
+        class="label-search ml-auto f-2 td-none c-pointer"
+        [class.hidden]="!labelSearchedContacts.length"
+        (click)="openLabelContacts()"
+        cdkOverlayOrigin
+        #trigger="cdkOverlayOrigin"
+        #teamTrigger>Insert Team Contacts</a>
+    </div>
+    <app-input-contacts
+      [selectedContacts]="selectedContacts"
+      [onlyFromSearch]="false"
+      [chipType]="'inline'"
+      [display]="'email'"
+      [placeholder]="'Add Referrals'"
+    >
+    </app-input-contacts>
+    <span class="invalid-feedback d-block f-2 mt-0" *ngIf="submitted && !selectedContacts.length">
+      Please add referrals to share.
+    </span>
+  </div>
+  
   <ng-template
     cdkConnectedOverlay
     [cdkConnectedOverlayOrigin]="trigger"
     [cdkConnectedOverlayOpen]="isOpen"
+    [cdkConnectedOverlayPositions]="connectedPositions"
     (overlayOutsideClick)="closeOverlay($event)"
   >
-    <div class="searched-contacts mt-0 bg-white" [hidden]="showType != 'normal'">
-      <div *ngIf="searchedContacts.length" class="action mr-0">
-        <a (click)="addAllSearched()">Select All</a>
-      </div>
-      <ng-container *ngFor="let contact of searchedContacts; let i = index;">
-        <div class="d-flex chip py-2" (click)="addContact(contact)">
-          <div class="form-avatar rounded-circle bg-dark mr-3 mt-1">{{contact.avatarName}}</div>
-          <div class="info">
-            <div class="f-5 font-weight-bold">{{contact.name}}</div>
-            <div class="f-2">{{contact['email'] || 'Undefined'}}</div>
-          </div>
-        </div>
-      </ng-container>
-      <div *ngIf="!searchedContacts.length" class="empty">
-        <p class="mb-0" style="font-size: 12px; font-weight: 400;">
-          <span *ngIf="!isValid(searchStr); else emailAddTemplate">There is no searched Contacts.</span>
-          <ng-template #emailAddTemplate><span>Please click "Enter" to <a class="manual" (click)="manualAdd()">insert</a> the current email</span></ng-template>
-        </p>
-      </div>
-    </div>
-    <div class="searched-contacts mt-0 bg-white" [hidden]="showType != 'team'">
-      <div *ngIf="labelSearchedContacts.length" class="action mr-0">
-        <a (click)="addAllLabelSearched()">Select All</a>
+    <div class="searched-contacts mt-0 bg-white">
+      <div *ngIf="labelSearchedContacts.length" class="action mr-0 c-pointer" (click)="addAllLabelSearched()">
+        <a>Select All</a>
       </div>
       <ng-container *ngFor="let contact of labelSearchedContacts; let i = index;">
         <div class="d-flex chip py-2" (click)="addContact(contact)">
@@ -121,16 +49,14 @@
           </div>
         </div>
       </ng-container>
-      <div *ngIf="!labelSearchedContacts.length" class="empty">
-        <p class="mb-0" style="font-size: 12px; font-weight: 400;">
-          <span>There is no searched Contacts.</span>
-        </p>
-      </div>
     </div>
   </ng-template>
 
   <div class="form-group mt-3">
-    <input class="form-control" placeholder="Email Subject" [(ngModel)]="email.subject" (focus)="hideSearchedResult()"/>
+    <input class="form-control" placeholder="Email Subject" [(ngModel)]="email.subject"/>
+    <span class="invalid-feedback d-block f-2 mt-0" *ngIf="submitted && !email.subject">
+      Please input the subject.
+    </span>
   </div>
   <div class="form-group">
     <div class="v-center label-group">
@@ -140,8 +66,7 @@
         [(value)]="email.content"
         placeholder="Enter Text"
         required="true"
-        [style]="{height: '270px'}"
-        (onFocus)="focusEditor()"
+        [style]="{height: '200px'}"
         #emailEditor
         >
     </app-html-editor>
@@ -149,7 +74,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn btn-white" mat-dialog-close>Close</button>
-  <button class="btn btn-primary" [disabled]="!selectedContacts.length || !email.subject || !email.content "
-          (click)="share()" *ngIf="!sharing">Share</button>
-  <app-loading-button [class]="'btn btn-sm btn-primary'" [title]="'Sharing...'" *ngIf="sharing"></app-loading-button>
+  <button class="btn btn-primary" (click)="share()" [class.loading]="sharing">Share</button>
 </mat-dialog-actions>

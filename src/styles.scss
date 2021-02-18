@@ -921,6 +921,7 @@ body{
 //* Body Tablelet style
 .mat-table-wrapper {
   width: 100%;
+  min-height: 240px;
 
   table {
     min-width: 1000px;

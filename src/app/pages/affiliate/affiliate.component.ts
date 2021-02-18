@@ -121,7 +121,7 @@ export class AffiliateComponent implements OnInit {
     this.dialog
       .open(ShareSiteComponent, {
         width: '96vw',
-        maxWidth: '800px',
+        maxWidth: '680px',
         disableClose: true,
         data: {
           share_url: this.affiliate.share_link

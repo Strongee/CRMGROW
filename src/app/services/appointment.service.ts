@@ -15,14 +15,16 @@ export class AppointmentService extends HttpService {
     super(errorService);
     this.calendars$.subscribe((calendars) => {
       const subCalendars = {};
-      calendars.forEach((account) => {
-        if (account.data) {
-          account.data.forEach((e) => {
-            subCalendars[e.id] = { ...e, account: account.email };
-          });
-        }
-      });
-      this.subCalendars.next(subCalendars);
+      if (calendars) {
+        calendars.forEach((account) => {
+          if (account.data) {
+            account.data.forEach((e) => {
+              subCalendars[e.id] = { ...e, account: account.email };
+            });
+          }
+        });
+        this.subCalendars.next(subCalendars);
+      }
     });
   }
 
