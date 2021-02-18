@@ -44,7 +44,7 @@ export class ContactService extends HttpService {
   pageSize: BehaviorSubject<number> = new BehaviorSubject(50);
   pageSize$ = this.pageSize.asObservable();
   sort: BehaviorSubject<any> = new BehaviorSubject(
-    CONTACT_SORT_OPTIONS['alpha_up']
+    CONTACT_SORT_OPTIONS['alpha_down']
   );
   sort$ = this.sort.asObservable();
 

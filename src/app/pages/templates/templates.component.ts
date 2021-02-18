@@ -24,6 +24,10 @@ export class TemplatesComponent implements OnInit {
   deleting = false;
   currentUser: any;
 
+  templates: Template[] = [];
+  filteredResult: Template[] = [];
+  searchStr = '';
+
   constructor(
     public templatesService: TemplatesService,
     private userService: UserService,
@@ -40,6 +44,10 @@ export class TemplatesComponent implements OnInit {
     });
     this.userService.profile$.subscribe((profile) => {
       this.userId = profile._id;
+    });
+    this.templatesService.templates$.subscribe((templates) => {
+      this.templates = templates;
+      this.filteredResult = templates;
     });
     this.templatesService.loadAll(true);
   }
@@ -114,5 +122,24 @@ export class TemplatesComponent implements OnInit {
         this.templatesService.delete(template._id);
       }
     });
+  }
+
+  changeSearchStr(): void {
+    const reg = new RegExp(this.searchStr, 'gi');
+    const filtered = this.templates.filter((template) => {
+      if (
+        reg.test(template.title) ||
+        reg.test(template.content) ||
+        reg.test(template.subject)
+      ) {
+        return true;
+      }
+    });
+    this.filteredResult = filtered;
+  }
+
+  clearSearchStr(): void {
+    this.searchStr = '';
+    this.filteredResult = this.templates;
   }
 }

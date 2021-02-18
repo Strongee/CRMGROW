@@ -41,7 +41,7 @@
             type="checkbox"
             class="custom-control-input"
             id="repeat_tc"
-            [checked]="task.is_repeat"
+            [checked]="task.set_recurrence"
             (change)="toggleRepeatSetting()"
           />
           <label
@@ -51,7 +51,7 @@
           >
         </div>
         <div class="form-group ml-auto mb-0">
-          <select class="form-control c-blue font-weight-bold" [(ngModel)]="task.repeat_duration" name="duration" #duration="ngModel" [disabled]="!task.is_repeat">
+          <select class="form-control c-blue font-weight-bold" [(ngModel)]="task.recurrence_mode" name="duration" #duration="ngModel" [disabled]="!task.set_recurrence">
             <option *ngFor="let type of REPEAT_DURATIONS" [value]="type.value">
               {{type.label}}
             </option>

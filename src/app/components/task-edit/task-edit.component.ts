@@ -113,7 +113,7 @@ export class TaskEditComponent implements OnInit {
   ngOnInit(): void {}
 
   toggleRepeatSetting(): void {
-    this.task.is_repeat = !this.task.is_repeat;
+    this.task.set_recurrence = !this.task.set_recurrence;
   }
 
   deleteTask(): void {

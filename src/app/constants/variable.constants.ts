@@ -1,8 +1,8 @@
 import { CountryISO } from 'ngx-intl-tel-input';
 
 export const CONTACT_SORT_OPTIONS = {
-  alpha_down: { dir: false, field: 'name', name: 'alpha_down' },
-  alpha_up: { dir: true, field: 'name', name: 'alpha_up' },
+  alpha_down: { dir: true, field: 'name', name: 'alpha_down' },
+  alpha_up: { dir: false, field: 'name', name: 'alpha_up' },
   last_added: { dir: true, field: 'updated_at', name: 'last_added' },
   last_active: { dir: false, field: 'updated_at', name: 'last_active' }
 };
@@ -372,15 +372,15 @@ export const RECURRING_TYPE = [
 ];
 export const REPEAT_DURATIONS = [
   {
-    value: 1,
+    value: 'DAILY',
     label: 'Daily'
   },
   {
-    value: 7,
+    value: 'WEEKLY',
     label: 'Weekly'
   },
   {
-    value: 30,
+    value: 'MONTHLY',
     label: 'Monthly'
   }
 ];
@@ -578,6 +578,10 @@ export const DialogSettings = {
   NOTE: {
     width: '98vw',
     maxWidth: '394px',
+    disableClose: true
+  },
+  AUTOMATION_ACTION: {
+    minHeight: '300px',
     disableClose: true
   },
   AUTOMATION: {

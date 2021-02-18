@@ -760,6 +760,27 @@ form.was-validated {
   }
 }
 
+.search-form {
+  position: relative;
+  .input-group-prepend {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  .cancel-action {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+  }
+  input {
+    padding-left: 36px;
+    padding-right: 26px;
+    height: 36px;
+  }
+}
+
 /** ==== Dropdown Style === */
 .dropdown-menu {
   box-shadow: 0 5px 24px -5px rgba(16, 19, 54, 0.24);

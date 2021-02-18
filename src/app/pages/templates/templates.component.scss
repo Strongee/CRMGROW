@@ -67,3 +67,8 @@
     pointer-events: none;
   }
 }
+
+input.disabled {
+  pointer-events: none;
+  background-color: #f8f8f8;
+}

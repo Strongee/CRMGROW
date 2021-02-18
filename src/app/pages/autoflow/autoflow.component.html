@@ -2,8 +2,8 @@
   <div class="automation-container">
     <form #automationForm="ngForm" (ngSubmit)="submitted=true; automationForm.form.valid ? storeData() : false;"
           [class.was-validated]="submitted">
-      <div class="v-center op-56 c-pointer mb-4 mt-3" (click)="goToBack()">
-        <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
+      <div class="v-center op-56 c-pointer mb-3" (click)="goToBack()">
+        <i class="d-block i-icon i-triangle-left bgc-dark mr-2 sm"></i>
         <span class="f-5 font-weight-bold">Back to automations</span>
       </div>
       <div class="align-items-top automation-name-wrapper">

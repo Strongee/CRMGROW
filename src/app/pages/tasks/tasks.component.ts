@@ -243,7 +243,7 @@ export class TasksComponent implements OnInit, OnDestroy {
    * @param _id : id of contact to update
    */
   updateLabel(label: string, _id: string): void {
-    const newLabel = label ? label : '';
+    const newLabel = label ? label : null;
     let ids = [];
     this.selection.forEach((e) => {
       ids.push(e.contact._id);

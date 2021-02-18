@@ -1,11 +1,24 @@
 <div class="page-content">
-  <div class="my-2">
-    <div class="d-flex justify-content-between">
-      <h6 class="page-title font-weight-bold my-2">Templates</h6>
-      <a class="btn btn-primary shadow py-2 v-center mb-2 border-0" [routerLink]="['/templates/new']">
+  <div class="">
+    <div class="d-flex justify-content-between mb-3">
+      <h6 class="page-title font-weight-bold mb-0">Templates</h6>
+      <a class="btn btn-primary shadow py-2 v-center mb-0 border-0" [routerLink]="['/templates/new']">
         <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
         <span class="fw-600 f-3">New Template</span>
       </a>
+    </div>
+    <div class="v-center">
+      <div class="form-group mb-0 search-form">
+        <div class="input-group-prepend">
+          <i class="i-icon i-search d-block bgc-dark"></i>
+        </div>
+        <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="changeSearchStr()" [class.disabled]="(templatesService.loading$ | async) === STATUS.REQUEST">
+        <ng-container *ngIf="searchStr">
+          <div class="cancel-action" (click)="clearSearchStr()">
+            <i class="i-icon i-close d-block bgc-dark"></i>
+          </div>
+        </ng-container>
+      </div>
     </div>
     <div class="my-3 position-relative">
       <ng-container *ngIf="(templatesService.templates$ | async).length; else emptyListTemplate">
@@ -22,8 +35,8 @@
           </thead>
           <tbody class="position-relative">
             <tr
-              *ngFor="let template of templatesService.templates$ | async
-              | paginate : {id: 'templateTable', itemsPerPage: 10, currentPage: page, totalItems: (templatesService.templates$ | async).length}
+              *ngFor="let template of filteredResult
+              | paginate : {id: 'templateTable', itemsPerPage: 10, currentPage: page, totalItems: filteredResult.length}
             ">
               <td class="template-title">
                 <a [routerLink]="['/templates/' + template._id]"
@@ -69,7 +82,7 @@
             </tr>
           </tbody>
         </table>
-        <div class="d-flex justify-content-center align-items-center my-2">
+        <div class="d-flex justify-content-center align-items-center my-2 py-3 table-control mode-1">
           <div class="ml-3 pagination-wrapper">
             <pagination-controls (pageChange)="page = $event" id="templateTable" maxSize="5" previousLabel=""
                                  nextLabel=""></pagination-controls>

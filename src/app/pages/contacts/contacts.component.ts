@@ -132,6 +132,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
     }
 
     this.contactService.reloadPage();
+
+    const sortInfo = this.contactService.sort.getValue();
+    this.SORT_TYPES.some((e) => {
+      if (e.id === sortInfo) {
+        this.sortType = e;
+        return true;
+      }
+    });
   }
   /**
    * Load the contacts: Advanced Search, Normal Search, API Call
@@ -288,7 +296,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
    * @param _id : id of contact to update
    */
   updateLabel(label: string, _id: string): void {
-    const newLabel = label ? label : '';
+    const newLabel = label ? label : null;
     let ids = [];
     this.selection.forEach((e) => {
       ids.push(e._id);
@@ -297,8 +305,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
       ids = [_id];
     }
     this.isUpdating = true;
-    this.updateSubscription && this.updateSubscription.unsubscribe();
-    this.updateSubscription = this.contactService
+    this.contactService
       .bulkUpdate(ids, { label: newLabel }, {})
       .subscribe((status) => {
         this.isUpdating = false;

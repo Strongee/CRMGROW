@@ -439,7 +439,7 @@ export class AutoflowComponent
       });
 
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        ...DialogSettings.AUTOMATION,
+        ...DialogSettings.AUTOMATION_ACTION,
         data: {
           follows: prevFollowUps
         }
@@ -492,7 +492,7 @@ export class AutoflowComponent
         }
       }
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        ...DialogSettings.AUTOMATION,
+        ...DialogSettings.AUTOMATION_ACTION,
         data: {
           currentAction: node.type,
           conditionHandler,
@@ -566,7 +566,7 @@ export class AutoflowComponent
       });
     } else {
       const actionDlg = this.dialog.open(ActionDialogComponent, {
-        ...DialogSettings.AUTOMATION,
+        ...DialogSettings.AUTOMATION_ACTION,
         data: {}
       });
       actionDlg.afterClosed().subscribe((res) => {
@@ -613,7 +613,7 @@ export class AutoflowComponent
 
     this.dialog
       .open(ActionEditComponent, {
-        ...DialogSettings.AUTOMATION,
+        ...DialogSettings.AUTOMATION_ACTION,
         data: {
           action: node,
           conditionHandler,

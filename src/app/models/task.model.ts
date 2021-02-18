@@ -11,8 +11,8 @@ export class Task implements Deserializable {
   reminder: number;
   reminder_type: string;
   type: string;
-  is_repeat: boolean;
-  repeat_duration: number;
+  set_recurrence: boolean;
+  recurrence_mode: number;
   created_at: Date;
   updated_at: Date;
   deserialize(input: any): this {
@@ -33,8 +33,8 @@ export class TaskDetail implements Deserializable {
   reminder: number;
   reminder_type: string;
   type: string;
-  is_repeat: boolean;
-  repeat_duration: number;
+  set_recurrence: boolean;
+  recurrence_mode: number;
   created_at: Date;
   updated_at: Date;
   deserialize(input: any): this {

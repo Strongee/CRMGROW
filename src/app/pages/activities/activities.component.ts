@@ -79,7 +79,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   }
 
   updateLabel(label: string, _id: string): void {
-    const newLabel = label ? label : '';
+    const newLabel = label ? label : null;
     const ids = [_id];
     this.isUpdating = true;
     this.updateSubscription && this.updateSubscription.unsubscribe();

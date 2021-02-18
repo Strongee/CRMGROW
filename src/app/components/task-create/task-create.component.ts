@@ -80,7 +80,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   toggleRepeatSetting(): void {
-    this.task.is_repeat = !this.task.is_repeat;
+    this.task.set_recurrence = !this.task.set_recurrence;
   }
   selectContact(event: Contact): void {
     if (event) {
@@ -119,7 +119,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         contacts: ids,
         type: this.task.type,
         content: this.task.content,
-        due_date: due_date
+        due_date: due_date,
+        set_recurrence: this.task.set_recurrence,
+        recurrence_mode: this.task.recurrence_mode
       };
       this.saving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
@@ -128,7 +130,6 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           this.saving = false;
           if (res) {
-            console.log('add followup ==============>', res);
             this.dialogRef.close();
           }
         });
@@ -138,7 +139,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
           contacts: ids,
           type: this.task.type,
           content: this.task.content,
-          due_date: due_date
+          due_date: due_date,
+          set_recurrence: this.task.set_recurrence,
+          recurrence_mode: this.task.recurrence_mode
         };
         this.saving = true;
         this.saveSubscription && this.saveSubscription.unsubscribe();
@@ -157,7 +160,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
           contact: ids[0],
           type: this.task.type,
           content: this.task.content,
-          due_date: due_date
+          due_date: due_date,
+          set_recurrence: this.task.set_recurrence,
+          recurrence_mode: this.task.recurrence_mode
         };
         this.saving = true;
         this.saveSubscription && this.saveSubscription.unsubscribe();
