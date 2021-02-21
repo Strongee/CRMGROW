@@ -43,13 +43,13 @@
             <div class="form-group mb-1">
                 <label for="organizer" class="mb-1">organizer</label>
                 <div class="v-center">
-        
+                    {{event.meta.organizer}}
                 </div>
             </div>
             <div class="form-group mb-1">
                 <label for="guests" class="mb-1">{{event.meta.guests.length}} guests</label>
                 <div class="v-center f-3" *ngFor="let guest of event.meta.guests">
-                    
+                    {{guest.email}}
                 </div>
             </div>
             <div class="form-group">

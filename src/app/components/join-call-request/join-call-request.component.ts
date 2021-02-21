@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
-import { numPad, getCurrentTimezone } from '../../helper';
+import { numPad, getCurrentTimezone, convertTimetoTz } from '../../helper';
 import {
   TIMES,
   CALL_REQUEST_DURATION
@@ -14,35 +14,42 @@ import { Contact } from 'src/app/models/contact.model';
 import { SelectContactComponent } from '../select-contact/select-contact.component';
 import * as _ from 'lodash';
 import { DealsService } from 'src/app/services/deals.service';
+import { User } from 'src/app/models/user.model';
 @Component({
   selector: 'app-join-call-request',
   templateUrl: './join-call-request.component.html',
   styleUrls: ['./join-call-request.component.scss']
 })
 export class JoinCallRequestComponent implements OnInit, OnDestroy {
+  durations = CALL_REQUEST_DURATION;
+  times = TIMES;
+  timezone;
+  userId;
+
   contacts: Contact[] = [];
   keepContacts: Contact[] = [];
   keepContactIds: string[] = [];
   leader = null;
   subject = '';
-
-  description: any;
+  description: '';
 
   minDate: any;
   callDateTimes = [];
   selectedDate = [];
-  times = TIMES;
-  timezone;
 
   duration = '30 mins';
-  durations = CALL_REQUEST_DURATION;
 
   submitted = false;
   isLoading = false;
   requestCreateSubscription: Subscription;
 
+  onlyRemove = false;
+  shouldKeepContacts = false;
+
   isDeal = false;
   dealId = '';
+
+  profileSubscription: Subscription;
 
   @ViewChild('contactSelector') contactSelector: SelectContactComponent;
   constructor(
@@ -66,10 +73,12 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
     this.setDateTime(0);
 
     if (this.data && this.data.contacts) {
-      this.keepContacts = this.data.contacts;
-      this.keepContacts.forEach((e) => {
-        this.keepContactIds.push(e._id);
-      });
+      if (this.data.shouldKeepContacts) {
+        this.keepContacts = this.data.contacts;
+        this.keepContacts.forEach((e) => {
+          this.keepContactIds.push(e._id);
+        });
+      }
       this.contacts = [...this.data.contacts];
     }
 
@@ -77,26 +86,32 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       this.isDeal = true;
       this.dealId = this.data.deal;
     }
+
+    if (this.data && this.data.onlyRemove) {
+      this.onlyRemove = this.data.onlyRemove;
+    }
   }
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
 
   ngOnInit(): void {
-    // this.userService.profile$.subscribe((user) => {
-    //   try {
-    //     this.timezone = JSON.parse(user.time_zone_info);
-    //   } catch (err) {
-    //     const timezone = getCurrentTimezone();
-    //     this.timezone = { zone: user.time_zone || timezone };
-    //   }
-    // });
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
+      this.userId = user._id;
+      try {
+        this.timezone = JSON.parse(user.time_zone_info);
+      } catch (err) {
+        const timezone = getCurrentTimezone();
+        this.timezone = { zone: user.time_zone || timezone };
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.requestCreateSubscription &&
       this.requestCreateSubscription.unsubscribe();
+    this.profileSubscription && this.profileSubscription.unsubscribe();
   }
-  changeLeader(leader): void {
+  changeLeader(leader: User): void {
     this.leader = leader;
   }
 
@@ -122,10 +137,6 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
     this.selectedDate.splice(index, 1);
   }
 
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
-
   assignCallRequest(): void {
     this.submitted = true;
     if (!this.leader) {
@@ -139,6 +150,9 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const subject = this.subject;
     const description = this.description;
+    const status = 'pending';
+    const contacts = [];
+    const guests = [];
     let duration = 30;
     if (this.duration === '15 mins') {
       duration = 15;
@@ -150,58 +164,54 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       duration = 60;
     }
 
-    const status = 'pending';
-    const contacts = [];
     for (const contact of this.contacts) {
-      contacts.push(contact._id);
+      if (contact._id) {
+        contacts.push(contact._id);
+      } else {
+        guests.push(contact.email);
+      }
     }
 
-    this.userService.profile$.subscribe((res) => {
-      const timezone = res['time_zone'];
-      const dueDateTimes = [];
-      for (const dateTime of this.callDateTimes) {
-        const dueDateTime = new Date(
-          `${dateTime.date.year}-${numPad(dateTime.date.month)}-${numPad(
-            dateTime.date.day
-          )}T${dateTime.time}${timezone}`
-        ).toISOString();
+    const dueDateTimes = [];
+    for (const dateTime of this.callDateTimes) {
+      const dueDateTime = new Date(
+        convertTimetoTz(dateTime.date, dateTime.time, this.timezone)
+      ).toISOString();
 
-        const index = dueDateTimes.indexOf(dueDateTime);
-        if (index < 0) {
-          dueDateTimes.push(dueDateTime);
-        }
+      const index = dueDateTimes.indexOf(dueDateTime);
+      if (index < 0) {
+        dueDateTimes.push(dueDateTime);
       }
-      const data = {
-        user: res._id,
-        leader: this.leader._id,
-        contacts,
-        subject,
-        description,
-        duration,
-        status,
-        proposed_at: dueDateTimes
-      };
-      if (this.isDeal) {
-        data['deal'] = this.dealId;
-        this.dealService.addGroupCall(data).subscribe((response) => {
-          console.log('deal group call response', response);
-          this.isLoading = false;
-          this.dialogRef.close(response);
-        });
-      } else {
-        this.teamService.requestCall(data).subscribe((response) => {
-          this.isLoading = false;
-          this.dialogRef.close({ data: response });
-        });
-      }
-    });
+    }
+    const data = {
+      user: this.userId,
+      leader: this.leader._id,
+      contacts,
+      guests,
+      subject,
+      description,
+      duration,
+      status,
+      proposed_at: dueDateTimes
+    };
+    if (this.isDeal) {
+      data['deal'] = this.dealId;
+      this.dealService.addGroupCall(data).subscribe((response) => {
+        this.isLoading = false;
+        this.dialogRef.close(response);
+      });
+    } else {
+      this.teamService.requestCall(data).subscribe((response) => {
+        this.isLoading = false;
+        this.dialogRef.close({ data: response });
+      });
+    }
   }
 
   setDateTime(index): void {
     this.selectedDate[index] = moment(this.getDateTime(index)).format(
       'YYYY-MM-DD'
     );
-    close();
   }
 
   getDateTime(index): any {
@@ -212,7 +222,12 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
   }
 
   selectContact(contact: Contact): void {
-    const index = this.contacts.findIndex((item) => item._id === contact._id);
+    let index;
+    if (contact._id) {
+      index = this.contacts.findIndex((item) => item._id === contact._id);
+    } else {
+      index = this.contacts.findIndex((item) => item.email === contact.email);
+    }
     if (index < 0) {
       this.contacts.push(contact);
     }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   TIMES,
   CALENDAR_DURATION,
@@ -26,6 +26,7 @@ export class CalendarDialogComponent implements OnInit {
   times = TIMES;
   calendar_durations = CALENDAR_DURATION;
   recurrings = RECURRING_TYPE;
+  minDate;
 
   submitted = false;
   calendar;
@@ -72,6 +73,7 @@ export class CalendarDialogComponent implements OnInit {
       month: today.getMonth() + 1,
       day: today.getDate()
     };
+    this.minDate = { ...this.selectedDateTime };
 
     if (this.data && this.data.contacts) {
       this.keepContacts = this.data.contacts;
@@ -89,7 +91,7 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.data.event) {
+    if (this.data && this.data.event) {
       this.type = 'update';
       this.event.title = this.data.event.title;
       this.selectedDateTime.year = this.data.event.start
@@ -298,8 +300,8 @@ export class CalendarDialogComponent implements OnInit {
       this.contacts.forEach((contact) => {
         if (contact._id) {
           const data = {
-            email: contact.email,
-            _id: contact._id
+            _id: contact._id,
+            email: contact.email
           };
           this.event.contacts.push(data);
         }

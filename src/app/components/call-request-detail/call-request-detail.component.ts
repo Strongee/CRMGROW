@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -14,13 +14,17 @@ import 'moment-timezone';
 import { CallRequestCancelComponent } from '../call-request-cancel/call-request-cancel.component';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { Contact } from 'src/app/models/contact.model';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-call-request-detail',
   templateUrl: './call-request-detail.component.html',
   styleUrls: ['./call-request-detail.component.scss']
 })
-export class CallRequestDetailComponent implements OnInit {
+export class CallRequestDetailComponent implements OnInit, OnDestroy {
   TIMES = TIMES;
   MIN_DATE = {};
 
@@ -37,34 +41,31 @@ export class CallRequestDetailComponent implements OnInit {
   declining = false;
   completing = false;
 
+  profileSubscription: Subscription;
+
   constructor(
     private profileService: UserService,
     private teamService: TeamService,
     private appointmentService: AppointmentService,
     private dialogRef: MatDialogRef<CallRequestDetailComponent>,
     private dialog: MatDialog,
+    private toast: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.call) {
       this.call = { ...this.data.call };
+      const contacts = [];
+      this.call.contacts.forEach((e) => {
+        contacts.push(new Contact().deserialize(e));
+      });
+      this.call.contacts = contacts;
+      this.call.leader = new User().deserialize(this.call.leader);
+      this.call.user = new User().deserialize(this.call.user);
       if (this.call.proposed_at.length) {
         this.selectedTime = this.call.proposed_at[0];
       }
       this.checkOrganizer();
     }
-
-    this.profileService.profile$.subscribe((profile) => {
-      if (profile && profile._id) {
-        this.userId = profile._id;
-        try {
-          this.userTimezone = JSON.parse(profile.time_zone_info);
-        } catch (err) {
-          const timezone = getCurrentTimezone();
-          this.userTimezone = { zone: profile.time_zone || timezone };
-        }
-        this.checkOrganizer();
-      }
-    });
 
     const current = new Date();
     this.MIN_DATE = {
@@ -74,7 +75,27 @@ export class CallRequestDetailComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.profileService.profile$.subscribe(
+      (profile) => {
+        if (profile && profile._id) {
+          this.userId = profile._id;
+          try {
+            this.userTimezone = JSON.parse(profile.time_zone_info);
+          } catch (err) {
+            const timezone = getCurrentTimezone();
+            this.userTimezone = { zone: profile.time_zone || timezone };
+          }
+          this.checkOrganizer();
+        }
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
 
   checkOrganizer(): void {
     if (this.call && this.call.user) {
@@ -98,7 +119,11 @@ export class CallRequestDetailComponent implements OnInit {
       res['garbage'].calendly.link
     ) {
       this.calendaryLink = res['garbage'].calendly.link;
-    } else {}
+    } else {
+      this.toast.info('', 'Please connect with calendly.', {
+        closeButton: true
+      });
+    }
   }
 
   delete(): void {
@@ -106,8 +131,8 @@ export class CallRequestDetailComponent implements OnInit {
       .open(ConfirmComponent, {
         ...DialogSettings.CONFIRM,
         data: {
-          title: '',
-          message: '',
+          title: 'Delete group call',
+          message: 'Are you sure to remove this group call?',
           label: 'Delete'
         }
       })

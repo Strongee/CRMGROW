@@ -81,7 +81,7 @@
         </ng-container>
         <ng-template #userProfilePlaceholder>
           <div class="name-avatar">
-            {{call.user.user_name[0]}}
+            {{call.user.avatarName}}
           </div>
         </ng-template>
       </div>
@@ -97,7 +97,7 @@
         </ng-container>
         <ng-template #userProfilePlaceholder>
           <div class="name-avatar">
-            {{call.leader.user_name[0]}}
+            {{call.leader.avatarName}}
           </div>
         </ng-template>
       </div>
@@ -112,10 +112,10 @@
           <img [src]="contact.picture_profile" class="avatar" />
         </ng-container>
         <ng-template #prospectNamePlaceholder>
-          <div class="name-avatar">{{contact.first_name[0]}}</div>
+          <div class="name-avatar">{{contact.avatarName}}</div>
         </ng-template>
         <div class="f-3 ml-2">
-          {{contact.first_name + " " + contact.last_name}}
+          {{contact.fullName}}
         </div>
       </div>
     </div>

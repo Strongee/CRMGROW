@@ -11,7 +11,7 @@ import {
   TemplateRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, ReplaySubject } from 'rxjs';
+import { Subject, ReplaySubject, Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import {
   filter,
@@ -23,6 +23,8 @@ import {
 } from 'rxjs/operators';
 import { User } from 'src/app/models/user.model';
 import { TeamService } from 'src/app/services/team.service';
+import * as _ from 'lodash';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-select-leader',
@@ -46,7 +48,16 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   filteredResults: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
   teamLeaders: User[] = [];
 
-  constructor(private teamService: TeamService) {}
+  loadSubscription: Subscription;
+
+  userId;
+  constructor(
+    private teamService: TeamService,
+    private userService: UserService
+  ) {
+    const profile = this.userService.profile.getValue();
+    this.userId = profile._id;
+  }
 
   ngOnInit(): void {
     this.loadLeaders();
@@ -97,16 +108,24 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     ];
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+  }
 
   /**
    * This function loads the leaders(owners and editors) of teams that he owns or is included.
    */
   loadLeaders(): void {
     this.searching = true;
-    this.teamService.loadLeaders().subscribe((data) => {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.teamService.loadLeaders().subscribe((data) => {
       this.searching = false;
       this.teamLeaders = data;
+      this.teamLeaders = _.pullAllBy(
+        this.teamLeaders,
+        [{ _id: this.userId }],
+        '_id'
+      );
       this.filteredResults.next(this.teamLeaders);
     });
   }

@@ -31,7 +31,8 @@ export class CalendarEventComponent implements OnInit {
       location: '',
       recurrence: '',
       recurrence_id: '',
-      type: ''
+      type: '',
+      organizer: ''
     }
   };
   zoom_link =
