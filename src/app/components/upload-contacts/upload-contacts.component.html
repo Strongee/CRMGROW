@@ -122,12 +122,17 @@
             There were <span class="f-8 c-blue">{{sameContacts.length}}</span> record duplicates found in your .csv file. Please merge or edit primary data.
           </div>
           <ng-container  *ngFor="let dupItem of sameContacts; let dupIndex = index;">
-            <div class="merge-group-wrapper mb-3">
+            <div id="contact-group-{{dupIndex}}" class="merge-group-wrapper mb-3">
               <div class="table-wrapper">
                 <table class="table duplicate-check-table mb-0">
                   <thead>
                   <tr>
-                    <th class="check-cell sticky-check-col">&nbsp;</th>
+                    <th class="check-cell sticky-check-col">
+                      <div class="custom-control custom-checkbox" *ngIf="dupItem.length > 1">
+                        <input type="checkbox" class="custom-control-input" id="merge-select-all-{{dupIndex}}" (change)="selectAllContactGroup(dupIndex, dupItem)" [checked]="isSelectedGroup(dupIndex, dupItem)">
+                        <label class="custom-control-label" for="merge-select-all-{{dupIndex}}"></label>
+                      </div>
+                    </th>
                     <th>Type</th>
                     <ng-container *ngFor="let column of columns">
                       <th [class]="column" *ngIf="updateColumn[column]">
