@@ -42,6 +42,51 @@
     }
 }
 
+.member {
+    .avatar {
+        background-image: url(../../../assets/img/avatar.svg);
+        background-size: 80%;
+        width: 24px;
+        height: 24px;
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-color: #e8e8e8;
+        position: relative;
+        &.declined::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            bottom: -4px;
+            right: -4px;
+            border: 2px solid white;
+            background-color: #ffc1c1;
+            background-image: url(../../../assets/img/close-red.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+        &.accepted::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            bottom: -4px;
+            right: -4px;
+            border: 2px solid white;
+            background-image: url(../../../assets/img/done.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 80%;
+            background-color: #a4ffb2;
+        }
+    }
+}
+
 :host ::ng-deep {
     .description {
         h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
