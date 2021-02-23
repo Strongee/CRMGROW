@@ -23,7 +23,7 @@ import { NotifyComponent } from '../../components/notify/notify.component';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 import { MaterialSendComponent } from '../../components/material-send/material-send.component';
-import {MaterialEditTemplateComponent} from "../../components/material-edit-template/material-edit-template.component";
+import { MaterialEditTemplateComponent } from '../../components/material-edit-template/material-edit-template.component';
 
 @Component({
   selector: 'app-team',
@@ -490,7 +490,8 @@ export class TeamComponent implements OnInit {
       disableClose: false,
       data: {
         material: [material],
-        materialType: type
+        material_type: type,
+        type: 'email'
       }
     });
   }

@@ -12,6 +12,7 @@ import {
   ContactDetail
 } from '../models/contact.model';
 import { DetailActivity, PureActivity } from '../models/activityDetail.model';
+import { Material } from '../models/material.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class StoreService {
   videos: BehaviorSubject<Video[]> = new BehaviorSubject([]);
   pdfs: BehaviorSubject<Pdf[]> = new BehaviorSubject([]);
   images: BehaviorSubject<Image[]> = new BehaviorSubject([]);
+  materials: BehaviorSubject<Material[]> = new BehaviorSubject([]);
   templates: BehaviorSubject<Template[]> = new BehaviorSubject([]);
 
   tags$ = this.tags.asObservable();
@@ -41,6 +43,7 @@ export class StoreService {
   videos$ = this.videos.asObservable();
   pdfs$ = this.pdfs.asObservable();
   images$ = this.images.asObservable();
+  materials$ = this.materials.asObservable();
   templates$ = this.templates.asObservable();
 
   /**
@@ -50,6 +53,7 @@ export class StoreService {
     this.tags.next([]);
     this.tasks.next([]);
     this.activities.next([]);
+    this.materials.next([]);
     this.videos.next([]);
     this.pdfs.next([]);
     this.images.next([]);

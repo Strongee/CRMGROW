@@ -2,10 +2,8 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
 import { FormControl } from '@angular/forms';
-import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 import { Template } from 'src/app/models/template.model';
 import { UserService } from 'src/app/services/user.service';
-import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
 import { MaterialService } from 'src/app/services/material.service';
 import { ContactService } from 'src/app/services/contact.service';
 
@@ -26,9 +24,7 @@ export class MaterialSendComponent implements OnInit {
   emailContent = '';
   textContent = '';
   sending = false;
-
-  focusedField = '';
-  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
+  firstMaterialType = '';
 
   constructor(
     private userService: UserService,
@@ -40,16 +36,34 @@ export class MaterialSendComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.material.length > 1) {
-      switch (this.data.materialType) {
-        case 'video':
-          this.videos = [...this.videos, ...this.data.material];
-          break;
-        case 'pdf':
-          this.pdfs = [...this.videos, ...this.data.material];
-          break;
-        case 'image':
-          this.images = [...this.videos, ...this.data.material];
-          break;
+      if (this.data.material_type) {
+        switch (this.data.material_type) {
+          case 'video':
+            this.videos = [...this.data.material];
+            break;
+          case 'pdf':
+            this.pdfs = [...this.data.material];
+            break;
+          case 'image':
+            this.images = [...this.data.material];
+            break;
+        }
+        this.firstMaterialType = this.data.material_type;
+      } else {
+        this.data.material.forEach((e) => {
+          switch (e.material_type) {
+            case 'video':
+              this.videos.push(e);
+              break;
+            case 'pdf':
+              this.pdfs.push(e);
+              break;
+            case 'image':
+              this.images.push(e);
+              break;
+          }
+        });
+        this.firstMaterialType = this.data.material[0]['material_type'];
       }
     }
     if (this.data.type) {
@@ -69,23 +83,13 @@ export class MaterialSendComponent implements OnInit {
   changeTab(event: number): void {
     this.selectedTab = event;
   }
-
   selectTextTemplate(event: Template): void {
     this.textTemplate = event;
     this.textContent = this.textTemplate.content;
   }
-  selectEmailTemplate(event: Template): void {
-    this.emailTemplate = event;
-    this.subject = this.emailTemplate.subject;
-    this.emailContent = this.emailTemplate.content;
-    if (this.htmlEditor) {
-      this.htmlEditor.setValue(this.emailContent);
-    }
-  }
   onChangeTemplate(event: Template): void {
     this.subject = event.subject;
   }
-
   send(): void {
     if (this.contacts.length == 0) {
       return;
@@ -143,7 +147,7 @@ export class MaterialSendComponent implements OnInit {
     const image_ids = [];
     const data = {};
     this.contacts.forEach((e) => {
-      if (e._id && e.email) {
+      if (e._id && e.cell_phone) {
         contacts.push(e._id);
       }
     });
@@ -222,9 +226,5 @@ export class MaterialSendComponent implements OnInit {
           this.dialogRef.close();
         }
       });
-  }
-
-  focusEditor(): void {
-    this.focusedField = 'editor';
   }
 }
