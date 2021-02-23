@@ -9,7 +9,7 @@
   </div>
   <mat-dialog-content>
     <div class="f-6 mt-3">
-      Select who will be merged into Andrew Johson
+      Select who will be merged into {{sourceContact.fullName}}
     </div>
     <div class="v-center select-contact mt-3">
       <app-select-contact (onSelect)="addContacts($event)" [excludeContacts]="[sourceContact]"></app-select-contact>
@@ -26,335 +26,134 @@
       Select primary data to be preserved in new record
     </div>
     <div class="contact-fields mt-2">
-      <div class="v-center row">
+      <ng-container *ngFor="let column of columns">
+        <div class="v-center row my-2" *ngIf="collection[column] && collection[column].length > 0">
+          <div class="col-sm-3">
+            <span class="f-3 fw-600 op-40 text-uppercase">
+              {{column}}
+            </span>
+          </div>
+          <ng-container *ngIf="column != 'label'; else labelSelect">
+            <div class="col-sm-7 form-group m-0" *ngIf="column != 'tags'">
+              <mat-select
+                [(ngModel)]="previewContact[column]"
+                name="{{column}}"
+                [disabled]="collection[column].length == 1"
+                [class.disabled]="collection[column].length == 1"
+              >
+                <mat-option *ngFor="let option of collection[column]" value="{{option}}">
+                  <div class="f-3 c-black"
+                       [class.selected-option-text]="previewContact[column] == option">
+                    {{option}}
+                  </div>
+                </mat-option>
+              </mat-select>
+            </div>
+            <div class="col-sm-7 form-group m-0" *ngIf="column == 'tags'">
+              <mat-select multiple
+                [(ngModel)]="previewContact[column]"
+                name="{{column}}"
+                [class.disabled]="collection[column].length == 1"
+              >
+                <mat-option *ngFor="let option of collection[column]" value="{{option}}">
+                  <div class="f-3 c-black"
+                       [class.selected-option-text]="previewContact[column] == option">
+                    {{option}}
+                  </div>
+                </mat-option>
+              </mat-select>
+            </div>
+          </ng-container>
+          <ng-template #labelSelect>
+            <div class="col-sm-7 form-group m-0">
+              <app-contact-merge-label
+                [source]="collection[column][0]"
+                [merge]="collection[column].length > 1 ? collection[column][1] : null"
+                [(label)]="previewContact[column]"
+              ></app-contact-merge-label>
+            </div>
+          </ng-template>
+        </div>
+      </ng-container>
+      <div class="v-center row my-2" *ngIf="emails.length > 0">
         <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Name
-          </span>
+            <span class="f-3 fw-600 op-40 text-uppercase">
+              Primary_Email
+            </span>
         </div>
         <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewName" name="fullname">
-            <mat-option value="{{sourceContact.fullName}}">
+          <mat-select
+            [(ngModel)]="previewContact['primary_email']"
+            name="primary_email"
+            [disabled]="emails.length == 1"
+            [class.disabled]="emails.length == 1"
+          >
+            <mat-option *ngFor="let option of emails" value="{{option}}">
               <div class="f-3 c-black"
-                   [class.selected-option-text]="previewName == sourceContact.fullName">
-                {{sourceContact.fullName}}
-              </div>
-            </mat-option>
-            <mat-option value="{{mergeContact.fullName}}" *ngIf="isExistMergeContact()">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewName == mergeContact.fullName">
-                {{mergeContact.fullName}}
+                   [class.selected-option-text]="previewContact['primary_email'] == option">
+                {{option}}
               </div>
             </mat-option>
           </mat-select>
         </div>
       </div>
-      <div class="v-center row mt-2">
+      <div class="v-center row my-2" *ngIf="phones.length > 0">
         <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Label
-          </span>
+            <span class="f-3 fw-600 op-40 text-uppercase">
+              Primary_Phone
+            </span>
         </div>
         <div class="col-sm-7 form-group m-0">
-          <app-contact-merge-label
-            [source]="sourceContact.label"
-            [merge]="mergeContact ? mergeContact.label: null"
-            [(label)]="label"
-          ></app-contact-merge-label>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Address
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.address" name="address">
-            <mat-option value="{{sourceContact.address}}">
+          <mat-select
+            [(ngModel)]="previewContact['primary_phone']"
+            name="primary_phone"
+            [disabled]="phones.length == 1"
+            [class.disabled]="phones.length == 1"
+          >
+            <mat-option *ngFor="let option of phones" value="{{option}}">
               <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.address == sourceContact.address">
-                {{sourceContact.address}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.address}}"
-              *ngIf="isExistMergeContact() && sourceContact.address != mergeContact.address"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.address == mergeContact.address">
-                {{mergeContact.address}}
+                   [class.selected-option-text]="previewContact['primary_phone'] == option">
+                {{option}}
               </div>
             </mat-option>
           </mat-select>
         </div>
       </div>
-      <div class="v-center row mt-2">
+      <div class="v-center row my-2" *ngIf="emails.length > 1">
         <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Website
-          </span>
+            <span class="f-3 fw-600 op-40 text-uppercase">
+              Secondary_Email
+            </span>
         </div>
         <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.website" name="website">
-            <mat-option value="{{sourceContact.website}}">
+          <mat-select
+            [(ngModel)]="previewContact['secondary_email']"
+            name="secondary_email"
+          >
+            <mat-option *ngFor="let option of emails" value="{{option}}">
               <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.address == sourceContact.website">
-                {{sourceContact.website}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.website}}"
-              *ngIf="isExistMergeContact() && sourceContact.website != mergeContact.website"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.website == mergeContact.website">
-                {{mergeContact.website}}
+                   [class.selected-option-text]="previewContact['secondary_email'] == option">
+                {{option}}
               </div>
             </mat-option>
           </mat-select>
         </div>
       </div>
-      <div class="v-center row mt-2">
+      <div class="v-center row my-2" *ngIf="phones.length > 1">
         <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Primary Email
-          </span>
+            <span class="f-3 fw-600 op-40 text-uppercase">
+              Secondary_Phone
+            </span>
         </div>
         <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.email" name="primary_email">
-            <mat-option value=""></mat-option>
-            <mat-option *ngFor="let email of emails" value="{{email}}">
+          <mat-select
+            [(ngModel)]="previewContact['secondary_phone']"
+            name="secondary_phone"
+          >
+            <mat-option *ngFor="let option of phones" value="{{option}}">
               <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.email == email">
-                {{email}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2" *ngIf="emails.length > 1">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Secondary Email
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.secondary_email" name="secondary_email">
-            <mat-option value=""></mat-option>
-            <mat-option *ngFor="let email of emails" value="{{email}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.secondary_email == email">
-                {{email}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Primary Phone
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.cell_phone" name="primary_phone">
-            <mat-option value=""></mat-option>
-            <mat-option *ngFor="let phone of phones" value="{{phone}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.cell_phone == phone">
-                {{phone}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2" *ngIf="phones.length > 1">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Secondary Phone
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.secondary_phone" name="secondary_phone">
-            <mat-option value=""></mat-option>
-            <mat-option *ngFor="let phone of phones" value="{{phone}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.secondary_phone == phone">
-                {{phone}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Country
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.country" name="country">
-            <mat-option value="{{sourceContact.country}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.country == sourceContact.country">
-                {{sourceContact.country}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.country}}"
-              *ngIf="isExistMergeContact() && sourceContact.country != mergeContact.country"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.country == mergeContact.country">
-                {{mergeContact.country}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            State
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.state" name="state">
-            <mat-option value="{{sourceContact.state}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.state == sourceContact.state">
-                {{sourceContact.state}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.state}}"
-              *ngIf="isExistMergeContact() && sourceContact.state != mergeContact.state"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.state == mergeContact.state">
-                {{mergeContact.state}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            City
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.city" name="city">
-            <mat-option value="{{sourceContact.city}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.city == sourceContact.city">
-                {{sourceContact.city}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.city}}"
-              *ngIf="isExistMergeContact() && sourceContact.city != mergeContact.city"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.city == mergeContact.city">
-                {{mergeContact.city}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Zip
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.zip" name="zip">
-            <mat-option value="{{sourceContact.zip}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.zip == sourceContact.zip">
-                {{sourceContact.zip}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.zip}}"
-              *ngIf="isExistMergeContact() && sourceContact.zip != mergeContact.zip"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.zip == mergeContact.zip">
-                {{mergeContact.zip}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Source
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.source" name="source">
-            <mat-option value="{{sourceContact.source}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.source == sourceContact.source">
-                {{sourceContact.source}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.source}}"
-              *ngIf="isExistMergeContact() && sourceContact.source != mergeContact.source"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.source == mergeContact.source">
-                {{mergeContact.source}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Brokerage
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.brokerage" name="brokerage">
-            <mat-option value="{{sourceContact.brokerage}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.brokerage == sourceContact.brokerage">
-                {{sourceContact.brokerage}}
-              </div>
-            </mat-option>
-            <mat-option
-              value="{{mergeContact.brokerage}}"
-              *ngIf="isExistMergeContact() && sourceContact.brokerage != mergeContact.brokerage"
-            >
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.brokerage == mergeContact.brokerage">
-                {{mergeContact.brokerage}}
-              </div>
-            </mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="v-center row mt-2">
-        <div class="col-sm-3">
-          <span class="f-6 fw-600 op-40">
-            Tags
-          </span>
-        </div>
-        <div class="col-sm-7 form-group m-0">
-          <mat-select [(ngModel)]="previewContact.tags" name="tags" multiple>
-            <mat-option *ngFor="let tag of tags" value="{{tag}}">
-              <div class="f-3 c-black"
-                   [class.selected-option-text]="previewContact.tags.indexOf(tag) >= 0">
-                {{tag}}
+                   [class.selected-option-text]="previewContact['secondary_phone'] == option">
+                {{option}}
               </div>
             </mat-option>
           </mat-select>

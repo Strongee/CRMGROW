@@ -13,6 +13,7 @@ import { EmailService } from 'src/app/services/email.service';
 import { NotifyComponent } from '../notify/notify.component';
 import { ConnectedPosition } from '@angular/cdk/overlay';
 import { Contact } from 'src/app/models/contact.model';
+import { HtmlEditorComponent } from '../html-editor/html-editor.component';
 import * as _ from 'lodash';
 
 @Component({
@@ -40,7 +41,9 @@ export class ShareSiteComponent implements OnInit {
   submitted = false;
 
   labels = [{ id: 'unset', text: 'Unset' }, ...Labels];
+  selectedTemplate = { subject: '', content: '' };
 
+  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
   @ViewChild('teamTrigger') teamTrigger: HTMLElement;
 
   connectedPositions: ConnectedPosition[] = [
@@ -183,5 +186,18 @@ export class ShareSiteComponent implements OnInit {
       return;
     }
     this.isOpen = false;
+  }
+
+  insertEmailContentValue(value: string): void {
+    this.htmlEditor.insertEmailContentValue(value);
+  }
+
+  selectTemplate(event): void {
+    this.selectedTemplate = event;
+    this.email.subject = this.selectedTemplate.subject;
+    this.email.content = this.selectedTemplate.content;
+    if (this.email.content && this.htmlEditor) {
+      this.htmlEditor.setValue(this.email.content);
+    }
   }
 }

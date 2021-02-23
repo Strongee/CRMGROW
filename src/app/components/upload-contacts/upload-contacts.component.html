@@ -8,9 +8,9 @@
     </ng-container>
     <ng-container *ngIf="step == 3">
       <div class="f-22 font-weight-bold c-black">
-        Duplicates
-        <span class="f-6 ml-5 c-red ml-5" *ngIf="isDuplicatedEmail()">
-          Email is duplicated. Please merge duplicated emails.
+        {{this.failedData.length > 0 ? 'Duplicates with Contacts' : 'Duplicates'}}
+        <span class="dup-notification-text f-6 ml-md-5 ml-sm-3 ml-3 c-red" *ngIf="isDuplicatedExist">
+          Contact is duplicated. Please merge duplicated contacts.
         </span>
       </div>
     </ng-container>
@@ -129,7 +129,10 @@
                   <tr>
                     <th class="check-cell sticky-check-col">
                       <div class="custom-control custom-checkbox" *ngIf="dupItem.length > 1">
-                        <input type="checkbox" class="custom-control-input" id="merge-select-all-{{dupIndex}}" (change)="selectAllContactGroup(dupIndex, dupItem)" [checked]="isSelectedGroup(dupIndex, dupItem)">
+                        <input type="checkbox" class="custom-control-input"
+                               id="merge-select-all-{{dupIndex}}"
+                               (click)="selectAllContactGroup($event, dupIndex, dupItem)"
+                               [checked]="isSelectedGroup(dupIndex, dupItem)">
                         <label class="custom-control-label" for="merge-select-all-{{dupIndex}}"></label>
                       </div>
                     </th>
@@ -149,9 +152,9 @@
                     >
                       <div class="custom-control custom-checkbox" *ngIf="dupItem.length > 1">
                         <input type="checkbox" class="custom-control-input" id="duplicate-{{contact.id}}"
-                               [checked]="isSelectedMerge(dupIndex, contact.id)"
-                               (change)="$event ? selectedMergeContacts[dupIndex].toggle(contact.id) : null"
-                               [disabled]="isDisable(dupIndex, contact.id)">
+                           [checked]="isSelectedMerge(dupIndex, contact.id)"
+                           (click)="selectContact($event, dupIndex, contact)"
+                        >
                         <label class="custom-control-label"
                                for="duplicate-{{contact.id}}"></label>
                       </div>
@@ -187,9 +190,8 @@
                 </table>
               </div>
               <div class="v-center p-2">
-                <div class="duplicate-error f-1 font-weight-bold c-red"
-                      *ngIf="duplicateItems[dupIndex]">
-                  EMAIL is duplicated. Please merge duplicated emails.
+                <div class="duplicate-error f-1 font-weight-bold c-red" *ngIf="isDuplicatedExist">
+                  {{getDuplicateContactsText(dupIndex)}}
                 </div>
                 <div class="v-center ml-auto">
                   <button type="button"
@@ -260,27 +262,6 @@
           <div class="f-3 font-weight-bold">{{uploadPercent}}%</div>
         </div>
       </div>
-<!--      <div class="v-center justify-content-center" *ngIf="!checkingDuplicate">-->
-<!--        <div class="upload-progress-wrapper">-->
-<!--          <circle-progress-->
-<!--            [percent]=uploadPercent-->
-<!--            [radius]="100"-->
-<!--            [outerStrokeWidth]="16"-->
-<!--            [innerStrokeWidth]="8"-->
-<!--            [outerStrokeColor]="'#78C000'"-->
-<!--            [innerStrokeColor]="'#C7E596'"-->
-<!--            [backgroundOpacity]="0"-->
-<!--            [titleColor]="'#0000ff'"-->
-<!--            [titleFontSize]="40"-->
-<!--            [subtitleFontSize]="14"-->
-<!--            [subtitle]=uploadSubTitle-->
-<!--            [subtitleColor]="'#000000'"-->
-<!--            [animation]="true"-->
-<!--            [animationDuration]="0"-->
-<!--          ></circle-progress>-->
-<!--          <img class="glass-img" src="../../assets/img/hourglass.gif">-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="my-3 text-center" *ngIf="checkingDuplicate">
         <div class="loader mt-2"></div>
         <h4 class="f-5 font-weight-bold mt-2">Checking duplicate contacts.</h4>

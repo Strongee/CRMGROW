@@ -14,4 +14,10 @@
       color: #000;
     }
   }
+
+  .disabled .mat-select-arrow {
+    border-left: 0px solid transparent;
+    border-right: 0px solid transparent;
+    border-top: 0px solid;
+  }
 }

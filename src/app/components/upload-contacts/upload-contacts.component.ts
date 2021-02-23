@@ -15,6 +15,7 @@ import {
 import { ContactService } from '../../services/contact.service';
 import { HandlerService } from '../../services/handler.service';
 import { ElementRef } from '@angular/core';
+import { NotifyComponent } from '../notify/notify.component';
 
 const phone = require('phone');
 
@@ -87,6 +88,7 @@ export class UploadContactsComponent implements OnInit {
   uploadHeaders = [];
   uploadSubTitle = '';
   checkingDuplicate = false;
+  isDuplicatedExist = false;
 
   constructor(
     private dialogRef: MatDialogRef<UploadContactsComponent>,
@@ -144,22 +146,6 @@ export class UploadContactsComponent implements OnInit {
           this.uploadRecursive(uploads);
         } else {
           this.confirmDuplicates();
-
-          // this.failedRecords = [];
-          // const emails = [];
-          // this.failedData.forEach((e) => {
-          //   emails.push(e.email);
-          // });
-          // this.contactsToUpload.forEach((e) => {
-          //   if (emails.indexOf(e.email) !== -1) {
-          //     this.failedRecords.push({ ...e });
-          //   }
-          // });
-          // if (!this.failedData.length) {
-          //   this.dialogRef.close({ status: true });
-          // } else {
-          //   this.step = 5;
-          // }
         }
       } else {
         this.uploading = false;
@@ -580,9 +566,13 @@ export class UploadContactsComponent implements OnInit {
     const mergeContacts = [];
     if (contactIds && contactIds.length > 1) {
       for (const id of contactIds) {
-        const index = this.sameContacts[dupIndex].findIndex((item) => item.id === id);
+        const index = this.sameContacts[dupIndex].findIndex(
+          (item) => item.id === id
+        );
         if (index >= 0) {
-          mergeContacts.push(Object.assign({}, this.sameContacts[dupIndex][index]));
+          mergeContacts.push(
+            Object.assign({}, this.sameContacts[dupIndex][index])
+          );
         }
       }
     }
@@ -601,9 +591,13 @@ export class UploadContactsComponent implements OnInit {
           const merged = res.merged;
           for (const id of contactIds) {
             this.selectedMergeContacts[dupIndex].deselect(id);
-            let sameIndex = this.sameContacts[dupIndex].findIndex((item) => item.id === id);
+            const sameIndex = this.sameContacts[dupIndex].findIndex(
+              (item) => item.id === id
+            );
             this.sameContacts[dupIndex].splice(sameIndex, 1);
-            let contactIndex = this.contacts.findIndex((item) => item.id === id);
+            const contactIndex = this.contacts.findIndex(
+              (item) => item.id === id
+            );
             this.contacts.splice(contactIndex, 1);
           }
 
@@ -644,11 +638,87 @@ export class UploadContactsComponent implements OnInit {
     return false;
   }
 
+  getDuplicateContactsText(dupIndex): any {
+    const emailKey = 'primary_email';
+    const phoneKey = 'primary_phone';
+    const firstNameKey = 'first_name';
+    const lastNameKey = 'last_name';
+
+    let isEmailDuplicate = false;
+    let isPhoneDuplicate = false;
+    let isFirstNameDuplicate = false;
+    let isLastNameDuplicate = false;
+
+    if (this.sameContacts[dupIndex].length > 1) {
+      for (let i = 0; i < this.sameContacts[dupIndex].length; i++) {
+        for (let j = i; j < this.sameContacts[dupIndex].length; j++) {
+          if (i === j) {
+            continue;
+          } else {
+            if (
+              this.sameContacts[dupIndex][i][emailKey] ===
+              this.sameContacts[dupIndex][j][emailKey]
+            ) {
+              isEmailDuplicate = true;
+            }
+            if (
+              this.sameContacts[dupIndex][i][phoneKey] ===
+              this.sameContacts[dupIndex][j][phoneKey]
+            ) {
+              isPhoneDuplicate = true;
+            }
+            if (
+              this.sameContacts[dupIndex][i][firstNameKey] ===
+              this.sameContacts[dupIndex][j][firstNameKey]
+            ) {
+              isFirstNameDuplicate = true;
+            }
+            if (
+              this.sameContacts[dupIndex][i][lastNameKey] ===
+              this.sameContacts[dupIndex][j][lastNameKey]
+            ) {
+              isLastNameDuplicate = true;
+            }
+          }
+        }
+      }
+    }
+
+    const duplicatedKey = [];
+    if (isEmailDuplicate) {
+      duplicatedKey.push('email');
+    }
+    if (isPhoneDuplicate) {
+      duplicatedKey.push('phone');
+    }
+    if (isFirstNameDuplicate) {
+      duplicatedKey.push('first name');
+    }
+    if (isLastNameDuplicate) {
+      duplicatedKey.push('last name');
+    }
+
+    if (duplicatedKey.length > 0) {
+      let message = '';
+      for (let i = 0; i < duplicatedKey.length; i++) {
+        if (i === duplicatedKey.length - 1) {
+          message += duplicatedKey[i];
+        } else {
+          message += duplicatedKey[i] + ', ';
+        }
+      }
+      message += ' of contacts are duplicated.';
+      return message.charAt(0).toUpperCase() + message.slice(1);
+    }
+    return '';
+  }
+
   goToReview(): void {
     const csvImport = this.isContactExist();
     const csvContacts = [];
     let isDuplicateKey = false;
     this.duplicateItems = [];
+    this.isDuplicatedExist = this.isDuplicatedEmail();
     this.sameContacts.forEach((dupItem, index) => {
       let emailKey = '';
       for (const key in this.updateColumn) {
@@ -697,7 +767,7 @@ export class UploadContactsComponent implements OnInit {
         for (let i = 0; i < this.duplicateItems.length; i++) {
           if (this.duplicateItems[i] === true) {
             id = id + i.toString();
-            let el = document.getElementById(id);
+            const el = document.getElementById(id);
             el.scrollIntoView();
             return;
           }
@@ -1123,21 +1193,105 @@ export class UploadContactsComponent implements OnInit {
         this.step -= 2;
       }
     } else {
+      this.isDuplicatedExist = false;
       this.step--;
     }
   }
 
-  selectAllContactGroup(index, contacts): void {
-    if (this.isSelectedGroup(index, contacts)) {
-      for (const contact of contacts) {
-        if (this.selectedMergeContacts[index].isSelected(contact.id)) {
-          this.selectedMergeContacts[index].deselect(contact.id);
-        }
+  selectContact($event, dupIndex, contact): void {
+    if ($event) {
+      if (this.overContactCount(dupIndex, contact)) {
+        this.selectedMergeContacts[dupIndex].toggle(contact.id);
+      } else {
+        $event.preventDefault();
       }
+    }
+  }
+
+  overContactCount(dupIndex, contact): any {
+    let selectedContactCount = 0;
+    let selectedCSVCount = 0;
+    for (const id of this.selectedMergeContacts[dupIndex].selected) {
+      const index = this.sameContacts[dupIndex].findIndex(
+        (contact) => contact._id && contact._id === id
+      );
+      if (index >= 0) {
+        selectedContactCount++;
+      } else {
+        selectedCSVCount++;
+      }
+    }
+    if (selectedContactCount === 1 && this.isContact(contact)) {
+      if (selectedCSVCount > 0) {
+        this.dialog.open(NotifyComponent, {
+          maxWidth: '360px',
+          width: '96vw',
+          data: {
+            message: 'Can not merge more than 2 contacts and CSV'
+          }
+        });
+        return false;
+      } else {
+        return true;
+      }
+    } else if (selectedContactCount === 2 && this.isContact(contact)) {
+      if (this.selectedMergeContacts[dupIndex].isSelected(contact._id)) {
+        return true;
+      } else {
+        this.dialog.open(NotifyComponent, {
+          maxWidth: '360px',
+          width: '96vw',
+          data: {
+            message: 'Can not merge more than 2 contacts'
+          }
+        });
+        return false;
+      }
+    } else if (selectedContactCount === 2 && !this.isContact(contact)) {
+      this.dialog.open(NotifyComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          message: 'Can not merge more than 2 contacts'
+        }
+      });
+      return false;
+    }
+    return true;
+  }
+
+  selectAllContactGroup($event, dupIndex, contacts): void {
+    let contactCount = 0;
+    let csvCount = 0;
+    for (const contact of contacts) {
+      if (this.isContact(contact)) {
+        contactCount++;
+      } else {
+        csvCount++;
+      }
+    }
+    if (contactCount > 2 || (contactCount === 2 && csvCount > 0)) {
+      this.dialog.open(NotifyComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          message: 'Can not merge more than 2 contacts'
+        }
+      });
+      $event.preventDefault();
+      return;
     } else {
-      for (const contact of contacts) {
-        if (!this.selectedMergeContacts[index].isSelected(contact.id)) {
-          this.selectedMergeContacts[index].select(contact.id);
+      if (this.isSelectedGroup(dupIndex, contacts)) {
+        for (const contact of contacts) {
+          if (this.selectedMergeContacts[dupIndex].isSelected(contact.id)) {
+            this.selectedMergeContacts[dupIndex].deselect(contact.id);
+          }
+        }
+      } else {
+        for (const contact of contacts) {
+          if (!this.selectedMergeContacts[dupIndex].isSelected(contact.id)) {
+            this.selectedMergeContacts[dupIndex].select(contact.id);
+          }
         }
       }
     }

@@ -1,13 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Contact } from '../../models/contact.model';
-import { SelectionModel } from '@angular/cdk/collections';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef
 } from '@angular/material/dialog';
-import { ImportSelectableColumn } from '../../constants/variable.constants';
-import { ImportContactMergeConfirmComponent } from '../import-contact-merge-confirm/import-contact-merge-confirm.component';
 import { ContactService } from '../../services/contact.service';
 
 @Component({
@@ -16,19 +12,12 @@ import { ContactService } from '../../services/contact.service';
   styleUrls: ['./import-contact-merge.component.scss']
 })
 export class ImportContactMergeComponent implements OnInit {
-  primaryContact;
-  secondaryContact;
   collection = {};
   emails = [];
   phones = [];
 
-  primarySelectionModel = [];
-  secondarySelectionModel = [];
-  primaryNotesSelectionModel = [];
-  secondaryNotesSelectionModel = [];
   updateColumn;
   columns = [];
-  previewColumns = [];
 
   contacts = [];
 
@@ -118,10 +107,6 @@ export class ImportContactMergeComponent implements OnInit {
     if (this.data) {
       this.contacts = this.data.contacts;
 
-      // this.primaryContact = this.data.primary;
-      // this.secondaryContact = this.data.secondary;
-      // load primary columns
-
       if (this.mergeType() === this.MERGETYPE.CONTACT_CSV) {
         this.updateColumn = this.contactCSVColumn;
       } else if (this.mergeType() === this.MERGETYPE.CONTACT) {
@@ -137,14 +122,20 @@ export class ImportContactMergeComponent implements OnInit {
           if (this.isEmailPhoneColumn(this.updateColumn[name])) {
             if (this.updateColumn[name].indexOf('email') >= 0) {
               for (const contact of this.contacts) {
-                if (contact[this.updateColumn[name]] && this.emails.indexOf(contact[this.updateColumn[name]]) < 0 ) {
+                if (
+                  contact[this.updateColumn[name]] &&
+                  this.emails.indexOf(contact[this.updateColumn[name]]) < 0
+                ) {
                   this.emails.push(contact[this.updateColumn[name]]);
                 }
               }
             }
             if (this.updateColumn[name].indexOf('phone') >= 0) {
               for (const contact of this.contacts) {
-                if (contact[this.updateColumn[name]] && this.phones.indexOf(contact[this.updateColumn[name]]) < 0 ) {
+                if (
+                  contact[this.updateColumn[name]] &&
+                  this.phones.indexOf(contact[this.updateColumn[name]]) < 0
+                ) {
                   this.phones.push(contact[this.updateColumn[name]]);
                 }
               }
@@ -153,8 +144,14 @@ export class ImportContactMergeComponent implements OnInit {
             if (this.collection[this.updateColumn[name]]) {
               for (const contact of this.contacts) {
                 if (contact[this.updateColumn[name]]) {
-                  if (this.collection[this.updateColumn[name]].indexOf(contact[this.updateColumn[name]]) < 0) {
-                    this.collection[this.updateColumn[name]].push(contact[this.updateColumn[name]]);
+                  if (
+                    this.collection[this.updateColumn[name]].indexOf(
+                      contact[this.updateColumn[name]]
+                    ) < 0
+                  ) {
+                    this.collection[this.updateColumn[name]].push(
+                      contact[this.updateColumn[name]]
+                    );
                   }
                 }
               }
@@ -162,10 +159,18 @@ export class ImportContactMergeComponent implements OnInit {
               for (const contact of this.contacts) {
                 if (contact[this.updateColumn[name]]) {
                   if (!this.collection[this.updateColumn[name]]) {
-                    this.collection[this.updateColumn[name]] = [contact[this.updateColumn[name]]];
+                    this.collection[this.updateColumn[name]] = [
+                      contact[this.updateColumn[name]]
+                    ];
                   } else {
-                    if (this.collection[this.updateColumn[name]].indexOf(contact[this.updateColumn[name]]) < 0) {
-                      this.collection[this.updateColumn[name]].push(contact[this.updateColumn[name]]);
+                    if (
+                      this.collection[this.updateColumn[name]].indexOf(
+                        contact[this.updateColumn[name]]
+                      ) < 0
+                    ) {
+                      this.collection[this.updateColumn[name]].push(
+                        contact[this.updateColumn[name]]
+                      );
                     }
                   }
                 }
@@ -176,18 +181,27 @@ export class ImportContactMergeComponent implements OnInit {
           for (let i = 0; i < this.contacts.length; i++) {
             if (i === 0) {
               if (this.contacts[i][this.updateColumn[name]]) {
-                this.collection[this.updateColumn[name]] = [...this.contacts[i][this.updateColumn[name]]];
+                this.collection[this.updateColumn[name]] = [
+                  ...this.contacts[i][this.updateColumn[name]]
+                ];
               }
             } else {
               if (this.contacts[i][this.updateColumn[name]]) {
                 if (this.collection[this.updateColumn[name]]) {
-                  for (const value of this.contacts[i][this.updateColumn[name]]) {
-                    if (this.collection[this.updateColumn[name]].indexOf(value) < 0) {
+                  for (const value of this.contacts[i][
+                    this.updateColumn[name]
+                  ]) {
+                    if (
+                      this.collection[this.updateColumn[name]].indexOf(value) <
+                      0
+                    ) {
                       this.collection[this.updateColumn[name]].push(value);
                     }
                   }
                 } else {
-                  this.collection[this.updateColumn[name]] = [...this.contacts[i][this.updateColumn[name]]];
+                  this.collection[this.updateColumn[name]] = [
+                    ...this.contacts[i][this.updateColumn[name]]
+                  ];
                 }
               }
             }
@@ -210,13 +224,19 @@ export class ImportContactMergeComponent implements OnInit {
           }
         } else {
           if (this.isCheckable(this.updateColumn[name])) {
-            if (this.collection[this.updateColumn[name]] && this.collection[this.updateColumn[name]].length > 0) {
-              this.previewContact[this.updateColumn[name]] = this.collection[this.updateColumn[name]][0];
+            if (
+              this.collection[this.updateColumn[name]] &&
+              this.collection[this.updateColumn[name]].length > 0
+            ) {
+              this.previewContact[this.updateColumn[name]] = this.collection[
+                this.updateColumn[name]
+              ][0];
             }
           } else {
-            this.previewContact[this.updateColumn[name]] = this.collection[this.updateColumn[name]];
+            this.previewContact[this.updateColumn[name]] = this.collection[
+              this.updateColumn[name]
+            ];
           }
-
         }
       }
 
@@ -360,13 +380,6 @@ export class ImportContactMergeComponent implements OnInit {
     return phones;
   }
 
-  isContact(contact): any {
-    if (contact._id) {
-      return true;
-    }
-    return false;
-  }
-
   mergeType(): any {
     let contactCount = 0;
     for (const contact of this.contacts) {
@@ -411,58 +424,59 @@ export class ImportContactMergeComponent implements OnInit {
   }
 
   mergeContact(): void {
-    // const data = {
-    //   primary_contact: this.primaryContact._id,
-    //   secondary_contact: this.secondaryContact._id,
-    //   activity_merge: this.activity,
-    //   followup_merge: this.followup,
-    //   automation_merge: this.automation
-    // };
-    //
-    // let labelName = this.previewContact.label;
-    // let labelId = this.previewContact.label_id;
-    // if (this.previewContact.label === this.primaryContact.label) {
-    //   labelName = this.primaryContact.label;
-    //   labelId = this.primaryContact.label_id;
-    //   this.previewContact.label = this.primaryContact.label_id;
-    // } else {
-    //   labelName = this.secondaryContact.label;
-    //   labelId = this.secondaryContact.label_id;
-    //   this.previewContact.label = this.secondaryContact.label_id;
-    // }
-    //
-    // for (const field in this.contactContactColumn) {
-    //   if (field === 'primary_email') {
-    //     data['email'] = this.previewContact[this.contactContactColumn[field]];
-    //   } else if (field === 'primary_phone') {
-    //     data['cell_phone'] = this.previewContact[
-    //       this.contactContactColumn[field]
-    //     ];
-    //   } else {
-    //     data[field] = this.previewContact[this.contactContactColumn[field]];
-    //   }
-    // }
-    //
-    // this.merging = true;
-    // this.contactService.mergeContacts(data).subscribe(
-    //   (res) => {
-    //     this.merging = false;
-    //     if (res) {
-    //       const merged = {
-    //         ...res,
-    //         primary_email: res.email,
-    //         primary_phone: res.cell_phone,
-    //         label: labelName,
-    //         label_id: labelId
-    //       };
-    //
-    //       this.dialogRef.close({ type: 'contact', merged });
-    //     }
-    //   },
-    //   (error) => {
-    //     this.merging = false;
-    //   }
-    // );
+    if (this.contacts.length > 1) {
+      const data = {
+        primary_contact: this.contacts[0]._id,
+        secondary_contact: this.contacts[1]._id,
+        activity_merge: this.activity,
+        followup_merge: this.followup,
+        automation_merge: this.automation
+      };
+
+      let labelName = this.contacts[0].label;
+      let labelId = this.contacts[0].label_id;
+      if (this.previewContact['label'] === this.contacts[0].label) {
+        labelName = this.contacts[0].label;
+        labelId = this.contacts[0].label_id;
+        this.previewContact['label'] = this.contacts[0].label_id;
+      } else {
+        labelName = this.contacts[1].label;
+        labelId = this.contacts[1].label_id;
+        this.previewContact['label'] = this.contacts[1].label_id;
+      }
+
+      for (const field in this.contactContactColumn) {
+        if (field === 'primary_email') {
+          data['email'] = this.previewContact[this.contactContactColumn[field]];
+        } else if (field === 'primary_phone') {
+          data['cell_phone'] = this.previewContact[
+            this.contactContactColumn[field]
+          ];
+        } else {
+          data[field] = this.previewContact[this.contactContactColumn[field]];
+        }
+      }
+      this.merging = true;
+      this.contactService.mergeContacts(data).subscribe(
+        (res) => {
+          this.merging = false;
+          if (res) {
+            const merged = {
+              ...res,
+              primary_email: res.email,
+              primary_phone: res.cell_phone,
+              label: labelName,
+              label_id: labelId
+            };
+
+            this.dialogRef.close({ type: 'contact', merged });
+          }
+        },
+        (error) => {
+          this.merging = false;
+        }
+      );
+    }
   }
 
   isCheckable(column): any {
@@ -471,5 +485,4 @@ export class ImportContactMergeComponent implements OnInit {
     }
     return false;
   }
-
 }

@@ -15,12 +15,26 @@ export class ContactMergeComponent implements OnInit {
   saving = false;
   sourceContact: ContactDetail = new ContactDetail();
   mergeContact: ContactDetail = new ContactDetail();
-  previewContact: ContactDetail = new ContactDetail();
-
-  previewName = '';
+  previewContact = {};
+  collection = {};
   emails = [];
   phones = [];
-  tags = [];
+
+  columns = [
+    'first_name',
+    'last_name',
+    'label',
+    'address',
+    'website',
+    'country',
+    'city',
+    'state',
+    'zip',
+    'brokerage',
+    'source',
+    'tags'
+  ];
+
   activity = 'Keep primary';
   followup = 'Both';
   automation = 'Keep primary';
@@ -46,92 +60,128 @@ export class ContactMergeComponent implements OnInit {
   ) {
     if (this.data && this.data.contact) {
       this.sourceContact = this.data.contact;
-      this.previewContact = Object.assign({}, this.data.contact);
     }
   }
 
   ngOnInit(): void {
     this.initContact();
-    console.log('source contact ==============>', this.sourceContact);
   }
 
   initContact(): void {
-    this.previewName = this.sourceContact.fullName;
-    this.emails = [];
-    this.phones = [];
-    this.tags = [...this.sourceContact.tags];
-    if (this.sourceContact.email) {
-      this.emails.push(this.sourceContact.email);
+    this.previewContact = {
+      ...this.sourceContact
+    };
+    this.collection = {};
+
+    for (const column of this.columns) {
+      if (this.sourceContact[column]) {
+        if (column !== 'tags') {
+          this.collection[column] = [this.sourceContact[column]];
+        } else {
+          this.collection[column] = [...this.sourceContact[column]];
+        }
+      }
     }
-    if (this.sourceContact.secondary_email) {
-      this.emails.push(this.sourceContact.secondary_email);
+
+    if (this.sourceContact['email']) {
+      this.emails.push(this.sourceContact['email']);
     }
-    if (this.sourceContact.cell_phone) {
-      this.phones.push(this.sourceContact.cell_phone);
+    if (this.sourceContact['secondary_email']) {
+      this.emails.push(this.sourceContact['secondary_email']);
     }
-    if (this.sourceContact.secondary_phone) {
-      this.phones.push(this.sourceContact.secondary_phone);
+    if (this.sourceContact['cell_phone']) {
+      this.phones.push(this.sourceContact['cell_phone']);
     }
-    console.log('tags ==========>', this.tags);
+    if (this.sourceContact['secondary_phone']) {
+      this.phones.push(this.sourceContact['secondary_phone']);
+    }
+
+    if (this.emails.length > 0) {
+      this.previewContact['primary_email'] = this.emails[0];
+      if (this.emails.length > 1) {
+        this.previewContact['secondary_email'] = this.emails[1];
+      }
+    }
+    if (this.phones.length > 0) {
+      this.previewContact['primary_phone'] = this.phones[0];
+      if (this.phones.length > 1) {
+        this.previewContact['secondary_phone'] = this.phones[1];
+      }
+    }
   }
 
   isExistMergeContact(): any {
     return this.mergeContact && this.mergeContact._id;
   }
 
-  getOtherEmails(email): any {
-    const emails = [...this.emails];
-    _.remove(emails, (item) => {
-      return item === email;
-    });
-    return emails;
-  }
-
   addContacts(contact: any): void {
-    this.mergeContact = contact;
-    console.log('merge contact ==============>', this.mergeContact);
+    this.emails = [];
+    this.phones = [];
     this.initContact();
-    if (contact) {
-      if (this.mergeContact.email) {
-        this.emails.push(this.mergeContact.email);
-      }
-      if (this.mergeContact.secondary_email) {
-        this.emails.push(this.mergeContact.secondary_email);
-      }
-      if (this.mergeContact.cell_phone) {
-        this.phones.push(this.mergeContact.cell_phone);
-      }
-      if (this.mergeContact.secondary_phone) {
-        this.phones.push(this.mergeContact.secondary_phone);
-      }
-      if (this.mergeContact.tags.length) {
-        for (let i = 0; i < this.mergeContact.tags.length; i++) {
-          if (this.tags.indexOf(this.mergeContact.tags[i]) < 0) {
-            this.tags.push(this.mergeContact.tags[i]);
+    this.mergeContact = new ContactDetail();
+
+    if (!contact) {
+      return;
+    }
+
+    this.mergeContact = contact;
+    for (const column of this.columns) {
+      if (this.mergeContact[column]) {
+        if (this.collection[column]) {
+          if (column !== 'tags') {
+            if (this.collection[column].indexOf(this.mergeContact[column]) < 0 ) {
+              this.collection[column].push(this.mergeContact[column]);
+            }
+          } else {
+            for (const tag of this.mergeContact[column]) {
+              if (this.collection[column].indexOf(tag) < 0) {
+                this.collection[column].push(tag);
+              }
+            }
+            this.previewContact[column] = [...this.collection[column]];
+          }
+        } else {
+          if (column !== 'tags') {
+            this.collection[column] = [this.mergeContact[column]];
+            this.previewContact[column] = this.collection[column].length > 0 ? this.collection[column][0] : null;
+          } else {
+            this.collection[column] = [...this.mergeContact[column]];
+            this.previewContact[column] = [...this.collection[column]];
           }
         }
       }
+    }
+
+    if (this.mergeContact['email']) {
+      this.emails.push(this.mergeContact['email']);
+    }
+    if (this.mergeContact['secondary_email']) {
+      this.emails.push(this.mergeContact['secondary_email']);
+    }
+    if (this.mergeContact['cell_phone']) {
+      this.phones.push(this.mergeContact['cell_phone']);
+    }
+    if (this.mergeContact['secondary_phone']) {
+      this.phones.push(this.mergeContact['secondary_phone']);
+    }
+
+    if (!this.previewContact['primary_email'] && this.emails.length > 0) {
+      this.previewContact['primary_email'] = this.emails[0];
+    }
+    if (!this.previewContact['secondary_email'] && this.emails.length > 1) {
+      this.previewContact['secondary_email'] = this.emails[1];
+    }
+    if (!this.previewContact['primary_phone'] && this.phones.length > 0) {
+      this.previewContact['primary_phone'] = this.phones[0];
+    }
+    if (!this.previewContact['secondary_phone'] && this.phones.length > 1) {
+      this.previewContact['secondary_phone'] = this.phones[1];
     }
   }
 
   submit(): void {
     if (!this.mergeContact._id) {
       return;
-    }
-
-    const names = this.previewName.split(' ');
-    if (names.length > 1) {
-      this.previewContact.first_name = names[0];
-      let lastName = '';
-      for (let i = 1; i < names.length; i++) {
-        lastName += names[i];
-      }
-      this.previewContact.last_name = lastName;
-    } else {
-      this.previewContact.first_name = this.previewName;
-    }
-    if (this.label && this.label._id) {
-      this.previewContact.label = this.label._id;
     }
     this.saving = true;
     const activityIndex = this.mergeActions.findIndex((item) => item.label === this.activity);
@@ -150,10 +200,10 @@ export class ContactMergeComponent implements OnInit {
     };
     this.contactService.mergeContacts(data).subscribe((res) => {
       this.saving = false;
+      console.log("merged contact ==============>", res);
       if (res) {
         this.dialogRef.close(true);
       }
-      console.log("merged contact ==============>", res);
     });
   }
 }

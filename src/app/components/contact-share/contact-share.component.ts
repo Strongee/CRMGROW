@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { TeamService } from '../../services/team.service';
 import { ContactService } from '../../services/contact.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-contact-share',
@@ -23,6 +24,7 @@ export class ContactShareComponent implements OnInit {
     private teamService: TeamService,
     private contactService: ContactService,
     private toastr: ToastrService,
+    private userService: UserService,
     private changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -31,6 +33,9 @@ export class ContactShareComponent implements OnInit {
     if (this.data) {
       this.contact = this.data.contact;
     }
+    this.userService.profile$.subscribe((res) => {
+      this.userId = res._id;
+    });
   }
 
   selectTeam($event): void {
@@ -43,6 +48,13 @@ export class ContactShareComponent implements OnInit {
       for (const member of this.selectedTeam.members) {
         this.members.push(member);
       }
+
+      // remove yourself from members.
+      const index = this.members.findIndex((item) => item._id === this.userId);
+      if (index >= 0) {
+        this.members.splice(index, 1);
+      }
+
       this.changeDetectorRef.detectChanges();
     } else {
       this.selectedTeam = null;

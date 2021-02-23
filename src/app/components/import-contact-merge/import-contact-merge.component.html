@@ -9,7 +9,9 @@
               <div class="contact-header f-3 text-uppercase">{{column}}</div>
               <div class="contact-field">
                 <mat-select [(ngModel)]="previewContact[updateColumn[column]]"
-                            [disabled]="collection[updateColumn[column]] && collection[updateColumn[column]].length < 2">
+                            [disabled]="collection[updateColumn[column]] && collection[updateColumn[column]].length < 2"
+                            [class.disabled]="collection[updateColumn[column]] && collection[updateColumn[column]].length < 2"
+                >
                   <mat-option *ngFor="let value of collection[updateColumn[column]]" value="{{value}}">
                     <div class="f-3 c-black"
                          [class.selected-option-text]="previewContact[updateColumn[column]] == value">
