@@ -109,15 +109,7 @@ export class MaterialsComponent implements OnInit {
             e.folder = materialFolderMatch[e._id];
           }
         });
-        this.filteredMaterials = this.materials.filter((e) => {
-          if (e.material_type === 'folder') {
-            return true;
-          } else if (e.folder) {
-            return false;
-          } else {
-            return true;
-          }
-        });
+        this.filter();
       }
     );
   }
