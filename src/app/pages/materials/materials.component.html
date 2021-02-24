@@ -4,7 +4,7 @@
     <ng-template #folderTitleTemplate>
       <h1 class="f-24 font-weight-bold m-0 v-center">
         <a (click)="toRoot()" class="c-pointer c-dark">Materials</a>
-        <span class="f-8 v-center"><i class="i-icon i-chev-left d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
+        <span class="f-8 v-center"><i class="i-icon i-chev-right d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
       </h1>
     </ng-template>
     <div class="v-center create-actions">
@@ -52,7 +52,7 @@
       </ng-container>
     </div>
     <div class="pl-3 pr-0 py-1 text-center ml-auto mr-2">
-      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer v-center">
+      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer v-center" (click)="drawer.toggle()">
         <span>Filter</span>
         <img class="ml-1" src="../../../assets/img/filter.svg" alt="filter-icon" style="width: 23px;"/>
       </a>
@@ -352,7 +352,7 @@
           *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
     </div>
-    <ng-container *ngIf="!(storeService.materials$ | async).length">
+    <ng-container *ngIf="!(storeService.materials$ | async).length; else showingStatusTemplate">
       <ng-container [ngSwitch]="(materialService.loading$ | async)">
         <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
           <div class="object-icon v-center">
@@ -368,5 +368,117 @@
         </div>
       </ng-container>
     </ng-container>
+    <ng-template #showingStatusTemplate>
+      <ng-container *ngIf="!filteredMaterials.length">
+        <div class="empty-list py-5">
+          <div class="object-icon v-center">
+            <i class="i-icon i-lunch d-block bgc-dark"></i>
+          </div>
+          <h4 class="font-weight-bold mt-4 mb-3">
+            There is no materials for the filter options.
+          </h4>
+        </div>
+      </ng-container>
+    </ng-template>
   </div>
 </div>
+
+<mat-drawer-container [hasBackdrop]="true">
+  <mat-drawer #drawer
+    position="end">
+    <div class="p-4c panel">
+      <div class="v-center mb-3">
+        <h4 class="font-weight-bold mb-0 title">Advanced Filter</h4>
+        <div class="c-blue f-1 text-uppercase ml-2 mt-2 c-pointer" (click)="clearAllFilters()">Clear All Filters</div>
+        <button class="v-center border-0 bgc-trans ml-auto" type="button" (click)="drawer.toggle()">
+          <i class="d-block i-icon i-close bgc-dark"></i>
+        </button>
+      </div>
+      <form #actionForm="ngForm" [class.was-validated]="actionForm.submitted">
+        <div class="form-group">
+          <label>file type</label>
+          <div class="border rounded py-2 pr-2 pl-3 mt-1">
+            <mat-select [(ngModel)]="matType" (ngModelChange)="filter()" id="filter-folder" name="folder" #folder="ngModel" required>
+              <mat-option value="">All types</mat-option>
+              <mat-option value="folder" *ngIf="!selectedFolder">
+                <div class="f-3 c-black">
+                  Folder
+                </div>
+              </mat-option>
+              <mat-option value="video">
+                <div class="f-3 c-black">
+                  Video
+                </div>
+              </mat-option>
+              <mat-option value="pdf">
+                <div class="f-3 c-black">
+                  Pdf
+                </div>
+              </mat-option>
+              <mat-option value="image">
+                <div class="f-3 c-black">
+                  Image
+                </div>
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="mb-2">shared with</label>
+          <div class="filter-check-item" *ngFor="let team of teamService.teams$ | async">
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mft-{{team._id}}" name="mfu-{{team._id}}"
+                (change)="toggleTeamOption(team._id)" [checked]="teamOptions.indexOf(team._id) !== -1">
+              <label class="custom-control-label" for="mft-{{team._id}}">
+                <div class="f-3 mt-1">{{team.name}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="mb-2">owner</label>
+          <div class="filter-check-item">
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mfu-admin" name="mfu-admin"
+                (change)="toggleAdminOption()" [checked]="isAdmin">
+              <label class="custom-control-label" for="mfu-admin">
+                <div class="f-3 mt-1">Admin</div>
+              </label>
+            </div>
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mfu-me" name="mfu-me"
+                (change)="toggleUserOption(user_id)" [checked]="userOptions.indexOf(user_id) !== -1">
+              <label class="custom-control-label" for="mfu-me">
+                <div class="f-3 mt-1">Me</div>
+              </label>
+            </div>
+            <ng-container *ngFor="let team of teamService.teams$ | async">
+              <ng-container *ngFor="let user of team.owner">
+                <div class="custom-checkbox mb-1" *ngIf="user._id != user_id">
+                  <input type="checkbox" class="custom-control-input" id="mfu-{{user._id}}" name="mfu-{{user._id}}"
+                    (change)="toggleUserOption(user._id)" [checked]="userOptions.indexOf(user._id) !== -1">
+                  <label class="custom-control-label" for="mfu-{{user._id}}">
+                    <div class="f-3 mt-1">{{user.user_name}}</div>
+                  </label>
+                </div>
+              </ng-container>
+              <ng-container *ngFor="let user of team.editors">
+                <div class="custom-checkbox mb-1" *ngIf="user._id != user_id">
+                  <input type="checkbox" class="custom-control-input" id="mfu-{{user._id}}" name="mfu-{{user._id}}"
+                    (change)="toggleUserOption(user._id)" [checked]="userOptions.indexOf(user._id) !== -1">
+                  <label class="custom-control-label" for="mfu-{{user._id}}">
+                    <div class="f-3 mt-1">{{user.user_name}}</div>
+                  </label>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="mt-4 d-flex">
+          <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="drawer.toggle()">Close</button>
+        </div>
+      </form>
+    </div>    
+  </mat-drawer>
+</mat-drawer-container>

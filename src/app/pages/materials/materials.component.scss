@@ -223,3 +223,17 @@ td.type-col {
     padding-right: 0px!important;
     width: 30px;
 }
+
+.panel {
+    max-width: 400px;
+    @media screen and (max-width: 360px) {
+        padding-left: 1rem!important;
+        padding-right: 1rem!important;
+        .title {
+          font-size: 18px;
+        }
+    }
+}
+.filter-check-item {
+    padding-left: 28px;
+}

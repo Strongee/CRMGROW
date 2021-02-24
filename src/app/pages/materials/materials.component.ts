@@ -48,9 +48,7 @@ export class MaterialsComponent implements OnInit {
 
   materials: any[] = [];
   filteredMaterials: any[] = [];
-  searchStr = '';
   selection: any[] = [];
-  selectedFolder: Material;
 
   convertLoaderTimer;
   convertingVideos = [];
@@ -67,6 +65,14 @@ export class MaterialsComponent implements OnInit {
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
   materialDeleteSubscription: Subscription;
+
+  // Search Option
+  selectedFolder: Material;
+  searchStr = '';
+  matType = '';
+  teamOptions = [];
+  userOptions = [];
+  isAdmin = false;
 
   constructor(
     private dialog: MatDialog,
@@ -94,6 +100,7 @@ export class MaterialsComponent implements OnInit {
     });
     this.loadSubscription = this.storeService.materials$.subscribe(
       (materials) => {
+        materials.sort((a, b) => (a.folder ? -1 : 1));
         this.materials = materials;
         const folders = materials.filter((e) => {
           return e.material_type === 'folder';
@@ -200,7 +207,7 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-  filter(): void {
+  filterEx(): void {
     this.selection = [];
     if (this.searchStr) {
       const reg = new RegExp(this.searchStr, 'gi');
@@ -228,15 +235,16 @@ export class MaterialsComponent implements OnInit {
 
   clearSearchStr(): void {
     this.searchStr = '';
-    if (!this.selectedFolder) {
-      this.filteredMaterials = this.materials.filter((e) => {
-        return !e.folder || e.type === 'folder';
-      });
-    } else {
-      this.filteredMaterials = this.materials.filter((e) => {
-        return e.folder === this.selectedFolder._id;
-      });
-    }
+    this.filter();
+    // if (!this.selectedFolder) {
+    //   this.filteredMaterials = this.materials.filter((e) => {
+    //     return !e.folder || e.type === 'folder';
+    //   });
+    // } else {
+    //   this.filteredMaterials = this.materials.filter((e) => {
+    //     return e.folder === this.selectedFolder._id;
+    //   });
+    // }
   }
 
   createMaterial(type): void {
@@ -680,12 +688,7 @@ export class MaterialsComponent implements OnInit {
                     if (this.isSelected(material)) {
                       this.toggleElement(material);
                     }
-                    this.materials.some((e, index) => {
-                      if (e._id === material._id) {
-                        this.materials.splice(index, 1);
-                        return true;
-                      }
-                    });
+                    this.materialService.delete$([material._id]);
                   });
               }
             }
@@ -701,12 +704,7 @@ export class MaterialsComponent implements OnInit {
                   if (this.isSelected(material)) {
                     this.toggleElement(material);
                   }
-                  this.materials.some((e, index) => {
-                    if (e._id === material._id) {
-                      this.materials.splice(index, 1);
-                      return true;
-                    }
-                  });
+                  this.materialService.delete$([material._id]);
                 });
             }
           });
@@ -741,12 +739,7 @@ export class MaterialsComponent implements OnInit {
                     if (this.isSelected(material)) {
                       this.toggleElement(material);
                     }
-                    this.materials.some((e, index) => {
-                      if (e._id === material._id) {
-                        this.materials.splice(index, 1);
-                        return true;
-                      }
-                    });
+                    this.materialService.delete$([material._id]);
                   });
               }
             }
@@ -762,12 +755,7 @@ export class MaterialsComponent implements OnInit {
                   if (this.isSelected(material)) {
                     this.toggleElement(material);
                   }
-                  this.materials.some((e, index) => {
-                    if (e._id === material._id) {
-                      this.materials.splice(index, 1);
-                      return true;
-                    }
-                  });
+                  this.materialService.delete$([material._id]);
                 });
             }
           });
@@ -802,12 +790,7 @@ export class MaterialsComponent implements OnInit {
                     if (this.isSelected(material)) {
                       this.toggleElement(material);
                     }
-                    this.materials.some((e, index) => {
-                      if (e._id === material._id) {
-                        this.materials.splice(index, 1);
-                        return true;
-                      }
-                    });
+                    this.materialService.delete$([material._id]);
                   });
               }
             }
@@ -823,12 +806,7 @@ export class MaterialsComponent implements OnInit {
                   if (this.isSelected(material)) {
                     this.toggleElement(material);
                   }
-                  this.materials.some((e, index) => {
-                    if (e._id === material._id) {
-                      this.materials.splice(index, 1);
-                      return true;
-                    }
-                  });
+                  this.materialService.delete$([material._id]);
                 });
             }
           });
@@ -1123,23 +1101,31 @@ export class MaterialsComponent implements OnInit {
   }
 
   openFolder(element: Material): void {
-    this.selection = [];
     this.selectedFolder = element;
     this.searchStr = '';
-    this.filteredMaterials = this.materials.filter((e) => {
-      if (e.folder === this.selectedFolder._id) {
-        console.log(e.folder, e.title, e._id);
-        return true;
-      }
-    });
+    this.matType = '';
+    this.isAdmin = false;
+    this.userOptions = [];
+    this.teamOptions = [];
+    this.filter();
+    // this.filteredMaterials = this.materials.filter((e) => {
+    //   if (e.folder === this.selectedFolder._id) {
+    //     console.log(e.folder, e.title, e._id);
+    //     return true;
+    //   }
+    // });
   }
   toRoot(): void {
-    this.selection = [];
     this.selectedFolder = null;
     this.searchStr = '';
-    this.filteredMaterials = this.materials.filter((e) => {
-      return !e.folder || e.type === 'folder';
-    });
+    this.matType = '';
+    this.isAdmin = false;
+    this.userOptions = [];
+    this.teamOptions = [];
+    this.filter();
+    // this.filteredMaterials = this.materials.filter((e) => {
+    //   return !e.folder || e.type === 'folder';
+    // });
   }
 
   createFolder(): void {
@@ -1231,5 +1217,70 @@ export class MaterialsComponent implements OnInit {
           this.selection = [];
         }
       });
+  }
+
+  toggleAdminOption(): void {
+    this.isAdmin = !this.isAdmin;
+    this.filter();
+  }
+  toggleTeamOption(id: string): void {
+    this.teamOptions = _.xor(this.teamOptions, [id]);
+    this.filter();
+  }
+  toggleUserOption(id: string): void {
+    this.userOptions = _.xor(this.userOptions, [id]);
+    this.filter();
+  }
+
+  filter(): void {
+    this.selection = [];
+    const reg = new RegExp(this.searchStr, 'gi');
+    this.filteredMaterials = this.materials.filter((material) => {
+      if (this.selectedFolder) {
+        if (this.selectedFolder._id !== material.folder) {
+          return false;
+        }
+      } else if (material.folder) {
+        return false;
+      }
+      if (this.matType && material.material_type != this.matType) {
+        return false;
+      }
+      if (!reg.test(material.title)) {
+        return false;
+      }
+      if (
+        this.teamOptions.length &&
+        (!material.team || this.userOptions.indexOf(material.team._id))
+      ) {
+        return false;
+      }
+      if (this.isAdmin && this.userOptions.length) {
+        if (material.role === 'admin') {
+          return true;
+        }
+        const userId =
+          material.user && material.user._id
+            ? material.user._id
+            : material.user;
+        if (this.userOptions.indexOf(userId) !== -1) {
+          return true;
+        }
+        return false;
+      }
+      if (this.isAdmin && material.role != 'admin') {
+        return false;
+      }
+      if (this.userOptions.length) {
+        const userId =
+          material.user && material.user._id
+            ? material.user._id
+            : material.user;
+        if (this.userOptions.indexOf(userId) === -1) {
+          return false;
+        }
+      }
+      return true;
+    });
   }
 }
