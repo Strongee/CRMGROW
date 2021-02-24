@@ -278,10 +278,10 @@ export class UserService extends HttpService {
     this.garbage.next(garbage);
     return;
   }
-  public updateGarbage(garbage: any): Observable<any> {
+  public updateGarbage(garbage: any): Observable<boolean> {
     return this.httpClient.put(this.server + USER.UPDATE_GARBAGE, garbage).pipe(
-      map((res) => res['data']),
-      catchError(this.handleError('UPDATE GARBAGE'))
+      map((res) => res['status']),
+      catchError(this.handleError('UPDATE GARBAGE', false))
     );
   }
   /**

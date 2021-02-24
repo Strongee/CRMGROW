@@ -342,6 +342,7 @@ export class HandlerService {
     this.activityService.clear$();
     this.taskService.clear$();
     this.contactService.clear$();
+    this.materialService.clear$();
     this.storeService.clearData();
     this.automationService.clear$();
     this.templateService.clear$();
