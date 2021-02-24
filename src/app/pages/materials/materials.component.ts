@@ -1231,6 +1231,14 @@ export class MaterialsComponent implements OnInit {
     this.userOptions = _.xor(this.userOptions, [id]);
     this.filter();
   }
+  clearAllFilters(): void {
+    this.searchStr = '';
+    this.matType = '';
+    this.isAdmin = false;
+    this.userOptions = [];
+    this.teamOptions = [];
+    this.filter();
+  }
 
   filter(): void {
     this.selection = [];
