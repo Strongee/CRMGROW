@@ -2,3 +2,19 @@
   max-width: 360px;
   width: 100vw;
 }
+
+:host ::ng-deep {
+  .mat-select {
+    border: 1px solid #ced4da;
+    padding: 0.5em 0.6em 0.5em 1em;
+    border-radius: 5px;
+  }
+
+  .mat-select-arrow {
+    color: blue;
+  }
+
+  .mat-select-value-text {
+    font-size: 14px;
+  }
+}

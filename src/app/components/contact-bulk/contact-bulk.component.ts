@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { STAGES } from 'src/app/constants/variable.constants';
+import { REGIONS, STAGES } from 'src/app/constants/variable.constants';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
+import { COUNTRIES } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-contact-bulk',
@@ -33,6 +34,9 @@ export class ContactBulkComponent implements OnInit {
   updateSubscription: Subscription;
   isUpdating = false;
 
+  COUNTRIES = COUNTRIES;
+  COUNTRY_REGIONS = REGIONS;
+
   constructor(
     private contactService: ContactService,
     private handlerService: HandlerService
@@ -51,6 +55,7 @@ export class ContactBulkComponent implements OnInit {
   update(): void {
     const data = {};
     const tagData = {};
+    console.log("update =========>", this.contact);
     for (const key in this.contact) {
       if (key === 'tags') {
         continue;
@@ -96,4 +101,5 @@ export class ContactBulkComponent implements OnInit {
     });
     this.onClose.emit();
   }
+
 }
