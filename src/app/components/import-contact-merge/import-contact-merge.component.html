@@ -24,7 +24,7 @@
           </ng-container>
           <ng-template #emailPhoneColumn>
             <ng-container *ngIf="isEmailColumn(updateColumn[column]) else phoneColumn">
-              <div class="v-center contact-row w-100 my-2">
+              <div class="v-center contact-row w-100 my-2" *ngIf="emails.length > 0">
                 <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
                 <div class="contact-field">
                   <mat-select [(ngModel)]="previewContact[updateColumn[column]]">
@@ -40,7 +40,7 @@
               </div>
             </ng-container>
             <ng-template #phoneColumn>
-              <div class="v-center contact-row w-100 my-2">
+              <div class="v-center contact-row w-100 my-2" *ngIf="phones.length > 0">
                 <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
                 <div class="contact-field">
                   <mat-select [(ngModel)]="previewContact[updateColumn[column]]">

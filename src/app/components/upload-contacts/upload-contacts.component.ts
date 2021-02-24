@@ -89,6 +89,7 @@ export class UploadContactsComponent implements OnInit {
   uploadSubTitle = '';
   checkingDuplicate = false;
   isDuplicatedExist = false;
+  initPropertyColumn = {};
 
   constructor(
     private dialogRef: MatDialogRef<UploadContactsComponent>,
@@ -261,6 +262,7 @@ export class UploadContactsComponent implements OnInit {
     this.previewPhones = [];
     this.sameContacts = [];
     let importField = false;
+    this.initPropertyColumn = { ...this.updateColumn };
     this.columns.some((e) => {
       if (this.updateColumn[e]) {
         importField = true;
@@ -523,7 +525,7 @@ export class UploadContactsComponent implements OnInit {
       }
     });
 
-    if (this.sameContacts.length) {
+    if (this.sameContacts.length > 0) {
       return true;
     } else {
       return false;
@@ -1186,8 +1188,11 @@ export class UploadContactsComponent implements OnInit {
   }
 
   back(): void {
-    if (this.step === 4) {
-      if (this.sameContacts.length) {
+    if (this.step === 3) {
+      this.updateColumn = { ...this.initPropertyColumn };
+      this.step--;
+    } else if (this.step === 4) {
+      if (this.sameContacts.length > 0) {
         this.step--;
       } else {
         this.step -= 2;
@@ -1307,6 +1312,43 @@ export class UploadContactsComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  selectProperty(column, value): void {
+    for (const key in this.updateColumn) {
+      if (this.updateColumn[key] === value && value !== 'notes') {
+        const index = this.fields.findIndex((item) => item.value === value);
+        this.fields.splice(index, 1);
+      }
+    }
+  }
+
+  getFieldLabel(value): any {
+    const index = this.fields.findIndex((item) => item.value === value);
+    return this.fields[index].label;
+  }
+
+  getColumnFields(): any {
+    const fields = [...this.fields];
+    for (const key in this.updateColumn) {
+      if (this.updateColumn[key] && this.updateColumn[key] !== 'notes') {
+        const index = fields.findIndex(
+          (item) => item.value === this.updateColumn[key]
+        );
+        fields.splice(index, 1);
+      }
+    }
+    return fields;
+  }
+
+  getDuplicateContactCount(): any {
+    let count = 0;
+    for (const contacts of this.sameContacts) {
+      if (contacts && contacts.length > 1) {
+        count++;
+      }
+    }
+    return count;
   }
 
   fields = [

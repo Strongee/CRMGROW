@@ -101,7 +101,10 @@
               <div class="form-group mb-0">
                 <mat-select [(ngModel)]="updateColumn[column]">
                   <mat-option value="">Select Property</mat-option>
-                  <mat-option *ngFor="let field of fields" value="{{field.value}}">
+                  <mat-option value="{{updateColumn[column]}}" *ngIf="updateColumn[column]">
+                    <div class="f-3 c-black selected-option-text">{{getFieldLabel(updateColumn[column])}}</div>
+                  </mat-option>
+                  <mat-option *ngFor="let field of getColumnFields()" value="{{field.value}}">
                     <div class="f-3 c-black" [class.selected-option-text]="updateColumn[column] == field.value">{{field.label}}</div>
                   </mat-option>
                 </mat-select>
@@ -118,8 +121,8 @@
     <ng-container *ngIf="step == 3">
       <div class="duplicate-wrapper pr-2">
         <div class="dups-container" *ngIf="sameContacts.length">
-          <div class="f-5 font-weight-bold mb-3">
-            There were <span class="f-8 c-blue">{{sameContacts.length}}</span> record duplicates found in your .csv file. Please merge or edit primary data.
+          <div class="f-5 font-weight-bold mb-3" *ngIf="getDuplicateContactCount() > 0">
+            There were <span class="f-8 c-blue">{{getDuplicateContactCount()}}</span> record duplicates found in your .csv file. Please merge or edit primary data.
           </div>
           <ng-container  *ngFor="let dupItem of sameContacts; let dupIndex = index;">
             <div id="contact-group-{{dupIndex}}" class="merge-group-wrapper mb-3">

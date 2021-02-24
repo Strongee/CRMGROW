@@ -109,10 +109,18 @@ export class ImportContactMergeComponent implements OnInit {
 
       if (this.mergeType() === this.MERGETYPE.CONTACT_CSV) {
         this.updateColumn = this.contactCSVColumn;
+        for (const contact of this.contacts) {
+          if (this.isContact(contact)) {
+            this.previewContact = Object.assign({}, contact);
+            break;
+          }
+        }
       } else if (this.mergeType() === this.MERGETYPE.CONTACT) {
         this.updateColumn = this.contactCSVColumn;
+        this.previewContact = Object.assign({}, this.contacts[0]);
       } else if (this.mergeType() === this.MERGETYPE.CSV) {
         this.updateColumn = this.data.updateColumn;
+        this.previewContact = Object.assign({}, this.contacts[0]);
       }
 
       for (const name in this.updateColumn) {
@@ -378,6 +386,13 @@ export class ImportContactMergeComponent implements OnInit {
       }
     }
     return phones;
+  }
+
+  isContact(contact): any {
+    if (contact._id) {
+      return true;
+    }
+    return false;
   }
 
   mergeType(): any {
