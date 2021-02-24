@@ -206,19 +206,6 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
       });
   }
 
-  /**
-   * Populate the selected template content
-   * @param template : Template
-   */
-  selectTemplate(template: Template): void {
-    this.selectedTemplate = template;
-    this.emailSubject = this.selectedTemplate.subject;
-    this.emailContent = this.selectedTemplate.content;
-    if (this.htmlEditor) {
-      this.htmlEditor.setValue(this.emailContent);
-    }
-    // Attach the Selected Material Content
-  }
   onChangeTemplate(template: Template): void {
     this.emailSubject = template.subject;
   }
@@ -255,9 +242,6 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     this.scheduleDateTime = '';
   }
 
-  // onInitEditor(): void {
-
-  // }
   onAttachmentChange(attachments: any[]): void {
     this.attachments = attachments;
   }

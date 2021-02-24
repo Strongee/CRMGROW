@@ -64,22 +64,22 @@ export class NoteCreateComponent implements OnInit {
     this.contacts.forEach((e) => {
       ids.push(e._id);
     });
-    if (ids.length > 1) {
-      if (this.type === 'deal') {
-        const data = {
-          contacts: ids,
-          content: this.note.content,
-          deal: this.dealId
-        };
-        this.saving = true;
-        this.saveSubscription && this.saveSubscription.unsubscribe();
-        this.saveSubscription = this.dealService
-          .addNote(data)
-          .subscribe((res) => {
-            this.saving = false;
-            this.dialogRef.close();
-          });
-      } else {
+    if (this.type === 'deal') {
+      const data = {
+        contacts: ids,
+        content: this.note.content,
+        deal: this.dealId
+      };
+      this.saving = true;
+      this.saveSubscription && this.saveSubscription.unsubscribe();
+      this.saveSubscription = this.dealService
+        .addNote(data)
+        .subscribe((res) => {
+          this.saving = false;
+          this.dialogRef.close();
+        });
+    } else {
+      if (ids.length > 1) {
         const data = {
           contacts: ids,
           content: this.note.content
@@ -93,22 +93,24 @@ export class NoteCreateComponent implements OnInit {
             this.handlerService.activityAdd$(ids, 'note');
             this.dialogRef.close();
           });
+      } else {
+        const data = {
+          contact: ids[0],
+          content: this.note.content
+        };
+        this.saving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.noteService
+          .create(data)
+          .subscribe((res) => {
+            this.saving = false;
+            if (res) {
+              this.handlerService.activityAdd$(ids, 'note');
+              this.handlerService.registerActivity$(res);
+              this.dialogRef.close();
+            }
+          });
       }
-    } else {
-      const data = {
-        contact: ids[0],
-        content: this.note.content
-      };
-      this.saving = true;
-      this.saveSubscription && this.saveSubscription.unsubscribe();
-      this.saveSubscription = this.noteService.create(data).subscribe((res) => {
-        this.saving = false;
-        if (res) {
-          this.handlerService.activityAdd$(ids, 'note');
-          this.handlerService.registerActivity$(res);
-          this.dialogRef.close();
-        }
-      });
     }
   }
 }

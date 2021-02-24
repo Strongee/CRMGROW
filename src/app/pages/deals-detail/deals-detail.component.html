@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="v-center justify-content-between mt-3" style="height: 6px;">
-                    <div class="stage-status stage-{{index}} mr-1" *ngFor="let stage of stages; let index=index">
+                    <div class="stage-status stage-{{index}} mr-1" *ngFor="let stage of stages; let index=index" [class.active]="stage._id === selectedStageId">
                     </div>
                 </div>
             </div>
@@ -186,7 +186,7 @@
                       <i class="i-icon i-template d-block bgc-dark"></i>
                     </div>
                     <h4 class="font-weight-bold mt-4 mb-3">
-                      There is no note activities yet.
+                      There is no note yet.
                     </h4>
                   </div>
                 </div>
@@ -200,7 +200,7 @@
                       <i class="i-icon i-template d-block bgc-dark"></i>
                     </div>
                     <h4 class="font-weight-bold mt-4 mb-3">
-                      There is no email activities yet.
+                      There is no email yet.
                     </h4>
                   </div>
                 </div>
@@ -214,7 +214,7 @@
                       <i class="i-icon i-template d-block bgc-dark"></i>
                     </div>
                     <h4 class="font-weight-bold mt-4 mb-3">
-                      There is no text activities yet.
+                      There is no text yet.
                     </h4>
                   </div>
                 </div>
@@ -228,7 +228,7 @@
                       <i class="i-icon i-template d-block bgc-dark"></i>
                     </div>
                     <h4 class="font-weight-bold mt-4 mb-3">
-                      There is no appointment activities yet.
+                      There is no appointment yet.
                     </h4>
                   </div>
                 </div>
@@ -242,7 +242,7 @@
                       <i class="i-icon i-template d-block bgc-dark"></i>
                     </div>
                     <h4 class="font-weight-bold mt-4 mb-3">
-                      There is no task activities yet.
+                      There is no task yet.
                     </h4>
                   </div>
                 </div>
