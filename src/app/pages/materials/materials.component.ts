@@ -96,9 +96,15 @@ export class MaterialsComponent implements OnInit {
       (materials) => {
         this.materials = materials;
         this.filteredMaterials = this.materials.filter((e) => {
-          return !e.folder || e.type === 'folder';
+          if (e.material_type === 'folder') {
+            return true;
+          } else if (e.folder) {
+            console.log(e.title);
+            return false;
+          } else {
+            return true;
+          }
         });
-        this.filteredMaterials = materials;
       }
     );
   }
@@ -190,21 +196,39 @@ export class MaterialsComponent implements OnInit {
     this.selection = [];
     if (this.searchStr) {
       const reg = new RegExp(this.searchStr, 'gi');
-      this.filteredMaterials = this.materials.filter((e) => {
-        return reg.test(e.title);
-      });
+      if (!this.selectedFolder) {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return reg.test(e.title);
+        });
+      } else {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return e.folder === this.selectedFolder._id && reg.test(e.title);
+        });
+      }
     } else {
-      this.filteredMaterials = this.materials.filter((e) => {
-        return !e.folder || e.type === 'folder';
-      });
+      if (!this.selectedFolder) {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return !e.folder || e.type === 'folder';
+        });
+      } else {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return e.folder === this.selectedFolder._id;
+        });
+      }
     }
   }
 
   clearSearchStr(): void {
     this.searchStr = '';
-    this.filteredMaterials = this.materials.filter((e) => {
-      return !e.folder || e.type === 'folder';
-    });
+    if (!this.selectedFolder) {
+      this.filteredMaterials = this.materials.filter((e) => {
+        return !e.folder || e.type === 'folder';
+      });
+    } else {
+      this.filteredMaterials = this.materials.filter((e) => {
+        return e.folder === this.selectedFolder._id;
+      });
+    }
   }
 
   createMaterial(type): void {
@@ -1084,6 +1108,7 @@ export class MaterialsComponent implements OnInit {
     this.searchStr = '';
     this.filteredMaterials = this.materials.filter((e) => {
       if (e.folder === this.selectedFolder._id) {
+        console.log(e.folder, e.title, e._id);
         return true;
       }
     });
@@ -1097,17 +1122,10 @@ export class MaterialsComponent implements OnInit {
   }
 
   createFolder(): void {
-    this.dialog
-      .open(FolderComponent, {
-        width: '96vw',
-        maxWidth: '400px'
-      })
-      .afterClosed()
-      .subscribe((folder) => {
-        if (folder) {
-          this.materialService.create$(folder);
-        }
-      });
+    this.dialog.open(FolderComponent, {
+      width: '96vw',
+      maxWidth: '400px'
+    });
   }
 
   removeFolder(material: Material): void {
@@ -1137,26 +1155,25 @@ export class MaterialsComponent implements OnInit {
         if (answer) {
           this.materialService
             .removeFolder(material._id, answer)
-            .subscribe((status) => {});
+            .subscribe((res) => {
+              if (res['status']) {
+                if (answer === 'only-folder') {
+                  this.materialService.delete$([material._id]);
+                }
+              }
+            });
         }
       });
   }
 
   editFolder(material: Material): void {
-    this.dialog
-      .open(FolderComponent, {
-        width: '96vw',
-        maxWidth: '400px',
-        data: {
-          folder: { ...material }
-        }
-      })
-      .afterClosed()
-      .subscribe((folder) => {
-        if (folder) {
-          
-        }
-      });
+    this.dialog.open(FolderComponent, {
+      width: '96vw',
+      maxWidth: '400px',
+      data: {
+        folder: { ...material }
+      }
+    });
   }
 
   moveToFolder(): void {
@@ -1187,6 +1204,10 @@ export class MaterialsComponent implements OnInit {
         }
       })
       .afterClosed()
-      .subscribe((res) => {});
+      .subscribe((status) => {
+        if (status) {
+          this.selection = [];
+        }
+      });
   }
 }

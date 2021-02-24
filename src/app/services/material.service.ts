@@ -221,7 +221,9 @@ export class MaterialService extends HttpService {
   }
   loadMaterialImp(): Observable<Material[]> {
     return this.httpClient.get(this.server + MATERIAL.LOAD).pipe(
-      map((res) => res['data'] || [].map((e) => new Material().deserialize(e))),
+      map((res) =>
+        (res['data'] || []).map((e) => new Material().deserialize(e))
+      ),
       catchError(this.handleError('LOAD MATERIALS', []))
     );
   }
@@ -286,7 +288,7 @@ export class MaterialService extends HttpService {
     return this.httpClient
       .post(this.server + MATERIAL.REMOVE_FOLDER, { _id, mode })
       .pipe(
-        map((res) => res['status']),
+        map((res) => res),
         catchError(this.handleError('DELETE FOLDER', null))
       );
   }
@@ -294,7 +296,7 @@ export class MaterialService extends HttpService {
     return this.httpClient
       .post(this.server + MATERIAL.MOVE_FILES, { materials, target })
       .pipe(
-        map((res) => res['data']),
+        map((res) => res['status']),
         catchError(this.handleError('MOVE MATERIALS', null))
       );
   }
@@ -302,7 +304,38 @@ export class MaterialService extends HttpService {
   create$(material: any): void {
     const materials = this.storeService.materials.getValue();
     materials.unshift(material);
+    this.storeService.materials.next([...materials]);
+  }
+
+  update$(_id: string, data: any): void {
+    const materials = this.storeService.materials.getValue();
+    materials.some((e) => {
+      if (e._id === _id) {
+        e.deserialize(data);
+        return true;
+      }
+    });
     this.storeService.materials.next(materials);
+  }
+
+  bulkUpdate$(ids: string[], data: any): void {
+    const materials = this.storeService.materials.getValue();
+    materials.forEach((e) => {
+      if (ids.indexOf(e._id) !== -1) {
+        e.deserialize(data);
+      }
+    });
+    this.storeService.materials.next(materials);
+  }
+
+  delete$(ids: string[]): void {
+    const materials = this.storeService.materials.getValue();
+    const remained = materials.filter((e) => {
+      if (ids.indexOf(e._id) === -1) {
+        return true;
+      }
+    });
+    this.storeService.materials.next(remained);
   }
 
   clear$(): void {

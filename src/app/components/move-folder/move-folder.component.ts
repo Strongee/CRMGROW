@@ -97,19 +97,19 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
       }
     });
 
-    // console.log(
-    //   'files',
-    //   { videos, images, pdfs, shared_materials },
-    //   this.selectedFolder
-    // );
-    this.materialService
+    this.moving = true;
+    this.moveSubscription = this.materialService
       .moveFiles(
         { videos, images, pdfs, shared_materials },
         this.selectedFolder._id
       )
       .subscribe((status) => {
         if (status) {
-          this.dialogRef.close();
+          this.materialService.bulkUpdate$(
+            [...videos, ...images, ...pdfs, ...shared_materials],
+            { folder: this.selectedFolder._id }
+          );
+          this.dialogRef.close(true);
         }
       });
   }

@@ -37,7 +37,10 @@ export class FolderComponent implements OnInit {
         .subscribe((status) => {
           this.saving = false;
           if (status) {
-            this.dialogRef.close(true);
+            this.materialService.update$(this.folder._id, {
+              title: this.folder.title
+            });
+            this.dialogRef.close();
           }
         });
     } else {
@@ -48,7 +51,10 @@ export class FolderComponent implements OnInit {
         .subscribe((data) => {
           this.saving = false;
           if (data) {
-            this.dialogRef.close(data);
+            const _createdFolder = new Material().deserialize(data);
+            _createdFolder.material_type = 'folder';
+            this.materialService.create$(_createdFolder);
+            this.dialogRef.close();
           }
         });
     }
