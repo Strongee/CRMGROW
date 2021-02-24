@@ -292,9 +292,13 @@ export class MaterialService extends HttpService {
         catchError(this.handleError('DELETE FOLDER', null))
       );
   }
-  moveFiles(materials: any, target: string): Observable<Material> {
+  moveFiles(
+    materials: any,
+    target: string,
+    source: string
+  ): Observable<Material> {
     return this.httpClient
-      .post(this.server + MATERIAL.MOVE_FILES, { materials, target })
+      .post(this.server + MATERIAL.MOVE_FILES, { materials, target, source })
       .pipe(
         map((res) => res['status']),
         catchError(this.handleError('MOVE MATERIALS', null))
@@ -336,6 +340,16 @@ export class MaterialService extends HttpService {
       }
     });
     this.storeService.materials.next(remained);
+  }
+
+  removeFolder$(folder: string): void {
+    const materials = this.storeService.materials.getValue();
+    materials.forEach((e) => {
+      if (e.folder === folder) {
+        e.folder = '';
+      }
+    });
+    this.storeService.materials.next(materials);
   }
 
   clear$(): void {

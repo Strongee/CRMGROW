@@ -95,16 +95,21 @@ export class MaterialsComponent implements OnInit {
     this.loadSubscription = this.storeService.materials$.subscribe(
       (materials) => {
         this.materials = materials;
-        this.filteredMaterials = this.materials.filter((e) => {
-          if (e.material_type === 'folder') {
-            return true;
-          } else if (e.folder) {
-            console.log(e.title);
-            return false;
-          } else {
-            return true;
+        const folders = materials.filter((e) => {
+          return e.material_type === 'folder';
+        });
+        const materialFolderMatch = {};
+        folders.forEach((folder) => {
+          folder.shared_materials.forEach((e) => {
+            materialFolderMatch[e] = folder._id;
+          });
+        });
+        materials.forEach((e) => {
+          if (materialFolderMatch[e._id]) {
+            e.folder = materialFolderMatch[e._id];
           }
         });
+        this.filter();
       }
     );
   }
@@ -127,7 +132,10 @@ export class MaterialsComponent implements OnInit {
   }
 
   isAllSelected(): boolean {
-    return this.selection.length === this.filteredMaterials.length;
+    return (
+      this.filteredMaterials.length &&
+      this.selection.length === this.filteredMaterials.length
+    );
   }
 
   isSelected(element: Material): boolean {
@@ -374,12 +382,13 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (video.role === 'admin') {
-            this.materials.some((e, index) => {
-              if (e._id === video._id) {
-                this.materials.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === video._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([video._id]);
             this.editedVideos.push(video._id);
             this.userService
               .updateGarbage({
@@ -398,11 +407,12 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['thumbnail'],
               default_edited: true
             };
-            this.materials.push(newVideo);
+            this.materialService.create$(newVideo);
           } else {
             video.title = res['data']['title'];
             video.description = res['data']['description'];
             video.thumbnail = res['data']['thumbnail'];
+            this.materialService.update$(video._id, res['data']);
           }
         }
       });
@@ -430,12 +440,13 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (pdf.role === 'admin') {
-            this.materials.some((e, index) => {
-              if (e._id === pdf._id) {
-                this.materials.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === pdf._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([pdf._id]);
             this.editedPdfs.push(pdf._id);
             this.userService
               .updateGarbage({
@@ -454,11 +465,13 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['preview'],
               default_edited: true
             };
-            this.materials.push(newPdf);
+            // this.materials.push(newPdf);
+            this.materialService.create$(newPdf);
           } else {
             pdf.title = res['data']['title'];
             pdf.description = res['data']['description'];
             pdf.preview = res['data']['preview'];
+            this.materialService.update$(pdf._id, res['data']);
           }
         }
       });
@@ -485,12 +498,13 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (image.role === 'admin') {
-            this.materials.some((e, index) => {
-              if (e._id === image._id) {
-                this.materials.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === image._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([image._id]);
             this.editedImages.push(image._id);
             this.userService
               .updateGarbage({
@@ -509,11 +523,13 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['preview'],
               default_edited: true
             };
-            this.materials.push(newImage);
+            // this.materials.push(newImage);
+            this.materialService.create$(newImage);
           } else {
             image.title = res['data']['title'];
             image.description = res['data']['description'];
             image.preview = res['data']['preview'];
+            this.materialService.update$(image._id, res['data']);
           }
         }
       });
@@ -553,7 +569,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.materials.push(newVideo);
+              // this.materials.push(newVideo);
+              this.materialService.create$(newVideo);
             }
           });
         break;
@@ -588,7 +605,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.materials.push(newPdf);
+              // this.materials.push(newPdf);
+              this.materialService.create$(newPdf);
             }
           });
         break;
@@ -623,7 +641,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.materials.push(newImage);
+              // this.materials.push(newImage);
+              this.materialService.create$(newImage);
             }
           });
         break;
@@ -1104,6 +1123,7 @@ export class MaterialsComponent implements OnInit {
   }
 
   openFolder(element: Material): void {
+    this.selection = [];
     this.selectedFolder = element;
     this.searchStr = '';
     this.filteredMaterials = this.materials.filter((e) => {
@@ -1114,6 +1134,7 @@ export class MaterialsComponent implements OnInit {
     });
   }
   toRoot(): void {
+    this.selection = [];
     this.selectedFolder = null;
     this.searchStr = '';
     this.filteredMaterials = this.materials.filter((e) => {
@@ -1136,30 +1157,30 @@ export class MaterialsComponent implements OnInit {
         data: {
           title: 'Delete folder',
           message:
-            'Are you sure to delete this folder? If yes, please select delete mode.',
-          case: true,
-          answers: [
-            {
-              label: 'Remove with sub-materials',
-              value: 'with-materials'
-            },
-            {
-              label: 'Remove only folder',
-              value: 'only-folder'
-            }
-          ]
+            'This folder would be removed and sub materials would be moved to root directory. Are you sure to delete this folder?',
+          confirmLabel: 'Delete'
+          // case: true,
+          // answers: [
+          //   {
+          //     label: 'Remove with sub-materials',
+          //     value: 'with-materials'
+          //   },
+          //   {
+          //     label: 'Remove only folder',
+          //     value: 'only-folder'
+          //   }
+          // ]
         }
       })
       .afterClosed()
       .subscribe((answer) => {
         if (answer) {
           this.materialService
-            .removeFolder(material._id, answer)
+            .removeFolder(material._id, 'only-folder') // answer
             .subscribe((res) => {
               if (res['status']) {
-                if (answer === 'only-folder') {
-                  this.materialService.delete$([material._id]);
-                }
+                this.materialService.delete$([material._id]);
+                this.materialService.removeFolder$(material._id);
               }
             });
         }
@@ -1200,7 +1221,8 @@ export class MaterialsComponent implements OnInit {
         width: '96vw',
         maxWidth: '400px',
         data: {
-          materials: selectedMaterials
+          materials: selectedMaterials,
+          currentFolder: this.selectedFolder
         }
       })
       .afterClosed()

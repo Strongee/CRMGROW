@@ -10,6 +10,7 @@ export class Material implements Deserializable {
   type: string;
   material_type: string;
   folder: string;
+  shared_materials: string[];
   role: string;
   company: string;
   preview: string;
