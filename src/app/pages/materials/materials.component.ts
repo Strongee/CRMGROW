@@ -382,12 +382,13 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (video.role === 'admin') {
-            this.materials.some((e, index) => {
-              if (e._id === video._id) {
-                this.materials.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === video._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([video._id]);
             this.editedVideos.push(video._id);
             this.userService
               .updateGarbage({
@@ -406,11 +407,12 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['thumbnail'],
               default_edited: true
             };
-            this.materials.push(newVideo);
+            this.materialService.create$(newVideo);
           } else {
             video.title = res['data']['title'];
             video.description = res['data']['description'];
             video.thumbnail = res['data']['thumbnail'];
+            this.materialService.update$(video._id, res['data']);
           }
         }
       });
@@ -438,12 +440,13 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (pdf.role === 'admin') {
-            this.materials.some((e, index) => {
-              if (e._id === pdf._id) {
-                this.materials.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === pdf._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([pdf._id]);
             this.editedPdfs.push(pdf._id);
             this.userService
               .updateGarbage({
@@ -462,11 +465,13 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['preview'],
               default_edited: true
             };
-            this.materials.push(newPdf);
+            // this.materials.push(newPdf);
+            this.materialService.create$(newPdf);
           } else {
             pdf.title = res['data']['title'];
             pdf.description = res['data']['description'];
             pdf.preview = res['data']['preview'];
+            this.materialService.update$(pdf._id, res['data']);
           }
         }
       });
@@ -493,12 +498,13 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (image.role === 'admin') {
-            this.materials.some((e, index) => {
-              if (e._id === image._id) {
-                this.materials.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === image._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([image._id]);
             this.editedImages.push(image._id);
             this.userService
               .updateGarbage({
@@ -517,11 +523,13 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['preview'],
               default_edited: true
             };
-            this.materials.push(newImage);
+            // this.materials.push(newImage);
+            this.materialService.create$(newImage);
           } else {
             image.title = res['data']['title'];
             image.description = res['data']['description'];
             image.preview = res['data']['preview'];
+            this.materialService.update$(image._id, res['data']);
           }
         }
       });
@@ -561,7 +569,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.materials.push(newVideo);
+              // this.materials.push(newVideo);
+              this.materialService.create$(newVideo);
             }
           });
         break;
@@ -596,7 +605,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.materials.push(newPdf);
+              // this.materials.push(newPdf);
+              this.materialService.create$(newPdf);
             }
           });
         break;
@@ -631,7 +641,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.materials.push(newImage);
+              // this.materials.push(newImage);
+              this.materialService.create$(newImage);
             }
           });
         break;
