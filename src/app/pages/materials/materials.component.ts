@@ -95,11 +95,24 @@ export class MaterialsComponent implements OnInit {
     this.loadSubscription = this.storeService.materials$.subscribe(
       (materials) => {
         this.materials = materials;
+        const folders = materials.filter((e) => {
+          return e.material_type === 'folder';
+        });
+        const materialFolderMatch = {};
+        folders.forEach((folder) => {
+          folder.shared_materials.forEach((e) => {
+            materialFolderMatch[e] = folder._id;
+          });
+        });
+        materials.forEach((e) => {
+          if (materialFolderMatch[e._id]) {
+            e.folder = materialFolderMatch[e._id];
+          }
+        });
         this.filteredMaterials = this.materials.filter((e) => {
           if (e.material_type === 'folder') {
             return true;
           } else if (e.folder) {
-            console.log(e.title);
             return false;
           } else {
             return true;
@@ -127,7 +140,10 @@ export class MaterialsComponent implements OnInit {
   }
 
   isAllSelected(): boolean {
-    return this.selection.length === this.filteredMaterials.length;
+    return (
+      this.filteredMaterials.length &&
+      this.selection.length === this.filteredMaterials.length
+    );
   }
 
   isSelected(element: Material): boolean {
@@ -1104,6 +1120,7 @@ export class MaterialsComponent implements OnInit {
   }
 
   openFolder(element: Material): void {
+    this.selection = [];
     this.selectedFolder = element;
     this.searchStr = '';
     this.filteredMaterials = this.materials.filter((e) => {
@@ -1114,6 +1131,7 @@ export class MaterialsComponent implements OnInit {
     });
   }
   toRoot(): void {
+    this.selection = [];
     this.selectedFolder = null;
     this.searchStr = '';
     this.filteredMaterials = this.materials.filter((e) => {
@@ -1136,30 +1154,30 @@ export class MaterialsComponent implements OnInit {
         data: {
           title: 'Delete folder',
           message:
-            'Are you sure to delete this folder? If yes, please select delete mode.',
-          case: true,
-          answers: [
-            {
-              label: 'Remove with sub-materials',
-              value: 'with-materials'
-            },
-            {
-              label: 'Remove only folder',
-              value: 'only-folder'
-            }
-          ]
+            'This folder would be removed and sub materials would be moved to root directory. Are you sure to delete this folder?',
+          confirmLabel: 'Delete'
+          // case: true,
+          // answers: [
+          //   {
+          //     label: 'Remove with sub-materials',
+          //     value: 'with-materials'
+          //   },
+          //   {
+          //     label: 'Remove only folder',
+          //     value: 'only-folder'
+          //   }
+          // ]
         }
       })
       .afterClosed()
       .subscribe((answer) => {
         if (answer) {
           this.materialService
-            .removeFolder(material._id, answer)
+            .removeFolder(material._id, 'only-folder') // answer
             .subscribe((res) => {
               if (res['status']) {
-                if (answer === 'only-folder') {
-                  this.materialService.delete$([material._id]);
-                }
+                this.materialService.delete$([material._id]);
+                this.materialService.removeFolder$(material._id);
               }
             });
         }
@@ -1200,7 +1218,8 @@ export class MaterialsComponent implements OnInit {
         width: '96vw',
         maxWidth: '400px',
         data: {
-          materials: selectedMaterials
+          materials: selectedMaterials,
+          currentFolder: this.selectedFolder
         }
       })
       .afterClosed()
