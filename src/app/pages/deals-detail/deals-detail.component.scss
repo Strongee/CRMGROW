@@ -31,8 +31,8 @@
             &:last-child {
                 margin-right: 0;
             }
-            &.stage-0, &.stage-1 {
-                border: 3px solid #04B800;
+            &.active {
+              border: 3px solid #04B800;
             }
         }
     }

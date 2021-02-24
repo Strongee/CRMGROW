@@ -6,6 +6,7 @@ import { DealStageCreateComponent } from 'src/app/components/deal-stage-create/d
 import { DealStageDeleteComponent } from 'src/app/components/deal-stage-delete/deal-stage-delete.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
+import { ConfirmComponent } from '../../components/confirm/confirm.component';
 
 @Component({
   selector: 'app-deals-setting',
@@ -44,26 +45,58 @@ export class DealsSettingComponent implements OnInit {
   }
 
   moveDelete(id: string): void {
-    this.dialog
-      .open(DealStageDeleteComponent, {
-        position: { top: '100px' },
-        width: '100vw',
-        maxWidth: '550px',
-        disableClose: true,
-        data: {
-          deleteId: id
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          this.stages.some((e, index) => {
-            if (e._id === id) {
-              this.stages.splice(index, 1);
+    const idx = this.stages.findIndex((item) => item._id === id);
+    if (idx >= 0) {
+      if (this.stages[idx].deals && this.stages[idx].deals.length > 0) {
+        if (this.stages.length > 1) {
+          // move deals and delete stage
+          this.dialog
+            .open(DealStageDeleteComponent, {
+              position: { top: '100px' },
+              width: '100vw',
+              maxWidth: '550px',
+              disableClose: true,
+              data: {
+                deleteId: id
+              }
+            })
+            .afterClosed()
+            .subscribe((res) => {
+              if (res) {
+                this.stages.some((e, index) => {
+                  if (e._id === id) {
+                    this.stages.splice(index, 1);
+                  }
+                });
+              }
+            });
+        } else {
+          // confirm delete deals and then delete stage
+          const dialog = this.dialog.open(ConfirmComponent, {
+            data: {
+              title: 'Delete deal(s)',
+              message: 'Are you sure to delete the deals in this stage?',
+              confirmLabel: 'Delete'
             }
-          })
+          });
+          dialog.afterClosed().subscribe((res) => {
+            if (res) {
+              this.dealsService.deleteStage(id, null).subscribe((response) => {
+                if (response) {
+                  this.stages.splice(idx, 1);
+                }
+              });
+            }
+          });
         }
-      });
+      } else {
+        this.dealsService.deleteStage(id, null).subscribe((res) => {
+          if (res) {
+            this.stages.splice(idx, 1);
+          }
+        });
+      }
+    }
   }
 
   addStage(): void {
