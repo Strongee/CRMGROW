@@ -226,7 +226,7 @@ export class DealsDetailComponent implements OnInit {
       deal_stage_id: stage._id
     };
     this.dealsService.moveDeal(data).subscribe((res) => {
-      this.dealsService.getStage(true);
+      this.getStage(stage._id);
     });
   }
 
