@@ -14,6 +14,7 @@ import { LabelEditComponent } from '../label-edit/label-edit.component';
 })
 export class ManageLabelComponent implements OnInit {
   loading = false;
+  submitted = false;
   newLabel: Label = new Label().deserialize({
     color: '#000',
     name: ''
@@ -50,11 +51,16 @@ export class ManageLabelComponent implements OnInit {
   }
 
   saveLabel(): void {
+    if (this.newLabel.name === '') {
+      this.submitted = false;
+      return;
+    }
     this.labelService
       .createLabel(
         this.newLabel.deserialize({ priority: (this.labelLength + 1) * 1000 })
       )
       .subscribe((newLabel) => {
+        this.submitted = false;
         if (newLabel) {
           this.labelService.create$(newLabel);
           this.newLabel = new Label().deserialize({

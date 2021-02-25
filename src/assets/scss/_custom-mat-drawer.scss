@@ -1,6 +1,6 @@
 .page {
   .mat-drawer-container {
-    z-index: 1000;
+    z-index: 1001;
     margin-top: 1px;
     background-color: #fff;
 
@@ -45,7 +45,7 @@
       top: 101px;
       left: 0px;
     }
-    
+
     &.has-topbar {
       .mat-drawer-container .mat-drawer-backdrop {
         top: 151px;
