@@ -3,7 +3,6 @@ import {
   Component,
   OnInit,
   ViewContainerRef,
-  ViewChild,
   OnDestroy
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,16 +10,12 @@ import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { OverlayService } from 'src/app/services/overlay.service';
-import {
-  ActivityDetail,
-  DetailActivity
-} from 'src/app/models/activityDetail.model';
+import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactMergeComponent } from 'src/app/components/contact-merge/contact-merge.component';
 import { Automation } from 'src/app/models/automation.model';
 import {
   ActionName,
-  REPEAT_DURATIONS,
   DialogSettings,
   CALENDAR_DURATION,
   STATUS
