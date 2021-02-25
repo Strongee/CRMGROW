@@ -26,7 +26,9 @@ export class SettingsComponent implements OnInit {
     },
     { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' },
     { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS Limits' },
-    { id: 'deals-setting', icon: 'i-deals', label: 'Deals' }
+    { id: 'deals-setting', icon: 'i-deals', label: 'Deals' },
+    { id: 'integration', icon: 'i-integration', label: 'Integration' },
+    { id: 'social', icon: 'i-social', label: 'Social Profile' }
   ];
   defaultPage = 'notifications';
   currentPage: string;

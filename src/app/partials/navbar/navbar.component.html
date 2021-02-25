@@ -134,13 +134,25 @@
           <div class=" dropdown-header noti-title">
             <h6 class="text-overflow m-0 c-default f-0">Welcome!</h6>
           </div>
-          <a routerLinkActive="active" [routerLink]="['/profile']" class="dropdown-item">
+          <a [routerLink]="['/profile']" class="dropdown-item">
             <i class="i-icon i- "></i>
             <span class="f-4 fw-600">My profile</span>
           </a>
-          <a routerLinkActive="active" [routerLink]="['/profile/billing']" class="dropdown-item">
+          <a [routerLink]="['/profile/billing']" class="dropdown-item">
             <i class="ni ni-settings-gear-65"></i>
             <span class="f-4 fw-600">Billing</span>
+          </a>
+          <a [routerLink]="['/profile/signature']" class="dropdown-item">
+            <i class="ni ni-settings-gear-65"></i>
+            <span class="f-4 fw-600">Email signature</span>
+          </a>
+          <a [routerLink]="['/profile/security']" class="dropdown-item">
+            <i class="ni ni-settings-gear-65"></i>
+            <span class="f-4 fw-600">Security</span>
+          </a>
+          <a [routerLink]="['/settings']" class="dropdown-item">
+            <i class="ni ni-settings-gear-65"></i>
+            <span class="f-4 fw-600">Settings</span>
           </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" (click)="logout($event)">

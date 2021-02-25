@@ -18,8 +18,6 @@ export class ProfileComponent implements OnInit {
     { id: 'general', icon: 'i-general', label: 'General Information' },
     { id: 'signature', icon: 'i-signature', label: 'Signature' },
     { id: 'security', icon: 'i-security', label: 'Security' },
-    { id: 'integration', icon: 'i-integration', label: 'Integration' },
-    { id: 'social', icon: 'i-social', label: 'Social Profile' },
     { id: 'billing', icon: 'i-payment', label: 'Billing' }
   ];
   defaultPage = 'general';
@@ -57,10 +55,10 @@ export class ProfileComponent implements OnInit {
               this.toast.success(
                 'Your Outlook mail is connected successfully.'
               );
-              this.location.replaceState('/profile/integration');
+              this.location.replaceState('/settings/integration');
             },
             (err) => {
-              this.location.replaceState('/profile/integration');
+              this.location.replaceState('/settings/integration');
             }
           );
         }
@@ -75,10 +73,10 @@ export class ProfileComponent implements OnInit {
                 this.userService.updateProfileImpl(data);
               });
               this.toast.success('Your Gmail is connected successfully.');
-              this.location.replaceState('/profile/integration');
+              this.location.replaceState('/settings/integration');
             },
             (err) => {
-              this.location.replaceState('/profile/integration');
+              this.location.replaceState('/settings/integration');
             }
           );
         }
