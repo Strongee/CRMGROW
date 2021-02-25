@@ -6,6 +6,8 @@ import { Label } from 'src/app/models/label.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { LabelEditColorComponent } from '../label-edit-color/label-edit-color.component';
 import { LabelEditComponent } from '../label-edit/label-edit.component';
+import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-manage-label',
@@ -14,13 +16,13 @@ import { LabelEditComponent } from '../label-edit/label-edit.component';
 })
 export class ManageLabelComponent implements OnInit {
   loading = false;
-  submitted = false;
   newLabel: Label = new Label().deserialize({
     color: '#000',
     name: ''
   });
   labelLength = 0;
   @Output() onClose = new EventEmitter();
+  saveSubscription: Subscription;
   constructor(private dialog: MatDialog, public labelService: LabelService) {}
 
   ngOnInit(): void {
@@ -50,23 +52,25 @@ export class ManageLabelComponent implements OnInit {
       });
   }
 
-  saveLabel(): void {
-    if (this.newLabel.name === '') {
-      this.submitted = false;
+  saveLabel(form: NgForm): void {
+    if (!this.newLabel.name) {
       return;
     }
-    this.labelService
+    this.loading = true;
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    this.saveSubscription = this.labelService
       .createLabel(
         this.newLabel.deserialize({ priority: (this.labelLength + 1) * 1000 })
       )
       .subscribe((newLabel) => {
-        this.submitted = false;
+        this.loading = false;
         if (newLabel) {
           this.labelService.create$(newLabel);
           this.newLabel = new Label().deserialize({
             color: '#000',
             name: ''
           });
+          form.resetForm();
         }
       });
   }
