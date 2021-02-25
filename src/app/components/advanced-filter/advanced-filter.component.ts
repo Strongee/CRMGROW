@@ -200,6 +200,7 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   selectMaterialAction(title: string): void {
+    console.log("selected filter =========>", title);
     if (this.selectedMaterialActions == title) {
       this.selectedMaterialActions = '';
       this.selectedMaterial = [];
@@ -210,6 +211,28 @@ export class AdvancedFilterComponent implements OnInit {
       this.contactService.searchOption.next(this.searchOption);
     } else {
       this.selectedMaterialActions = title;
+      this.materialActions.forEach((action) => {
+        action.count = 0;
+      });
+      this.searchOption.materialCondition = new MaterialCondition();
+      if (title === 'Material sent') {
+        this.searchOption.materialCondition.sent_video.flag = true;
+        this.searchOption.materialCondition.sent_pdf.flag = true;
+        this.searchOption.materialCondition.sent_image.flag = true;
+      } else if (title === 'No material sent') {
+        this.searchOption.materialCondition.not_sent_video.flag = true;
+        this.searchOption.materialCondition.not_sent_pdf.flag = true;
+        this.searchOption.materialCondition.not_sent_image.flag = true;
+      } else if (title === 'Material reviewed') {
+        this.searchOption.materialCondition.watched_video.flag = true;
+        this.searchOption.materialCondition.watched_pdf.flag = true;
+        this.searchOption.materialCondition.watched_image.flag = true;
+      } else if (title === 'Material not reviewed') {
+        this.searchOption.materialCondition.not_watched_video.flag = true;
+        this.searchOption.materialCondition.not_watched_pdf.flag = true;
+        this.searchOption.materialCondition.not_watched_image.flag = true;
+      }
+      this.contactService.searchOption.next(this.searchOption);
     }
   }
 

@@ -1,5 +1,6 @@
 .panel {
   max-width: 480px;
+  padding-bottom: 80px !important;
 }
 
 .checkbox-wrapper {
@@ -55,6 +56,15 @@
       flex-grow: 1;
     }
   }
+}
+
+.fixed-action-group {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 480px;
+  background: white;
+  padding: 20px 20px 20px 0px;
 }
 
 @media screen and (max-width: 370px) {
