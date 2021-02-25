@@ -6,6 +6,12 @@
     font-size: 22px;
   }
 
+  @media screen and (max-width: 576px) {
+    .dup-notification-text {
+      display: inline-block;
+    }
+  }
+
   .close-button {
     width: auto;
     padding: 0;
@@ -126,6 +132,16 @@
 
   .duplicate-error {
     margin-left: 40px;
+  }
+
+  @media screen and (max-width: 576px) {
+    .duplicate-error {
+      margin-left: 40px;
+      width: 50%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-all;
+    }
   }
 }
 

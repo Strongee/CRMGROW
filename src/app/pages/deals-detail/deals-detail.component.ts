@@ -183,6 +183,7 @@ export class DealsDetailComponent implements OnInit {
       this.stages = res;
       if (this.stages.length) {
         this.stages.forEach((stage) => {
+          console.log("get stage ========>", stage._id, id);
           if (stage._id == id) {
             this.selectedStage = stage.title;
             this.selectedStageId = stage._id;
@@ -216,6 +217,17 @@ export class DealsDetailComponent implements OnInit {
           this.getStage(this.deal.main.deal_stage);
         }
       });
+  }
+
+  moveDeal(stage): void {
+    const data = {
+      deal_id: this.dealId,
+      position: stage.deals.length,
+      deal_stage_id: stage._id
+    };
+    this.dealsService.moveDeal(data).subscribe((res) => {
+      this.getStage(stage._id);
+    });
   }
 
   contactDetail(contact: any): void {

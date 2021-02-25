@@ -8,9 +8,9 @@
     </ng-container>
     <ng-container *ngIf="step == 3">
       <div class="f-22 font-weight-bold c-black">
-        Duplicates
-        <span class="f-6 ml-5 c-red ml-5" *ngIf="isDuplicatedEmail()">
-          Email is duplicated. Please merge duplicated emails.
+        {{this.failedData.length > 0 ? 'Duplicates with Contacts' : 'Duplicates'}}
+        <span class="dup-notification-text f-6 ml-md-5 ml-sm-3 ml-3 c-red" *ngIf="isDuplicatedExist">
+          Contact is duplicated. Please merge duplicated contacts.
         </span>
       </div>
     </ng-container>
@@ -101,7 +101,10 @@
               <div class="form-group mb-0">
                 <mat-select [(ngModel)]="updateColumn[column]">
                   <mat-option value="">Select Property</mat-option>
-                  <mat-option *ngFor="let field of fields" value="{{field.value}}">
+                  <mat-option value="{{updateColumn[column]}}" *ngIf="updateColumn[column]">
+                    <div class="f-3 c-black selected-option-text">{{getFieldLabel(updateColumn[column])}}</div>
+                  </mat-option>
+                  <mat-option *ngFor="let field of getColumnFields()" value="{{field.value}}">
                     <div class="f-3 c-black" [class.selected-option-text]="updateColumn[column] == field.value">{{field.label}}</div>
                   </mat-option>
                 </mat-select>
@@ -118,16 +121,24 @@
     <ng-container *ngIf="step == 3">
       <div class="duplicate-wrapper pr-2">
         <div class="dups-container" *ngIf="sameContacts.length">
-          <div class="f-5 font-weight-bold mb-3">
-            There were <span class="f-8 c-blue">{{sameContacts.length}}</span> record duplicates found in your .csv file. Please merge or edit primary data.
+          <div class="f-5 font-weight-bold mb-3" *ngIf="getDuplicateContactCount() > 0">
+            There were <span class="f-8 c-blue">{{getDuplicateContactCount()}}</span> record duplicates found in your .csv file. Please merge or edit primary data.
           </div>
           <ng-container  *ngFor="let dupItem of sameContacts; let dupIndex = index;">
-            <div class="merge-group-wrapper mb-3">
+            <div id="contact-group-{{dupIndex}}" class="merge-group-wrapper mb-3">
               <div class="table-wrapper">
                 <table class="table duplicate-check-table mb-0">
                   <thead>
                   <tr>
-                    <th class="check-cell sticky-check-col">&nbsp;</th>
+                    <th class="check-cell sticky-check-col">
+                      <div class="custom-control custom-checkbox" *ngIf="dupItem.length > 1">
+                        <input type="checkbox" class="custom-control-input"
+                               id="merge-select-all-{{dupIndex}}"
+                               (click)="selectAllContactGroup($event, dupIndex, dupItem)"
+                               [checked]="isSelectedGroup(dupIndex, dupItem)">
+                        <label class="custom-control-label" for="merge-select-all-{{dupIndex}}"></label>
+                      </div>
+                    </th>
                     <th>Type</th>
                     <ng-container *ngFor="let column of columns">
                       <th [class]="column" *ngIf="updateColumn[column]">
@@ -144,9 +155,9 @@
                     >
                       <div class="custom-control custom-checkbox" *ngIf="dupItem.length > 1">
                         <input type="checkbox" class="custom-control-input" id="duplicate-{{contact.id}}"
-                               [checked]="isSelectedMerge(dupIndex, contact.id)"
-                               (change)="$event ? selectedMergeContacts[dupIndex].toggle(contact.id) : null"
-                               [disabled]="isDisable(dupIndex, contact.id)">
+                           [checked]="isSelectedMerge(dupIndex, contact.id)"
+                           (click)="selectContact($event, dupIndex, contact)"
+                        >
                         <label class="custom-control-label"
                                for="duplicate-{{contact.id}}"></label>
                       </div>
@@ -182,9 +193,8 @@
                 </table>
               </div>
               <div class="v-center p-2">
-                <div class="duplicate-error f-1 font-weight-bold c-red"
-                      *ngIf="duplicateItems[dupIndex]">
-                  EMAIL is duplicated. Please merge duplicated emails.
+                <div class="duplicate-error f-1 font-weight-bold c-red" *ngIf="isDuplicatedExist">
+                  {{getDuplicateContactsText(dupIndex)}}
                 </div>
                 <div class="v-center ml-auto">
                   <button type="button"
@@ -255,27 +265,6 @@
           <div class="f-3 font-weight-bold">{{uploadPercent}}%</div>
         </div>
       </div>
-<!--      <div class="v-center justify-content-center" *ngIf="!checkingDuplicate">-->
-<!--        <div class="upload-progress-wrapper">-->
-<!--          <circle-progress-->
-<!--            [percent]=uploadPercent-->
-<!--            [radius]="100"-->
-<!--            [outerStrokeWidth]="16"-->
-<!--            [innerStrokeWidth]="8"-->
-<!--            [outerStrokeColor]="'#78C000'"-->
-<!--            [innerStrokeColor]="'#C7E596'"-->
-<!--            [backgroundOpacity]="0"-->
-<!--            [titleColor]="'#0000ff'"-->
-<!--            [titleFontSize]="40"-->
-<!--            [subtitleFontSize]="14"-->
-<!--            [subtitle]=uploadSubTitle-->
-<!--            [subtitleColor]="'#000000'"-->
-<!--            [animation]="true"-->
-<!--            [animationDuration]="0"-->
-<!--          ></circle-progress>-->
-<!--          <img class="glass-img" src="../../assets/img/hourglass.gif">-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="my-3 text-center" *ngIf="checkingDuplicate">
         <div class="loader mt-2"></div>
         <h4 class="f-5 font-weight-bold mt-2">Checking duplicate contacts.</h4>

@@ -53,6 +53,26 @@
   }
 }
 
+.button-more {
+  display: inline-block;
+
+  .i-icon {
+    width: 10px;
+    height: 10px;
+  }
+  a {
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.button-more-container {
+  .actions {
+    padding: 0px 5px;
+    text-align: left;
+  }
+}
 
 .label-search {
   background: #1fb34c;
@@ -62,9 +82,38 @@
   padding: 2px 6px;
 }
 
+.field-actions {
+  button {
+    padding: 5px 10px;
+    height: 22px;
+    line-height: 14px;
+    transform: none!important;
+    font-size: 11px;
+    margin-right: 5px;
+    box-shadow: none;
+    font-weight: bold;
+
+    @media screen and (max-width: 576px) {
+      padding: 5px;
+      margin: 3px;
+    }
+  }
+
+  .button-more-container {
+    button {
+      margin: 5px 0px;
+    }
+  }
+}
+
 :host ::ng-deep {
   .contacts-form .chip {
     background-color: blue!important;
     color: white;
+  }
+
+  .dropdown-menu {
+    padding: 0;
+    min-width: 8rem;
   }
 }

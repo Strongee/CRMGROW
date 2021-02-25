@@ -52,7 +52,10 @@
                             <i class="d-block i-icon i-triangle-down bgc-dark ml-2"></i>
                         </div>
                         <div ngbDropdownMenu class="light">
-                            <button class="border-0 c-dark dropdown-item" *ngFor="let stage of stages">
+                            <button class="border-0 c-dark dropdown-item"
+                              *ngFor="let stage of stages; let position = index"
+                              (click)="moveDeal(stage)"
+                            >
                                 <span class="ml-1 f-6">{{stage.title}}</span>
                             </button>
                         </div>
