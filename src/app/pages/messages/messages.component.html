@@ -12,7 +12,7 @@
     </div>
     <div class="d-flex message-container position-relative">
         <div class="contact-list" [class.hide]="showMessage">
-            <div class="d-flex p-2 c-pointer contact" [ngClass]="{'selected': contact._id == selectedContact._id}" *ngFor="let contact of contacts" (click)="selectContact(contact)">
+            <div class="d-flex p-2 c-pointer contact" [class]="{'selected': contact._id == selectedContact._id}" *ngFor="let contact of contacts" (click)="selectContact(contact)">
                 <div class="contact-avatar f-3 font-weight-bold mr-2">{{contact.avatarName}}</div>
                 <div class="contact-name">
                     <div class="v-center justify-content-between">
@@ -43,10 +43,22 @@
                     <i class="d-block i-icon i-list bgc-dark"></i>
                 </div>
             </div>
-            <div class="px-3 py-2 border-bottom select-template">
-                <div class="v-center f-3 font-weight-bold c-blue c-pointer">
+            <div ngbDropdown class="px-3 py-2 border-bottom select-template">
+                <div ngbDropdownToggle class="v-center f-3 font-weight-bold c-blue c-pointer">
                     Insert template
                     <i class="d-block i-icon i-triangle-down bgc-blue ml-2"></i>
+                </div>
+                <div ngbDropdownMenu class="light">
+                    <ng-container *ngFor="let template of (templateService.templates$ | async)">
+                        <div class="dropdown-item template" *ngIf="template.type === 'email'" (click)="selectTemplate(template)">
+                          <div class="v-center">
+                            <div class="f-3 font-weight-bold">{{template.title}}</div>
+                            <div class="c-badge rect ml-auto text-uppercase" [class]="template.role || 'own'">{{template.role || 'own'}}</div>
+                          </div>
+                          <div class="f-2 font-weight-bold">{{template.subject}}</div>
+                          <div class="f-1">{{template.content | stripTags | shorten: 40: '...'}}</div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
             <div class="p-3 border-bottom message-list">
@@ -56,11 +68,14 @@
             </div>
             <div class="px-4 py-3 message-action">
                 <div class="form-group">
-                    <input
+                    <textarea
                         type="text"
+                        rows="5"
+                        cols="40"
                         class="form-control"
                         placeholder="Message"
-                    >
+                        [ngModel]="messageText"
+                    ></textarea>
                 </div>
                 <div class="v-center justify-content-between">
                     <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue px-3 py-2 mr-2 material-button" (click)="openMaterialsDlg()">
@@ -68,7 +83,7 @@
                         <span class="f-3 font-weight-bold c-blue ml-1 mr-3">Material</span>
                         <i class="d-block i-icon i-plus bgc-blue ml-auto"></i>
                     </button>
-                    <button class="btn btn-blue f-6 font-weight-bold">
+                    <button class="btn btn-blue f-6 font-weight-bold" (click)="sendMessage()">
                         Send
                     </button>
                 </div>
