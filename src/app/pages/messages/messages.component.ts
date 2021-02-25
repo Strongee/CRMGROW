@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatesService } from 'src/app/services/templates.service';
+import { UserService } from 'src/app/services/user.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 import * as _ from 'lodash';
 import { Contact } from 'src/app/models/contact.model';
+import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -73,21 +76,35 @@ export class MessagesComponent implements OnInit {
   selectedTemplate: Template = new Template();
   emailSubject = '';
   emailContent = '';
+  siteUrl = environment.website;
+  user_id = '';
+  profileSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
     public templateService: TemplatesService,
+    private userService: UserService,
     private materialService: MaterialService
   ) {
     this.templateService.loadAll(false);
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        this.user_id = profile._id;
+      }
+    );
   }
 
   ngOnInit(): void {
     this.selectedContact = { ...this.selectedContact, ...this.contacts[0] };
   }
 
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
+
   selectContact(contact: any): void {
     this.selectedContact = { ...this.selectedContact, ...contact };
+    this.isNew = false;
     this.showMessage = true;
   }
 
@@ -109,9 +126,18 @@ export class MessagesComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res && res.materials) {
+          this.materials = [];
           this.materials = [...this.materials, ...res.materials];
-          for (let i = 0; i < res.materials.length; i++) {
-            this.messageText += '\n' + res.materials[i].url;
+          for (let i = 0; i < this.materials.length; i++) {
+            let url = '';
+            if (this.materials[i].hasOwnProperty('default_video')) {
+              url = `${this.siteUrl}/video?video=${this.materials[i]._id}&user=${this.user_id}`;
+            } else if (this.materials[i].hasOwnProperty('default_pdf')) {
+              url = `${this.siteUrl}/pdf?pdf=${this.materials[i]._id}&user=${this.user_id}`;
+            } else {
+              url = `${this.siteUrl}/image?image=${this.materials[i]._id}&user=${this.user_id}`;
+            }
+            this.messageText += '\n' + url;
           }
         }
       });
@@ -163,7 +189,7 @@ export class MessagesComponent implements OnInit {
         contacts: [this.selectedContact._id]
       };
     }
-    this.materialService.sendText(data, 'video').subscribe((res) => {
+    this.materialService.sendMessage(data).subscribe((res) => {
       if (res) {
         this.messages.forEach((messageList) => {
           if (this.isNew && messageList.id == this.newContact._id) {
