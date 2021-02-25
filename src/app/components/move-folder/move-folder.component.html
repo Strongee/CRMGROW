@@ -1,0 +1,37 @@
+<h1 mat-dialog-title class="v-center d-flex">
+  <span>Move Materials to Folder</span>
+  <button class="border-0 bgc-trans ml-auto" mat-dialog-close>
+    <i class="d-block i-icon i-close bgc-dark"></i>
+  </button>
+</h1>
+<mat-dialog-content>
+  <div class="form-group">
+    <div class="v-center">
+      <label for="target_folder" class="mb-0">select folder</label>
+      <span class="error ml-auto" *ngIf="folder.errors">
+        <ng-container *ngIf="folder.errors.required">Required!</ng-container>
+      </span>
+    </div>
+    <div class="border rounded py-2 px-2 mt-1">
+      <mat-select [(ngModel)]="selectedFolder" name="fullname" id="target_folder" name="folder" #folder="ngModel" required placecholder="Select Folder">
+        <mat-option disabled>Please select folder</mat-option>
+        <ng-container *ngIf="!isRoot">
+          <mat-option [value]="rootFolder">
+            <div class="f-3 c-black">
+              <span class="f-20 mr-1">..</span>to the root
+            </div>
+          </mat-option>  
+        </ng-container>
+        <mat-option *ngFor="let folder of folders" [value]="folder">
+          <div class="f-3 c-black">
+            {{folder.title}}
+          </div>
+        </mat-option>
+      </mat-select>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn c-blue" mat-dialog-close>Cancel</button>
+  <button class="btn btn-primary" [class.loading]="moving" (click)="move()">Move</button>
+</mat-dialog-actions>

@@ -22,6 +22,7 @@ import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import { StoreService } from './store.service';
 import { STATUS } from '../constants/variable.constants';
+import { Material } from '../models/material.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,12 +36,14 @@ export class MaterialService extends HttpService {
     super(errorService);
   }
 
-  loadVidoeStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
-  loadingVideo$ = this.loadVidoeStatus.asObservable();
+  loadVideoStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loadingVideo$ = this.loadVideoStatus.asObservable();
   loadPdfStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loadingPdf$ = this.loadPdfStatus.asObservable();
   loadImageStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loadingImage$ = this.loadImageStatus.asObservable();
+  loading: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
+  loading$ = this.loading.asObservable();
 
   /**
    * LOAD MATERIALS
@@ -67,16 +70,16 @@ export class MaterialService extends HttpService {
   }
   loadVideos(force = false): void {
     if (!force) {
-      const loadVidoeStatus = this.loadVidoeStatus.getValue();
+      const loadVidoeStatus = this.loadVideoStatus.getValue();
       if (loadVidoeStatus != STATUS.NONE && loadVidoeStatus != STATUS.FAILURE) {
         return;
       }
     }
-    this.loadVidoeStatus.next(STATUS.REQUEST);
+    this.loadVideoStatus.next(STATUS.REQUEST);
     this.loadVideosImpl().subscribe((videos) => {
       videos
-        ? this.loadVidoeStatus.next(STATUS.SUCCESS)
-        : this.loadVidoeStatus.next(STATUS.FAILURE);
+        ? this.loadVideoStatus.next(STATUS.SUCCESS)
+        : this.loadVideoStatus.next(STATUS.FAILURE);
       this.storeService.videos.next(videos);
     });
   }
@@ -201,6 +204,36 @@ export class MaterialService extends HttpService {
     );
   }
 
+  loadMaterial(force = false): void {
+    if (!force) {
+      const loading = this.loading.getValue();
+      if (loading != STATUS.NONE && loading != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loading.next(STATUS.REQUEST);
+    this.loadMaterialImp().subscribe((materials) => {
+      materials
+        ? this.loading.next(STATUS.SUCCESS)
+        : this.loading.next(STATUS.FAILURE);
+      this.storeService.materials.next(materials);
+    });
+  }
+  loadMaterialImp(): Observable<Material[]> {
+    return this.httpClient.get(this.server + MATERIAL.LOAD).pipe(
+      map((res) =>
+        (res['data'] || []).map((e) => new Material().deserialize(e))
+      ),
+      catchError(this.handleError('LOAD MATERIALS', []))
+    );
+  }
+  bulkRemove(data): Observable<any> {
+    return this.httpClient.post(this.server + MATERIAL.BULK_REMOVE, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('REMOVE MATERIALS', false))
+    );
+  }
+
   getVimeoMeta(id: string): any {
     return this.httpClient.get(`https://vimeo.com/api/v2/video/${id}.json`);
   }
@@ -233,5 +266,96 @@ export class MaterialService extends HttpService {
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD VIDEO DATA', []))
     );
+  }
+
+  createFolder(material: any): Observable<Material> {
+    return this.httpClient
+      .post(this.server + MATERIAL.CREATE_FOLDER, material)
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('CREATE FOLDER', null))
+      );
+  }
+  updateFolder(_id: string, data: any): Observable<boolean> {
+    return this.httpClient
+      .put(this.server + MATERIAL.UPDATE_FOLDER + _id, data)
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('UPDATE FOLDER', false))
+      );
+  }
+  removeFolder(_id: string, mode: string): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + MATERIAL.REMOVE_FOLDER, { _id, mode })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('DELETE FOLDER', null))
+      );
+  }
+  moveFiles(
+    materials: any,
+    target: string,
+    source: string
+  ): Observable<Material> {
+    return this.httpClient
+      .post(this.server + MATERIAL.MOVE_FILES, { materials, target, source })
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('MOVE MATERIALS', null))
+      );
+  }
+
+  create$(material: any): void {
+    const materials = this.storeService.materials.getValue();
+    materials.unshift(material);
+    this.storeService.materials.next([...materials]);
+  }
+
+  update$(_id: string, data: any): void {
+    const materials = this.storeService.materials.getValue();
+    materials.some((e) => {
+      if (e._id === _id) {
+        e.deserialize(data);
+        return true;
+      }
+    });
+    this.storeService.materials.next(materials);
+  }
+
+  bulkUpdate$(ids: string[], data: any): void {
+    const materials = this.storeService.materials.getValue();
+    materials.forEach((e) => {
+      if (ids.indexOf(e._id) !== -1) {
+        e.deserialize(data);
+      }
+    });
+    this.storeService.materials.next(materials);
+  }
+
+  delete$(ids: string[]): void {
+    const materials = this.storeService.materials.getValue();
+    const remained = materials.filter((e) => {
+      if (ids.indexOf(e._id) === -1) {
+        return true;
+      }
+    });
+    this.storeService.materials.next(remained);
+  }
+
+  removeFolder$(folder: string): void {
+    const materials = this.storeService.materials.getValue();
+    materials.forEach((e) => {
+      if (e.folder === folder) {
+        e.folder = '';
+      }
+    });
+    this.storeService.materials.next(materials);
+  }
+
+  clear$(): void {
+    this.loading.next(STATUS.NONE);
+    this.loadVideoStatus.next(STATUS.NONE);
+    this.loadPdfStatus.next(STATUS.NONE);
+    this.loadImageStatus.next(STATUS.NONE);
   }
 }

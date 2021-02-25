@@ -30,3 +30,14 @@ tr.completed-extension {
 tr.completed + tr.completed-extension .completed-cell .completed-mark {
   width: calc(100% - 70px);
 }
+
+@media screen and (min-width: 484px) {
+  .custom-mat-table {
+    margin-top: -50px
+  }
+  .table-control-header {
+    width: fit-content;
+    margin-left: auto;
+    margin-bottom: 16px;
+  }
+}

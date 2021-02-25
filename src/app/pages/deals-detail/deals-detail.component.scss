@@ -24,15 +24,15 @@
             min-width: 10px;
         }
         .stage-status {
-            border: 3px solid #D9D9DF;
+            border: 3px solid #04B800;
             border-radius: 5px;
             flex: 1;
             height: 2px;
             &:last-child {
                 margin-right: 0;
             }
-            &.active {
-              border: 3px solid #04B800;
+            &.active ~ .stage-status {
+              border: 3px solid #D9D9DF;
             }
         }
     }

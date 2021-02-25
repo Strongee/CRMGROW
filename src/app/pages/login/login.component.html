@@ -36,10 +36,10 @@
           <label for="password">Password</label>
           <a class="f-3 ml-auto font-weight-bold" [routerLink]="['/forgot-password']">Forgot Password?</a>
         </div>
-        <input type="password"  tabindex="2" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="8" #password="ngModel"/>
+        <input type="password"  tabindex="2" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="6" #password="ngModel"/>
         <span class="error" *ngIf="password.errors">
           <ng-container *ngIf="password.errors.required">Password is required!</ng-container>
-          <ng-container *ngIf="password.errors.minlength">Password must be at least 8 characters long!</ng-container>
+          <ng-container *ngIf="password.errors.minlength">Password must be at least 6 characters long!</ng-container>
         </span>
       </div>
       <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4" [class.loading]="submitting">Sign In</button>

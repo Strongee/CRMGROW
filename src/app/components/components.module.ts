@@ -127,6 +127,8 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
 import { StageInputComponent } from './stage-input/stage-input.component';
 import { SelectCalendarComponent } from './select-calendar/select-calendar.component';
 import { CallRequestDetailComponent } from './call-request-detail/call-request-detail.component';
+import { FolderComponent } from './folder/folder.component';
+import { MoveFolderComponent } from './move-folder/move-folder.component';
 
 @NgModule({
   declarations: [
@@ -252,7 +254,9 @@ import { CallRequestDetailComponent } from './call-request-detail/call-request-d
     FilterInputComponent,
     StageInputComponent,
     SelectCalendarComponent,
-    CallRequestDetailComponent
+    CallRequestDetailComponent,
+    FolderComponent,
+    MoveFolderComponent
   ],
   imports: [
     CommonModule,

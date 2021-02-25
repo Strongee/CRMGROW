@@ -9,7 +9,12 @@
 <form #sendForm="ngForm" (ngSubmit)="sendForm.form.valid ? send() : false">
     <mat-dialog-content>
         <div class="d-flex mt-2 material-preivew">
-            <img [src]="data.material[0].thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );">
+            <ng-container [ngSwitch]="data.material[0].material_type">
+                <img [src]="data.material[0].thumbnail" *ngSwitchCase="'video'" onerror="( this.src = './assets/img/video_thumb.jpg' );">
+                <img [src]="data.material[0].preview" *ngSwitchCase="'pdf'" onerror="( this.src = './assets/img/video_thumb.jpg' );">
+                <img [src]="data.material[0].preview" *ngSwitchCase="'image'" onerror="( this.src = './assets/img/video_thumb.jpg' );">
+            </ng-container>
+            
             <div class="ml-4">
                 <div class="f-6 font-weight-bold material-title">
                     {{data.material[0].title}}
@@ -18,19 +23,40 @@
                     {{(data.material[0]?.description || '') | stripTags | shorten: 100: '...'}}
                 </div>
             </div>
-            <div class="v-center mt-3 material-more" *ngIf="data.material.length > 1">
-                <div class="v-center" *ngIf="videos.length > 1">
+        </div>
+        
+        <div class="d-flex">
+            <div class="v-center mt-3 material-more px-1 py-0 mx-auto" *ngIf="data.material.length > 1">
+                <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'video' && videos.length > 1; else normalVideoTemplate">
                     <i class="d-block i-icon act-videos mr-1"></i>
-                    + {{videos.length - 1}} Videos More
+                    + {{videos.length - 1}} Videos<span class="more"> More</span>
                 </div>
-                <div class="v-center mx-2" *ngIf="pdfs.length > 1">
+                <ng-template #normalVideoTemplate>
+                    <div class="v-center mx-1 my-1" *ngIf="videos.length">
+                        <i class="d-block i-icon act-videos mr-1"></i>
+                        + {{videos.length}} Videos<span class="more"> More</span>
+                    </div>
+                </ng-template>
+                <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'pdf' && pdfs.length > 1; else normalPdfTemplate">
                     <i class="d-block i-icon act-pdfs mr-1"></i>
-                     + {{pdfs.length - 1}} Pdfs More
+                    + {{pdfs.length - 1}} Pdfs<span class="more"> More</span>
                 </div>
-                <div class="v-center" *ngIf="images.length > 1">
+                <ng-template #normalPdfTemplate>
+                    <div class="v-center mx-1 my-1" *ngIf="pdfs.length">
+                        <i class="d-block i-icon act-pdfs mr-1"></i>
+                        + {{pdfs.length}} Pdfs<span class="more"> More</span>
+                    </div>
+                </ng-template>
+                <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'image' && images.length > 1; else normalImageTemplate">
                     <i class="d-block i-icon act-images mr-1"></i>
-                    + {{images.length - 1}} Images More
+                    + {{images.length - 1}} Images<span class="more"> More</span>
                 </div>
+                <ng-template #normalImageTemplate>
+                    <div class="v-center mx-1 my-1" *ngIf="images.length">
+                        <i class="d-block i-icon act-images mr-1"></i>
+                        + {{images.length}} Images<span class="more"> More</span>
+                    </div>
+                </ng-template>
             </div>
         </div>
         
@@ -82,15 +108,6 @@
                 </div>
             </mat-tab>
             <mat-tab label="Send via Email">
-                <!-- <div class="mt-2">
-                    <app-input-template
-                        [placeholder]="'Search for Template to use'"
-                        [(template)]="emailTemplate"
-                        [type]="'email'"
-                        [hasNewLink]="false"
-                        (templateChange)="selectEmailTemplate($event)"
-                    ></app-input-template>
-                </div> -->
                 <div class="form-group mt-2">
                     <div class="v-center">
                         <span class="f-1 fw-600 op-40 text-uppercase mb-1">
@@ -122,7 +139,6 @@
                         required="true"
                         [style]="{height: '200px'}"
                         [hasTemplates]="true"
-                        (onFocus)="focusEditor()"
                         (onChangeTemplate)="onChangeTemplate($event)"
                         #emailEditor
                         >

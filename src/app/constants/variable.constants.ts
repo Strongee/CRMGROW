@@ -741,17 +741,17 @@ export const BulkActions = {
       loading: false
     },
     {
+      label: 'Move To',
+      type: 'button',
+      icon: 'i-folder',
+      command: 'folder',
+      loading: false
+    },
+    {
       label: 'Delete',
       type: 'button',
       icon: 'i-trash',
       command: 'delete',
-      loading: false
-    },
-    {
-      spliter: true,
-      label: 'Select all',
-      type: 'button',
-      command: 'select',
       loading: false
     },
     {

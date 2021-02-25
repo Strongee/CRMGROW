@@ -6,12 +6,9 @@ import { StoreService } from 'src/app/services/store.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
 import { TeamService } from '../../services/team.service';
-import { User } from 'src/app/models/user.model';
 import { Garbage } from 'src/app/models/garbage.model';
-import { TabItem } from 'src/app/utils/data.types';
 import { environment } from 'src/environments/environment';
 import { BulkActions } from 'src/app/constants/variable.constants';
-import { SelectionModel } from '@angular/cdk/collections';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { Subscription } from 'rxjs';
@@ -21,62 +18,61 @@ import { PdfEditComponent } from 'src/app/components/pdf-edit/pdf-edit.component
 import { ImageEditComponent } from 'src/app/components/image-edit/image-edit.component';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { MaterialSendComponent } from 'src/app/components/material-send/material-send.component';
-
+import { Material } from 'src/app/models/material.model';
+import { Clipboard } from '@angular/cdk/clipboard';
+import * as _ from 'lodash';
+import { FolderComponent } from 'src/app/components/folder/folder.component';
+import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.component';
+import { NotifyComponent } from 'src/app/components/notify/notify.component';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
   styleUrls: ['./materials.component.scss']
 })
 export class MaterialsComponent implements OnInit {
-  user: User = new User();
-  garbage: Garbage = new Garbage();
-  BULK_ACTIONS = BulkActions.Materials;
-  tabs: TabItem[] = [
-    { icon: 'i-icon i-video', label: 'VIDEO', id: 'video' },
-    { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdf' },
-    { icon: 'i-icon i-image', label: 'IMAGE', id: 'image' }
+  DISPLAY_COLUMNS = [
+    'select',
+    'material_name',
+    'creator',
+    'share',
+    'type',
+    'created_at',
+    'analytics',
+    'lead_capture',
+    'actions'
   ];
-  selectedTab: TabItem = this.tabs[0];
+  ACTIONS = BulkActions.Materials;
+  STATUS = STATUS;
   siteUrl = environment.website;
   user_id = '';
-  STATUS = STATUS;
 
-  videos: any[] = [];
-  adminVideos: any[] = [];
-  ownVideos: any[] = [];
-  teamVideos: any[] = [];
-
-  pdfs: any[] = [];
-  adminPdfs: any[] = [];
-  ownPdfs: any[] = [];
-  teamPdfs: any[] = [];
-
-  images: any[] = [];
-  adminImages: any[] = [];
-  ownImages: any[] = [];
-  teamImages: any[] = [];
+  materials: any[] = [];
+  filteredMaterials: any[] = [];
+  selection: any[] = [];
 
   convertLoaderTimer;
   convertingVideos = [];
   videoConvertingLoadSubscription: Subscription;
 
-  videoLoadSubscription: Subscription;
-  pdfLoadSubscription: Subscription;
-  imageLoadSubscription: Subscription;
-
-  videoDeleteSubscription: Subscription;
-  pdfDeleteSubscription: Subscription;
-  imageDeleteSubscription: Subscription;
-
-  selectedVideoLists = new SelectionModel<any>(true, []);
-  selectedPdfLists = new SelectionModel<any>(true, []);
-  selectedImageLists = new SelectionModel<any>(true, []);
   captureVideos = [];
   editedVideos;
   capturePdfs = [];
   editedPdfs;
   captureImages = [];
   editedImages;
+
+  profileSubscription: Subscription;
+  garbageSubscription: Subscription;
+  loadSubscription: Subscription;
+  materialDeleteSubscription: Subscription;
+
+  // Search Option
+  selectedFolder: Material;
+  searchStr = '';
+  matType = '';
+  teamOptions = [];
+  userOptions = [];
+  isAdmin = false;
 
   constructor(
     private dialog: MatDialog,
@@ -85,30 +81,48 @@ export class MaterialsComponent implements OnInit {
     private userService: UserService,
     public teamService: TeamService,
     private toast: ToastrService,
-    private router: Router
+    private router: Router,
+    private clipboard: Clipboard
   ) {
-    this.loadVideos();
-    this.loadImages();
-    this.loadPdfs();
-    this.userService.profile$.subscribe((profile) => {
-      this.user = profile;
-      this.user_id = this.user._id;
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        this.user_id = profile._id;
+      }
+    );
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      const garbage = new Garbage().deserialize(res);
+      this.captureVideos = garbage['capture_videos'] || [];
+      this.editedVideos = garbage['edited_video'] || [];
+      this.capturePdfs = garbage['capture_pdfs'] || [];
+      this.editedPdfs = garbage['edited_pdf'] || [];
+      this.captureImages = garbage['capture_images'] || [];
+      this.editedImages = garbage['edited_image'] || [];
     });
-    this.userService.garbage$.subscribe((res) => {
-      this.garbage = new Garbage().deserialize(res);
-      this.captureVideos = this.garbage['capture_videos'] || [];
-      this.editedVideos = this.garbage['edited_video'] || [];
-      this.capturePdfs = this.garbage['capture_pdfs'] || [];
-      this.editedPdfs = this.garbage['edited_pdf'] || [];
-      this.captureImages = this.garbage['capture_images'] || [];
-      this.editedImages = this.garbage['edited_image'] || [];
-    });
+    this.loadSubscription = this.storeService.materials$.subscribe(
+      (materials) => {
+        materials.sort((a, b) => (a.folder ? -1 : 1));
+        this.materials = materials;
+        const folders = materials.filter((e) => {
+          return e.material_type === 'folder';
+        });
+        const materialFolderMatch = {};
+        folders.forEach((folder) => {
+          folder.shared_materials.forEach((e) => {
+            materialFolderMatch[e] = folder._id;
+          });
+        });
+        materials.forEach((e) => {
+          if (materialFolderMatch[e._id]) {
+            e.folder = materialFolderMatch[e._id];
+          }
+        });
+        this.filter();
+      }
+    );
   }
 
   ngOnInit(): void {
-    this.materialService.loadVideos(true);
-    this.materialService.loadPdfs(true);
-    this.materialService.loadImages(true);
+    this.materialService.loadMaterial(true);
     this.teamService.loadAll(true);
     this.convertLoaderTimer = setInterval(() => {
       if (this.convertingVideos.length) {
@@ -118,107 +132,130 @@ export class MaterialsComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
-    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
-    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
-    this.videoDeleteSubscription && this.videoDeleteSubscription.unsubscribe();
-    this.pdfDeleteSubscription && this.pdfDeleteSubscription.unsubscribe();
-    this.imageDeleteSubscription && this.imageDeleteSubscription.unsubscribe();
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.loadSubscription && this.loadSubscription.unsubscribe();
     clearInterval(this.convertLoaderTimer);
   }
 
-  changeTab(tab: TabItem): void {
-    this.selectedTab = tab;
-  }
-
-  loadVideos(): void {
-    this.videoLoadSubscription && this.videoLoadSubscription.unsubscribe();
-    this.videoLoadSubscription = this.storeService.videos$.subscribe(
-      (videos) => {
-        this.videos = videos;
-        this.adminVideos = [];
-        this.ownVideos = [];
-        this.teamVideos = [];
-        const videoIds = [];
-        videos.forEach((e) => {
-          if (videoIds.indexOf(e._id) !== -1) {
-            return;
-          }
-          if (e.converted !== 'completed' && e.converted !== 'disabled') {
-            this.convertingVideos.push(e._id);
-          }
-          if (e.role == 'admin') {
-            this.adminVideos.push(e);
-          } else if (e.role === 'team' && e.user !== this.user_id) {
-            this.teamVideos.push(e);
-          } else {
-            this.ownVideos.push(e);
-          }
-          videoIds.push(e._id);
-        });
-      }
+  isAllSelected(): boolean {
+    return (
+      this.filteredMaterials.length &&
+      this.selection.length === this.filteredMaterials.length
     );
   }
 
-  loadPdfs(): void {
-    this.pdfLoadSubscription && this.pdfLoadSubscription.unsubscribe();
-    this.pdfLoadSubscription = this.storeService.pdfs$.subscribe((pdfs) => {
-      this.pdfs = pdfs;
-      this.adminPdfs = [];
-      this.teamPdfs = [];
-      this.ownPdfs = [];
-      const pdfIds = [];
-      pdfs.forEach((e) => {
-        if (pdfIds.indexOf(e._id) !== -1) {
-          return;
-        }
-        if (e.role == 'admin') {
-          this.adminPdfs.push(e);
-        } else if (e.role == 'team' && e.user != this.user_id) {
-          this.teamPdfs.push(e);
-        } else {
-          this.ownPdfs.push(e);
-        }
-        pdfIds.push(e._id);
+  isSelected(element: Material): boolean {
+    const pos = this.selection.indexOf(element._id);
+    if (pos !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected()) {
+      this.selection = [];
+    } else {
+      this.selection = [];
+      this.filteredMaterials.forEach((e) => {
+        this.selection.push(e._id);
       });
-    });
+    }
+    this.changeCaptureAction();
   }
 
-  loadImages(): void {
-    this.imageLoadSubscription && this.imageLoadSubscription.unsubscribe();
-    this.imageLoadSubscription = this.storeService.images$.subscribe(
-      (images) => {
-        this.images = images;
-        this.adminImages = [];
-        this.ownImages = [];
-        this.teamImages = [];
-        const imageIds = [];
-        images.forEach((e) => {
-          if (imageIds.indexOf(e._id) !== -1) {
-            return;
-          }
-          if (e.role == 'admin') {
-            this.adminImages.push(e);
-          } else if (e.role == 'team' && e.user != this.user_id) {
-            this.teamImages.push(e);
-          } else {
-            this.ownImages.push(e);
-          }
-          imageIds.push(e._id);
+  toggleElement(element: Material): void {
+    const pos = this.selection.indexOf(element._id);
+    if (pos !== -1) {
+      this.selection.splice(pos, 1);
+    } else {
+      this.selection.push(element._id);
+    }
+    this.changeCaptureAction();
+  }
+
+  changeCaptureAction(): void {
+    // Check the lead capture Status
+    const selectedMaterials = this.filteredMaterials
+      .filter((e) => {
+        if (
+          e.material_type !== 'folder' &&
+          this.selection.indexOf(e._id) !== -1
+        ) {
+          return true;
+        }
+        return false;
+      })
+      .map((e) => e._id);
+    // Check the lead Capture Status
+    const _intersection = _.intersection(selectedMaterials, [
+      ...this.captureVideos,
+      ...this.capturePdfs,
+      ...this.captureImages
+    ]);
+    const bulkSetCapture = this.ACTIONS.filter(
+      (action) => action.label == 'Lead Capture'
+    );
+    if (_intersection.length === selectedMaterials.length) {
+      // Enable the Lead Capture Status
+      bulkSetCapture[0].status = true;
+    } else {
+      // Disable the Lead Capture Status
+      bulkSetCapture[0].status = false;
+    }
+  }
+
+  filterEx(): void {
+    this.selection = [];
+    if (this.searchStr) {
+      const reg = new RegExp(this.searchStr, 'gi');
+      if (!this.selectedFolder) {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return reg.test(e.title);
+        });
+      } else {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return e.folder === this.selectedFolder._id && reg.test(e.title);
         });
       }
-    );
+    } else {
+      if (!this.selectedFolder) {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return !e.folder || e.type === 'folder';
+        });
+      } else {
+        this.filteredMaterials = this.materials.filter((e) => {
+          return e.folder === this.selectedFolder._id;
+        });
+      }
+    }
   }
 
-  createVideo(): void {
-    this.router.navigate([`./materials/${this.selectedTab.id}`]);
+  clearSearchStr(): void {
+    this.searchStr = '';
+    this.filter();
+    // if (!this.selectedFolder) {
+    //   this.filteredMaterials = this.materials.filter((e) => {
+    //     return !e.folder || e.type === 'folder';
+    //   });
+    // } else {
+    //   this.filteredMaterials = this.materials.filter((e) => {
+    //     return e.folder === this.selectedFolder._id;
+    //   });
+    // }
+  }
+
+  createMaterial(type): void {
+    this.router.navigate([`./materials/${type}`]);
   }
 
   selectFolder(type: string): void {
     this.router.navigate([`./materials/folder/${type}`]);
   }
 
-  sendMaterial(material: any, type: string): void {
+  sendMaterial(material: Material): void {
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',
@@ -226,29 +263,28 @@ export class MaterialsComponent implements OnInit {
       disableClose: true,
       data: {
         material: [material],
-        materialType: type
+        type: 'email'
       }
     });
   }
 
-  copyLink(material: any, type: string): void {
+  copyLink(material: Material): void {
     let url;
-
-    if (type == 'video') {
+    if (material.material_type == 'video') {
       url =
         environment.website +
         '/video?video=' +
         material._id +
         '&user=' +
         this.user_id;
-    } else if (type == 'pdf') {
+    } else if (material.material_type == 'pdf') {
       url =
         environment.website +
         '/pdf?pdf=' +
         material._id +
         '&user=' +
         this.user_id;
-    } else if (type == 'image') {
+    } else if (material.material_type == 'image') {
       url =
         environment.website +
         '/image?image=' +
@@ -256,238 +292,79 @@ export class MaterialsComponent implements OnInit {
         '&user=' +
         this.user_id;
     }
-    const el = document.createElement('textarea');
-    el.value = url;
-    el.setAttribute('readonly', '');
-    el.style.position = 'absolute';
-    el.style.left = '-9999px';
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
+    this.clipboard.copy(url);
     this.toast.success('Copied the link to clipboard');
   }
 
-  selectAllPage(type: string): void {
-    const bulkSetCapture = this.BULK_ACTIONS.filter(
-      (action) => action.label == 'Lead Capture'
-    );
-    switch (type) {
-      case 'video':
-        if (this.isSelectedPage(type)) {
-          this.selectedVideoLists.clear();
-        } else {
-          this.ownVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-          this.adminVideos.forEach((e) =>
-            this.selectedVideoLists.select(e._id)
-          );
-          this.teamVideos.forEach((e) => this.selectedVideoLists.select(e._id));
-        }
-        const videoCaptureStatus = this.selectedVideoLists.selected.every(
-          (video) => this.captureVideos.includes(video)
-        );
-        if (videoCaptureStatus) {
-          bulkSetCapture[0].status = true;
-        } else {
-          bulkSetCapture[0].status = false;
-        }
-        break;
-      case 'pdf':
-        if (this.isSelectedPage(type)) {
-          this.selectedPdfLists.clear();
-        } else {
-          this.ownPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.adminPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-          this.teamPdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-        }
-        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
-          this.capturePdfs.includes(pdf)
-        );
-        if (pdfCaptureStatus) {
-          bulkSetCapture[0].status = true;
-        } else {
-          bulkSetCapture[0].status = false;
-        }
-        break;
-      case 'image':
-        if (this.isSelectedPage(type)) {
-          this.selectedImageLists.clear();
-        } else {
-          this.ownImages.forEach((e) => this.selectedImageLists.select(e._id));
-          this.adminImages.forEach((e) =>
-            this.selectedImageLists.select(e._id)
-          );
-          this.teamImages.forEach((e) => this.selectedImageLists.select(e._id));
-        }
-        const imageCaptureStatus = this.selectedImageLists.selected.every(
-          (image) => this.captureImages.includes(image)
-        );
-        if (imageCaptureStatus) {
-          bulkSetCapture[0].status = true;
-        } else {
-          bulkSetCapture[0].status = false;
-        }
-        break;
+  editMaterial(material: Material): void {
+    if (material.material_type === 'video') {
+      this.editVideo(material);
+    } else if (material.material_type === 'pdf') {
+      this.editPdf(material);
+    } else if (material.material_type === 'image') {
+      this.editImage(material);
     }
   }
 
-  isSelectedPage(type: string): any {
-    switch (type) {
+  setCapture(material: Material): void {
+    const updateData = {};
+    let pos;
+    switch (material.material_type) {
       case 'video':
-        const videoCounts =
-          this.adminVideos.length +
-          this.ownVideos.length +
-          this.teamVideos.length;
-        const selectedVideoCounts = this.selectedVideoLists.selected.length;
-        return videoCounts == selectedVideoCounts;
-      case 'pdf':
-        const pdfCounts =
-          this.adminPdfs.length + this.ownPdfs.length + this.teamPdfs.length;
-        const selectedPdfCounts = this.selectedPdfLists.selected.length;
-        return pdfCounts == selectedPdfCounts;
-      case 'image':
-        const imageCounts =
-          this.adminImages.length +
-          this.ownImages.length +
-          this.teamImages.length;
-        const selectedImageCounts = this.selectedImageLists.selected.length;
-        return imageCounts == selectedImageCounts;
-    }
-  }
-
-  selectMaterial(material_id: string, type: string): void {
-    const bulkSetCapture = this.BULK_ACTIONS.filter(
-      (action) => action.label == 'Lead Capture'
-    );
-    switch (type) {
-      case 'video':
-        this.selectedVideoLists.toggle(material_id);
-        const videoCaptureStatus = this.selectedVideoLists.selected.every(
-          (video) => this.captureVideos.includes(video)
-        );
-        if (videoCaptureStatus) {
-          bulkSetCapture[0].status = true;
+        pos = this.captureVideos.indexOf(material._id);
+        const capturedVideos = [...this.captureVideos];
+        if (pos !== -1) {
+          capturedVideos.splice(pos, 1);
         } else {
-          bulkSetCapture[0].status = false;
+          capturedVideos.push(material._id);
         }
+        updateData['capture_videos'] = capturedVideos;
         break;
       case 'pdf':
-        this.selectedPdfLists.toggle(material_id);
-        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
-          this.capturePdfs.includes(pdf)
-        );
-        if (pdfCaptureStatus) {
-          bulkSetCapture[0].status = true;
+        pos = this.capturePdfs.indexOf(material._id);
+        const capturedPdfs = [...this.capturePdfs];
+        if (pos !== -1) {
+          capturedPdfs.splice(pos, 1);
         } else {
-          bulkSetCapture[0].status = false;
+          capturedPdfs.push(material._id);
         }
+        updateData['capture_pdfs'] = capturedPdfs;
         break;
       case 'image':
-        this.selectedImageLists.toggle(material_id);
-        const imageCaptureStatus = this.selectedImageLists.selected.every(
-          (image) => this.captureImages.includes(image)
-        );
-        if (imageCaptureStatus) {
-          bulkSetCapture[0].status = true;
+        pos = this.captureImages.indexOf(material._id);
+        const capturedImages = [...this.captureImages];
+        if (pos !== -1) {
+          capturedImages.splice(pos, 1);
         } else {
-          bulkSetCapture[0].status = false;
+          capturedImages.push(material._id);
         }
+        updateData['capture_images'] = capturedImages;
         break;
     }
+    this.userService.updateGarbage(updateData).subscribe((status) => {
+      if (status) {
+        this.userService.updateGarbageImpl(updateData);
+        this.changeCaptureAction();
+      }
+    });
   }
 
-  setCapture(material_id: string, type: string): void {
-    const bulkSetCapture = this.BULK_ACTIONS.filter(
-      (action) => action.label == 'Lead Capture'
-    );
-    switch (type) {
-      case 'video':
-        if (this.captureVideos.indexOf(material_id) === -1) {
-          this.captureVideos.push(material_id);
-          this.garbage.capture_videos = this.captureVideos;
-          this.userService
-            .updateGarbage({ capture_videos: this.captureVideos })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-        } else {
-          const pos = this.captureVideos.indexOf(material_id);
-          this.captureVideos.splice(pos, 1);
-          this.garbage.capture_videos = [];
-          this.garbage.capture_videos = this.captureVideos;
-          this.userService
-            .updateGarbage({ capture_videos: this.captureVideos })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-        }
-        const videoCaptureStatus = this.selectedVideoLists.selected.every(
-          (video) => this.captureVideos.includes(video)
-        );
-        if (videoCaptureStatus) {
-          bulkSetCapture[0].status = true;
-        } else {
-          bulkSetCapture[0].status = false;
-        }
-        break;
-      case 'pdf':
-        if (this.capturePdfs.indexOf(material_id) === -1) {
-          this.capturePdfs.push(material_id);
-          this.garbage.capture_pdfs = this.capturePdfs;
-          this.userService
-            .updateGarbage({ capture_pdfs: this.capturePdfs })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-        } else {
-          const pos = this.capturePdfs.indexOf(material_id);
-          this.capturePdfs.splice(pos, 1);
-          this.garbage.capture_pdfs = [];
-          this.garbage.capture_pdfs = this.capturePdfs;
-          this.userService
-            .updateGarbage({ capture_pdfs: this.capturePdfs })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-        }
-        const pdfCaptureStatus = this.selectedPdfLists.selected.every((pdf) =>
-          this.capturePdfs.includes(pdf)
-        );
-        if (pdfCaptureStatus) {
-          bulkSetCapture[0].status = true;
-        } else {
-          bulkSetCapture[0].status = false;
-        }
-        break;
-      case 'image':
-        if (this.captureImages.indexOf(material_id) === -1) {
-          this.captureImages.push(material_id);
-          this.garbage.capture_images = this.captureImages;
-          this.userService
-            .updateGarbage({ capture_images: this.captureImages })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-        } else {
-          const pos = this.captureImages.indexOf(material_id);
-          this.captureImages.splice(pos, 1);
-          this.garbage.capture_images = [];
-          this.garbage.capture_images = this.captureImages;
-          this.userService
-            .updateGarbage({ capture_images: this.captureImages })
-            .subscribe(() => {
-              this.userService.updateGarbageImpl(this.garbage);
-            });
-        }
-        const imageCaptureStatus = this.selectedImageLists.selected.every(
-          (image) => this.captureImages.includes(image)
-        );
-        if (imageCaptureStatus) {
-          bulkSetCapture[0].status = true;
-        } else {
-          bulkSetCapture[0].status = false;
-        }
-        break;
+  isCaptured(material: Material): boolean {
+    if (material.material_type === 'video') {
+      if (this.captureVideos.indexOf(material._id) !== -1) {
+        return true;
+      }
+      return false;
+    } else if (material.material_type === 'pdf') {
+      if (this.capturePdfs.indexOf(material._id) !== -1) {
+        return true;
+      }
+      return false;
+    } else if (material.material_type === 'image') {
+      if (this.captureImages.indexOf(material._id) !== -1) {
+        return true;
+      }
+      return false;
     }
   }
 
@@ -513,19 +390,22 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (video.role === 'admin') {
-            this.adminVideos.some((e, index) => {
-              if (e._id == video._id) {
-                this.adminVideos.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === video._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([video._id]);
             this.editedVideos.push(video._id);
             this.userService
               .updateGarbage({
                 edited_video: this.editedVideos
               })
               .subscribe(() => {
-                this.userService.updateGarbageImpl(this.garbage);
+                this.userService.updateGarbageImpl({
+                  edited_video: this.editedVideos
+                });
               });
             const newVideo = {
               ...video,
@@ -535,11 +415,12 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['thumbnail'],
               default_edited: true
             };
-            this.ownVideos.push(newVideo);
+            this.materialService.create$(newVideo);
           } else {
             video.title = res['data']['title'];
             video.description = res['data']['description'];
             video.thumbnail = res['data']['thumbnail'];
+            this.materialService.update$(video._id, res['data']);
           }
         }
       });
@@ -567,19 +448,22 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (pdf.role === 'admin') {
-            this.adminPdfs.some((e, index) => {
-              if (e._id === pdf._id) {
-                this.adminPdfs.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === pdf._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([pdf._id]);
             this.editedPdfs.push(pdf._id);
             this.userService
               .updateGarbage({
                 edited_pdf: this.editedPdfs
               })
               .subscribe(() => {
-                this.userService.updateGarbageImpl(this.garbage);
+                this.userService.updateGarbageImpl({
+                  edited_pdf: this.editedPdfs
+                });
               });
             const newPdf = {
               ...pdf,
@@ -589,11 +473,13 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['preview'],
               default_edited: true
             };
-            this.ownPdfs.push(newPdf);
+            // this.materials.push(newPdf);
+            this.materialService.create$(newPdf);
           } else {
             pdf.title = res['data']['title'];
             pdf.description = res['data']['description'];
             pdf.preview = res['data']['preview'];
+            this.materialService.update$(pdf._id, res['data']);
           }
         }
       });
@@ -620,19 +506,22 @@ export class MaterialsComponent implements OnInit {
       .subscribe((res) => {
         if (res && res['status']) {
           if (image.role === 'admin') {
-            this.adminImages.some((e, index) => {
-              if (e._id == image._id) {
-                this.adminImages.splice(index, 1);
-                return true;
-              }
-            });
+            // this.materials.some((e, index) => {
+            //   if (e._id === image._id) {
+            //     this.materials.splice(index, 1);
+            //     return true;
+            //   }
+            // });
+            this.materialService.delete$([image._id]);
             this.editedImages.push(image._id);
             this.userService
               .updateGarbage({
                 edited_image: this.editedImages
               })
               .subscribe(() => {
-                this.userService.updateGarbageImpl(this.garbage);
+                this.userService.updateGarbageImpl({
+                  edited_image: this.editedImages
+                });
               });
             const newImage = {
               ...image,
@@ -642,18 +531,20 @@ export class MaterialsComponent implements OnInit {
               thumbnail: res['data']['preview'],
               default_edited: true
             };
-            this.ownImages.push(newImage);
+            // this.materials.push(newImage);
+            this.materialService.create$(newImage);
           } else {
             image.title = res['data']['title'];
             image.description = res['data']['description'];
             image.preview = res['data']['preview'];
+            this.materialService.update$(image._id, res['data']);
           }
         }
       });
   }
 
-  duplicateMaterial(material: any, type: string): void {
-    switch (type) {
+  duplicateMaterial(material: any): void {
+    switch (material.material_type) {
       case 'video':
         this.dialog
           .open(VideoEditComponent, {
@@ -686,7 +577,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.ownVideos.push(newVideo);
+              // this.materials.push(newVideo);
+              this.materialService.create$(newVideo);
             }
           });
         break;
@@ -721,7 +613,8 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.ownPdfs.push(newPdf);
+              // this.materials.push(newPdf);
+              this.materialService.create$(newPdf);
             }
           });
         break;
@@ -756,15 +649,16 @@ export class MaterialsComponent implements OnInit {
                 role: 'user',
                 default_edited: true
               };
-              this.ownImages.push(newImage);
+              // this.materials.push(newImage);
+              this.materialService.create$(newImage);
             }
           });
         break;
     }
   }
 
-  deleteMaterial(material: any, type: string): void {
-    switch (type) {
+  deleteMaterial(material: any): void {
+    switch (material.material_type) {
       case 'video':
         const videoConfirmDialog = this.dialog.open(ConfirmComponent, {
           position: { top: '100px' },
@@ -788,16 +682,13 @@ export class MaterialsComponent implements OnInit {
                   })
                   .subscribe(() => {
                     this.editedVideos.push(material._id);
-                    this.userService.updateGarbageImpl(this.garbage);
-                    this.adminVideos.some((e, index) => {
-                      if (e._id == material._id) {
-                        if (this.selectedPdfLists.isSelected(material)) {
-                          this.selectedPdfLists.deselect(material);
-                        }
-                        this.adminVideos.splice(index, 1);
-                        return true;
-                      }
+                    this.userService.updateGarbageImpl({
+                      edited_video: this.editedVideos
                     });
+                    if (this.isSelected(material)) {
+                      this.toggleElement(material);
+                    }
+                    this.materialService.delete$([material._id]);
                   });
               }
             }
@@ -805,79 +696,15 @@ export class MaterialsComponent implements OnInit {
         } else {
           videoConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
-              this.videoDeleteSubscription &&
-                this.videoDeleteSubscription.unsubscribe();
-              this.videoDeleteSubscription = this.materialService
+              this.materialDeleteSubscription &&
+                this.materialDeleteSubscription.unsubscribe();
+              this.materialDeleteSubscription = this.materialService
                 .deleteVideo(material._id)
                 .subscribe((res) => {
-                  this.ownVideos.some((e, index) => {
-                    if (e._id == material._id) {
-                      if (this.selectedVideoLists.isSelected(material)) {
-                        this.selectedVideoLists.deselect(material);
-                      }
-                      this.ownVideos.splice(index, 1);
-                      return true;
-                    }
-                  });
-                });
-            }
-          });
-        }
-        break;
-      case 'pdf':
-        const pdfConfirmDialog = this.dialog.open(ConfirmComponent, {
-          position: { top: '100px' },
-          data: {
-            title: 'Delete Pdf',
-            message: 'Are you sure to delete this pdf?',
-            confirmLabel: 'Delete',
-            cancelLabel: 'Cancel'
-          }
-        });
-        if (material.role == 'admin') {
-          pdfConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
-              const pos = this.editedPdfs.indexOf(material._id);
-              if (pos != -1) {
-                return;
-              } else {
-                this.userService
-                  .updateGarbage({
-                    edited_pdf: [...this.editedPdfs, material._id]
-                  })
-                  .subscribe(() => {
-                    this.editedPdfs.push(material._id);
-                    this.userService.updateGarbageImpl(this.garbage);
-                    this.adminPdfs.some((e, index) => {
-                      if (e._id == material._id) {
-                        if (this.selectedPdfLists.isSelected(material)) {
-                          this.selectedPdfLists.deselect(material);
-                        }
-                        this.adminPdfs.splice(index, 1);
-                        return true;
-                      }
-                    });
-                  });
-              }
-            }
-          });
-        } else {
-          pdfConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
-              this.pdfDeleteSubscription &&
-                this.pdfDeleteSubscription.unsubscribe();
-              this.pdfDeleteSubscription = this.materialService
-                .deletePdf(material._id)
-                .subscribe((res) => {
-                  this.ownPdfs.some((e, index) => {
-                    if (e._id == material._id) {
-                      if (this.selectedPdfLists.isSelected(material)) {
-                        this.selectedPdfLists.deselect(material);
-                      }
-                      this.ownPdfs.splice(index, 1);
-                      return true;
-                    }
-                  });
+                  if (this.isSelected(material)) {
+                    this.toggleElement(material);
+                  }
+                  this.materialService.delete$([material._id]);
                 });
             }
           });
@@ -906,16 +733,13 @@ export class MaterialsComponent implements OnInit {
                   })
                   .subscribe(() => {
                     this.editedImages.push(material._id);
-                    this.userService.updateGarbageImpl(this.garbage);
-                    this.adminImages.some((e, index) => {
-                      if (e._id == material._id) {
-                        if (this.selectedImageLists.isSelected(material)) {
-                          this.selectedImageLists.deselect(material);
-                        }
-                        this.adminImages.splice(index, 1);
-                        return true;
-                      }
+                    this.userService.updateGarbageImpl({
+                      edited_image: this.editedImages
                     });
+                    if (this.isSelected(material)) {
+                      this.toggleElement(material);
+                    }
+                    this.materialService.delete$([material._id]);
                   });
               }
             }
@@ -923,20 +747,66 @@ export class MaterialsComponent implements OnInit {
         } else {
           imageConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
-              this.imageDeleteSubscription &&
-                this.imageDeleteSubscription.unsubscribe();
-              this.imageDeleteSubscription = this.materialService
+              this.materialDeleteSubscription &&
+                this.materialDeleteSubscription.unsubscribe();
+              this.materialDeleteSubscription = this.materialService
                 .deleteImage(material._id)
                 .subscribe((res) => {
-                  this.ownImages.some((e, index) => {
-                    if (e._id == material._id) {
-                      if (this.selectedImageLists.isSelected(material)) {
-                        this.selectedImageLists.deselect(material);
-                      }
-                      this.ownImages.splice(index, 1);
-                      return true;
+                  if (this.isSelected(material)) {
+                    this.toggleElement(material);
+                  }
+                  this.materialService.delete$([material._id]);
+                });
+            }
+          });
+        }
+        break;
+      case 'pdf':
+        const pdfConfirmDialog = this.dialog.open(ConfirmComponent, {
+          position: { top: '100px' },
+          data: {
+            title: 'Delete Pdf',
+            message: 'Are you sure to delete this pdf?',
+            confirmLabel: 'Delete',
+            cancelLabel: 'Cancel'
+          }
+        });
+        if (material.role == 'admin') {
+          pdfConfirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              const pos = this.editedPdfs.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_pdf: [...this.editedPdfs, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedPdfs.push(material._id);
+                    this.userService.updateGarbageImpl({
+                      edited_pdf: this.editedPdfs
+                    });
+                    if (this.isSelected(material)) {
+                      this.toggleElement(material);
                     }
+                    this.materialService.delete$([material._id]);
                   });
+              }
+            }
+          });
+        } else {
+          pdfConfirmDialog.afterClosed().subscribe((res) => {
+            if (res) {
+              this.materialDeleteSubscription &&
+                this.materialDeleteSubscription.unsubscribe();
+              this.materialDeleteSubscription = this.materialService
+                .deletePdf(material._id)
+                .subscribe((res) => {
+                  if (this.isSelected(material)) {
+                    this.toggleElement(material);
+                  }
+                  this.materialService.delete$([material._id]);
                 });
             }
           });
@@ -945,7 +815,7 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-  editTemplate(material_id: string): void {
+  editTemplate(material: Material): void {
     this.dialog.open(MaterialEditTemplateComponent, {
       position: { top: '10vh' },
       width: '100vw',
@@ -953,7 +823,8 @@ export class MaterialsComponent implements OnInit {
       height: '550px',
       disableClose: true,
       data: {
-        id: material_id
+        id: material._id,
+        type: material.material_type
       }
     });
   }
@@ -973,234 +844,96 @@ export class MaterialsComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.ownVideos.push(res.data);
+          this.materials.push(res.data);
         }
       });
   }
 
   doAction(evt: any): void {
-    switch (evt.label) {
-      case 'Send via e-mail':
-        const emailMaterial = [];
-        if (this.selectedTab.id == 'video') {
-          this.selectedVideoLists.selected.forEach((id) => {
-            this.videos.forEach((video) => {
-              if (video._id == id) {
-                emailMaterial.push(video);
-              }
-            });
-          });
-        } else if (this.selectedTab.id == 'pdf') {
-          this.selectedPdfLists.selected.forEach((id) => {
-            this.pdfs.forEach((pdf) => {
-              if (pdf._id == id) {
-                emailMaterial.push(pdf);
-              }
-            });
-          });
-        } else {
-          this.selectedImageLists.selected.forEach((id) => {
-            this.images.forEach((image) => {
-              if (image._id == id) {
-                emailMaterial.push(image);
-              }
-            });
-          });
-        }
+    const selectedMaterials = this.filteredMaterials.filter((e) => {
+      if (
+        e.material_type !== 'folder' &&
+        this.selection.indexOf(e._id) !== -1
+      ) {
+        return true;
+      }
+      return false;
+    });
+    switch (evt.command) {
+      case 'email':
         this.dialog.open(MaterialSendComponent, {
           position: { top: '5vh' },
-          width: '100vw',
+          width: '96vw',
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: emailMaterial,
-            type: 'email',
-            materialType: this.selectedTab.id
+            material: selectedMaterials,
+            type: 'email'
           }
         });
         break;
-      case 'Send via SMS':
-        const textMaterial = [];
-        if (this.selectedTab.id == 'video') {
-          this.selectedVideoLists.selected.forEach((id) => {
-            this.videos.forEach((video) => {
-              if (video._id == id) {
-                textMaterial.push(video);
-              }
-            });
-          });
-        } else if (this.selectedTab.id == 'pdf') {
-          this.selectedPdfLists.selected.forEach((id) => {
-            this.pdfs.forEach((pdf) => {
-              if (pdf._id == id) {
-                textMaterial.push(pdf);
-              }
-            });
-          });
-        } else {
-          this.selectedImageLists.selected.forEach((id) => {
-            this.images.forEach((image) => {
-              if (image._id == id) {
-                textMaterial.push(image);
-              }
-            });
-          });
-        }
+      case 'text':
         this.dialog.open(MaterialSendComponent, {
           position: { top: '5vh' },
-          width: '100vw',
+          width: '96vw',
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: textMaterial,
-            type: 'text',
-            materialType: this.selectedTab.id
+            material: selectedMaterials,
+            type: 'text'
           }
         });
         break;
-      case 'Select all':
-        if (this.selectedTab.id == 'video') {
-          this.videos.forEach((e) => this.selectedVideoLists.select(e._id));
-        } else if (this.selectedTab.id == 'pdf') {
-          this.pdfs.forEach((e) => this.selectedPdfLists.select(e._id));
-        } else {
-          this.images.forEach((e) => this.selectedImageLists.select(e._id));
-        }
+      case 'deselect':
+        this.selection = [];
         break;
-      case 'Deselect':
-        if (this.selectedTab.id == 'video') {
-          this.selectedVideoLists.clear();
-        } else if (this.selectedTab.id == 'pdf') {
-          this.selectedPdfLists.clear();
-        } else {
-          this.selectedImageLists.clear();
-        }
-        break;
-      case 'Lead Capture':
-        const bulkSetCapture = this.BULK_ACTIONS.filter(
+      case 'lead_capture':
+        const bulkSetCapture = this.ACTIONS.filter(
           (action) => action.label == 'Lead Capture'
         );
-        switch (this.selectedTab.id) {
-          case 'video':
-            if (bulkSetCapture[0].status) {
-              this.selectedVideoLists.selected.forEach((video) => {
-                const pos = this.captureVideos.indexOf(video);
-                if (pos != -1) {
-                  this.captureVideos.splice(pos, 1);
-                }
-              });
-              this.garbage.capture_videos = [];
-              this.garbage.capture_videos = this.captureVideos;
-              this.userService
-                .updateGarbage({
-                  capture_videos: this.captureVideos
-                })
-                .subscribe(() => {
-                  this.userService.updateGarbageImpl(this.garbage);
-                });
-              bulkSetCapture[0].status = false;
-            } else {
-              this.selectedVideoLists.selected.forEach((video) => {
-                const pos = this.captureVideos.indexOf(video);
-                if (pos == -1) {
-                  this.captureVideos.push(video);
-                }
-              });
-              this.garbage.capture_videos = [];
-              this.garbage.capture_videos = this.captureVideos;
-              this.userService
-                .updateGarbage({
-                  capture_videos: this.captureVideos
-                })
-                .subscribe(() => {
-                  this.userService.updateGarbageImpl(this.garbage);
-                });
-              bulkSetCapture[0].status = true;
+        if (bulkSetCapture[0].status) {
+          _.pullAll(this.captureVideos, this.selection);
+          _.pullAll(this.capturePdfs, this.selection);
+          _.pullAll(this.captureImages, this.selection);
+        } else {
+          const selectedVideos = [];
+          const selectedPdfs = [];
+          const selectedImages = [];
+          selectedMaterials.forEach((e) => {
+            if (e.material_type === 'video') {
+              selectedVideos.push(e._id);
+            } else if (e.material_type === 'pdf') {
+              selectedPdfs.push(e._id);
+            } else if (e.material_type === 'image') {
+              selectedImages.push(e._id);
             }
-            break;
-          case 'pdf':
-            if (bulkSetCapture[0].status) {
-              this.selectedPdfLists.selected.forEach((pdf) => {
-                const pos = this.capturePdfs.indexOf(pdf);
-                if (pos != -1) {
-                  this.capturePdfs.splice(pos, 1);
-                }
-              });
-              this.garbage.capture_pdfs = [];
-              this.garbage.capture_pdfs = this.capturePdfs;
-              this.userService
-                .updateGarbage({
-                  capture_pdfs: this.capturePdfs
-                })
-                .subscribe(() => {
-                  this.userService.updateGarbageImpl(this.garbage);
-                });
-              bulkSetCapture[0].status = false;
-            } else {
-              this.selectedPdfLists.selected.forEach((pdf) => {
-                const pos = this.capturePdfs.indexOf(pdf);
-                if (pos == -1) {
-                  this.capturePdfs.push(pdf);
-                }
-              });
-              this.garbage.capture_pdfs = [];
-              this.garbage.capture_pdfs = this.capturePdfs;
-              this.userService
-                .updateGarbage({
-                  capture_pdfs: this.capturePdfs
-                })
-                .subscribe(() => {
-                  this.userService.updateGarbageImpl(this.garbage);
-                });
-              bulkSetCapture[0].status = true;
-            }
-            break;
-          case 'image':
-            if (bulkSetCapture[0].status) {
-              this.selectedImageLists.selected.forEach((image) => {
-                const pos = this.captureImages.indexOf(image);
-                if (pos != -1) {
-                  this.captureImages.splice(pos, 1);
-                }
-              });
-              this.garbage.capture_images = [];
-              this.garbage.capture_images = this.captureImages;
-              this.userService
-                .updateGarbage({
-                  capture_images: this.captureImages
-                })
-                .subscribe(() => {
-                  this.userService.updateGarbageImpl(this.garbage);
-                });
-              bulkSetCapture[0].status = false;
-            } else {
-              this.selectedImageLists.selected.forEach((image) => {
-                const pos = this.captureImages.indexOf(image);
-                if (pos == -1) {
-                  this.captureImages.push(image);
-                }
-              });
-              this.garbage.capture_images = [];
-              this.garbage.capture_images = this.captureImages;
-              this.userService
-                .updateGarbage({
-                  capture_images: this.captureImages
-                })
-                .subscribe(() => {
-                  this.userService.updateGarbageImpl(this.garbage);
-                });
-              bulkSetCapture[0].status = true;
-            }
-            break;
+          });
+          this.captureVideos = _.union(this.captureVideos, selectedVideos);
+          this.captureImages = _.union(this.captureImages, selectedImages);
+          this.capturePdfs = _.union(this.capturePdfs, selectedPdfs);
         }
+        this.userService
+          .updateGarbage({
+            capture_videos: this.captureVideos,
+            capture_images: this.captureImages,
+            capture_pdfs: this.capturePdfs
+          })
+          .subscribe((status) => {
+            if (status) {
+              this.userService.updateGarbageImpl({
+                capture_videos: this.captureVideos,
+                capture_images: this.captureImages,
+                capture_pdfs: this.capturePdfs
+              });
+            }
+          });
+        this.changeCaptureAction();
         break;
-      case 'Delete':
-        if (
-          this.selectedVideoLists.selected.length +
-            this.selectedPdfLists.selected.length +
-            this.selectedImageLists.selected.length ==
-          0
-        ) {
+      case 'folder':
+        this.moveToFolder();
+        break;
+      case 'delete':
+        if (!this.selection.length) {
           return;
         } else {
           const confirmDialog = this.dialog.open(ConfirmComponent, {
@@ -1214,140 +947,89 @@ export class MaterialsComponent implements OnInit {
           });
           confirmDialog.afterClosed().subscribe((res) => {
             if (res) {
-              if (this.selectedVideoLists.selected.length > 0) {
-                this.selectedVideoLists.selected.forEach((e) => {
-                  const deleteVideo = this.videos.filter(
-                    (video) => video._id == e
+              const selectedAdminVideos = [];
+              const selectedAdminPdfs = [];
+              const selectedAdminImages = [];
+              const selectedVideos = [];
+              const selectedPdfs = [];
+              const selectedImages = [];
+              selectedMaterials.forEach((e) => {
+                if (e.material_type === 'video') {
+                  if (e.role === 'admin') {
+                    selectedAdminVideos.push(e._id);
+                  } else {
+                    selectedVideos.push(e._id);
+                  }
+                } else if (e.material_type === 'pdf') {
+                  if (e.role === 'admin') {
+                    selectedAdminPdfs.push(e._id);
+                  } else {
+                    selectedPdfs.push(e._id);
+                  }
+                } else if (e.material_type === 'image') {
+                  if (e.role === 'admin') {
+                    selectedAdminImages.push(e._id);
+                  } else {
+                    selectedImages.push(e._id);
+                  }
+                }
+              });
+              if (
+                selectedAdminVideos.length ||
+                selectedAdminPdfs.length ||
+                selectedAdminImages.length
+              ) {
+                const updateData = {};
+                if (selectedAdminVideos.length) {
+                  const editedVideos = _.union(
+                    this.editedVideos,
+                    selectedAdminVideos
                   );
-                  if (deleteVideo[0].role == 'admin') {
-                    const pos = this.editedVideos.indexOf(deleteVideo[0]._id);
-
-                    if (pos != -1) {
-                      return;
-                    } else {
-                      this.editedVideos.push(deleteVideo[0]._id);
-                      this.adminVideos.some((e, index) => {
-                        if (e._id == deleteVideo[0]._id) {
-                          if (
-                            this.selectedVideoLists.isSelected(deleteVideo[0])
-                          ) {
-                            this.selectedVideoLists.deselect(deleteVideo[0]);
-                          }
-                          this.adminVideos.splice(index, 1);
-                        }
-                      });
-                    }
-                  } else {
-                    this.videoDeleteSubscription &&
-                      this.videoDeleteSubscription.unsubscribe();
-                    this.videoDeleteSubscription = this.materialService
-                      .deleteVideo(deleteVideo[0]._id)
-                      .subscribe((res) => {
-                        this.ownVideos.some((e, index) => {
-                          if (e._id == deleteVideo[0]._id) {
-                            if (
-                              this.selectedVideoLists.isSelected(deleteVideo[0])
-                            ) {
-                              this.selectedVideoLists.deselect(deleteVideo[0]);
-                            }
-                            this.ownVideos.splice(index, 1);
-                          }
-                        });
-                      });
-                  }
-                });
-              }
-              if (this.selectedPdfLists.selected.length > 0) {
-                this.selectedPdfLists.selected.forEach((e) => {
-                  const deletePdf = this.pdfs.filter((pdf) => pdf._id == e);
-                  if (deletePdf[0].role == 'admin') {
-                    const pos = this.editedPdfs.indexOf(deletePdf[0]._id);
-
-                    if (pos != -1) {
-                      return;
-                    } else {
-                      this.editedPdfs.push(deletePdf[0]._id);
-                      this.adminPdfs.some((e, index) => {
-                        if (e._id == deletePdf[0]._id) {
-                          if (this.selectedPdfLists.isSelected(deletePdf[0])) {
-                            this.selectedPdfLists.deselect(deletePdf[0]);
-                          }
-                          this.adminPdfs.splice(index, 1);
-                        }
-                      });
-                    }
-                  } else {
-                    this.pdfDeleteSubscription &&
-                      this.pdfDeleteSubscription.unsubscribe();
-                    this.pdfDeleteSubscription = this.materialService
-                      .deletePdf(deletePdf[0]._id)
-                      .subscribe((res) => {
-                        this.ownPdfs.some((e, index) => {
-                          if (e._id == deletePdf[0]._id) {
-                            if (
-                              this.selectedPdfLists.isSelected(deletePdf[0])
-                            ) {
-                              this.selectedPdfLists.deselect(deletePdf[0]);
-                            }
-                            this.ownPdfs.splice(index, 1);
-                          }
-                        });
-                      });
-                  }
-                });
-              }
-              if (this.selectedImageLists.selected.length > 0) {
-                this.selectedImageLists.selected.forEach((e) => {
-                  const deleteImage = this.images.filter(
-                    (image) => image._id == e
+                  updateData['edited_video'] = editedVideos;
+                }
+                if (selectedAdminPdfs.length) {
+                  const editedPdfs = _.union(
+                    this.editedPdfs,
+                    selectedAdminPdfs
                   );
-                  if (deleteImage[0].role == 'admin') {
-                    const pos = this.editedImages.indexOf(deleteImage[0]._id);
+                  updateData['edited_pdf'] = editedPdfs;
+                }
+                if (selectedAdminImages.length) {
+                  const editedImages = _.union(
+                    this.editedImages,
+                    selectedAdminImages
+                  );
+                  updateData['edited_image'] = editedImages;
+                }
 
-                    if (pos != -1) {
-                      return;
-                    } else {
-                      this.editedImages.push(deleteImage[0]._id);
-                      this.adminImages.some((e, index) => {
-                        if (e._id == deleteImage[0]._id) {
-                          if (
-                            this.selectedImageLists.isSelected(deleteImage[0])
-                          ) {
-                            this.selectedImageLists.deselect(deleteImage[0]);
-                          }
-                          this.adminImages.splice(index, 1);
-                        }
-                      });
+                // Call the Garbage Update
+                this.userService
+                  .updateGarbage(updateData)
+                  .subscribe((status) => {
+                    if (status) {
+                      this.userService.updateGarbageImpl(updateData);
                     }
-                  } else {
-                    this.imageDeleteSubscription &&
-                      this.imageDeleteSubscription.unsubscribe();
-                    this.imageDeleteSubscription = this.materialService
-                      .deleteImage(deleteImage[0]._id)
-                      .subscribe((res) => {
-                        this.ownImages.some((e, index) => {
-                          if (e._id == deleteImage[0]._id) {
-                            if (
-                              this.selectedImageLists.isSelected(deleteImage[0])
-                            ) {
-                              this.selectedImageLists.deselect(deleteImage[0]);
-                            }
-                            this.ownImages.splice(index, 1);
-                          }
-                        });
-                      });
-                  }
-                });
+                  });
               }
-              this.userService
-                .updateGarbage({
-                  edited_video: this.editedVideos,
-                  edited_pdf: this.editedPdfs,
-                  edited_image: this.editedImages
-                })
-                .subscribe(() => {
-                  this.userService.updateGarbageImpl(this.garbage);
-                });
+
+              if (
+                selectedVideos.length ||
+                selectedImages.length ||
+                selectedPdfs.length
+              ) {
+                const removeData = {
+                  videos: selectedVideos,
+                  pdfs: selectedPdfs,
+                  images: selectedImages
+                };
+                this.materialService
+                  .bulkRemove(removeData)
+                  .subscribe((status) => {
+                    if (status) {
+
+                    }
+                  });
+              }
             }
           });
         }
@@ -1361,59 +1043,10 @@ export class MaterialsComponent implements OnInit {
     this.videoConvertingLoadSubscription = this.materialService
       .loadConvertingStatus(this.convertingVideos)
       .subscribe((res) => {
-        this.ownVideos.forEach((e) => {
-          if (e.converted !== 'completed' && e.converted !== 'disabled') {
-            const convertingStatus = res[e._id];
-            if (!convertingStatus) {
-              return;
-            }
-            if (convertingStatus.status && convertingStatus.progress == 100) {
-              e['converted'] = 'completed';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
-            if (convertingStatus.status && convertingStatus.progress < 100) {
-              e['progress'] = convertingStatus.progress;
-            }
-            if (!convertingStatus.status) {
-              e['convertingStatus'] = 'error';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
+        this.materials.forEach((e) => {
+          if (e.material_type !== 'video') {
+            return;
           }
-        });
-
-        this.adminVideos.forEach((e) => {
-          if (e.converted !== 'completed' && e.converted !== 'disabled') {
-            const convertingStatus = res[e._id];
-            if (!convertingStatus) {
-              return;
-            }
-            if (convertingStatus.status && convertingStatus.progress == 100) {
-              e['converted'] = 'completed';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
-            if (convertingStatus.status && convertingStatus.progress < 100) {
-              e['progress'] = convertingStatus.progress;
-            }
-            if (!convertingStatus.status) {
-              e['convertingStatus'] = 'error';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
-          }
-        });
-
-        this.teamVideos.forEach((e) => {
           if (e.converted !== 'completed' && e.converted !== 'disabled') {
             const convertingStatus = res[e._id];
             if (!convertingStatus) {
@@ -1464,6 +1097,198 @@ export class MaterialsComponent implements OnInit {
       this.editedImages = [];
       this.userService.updateGarbageImpl({ edited_image: [] });
       this.materialService.loadImages(true);
+    });
+  }
+
+  openFolder(element: Material): void {
+    this.selectedFolder = element;
+    this.searchStr = '';
+    this.matType = '';
+    this.isAdmin = false;
+    this.userOptions = [];
+    this.teamOptions = [];
+    this.filter();
+    // this.filteredMaterials = this.materials.filter((e) => {
+    //   if (e.folder === this.selectedFolder._id) {
+    //     console.log(e.folder, e.title, e._id);
+    //     return true;
+    //   }
+    // });
+  }
+  toRoot(): void {
+    this.selectedFolder = null;
+    this.searchStr = '';
+    this.matType = '';
+    this.isAdmin = false;
+    this.userOptions = [];
+    this.teamOptions = [];
+    this.filter();
+    // this.filteredMaterials = this.materials.filter((e) => {
+    //   return !e.folder || e.type === 'folder';
+    // });
+  }
+
+  createFolder(): void {
+    this.dialog.open(FolderComponent, {
+      width: '96vw',
+      maxWidth: '400px'
+    });
+  }
+
+  removeFolder(material: Material): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        width: '96vw',
+        maxWidth: '400px',
+        data: {
+          title: 'Delete folder',
+          message:
+            'This folder would be removed and sub materials would be moved to root directory. Are you sure to delete this folder?',
+          confirmLabel: 'Delete'
+          // case: true,
+          // answers: [
+          //   {
+          //     label: 'Remove with sub-materials',
+          //     value: 'with-materials'
+          //   },
+          //   {
+          //     label: 'Remove only folder',
+          //     value: 'only-folder'
+          //   }
+          // ]
+        }
+      })
+      .afterClosed()
+      .subscribe((answer) => {
+        if (answer) {
+          this.materialService
+            .removeFolder(material._id, 'only-folder') // answer
+            .subscribe((res) => {
+              if (res['status']) {
+                this.materialService.delete$([material._id]);
+                this.materialService.removeFolder$(material._id);
+              }
+            });
+        }
+      });
+  }
+
+  editFolder(material: Material): void {
+    this.dialog.open(FolderComponent, {
+      width: '96vw',
+      maxWidth: '400px',
+      data: {
+        folder: { ...material }
+      }
+    });
+  }
+
+  moveToFolder(): void {
+    const selectedMaterials = this.filteredMaterials.filter((e) => {
+      if (
+        e.material_type !== 'folder' &&
+        this.selection.indexOf(e._id) !== -1
+      ) {
+        return true;
+      }
+      return false;
+    });
+    if (!selectedMaterials.length) {
+      this.dialog.open(NotifyComponent, {
+        width: '96vw',
+        maxWidth: '360px',
+        data: {
+          message: 'You have to select materials to move those to the folder.'
+        }
+      });
+    }
+    this.dialog
+      .open(MoveFolderComponent, {
+        width: '96vw',
+        maxWidth: '400px',
+        data: {
+          materials: selectedMaterials,
+          currentFolder: this.selectedFolder
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.selection = [];
+        }
+      });
+  }
+
+  toggleAdminOption(): void {
+    this.isAdmin = !this.isAdmin;
+    this.filter();
+  }
+  toggleTeamOption(id: string): void {
+    this.teamOptions = _.xor(this.teamOptions, [id]);
+    this.filter();
+  }
+  toggleUserOption(id: string): void {
+    this.userOptions = _.xor(this.userOptions, [id]);
+    this.filter();
+  }
+  clearAllFilters(): void {
+    this.searchStr = '';
+    this.matType = '';
+    this.isAdmin = false;
+    this.userOptions = [];
+    this.teamOptions = [];
+    this.filter();
+  }
+
+  filter(): void {
+    this.selection = [];
+    const reg = new RegExp(this.searchStr, 'gi');
+    this.filteredMaterials = this.materials.filter((material) => {
+      if (this.selectedFolder) {
+        if (this.selectedFolder._id !== material.folder) {
+          return false;
+        }
+      } else if (material.folder) {
+        return false;
+      }
+      if (this.matType && material.material_type != this.matType) {
+        return false;
+      }
+      if (!reg.test(material.title)) {
+        return false;
+      }
+      if (
+        this.teamOptions.length &&
+        (!material.team || this.userOptions.indexOf(material.team._id))
+      ) {
+        return false;
+      }
+      if (this.isAdmin && this.userOptions.length) {
+        if (material.role === 'admin') {
+          return true;
+        }
+        const userId =
+          material.user && material.user._id
+            ? material.user._id
+            : material.user;
+        if (this.userOptions.indexOf(userId) !== -1) {
+          return true;
+        }
+        return false;
+      }
+      if (this.isAdmin && material.role != 'admin') {
+        return false;
+      }
+      if (this.userOptions.length) {
+        const userId =
+          material.user && material.user._id
+            ? material.user._id
+            : material.user;
+        if (this.userOptions.indexOf(userId) === -1) {
+          return false;
+        }
+      }
+      return true;
     });
   }
 }

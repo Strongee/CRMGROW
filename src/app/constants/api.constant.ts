@@ -281,7 +281,13 @@ export const MATERIAL = {
   EMAIL: 'material/bulk-email',
   VIDEO_TEXT: 'video/bulk-text',
   PDF_TEXT: 'pdf/bulk-text',
-  IMAGE_TEXT: 'image/bulk-text'
+  IMAGE_TEXT: 'image/bulk-text',
+  LOAD: 'material/load',
+  BULK_REMOVE: 'material/remove',
+  CREATE_FOLDER: 'material/folder',
+  UPDATE_FOLDER: 'material/folder/',
+  REMOVE_FOLDER: 'material/remove-folder',
+  MOVE_FILES: 'material/move-material'
 };
 
 export const NOTIFICATION = {
