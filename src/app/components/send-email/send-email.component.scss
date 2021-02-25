@@ -5,6 +5,15 @@
   border-top-right-radius: 4px;
 }
 
+.address-wrapper {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.overflow-visible {
+  overflow: visible;
+}
+
 .email-panel {
     .email-box {
         .receiver {
@@ -160,20 +169,20 @@
     .general-panels {
       .mat-expansion-panel-header {
         padding: 0px;
-  
+
         &.mat-expanded {
           height: 48px;
         }
-  
+
         .mat-expansion-panel-header-title {
           margin-right: 0px;
         }
       }
-  
+
       .mat-expansion-panel-body {
         padding: 0px;
       }
-  
+
       .toggle-icon {
         width: 12px;
         height: 12px;

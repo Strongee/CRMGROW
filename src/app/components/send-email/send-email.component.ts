@@ -55,6 +55,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   type = '';
   dealId;
   mainContact;
+  toFocus = false;
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
@@ -316,5 +317,19 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         }
         break;
     }
+  }
+
+  blueAll(): void {
+    console.log("blue all ===========>");
+    this.toFocus = false;
+  }
+
+  setToFocus(): void {
+    console.log("set to focus ===========>");
+    this.toFocus = true;
+  }
+
+  isToFocus(): any {
+    return this.toFocus;
   }
 }

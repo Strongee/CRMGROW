@@ -9,21 +9,25 @@
 <div class="email-panel">
     <form #emailForm="ngForm" (ngSubmit)="emailSubmitted = true; emailForm.form.valid ? sendEmail() : false">
       <div class="email-box">
-        <div class="v-center justify-content-between receiver pl-3 pr-2 py-1 contacts-wrapper">
-          <div class="v-center" style="width: 70%;">
-            <label class="f-6 op-56 m-0">To:</label>
-            <app-input-contacts
-              [selectedContacts]="emailContacts"
-              [onlyFromSearch]="true"
-              [onlySubscriber]="true"
-              (onSelect)="checkDuplication('to')"
-              (onRemove)="removeContact($event)"
-              class="w-100 ml-2"
-            ></app-input-contacts>
-          </div>
-          <div class="v-center">
-            <div class="f-6 c-blue p-1 c-pointer" (click)="ccFlag = !ccFlag">{{ccFlag ? "Disable Cc" : "Add Cc"}}</div>
-            <div class="f-6 c-blue p-1 c-pointer" (click)="bccFlag = !bccFlag">{{bccFlag ? "Disable Bcc" : "Add Bcc"}}</div>
+        <div class="receiver pl-3 pr-2 py-1 contacts-wrapper address-wrapper">
+          <div class="overflow-visible">
+            <div class="d-flex w-100">
+              <label class="f-6 op-56 m-0">To:</label>
+              <app-input-contact-chip
+                [selectedContacts]="emailContacts"
+                [onlyFromSearch]="true"
+                [onlySubscriber]="true"
+                (onSelect)="checkDuplication('to')"
+                (onRemove)="removeContact($event)"
+                (onFocus)="setToFocus()"
+                [focus]="isToFocus()"
+                class="w-100 ml-2"
+              ></app-input-contact-chip>
+            </div>
+            <div class="v-center justify-content-end">
+              <div class="f-3 c-blue p-1 c-pointer" (click)="ccFlag = !ccFlag">{{ccFlag ? "Disable Cc" : "Add Cc"}}</div>
+              <div class="f-3 c-blue p-1 c-pointer" (click)="bccFlag = !bccFlag">{{bccFlag ? "Disable Bcc" : "Add Bcc"}}</div>
+            </div>
           </div>
         </div>
         <div class="email-tracking contacts-wrapper" *ngIf="ccFlag || bccFlag">
@@ -31,7 +35,7 @@
             <mat-icon class="mr-2">warning</mat-icon>
             Email tracking is not working if you add cc, bcc.
           </div>
-          <div class="v-center pl-3 py-2 email-cc" *ngIf="ccFlag">
+          <div class="v-center pl-3 py-2 email-cc address-wrapper" *ngIf="ccFlag">
             <label class="f-6 text-uppercase op-56 m-0">cc:</label>
             <app-input-contacts
               [selectedContacts]="ccContacts"
@@ -39,7 +43,7 @@
               class="w-100 ml-2"
             ></app-input-contacts>
           </div>
-          <div class="v-center pl-3 py-2 email-bcc" *ngIf="bccFlag">
+          <div class="v-center pl-3 py-2 email-bcc address-wrapper" *ngIf="bccFlag">
             <label class="f-6 text-uppercase op-56 m-0">bcc:</label>
             <app-input-contacts
               [selectedContacts]="bccContacts"
@@ -56,6 +60,7 @@
             name="emailTitle"
             #emailTitle="ngModel"
             [(ngModel)]="emailSubject"
+            (focus)="blueAll()"
             required
           >
           <span
