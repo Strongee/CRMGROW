@@ -1,13 +1,11 @@
-import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { HelperService } from 'src/app/services/helper.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 import * as _ from 'lodash';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { take } from 'rxjs/operators';
+import { Contact } from 'src/app/models/contact.model';
 
 @Component({
   selector: 'app-messages',
@@ -42,30 +40,44 @@ export class MessagesComponent implements OnInit {
     _id: ''
   };
   messages = [
-    'Hey, lets meet on dinner and discuss',
-    'Sure, is tomorrow 1 pm okay?',
-    'Hey, lets meet on dinner and discuss',
-    'Sure, is tomorrow 1 pm okay?',
-    'Hey, lets meet on dinner and discuss',
-    'Sure, is tomorrow 1 pm okay?',
-    'Hey, lets meet on dinner and discuss',
-    'Sure, is tomorrow 1 pm okay?'
+    {
+      id: '1',
+      message: [
+        'Hey, lets meet on dinner and discuss',
+        'Sure, is tomorrow 1 pm okay?',
+        'Hey, lets meet on dinner and discuss',
+        'Sure, is tomorrow 1 pm okay?',
+        'Hey, lets meet on dinner and discuss',
+        'Sure, is tomorrow 1 pm okay?',
+        'Hey, lets meet on dinner and discuss',
+        'Sure, is tomorrow 1 pm okay?'
+      ]
+    },
+    {
+      id: '2',
+      message: [
+        'Could you let me know when you come here?',
+        'Okay, I will',
+        'Could you let me know when you come here?',
+        'Okay, I will'
+      ]
+    }
   ];
   messageText = '';
   showFileList = false;
   showMessage = false;
+  isNew = false;
+  newContact: Contact = new Contact();
   materials = [];
+  materialType = '';
   selectedTemplate: Template = new Template();
   emailSubject = '';
   emailContent = '';
-  @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   constructor(
     private dialog: MatDialog,
-    private helperSerivce: HelperService,
     public templateService: TemplatesService,
-    private materialService: MaterialService,
-    private _ngZone: NgZone
+    private materialService: MaterialService
   ) {
     this.templateService.loadAll(false);
   }
@@ -77,6 +89,15 @@ export class MessagesComponent implements OnInit {
   selectContact(contact: any): void {
     this.selectedContact = { ...this.selectedContact, ...contact };
     this.showMessage = true;
+  }
+
+  addContacts(contact: any): void {
+    this.newContact = { ...this.newContact, ...contact };
+    const newData = {
+      id: contact._id,
+      messages: []
+    };
+    this.messages.push(JSON.parse(JSON.stringify(newData)));
   }
 
   openMaterialsDlg(): void {
@@ -100,11 +121,15 @@ export class MessagesComponent implements OnInit {
     this.selectedTemplate = template;
     this.emailSubject = this.selectedTemplate.subject;
     this.emailContent = this.selectedTemplate.content;
-    this.messageText += '\n' + this.emailContent.replace(/<[^>]*>/g, '');
+    this.messageText += '\n' + this.emailContent;
   }
 
   goToBack(): void {
     this.showMessage = false;
+  }
+
+  newMessage(): void {
+    this.isNew = true;
   }
 
   sendMessage(): void {
@@ -120,23 +145,36 @@ export class MessagesComponent implements OnInit {
         imageIds.push(this.materials[i]._id);
       }
     }
-    const data = {
-      video_ids: videoIds,
-      pdf_ids: pdfIds,
-      image_ids: imageIds,
-      content: this.messageText,
-      contacts: this.selectedContact
-    };
+    let data;
+    if (this.isNew) {
+      data = {
+        video_ids: videoIds,
+        pdf_ids: pdfIds,
+        image_ids: imageIds,
+        content: this.messageText,
+        contacts: [this.newContact._id]
+      };
+    } else {
+      data = {
+        video_ids: videoIds,
+        pdf_ids: pdfIds,
+        image_ids: imageIds,
+        content: this.messageText,
+        contacts: [this.selectedContact._id]
+      };
+    }
     this.materialService.sendText(data, 'video').subscribe((res) => {
       if (res) {
-        this.messages.push(this.messageText);
+        this.messages.forEach((messageList) => {
+          if (this.isNew && messageList.id == this.newContact._id) {
+            messageList.message.push(this.messageText);
+            this.contacts.push(JSON.parse(JSON.stringify(this.newContact)));
+          }
+          if (!this.isNew && messageList.id == this.selectedContact._id) {
+            messageList.message.push(this.messageText);
+          }
+        });
       }
     });
-  }
-
-  triggerResize(): void {
-    this._ngZone.onStable
-      .pipe(take(1))
-      .subscribe(() => this.autosize.resizeToFitContent(true));
   }
 }
