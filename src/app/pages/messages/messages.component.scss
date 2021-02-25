@@ -140,8 +140,8 @@
             }
         }
         .message-action {
-            input {
-                border-radius: 20px;
+            textarea {
+                resize: none;
             }
             .material-button {
                 border-radius: 24px;

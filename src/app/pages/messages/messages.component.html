@@ -50,7 +50,7 @@
                 </div>
                 <div ngbDropdownMenu class="light">
                     <ng-container *ngFor="let template of (templateService.templates$ | async)">
-                        <div class="dropdown-item template" *ngIf="template.type === 'email'" (click)="selectTemplate(template)">
+                        <div class="dropdown-item template" *ngIf="template.type === 'text'" (click)="selectTemplate(template)">
                           <div class="v-center">
                             <div class="f-3 font-weight-bold">{{template.title}}</div>
                             <div class="c-badge rect ml-auto text-uppercase" [class]="template.role || 'own'">{{template.role || 'own'}}</div>
@@ -68,14 +68,16 @@
             </div>
             <div class="px-4 py-3 message-action">
                 <div class="form-group">
-                    <textarea
-                        type="text"
-                        rows="5"
-                        cols="40"
-                        class="form-control"
-                        placeholder="Message"
-                        [ngModel]="messageText"
-                    ></textarea>
+                    <mat-form-field class="w-100">
+                        <textarea
+                            matInput
+                            cdkTextareaAutosize
+                            #autosize
+                            [(ngModel)]="messageText"
+                            cdkAutosizeMinRows="1"
+                            cdkAutosizeMaxRows="5"
+                        ></textarea>
+                    </mat-form-field>
                 </div>
                 <div class="v-center justify-content-between">
                     <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue px-3 py-2 mr-2 material-button" (click)="openMaterialsDlg()">
