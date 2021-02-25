@@ -14,7 +14,7 @@ import { Layout, Edge, Node } from '@swimlane/ngx-graph';
 import { ActionDialogComponent } from 'src/app/components/action-dialog/action-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  ACTION_CAT,
+  ACTION_CAT, AUTOMATION_ICONS,
   DialogSettings
 } from 'src/app/constants/variable.constants';
 import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
@@ -1530,19 +1530,17 @@ export class AutoflowComponent
   }
 
   ICONS = {
-    follow_up: '../../assets/img/automations/follow_up.svg',
-    update_follow_up:
-      'https://app.crmgrow.com/assets/img/icons/follow-step.png',
-    note: '../../assets/img/automations/create_note.svg',
-    email: '../../assets/img/automations/send_email.svg',
-    send_email_video: '../../assets/img/automations/send_video_email.svg',
-    send_text_video: '../../assets/img/automations/send_video_text.svg',
-    send_email_pdf: '../../assets/img/automations/send_pdf_email.svg',
-    send_text_pdf: '../../assets/img/automations/send_pdf_text.svg',
-    send_email_image: '../../assets/img/automations/send_image_email.svg',
-    send_text_image: 'https://app.crmgrow.com/assets/img/icons/image_sms.png',
-    update_contact:
-      'https://app.crmgrow.com/assets/img/icons/update_contact.png'
+    follow_up: AUTOMATION_ICONS.FOLLOWUP,
+    update_follow_up: AUTOMATION_ICONS.UPDATE_FOLLOWUP,
+    note: AUTOMATION_ICONS.CREATE_NOTE,
+    email: AUTOMATION_ICONS.SEND_EMAIL,
+    send_email_video: AUTOMATION_ICONS.SEND_VIDEO_EMAIL,
+    send_text_video: AUTOMATION_ICONS.SEND_VIDEO_TEXT,
+    send_email_pdf: AUTOMATION_ICONS.SEND_PDF_EMAIL,
+    send_text_pdf: AUTOMATION_ICONS.SEND_PDF_TEXT,
+    send_email_image: AUTOMATION_ICONS.SEND_IMAGE_EMAIL,
+    send_text_image: AUTOMATION_ICONS.SEND_IMAGE_TEXT,
+    update_contact: AUTOMATION_ICONS.UPDATE_CONTACT
   };
   ACTIONS = {
     follow_up: 'Follow up',

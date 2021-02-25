@@ -857,3 +857,21 @@ export const TaskStatus = {
 };
 export const UnlayerThemeId = 6121;
 export const ImportSelectableColumn = ['notes', 'tags'];
+
+export const AUTOMATION_ICONS = {
+  FOLLOWUP: '../../../assets/img/automations/follow_up.svg',
+  UPDATE_FOLLOWUP: '../../../assets/img/follow-step.png',
+  CREATE_NOTE: '../../../assets/img/automations/create_note.svg',
+  SEND_EMAIL: '../../../assets/img/automations/send_email.svg',
+  SEND_VIDEO_EMAIL: '../../../assets/img/automations/send_video_email.svg',
+  SEND_VIDEO_TEXT: '../../../assets/img/automations/send_video_text.svg',
+  SEND_PDF_EMAIL: '../../../assets/img/automations/send_pdf_email.svg',
+  SEND_PDF_TEXT: '../../../assets/img/automations/send_pdf_text.svg',
+  SEND_IMAGE_EMAIL: '../../../assets/img/automations/send_image_email.svg',
+  SEND_IMAGE_TEXT: '../../../assets/img/automations/send_image_text.svg',
+  UPDATE_CONTACT: '../../../assets/img/automations/update_contact.svg',
+  WATCHED_VIDEO: '../../../assets/img/automations/watched_video.svg',
+  WATCHED_PDF: '../../../assets/img/automations/watched_pdf.svg',
+  WATCHED_IMAGE: '../../../assets/img/watch_image.png',
+  OPENED_EMAIL: '../../../assets/img/automations/opended_email.svg'
+};

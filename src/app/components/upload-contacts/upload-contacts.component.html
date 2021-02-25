@@ -202,7 +202,7 @@
                     (click)="merge(dupIndex)"
                     [disabled]="this.selectedMergeContacts[dupIndex].selected.length < 2"
                   >
-                    Merge
+                    {{dupItem.length > 1 ? 'Merge' : 'Merged'}}
                   </button>
                 </div>
               </div>
