@@ -1157,7 +1157,19 @@
                       <i class="i-icon i-{{tab.id}} d-block bgc-dark"></i>
                     </div>
                     <h4 class="font-weight-bold mt-4 mb-3">
-                      There are no {{tab.label | lowercase}} with this contact yet.
+                      <ng-container *ngIf="tab.id === 'follow_ups'; else anotherEmptyText">
+                        <ng-container [ngSwitch]="selectedTimeSort.id">
+                          <span *ngSwitchCase="'all'">There are no tasks with this contact yet.</span>
+                          <span *ngSwitchCase="'overdue'">There are no overdue tasks.</span>
+                          <span *ngSwitchCase="'today'">There are no tasks today.</span>
+                          <span *ngSwitchCase="'tomorrow'">There are no tasks tomorrow.</span>
+                          <span *ngSwitchCase="'this_week'">There are no tasks for this week.</span>
+                          <span *ngSwitchCase="'next_week'">There are no tasks for next week.</span>
+                        </ng-container>
+                      </ng-container>
+                      <ng-template #anotherEmptyText>
+                        There are no {{tab.label | lowercase}} with the contacts in this deal yet.
+                      </ng-template>
                     </h4>
                   </div>
                 </ng-template>

@@ -8,7 +8,10 @@ import { TabItem } from 'src/app/utils/data.types';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
-import { CALENDAR_DURATION, DialogSettings } from 'src/app/constants/variable.constants';
+import {
+  CALENDAR_DURATION,
+  DialogSettings
+} from 'src/app/constants/variable.constants';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { DealEditComponent } from 'src/app/components/deal-edit/deal-edit.component';
