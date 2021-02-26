@@ -181,7 +181,7 @@
         <ng-container matColumnDef="selection_info">
           <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
             <span *ngIf="selection.length !== (taskService.total$ | async); else deselectTemplate" class="">
-              All {{pageTasks.length}} tasks are selected. 
+              {{selection.length}} tasks are selected. 
               <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
                 <i class="small-spinner"></i>
                 <span>Selecting all. . .</span>
@@ -207,7 +207,7 @@
         <tr mat-header-row
           *matHeaderRowDef="DISPLAY_COLUMNS" class="table-header" [class.selected]="selection.length"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']"
-            [class.d-none]="!isAllSelected() || !selection.length" class='selection-info'></tr>
+            [class.d-none]="!selection.length" class='selection-info'></tr>
         <tr mat-row *matRowDef="let row; columns: DISPLAY_COLUMNS;" [class.completed]="completedTasks.indexOf(row._id) !== -1"></tr>
         <tr mat-row *matRowDef="let task; columns: ['completed_info'];" class="completed-extension"></tr>
       </table>

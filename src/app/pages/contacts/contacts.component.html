@@ -89,7 +89,7 @@
                 class="custom-control-input"
                 id="selectAllContacts"
                 (change)="$event ? masterToggle() : null"
-                [checked]="isAllSelected()" />
+                [checked]="(storeService.pageContacts$ | async).length && isAllSelected()" />
               <label class="custom-control-label"
                 for="selectAllContacts"></label>
             </div>
@@ -205,7 +205,7 @@
         <ng-container matColumnDef="selection_info">
           <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
             <span *ngIf="selection.length !== (contactService.total$ | async); else deselectTemplate">
-              All {{pageContacts.length}} contacts are selected. 
+              {{selection.length}} contacts are selected. 
               <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
                 <i class="small-spinner"></i>
                 <span class="ml-1">Selecting all. . .</span>
@@ -224,7 +224,7 @@
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
           *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
-        <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length || !isAllSelected()" class='selection-info'></tr>
+        <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length" class='selection-info'></tr>
         <tr mat-row
           *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>

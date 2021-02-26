@@ -27,7 +27,7 @@ export class ResetPasswordComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private toast: ToastrService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.newData.email = this.route.snapshot.queryParams['email'];
