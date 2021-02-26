@@ -164,6 +164,17 @@ export class ContactActivity implements Deserializable {
     });
   }
 
+  get shortAddress(): string {
+    if (!this.city && !this.state && !this.country) {
+      return '---';
+    } else {
+      const comps = [this.city, this.state, this.country].filter((e) => {
+        return !!e;
+      });
+      return comps.join(', ');
+    }
+  }
+
   updateTag(tagData: any): void {
     switch (tagData.option) {
       case 2:

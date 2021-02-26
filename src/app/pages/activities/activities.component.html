@@ -35,8 +35,8 @@
           *matHeaderCellDef class="address-col">city</th>
         <td mat-cell
           *matCellDef="let element" class="address-col">
-          <a class="c-pointer undecoration c-dark" [routerLink]="['/contacts/' + element.contacts._id]">
-            {{element.contacts.shortAddress}}
+          <a class="c-pointer undecoration c-dark d-block" [routerLink]="['/contacts/' + element.contacts._id]">
+            <span class="c-dark">{{element.contacts.shortAddress}}</span>
           </a>
         </td>
       </ng-container>
