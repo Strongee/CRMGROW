@@ -11,6 +11,7 @@ import { Deal } from '../models/deal.model';
 import { Email } from '../models/email.model';
 import { Note } from '../models/note.model';
 import { Activity } from '../models/activity.model';
+import { DetailActivity } from '../models/activityDetail.model';
 
 @Injectable({
   providedIn: 'root'
@@ -196,9 +197,11 @@ export class DealsService extends HttpService {
     );
   }
 
-  getActivity(data: any): Observable<Activity[]> {
+  getActivity(data: any): Observable<DetailActivity[]> {
     return this.httpClient.post(this.server + DEAL.GET_ACTIVITY, data).pipe(
-      map((res) => res['data'] || []),
+      map((res) =>
+        (res['data'] || []).map((e) => new DetailActivity().deserialize(e))
+      ),
       catchError(this.handleError('GET DEAL ACTIVITY', []))
     );
   }

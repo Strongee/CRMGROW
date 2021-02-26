@@ -1,10 +1,5 @@
 import { Location } from '@angular/common';
-import {
-  Component,
-  OnInit,
-  ViewContainerRef,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
