@@ -26,6 +26,12 @@
     }
   }
 
+  &.dialog-mode {
+    .mat-drawer-container {
+      z-index: 1000;
+    }
+  }
+
   &.has-topbar {
     .mat-drawer-container .mat-drawer-backdrop{
       position: fixed;

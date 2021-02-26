@@ -22,6 +22,7 @@ export class ManageLabelComponent implements OnInit {
   });
   labelLength = 0;
   @Output() onClose = new EventEmitter();
+  @Output() showDialog = new EventEmitter();
   saveSubscription: Subscription;
   constructor(private dialog: MatDialog, public labelService: LabelService) {}
 
@@ -37,6 +38,7 @@ export class ManageLabelComponent implements OnInit {
   }
 
   editLabelColor(): void {
+    this.showDialog.emit(true);
     this.dialog
       .open(LabelEditColorComponent, {
         position: { top: '100px' },
@@ -46,6 +48,7 @@ export class ManageLabelComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        this.showDialog.emit(false);
         if (res) {
           this.newLabel.color = res;
         }
@@ -76,17 +79,24 @@ export class ManageLabelComponent implements OnInit {
   }
 
   editLabel(label: Label): void {
-    this.dialog.open(LabelEditComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '400px',
-      maxHeight: '400px',
-      disableClose: true,
-      data: label
-    });
+    this.showDialog.emit(true);
+    this.dialog
+      .open(LabelEditComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        maxHeight: '400px',
+        disableClose: true,
+        data: label
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        this.showDialog.emit(false);
+      });
   }
 
   removeLabel(label: Label): void {
+    this.showDialog.emit(true);
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
         title: 'Delete label',
@@ -96,6 +106,7 @@ export class ManageLabelComponent implements OnInit {
       }
     });
     dialog.afterClosed().subscribe((res) => {
+      this.showDialog.emit(false);
       if (res) {
         this.labelService.deleteLabel(label._id).subscribe((status) => {
           if (status) {
