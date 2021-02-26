@@ -8,32 +8,28 @@ import { Router } from '@angular/router';
   styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent implements OnInit {
-
   loading = false;
   resetEmail = '';
   submitted = false;
   submitting = false;
 
-  constructor(
-    private userService: UserService,
-    private router: Router
-  ) { }
+  constructor(private userService: UserService, private router: Router) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   sendResetCode(): void {
     this.loading = true;
     this.submitting = true;
-    this.userService.requestResetPassword(this.resetEmail).subscribe(
-      (res) => {
+    this.userService
+      .requestResetPassword(this.resetEmail)
+      .subscribe((status) => {
         this.loading = false;
         this.submitting = false;
-        this.router.navigate(['/reset-password'], {
-          queryParams: { email: this.resetEmail }
-        });
-      },
-      (err) => (this.loading = false)
-    );
+        if (status) {
+          this.router.navigate(['/reset-password'], {
+            queryParams: { email: this.resetEmail }
+          });
+        }
+      });
   }
 }

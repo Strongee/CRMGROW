@@ -142,7 +142,7 @@ export class UserService extends HttpService {
       this.server + USER.AUTH_GOOGLE_CALENDAR + '?code=' + code
     );
   }
-  public requestResetPassword(email): Observable<any> {
+  public requestResetPassword(email): Observable<boolean> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'No-Auth': 'True'
@@ -155,9 +155,12 @@ export class UserService extends HttpService {
           headers: reqHeader
         }
       )
-      .pipe(catchError(this.handleError('REQUEST RESET PASSWORD')));
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('REQUEST RESET PASSWORD', false))
+      );
   }
-  public resetPassword(requestData): Observable<any> {
+  public resetPassword(requestData): Observable<boolean> {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'No-Auth': 'True'
@@ -166,7 +169,10 @@ export class UserService extends HttpService {
       .post(this.server + AUTH.RESET_PASSWORD, JSON.stringify(requestData), {
         headers: reqHeader
       })
-      .pipe(catchError(this.handleError('RESET PASSWORD')));
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('RESET PASSWORD', false))
+      );
   }
   public isAuthenticated(): boolean {
     if (localStorage.getItem('token') != null) {
@@ -213,15 +219,17 @@ export class UserService extends HttpService {
     user[field] = value;
     localStorage.setItem('user', JSON.stringify(user));
   }
-  public updatePassword(oldPwd: string, newPwd: string): Observable<any> {
+  public updatePassword(oldPwd: string, newPwd: string): Observable<boolean> {
     const data = {
       old_password: oldPwd,
       new_password: newPwd
     };
-    return this.httpClient.post(
-      this.server + USER.UPDATE_PASSWORD,
-      JSON.stringify(data)
-    );
+    return this.httpClient
+      .post(this.server + USER.UPDATE_PASSWORD, JSON.stringify(data))
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('Password Change', false))
+      );
   }
   public createPassword(password: string): Observable<boolean> {
     const data = {
