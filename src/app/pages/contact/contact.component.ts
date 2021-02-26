@@ -165,7 +165,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.storeService.selectedContact$.subscribe((res) => {
       this.contact = res;
       this.selectedContact = res;
-      console.log("selected contact =======>", this._id, this.selectedContact);
       this.groupActivities();
       this.getActivityCount();
       this.timeLineArrangement();
