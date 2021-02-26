@@ -6,11 +6,13 @@ import {
 } from '@angular/material/dialog';
 import { LabelService } from '../../services/label.service';
 import { Contact } from '../../models/contact.model';
-import {StoreService} from "../../services/store.service";
-import {ContactService} from "../../services/contact.service";
-import {DetailActivity} from "../../models/activityDetail.model";
-import {MatTreeNestedDataSource} from "@angular/material/tree";
-import {listToTree} from "../../helper";
+import { StoreService } from '../../services/store.service';
+import { ContactService } from '../../services/contact.service';
+import { DetailActivity } from '../../models/activityDetail.model';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { listToTree } from '../../helper';
+import {DealsService} from "../../services/deals.service";
+import {CALENDAR_DURATION} from "../../constants/variable.constants";
 
 @Component({
   selector: 'app-contact-detail',
@@ -42,6 +44,7 @@ export class ContactDetailComponent implements OnInit {
   showOlder = false;
   noteTimeLines: DetailActivity[] = [];
   otherTimeLines: DetailActivity[] = [];
+  durations = CALENDAR_DURATION;
 
   constructor(
     private dialog: MatDialog,
@@ -49,6 +52,7 @@ export class ContactDetailComponent implements OnInit {
     private dialogRef: MatDialogRef<ContactDetailComponent>,
     private storeService: StoreService,
     public contactService: ContactService,
+    private dealsService: DealsService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.contact) {
@@ -63,13 +67,20 @@ export class ContactDetailComponent implements OnInit {
       this.label = labels[index];
     }
     this.loadContact(this.contact._id);
-    this.storeService.selectedContact$.subscribe((res) => {
-      this.contact = res;
-      this.selectedContact = res;
-      this.groupActivities();
-      this.getActivityCount();
-      this.timeLineArrangement();
-    });
+    this.storeService.selectedContact$.subscribe(
+      (res) => {
+        if (res && res._id) {
+          this.contact = res;
+          this.selectedContact = res;
+          this.groupActivities();
+          this.getActivityCount();
+          this.timeLineArrangement();
+        }
+      },
+      () => {
+        this.dialogRef.close();
+      }
+    );
   }
 
   loadContact(_id: string): void {
@@ -260,6 +271,23 @@ export class ContactDetailComponent implements OnInit {
     );
     if (parent) {
       parent.classList.remove('expanded');
+    }
+  }
+
+  /**************************************
+   * Appointment Activity Relative Functions
+   **************************************/
+  getTime(start: any, end: any): any {
+    const start_hour = new Date(start).getHours();
+    const end_hour = new Date(end).getHours();
+    const start_minute = new Date(start).getMinutes();
+    const end_minute = new Date(end).getMinutes();
+    const duration = end_hour - start_hour + (end_minute - start_minute) / 60;
+    const durationTime = this.durations.filter(
+      (time) => time.value == duration
+    );
+    if (durationTime) {
+      return durationTime[0].text;
     }
   }
 }
