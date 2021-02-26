@@ -19,7 +19,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AdminLayoutComponent implements OnInit {
   @ViewChild('drawer') manageLabelPanel: MatDrawer;
-
+  showDialog = false;
   constructor(
     private userService: UserService,
     private labelService: LabelService,
@@ -89,5 +89,9 @@ export class AdminLayoutComponent implements OnInit {
         }
       );
     }
+  }
+
+  setShowDialog($event): void {
+    this.showDialog = $event;
   }
 }

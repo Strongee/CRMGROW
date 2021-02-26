@@ -5,7 +5,7 @@
       <i class="d-block i-icon i-close bgc-dark"></i>
     </button>
   </div>
-  <form #actionForm="ngForm" (ngSubmit)="actionForm.form.valid ? saveLabel() : false"
+  <form #actionForm="ngForm" (ngSubmit)="actionForm.form.valid ? saveLabel(actionForm) : false"
         [class.was-validated]="actionForm.submitted">
       <div class="form-group">
         <div>
@@ -21,11 +21,11 @@
                 <input type="text" class="form-control label-name-input ml-2" [(ngModel)]="newLabel.name" placeholder="Name new label"
                        name="edit_label_name" #edit_label_name="ngModel" required/>
                 <button type="submit" class="v-center btn btn-primary ml-2 px-2" [class.loading]="loading">
-                  <i class="i-icon i-plus i-small bgc-white"></i>
+                  <i class="i-icon i-plus i-small bgc-white" [class.d-none]="loading"></i>
                   <span class="f-3 font-weight-bold ml-2">Save</span>
                 </button>
               </div>
-              <span class="error ml-2" *ngIf="edit_label_name.errors" style="height: 0px;">
+              <span class="error ml-2 mt-1" *ngIf="edit_label_name.errors" style="height: 0px;">
                 Label name is required.
               </span>
             </div>

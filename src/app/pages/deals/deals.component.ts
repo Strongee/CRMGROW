@@ -56,7 +56,6 @@ export class DealsComponent implements OnInit {
         event.currentIndex
       );
     }
-    console.log("move deal ============>", data);
     this.dealsService.moveDeal(data).subscribe(() => {});
   }
 

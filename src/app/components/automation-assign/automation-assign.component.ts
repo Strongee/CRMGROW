@@ -63,11 +63,9 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
             'Automation is assigned to selected contacts successfully.'
           );
         }
-        console.log("assign automation ============>", res);
         this.dialogRef.close(res);
       },
       (err) => {
-        console.log("assign error ==========>", err);
         this.loading = false;
         this.dialogRef.close({ status: false });
       }

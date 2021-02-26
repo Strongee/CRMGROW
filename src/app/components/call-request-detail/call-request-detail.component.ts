@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Contact } from 'src/app/models/contact.model';
 import { User } from 'src/app/models/user.model';
+import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 
 @Component({
   selector: 'app-call-request-detail',
@@ -64,6 +65,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       if (this.call.proposed_at.length) {
         this.selectedTime = this.call.proposed_at[0];
       }
+      this.note = this.call.note;
       this.checkOrganizer();
     }
 
@@ -153,7 +155,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
     this.teamService
       .updateCall(this.call._id, {
         status: 'finished',
-        note: this.note
+        note: this.call.note
       })
       .subscribe((status) => {
         this.completing = false;
@@ -162,7 +164,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
             action: 'update',
             data: {
               status: 'finished',
-              note: this.note
+              note: this.call.note
             },
             id: this.call._id
           });
@@ -320,5 +322,42 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
         type: 'organizer'
       }
     });
+  }
+
+  saveNote(): void {
+    if (this.note !== this.call.note) {
+      this.teamService
+        .updateCall(this.call._id, {
+          status: this.call.status,
+          note: this.call.note
+        })
+        .subscribe((status) => {
+          this.completing = false;
+          if (status) {
+            this.dialogRef.close({
+              action: 'cancel',
+              note: this.call.note
+            });
+          }
+        });
+    } else {
+      this.dialogRef.close();
+    }
+  }
+
+  contactDetail(contact): void {
+    if (contact && contact._id) {
+      this.dialog.open(ContactDetailComponent, {
+        ...DialogSettings.CONTACT,
+        data: {
+          contact
+        }
+      });
+      // if (this.isOrganizer) {
+      //   window.open('/contacts/' + contact._id, '_blank');
+      // } else {
+      //
+      // }
+    }
   }
 }

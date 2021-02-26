@@ -504,10 +504,6 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       return;
     }
 
-    console.log('update action ====================>', {
-      ...this.action,
-      period
-    });
     this.dialogRef.close({ ...this.action, period });
   }
 

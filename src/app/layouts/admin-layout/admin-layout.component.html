@@ -1,13 +1,13 @@
 <!-- <app-topbar></app-topbar> -->
 <app-navbar></app-navbar>
 <app-sidebar></app-sidebar>
-<div class="page">
+<div class="page" [class.dialog-mode]="showDialog">
   <router-outlet></router-outlet>
   <div class="footer">
   </div>
   <mat-drawer-container [hasBackdrop]="true">
     <mat-drawer #drawer position="end">
-      <app-manage-label (onClose)="drawer.close();"></app-manage-label>
+      <app-manage-label (onClose)="drawer.close();" (showDialog)="setShowDialog($event)"></app-manage-label>
     </mat-drawer>
   </mat-drawer-container>
 </div>

@@ -51,7 +51,6 @@ export class CampaignListItemComponent implements OnInit {
   loadContacts(): void {
     this.mailListService.get(this.id).subscribe(
       (res) => {
-        console.log("load contacts ==========>", res);
         this.contacts = res['contacts'];
         this.isLoading = false;
       },

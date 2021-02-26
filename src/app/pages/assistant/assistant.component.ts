@@ -29,7 +29,6 @@ export class AssistantComponent implements OnInit {
     this.loading = true;
     this.guestService.loadGuests().subscribe(
       (guests) => {
-        console.log('Guests ==== >', guests);
         this.loading = false;
         this.guests = guests;
       },

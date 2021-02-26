@@ -55,7 +55,6 @@ export class ContactBulkComponent implements OnInit {
   update(): void {
     const data = {};
     const tagData = {};
-    console.log("update =========>", this.contact);
     for (const key in this.contact) {
       if (key === 'tags') {
         continue;

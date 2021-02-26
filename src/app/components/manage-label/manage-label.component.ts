@@ -6,6 +6,8 @@ import { Label } from 'src/app/models/label.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { LabelEditColorComponent } from '../label-edit-color/label-edit-color.component';
 import { LabelEditComponent } from '../label-edit/label-edit.component';
+import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-manage-label',
@@ -20,6 +22,8 @@ export class ManageLabelComponent implements OnInit {
   });
   labelLength = 0;
   @Output() onClose = new EventEmitter();
+  @Output() showDialog = new EventEmitter();
+  saveSubscription: Subscription;
   constructor(private dialog: MatDialog, public labelService: LabelService) {}
 
   ngOnInit(): void {
@@ -34,6 +38,7 @@ export class ManageLabelComponent implements OnInit {
   }
 
   editLabelColor(): void {
+    this.showDialog.emit(true);
     this.dialog
       .open(LabelEditColorComponent, {
         position: { top: '100px' },
@@ -43,40 +48,55 @@ export class ManageLabelComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
+        this.showDialog.emit(false);
         if (res) {
           this.newLabel.color = res;
         }
       });
   }
 
-  saveLabel(): void {
-    this.labelService
+  saveLabel(form: NgForm): void {
+    if (!this.newLabel.name) {
+      return;
+    }
+    this.loading = true;
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    this.saveSubscription = this.labelService
       .createLabel(
         this.newLabel.deserialize({ priority: (this.labelLength + 1) * 1000 })
       )
       .subscribe((newLabel) => {
+        this.loading = false;
         if (newLabel) {
           this.labelService.create$(newLabel);
           this.newLabel = new Label().deserialize({
             color: '#000',
             name: ''
           });
+          form.resetForm();
         }
       });
   }
 
   editLabel(label: Label): void {
-    this.dialog.open(LabelEditComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '400px',
-      maxHeight: '400px',
-      disableClose: true,
-      data: label
-    });
+    this.showDialog.emit(true);
+    this.dialog
+      .open(LabelEditComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        maxHeight: '400px',
+        disableClose: true,
+        data: label
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        this.showDialog.emit(false);
+      });
   }
 
   removeLabel(label: Label): void {
+    this.showDialog.emit(true);
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
         title: 'Delete label',
@@ -86,6 +106,7 @@ export class ManageLabelComponent implements OnInit {
       }
     });
     dialog.afterClosed().subscribe((res) => {
+      this.showDialog.emit(false);
       if (res) {
         this.labelService.deleteLabel(label._id).subscribe((status) => {
           if (status) {

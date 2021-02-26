@@ -59,7 +59,6 @@ export class SelectTeamComponent implements OnInit, OnDestroy, AfterViewInit {
       if (res) {
         this.filteredResults.next(res);
         this.teams = res;
-        console.log("teams ============>", this.teams);
       }
     });
 
