@@ -8,11 +8,16 @@ import { OverlayService } from 'src/app/services/overlay.service';
 })
 export class AutomationTreeOverlayComponent implements OnInit {
   @Input('dataSource') node;
+  isShow = false;
   constructor(private overlayService: OverlayService) {}
 
   ngOnInit(): void {}
 
   overlayClose(): void {
     this.overlayService.close(null);
+  }
+
+  seeMore(): void {
+    this.isShow = !this.isShow;
   }
 }
