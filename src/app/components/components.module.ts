@@ -129,7 +129,8 @@ import { SelectCalendarComponent } from './select-calendar/select-calendar.compo
 import { CallRequestDetailComponent } from './call-request-detail/call-request-detail.component';
 import { FolderComponent } from './folder/folder.component';
 import { MoveFolderComponent } from './move-folder/move-folder.component';
-import { InputContactChipComponent } from "./input-contact-chip/input-contact-chip.component";
+import { InputContactChipComponent } from './input-contact-chip/input-contact-chip.component';
+import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 
 @NgModule({
   declarations: [
@@ -258,7 +259,8 @@ import { InputContactChipComponent } from "./input-contact-chip/input-contact-ch
     CallRequestDetailComponent,
     FolderComponent,
     MoveFolderComponent,
-    InputContactChipComponent
+    InputContactChipComponent,
+    ContactDetailComponent
   ],
   imports: [
     CommonModule,

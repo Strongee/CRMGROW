@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Contact } from 'src/app/models/contact.model';
 import { User } from 'src/app/models/user.model';
+import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 
 @Component({
   selector: 'app-call-request-detail',
@@ -68,7 +69,6 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       this.note = this.call.note;
       this.checkOrganizer();
       this.checkLeader();
-      console.log("call detail ==========>", this.call);
     }
 
     const current = new Date();
@@ -356,10 +356,17 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
 
   contactDetail(contact): void {
     if (contact && contact._id) {
-      if (this.isOrganizer) {
-        window.open('/contacts/' + contact._id, '_blank');
-      }
+      this.dialog.open(ContactDetailComponent, {
+        ...DialogSettings.CONTACT,
+        data: {
+          contact
+        }
+      });
+      // if (this.isOrganizer) {
+      //   window.open('/contacts/' + contact._id, '_blank');
+      // } else {
+      //
+      // }
     }
-
   }
 }

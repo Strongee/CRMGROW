@@ -200,7 +200,6 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   selectMaterialAction(title: string): void {
-    console.log("selected filter =========>", title);
     if (this.selectedMaterialActions == title) {
       this.selectedMaterialActions = '';
       this.selectedMaterial = [];

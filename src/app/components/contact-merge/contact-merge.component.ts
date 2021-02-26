@@ -200,7 +200,6 @@ export class ContactMergeComponent implements OnInit {
     };
     this.contactService.mergeContacts(data).subscribe((res) => {
       this.saving = false;
-      console.log("merged contact ==============>", res);
       if (res) {
         this.dialogRef.close(true);
       }

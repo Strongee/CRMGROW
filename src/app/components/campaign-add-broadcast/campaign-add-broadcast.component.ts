@@ -169,7 +169,6 @@ export class CampaignAddBroadcastComponent implements OnInit {
         })
         .toISOString();
       // Number(new Date(this.selectedDateTime).getHours()) + ':00:00';
-      // console.log("broadcast:: ======>", timezone, time);
 
       // const dueDateTime = new Date(
       //   `${this.date.year}-${numPad(this.date.month)}-${numPad(

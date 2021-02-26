@@ -1,0 +1,36 @@
+<div mat-dialog-title class="title">
+  <div class="row">
+    <div class="col-md-4 col-sm-12 col-12">
+      <div class="v-center">
+        <i class="i-icon arrow-icon i-chev-left bgc-dark mr-2"></i>
+        <ng-container *ngIf="contact.picture_profile; else userProfilePlaceholder">
+          <img [src]="contact.picture_profile" class="avatar" />
+        </ng-container>
+        <ng-template #userProfilePlaceholder>
+          <div class="name-avatar">
+            {{contact.avatarName}}
+          </div>
+        </ng-template>
+        <div class="ml-2">
+          <div class="f-3">
+            {{contact.fullName}}
+          </div>
+          <div class="mt-1"></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-3 col-sm-4 col-12">
+      <label>Label</label>
+      <div class="v-center mt-1">
+        <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="label.color === '#FFF' ? '#000' : label.color"></i>
+        <span class="f-3 fw-600">{{label.name}}</span>
+      </div>
+    </div>
+    <div class="form-group col-md-5 col-sm-8 col-12">
+      <label>Contact Added</label>
+      <div class="f-3 mt-1">{{contact.createdAt | date: 'MMM dd yyyy, h:mm a'}}</div>
+    </div>
+  </div>
+</div>
+<mat-dialog-content>
+</mat-dialog-content>

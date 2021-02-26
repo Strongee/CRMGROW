@@ -31,7 +31,6 @@ export class CampaignSmtpComponent implements OnInit {
     this.userService.connectSMTP(data).subscribe(
       (res) => {
         if (res) {
-          console.log("smtp connect response ==========>", res);
         }
       },
       (error) => {}

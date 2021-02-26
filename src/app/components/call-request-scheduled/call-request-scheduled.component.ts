@@ -44,7 +44,6 @@ export class CallRequestScheduledComponent implements OnInit {
 
   load(): void {
     this.formData = this.data.plan;
-    console.log("call request ===========>", this.formData);
     this.selectedDate = this.formData.confirmed_at;
     this.userService.profile$.subscribe((res) => {
       if (this.formData) {

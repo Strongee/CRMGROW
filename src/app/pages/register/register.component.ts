@@ -99,7 +99,6 @@ export class RegisterComponent implements OnInit {
 
   socialHandle(): void {
     this.route.queryParams.subscribe((params) => {
-      console.log("outlook params ==============>", params);
       if (params['code']) {
         const socialType = this.route.snapshot.params['social'];
         switch (socialType) {

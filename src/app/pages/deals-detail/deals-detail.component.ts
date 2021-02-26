@@ -173,7 +173,6 @@ export class DealsDetailComponent implements OnInit {
               this.taskActivity++;
             }
           }
-          console.log('activity =============>', this.activities);
         }
       });
   }
@@ -183,7 +182,6 @@ export class DealsDetailComponent implements OnInit {
       this.stages = res;
       if (this.stages.length) {
         this.stages.forEach((stage) => {
-          console.log("get stage ========>", stage._id, id);
           if (stage._id == id) {
             this.selectedStage = stage.title;
             this.selectedStageId = stage._id;

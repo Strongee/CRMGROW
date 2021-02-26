@@ -165,7 +165,6 @@ export class AutoflowComponent
             .subscribe((contacts) => {
               this.assignedContactLoading = false;
               this.contacts = contacts;
-              console.log('automation contacts ==============>', contacts);
             });
         }
 
@@ -182,7 +181,6 @@ export class AutoflowComponent
 
   loadContacts(id): void {
     this.automationService.getAssignedContacts(id).subscribe((res) => {
-      console.log('assigned contacts =============>', res);
       if (res) {
       }
     });
@@ -423,7 +421,6 @@ export class AutoflowComponent
   }
 
   insertAction(link = null): void {
-    console.log('insertAction ===========>', link);
     if (link) {
       const source = link.source;
       const target = link.target;
@@ -1424,7 +1421,6 @@ export class AutoflowComponent
       })
       .afterClosed()
       .subscribe((res) => {
-        console.log("autoflow assign ============>", res);
         if (res && res.data && res.data.length) {
           this.contacts = [...this.contacts, ...res.data];
         }
