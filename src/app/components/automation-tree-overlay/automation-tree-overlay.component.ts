@@ -8,6 +8,7 @@ import { OverlayService } from 'src/app/services/overlay.service';
 })
 export class AutomationTreeOverlayComponent implements OnInit {
   @Input('dataSource') node;
+  @Input('type') type;
   isShow = false;
   constructor(private overlayService: OverlayService) {}
 

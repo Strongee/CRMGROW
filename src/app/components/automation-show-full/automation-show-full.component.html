@@ -59,7 +59,7 @@
                 <svg:g class="node" *ngIf="node.category === 'NORMAL'">
                   <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.leaf ? 200 : 110"
                             fill="transparent" />
-                  <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110" class="c-pointer">
+                  <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110" class="c-pointer" #treeNode (click)="easyView(node, treeNode, treeOverlay)">
                     <xhtml:div class="cardContainer"
                                style="text-align: center;"
                                xmlns="http://www.w3.org/1999/xhtml">
@@ -103,7 +103,13 @@
               </ng-template>
             </ngx-graph>
           </ng-template>
-  
+          <ng-template #treeOverlay let-close="close" let-data>
+            <app-automation-tree-overlay
+                [dataSource]="data.data"
+                [type]="'full'"
+            >
+            </app-automation-tree-overlay>
+          </ng-template>
           <!--  -->
         </div>
       </div>
