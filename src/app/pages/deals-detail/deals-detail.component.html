@@ -718,6 +718,17 @@
                     </div>
                   </ng-container>
                 </ng-container>
+
+                <ng-container *ngIf="activityType.id !== 'all' && !activityCount[activityType.id]">
+                  <div class="empty-list">
+                    <div class="object-icon v-center">
+                      <i class="i-icon i-{{activityType.id}} d-block bgc-dark"></i>
+                    </div>
+                    <h4 class="font-weight-bold mt-4 mb-3">
+                      There are no {{activityType.label | lowercase}} with this contact yet.
+                    </h4>
+                  </div>
+                </ng-container>
                 
                 <div class="history-detail p-3 mt-3" *ngIf="activityType.id === 'all'">
                   <div class="v-center justify-content-between mb-3">
