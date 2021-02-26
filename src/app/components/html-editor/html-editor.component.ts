@@ -239,7 +239,6 @@ export class HtmlEditorComponent implements OnInit {
   }
 
   selectTemplate(template: Template): void {
-    console.log('seelect template', template);
     this.onChangeTemplate.emit(template);
     this.setValue(template.content);
   }

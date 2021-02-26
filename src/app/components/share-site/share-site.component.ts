@@ -195,9 +195,9 @@ export class ShareSiteComponent implements OnInit {
   selectTemplate(event): void {
     this.selectedTemplate = event;
     this.email.subject = this.selectedTemplate.subject;
-    this.email.content = this.selectedTemplate.content;
-    if (this.email.content && this.htmlEditor) {
-      this.htmlEditor.setValue(this.email.content);
-    }
+    // this.email.content = this.selectedTemplate.content;
+    // if (this.email.content && this.htmlEditor) {
+    //   this.htmlEditor.setValue(this.email.content);
+    // }
   }
 }
