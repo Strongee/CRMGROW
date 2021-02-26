@@ -48,7 +48,6 @@ export class MessagesComponent implements OnInit {
       }
     );
     this.smsService.getAllMessage().subscribe((res) => {
-      console.log('###', res);
       res['data'].forEach((data) => {
         data.contact_detail.forEach((contact) => {
           this.contacts.push(new Contact().deserialize(contact));
