@@ -347,20 +347,16 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
 
   contactDetail(contact): void {
     if (contact && contact._id) {
-      // if (this.isOrganizer) {
-      //   window.open('/contacts/' + contact._id, '_blank');
-      // } else {
-      // this.loadContact(contact._id);
-      // this.storeService.selectedContact$.subscribe((res) => {
-      //   if (res && res._id) {
-          this.dialog.open(ContactDetailComponent, {
-            ...DialogSettings.CONTACT,
-            data: {
-              contact
-            }
-          });
-        // }
-      // });
+      if (this.isOrganizer) {
+        window.open('/contacts/' + contact._id, '_blank');
+      } else {
+        this.dialog.open(ContactDetailComponent, {
+          ...DialogSettings.CONTACT,
+          data: {
+            contact
+          }
+        });
+      }
     }
   }
 }
