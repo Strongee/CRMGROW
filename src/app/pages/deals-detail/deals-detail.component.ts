@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from 'src/app/services/store.service';
 import { DealsService } from 'src/app/services/deals.service';
@@ -34,6 +34,7 @@ import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
 import { getCurrentTimezone } from 'src/app/helper';
 import { DetailActivity } from 'src/app/models/activityDetail.model';
+import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -110,6 +111,11 @@ export class DealsDetailComponent implements OnInit {
   taskSubscription: Subscription;
   dealSubscription: Subscription;
 
+  titleEditable = false;
+  dealTitle = '';
+  saving = false;
+  saveSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
@@ -121,7 +127,8 @@ export class DealsDetailComponent implements OnInit {
     private appointmentService: AppointmentService,
     private teamService: TeamService,
     private handlerService: HandlerService,
-    private location: Location
+    private location: Location,
+    private element: ElementRef
   ) {
     this.dealsService.getStage(false);
     this.appointmentService.loadCalendars(false);
@@ -760,6 +767,38 @@ export class DealsDetailComponent implements OnInit {
 
   removeAppointment(): void {}
 
+  /**
+   * Focus the cursor to the editor
+   * @param formControl: Input Form Control
+   */
+  focusTitle(): void {
+    this.titleEditable = true;
+    this.dealTitle = this.deal.main.title;
+    setTimeout(() => {
+      if (this.element.nativeElement.querySelector('.title-input')) {
+        this.element.nativeElement.querySelector('.title-input').focus();
+      }
+    }, 200);
+  }
+  checkAndSave(event): void {
+    if (event.keyCode === 13) {
+      if (this.deal.main.title === this.dealTitle) {
+        this.titleEditable = false;
+        return;
+      }
+      this.saving = true;
+      this.saveSubscription && this.saveSubscription.unsubscribe();
+      this.saveSubscription = this.dealsService
+        .editDeal(this.dealId, { title: this.dealTitle })
+        .subscribe((res) => {
+          this.saving = false;
+          if (res) {
+            this.deal.main.title = this.dealTitle;
+            this.titleEditable = false;
+          }
+        });
+    }
+  }
   /**************************************
    * Appointment Activity Relative Functions
    **************************************/

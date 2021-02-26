@@ -1,14 +1,21 @@
 <div class="page-content pt-0">
     <div class="d-flex deal-panel">
         <div class="deal-info-panel pr-3">
-            <div class="v-center op-56 c-pointer mb-4 mt-3" (click)="backPage()">
+            <div class="v-center op-56 c-pointer mb-4 mt-3 back-button" (click)="backPage()">
                 <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
                 <span class="f-5 font-weight-bold">Back to deals</span>
             </div>
             <div class="v-center justify-content-between deal-main mb-3">
-                <div class="f-6 font-weight-bold mr-3">
+                <ng-container *ngIf="titleEditable; else displayTitleTemplate">
+                  <div class="form-group mb-0 flex-grow-1 mr-3">
+                    <input class="form-control title-input" [(ngModel)]="dealTitle" name="title" #title="ngModel" required (blur)="checkAndSave({keyCode: 13})" (keyup)="checkAndSave($event)" [disabled]="saving" [class.loading]="saving"/>
+                  </div>
+                </ng-container>
+                <ng-template #displayTitleTemplate>
+                  <div class="f-6 font-weight-bold mr-3" (click)="focusTitle()">
                     {{deal.main.title}}
-                </div>
+                  </div>
+                </ng-template>
                 <div ngbDropdown class="ml-auto button-more p-0">
                     <div class="v-center btn btn-blue" ngbDropdownToggle>
                       <span class="f-6 font-weight-bold text-white c-pointer px-2">

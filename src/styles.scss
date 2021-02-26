@@ -664,6 +664,15 @@ button {
     height: 40px;
     font-size: 14px;
     box-shadow: none!important;
+
+    &.loading {
+      background-image: url(/assets/img/spinner-dark.svg);
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 32px;
+      background-color: #f8f8f8;
+    }
   }
   textarea {
     &.form-control {
