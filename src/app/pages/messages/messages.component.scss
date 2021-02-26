@@ -93,13 +93,13 @@
                 &:first-child {
                     margin-top: 0 !important;
                 }
-                &:nth-child(odd) {
+                &.send {
                     border-radius: 22px 22px 6px 22px;
                     background-color: $color-blue;
                     color: white;
                     margin-left: auto;
                 }
-                &:nth-child(even) {
+                &.receive {
                     border-radius: 22px 22px 22px 6px;
                     background-color: #EFF1F4;
                     color: $color-dark;

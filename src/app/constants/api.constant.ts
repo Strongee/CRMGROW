@@ -303,3 +303,7 @@ export const NOTIFICATION = {
 export const FILTER = {
   API: 'filter/'
 };
+
+export const SMS = {
+  GET: 'sms'
+};

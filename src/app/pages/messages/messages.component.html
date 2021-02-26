@@ -58,13 +58,13 @@
             <div class="p-3 border-bottom message-list">
                 <ng-container *ngFor="let messageList of messages">
                     <ng-container *ngIf="isNew && messageList.id === newContact._id">
-                        <div class="message mt-3" *ngFor="let message of messageList.message">
-                            {{message}}
+                        <div class="message mt-3" [class.send]="message.type == 0" [class.receive]="message.type == 1" *ngFor="let message of messageList.messages">
+                            {{message.content}}
                         </div>
                     </ng-container>
                     <ng-container *ngIf="!isNew && messageList.id === selectedContact._id">
-                        <div class="message mt-3" *ngFor="let message of messageList.message">
-                            {{message}}
+                        <div class="message mt-3" [class.send]="message.type == 0" [class.receive]="message.type == 1" *ngFor="let message of messageList.messages">
+                            {{message.content}}
                         </div>
                     </ng-container>
                 </ng-container>

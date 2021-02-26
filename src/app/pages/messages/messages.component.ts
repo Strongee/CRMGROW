@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { UserService } from 'src/app/services/user.service';
+import { SmsService } from 'src/app/services/sms.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
@@ -16,56 +17,9 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./messages.component.scss']
 })
 export class MessagesComponent implements OnInit {
-  contacts = [
-    {
-      avatarName: 'DW',
-      fullName: 'Donald Williams',
-      cell_phone: '+12015550213',
-      latest_message: "I'm a preview of the text message for you to see",
-      received_at: '1/14/21',
-      _id: '1'
-    },
-    {
-      avatarName: 'HW',
-      fullName: 'Hattie Webster',
-      cell_phone: '+12057896648',
-      latest_message: "I'm a preview of the text message for you to see",
-      received_at: '1/14/21',
-      _id: '2'
-    }
-  ];
-  selectedContact = {
-    avatarName: '',
-    fullName: '',
-    cell_phone: '',
-    latest_message: '',
-    received_at: '',
-    _id: ''
-  };
-  messages = [
-    {
-      id: '1',
-      message: [
-        'Hey, lets meet on dinner and discuss',
-        'Sure, is tomorrow 1 pm okay?',
-        'Hey, lets meet on dinner and discuss',
-        'Sure, is tomorrow 1 pm okay?',
-        'Hey, lets meet on dinner and discuss',
-        'Sure, is tomorrow 1 pm okay?',
-        'Hey, lets meet on dinner and discuss',
-        'Sure, is tomorrow 1 pm okay?'
-      ]
-    },
-    {
-      id: '2',
-      message: [
-        'Could you let me know when you come here?',
-        'Okay, I will',
-        'Could you let me know when you come here?',
-        'Okay, I will'
-      ]
-    }
-  ];
+  contacts = [];
+  selectedContact: Contact = new Contact();
+  messages = [];
   messageText = '';
   showFileList = false;
   showMessage = false;
@@ -84,7 +38,8 @@ export class MessagesComponent implements OnInit {
     private dialog: MatDialog,
     public templateService: TemplatesService,
     private userService: UserService,
-    private materialService: MaterialService
+    private materialService: MaterialService,
+    private smsService: SmsService
   ) {
     this.templateService.loadAll(false);
     this.profileSubscription = this.userService.profile$.subscribe(
@@ -92,11 +47,24 @@ export class MessagesComponent implements OnInit {
         this.user_id = profile._id;
       }
     );
+    this.smsService.getAllMessage().subscribe((res) => {
+      console.log('###', res);
+      res['data'].forEach((data) => {
+        data.contact_detail.forEach((contact) => {
+          this.contacts.push(new Contact().deserialize(contact));
+          this.selectedContact = new Contact().deserialize(this.contacts[0]);
+        });
+        const message = {
+          id: data.contact_detail[0]._id,
+          messages: data.data
+        };
+        this.messages.push(message);
+        console.log('@@@', this.messages);
+      });
+    });
   }
 
-  ngOnInit(): void {
-    this.selectedContact = { ...this.selectedContact, ...this.contacts[0] };
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
@@ -194,10 +162,14 @@ export class MessagesComponent implements OnInit {
         this.messages.forEach((messageList) => {
           if (this.isNew && messageList.id == this.newContact._id) {
             messageList.message.push(this.messageText);
-            this.contacts.push(JSON.parse(JSON.stringify(this.newContact)));
+            this.contacts.push(new Contact().deserialize(this.newContact));
           }
           if (!this.isNew && messageList.id == this.selectedContact._id) {
-            messageList.message.push(this.messageText);
+            const message = {
+              type: 0,
+              content: this.messageText
+            };
+            messageList.messages.push(message);
           }
         });
       }
