@@ -1,11 +1,12 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PageMenuItem } from 'src/app/utils/data.types';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user.model';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +16,7 @@ import { User } from 'src/app/models/user.model';
 export class ProfileComponent implements OnInit {
   user: User = new User();
   menuItems: PageMenuItem[] = [
-    { id: 'general', icon: 'i-general', label: 'General Information' },
+    { id: 'general', icon: 'i-general', label: 'Info' },
     { id: 'signature', icon: 'i-signature', label: 'Signature' },
     { id: 'security', icon: 'i-security', label: 'Security' },
     { id: 'billing', icon: 'i-payment', label: 'Billing' }
@@ -27,6 +28,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private location: Location,
+    private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
     private toast: ToastrService
@@ -80,13 +82,14 @@ export class ProfileComponent implements OnInit {
             }
           );
         }
-      } else {
-        this.currentPage =
-          this.route.snapshot.params['page'] || this.defaultPage;
-        this.currentPageItem = this.menuItems.filter(
-          (item) => item.id == this.currentPage
-        );
       }
+    });
+
+    this.route.params.subscribe((params) => {
+      this.currentPage = params['page'] || this.defaultPage;
+      this.currentPageItem = this.menuItems.filter(
+        (item) => item.id == this.currentPage
+      );
     });
   }
 
