@@ -123,7 +123,7 @@ export class CalendarComponent implements OnInit {
                 this.toast.success(
                   'Your Outlook Calendar is connected successfully.'
                 );
-                this.router.navigate(['/profile/integration']);
+                this.router.navigate(['/settings/integration']);
               }
             });
         }
@@ -135,7 +135,7 @@ export class CalendarComponent implements OnInit {
                 this.toast.success(
                   'Your Google Calendar is connected successfully.'
                 );
-                this.router.navigate(['/profile/integration']);
+                this.router.navigate(['/settings/integration']);
               }
             });
         }

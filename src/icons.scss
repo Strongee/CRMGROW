@@ -198,6 +198,10 @@
 .i-zapier {
   mask-image: url('./assets/img/zapier.svg');
 }
+.i-team_calls {
+  mask-image: url('./assets/img/group_call.svg');
+}
+
 .i-record{
   mask-image: url('/assets/img/record.svg');
   position: relative;
@@ -350,7 +354,7 @@
   mask-image: url('/assets/img/group_call.svg')
 }
 .i-follow_ups {
-  mask-image: url('/assets/img/tasks.svg')
+  mask-image: url('/assets/img/task.svg')
 }
 .i-deals {
   mask-image: url('/assets/img/flame.svg')
@@ -564,7 +568,6 @@
 .act-image_trackers.share {
   background-image: url('/assets/img/activities/image_like.svg');
 }
-
 .act-pdf_trackers {
   background-image: url('/assets/img/activities/pdf_watched.svg');
 }

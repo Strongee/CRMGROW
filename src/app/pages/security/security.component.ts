@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 
@@ -15,38 +16,43 @@ export class SecurityComponent implements OnInit {
   saving = false;
   saveSubscription: Subscription;
 
-  constructor(public userService: UserService) {}
+  constructor(public userService: UserService, private toast: ToastrService) {}
 
   ngOnInit(): void {}
 
-  saveChange(): void {
+  saveChange(form): void {
     const hasPassword = this.userService.profile.getValue().hasPassword;
     if (hasPassword) {
       this.saving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
       this.userService
         .updatePassword(this.old_password, this.new_password)
-        .subscribe(
-          (res) => {
-            this.saving = false;
+        .subscribe((status) => {
+          this.saving = false;
+          if (status) {
             this.old_password = '';
             this.new_password = '';
             this.confirm_password = '';
-          },
-          (err) => {
-            this.saving = false;
+            form.resetForm();
+            this.toast.success('', 'Password reset was successful!', {
+              closeButton: true
+            });
           }
-        );
+        });
     } else {
       this.saving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
       this.userService.createPassword(this.new_password).subscribe((status) => {
         this.saving = false;
-        this.old_password = '';
-        this.new_password = '';
-        this.confirm_password = '';
         if (status) {
+          this.old_password = '';
+          this.new_password = '';
+          this.confirm_password = '';
+          form.resetForm();
           this.userService.updateProfileImpl({ hasPassword: true });
+          this.toast.success('', 'Password create was successful!', {
+            closeButton: true
+          });
         }
       });
     }

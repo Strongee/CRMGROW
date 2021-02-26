@@ -1,5 +1,9 @@
 @import '../../../variables';
 
+.back-button {
+  width: fit-content;
+}
+
 .deal-info-panel {
     min-width: 376px;
     .i-triangle-left {
@@ -398,4 +402,8 @@
             }
         }
     }
+}
+
+.title-input {
+  height: 38px;
 }

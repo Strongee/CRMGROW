@@ -15,6 +15,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
   DISPLAY_COLUMNS = [
     'contact_name',
+    'contact_address',
     'contact_label',
     'activity',
     'contact_email',

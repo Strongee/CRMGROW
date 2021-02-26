@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from 'src/app/services/store.service';
 import { DealsService } from 'src/app/services/deals.service';
@@ -8,12 +8,13 @@ import { TabItem } from 'src/app/utils/data.types';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
-import { DialogSettings } from 'src/app/constants/variable.constants';
+import {
+  CALENDAR_DURATION,
+  DialogSettings
+} from 'src/app/constants/variable.constants';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
-import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { DealEditComponent } from 'src/app/components/deal-edit/deal-edit.component';
-import { DetailActivity } from '../../models/activityDetail.model';
 import { Subscription } from 'rxjs';
 import { NoteEditComponent } from '../../components/note-edit/note-edit.component';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
@@ -24,53 +25,83 @@ import { TaskService } from '../../services/task.service';
 import { HandlerService } from '../../services/handler.service';
 import { DealContactComponent } from 'src/app/components/deal-contact/deal-contact.component';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { Location } from '@angular/common';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { TeamService } from 'src/app/services/team.service';
+import { UserService } from 'src/app/services/user.service';
+import { getCurrentTimezone } from 'src/app/helper';
+import { DetailActivity } from 'src/app/models/activityDetail.model';
+import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
   styleUrls: ['./deals-detail.component.scss']
 })
 export class DealsDetailComponent implements OnInit {
+  timezone;
+  dealId;
   deal = {
     main: new Deal(),
     activities: [],
     contacts: []
   };
-  dealId;
   stages: any[] = [];
-  selectedStage = '';
+  selectedStage;
   selectedStageId = '';
-  dealPanel = true;
-  contactsPanel = true;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
     { icon: '', label: 'Notes', id: 'notes' },
     { icon: '', label: 'Emails', id: 'emails' },
     { icon: '', label: 'Texts', id: 'texts' },
     { icon: '', label: 'Appointments', id: 'appointments' },
-    { icon: '', label: 'Group Calls', id: 'group_calls' },
+    { icon: '', label: 'Group Calls', id: 'team_calls' },
     { icon: '', label: 'Tasks', id: 'follow_ups' }
   ];
-  action: TabItem = this.tabs[0];
-  noteActivity = 0;
-  emailActivity = 0;
-  textActivity = 0;
-  appointmentActivity = 0;
-  groupCallActivity = 0;
-  taskActivity = 0;
-  dealActivity = 0;
+  tab: TabItem = this.tabs[0];
+  activityType: TabItem = this.tabs[0];
+  timeSorts = [
+    { label: 'All', id: 'all' },
+    { label: 'Overdue', id: 'overdue' },
+    { label: 'Today', id: 'today' },
+    { label: 'Tomorrow', id: 'tomorrow' },
+    { label: 'This week', id: 'this_week' },
+    { label: 'Next Week', id: 'next_week' }
+  ];
+  selectedTimeSort = this.timeSorts[0];
+  durations = CALENDAR_DURATION;
+  dealPanel = true;
+  contactsPanel = true;
+
+  activityCount = {
+    notes: 0,
+    emails: 0,
+    texts: 0,
+    appointments: 0,
+    team_calls: 0,
+    follow_ups: 0
+  };
   notes = [];
   emails = [];
   texts = [];
   appointments = [];
   groupCalls = [];
   tasks = [];
-  activities = [];
 
+  activities: DetailActivity[] = [];
+  timelines = [];
+  showingDetails = [];
+  showingTimelines = [];
+  groupActions = {};
+  details = {};
+  detailData = {};
+  sendActions = {};
+
+  profileSubscription: Subscription;
+  stageLoadSubscription: Subscription;
+  loadSubscription: Subscription;
   activitySubscription: Subscription;
   noteSubscription: Subscription;
   emailSubscription: Subscription;
@@ -80,59 +111,82 @@ export class DealsDetailComponent implements OnInit {
   taskSubscription: Subscription;
   dealSubscription: Subscription;
 
+  titleEditable = false;
+  dealTitle = '';
+  saving = false;
+  saveSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
+    private userService: UserService,
     public dealsService: DealsService,
     private noteService: NoteService,
     private taskService: TaskService,
     private appointmentService: AppointmentService,
     private teamService: TeamService,
     private handlerService: HandlerService,
-    private storeService: StoreService,
-    private location: Location
+    private location: Location,
+    private element: ElementRef
   ) {
-    this.dealsService.getStage(true);
-
-    this.teamService.loadAll(true);
+    this.dealsService.getStage(false);
     this.appointmentService.loadCalendars(false);
-    // this.profileSubscription && this.profileSubscription.unsubscribe();
-    // this.profileSubscription = this.userService.profile$.subscribe((user) => {
-    //   try {
-    //     this.timezone = JSON.parse(user.time_zone_info);
-    //   } catch (err) {
-    //     const timezone = getCurrentTimezone();
-    //     this.timezone = { zone: user.time_zone || timezone };
-    //   }
-    //   this.checkSharable();
-    // });
+    this.teamService.loadAll(true);
 
-    // this.teamSubscription && this.teamSubscription.unsubscribe();
-    // this.teamSubscription = this.teamService.teams$.subscribe(() => {
-    //   this.checkSharable();
-    // });
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
+      try {
+        this.timezone = JSON.parse(user.time_zone_info);
+      } catch (err) {
+        const timezone = getCurrentTimezone();
+        this.timezone = { zone: user.time_zone || timezone };
+      }
+    });
+
+    this.stageLoadSubscription = this.dealsService.stages$.subscribe((res) => {
+      this.stages = res;
+      this.changeSelectedStage();
+    });
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
     if (id) {
       this.dealId = id;
-      this.dealsService.getDeal(id).subscribe((res) => {
+      this.loadSubscription && this.loadSubscription.unsubscribe();
+      this.loadSubscription = this.dealsService.getDeal(id).subscribe((res) => {
         if (res) {
           this.deal = res;
           this.deal.contacts = (res.contacts || []).map((e) =>
             new Contact().deserialize(e)
           );
           if (this.deal.main.deal_stage) {
-            this.getStage(this.deal.main.deal_stage);
+            this.selectedStageId = this.deal.main.deal_stage;
+            this.changeSelectedStage();
           }
         }
       });
-      // this.loadNotes();
       this.loadActivity();
-      // this.loadEmails();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.stageLoadSubscription && this.stageLoadSubscription.unsubscribe();
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+  }
+
+  changeSelectedStage(): void {
+    this.stages.some((e) => {
+      if (e._id === this.selectedStageId) {
+        this.selectedStage = e;
+      }
+    });
+  }
+
+  backPage(): void {
+    this.location.back();
   }
 
   loadNotes(): void {
@@ -163,37 +217,164 @@ export class DealsDetailComponent implements OnInit {
       .getActivity({ deal: this.dealId })
       .subscribe((res) => {
         if (res) {
-          this.activities = res;
+          const activities = res
+            .filter((e) => {
+              return e.type !== 'deals';
+            })
+            .sort((a, b) => {
+              return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
+            });
+          this.activities = activities;
           for (const activity of this.activities) {
-            if (activity.type === 'notes') {
-              this.noteActivity++;
-            } else if (activity.type === 'emails') {
-              this.emailActivity++;
-            } else if (activity.type === 'follow_ups') {
-              this.taskActivity++;
-            }
+            this.activityCount[activity.type]++;
           }
+          this.groupActivities();
+          this.changeActivityTypes(this.activityType);
         }
       });
   }
 
-  getStage(id: string): void {
-    this.dealsService.stages$.subscribe((res) => {
-      this.stages = res;
-      if (this.stages.length) {
-        this.stages.forEach((stage) => {
-          if (stage._id == id) {
-            this.selectedStage = stage.title;
-            this.selectedStageId = stage._id;
-          }
-        });
+  groupActivities(): void {
+    this.groupActions = {};
+    this.timelines = [];
+    this.details = {};
+    this.activities.forEach((e) => {
+      const group = this.generateUniqueId(e);
+      if (this.groupActions[group]) {
+        this.groupActions[group].push(e);
+      } else {
+        e.group_id = group;
+        this.groupActions[group] = [e];
+        this.timelines.push(e);
       }
     });
   }
 
-  backTasks(): void {
-    this.router.navigate(['./deals']);
+  generateUniqueId(activity: DetailActivity): string {
+    if (!activity.activity_detail) {
+      if (activity.type === 'follow_ups' && activity.follow_ups) {
+        return activity.follow_ups;
+      }
+      return activity._id;
+    }
+    let material_id;
+    switch (activity.type) {
+      case 'video_trackers':
+      case 'pdf_trackers':
+      case 'image_trackers':
+      case 'email_trackers':
+        const material_type = activity.type.split('_')[0];
+        material_id = activity.activity_detail[material_type];
+        if (material_id instanceof Array) {
+          material_id = material_id[0];
+        }
+        let activity_id = activity.activity_detail['activity'];
+        if (activity_id instanceof Array) {
+          activity_id = activity_id[0];
+        }
+        return `${material_id}_${activity_id}`;
+      case 'videos':
+      case 'pdfs':
+      case 'images':
+      case 'emails':
+        material_id = activity.activity_detail['_id'];
+        if (activity.type !== 'emails') {
+          activity.activity_detail['content'] = activity.content;
+          activity.activity_detail['subject'] = activity.subject;
+        }
+        this.details[material_id] = activity.activity_detail;
+        const group_id = `${material_id}_${activity._id}`;
+        this.detailData[group_id] = activity.activity_detail;
+        this.detailData[group_id]['data_type'] = activity.type;
+        this.detailData[group_id]['group_id'] = group_id;
+        this.detailData[group_id]['emails'] = activity.emails;
+        return group_id;
+      case 'texts':
+        return activity._id;
+      default:
+        const detailKey = activity.activity_detail['_id'];
+        this.detailData[detailKey] = activity.activity_detail;
+        this.detailData[detailKey]['data_type'] = activity.type;
+        return detailKey;
+    }
   }
+
+  openAppointmentDlg(): void {
+    const calendars = this.appointmentService.calendars.getValue();
+    if (!calendars || !calendars.length) {
+      this.dialog.open(NotifyComponent, {
+        ...DialogSettings.ALERT,
+        data: {
+          title: 'Calendar',
+          message:
+            'You did not connected with your calendars. Please connect with your calendar.'
+        }
+      });
+      return;
+    }
+
+    this.dialog.open(CalendarDialogComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      maxHeight: '700px',
+      data: {
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
+    });
+  }
+
+  openGroupCallDlg(): void {
+    this.dialog.open(JoinCallRequestComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '530px',
+      data: {
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
+    });
+  }
+
+  openSendEmail(): void {
+    this.dialog.open(SendEmailComponent, {
+      position: {
+        bottom: '0px',
+        right: '0px'
+      },
+      width: '100vw',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
+      disableClose: false,
+      data: {
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
+    });
+  }
+
+  openTaskDlg(): void {
+    this.dialog.open(TaskCreateComponent, {
+      ...DialogSettings.TASK,
+      data: {
+        contacts: this.deal.contacts,
+        deal: this.dealId
+      }
+    });
+  }
+
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.NOTE,
+      data: {
+        deal: this.dealId,
+        contacts: this.deal.contacts
+      }
+    });
+  }
+
+  openSendText(): void {}
 
   editDeal(): void {
     this.dealPanel = !this.dealPanel;
@@ -212,7 +393,8 @@ export class DealsDetailComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.deal.main = { ...this.deal.main, ...res };
-          this.getStage(this.deal.main.deal_stage);
+          this.selectedStageId = this.deal.main.deal_stage;
+          this.changeSelectedStage();
         }
       });
   }
@@ -224,7 +406,9 @@ export class DealsDetailComponent implements OnInit {
       deal_stage_id: stage._id
     };
     this.dealsService.moveDeal(data).subscribe((res) => {
-      this.getStage(stage._id);
+      this.deal.main.deal_stage = stage._id;
+      this.selectedStageId = stage._id;
+      this.changeSelectedStage();
     });
   }
 
@@ -305,85 +489,119 @@ export class DealsDetailComponent implements OnInit {
   }
 
   changeTab(tab: TabItem): void {
-    this.action = tab;
-  }
+    this.tab = tab;
 
-  openAppointmentDlg(): void {
-    const calendars = this.appointmentService.calendars.getValue();
-    if (!calendars || !calendars.length) {
-      this.dialog.open(NotifyComponent, {
-        ...DialogSettings.ALERT,
-        data: {
-          title: 'Calendar',
-          message:
-            'You did not connected with your calendars. Please connect with your calendar.'
+    if (this.tab.id !== 'all') {
+      this.showingDetails = [];
+      this.sendActions = {};
+      const dataType = tab.id;
+      if (tab.id === 'follow_ups') {
+        this.selectedTimeSort = this.timeSorts[0];
+      }
+      const details = Object.values(this.detailData);
+      details.forEach((e) => {
+        if (dataType === 'emails') {
+          if (e['data_type'] === 'emails') {
+            this.showingDetails.push(e);
+            if (this.sendActions[e['_id']]) {
+              this.sendActions[e['_id']] = [
+                ...this.sendActions[e['_id']],
+                ...this.groupActions[e['group_id']]
+              ];
+            } else {
+              this.sendActions[e['_id']] = this.groupActions[e['group_id']];
+            }
+          }
+          if (
+            e['data_type'] === 'videos' ||
+            e['data_type'] === 'pdfs' ||
+            e['data_type'] === 'images'
+          ) {
+            if (e['emails']) {
+              if (this.sendActions[e['emails']]) {
+                this.sendActions[e['emails']] = [
+                  ...this.sendActions[e['emails']],
+                  ...this.groupActions[e['group_id']]
+                ];
+              } else {
+                this.sendActions[e['emails']] = this.groupActions[e['group_id']];
+              }
+            } else {
+              this.showingDetails.push(e);
+              this.sendActions[e['group_id']] = this.groupActions[e['group_id']];
+            }
+          }
+        } else if (e['data_type'] === dataType) {
+          this.showingDetails.push(e);
         }
       });
-      return;
+      this.showingDetails = this.showingDetails.sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      );
     }
+  }
+  changeActivityTypes(tab: TabItem): void {
+    this.activityType = tab;
 
-    this.dialog.open(CalendarDialogComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '600px',
-      maxHeight: '700px',
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
+    this.showingTimelines = this.timelines.filter((e) => {
+      if (tab.id === 'all') {
+        return true;
       }
+      return tab.id === e.type;
     });
   }
-
-  openGroupCallDlg(): void {
-    this.dialog.open(JoinCallRequestComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '530px',
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
-      }
-    });
+  changeSort(timeSort: any): void {
+    this.changeTab(this.tab);
+    let today;
+    let weekDay;
+    this.selectedTimeSort = timeSort;
+    if (this.timezone.tz_name) {
+      today = moment().tz(this.timezone.tz_name).startOf('day');
+      weekDay = moment().tz(this.timezone.tz_name).startOf('week');
+    } else {
+      today = moment().utcOffset(this.timezone.zone).startOf('day');
+      weekDay = moment().utcOffset(this.timezone.zone).startOf('week');
+    }
+    let start_date = new Date();
+    let end_date = new Date();
+    switch (this.selectedTimeSort.id) {
+      case 'overdue':
+        end_date = today.format();
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date < end_date && !detail.status
+        );
+        break;
+      case 'today':
+        start_date = today.format();
+        end_date = today.add('day', 1).format();
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
+        );
+        break;
+      case 'tomorrow':
+        start_date = today.add('day', 1).format();
+        end_date = today.add('day', 2).format();
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
+        );
+        break;
+      case 'this_week':
+        start_date = weekDay.format();
+        end_date = weekDay.add('week', 1).format();
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
+        );
+        break;
+      case 'next_week':
+        start_date = weekDay.add('week', 1).format();
+        end_date = weekDay.add('week', 2).format();
+        this.showingDetails = this.showingDetails.filter(
+          (detail) => detail.due_date > start_date && detail.due_date < end_date
+        );
+        break;
+    }
   }
-
-  openSendEmail(): void {
-    this.dialog.open(SendEmailComponent, {
-      position: {
-        bottom: '0px',
-        right: '0px'
-      },
-      width: '100vw',
-      panelClass: 'send-email',
-      backdropClass: 'cdk-send-email',
-      disableClose: false,
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
-      }
-    });
-  }
-
-  openTaskDlg(): void {
-    this.dialog.open(TaskCreateComponent, {
-      ...DialogSettings.TASK,
-      data: {
-        contacts: this.deal.contacts,
-        deal: this.dealId
-      }
-    });
-  }
-
-  openNoteDlg(): void {
-    this.dialog.open(NoteCreateComponent, {
-      ...DialogSettings.NOTE,
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
-      }
-    });
-  }
-
-  deleteDealDlg(): void {}
 
   showDetail(event: any): void {
     const target: HTMLElement = event.target as HTMLElement;
@@ -539,5 +757,73 @@ export class DealsDetailComponent implements OnInit {
             });
         }
       });
+  }
+
+  editGroupCall(): void {}
+
+  removeGroupCall(): void {}
+
+  editAppointment(): void {}
+
+  removeAppointment(): void {}
+
+  /**
+   * Focus the cursor to the editor
+   * @param formControl: Input Form Control
+   */
+  focusTitle(): void {
+    this.titleEditable = true;
+    this.dealTitle = this.deal.main.title;
+    setTimeout(() => {
+      if (this.element.nativeElement.querySelector('.title-input')) {
+        this.element.nativeElement.querySelector('.title-input').focus();
+      }
+    }, 200);
+  }
+  checkAndSave(event): void {
+    if (event.keyCode === 13) {
+      if (this.deal.main.title === this.dealTitle) {
+        this.titleEditable = false;
+        return;
+      }
+      this.saving = true;
+      this.saveSubscription && this.saveSubscription.unsubscribe();
+      this.saveSubscription = this.dealsService
+        .editDeal(this.dealId, { title: this.dealTitle })
+        .subscribe((res) => {
+          this.saving = false;
+          if (res) {
+            this.deal.main.title = this.dealTitle;
+            this.titleEditable = false;
+          }
+        });
+    }
+  }
+  /**************************************
+   * Appointment Activity Relative Functions
+   **************************************/
+  getTime(start: any, end: any): any {
+    const start_hour = new Date(start).getHours();
+    const end_hour = new Date(end).getHours();
+    const start_minute = new Date(start).getMinutes();
+    const end_minute = new Date(end).getMinutes();
+    const duration = end_hour - start_hour + (end_minute - start_minute) / 60;
+    const durationTime = this.durations.filter(
+      (time) => time.value == duration
+    );
+    if (durationTime) {
+      return durationTime[0].text;
+    }
+  }
+
+  convertContent(content = ''): any {
+    const htmlContent = content.split('<div>');
+    let convertString = '';
+    htmlContent.forEach((html) => {
+      if (html.indexOf('material-object') !== -1) {
+        convertString = convertString + html.match('<a(.*)a>')[0];
+      }
+    });
+    return convertString;
   }
 }

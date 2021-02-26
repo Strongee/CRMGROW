@@ -110,6 +110,10 @@ export class ErrorService {
     this.lastTime = new Date().getTime();
   }
 
+  showSuccess(message): void {
+    this.toast.success('', message, { closeButton: true });
+  }
+
   clearData(): void {
     localStorage.removeItem('token');
   }

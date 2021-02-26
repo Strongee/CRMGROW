@@ -38,6 +38,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     'select',
     'status',
     'contact_name',
+    'contact_address',
     'contact_label',
     'subject',
     'contact_phone',
