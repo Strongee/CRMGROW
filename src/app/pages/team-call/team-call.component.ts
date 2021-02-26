@@ -178,34 +178,43 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((data) => {
         if (data) {
           const currentTab = this.selectedTab.id;
+          let newTab;
           if (data.action === 'delete') {
             _.remove(this.pageData[currentTab], (e) => {
               return e._id === call._id;
             });
             this.total[currentTab]--;
-          } else if (data.action === 'update') {
-            let newTab;
-            if (data.data.status === 'finished') {
-              newTab = 'completed';
-            } else if (data.data.status === 'planned') {
-              newTab = 'scheduled';
-            } else if (data.data.status === 'declined') {
-              newTab = 'denied';
-            }
-            this.pageData[newTab].unshift({
-              ...call,
-              ...data.data
-            });
-            _.remove(this.pageData[currentTab], (e) => {
-              return e._id === call._id;
-            });
-            this.total[currentTab]--;
-            this.total[newTab]++;
-            if (
-              this.pageData[currentTab].length < 5 &&
-              this.total[currentTab] > 8
-            ) {
-              this.loadPageCalls(currentTab, this.page[currentTab]);
+          } else {
+            if (data.action === 'update') {
+              if (data.data.status === 'finished') {
+                newTab = 'completed';
+              } else if (data.data.status === 'planned') {
+                newTab = 'scheduled';
+              } else if (data.data.status === 'declined') {
+                newTab = 'denied';
+              }
+              this.pageData[newTab].unshift({
+                ...call,
+                ...data.data
+              });
+              _.remove(this.pageData[currentTab], (e) => {
+                return e._id === call._id;
+              });
+              this.total[currentTab]--;
+              this.total[newTab]++;
+              if (
+                this.pageData[currentTab].length < 5 &&
+                this.total[currentTab] > 8
+              ) {
+                this.loadPageCalls(currentTab, this.page[currentTab]);
+              }
+            } else if (data.action === 'cancel') {
+              this.pageData[currentTab].some((e) => {
+                if (e._id === call._id) {
+                  e['note'] = data.note;
+                  return true;
+                }
+              });
             }
           }
         }

@@ -32,6 +32,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   userTimezone;
   call;
   isOrganizer = false;
+  isLeader = false;
   selectedTime;
   customDate;
   customTime = TIMES[0]['id'];
@@ -64,7 +65,10 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       if (this.call.proposed_at.length) {
         this.selectedTime = this.call.proposed_at[0];
       }
+      this.note = this.call.note;
       this.checkOrganizer();
+      this.checkLeader();
+      console.log("call detail ==========>", this.call);
     }
 
     const current = new Date();
@@ -88,6 +92,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
             this.userTimezone = { zone: profile.time_zone || timezone };
           }
           this.checkOrganizer();
+          this.checkLeader();
         }
       }
     );
@@ -100,6 +105,12 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   checkOrganizer(): void {
     if (this.call && this.call.user) {
       this.isOrganizer = this.call.user._id === this.userId;
+    }
+  }
+
+  checkLeader(): void {
+    if (this.call && this.call.leader) {
+      this.isLeader = this.call.leader._id === this.userId;
     }
   }
 
@@ -153,7 +164,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
     this.teamService
       .updateCall(this.call._id, {
         status: 'finished',
-        note: this.note
+        note: this.call.note
       })
       .subscribe((status) => {
         this.completing = false;
@@ -162,7 +173,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
             action: 'update',
             data: {
               status: 'finished',
-              note: this.note
+              note: this.call.note
             },
             id: this.call._id
           });
@@ -320,5 +331,35 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
         type: 'organizer'
       }
     });
+  }
+
+  saveNote(): void {
+    if (this.note !== this.call.note) {
+      this.teamService
+        .updateCall(this.call._id, {
+          status: this.call.status,
+          note: this.call.note
+        })
+        .subscribe((status) => {
+          this.completing = false;
+          if (status) {
+            this.dialogRef.close({
+              action: 'cancel',
+              note: this.call.note
+            });
+          }
+        });
+    } else {
+      this.dialogRef.close();
+    }
+  }
+
+  contactDetail(contact): void {
+    if (contact && contact._id) {
+      if (this.isOrganizer) {
+        window.open('/contacts/' + contact._id, '_blank');
+      }
+    }
+
   }
 }

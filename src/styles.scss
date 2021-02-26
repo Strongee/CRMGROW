@@ -1101,7 +1101,7 @@ table {
       position: sticky;
       top: 64px;
       border: none;
-      
+
       .updating-status {
         position: absolute;
         background: #000000aa;
@@ -1980,4 +1980,8 @@ body {
   height: 32px !important;
   font-size: 16px;
   font-weight: bold;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

@@ -2,7 +2,7 @@
   <h4 class="font-weight-bold mr-auto mb-0">Group Call</h4>
   <span class="mail-action ml-2 font-weight-bold c-pointer" *ngIf="!isOrganizer" (click)="messageOrganizer()">Message organizer</span>
   <span class="mail-action ml-2 font-weight-bold c-pointer" *ngIf="isOrganizer" (click)="messageLeader()">Message Leader</span>
-  <button class="v-center border-0 bgc-trans ml-2" mat-dialog-close>
+  <button class="v-center border-0 bgc-trans ml-2" (click)="saveNote()">
     <i class="d-block i-icon i-close bgc-dark"></i>
   </button>
 </h1>
@@ -107,7 +107,7 @@
   <div class="mt-3">
     <label>guests</label>
     <div>
-      <div class="v-center mb-2" *ngFor="let contact of call.contacts">
+      <div class="v-center mb-2 cursor-pointer" *ngFor="let contact of call.contacts" (click)="contactDetail(contact)">
         <ng-container *ngIf="contact.picture_profile; else prospectNamePlaceholder">
           <img [src]="contact.picture_profile" class="avatar" />
         </ng-container>
@@ -120,18 +120,11 @@
       </div>
     </div>
   </div>
-  <div class="mt-3" *ngIf="call.status === 'planned' || call.status === 'finished'">
+  <div class="mt-3" *ngIf="call.status != 'pending' && (isLeader || isOrganizer)">
     <label>notes</label>
-    <ng-container *ngIf="call.status === 'planned'">
-      <div class="form-group">
-        <textarea class="form-control f-3" [(ngModel)]="note"></textarea>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="call.status === 'finished'">
-      <div class="border rounded f-3 note-area">
-        {{call.note}}
-      </div>
-    </ng-container>
+    <div class="form-group">
+      <textarea class="note-area form-control f-3" [(ngModel)]="call.note"></textarea>
+    </div>
   </div>
 
 </mat-dialog-content>
