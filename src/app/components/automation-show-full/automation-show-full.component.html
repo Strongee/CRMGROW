@@ -59,7 +59,7 @@
                 <svg:g class="node" *ngIf="node.category === 'NORMAL'">
                   <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.leaf ? 200 : 110"
                             fill="transparent" />
-                  <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110">
+                  <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110" class="c-pointer">
                     <xhtml:div class="cardContainer"
                                style="text-align: center;"
                                xmlns="http://www.w3.org/1999/xhtml">
