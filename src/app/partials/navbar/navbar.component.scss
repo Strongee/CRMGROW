@@ -79,12 +79,20 @@
     }
   }
 }
-// Chat Message Wrapper
-.chat-messages-wrapper {
-  .dropdown-menu {
 
+//Support Wrapper
+.support-wrapper {
+  i {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+  }
+  .dropdown-menu {
+    top: 0.75rem!important;
+    transform: translate(-125px, 18px) !important;
   }
 }
+
 // Notifications Wrapper
 // Integrations Wrapper
 // Send Status Wrapper
@@ -136,10 +144,6 @@
       border: none;
     }
   }
-}
-
-.search-wrapper-mobile {
-  display: none;
 }
 
 // Mobile Responsive : Tablet
