@@ -59,7 +59,6 @@ export class MessagesComponent implements OnInit {
           messages: data.data
         };
         this.messages.push(message);
-        console.log('@@@', this.messages);
       });
     });
   }
@@ -127,6 +126,9 @@ export class MessagesComponent implements OnInit {
   }
 
   sendMessage(): void {
+    if (this.messageText == '') {
+      return;
+    }
     const videoIds = [];
     const pdfIds = [];
     const imageIds = [];
@@ -161,7 +163,11 @@ export class MessagesComponent implements OnInit {
       if (res) {
         this.messages.forEach((messageList) => {
           if (this.isNew && messageList.id == this.newContact._id) {
-            messageList.message.push(this.messageText);
+            const message = {
+              type: 0,
+              content: this.messageText
+            };
+            messageList.messages.push(message);
             this.contacts.push(new Contact().deserialize(this.newContact));
           }
           if (!this.isNew && messageList.id == this.selectedContact._id) {
