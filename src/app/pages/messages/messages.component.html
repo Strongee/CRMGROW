@@ -31,7 +31,7 @@
         </div>
         <div class="message-box" [class.show]="showMessage">
             <div class="v-center justify-content-between border-bottom p-3 message-box-header" *ngIf="!isNew; else newMessageHeader">
-                <div class="v-center">
+                <div class="v-center" *ngIf="selectedContact._id">
                     <div class="contact-avatar f-3 font-weight-bold mr-2">
                         {{selectedContact.avatarName}}
                     </div>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="v-center justify-content-center c-pointer show-list" (click)="showFileList = !showFileList">
+                <div class="v-center justify-content-center c-pointer show-list ml-auto" (click)="showFileList = !showFileList">
                     <i class="d-block i-icon i-list bgc-dark"></i>
                 </div>
             </div>

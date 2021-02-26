@@ -49,15 +49,17 @@ export class MessagesComponent implements OnInit {
     );
     this.smsService.getAllMessage().subscribe((res) => {
       res['data'].forEach((data) => {
-        data.contact_detail.forEach((contact) => {
-          this.contacts.push(new Contact().deserialize(contact));
-          this.selectedContact = new Contact().deserialize(this.contacts[0]);
-        });
-        const message = {
-          id: data.contact_detail[0]._id,
-          messages: data.data
-        };
-        this.messages.push(message);
+        if (data.contact_detail.length > 0) {
+          data.contact_detail.forEach((contact) => {
+            this.contacts.push(new Contact().deserialize(contact));
+            this.selectedContact = new Contact().deserialize(this.contacts[0]);
+          });
+          const message = {
+            id: data.contact_detail[0]._id,
+            messages: data.data
+          };
+          this.messages.push(message);
+        }
       });
     });
   }
@@ -69,18 +71,18 @@ export class MessagesComponent implements OnInit {
   }
 
   selectContact(contact: any): void {
-    this.selectedContact = { ...this.selectedContact, ...contact };
+    this.selectedContact = new Contact().deserialize(contact);
     this.isNew = false;
     this.showMessage = true;
   }
 
   addContacts(contact: any): void {
-    this.newContact = { ...this.newContact, ...contact };
+    this.newContact = new Contact().deserialize(contact);
     const newData = {
       id: contact._id,
       messages: []
     };
-    this.messages.push(JSON.parse(JSON.stringify(newData)));
+    this.messages.push(newData);
   }
 
   openMaterialsDlg(): void {
@@ -161,6 +163,14 @@ export class MessagesComponent implements OnInit {
     this.materialService.sendMessage(data).subscribe((res) => {
       if (res) {
         this.messages.forEach((messageList) => {
+          if (!this.isNew && messageList.id == this.selectedContact._id) {
+            const message = {
+              type: 0,
+              content: this.messageText
+            };
+            messageList.messages.push(message);
+            this.messageText = '';
+          }
           if (this.isNew && messageList.id == this.newContact._id) {
             const message = {
               type: 0,
@@ -168,13 +178,9 @@ export class MessagesComponent implements OnInit {
             };
             messageList.messages.push(message);
             this.contacts.push(new Contact().deserialize(this.newContact));
-          }
-          if (!this.isNew && messageList.id == this.selectedContact._id) {
-            const message = {
-              type: 0,
-              content: this.messageText
-            };
-            messageList.messages.push(message);
+            this.isNew = false;
+            this.selectedContact = new Contact().deserialize(this.newContact);
+            this.messageText = '';
           }
         });
       }
