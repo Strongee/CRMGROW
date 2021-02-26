@@ -33,5 +33,6 @@ export class ContactDetailComponent implements OnInit {
       const index = labels.findIndex((item) => item._id === this.contact.label);
       this.label = labels[index];
     }
+    console.log("contact detail ==========>", this.contact);
   }
 }

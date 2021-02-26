@@ -107,7 +107,7 @@
   <div class="mt-3">
     <label>guests</label>
     <div>
-      <div class="v-center mb-2 cursor-pointer" *ngFor="let contact of call.contacts" (click)="contactDetail(contact)">
+      <div class="v-center mb-2 c-pointer" *ngFor="let contact of call.contacts" (click)="contactDetail(contact)">
         <ng-container *ngIf="contact.picture_profile; else prospectNamePlaceholder">
           <img [src]="contact.picture_profile" class="avatar" />
         </ng-container>
@@ -120,7 +120,7 @@
       </div>
     </div>
   </div>
-  <div class="mt-3" *ngIf="call.status != 'pending' && (isLeader || isOrganizer)">
+  <div class="mt-3" *ngIf="call.status != 'pending'">
     <label>notes</label>
     <div class="form-group">
       <textarea class="note-area form-control f-3" [(ngModel)]="call.note"></textarea>

@@ -33,7 +33,6 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   userTimezone;
   call;
   isOrganizer = false;
-  isLeader = false;
   selectedTime;
   customDate;
   customTime = TIMES[0]['id'];
@@ -68,7 +67,6 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       }
       this.note = this.call.note;
       this.checkOrganizer();
-      this.checkLeader();
     }
 
     const current = new Date();
@@ -92,7 +90,6 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
             this.userTimezone = { zone: profile.time_zone || timezone };
           }
           this.checkOrganizer();
-          this.checkLeader();
         }
       }
     );
@@ -105,12 +102,6 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   checkOrganizer(): void {
     if (this.call && this.call.user) {
       this.isOrganizer = this.call.user._id === this.userId;
-    }
-  }
-
-  checkLeader(): void {
-    if (this.call && this.call.leader) {
-      this.isLeader = this.call.leader._id === this.userId;
     }
   }
 
