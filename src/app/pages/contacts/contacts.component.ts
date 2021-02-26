@@ -37,6 +37,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   DISPLAY_COLUMNS = [
     'select',
     'contact_name',
+    'contact_address',
     'contact_label',
     'activity',
     'contact_tags',
