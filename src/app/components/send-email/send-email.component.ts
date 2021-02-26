@@ -320,16 +320,14 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   }
 
   blueAll(): void {
-    console.log("blue all ===========>");
     this.toFocus = false;
   }
 
-  setToFocus(): void {
-    console.log("set to focus ===========>");
+  setFocus(): void {
     this.toFocus = true;
   }
 
-  isToFocus(): any {
+  isFocus(): any {
     return this.toFocus;
   }
 }

@@ -3,11 +3,21 @@
     <mat-chip-list aria-label="Contact Selection" #contactList>
       <ng-container *ngIf="!isFocus && selectedContacts.length > 3; else focusContent">
         <div class="v-center" (click)="setFocus()">
-          <ng-container *ngFor="let contact of selectedContacts.slice(0,2)">
+          <ng-container *ngFor="let contact of selectedContacts.slice(0,3); let nIndex = index">
             <div class="d-flex chip mr-1">
               <div class="info v-center">
-                <div class="f-2 font-weight-bold">{{contact.fullName}}, </div>
-                <div class="f-2" *ngIf="contact.fullName == ''">{{contact[display]}}</div>
+                <ng-container *ngIf="!!contact.first_name || !!contact.last_name; else emailChip">
+                  <div class="f-2 font-weight-bold">
+                    {{contact.fullName}}
+                    <span class="contact-space" *ngIf="nIndex < 3">,</span>
+                  </div>
+                </ng-container>
+                <ng-template #emailChip>
+                  <div class="f-2 font-weight-bold">
+                    {{contact[display]}}
+                    <span class="contact-space" *ngIf="nIndex < 3">,</span>
+                  </div>
+                </ng-template>
               </div>
             </div>
           </ng-container>
@@ -25,8 +35,12 @@
           <ng-container *ngIf="chipType === 'block'; else inlineTemplate;">
             <div class="d-flex chip" ngbDropdown (click)="setFocus()">
               <div class="info v-center" ngbDropdownToggle>
-                <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
-                <div class="f-2" *ngIf="contact.fullName == ''">{{contact[display]}}</div>
+                <ng-container *ngIf="!!contact.first_name || !!contact.last_name; else emailChip">
+                  <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
+                </ng-container>
+                <ng-template #emailChip>
+                  <div class="f-2 font-weight-bold">{{contact[display]}}</div>
+                </ng-template>
               </div>
               <div ngbDropdownMenu class="light py-1">
                 <div class="v-center px-2" (click)="setFocus()">

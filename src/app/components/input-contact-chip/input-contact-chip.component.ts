@@ -6,7 +6,7 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
-  TemplateRef
+  TemplateRef, OnChanges
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
@@ -37,7 +37,7 @@ const phone = require('phone');
   templateUrl: './input-contact-chip.component.html',
   styleUrls: ['./input-contact-chip.component.scss']
 })
-export class InputContactChipComponent implements OnInit {
+export class InputContactChipComponent implements OnInit, OnChanges {
   separatorKeyCodes: number[] = [ENTER, COMMA];
   keyword = '';
   searching = false;
@@ -154,6 +154,16 @@ export class InputContactChipComponent implements OnInit {
           }
         );
       });
+  }
+
+  ngOnChanges(changes): void {
+    const _SELF = this;
+    setTimeout(function () {
+      if (changes.isFocus.currentValue && _SELF.inputField) {
+        _SELF.inputField.nativeElement.focus();
+      }
+    }, 300);
+
   }
 
   getMaterialLatestContact(): void {
@@ -307,14 +317,7 @@ export class InputContactChipComponent implements OnInit {
     this.optionsFocused = false;
   }
 
-  onBlue($event): void {
-    console.log("on blue ===========>");
-    this.isFocus = false;
-  }
-
-
   setFocus(): void {
-    console.log("set focus ==========>");
     this.isFocus = true;
     this.onFocus.emit();
   }
