@@ -15,7 +15,7 @@ import { Contact } from '../../models/contact.model';
 export class ContactDetailComponent implements OnInit {
   contact;
   label;
-
+  additionalPanel = true;
   constructor(
     private dialog: MatDialog,
     private labelService: LabelService,
