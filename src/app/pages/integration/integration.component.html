@@ -1,123 +1,145 @@
 <div style="max-width: 680px;">
-  <div class="row">
-    <div class="col-md-6 col-12 mb-3">
-      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
-        <div class="f-4 font-weight-bold mb-2">Google Mail Sync</div>
-        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='gmail' && user.primary_connected">
-          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
-        </div>
-        <div class="d-flex mt-auto mb-2">
-          <img src="../../../assets/img/google.svg">
-          <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
-        </div>
-        <button type="button" class="v-center social-btn btn border-dark w-100 font-weight-bold" (click)="connectMail('gmail')">
-          <img class="social-icon" src="../../../assets/img/google.svg" alt="">
-          <div class="social-text f-4">Sign in with Google</div>
-        </button>
+  <h6 class="font-weight-bold">Calendar apps</h6>
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/google_calendar.png">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Google Calendar</div>
+      <div class="desc f-2 op-75">
+        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
       </div>
     </div>
-    <div class="col-md-6 col-12 mb-3">
-      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
-        <div class="f-4 font-weight-bold mb-2">Outlook Mail Sync</div>
-        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='outlook' && user.primary_connected">
-          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
-        </div>
-        <div class="d-flex mt-auto mb-2">
-          <img src="../../../assets/img/outlook.svg">
-          <p class="mb-0 f-0">Our Platform can deliver the emails through your outlook email. Email Deliverity will be upgraded.</p>
-        </div>
-        <button type="button" class="v-center social-btn btn border-dark w-100 font-weight-bold" (click)="connectMail('outlook')">
-          <img class="social-icon" src="../../../assets/img/outlook.svg" alt="">
-          <div class="social-text f-4">Sign in with Outlook</div>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 col-12 mb-3">
-      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
-        <div class="f-4 font-weight-bold mb-2">Calendly Sync</div>
-        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='calendly' && user.primary_connected">
-          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
-        </div>
-        <div class="d-flex mt-auto mb-2">
-          <img src="../../../assets/img/calendly.svg">
-          <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
-        </div>
-        <button type="button" class="social-btn btn border-dark d-block w-100 font-weight-bold">
-          <span class="f-4">Sign in with Calendly</span>
-        </button>
-      </div>
-    </div>
-    <div class="col-md-6 col-12 mb-3">
-      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
-        <div class="f-4 font-weight-bold mb-2">Zapier Sync</div>
-        <div class="f-2 connect-status" *ngIf="user.connected_email_type=='zapier' && user.primary_connected">
-          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
-        </div>
-        <div class="d-flex mt-auto mb-2">
-          <img src="../../../assets/img/zapier.svg">
-          <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
-        </div>
-        <button type="button" class="social-btn btn border-dark d-block w-100 font-weight-bold">
-          <span class="f-4">Sign in with Zapier</span>
-        </button>
-      </div>
-    </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6 col-12 mb-3">
-      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
-        <div class="f-4 font-weight-bold mb-2">Google Calendar Sync</div>
-        <!-- <div class="f-2 connect-status" *ngIf="user.connected_email_type=='gmail' && user.primary_connected">
-          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
-        </div> -->
-        <div class="d-flex mt-2 mb-2">
-          <img src="../../../assets/img/google.svg">
-          <p class="mb-0 f-0">Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.</p>
-        </div>
-        
-        <ng-container *ngFor="let calendar of user?.calendar_list">
-          <div class="v-center mb-2" *ngIf="calendar.connected_calendar_type === 'google'">
-            <div class="f-3 font-weight-bold flex-grow-1">{{calendar.connected_email}}</div>
-            <button type="button" class="social-btn btn border-dark w-100 font-weight-bold ml-2 sm" (click)="disconnectCalendar(calendar)">
-              <div class="f-3">Disconnect</div>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('gmail')">Connect account</button>
+    <div class="accounts">
+      <ng-container *ngIf="googleCalendars.length">
+        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+        <ng-container *ngFor="let calendar of googleCalendars">
+          <div class="v-center mb-1">
+            <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
+            <span class="f-1">connected</span>
+            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar)">
+              <div class="f-2">Disconnect</div>
             </button>
           </div>
         </ng-container>
+      </ng-container>
+    </div>
+  </div>
 
-        <div class="v-center mt-auto">
-          <button type="button" class="social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('gmail')">
-            <div class="f-4">Connect</div>
-          </button>
-        </div>
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/zapier.svg">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Zapier</div>
+      <div class="desc f-2 op-75">
+        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
       </div>
     </div>
-    <div class="col-md-6 col-12 mb-3">
-      <div class="integration-card border rounded py-3 px-3 my-2 h-100">
-        <div class="f-4 font-weight-bold mb-2">Outlook Calendar Sync</div>
-        <!-- <div class="f-2 connect-status" *ngIf="user.connected_email_type=='outlook' && user.primary_connected">
-          Connected with <span class="font-weight-bold c-blue">{{user.connected_email}}</span>
-        </div> -->
-        <div class="d-flex mt-2 mb-2">
-          <img src="../../../assets/img/outlook.svg">
-          <p class="mb-0 f-0">Our Platform can deliver the emails through your outlook email. Email Deliverity will be upgraded.</p>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect">Connect account</button>
+    <div class="accounts">
+      <ng-container *ngIf="user.connected_email_type=='zapier' && user.primary_connected">
+        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+        <div class="f-1">
+          <span class="font-weight-bold mr-2">{{user.connected_email}}</span>
+          connected
         </div>
-        <ng-container *ngFor="let calendar of user?.calendar_list">
-          <div class="v-center mb-2" *ngIf="calendar.connected_calendar_type === 'outlook'">
-            <div class="f-3 font-weight-bold flex-grow-1">{{calendar.connected_email}}</div>
-            <button type="button" class="social-btn btn border-dark w-100 font-weight-bold ml-2 sm" (click)="disconnectCalendar(calendar)">
-              <div class="f-3">Disconnect</div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/calendly.svg">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Calendly</div>
+      <div class="desc f-2 op-75">
+        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+      </div>
+    </div>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect">Connect account</button>
+    <div class="accounts">
+      <ng-container *ngIf="user.connected_email_type=='calendly' && user.primary_connected">
+        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+        <div class="f-1">
+          <span class="font-weight-bold mr-2">{{user.connected_email}}</span>
+          connected
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/outlook_calendar.png">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Outlook Calendar</div>
+      <div class="desc f-2 op-75">
+        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+      </div>
+    </div>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">Connect account</button>
+    <div class="accounts">
+      <ng-container *ngIf="outlookCalendars.length">
+        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+        <ng-container *ngFor="let calendar of outlookCalendars">
+          <div class="v-center mb-1">
+            <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
+            <span class="f-1">connected</span>
+            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar)">
+              <div class="f-2">Disconnect</div>
             </button>
           </div>
         </ng-container>
-        <div class="v-center mt-auto">
-          <button type="button" class="social-btn btn border-dark w-100 font-weight-bold" (click)="connectCalendar('outlook')">
-            <div class="f-4">Connect</div>
-          </button>
-        </div>
+      </ng-container>
+    </div>
+  </div>
+
+
+  <h6 class="font-weight-bold">Email apps</h6>
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/google_email.png">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Google mail</div>
+      <div class="desc f-2 op-75">
+        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
       </div>
+    </div>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('gmail')">Connect account</button>
+    <div class="accounts">
+      <ng-container *ngIf="user.connected_email_type=='gmail' && user.primary_connected">
+        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+        <div class="f-1">
+          <span class="font-weight-bold mr-2">{{user.connected_email}}</span>
+          connected
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/outlook_email.png">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Outlook mail</div>
+      <div class="desc f-2 op-75">
+        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+      </div>
+    </div>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('outlook')">Connect account</button>
+    <div class="accounts">
+      <ng-container *ngIf="user.connected_email_type=='outlook' && user.primary_connected">
+        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+        <div class="f-1">
+          <span class="font-weight-bold mr-2">{{user.connected_email}}</span>
+          connected
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

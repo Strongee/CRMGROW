@@ -13,9 +13,23 @@ export class IntegrationComponent implements OnInit {
   connectingMail = '';
   connectingCalendar = '';
 
+  googleCalendars = [];
+  outlookCalendars = [];
+
   constructor(private userService: UserService, private toast: ToastrService) {
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
+
+      if (this.user.calendar_list) {
+        this.googleCalendars = this.user.calendar_list.filter((e) => {
+          if (e.connected_calendar_type === 'google') {
+            return true;
+          }
+        });
+        this.outlookCalendars = this.user.calendar_list.filter((e) => {
+          return e.connected_calendar_type === 'outlook';
+        });
+      }
     });
   }
 
