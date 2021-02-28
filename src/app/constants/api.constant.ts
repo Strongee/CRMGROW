@@ -28,6 +28,7 @@ export const USER = {
   AUTH_OUTLOOK: 'user/authorize-outlook',
   AUTH_GOOGLE_CALENDAR: 'user/authorize-google-calendar',
   AUTH_OUTLOOK_CALENDAR: 'user/authorize-outlook-calendar',
+  SET_ANOTHER_MAIL: 'user/another-con',
   ENABLE_DESKTOP_NOTIFICATION: 'user/desktop-notification',
   LOAD_AFFILIATE: 'affiliate',
   CREATE_AFFILIATE: 'affiliate',

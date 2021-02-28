@@ -12,6 +12,7 @@ import { RecordSettingDialogComponent } from '../../components/record-setting-di
 import { SendEmailComponent } from '../../components/send-email/send-email.component';
 import { HandlerService } from 'src/app/services/handler.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { ConnectService } from 'src/app/services/connect.service';
 
 @Component({
   selector: 'app-navbar',
@@ -43,11 +44,16 @@ export class NavbarComponent implements OnInit {
     private storeService: StoreService,
     private contactService: ContactService,
     private handlerService: HandlerService,
+    private connectService: ConnectService,
     private dialog: MatDialog,
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.connectService.receiveLogout().subscribe(() => {
+      this.logout(null);
+    });
+  }
 
   runAction(action: string): void {
     // Open New modal that corresponds to action
@@ -92,7 +98,7 @@ export class NavbarComponent implements OnInit {
   }
   logout(event: Event): void {
     // Logout Logic
-    event.preventDefault();
+    event && event.preventDefault();
     this.userService.logout().subscribe(
       () => {
         this.userService.logoutImpl();

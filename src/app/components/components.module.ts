@@ -131,6 +131,7 @@ import { FolderComponent } from './folder/folder.component';
 import { MoveFolderComponent } from './move-folder/move-folder.component';
 import { InputContactChipComponent } from './input-contact-chip/input-contact-chip.component';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
+import { DetailErrorComponent } from './detail-error/detail-error.component';
 
 @NgModule({
   declarations: [
@@ -260,7 +261,8 @@ import { ContactDetailComponent } from './contact-detail/contact-detail.componen
     FolderComponent,
     MoveFolderComponent,
     InputContactChipComponent,
-    ContactDetailComponent
+    ContactDetailComponent,
+    DetailErrorComponent
   ],
   imports: [
     CommonModule,

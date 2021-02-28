@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
+import { DetailErrorComponent } from '../components/detail-error/detail-error.component';
 import { NotifyComponent } from '../components/notify/notify.component';
 import { Strings } from '../constants/strings.constant';
 
@@ -38,6 +39,15 @@ export class ErrorService {
     };
 
     const diffTime = new Date().getTime() - this.lastTime;
+    if (
+      errorObj.status === 402 ||
+      errorObj.status === 403 ||
+      errorObj.status === 406
+    ) {
+      if (this.lastError.status === errorObj.status) {
+        return;
+      }
+    }
     if (
       this.lastError.operation === errorObj.operation &&
       this.lastError.status === errorObj.status &&
@@ -81,23 +91,48 @@ export class ErrorService {
         }
         break;
       case 402:
-        console.log('402', error);
+        this.dialog.closeAll();
+        this.dialog.open(DetailErrorComponent, {
+          width: '98vw',
+          maxWidth: '390px',
+          disableClose: true,
+          data: {
+            errorCode: 402
+          }
+        });
         break;
       case 403:
-        console.log('403', error);
-        break;
-      case 405:
         this.dialog.closeAll();
-        this.dialog.open(NotifyComponent, {
+        this.dialog.open(DetailErrorComponent, {
           width: '98vw',
           maxWidth: '390px',
           data: {
-            message: JSON.stringify(error)
+            errorCode: 403
+          }
+        });
+        break;
+      case 405:
+        this.dialog.closeAll();
+        console.log('error happened', error);
+        this.dialog.open(DetailErrorComponent, {
+          width: '98vw',
+          maxWidth: '390px',
+          data: {
+            errorCode: 405,
+            operation: operation,
+            error: error.error
           }
         });
         break;
       case 406:
-        console.log('406', error);
+        this.dialog.closeAll();
+        this.dialog.open(DetailErrorComponent, {
+          width: '98vw',
+          maxWidth: '390px',
+          data: {
+            errorCode: 406
+          }
+        });
         break;
       default:
         this.toast.error(errorObj.message, errorObj.operation, {

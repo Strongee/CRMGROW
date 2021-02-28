@@ -1,0 +1,82 @@
+<ng-container [ngSwitch]="errorCode">
+  <ng-container *ngSwitchCase="402">
+    <h5 class="text-center">Connect your email account</h5>
+    <p class="text-center f-4">To ensure you avoid the spam filter when emailing contacts within crmgrow, please connect your desired email account, you always hit the inbox.</p>
+    <button type="button" class="btn bgc-white border-primary c-blue mb-1 fw-600 d-block w-100" (click)="connectMail('gmail')">
+      Connect with Google
+    </button>
+    <button type="button" class="btn bgc-white border-primary c-blue mb-1 fw-600 d-block w-100" (click)="connectMail('outlook')">
+      Connect with Microsoft
+    </button>
+    <p class="bottom-guide f-3 text-center mt-3">
+      Click <a class="text-primary font-weight-bold c-pointer" (click)="connectAnotherMail()">here</a> to continue with our service where we send your emails from our third party service provider or <a class="text-primary font-weight-bold c-pointer" (click)="logout()">Log out</a> from this account.
+    </p>
+  </ng-container>
+
+
+  <ng-container *ngSwitchCase="403">
+    <mat-dialog-content>
+      There are some technical issues in connecting your email to CRMGrow. Please read this link and follow step by step. <a class="c-pointer" href="https://crmgrow.com/articles/mail-connect-error.html" target="_blank">Click Here</a>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="mx-0">
+      <button class="btn btn-primary" mat-dialog-close>
+        Close
+      </button>
+    </mat-dialog-actions>
+  </ng-container>
+
+
+  <ng-container *ngSwitchCase="405">
+    <div mat-dialog-title class="text-center">
+      <span class="operation">{{(data.operation || '') | lowercase}}</span> status!
+    </div>
+    <mat-dialog-content>
+      <p class="text-center f-3">
+        Your request is failed for some contacts. Please check the detail reason.
+      </p>
+      <ul class="p-0 f-3 mb-0 detail-list">
+        <li class="member mb-1" *ngFor="let error of data.error.error">
+          <div class="name font-weight-bold">
+            {{error['contact'] && error['contact']['first_name']}} {{error['contact'] && error['contact']['last_name']}}
+          </div>
+          <div class="contact-info">
+            <div class="v-center">
+              <i class="i-icon i-emails d-block bgc-dark sm mr-1"></i>
+              <span>{{error['contact'] && (error['contact']['email'] || '----')}}</span>
+            </div>
+            <div class="v-center">
+              <i class="i-icon i-phone d-block bgc-dark sm mr-1"></i>
+              <span>{{error['contact'] && (error['contact']['cell_phone'] || '----')}}</span>
+            </div>
+          </div>
+          <div class="reason">
+            <label class="mb-0">Reason: </label> 
+            <span>
+              {{showError(error.error)}}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="mx-0">
+      <button class="btn btn-primary" mat-dialog-close>
+        Close
+      </button>
+    </mat-dialog-actions>
+  </ng-container>
+
+
+  <ng-container *ngSwitchCase="406">
+    <h5 class="text-center">Reconnect your email account or Please check your social email account</h5>
+    <p class="text-center f-4">You have connected with your social email account already. But there are some problem in processing your request with that account. To fix this problem, please check your current social account or connect with another email account.</p>
+    <button type="button" class="btn bgc-white border-primary c-blue mb-1 fw-600 d-block w-100" (click)="connectMail('gmail')">
+      Connect with Google
+    </button>
+    <button type="button" class="btn bgc-white border-primary c-blue mb-1 fw-600 d-block w-100" (click)="connectMail('outlook')">
+      Connect with Microsoft
+    </button>
+    <p class="bottom-guide f-3 text-center mt-3">
+      Click <a class="text-primary font-weight-bold c-pointer" (click)="goToIntegration()">here</a> to visit integration setting page or click <a class="text-primary font-weight-bold c-pointer" (click)="logout()">here</a> to log out.
+    </p>
+  </ng-container>
+</ng-container>
