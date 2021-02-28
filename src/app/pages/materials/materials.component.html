@@ -3,7 +3,7 @@
     <h1 class="f-24 font-weight-bold m-0" *ngIf="!selectedFolder; else folderTitleTemplate">Materials</h1>
     <ng-template #folderTitleTemplate>
       <h1 class="f-24 font-weight-bold m-0 v-center">
-        <a (click)="toRoot()" class="c-pointer c-dark">Materials</a>
+        <a (click)="toRoot()" class="c-pointer c-dark to-root">Materials</a>
         <span class="f-8 v-center"><i class="i-icon i-chev-right d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
       </h1>
     </ng-template>
@@ -157,7 +157,11 @@
                     </a>
                   </ng-container>
                 </div>
-                <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}</span>
+                <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
+                  <ng-container *ngIf="!selectedFolder && isEnableSearchOptions() && element.folder && foldersKeyValue[element.folder]">
+                    <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
+                  </ng-container>
+                </span>
               </div>
             </ng-template>
             <div class="responsive-data">
@@ -400,7 +404,7 @@
           <div class="border rounded py-2 pr-2 pl-3 mt-1">
             <mat-select [(ngModel)]="matType" (ngModelChange)="filter()" id="filter-folder" name="folder" #folder="ngModel" required>
               <mat-option value="">All types</mat-option>
-              <mat-option value="folder" *ngIf="!selectedFolder">
+              <mat-option value="folder" *ngIf="!selectedFolder || folderOptions.length">
                 <div class="f-3 c-black">
                   Folder
                 </div>
@@ -423,7 +427,19 @@
             </mat-select>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" *ngIf="folders.length > 1">
+          <label class="mb-2">folders</label>
+          <div class="filter-check-item" *ngFor="let folder of folders">
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mff-{{folder._id}}" name="mff-{{folder._id}}"
+                (change)="toggleFolderOption(folder._id)" [checked]="folderOptions.indexOf(folder._id) !== -1">
+              <label class="custom-control-label" for="mff-{{folder._id}}">
+                <div class="f-3 mt-1">{{folder.title}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="(teamService.teams$ | async).length">
           <label class="mb-2">shared with</label>
           <div class="filter-check-item" *ngFor="let team of teamService.teams$ | async">
             <div class="custom-checkbox mb-1">

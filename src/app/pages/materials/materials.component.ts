@@ -66,12 +66,17 @@ export class MaterialsComponent implements OnInit {
   loadSubscription: Subscription;
   materialDeleteSubscription: Subscription;
 
+  // Folders
+  folders: Material[] = [];
+  foldersKeyValue = {};
+
   // Search Option
   selectedFolder: Material;
   searchStr = '';
   matType = '';
   teamOptions = [];
   userOptions = [];
+  folderOptions = [];
   isAdmin = false;
 
   constructor(
@@ -104,6 +109,10 @@ export class MaterialsComponent implements OnInit {
         this.materials = materials;
         const folders = materials.filter((e) => {
           return e.material_type === 'folder';
+        });
+        this.folders = folders;
+        this.folders.forEach((folder) => {
+          this.foldersKeyValue[folder._id] = { ...folder };
         });
         const materialFolderMatch = {};
         folders.forEach((folder) => {
@@ -1107,6 +1116,7 @@ export class MaterialsComponent implements OnInit {
     this.isAdmin = false;
     this.userOptions = [];
     this.teamOptions = [];
+    this.folderOptions = [];
     this.filter();
     // this.filteredMaterials = this.materials.filter((e) => {
     //   if (e.folder === this.selectedFolder._id) {
@@ -1122,6 +1132,7 @@ export class MaterialsComponent implements OnInit {
     this.isAdmin = false;
     this.userOptions = [];
     this.teamOptions = [];
+    this.folderOptions = [];
     this.filter();
     // this.filteredMaterials = this.materials.filter((e) => {
     //   return !e.folder || e.type === 'folder';
@@ -1227,6 +1238,10 @@ export class MaterialsComponent implements OnInit {
     this.teamOptions = _.xor(this.teamOptions, [id]);
     this.filter();
   }
+  toggleFolderOption(id: string): void {
+    this.folderOptions = _.xor(this.folderOptions, [id]);
+    this.filter();
+  }
   toggleUserOption(id: string): void {
     this.userOptions = _.xor(this.userOptions, [id]);
     this.filter();
@@ -1237,7 +1252,18 @@ export class MaterialsComponent implements OnInit {
     this.isAdmin = false;
     this.userOptions = [];
     this.teamOptions = [];
+    this.folderOptions = [];
     this.filter();
+  }
+  isEnableSearchOptions(): boolean {
+    return !!(
+      this.searchStr ||
+      this.matType ||
+      this.isAdmin ||
+      this.userOptions.length ||
+      this.teamOptions.length ||
+      this.folderOptions.length
+    );
   }
 
   filter(): void {
@@ -1248,7 +1274,7 @@ export class MaterialsComponent implements OnInit {
         if (this.selectedFolder._id !== material.folder) {
           return false;
         }
-      } else if (material.folder) {
+      } else if (!this.isEnableSearchOptions() && material.folder) {
         return false;
       }
       if (this.matType && material.material_type != this.matType) {
@@ -1258,8 +1284,14 @@ export class MaterialsComponent implements OnInit {
         return false;
       }
       if (
+        this.folderOptions.length &&
+        (!material.folder || this.folderOptions.indexOf(material.folder) === -1)
+      ) {
+        return false;
+      }
+      if (
         this.teamOptions.length &&
-        (!material.team || this.userOptions.indexOf(material.team._id))
+        (!material.team || this.userOptions.indexOf(material.team._id) === -1)
       ) {
         return false;
       }

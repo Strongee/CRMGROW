@@ -237,3 +237,18 @@ td.type-col {
 .filter-check-item {
     padding-left: 28px;
 }
+
+.folder-info {
+    color: $color-dark;
+    text-decoration: none!important;
+    opacity: 0.8;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.to-root {
+    text-decoration: none!important;
+    color: $color-dark!important;
+}
