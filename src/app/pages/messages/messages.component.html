@@ -1,5 +1,5 @@
 <div class="page-content">
-    <div class="v-center justify-content-between border-bottom pb-3 page-header">
+    <div class="v-center justify-content-between border-bottom page-header">
         <h4 class="page-title m-0">MESSAGES</h4>
         <button class="v-center btn btn-blue f-6 font-weight-bold" (click)="newMessage()">
             <i class="d-block i-icon i-plus bgc-white mr-2"></i>
@@ -39,7 +39,6 @@
                         <div class="f-3">{{selectedContact.fullName}}</div>
                         <div class="v-center f-1 font-weight-bold c-blue c-pointer">
                             {{selectedContact.cell_phone}}
-                            <i class="d-block i-icon i-triangle-down bgc-dark ml-2"></i>
                         </div>
                     </div>
                 </div>
@@ -69,7 +68,7 @@
                     </ng-container>
                 </ng-container>
             </div>
-            <div class="px-4 py-3 message-action">
+            <div class="p-3 message-action">
                 <div class="form-group">
                     <mat-form-field class="w-100">
                         <textarea
@@ -78,11 +77,12 @@
                             [(ngModel)]="messageText"
                             cdkAutosizeMinRows="1"
                             cdkAutosizeMaxRows="5"
+                            (keydown)="keyTrigger($event)"
                         ></textarea>
                     </mat-form-field>
                 </div>
-                <div class="v-center justify-content-between">
-                    <div class="v-center">
+                <div class="v-center justify-content-between button-groups">
+                    <div class="v-center insert-button">
                         <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue px-3 py-2 mr-2 material-button" (click)="openMaterialsDlg()">
                             <i class="d-block i-icon i-material bgc-blue"></i>
                             <span class="f-3 font-weight-bold c-blue ml-1 mr-3">Material</span>
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-blue f-6 font-weight-bold" (click)="sendMessage()">
+                    <button class="btn btn-blue f-6 font-weight-bold" [class.loading]="isSend" (click)="sendMessage()">
                         Send
                     </button>
                 </div>
