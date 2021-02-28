@@ -1,8 +1,12 @@
 .page {
   .mat-drawer-container {
-    z-index: 1001;
+    z-index: 1000;
     margin-top: 1px;
     background-color: #fff;
+
+    &.label-container {
+      z-index: 1001;
+    }
 
     .mat-drawer-backdrop.mat-drawer-shown {
       background-color: #0002;
