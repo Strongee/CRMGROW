@@ -280,6 +280,7 @@ export const DEAL = {
 
 export const MATERIAL = {
   EMAIL: 'material/bulk-email',
+  BULK_TEXT: 'material/bulk-text',
   VIDEO_TEXT: 'video/bulk-text',
   PDF_TEXT: 'pdf/bulk-text',
   IMAGE_TEXT: 'image/bulk-text',
@@ -302,4 +303,8 @@ export const NOTIFICATION = {
 
 export const FILTER = {
   API: 'filter/'
+};
+
+export const SMS = {
+  GET: 'sms'
 };

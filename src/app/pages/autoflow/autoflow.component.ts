@@ -7,7 +7,7 @@ import {
   ElementRef,
   AfterViewInit
 } from '@angular/core';
-import {Subject, Subscription} from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { DagreNodesOnlyLayout } from '../../variables/customDagreNodesOnly';
 import { stepRound } from '../../variables/customStepCurved';
 import { Layout, Edge, Node } from '@swimlane/ngx-graph';
@@ -1453,9 +1453,7 @@ export class AutoflowComponent
     });
   }
 
-  unassign(contact): void {
-
-  }
+  unassign(contact): void {}
 
   selectAllPage(): void {
     if (this.isSelectedPage()) {

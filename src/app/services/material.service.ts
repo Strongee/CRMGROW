@@ -204,6 +204,13 @@ export class MaterialService extends HttpService {
     );
   }
 
+  sendMessage(data: any): Observable<boolean> {
+    return this.httpClient.post(this.server + MATERIAL.BULK_TEXT, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('SEND MESSAGE', false))
+    );
+  }
+
   loadMaterial(force = false): void {
     if (!force) {
       const loading = this.loading.getValue();
