@@ -38,6 +38,8 @@ export class NavbarComponent implements OnInit {
   currentSearchType: any = this.searchDataTypes[0];
   keyword = '';
 
+  searchOpened = false;
+
   constructor(
     public userService: UserService,
     public notificationService: NotificationService,
@@ -130,5 +132,14 @@ export class NavbarComponent implements OnInit {
   }
   changeType(type: any): void {
     this.currentSearchType = type;
+  }
+
+  openSearchBar(): void {
+    this.searchOpened = true;
+    this.handlerService.openSearch.next(this.searchOpened);
+  }
+  closeSearchBar(): void {
+    this.searchOpened = false;
+    this.handlerService.openSearch.next(this.searchOpened);
   }
 }

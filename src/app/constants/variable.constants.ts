@@ -109,7 +109,8 @@ export const PHONE_COUNTRIES = [
   CountryISO.Germany,
   CountryISO.Italy,
   CountryISO.Spain,
-  CountryISO.Switzerland
+  CountryISO.Switzerland,
+  CountryISO.PuertoRico
 ];
 export const COUNTRY_CODES = {
   USA: 'US',

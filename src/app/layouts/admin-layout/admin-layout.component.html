@@ -10,4 +10,9 @@
       <app-manage-label (onClose)="drawer.close();" (showDialog)="setShowDialog($event)"></app-manage-label>
     </mat-drawer>
   </mat-drawer-container>
+  <ng-container *ngIf="handlerService.openSearch$ | async">
+    <div class="search-page">
+      
+    </div>
+  </ng-container>
 </div>

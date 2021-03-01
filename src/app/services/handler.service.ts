@@ -24,6 +24,10 @@ import { UserService } from './user.service';
 })
 export class HandlerService {
   pageName: BehaviorSubject<string> = new BehaviorSubject('');
+  searchStr: BehaviorSubject<string> = new BehaviorSubject('');
+  openSearch: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  searchStr$ = this.searchStr.asObservable();
+  openSearch$ = this.openSearch.asObservable();
 
   constructor(
     private storeService: StoreService,

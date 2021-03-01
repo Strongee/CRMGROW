@@ -7,6 +7,7 @@ import { Garbage } from 'src/app/models/garbage.model';
 import { SearchOption } from 'src/app/models/searchOption.model';
 import { User } from 'src/app/models/user.model';
 import { ContactService } from 'src/app/services/contact.service';
+import { HandlerService } from 'src/app/services/handler.service';
 import { LabelService } from 'src/app/services/label.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TagService } from 'src/app/services/tag.service';
@@ -21,6 +22,7 @@ export class AdminLayoutComponent implements OnInit {
   @ViewChild('drawer') manageLabelPanel: MatDrawer;
   showDialog = false;
   constructor(
+    public handlerService: HandlerService,
     private userService: UserService,
     private labelService: LabelService,
     private tagService: TagService,

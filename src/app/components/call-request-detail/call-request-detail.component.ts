@@ -272,7 +272,8 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
               this.dialogRef.close({
                 action: 'update',
                 data: {
-                  status: 'declined'
+                  status: 'planned',
+                  confirmed_at: callTime
                 },
                 id: this.call._id
               });
