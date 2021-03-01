@@ -344,7 +344,7 @@ export class AutomationShowFullComponent
     this.identity = maxId;
     this.nodes = [...nodes];
     this.edges = [...edges];
-    console.log('!@#', this.edges);
+    console.log('!@#', this.nodes);
   }
 
   genIndex(id: string): any {
