@@ -24,6 +24,7 @@ import { AutomationAssignComponent } from '../../components/automation-assign/au
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 import { MaterialSendComponent } from '../../components/material-send/material-send.component';
 import { MaterialEditTemplateComponent } from '../../components/material-edit-template/material-edit-template.component';
+import { MaterialBrowserComponent } from 'src/app/components/material-browser/material-browser.component';
 
 @Component({
   selector: 'app-team',
@@ -205,24 +206,52 @@ export class TeamComponent implements OnInit {
   }
   shareMaterial(type): void {
     this.dialog
-      .open(MaterialShareComponent, {
+      .open(MaterialBrowserComponent, {
         width: '96vw',
-        maxWidth: '500px',
+        maxWidth: '940px',
         disableClose: true,
         data: {
-          team_id: this.teamId,
-          type
+          title: 'Share media',
+          buttonLabel: 'Share',
+          multiple: true,
+          onlyMine: true,
+          material_type: type
         }
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res && res.materials) {
+        if (res && res.materials && res.materials.length) {
+          const materialIds = res.materials.map((e) => e._id);
           if (type === 'video') {
-            this.team.videos = [...this.team.videos, ...res.materials];
+            this.teamService
+              .shareVideos(this.teamId, materialIds)
+              .subscribe((status) => {
+                this.team.videos = _.unionBy(
+                  this.team.videos,
+                  res.materials,
+                  '_id'
+                );
+              });
           } else if (type === 'pdf') {
-            this.team.pdfs = [...this.team.pdfs, ...res.materials];
+            this.teamService
+              .sharePdfs(this.teamId, materialIds)
+              .subscribe((status) => {
+                this.team.pdfs = _.unionBy(
+                  this.team.pdfs,
+                  res.materials,
+                  '_id'
+                );
+              });
           } else if (type === 'image') {
-            this.team.images = [...this.team.images, ...res.materials];
+            this.teamService
+              .shareImages(this.teamId, materialIds)
+              .subscribe((status) => {
+                this.team.images = _.unionBy(
+                  this.team.images,
+                  res.materials,
+                  '_id'
+                );
+              });
           }
         }
       });
@@ -489,7 +518,7 @@ export class TeamComponent implements OnInit {
       maxWidth: '600px',
       disableClose: false,
       data: {
-        material: [material],
+        material: [{ ...material, material_type: type }],
         material_type: type,
         type: 'email'
       }

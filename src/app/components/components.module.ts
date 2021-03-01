@@ -132,6 +132,7 @@ import { MoveFolderComponent } from './move-folder/move-folder.component';
 import { InputContactChipComponent } from './input-contact-chip/input-contact-chip.component';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 import { DetailErrorComponent } from './detail-error/detail-error.component';
+import { MaterialBrowserComponent } from './material-browser/material-browser.component';
 
 @NgModule({
   declarations: [
@@ -262,7 +263,8 @@ import { DetailErrorComponent } from './detail-error/detail-error.component';
     MoveFolderComponent,
     InputContactChipComponent,
     ContactDetailComponent,
-    DetailErrorComponent
+    DetailErrorComponent,
+    MaterialBrowserComponent
   ],
   imports: [
     CommonModule,

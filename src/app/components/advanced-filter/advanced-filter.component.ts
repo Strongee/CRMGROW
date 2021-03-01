@@ -16,6 +16,7 @@ import { NotifyComponent } from '../notify/notify.component';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { FilterService } from 'src/app/services/filter.service';
 import { Subscription } from 'rxjs';
+import { MaterialBrowserComponent } from '../material-browser/material-browser.component';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -237,19 +238,22 @@ export class AdvancedFilterComponent implements OnInit {
 
   selectMaterial(): void {
     this.dialog
-      .open(MaterialAddComponent, {
+      .open(MaterialBrowserComponent, {
         width: '96vw',
-        maxWidth: '500px',
+        maxWidth: '940px',
         disableClose: true,
         data: {
-          type: 'filter'
+          title: 'Select media',
+          multiple: false,
+          onlyMine: false,
+          buttonLabel: 'Select'
         }
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
+        if (res && res.materials) {
           this.selectedMaterial = [];
-          this.selectedMaterial = [...this.selectedMaterial, ...res];
+          this.selectedMaterial = [...this.selectedMaterial, ...res.materials];
           this.materialActions.forEach((action) => {
             action.count = 0;
             if (action.title == this.selectedMaterialActions) {

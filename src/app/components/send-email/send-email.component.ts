@@ -22,6 +22,7 @@ import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
 import { DealsService } from '../../services/deals.service';
 import { HandlerService } from 'src/app/services/handler.service';
+import { MaterialBrowserComponent } from '../material-browser/material-browser.component';
 
 @Component({
   selector: 'app-send-email',
@@ -187,11 +188,14 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     const content = this.emailContent;
     const materials = this.helperSerivce.getMaterials(content);
     this.dialog
-      .open(MaterialAddComponent, {
+      .open(MaterialBrowserComponent, {
         width: '98vw',
-        maxWidth: '500px',
+        maxWidth: '940px',
         data: {
-          hideMaterials: materials
+          hideMaterials: materials,
+          title: 'Insert media',
+          multiple: true,
+          onlyMine: false
         }
       })
       .afterClosed()

@@ -1,0 +1,249 @@
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { STATUS } from 'src/app/constants/variable.constants';
+import { Material } from 'src/app/models/material.model';
+import { MaterialService } from 'src/app/services/material.service';
+import { StoreService } from 'src/app/services/store.service';
+import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
+import * as _ from 'lodash';
+
+@Component({
+  selector: 'app-material-browser',
+  templateUrl: './material-browser.component.html',
+  styleUrls: ['./material-browser.component.scss']
+})
+export class MaterialBrowserComponent implements OnInit, OnDestroy {
+  DISPLAY_COLUMNS = ['select', 'material_name', 'creator', 'share', 'type'];
+  STATUS = STATUS;
+  siteUrl = environment.website;
+  user_id = '';
+
+  material_type = '';
+  materials: any[] = [];
+  filteredMaterials: any[] = [];
+  selection: any[] = [];
+
+  loadSubscription: Subscription;
+  profileSubscription: Subscription;
+
+  folders: Material[] = [];
+  foldersKeyValue = {};
+
+  selectedFolder: Material;
+  searchStr = '';
+  matType = '';
+
+  multiple = true;
+  onlyMine = false;
+
+  hideMaterials = [];
+  constructor(
+    public materialService: MaterialService,
+    public storeService: StoreService,
+    private dialogRef: MatDialogRef<MaterialBrowserComponent>,
+    private userService: UserService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (this.data) {
+      this.multiple = this.data.multiple;
+      this.onlyMine = this.data.onlyMine;
+
+      if (this.data.material_type) {
+        this.material_type = this.data.material_type;
+      }
+
+      if (!this.multiple) {
+        this.DISPLAY_COLUMNS.splice(0, 1);
+      }
+
+      if (this.data.hideMaterials) {
+        this.data.hideMaterials.forEach((e) => {
+          this.hideMaterials.push(e._id);
+        });
+      }
+
+      if (this.data.materials) {
+        this.data.materials.forEach((e) => {
+          this.selection.push(e._id);
+        });
+      }
+    }
+
+    const profile = this.userService.profile.getValue();
+    this.user_id = profile._id;
+
+    this.loadSubscription = this.storeService.materials$.subscribe(
+      (materials) => {
+        materials.sort((a, b) => (a.folder ? -1 : 1));
+        this.materials = materials.filter((e) => {
+          if (this.hideMaterials.indexOf(e._id) !== -1) {
+            return false;
+          }
+          if (this.onlyMine) {
+            const userId = e.user && e.user._id ? e.user._id : e.user;
+            if (e.role === 'admin') {
+              return false;
+            }
+            if (userId !== this.user_id) {
+              return false;
+            }
+          }
+          if (this.material_type) {
+            if (
+              e.material_type !== 'folder' &&
+              e.material_type !== this.material_type
+            ) {
+              return false;
+            }
+          }
+          return true;
+        });
+        this.materials = _.uniqBy(this.materials, '_id');
+        const folders = materials.filter((e) => {
+          return e.material_type === 'folder';
+        });
+        this.folders = folders;
+        this.folders.forEach((folder) => {
+          this.foldersKeyValue[folder._id] = { ...folder };
+        });
+        const materialFolderMatch = {};
+        folders.forEach((folder) => {
+          folder.shared_materials.forEach((e) => {
+            materialFolderMatch[e] = folder._id;
+          });
+        });
+        materials.forEach((e) => {
+          if (materialFolderMatch[e._id]) {
+            e.folder = materialFolderMatch[e._id];
+          }
+        });
+        this.filter();
+      }
+    );
+  }
+
+  ngOnInit(): void {
+    this.materialService.loadMaterial(false);
+  }
+
+  ngOnDestroy(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
+
+  clearSearchStr(): void {
+    this.searchStr = '';
+    this.filter();
+  }
+
+  filter(): void {
+    this.selection = [];
+    const reg = new RegExp(this.searchStr, 'gi');
+    this.filteredMaterials = this.materials.filter((material) => {
+      if (this.selectedFolder) {
+        if (this.selectedFolder._id !== material.folder) {
+          return false;
+        }
+      } else if (!this.searchStr && material.folder) {
+        return false;
+      }
+      if (this.matType && material.material_type != this.matType) {
+        return false;
+      }
+      if (!reg.test(material.title)) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  isAllSelected(): boolean {
+    return (
+      this.filteredMaterials.length &&
+      this.selection.length === this.filteredMaterials.length
+    );
+  }
+
+  isSelected(element: Material): boolean {
+    const pos = this.selection.indexOf(element._id);
+    if (pos !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected()) {
+      this.selection = [];
+    } else {
+      this.selection = [];
+      this.filteredMaterials.forEach((e) => {
+        this.selection.push(e._id);
+      });
+    }
+  }
+
+  toggleElement(element: Material): void {
+    const pos = this.selection.indexOf(element._id);
+    if (pos !== -1) {
+      this.selection.splice(pos, 1);
+    } else {
+      this.selection.push(element._id);
+    }
+  }
+
+  openFolder(element: Material): void {
+    this.selectedFolder = element;
+    this.filter();
+  }
+
+  toRoot(): void {
+    this.selectedFolder = null;
+    this.filter();
+  }
+
+  changeFileType(type: string): void {
+    this.matType = type;
+    this.filter();
+  }
+
+  select(): void {
+    const selectedMaterials = this.filteredMaterials.filter((e) => {
+      if (
+        e.material_type !== 'folder' &&
+        this.selection.indexOf(e._id) !== -1
+      ) {
+        return true;
+      }
+      return false;
+    });
+    const filteredFolders = this.folders
+      .filter((e) => {
+        if (this.selection.indexOf(e._id) !== -1) {
+          return true;
+        }
+      })
+      .map((e) => e._id);
+    const folderMaterials = this.materials.filter((e) => {
+      if (filteredFolders.indexOf(e.folder) !== -1) {
+        return true;
+      }
+    });
+    this.dialogRef.close({
+      materials: [...folderMaterials, ...selectedMaterials]
+    });
+  }
+
+  selectMaterial(element: Material): void {
+    if (this.multiple) {
+      return;
+    }
+    if (element.material_type === 'folder') {
+      return;
+    }
+    this.selection = [element._id];
+  }
+}

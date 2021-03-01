@@ -107,6 +107,7 @@ export class MaterialsComponent implements OnInit {
       (materials) => {
         materials.sort((a, b) => (a.folder ? -1 : 1));
         this.materials = materials;
+        this.materials = _.uniqBy(this.materials, '_id');
         const folders = materials.filter((e) => {
           return e.material_type === 'folder';
         });
@@ -216,32 +217,6 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-  filterEx(): void {
-    this.selection = [];
-    if (this.searchStr) {
-      const reg = new RegExp(this.searchStr, 'gi');
-      if (!this.selectedFolder) {
-        this.filteredMaterials = this.materials.filter((e) => {
-          return reg.test(e.title);
-        });
-      } else {
-        this.filteredMaterials = this.materials.filter((e) => {
-          return e.folder === this.selectedFolder._id && reg.test(e.title);
-        });
-      }
-    } else {
-      if (!this.selectedFolder) {
-        this.filteredMaterials = this.materials.filter((e) => {
-          return !e.folder || e.type === 'folder';
-        });
-      } else {
-        this.filteredMaterials = this.materials.filter((e) => {
-          return e.folder === this.selectedFolder._id;
-        });
-      }
-    }
-  }
-
   clearSearchStr(): void {
     this.searchStr = '';
     this.filter();
@@ -258,10 +233,6 @@ export class MaterialsComponent implements OnInit {
 
   createMaterial(type): void {
     this.router.navigate([`./materials/${type}`]);
-  }
-
-  selectFolder(type: string): void {
-    this.router.navigate([`./materials/folder/${type}`]);
   }
 
   sendMaterial(material: Material): void {
