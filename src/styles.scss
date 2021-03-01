@@ -1226,6 +1226,13 @@ table {
   line-height: 32px;
   color: white;
   border-radius: 50%;
+
+  &.lg {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    line-height: 48px;
+  }
 }
 
 .contact-avatar {
