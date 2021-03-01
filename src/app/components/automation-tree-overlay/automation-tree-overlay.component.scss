@@ -36,4 +36,12 @@
             }
         }
     }
+    .read-more {
+        span {
+            display: none;
+            &.show {
+                display: block;
+            }
+        }
+    }
 }
