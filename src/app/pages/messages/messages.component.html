@@ -1,7 +1,7 @@
 <div class="page-content">
-    <div class="v-center justify-content-between border-bottom pb-3 page-header">
+    <div class="v-center justify-content-between border-bottom page-header">
         <h4 class="page-title m-0">MESSAGES</h4>
-        <button class="v-center btn btn-blue f-6 font-weight-bold">
+        <button class="v-center btn btn-blue f-6 font-weight-bold" (click)="newMessage()">
             <i class="d-block i-icon i-plus bgc-white mr-2"></i>
             New message
         </button>
@@ -12,8 +12,18 @@
     </div>
     <div class="d-flex message-container position-relative">
         <div class="contact-list" [class.hide]="showMessage">
-            <div class="d-flex p-2 c-pointer contact" [ngClass]="{'selected': contact._id == selectedContact._id}" *ngFor="let contact of contacts" (click)="selectContact(contact)">
-                <div class="contact-avatar f-3 font-weight-bold mr-2">{{contact.avatarName}}</div>
+            <div class="v-center contact-list-header border-bottom p-3">
+                <h3 class="f-8 font-weight-bold m-0" *ngIf="!isNew">Contacts</h3>
+                <h3 class="f-8 font-weight-bold m-0" *ngIf="isNew">New message</h3>
+            </div>
+            <div class="d-flex p-2 c-pointer contact"
+                [class]="{'selected': contact._id == selectedContact._id}"
+                *ngFor="let contact of contacts" #easyContact
+                (click)="easyView(contact, easyContact, contactDetail)"
+            >
+                <div class="contact-avatar f-3 font-weight-bold mr-2">
+                    {{contact.avatarName}}
+                </div>
                 <div class="contact-name">
                     <div class="v-center justify-content-between">
                         <span class="f-3 fw-600">{{contact.fullName}}</span>
@@ -24,10 +34,27 @@
                     </div>
                 </div>
             </div>
+            <ng-template #contactDetail let-close="close" let-data>
+                <div class="v-center contact-detail">
+                    <div class="contact-avatar f-3 font-weight-bold mr-2">
+                        {{data.data.avatarName}}
+                    </div>
+                    <div class="contact-info">
+                        <div class="f-3">
+                            <a [routerLink]="['/contacts/' + data.data._id]" target="_blank">
+                                {{data.data.fullName}}
+                            </a>
+                        </div>
+                        <div class="v-center f-1 font-weight-bold c-blue">
+                            {{data.data.cell_phone}}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
         </div>
         <div class="message-box" [class.show]="showMessage">
-            <div class="v-center justify-content-between border-bottom p-3 message-box-header">
-                <div class="v-center">
+            <div class="v-center justify-content-between border-bottom px-3 message-box-header" *ngIf="!isNew; else newMessageHeader">
+                <div class="v-center" *ngIf="selectedContact._id">
                     <div class="contact-avatar f-3 font-weight-bold mr-2">
                         {{selectedContact.avatarName}}
                     </div>
@@ -35,40 +62,108 @@
                         <div class="f-3">{{selectedContact.fullName}}</div>
                         <div class="v-center f-1 font-weight-bold c-blue c-pointer">
                             {{selectedContact.cell_phone}}
-                            <i class="d-block i-icon i-triangle-down bgc-dark ml-2"></i>
                         </div>
                     </div>
                 </div>
-                <div class="v-center justify-content-center c-pointer show-list" (click)="showFileList = !showFileList">
+                <div class="v-center justify-content-center c-pointer show-list ml-auto" (click)="showFileList = !showFileList">
                     <i class="d-block i-icon i-list bgc-dark"></i>
                 </div>
             </div>
-            <div class="px-3 py-2 border-bottom select-template">
-                <div class="v-center f-3 font-weight-bold c-blue c-pointer">
-                    Insert template
-                    <i class="d-block i-icon i-triangle-down bgc-blue ml-2"></i>
+            <ng-template #newMessageHeader>
+                <div class="v-center border-bottom p-3 message-box-header">
+                    <label class="f-6 op-56 m-0">To:</label>
+                    <app-input-contacts
+                        class="w-100"
+                        [placeholder]="'Search for Contact'"
+                        [display]="'cell_phone'"
+                        [selectedContacts]="newContacts"
+                    ></app-input-contacts>
                 </div>
-            </div>
+            </ng-template>
             <div class="p-3 border-bottom message-list">
-                <div class="message mt-3" *ngFor="let message of messages">
-                    {{message}}
-                </div>
+                <ng-container *ngFor="let messageList of messages">
+                    <ng-container *ngFor="let newContact of newContacts">
+                        <ng-container *ngIf="isNew && messageList.id === newContact._id">
+                            <ng-container *ngFor="let message of messageList.messages">
+                                <div class="message mt-3"
+                                [innerHTML]="parseContent(message.content)"
+                                    [ngClass]="{send: message.type == 0, receive: message.type == 1}"
+                                ></div>
+                                <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
+                                    <ng-container *ngIf="calcDate(message.created_at) == 0">
+                                        {{message.created_at | date:'h:mm a'}}
+                                    </ng-container>
+                                    <ng-container *ngIf="calcDate(message.created_at) > 0 && calcDate(message.created_at) < 8">
+                                        {{message.created_at | date:'EEE h:mm a'}}
+                                    </ng-container>
+                                    <ng-container *ngIf="calcDate(message.created_at) > 8">
+                                        {{message.created_at | date:'EEE dd, YYYY'}}
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!isNew && messageList.id === selectedContact._id">
+                        <ng-container *ngFor="let message of messageList.messages">
+                            <div class="message mt-3"
+                                [innerHTML]="parseContent(message.content)"
+                                [ngClass]="{send: message.type == 0, receive: message.type == 1}"
+                            ></div>
+                            <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
+                                <ng-container *ngIf="calcDate(message.created_at) == 0">
+                                    {{message.created_at | date:'h:mm a'}}
+                                </ng-container>
+                                <ng-container *ngIf="calcDate(message.created_at) > 0 && calcDate(message.created_at) < 8">
+                                    {{message.created_at | date:'EEE h:mm a'}}
+                                </ng-container>
+                                <ng-container *ngIf="calcDate(message.created_at) > 8">
+                                    {{message.created_at | date:'EEE dd, YYYY'}}
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
             </div>
-            <div class="px-4 py-3 message-action">
+            <div class="p-3 message-action">
                 <div class="form-group">
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Message"
-                    >
+                    <mat-form-field class="w-100">
+                        <textarea
+                            matInput
+                            cdkTextareaAutosize
+                            [(ngModel)]="messageText"
+                            cdkAutosizeMinRows="1"
+                            cdkAutosizeMaxRows="5"
+                            (keydown)="keyTrigger($event)"
+                        ></textarea>
+                    </mat-form-field>
                 </div>
-                <div class="v-center justify-content-between">
-                    <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue px-3 py-2 mr-2 material-button" (click)="openMaterialsDlg()">
-                        <i class="d-block i-icon i-material bgc-blue"></i>
-                        <span class="f-3 font-weight-bold c-blue ml-1 mr-3">Material</span>
-                        <i class="d-block i-icon i-plus bgc-blue ml-auto"></i>
-                    </button>
-                    <button class="btn btn-blue f-6 font-weight-bold">
+                <div class="v-center justify-content-between button-groups">
+                    <div class="v-center insert-button">
+                        <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue px-3 py-2 mr-2 material-button" (click)="openMaterialsDlg()">
+                            <i class="d-block i-icon i-material bgc-blue"></i>
+                            <span class="f-3 font-weight-bold c-blue ml-1 mr-3">Material</span>
+                            <i class="d-block i-icon i-plus bgc-blue ml-auto"></i>
+                        </button>
+                        <div ngbDropdown class="px-3 py-2 border-primary select-template">
+                            <div ngbDropdownToggle class="v-center f-3 font-weight-bold c-blue c-pointer">
+                                Insert template
+                                <i class="d-block i-icon i-triangle-down bgc-blue ml-2"></i>
+                            </div>
+                            <div ngbDropdownMenu class="light">
+                                <ng-container *ngFor="let template of (templateService.templates$ | async)">
+                                    <div class="dropdown-item template" *ngIf="template.type === 'text'" (click)="selectTemplate(template)">
+                                      <div class="v-center">
+                                        <div class="f-3 font-weight-bold">{{template.title}}</div>
+                                        <div class="c-badge rect ml-auto text-uppercase" [class]="template.role || 'own'">{{template.role || 'own'}}</div>
+                                      </div>
+                                      <div class="f-2 font-weight-bold">{{template.subject}}</div>
+                                      <div class="f-1">{{template.content | stripTags | shorten: 40: '...'}}</div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-blue f-6 font-weight-bold" [class.loading]="isSend" (click)="sendMessage()">
                         Send
                     </button>
                 </div>
@@ -82,29 +177,13 @@
                 </button>
             </div>
             <div class="p-3 files">
-                <div class="file rounded mb-3">
+                <div class="file rounded mb-3" *ngFor="let material of this.materials">
                     <div class="thumbnail">
-                        <img src="./assets/img/video_thumb.jpg">
+                        <img [src]="material.thumbnail">
                     </div>
                     <div class="p-2">
                         <div class="f-1 font-weight-bold">
-                            eXp Realty eXplained in 9 Minutes
-                        </div>
-                        <div class="f-1 font-weight-bold op-40 mt-2">
-                            02:08PM 12.09
-                        </div>
-                        <div class="d-inline-block f-1 font-weight-bold bgc-blue c-white rounded px-1 mt-3">
-                            WATCHED 80%
-                        </div>
-                    </div>
-                </div>
-                <div class="file rounded">
-                    <div class="thumbnail">
-                        <img src="./assets/img/video_thumb.jpg">
-                    </div>
-                    <div class="p-2">
-                        <div class="f-1 font-weight-bold">
-                            eXp Realty eXplained in 9 Minutes
+                            {{material.title}}
                         </div>
                         <div class="f-1 font-weight-bold op-40 mt-2">
                             02:08PM 12.09

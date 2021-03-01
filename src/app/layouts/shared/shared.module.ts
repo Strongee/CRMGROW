@@ -11,6 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -64,6 +65,7 @@ import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
     MatAutocompleteModule,
     MatChipsModule,
     MatIconModule,
+    MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -105,6 +107,7 @@ import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
     MatChipsModule,
     MatSelectModule,
     MatIconModule,
+    MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatTabsModule,
