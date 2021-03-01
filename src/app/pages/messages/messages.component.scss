@@ -80,6 +80,7 @@
         .message-box-header {
             height: 65px;
             background-color: #F6F6F7;
+            overflow-y: auto;
             .contact-info {
                 i {
                     width: 10px;
@@ -117,6 +118,11 @@
                     background-color: #EFF1F4;
                     color: $color-dark;
                     border: 1px solid rgba(16,19,54,0.24);
+                }
+            }
+            .message-date {
+                &.send {
+                    text-align: right;
                 }
             }
         }
@@ -259,6 +265,9 @@
             .mat-select-arrow {
                 border: none;
             }
+            .mat-form-field-infix {
+                padding: 0;
+            }
         }
     }
     .message-action {
@@ -274,6 +283,19 @@
                     display: none !important;
                 }
             }
+        }
+    }
+}
+
+.contact-detail {
+    width: 200px;
+    padding: 1rem;
+    background: white;
+    box-shadow: -8px 0 24px -5px rgb(16 19 54 / 24%);
+    a {
+        color: #101336 !important;
+        &:hover {
+            text-decoration: none;
         }
     }
 }

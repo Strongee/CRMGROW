@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { UserService } from 'src/app/services/user.service';
 import { SmsService } from 'src/app/services/sms.service';
 import { MaterialService } from 'src/app/services/material.service';
+import { OverlayService } from 'src/app/services/overlay.service';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 import * as _ from 'lodash';
@@ -25,7 +26,7 @@ export class MessagesComponent implements OnInit {
   showMessage = false;
   isNew = false;
   isSend = false;
-  newContact: Contact = new Contact();
+  newContacts = [];
   materials = [];
   materialType = '';
   selectedTemplate: Template = new Template();
@@ -42,7 +43,9 @@ export class MessagesComponent implements OnInit {
     public templateService: TemplatesService,
     private userService: UserService,
     private materialService: MaterialService,
-    private smsService: SmsService
+    private overlayService: OverlayService,
+    private smsService: SmsService,
+    private viewContainerRef: ViewContainerRef
   ) {
     this.templateService.loadAll(false);
     this.profileSubscription = this.userService.profile$.subscribe(
@@ -53,9 +56,10 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.messageLoadTimer = setInterval(() => {
-      this.loadMessage();
-    }, 5000);
+    this.loadMessage();
+    // this.messageLoadTimer = setInterval(() => {
+    //   this.loadMessage();
+    // }, 5000);
   }
 
   ngOnDestroy(): void {
@@ -68,6 +72,7 @@ export class MessagesComponent implements OnInit {
     this.messageLoadSubscription = this.smsService
       .getAllMessage()
       .subscribe((res) => {
+        console.log('##', res);
         this.contacts = [];
         this.messages = [];
         res['data'].forEach((data) => {
@@ -90,28 +95,46 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  selectContact(contact: any): void {
-    this.selectedContact = new Contact().deserialize(contact);
-    this.isNew = false;
-    this.showMessage = true;
-  }
-
-  addContacts(contact: any): void {
-    this.newContact = new Contact().deserialize(contact);
-    const newData = {
-      id: contact._id,
-      messages: []
-    };
-    this.messages.push(newData);
-  }
-
   keyTrigger(evt: any): void {
     if (evt.ctrlKey && evt.key === 'Enter') {
-      this.messageText += '\n';
+      this.messageText += '<br>';
     } else if (evt.key === 'Enter') {
       evt.preventDefault();
       this.sendMessage();
     }
+  }
+
+  calcDate(date: any): number {
+    const currentDate = new Date();
+    const dateSent = new Date(date);
+    return Math.floor(
+      (Date.UTC(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate()
+      ) -
+        Date.UTC(
+          dateSent.getFullYear(),
+          dateSent.getMonth(),
+          dateSent.getDate()
+        )) /
+        (1000 * 60 * 60 * 24)
+    );
+  }
+
+  easyView(contact: any, origin: any, content: any): void {
+    this.selectedContact = new Contact().deserialize(contact);
+    this.isNew = false;
+    this.showMessage = true;
+    this.overlayService.open(
+      origin,
+      content,
+      this.viewContainerRef,
+      'automation',
+      {
+        data: contact
+      }
+    );
   }
 
   openMaterialsDlg(): void {
@@ -134,7 +157,7 @@ export class MessagesComponent implements OnInit {
             } else {
               url = `${this.siteUrl}/image?image=${this.materials[i]._id}&user=${this.user_id}`;
             }
-            this.messageText += '\n' + url;
+            this.messageText += `<br><a href="${url}">${url}</a>`;
           }
         }
       });
@@ -144,7 +167,7 @@ export class MessagesComponent implements OnInit {
     this.selectedTemplate = template;
     this.emailSubject = this.selectedTemplate.subject;
     this.emailContent = this.selectedTemplate.content;
-    this.messageText += '\n' + this.emailContent;
+    this.messageText += `<br><div>${this.emailContent}</div>`;
   }
 
   goToBack(): void {
@@ -157,7 +180,10 @@ export class MessagesComponent implements OnInit {
 
   sendMessage(): void {
     this.isSend = true;
-    if (this.messageText == '') {
+    if (
+      this.messageText == '' ||
+      (this.isNew && this.newContacts.length == 0)
+    ) {
       this.isSend = false;
       return;
     }
@@ -173,6 +199,17 @@ export class MessagesComponent implements OnInit {
         imageIds.push(this.materials[i]._id);
       }
     }
+    const newContactIds = [];
+    if (this.newContacts.length > 0) {
+      for (let i = 0; i < this.newContacts.length; i++) {
+        newContactIds.push(this.newContacts[i]._id);
+        const newData = {
+          id: this.newContacts[i]._id,
+          messages: []
+        };
+        this.messages.push(newData);
+      }
+    }
     let data;
     if (this.isNew) {
       data = {
@@ -180,7 +217,7 @@ export class MessagesComponent implements OnInit {
         pdf_ids: pdfIds,
         image_ids: imageIds,
         content: this.messageText,
-        contacts: [this.newContact._id]
+        contacts: newContactIds
       };
     } else {
       data = {
@@ -198,7 +235,8 @@ export class MessagesComponent implements OnInit {
           if (!this.isNew && messageList.id == this.selectedContact._id) {
             const message = {
               type: 0,
-              content: this.messageText
+              content: this.messageText,
+              created_at: new Date()
             };
             messageList.messages.push(message);
             this.messageText = '';
@@ -210,15 +248,25 @@ export class MessagesComponent implements OnInit {
               this.contacts.unshift(this.selectedContact);
             }
           }
-          if (this.isNew && messageList.id == this.newContact._id) {
-            const message = {
-              type: 0,
-              content: this.messageText
-            };
-            messageList.messages.push(message);
-            this.contacts.unshift(new Contact().deserialize(this.newContact));
+          if (this.isNew) {
+            for (let i = 0; i < this.newContacts.length; i++) {
+              if (
+                messageList.id ==
+                this.newContacts[this.newContacts.length - 1 - i]._id
+              ) {
+                const message = {
+                  type: 0,
+                  content: this.messageText,
+                  created_at: new Date()
+                };
+                messageList.messages.push(message);
+              }
+              this.contacts.unshift(
+                this.newContacts[this.newContacts.length - 1 - i]
+              );
+            }
             this.isNew = false;
-            this.selectedContact = new Contact().deserialize(this.newContact);
+            this.selectedContact = this.contacts[0];
             this.messageText = '';
           }
         });
