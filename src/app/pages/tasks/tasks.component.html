@@ -113,7 +113,7 @@
         <ng-container matColumnDef="contact_address">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-                *ngIf="!selection.length" class="address-col"> city </th>
+                *ngIf="!selection.length" class="address-col"> address </th>
           </ng-container>
           <td mat-cell *matCellDef="let element" class="address-col">
             <a class="v-center c-pointer undecoration" [routerLink]="['/contacts/' + element.contact._id]">
@@ -140,7 +140,7 @@
                 *ngIf="!selection.length"> subject </th>
           </ng-container>
           <td mat-cell *matCellDef="let element">
-            <a class="v-center c-pointer undecoration" [routerLink]="['/contacts/' + element.contact._id]">
+            <a class="v-center c-pointer undecoration" (click)="element.status !== 1 ? openEdit(element) : false;">
               <div class="v-center">
                 <i class="i-icon {{TASK_ICONS[element.type] || 'i-task'}} d-block bgc-dark mr-2"></i>
                 <span class="c-dark">{{element.content}}</span>
@@ -174,7 +174,7 @@
             </th>
           </ng-container>
           <td mat-cell *matCellDef="let element">
-            <a class="v-center c-pointer undecoration" [routerLink]="['/contacts/' + element.contact._id]">
+            <a class="v-center c-pointer undecoration" (click)="element.status !== 1 ? openEdit(element) : false;">
               <span class="c-dark">{{element.due_date | date: 'MMM dd, hh:mm a'}}</span>
             </a>
           </td>
