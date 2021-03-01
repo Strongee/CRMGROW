@@ -86,7 +86,7 @@
                         <ng-container *ngIf="isNew && messageList.id === newContact._id">
                             <ng-container *ngFor="let message of messageList.messages">
                                 <div class="message mt-3"
-                                    [innerHTML]="message.content"
+                                [innerHTML]="parseContent(message.content)"
                                     [ngClass]="{send: message.type == 0, receive: message.type == 1}"
                                 ></div>
                                 <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
@@ -106,7 +106,7 @@
                     <ng-container *ngIf="!isNew && messageList.id === selectedContact._id">
                         <ng-container *ngFor="let message of messageList.messages">
                             <div class="message mt-3"
-                                [innerHTML]="message.content"
+                                [innerHTML]="parseContent(message.content)"
                                 [ngClass]="{send: message.type == 0, receive: message.type == 1}"
                             ></div>
                             <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">

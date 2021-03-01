@@ -56,10 +56,10 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadMessage();
-    // this.messageLoadTimer = setInterval(() => {
-    //   this.loadMessage();
-    // }, 5000);
+    // this.loadMessage();
+    this.messageLoadTimer = setInterval(() => {
+      this.loadMessage();
+    }, 5000);
   }
 
   ngOnDestroy(): void {
@@ -72,32 +72,33 @@ export class MessagesComponent implements OnInit {
     this.messageLoadSubscription = this.smsService
       .getAllMessage()
       .subscribe((res) => {
-        console.log('##', res);
-        this.contacts = [];
-        this.messages = [];
-        res['data'].forEach((data) => {
-          if (data.contact_detail.length > 0) {
-            data.contact_detail.forEach((contact) => {
-              this.contacts.push(new Contact().deserialize(contact));
-              if (Object.keys(this.selectedContact).length == 0) {
-                this.selectedContact = new Contact().deserialize(
-                  this.contacts[0]
-                );
-              }
-            });
-            const message = {
-              id: data.contact_detail[0]._id,
-              messages: data.data
-            };
-            this.messages.push(message);
-          }
-        });
+        if (res['status']) {
+          this.contacts = [];
+          this.messages = [];
+          res['data'].forEach((data) => {
+            if (data.contact_detail.length > 0) {
+              data.contact_detail.forEach((contact) => {
+                this.contacts.push(new Contact().deserialize(contact));
+                if (Object.keys(this.selectedContact).length == 0) {
+                  this.selectedContact = new Contact().deserialize(
+                    this.contacts[0]
+                  );
+                }
+              });
+              const message = {
+                id: data.contact_detail[0]._id,
+                messages: data.data
+              };
+              this.messages.push(message);
+            }
+          });
+        }
       });
   }
 
   keyTrigger(evt: any): void {
     if (evt.ctrlKey && evt.key === 'Enter') {
-      this.messageText += '<br>';
+      this.messageText += '\n';
     } else if (evt.key === 'Enter') {
       evt.preventDefault();
       this.sendMessage();
@@ -120,6 +121,12 @@ export class MessagesComponent implements OnInit {
         )) /
         (1000 * 60 * 60 * 24)
     );
+  }
+
+  parseContent(content: string): any {
+    return content.replace(/(https?:\/\/[^\s]+)/g, function (url) {
+      return '<a href="' + url + '">' + url + '</a>';
+    });
   }
 
   easyView(contact: any, origin: any, content: any): void {
@@ -157,7 +164,7 @@ export class MessagesComponent implements OnInit {
             } else {
               url = `${this.siteUrl}/image?image=${this.materials[i]._id}&user=${this.user_id}`;
             }
-            this.messageText += `<br><a href="${url}">${url}</a>`;
+            this.messageText += '\n' + url;
           }
         }
       });
@@ -167,7 +174,7 @@ export class MessagesComponent implements OnInit {
     this.selectedTemplate = template;
     this.emailSubject = this.selectedTemplate.subject;
     this.emailContent = this.selectedTemplate.content;
-    this.messageText += `<br><div>${this.emailContent}</div>`;
+    this.messageText += '\n' + this.emailContent;
   }
 
   goToBack(): void {
@@ -182,8 +189,12 @@ export class MessagesComponent implements OnInit {
     this.isSend = true;
     if (
       this.messageText == '' ||
-      (this.isNew && this.newContacts.length == 0)
+      this.messageText.replace(/\s/g, '').length == 0
     ) {
+      this.isSend = false;
+      return;
+    }
+    if (this.isNew && this.newContacts.length == 0) {
       this.isSend = false;
       return;
     }
