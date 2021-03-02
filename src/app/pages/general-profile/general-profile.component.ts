@@ -13,6 +13,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 
 @Component({
   selector: 'app-general-profile',
@@ -177,4 +178,17 @@ export class GeneralProfileComponent implements OnInit {
   }
 
   confirmPhone(): void {}
+
+  confirmCompany(): void {
+    if (this.userCompany == 'other') {
+      this.dialog.open(ConfirmComponent, {
+        data: {
+          title: 'Change Company',
+          message: 'You will lose all eXp materials. Are you sure?',
+          cancelLabel: 'No',
+          confirmLabel: 'Yes'
+        }
+      });
+    }
+  }
 }
