@@ -7,6 +7,7 @@ import { ContactService } from 'src/app/services/contact.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { StoreService } from 'src/app/services/store.service';
 import { COUNTRIES } from 'src/app/constants/variable.constants';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contact-bulk',
@@ -39,7 +40,8 @@ export class ContactBulkComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private handlerService: HandlerService
+    private handlerService: HandlerService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {}
@@ -88,6 +90,7 @@ export class ContactBulkComponent implements OnInit {
       .subscribe((status) => {
         this.isUpdating = false;
         if (status) {
+          this.toastr.success('Contact(s) successfully edited.');
           this.handlerService.bulkContactUpdate$(ids, data, tagData);
         }
       });

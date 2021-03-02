@@ -159,6 +159,7 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   clearAllFilters(): void {
+    this.currentFilterId = '';
     this.selectedMaterial = [];
     this.selectedMaterialActions = '';
     this.materialActions.forEach((action) => {
@@ -413,7 +414,6 @@ export class AdvancedFilterComponent implements OnInit {
       );
       this.searchOption = new SearchOption().deserialize(filter.content);
     } else {
-      this.currentFilterId = '';
       this.clearAllFilters();
     }
   }
@@ -438,8 +438,8 @@ export class AdvancedFilterComponent implements OnInit {
       this.dialog
         .open(ConfirmComponent, {
           data: {
-            title: 'Delete label',
-            message: 'Are you sure to delete the label?',
+            title: 'Delete filter',
+            message: 'Are you sure to delete the filter?',
             cancelLabel: 'No',
             confirmLabel: 'Delete'
           }

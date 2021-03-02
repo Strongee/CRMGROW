@@ -436,7 +436,7 @@ export const CALL_REQUEST_DURATION = [
 ];
 export const ActionName = {
   note: 'Note',
-  email: 'Send Email',
+  email: 'Send email',
   send_email_video: 'Send Video Email',
   send_text_video: 'Send Video Text',
   send_email_pdf: 'Send PDF Email',
@@ -664,7 +664,7 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Send messages',
+      label: 'Send email',
       type: 'button',
       icon: 'i-message',
       command: 'message',
