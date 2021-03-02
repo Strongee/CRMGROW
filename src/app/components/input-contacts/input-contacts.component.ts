@@ -53,6 +53,7 @@ export class InputContactsComponent implements OnInit {
   @Input('selectedContacts') selectedContacts: Contact[] = [];
   @Input('chipType') chipType = 'block';
   @Input('keepContacts') keepContacts: Contact[] = [];
+  @Input('focus') isFocus = false;
   @Output() onSelect = new EventEmitter();
   @Output() onRemove = new EventEmitter();
 
@@ -70,6 +71,12 @@ export class InputContactsComponent implements OnInit {
   constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {
+    if (this.isFocus) {
+      const _SELF = this;
+      setTimeout(() => {
+        _SELF.inputField.nativeElement.focus();
+      }, 300);
+    }
     this.formControl.valueChanges
       .pipe(
         filter((search) => {
