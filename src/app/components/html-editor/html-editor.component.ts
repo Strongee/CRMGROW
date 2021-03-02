@@ -17,8 +17,8 @@ import * as QuillNamespace from 'quill';
 import { promptForFiles, loadBase64, ByteToSize } from 'src/app/helper';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { Template } from 'src/app/models/template.model';
-
 const Quill: any = QuillNamespace;
+const Delta = Quill.import('delta');
 // import ImageResize from 'quill-image-resize-module';
 // Quill.register('modules/imageResize', ImageResize);
 
@@ -119,8 +119,22 @@ export class HtmlEditorComponent implements OnInit {
 
   setValue(value: string): void {
     if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
-      const delta = this.quillEditorRef.clipboard.convert({ html: value });
-      this.emailEditor.quillEditor.setContents(delta, 'user');
+      this.emailEditor.quillEditor.focus();
+      const range = this.emailEditor.quillEditor.getSelection();
+      let index = 0;
+      if (range) {
+        index = range.index;
+      }
+      const delta = this.quillEditorRef.clipboard.convert({
+        html: value
+      });
+      this.emailEditor.quillEditor.updateContents(
+        new Delta().retain(index).concat(delta),
+        'user'
+      );
+      const length = this.emailEditor.quillEditor.getLength();
+      this.emailEditor.quillEditor.setSelection(length, 0, 'user');
+      // this.emailEditor.quillEditor.setContents(delta, 'user');
     }
   }
 
@@ -240,7 +254,7 @@ export class HtmlEditorComponent implements OnInit {
 
   selectTemplate(template: Template): void {
     this.onChangeTemplate.emit(template);
-    this.setValue(template.content);
+    this.setValue(template.content + '<br>');
   }
 }
 // [{ font: [] }],
