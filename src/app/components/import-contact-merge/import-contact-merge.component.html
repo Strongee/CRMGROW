@@ -27,9 +27,11 @@
               <div class="v-center contact-row w-100 my-2" *ngIf="emails.length > 0">
                 <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
                 <div class="contact-field">
-                  <mat-select [(ngModel)]="previewContact[updateColumn[column]]">
-                    <mat-option value=""></mat-option>
-                    <mat-option *ngFor="let value of getOtherEmails(updateColumn[column])" value="{{value}}">
+                  <mat-select [(ngModel)]="previewContact[updateColumn[column]]"
+                              [disabled]="emails.length < 2"
+                              [class.disabled]="emails.length < 2"
+                  >
+                    <mat-option *ngFor="let value of emails" value="{{value}}">
                       <div class="f-3 c-black"
                            [class.selected-option-text]="previewContact[updateColumn[column]] == value">
                         {{value}}
@@ -43,9 +45,11 @@
               <div class="v-center contact-row w-100 my-2" *ngIf="phones.length > 0">
                 <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
                 <div class="contact-field">
-                  <mat-select [(ngModel)]="previewContact[updateColumn[column]]">
-                    <mat-option value=""></mat-option>
-                    <mat-option *ngFor="let value of getOtherPhones(updateColumn[column])" value="{{value}}">
+                  <mat-select [(ngModel)]="previewContact[updateColumn[column]]"
+                              [disabled]="phones.length < 2"
+                              [class.disabled]="phones.length < 2"
+                  >
+                    <mat-option *ngFor="let value of phones" value="{{value}}">
                       <div class="f-3 c-black"
                            [class.selected-option-text]="previewContact[updateColumn[column]] == value">
                         {{value}}
