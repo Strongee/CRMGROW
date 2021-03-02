@@ -42,7 +42,7 @@ export class MessagesComponent implements OnInit {
     public templateService: TemplatesService,
     private userService: UserService,
     private materialService: MaterialService,
-    private smsService: SmsService,
+    private smsService: SmsService
   ) {
     this.templateService.loadAll(false);
     this.profileSubscription = this.userService.profile$.subscribe(
@@ -53,10 +53,9 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadMessage();
-    // this.messageLoadTimer = setInterval(() => {
-    //   this.loadMessage();
-    // }, 5000);
+    this.messageLoadTimer = setInterval(() => {
+      this.loadMessage();
+    }, 5000);
   }
 
   ngOnDestroy(): void {
