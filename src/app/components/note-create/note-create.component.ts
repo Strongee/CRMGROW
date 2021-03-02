@@ -7,6 +7,7 @@ import { Note } from 'src/app/models/note.model';
 import { HandlerService } from 'src/app/services/handler.service';
 import { NoteService } from 'src/app/services/note.service';
 import { DealsService } from '../../services/deals.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-note-create',
@@ -26,6 +27,7 @@ export class NoteCreateComponent implements OnInit {
     private noteService: NoteService,
     private handlerService: HandlerService,
     private dealService: DealsService,
+    private toastr: ToastrService,
     private dialogRef: MatDialogRef<NoteCreateComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -90,6 +92,7 @@ export class NoteCreateComponent implements OnInit {
           .bulkCreate(data)
           .subscribe(() => {
             this.saving = false;
+            this.toastr.success('Notes successfully added.');
             this.handlerService.activityAdd$(ids, 'note');
             this.dialogRef.close();
           });
@@ -105,6 +108,7 @@ export class NoteCreateComponent implements OnInit {
           .subscribe((res) => {
             this.saving = false;
             if (res) {
+              this.toastr.success('Notes successfully added.');
               this.handlerService.activityAdd$(ids, 'note');
               this.handlerService.registerActivity$(res);
               this.dialogRef.close();

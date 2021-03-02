@@ -414,7 +414,7 @@ export class ImportContactMergeComponent implements OnInit {
     const merged = {
       ...this.previewContact
     };
-    this.dialogRef.close({ type: 'csv', merged });
+    this.dialogRef.close({ type: 'csv-csv', merged });
   }
 
   update(): void {
@@ -429,7 +429,7 @@ export class ImportContactMergeComponent implements OnInit {
           merged = {
             ...this.previewContact
           };
-          this.dialogRef.close({ type: 'csv', merged });
+          this.dialogRef.close({ type: 'contact-csv', merged });
         }
       },
       (error) => {
@@ -484,7 +484,7 @@ export class ImportContactMergeComponent implements OnInit {
               label_id: labelId
             };
 
-            this.dialogRef.close({ type: 'contact', merged });
+            this.dialogRef.close({ type: 'contact-contact', merged });
           }
         },
         (error) => {

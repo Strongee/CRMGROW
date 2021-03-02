@@ -16,6 +16,7 @@ import { ContactService } from '../../services/contact.service';
 import { HandlerService } from '../../services/handler.service';
 import { ElementRef } from '@angular/core';
 import { NotifyComponent } from '../notify/notify.component';
+import { ToastrService } from 'ngx-toastr';
 
 const phone = require('phone');
 
@@ -98,7 +99,8 @@ export class UploadContactsComponent implements OnInit {
     private papa: Papa,
     private contactService: ContactService,
     private handlerService: HandlerService,
-    private scrollElement: ElementRef
+    private scrollElement: ElementRef,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -143,7 +145,6 @@ export class UploadContactsComponent implements OnInit {
             this.uploadLines.splice(0, this.uploadLines.length);
             this.uploadedCount += uploads.length;
           }
-
           this.uploadRecursive(uploads);
         } else {
           this.confirmDuplicates();
@@ -547,16 +548,7 @@ export class UploadContactsComponent implements OnInit {
           contactItem[key] === contact[key] &&
           contactItem.id !== contact.id
         ) {
-          if (key === 'first_name' || key === 'last_name') {
-            if (
-              contactItem['first_name'] + contactItem['last_name'] ===
-              contact['first_name'] + contact['last_name']
-            ) {
-              return true;
-            }
-          } else {
-            return true;
-          }
+          return true;
         }
       }
     }
@@ -590,6 +582,7 @@ export class UploadContactsComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toastr.success('Contacts successfully merged.');
           const merged = res.merged;
           for (const id of contactIds) {
             this.selectedMergeContacts[dupIndex].deselect(id);
@@ -911,6 +904,7 @@ export class UploadContactsComponent implements OnInit {
         }
       }, 2000);
     } else {
+      this.toastr.success('Contacts successfully imported.');
       this.dialogRef.close({});
       this.handlerService.bulkContactAdd$();
     }
@@ -1025,6 +1019,9 @@ export class UploadContactsComponent implements OnInit {
 
   close(): void {
     this.dialogRef.close();
+    if (!this.firstImport) {
+      this.handlerService.bulkContactAdd$();
+    }
   }
 
   selectAllContacts(): void {
@@ -1113,7 +1110,7 @@ export class UploadContactsComponent implements OnInit {
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
         title: 'Delete contact',
-        message: 'Are you sure to delete the contact?',
+        message: 'Are you sure you want to delete this contact?',
         confirmLabel: 'Delete'
       }
     });
@@ -1218,7 +1215,7 @@ export class UploadContactsComponent implements OnInit {
     let selectedCSVCount = 0;
     for (const id of this.selectedMergeContacts[dupIndex].selected) {
       const index = this.sameContacts[dupIndex].findIndex(
-        (contact) => contact._id && contact._id === id
+        (item) => item._id && contact._id === id
       );
       if (index >= 0) {
         selectedContactCount++;

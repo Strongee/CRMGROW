@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
     { icon: 'i-plus bg-white', label: 'Add new Contact', id: 'contact' },
     { icon: 'i-task bg-white', label: 'Add new Task', id: 'task' },
     { icon: 'i-template bg-white', label: 'Add new Note', id: 'note' },
-    { icon: 'i-message bg-white', label: 'Send Message', id: 'message' },
+    { icon: 'i-message bg-white', label: 'Send Email', id: 'message' },
     { icon: 'i-record bg-white', label: 'Record Video', id: 'record' },
     { icon: 'i-upload bg-white', label: 'Upload Video', id: 'video' }
   ];

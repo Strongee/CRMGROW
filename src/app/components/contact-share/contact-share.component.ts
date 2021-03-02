@@ -82,6 +82,7 @@ export class ContactShareComponent implements OnInit {
         this.loading = false;
         if (res) {
           if (res.status) {
+            this.toastr.success(`This contact is successfully shared to ${this.selectedMember.user_name} of ${this.selectedTeam.name}.`);
             this.dialogRef.close({ data: res.data });
           } else {
             this.toastr.error(res.error, 'Share contacts to team member', {
