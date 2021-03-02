@@ -18,13 +18,13 @@
             </div>
             <div class="d-flex p-2 c-pointer contact"
                 [class]="{'selected': contact._id == selectedContact._id}"
-                *ngFor="let contact of contacts" #easyContact
-                (click)="easyView(contact, easyContact, contactDetail)"
+                *ngFor="let contact of contacts" ngbDropdown
+                (click)="selectContact(contact)"
             >
                 <div class="contact-avatar f-3 font-weight-bold mr-2">
                     {{contact.avatarName}}
                 </div>
-                <div class="contact-name">
+                <div class="contact-name w-100">
                     <div class="v-center justify-content-between">
                         <span class="f-3 fw-600">{{contact.fullName}}</span>
                         <span class="f-1 op-56">{{contact.received_at}}</span>
@@ -34,37 +34,20 @@
                     </div>
                 </div>
             </div>
-            <ng-template #contactDetail let-close="close" let-data>
-                <div class="v-center contact-detail">
-                    <div class="contact-avatar f-3 font-weight-bold mr-2">
-                        {{data.data.avatarName}}
-                    </div>
-                    <div class="contact-info">
-                        <div class="f-3">
-                            <a [routerLink]="['/contacts/' + data.data._id]" target="_blank">
-                                {{data.data.fullName}}
-                            </a>
-                        </div>
-                        <div class="v-center f-1 font-weight-bold c-blue">
-                            {{data.data.cell_phone}}
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
         </div>
         <div class="message-box" [class.show]="showMessage">
             <div class="v-center justify-content-between border-bottom px-3 message-box-header" *ngIf="!isNew; else newMessageHeader">
-                <div class="v-center" *ngIf="selectedContact._id">
-                    <div class="contact-avatar f-3 font-weight-bold mr-2">
+                <a class="v-center c-pointer" [routerLink]="['/contacts/' + selectedContact._id]" target="_blank" *ngIf="selectedContact._id">
+                    <div class="contact-avatar f-3 font-weight-bold c-white mr-2">
                         {{selectedContact.avatarName}}
                     </div>
                     <div class="contact-info">
-                        <div class="f-3">{{selectedContact.fullName}}</div>
-                        <div class="v-center f-1 font-weight-bold c-blue c-pointer">
+                        <div class="f-3 c-dark">{{selectedContact.fullName}}</div>
+                        <div class="v-center f-1 font-weight-bold c-blue">
                             {{selectedContact.cell_phone}}
                         </div>
                     </div>
-                </div>
+                </a>
                 <div class="v-center justify-content-center c-pointer show-list ml-auto" (click)="showFileList = !showFileList">
                     <i class="d-block i-icon i-list bgc-dark"></i>
                 </div>
@@ -77,6 +60,7 @@
                         [placeholder]="'Search for Contact'"
                         [display]="'cell_phone'"
                         [selectedContacts]="newContacts"
+                        [focus]="true"
                     ></app-input-contacts>
                 </div>
             </ng-template>

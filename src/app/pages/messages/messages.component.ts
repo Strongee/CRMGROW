@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { UserService } from 'src/app/services/user.service';
 import { SmsService } from 'src/app/services/sms.service';
 import { MaterialService } from 'src/app/services/material.service';
-import { OverlayService } from 'src/app/services/overlay.service';
 import { Template } from 'src/app/models/template.model';
 import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 import * as _ from 'lodash';
@@ -43,9 +42,7 @@ export class MessagesComponent implements OnInit {
     public templateService: TemplatesService,
     private userService: UserService,
     private materialService: MaterialService,
-    private overlayService: OverlayService,
-    private smsService: SmsService,
-    private viewContainerRef: ViewContainerRef
+    private smsService: SmsService
   ) {
     this.templateService.loadAll(false);
     this.profileSubscription = this.userService.profile$.subscribe(
@@ -56,7 +53,6 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.loadMessage();
     this.messageLoadTimer = setInterval(() => {
       this.loadMessage();
     }, 5000);
@@ -97,9 +93,7 @@ export class MessagesComponent implements OnInit {
   }
 
   keyTrigger(evt: any): void {
-    if (evt.ctrlKey && evt.key === 'Enter') {
-      this.messageText += '\n';
-    } else if (evt.key === 'Enter') {
+    if (!evt.shiftKey && evt.key === 'Enter') {
       evt.preventDefault();
       this.sendMessage();
     }
@@ -129,19 +123,10 @@ export class MessagesComponent implements OnInit {
     });
   }
 
-  easyView(contact: any, origin: any, content: any): void {
+  selectContact(contact: any): void {
     this.selectedContact = new Contact().deserialize(contact);
     this.isNew = false;
     this.showMessage = true;
-    this.overlayService.open(
-      origin,
-      content,
-      this.viewContainerRef,
-      'automation',
-      {
-        data: contact
-      }
-    );
   }
 
   openMaterialsDlg(): void {
@@ -194,7 +179,10 @@ export class MessagesComponent implements OnInit {
       this.isSend = false;
       return;
     }
-    if (this.isNew && this.newContacts.length == 0) {
+    if (
+      (this.isNew && this.newContacts.length == 0) ||
+      (!this.isNew && !this.selectedContact._id)
+    ) {
       this.isSend = false;
       return;
     }
