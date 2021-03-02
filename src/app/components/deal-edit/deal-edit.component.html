@@ -55,12 +55,6 @@
         <div class="form-group">
             <div class="v-center">
                 <label class="mb-0">value</label>
-                <span
-                    class="invalid-error f-3 c-red ml-auto"
-                    *ngIf="dealForm.submitted && dealValue.invalid && (dealValue.dirty || dealValue.touched || dealForm.submitted)"
-                >
-                    Required!
-                </span>
             </div>
             <input
                 class="form-control"
@@ -68,7 +62,6 @@
                 name="dealValue"
                 #dealValue="ngModel"
                 [(ngModel)]="deal.value"
-                required
             >
         </div>
     </mat-dialog-content>
