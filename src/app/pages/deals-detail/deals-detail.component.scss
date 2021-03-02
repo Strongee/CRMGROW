@@ -6,6 +6,7 @@
 
 .deal-info-panel {
     min-width: 376px;
+    max-width: 376px;
     .i-triangle-left {
         width: 10px;
         height: 10px;
@@ -395,6 +396,7 @@
         .deal-info-panel {
             padding-right: 0px!important;
             min-width: unset;
+            max-width: unset;
         }
         .deal-action-panel {
             &::before {
