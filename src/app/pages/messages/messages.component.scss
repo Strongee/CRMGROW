@@ -287,6 +287,16 @@
             }
         }
     }
+    .dropdown-toggle::after {
+        content: none;
+    }
+    .dropdown-menu {
+        &.show {
+            width: 200px;
+            top: -10px !important;
+            left: 40px !important;
+        }
+    }
     .message {
         &.send {
             a {
@@ -302,11 +312,7 @@
 }
 
 .contact-detail {
-    width: 200px;
-    margin: 20px 0 0 50px;
-    padding: 1rem;
-    background: white;
-    box-shadow: -8px 0 24px -5px rgb(16 19 54 / 24%);
+    padding: 0 0.5rem;
     a {
         color: #101336 !important;
         &:hover {

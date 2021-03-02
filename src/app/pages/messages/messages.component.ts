@@ -56,10 +56,10 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.loadMessage();
-    this.messageLoadTimer = setInterval(() => {
-      this.loadMessage();
-    }, 5000);
+    this.loadMessage();
+    // this.messageLoadTimer = setInterval(() => {
+    //   this.loadMessage();
+    // }, 5000);
   }
 
   ngOnDestroy(): void {
@@ -97,7 +97,10 @@ export class MessagesComponent implements OnInit {
   }
 
   keyTrigger(evt: any): void {
-    if (evt.ctrlKey && evt.key === 'Enter') {
+    if (
+      (evt.ctrlKey && evt.key === 'Enter') ||
+      (evt.shiftKey && evt.key === 'Enter')
+    ) {
       this.messageText += '\n';
     } else if (evt.key === 'Enter') {
       evt.preventDefault();
@@ -129,20 +132,26 @@ export class MessagesComponent implements OnInit {
     });
   }
 
-  easyView(contact: any, origin: any, content: any): void {
+  selectContact(contact: any): void {
     this.selectedContact = new Contact().deserialize(contact);
     this.isNew = false;
     this.showMessage = true;
-    this.overlayService.open(
-      origin,
-      content,
-      this.viewContainerRef,
-      'automation',
-      {
-        data: contact
-      }
-    );
   }
+
+  // easyView(contact: any, origin: any, content: any): void {
+  //   this.selectedContact = new Contact().deserialize(contact);
+  //   this.isNew = false;
+  //   this.showMessage = true;
+  //   this.overlayService.open(
+  //     origin,
+  //     content,
+  //     this.viewContainerRef,
+  //     'automation',
+  //     {
+  //       data: contact
+  //     }
+  //   );
+  // }
 
   openMaterialsDlg(): void {
     this.dialog
