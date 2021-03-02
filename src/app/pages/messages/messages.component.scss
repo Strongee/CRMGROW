@@ -67,6 +67,9 @@
         }
     }
     .message-box {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
         width: 100%;
         &::before {
             width: 1px;
@@ -78,7 +81,7 @@
             opacity: 0.2;
         }
         .message-box-header {
-            height: 65px;
+            min-height: 65px;
             background-color: #F6F6F7;
             overflow-y: auto;
             .contact-info {
@@ -94,9 +97,14 @@
                 border-radius: 3px;
                 background-color: rgba(0,0,0,0.08);
             }
+            a {
+                &:hover {
+                    text-decoration: none;
+                }
+            }
         }
         .message-list {
-            height: 520px;
+            height: 620px;
             overflow-y: auto;
             .message {
                 padding: 0.5rem 1rem;
@@ -109,8 +117,8 @@
                 }
                 &.send {
                     border-radius: 22px 22px 6px 22px;
-                    background-color: $color-blue;
-                    color: #fff;
+                    background-color: #e0f2f1;
+                    color: #004d40;
                     margin-left: auto;
                 }
                 &.receive {
@@ -287,36 +295,16 @@
             }
         }
     }
-    .dropdown-toggle::after {
-        content: none;
-    }
-    .dropdown-menu {
-        &.show {
-            width: 200px;
-            top: -10px !important;
-            left: 40px !important;
-        }
-    }
     .message {
         &.send {
             a {
-                color: #fff;
+                color: #004d40;
             }
         }
         &.receive {
             a {
                 color: $color-dark;
             }
-        }
-    }
-}
-
-.contact-detail {
-    padding: 0 0.5rem;
-    a {
-        color: #101336 !important;
-        &:hover {
-            text-decoration: none;
         }
     }
 }

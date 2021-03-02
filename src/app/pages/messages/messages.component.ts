@@ -179,7 +179,10 @@ export class MessagesComponent implements OnInit {
       this.isSend = false;
       return;
     }
-    if (this.isNew && this.newContacts.length == 0) {
+    if (
+      (this.isNew && this.newContacts.length == 0) ||
+      (!this.isNew && !this.selectedContact._id)
+    ) {
       this.isSend = false;
       return;
     }
