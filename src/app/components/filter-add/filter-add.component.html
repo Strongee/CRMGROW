@@ -142,28 +142,30 @@
             searchOption.lastMaterial.watched_pdf.flag ||
             searchOption.lastMaterial.watched_image.flag"
         >
-            <div class="f-3 fw-600">
+            <div class="d-flex align-items-start">
+              <div class="f-3 fw-600">
                 Including last activities
-            </div>
-            <div class="v-center">
+              </div>
+              <div>
                 <div class="f-3 fw-600 ml-2" *ngFor="let item of this.searchOption.activityCondition">
-                    {{activityDefine[item]}}
+                  {{activityDefine[item]}}
                 </div>
                 <ng-container *ngIf="searchOption.lastMaterial.send_image.flag">
-                    <div class="f-3 fw-600 ml-2">
-                        Sent image
-                    </div>
+                  <div class="f-3 fw-600 ml-2">
+                    Sent image
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="searchOption.lastMaterial.watched_pdf.flag">
-                    <div class="f-3 fw-600 ml-2">
-                        Reviewed PDF
-                    </div>
+                  <div class="f-3 fw-600 ml-2">
+                    Reviewed PDF
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="searchOption.lastMaterial.watched_image.flag">
-                    <div class="f-3 fw-600 ml-2">
-                        Reviewed image
-                    </div>
+                  <div class="f-3 fw-600 ml-2">
+                    Reviewed image
+                  </div>
                 </ng-container>
+              </div>
             </div>
         </div>
         <div class="v-center mt-2" *ngIf="this.searchOption.activityStart">
