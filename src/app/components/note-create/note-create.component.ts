@@ -76,7 +76,7 @@ export class NoteCreateComponent implements OnInit {
         .addNote(data)
         .subscribe((res) => {
           this.saving = false;
-          this.dialogRef.close();
+          this.dialogRef.close(res);
         });
     } else {
       if (ids.length > 1) {

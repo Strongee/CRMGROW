@@ -22,6 +22,7 @@ import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { getCurrentTimezone, numPad } from 'src/app/helper';
 import { TaskDeleteComponent } from '../task-delete/task-delete.component';
+import { DealsService } from 'src/app/services/deals.service';
 
 @Component({
   selector: 'app-task-edit',
@@ -39,6 +40,7 @@ export class TaskEditComponent implements OnInit {
 
   timezone;
   type = '';
+  deal = '';
   updating = false;
   updateSubscription: Subscription;
 
@@ -47,9 +49,10 @@ export class TaskEditComponent implements OnInit {
     private handlerService: HandlerService,
     private userService: UserService,
     private helperService: HelperService,
+    private dealsService: DealsService,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<TaskEditComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: TaskDetail
+    @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     const current = new Date();
     this.MIN_DATE = {
@@ -68,14 +71,19 @@ export class TaskEditComponent implements OnInit {
         this.initTime();
       }
     });
+
     if (this.data) {
       if (this.data.type === 'deal') {
         this.type = 'deal';
+        if (this.data.deal) {
+          this.deal = this.data.deal;
+        }
       }
-
-      this.task = this.task.deserialize(this.data);
-      if (this.timezone) {
-        this.initTime();
+      if (this.data.task) {
+        this.task = this.task.deserialize(this.data.task);
+        if (this.timezone) {
+          this.initTime();
+        }
       }
     }
   }
@@ -147,30 +155,49 @@ export class TaskEditComponent implements OnInit {
       due_date
     };
 
-    this.updating = true;
-    this.updateSubscription && this.updateSubscription.unsubscribe();
-    this.updateSubscription = this.taskService
-      .update(this.task._id, data)
-      .subscribe((res) => {
-        this.updating = false;
-        if (res) {
-          this.dialogRef.close();
-          this.handlerService.updateTasks$([this.task._id], data);
-          this.handlerService.updateTaskInDetail$(res);
-          // if (this.type === 'deal') {
-          //   this.handlerService.updateLastActivities$(
-          //     [this.task.contact._id],
-          //     'task_update'
-          //   );
-          // } else {
-          //   this.handlerService.updateLastActivities$(
-          //     [this.task.contact._id],
-          //     'task_update'
-          //   );
-          // }
+    if (this.type === 'deal') {
+      this.updating = true;
+      this.updateSubscription && this.updateSubscription.unsubscribe();
+      this.updateSubscription = this.dealsService
+        .editFollowUp({
+          ...data,
+          followup: this.task._id,
+          deal: this.deal,
+          contact: undefined,
+          _id: undefined
+        })
+        .subscribe((status) => {
+          this.updating = false;
+          if (status) {
+            this.dialogRef.close({ status: true, data: data });
+          }
+        });
+    } else {
+      this.updating = true;
+      this.updateSubscription && this.updateSubscription.unsubscribe();
+      this.updateSubscription = this.taskService
+        .update(this.task._id, data)
+        .subscribe((res) => {
+          this.updating = false;
+          if (res) {
+            this.dialogRef.close();
+            this.handlerService.updateTasks$([this.task._id], data);
+            this.handlerService.updateTaskInDetail$(res);
+            // if (this.type === 'deal') {
+            //   this.handlerService.updateLastActivities$(
+            //     [this.task.contact._id],
+            //     'task_update'
+            //   );
+            // } else {
+            //   this.handlerService.updateLastActivities$(
+            //     [this.task.contact._id],
+            //     'task_update'
+            //   );
+            // }
 
-          // this.handlerService.registerActivity$(res);
-        }
-      });
+            // this.handlerService.registerActivity$(res);
+          }
+        });
+    }
   }
 }

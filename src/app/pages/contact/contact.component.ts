@@ -773,7 +773,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.dialog.open(TaskEditComponent, {
       width: '98vw',
       maxWidth: '394px',
-      data: new TaskDetail().deserialize(data)
+      data: {
+        task: new TaskDetail().deserialize(data)
+      }
     });
   }
 

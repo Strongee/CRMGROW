@@ -409,3 +409,27 @@
 .title-input {
   height: 38px;
 }
+
+.call-status {
+  .tag {
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.2;
+
+    &.planned {
+      background-color: $color-green-weak;
+      color: white;
+    }
+    &.declined {
+      background-color: $color-red;
+      color: white;
+    }
+    &.pending {
+      background-color: $color-yellow;
+      color: white;
+    }
+  }
+}

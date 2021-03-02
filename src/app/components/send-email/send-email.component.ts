@@ -159,7 +159,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
           })
           .subscribe((status) => {
             this.emailSending = false;
-            this.dialogRef.close();
+            this.dialogRef.close(status);
           });
       } else {
         this.emailSending = true;

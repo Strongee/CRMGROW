@@ -313,65 +313,100 @@ export class DealsDetailComponent implements OnInit {
       return;
     }
 
-    this.dialog.open(CalendarDialogComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '600px',
-      maxHeight: '700px',
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
-      }
-    });
+    this.dialog
+      .open(CalendarDialogComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '600px',
+        maxHeight: '700px',
+        data: {
+          deal: this.dealId,
+          contacts: this.deal.contacts
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.addLatestActivity(2);
+        }
+      });
   }
 
   openGroupCallDlg(): void {
-    this.dialog.open(JoinCallRequestComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '530px',
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
-      }
-    });
+    this.dialog
+      .open(JoinCallRequestComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '530px',
+        data: {
+          deal: this.dealId,
+          contacts: this.deal.contacts
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.addLatestActivity(2);
+        }
+      });
   }
 
   openSendEmail(): void {
-    this.dialog.open(SendEmailComponent, {
-      position: {
-        bottom: '0px',
-        right: '0px'
-      },
-      width: '100vw',
-      panelClass: 'send-email',
-      backdropClass: 'cdk-send-email',
-      disableClose: false,
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
-      }
-    });
+    this.dialog
+      .open(SendEmailComponent, {
+        position: {
+          bottom: '0px',
+          right: '0px'
+        },
+        width: '100vw',
+        panelClass: 'send-email',
+        backdropClass: 'cdk-send-email',
+        disableClose: false,
+        data: {
+          deal: this.dealId,
+          contacts: this.deal.contacts
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.addLatestActivity(2);
+        }
+      });
   }
 
   openTaskDlg(): void {
-    this.dialog.open(TaskCreateComponent, {
-      ...DialogSettings.TASK,
-      data: {
-        contacts: this.deal.contacts,
-        deal: this.dealId
-      }
-    });
+    this.dialog
+      .open(TaskCreateComponent, {
+        ...DialogSettings.TASK,
+        data: {
+          contacts: this.deal.contacts,
+          deal: this.dealId
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.addLatestActivity(2);
+        }
+      });
   }
 
   openNoteDlg(): void {
-    this.dialog.open(NoteCreateComponent, {
-      ...DialogSettings.NOTE,
-      data: {
-        deal: this.dealId,
-        contacts: this.deal.contacts
-      }
-    });
+    this.dialog
+      .open(NoteCreateComponent, {
+        ...DialogSettings.NOTE,
+        data: {
+          deal: this.dealId,
+          contacts: this.deal.contacts
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.addLatestActivity(2);
+        }
+      });
   }
 
   openSendText(): void {}
@@ -623,28 +658,65 @@ export class DealsDetailComponent implements OnInit {
   }
 
   updateNote(activity: any): void {
-    let contact_name = '';
-    if (this.deal.contacts && this.deal.contacts.length) {
-      contact_name = this.deal.contacts[0].fullName;
-      if (this.deal.contacts.length > 1) {
-        contact_name += ` +${this.deal.contacts.length - 1}`;
-      }
+    if (!activity || !activity.activity_detail) {
+      return;
     }
-
+    const data = {
+      note: activity.activity_detail,
+      type: 'deal',
+      deal_name: this.deal.main.title
+    };
     this.dialog
       .open(NoteEditComponent, {
         width: '98vw',
         maxWidth: '394px',
-        data: {
-          type: 'deal',
-          note: activity,
-          contact_name
-        }
+        data
       })
       .afterClosed()
       .subscribe((note) => {
         if (note) {
-          activity.activity_detail[0] = note;
+          activity.activity_detail = note;
+          if (this.detailData && this.detailData[note._id]) {
+            this.detailData[note._id].content = note.content;
+          }
+          this.changeTab(this.tab);
+        }
+      });
+  }
+
+  updateNoteDetail(detail: any): void {
+    if (!detail) {
+      return;
+    }
+    const data = {
+      note: detail,
+      type: 'deal',
+      deal_name: this.deal.main.title
+    };
+    this.dialog
+      .open(NoteEditComponent, {
+        width: '98vw',
+        maxWidth: '394px',
+        data
+      })
+      .afterClosed()
+      .subscribe((note) => {
+        if (note) {
+          detail.content = note.content;
+          this.activities.some((e) => {
+            if (e.type !== 'notes') {
+              return;
+            }
+            if (e.activity_detail && e.activity_detail._id === detail._id) {
+              e.activity_detail.content = note.content;
+              return true;
+            }
+          });
+          this.arrangeActivity();
+          if (this.detailData && this.detailData[note._id]) {
+            this.detailData[note._id].content = note.content;
+          }
+          this.changeTab(this.tab);
         }
       });
   }
@@ -657,38 +729,87 @@ export class DealsDetailComponent implements OnInit {
           title: 'Delete Note',
           message: 'Are you sure to delete the note?',
           cancelLabel: 'Cancel',
-          confirmLabel: 'Confirm'
+          confirmLabel: 'Delete'
         }
       })
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.noteService
-            .delete(activity.activity_detail[0]._id)
+          this.dealsService
+            .removeNote({ note: activity.activity_detail._id })
             .subscribe((res) => {
               if (res) {
-                const index = this.activities.findIndex(
-                  (item) =>
-                    item.activity_detail[0]._id ===
-                    activity.activity_detail[0]._id
+                delete this.detailData[activity.activity_detail._id];
+                _.pullAllBy(
+                  this.showingDetails,
+                  { _id: activity.activity_detail._id },
+                  '_id'
                 );
-                if (index >= 0) {
-                  this.activities[index].activity_detail = null;
-                }
+                this.activities.forEach((e) => {
+                  const detail = e.activity_detail;
+                  if (detail && detail._id === activity.activity_detail._id) {
+                    delete e.activity_detail;
+                  }
+                });
+                this.arrangeActivity();
+              }
+            });
+        }
+      });
+  }
+  deleteNoteDetail(detail: any): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Delete Note',
+          message: 'Are you sure to delete the note?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Delete'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.dealsService
+            .removeNote({ note: detail._id })
+            .subscribe((res) => {
+              if (res) {
+                this.activities.forEach((e) => {
+                  if (e.type !== 'notes') {
+                    return;
+                  }
+                  if (
+                    e.activity_detail &&
+                    e.activity_detail._id === detail._id
+                  ) {
+                    e.activity_detail = null;
+                    return true;
+                  }
+                });
+                this.arrangeActivity();
+                delete this.detailData[detail._id];
+                this.changeTab(this.tab);
               }
             });
         }
       });
   }
 
-  editTask(activity: any): void {
-    if (!activity || !activity.activity_detail.length) {
-      return;
+  editTask(activity: any, isReal: boolean = false): void {
+    let data;
+    if (isReal) {
+      data = {
+        ...activity
+      };
+    } else {
+      if (!activity || !activity.activity_detail) {
+        return;
+      }
+      data = {
+        ...activity.activity_detail
+      };
     }
-    const data = {
-      ...activity.activity_detail[0],
-      contacts: { _id: this.deal.contacts }
-    };
 
     this.dialog
       .open(TaskEditComponent, {
@@ -696,65 +817,56 @@ export class DealsDetailComponent implements OnInit {
         maxWidth: '394px',
         data: {
           type: 'deal',
+          deal: this.deal.main._id,
           task: new TaskDetail().deserialize(data)
         }
       })
       .afterClosed()
       .subscribe((res) => {
-        console.log(res);
+        if (res['status']) {
+          this.addLatestActivity(3);
+        }
+        // Update Activity
       });
   }
 
-  completeTask(activity: any): void {
-    this.dialog
-      .open(ConfirmComponent, {
-        position: { top: '100px' },
-        data: {
-          title: 'Complete Task',
-          message: 'Are you sure to complete the task?',
-          cancelLabel: 'Cancel',
-          confirmLabel: 'Complete'
-        }
-      })
-      .afterClosed()
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.taskService
-            .complete(activity.activity_detail._id)
-            .subscribe((res) => {
-              if (res) {
-                this.handlerService.updateTasks$(
-                  [activity.activity_detail._id],
-                  { status: 1 }
-                );
-                this.handlerService.registerActivity$(res);
-              }
-            });
-        }
-      });
-  }
+  completeTask(activity: any, isReal: boolean = false): void {}
 
-  archiveTask(activity: any): void {
+  archiveTask(activity: any, isReal: boolean = false): void {
+    let taskId;
+    if (isReal) {
+      taskId = activity._id;
+    } else {
+      taskId = activity.activity_detail._id;
+    }
     this.dialog
       .open(ConfirmComponent, {
         ...DialogSettings.CONFIRM,
         data: {
-          title: 'Archive Task',
-          message: 'Are you sure to archive the task?',
+          title: 'Delete Task',
+          message: 'Are you sure to delete the task?',
           cancelLabel: 'Cancel',
-          confirmLabel: 'Confirm'
+          confirmLabel: 'Delete'
         }
       })
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.taskService
-            .archive([activity.activity_detail._id])
+          this.dealsService
+            .removeFollowUp({ followup: taskId })
             .subscribe((status) => {
               if (status) {
-                this.handlerService.archiveTask$(activity.activity_detail._id);
+                delete this.detailData[taskId];
+                _.pullAllBy(this.showingDetails, { _id: taskId }, '_id');
+                this.activities.forEach((e) => {
+                  const detail = e.activity_detail;
+                  if (detail && detail._id === taskId) {
+                    delete e.activity_detail;
+                  }
+                });
+                this.arrangeActivity();
               }
-            });
+           });
         }
       });
   }
@@ -763,9 +875,159 @@ export class DealsDetailComponent implements OnInit {
 
   removeGroupCall(): void {}
 
-  editAppointment(): void {}
+  editAppointment(activity: any, isReal: boolean = false): void {
+    let data;
+    if (isReal) {
+      data = {
+        ...activity
+      };
+    } else {
+      if (!activity || !activity.activity_detail) {
+        return;
+      }
+      data = {
+        ...activity.activity_detail
+      };
+    }
 
-  removeAppointment(): void {}
+    const _formattedEvent = {
+      appointment: data._id,
+      title: data.title,
+      start: new Date(data.due_start),
+      end: new Date(data.due_end),
+      meta: {
+        contacts: data.contacts,
+        calendar_id: data.calendar_id,
+        description: data.description,
+        location: data.location,
+        type: data.type,
+        guests: data.guests,
+        event_id: data.event_id,
+        recurrence: data.recurrence,
+        recurrence_id: data.recurrence_id,
+        is_organizer: data.is_organizer,
+        organizer: data.organizer
+      }
+    };
+
+    this.dialog
+      .open(CalendarDialogComponent, {
+        width: '98vw',
+        maxWidth: '600px',
+        data: {
+          deal: this.deal.main._id,
+          event: _formattedEvent
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.addLatestActivity(3);
+        }
+      });
+  }
+
+  removeAppointment(activity: any, isReal: boolean = false): void {
+    let data;
+    if (isReal) {
+      data = {
+        ...activity
+      };
+    } else {
+      if (!activity || !activity.activity_detail) {
+        return;
+      }
+      data = {
+        ...activity.activity_detail
+      };
+    }
+
+    const _formattedEvent = {
+      appointment: data._id,
+      title: data.title,
+      start: new Date(data.due_start),
+      end: new Date(data.due_end),
+      meta: {
+        contacts: data.contacts,
+        calendar_id: data.calendar_id,
+        description: data.description,
+        location: data.location,
+        type: data.type,
+        guests: data.guests,
+        event_id: data.event_id,
+        recurrence: data.recurrence,
+        recurrence_id: data.recurrence_id,
+        is_organizer: data.is_organizer,
+        organizer: data.organizer
+      }
+    };
+
+    const calendars = this.appointmentService.subCalendars.getValue();
+    const currentCalendar = calendars[_formattedEvent.meta.calendar_id];
+    if (!currentCalendar) {
+      // OPEN ALERT & CLOSE OVERLAY
+      return;
+    }
+    const connected_email = currentCalendar.account;
+
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Delete Appointment',
+          message: 'Are you sure to delete the appointment?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Delete'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.dealsService
+            .removeAppointment({
+              connected_email,
+              recurrence_id: _formattedEvent.meta.recurrence_id,
+              event_id: _formattedEvent.meta.event_id,
+              calendar_id: _formattedEvent.meta.calendar_id
+            })
+            .subscribe((status) => {});
+        }
+      });
+  }
+
+  arrangeActivity(): void {
+    this.activityCount = {
+      notes: 0,
+      emails: 0,
+      texts: 0,
+      appointments: 0,
+      team_calls: 0,
+      follow_ups: 0
+    };
+    for (const activity of this.activities) {
+      this.activityCount[activity.type]++;
+    }
+    this.groupActivities();
+    this.changeActivityTypes(this.activityType);
+  }
+
+  addLatestActivity(count: number): void {
+    this.activitySubscription = this.dealsService
+      .getActivity({ deal: this.dealId, count: count })
+      .subscribe((res) => {
+        if (res) {
+          const activities = [...this.activities, ...res]
+            .filter((e) => {
+              return e.type !== 'deals';
+            })
+            .sort((a, b) => {
+              return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
+            });
+          this.activities = activities;
+          this.arrangeActivity();
+        }
+      });
+  }
 
   /**
    * Focus the cursor to the editor

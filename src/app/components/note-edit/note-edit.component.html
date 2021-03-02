@@ -6,9 +6,14 @@
         </button>
     </div>
     <mat-dialog-content>
-      <div class="f-6 mb-3">
-        editing note of <span class="font-weight-bold c-blue">{{contact}}</span>
+      <div class="f-6 mb-3" *ngIf="formType === 'deal'; else contactNameTemplate;">
+        editing note of deal: <span class="font-weight-bold c-blue">{{dealName}}</span>
       </div>
+      <ng-template #contactNameTemplate>
+        <div class="f-6 mb-3">
+          editing note of <span class="font-weight-bold c-blue">{{contact}}</span>
+        </div>
+      </ng-template>
       <div class="form-group has-feedback">
         <div class="d-flex">
           <label for="noteContent" class="mb-0">content</label>

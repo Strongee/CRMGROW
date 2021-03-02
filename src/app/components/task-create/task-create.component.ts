@@ -130,7 +130,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           this.saving = false;
           if (res) {
-            this.dialogRef.close();
+            this.dialogRef.close(true);
           }
         });
     } else {

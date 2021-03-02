@@ -162,6 +162,20 @@ export class DealsService extends HttpService {
     );
   }
 
+  editNote(data: any): Observable<boolean> {
+    return this.httpClient.post(this.server + DEAL.EDIT_NOTE, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('EDIT DEAL NOTE', false))
+    );
+  }
+
+  removeNote(data: any): Observable<boolean> {
+    return this.httpClient.post(this.server + DEAL.REMOVE_NOTE, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('REMOVE DEAL NOTE', false))
+    );
+  }
+
   getNotes(data: any): Observable<Note[]> {
     return this.httpClient.post(this.server + DEAL.GET_NOTES, data).pipe(
       map((res) => res['data'] || []),
@@ -190,6 +204,20 @@ export class DealsService extends HttpService {
     );
   }
 
+  editFollowUp(data: any): Observable<boolean> {
+    return this.httpClient.post(this.server + DEAL.EDIT_FOLLOWUP, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('EDIT DEAL FOLLOWUP', false))
+    );
+  }
+
+  removeFollowUp(data: any): Observable<boolean> {
+    return this.httpClient.post(this.server + DEAL.REMOVE_FOLLOWUP, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('REMOVE DEAL FOLLOWUP', false))
+    );
+  }
+
   getFollowUp(data: any): Observable<any[]> {
     return this.httpClient.post(this.server + DEAL.GET_FOLLOWUP, data).pipe(
       map((res) => res['data'] || []),
@@ -213,6 +241,24 @@ export class DealsService extends HttpService {
     );
   }
 
+  updateAppointment(data: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + DEAL.UPDATE_APPOINTMENT, data)
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('REMOVE DEAL APPOINTMENT', false))
+      );
+  }
+
+  removeAppointment(data: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + DEAL.REMOVE_APPOINTMENT, data)
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('REMOVE DEAL APPOINTMENT', false))
+      );
+  }
+
   getAppointments(data: any): Observable<any[]> {
     return this.httpClient.post(this.server + DEAL.GET_APPOINTMENT, data).pipe(
       map((res) => res['data'] || []),
@@ -232,5 +278,23 @@ export class DealsService extends HttpService {
       map((res) => res['data'] || []),
       catchError(this.handleError('GET DEAL GROUP CALL', []))
     );
+  }
+
+  updateGroupCall(data: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + DEAL.UPDAGE_GROUP_CALL, data)
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('EDIT DEAL GROUP CALL', false))
+      );
+  }
+
+  removeGroupCall(data: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + DEAL.REMOVE_GROUP_CALL, data)
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('REMOVE DEAL GROUP CALL', false))
+      );
   }
 }

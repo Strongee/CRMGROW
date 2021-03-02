@@ -470,7 +470,9 @@ export class ContactService extends HttpService {
     return this.httpClient
       .post(this.server + CONTACT.LOAD_BY_IDS, { ids })
       .pipe(
-        map((res) => res['data'] || []),
+        map((res) =>
+          (res['data'] || []).map((e) => new Contact().deserialize(e))
+        ),
         catchError(this.handleError('SEARCH CONTACTS', []))
       );
   }

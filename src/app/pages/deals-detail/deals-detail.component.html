@@ -519,7 +519,7 @@
                             <span>{{activity.content}}</span>
                           </div>
                         </div>
-                        <div class="v-center">
+                        <!-- <div class="v-center">
                           <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                           <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                             <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
@@ -532,7 +532,7 @@
                               </button>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                       <ng-container *ngIf="activity.activity_detail; else removedGroupCallTemplate">
                         <div class="main-history-item">
@@ -642,9 +642,13 @@
                               <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                             </a>
                             <div ngbDropdownMenu class="light py-1">
-                              <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="removeActivity(activity)">
+                              <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="editAppointment(activity)">
+                                <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                                <span class="ml-3 f-2 font-weight-bold">Edit Appointment</span>
+                              </button>
+                              <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="removeAppointment(activity)">
                                 <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
-                                <span class="ml-3 f-2 font-weight-bold">Delete activity</span>
+                                <span class="ml-3 f-2 font-weight-bold">Remove Appointment</span>
                               </button>
                             </div>
                           </div>
@@ -887,6 +891,21 @@
                           <div class="">appointment</div>
                           <div class="ml-auto f-3 op-56">
                             {{detail.created_at | date :'MMM d, hh:mm a'}}
+                          </div>
+                          <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                            <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
+                              <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                            </a>
+                            <div ngbDropdownMenu class="light py-1">
+                              <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="editAppointment(detail, true)">
+                                <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                                <span class="ml-3 f-2 font-weight-bold">Edit Appointment</span>
+                              </button>
+                              <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="removeAppointment(detail, true)">
+                                <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                                <span class="ml-3 f-2 font-weight-bold">Remove Appointment</span>
+                              </button>
+                            </div>
                           </div>
                         </div>
                         <div class="main-history-item">

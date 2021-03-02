@@ -1,6 +1,6 @@
 <form
   #eventForm="ngForm"
-  (ngSubmit)="submitted = true; eventForm.form.valid ? type == 'create' ? create() : update() : false"
+  (ngSubmit)="submit()"
 >
   <mat-dialog-content>
     <ng-container *ngIf="type !== 'update'">

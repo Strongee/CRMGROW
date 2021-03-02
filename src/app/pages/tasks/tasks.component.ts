@@ -267,7 +267,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   openEdit(element: TaskDetail): void {
     this.dialog.open(TaskEditComponent, {
       ...DialogSettings.TASK,
-      data: element
+      data: {
+        task: element
+      }
     });
   }
 

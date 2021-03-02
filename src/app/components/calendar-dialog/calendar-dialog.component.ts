@@ -48,7 +48,8 @@ export class CalendarDialogComponent implements OnInit {
     recurrence: '',
     recurrence_id: '',
     remove_contacts: [],
-    is_organizer: false
+    is_organizer: false,
+    appointment: ''
   };
 
   isRepeat = false;
@@ -135,6 +136,17 @@ export class CalendarDialogComponent implements OnInit {
       this.event.is_organizer = this.data.event.meta.is_organizer;
       this.event.contacts = this.data.event.meta.contacts;
       this.event.guests = this.data.event.meta.guests;
+      if (
+        this.data.event.meta.contacts &&
+        this.data.event.meta.contacts.length &&
+        typeof this.data.event.meta.contacts[0] === 'string'
+      ) {
+        this.contactService
+          .getContactsByIds(this.data.event.meta.contacts)
+          .subscribe((contacts) => {
+            this.contacts = [...this.contacts, ...contacts];
+          });
+      }
       if (this.data.event.meta.guests.length > 0) {
         this.data.event.meta.guests.forEach(
           (guest: { email: any; response: any }) => {
@@ -166,7 +178,17 @@ export class CalendarDialogComponent implements OnInit {
       this.event.recurrence_id = this.data.event.meta.recurrence_id;
       this.event.calendar_id = this.data.event.meta.calendar_id;
       this.event.event_id = this.data.event.meta.event_id;
+      this.event.appointment = this.data.event.appointment;
     }
+  }
+
+  submit(): void {
+    this.submitted = true;
+    if (this.type === 'update') {
+      this.update();
+      return;
+    }
+    this.create();
   }
 
   update(): void {
@@ -228,48 +250,80 @@ export class CalendarDialogComponent implements OnInit {
             if (res.type == 'own') {
               delete this.event['recurrence_id'];
             }
-            this.appointmentService
-              .updateEvents(this.event, this.event.event_id)
-              .subscribe(
-                (res) => {
-                  if (res['status'] == true) {
-                    this.isLoading = false;
-                    const data = {
-                      recurrence_id: this.event.recurrence_id
-                    };
-                    this.toast.success('Event is updated successfully');
-                    this.dialogRef.close(data);
-                  }
-                },
-                () => {
+            if (this.isDeal) {
+              this.dealsService
+                .updateAppointment({
+                  ...this.event,
+                  connected_email,
+                  contacts: this.event.contacts,
+                  deal: this.deal
+                })
+                .subscribe((status) => {
                   this.isLoading = false;
-                  this.dialogRef.close();
-                }
-              );
+                  if (status) {
+                    this.dialogRef.close(true);
+                  }
+                });
+            } else {
+              this.appointmentService
+                .updateEvents(this.event, this.event.event_id)
+                .subscribe(
+                  (res) => {
+                    if (res['status'] == true) {
+                      this.isLoading = false;
+                      const data = {
+                        recurrence_id: this.event.recurrence_id
+                      };
+                      this.toast.success('Event is updated successfully');
+                      this.dialogRef.close(data);
+                    }
+                  },
+                  () => {
+                    this.isLoading = false;
+                    this.dialogRef.close();
+                  }
+                );
+            }
           } else {
             this.isLoading = false;
           }
         });
     } else {
       delete this.event['recurrence_id'];
-      this.appointmentService
-        .updateEvents({ ...this.event, connected_email }, this.event.event_id)
-        .subscribe(
-          (res) => {
-            if (res['status'] == true) {
-              this.isLoading = false;
-              const data = {
-                recurrence_id: this.event.recurrence_id
-              };
-              this.toast.success('Event is updated successfully');
-              this.dialogRef.close(data);
-            }
-          },
-          (err) => {
+      if (this.isDeal) {
+        this.dealsService
+          .updateAppointment({
+            ...this.event,
+            connected_email,
+            contacts: this.event.contacts,
+            deal: this.deal
+          })
+          .subscribe((status) => {
             this.isLoading = false;
-            this.dialogRef.close();
-          }
-        );
+            if (status) {
+              this.dialogRef.close(true);
+            }
+          });
+      } else {
+        this.appointmentService
+          .updateEvents({ ...this.event, connected_email }, this.event.event_id)
+          .subscribe(
+            (res) => {
+              if (res['status'] == true) {
+                this.isLoading = false;
+                const data = {
+                  recurrence_id: this.event.recurrence_id
+                };
+                this.toast.success('Event is updated successfully');
+                this.dialogRef.close(data);
+              }
+            },
+            (err) => {
+              this.isLoading = false;
+              this.dialogRef.close();
+            }
+          );
+      }
     }
   }
 
