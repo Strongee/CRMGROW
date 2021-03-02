@@ -1094,7 +1094,7 @@
                   <ng-container *ngIf="activity.activity_detail; else removedDealTemplate">
                     <div class="main-history-item">
                       <div class="f-6 font-weight-bold">
-                        {{activity.activity_detail.title}}
+                        <a class="ci-dark td-none" [routerLink]="['/deals/' + activity.activity_detail._id]">{{activity.activity_detail.title}}</a>
                       </div>
                       <div class="v-center mt-3">
                         <div class="stage">
@@ -1632,7 +1632,7 @@
                     </div>
                     <div class="main-history-item">
                       <div class="f-6 font-weight-bold">
-                        {{detail.title}}
+                        <a class="ci-dark td-none" [routerLink]="['/deals/' + detail._id]">{{detail.title}}</a>
                       </div>
                       <div class="v-center mt-3">
                         <div class="stage">

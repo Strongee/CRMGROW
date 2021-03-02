@@ -789,7 +789,10 @@ export class DealsDetailComponent implements OnInit {
       this.saving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();
       this.saveSubscription = this.dealsService
-        .editDeal(this.dealId, { title: this.dealTitle })
+        .editDeal(this.dealId, {
+          title: this.dealTitle,
+          deal_stage: this.deal.main.deal_stage
+        })
         .subscribe((res) => {
           this.saving = false;
           if (res) {
