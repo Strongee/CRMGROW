@@ -8,6 +8,17 @@
       <ng-container
         *ngIf="type == 'send_email_video' || type == 'send_text_video' || type == 'send_email_pdf' || type == 'send_text_pdf' || type == 'send_email_image' || type == 'send_text_image' ">
         <div class="temlate-container mr-lg-5 mr-md-3 mr-sm-0">
+          <div class="form-group search-form">
+            <div class="input-group-prepend">
+              <i class="i-icon i-search d-block bgc-dark"></i>
+            </div>
+            <input type="text" class="form-control" name="search" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="filter()">
+            <ng-container *ngIf="searchStr">
+              <div class="cancel-action c-pointer" (click)="clearSearchStr()">
+                <i class="i-icon i-close d-block bgc-dark"></i>
+              </div>
+            </ng-container>
+          </div>
           <ng-container *ngIf="materialsLoading">
             <div class="list-loading text-center">
               <div class="loader mt-5"></div>
@@ -24,7 +35,7 @@
           </div>
           <div class="material-container mt-2">
             <ng-container *ngIf="!materialsLoading">
-              <ng-container *ngFor="let materialItem of materials">
+              <ng-container *ngFor="let materialItem of filterMaterials">
                 <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material._id == materialItem._id">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material._id == materialItem._id">
                   <div class="thumb-wrapper">

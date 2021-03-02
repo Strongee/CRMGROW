@@ -45,6 +45,17 @@
                || type == 'send_email_image' || type == 'send_text_image'
       ">
         <div class="template-container mr-lg-5 mr-md-3 mr-sm-0">
+          <div class="form-group search-form">
+            <div class="input-group-prepend">
+              <i class="i-icon i-search d-block bgc-dark"></i>
+            </div>
+            <input type="text" class="form-control" name="search" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="filter()">
+            <ng-container *ngIf="searchStr">
+              <div class="cancel-action c-pointer" (click)="clearSearchStr()">
+                <i class="i-icon i-close d-block bgc-dark"></i>
+              </div>
+            </ng-container>
+          </div>
           <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" type="same">
           </app-slide-tab>
           <ng-container *ngIf="videosLoading && selectedTab.id == 'videos'">
@@ -63,7 +74,7 @@
           </div>
           <ng-container *ngIf="selectedTab.label == 'VIDEO'">
             <div class="material-container mt-3">
-              <ng-container *ngFor="let video of videos">
+              <ng-container *ngFor="let video of filterVideos">
                 <div class="material-item" (click)="toggleVideo(video)" [class.active]="action['video'] == video">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['video'] == video">
                   <div class="thumb-wrapper">
@@ -95,7 +106,7 @@
               </h4>
             </div>
             <div class="material-container mt-3">
-              <ng-container *ngFor="let pdf of pdfs">
+              <ng-container *ngFor="let pdf of filterPdfs">
                 <div class="material-item" (click)="togglePdf(pdf)" [class.active]="action['pdf'] == pdf">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['pdf'] == pdf">
                   <div class="thumb-wrapper">
@@ -127,7 +138,7 @@
               </h4>
             </div>
             <div class="material-container mt-3">
-              <ng-container *ngFor="let image of images">
+              <ng-container *ngFor="let image of filterImages">
                 <div class="material-item" (click)="toggleImage(image)" [class.active]="action['image'] == image">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['image'] == image">
                   <div class="thumb-wrapper">

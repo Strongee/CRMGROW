@@ -107,6 +107,11 @@ export class ActionDialogComponent implements OnInit {
   update_due_duration = 0;
   selectedDate = '';
 
+  searchStr = '';
+  filterVideos = [];
+  filterPdfs = [];
+  filterImages = [];
+
   constructor(
     private dialogRef: MatDialogRef<ActionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -220,6 +225,7 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.videosLoading = false;
         this.videos = res;
+        this.filterVideos = res;
       },
       (err) => {
         this.videosLoading = false;
@@ -234,6 +240,7 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.pdfsLoading = false;
         this.pdfs = res;
+        this.filterPdfs = res;
       },
       (err) => {
         this.pdfsLoading = false;
@@ -248,6 +255,7 @@ export class ActionDialogComponent implements OnInit {
       (res) => {
         this.imagesLoading = false;
         this.images = res;
+        this.filterImages = res;
       },
       (err) => {
         this.imagesLoading = false;
@@ -836,6 +844,7 @@ export class ActionDialogComponent implements OnInit {
   }
 
   changeTab(tab: TabItem): void {
+    this.clearSearchStr();
     this.selectedTab = tab;
     if (this.material_type === 'email') {
       if (tab.id === 'videos') {
@@ -889,6 +898,33 @@ export class ActionDialogComponent implements OnInit {
   changeCommandLabel($event): void {
     this.commandLabel = $event;
     this.error = '';
+  }
+
+  clearSearchStr(): void {
+    this.searchStr = '';
+    this.filter();
+  }
+
+  filter(): void {
+    const reg = new RegExp(this.searchStr, 'gi');
+    this.filterVideos = this.videos.filter((video) => {
+      if (!reg.test(video.title)) {
+        return false;
+      }
+      return true;
+    });
+    this.filterPdfs = this.pdfs.filter((pdf) => {
+      if (!reg.test(pdf.title)) {
+        return false;
+      }
+      return true;
+    });
+    this.filterImages = this.images.filter((image) => {
+      if (!reg.test(image.title)) {
+        return false;
+      }
+      return true;
+    });
   }
 
   minDate;

@@ -102,6 +102,9 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   update_due_duration = 0;
   task = new Task();
 
+  searchStr = '';
+  filterMaterials = [];
+
   constructor(
     private dialogRef: MatDialogRef<ActionEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -295,6 +298,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     this.materialService.loadVideosImpl().subscribe(
       (res) => {
         this.materials = res;
+        this.filterMaterials = res;
         this.materialsLoading = false;
       },
       (err) => {
@@ -310,6 +314,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       (res) => {
         this.materialsLoading = false;
         this.materials = res;
+        this.filterMaterials = res;
       },
       (err) => {
         this.materialsLoading = false;
@@ -324,6 +329,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       (res) => {
         this.materialsLoading = false;
         this.materials = res;
+        this.filterMaterials = res;
       },
       (err) => {
         this.materialsLoading = false;
@@ -671,6 +677,21 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   setUpdateDateTime(): void {
     this.selectedDate = moment(this.getUpdateDateTime()).format('YYYY-MM-DD');
     close();
+  }
+
+  clearSearchStr(): void {
+    this.searchStr = '';
+    this.filter();
+  }
+
+  filter(): void {
+    const reg = new RegExp(this.searchStr, 'gi');
+    this.filterMaterials = this.materials.filter((material) => {
+      if (!reg.test(material.title)) {
+        return false;
+      }
+      return true;
+    });
   }
 
   ActionName = ActionName;
