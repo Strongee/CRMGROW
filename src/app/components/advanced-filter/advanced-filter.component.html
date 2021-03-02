@@ -5,8 +5,7 @@
       <i class="d-block i-icon i-close bgc-dark"></i>
     </button>
   </div>
-  <form #actionForm="ngForm" (ngSubmit)="actionForm.form.valid ? applyFilters() : false"
-    [class.was-validated]="actionForm.submitted">
+  <div>
     <div class="form-group">
       <label>Saved Filters</label>
       <div class="v-center">
@@ -198,5 +197,5 @@
         <button type="button" class="btn btn-primary ml-2" (click)="saveFilters()">Save</button>
       </ng-container>
     </div>
-  </form>
+  </div>
 </div>
