@@ -45,8 +45,7 @@ export class NavbarComponent implements OnInit {
     public handlerService: HandlerService,
     private connectService: ConnectService,
     private dialog: MatDialog,
-    private router: Router,
-    private location: Location
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -139,6 +138,5 @@ export class NavbarComponent implements OnInit {
   }
   closeSearchBar(): void {
     this.handlerService.openSearch.next(false);
-    // this.location.back();
   }
 }
