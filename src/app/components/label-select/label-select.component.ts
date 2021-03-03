@@ -39,22 +39,37 @@ export class LabelSelectComponent implements OnInit, AfterViewInit {
   @ViewChild('inputField') trigger: ElementRef;
 
   label: string = '';
+  originValue = {
+    name: 'Keep origin',
+    _id: ''
+  };
   formControl: FormControl = new FormControl();
   constructor(public labelService: LabelService) {}
 
   ngOnInit(): void {
+    if (this.defaultLabel == 'No Label') {
+      this.originValue = null;
+    }
     this.labelService.labels$.subscribe((res) => {
       const value = _.find(res, (e) => e._id === this.label);
-      this.formControl.setValue(value, { emitEvent: false });
+      if (this.defaultLabel == 'No Label') {
+        this.formControl.setValue(value, { emitEvent: false });
+      } else {
+        this.formControl.setValue(this.originValue, { emitEvent: false });
+      }
     });
 
     this.formControl.valueChanges.subscribe((value) => {
+      console.log('###', value);
       if (value && value._id) {
         this.label = value._id;
         this.valueChange.emit(value._id);
-      } else {
+      } else if (value && value._id == '') {
         this.label = '';
         this.valueChange.emit('');
+      } else {
+        this.label = null;
+        this.valueChange.emit(null);
       }
     });
   }

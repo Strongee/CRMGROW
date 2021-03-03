@@ -63,6 +63,8 @@ export class ContactBulkComponent implements OnInit {
       }
       if (this.contact[key]) {
         data[key] = this.contact[key];
+      } else if (key == 'label' && this.contact[key] == null) {
+        data[key] = this.contact[key];
       }
     }
     if (
@@ -83,6 +85,7 @@ export class ContactBulkComponent implements OnInit {
     this.contacts.forEach((e) => {
       ids.push(e._id);
     });
+
     this.isUpdating = true;
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService
@@ -103,5 +106,4 @@ export class ContactBulkComponent implements OnInit {
     });
     this.onClose.emit();
   }
-
 }
