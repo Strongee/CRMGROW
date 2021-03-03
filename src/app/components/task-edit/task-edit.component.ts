@@ -23,6 +23,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { getCurrentTimezone, numPad } from 'src/app/helper';
 import { TaskDeleteComponent } from '../task-delete/task-delete.component';
 import { DealsService } from 'src/app/services/deals.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-task-edit',
@@ -51,6 +52,7 @@ export class TaskEditComponent implements OnInit {
     private helperService: HelperService,
     private dealsService: DealsService,
     private dialog: MatDialog,
+    private toastr: ToastrService,
     private dialogRef: MatDialogRef<TaskEditComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -169,6 +171,7 @@ export class TaskEditComponent implements OnInit {
         .subscribe((status) => {
           this.updating = false;
           if (status) {
+            this.toastr.success('Task(s) successfully updated.');
             this.dialogRef.close({ status: true, data: data });
           }
         });
@@ -181,6 +184,7 @@ export class TaskEditComponent implements OnInit {
           this.updating = false;
           if (res) {
             this.dialogRef.close();
+            this.toastr.success('Task(s) successfully updated.');
             this.handlerService.updateTasks$([this.task._id], data);
             this.handlerService.updateTaskInDetail$(res);
             // if (this.type === 'deal') {
