@@ -366,6 +366,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateSelectActionStatus(status: boolean): void {
+    this.ACTIONS.some((e) => {
+      if (e.command === 'select') {
+        e.spliter = status;
+      }
+    });
+  }
+
   /**
    * Download CSV
    */
@@ -456,12 +464,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
           '_id'
         );
         this.updateActionsStatus('select', false);
+        this.updateSelectActionStatus(false);
       });
   }
 
   deselectAll(): void {
     this.pageSelection = [];
     this.selection = [];
+    this.updateSelectActionStatus(true);
   }
 
   /**

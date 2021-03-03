@@ -678,6 +678,12 @@ export const BulkActions = {
       loading: false
     },
     {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
+    },
+    {
       label: 'Edit',
       type: 'button',
       icon: 'i-edit',
@@ -710,12 +716,6 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-download',
       command: 'download',
-      loading: false
-    },
-    {
-      label: 'Deselect',
-      type: 'button',
-      command: 'deselect',
       loading: false
     }
   ],
