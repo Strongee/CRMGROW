@@ -216,4 +216,8 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     this.automation = automation;
     return;
   }
+
+  updateLabel(label: string): void {
+    this.contact.label = label;
+  }
 }

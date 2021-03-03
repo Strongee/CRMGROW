@@ -5,7 +5,7 @@
   <form #form="ngForm" (ngSubmit)="form.form.valid ? update() : false">
     <div class="form-group">
       <label>label</label>
-      <app-label-select type="form" defaultLabel="Keep origin" [value]="contact.label" (valueChange)="contact.label = $event"></app-label-select>
+      <app-label-select type="form" [hasKeepLabel]="true" [value]="contact.label" (valueChange)="changeLabel($event)" (clearLabel)="clearLabel()"></app-label-select>
     </div>
     <div class="form-group">
       <label for="bulk-source">source</label>

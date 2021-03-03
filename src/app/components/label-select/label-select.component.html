@@ -36,20 +36,24 @@
   <mat-form-field style="display: block;" appearance="outline" (click)="focusField()">
     <mat-chip-list aria-label="Contact Selection" #contactList>
       <mat-basic-chip >
-        <ng-container *ngIf="formControl.value; else emptyLabel">
-          <div class="v-center py-1" *ngIf="formControl.value._id != ''">
-            <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="formControl.value.color === '#FFF' ? '#000' : formControl.value.color"></i>
-            <span class="f-3 fw-600">{{formControl.value.name}}</span>
-          </div>
-          <div class="v-center py-1" *ngIf="formControl.value._id == ''">
-            <span class="f-3 fw-600">{{formControl.value.name}}</span>
+        <ng-container *ngIf="formControl.value && formControl.value === 'keep'; else normalSelectedLabel">
+          <div class="v-center py-1">
+            <span class="f-3 fw-600 py-1 px-2">Keep Original Label</span>
           </div>
         </ng-container>
-        <ng-template #emptyLabel>
-          <div class="v-center py-1">
-            <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
-            <span class="f-3 fw-600">No Label</span>
-          </div>
+        <ng-template #normalSelectedLabel>
+          <ng-container *ngIf="formControl.value; else emptyLabel">
+            <div class="v-center py-1">
+              <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="formControl.value.color === '#FFF' ? '#000' : formControl.value.color"></i>
+              <span class="f-3 fw-600">{{formControl.value.name}}</span>
+            </div>  
+          </ng-container>
+          <ng-template #emptyLabel>
+            <div class="v-center py-1">
+              <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
+              <span class="f-3 fw-600">{{defaultLabel}}</span>
+            </div>
+          </ng-template>
         </ng-template>
       </mat-basic-chip>
       <input
@@ -70,18 +74,19 @@
           <span class="c-blue fw-600">Manage Labels</span>
         </a>
       </mat-option>
-      <mat-option [value]="originValue"
-        style="height: unset; line-height: unset;">
-        <div class="v-center py-1 f-3 fw-600">
-          <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'" *ngIf="defaultLabel == 'No Label'"></i>
-          <span>{{defaultLabel}}</span>
-        </div>
-      </mat-option>
-      <mat-option [value]="null" *ngIf="defaultLabel != 'No Label'"
+      <ng-container *ngIf="hasKeepLabel">
+        <mat-option [value]="'keep'"
+          style="height: unset; line-height: unset;">
+          <div class="v-center py-1 f-3 fw-600">
+            <span class="py-1">Keep Original Label</span>
+          </div>
+        </mat-option>
+      </ng-container>
+      <mat-option [value]="null"
         style="height: unset; line-height: unset;">
         <div class="v-center py-1 f-3 fw-600">
           <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
-          <span>No Label</span>
+          <span>{{defaultLabel}}</span>
         </div>
       </mat-option>
       <mat-option *ngFor="let item of labelService.labels$ | async" [value]="item"
