@@ -80,7 +80,7 @@
     </div>
     <div class="form-group my-3">
       <label for="state">State</label>
-      <app-input-state [selectedRegions]="searchOption.regionCondition" (onSelect)="updateFilter()"></app-input-state>
+      <app-input-state [selectedRegions]="searchOption.regionCondition" [selectedCountries]="searchOption.countryCondition" (onSelect)="updateFilter()"></app-input-state>
     </div>
     <div class="form-group my-3">
       <label for="city">City</label>
