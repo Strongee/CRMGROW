@@ -186,7 +186,7 @@ export class DealsDetailComponent implements OnInit {
   }
 
   backPage(): void {
-    this.location.back();
+    this.handlerService.goBack('/deals');
   }
 
   loadNotes(): void {
@@ -516,7 +516,7 @@ export class DealsDetailComponent implements OnInit {
         if (res) {
           this.dealsService.deleteDeal(this.dealId).subscribe((status) => {
             if (status) {
-              this.location.back();
+              this.backPage();
             }
           });
         }

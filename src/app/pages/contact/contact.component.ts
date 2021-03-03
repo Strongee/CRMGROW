@@ -312,7 +312,8 @@ export class ContactComponent implements OnInit, OnDestroy {
    * Go to Contact List Page
    */
   goToBack(): void {
-    this.location.back();
+    // this.location.back();
+    this.handlerService.goBack('/contacts');
   }
 
   /**

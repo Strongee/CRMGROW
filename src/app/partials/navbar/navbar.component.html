@@ -46,7 +46,7 @@
   <!-- Navbar Main Wrapper -->
   <div class="navbar-nav v-center ml-sm-3">
     <!-- Notification Wrapper -->
-    <div class="search-box input-group bgc-dark-trans08 rounded mr-2" [class.opened]="searchOpened">
+    <div class="search-box input-group bgc-dark-trans08 rounded mr-2" [class.opened]="handlerService.openSearch$ | async">
       <div class="input-group-prepend" (click)="openSearchBar()">
         <span class="input-group-text border-0 py-2 px-2" id="search-addon">
           <i class="i-icon i-search d-block bgc-blue"></i>

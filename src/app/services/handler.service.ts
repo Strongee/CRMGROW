@@ -1,5 +1,8 @@
+import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Activity } from '../models/activity.model';
 import { DetailActivity, PureActivity } from '../models/activityDetail.model';
 import { Contact, ContactActivity } from '../models/contact.model';
@@ -28,6 +31,8 @@ export class HandlerService {
   openSearch: BehaviorSubject<boolean> = new BehaviorSubject(false);
   searchStr$ = this.searchStr.asObservable();
   openSearch$ = this.openSearch.asObservable();
+  previousUrl: string = '';
+  currentUrl: string = '';
 
   constructor(
     private storeService: StoreService,
@@ -44,8 +49,22 @@ export class HandlerService {
     private labelService: LabelService,
     private userService: UserService,
     private tagService: TagService,
-    private filterService: FilterService
-  ) {}
+    private filterService: FilterService,
+    private router: Router,
+    private location: Location
+  ) {
+    router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.previousUrl = this.currentUrl;
+        this.currentUrl = event.url;
+        if (event.url.indexOf('/global-search') !== -1) {
+          this.openSearch.next(true);
+        } else {
+          this.openSearch.next(false);
+        }
+      });
+  }
 
   /**
    * Display the added contact to the list pages (Contacts, activities)
@@ -340,6 +359,14 @@ export class HandlerService {
 
   reloadDetail$(): void {
     this.contactService.reloadDetail();
+  }
+
+  goBack(initial: string): void {
+    if (this.previousUrl) {
+      this.location.back();
+    } else {
+      this.router.navigate([initial]);
+    }
   }
 
   clearData(): void {
