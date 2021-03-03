@@ -211,6 +211,15 @@ export class DealsService extends HttpService {
     );
   }
 
+  completeFollowUp(data: any): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + DEAL.COMPLETE_FOLLOWUP, data)
+      .pipe(
+        map((res) => res['status']),
+        catchError(this.handleError('COMPLETE DEAL FOLLOWUP', false))
+      );
+  }
+
   removeFollowUp(data: any): Observable<boolean> {
     return this.httpClient.post(this.server + DEAL.REMOVE_FOLLOWUP, data).pipe(
       map((res) => res['status']),

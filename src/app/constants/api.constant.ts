@@ -272,6 +272,7 @@ export const DEAL = {
   GET_NOTES: 'deal/get-note',
   ADD_FOLLOWUP: 'deal/add-follow',
   EDIT_FOLLOWUP: 'deal/update-follow',
+  COMPLETE_FOLLOWUP: 'deal/complete-follow',
   REMOVE_FOLLOWUP: 'deal/remove-follow',
   GET_FOLLOWUP: 'deal/get-follow',
   GET_ACTIVITY: 'deal/get-activity',
