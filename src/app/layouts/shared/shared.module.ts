@@ -47,9 +47,16 @@ import { ChartsModule } from 'ng2-charts';
 import { SocialLoginModule } from 'angularx-social-login';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
+import { HighlightPipe } from '../../pipes/highlight.pipe';
 
 @NgModule({
-  declarations: [LoadingOverlayComponent, DurationPipe, PhonePipe, TimeDurationPipe],
+  declarations: [
+    LoadingOverlayComponent,
+    DurationPipe,
+    PhonePipe,
+    TimeDurationPipe,
+    HighlightPipe
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -134,7 +141,8 @@ import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
     ChartsModule,
     SocialLoginModule,
     MatProgressBarModule,
-    TimeDurationPipe
+    TimeDurationPipe,
+    HighlightPipe
   ]
 })
 export class SharedModule {}

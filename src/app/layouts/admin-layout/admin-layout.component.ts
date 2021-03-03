@@ -68,6 +68,14 @@ export class AdminLayoutComponent implements OnInit {
     });
 
     this.notificationService.loadNotifications();
+
+    this.handlerService.openSearch$.subscribe((status) => {
+      if (status) {
+        document.body.classList.add('overflow-hidden');
+      } else {
+        document.body.classList.remove('overflow-hidden');
+      }
+    });
   }
 
   ngOnInit(): void {}

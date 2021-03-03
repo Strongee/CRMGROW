@@ -133,6 +133,7 @@ import { InputContactChipComponent } from './input-contact-chip/input-contact-ch
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 import { DetailErrorComponent } from './detail-error/detail-error.component';
 import { MaterialBrowserComponent } from './material-browser/material-browser.component';
+import { GlobalSearchComponent } from './global-search/global-search.component';
 
 @NgModule({
   declarations: [
@@ -264,7 +265,8 @@ import { MaterialBrowserComponent } from './material-browser/material-browser.co
     InputContactChipComponent,
     ContactDetailComponent,
     DetailErrorComponent,
-    MaterialBrowserComponent
+    MaterialBrowserComponent,
+    GlobalSearchComponent
   ],
   imports: [
     CommonModule,
@@ -351,7 +353,8 @@ import { MaterialBrowserComponent } from './material-browser/material-browser.co
     FilterInputComponent,
     StageInputComponent,
     SelectCalendarComponent,
-    InputContactChipComponent
+    InputContactChipComponent,
+    GlobalSearchComponent
   ],
   bootstrap: [
     ContactCreateComponent,

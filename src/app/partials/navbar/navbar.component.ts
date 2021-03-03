@@ -118,17 +118,18 @@ export class NavbarComponent implements OnInit {
    * @param str : keyword to filter the contacts, materials ...
    */
   onFilter(str: string): void {
-    switch (this.currentSearchType.id) {
-      case 'contacts':
-        this.contactService.searchStr.next(str);
-        break;
-      case 'tasks':
-        break;
-      case 'materials':
-        break;
-      case 'templates':
-        break;
-    }
+    this.handlerService.searchStr.next(str);
+    // switch (this.currentSearchType.id) {
+    //   case 'contacts':
+    //     this.contactService.searchStr.next(str);
+    //     break;
+    //   case 'tasks':
+    //     break;
+    //   case 'materials':
+    //     break;
+    //   case 'templates':
+    //     break;
+    // }
   }
   changeType(type: any): void {
     this.currentSearchType = type;
