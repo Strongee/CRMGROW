@@ -7,14 +7,15 @@ import {
   ElementRef,
   AfterViewInit
 } from '@angular/core';
-import {Subject, Subscription} from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { DagreNodesOnlyLayout } from '../../variables/customDagreNodesOnly';
 import { stepRound } from '../../variables/customStepCurved';
 import { Layout, Edge, Node } from '@swimlane/ngx-graph';
 import { ActionDialogComponent } from 'src/app/components/action-dialog/action-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  ACTION_CAT, AUTOMATION_ICONS,
+  ACTION_CAT,
+  AUTOMATION_ICONS,
   DialogSettings
 } from 'src/app/constants/variable.constants';
 import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
@@ -30,6 +31,7 @@ import { TabItem } from '../../utils/data.types';
 import { SelectionModel } from '@angular/cdk/collections';
 import { LabelService } from '../../services/label.service';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
+import { Contact, ContactActivity } from 'src/app/models/contact.model';
 
 @Component({
   selector: 'app-autoflow',
@@ -78,6 +80,18 @@ export class AutoflowComponent
   ];
 
   selectedTab: TabItem = this.tabs[0];
+
+  DISPLAY_COLUMNS = [
+    'select',
+    'contact_name',
+    'contact_address',
+    'contact_label',
+    'activity',
+    'contact_tags',
+    'contact_email',
+    'contact_phone'
+  ];
+  selection: Contact[] = [];
 
   @ViewChild('wrapper') wrapper: ElementRef;
   wrapperWidth = 0;
@@ -1453,9 +1467,7 @@ export class AutoflowComponent
     });
   }
 
-  unassign(contact): void {
-
-  }
+  unassign(contact): void {}
 
   selectAllPage(): void {
     if (this.isSelectedPage()) {
@@ -1523,6 +1535,37 @@ export class AutoflowComponent
       return contact.last_name[0];
     }
     return 'UC';
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected()) {
+      this.selection = [];
+      return;
+    }
+    this.contacts.forEach((e) => {
+      if (!this.isSelected(e)) {
+        this.selection.push(e.mainInfo);
+      }
+    });
+  }
+
+  toggle(contact: ContactActivity): void {
+    const selectedContact = contact.mainInfo;
+    const toggledSelection = _.xorBy(this.selection, [selectedContact], '_id');
+    this.selection = toggledSelection;
+  }
+  /**
+   * Check contact is selected.
+   * @param contact : ContactActivity
+   */
+  isSelected(contact: ContactActivity): boolean {
+    return _.findIndex(this.selection, contact.mainInfo, '_id') !== -1;
+  }
+  /**
+   * Check all contacts in page are selected.
+   */
+  isAllSelected(): boolean {
+    return this.selection.length === this.contacts.length;
   }
 
   ICONS = {
