@@ -2,11 +2,11 @@
   <div class="template-container d-flex w-100">
     <div class="template-content my-2">
       <div class="v-center justify-content-between">
-        <ng-container *ngIf="id; else editTemplate">
-          <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Create new template</h6>
-        </ng-container>
-        <ng-template #editTemplate>
+        <ng-container *ngIf="!!id; else createTemplate">
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Edit template</h6>
+        </ng-container>
+        <ng-template #createTemplate>
+          <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Create new template</h6>
         </ng-template>
       </div>
       <div class="v-center mt-3">

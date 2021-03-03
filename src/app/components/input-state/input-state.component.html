@@ -26,15 +26,26 @@
             #auto="matAutocomplete"
             (optionSelected)="onSelectOption($event)"
         >
+          <ng-container *ngIf="selectedCountries.length == 0 || selectedCountries.length == 2; else countrySelected">
             <mat-optgroup *ngFor="let country of COUNTRY_REGIONS | keyvalue" label="{{country.key}}">
-                <mat-option *ngFor="let region of country.value" value="{{region}}">
-                    <div class="d-flex chip py-2">
-                        <div class="info">
-                            <div class="f-4 fw-600">{{region}}</div>
-                        </div>
-                    </div>
-                </mat-option>
+              <mat-option *ngFor="let region of country.value" value="{{region}}">
+                <div class="d-flex chip py-2">
+                  <div class="info">
+                    <div class="f-4 fw-600">{{region}}</div>
+                  </div>
+                </div>
+              </mat-option>
             </mat-optgroup>
+          </ng-container>
+          <ng-template #countrySelected>
+            <mat-option *ngFor="let region of COUNTRY_REGIONS[selectedCountries[0]]" value="{{region}}">
+              <div class="d-flex chip py-2">
+                <div class="info">
+                  <div class="f-4 fw-600">{{region}}</div>
+                </div>
+              </div>
+            </mat-option>
+          </ng-template>
         </mat-autocomplete>
     </mat-form-field>
 </div>
