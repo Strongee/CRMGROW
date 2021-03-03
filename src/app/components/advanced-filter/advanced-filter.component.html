@@ -29,6 +29,14 @@
       </div>
     </div>
     <div class="checkbox-wrapper label-options my-3 w-100">
+      <div class="custom-checkbox label-item">
+        <input type="checkbox" class="custom-control-input" id="label-no-label" name="label-no-label"
+               (change)="toggleLabels('')" [checked]="searchOption.labelCondition.indexOf('') !== -1">
+        <label class="custom-control-label d-flex" for="label-no-label">
+          <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
+          <span class="f-3 fw-600 mt-1">No Label</span>
+        </label>
+      </div>
       <div class="custom-checkbox label-item" *ngFor="let item of labelService.labels$ | async"
         style="height: unset; line-height: unset;">
         <input type="checkbox" class="custom-control-input" id="label-{{item._id}}" name="label-{{item._id}}"
@@ -80,7 +88,7 @@
     </div>
     <div class="form-group my-3">
       <label for="state">State</label>
-      <app-input-state [selectedRegions]="searchOption.regionCondition" (onSelect)="updateFilter()"></app-input-state>
+      <app-input-state [selectedRegions]="searchOption.regionCondition" [selectedCountries]="searchOption.countryCondition" (onSelect)="updateFilter()"></app-input-state>
     </div>
     <div class="form-group my-3">
       <label for="city">City</label>

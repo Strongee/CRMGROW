@@ -788,6 +788,7 @@ export class UploadContactsComponent implements OnInit {
                 this.failedData = res.failure;
                 this.confirmDuplicates();
               } else {
+                this.toastr.success('Contacts successfully imported.');
                 this.dialogRef.close({});
                 this.handlerService.bulkContactAdd$();
               }
@@ -798,6 +799,7 @@ export class UploadContactsComponent implements OnInit {
             }
           );
         } else {
+          this.toastr.success('Contacts successfully imported.');
           this.dialogRef.close({});
           this.handlerService.bulkContactAdd$();
         }
