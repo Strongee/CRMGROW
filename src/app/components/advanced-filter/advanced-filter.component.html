@@ -31,7 +31,7 @@
     <div class="checkbox-wrapper label-options my-3 w-100">
       <div class="custom-checkbox label-item">
         <input type="checkbox" class="custom-control-input" id="label-no-label" name="label-no-label"
-               (change)="toggleLabels('')" [checked]="searchOption.labelCondition.indexOf('') !== -1">
+               (change)="toggleLabels(null)" [checked]="searchOption.labelCondition.indexOf(null) !== -1">
         <label class="custom-control-label d-flex" for="label-no-label">
           <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
           <span class="f-3 fw-600 mt-1">No Label</span>
