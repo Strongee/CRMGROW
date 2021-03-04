@@ -1165,40 +1165,48 @@ export class MaterialsComponent implements OnInit {
     });
   }
 
-  moveToFolder(): void {
-    const selectedMaterials = this.filteredMaterials.filter((e) => {
-      if (
-        e.material_type !== 'folder' &&
-        this.selection.indexOf(e._id) !== -1
-      ) {
-        return true;
-      }
-      return false;
-    });
+  moveToFolder(material: any = null): void {
+    let selectedMaterials = [];
+    if (material) {
+      selectedMaterials = [material];
+    } else {
+      selectedMaterials = this.filteredMaterials.filter((e) => {
+        if (
+          e.material_type !== 'folder' &&
+          this.selection.indexOf(e._id) !== -1
+        ) {
+          return true;
+        }
+        return false;
+      });
+    }
     if (!selectedMaterials.length) {
       this.dialog.open(NotifyComponent, {
         width: '96vw',
         maxWidth: '360px',
         data: {
-          message: 'You have to select materials to move those to the folder.'
+          message: 'You have to select material(s) to move those to the folder.'
         }
       });
+      return;
     }
-    this.dialog
-      .open(MoveFolderComponent, {
-        width: '96vw',
-        maxWidth: '400px',
-        data: {
-          materials: selectedMaterials,
-          currentFolder: this.selectedFolder
-        }
-      })
-      .afterClosed()
-      .subscribe((status) => {
-        if (status) {
-          this.selection = [];
-        }
-      });
+    if (selectedMaterials.length > 0) {
+      this.dialog
+        .open(MoveFolderComponent, {
+          width: '96vw',
+          maxWidth: '400px',
+          data: {
+            materials: selectedMaterials,
+            currentFolder: this.selectedFolder
+          }
+        })
+        .afterClosed()
+        .subscribe((status) => {
+          if (status) {
+            this.selection = [];
+          }
+        });
+    }
   }
 
   toggleAdminOption(): void {

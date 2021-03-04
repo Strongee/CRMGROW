@@ -270,6 +270,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
    * Check all contacts in page are selected.
    */
   isAllSelected(): boolean {
+    if (this.selection.length === this.contactService.total.getValue()) {
+      this.updateSelectActionStatus(false);
+    } else {
+      this.updateSelectActionStatus(true);
+    }
     return this.pageSelection.length === this.pageContacts.length;
   }
 
@@ -366,6 +371,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateSelectActionStatus(status: boolean): void {
+    this.ACTIONS.some((e) => {
+      if (e.command === 'select') {
+        e.spliter = status;
+      }
+    });
+  }
+
   /**
    * Download CSV
    */
@@ -456,12 +469,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
           '_id'
         );
         this.updateActionsStatus('select', false);
+        this.updateSelectActionStatus(false);
       });
   }
 
   deselectAll(): void {
     this.pageSelection = [];
     this.selection = [];
+    this.updateSelectActionStatus(true);
   }
 
   /**
