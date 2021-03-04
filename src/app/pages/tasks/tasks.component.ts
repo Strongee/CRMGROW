@@ -324,7 +324,20 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   isAllSelected(): boolean {
+    if (this.selection.length === this.taskService.total.getValue()) {
+      this.updateSelectActionStatus(false);
+    } else {
+      this.updateSelectActionStatus(true);
+    }
     return this.pageSelection.length === this.pageTasks.length;
+  }
+
+  updateSelectActionStatus(status: boolean): void {
+    this.ACTIONS.some((e) => {
+      if (e.command === 'select') {
+        e.spliter = status;
+      }
+    });
   }
 
   /**
@@ -358,12 +371,14 @@ export class TasksComponent implements OnInit, OnDestroy {
             this.ACTIONS[i]['loading'] = false;
           }
         }
+        this.updateSelectActionStatus(false);
       });
   }
 
   deselectAll(): void {
     this.pageSelection = [];
     this.selection = [];
+    this.updateSelectActionStatus(true);
   }
 
   changeSort(): void {
