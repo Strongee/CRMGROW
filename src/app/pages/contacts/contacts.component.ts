@@ -270,6 +270,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
    * Check all contacts in page are selected.
    */
   isAllSelected(): boolean {
+    if (this.selection.length === this.contactService.total.getValue()) {
+      this.updateSelectActionStatus(false);
+    } else {
+      this.updateSelectActionStatus(true);
+    }
     return this.pageSelection.length === this.pageContacts.length;
   }
 
