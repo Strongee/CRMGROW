@@ -46,6 +46,7 @@ import { TeamService } from 'src/app/services/team.service';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contact',
@@ -138,7 +139,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private automationService: AutomationService,
     private appointmentService: AppointmentService,
     private teamService: TeamService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private toastr: ToastrService
   ) {
     this.teamService.loadAll(true);
     this.appointmentService.loadCalendars(false);
@@ -404,6 +406,13 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          if (type == 'main') {
+            this.toastr.success('Successfully updated contact details.');
+          } else {
+            this.toastr.success(
+              'Successfully updated secondary contact details'
+            );
+          }
           for (const key in res) {
             this.contact[key] = res[key];
           }
@@ -424,6 +433,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toastr.success('Successfully updated additional information.');
           for (const key in res) {
             this.contact[key] = res[key];
           }
