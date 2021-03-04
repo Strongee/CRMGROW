@@ -56,7 +56,8 @@ export class ManageLabelComponent implements OnInit {
   }
 
   saveLabel(form: NgForm): void {
-    if (!this.newLabel.name) {
+    if (this.newLabel.name.replace(/\s/g, '').length == 0) {
+      this.newLabel.name = '';
       return;
     }
     this.loading = true;
