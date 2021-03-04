@@ -22,6 +22,7 @@ import * as _ from 'lodash';
 })
 export class InputStateComponent implements OnInit {
   @Input('selectedRegions') selectedRegions: string[] = [];
+  @Input('selectedCountries') selectedCountries: string[] = [];
   @Output() onSelect = new EventEmitter();
 
   COUNTRY_REGIONS = REGIONS;

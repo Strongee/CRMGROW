@@ -22,7 +22,7 @@
                 class="invalid-error f-3 font-weight-bold c-red"
                 *ngIf="filterName == '' && submitted"
             >
-                Name is required
+                Filter Name is required
             </span>
         </div>
         <div class="v-center">
@@ -68,7 +68,7 @@
             </div>
             <div class="v-center">
                 <div class="f-3 fw-600 ml-2">
-                    „{{searchOption.regionCondition}}”
+                    {{searchOption.regionCondition}}
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
             </div>
             <div class="v-center">
                 <div class="f-3 fw-600 ml-2">
-                    „{{searchOption.cityCondition}}”
+                    {{searchOption.cityCondition}}
                 </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
             </div>
             <div class="v-center">
                 <div class="f-3 fw-600 ml-2">
-                    „{{searchOption.zipcodeCondition}}”
+                    {{searchOption.zipcodeCondition}}
                 </div>
             </div>
         </div>
@@ -103,7 +103,7 @@
             </ng-template>
             <div class="v-center">
                 <div class="f-3 fw-600 ml-2" *ngFor="let item of this.searchOption.sourceCondition">
-                    „{{item}}”
+                    {{item}}
                 </div>
             </div>
         </div>
@@ -118,7 +118,7 @@
             </ng-template>
             <div class="v-center">
                 <div class="f-3 fw-600 ml-2" *ngFor="let item of this.searchOption.brokerageCondition">
-                    „{{item}}”
+                    {{item}}
                 </div>
             </div>
         </div>

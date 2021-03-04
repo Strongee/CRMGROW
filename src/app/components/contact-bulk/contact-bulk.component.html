@@ -75,8 +75,8 @@
             </div>
           </div>
         </mat-option>
-        <ng-container *ngFor="let country of COUNTRY_REGIONS | keyvalue">
-          <mat-optgroup  label="{{country.key}}" *ngIf="contact.country == country.key">
+        <ng-container *ngIf="!contact.country; else selectedState">
+          <mat-optgroup *ngFor="let country of COUNTRY_REGIONS | keyvalue" label="{{country.key}}">
             <mat-option *ngFor="let region of country.value" value="{{region}}">
               <div class="d-flex chip py-2">
                 <div class="info">
@@ -86,6 +86,15 @@
             </mat-option>
           </mat-optgroup>
         </ng-container>
+        <ng-template #selectedState>
+          <mat-option *ngFor="let region of COUNTRY_REGIONS[contact.country]" value="{{region}}">
+            <div class="d-flex chip py-2">
+              <div class="info">
+                <div class="f-4 fw-600">{{region}}</div>
+              </div>
+            </div>
+          </mat-option>
+        </ng-template>
       </mat-select>
     </div>
 

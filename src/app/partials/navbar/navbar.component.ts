@@ -13,6 +13,7 @@ import { SendEmailComponent } from '../../components/send-email/send-email.compo
 import { HandlerService } from 'src/app/services/handler.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ConnectService } from 'src/app/services/connect.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -38,14 +39,10 @@ export class NavbarComponent implements OnInit {
   currentSearchType: any = this.searchDataTypes[0];
   keyword = '';
 
-  searchOpened = false;
-
   constructor(
     public userService: UserService,
     public notificationService: NotificationService,
-    private storeService: StoreService,
-    private contactService: ContactService,
-    private handlerService: HandlerService,
+    public handlerService: HandlerService,
     private connectService: ConnectService,
     private dialog: MatDialog,
     private router: Router
@@ -97,6 +94,7 @@ export class NavbarComponent implements OnInit {
         this.router.navigate(['./materials/create']);
         break;
     }
+    this.closeSearchBar();
   }
   logout(event: Event): void {
     // Logout Logic
@@ -118,28 +116,27 @@ export class NavbarComponent implements OnInit {
    * @param str : keyword to filter the contacts, materials ...
    */
   onFilter(str: string): void {
-    switch (this.currentSearchType.id) {
-      case 'contacts':
-        this.contactService.searchStr.next(str);
-        break;
-      case 'tasks':
-        break;
-      case 'materials':
-        break;
-      case 'templates':
-        break;
-    }
+    this.handlerService.searchStr.next(str);
+    // switch (this.currentSearchType.id) {
+    //   case 'contacts':
+    //     this.contactService.searchStr.next(str);
+    //     break;
+    //   case 'tasks':
+    //     break;
+    //   case 'materials':
+    //     break;
+    //   case 'templates':
+    //     break;
+    // }
   }
   changeType(type: any): void {
     this.currentSearchType = type;
   }
 
   openSearchBar(): void {
-    this.searchOpened = true;
-    this.handlerService.openSearch.next(this.searchOpened);
+    this.handlerService.openSearch.next(true);
   }
   closeSearchBar(): void {
-    this.searchOpened = false;
-    this.handlerService.openSearch.next(this.searchOpened);
+    this.handlerService.openSearch.next(false);
   }
 }

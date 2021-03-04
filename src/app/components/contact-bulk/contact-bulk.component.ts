@@ -96,7 +96,7 @@ export class ContactBulkComponent implements OnInit {
       .subscribe((status) => {
         this.isUpdating = false;
         if (status) {
-          this.toastr.success('Contact(s) successfully edited.');
+          this.toastr.success('Selected contact(s) successfully edited.');
           this.handlerService.bulkContactUpdate$(ids, data, tagData);
         }
       });
@@ -109,13 +109,10 @@ export class ContactBulkComponent implements OnInit {
     });
     this.onClose.emit();
   }
-
   changeLabel(event: string): void {
     this.contact.label = event;
-    console.log(this.contact);
   }
   clearLabel(): void {
     delete this.contact.label;
-    console.log(this.contact);
   }
 }

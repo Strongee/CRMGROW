@@ -18,29 +18,24 @@
       </div>
       <div class="my-3">
         <label>Contacts to Assign</label>
-        <div class="status-description text-center f-2 c-red mx-auto mt-sm-3" *ngIf="!contacts.length; else contactList">
-          There are no contacts. Please add by searching above.
-        </div>
-        <ng-template #contactList>
-          <div class="new-contacts-wrapper">
-            <div class="new-member v-center py-2" *ngFor="let contact of contacts">
-              <div class="v-center justify-content-between w-100">
-                <div class="v-center">
-                  <img *ngIf="contact.picture_profile; else avatarNameTemplate" [src]="contact.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
-                  <ng-template #avatarNameTemplate>
-                    <div class="form-avatar rounded-circle bg-dark mr-3">{{contact.avatarName}}</div>
-                  </ng-template>
-                  <div class="f-5">{{contact.fullName}}</div>
-                </div>
-                <button type="button" class="v-center border-0 bgc-trans ml-1" (click)="removeContact(contact)">
-                  <span class="text-danger f-3 fw-600">Unassign</span>
-                </button>
+        <div class="new-contacts-wrapper" *ngIf="contacts.length">
+          <div class="new-member v-center py-2" *ngFor="let contact of contacts">
+            <div class="v-center justify-content-between w-100">
+              <div class="v-center">
+                <img *ngIf="contact.picture_profile; else avatarNameTemplate" [src]="contact.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+                <ng-template #avatarNameTemplate>
+                  <div class="form-avatar rounded-circle bg-dark mr-3">{{contact.avatarName}}</div>
+                </ng-template>
+                <div class="f-5">{{contact.fullName}}</div>
               </div>
+              <button type="button" class="v-center border-0 bgc-trans ml-1" (click)="removeContact(contact)">
+                <span class="text-danger f-3 fw-600">Unassign</span>
+              </button>
             </div>
           </div>
-          <div class="invalid-feedback d-block mt-2"
-                *ngIf="contactOverflow">Maximum contacts is 15.</div>
-        </ng-template>
+        </div>
+        <div class="invalid-feedback d-block mt-2"
+              *ngIf="contactOverflow">Maximum contacts is 15.</div>
       </div>
     </div>
   </mat-dialog-content>

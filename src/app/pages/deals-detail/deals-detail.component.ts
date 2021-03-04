@@ -10,7 +10,8 @@ import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/cale
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import {
   CALENDAR_DURATION,
-  DialogSettings
+  DialogSettings,
+  ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
@@ -186,7 +187,7 @@ export class DealsDetailComponent implements OnInit {
   }
 
   backPage(): void {
-    this.location.back();
+    this.handlerService.goBack('/deals');
   }
 
   loadNotes(): void {
@@ -225,11 +226,7 @@ export class DealsDetailComponent implements OnInit {
               return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
             });
           this.activities = activities;
-          for (const activity of this.activities) {
-            this.activityCount[activity.type]++;
-          }
-          this.groupActivities();
-          this.changeActivityTypes(this.activityType);
+          this.arrangeActivity();
         }
       });
   }
@@ -293,7 +290,16 @@ export class DealsDetailComponent implements OnInit {
         return activity._id;
       default:
         const detailKey = activity.activity_detail['_id'];
-        this.detailData[detailKey] = activity.activity_detail;
+        if (!this.detailData[detailKey]) {
+          this.detailData[detailKey] = activity.activity_detail;
+        } else {
+          if (
+            new Date(activity.activity_detail.updated_at) >
+            new Date(this.detailData[detailKey].updated_at)
+          ) {
+            this.detailData[detailKey] = activity.activity_detail;
+          }
+        }
         this.detailData[detailKey]['data_type'] = activity.type;
         return detailKey;
     }
@@ -516,7 +522,7 @@ export class DealsDetailComponent implements OnInit {
         if (res) {
           this.dealsService.deleteDeal(this.dealId).subscribe((status) => {
             if (status) {
-              this.location.back();
+              this.backPage();
             }
           });
         }
@@ -830,7 +836,48 @@ export class DealsDetailComponent implements OnInit {
       });
   }
 
-  completeTask(activity: any, isReal: boolean = false): void {}
+  completeTask(activity: any, isReal: boolean = false): void {
+    let data;
+    if (isReal) {
+      data = {
+        ...activity
+      };
+    } else {
+      if (!activity || !activity.activity_detail) {
+        return;
+      }
+      data = {
+        ...activity.activity_detail
+      };
+    }
+
+    this.dialog
+      .open(ConfirmComponent, {
+        position: { top: '100px' },
+        data: {
+          title: 'Complete Task',
+          message: 'Are you sure to complete the task?',
+          cancelLabel: 'Cancel',
+          confirmLabel: 'Complete'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.dealsService
+            .completeFollowUp({
+              followup: data._id,
+              deal: this.deal.main._id,
+              status: 1
+            })
+            .subscribe((status) => {
+              if (status) {
+                this.addLatestActivity(2);
+              }
+            });
+        }
+      });
+  }
 
   archiveTask(activity: any, isReal: boolean = false): void {
     let taskId;
@@ -1023,7 +1070,7 @@ export class DealsDetailComponent implements OnInit {
             .sort((a, b) => {
               return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
             });
-          this.activities = activities;
+          this.activities = _.uniqBy(activities, '_id');
           this.arrangeActivity();
         }
       });
@@ -1063,6 +1110,18 @@ export class DealsDetailComponent implements OnInit {
           }
         });
     }
+  }
+
+  getPrevPage(): string {
+    if (!this.handlerService.previousUrl) {
+      return 'to Deals';
+    }
+    for (const route in ROUTE_PAGE) {
+      if (this.handlerService.previousUrl === route) {
+        return 'to ' + ROUTE_PAGE[route];
+      }
+    }
+    return '';
   }
   /**************************************
    * Appointment Activity Relative Functions

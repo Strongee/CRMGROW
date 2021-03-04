@@ -122,7 +122,7 @@
       <div class="duplicate-wrapper pr-2">
         <div class="dups-container" *ngIf="sameContacts.length">
           <div class="f-5 font-weight-bold mb-3" *ngIf="getDuplicateContactCount() > 0">
-            There were <span class="f-8 c-blue">{{getDuplicateContactCount()}}</span> record duplicates found in your .csv file. Please merge or edit primary data.
+            There were <span class="f-8 c-blue">{{getDuplicateContactCount()}}</span> record duplicates. Please merge or edit primary data.
           </div>
           <ng-container  *ngFor="let dupItem of sameContacts; let dupIndex = index;">
             <div id="contact-group-{{dupIndex}}" class="merge-group-wrapper mb-3">

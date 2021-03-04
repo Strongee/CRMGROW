@@ -118,6 +118,15 @@ export const COUNTRY_CODES = {
   GBR: 'GB',
   ZAF: 'ZA'
 };
+
+export const ROUTE_PAGE = {
+  '/home': 'Dashboard',
+  '/task': 'Dashboard',
+  '/activities': 'Dashboard',
+  '/contacts': 'Contacts',
+  '/deals': 'Deals'
+};
+
 export const COUNTRIES = [
   {
     code: 'US',

@@ -91,7 +91,7 @@ export class UploadContactsComponent implements OnInit {
   checkingDuplicate = false;
   isDuplicatedExist = false;
   initPropertyColumn = {};
-
+  initColumns;
   constructor(
     private dialogRef: MatDialogRef<UploadContactsComponent>,
     private userService: UserService,
@@ -264,6 +264,7 @@ export class UploadContactsComponent implements OnInit {
     this.sameContacts = [];
     let importField = false;
     this.initPropertyColumn = { ...this.updateColumn };
+    this.initColumns = [ ...this.columns ];
     this.columns.some((e) => {
       if (this.updateColumn[e]) {
         importField = true;
@@ -286,7 +287,7 @@ export class UploadContactsComponent implements OnInit {
                 }
               }
             } else {
-              contact[newColumn] = e;
+              contact[newColumn] = e ? e.trim() : e;
             }
           }
         });
@@ -788,6 +789,7 @@ export class UploadContactsComponent implements OnInit {
                 this.failedData = res.failure;
                 this.confirmDuplicates();
               } else {
+                this.toastr.success('Contacts successfully imported.');
                 this.dialogRef.close({});
                 this.handlerService.bulkContactAdd$();
               }
@@ -798,6 +800,7 @@ export class UploadContactsComponent implements OnInit {
             }
           );
         } else {
+          this.toastr.success('Contacts successfully imported.');
           this.dialogRef.close({});
           this.handlerService.bulkContactAdd$();
         }
@@ -1187,6 +1190,7 @@ export class UploadContactsComponent implements OnInit {
   back(): void {
     if (this.step === 3) {
       this.updateColumn = { ...this.initPropertyColumn };
+      this.columns = [ ...this.initColumns ];
       this.step--;
     } else if (this.step === 4) {
       if (this.sameContacts.length > 0) {
