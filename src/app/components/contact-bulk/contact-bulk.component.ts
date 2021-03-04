@@ -63,6 +63,11 @@ export class ContactBulkComponent implements OnInit {
       }
       if (this.contact[key]) {
         data[key] = this.contact[key];
+      } else if (key == 'label' && typeof this.contact['label'] !== undefined) {
+        data[key] = this.contact[key];
+        if (!this.contact['label']) {
+          data[key] = null;
+        }
       }
     }
     if (
@@ -83,6 +88,7 @@ export class ContactBulkComponent implements OnInit {
     this.contacts.forEach((e) => {
       ids.push(e._id);
     });
+
     this.isUpdating = true;
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService
@@ -102,5 +108,11 @@ export class ContactBulkComponent implements OnInit {
       tags: []
     });
     this.onClose.emit();
+  }
+  changeLabel(event: string): void {
+    this.contact.label = event;
+  }
+  clearLabel(): void {
+    delete this.contact.label;
   }
 }

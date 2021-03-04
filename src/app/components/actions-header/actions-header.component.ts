@@ -15,11 +15,15 @@ export class ActionsHeaderComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.showActions = this.actions.slice(0, 4);
-    this.moreActions = this.actions.slice(4);
+    this.showActions = this.actions.slice(0, 5);
+    this.moreActions = this.actions.slice(5);
   }
 
   runCommand(command: any): void {
     this.doCommand.emit(command);
+  }
+
+  hasProp(action: ActionItem, property: string): boolean {
+    return action.hasOwnProperty(property);
   }
 }

@@ -166,7 +166,7 @@
             </ng-template>
             <div class="responsive-data">
               <div class="type">
-                <span class="info-title">type:</span> 
+                <span class="info-title">type:</span>
                 <span class="info-value">{{element.material_type}}</span>
               </div>
               <div class="time">
@@ -341,12 +341,16 @@
                     <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-3 f-3 font-weight-bold">Delete</span>
                   </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="moveToFolder(element)">
+                    <i class="i-icon i-folder bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Move To</span>
+                  </button>
                 </ng-template>
               </div>
             </div>
           </td>
         </ng-container>
-        
+
 
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
@@ -495,6 +499,6 @@
           <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="drawer.toggle()">Close</button>
         </div>
       </form>
-    </div>    
+    </div>
   </mat-drawer>
 </mat-drawer-container>

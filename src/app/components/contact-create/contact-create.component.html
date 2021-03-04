@@ -94,7 +94,7 @@
     <div class="row">
       <div class="col-sm-4 form-group">
         <label for="label_cc">label</label>
-        <app-label-select type="form" [value]="contact.label"></app-label-select>
+        <app-label-select type="form" [value]="contact.label" (valueChange)="updateLabel($event)"></app-label-select>
       </div>
       <div class="col-sm-4 form-group">
         <label for="source_cc">source</label>
