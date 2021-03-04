@@ -28,7 +28,22 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   CountryISO = CountryISO;
   COUNTRIES = COUNTRIES;
   COUNTRY_REGIONS = REGIONS;
-  LOCATION_COUNTRIES = ['US', 'CA'];
+  LOCATION_COUNTRIES = [
+    'US',
+    'CA',
+    'AU',
+    'FR',
+    'DE',
+    'IN',
+    'IT',
+    'MX',
+    'PT',
+    'PR',
+    'ZA',
+    'ES',
+    'CH',
+    'UK'
+  ];
   STAGES = STAGES;
 
   // Variables for the processs
