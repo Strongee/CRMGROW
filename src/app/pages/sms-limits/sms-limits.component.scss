@@ -1,39 +1,11 @@
 .page-content {
     width: 100%;
-    max-width: 300px;
-    .custom-radio-container {
-        width: 230px;
-        &.selected {
-            border: 1px solid #0000FF;
-            border-radius: 3px;
-            background-color: rgba(0,56,255,0.05);
-            font-weight: bold;
-        }
-        label {
-            padding-left: 30px;
-            &::before {
-                left: 0;
-            }
-            &::after {
-                left: 4px;
-            }
-        }
-    }
-    .upload-progress-wrapper {
-        border: 4px dashed #ddd;
-        border-radius: 50%;
-        width: 126px;
-        height: 126px;
-        padding: 0px;
-        position: relative;
-    }
-    button {
-        &:hover {
-            background-color: #0000ff;
-            border-color: #0000ff;
-            color: white;
-        }
-    }
+
+  .add-phone {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+  }
 }
 
 :host ::ng-deep {

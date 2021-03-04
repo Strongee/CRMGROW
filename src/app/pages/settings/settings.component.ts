@@ -11,6 +11,7 @@ import { PageMenuItem } from 'src/app/utils/data.types';
 export class SettingsComponent implements OnInit {
   menuItems: PageMenuItem[] = [
     { id: 'notifications', icon: 'i-notification', label: 'Notifications' },
+    { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
     { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
     { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
     { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
@@ -25,7 +26,6 @@ export class SettingsComponent implements OnInit {
       label: 'Auto Resend Video'
     },
     { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' },
-    { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS Limits' },
     { id: 'deals-setting', icon: 'i-deals', label: 'Deals' },
     { id: 'integration', icon: 'i-integration', label: 'Integration' },
     { id: 'social', icon: 'i-social', label: 'Social Profile' }

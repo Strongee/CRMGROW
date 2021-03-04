@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PlanSelectComponent } from 'src/app/components/plan-select/plan-select.component';
+import {PurchaseMessageComponent} from "../../components/purchase-message/purchase-message.component";
 
 @Component({
   selector: 'app-sms-limits',
@@ -31,5 +32,18 @@ export class SmsLimitsComponent implements OnInit {
       maxWidth: '650px',
       disableClose: true
     });
+  }
+
+  purchase(): void {
+    this.dialog.open(PurchaseMessageComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '650px',
+      disableClose: true
+    });
+  }
+
+  addPhone(): void {
+
   }
 }
