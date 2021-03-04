@@ -32,13 +32,13 @@
     <div class="sub-container pl-0 pl-sm-4 flex-grow-1">
       <ng-container [ngSwitch]="currentPage">
         <app-notifications *ngSwitchCase="'notifications'"></app-notifications>
+        <app-sms-limits *ngSwitchCase="'sms-limits'"></app-sms-limits>
         <app-assistant *ngSwitchCase="'assistant'"></app-assistant>
         <app-lead-capture *ngSwitchCase="'lead-capture'"></app-lead-capture>
         <app-tag-manager *ngSwitchCase="'tag-manager'"></app-tag-manager>
         <app-status-automation *ngSwitchCase="'status-automation'"></app-status-automation>
         <app-auto-follow-up *ngSwitchCase="'auto-follow-up'"></app-auto-follow-up>
         <app-auto-resend-video *ngSwitchCase="'auto-resend-video'"></app-auto-resend-video>
-        <app-sms-limits *ngSwitchCase="'sms-limits'"></app-sms-limits>
         <app-deals-setting *ngSwitchCase="'deals-setting'"></app-deals-setting>
         <app-integration *ngSwitchCase="'integration'"></app-integration>
         <app-social-profile *ngSwitchCase="'social'"></app-social-profile>
