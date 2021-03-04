@@ -82,6 +82,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   pageSelection = [];
   pageTasks = [];
   completedTasks = [];
+  selectedTasks = [];
   timezone;
   constructor(
     private handlerService: HandlerService,
@@ -287,6 +288,13 @@ export class TasksComponent implements OnInit, OnDestroy {
       '_id'
     );
     this.selection = toggledSelection;
+
+    if (_.findIndex(this.selectedTasks, { _id: task._id }, '_id') == -1) {
+      this.selectedTasks.push(task);
+    } else {
+      const pos = _.findIndex(this.selectedTasks, { _id: task._id }, '_id');
+      this.selectedTasks.splice(pos, 1);
+    }
     // const pagePosition = this.pageSelection.indexOf(task_id);
     // const pos = this.selection.indexOf(task_id);
     // if (pos !== -1) {
@@ -507,7 +515,7 @@ export class TasksComponent implements OnInit, OnDestroy {
         selected.push(e._id);
       }
     });
-    if (selected.length) {
+    if (selected.length > 1) {
       this.dialog.open(TaskBulkComponent, {
         width: '100vw',
         maxWidth: '450px',
@@ -515,8 +523,8 @@ export class TasksComponent implements OnInit, OnDestroy {
           ids: selected
         }
       });
-    } else {
-      // TODO: Show the Alert
+    } else if (selected.length == 1) {
+      this.openEdit(this.selectedTasks[0]);
     }
   }
 }
