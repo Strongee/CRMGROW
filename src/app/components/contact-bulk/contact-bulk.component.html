@@ -61,15 +61,26 @@
     <div class="form-group">
       <label for="contact-state">state</label>
       <mat-select [(ngModel)]="contact.state" name="contact-state">
-        <mat-optgroup *ngFor="let country of COUNTRY_REGIONS | keyvalue" label="{{country.key}}">
-          <mat-option *ngFor="let region of country.value" value="{{region}}">
+        <ng-container *ngIf="!contact.country; else selectedState">
+          <mat-optgroup *ngFor="let country of COUNTRY_REGIONS | keyvalue" label="{{country.key}}">
+            <mat-option *ngFor="let region of country.value" value="{{region}}">
+              <div class="d-flex chip py-2">
+                <div class="info">
+                  <div class="f-4 fw-600">{{region}}</div>
+                </div>
+              </div>
+            </mat-option>
+          </mat-optgroup>
+        </ng-container>
+        <ng-template #selectedState>
+          <mat-option *ngFor="let region of COUNTRY_REGIONS[contact.country]" value="{{region}}">
             <div class="d-flex chip py-2">
               <div class="info">
                 <div class="f-4 fw-600">{{region}}</div>
               </div>
             </div>
           </mat-option>
-        </mat-optgroup>
+        </ng-template>
       </mat-select>
     </div>
 

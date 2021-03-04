@@ -10,7 +10,8 @@ import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/cale
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import {
   CALENDAR_DURATION,
-  DialogSettings
+  DialogSettings,
+  ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
@@ -1109,6 +1110,18 @@ export class DealsDetailComponent implements OnInit {
           }
         });
     }
+  }
+
+  getPrevPage(): string {
+    if (!this.handlerService.previousUrl) {
+      return 'to Deals';
+    }
+    for (const route in ROUTE_PAGE) {
+      if (this.handlerService.previousUrl === route) {
+        return 'to ' + ROUTE_PAGE[route];
+      }
+    }
+    return '';
   }
   /**************************************
    * Appointment Activity Relative Functions

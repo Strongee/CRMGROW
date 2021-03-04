@@ -13,7 +13,8 @@ import {
   ActionName,
   DialogSettings,
   CALENDAR_DURATION,
-  STATUS
+  STATUS,
+  ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -1155,6 +1156,18 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     });
     return convertString;
+  }
+
+  getPrevPage(): string {
+    if (!this.handlerService.previousUrl) {
+      return 'to Contacts';
+    }
+    for (const route in ROUTE_PAGE) {
+      if (this.handlerService.previousUrl === route) {
+        return 'to ' + ROUTE_PAGE[route];
+      }
+    }
+    return '';
   }
 
   ICONS = {

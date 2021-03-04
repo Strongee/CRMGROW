@@ -5,6 +5,7 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import { Template } from 'src/app/models/template.model';
 import { PageCanDeactivate } from '../../variables/abstractors';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-template',
@@ -34,7 +35,8 @@ export class TemplateComponent
   constructor(
     private route: ActivatedRoute,
     private templatesService: TemplatesService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     super();
   }
@@ -65,6 +67,7 @@ export class TemplateComponent
         .create(this.template)
         .subscribe(
           () => {
+            this.toastr.success('New Template has been successfully created.');
             this.router.navigate(['/templates']);
             this.isSaving = false;
             this.saved = true;
@@ -81,6 +84,7 @@ export class TemplateComponent
         .update(this.id, template)
         .subscribe(
           () => {
+            this.toastr.success('Template has been successfully updated.');
             this.router.navigate(['/templates']);
             this.isSaving = false;
             this.saved = true;

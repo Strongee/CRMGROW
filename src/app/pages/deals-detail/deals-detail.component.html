@@ -3,7 +3,7 @@
         <div class="deal-info-panel pr-3">
             <div class="v-center op-56 c-pointer mb-4 mt-3 back-button" (click)="backPage()">
                 <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
-                <span class="f-5 font-weight-bold">Back to deals</span>
+                <span class="f-5 font-weight-bold">Back {{getPrevPage()}}</span>
             </div>
             <div class="v-center justify-content-between deal-main mb-3">
                 <ng-container *ngIf="titleEditable; else displayTitleTemplate">
