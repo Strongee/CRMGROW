@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -17,6 +18,7 @@ export class AdditionalEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<AdditionalEditComponent>,
     private contactService: ContactService,
+    private toast: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.contact) {
@@ -36,6 +38,13 @@ export class AdditionalEditComponent implements OnInit {
       .subscribe((res) => {
         this.isUpdating = false;
         if (res) {
+          this.toast.success(
+            '',
+            'Contact additional information is udpated successfully.',
+            {
+              closeButton: true
+            }
+          );
           this.dialogRef.close(res);
         }
       });

@@ -13,6 +13,7 @@ import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
 import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
 import { FormControl } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contact-edit',
@@ -51,7 +52,8 @@ export class ContactEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<ContactEditComponent>,
     private contactService: ContactService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private toast: ToastrService
   ) {
     if (this.data) {
       this.contact = { ...this.contact, ...this.data.contact };
@@ -103,6 +105,9 @@ export class ContactEditComponent implements OnInit {
       .subscribe((res) => {
         this.isUpdating = false;
         if (res) {
+          this.toast.success('', 'Contact is udpated successfully.', {
+            closeButton: true
+          });
           this.dialogRef.close(res);
         }
       });
