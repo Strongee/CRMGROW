@@ -24,6 +24,7 @@ import * as _ from 'lodash';
 import { FolderComponent } from 'src/app/components/folder/folder.component';
 import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
+import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -1006,7 +1007,6 @@ export class MaterialsComponent implements OnInit {
                   .bulkRemove(removeData)
                   .subscribe((status) => {
                     if (status) {
-
                     }
                   });
               }
@@ -1118,41 +1118,48 @@ export class MaterialsComponent implements OnInit {
   }
 
   removeFolder(material: Material): void {
-    this.dialog
-      .open(ConfirmComponent, {
-        width: '96vw',
-        maxWidth: '400px',
-        data: {
-          title: 'Delete folder',
-          message:
-            'This folder would be removed and sub materials would be moved to root directory. Are you sure to delete this folder?',
-          confirmLabel: 'Delete'
-          // case: true,
-          // answers: [
-          //   {
-          //     label: 'Remove with sub-materials',
-          //     value: 'with-materials'
-          //   },
-          //   {
-          //     label: 'Remove only folder',
-          //     value: 'only-folder'
-          //   }
-          // ]
-        }
-      })
-      .afterClosed()
-      .subscribe((answer) => {
-        if (answer) {
-          this.materialService
-            .removeFolder(material._id, 'only-folder') // answer
-            .subscribe((res) => {
-              if (res['status']) {
-                this.materialService.delete$([material._id]);
-                this.materialService.removeFolder$(material._id);
-              }
-            });
-        }
-      });
+    this.dialog.open(DeleteFolderComponent, {
+      width: '96vw',
+      maxWidth: '500px',
+      data: {
+        material
+      }
+    });
+    // this.dialog
+    //   .open(ConfirmComponent, {
+    //     width: '96vw',
+    //     maxWidth: '400px',
+    //     data: {
+    //       title: 'Delete folder',
+    //       message:
+    //         'This folder will be removed and sub materials will be moved to root directory. Are you sure to delete this folder?',
+    //       confirmLabel: 'Delete'
+    //       // case: true,
+    //       // answers: [
+    //       //   {
+    //       //     label: 'Remove with sub-materials',
+    //       //     value: 'with-materials'
+    //       //   },
+    //       //   {
+    //       //     label: 'Remove only folder',
+    //       //     value: 'only-folder'
+    //       //   }
+    //       // ]
+    //     }
+    //   })
+    //   .afterClosed()
+    //   .subscribe((answer) => {
+    //     if (answer) {
+    //       this.materialService
+    //         .removeFolder(material._id, 'only-folder') // answer
+    //         .subscribe((res) => {
+    //           if (res['status']) {
+    //             this.materialService.delete$([material._id]);
+    //             this.materialService.removeFolder$(material._id);
+    //           }
+    //         });
+    //     }
+    //   });
   }
 
   editFolder(material: Material): void {
