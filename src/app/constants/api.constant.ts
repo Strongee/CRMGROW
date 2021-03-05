@@ -187,7 +187,7 @@ export const AUTOMATION = {
   CONTACTS: 'automation/assigned-contacts/',
   CONTACT_DETAIL: 'automation/contact-detail',
   DELETE: 'automation/',
-  READ: 'automation/',
+  READ: 'automation/get-detail',
   UPDATE: 'automation/',
   CREATE: 'automation',
   ASSIGN: 'timeline/create',
