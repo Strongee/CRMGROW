@@ -7,7 +7,7 @@
   </button>
 </div>
 <mat-dialog-content>
-  <div class="f-3 font-weight-bold text-center w-75 mt-3 mx-auto">Use this text to explain something specific like if they clicked from the “add text” link you’d say. Add SMS credits to sent messages.</div>
+  <div class="f-3 font-weight-bold text-center w-75 mt-3 c-black mx-auto">Use this text to explain something specific like if they clicked from the “add text” link you’d say. Add SMS credits to sent messages.</div>
   <div class="row my-4">
     <div class="col-md-4 col-sm-12 mb-md-0 mb-sm-2 p-1" *ngFor="let plan of plans" (click)="selectPlan(plan)">
       <div class="text-center p-2 plan position-relative" [class.selected]="currentType == plan.type">

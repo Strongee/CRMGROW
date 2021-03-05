@@ -135,6 +135,7 @@ import { DetailErrorComponent } from './detail-error/detail-error.component';
 import { MaterialBrowserComponent } from './material-browser/material-browser.component';
 import { GlobalSearchComponent } from './global-search/global-search.component';
 import { PurchaseMessageComponent } from './purchase-message/purchase-message.component';
+import { AddPhoneComponent } from './add-phone/add-phone.component';
 
 @NgModule({
   declarations: [
@@ -268,7 +269,8 @@ import { PurchaseMessageComponent } from './purchase-message/purchase-message.co
     DetailErrorComponent,
     MaterialBrowserComponent,
     GlobalSearchComponent,
-    PurchaseMessageComponent
+    PurchaseMessageComponent,
+    AddPhoneComponent
   ],
   imports: [
     CommonModule,
@@ -357,7 +359,8 @@ import { PurchaseMessageComponent } from './purchase-message/purchase-message.co
     SelectCalendarComponent,
     InputContactChipComponent,
     GlobalSearchComponent,
-    PurchaseMessageComponent
+    PurchaseMessageComponent,
+    AddPhoneComponent
   ],
   bootstrap: [
     ContactCreateComponent,

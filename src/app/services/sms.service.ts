@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { SMS } from '../constants/api.constant';
+import { SMS, TASK } from '../constants/api.constant';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 
@@ -16,5 +16,12 @@ export class SmsService extends HttpService {
 
   getAllMessage(): any {
     return this.httpClient.get(this.server + SMS.GET);
+  }
+
+  searchNumbers(data: any): Observable<any> {
+    return this.httpClient.post(this.server + SMS.SEARCH_NUMBER, data).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('SMS SEARCH NUMBER', null))
+    );
   }
 }
