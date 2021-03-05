@@ -105,10 +105,11 @@ export class AutomationService extends HttpService {
       catchError(this.handleError('DELETE AUTOMATION', []))
     );
   }
-  get(id: string, pageSize: number): Observable<Automation[]> {
+  get(id: string, pageSize = 50, page = 0): Observable<Automation[]> {
     const data = {
       id: id,
-      count: pageSize
+      count: pageSize,
+      skip: page
     };
     return this.httpClient.post(this.server + AUTOMATION.READ, data).pipe(
       map((res) => res['data'] || []),

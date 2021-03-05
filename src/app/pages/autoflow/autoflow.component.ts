@@ -30,7 +30,6 @@ import { PageCanDeactivate } from 'src/app/variables/abstractors';
 import { UserService } from '../../services/user.service';
 import { TabItem } from '../../utils/data.types';
 import { SelectionModel } from '@angular/cdk/collections';
-import { LabelService } from '../../services/label.service';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -138,14 +137,12 @@ export class AutoflowComponent
     private toastr: ToastrService,
     private userService: UserService,
     public contactService: ContactService,
-    private handlerService: HandlerService,
-    private labelService: LabelService
+    private handlerService: HandlerService
   ) {
     super();
   }
 
   ngOnInit(): void {
-    // this.getLabels();
     this._id = this.route.snapshot.params['id'];
     const title = this.route.snapshot.params['title'];
     const mode = this.route.snapshot.params['mode'];
@@ -155,7 +152,7 @@ export class AutoflowComponent
     if (this._id) {
       this.userService.profile$.subscribe((res) => {
         this.user_id = res._id;
-        this.loadAutomation(this._id, this.pageSize.id);
+        this.loadAutomation(this._id, this.pageSize.id, 0);
         if (this.automation) {
           if (this.automation.role === 'admin') {
             this.auth = 'admin';
@@ -198,40 +195,41 @@ export class AutoflowComponent
     this.wrapperWidth = this.wrapper.nativeElement.offsetWidth;
   }
 
-  loadAutomation(id: string, count: number): void {
+  loadAutomation(id: string, count: number, page: number): void {
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.automationService.get(id, count).subscribe(
-      (res) => {
-        this.automation = res;
-        this.contacts = this.automation.contacts.count;
-        console.log('##', res);
-        const mode = this.route.snapshot.params['mode'];
+    this.loadSubscription = this.automationService
+      .get(id, count, page)
+      .subscribe(
+        (res) => {
+          this.automation = res;
+          this.contacts = this.automation.contacts.count;
+          const mode = this.route.snapshot.params['mode'];
 
-        if (this.automation.contacts.contacts.length) {
-          this.assignedContactLoading = true;
-          this.automationService
-            .getStatus(this.automation._id, this.automation.contacts.contacts)
-            .subscribe((contacts) => {
-              this.assignedContactLoading = false;
-              this.pageContacts = [];
-              for (let i = 0; i < contacts.length; i++) {
-                const newContact = new ContactActivity().deserialize(
-                  contacts[i]
-                );
-                this.pageContacts.push(newContact);
-              }
-            });
-        }
+          if (this.automation.contacts.contacts.length) {
+            this.assignedContactLoading = true;
+            this.automationService
+              .getStatus(this.automation._id, this.automation.contacts.contacts)
+              .subscribe((contacts) => {
+                this.assignedContactLoading = false;
+                this.pageContacts = [];
+                for (let i = 0; i < contacts.length; i++) {
+                  const newContact = new ContactActivity().deserialize(
+                    contacts[i]
+                  );
+                  this.pageContacts.push(newContact);
+                }
+              });
+          }
 
-        if (mode === 'edit') {
-          this.automation_id = res['_id'];
-        }
-        this.automation_title = res['title'];
-        const actions = res['automations'];
-        this.composeGraph(actions);
-      },
-      (err) => {}
-    );
+          if (mode === 'edit') {
+            this.automation_id = res['_id'];
+          }
+          this.automation_title = res['title'];
+          const actions = res['automations'];
+          this.composeGraph(actions);
+        },
+        (err) => {}
+      );
   }
 
   loadContacts(id): void {
@@ -1477,7 +1475,8 @@ export class AutoflowComponent
       .afterClosed()
       .subscribe((res) => {
         if (res && res.data && res.data.length) {
-          this.contacts = [...this.contacts, ...res.data];
+          // this.contacts = [...this.contacts, ...res.data];
+          this.loadAutomation(this._id, this.pageSize.id, 0);
         }
       });
   }
@@ -1573,7 +1572,7 @@ export class AutoflowComponent
     // Normal Load by Page
     let skip = (page - 1) * this.pageSize.id;
     skip = skip < 0 ? 0 : skip;
-    this.loadAutomation(this._id, skip);
+    this.loadAutomation(this._id, this.pageSize.id, skip);
   }
   /**
    * Change the Page Size

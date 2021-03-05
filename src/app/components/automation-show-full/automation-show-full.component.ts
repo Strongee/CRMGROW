@@ -90,7 +90,6 @@ export class AutomationShowFullComponent
     this.automationService.get(id).subscribe(
       (res) => {
         this.automation = res;
-        console.log('$$$', this.automation);
         const actions = res['automations'];
         actions.forEach((action) => {
           this.data.automations.forEach((automation) => {
