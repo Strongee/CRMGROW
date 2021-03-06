@@ -52,8 +52,7 @@ export class ContactEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<ContactEditComponent>,
     private contactService: ContactService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private toast: ToastrService
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
       this.contact = { ...this.contact, ...this.data.contact };
@@ -105,9 +104,6 @@ export class ContactEditComponent implements OnInit {
       .subscribe((res) => {
         this.isUpdating = false;
         if (res) {
-          this.toast.success('', 'Contact is udpated successfully.', {
-            closeButton: true
-          });
           this.dialogRef.close(res);
         }
       });
