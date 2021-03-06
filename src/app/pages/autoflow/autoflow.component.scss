@@ -24,24 +24,27 @@
 }
 
 .card-body {
-  height: calc(100vh - 380px);
   flex: unset;
   padding: 0px;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
 
-  @media screen and (max-width: 767px) {
-    height: calc(100vh - 450px);
+  &.activity {
+    height: calc(100vh - 380px);
+    @media screen and (max-width: 767px) {
+      height: calc(100vh - 450px);
+    }
+  
+    @media screen and (max-width: 680px) {
+      height: calc(100vh - 410px);
+    }
+  
+    @media screen and (max-width: 576px) {
+      height: calc(100vh - 400px);
+    }
   }
-
-  @media screen and (max-width: 680px) {
-    height: calc(100vh - 410px);
-  }
-
-  @media screen and (max-width: 576px) {
-    height: calc(100vh - 400px);
-  }
+  
 }
 
 .flows-container {
@@ -279,6 +282,49 @@
     a {
       &::after {
         content: none;
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .page-table {
+    thead tr:first-child th {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 2;
+    }
+  
+    thead tr.table-header th {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 2;
+    }
+  
+    thead tr.loader-row {
+      height: 0px;
+  
+      th.loader-cell {
+        position: sticky;
+        top: 0;
+        border: none;
+  
+        .updating-status {
+          position: absolute;
+          background: #000000aa;
+          padding: 4px 8px;
+          border-radius: 4px;
+          color: white;
+          z-index: 2;
+          top: 50px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-weight: bold;
+          font-size: 14px;
+          animation: loadAppear 0.4s;
+        }
       }
     }
   }

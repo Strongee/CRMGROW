@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   ACTION_CAT,
   AUTOMATION_ICONS,
+  BulkActions,
   DialogSettings
 } from 'src/app/constants/variable.constants';
 import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
@@ -29,9 +30,17 @@ import { PageCanDeactivate } from 'src/app/variables/abstractors';
 import { UserService } from '../../services/user.service';
 import { TabItem } from '../../utils/data.types';
 import { SelectionModel } from '@angular/cdk/collections';
-import { LabelService } from '../../services/label.service';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
+import { ContactService } from 'src/app/services/contact.service';
+import { HandlerService } from 'src/app/services/handler.service';
+import { saveAs } from 'file-saver';
+import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
+import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
+import { ContactAssignAutomationComponent } from 'src/app/components/contact-assign-automation/contact-assign-automation.component';
+import { NotifyComponent } from 'src/app/components/notify/notify.component';
+import { MatDrawer } from '@angular/material/sidenav';
+import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bulk.component';
 
 @Component({
   selector: 'app-autoflow',
@@ -53,6 +62,7 @@ export class AutoflowComponent
   edges = [];
   nodes = [];
 
+  _id;
   automation;
   automation_id;
   automation_title;
@@ -67,7 +77,7 @@ export class AutoflowComponent
   zoomLevel = 1;
 
   editMode = 'new';
-  contacts = [];
+  contacts = 0;
   selectedContacts = new SelectionModel<any>(true, []);
   labels = [];
   assignedContactLoading = false;
@@ -81,18 +91,38 @@ export class AutoflowComponent
 
   selectedTab: TabItem = this.tabs[0];
 
+  CONTACT_ACTIONS = BulkActions.Contacts;
   DISPLAY_COLUMNS = [
     'select',
     'contact_name',
     'contact_address',
     'contact_label',
-    'activity',
     'contact_tags',
     'contact_email',
     'contact_phone'
   ];
+  PAGE_COUNTS = [
+    { id: 8, label: '8' },
+    { id: 10, label: '10' },
+    { id: 25, label: '25' },
+    { id: 50, label: '50' }
+  ];
+  pageSize = this.PAGE_COUNTS[0];
+  page = 1;
+  selecting = false;
+  selectSubscription: Subscription;
+  selectSource = '';
   selection: Contact[] = [];
+  pageSelection: Contact[] = [];
+  pageContacts: ContactActivity[] = [];
 
+  // Variables for Label Update
+  isUpdating = false;
+  updateSubscription: Subscription;
+
+  @ViewChild('drawer') drawer: MatDrawer;
+  @ViewChild('editPanel') editPanel: ContactBulkComponent;
+  panelType = '';
   @ViewChild('wrapper') wrapper: ElementRef;
   wrapperWidth = 0;
   wrapperHeight = 0;
@@ -106,23 +136,23 @@ export class AutoflowComponent
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private userService: UserService,
-    private labelService: LabelService
+    public contactService: ContactService,
+    private handlerService: HandlerService
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.getLabels();
-    const id = this.route.snapshot.params['id'];
+    this._id = this.route.snapshot.params['id'];
     const title = this.route.snapshot.params['title'];
     const mode = this.route.snapshot.params['mode'];
     if (title) {
       this.automation_title = title;
     }
-    if (id) {
+    if (this._id) {
       this.userService.profile$.subscribe((res) => {
         this.user_id = res._id;
-        this.loadAutomation(id);
+        this.loadAutomation(this._id, this.pageSize.id, 0);
         if (this.automation) {
           if (this.automation.role === 'admin') {
             this.auth = 'admin';
@@ -165,32 +195,41 @@ export class AutoflowComponent
     this.wrapperWidth = this.wrapper.nativeElement.offsetWidth;
   }
 
-  loadAutomation(id): void {
+  loadAutomation(id: string, count: number, page: number): void {
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.automationService.get(id).subscribe(
-      (res) => {
-        this.automation = res;
-        const mode = this.route.snapshot.params['mode'];
+    this.loadSubscription = this.automationService
+      .get(id, count, page)
+      .subscribe(
+        (res) => {
+          this.automation = res;
+          this.contacts = this.automation.contacts.count;
+          const mode = this.route.snapshot.params['mode'];
 
-        if (this.automation.contacts.length) {
-          this.assignedContactLoading = true;
-          this.automationService
-            .getStatus(this.automation._id, this.automation.contacts)
-            .subscribe((contacts) => {
-              this.assignedContactLoading = false;
-              this.contacts = contacts;
-            });
-        }
+          if (this.automation.contacts.contacts.length) {
+            this.assignedContactLoading = true;
+            this.automationService
+              .getStatus(this.automation._id, this.automation.contacts.contacts)
+              .subscribe((contacts) => {
+                this.assignedContactLoading = false;
+                this.pageContacts = [];
+                for (let i = 0; i < contacts.length; i++) {
+                  const newContact = new ContactActivity().deserialize(
+                    contacts[i]
+                  );
+                  this.pageContacts.push(newContact);
+                }
+              });
+          }
 
-        if (mode === 'edit') {
-          this.automation_id = res['_id'];
-        }
-        this.automation_title = res['title'];
-        const actions = res['automations'];
-        this.composeGraph(actions);
-      },
-      (err) => {}
-    );
+          if (mode === 'edit') {
+            this.automation_id = res['_id'];
+          }
+          this.automation_title = res['title'];
+          const actions = res['automations'];
+          this.composeGraph(actions);
+        },
+        (err) => {}
+      );
   }
 
   loadContacts(id): void {
@@ -1436,7 +1475,8 @@ export class AutoflowComponent
       .afterClosed()
       .subscribe((res) => {
         if (res && res.data && res.data.length) {
-          this.contacts = [...this.contacts, ...res.data];
+          // this.contacts = [...this.contacts, ...res.data];
+          this.loadAutomation(this._id, this.pageSize.id, 0);
         }
       });
   }
@@ -1469,103 +1509,358 @@ export class AutoflowComponent
 
   unassign(contact): void {}
 
-  selectAllPage(): void {
-    if (this.isSelectedPage()) {
-      this.contacts.forEach((e) => {
-        if (this.selectedContacts.isSelected(e._id)) {
-          this.selectedContacts.deselect(e._id);
-        }
-      });
-    } else {
-      this.contacts.forEach((e) => {
-        if (!this.selectedContacts.isSelected(e._id)) {
-          this.selectedContacts.select(e._id);
-        }
-      });
-    }
-  }
-
-  isSelectedPage(): any {
-    if (this.contacts.length) {
-      for (let i = 0; i < this.contacts.length; i++) {
-        const e = this.contacts[i];
-        if (!this.selectedContacts.isSelected(e._id)) {
-          return false;
-        }
-      }
-      return true;
-    } else {
-      return false;
-    }
-    return false;
-  }
-
-  getLabels(): any {
-    // this.isLoading = true;
-    this.labelService.getLabels().subscribe(async (res: any) => {
-      this.labels = res.sort((a, b) => {
-        return a.priority - b.priority;
-      });
-    });
-  }
-  getLabelById(id): any {
-    let retVal = { color: 'white', font_color: 'black' };
-    let i;
-    for (i = 0; i < this.labels.length; i++) {
-      if (this.labels[i]._id === id) {
-        retVal = this.labels[i];
-      }
-    }
-    return retVal;
-  }
-
-  getAvatarName(contact): any {
-    if (contact.user_name) {
-      const names = contact.user_name.split(' ');
-      if (names.length > 1) {
-        return names[0][0] + names[1][0];
-      } else {
-        return names[0][0];
-      }
-    } else if (contact.first_name && contact.last_name) {
-      return contact.first_name[0] + contact.last_name[0];
-    } else if (contact.first_name && !contact.last_name) {
-      return contact.first_name[0];
-    } else if (!contact.first_name && contact.last_name) {
-      return contact.last_name[0];
-    }
-    return 'UC';
-  }
-
+  /**
+   * Toggle All Elements in Page
+   */
   masterToggle(): void {
     if (this.isAllSelected()) {
-      this.selection = [];
+      this.selection = _.differenceBy(
+        this.selection,
+        this.pageSelection,
+        '_id'
+      );
+      this.pageSelection = [];
       return;
     }
-    this.contacts.forEach((e) => {
+    this.pageContacts.forEach((e) => {
       if (!this.isSelected(e)) {
+        this.pageSelection.push(e.mainInfo);
         this.selection.push(e.mainInfo);
       }
     });
   }
-
+  /**
+   * Toggle Element
+   * @param contact : Contact
+   */
   toggle(contact: ContactActivity): void {
     const selectedContact = contact.mainInfo;
-    const toggledSelection = _.xorBy(this.selection, [selectedContact], '_id');
-    this.selection = toggledSelection;
+    const toggledSelection = _.xorBy(
+      this.pageSelection,
+      [selectedContact],
+      '_id'
+    );
+    this.pageSelection = toggledSelection;
+
+    const toggledAllSelection = _.xorBy(
+      this.selection,
+      [selectedContact],
+      '_id'
+    );
+    this.selection = toggledAllSelection;
   }
   /**
    * Check contact is selected.
    * @param contact : ContactActivity
    */
   isSelected(contact: ContactActivity): boolean {
-    return _.findIndex(this.selection, contact.mainInfo, '_id') !== -1;
+    return _.findIndex(this.pageSelection, contact.mainInfo, '_id') !== -1;
   }
   /**
    * Check all contacts in page are selected.
    */
   isAllSelected(): boolean {
-    return this.selection.length === this.contacts.length;
+    return this.pageSelection.length === this.pageContacts.length;
+  }
+
+  /**
+   * Load the page contacts
+   * @param page : Page Number to load
+   */
+  changePage(page: number): void {
+    this.page = page;
+    // Normal Load by Page
+    let skip = (page - 1) * this.pageSize.id;
+    skip = skip < 0 ? 0 : skip;
+    this.loadAutomation(this._id, this.pageSize.id, skip);
+  }
+  /**
+   * Change the Page Size
+   * @param type : Page size information element ({id: size of page, label: label to show UI})
+   */
+  changePageSize(type: any): void {
+    const currentSize = this.pageSize.id;
+    this.pageSize = type;
+    // Check with the Prev Page Size
+    if (currentSize < this.pageSize.id) {
+      // If page size get bigger
+      const loaded = this.page * currentSize;
+      let newPage = Math.floor(loaded / this.pageSize.id);
+      newPage = newPage > 0 ? newPage : 1;
+      this.changePage(newPage);
+    } else {
+      // if page size get smaller: TODO -> Set Selection and Page contacts
+      const skipped = (this.page - 1) * currentSize;
+      const newPage = Math.floor(skipped / this.pageSize.id) + 1;
+      this.changePage(newPage);
+    }
+  }
+
+  openContact(contact: ContactActivity): void {
+    this.router.navigate([`contacts/${contact._id}`]);
+  }
+
+  /**
+   * Update the Label of the current contact or selected contacts.
+   * @param label : Label to update
+   * @param _id : id of contact to update
+   */
+  updateLabel(label: string, _id: string): void {
+    const newLabel = label ? label : null;
+    let ids = [];
+    this.selection.forEach((e) => {
+      ids.push(e._id);
+    });
+    if (ids.indexOf(_id) === -1) {
+      ids = [_id];
+    }
+    this.isUpdating = true;
+    this.contactService
+      .bulkUpdate(ids, { label: newLabel }, {})
+      .subscribe((status) => {
+        this.isUpdating = false;
+        if (status) {
+          this.handlerService.bulkContactUpdate$(ids, { label: newLabel }, {});
+        }
+      });
+  }
+
+  /**
+   * Select All Contacts
+   */
+  selectAll(source = false): void {
+    if (source) {
+      this.updateActionsStatus('select', true);
+      this.selectSource = 'header';
+    } else {
+      this.selectSource = 'page';
+    }
+    this.selecting = true;
+    this.selectSubscription && this.selectSubscription.unsubscribe();
+    this.selectSubscription = this.contactService
+      .selectAll()
+      .subscribe((contacts) => {
+        this.selecting = false;
+        this.selection = _.unionBy(this.selection, contacts, '_id');
+        this.pageSelection = _.intersectionBy(
+          this.selection,
+          this.pageContacts,
+          '_id'
+        );
+        this.updateActionsStatus('select', false);
+      });
+  }
+
+  /**
+   * Update the Command Status
+   * @param command :Command String
+   * @param loading :Whether current action is running
+   */
+  updateActionsStatus(command: string, loading: boolean): void {
+    this.CONTACT_ACTIONS.some((e) => {
+      if (e.command === command) {
+        e.loading = loading;
+        return true;
+      }
+    });
+  }
+
+  deselectAll(): void {
+    this.pageSelection = [];
+    this.selection = [];
+  }
+
+  /**
+   * Delete Selected Contacts
+   */
+  deleteConfirm(): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Delete contacts',
+          message: 'Are you sure to delete contacts?',
+          confirmLabel: 'Delete'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.delete();
+          this.handlerService.reload$();
+        }
+      });
+  }
+
+  /**
+   * Bulk Edit Open
+   */
+  bulkEdit(): void {
+    this.panelType = 'editor';
+    this.drawer.open();
+  }
+
+  /**
+   * Download CSV
+   */
+  downloadCSV(): void {
+    const ids = [];
+    this.selection.forEach((e) => {
+      ids.push(e._id);
+    });
+    this.updateActionsStatus('download', true);
+    this.contactService.downloadCSV(ids).subscribe((data) => {
+      const contacts = [];
+      data.forEach((e) => {
+        const contact = {
+          first_name: e.contact.first_name,
+          last_name: e.contact.last_name,
+          email: e.contact.email,
+          phone: e.contact.phone,
+          source: e.contact.source,
+          brokerage: e.contact.brokerage,
+          city: e.contact.city,
+          state: e.contact.state,
+          zip: e.contact.zip,
+          address: e.contact.address
+        };
+        const notes = [];
+        if (e.note && e.note.length) {
+          e.note.forEach((note) => {
+            notes.push(note.content);
+          });
+        }
+        let label = '';
+        if (e.contact.label) {
+          label = e.contact.label.name || '';
+        }
+        contact['note'] = notes.join('     ');
+        contact['tags'] = e.contact.tags.join(', ');
+        contact['label'] = label;
+        contacts.push(contact);
+      });
+      if (contacts.length) {
+        const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
+        const header = Object.keys(contacts[0]);
+        const csv = contacts.map((row) =>
+          header
+            .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+            .join(',')
+        );
+        csv.unshift(header.join(','));
+        const csvArray = csv.join('\r\n');
+
+        const blob = new Blob([csvArray], { type: 'text/csv' });
+        saveAs(blob, 'myFile.csv');
+      }
+      this.updateActionsStatus('download', false);
+    });
+  }
+
+  openMessageDlg(): void {
+    this.dialog.open(SendEmailComponent, {
+      position: {
+        bottom: '0px',
+        right: '0px'
+      },
+      width: '100vw',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
+      disableClose: false,
+      data: {
+        contacts: this.selection
+      }
+    });
+  }
+
+  openNoteDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.NOTE,
+      data: {
+        contacts: this.selection
+      }
+    });
+  }
+
+  openTaskDlg(): void {
+    this.dialog.open(NoteCreateComponent, {
+      ...DialogSettings.TASK,
+      data: {
+        contacts: this.selection
+      }
+    });
+  }
+
+  openAutomationDlg(): void {
+    if (this.selection.length <= 10) {
+      this.dialog.open(ContactAssignAutomationComponent, {
+        ...DialogSettings.AUTOMATION,
+        data: {
+          contacts: this.selection
+        }
+      });
+    } else {
+      this.dialog.open(NotifyComponent, {
+        width: '98vw',
+        maxWidth: '390px',
+        data: {
+          title: 'Add Automation',
+          message: 'You can assign to at most 10 contacts.'
+        }
+      });
+    }
+  }
+
+  doAction(event: any): void {
+    switch (event.command) {
+      case 'deselect':
+        this.deselectAll();
+        break;
+      case 'select':
+        this.selectAll(true);
+        break;
+      case 'delete':
+        this.deleteConfirm();
+        break;
+      case 'edit':
+        this.bulkEdit();
+        break;
+      case 'download':
+        this.downloadCSV();
+        break;
+      case 'message':
+        this.openMessageDlg();
+        break;
+      case 'add_note':
+        this.openNoteDlg();
+        break;
+      case 'add_task':
+        this.openTaskDlg();
+        break;
+      case 'automation':
+        this.openAutomationDlg();
+        break;
+    }
+  }
+
+  /**
+   * Handler when page number get out of the bound after remove contacts.
+   * @param $event : Page Number
+   */
+  pageChanged($event: number): void {
+    this.changePage($event);
+  }
+
+  /**
+   * Panel Open and Close event
+   * @param $event Panel Open Status
+   */
+  setPanelType($event: boolean): void {
+    if (!$event) {
+      this.panelType = '';
+    } else {
+      this.editPanel.clearForm();
+    }
   }
 
   ICONS = {
