@@ -1126,18 +1126,18 @@ export class MaterialsComponent implements OnInit {
           title: 'Delete folder',
           message:
             'This folder would be removed and sub materials would be moved to root directory. Are you sure to delete this folder?',
-          confirmLabel: 'Delete'
-          // case: true,
-          // answers: [
-          //   {
-          //     label: 'Remove with sub-materials',
-          //     value: 'with-materials'
-          //   },
-          //   {
-          //     label: 'Remove only folder',
-          //     value: 'only-folder'
-          //   }
-          // ]
+          // confirmLabel: 'Delete'
+          case: true,
+          answers: [
+            {
+              label: 'Remove with sub-materials',
+              value: 'with-materials'
+            },
+            {
+              label: 'Remove only folder',
+              value: 'only-folder'
+            }
+          ]
         }
       })
       .afterClosed()

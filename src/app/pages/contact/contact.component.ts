@@ -47,6 +47,7 @@ import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { ToastrService } from 'ngx-toastr';
+import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 
 @Component({
   selector: 'app-contact',
@@ -122,6 +123,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
   teamSubscription: Subscription;
+  updateSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -182,6 +184,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
     this.storeService.selectedContact.next(new ContactDetail());
+
+    this.updateSubscription && this.updateSubscription.unsubscribe();
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.teamSubscription && this.teamSubscription.unsubscribe();
   }
 
   /**
@@ -533,6 +539,22 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   openSendEmail(): void {
     this.dialog.open(SendEmailComponent, {
+      position: {
+        bottom: '0px',
+        right: '0px'
+      },
+      width: '100vw',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
+      disableClose: false,
+      data: {
+        contact: this.contact
+      }
+    });
+  }
+
+  openSendText(): void {
+    this.dialog.open(SendTextComponent, {
       position: {
         bottom: '0px',
         right: '0px'
@@ -1178,6 +1200,21 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     }
     return '';
+  }
+
+  changeLabel(event: string): void {
+    this.updateSubscription && this.updateSubscription.unsubscribe();
+    this.updateSubscription = this.contactService
+      .bulkUpdate([this.contact._id], { label: event }, {})
+      .subscribe((status) => {
+        if (status) {
+          this.handlerService.bulkContactUpdate$(
+            [this.contact._id],
+            { label: event },
+            {}
+          );
+        }
+      });
   }
 
   ICONS = {

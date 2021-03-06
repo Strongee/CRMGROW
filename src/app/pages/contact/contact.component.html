@@ -31,7 +31,7 @@
             <button class="border-0 c-dark dropdown-item" (click)="openSendEmail()">
               <span class="ml-1 f-3 font-weight-bold">Send email</span>
             </button>
-            <button class="border-0 c-dark dropdown-item">
+            <button class="border-0 c-dark dropdown-item" (click)="openSendText()">
               <span class="ml-1 f-3 font-weight-bold">Send text</span>
             </button>
             <button class="border-0 c-dark dropdown-item" (click)="openTaskDlg()">
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="my-3 py-2">
-        <app-label-select [value]="contact.label" type="form"></app-label-select>
+        <app-label-select [value]="contact.label" type="form" (valueChange)="changeLabel($event)"></app-label-select>
       </div>
       <mat-accordion multi class="general-panels">
         <!-- Begin Contact Detail -->
@@ -329,7 +329,7 @@
               <span class="f-3 font-weight-bold c-blue mr-2">Send email</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
-            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openTaskDlg()" *ngIf="tab.id === 'text' || (tab.id === 'all' && activityType.id === 'text')">
+            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'text' || (tab.id === 'all' && activityType.id === 'text')">
               <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
