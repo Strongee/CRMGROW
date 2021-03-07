@@ -14,6 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { STATUS } from '../../constants/variable.constants';
 import { Location } from '@angular/common';
 import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
 import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
@@ -69,7 +70,8 @@ export class AutomationsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -117,6 +119,7 @@ export class AutomationsComponent implements OnInit {
     dialog.afterClosed().subscribe((res) => {
       if (res) {
         this.deleting = true;
+        this.toastr.success('Automation Deleted Successfully');
         this.automationService.delete(automation._id).subscribe(
           (response) => {
             this.deleting = false;
