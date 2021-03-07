@@ -124,7 +124,8 @@ export const ROUTE_PAGE = {
   '/task': 'Dashboard',
   '/activities': 'Dashboard',
   '/contacts': 'Contacts',
-  '/deals': 'Deals'
+  '/deals': 'Deals',
+  '/autoflow': 'Automations'
 };
 
 export const COUNTRIES = [

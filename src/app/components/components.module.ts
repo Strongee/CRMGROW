@@ -135,6 +135,7 @@ import { DetailErrorComponent } from './detail-error/detail-error.component';
 import { MaterialBrowserComponent } from './material-browser/material-browser.component';
 import { GlobalSearchComponent } from './global-search/global-search.component';
 import { PurchaseMessageComponent } from './purchase-message/purchase-message.component';
+import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
 import { SendTextComponent } from './send-text/send-text.component';
 
 @NgModule({
@@ -270,6 +271,7 @@ import { SendTextComponent } from './send-text/send-text.component';
     MaterialBrowserComponent,
     GlobalSearchComponent,
     PurchaseMessageComponent,
+    DeleteFolderComponent,
     SendTextComponent
   ],
   imports: [
@@ -370,7 +372,8 @@ import { SendTextComponent } from './send-text/send-text.component';
     CallRequestCancelComponent,
     CallRequestDetailComponent,
     VideoShareComponent,
-    SelectTeamComponent
+    SelectTeamComponent,
+    DeleteFolderComponent
   ]
 })
 export class ComponentsModule {}

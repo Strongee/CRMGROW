@@ -9,6 +9,7 @@ const Quill: any = QuillNamespace;
 import quillBetterTable from 'quill-better-table';
 Quill.register({ 'modules/better-table': quillBetterTable }, true);
 import BlotFormatter from 'quill-blot-formatter';
+import { ToastrService } from 'ngx-toastr';
 Quill.register('modules/blotFormatter', BlotFormatter);
 @Component({
   selector: 'app-signature',
@@ -36,7 +37,8 @@ export class SignatureComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private fileService: FileService
+    private fileService: FileService,
+    private toastr: ToastrService
   ) {
     this.userService.profile$.subscribe((profile) => {
       if (profile && profile._id) {
@@ -166,6 +168,7 @@ export class SignatureComponent implements OnInit {
       .subscribe((data) => {
         this.userService.updateProfileImpl(data);
         this.saving = false;
+        this.toastr.success('Profile picture successfully uploaded.');
       });
   }
 
