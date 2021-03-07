@@ -146,6 +146,10 @@ export class AutoflowComponent
     this._id = this.route.snapshot.params['id'];
     const title = this.route.snapshot.params['title'];
     const mode = this.route.snapshot.params['mode'];
+    const page = localStorage.getItem('automation');
+    if (page === 'contacts') {
+      this.selectedTab = this.tabs[1];
+    }
     if (title) {
       this.automation_title = title;
     }
@@ -1461,6 +1465,7 @@ export class AutoflowComponent
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+    localStorage.setItem('automation', tab.id);
   }
 
   assignContacts(): void {
