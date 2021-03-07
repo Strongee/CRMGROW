@@ -40,6 +40,10 @@
               border: 3px solid #D9D9DF;
             }
         }
+
+        .stage-status-items:not(.loaded) .stage-status {
+          border-color:#D9D9DF;
+        }
     }
 }
 
