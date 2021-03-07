@@ -549,6 +549,9 @@ export class CalendarComponent implements OnInit {
         if (targetEl.closest('.event-panel')) {
           return;
         }
+        if (targetEl.closest('.calendar-contact')) {
+          return;
+        }
         this.overlayRef.detach();
         return;
       });

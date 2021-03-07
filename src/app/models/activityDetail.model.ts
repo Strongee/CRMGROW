@@ -16,6 +16,7 @@ export class PureActivity implements Deserializable {
   image_trackers: string;
   emails: string;
   email_trackers: string;
+  texts: string;
   sms: string;
   contacts: string;
   material_last: number;
@@ -49,6 +50,7 @@ export class ActivityDetail implements Deserializable {
   image_trackers: string;
   emails: string;
   email_trackers: string;
+  texts: string;
   sms: string;
   contacts: any;
   material_last: number;

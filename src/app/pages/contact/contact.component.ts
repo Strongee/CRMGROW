@@ -131,7 +131,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     public contactService: ContactService,
-    private userService: UserService,
+    public userService: UserService,
     private noteService: NoteService,
     private taskService: TaskService,
     private storeService: StoreService,
@@ -308,6 +308,16 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.detailData[group_id]['emails'] = activity.emails;
         return group_id;
       case 'texts':
+        material_id = activity.activity_detail['_id'];
+        this.details[material_id] = activity.activity_detail;
+        const text_group_id = `${material_id}_${activity._id}`;
+        this.detailData[text_group_id] = activity.activity_detail;
+        this.detailData[text_group_id]['data_type'] = activity.type;
+        this.detailData[text_group_id]['group_id'] = text_group_id;
+        this.detailData[text_group_id]['texts'] = activity.texts;
+        if (activity.content.indexOf('sent') !== -1) {
+          this.detailData[text_group_id]['sent'] = true;
+        }
         return activity._id;
       default:
         const detailKey = activity.activity_detail['_id'];

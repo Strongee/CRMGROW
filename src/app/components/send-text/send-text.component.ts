@@ -1,5 +1,9 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { Template } from 'src/app/models/template.model';
@@ -155,7 +159,8 @@ export class SendTextComponent implements OnInit, OnDestroy {
         pdf_ids: pdfIds,
         image_ids: imageIds,
         content: this.message,
-        contacts: [this.contact._id]
+        contacts: [this.contact._id],
+        mode: 'api'
       })
       .subscribe((res) => {
         this.sending = false;

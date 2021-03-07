@@ -654,6 +654,43 @@
                   </ng-container>
                 </div>
               </div>
+
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'text') && (activity.type == 'texts' || activity.type == 'text_trackers')">
+                <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+                  <div class="v-center justify-content-between mb-3">
+                    <div class="v-center">
+                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                      <div class="f-6">
+                        <span>{{activity.content}}</span>
+                      </div>
+                    </div>
+                    <div class="v-center ml-auto">
+                      <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="activity.activity_detail; else removedTextTemplate">
+                    <div class="main-history-item">
+                      <div class="text-direction mb-3">
+                        <ng-container *ngIf="activity.content.indexOf('sent') !== -1; else receivedDir">
+                          <h6 class="font-weight-bold mb-0">{{(userService.profile$ | async).user_name}}</h6>
+                          <div class="op-75 f-3">to {{contact.fullName}}</div>
+                        </ng-container>
+                        <ng-template #receivedDir>
+                          <h6 class="font-weight-bold mb-0">{{contact.fullName}}</h6>
+                          <div class="op-75 f-3">to {{(userService.profile$ | async).user_name}}</div>
+                        </ng-template>
+                      </div>
+                      <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
+                    </div>
+                  </ng-container>
+                  <ng-template #removedTextTemplate>
+                    <!-- <div class="d-flex">
+                      <mat-icon class="mr-2">warning</mat-icon>
+                      <span>Can't see the detail</span>
+                    </div> -->
+                  </ng-template>
+                </div>
+              </div>
   
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'videos' || activity.type == 'video_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
@@ -1135,6 +1172,37 @@
                   </ng-template>
                 </div>
               </div>
+
+              <div *ngIf="(activityType.id == 'all') && activity.type == 'users'">
+                <div class="history-detail {{activity.type}}-detail p-3 mt-3">
+                  <div class="v-center justify-content-between mb-3">
+                    <div class="v-center">
+                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                      <div class="f-6">
+                        <span>{{activity.content}}</span>
+                      </div>
+                    </div>
+                    <div class="v-center">
+                      <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="activity.activity_detail; else canceledUserTemplate">
+                    <div class="main-history-item">
+                      <label class="mb-0 op-75 f-3 mt-">Shared With</label>
+                      <div class="v-center mt-2">
+                        <img *ngIf="activity.activity_detail.picture_profile; else avatarNameTemplate" [src]="activity.activity_detail.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+                        <ng-template #avatarNameTemplate>
+                          <div class="avatar rounded-circle bg-dark mr-1">{{activity.activity_detail.user_name[0]}}</div>
+                        </ng-template>
+                        <div class="ml-2 font-weight-bold">{{activity.activity_detail.user_name}}</div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #canceledUserTemplate>
+                    
+                  </ng-template>
+                </div>
+              </div>
             </ng-container>
           </ng-container>
 
@@ -1262,8 +1330,28 @@
                       </ng-container>
                     </div>
                   </div>
-                  <div class="history-detail texts-detail p-3 mt-3" *ngSwitchCase="'text'">
 
+                  <div class="history-detail texts-detail p-3 mt-3" *ngSwitchCase="'text'">
+                    <div class="v-center justify-content-between mb-3">
+                      <div class="history-icon mr-3"><i class="act-icon act-texts"></i></div>
+                      <div class="">text</div>
+                      <div class="ml-auto f-3 op-56">
+                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                      </div>
+                    </div>
+                    <div class="main-history-item">
+                      <div class="text-direction mb-3">
+                        <ng-container *ngIf="detail['sent']; else receivedDir">
+                          <h6 class="font-weight-bold mb-0">{{(userService.profile$ | async).user_name}}</h6>
+                          <div class="op-75 f-3">to {{contact.fullName}}</div>
+                        </ng-container>
+                        <ng-template #receivedDir>
+                          <h6 class="font-weight-bold mb-0">{{contact.fullName}}</h6>
+                          <div class="op-75 f-3">to {{(userService.profile$ | async).user_name}}</div>
+                        </ng-template>
+                      </div>
+                      <div class="f-6 note-content opened">{{detail.content}}</div>
+                    </div>
                   </div>
 
                   <div class="history-detail appointments-detail p-3 mt-3" *ngSwitchCase="'appointment'">
