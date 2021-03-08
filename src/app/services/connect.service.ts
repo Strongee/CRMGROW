@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { USER } from '../constants/api.constant';
+import { INTEGRATION, USER } from '../constants/api.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,25 @@ export class ConnectService {
 
   public connectAnotherService(): Observable<any> {
     return this.httpClient.get(environment.api + USER.SET_ANOTHER_MAIL);
+  }
+
+  public connectCalendly(apiKey: any): any {
+    return this.httpClient.post(
+      environment.api + INTEGRATION.CHECK_CALENDLY,
+      apiKey
+    );
+  }
+
+  public getToken(): any {
+    return this.httpClient.get(environment.api + INTEGRATION.GET_TOKEN);
+  }
+
+  public getEvent(): any {
+    return this.httpClient.get(environment.api + INTEGRATION.GET_CALENDLY);
+  }
+
+  public setEvent(event: any): any {
+    return this.httpClient.post(environment.api + INTEGRATION.SET_EVENT, event);
   }
 
   public sendLogout(): void {

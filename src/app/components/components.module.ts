@@ -138,6 +138,9 @@ import { PurchaseMessageComponent } from './purchase-message/purchase-message.co
 import { AddPhoneComponent } from './add-phone/add-phone.component';
 import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
 import { SendTextComponent } from './send-text/send-text.component';
+import { ZapierDialogComponent } from './zapier-dialog/zapier-dialog.component';
+import { CalendlyDialogComponent } from './calendly-dialog/calendly-dialog.component';
+import { CalendlyListComponent } from './calendly-list/calendly-list.component';
 
 @NgModule({
   declarations: [
@@ -274,7 +277,10 @@ import { SendTextComponent } from './send-text/send-text.component';
     PurchaseMessageComponent,
     AddPhoneComponent,
     DeleteFolderComponent,
-    SendTextComponent
+    SendTextComponent,
+    ZapierDialogComponent,
+    CalendlyDialogComponent,
+    CalendlyListComponent
   ],
   imports: [
     CommonModule,
@@ -364,7 +370,10 @@ import { SendTextComponent } from './send-text/send-text.component';
     InputContactChipComponent,
     GlobalSearchComponent,
     PurchaseMessageComponent,
-    AddPhoneComponent
+    AddPhoneComponent,
+    ZapierDialogComponent,
+    CalendlyDialogComponent,
+    CalendlyListComponent
   ],
   bootstrap: [
     ContactCreateComponent,

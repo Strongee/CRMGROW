@@ -27,25 +27,30 @@
     </div>
   </div>
 
-  <div class="integration-account">
-    <div class="icon">
-      <img src="../../../assets/img/zapier.svg">
-    </div>
-    <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">Zapier</div>
-      <div class="desc f-2 op-75">
-        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+  <div class="integration-account zapier">
+    <div class="v-center justify-content-between integration-header">
+      <p class="f-3 font-weight-bold m-0">Your API Key</p>
+      <input class="form-control f-3 w-50 p-1" type="text" [ngModel]="garbage?.access_token" readonly>
+      <div class="d-flex justify-content-center header-button">
+        <button class="bg-white border-0 my-auto f-3 font-weight-bold key-copy" (click)="copyKey()">
+          <img src="../../../assets/img/pin.png" class="mr-2">Copy Key
+        </button>
+        <button class="bg-white border-0 my-auto f-3 font-weight-bold key-regenerate" (click)="getToken()">
+          <img src="../../../assets/img/reload.png" class="mr-2">Regenerate Key
+        </button>
       </div>
     </div>
-    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect">Connect account</button>
-    <div class="accounts">
-      <ng-container *ngIf="user.connected_email_type=='zapier' && user.primary_connected">
-        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
-        <div class="f-1">
-          <span class="font-weight-bold mr-2">{{user.connected_email}}</span>
-          connected
+    <div class="integration-body mt-3">
+      <div class="icon">
+        <img src="../../../assets/img/zapier.svg">
+      </div>
+      <div class="content">
+        <div class="title f-3 font-weight-bold mb-1">Zapier</div>
+        <div class="desc f-2 op-75">
+          Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
         </div>
-      </ng-container>
+      </div>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectZapier()">Connect account</button>
     </div>
   </div>
 
@@ -59,13 +64,25 @@
         Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
       </div>
     </div>
-    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect">Connect account</button>
+    <ng-container *ngIf="garbage.calendly?.email == '' && garbage.calendly?.token == ''; else selectEvent">
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendly()">
+        Connect account
+      </button>
+    </ng-container>
+    <ng-template #selectEvent>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="selectCalendly()">
+        Select Event
+      </button>
+    </ng-template>
     <div class="accounts">
-      <ng-container *ngIf="user.connected_email_type=='calendly' && user.primary_connected">
+      <ng-container *ngIf="garbage.calendly?.email != '' && garbage.calendly?.token != ''">
         <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
-        <div class="f-1">
-          <span class="font-weight-bold mr-2">{{user.connected_email}}</span>
-          connected
+        <div class="v-center mb-1">
+          <div class="f-1 font-weight-bold mr-1">{{garbage.calendly?.email}}</div>
+          <span class="f-1">connected</span>
+          <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendly(calendar)">
+            <div class="f-2">Disconnect</div>
+          </button>
         </div>
       </ng-container>
     </div>

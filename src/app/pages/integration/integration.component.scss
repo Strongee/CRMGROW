@@ -46,7 +46,6 @@
   grid-column-gap: 16px;
   grid-row-gap: 12px;
   
-
   .icon {
     width: 60px;
 
@@ -74,6 +73,26 @@
 
     .v-center div {
       overflow-wrap: anywhere;
+    }
+  }
+  &.zapier {
+    display: block;
+    .integration-header {
+      input {
+        border: 1px dashed #d0d0d0;
+        border-radius: 3px;
+        background-color: #e9ecef;
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+    }
+    .integration-body {
+      display: grid;
+      grid-template-columns: 60px auto 160px;
+      grid-column-gap: 16px;
+      grid-row-gap: 12px;
     }
   }
 
