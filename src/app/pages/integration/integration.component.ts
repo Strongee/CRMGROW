@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-integration',
@@ -16,24 +17,33 @@ export class IntegrationComponent implements OnInit {
   googleCalendars = [];
   outlookCalendars = [];
 
-  constructor(private userService: UserService, private toast: ToastrService) {
-    this.userService.profile$.subscribe((profile) => {
-      this.user = profile;
+  profileSubscription: Subscription;
 
-      if (this.user.calendar_list) {
-        this.googleCalendars = this.user.calendar_list.filter((e) => {
-          if (e.connected_calendar_type === 'google') {
-            return true;
-          }
-        });
-        this.outlookCalendars = this.user.calendar_list.filter((e) => {
-          return e.connected_calendar_type === 'outlook';
-        });
+  constructor(private userService: UserService, private toast: ToastrService) {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        this.user = profile;
+
+        if (this.user.calendar_list) {
+          this.googleCalendars = this.user.calendar_list.filter((e) => {
+            if (e.connected_calendar_type === 'google') {
+              return true;
+            }
+          });
+          this.outlookCalendars = this.user.calendar_list.filter((e) => {
+            return e.connected_calendar_type === 'outlook';
+          });
+        }
       }
-    });
+    );
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
 
   connectMail(type: string): void {
     if (type == 'gmail' || type == 'outlook') {

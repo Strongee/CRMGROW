@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { FileService } from '../../services/file.service';
@@ -9,13 +9,15 @@ const Quill: any = QuillNamespace;
 import quillBetterTable from 'quill-better-table';
 Quill.register({ 'modules/better-table': quillBetterTable }, true);
 import BlotFormatter from 'quill-blot-formatter';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 Quill.register('modules/blotFormatter', BlotFormatter);
 @Component({
   selector: 'app-signature',
   templateUrl: './signature.component.html',
   styleUrls: ['./signature.component.scss']
 })
-export class SignatureComponent implements OnInit {
+export class SignatureComponent implements OnInit, OnDestroy {
   user: User = new User();
   templates = [
     { layout: 'img_text_hor', icon: 'i-signature-1' },
@@ -34,25 +36,35 @@ export class SignatureComponent implements OnInit {
 
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
 
+  profileSubscription: Subscription;
+
   constructor(
     private userService: UserService,
-    private fileService: FileService
+    private fileService: FileService,
+    private toastr: ToastrService
   ) {
-    this.userService.profile$.subscribe((profile) => {
-      if (profile && profile._id) {
-        this.user = profile;
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        if (profile && profile._id) {
+          this.user = profile;
 
-        if (this.quillEditorRef) {
-          const delta = this.quillEditorRef.clipboard.convert({
-            html: this.user.email_signature
-          });
-          this.emailEditor.quillEditor.setContents(delta, 'user');
+          if (this.quillEditorRef) {
+            const delta = this.quillEditorRef.clipboard.convert({
+              html: this.user.email_signature
+            });
+            this.emailEditor.quillEditor.setContents(delta, 'user');
+          }
         }
       }
-    });
+    );
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
 
   changeTemplate(template: any): void {
     this.currentTemplate = template.layout;
@@ -166,6 +178,7 @@ export class SignatureComponent implements OnInit {
       .subscribe((data) => {
         this.userService.updateProfileImpl(data);
         this.saving = false;
+        this.toastr.success('Profile picture successfully uploaded.');
       });
   }
 

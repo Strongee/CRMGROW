@@ -786,7 +786,7 @@ export class RecordSettingDialogComponent implements OnInit, AfterViewInit {
         width: '96vw',
         data: {
           title: 'CRM Record',
-          message: `Please use the our recording application. If you didn't install CRMRecord, please download and install.`,
+          message: `Please use our recording application. If you didn't install CRMRecord, please download and install.`,
           cancelLabel: 'Download',
           confirmLabel: 'Open Application'
         }

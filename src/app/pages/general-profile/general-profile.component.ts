@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { ToastrService } from 'ngx-toastr';
@@ -14,13 +14,14 @@ import { UserService } from 'src/app/services/user.service';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-general-profile',
   templateUrl: './general-profile.component.html',
   styleUrls: ['./general-profile.component.scss']
 })
-export class GeneralProfileComponent implements OnInit {
+export class GeneralProfileComponent implements OnInit, OnDestroy {
   user: User = new User();
   name = '';
   userEmail = '';
@@ -40,22 +41,27 @@ export class GeneralProfileComponent implements OnInit {
     itemAlias: 'photo'
   });
 
+  profileSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private helperService: HelperService,
     private dialog: MatDialog,
     private toast: ToastrService
   ) {
-    this.userService.profile$.subscribe((profile) => {
-      this.user = profile;
-      this.name = this.user.user_name;
-      this.userEmail = this.user.email;
-      this.phoneNumber = this.user.phone;
-      this.userCompany = this.user.company;
-      this.website = this.user.learn_more;
-      this.timezone = this.user.time_zone_info;
-      this.address = this.user.location;
-    });
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        this.user = profile;
+        this.name = this.user.user_name;
+        this.userEmail = this.user.email;
+        this.phoneNumber = this.user.phone;
+        this.userCompany = this.user.company;
+        this.website = this.user.learn_more;
+        this.timezone = this.user.time_zone_info;
+        this.address = this.user.location;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -89,6 +95,10 @@ export class GeneralProfileComponent implements OnInit {
         this.toast.error(error);
       }
     };
+  }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
   }
 
   openProfilePhoto(): void {

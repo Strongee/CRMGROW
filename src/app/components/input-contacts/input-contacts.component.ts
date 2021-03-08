@@ -54,6 +54,7 @@ export class InputContactsComponent implements OnInit {
   @Input('chipType') chipType = 'block';
   @Input('keepContacts') keepContacts: Contact[] = [];
   @Input('focus') isFocus = false;
+  @Input('optionClass') optionClass = '';
   @Output() onSelect = new EventEmitter();
   @Output() onRemove = new EventEmitter();
 

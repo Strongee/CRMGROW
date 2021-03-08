@@ -291,9 +291,9 @@ export class MaterialService extends HttpService {
         catchError(this.handleError('UPDATE FOLDER', false))
       );
   }
-  removeFolder(_id: string, mode: string): Observable<boolean> {
+  removeFolder(data): Observable<boolean> {
     return this.httpClient
-      .post(this.server + MATERIAL.REMOVE_FOLDER, { _id, mode })
+      .post(this.server + MATERIAL.REMOVE_FOLDER, data)
       .pipe(
         map((res) => res),
         catchError(this.handleError('DELETE FOLDER', null))

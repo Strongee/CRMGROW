@@ -139,9 +139,14 @@
         <label for="state_cc">state</label>
         <select id="state-cc" class="form-control" [(ngModel)]="contact.state" name="state" #state="ngModel">
           <option value="">None</option>
-          <optgroup *ngFor="let country of COUNTRY_REGIONS | keyvalue" label="{{country.key}}">
-            <option *ngFor="let region of country.value" value="{{region}}">{{region}}</option>
-          </optgroup>
+          <ng-container *ngIf="!contact.country; else selectedState">
+            <optgroup *ngFor="let country of COUNTRY_REGIONS | keyvalue" label="{{country.key}}">
+              <option *ngFor="let region of country.value" value="{{region}}">{{region}}</option>
+            </optgroup>
+          </ng-container>
+          <ng-template #selectedState>
+            <option *ngFor="let region of COUNTRY_REGIONS[contact.country]" value="{{region}}">{{region}}</option>
+          </ng-template>
         </select>
       </div>
       <div class="col-sm-4 col-12 form-group">

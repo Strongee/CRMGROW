@@ -46,6 +46,8 @@ import { TeamService } from 'src/app/services/team.service';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
+import { ToastrService } from 'ngx-toastr';
+import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 
 @Component({
   selector: 'app-contact',
@@ -121,6 +123,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
   teamSubscription: Subscription;
+  updateSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -128,7 +131,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     public contactService: ContactService,
-    private userService: UserService,
+    public userService: UserService,
     private noteService: NoteService,
     private taskService: TaskService,
     private storeService: StoreService,
@@ -138,7 +141,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private automationService: AutomationService,
     private appointmentService: AppointmentService,
     private teamService: TeamService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private toastr: ToastrService
   ) {
     this.teamService.loadAll(true);
     this.appointmentService.loadCalendars(false);
@@ -180,6 +184,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
     this.storeService.selectedContact.next(new ContactDetail());
+
+    this.updateSubscription && this.updateSubscription.unsubscribe();
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.teamSubscription && this.teamSubscription.unsubscribe();
   }
 
   /**
@@ -300,6 +308,16 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.detailData[group_id]['emails'] = activity.emails;
         return group_id;
       case 'texts':
+        material_id = activity.activity_detail['_id'];
+        this.details[material_id] = activity.activity_detail;
+        const text_group_id = `${material_id}_${activity._id}`;
+        this.detailData[text_group_id] = activity.activity_detail;
+        this.detailData[text_group_id]['data_type'] = activity.type;
+        this.detailData[text_group_id]['group_id'] = text_group_id;
+        this.detailData[text_group_id]['texts'] = activity.texts;
+        if (activity.content.indexOf('sent') !== -1) {
+          this.detailData[text_group_id]['sent'] = true;
+        }
         return activity._id;
       default:
         const detailKey = activity.activity_detail['_id'];
@@ -404,6 +422,13 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          if (type == 'main') {
+            this.toastr.success('Successfully updated contact details.');
+          } else {
+            this.toastr.success(
+              'Successfully updated secondary contact details'
+            );
+          }
           for (const key in res) {
             this.contact[key] = res[key];
           }
@@ -424,6 +449,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toastr.success('Successfully updated additional information.');
           for (const key in res) {
             this.contact[key] = res[key];
           }
@@ -523,6 +549,22 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   openSendEmail(): void {
     this.dialog.open(SendEmailComponent, {
+      position: {
+        bottom: '0px',
+        right: '0px'
+      },
+      width: '100vw',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
+      disableClose: false,
+      data: {
+        contact: this.contact
+      }
+    });
+  }
+
+  openSendText(): void {
+    this.dialog.open(SendTextComponent, {
       position: {
         bottom: '0px',
         right: '0px'
@@ -1168,6 +1210,21 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     }
     return '';
+  }
+
+  changeLabel(event: string): void {
+    this.updateSubscription && this.updateSubscription.unsubscribe();
+    this.updateSubscription = this.contactService
+      .bulkUpdate([this.contact._id], { label: event }, {})
+      .subscribe((status) => {
+        if (status) {
+          this.handlerService.bulkContactUpdate$(
+            [this.contact._id],
+            { label: event },
+            {}
+          );
+        }
+      });
   }
 
   ICONS = {

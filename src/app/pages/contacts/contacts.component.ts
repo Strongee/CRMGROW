@@ -45,8 +45,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
     'contact_phone'
   ];
   SORT_TYPES = [
-    { id: 'alpha_down', label: 'Alphabetical down' },
-    { id: 'alpha_up', label: 'Alphabetical up' },
+    { id: 'alpha_down', label: 'Alphabetical Z-A' },
+    { id: 'alpha_up', label: 'Alphabetical A-Z' },
     { id: 'last_added', label: 'Last added' },
     { id: 'last_active', label: 'Recent active' }
   ];

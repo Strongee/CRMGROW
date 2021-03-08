@@ -136,6 +136,8 @@ import { MaterialBrowserComponent } from './material-browser/material-browser.co
 import { GlobalSearchComponent } from './global-search/global-search.component';
 import { PurchaseMessageComponent } from './purchase-message/purchase-message.component';
 import { AddPhoneComponent } from './add-phone/add-phone.component';
+import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
+import { SendTextComponent } from './send-text/send-text.component';
 
 @NgModule({
   declarations: [
@@ -270,7 +272,9 @@ import { AddPhoneComponent } from './add-phone/add-phone.component';
     MaterialBrowserComponent,
     GlobalSearchComponent,
     PurchaseMessageComponent,
-    AddPhoneComponent
+    AddPhoneComponent,
+    DeleteFolderComponent,
+    SendTextComponent
   ],
   imports: [
     CommonModule,
@@ -371,7 +375,8 @@ import { AddPhoneComponent } from './add-phone/add-phone.component';
     CallRequestCancelComponent,
     CallRequestDetailComponent,
     VideoShareComponent,
-    SelectTeamComponent
+    SelectTeamComponent,
+    DeleteFolderComponent
   ]
 })
 export class ComponentsModule {}

@@ -44,13 +44,13 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     // const currentPage = this.activityService.page.getValue();
     // this.changePage(currentPage || 1);
 
-    // const currentPageSize = this.activityService.pageSize.getValue();
-    // this.PAGE_COUNTS.some((e) => {
-    //   if (e.id === currentPageSize) {
-    //     this.pageSize = e;
-    //     return true;
-    //   }
-    // });
+    const currentPageSize = this.activityService.pageSize.getValue();
+    this.PAGE_COUNTS.some((e) => {
+      if (e.id === currentPageSize) {
+        this.pageSize = e;
+        return true;
+      }
+    });
     this.activityService.load(0);
   }
 

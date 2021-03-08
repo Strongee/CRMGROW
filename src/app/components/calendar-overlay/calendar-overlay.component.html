@@ -87,7 +87,7 @@
           <div class="col-12">
             <div class="form-group">
               <label class="calendar-label mb-0">ASSIGN GUESTS</label>
-              <app-input-contacts [selectedContacts]="contacts">
+              <app-input-contacts [selectedContacts]="contacts" [optionClass]="'calendar-contact'">
               </app-input-contacts>
             </div>
           </div>
@@ -175,7 +175,7 @@
         <div class="col-12">
           <button
             type="button"
-            (click)="overlayClose()"
+            (click)="close()"
             class="btn btn-white mr-2 py-2 f-6 font-weight-bold"
           >
             Cancel

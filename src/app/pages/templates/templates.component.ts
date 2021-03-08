@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TemplatesService } from '../../services/templates.service';
 import { UserService } from '../../services/user.service';
@@ -13,7 +13,7 @@ import { STATUS } from 'src/app/constants/variable.constants';
   templateUrl: './templates.component.html',
   styleUrls: ['./templates.component.scss']
 })
-export class TemplatesComponent implements OnInit {
+export class TemplatesComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
 
   page = 1;
@@ -28,6 +28,10 @@ export class TemplatesComponent implements OnInit {
   filteredResult: Template[] = [];
   searchStr = '';
 
+  profileSubscription: Subscription;
+  garbageSubscription: Subscription;
+  loadSubscription: Subscription;
+
   constructor(
     public templatesService: TemplatesService,
     private userService: UserService,
@@ -36,20 +40,35 @@ export class TemplatesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userService.garbage$.subscribe((garbage) => {
-      if (garbage && garbage.canned_message) {
-        this.emailDefault = garbage.canned_message.email;
-        this.smsDefault = garbage.canned_message.sms;
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe(
+      (garbage) => {
+        if (garbage && garbage.canned_message) {
+          this.emailDefault = garbage.canned_message.email;
+          this.smsDefault = garbage.canned_message.sms;
+        }
       }
-    });
-    this.userService.profile$.subscribe((profile) => {
-      this.userId = profile._id;
-    });
-    this.templatesService.templates$.subscribe((templates) => {
-      this.templates = templates;
-      this.filteredResult = templates;
-    });
+    );
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        this.userId = profile._id;
+      }
+    );
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.templatesService.templates$.subscribe(
+      (templates) => {
+        this.templates = templates;
+        this.filteredResult = templates;
+      }
+    );
     this.templatesService.loadAll(true);
+  }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.loadSubscription && this.loadSubscription.unsubscribe();
   }
 
   setDefault(template: Template): void {
