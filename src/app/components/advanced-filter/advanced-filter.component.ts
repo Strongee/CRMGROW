@@ -261,7 +261,10 @@ export class AdvancedFilterComponent implements OnInit {
               action.count = res.length;
             }
           });
-          if (this.selectedMaterial[0].type.startsWith('video')) {
+          if (
+            this.selectedMaterial[0].material_type &&
+            this.selectedMaterial[0].material_type.startsWith('video')
+          ) {
             switch (this.selectedMaterialActions) {
               case 'Material sent':
                 this.searchOption.materialCondition.sent_video.flag = true;
@@ -281,7 +284,10 @@ export class AdvancedFilterComponent implements OnInit {
                 break;
             }
           }
-          if (this.selectedMaterial[0].type.endsWith('pdf')) {
+          if (
+            this.selectedMaterial[0].material_type &&
+            this.selectedMaterial[0].material_type.startsWith('pdf')
+          ) {
             switch (this.selectedMaterialActions) {
               case 'Material sent':
                 this.searchOption.materialCondition.sent_pdf.flag = true;
@@ -301,7 +307,10 @@ export class AdvancedFilterComponent implements OnInit {
                 break;
             }
           }
-          if (this.selectedMaterial[0].type.startsWith('image')) {
+          if (
+            this.selectedMaterial[0].material_type &&
+            this.selectedMaterial[0].material_type.startsWith('image')
+          ) {
             switch (this.selectedMaterialActions) {
               case 'Material sent':
                 this.searchOption.materialCondition.sent_image.flag = true;

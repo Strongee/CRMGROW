@@ -29,7 +29,9 @@ export class FilterAddComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.searchOption = this.data.searchOption;
-    this.selectedMaterial.push(this.data.material[0]);
+    if (this.data.material && this.data.material.length > 0) {
+      this.selectedMaterial.push(this.data.material[0]);
+    }
     if (this.data && this.data._id) {
       this.filterId = this.data._id;
       const filters = this.filterService.filters.getValue();
@@ -48,6 +50,9 @@ export class FilterAddComponent implements OnInit {
               this.selectedLabels.push(label);
             }
           });
+          if (selectLabel == null) {
+            this.selectedLabels.push(null);
+          }
         });
       }
     });
@@ -139,7 +144,7 @@ export class FilterAddComponent implements OnInit {
   ngOnInit(): void {}
 
   getMaterialType(): string {
-    if (this.selectedMaterial[0].type) {
+    if (this.selectedMaterial.length > 0 && this.selectedMaterial[0].type) {
       if (this.selectedMaterial[0].type === 'application/pdf') {
         return 'PDF';
       } else if (this.selectedMaterial[0].type.includes('image')) {

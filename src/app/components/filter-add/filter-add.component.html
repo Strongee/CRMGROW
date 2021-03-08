@@ -31,21 +31,27 @@
                 {{filterCount}}
             </div>
         </div>
-        <div class="v-center mt-3" *ngIf="this.searchOption.labelCondition.length">
-            <div class="f-3 fw-600" *ngIf="this.searchOption.includeLabel; else excludeLabel">
+        <div class="d-flex align-items-start mt-3" *ngIf="this.searchOption.labelCondition.length">
+            <div class="label-type f-3 fw-600" *ngIf="this.searchOption.includeLabel; else excludeLabel">
                 Including labels
             </div>
             <ng-template #excludeLabel>
-                <div class="f-3 fw-600">
+                <div class="label-type f-3 fw-600">
                     Excluding labels
                 </div>
             </ng-template>
-            <div class="v-center">
-                <div class="v-center ml-2" *ngFor="let item of this.selectedLabels">
+            <div class="label-container v-center flex-wrap">
+                <div class="v-center mb-2 ml-2" *ngFor="let item of this.selectedLabels">
+                  <ng-container *ngIf="item; else noLabelTemplate">
                     <i class="d-block i-icon i-label mr-1"
-                        [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color">
+                       [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color">
                     </i>
                     <span class="f-3 fw-600">{{item.name}}</span>
+                  </ng-container>
+                  <ng-template #noLabelTemplate>
+                    <i class="i-icon i-label d-block mr-2" [style.backgroundColor]="'#000'"></i>
+                    <span class="f-3 fw-600 mt-1">No Label</span>
+                  </ng-template>
                 </div>
             </div>
         </div>
