@@ -174,10 +174,6 @@ export const COUNTRIES = [
     name: 'South Africa'
   },
   {
-    code: 'CA',
-    name: 'Canada'
-  },
-  {
     code: 'ES',
     name: 'Spain'
   },
