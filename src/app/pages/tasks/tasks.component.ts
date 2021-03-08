@@ -72,7 +72,6 @@ export class TasksComponent implements OnInit, OnDestroy {
   isUpdating = false;
   updateSubscription: Subscription;
   isLoading = false;
-  loadSubscription: Subscription;
 
   selecting = false;
   selectSubscription: Subscription;
@@ -84,6 +83,11 @@ export class TasksComponent implements OnInit, OnDestroy {
   completedTasks = [];
   selectedTasks = [];
   timezone;
+
+  profileSubscription: Subscription;
+  loadSubscription: Subscription;
+
+
   constructor(
     private handlerService: HandlerService,
     public taskService: TaskService,
@@ -94,7 +98,8 @@ export class TasksComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toast: ToastrService
   ) {
-    this.userService.profile$.subscribe((user) => {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
       } catch (err) {
@@ -103,7 +108,8 @@ export class TasksComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.storeService.tasks$.subscribe((tasks) => {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.storeService.tasks$.subscribe((tasks) => {
       if (tasks) {
         this.pageTasks = tasks;
         const ids = tasks.map((e) => e._id);
@@ -118,6 +124,8 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.taskService.resetOption();
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.profileSubscription && this.profileSubscription.unsubscribe();
   }
 
   loadTasks(): void {

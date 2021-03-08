@@ -33,9 +33,10 @@ export class ContactShareComponent implements OnInit {
     if (this.data) {
       this.contact = this.data.contact;
     }
-    this.userService.profile$.subscribe((res) => {
-      this.userId = res._id;
-    });
+    const profile = this.userService.profile.getValue();
+    if (profile) {
+      this.userId = profile._id;
+    }
   }
 
   selectTeam($event): void {

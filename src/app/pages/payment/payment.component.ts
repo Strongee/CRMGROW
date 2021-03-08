@@ -1,15 +1,16 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { MONTH, YEAR } from '../../constants/variable.constants';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss']
 })
-export class PaymentComponent implements OnInit {
+export class PaymentComponent implements OnInit, OnDestroy {
   // UI Variables;
   MONTHS = MONTH;
   YEARS = YEAR;
@@ -85,34 +86,43 @@ export class PaymentComponent implements OnInit {
   ];
   saving = false;
 
+  profileSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private ngZone: NgZone,
     private toast: ToastrService
   ) {
     this.loading = true;
-    this.userService.profile$.subscribe((profile) => {
-      if (profile.payment) {
-        this.userService.getPayment(profile.payment).subscribe(
-          (res) => {
-            this.loading = false;
-            this.payment = res;
-            this.card = {
-              ...res,
-              number: this.payment.last4
-            };
-          },
-          () => {
-            this.loading = false;
-          }
-        );
-      } else {
-        this.loading = false;
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        if (profile.payment) {
+          this.userService.getPayment(profile.payment).subscribe(
+            (res) => {
+              this.loading = false;
+              this.payment = res;
+              this.card = {
+                ...res,
+                number: this.payment.last4
+              };
+            },
+            () => {
+              this.loading = false;
+            }
+          );
+        } else {
+          this.loading = false;
+        }
       }
-    });
+    );
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
 
   changeLast4Code(): void {
     const number = this.card.number.replace(' ', '');

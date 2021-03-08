@@ -228,12 +228,10 @@ export class TeamService extends HttpService {
     );
   }
   acceptInvitation(teamId): Observable<any> {
-    return this.httpClient
-      .post(this.server + TEAM.ACCEPT_INVITATION + teamId, {})
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('ACCEPT TEAM INVITATION', []))
-      );
+    return this.httpClient.post(
+      this.server + TEAM.ACCEPT_INVITATION + teamId,
+      {}
+    );
   }
   declineInvitation(teamId): Observable<any> {
     return this.httpClient

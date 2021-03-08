@@ -143,6 +143,11 @@ export class AutoflowComponent
   }
 
   ngOnInit(): void {
+    this.userService.profile$.subscribe((res) => {
+      this.user_id = res._id;
+      this.arrangeAutomationData();
+    });
+
     this._id = this.route.snapshot.params['id'];
     const title = this.route.snapshot.params['title'];
     const mode = this.route.snapshot.params['mode'];
@@ -154,26 +159,7 @@ export class AutoflowComponent
       this.automation_title = title;
     }
     if (this._id) {
-      this.userService.profile$.subscribe((res) => {
-        this.user_id = res._id;
-        this.loadAutomation(this._id, this.pageSize.id, 0);
-        if (this.automation) {
-          if (this.automation.role === 'admin') {
-            this.auth = 'admin';
-          } else if (this.automation.role === 'team') {
-            if (this.automation.user === this.user_id) {
-              this.auth = 'team';
-            } else {
-              this.auth = 'shared';
-            }
-          }
-          this.created_at = this.automation.created_at;
-        } else {
-          this.auth = 'owner';
-          const curDate = new Date();
-          this.created_at = curDate.toISOString();
-        }
-      });
+      this.loadAutomation(this._id, this.pageSize.id, 0);
     } else {
       this.auth = 'owner';
       const curDate = new Date();
@@ -208,7 +194,7 @@ export class AutoflowComponent
           this.automation = res;
           this.contacts = this.automation.contacts.count;
           const mode = this.route.snapshot.params['mode'];
-
+          this.arrangeAutomationData();
           if (this.automation.contacts.contacts.length) {
             this.assignedContactLoading = true;
             this.automationService
@@ -241,6 +227,25 @@ export class AutoflowComponent
       if (res) {
       }
     });
+  }
+
+  arrangeAutomationData(): void {
+    if (this.automation) {
+      if (this.automation.role === 'admin') {
+        this.auth = 'admin';
+      } else if (this.automation.role === 'team') {
+        if (this.automation.user === this.user_id) {
+          this.auth = 'team';
+        } else {
+          this.auth = 'shared';
+        }
+      }
+      this.created_at = this.automation.created_at;
+    } else {
+      this.auth = 'owner';
+      const curDate = new Date();
+      this.created_at = curDate.toISOString();
+    }
   }
 
   composeGraph(actions): void {

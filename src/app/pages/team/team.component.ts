@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { TeamService } from 'src/app/services/team.service';
@@ -31,7 +31,7 @@ import { MaterialBrowserComponent } from 'src/app/components/material-browser/ma
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss']
 })
-export class TeamComponent implements OnInit {
+export class TeamComponent implements OnInit, OnDestroy {
   loading = false;
   loadError = false;
   team;
@@ -82,6 +82,8 @@ export class TeamComponent implements OnInit {
   myContacts = [];
   otherContacts = [];
 
+  profileSubscription: Subscription;
+
   constructor(
     private teamService: TeamService,
     private userService: UserService,
@@ -96,30 +98,38 @@ export class TeamComponent implements OnInit {
   ngOnInit(): void {
     this.load();
   }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+  }
+
   load(): void {
-    this.teamId = this.route.snapshot.params['id'];
-    this.loading = true;
-    this.userService.profile$.subscribe((res) => {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
+      this.arrangeTeamData();
+    });
+
+    this.teamId = this.route.snapshot.params['id'];
+    if (this.teamId) {
+      this.loadTeam();
+    } else {
+      this.teamId = this.route.snapshot.params['team'];
       if (this.teamId) {
-        this.loadTeam();
+        this.acceptInvitation();
       } else {
-        this.teamId = this.route.snapshot.params['team'];
-        if (this.teamId) {
-          this.acceptInvitation();
+        const teamId = this.route.snapshot.queryParams['team'];
+        const userId = this.route.snapshot.queryParams['user'];
+        if (teamId && userId) {
+          this.teamId = teamId;
+          this.acceptOutRequest(teamId, userId);
         } else {
-          const teamId = this.route.snapshot.queryParams['team'];
-          const userId = this.route.snapshot.queryParams['user'];
-          if (teamId && userId) {
-            this.teamId = teamId;
-            this.acceptOutRequest(teamId, userId);
-          } else {
-            this.router.navigate(['/teams']);
-          }
+          this.router.navigate(['/teams']);
         }
       }
-    });
+    }
   }
   goToBack(): void {
     this.location.back();
@@ -130,7 +140,7 @@ export class TeamComponent implements OnInit {
     this.acceptSubscription = this.teamService
       .acceptInvitation(this.teamId)
       .subscribe(
-        (res) => {
+        () => {
           this.accepting = false;
           this.location.replaceState('/teams/' + this.teamId);
           this.loadTeam();
@@ -138,19 +148,7 @@ export class TeamComponent implements OnInit {
         (err) => {
           this.accepting = false;
           if (err.status === 400) {
-            // this.dialog
-            //   .open(NotifyComponent, {
-            //     width: '96vw',
-            //     maxWidth: '400px',
-            //     data: {
-            //       message: 'Invalid permission for this team.'
-            //     },
-            //     disableClose: true
-            //   })
-            //   .afterClosed()
-            //   .subscribe((res) => {
-            //     this.router.navigate(['/teams']);
-            //   });
+            // TODO: Invalid Permission Dialog Display
           } else {
             this.router.navigate(['/teams']);
           }
@@ -168,42 +166,41 @@ export class TeamComponent implements OnInit {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
-        const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
-        if (ownerIndex !== -1) {
-          this.role = 'owner';
-        } else if (
-          this.team.editors &&
-          this.team.editors.indexOf(this.userId) !== -1
-        ) {
-          this.role = 'editor';
-        } else {
-          this.role = 'viewer';
-        }
-        this.teamService.loadSharedContacts().subscribe(
-          (contacts) => {
-            this.loading = false;
-            if (contacts) {
-              this.sharedContacts = contacts;
-              this.sharedContacts.forEach((e) => {
-                if (e.user[0]._id === this.userId) {
-                  this.myContacts.push(e);
-                } else {
-                  this.otherContacts.push(e);
-                }
-              });
-              console.log('MyContacts', this.myContacts, this.otherContacts);
-            }
-          },
-          (err) => {
-            this.loading = false;
+        this.teamService.loadSharedContacts().subscribe((contacts) => {
+          this.loading = false;
+          if (contacts && contacts.length) {
+            this.sharedContacts = contacts;
           }
-        );
+          this.arrangeTeamData();
+        });
       },
-      (err) => {
+      () => {
         this.loading = false;
       }
     );
   }
+
+  arrangeTeamData(): void {
+    const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
+    if (ownerIndex !== -1) {
+      this.role = 'owner';
+    } else if (
+      this.team.editors &&
+      this.team.editors.indexOf(this.userId) !== -1
+    ) {
+      this.role = 'editor';
+    } else {
+      this.role = 'viewer';
+    }
+    this.sharedContacts.forEach((e) => {
+      if (e.user[0]._id === this.userId) {
+        this.myContacts.push(e);
+      } else {
+        this.otherContacts.push(e);
+      }
+    });
+  }
+
   shareMaterial(type): void {
     this.dialog
       .open(MaterialBrowserComponent, {

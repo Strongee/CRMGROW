@@ -71,6 +71,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   subscriptions: any = {};
 
+  profileSubscription: Subscription;
+
   constructor(
     private teamService: TeamService,
     private dialog: MatDialog,
@@ -85,7 +87,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.appointmentService.loadCalendars(false);
 
-    this.userService.profile$.subscribe((res) => {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
     });
@@ -109,6 +112,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
     for (const type in this.subscriptions) {
       this.subscriptions[type] && this.subscriptions[type].unsubscribe();
     }

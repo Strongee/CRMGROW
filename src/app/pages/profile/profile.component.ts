@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PageMenuItem } from 'src/app/utils/data.types';
@@ -13,7 +13,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   user: User = new User();
   menuItems: PageMenuItem[] = [
     { id: 'general', icon: 'i-general', label: 'Info' },
@@ -26,6 +26,9 @@ export class ProfileComponent implements OnInit {
   currentPageItem: PageMenuItem[];
   queryParamSubscription: Subscription;
 
+  profileSubscription: Subscription;
+  routeChangeSubscription: Subscription;
+
   constructor(
     private location: Location,
     private router: Router,
@@ -33,9 +36,12 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private toast: ToastrService
   ) {
-    this.userService.profile$.subscribe((profile) => {
-      this.user = profile;
-    });
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        this.user = profile;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -85,12 +91,18 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.route.params.subscribe((params) => {
+    this.routeChangeSubscription = this.route.params.subscribe((params) => {
       this.currentPage = params['page'] || this.defaultPage;
       this.currentPageItem = this.menuItems.filter(
         (item) => item.id == this.currentPage
       );
     });
+  }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.queryParamSubscription && this.queryParamSubscription.unsubscribe();
+    this.routeChangeSubscription && this.routeChangeSubscription.unsubscribe();
   }
 
   /**

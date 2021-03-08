@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TeamService } from '../../services/team.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './team-list.component.html',
   styleUrls: ['./team-list.component.scss']
 })
-export class TeamListComponent implements OnInit {
+export class TeamListComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
 
   userId = '';
@@ -33,6 +33,7 @@ export class TeamListComponent implements OnInit {
   isAcceptInviting = false;
   isDeclineInviting = false;
 
+  profileSubscription: Subscription;
   constructor(
     public teamService: TeamService,
     private dialog: MatDialog,
@@ -41,11 +42,16 @@ export class TeamListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userService.profile$.subscribe((res) => {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.userId = res._id;
       this.currentUser = res;
     });
     this.load();
+  }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
   }
 
   load(): void {
