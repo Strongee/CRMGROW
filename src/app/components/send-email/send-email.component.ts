@@ -81,7 +81,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         this.mainContact = this.data.contact;
       }
       if (this.data && this.data.contacts) {
-        this.emailContacts = this.data.contacts;
+        this.emailContacts = [...this.data.contacts];
       }
     }
   }
