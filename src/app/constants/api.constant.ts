@@ -315,5 +315,6 @@ export const FILTER = {
 };
 
 export const SMS = {
-  GET: 'sms'
+  GET: 'sms',
+  SEARCH_NUMBER: 'sms/search-numbers'
 };
