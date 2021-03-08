@@ -21,6 +21,30 @@ export class AddPhoneComponent implements OnInit {
     {
       phone: '(303) 431-3303',
       location: 'Denver, CO'
+    },
+    {
+      phone: '(303) 431-3301',
+      location: 'Denver, CO'
+    },
+    {
+      phone: '(303) 431-3302',
+      location: 'Denver, CO'
+    },
+    {
+      phone: '(303) 431-3303',
+      location: 'Denver, CO'
+    },
+    {
+      phone: '(303) 431-3301',
+      location: 'Denver, CO'
+    },
+    {
+      phone: '(303) 431-3302',
+      location: 'Denver, CO'
+    },
+    {
+      phone: '(303) 431-3303',
+      location: 'Denver, CO'
     }
   ];
   constructor(

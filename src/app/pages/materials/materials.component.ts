@@ -233,7 +233,11 @@ export class MaterialsComponent implements OnInit {
   }
 
   createMaterial(type): void {
-    this.router.navigate([`./materials/${type}`]);
+    if (this.selectedFolder) {
+      this.router.navigate([`./materials/${type}/${this.selectedFolder._id}`]);
+    } else {
+      this.router.navigate([`./materials/${type}`]);
+    }
   }
 
   sendMaterial(material: Material): void {

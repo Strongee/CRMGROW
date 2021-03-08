@@ -102,6 +102,13 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
+    path: 'materials/:mode/:folder',
+    component: VideoCreateComponent,
+    data: {
+      title: 'Materials'
+    }
+  },
+  {
     path: 'materials/analytics/:id',
     component: AnalyticsMaterialComponent,
     data: {

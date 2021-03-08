@@ -11,7 +11,7 @@ import { MaterialService } from '../../services/material.service';
   styleUrls: ['./delete-folder.component.scss']
 })
 export class DeleteFolderComponent implements OnInit {
-  currentOption = 'only-folder';
+  currentOption = 'remove-all';
   selectedFolder: Material = new Material();
   rootFolder: Material = new Material().deserialize({ _id: 'root' });
   folders: Material[] = [];
@@ -59,7 +59,7 @@ export class DeleteFolderComponent implements OnInit {
   delete(): void {
     this.submitted = true;
     if (this.currentOption === 'move-other') {
-      if (!this.selectedFolder) {
+      if (!this.selectedFolder._id) {
         return;
       }
     }

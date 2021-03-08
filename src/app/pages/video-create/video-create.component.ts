@@ -74,6 +74,7 @@ export class VideoCreateComponent implements OnInit {
   uploaded_time = 0;
   themeSaving = false;
   focusedField = '';
+  currentFolder = '';
 
   themes = [
     {
@@ -143,6 +144,7 @@ export class VideoCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.mode = this.route.snapshot.params['mode'];
+    this.currentFolder = this.route.snapshot.params['folder'];
     this.tabs.forEach((tab) => {
       if (tab.id == this.mode) {
         this.changeTab(tab);
@@ -210,6 +212,9 @@ export class VideoCreateComponent implements OnInit {
       try {
         if (status == 200) {
           this.image.preview = this.upload_thumbnail;
+          if (this.currentFolder !== '') {
+            this.image['folder'] = this.currentFolder;
+          }
           response = JSON.parse(response);
           this.image._id = response['data']._id;
           this.materialService
@@ -409,6 +414,9 @@ export class VideoCreateComponent implements OnInit {
     newVideo.site_image = this.video['site_image'];
     newVideo.custom_thumbnail = this.video['custom_thumbnail'];
     this.video['url'] = video.url;
+    if (this.currentFolder !== '') {
+      newVideo['folder'] = this.currentFolder;
+    }
     this.materialService.uploadVideoDetail(videoId, newVideo).subscribe(
       (res) => {
         this.uploading = false;
@@ -436,6 +444,9 @@ export class VideoCreateComponent implements OnInit {
     newPdf.description = this.pdf.description;
     newPdf.preview = this.upload_thumbnail;
     this.pdf['url'] = pdf.url;
+    if (this.currentFolder !== '') {
+      newPdf['folder'] = this.currentFolder;
+    }
     this.materialService.updatePdf(pdfId, newPdf).subscribe(
       (res) => {
         this.uploading = false;

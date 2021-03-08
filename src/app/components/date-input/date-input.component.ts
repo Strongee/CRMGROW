@@ -23,7 +23,7 @@ export class DateInputComponent implements OnInit {
     if (val) {
       this.dateObj = val;
       this.dateString =
-        this.dateObj.year + '-' + this.dateObj.month + '-' + this.dateObj.day;
+        this.dateObj.month + '-' + this.dateObj.day + '-' + this.dateObj.year;
     } else {
       this.dateObj = null;
       this.dateString = '';
