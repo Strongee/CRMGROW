@@ -3,3 +3,10 @@
     height: 20px;
     border-radius: 3px;
 }
+
+.label-type {
+  max-width: 150px;
+}
+.label-container {
+  max-width: calc(100% - 150px);
+}
