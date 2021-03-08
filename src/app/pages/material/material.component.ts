@@ -214,7 +214,7 @@ export class MaterialComponent implements OnInit {
   }
 
   createVideo(): void {
-    this.router.navigate([`./materials/${this.selectedTab.id}`]);
+    this.router.navigate([`./materials/create/${this.selectedTab.id}`]);
   }
 
   goToBack(): void {

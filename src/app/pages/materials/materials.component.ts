@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
@@ -25,6 +25,7 @@ import { FolderComponent } from 'src/app/components/folder/folder.component';
 import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
+import { HandlerService } from 'src/app/services/handler.service';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -66,6 +67,7 @@ export class MaterialsComponent implements OnInit {
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
   materialDeleteSubscription: Subscription;
+  routeChangeSubscription: Subscription;
 
   // Folders
   folders: Material[] = [];
@@ -83,12 +85,14 @@ export class MaterialsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     public storeService: StoreService,
+    private handlerService: HandlerService,
     public materialService: MaterialService,
     private userService: UserService,
     public teamService: TeamService,
     private toast: ToastrService,
     private router: Router,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private route: ActivatedRoute
   ) {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -104,37 +108,55 @@ export class MaterialsComponent implements OnInit {
       this.captureImages = garbage['capture_images'] || [];
       this.editedImages = garbage['edited_image'] || [];
     });
-    this.loadSubscription = this.storeService.materials$.subscribe(
-      (materials) => {
-        materials.sort((a, b) => (a.folder ? -1 : 1));
-        this.materials = materials;
-        this.materials = _.uniqBy(this.materials, '_id');
-        const folders = materials.filter((e) => {
-          return e.material_type === 'folder';
-        });
-        this.folders = folders;
-        this.folders.forEach((folder) => {
-          this.foldersKeyValue[folder._id] = { ...folder };
-        });
-        const materialFolderMatch = {};
-        folders.forEach((folder) => {
-          folder.shared_materials.forEach((e) => {
-            materialFolderMatch[e] = folder._id;
+
+    this.routeChangeSubscription = this.route.params.subscribe((params) => {
+      const folder_id = params['folder'];
+
+      this.loadSubscription && this.loadSubscription.unsubscribe();
+      this.loadSubscription = this.storeService.materials$.subscribe(
+        (materials) => {
+          materials.sort((a, b) => (a.folder ? -1 : 1));
+          this.materials = materials;
+          this.materials = _.uniqBy(this.materials, '_id');
+          const folders = materials.filter((e) => {
+            return e.material_type === 'folder';
           });
-        });
-        materials.forEach((e) => {
-          if (materialFolderMatch[e._id]) {
-            e.folder = materialFolderMatch[e._id];
+          this.folders = folders;
+          this.folders.forEach((folder) => {
+            this.foldersKeyValue[folder._id] = { ...folder };
+          });
+          const materialFolderMatch = {};
+          folders.forEach((folder) => {
+            folder.shared_materials.forEach((e) => {
+              materialFolderMatch[e] = folder._id;
+            });
+          });
+          materials.forEach((e) => {
+            if (materialFolderMatch[e._id]) {
+              e.folder = materialFolderMatch[e._id];
+            }
+          });
+          if (folder_id && folder_id !== 'root') {
+            this.openFolder(this.foldersKeyValue[folder_id]);
+          } else {
+            this.selectedFolder = null;
+            this.filter();
           }
-        });
-        this.filter();
-      }
-    );
+        }
+      );
+    });
   }
 
   ngOnInit(): void {
-    this.materialService.loadMaterial(true);
-    this.teamService.loadAll(true);
+    if (
+      !this.handlerService.previousUrl ||
+      this.handlerService.previousUrl.indexOf('/materials') === -1 ||
+      this.handlerService.previousUrl.indexOf('/materials/create') !== -1 ||
+      this.handlerService.previousUrl.indexOf('/materials/analytics') !== -1
+    ) {
+      this.materialService.loadMaterial(true);
+      this.teamService.loadAll(true);
+    }
     this.convertLoaderTimer = setInterval(() => {
       if (this.convertingVideos.length) {
         this.loadConvertingStatus();
@@ -234,9 +256,11 @@ export class MaterialsComponent implements OnInit {
 
   createMaterial(type): void {
     if (this.selectedFolder) {
-      this.router.navigate([`./materials/${type}/${this.selectedFolder._id}`]);
+      this.router.navigate([
+        `./materials/create/${type}/${this.selectedFolder._id}`
+      ]);
     } else {
-      this.router.navigate([`./materials/${type}`]);
+      this.router.navigate([`./materials/create/${type}`]);
     }
   }
 
