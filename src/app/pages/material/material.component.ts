@@ -109,7 +109,6 @@ export class MaterialComponent implements OnInit {
   ngOnInit(): void {
     this.mode = this.route.snapshot.params['id'];
     this.currentFolder = this.route.snapshot.params['folderId'];
-    console.log("current folder =================>", this.currentFolder);
     this.materialService.loadVideos(true);
     this.materialService.loadPdfs(true);
     this.materialService.loadImages(true);
