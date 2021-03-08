@@ -13,7 +13,7 @@
                 <label class="op-40 mb-0">Title</label>
                 <span
                     class="invalid-error f-3 c-red ml-auto"
-                    *ngIf="title == '' && dealForm.submitted"
+                    *ngIf="(title == '' || title.trim() == '') && dealForm.submitted"
                 >
                     Required!
                 </span>

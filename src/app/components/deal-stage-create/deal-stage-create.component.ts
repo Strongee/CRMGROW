@@ -22,7 +22,7 @@ export class DealStageCreateComponent implements OnInit {
   ngOnInit(): void {}
 
   createStages(): void {
-    if (this.title == '') {
+    if (this.title === '' || this.title.trim() === '') {
       return;
     } else {
       this.saving = true;
