@@ -1071,6 +1071,7 @@ export class DealsDetailComponent implements OnInit {
             });
           this.activities = _.uniqBy(activities, '_id');
           this.arrangeActivity();
+          this.changeTab(this.tab);
         }
       });
   }
