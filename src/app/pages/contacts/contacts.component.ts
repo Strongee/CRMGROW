@@ -45,8 +45,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
     'contact_phone'
   ];
   SORT_TYPES = [
-    { id: 'alpha_down', label: 'Alphabetical Z-A' },
-    { id: 'alpha_up', label: 'Alphabetical A-Z' },
+    { id: 'alpha_up', label: 'Alphabetical Z-A' },
+    { id: 'alpha_down', label: 'Alphabetical A-Z' },
     { id: 'last_added', label: 'Last added' },
     { id: 'last_active', label: 'Recent active' }
   ];
@@ -61,7 +61,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   @ViewChild('editPanel') editPanel: ContactBulkComponent;
   panelType = '';
 
-  sortType = this.SORT_TYPES[0];
+  sortType = this.SORT_TYPES[1];
   pageSize = this.PAGE_COUNTS[3];
   page = 1;
   searchOption: SearchOption = new SearchOption();
