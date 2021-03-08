@@ -138,6 +138,7 @@ import { PurchaseMessageComponent } from './purchase-message/purchase-message.co
 import { AddPhoneComponent } from './add-phone/add-phone.component';
 import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
 import { SendTextComponent } from './send-text/send-text.component';
+import { InputEmailChipComponent } from './input-email-chip/input-email-chip.component';
 
 @NgModule({
   declarations: [
@@ -274,7 +275,8 @@ import { SendTextComponent } from './send-text/send-text.component';
     PurchaseMessageComponent,
     AddPhoneComponent,
     DeleteFolderComponent,
-    SendTextComponent
+    SendTextComponent,
+    InputEmailChipComponent
   ],
   imports: [
     CommonModule,
@@ -364,7 +366,8 @@ import { SendTextComponent } from './send-text/send-text.component';
     InputContactChipComponent,
     GlobalSearchComponent,
     PurchaseMessageComponent,
-    AddPhoneComponent
+    AddPhoneComponent,
+    InputEmailChipComponent
   ],
   bootstrap: [
     ContactCreateComponent,
