@@ -364,7 +364,6 @@ export class DealsDetailComponent implements OnInit {
           bottom: '0px',
           right: '0px'
         },
-        width: '100vw',
         panelClass: 'send-email',
         backdropClass: 'cdk-send-email',
         disableClose: false,

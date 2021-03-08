@@ -37,19 +37,19 @@
           </div>
           <div class="v-center pl-3 py-2 email-cc address-wrapper" *ngIf="ccFlag">
             <label class="f-6 text-uppercase op-56 m-0">cc:</label>
-            <app-input-contacts
+            <app-input-email-chip
               [selectedContacts]="ccContacts"
               (onSelect)="checkDuplication('cc')"
               class="w-100 ml-2"
-            ></app-input-contacts>
+            ></app-input-email-chip>
           </div>
           <div class="v-center pl-3 py-2 email-bcc address-wrapper" *ngIf="bccFlag">
             <label class="f-6 text-uppercase op-56 m-0">bcc:</label>
-            <app-input-contacts
+            <app-input-email-chip
               [selectedContacts]="bccContacts"
               (onSelect)="checkDuplication('bcc')"
               class="w-100 ml-2"
-            ></app-input-contacts>
+            ></app-input-email-chip>
           </div>
         </div>
         <div class="email-title px-3 py-2 position-relative" (click)="blueAll()">

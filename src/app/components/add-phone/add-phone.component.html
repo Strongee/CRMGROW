@@ -1,0 +1,45 @@
+<div class="v-center justify-content-between">
+  <h1 mat-dialog-title class="m-0">
+    Add phone number
+  </h1>
+  <button class="v-center border-0 bgc-trans p-0" mat-dialog-close>
+    <i class="d-block i-icon i-close bgc-dark"></i>
+  </button>
+</div>
+<mat-dialog-content>
+  <div class="f-3 font-weight-bold c-black mt-3">
+    Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna. Ut laoreet sodales nisi, quis iaculis nulla iaculis vitae..
+  </div>
+  <div class="form-group my-4">
+    <div class="ml-2">
+      <div class="f-3">Which local area code are you looking for?</div>
+      <div class="row">
+        <div class="col-sm-8 col-12 search-phone-wrapper v-center mt-2">
+          <input type="text" class="form-control" [(ngModel)]="searchCode" name="search-phone" id="search-phone" placeholder="e.g.123"/>
+          <button class="search-button btn btn-primary v-center ml-2" (click)="searchPhone()">
+            <i class="i-icon i-search d-block bgc-white"></i>
+          </button>
+        </div>
+      </div>
+      <div class="phones-container mt-2">
+        <div class="phone-wrapper v-center mb-1" *ngFor="let phone of suggestPhones; let i = index">
+          <div class="custom-radio-container mr-3" (click)="selectPhone(phone)">
+            <input class="custom-radio" type="radio" [id]="'select-phone-' + i" [name]="'select-phone-' + i" [checked]="isSelected(phone)">
+            <label class="f-6 font-weight-bold"></label>
+          </div>
+          <div class="v-center ml-4 mt-3 c-pointer" (click)="selectPhone(phone)">
+            <i class="i-icon i-phone d-block bgc-dark"></i>
+            <div class="ml-2">
+              <div class="f-3 font-weight-bold">{{phone.phone}}</div>
+              <div class="f-3">{{phone.location}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn btn-white c-blue font-weight-bold" mat-dialog-close>Cancel</button>
+  <button class="btn btn-primary f-6 font-weight-bold px-3 ml-2" (click)="save()">Save</button>
+</mat-dialog-actions>

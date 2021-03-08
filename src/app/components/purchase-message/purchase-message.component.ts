@@ -9,9 +9,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class PurchaseMessageComponent implements OnInit {
   currentType = 'medium';
   plans = [
-    { type: 'mini', sms: '150', price: '5' },
-    { type: 'medium', sms: '150', price: '13' },
-    { type: 'maxi', sms: '150', price: '16' }
+    { type: 'mini', sms: '250', price: '6' },
+    { type: 'medium', sms: '500', price: '10' },
+    { type: 'maxi', sms: '1000', price: '15' }
   ];
 
   constructor(

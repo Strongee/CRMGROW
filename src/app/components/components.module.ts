@@ -135,8 +135,10 @@ import { DetailErrorComponent } from './detail-error/detail-error.component';
 import { MaterialBrowserComponent } from './material-browser/material-browser.component';
 import { GlobalSearchComponent } from './global-search/global-search.component';
 import { PurchaseMessageComponent } from './purchase-message/purchase-message.component';
+import { AddPhoneComponent } from './add-phone/add-phone.component';
 import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
 import { SendTextComponent } from './send-text/send-text.component';
+import { InputEmailChipComponent } from './input-email-chip/input-email-chip.component';
 
 @NgModule({
   declarations: [
@@ -271,8 +273,10 @@ import { SendTextComponent } from './send-text/send-text.component';
     MaterialBrowserComponent,
     GlobalSearchComponent,
     PurchaseMessageComponent,
+    AddPhoneComponent,
     DeleteFolderComponent,
-    SendTextComponent
+    SendTextComponent,
+    InputEmailChipComponent
   ],
   imports: [
     CommonModule,
@@ -361,7 +365,9 @@ import { SendTextComponent } from './send-text/send-text.component';
     SelectCalendarComponent,
     InputContactChipComponent,
     GlobalSearchComponent,
-    PurchaseMessageComponent
+    PurchaseMessageComponent,
+    AddPhoneComponent,
+    InputEmailChipComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -10,15 +10,3 @@ textarea {
         }
     }
 }
-
-
-:host ::ng-deep {
-    .chip {
-        background-color: blue!important;
-        color: white!important;
-
-        .info {
-            padding: 2px;
-        }
-    }
-}
