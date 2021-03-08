@@ -109,6 +109,7 @@ export class AutoflowComponent
   ];
   pageSize = this.PAGE_COUNTS[0];
   page = 1;
+  searchStr = '';
   selecting = false;
   selectSubscription: Subscription;
   selectSource = '';
@@ -1604,6 +1605,14 @@ export class AutoflowComponent
       const newPage = Math.floor(skipped / this.pageSize.id) + 1;
       this.changePage(newPage);
     }
+  }
+
+  changeSearchStr(): void {
+    this.contactService.searchStr.next(this.searchStr);
+  }
+
+  clearSearchStr(): void {
+    this.contactService.searchStr.next('');
   }
 
   openContact(contact: ContactActivity): void {

@@ -287,6 +287,10 @@
   }
 }
 
+.search-form {
+  width: 250px;
+}
+
 :host ::ng-deep {
   .page-table {
     thead tr:first-child th {
