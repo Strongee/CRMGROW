@@ -1227,5 +1227,5 @@ export const AUTOMATION_ICONS = {
   WATCHED_VIDEO: '../../../assets/img/automations/watched_video.svg',
   WATCHED_PDF: '../../../assets/img/automations/watched_pdf.svg',
   WATCHED_IMAGE: '../../../assets/img/watch_image.png',
-  OPENED_EMAIL: '../../../assets/img/automations/opended_email.svg'
+  OPENED_EMAIL: '../../../assets/img/automations/opened_email.svg'
 };

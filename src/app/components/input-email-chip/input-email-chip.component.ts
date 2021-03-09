@@ -238,7 +238,6 @@ export class InputEmailChipComponent implements OnInit {
     this.formControl.setValue(null);
     this.keyword = '';
     this.optionsFocused = false;
-    console.log("on select ==========>", this.selectedContacts);
   }
 
   onActiveOption(event: MatAutocompleteActivatedEvent): void {
@@ -314,7 +313,6 @@ export class InputEmailChipComponent implements OnInit {
     this.formControl.setValue(null);
     this.keyword = '';
     this.optionsFocused = false;
-    console.log("on add ==========>", this.selectedContacts);
   }
 
   isContact(contact): any {

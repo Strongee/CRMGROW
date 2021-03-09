@@ -27,7 +27,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   userId = '';
   currentUser: User;
-  hasOwnTeam = true;
+  hasOwnTeam = false;
   role = '';
 
   isAcceptInviting = false;
@@ -58,15 +58,16 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.teamService.loadAll(true);
     this.teamService.loadInvites(true);
     this.teamService.teams$.subscribe((res) => {
-      if (res && res.length) {
-        for (const team of res) {
-          if (team.owner && team.owner.length) {
+      const teams = this.teamService.teams.getValue();
+      for (const team of teams) {
+        if (team.owner && team.owner.length > 0) {
+          const index = team.owner.findIndex((item) => item._id === this.userId);
+          if (index >= 0) {
             this.hasOwnTeam = true;
             return;
           }
         }
       }
-      this.hasOwnTeam = false;
     });
   }
 

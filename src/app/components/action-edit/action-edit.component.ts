@@ -342,11 +342,11 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   }
 
   toggleMaterial(material): void {
-    if (material) {
-      if (material._id !== this.material._id) {
-        this.material = material;
-      } else {
-        this.material = undefined;
+    if (this.material && this.material._id) {
+      if (material) {
+        if (material._id !== this.material._id) {
+          this.material = material;
+        }
       }
     }
   }
