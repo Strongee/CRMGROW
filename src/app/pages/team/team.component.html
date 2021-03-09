@@ -237,7 +237,9 @@
                   <div class="label-cell status">
                     <select (change)="toggleMember(member)"
                             class="c-white f-1 font-weight-bold"
-                            [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
+                            [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
+                            [disabled]="role == 'owner'"
+                    >
                       <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
                         Viewer
                       </option>
@@ -940,7 +942,7 @@
                 >
                   Share PDF
                 </button>
-                
+
               </div>
             </mat-tab>
             <mat-tab label="image">
@@ -954,7 +956,7 @@
                 >
                   Share image
                 </button>
-                
+
               </div>
             </mat-tab>
             <mat-tab label="template">
@@ -968,7 +970,7 @@
                 >
                   Share template
                 </button>
-                
+
               </div>
             </mat-tab>
             <mat-tab label="automation">
@@ -990,9 +992,9 @@
               </ng-template>
               <div class="contact-list-wrapper list-wrapper tab-panel mt-3">
                 <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto"
-                  
+
                 >Share Contact</button>
-                
+
               </div>
             </mat-tab>
           </mat-tab-group>

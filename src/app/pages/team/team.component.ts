@@ -181,17 +181,29 @@ export class TeamComponent implements OnInit, OnDestroy {
   }
 
   arrangeTeamData(): void {
-    const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
-    if (ownerIndex !== -1) {
-      this.role = 'owner';
-    } else if (
-      this.team.editors &&
-      this.team.editors.indexOf(this.userId) !== -1
-    ) {
-      this.role = 'editor';
+    if (this.team && this.team.owner) {
+      const ownerIndex = _.findIndex(this.team.owner, { _id: this.userId });
+      if (ownerIndex !== -1) {
+        this.role = 'owner';
+      } else if (
+        this.team.editors &&
+        this.team.editors.indexOf(this.userId) !== -1
+      ) {
+        this.role = 'editor';
+      } else {
+        this.role = 'viewer';
+      }
     } else {
-      this.role = 'viewer';
+      if (
+        this.team.editors &&
+        this.team.editors.indexOf(this.userId) !== -1
+      ) {
+        this.role = 'editor';
+      } else {
+        this.role = 'viewer';
+      }
     }
+
     this.sharedContacts.forEach((e) => {
       if (e.user[0]._id === this.userId) {
         this.myContacts.push(e);
