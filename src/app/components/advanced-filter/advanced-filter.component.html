@@ -28,7 +28,10 @@
         </div>
       </div>
     </div>
-    <div class="checkbox-wrapper label-options my-3 w-100">
+    <div class="form-group mt-4 mb-1">
+        <label class="mb-0">Label</label>
+    </div>
+    <div class="checkbox-wrapper label-options mb-3 w-100">
       <div class="custom-checkbox label-item">
         <input type="checkbox" class="custom-control-input" id="label-no-label" name="label-no-label"
                (change)="toggleLabels(null)" [checked]="searchOption.labelCondition.indexOf(null) !== -1">

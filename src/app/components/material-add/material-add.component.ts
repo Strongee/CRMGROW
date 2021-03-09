@@ -15,7 +15,7 @@ export class MaterialAddComponent implements OnInit {
   tabs: TabItem[] = [
     { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
     { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
-    { icon: 'i-icon i-notification', label: 'IMAGE', id: 'images' }
+    { icon: 'i-icon i-image', label: 'IMAGE', id: 'images' }
   ];
   selectedTab: TabItem = this.tabs[0];
 

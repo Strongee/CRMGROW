@@ -7,6 +7,7 @@ import { DealStageDeleteComponent } from 'src/app/components/deal-stage-delete/d
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-deals-setting',
@@ -17,7 +18,11 @@ export class DealsSettingComponent implements OnInit {
   stages: any[] = [];
   changeOrderSubscription: Subscription;
 
-  constructor(private dialog: MatDialog, public dealsService: DealsService) {
+  constructor(
+    private dialog: MatDialog,
+    public dealsService: DealsService,
+    private toastr: ToastrService
+  ) {
     this.dealsService.getStage(true);
   }
 
@@ -81,6 +86,7 @@ export class DealsSettingComponent implements OnInit {
           });
           dialog.afterClosed().subscribe((res) => {
             if (res) {
+              this.toastr.success('Deal Stage successfully deleted.');
               this.dealsService.deleteStage(id, null).subscribe((response) => {
                 if (response) {
                   this.stages.splice(idx, 1);
@@ -92,6 +98,7 @@ export class DealsSettingComponent implements OnInit {
       } else {
         this.dealsService.deleteStage(id, null).subscribe((res) => {
           if (res) {
+            this.toastr.success('Deal Stage successfully deleted.');
             this.stages.splice(idx, 1);
           }
         });

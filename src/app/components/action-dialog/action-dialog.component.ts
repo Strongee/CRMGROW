@@ -8,7 +8,8 @@ import {
   ACTION_CAT,
   TIMES,
   QuillEditor,
-  DefaultMessage, AUTOMATION_ICONS
+  DefaultMessage,
+  AUTOMATION_ICONS
 } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { Subscription } from 'rxjs';
@@ -329,11 +330,17 @@ export class ActionDialogComponent implements OnInit {
       if (this.followDueOption === 'date') {
         const time_zone = this.currentUser.time_zone;
 
-        if (this.due_date.year !== '' && this.due_date.month !== '' && this.due_date.day !== '') {
+        if (
+          this.due_date.year !== '' &&
+          this.due_date.month !== '' &&
+          this.due_date.day !== ''
+        ) {
           const due_date = new Date(
             `${this.due_date['year']}-${this.numPad(
               this.due_date['month']
-            )}-${this.numPad(this.due_date['day'])}T${this.due_time}${time_zone}`
+            )}-${this.numPad(this.due_date['day'])}T${
+              this.due_time
+            }${time_zone}`
           );
           this.dialogRef.close({
             ...this.action,
@@ -407,7 +414,11 @@ export class ActionDialogComponent implements OnInit {
           });
         } else if (this.updateFollowDueOption === 'update_due_date') {
           const time_zone = this.currentUser.time_zone;
-          if (this.update_due_date.year !== '' && this.update_due_date.month !== '' && this.update_due_date.day !== '') {
+          if (
+            this.update_due_date.year !== '' &&
+            this.update_due_date.month !== '' &&
+            this.update_due_date.day !== ''
+          ) {
             const due_date = new Date(
               `${this.update_due_date['year']}-${this.numPad(
                 this.update_due_date['month']
@@ -652,6 +663,21 @@ export class ActionDialogComponent implements OnInit {
     this.smsContentCursorStart = this.smsContentCursorStart + value.length;
     this.smsContentCursorEnd = this.smsContentCursorStart;
     field.focus();
+  }
+
+  isMaterialSetting(): any {
+    if (
+      this.type === 'send_email_video' ||
+      this.type === 'send_text_video' ||
+      this.type === 'send_email_pdf' ||
+      this.type === 'send_text_pdf' ||
+      this.type === 'send_email_image' ||
+      this.type === 'send_text_image'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   DisplayActions = [
@@ -934,7 +960,7 @@ export class ActionDialogComponent implements OnInit {
   tabs: TabItem[] = [
     { icon: 'i-icon i-video', label: 'VIDEO', id: 'videos' },
     { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdfs' },
-    { icon: 'i-icon i-notification', label: 'IMAGE', id: 'images' }
+    { icon: 'i-icon i-image', label: 'IMAGE', id: 'images' }
   ];
   selectedTab: TabItem = this.tabs[0];
 }

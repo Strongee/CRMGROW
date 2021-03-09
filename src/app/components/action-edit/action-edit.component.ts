@@ -694,6 +694,21 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     });
   }
 
+  isMaterialSetting(): any {
+    if (
+      this.type === 'send_email_video' ||
+      this.type === 'send_text_video' ||
+      this.type === 'send_email_pdf' ||
+      this.type === 'send_text_pdf' ||
+      this.type === 'send_email_image' ||
+      this.type === 'send_text_image'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   ActionName = ActionName;
 
   minDate;
