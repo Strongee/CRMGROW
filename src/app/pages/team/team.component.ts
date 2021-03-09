@@ -195,6 +195,7 @@ export class TeamComponent implements OnInit, OnDestroy {
       }
     } else {
       if (
+        this.team &&
         this.team.editors &&
         this.team.editors.indexOf(this.userId) !== -1
       ) {

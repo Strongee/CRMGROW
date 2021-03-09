@@ -169,6 +169,8 @@ export class ActionDialogComponent implements OnInit {
     // if(this.data.action.category === 'START') {
     //   this.action['period'] = 0
     // }
+    this.due_date = { ...this.minDate };
+    this.update_due_date = { ...this.minDate };
   }
 
   removeError(): void {
@@ -889,19 +891,6 @@ export class ActionDialogComponent implements OnInit {
         this.type = 'send_text_image';
       }
     }
-  }
-
-  getDateTime(): any {
-    if (this.due_date.day !== '') {
-      return (
-        this.due_date.year + '-' + this.due_date.month + '-' + this.due_date.day
-      );
-    }
-  }
-
-  setDateTime(): void {
-    this.selectedDate = moment(this.getDateTime()).format('YYYY-MM-DD');
-    close();
   }
 
   getUpdateDateTime(): any {
