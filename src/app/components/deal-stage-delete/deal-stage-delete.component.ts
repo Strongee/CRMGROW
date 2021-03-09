@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DealStage } from 'src/app/models/deal-stage.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-deal-stage-delete',
@@ -16,6 +17,7 @@ export class DealStageDeleteComponent implements OnInit {
 
   constructor(
     private dealsService: DealsService,
+    private toastr: ToastrService,
     private dialogRef: MatDialogRef<DealStageDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -43,6 +45,9 @@ export class DealStageDeleteComponent implements OnInit {
       .subscribe((res) => {
         this.saving = false;
         if (res) {
+          this.toastr.success(
+            'Deal Stage has been deleted and associated contacts has been moved to a different stage.'
+          );
           this.dialogRef.close(true);
         }
       });

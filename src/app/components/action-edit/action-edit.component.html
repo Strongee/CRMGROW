@@ -1,6 +1,13 @@
-<div class="mx-0" mat-dialog-title>
-  Edit {{ActionName[type]}}
-</div>
+<ng-container *ngIf="isMaterialSetting(); else noMaterialTitle">
+  <div class="mx-0" mat-dialog-title>
+    Choose Material
+  </div>
+</ng-container>
+<ng-template #noMaterialTitle>
+  <div class="mx-0" mat-dialog-title>
+    Edit {{ActionName[type]}}
+  </div>
+</ng-template>
 <form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? updateAction() : false"
   [class.was-validated]="submitted">
   <mat-dialog-content class="content-section" [class]="type">
@@ -137,23 +144,23 @@
                 <label>type of the task</label>
                 <div>
                   <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="task.type">
-                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                    <label class="btn px-2 rounded no-shadow" title="Task" ngbButtonLabel>
                       <input type="radio" name="options" value="task" ngbButton>
                       <i class="i-icon i-task d-block bgc-dark"></i>
                     </label>
-                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                    <label class="btn px-2 rounded no-shadow" title="Call" ngbButtonLabel>
                       <input type="radio" name="options" value="call" ngbButton>
                       <i class="i-icon i-phone d-block bgc-dark"></i>
                     </label>
-                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                    <label class="btn px-2 rounded no-shadow" title="Meeting" ngbButtonLabel>
                       <input type="radio" name="options" value="meeting" ngbButton>
                       <i class="i-icon i-lunch d-block bgc-dark"></i>
                     </label>
-                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                    <label class="btn px-2 rounded no-shadow" title="Email" ngbButtonLabel>
                       <input type="radio" name="options" value="email" ngbButton>
                       <i class="i-icon i-message d-block bgc-dark"></i>
                     </label>
-                    <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
+                    <label class="btn px-2 rounded no-shadow" title="Material" ngbButtonLabel>
                       <input type="radio" name="options" value="material" ngbButton>
                       <i class="i-icon i-video d-block bgc-dark"></i>
                     </label>
@@ -387,64 +394,16 @@
                                    || type == 'send_email_image' || type == 'send_text_image'; else noContentMaterial">
                 <div class="v-center label-group">
                   <label class="theme-label">CONTENT</label>
-                  <div ngbDropdown class="justify-content-end field-actions button-more rounded">
-                    <a class="v-center justify-content-end text-decoration-none c-pointer" ngbDropdownToggle>
-                      <span class="c-blue f-1 ml-2 mr-1 font-weight-bold">Show shortcut tokens</span>
-                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
-                    </a>
-                    <div ngbDropdownMenu class="button-more-container light">
-                      <div class="actions ml-auto">
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{user_name}')">Your Name</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{user_email}')">Your Email</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </ng-container>
               <ng-template #noContentMaterial>
                 <label class="theme-label">CONTENT</label>
-                <div class="d-flex flex-wrap field-actions mb-2">
-                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
-                          (click)="insertEmailContentValue('{user_name}')">Your Name</button>
-                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
-                          (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</button>
-                  <button type="button" class="btn btn-sm btn-white-gray font-weight-bold"
-                          (click)="insertEmailContentValue('{user_email}')">Your Email</button>
-                  <div ngbDropdown class="d-flex justify-content-end button-more rounded">
-                    <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                      <i class="i-icon i-triangle-more bgc-blue" aria-hidden="true"></i>
-                    </a>
-                    <div ngbDropdownMenu class="button-more-container light">
-                      <div class="actions ml-auto">
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{user_phone}')">Your Phone</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{contact_last_name}')">Contact Lastname</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{contact_email}')">Contact Email</button>
-                        <button type="button" class="btn btn-sm btn-white-gray font-weight-bold dropdown-item"
-                                (click)="insertEmailContentValue('{contact_phone}')">Contact Phone</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </ng-template>
               <app-html-editor
                 [(value)]="action.content"
                 placeholder="Enter email content..."
                 required="true"
+                hasToken="true"
                 [style]="{height: '240px'}"
                 #editor
               >
@@ -615,6 +574,7 @@
                 [type]="'email'"
                 [placeholder]="'Search templates'"
                 [(template)]="selectedTemplate"
+                [hasNewLink]="false"
                 (templateChange)="selectTemplate($event)">
               </app-input-template>
             </ng-container>
@@ -623,6 +583,7 @@
               <app-input-template
                 [type]="'email'"
                 [placeholder]="'Search templates'"
+                [hasNewLink]="false"
                 [(template)]="selectedTemplate"
                 (templateChange)="selectTemplate($event)">
               </app-input-template>

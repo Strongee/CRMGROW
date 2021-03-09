@@ -56,7 +56,7 @@ export class VideoCreateComponent implements OnInit {
   tabs: TabItem[] = [
     { icon: 'i-icon i-video', label: 'VIDEO', id: 'video' },
     { icon: 'i-icon i-pdf', label: 'PDF', id: 'pdf' },
-    { icon: 'i-icon i-notification', label: 'IMAGE', id: 'image' }
+    { icon: 'i-icon i-image', label: 'IMAGE', id: 'image' }
   ];
   selectedTab: TabItem = this.tabs[0];
 
