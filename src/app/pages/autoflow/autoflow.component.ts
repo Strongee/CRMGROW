@@ -683,6 +683,7 @@ export class AutoflowComponent
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toastr.success('Automation has been successfully updated.');
           for (const key in res) {
             node[key] = res[key];
           }
