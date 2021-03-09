@@ -238,7 +238,7 @@
                     <select (change)="toggleMember(member)"
                             class="c-white f-1 font-weight-bold"
                             [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
-                            [disabled]="role == 'owner'"
+                            [disabled]="role != 'owner'"
                     >
                       <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
                         Viewer
