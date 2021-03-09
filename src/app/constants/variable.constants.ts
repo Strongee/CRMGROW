@@ -1074,7 +1074,7 @@ export const BulkActions = {
   ],
   Materials: [
     {
-      label: 'Send via e-mail',
+      label: 'Send via email',
       type: 'button',
       icon: 'i-message',
       command: 'email',

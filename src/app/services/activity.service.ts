@@ -24,6 +24,8 @@ export class ActivityService extends HttpService {
   command: BehaviorSubject<any> = new BehaviorSubject(null);
   pageSize: BehaviorSubject<number> = new BehaviorSubject(20);
   pageSize$ = this.pageSize.asObservable();
+  latest: BehaviorSubject<string> = new BehaviorSubject('');
+  latest$ = this.latest.asObservable();
 
   constructor(
     errorService: ErrorService,
@@ -42,6 +44,7 @@ export class ActivityService extends HttpService {
         : this.loadStatus.next(STATUS.FAILURE);
       if (res && res['activities']) {
         this.storeService.activities.next(res['activities']);
+        this.latest.next(res['latest'] ? res['latest']['_id'] : '');
         this.command.next(command);
       }
     });
@@ -71,7 +74,8 @@ export class ActivityService extends HttpService {
           return {
             activities: (res['data']['activity_list'] || [])
               .slice(0, pageSize)
-              .map((e) => new Activity().deserialize(e))
+              .map((e) => new Activity().deserialize(e)),
+            latest: res['data']['latest']
           };
         }),
         catchError(this.handleError('LOAD ACTIVITY', null))

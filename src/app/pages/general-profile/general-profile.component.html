@@ -23,7 +23,7 @@
           <label for="email" class="mr-auto">email</label>
           <span class="error" *ngIf="email.errors">
             <ng-container *ngIf="email.errors.required">Required!</ng-container>
-            <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
+            <ng-container *ngIf="email.errors.pattern">Wrong email format!</ng-container>
           </span>
         </div>
         <input type="text" class="form-control" [(ngModel)]="userEmail" id="email" name="email" #email="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$">

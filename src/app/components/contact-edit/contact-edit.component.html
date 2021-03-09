@@ -141,7 +141,7 @@
       </div>
       <div class="row" *ngIf="panelOpenState">
         <div class="col-sm-6 col-12 form-group" [ngClass]="{invalid: form.submitted && secondEmail.invalid && (secondEmail.dirty || secondEmail.touched || form.submitted)}">
-          <label for="second_email">secondary e-mail address (optional)</label>
+          <label for="second_email">secondary email address (optional)</label>
           <input type="email" id="second_email" class="form-control" name="secondEmail" #secondEmail="ngModel" [(ngModel)]="contact.secondary_email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$"/>
           <span class="error" *ngIf="secondEmail.errors">
             <ng-container *ngIf="secondEmail.errors.pattern">Email is invalid!</ng-container>

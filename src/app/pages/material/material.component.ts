@@ -1031,7 +1031,7 @@ export class MaterialComponent implements OnInit {
 
   doAction(evt: any): void {
     switch (evt.label) {
-      case 'Send via e-mail':
+      case 'Send via email':
         const emailMaterial = [];
         if (this.selectedTab.id == 'video') {
           if (this.mode == 'provided') {

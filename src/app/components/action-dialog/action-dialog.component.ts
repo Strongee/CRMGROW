@@ -704,14 +704,14 @@ export class ActionDialogComponent implements OnInit {
     },
     {
       type: 'email',
-      title: 'Send E-mail',
+      title: 'Send Email',
       description: '',
       icon: AUTOMATION_ICONS.SEND_EMAIL,
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_email_material',
-      title: 'Send Material E-mail',
+      title: 'Send Material Email',
       description: '',
       icon: AUTOMATION_ICONS.SEND_VIDEO_EMAIL,
       category: ACTION_CAT.NORMAL
@@ -756,14 +756,14 @@ export class ActionDialogComponent implements OnInit {
     },
     {
       type: 'email',
-      title: 'Send E-mail',
+      title: 'Send Email',
       description: '',
       icon: AUTOMATION_ICONS.SEND_EMAIL,
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'send_email_video',
-      title: 'Send Video E-mail',
+      title: 'Send Video Email',
       description: '',
       icon: AUTOMATION_ICONS.SEND_VIDEO_EMAIL,
       category: ACTION_CAT.NORMAL
@@ -777,7 +777,7 @@ export class ActionDialogComponent implements OnInit {
     },
     {
       type: 'send_email_pdf',
-      title: 'Send PDF E-mail',
+      title: 'Send PDF Email',
       description: '',
       icon: AUTOMATION_ICONS.SEND_PDF_EMAIL,
       category: ACTION_CAT.NORMAL
@@ -791,7 +791,7 @@ export class ActionDialogComponent implements OnInit {
     },
     {
       type: 'send_email_image',
-      title: 'Send Image E-mail',
+      title: 'Send Image Email',
       description: '',
       icon: AUTOMATION_ICONS.SEND_IMAGE_EMAIL,
       category: ACTION_CAT.NORMAL

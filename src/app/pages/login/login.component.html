@@ -24,11 +24,11 @@
     </div>
     <form #signForm="ngForm" (ngSubmit)="signForm.form.valid ? login() : false">
       <div class="form-group" [ngClass]="{invalid: signForm.submitted && email.invalid && (email.dirty || email.touched || signForm.submitted)}">
-        <label for="email">E-Mail</label>
+        <label for="email">Email</label>
         <input type="email" tabindex="1" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
         <span class="error" *ngIf="email.errors">
-          <ng-container *ngIf="email.errors.required">E-Mail is required!</ng-container>
-          <ng-container *ngIf="email.errors.pattern">E-Mail is invalid!</ng-container>
+          <ng-container *ngIf="email.errors.required">Email is required!</ng-container>
+          <ng-container *ngIf="email.errors.pattern">Email is invalid!</ng-container>
         </span>
       </div>
       <div class="form-group" [ngClass]="{invalid: signForm.submitted && password.invalid && (password.dirty || password.touched || signForm.submitted)}">

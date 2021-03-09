@@ -37,10 +37,10 @@
         </div>
         <div class="form-group email-form" [ngClass]="{invalid: basicForm.submitted && email.invalid && (email.dirty || email.touched || basicForm.submitted)}">
           <div class="d-flex">
-            <label for="email" class="mr-auto">E-Mail</label>
+            <label for="email" class="mr-auto">Email</label>
             <span class="error" *ngIf="email.errors">
               <ng-container *ngIf="email.errors.required">Required!</ng-container>
-              <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
+              <ng-container *ngIf="email.errors.pattern">Wrong email format!</ng-container>
             </span>
             <span class="error d-inline-block" *ngIf="!checkingUser && existing">Email is already taken</span>
           </div>

@@ -398,12 +398,12 @@ export class AutomationShowFullComponent
     follow_up: 'Follow up',
     update_follow_up: 'Update Follow up',
     note: 'Create Note',
-    email: 'Send E-mail',
-    send_email_video: 'Send Video E-mail',
+    email: 'Send Email',
+    send_email_video: 'Send Video Email',
     send_text_video: 'Send Video Text',
-    send_email_pdf: 'Send PDF E-mail',
+    send_email_pdf: 'Send PDF Email',
     send_text_pdf: 'Send PDF Text',
-    send_email_image: 'Send Image E-mail',
+    send_email_image: 'Send Image Email',
     send_text_image: 'Send Image Text',
     update_contact: 'Update Contact'
   };

@@ -1,11 +1,11 @@
 <div class="smtp-container my-5 mx-5">
   <form #smtpForm="ngForm" (ngSubmit)="smtpForm.form.valid ? saveSMTP() : false">
     <div class="form-group email-form" [ngClass]="{invalid: smtpForm.submitted && email.invalid && (email.dirty || email.touched || smtpForm.submitted)}">
-      <label for="email" class="mr-auto">E-Mail</label>
+      <label for="email" class="mr-auto">EMail</label>
       <input type="email" class="form-control" [(ngModel)]="senderEmail" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"/>
       <span class="error" *ngIf="email.errors">
             <ng-container *ngIf="email.errors.required">Required!</ng-container>
-            <ng-container *ngIf="email.errors.pattern">Wrong e-mail format!</ng-container>
+            <ng-container *ngIf="email.errors.pattern">Wrong email format!</ng-container>
           </span>
     </div>
     <div class="form-group" [ngClass]="{invalid: smtpForm.submitted && username.invalid && (username.dirty || username.touched || smtpForm.submitted)}">
