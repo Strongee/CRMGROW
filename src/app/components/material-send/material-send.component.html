@@ -29,32 +29,32 @@
             <div class="v-center mt-3 material-more px-1 py-0 mx-auto" *ngIf="data.material.length > 1">
                 <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'video' && videos.length > 1; else normalVideoTemplate">
                     <i class="d-block i-icon act-videos mr-1"></i>
-                    + {{videos.length - 1}} Videos<span class="more"> More</span>
+                    + {{videos.length - 1}} Videos
                 </div>
                 <ng-template #normalVideoTemplate>
                     <div class="v-center mx-1 my-1" *ngIf="videos.length">
                         <i class="d-block i-icon act-videos mr-1"></i>
-                        + {{videos.length}} Videos<span class="more"> More</span>
+                        + {{videos.length}} Videos
                     </div>
                 </ng-template>
                 <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'pdf' && pdfs.length > 1; else normalPdfTemplate">
                     <i class="d-block i-icon act-pdfs mr-1"></i>
-                    + {{pdfs.length - 1}} Pdfs<span class="more"> More</span>
+                    + {{pdfs.length - 1}} Pdfs
                 </div>
                 <ng-template #normalPdfTemplate>
                     <div class="v-center mx-1 my-1" *ngIf="pdfs.length">
                         <i class="d-block i-icon act-pdfs mr-1"></i>
-                        + {{pdfs.length}} Pdfs<span class="more"> More</span>
+                        + {{pdfs.length}} Pdfs
                     </div>
                 </ng-template>
                 <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'image' && images.length > 1; else normalImageTemplate">
                     <i class="d-block i-icon act-images mr-1"></i>
-                    + {{images.length - 1}} Images<span class="more"> More</span>
+                    + {{images.length - 1}} Images
                 </div>
                 <ng-template #normalImageTemplate>
                     <div class="v-center mx-1 my-1" *ngIf="images.length">
                         <i class="d-block i-icon act-images mr-1"></i>
-                        + {{images.length}} Images<span class="more"> More</span>
+                        + {{images.length}} Images
                     </div>
                 </ng-template>
             </div>
