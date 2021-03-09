@@ -1,5 +1,5 @@
 <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
-  <button type="button" class="v-center btn btn-primary py-2 shadow" *ngIf="!hasOwnTeam" (click)="openForm()">
+  <button type="button" class="v-center btn btn-primary py-2 shadow" *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS" (click)="openForm()">
     <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
     <span class="fw-600 f-3">Create new team</span>
   </button>

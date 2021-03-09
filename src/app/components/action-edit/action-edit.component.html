@@ -43,8 +43,8 @@
           <div class="material-container mt-2">
             <ng-container *ngIf="!materialsLoading">
               <ng-container *ngFor="let materialItem of filterMaterials">
-                <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material._id == materialItem._id">
-                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material._id == materialItem._id">
+                <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material && material._id && material._id == materialItem._id">
+                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material && material._id && material._id == materialItem._id">
                   <div class="thumb-wrapper">
                     <img class="thumbnail" src="{{materialItem.thumbnail || materialItem.preview}}" alt="{{materialItem.title}}"/>
                   </div>
