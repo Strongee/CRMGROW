@@ -38,11 +38,11 @@ export class TasksComponent implements OnInit, OnDestroy {
     'select',
     'status',
     'contact_name',
-    'contact_address',
     'contact_label',
     'subject',
     'contact_phone',
     'deadline',
+    'contact_address',
     'action'
   ];
   TASK_ICONS = {
@@ -86,7 +86,6 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
   loadSubscription: Subscription;
-
 
   constructor(
     private handlerService: HandlerService,

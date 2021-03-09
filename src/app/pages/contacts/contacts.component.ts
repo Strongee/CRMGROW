@@ -37,12 +37,12 @@ export class ContactsComponent implements OnInit, OnDestroy {
   DISPLAY_COLUMNS = [
     'select',
     'contact_name',
-    'contact_address',
     'contact_label',
     'activity',
     'contact_tags',
     'contact_email',
-    'contact_phone'
+    'contact_phone',
+    'contact_address'
   ];
   SORT_TYPES = [
     { id: 'alpha_up', label: 'Alphabetical Z-A' },

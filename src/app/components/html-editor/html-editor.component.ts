@@ -255,6 +255,7 @@ export class HtmlEditorComponent implements OnInit {
   selectTemplate(template: Template): void {
     this.onChangeTemplate.emit(template);
     this.setValue(template.content + '<br>');
+    this.showTemplates = false;
   }
 }
 // [{ font: [] }],
