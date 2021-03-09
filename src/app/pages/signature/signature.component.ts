@@ -67,6 +67,52 @@ export class SignatureComponent implements OnInit, OnDestroy {
   }
 
   changeTemplate(template: any): void {
+    let imageCell;
+    let dataCell;
+    if (this.user.email_signature.indexOf('<table') !== -1) {
+      // Table Layout -> IMG_TEXT_HOR, TEXT_IMG_HOR
+      const signatureDom = document.createElement('div');
+      signatureDom.innerHTML = this.user.email_signature;
+      const signatureCells = signatureDom.querySelectorAll('td');
+      if (signatureCells[0].querySelector('img')) {
+        imageCell = signatureCells[0].innerHTML;
+        dataCell = signatureCells[1].innerHTML;
+      } else {
+        dataCell = signatureCells[0].innerHTML;
+        imageCell = signatureCells[1].innerHTML;
+      }
+    } else {
+      // Normal Layout -> IMG_TEXT_VER, TEXT_IMG_VER
+      const signatureDom = document.createElement('div');
+      signatureDom.innerHTML = this.user.email_signature;
+      const firstImageDom = signatureDom.querySelector('img');
+      if (firstImageDom) {
+        const firstImageEl = firstImageDom.closest('div');
+        const children = signatureDom.children;
+        let prevNodeCount = 0;
+        let prevHTML = '';
+        for (let i = 0; i < children.length; i++) {
+          if (children[i] === firstImageEl) {
+            break;
+          }
+          prevHTML += children[i].outerHTML;
+          prevNodeCount++;
+        }
+        if (prevNodeCount < children.length - 1 - prevNodeCount) {
+          imageCell = prevHTML + firstImageEl.outerHTML;
+          dataCell = this.user.email_signature.replace(imageCell, '');
+        } else {
+          dataCell = prevHTML;
+          imageCell = this.user.email_signature.replace(dataCell, '');
+        }
+      } else {
+        dataCell = this.user.email_signature;
+        imageCell = '';
+      }
+    }
+
+    let textCellHTML = '';
+    let imageCellHTML = '';
     this.currentTemplate = template.layout;
     let signature;
     switch (this.currentTemplate) {
@@ -81,13 +127,10 @@ export class SignatureComponent implements OnInit, OnDestroy {
             <tbody>
               <tr data-row="row-yu3l">
                 <td data-row="row-yu3l" rowspan="1" colspan="1">
-                  <img src="${this.user.picture_profile}" width="95" height="95">
+                  ${imageCell}
                 </td>
                 <td data-row="row-yu3l" rowspan="1" colspan="1">
-                  <div>${this.user.user_name}</div>
-                  <div>${this.user.company}</div>
-                  <div>${this.user.email}</div>
-                  <div>${this.user.phone.internationalNumber}</div>
+                  ${dataCell}
                 </td>
               </tr>
             </tbody>
@@ -111,13 +154,10 @@ export class SignatureComponent implements OnInit, OnDestroy {
             <tbody>
             <tr data-row="row-yu3l">
               <td data-row="row-yu3l" rowspan="1" colspan="1">
-                <div>${this.user.user_name}</div>
-                <div>${this.user.company}</div>
-                <div>${this.user.email}</div>
-                <div>${this.user.phone.internationalNumber}</div>
+                ${dataCell}
               </td>
               <td data-row="row-yu3l" rowspan="1" colspan="1">
-                <img src="${this.user.picture_profile}" width="95" height="95">
+                ${imageCell}
               </td>
             </tr>
             </tbody>
@@ -131,31 +171,39 @@ export class SignatureComponent implements OnInit, OnDestroy {
         this.emailEditor.quillEditor.setContents(html, 'user');
         break;
       case 'text_img_ver':
+        textCellHTML = this.clearHTML(dataCell);
+        imageCellHTML = this.clearHTML(imageCell);
+        textCellHTML = textCellHTML.replace(new RegExp('<p', 'gi'), '<div');
+        textCellHTML = textCellHTML.replace(new RegExp('</p>', 'gi'), '</div>');
+        imageCellHTML = imageCellHTML.replace(new RegExp('<p', 'gi'), '<div');
+        imageCellHTML = imageCellHTML.replace(
+          new RegExp('</p>', 'gi'),
+          '</div>'
+        );
         signature = `
           <div>
-            <div>
-              <div>${this.user.user_name}</div>
-              <div>${this.user.company}</div>
-              <div>${this.user.email}</div>
-              <div>${this.user.phone.internationalNumber}</div>
+            <div class="ql-user-profile">
+              ${textCellHTML}
             </div>
-            <div>
-              <img src="${this.user.picture_profile}" width="95" height="95">
-            </div>
+            ${imageCellHTML}
           </div>
         `;
         break;
       case 'img_text_ver':
+        textCellHTML = this.clearHTML(dataCell);
+        imageCellHTML = this.clearHTML(imageCell);
+        textCellHTML = textCellHTML.replace(new RegExp('<p', 'gi'), '<div');
+        textCellHTML = textCellHTML.replace(new RegExp('</p>', 'gi'), '</div>');
+        imageCellHTML = imageCellHTML.replace(new RegExp('<p', 'gi'), '<div');
+        imageCellHTML = imageCellHTML.replace(
+          new RegExp('</p>', 'gi'),
+          '</div>'
+        );
         signature = `
           <div>
+            ${imageCellHTML}
             <div>
-              <img src="${this.user.picture_profile}" width="95" height="95">
-            </div>
-            <div>
-              <div>${this.user.user_name}</div>
-              <div>${this.user.company}</div>
-              <div>${this.user.email}</div>
-              <div>${this.user.phone.internationalNumber}</div>
+              ${textCellHTML}
             </div>
           </div>
         `;
@@ -221,5 +269,18 @@ export class SignatureComponent implements OnInit, OnDestroy {
     const range = this.quillEditorRef.getSelection();
     this.emailEditor.quillEditor.insertEmbed(range.index, `image`, url, 'user');
     this.emailEditor.quillEditor.setSelection(range.index + 1, 0, 'user');
+  }
+
+  clearHTML(html: string): string {
+    const outerDom = document.createElement('div');
+    outerDom.innerHTML = html;
+    const pels = outerDom.querySelectorAll('p');
+    for (let i = 0; i < pels.length; i++) {
+      const attrs = pels[i].attributes;
+      for (let j = 0; j < attrs.length; j++) {
+        pels[i].removeAttribute(attrs[j].name);
+      }
+    }
+    return outerDom.innerHTML;
   }
 }
