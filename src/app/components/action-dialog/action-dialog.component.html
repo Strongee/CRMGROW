@@ -2,7 +2,7 @@
   <span *ngIf="stepIndex === 1">Select the action</span>
 <!--  <span *ngIf="stepIndex === 2">Setting the {{ActivityName[type]}}</span>-->
   <ng-container *ngIf="isMaterialSetting(); else noMaterialTitle">
-    <span *ngIf="stepIndex === 2">Choose Material</span>
+    <span *ngIf="stepIndex === 2">Choose media to email</span>
   </ng-container>
   <ng-template #noMaterialTitle>
     <span *ngIf="stepIndex === 2">Setting the {{ActivityName[type]}}</span>

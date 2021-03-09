@@ -111,7 +111,7 @@ export class AutomationsComponent implements OnInit {
     const dialog = this.dialog.open(ConfirmComponent, {
       data: {
         title: 'Delete Automation',
-        message: 'Are you sure to delete the automation?',
+        message: 'Are you sure you want to delete the automation?',
         confirmLabel: 'Delete'
       }
     });
