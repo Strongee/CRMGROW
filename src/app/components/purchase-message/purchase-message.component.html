@@ -1,13 +1,13 @@
 <div class="v-center justify-content-between">
   <h1 mat-dialog-title class="m-0">
-    Add SMS credits
+    Add SMS message credits
   </h1>
   <button class="v-center border-0 bgc-trans p-0" mat-dialog-close>
     <i class="d-block i-icon i-close bgc-dark"></i>
   </button>
 </div>
 <mat-dialog-content>
-  <div class="f-3 font-weight-bold text-center w-75 mt-3 c-black mx-auto">Use this text to explain something specific like if they clicked from the “add text” link you’d say. Add SMS credits to sent messages.</div>
+  <div class="f-3 font-weight-bold text-center w-75 mt-3 c-red mx-auto">Your account is out of SMS credits, please purchase more message credits to send out additional SMS messages.</div>
   <div class="row my-4">
     <div class="col-md-4 col-sm-12 mb-md-0 mb-sm-2 p-1" *ngFor="let plan of plans" (click)="selectPlan(plan)">
       <div class="text-center p-2 plan position-relative" [class.selected]="currentType == plan.type">
@@ -21,7 +21,10 @@
       </div>
     </div>
   </div>
-  <div class="f-3 description text-center">You will be charged $5.00. You can add more credits at any time.</div>
+  <div class="f-3 description text-center">
+    You will be charged $6.00. You can add more credits at any time.<br/>
+    This is a one time purchase, you're not opting into this for a monthly reoccuring fee
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn btn-primary f-6 font-weight-bold px-3 mx-auto mt-4" (click)="purchase()">Complete purchase</button>

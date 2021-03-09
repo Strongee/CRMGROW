@@ -364,7 +364,6 @@ export class DealsDetailComponent implements OnInit {
           bottom: '0px',
           right: '0px'
         },
-        width: '100vw',
         panelClass: 'send-email',
         backdropClass: 'cdk-send-email',
         disableClose: false,
@@ -1072,6 +1071,7 @@ export class DealsDetailComponent implements OnInit {
             });
           this.activities = _.uniqBy(activities, '_id');
           this.arrangeActivity();
+          this.changeTab(this.tab);
         }
       });
   }

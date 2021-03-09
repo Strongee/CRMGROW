@@ -21,7 +21,7 @@
           </button>
         </div>
       </div>
-      <div class="mt-2">
+      <div class="phones-container mt-2">
         <div class="phone-wrapper v-center mb-1" *ngFor="let phone of suggestPhones; let i = index">
           <div class="custom-radio-container mr-3" (click)="selectPhone(phone)">
             <input class="custom-radio" type="radio" [id]="'select-phone-' + i" [name]="'select-phone-' + i" [checked]="isSelected(phone)">

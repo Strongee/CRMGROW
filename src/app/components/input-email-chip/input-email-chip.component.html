@@ -1,0 +1,65 @@
+<div class="custom-mat-field">
+  <mat-form-field appearance="outline" floatLabel="never" class="d-block">
+    <mat-chip-list aria-label="Contact Selection" #contactList>
+      <mat-basic-chip
+        *ngFor="let contact of selectedContacts"
+        [selectable]="selectable"
+        [removable]="true"
+        (removed)="remove(contact)">
+        <ng-container *ngIf="chipType === 'block'">
+          <div class="d-flex chip c-pointer" ngbDropdown>
+            <div class="info v-center" ngbDropdownToggle>
+              <div class="f-2 font-weight-bold">{{contact[display]}}</div>
+            </div>
+            <div ngbDropdownMenu class="light py-1">
+              <ng-container *ngIf="isContact(contact); else noContactTemplate">
+                <div class="v-center px-2">
+                  <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
+                  <div class="info ml-2">
+                    <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
+                    <div class="f-2">{{contact[display]}}</div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noContactTemplate>
+                <div class="v-center p-2">
+                  <div class="info ml-2">
+                    <div class="f-2 font-weight-bold">No contact</div>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+            <div class="icon-close" matChipRemove></div>
+          </div>
+        </ng-container>
+      </mat-basic-chip>
+      <input
+        [placeholder]="placeholder"
+        #inputField
+        [formControl]="formControl"
+        [matChipInputFor]="contactList"
+        [matAutocomplete]="auto"
+        [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+        [matChipInputAddOnBlur]="false"
+        (matChipInputTokenEnd)="onAdd($event)"
+      >
+    </mat-chip-list>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="onSelectOption($event)"
+      (optionActivated)="onActiveOption($event)"
+      [autoActiveFirstOption]="onlyFromSearch"
+    >
+      <mat-option *ngFor="let item of filteredResults | async" [value]="item" class="{{optionClass}}">
+        <div class="d-flex chip py-2">
+          <div class="form-avatar rounded-circle bg-dark mr-3 mt-1">{{item.avatarName}}</div>
+          <div class="info">
+            <div class="f-5 font-weight-bold">{{item.fullName}}</div>
+            <div class="f-2">{{item['email'] || 'Undefined'}}</div>
+            <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
+          </div>
+        </div>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

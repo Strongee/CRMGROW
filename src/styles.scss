@@ -1913,7 +1913,13 @@ body {
 
 .send-email {
   overflow: auto;
-  max-width: unset!important;
+  max-width: unset !important;
+  width: 700px !important;
+
+  @media screen and (max-width: 992px) {
+    width: 100vw;
+  }
+
   mat-dialog-container {
     padding: 0;
     transform: none;
