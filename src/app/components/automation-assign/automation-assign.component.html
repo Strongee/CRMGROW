@@ -16,9 +16,9 @@
         >
         </app-select-contact>
       </div>
-      <div class="my-3">
+      <div class="my-3" *ngIf="contacts.length">
         <label>Contacts to Assign</label>
-        <div class="new-contacts-wrapper" *ngIf="contacts.length">
+        <div class="new-contacts-wrapper">
           <div class="new-member v-center py-2" *ngFor="let contact of contacts">
             <div class="v-center justify-content-between w-100">
               <div class="v-center">
