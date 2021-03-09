@@ -318,3 +318,10 @@ export const SMS = {
   GET: 'sms',
   SEARCH_NUMBER: 'sms/search-numbers'
 };
+
+export const INTEGRATION = {
+  CHECK_CALENDLY: 'integration/calendly/check-auth',
+  GET_CALENDLY: 'integration/calendly',
+  SET_EVENT: 'integration/calendly/set-event',
+  GET_TOKEN: 'integration/token'
+};

@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { ConnectService } from '../../services/connect.service';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ZapierDialogComponent } from 'src/app/components/zapier-dialog/zapier-dialog.component';
+import { CalendlyDialogComponent } from 'src/app/components/calendly-dialog/calendly-dialog.component';
+import { Garbage } from 'src/app/models/garbage.model';
+import { CalendlyListComponent } from 'src/app/components/calendly-list/calendly-list.component';
 
 @Component({
   selector: 'app-integration',
@@ -13,13 +19,20 @@ export class IntegrationComponent implements OnInit {
   user: User = new User();
   connectingMail = '';
   connectingCalendar = '';
+  garbage: Garbage = new Garbage();
 
   googleCalendars = [];
   outlookCalendars = [];
 
   profileSubscription: Subscription;
+  garbageSubscription: Subscription;
 
-  constructor(private userService: UserService, private toast: ToastrService) {
+  constructor(
+    private userService: UserService,
+    private toast: ToastrService,
+    private connectService: ConnectService,
+    private dialog: MatDialog
+  ) {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -37,12 +50,17 @@ export class IntegrationComponent implements OnInit {
         }
       }
     );
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      this.garbage = res;
+    });
   }
 
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
   }
 
   connectMail(type: string): void {
@@ -87,6 +105,60 @@ export class IntegrationComponent implements OnInit {
         'We are improving with the platform with this calendar Services. So please use another service while we are developing.'
       );
     }
+  }
+
+  connectZapier(): void {
+    this.dialog.open(ZapierDialogComponent, {
+      width: '100vw',
+      maxWidth: '800px'
+    });
+  }
+
+  copyKey(): void {
+    const key = this.garbage?.access_token;
+    const el = document.createElement('textarea');
+    el.value = key;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    this.toast.success('Copied the key to clipboard');
+  }
+
+  getToken(): void {
+    this.connectService.getToken().subscribe((res) => {
+      if (res['status'] == true) {
+        this.garbage.access_token = res['token'];
+        this.toast.success('API Key regenerated successfully.');
+      }
+    });
+  }
+
+  connectCalendly(): void {
+    this.dialog
+      .open(CalendlyDialogComponent, {
+        width: '100vw',
+        maxWidth: '850px'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          console.log('###', res);
+        }
+      });
+  }
+
+  selectCalendly(): void {
+    this.dialog.open(CalendlyListComponent, {
+      width: '100vw',
+      maxWidth: '1000px',
+      data: {
+        key: this.garbage.calendly?.id
+      }
+    });
   }
 
   showError(msg: string): void {
