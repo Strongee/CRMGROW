@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { AutomationService } from 'src/app/services/automation.service';
 import { ContactService } from 'src/app/services/contact.service';
+import { DealsService } from 'src/app/services/deals.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
@@ -14,12 +15,13 @@ import { TemplatesService } from 'src/app/services/templates.service';
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss']
 })
-export class GlobalSearchComponent implements OnInit {
+export class GlobalSearchComponent implements OnInit, OnDestroy {
   searchSubscription: Subscription;
   automationLoadSubscription: Subscription;
   templateLoadSubscription: Subscription;
   teamLoadSubscription: Subscription;
   materialLoadSubscription: Subscription;
+  dealLoadSubscription: Subscription;
   loadSubscription: Subscription[] = [];
 
   loading = {
@@ -27,7 +29,8 @@ export class GlobalSearchComponent implements OnInit {
     automations: false,
     templates: false,
     teams: false,
-    materials: false
+    materials: false,
+    deals: false
   };
 
   searchedResults = {
@@ -37,7 +40,8 @@ export class GlobalSearchComponent implements OnInit {
     teams: [],
     videos: [],
     pdfs: [],
-    images: []
+    images: [],
+    deals: []
   };
 
   selectedMainResult = '';
@@ -49,7 +53,8 @@ export class GlobalSearchComponent implements OnInit {
     private materialService: MaterialService,
     private templateService: TemplatesService,
     private automationService: AutomationService,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private dealsService: DealsService
   ) {
     this.handlerService.searchStr$.subscribe((str) => {
       if (str) {
@@ -69,6 +74,7 @@ export class GlobalSearchComponent implements OnInit {
         this.templateService.loadAll(false);
         this.automationService.loadAll(false);
         this.teamService.loadAll(false);
+        this.dealsService.getStage(false);
 
         const reg = new RegExp(str, 'gi');
 
@@ -120,6 +126,19 @@ export class GlobalSearchComponent implements OnInit {
             });
           }
         );
+
+        this.dealLoadSubscription && this.dealLoadSubscription.unsubscribe();
+        this.dealLoadSubscription = this.dealsService.stages$.subscribe(
+          (stages) => {
+            let deals = [];
+            stages.forEach((e) => {
+              deals = [...deals, ...e.deals];
+            });
+            this.searchedResults['deals'] = deals.filter((e) => {
+              return reg.test(e.title);
+            });
+          }
+        );
       }
     });
 
@@ -160,6 +179,16 @@ export class GlobalSearchComponent implements OnInit {
         }
       }
     );
+
+    this.loadSubscription[4] = this.dealsService.loadingStage$.subscribe(
+      (status) => {
+        if (status === STATUS.REQUEST || status === STATUS.NONE) {
+          this.loading['deals'] = true;
+        } else {
+          this.loading['deals'] = false;
+        }
+      }
+    );
   }
 
   isLoading(): boolean {
@@ -168,7 +197,8 @@ export class GlobalSearchComponent implements OnInit {
       this.loading['automations'] ||
       this.loading['templates'] ||
       this.loading['teams'] ||
-      this.loading['materials']
+      this.loading['materials'] ||
+      this.loading['deals']
     );
   }
 
@@ -180,7 +210,8 @@ export class GlobalSearchComponent implements OnInit {
       this.searchedResults['teams'].length +
       this.searchedResults['videos'].length +
       this.searchedResults['images'].length +
-      this.searchedResults['pdfs'].length
+      this.searchedResults['pdfs'].length +
+      this.searchedResults['deals'].length
     );
   }
 
@@ -189,4 +220,19 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.searchSubscription && this.searchSubscription.unsubscribe();
+    this.automationLoadSubscription &&
+      this.automationLoadSubscription.unsubscribe();
+    this.templateLoadSubscription &&
+      this.templateLoadSubscription.unsubscribe();
+    this.teamLoadSubscription && this.teamLoadSubscription.unsubscribe();
+    this.materialLoadSubscription &&
+      this.materialLoadSubscription.unsubscribe();
+    this.dealLoadSubscription && this.dealLoadSubscription.unsubscribe();
+    for (let i = 0; i < this.loadSubscription.length; i++) {
+      this.loadSubscription[i] && this.loadSubscription[i].unsubscribe();
+    }
+  }
 }

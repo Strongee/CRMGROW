@@ -133,10 +133,22 @@ export class NavbarComponent implements OnInit {
     this.currentSearchType = type;
   }
 
+  toggleSearchBar(): void {
+    const openSearch = this.handlerService.openSearch.getValue();
+    if (openSearch) {
+      this.handlerService.openSearch.next(false);
+    } else {
+      this.handlerService.openSearch.next(true);
+    }
+  }
   openSearchBar(): void {
     this.handlerService.openSearch.next(true);
   }
   closeSearchBar(): void {
     this.handlerService.openSearch.next(false);
+  }
+  clearSearch(): void {
+    this.keyword = '';
+    this.handlerService.searchStr.next('');
   }
 }

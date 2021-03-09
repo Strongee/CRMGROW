@@ -21,14 +21,14 @@
         <ng-container *ngFor="let item of searchedResults[selectedMainResult]">
           <ng-container [ngSwitch]="selectedMainResult">
             <ng-container *ngSwitchCase="'contacts'">
-              <a class="v-center result-item"  [routerLink]="['/contacts/' + contact._id]">
+              <a class="v-center result-item"  [routerLink]="['/contacts/' + item._id]">
                 <div class="avatar bgc-dark text-white text-center sm mr-2">{{item.avatarName}}</div>
                 <div class="f-3" [innerHTML]="item.fullName | highlight: (handlerService.searchStr$ | async)"></div>
               </a>
             </ng-container>
 
             <ng-container *ngSwitchCase="'automations'">
-              <a class="v-center result-item"  [routerLink]="['/autoflow/edit/' + contact._id]">
+              <a class="v-center result-item"  [routerLink]="['/autoflow/edit/' + item._id]">
                 <i class="i-icon i-automation d-block bgc-dark mr-2"></i>
                 <div class="f-3" [innerHTML]="item.title | highlight: (handlerService.searchStr$ | async)"></div>
               </a>
@@ -45,6 +45,13 @@
               <a class="v-center result-item" [routerLink]="['/teams/' + item._id]">
                 <i class="i-icon i-teams d-block bgc-dark mr-2"></i>
                 <div class="f-3" [innerHTML]="item.name | highlight: (handlerService.searchStr$ | async)"></div>
+              </a>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'deals'">
+              <a class="v-center result-item" [routerLink]="['/deals/' + item._id]">
+                <i class="i-icon i-deals d-block bgc-red mr-2"></i>
+                <div class="f-3" [innerHTML]="item.title | highlight: (handlerService.searchStr$ | async)"></div>
               </a>
             </ng-container>
 
@@ -130,6 +137,17 @@
               <div class="f-3" [innerHTML]="team.name | highlight: (handlerService.searchStr$ | async)"></div>
             </a>
             <a *ngIf="searchedResults['teams'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('teams')">See all</a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="searchedResults['deals'].length">
+          <h4 class="data-title">Deals</h4>
+          <div class="data-result">
+            <a class="v-center result-item" *ngFor="let deal of searchedResults['deals'] | slice: 0:3" [routerLink]="['/deals/' + deal._id]">
+              <i class="i-icon i-deals d-block bgc-red mr-2"></i>
+              <div class="f-3" [innerHTML]="deal.title | highlight: (handlerService.searchStr$ | async)"></div>
+            </a>
+            <a *ngIf="searchedResults['deals'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('deals')">See all</a>
           </div>
         </ng-container>
     

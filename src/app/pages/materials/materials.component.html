@@ -17,11 +17,11 @@
           Add new
         </div>
         <div ngbDropdownMenu>
-          <div class="dropdown-item v-center" (click)="createFolder()">
+          <div class="dropdown-item v-center" (click)="createFolder()" *ngIf="!selectedFolder">
             <i class="i-icon d-block i-folder mr-2 bgc-dark"></i>
             <span class="f-3">Folder</span>
           </div>
-          <hr class="my-0" />
+          <hr class="my-0" *ngIf="!selectedFolder"/>
           <div class="dropdown-item v-center" (click)="createMaterial('video')">
             <i class="i-icon d-block act-videos mr-2"></i>
             <span class="f-3">Video</span>

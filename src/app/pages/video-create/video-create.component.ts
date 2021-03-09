@@ -31,7 +31,7 @@ export class VideoCreateComponent implements OnInit {
   };
   video = {
     url: '',
-    title: 'Introduction to eXp Realty',
+    title: '',
     duration: 0,
     thumbnail: '',
     description: ''
@@ -832,6 +832,9 @@ export class VideoCreateComponent implements OnInit {
               this.video.thumbnail =
                 'https://img.youtube.com/vi/' + this.videoId + '/0.jpg';
             }
+
+            const title = res['items'][0]['snippet']['title'];
+            this.video.title = title;
           }
           if (res['items']) {
             this.loadedData = true;
@@ -853,6 +856,7 @@ export class VideoCreateComponent implements OnInit {
         if (res) {
           this.video.thumbnail = res[0]['thumbnail_large'];
           this.video.duration = res[0]['duration'] * 1000;
+          this.video.title = res[0]['title'];
           this.loadedData = true;
           this.videoType = 'web';
           this.uploadVideo();
