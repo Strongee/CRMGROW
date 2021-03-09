@@ -6,6 +6,7 @@ import { Template } from 'src/app/models/template.model';
 import { UserService } from 'src/app/services/user.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { ContactService } from 'src/app/services/contact.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-material-send',
@@ -30,6 +31,7 @@ export class MaterialSendComponent implements OnInit {
     private userService: UserService,
     private contactService: ContactService,
     private materialService: MaterialService,
+    private toast: ToastrService,
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -171,6 +173,7 @@ export class MaterialSendComponent implements OnInit {
       .subscribe((status) => {
         this.sending = false;
         if (status) {
+          this.toast.success('Materials has been successfully sent.');
           this.dialogRef.close();
         }
       });
@@ -223,6 +226,7 @@ export class MaterialSendComponent implements OnInit {
       .subscribe((status) => {
         this.sending = false;
         if (status) {
+          this.toast.success('Materials has been successfully sent.');
           this.dialogRef.close();
         }
       });

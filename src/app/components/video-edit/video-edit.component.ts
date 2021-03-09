@@ -61,8 +61,11 @@ export class VideoEditComponent implements OnInit {
     } else {
       this.materialService.updateVideo(this.video['_id'], video).subscribe(
         (res) => {
-          this.saving = false;
-          this.dialogRef.close(res);
+          if (res && res['status']) {
+            this.saving = false;
+            this.toast.success('Video material successfully edited.');
+            this.dialogRef.close(res);
+          }
         },
         (err) => {
           this.saving = false;
@@ -98,6 +101,7 @@ export class VideoEditComponent implements OnInit {
     this.materialService.createVideo(video).subscribe((res) => {
       if (res['data']) {
         this.saving = false;
+        this.toast.success('Video material successfully duplicated.');
         this.dialogRef.close(res['data']);
       }
     });
