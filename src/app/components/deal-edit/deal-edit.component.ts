@@ -28,6 +28,9 @@ export class DealEditComponent implements OnInit {
   ngOnInit(): void {}
 
   editDeals(): void {
+    if (this.deal.value > 9999999) {
+      return;
+    }
     const data = {
       title: this.deal.title,
       deal_stage: this.deal.deal_stage,

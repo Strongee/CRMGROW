@@ -10,7 +10,7 @@
     <mat-dialog-content>
         <div class="form-group mt-2">
             <div class="v-center">
-                <label class="mb-0">Name</label>
+                <label class="mb-0">Deal Name</label>
                 <span
                     class="invalid-error f-3 c-red ml-auto"
                     *ngIf="dealForm.submitted && dealTitle.invalid && (dealTitle.dirty || dealTitle.touched || dealForm.submitted)"
@@ -55,6 +55,12 @@
         <div class="form-group">
             <div class="v-center">
                 <label class="mb-0">value</label>
+                <span
+                    class="invalid-error f-3 c-red ml-auto"
+                    *ngIf="dealForm.submitted && this.deal.value > 9999999"
+                >
+                    Max value is 9999999
+                </span>
             </div>
             <input
                 class="form-control"
@@ -62,6 +68,9 @@
                 name="dealValue"
                 #dealValue="ngModel"
                 [(ngModel)]="deal.value"
+                min="0"
+                max="9999999"
+                required
             >
         </div>
     </mat-dialog-content>
