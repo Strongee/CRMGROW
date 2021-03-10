@@ -8,12 +8,17 @@ import { Template } from '../models/template.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 import * as _ from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TemplatesService extends HttpService {
-  constructor(errorService: ErrorService, private httpClient: HttpClient) {
+  constructor(
+    errorService: ErrorService,
+    private httpClient: HttpClient,
+    private toastr: ToastrService
+  ) {
     super(errorService);
   }
 

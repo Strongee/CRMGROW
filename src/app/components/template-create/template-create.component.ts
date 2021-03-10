@@ -6,12 +6,12 @@ import {
   OnInit,
   Output,
   ViewChild,
-  EventEmitter
+  EventEmitter,
+  ChangeDetectorRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { QuillEditorComponent } from 'ngx-quill';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { Template } from 'src/app/models/template.model';
 import { FileService } from 'src/app/services/file.service';
@@ -54,7 +54,7 @@ export class TemplateCreateComponent implements OnInit {
     private fileService: FileService,
     public templateService: TemplatesService,
     @Inject(DOCUMENT) private document: Document,
-    private toast: ToastrService
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {}
@@ -97,21 +97,20 @@ export class TemplateCreateComponent implements OnInit {
   }
 
   close(): void {
-    this.onClose.emit(true);
+    this.onClose.emit(false);
   }
 
   saveTemplate(): void {
     this.template.content = this.value;
     this.isSaving = true;
+    this.cdr.detectChanges();
     this.saveSubscription && this.saveSubscription.unsubscribe();
     this.saveSubscription = this.templateService
       .create(this.template)
       .subscribe((template) => {
         this.isSaving = false;
+        this.cdr.detectChanges();
         if (template) {
-          this.toast.show('', 'New template is created successfully.', {
-            closeButton: true
-          });
           this.templateService.create$(template);
           this.onClose.emit(true);
         }

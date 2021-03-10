@@ -80,6 +80,6 @@
 
 
 <ng-template #createNewContent>
-  <app-template-create class="w-100" [value]="value" (onClose)="closeOverlay()">
+  <app-template-create class="w-100" [value]="value" (onClose)="closeOverlay($event)">
   </app-template-create>
 </ng-template>

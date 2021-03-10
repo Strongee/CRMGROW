@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import {
+  ApplicationRef,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -21,6 +22,7 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { Template } from 'src/app/models/template.model';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { ToastrService } from 'ngx-toastr';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 // import ImageResize from 'quill-image-resize-module';
@@ -123,7 +125,9 @@ export class HtmlEditorComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef,
     private overlay: Overlay,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
+    private toast: ToastrService,
+    private appRef: ApplicationRef
   ) {
     this.templateService.loadAll(false);
   }
@@ -311,12 +315,20 @@ export class HtmlEditorComponent implements OnInit {
     }
   }
 
-  closeOverlay(): void {
+  closeOverlay(flag: boolean): void {
     if (this.overlayRef) {
       this.overlayRef.detach();
       this.overlayRef.detachBackdrop();
-      this.cdr.detectChanges();
     }
+    if (flag) {
+      this.toast.success('', 'New template is created successfully.', {
+        closeButton: true
+      });
+      setTimeout(() => {
+        this.appRef.tick();
+      }, 1);
+    }
+    this.cdr.detectChanges();
   }
 }
 // [{ font: [] }],
