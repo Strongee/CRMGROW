@@ -60,8 +60,11 @@ export class PdfEditComponent implements OnInit {
     } else {
       this.materialService.updatePdf(this.pdf['_id'], pdf).subscribe(
         (res) => {
-          this.saving = false;
-          this.dialogRef.close(res);
+          if (res && res['status']) {
+            this.saving = false;
+            this.toast.success('Pdf material successfully edited.');
+            this.dialogRef.close(res);
+          }
         },
         (err) => {
           this.saving = false;
@@ -95,6 +98,7 @@ export class PdfEditComponent implements OnInit {
     this.materialService.createPdf(pdf).subscribe((res) => {
       if (res['data']) {
         this.saving = false;
+        this.toast.success('Pdf material successfully duplicated.');
         this.dialogRef.close(res['data']);
       }
     });

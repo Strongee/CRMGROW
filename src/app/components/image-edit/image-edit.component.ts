@@ -60,8 +60,11 @@ export class ImageEditComponent implements OnInit {
     } else {
       this.materialService.updateImage(this.image['_id'], image).subscribe(
         (res) => {
-          this.saving = false;
-          this.dialogRef.close(res);
+          if (res && res['status']) {
+            this.saving = false;
+            this.toast.success('Image material successfully edited.');
+            this.dialogRef.close(res);
+          }
         },
         (err) => {
           this.saving = false;
@@ -95,6 +98,7 @@ export class ImageEditComponent implements OnInit {
     this.materialService.createImage(image).subscribe((res) => {
       if (res['data']) {
         this.saving = false;
+        this.toast.success('Image material successfully duplicated.');
         this.dialogRef.close(res['data']);
       }
     });
