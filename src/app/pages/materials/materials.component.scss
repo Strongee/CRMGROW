@@ -74,6 +74,10 @@
     background-image: url(../../../assets/img/folder.svg);
 }
 
+.material-table-container {
+  overflow: visible;
+}
+
 td {
     height: 64px;
 }
@@ -251,4 +255,10 @@ td.type-col {
 .to-root {
     text-decoration: none!important;
     color: $color-dark!important;
+}
+
+:host ::ng-deep {
+  .show.dropdown {
+    position: unset;
+  }
 }
