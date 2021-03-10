@@ -126,10 +126,13 @@ export class TeamListComponent implements OnInit, OnDestroy {
         if (res) {
           this.teamService.deleteTeam$(team._id);
           const teams = this.teamService.teams.getValue();
-          for (const item of teams) {
-            if (item.owner && item.owner.length) {
-              this.hasOwnTeam = true;
-              return;
+          for (const teamItem of teams) {
+            if (teamItem.owner && teamItem.owner.length > 0) {
+              const index = teamItem.owner.findIndex((item) => item._id === this.userId);
+              if (index >= 0) {
+                this.hasOwnTeam = true;
+                return;
+              }
             }
           }
           this.hasOwnTeam = false;

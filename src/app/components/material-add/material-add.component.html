@@ -8,9 +8,10 @@
         <div class="material-container mt-3">
           <ng-container *ngFor="let material of storeService.videos$ | async">
             <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1" [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
-              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
-              <div class="thumb-wrapper">
-                <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedMaterialIds.indexOf(material._id) !== -1">
+              <div class="thumb-wrapper video-wrapper">
+                <img [src]="material.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                <img [src]="material.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
               </div>
               <div class="material-title f-1 font-weight-bold mt-3">
                 {{material.title}}
@@ -45,7 +46,7 @@
         <div class="material-container mt-3">
           <ng-container *ngFor="let material of storeService.pdfs$ | async">
             <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1"  [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
-              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
+              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedMaterialIds.indexOf(material._id) !== -1">
               <div class="thumb-wrapper">
                 <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
               </div>
@@ -82,7 +83,7 @@
         <div class="material-container mt-3">
           <ng-container *ngFor="let material of storeService.images$ | async">
             <div class="material-item" (click)="toggleMaterial(material)" [class.active]="selectedMaterialIds.indexOf(material._id) !== -1"  [class.d-none]="hideMaterials.indexOf(material._id) !== -1">
-              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check">
+              <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="selectedMaterialIds.indexOf(material._id) !== -1">
               <div class="thumb-wrapper">
                 <img class="thumbnail" src="{{material.thumbnail || material.preview}}" alt="{{material.title}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
               </div>
@@ -135,9 +136,9 @@
         <td class="type">
           <div class="v-center border-0 bgc-trans">
             <i class="i-icon bgc-black" aria-hidden="true"
-               [class.i-video]="getMaterialType(material) === 'Video'"
-               [class.i-pdf]="getMaterialType(material) === 'PDF'"
-               [class.i-image]="getMaterialType(material) === 'Image'"
+               [class.i-video]="getMaterialType(material) == 'Video'"
+               [class.i-pdf]="getMaterialType(material) == 'PDF'"
+               [class.i-image]="getMaterialType(material) == 'Image'"
             ></i>
             <span class="f-2 ml-2">{{getMaterialType(material)}}</span>
           </div>

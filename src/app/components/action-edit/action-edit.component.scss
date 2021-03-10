@@ -33,6 +33,7 @@
   flex-shrink: 0;
   width: 50%;
   padding: 0px 5px;
+  cursor: pointer;
 
   .thumb-wrapper {
       width: 100%;
@@ -277,7 +278,7 @@ button:disabled {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   grid-row-gap: 20px;
-  max-height: calc( 65vh - 132px );
+  max-height: calc( 65vh - 220px );
   overflow: auto;
   width: 450px;
   padding-right: 20px;
@@ -292,6 +293,19 @@ button:disabled {
 
     .material-item {
       margin: 0 auto;
+    }
+  }
+
+  .thumb-wrapper.video-wrapper .preview {
+    display: none;
+  }
+
+  .thumb-wrapper.video-wrapper {
+    &:hover .preview {
+      display: block;
+    }
+    &:hover .thumbnail {
+      display: none;
     }
   }
 
@@ -310,6 +324,12 @@ button:disabled {
     }
 
     .thumbnail {
+      width: 180px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .preview {
       width: 180px;
       height: 100px;
       object-fit: cover;

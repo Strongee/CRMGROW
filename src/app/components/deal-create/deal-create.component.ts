@@ -47,7 +47,7 @@ export class DealCreateComponent implements OnInit {
   }
 
   createDeals(): void {
-    if (this.contacts.length == 0) {
+    if (this.contacts.length == 0 || this.value > 9999999) {
       return;
     } else {
       this.saving = true;

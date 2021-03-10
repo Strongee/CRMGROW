@@ -1,5 +1,5 @@
 <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="value" (ngModelChange)="updateValue($event)">
-  <label class="btn px-2 rounded no-shadow" title="Task" ngbButtonLabel>
+  <label class="btn px-2 rounded no-shadow" title="General" ngbButtonLabel>
     <input type="radio" name="options" value="task" ngbButton>
     <i class="i-icon i-task d-block bgc-dark"></i>
   </label>
@@ -15,7 +15,7 @@
     <input type="radio" name="options" value="email" ngbButton>
     <i class="i-icon i-message d-block bgc-dark"></i>
   </label>
-  <label class="btn px-2 rounded no-shadow" title="Material" ngbButtonLabel>
+  <label class="btn px-2 rounded no-shadow" title="Media" ngbButtonLabel>
     <input type="radio" name="options" value="material" ngbButton>
     <i class="i-icon i-video d-block bgc-dark"></i>
   </label>

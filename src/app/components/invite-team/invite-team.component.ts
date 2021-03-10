@@ -41,14 +41,16 @@ export class InviteTeamComponent implements OnInit {
     }
     if (this.data.referrals) {
       this.data.referrals.forEach((e) => {
-        const email = e;
-        const user_name = e.split('@')[0];
-        this.oldMembers.push(
-          new User().deserialize({
-            email,
-            user_name
-          })
-        );
+        if (e && e.email) {
+          const email = e.email;
+          const user_name = e.user_name ? e.user_name : email.split('@')[0];
+          this.oldMembers.push(
+            new User().deserialize({
+              email,
+              user_name
+            })
+          );
+        }
       });
     }
   }
