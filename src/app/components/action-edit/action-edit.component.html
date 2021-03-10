@@ -45,9 +45,18 @@
               <ng-container *ngFor="let materialItem of filterMaterials">
                 <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material && material._id && material._id == materialItem._id">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material && material._id && material._id == materialItem._id">
-                  <div class="thumb-wrapper">
-                    <img class="thumbnail" src="{{materialItem.thumbnail || materialItem.preview}}" alt="{{materialItem.title}}"/>
-                  </div>
+                  <ng-container [ngSwitch]="getMaterialType(materialItem)">
+                    <div class="thumb-wrapper video-wrapper" *ngSwitchCase="'video'">
+                      <img [src]="materialItem.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                      <img [src]="materialItem.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    </div>
+                    <div class="thumb-wrapper" *ngSwitchCase="'pdf'">
+                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/pdf_overlay.jpg');"/>
+                    </div>
+                    <div class="thumb-wrapper" *ngSwitchCase="'image'">
+                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/image_overlay.jpg');"/>
+                    </div>
+                  </ng-container>
                   <div class="material-title f-1 font-weight-bold mt-3">
                     {{materialItem.title}}
                   </div>

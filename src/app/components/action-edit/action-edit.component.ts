@@ -709,6 +709,17 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  getMaterialType(material: any): string {
+    if (material.type) {
+      if (material.type === 'application/pdf') {
+        return 'pdf';
+      } else if (material.type.includes('image')) {
+        return 'image';
+      }
+    }
+    return 'video';
+  }
+
   ActionName = ActionName;
 
   minDate;

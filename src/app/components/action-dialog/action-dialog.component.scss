@@ -85,6 +85,7 @@
 .material-item {
   flex-shrink: 0;
   padding: 0px 5px;
+  cursor: pointer;
 
   .thumb-wrapper {
       width: 100%;
@@ -351,6 +352,19 @@ button:disabled {
     }
   }
 
+  .thumb-wrapper.video-wrapper .preview {
+    display: none;
+  }
+
+  .thumb-wrapper.video-wrapper {
+    &:hover .preview {
+      display: block;
+    }
+    &:hover .thumbnail {
+      display: none;
+    }
+  }
+
   .material-item {
     width: 180px;
     position: relative;
@@ -366,6 +380,12 @@ button:disabled {
     }
 
     .thumbnail {
+      width: 180px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .preview {
       width: 180px;
       height: 100px;
       object-fit: cover;

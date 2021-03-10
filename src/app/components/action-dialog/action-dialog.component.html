@@ -83,8 +83,9 @@
               <ng-container *ngFor="let video of filterVideos">
                 <div class="material-item" (click)="toggleVideo(video)" [class.active]="action['video'] == video">
                   <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['video'] == video">
-                  <div class="thumb-wrapper">
-                    <img class="thumbnail" src="{{video.thumbnail || video.preview}}" alt="{{video.title}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                  <div class="thumb-wrapper video-wrapper">
+                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
                   </div>
                   <div class="material-title f-1 font-weight-bold mt-3">
                     {{video.title}}
