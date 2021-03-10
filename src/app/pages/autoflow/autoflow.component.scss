@@ -31,20 +31,24 @@
   flex-direction: column;
 
   &.activity {
-    height: calc(100vh - 380px);
+    height: calc(100vh - 320px);
     @media screen and (max-width: 767px) {
-      height: calc(100vh - 450px);
+      height: calc(100vh - 390px);
     }
-  
+
     @media screen and (max-width: 680px) {
-      height: calc(100vh - 410px);
+      height: calc(100vh - 360px);
     }
-  
+
     @media screen and (max-width: 576px) {
-      height: calc(100vh - 400px);
+      height: calc(100vh - 350px);
     }
   }
-  
+  &.contact {
+    height: unset;
+    overflow-x: unset;
+  }
+
 }
 
 .flows-container {
@@ -299,22 +303,22 @@
       background-color: white;
       z-index: 2;
     }
-  
+
     thead tr.table-header th {
       position: sticky;
       top: 0;
       background-color: white;
       z-index: 2;
     }
-  
+
     thead tr.loader-row {
       height: 0px;
-  
+
       th.loader-cell {
         position: sticky;
         top: 0;
         border: none;
-  
+
         .updating-status {
           position: absolute;
           background: #000000aa;

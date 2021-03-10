@@ -162,13 +162,7 @@ export class ActionDialogComponent implements OnInit {
     if (this.data.currentAction === 'email') {
       this.conditionAction = 'opened_email';
     }
-    // this.loadTemplates()
-    // if(!(this.data.action.condition && this.data.editFlag)) {
-    //   this.action['period'] = "";
-    // }
-    // if(this.data.action.category === 'START') {
-    //   this.action['period'] = 0
-    // }
+    this.action['period'] = 0;
     this.due_date = { ...this.minDate };
     this.update_due_date = { ...this.minDate };
   }
@@ -274,16 +268,22 @@ export class ActionDialogComponent implements OnInit {
 
   toggleVideo(video): void {
     this.action['video'] = video;
+    this.action['pdf'] = null;
+    this.action['image'] = null;
     this.materialError = '';
   }
 
   togglePdf(pdf): void {
     this.action['pdf'] = pdf;
+    this.action['video'] = null;
+    this.action['image'] = null;
     this.materialError = '';
   }
 
   toggleImage(image): void {
     this.action['image'] = image;
+    this.action['video'] = null;
+    this.action['pdf'] = null;
     this.materialError = '';
   }
 
