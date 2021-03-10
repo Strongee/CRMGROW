@@ -1907,6 +1907,16 @@ body {
   right: 0px;
 }
 
+.template-backdrop {
+  background: rgba(43, 43, 43, 0.2);
+}
+
+.template-panel {
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(18vh - 53px);
+}
+
 .cdk-send-email {
   background-color: transparent;
 }

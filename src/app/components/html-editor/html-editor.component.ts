@@ -8,7 +8,9 @@ import {
   NgZone,
   OnInit,
   Output,
-  ViewChild
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -17,6 +19,8 @@ import * as QuillNamespace from 'quill';
 import { promptForFiles, loadBase64, ByteToSize } from 'src/app/helper';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { Template } from 'src/app/models/template.model';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 // import ImageResize from 'quill-image-resize-module';
@@ -45,6 +49,8 @@ export class HtmlEditorComponent implements OnInit {
       this.config.toolbar.container.push(['template']);
     }
   }
+  @Input() templateSelectMethod = 'insert';
+  @Input() hasNewTemplateLink = true;
 
   @Input() value: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
@@ -52,6 +58,7 @@ export class HtmlEditorComponent implements OnInit {
   @Output() attachmentChange: EventEmitter<any> = new EventEmitter();
   @Output() onInit: EventEmitter<boolean> = new EventEmitter();
   @Output() onChangeTemplate: EventEmitter<Template> = new EventEmitter();
+  @Output() onCreateEvent: EventEmitter<string> = new EventEmitter();
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
@@ -106,18 +113,24 @@ export class HtmlEditorComponent implements OnInit {
     blotFormatter: {}
   };
 
+  @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
+  overlayRef: OverlayRef;
+  templatePortal: TemplatePortal;
+
   constructor(
     private fileService: FileService,
     public templateService: TemplatesService,
     @Inject(DOCUMENT) private document: Document,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private overlay: Overlay,
+    private _viewContainerRef: ViewContainerRef
   ) {
     this.templateService.loadAll(false);
   }
 
   ngOnInit(): void {}
 
-  setValue(value: string): void {
+  insertValue(value: string): void {
     if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
       this.emailEditor.quillEditor.focus();
       const range = this.emailEditor.quillEditor.getSelection();
@@ -135,6 +148,13 @@ export class HtmlEditorComponent implements OnInit {
       const length = this.emailEditor.quillEditor.getLength();
       this.emailEditor.quillEditor.setSelection(length, 0, 'user');
       // this.emailEditor.quillEditor.setContents(delta, 'user');
+    }
+  }
+
+  setValue(value: string): void {
+    if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
+      const delta = this.quillEditorRef.clipboard.convert({ html: value });
+      this.emailEditor.quillEditor.setContents(delta, 'user');
     }
   }
 
@@ -254,8 +274,49 @@ export class HtmlEditorComponent implements OnInit {
 
   selectTemplate(template: Template): void {
     this.onChangeTemplate.emit(template);
-    this.setValue(template.content + '<br>');
+    if (this.templateSelectMethod === 'insert') {
+      this.insertValue(template.content + '<br>');
+    } else {
+      this.setValue(template.content + '<br>');
+    }
     this.showTemplates = false;
+  }
+
+  createNew(): void {
+    this.templatePortal = new TemplatePortal(
+      this.createNewContent,
+      this._viewContainerRef
+    );
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+        return;
+      } else {
+        this.overlayRef.attach(this.templatePortal);
+        return;
+      }
+    } else {
+      this.overlayRef = this.overlay.create({
+        hasBackdrop: true,
+        backdropClass: 'template-backdrop',
+        panelClass: 'template-panel',
+        width: '96vw',
+        maxWidth: '480px'
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((event) => {
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
+    }
+  }
+
+  closeOverlay(): void {
+    if (this.overlayRef) {
+      this.overlayRef.detach();
+      this.overlayRef.detachBackdrop();
+      this.cdr.detectChanges();
+    }
   }
 }
 // [{ font: [] }],

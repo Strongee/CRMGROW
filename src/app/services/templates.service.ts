@@ -92,8 +92,8 @@ export class TemplatesService extends HttpService {
 
   create(template: Template): Observable<Template[]> {
     return this.httpClient.post(this.server + TEMPLATE.CREATE, template).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('CREATE TEMPLATE', []))
+      map((res) => res['data']),
+      catchError(this.handleError('CREATE TEMPLATE', null))
     );
   }
 
@@ -145,6 +145,12 @@ export class TemplatesService extends HttpService {
       map((res) => res['data'] || []),
       catchError(this.handleError('LOAD OWN TEMPLATE', []))
     );
+  }
+
+  create$(template): void {
+    const templates = this.templates.getValue();
+    templates.push(template);
+    this.templates.next([...templates]);
   }
 
   clear$(): void {
