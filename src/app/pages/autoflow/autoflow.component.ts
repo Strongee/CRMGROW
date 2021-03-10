@@ -41,6 +41,7 @@ import { ContactAssignAutomationComponent } from 'src/app/components/contact-ass
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bulk.component';
+import { Automation } from '../../models/automation.model';
 
 @Component({
   selector: 'app-autoflow',
@@ -1683,6 +1684,15 @@ export class AutoflowComponent
         return true;
       }
     });
+  }
+
+  duplicate(event: Event, automation: Automation): void {
+    event.stopPropagation();
+    this.router.navigate(['/automations']);
+    const _SELF = this;
+    setTimeout(function () {
+      _SELF.router.navigate(['/autoflow/new/' + automation._id]);
+    }, 30);
   }
 
   deselectAll(): void {
