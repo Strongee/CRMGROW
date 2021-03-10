@@ -14,6 +14,9 @@
       (overlayOutsideClick)="closeTemplates($event)"
     >
       <div class="templates-container">
+        <div class="template" *ngIf="hasNewTemplateLink" (click)="createNew()">
+          <a class="f-3 font-weight-bold">Create New Template ...</a>
+        </div>
         <ng-container *ngFor="let template of (templateService.templates$ | async)">
           <div class="template" *ngIf="template.type === 'email'" (click)="selectTemplate(template)">
             <div class="v-center">
@@ -74,3 +77,9 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #createNewContent>
+  <app-template-create class="w-100" [value]="value" (onClose)="closeOverlay()">
+  </app-template-create>
+</ng-template>

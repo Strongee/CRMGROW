@@ -1,0 +1,61 @@
+<div class="bg-white overlay-wrapper">
+  <h5 class="font-weight-bold">
+    Create new template
+  </h5>
+  <form  #templateForm="ngForm"
+    (ngSubmit)="templateForm.form.valid ? saveTemplate() : false"
+    [class.was-validated]="templateForm.submitted">
+    <div class="overlay-content">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text"
+          class="form-control"
+          required
+          [(ngModel)]="template.title"
+          name="title"
+          #title="ngModel" />
+        <span class="invalid-feedback"
+          *ngIf="title.errors &&
+          (title.touched || title.dirty)">Please input template name.</span>
+      </div>
+  
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text"
+          class="form-control"
+          #subjectField
+          [(ngModel)]="template.subject"
+          name="mailSubject"
+          #mailSubject="ngModel"
+          required />
+        <span class="invalid-feedback"
+          *ngIf="mailSubject.errors &&
+          (mailSubject.touched || mailSubject.dirty)">
+        Please input the email template subject.</span>
+      </div>
+    
+      <div class="form-group">
+        <label>Content</label>
+        <quill-editor
+        [placeholder]="placeholder"
+        [ngModel]="value"
+        [modules]="config"
+        [styles]="style"
+        [class]="class"
+        image-resize="true"
+        [required]="required ? true : false"
+        (onEditorCreated)="getEditorInstance($event)"
+        [formControl]="editorForm"
+        #emailEditor>
+      </quill-editor>
+      </div>
+    </div>
+  
+    <div class="d-flex justify-content-end pt-2">
+      <button class="btn c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
+      <button class="btn btn-primary font-weight-bold ml-2"
+        [class.loading]="isSaving">Save</button>
+    </div>
+  </form>
+  
+</div>

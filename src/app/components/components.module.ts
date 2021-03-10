@@ -142,6 +142,7 @@ import { ZapierDialogComponent } from './zapier-dialog/zapier-dialog.component';
 import { CalendlyDialogComponent } from './calendly-dialog/calendly-dialog.component';
 import { CalendlyListComponent } from './calendly-list/calendly-list.component';
 import { InputEmailChipComponent } from './input-email-chip/input-email-chip.component';
+import { TemplateCreateComponent } from './template-create/template-create.component';
 
 @NgModule({
   declarations: [
@@ -282,7 +283,8 @@ import { InputEmailChipComponent } from './input-email-chip/input-email-chip.com
     ZapierDialogComponent,
     CalendlyDialogComponent,
     CalendlyListComponent,
-    InputEmailChipComponent
+    InputEmailChipComponent,
+    TemplateCreateComponent
   ],
   imports: [
     CommonModule,
@@ -376,7 +378,8 @@ import { InputEmailChipComponent } from './input-email-chip/input-email-chip.com
     ZapierDialogComponent,
     CalendlyDialogComponent,
     CalendlyListComponent,
-    InputEmailChipComponent
+    InputEmailChipComponent,
+    TemplateCreateComponent
   ],
   bootstrap: [
     ContactCreateComponent,
