@@ -240,7 +240,8 @@ export const REGIONS = {
     'Washington',
     'West Virginia',
     'Wisconsin',
-    'Wyoming'
+    'Wyoming',
+    'District of Columbia'
   ],
   CA: [
     'Alberta',

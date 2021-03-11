@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AUTO_FOLLOW_DELAY } from '../../constants/variable.constants';
 import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-auto-follow-up',
@@ -17,7 +18,7 @@ export class AutoFollowUpComponent implements OnInit {
   garbage: Garbage = new Garbage();
   saving = false;
 
-  constructor(public userService: UserService) {
+  constructor(public userService: UserService, public location: Location) {
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
     });
@@ -42,5 +43,9 @@ export class AutoFollowUpComponent implements OnInit {
         this.saving = false;
       }
     );
+  }
+
+  cancel(): void {
+    this.location.back();
   }
 }
