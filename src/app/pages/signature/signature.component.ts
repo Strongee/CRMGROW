@@ -226,7 +226,7 @@ export class SignatureComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.userService.updateProfileImpl(data);
         this.saving = false;
-        this.toastr.success('Profile picture successfully uploaded.');
+        this.toastr.success('Email signature is updated successfully.');
       });
   }
 
