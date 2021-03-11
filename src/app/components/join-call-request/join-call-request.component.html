@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>New group call inquiry</h1>
+<h1 mat-dialog-title>{{type == 'edit' ? 'Edit group call inquiry' : 'New group call inquiry'}}</h1>
 <form #actionForm="ngForm" (ngSubmit)="submitted = true; actionForm.form.valid ? assignCallRequest() : false"
       [class.was-validated]="submitted">
   <mat-dialog-content class="content-section form-group">
@@ -16,7 +16,7 @@
           <label class="mb-0">Select group call leader</label>
           <div class="invalid-feedback ml-auto" [class.invalid]="!leader && submitted">Required!</div>
         </div>
-        <app-select-leader (onSelect)="changeLeader($event)"></app-select-leader>
+        <app-select-leader [leader]="leader" (onSelect)="changeLeader($event)"></app-select-leader>
       </div>
       <div class="form-group mb-2">
         <div class="v-center">
@@ -88,7 +88,7 @@
       Cancel
     </button>
     <button type="submit" class="btn btn-primary font-weight-bold f-6" [class.loading]="isLoading">
-      Send
+      {{type == 'edit' ? 'Update' : 'Send'}}
     </button>
   </mat-dialog-actions>
 </form>

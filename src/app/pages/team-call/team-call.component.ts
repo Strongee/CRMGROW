@@ -225,7 +225,26 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  edit(call): void {}
+  edit(call): void {
+    this.dialog
+      .open(JoinCallRequestComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        height: 'auto',
+        disableClose: true,
+        data: {
+          teams: this.teams,
+          type: 'edit',
+          callData: call
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.loadPageCalls('sent', this.page['sent']);
+        }
+      });
+  }
 
   complete(call): void {}
 

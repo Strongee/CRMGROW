@@ -20,11 +20,14 @@
             <div class="f-3 c-black">
               <span class="f-20 mr-1">..</span>to the root
             </div>
-          </mat-option>  
+          </mat-option>
         </ng-container>
         <mat-option *ngFor="let folder of folders" [value]="folder">
-          <div class="f-3 c-black">
-            {{folder.title}}
+          <div class="v-center">
+            <i class="i-icon i-folder d-block bgc-dark" aria-hidden="true"></i>
+            <div class="f-3 c-black ml-2">
+              {{folder.title}}
+            </div>
           </div>
         </mat-option>
       </mat-select>
