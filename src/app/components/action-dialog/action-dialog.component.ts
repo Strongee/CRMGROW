@@ -1,4 +1,10 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -23,6 +29,7 @@ import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
+import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-action-dialog',
@@ -57,7 +64,7 @@ export class ActionDialogComponent implements OnInit {
   templates;
   templateLoadError = '';
   myControl = new FormControl();
-  selectedTemplate = { subject: '', content: '' };
+  selectedTemplate: Template = new Template();
 
   // Follow Create
   due_date = {
@@ -94,6 +101,7 @@ export class ActionDialogComponent implements OnInit {
   task = new Task();
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
+  @ViewChild('searchInput') searchField: ElementRef;
   error = '';
 
   selectedFollow: any;
@@ -165,6 +173,11 @@ export class ActionDialogComponent implements OnInit {
     this.action['period'] = 0;
     this.due_date = { ...this.minDate };
     this.update_due_date = { ...this.minDate };
+
+    const _SELF = this;
+    setTimeout(() => {
+      _SELF.searchField.nativeElement.blur();
+    }, 300);
   }
 
   removeError(): void {
@@ -591,13 +604,10 @@ export class ActionDialogComponent implements OnInit {
     this.action['content'] = this.selectedTemplate.content;
   }
 
-  selectTemplate(event): void {
+  selectTemplate(event: Template): void {
     this.selectedTemplate = event;
     this.action['subject'] = this.selectedTemplate.subject;
     this.action['content'] = this.selectedTemplate.content;
-    if (this.action['content'] && this.htmlEditor) {
-      this.htmlEditor.setValue(this.action['content']);
-    }
   }
 
   /**=======================================================
@@ -872,7 +882,6 @@ export class ActionDialogComponent implements OnInit {
   }
 
   changeTab(tab: TabItem): void {
-    this.clearSearchStr();
     this.selectedTab = tab;
     if (this.material_type === 'email') {
       if (tab.id === 'videos') {

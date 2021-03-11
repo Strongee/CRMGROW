@@ -14,6 +14,8 @@ export class DealEditComponent implements OnInit {
   deal = new Deal();
   saving = false;
   saveSubscription: Subscription;
+  maxValueFlag = false;
+  decimalPointFlag = false;
 
   constructor(
     public dealsService: DealsService,
@@ -27,8 +29,23 @@ export class DealEditComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  changeValue(): void {
+    if (this.deal.value > 10000000) {
+      this.maxValueFlag = true;
+    } else {
+      this.maxValueFlag = false;
+    }
+    const values = this.deal.value.toString().split('.');
+
+    if (values && values[1]?.length > 2) {
+      this.maxValueFlag = true;
+    } else {
+      this.decimalPointFlag = false;
+    }
+  }
+
   editDeals(): void {
-    if (this.deal.value > 9999999) {
+    if (this.maxValueFlag || this.maxValueFlag) {
       return;
     }
     const data = {
