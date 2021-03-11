@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
@@ -38,6 +38,8 @@ export class NavbarComponent implements OnInit {
   ];
   currentSearchType: any = this.searchDataTypes[0];
   keyword = '';
+
+  @ViewChild('searchInput') searchInput: ElementRef;
 
   constructor(
     public userService: UserService,
@@ -139,10 +141,12 @@ export class NavbarComponent implements OnInit {
       this.handlerService.openSearch.next(false);
     } else {
       this.handlerService.openSearch.next(true);
+      this.searchInput.nativeElement.focus();
     }
   }
   openSearchBar(): void {
     this.handlerService.openSearch.next(true);
+    this.searchInput.nativeElement.focus();
   }
   closeSearchBar(): void {
     this.handlerService.openSearch.next(false);

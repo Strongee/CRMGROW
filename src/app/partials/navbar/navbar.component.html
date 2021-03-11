@@ -52,7 +52,7 @@
           <i class="i-icon i-search d-block bgc-blue"></i>
         </span>
       </div>
-      <input type="text" class="form-control fc-control bgc-trans border-0" placeholder="Search" aria-label="search" aria-describedby="search-addon" (ngModelChange)="onFilter($event)" [(ngModel)]="keyword">
+      <input type="text" class="form-control fc-control bgc-trans border-0" placeholder="Search" aria-label="search" aria-describedby="search-addon" (ngModelChange)="onFilter($event)" [(ngModel)]="keyword" #searchInput>
       <i class="i-icon i-close bgc-dark c-pointer" (click)="clearSearch()"></i>
     </div>
     <!-- Support Wrapper -->
