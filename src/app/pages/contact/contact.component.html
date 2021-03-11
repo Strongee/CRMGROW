@@ -598,7 +598,7 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.emails]?.subject}}
                           </div>
-                          <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
+                          <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content) | makeRedirect"></div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -606,7 +606,7 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.emails]?.subject}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                          <div class="f-6" [innerHTML]="(details[activity.emails]?.content || 'No Content') | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div>
                       </ng-container>
@@ -615,7 +615,7 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.emails]?.subject}}
                           </div>
-                          <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
+                          <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content) | makeRedirect"></div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -623,7 +623,7 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.emails]?.subject}}
                           </div>
-                          <div class="f-6 mb-2" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                          <div class="f-6 mb-2" [innerHTML]="(details[activity.emails]?.content || '') | makeRedirect"></div>
                           <table class="table">
                             <thead>
                               <tr>
@@ -722,7 +722,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.videos]?.preview}}"/>
                           </a>
-                          <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div> 
                       </ng-container>
@@ -744,7 +744,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.videos]?.preview}}"/>
                           </a>
-                          <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
                           <table class="table">
                             <thead>
                               <tr>
@@ -806,7 +806,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.pdfs]?.preview}}"/>
                           </a>
-                          <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div> 
                       </ng-container>
@@ -828,7 +828,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.pdfs]?.preview}}"/>
                           </a>
-                          <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                           <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                             <div class="d-flex mb-1">
                               <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
@@ -875,7 +875,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.images]?.preview}}"/>
                           </a>
-                          <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div> 
                       </ng-container>
@@ -897,7 +897,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.images]?.preview}}"/>
                           </a>
-                          <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                           <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                             <div class="d-flex mb-1">
                               <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
@@ -945,7 +945,7 @@
                             <div class="font-weight-bold">
                               {{activity.activity_detail.title}}
                             </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
@@ -957,7 +957,7 @@
                             <div class="f-6 font-weight-bold">
                               {{activity.activity_detail.title}}
                             </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || ''"></div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | makeRedirect"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
@@ -1050,7 +1050,7 @@
                               <span class="f-3"> on </span><span class="time f-3 font-weight-bold">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
                               </ng-container>
                             </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
@@ -1068,7 +1068,7 @@
                                 on <span class="time">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
                               </ng-container>
                             </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || ''"></div>
+                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | makeRedirect"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
@@ -1337,7 +1337,7 @@
                           <div class="title f-6 font-weight-bold">
                             {{detail.data_type === 'emails' ? detail.subject : detail.title}}
                           </div>
-                          <div class="f-6 detail-content" [innerHTML]="convertContent(detail.data_type === 'emails' ? detail.content : detail.description)"></div>
+                          <div class="f-6 detail-content" [innerHTML]="convertContent(detail.data_type === 'emails' ? detail.content : detail.description) | makeRedirect"></div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -1345,7 +1345,7 @@
                           <div class="title f-6 font-weight-bold">
                             {{detail.data_type === 'emails' ? detail.subject : detail.title}}
                           </div>
-                          <div class="f-6 mb-2" [innerHTML]="(detail.data_type === 'emails' ? detail.content : detail.description) || ''"></div>
+                          <div class="f-6 mb-2" [innerHTML]="(detail.data_type === 'emails' ? detail.content : detail.description) || '' | makeRedirect"></div>
                           <table class="table"
                             *ngIf="(detail.data_type === 'emails' && sendActions[detail._id].length > 1) || (detail.data_type !== 'emails' && sendActions[detail.group_id].length > 1)">
                             <thead>
@@ -1446,7 +1446,7 @@
                             <div class="font-weight-bold">
                               {{detail.title}}
                             </div>
-                            <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                            <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
@@ -1458,7 +1458,7 @@
                             <div class="f-6 font-weight-bold">
                               {{detail.title}}
                             </div>
-                            <div class="f-6" [innerHTML]="detail.description || ''"></div>
+                            <div class="f-6" [innerHTML]="detail.description || '' | makeRedirect"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
@@ -1557,7 +1557,7 @@
                               <span class="f-3"> on </span><span class="time f-3 font-weight-bold">{{detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
                               </ng-container>
                             </div>
-                            <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                            <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
@@ -1575,7 +1575,7 @@
                                 on <span class="time">{{detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
                               </ng-container>
                             </div>
-                            <div class="f-6" [innerHTML]="detail.description || ''"></div>
+                            <div class="f-6" [innerHTML]="detail.description || '' | makeRedirect"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
