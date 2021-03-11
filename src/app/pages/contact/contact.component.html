@@ -709,7 +709,9 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.videos]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.videos]?.preview}}"/>
+                          </a>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -717,7 +719,10 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.videos]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.videos]?.description || ''"></div>
+                          <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.videos]?.preview}}"/>
+                          </a>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div> 
                       </ng-container>
@@ -726,7 +731,9 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.videos]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.videos]?.preview}}"/>
+                          </a>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -734,7 +741,10 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.videos]?.title}}
                           </div>
-                          <div class="f-6 mb-2" [innerHTML]="details[activity.videos]?.description || ''"></div>
+                          <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.videos]?.preview}}"/>
+                          </a>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
                           <table class="table">
                             <thead>
                               <tr>
@@ -783,7 +793,9 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.pdfs]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.pdfs]?.preview}}"/>
+                          </a>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -791,7 +803,10 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.pdfs]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || ''"></div>
+                          <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.pdfs]?.preview}}"/>
+                          </a>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div> 
                       </ng-container>
@@ -800,7 +815,9 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.pdfs]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.pdfs]?.preview}}"/>
+                          </a>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -808,7 +825,10 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.pdfs]?.title}}
                           </div>
-                          <div class="f-6 mb-2" [innerHTML]="details[activity.pdfs]?.description || ''"></div>
+                          <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.pdfs]?.preview}}"/>
+                          </a>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
                           <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                             <div class="d-flex mb-1">
                               <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
@@ -842,7 +862,9 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.images]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                          <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.images]?.preview}}"/>
+                          </a>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -850,7 +872,10 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.images]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
+                          <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.images]?.preview}}"/>
+                          </a>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div> 
                       </ng-container>
@@ -859,7 +884,9 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.images]?.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                          <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.images]?.preview}}"/>
+                          </a>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
@@ -867,7 +894,10 @@
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.images]?.title}}
                           </div>
-                          <div class="f-6 mb-2" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
+                          <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.images]?.preview}}"/>
+                          </a>
+                          <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
                           <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                             <div class="d-flex mb-1">
                               <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
@@ -1115,16 +1145,16 @@
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
-                        <div ngbDropdownMenu class="light py-1">
-                          <!-- <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="updateNote(activity)">
+                        <!-- <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="updateNote(activity)">
                             <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Exclude from deal</span>
-                          </button> -->
+                          </button>
                           <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="removeActivity(activity)">
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Delete</span>
                           </button>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -1276,13 +1306,13 @@
                       <div class="ml-auto f-3 op-56">
                         {{detail.created_at | date :'MMM d, hh:mm a'}}
                       </div>
-                      <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                      <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
                         <div ngbDropdownMenu class="light py-1">
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="main-history-item">
                       <ng-container>
@@ -1693,10 +1723,10 @@
                     <div class="v-center justify-content-between mb-3">
                       <div class="history-icon mr-3"><i class="act-icon act-deals"></i></div>
                       <div class="">Deal</div>
-                      <div class="ml-auto">
+                      <div class="ml-auto f-3 op-56">
                         {{detail.created_at | date :'MMM d, hh:mm a'}}
                       </div>
-                      <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                      <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
@@ -1716,7 +1746,7 @@
                             <span class="ml-3 f-2 font-weight-bold">Delete deal</span>
                           </button>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="main-history-item">
                       <div class="f-6 font-weight-bold">

@@ -48,6 +48,7 @@ import { AppointmentService } from 'src/app/services/appointment.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { ToastrService } from 'ngx-toastr';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-contact',
@@ -55,6 +56,8 @@ import { SendTextComponent } from 'src/app/components/send-text/send-text.compon
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit, OnDestroy {
+  SITE = environment.website;
+  userId = '';
   STATUS = STATUS;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
@@ -101,6 +104,15 @@ export class ContactComponent implements OnInit, OnDestroy {
     group_call: 0,
     follow_up: 0,
     deal: 0
+  };
+  detailCounts = {
+    notes: 0,
+    emails: 0,
+    texts: 0,
+    appointments: 0,
+    team_calls: 0,
+    follow_ups: 0,
+    deals: 0
   };
   timezone;
 
@@ -155,6 +167,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.timezone = { zone: user.time_zone || timezone };
       }
       this.checkSharable();
+
+      this.userId = user._id;
     });
 
     this.teamSubscription && this.teamSubscription.unsubscribe();
@@ -176,6 +190,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       if (this.tab.id !== 'all') {
         this.changeTab(this.tab);
       }
+      this.getDetailCounts();
     });
 
     this.handlerService.pageName.next('detail');
@@ -720,6 +735,42 @@ export class ContactComponent implements OnInit, OnDestroy {
           new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
       );
     }
+  }
+
+  getDetailCounts(): void {
+    this.detailCounts = {
+      notes: 0,
+      emails: 0,
+      texts: 0,
+      appointments: 0,
+      team_calls: 0,
+      follow_ups: 0,
+      deals: 0
+    };
+    const details = Object.values(this.detailData);
+    details.forEach((e) => {
+      switch (e['data_type']) {
+        case 'emails':
+          this.detailCounts['emails']++;
+          break;
+        case 'videos':
+        case 'pdfs':
+        case 'images':
+          if (!e['emails']) {
+            this.detailCounts['emails']++;
+          }
+          break;
+        default:
+          this.detailCounts[e['data_type']]++;
+      }
+    });
+    this.tabs[1]['badge'] = this.detailCounts['notes'];
+    this.tabs[2]['badge'] = this.detailCounts['emails'];
+    this.tabs[3]['badge'] = this.detailCounts['texts'];
+    this.tabs[4]['badge'] = this.detailCounts['appointments'];
+    this.tabs[5]['badge'] = this.detailCounts['team_calls'];
+    this.tabs[6]['badge'] = this.detailCounts['follow_ups'];
+    this.tabs[7]['badge'] = this.detailCounts['deals'];
   }
 
   changeActivityTypes(type: TabItem): void {

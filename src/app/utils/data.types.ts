@@ -7,6 +7,7 @@ export interface TabItem {
   icon: string;
   label: string;
   id: string;
+  badge?: number;
 }
 
 export interface TabOption {

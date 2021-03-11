@@ -181,6 +181,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   changePageSize(type: any): void {
     const currentSize = this.pageSize.id;
     this.pageSize = type;
+    this.contactService.pageSize.next(this.pageSize.id);
     // Check with the Prev Page Size
     if (currentSize < this.pageSize.id) {
       // If page size get bigger
@@ -205,7 +206,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
    */
   changeSort(type: any): void {
     this.sortType = type;
-    this.contactService.sort.next(CONTACT_SORT_OPTIONS[type.id]);
+    this.contactService.sort.next({
+      ...CONTACT_SORT_OPTIONS[type.id],
+      page: this.page
+    });
   }
 
   /**

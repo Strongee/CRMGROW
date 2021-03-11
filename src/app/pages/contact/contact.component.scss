@@ -641,3 +641,14 @@ table.table {
   transition: none;
   display: none;
 }
+
+.material-thumbnail {
+  display: block;
+  width: 240px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+
+  img {
+    width: 100%;
+  }
+}

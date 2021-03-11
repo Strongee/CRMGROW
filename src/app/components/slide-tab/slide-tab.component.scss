@@ -94,6 +94,7 @@
     padding: 0px 12px;
     min-width: unset;
     font-size: 16px;
+    opacity: 1;
 
     &.mat-tab-label-active {
       color: blue;
@@ -108,4 +109,16 @@
   .mat-ink-bar {
     background-color: blue!important;
   }
+}
+
+.badge {
+  background: #0000ff80;
+  color: white;
+  border-radius: 12px;
+  margin-left: 4px;
+  min-width: 20px;
+  line-height: 15px;
+  height: 20px;
+  font-size: 10px;
+  text-align: center;
 }

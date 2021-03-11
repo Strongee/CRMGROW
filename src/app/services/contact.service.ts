@@ -73,7 +73,13 @@ export class ContactService extends HttpService {
           this.sortContacts();
         } else {
           // Call Normal Load
-          this.load(0);
+          const sortData = this.sort.getValue();
+          if (sortData.page) {
+            const pageSize = this.pageSize.getValue();
+            this.load(pageSize * (sortData.page - 1));
+          } else {
+            this.load(0);
+          }
         }
       } else {
         this.sortContacts();
@@ -289,10 +295,12 @@ export class ContactService extends HttpService {
    * @param page
    */
   loadImpl(page: number): Observable<any> {
+    const count = this.pageSize.getValue();
     const sort = this.sort.getValue();
     this.loadStatus.next(STATUS.REQUEST);
     return this.httpClient
       .post(this.server + CONTACT.LOAD_PAGE + page, {
+        count,
         ...sort,
         name: undefined
       })
