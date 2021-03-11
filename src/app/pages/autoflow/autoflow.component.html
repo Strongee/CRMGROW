@@ -61,7 +61,7 @@
                   <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
                 </button>
                 <div ngbDropdownMenu class="light">
-                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item">
+                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
                     <span class="f-3 font-weight-bold">Clone</span>
                   </button>
                   <hr class="my-1">
@@ -99,7 +99,7 @@
           <div class="contacts-count mt-3" *ngIf="editMode == 'edit'">
             <label class="f-1 text-uppercase">Contacts</label>
             <div class="content contacts">
-              <p class="count font-weight-bold">{{automation.contacts && automation.contacts.length}}</p>
+              <p class="count font-weight-bold">{{contacts || '0'}}</p>
             </div>
           </div>
         </div>
