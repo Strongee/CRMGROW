@@ -3,7 +3,8 @@ import {
   OnInit,
   Inject,
   ViewChild,
-  AfterContentChecked
+  AfterContentChecked,
+  ElementRef
 } from '@angular/core';
 import {
   MatDialogRef,
@@ -27,6 +28,7 @@ import { UserService } from '../../services/user.service';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
+import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-action-edit',
@@ -49,7 +51,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   templates;
   templateLoadError = '';
   myControl = new FormControl();
-  selectedTemplate = { subject: '', content: '' };
+  selectedTemplate: Template = new Template();
 
   due_date = {
     year: '',
@@ -85,6 +87,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   plan_time = { day: 0, hour: 0, min: 0 };
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
+  @ViewChild('searchInput') searchField: ElementRef;
   currentUser;
 
   error = '';
@@ -162,8 +165,8 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
         timezone.replace(':', '.');
         timezone = parseFloat(timezone);
         const date = new Date(this.data.action.due_date);
-        var utc = date.getTime() + date.getTimezoneOffset() * 60000;
-        var nd = new Date(utc + 3600000 * timezone);
+        const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+        const nd = new Date(utc + 3600000 * timezone);
         this.due_date = {
           year: nd.getFullYear().toString(),
           month: (nd.getMonth() + 1).toString(),
@@ -200,8 +203,8 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
         timezone.replace(':', '.');
         timezone = parseFloat(timezone);
         const date = new Date(this.data.action.due_date);
-        var utc = date.getTime() + date.getTimezoneOffset() * 60000;
-        var nd = new Date(utc + 3600000 * timezone);
+        const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+        const nd = new Date(utc + 3600000 * timezone);
         this.update_due_date = {
           year: nd.getFullYear().toString(),
           month: (nd.getMonth() + 1).toString(),
@@ -247,6 +250,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       if (_SELF.htmlEditor && _SELF.action.content) {
         _SELF.htmlEditor.setValue(_SELF.action.content);
       }
+      _SELF.searchField.nativeElement.blur();
     }, 300);
 
     if (
@@ -386,11 +390,17 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     if (this.type === 'follow_up') {
       if (this.followDueOption === 'date') {
         const time_zone = this.currentUser.time_zone;
-        if (this.due_date.year !== '' && this.due_date.month !== '' && this.due_date.day !== '') {
+        if (
+          this.due_date.year !== '' &&
+          this.due_date.month !== '' &&
+          this.due_date.day !== ''
+        ) {
           const due_date = new Date(
             `${this.due_date['year']}-${this.numPad(
               this.due_date['month']
-            )}-${this.numPad(this.due_date['day'])}T${this.due_time}${time_zone}`
+            )}-${this.numPad(this.due_date['day'])}T${
+              this.due_time
+            }${time_zone}`
           );
           this.dialogRef.close({
             ...this.action,
@@ -468,7 +478,11 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
           });
         } else if (this.updateFollowDueOption === 'update_due_date') {
           const time_zone = this.currentUser.time_zone;
-          if (this.update_due_date.year !== '' && this.update_due_date.month !== '' && this.update_due_date.day !== '') {
+          if (
+            this.update_due_date.year !== '' &&
+            this.update_due_date.month !== '' &&
+            this.update_due_date.day !== ''
+          ) {
             const due_date = new Date(
               `${this.update_due_date['year']}-${this.numPad(
                 this.update_due_date['month']
@@ -555,18 +569,10 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  setMessage(): void {
-    this.action['subject'] = this.selectedTemplate.subject;
-    this.action['content'] = this.selectedTemplate.content;
-  }
-
-  selectTemplate(event): void {
+  selectTemplate(event: Template): void {
     this.selectedTemplate = event;
     this.action['subject'] = this.selectedTemplate.subject;
     this.action['content'] = this.selectedTemplate.content;
-    if (this.action['content'] && this.htmlEditor) {
-      this.htmlEditor.setValue(this.action['content']);
-    }
   }
 
   /**=======================================================
