@@ -148,7 +148,11 @@ export class NavbarComponent implements OnInit {
     this.handlerService.openSearch.next(false);
   }
   clearSearch(): void {
-    this.keyword = '';
-    this.handlerService.searchStr.next('');
+    if (this.keyword) {
+      this.keyword = '';
+      this.handlerService.searchStr.next('');
+    } else {
+      this.closeSearchBar();
+    }
   }
 }

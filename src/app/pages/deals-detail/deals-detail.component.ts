@@ -36,6 +36,7 @@ import { UserService } from 'src/app/services/user.service';
 import { getCurrentTimezone } from 'src/app/helper';
 import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { FormControl } from '@angular/forms';
+import { User } from 'src/app/models/user.model';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -100,6 +101,8 @@ export class DealsDetailComponent implements OnInit {
   detailData = {};
   sendActions = {};
 
+  editors = {};
+
   profileSubscription: Subscription;
   stageLoadSubscription: Subscription;
   loadSubscription: Subscription;
@@ -111,6 +114,7 @@ export class DealsDetailComponent implements OnInit {
   groupCallSubscription: Subscription;
   taskSubscription: Subscription;
   dealSubscription: Subscription;
+  teamsLoadSubscription: Subscription;
 
   titleEditable = false;
   dealTitle = '';
@@ -149,6 +153,17 @@ export class DealsDetailComponent implements OnInit {
       this.stages = res;
       this.changeSelectedStage();
     });
+
+    this.teamsLoadSubscription && this.teamsLoadSubscription.unsubscribe();
+    this.teamsLoadSubscription = this.teamService.teams$.subscribe((teams) => {
+      teams.forEach((team) => {
+        if (team.editors && team.editors.length) {
+          team.editors.forEach((e) => {
+            this.editors[e._id] = new User().deserialize(e);
+          });
+        }
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -176,6 +191,7 @@ export class DealsDetailComponent implements OnInit {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.stageLoadSubscription && this.stageLoadSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.teamsLoadSubscription && this.teamsLoadSubscription.unsubscribe();
   }
 
   changeSelectedStage(): void {

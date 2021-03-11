@@ -573,8 +573,25 @@
                               </div>
                             </ng-template>
                           </app-accordion>
-                          <div class="v-center mt-3">
-                            <div class="contacts">
+                          <div class="d-flex mt-3 partner-info">
+                            <div class="leader">
+                              <div class="f-4 fw-600 op-40">
+                                Leader
+                              </div>
+                              <div class="v-center mt-1">
+                                <ng-container *ngIf="editors[activity.activity_detail.leader]; else unknownLeader">
+                                  <img *ngIf="editors[activity.activity_detail.leader].picture_profile; else avatarNameTemplate" [src]="editors[activity.activity_detail.leader].picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+                                  <ng-template #avatarNameTemplate>
+                                    <div class="form-avatar rounded-circle bg-dark mr-1 text-white text-center">{{editors[activity.activity_detail.leader].avatarName}}</div>
+                                  </ng-template>
+                                  <div class="f-3 mr-2">{{editors[activity.activity_detail.leader].user_name}}</div>
+                                </ng-container>
+                                <ng-template #unknownLeader>
+                                  --
+                                </ng-template>
+                              </div>
+                            </div>
+                            <div class="contacts mr-4">
                               <div class="f-4 fw-600 op-40">
                                 Contacts
                               </div>
@@ -583,7 +600,7 @@
                                 <span class="f-4">{{activity.activity_detail.contacts?.length || 0}}</span>
                               </div>
                             </div>
-                            <div class="time ml-5">
+                            <div class="time">
                               <div class="f-4 fw-600 op-40">
                                 Duration
                               </div>
@@ -1021,8 +1038,25 @@
                               </div>
                             </ng-template>
                           </app-accordion>
-                          <div class="v-center mt-3">
-                            <div class="contacts">
+                          <div class="d-flex mt-3 partner-info">
+                            <div class="leader">
+                              <div class="f-4 fw-600 op-40">
+                                Leader
+                              </div>
+                              <div class="v-center mt-1">
+                                <ng-container *ngIf="editors[detail.leader]; else unknownLeader">
+                                  <img *ngIf="editors[detail.leader].picture_profile; else avatarNameTemplate" [src]="editors[detail.leader].picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+                                  <ng-template #avatarNameTemplate>
+                                    <div class="form-avatar rounded-circle bg-dark mr-1 text-white text-center">{{editors[detail.leader].avatarName}}</div>
+                                  </ng-template>
+                                  <div class="f-3 mr-2">{{editors[detail.leader].user_name}}</div>
+                                </ng-container>
+                                <ng-template #unknownLeader>
+                                  --
+                                </ng-template>
+                              </div>
+                            </div>
+                            <div class="contacts mr-4">
                               <div class="f-4 fw-600 op-40">
                                 Contacts
                               </div>
@@ -1031,7 +1065,7 @@
                                 <span class="f-4">{{detail.contacts?.length || 0}}</span>
                               </div>
                             </div>
-                            <div class="time ml-5">
+                            <div class="time">
                               <div class="f-4 fw-600 op-40">
                                 Duration
                               </div>
