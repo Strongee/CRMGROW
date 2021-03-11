@@ -12,6 +12,19 @@
 <!--      </a>-->
     </div>
   </div>
+  <div class="v-center">
+    <div class="form-group mb-0 search-form">
+      <div class="input-group-prepend">
+        <i class="i-icon i-search d-block bgc-dark"></i>
+      </div>
+      <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="changeSearchStr()" [class.disabled]="(automationService.loading$ | async) === STATUS.REQUEST">
+      <ng-container *ngIf="searchStr">
+        <div class="cancel-action c-pointer" (click)="clearSearchStr()">
+          <i class="i-icon i-close d-block bgc-dark"></i>
+        </div>
+      </ng-container>
+    </div>
+  </div>
   <div class="my-3 position-relative">
     <ng-container *ngIf="(automationService.automations$ | async).length; else emptyListTemplate">
       <div class="updating-status" *ngIf="(automationService.loading$ | async) === STATUS.REQUEST">
@@ -20,7 +33,7 @@
       <table
         mat-table
         class="table automation-table" multiTemplateDataRows
-        [dataSource]="automationService.automations$ | async | paginate: {itemsPerPage: 10, currentPage: page, id: 'automationTable', total: (automationService.automations$ | async).length}">
+        [dataSource]="filteredResult | paginate: {itemsPerPage: 10, currentPage: page, id: 'automationTable', total: filteredResult.length}">
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">Title</th>
           <td mat-cell *matCellDef="let automation" class="title">

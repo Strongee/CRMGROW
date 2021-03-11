@@ -80,3 +80,8 @@ tr td {
     font-size: 20px;
   }
 }
+
+input.disabled {
+  pointer-events: none;
+  background-color: #f8f8f8;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   animate,
   state,
@@ -40,7 +40,7 @@ import { AutomationCreateComponent } from '../../components/automation-create/au
     ])
   ]
 })
-export class AutomationsComponent implements OnInit {
+export class AutomationsComponent implements OnInit, OnDestroy {
   DISPLAY_COLUMNS = [
     'title',
     'owner',
@@ -64,6 +64,13 @@ export class AutomationsComponent implements OnInit {
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('detailPanel') detailPanel: AutomationStatusComponent;
 
+  automations: Automation[] = [];
+  filteredResult: Automation[] = [];
+  searchStr = '';
+
+  profileSubscription: Subscription;
+  loadSubscription: Subscription;
+
   constructor(
     public automationService: AutomationService,
     private dialog: MatDialog,
@@ -75,12 +82,38 @@ export class AutomationsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userService.profile$.subscribe((res) => {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.userId = res._id;
     });
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.automationService.automations$.subscribe(
+      (automations) => {
+        this.automations = automations;
+        this.filteredResult = automations;
+      }
+    );
     this.automationService.loadAll(true);
   }
 
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+  }
+
+  changeSearchStr(): void {
+    const reg = new RegExp(this.searchStr, 'gi');
+    const filtered = this.automations.filter((item) => {
+      return reg.test(item.title);
+    });
+    this.filteredResult = filtered;
+    this.page = 1;
+  }
+
+  clearSearchStr(): void {
+    this.searchStr = '';
+    this.changeSearchStr();
+  }
   /**
    * Redirects to the selected Automation
    * @param event HTML Event
@@ -119,16 +152,13 @@ export class AutomationsComponent implements OnInit {
     dialog.afterClosed().subscribe((res) => {
       if (res) {
         this.deleting = true;
-        this.toastr.success('Automation Deleted Successfully');
-        this.automationService.delete(automation._id).subscribe(
-          (response) => {
-            this.deleting = false;
+        this.automationService.delete(automation._id).subscribe((status) => {
+          this.deleting = false;
+          if (status) {
+            this.toastr.success('Automation is deleted successfully.');
             this.automationService.reload();
-          },
-          (err) => {
-            this.deleting = false;
           }
-        );
+        });
       }
     });
   }

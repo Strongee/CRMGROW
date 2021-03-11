@@ -14,7 +14,7 @@
         </div>
         <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="changeSearchStr()" [class.disabled]="(templatesService.loading$ | async) === STATUS.REQUEST">
         <ng-container *ngIf="searchStr">
-          <div class="cancel-action" (click)="clearSearchStr()">
+          <div class="cancel-action c-pointer" (click)="clearSearchStr()">
             <i class="i-icon i-close d-block bgc-dark"></i>
           </div>
         </ng-container>

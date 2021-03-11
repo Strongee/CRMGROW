@@ -101,8 +101,8 @@ export class AutomationService extends HttpService {
   }
   delete(id: string): Observable<Automation[]> {
     return this.httpClient.delete(this.server + AUTOMATION.DELETE + id).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('DELETE AUTOMATION', []))
+      map((res) => res['status']),
+      catchError(this.handleError('DELETE AUTOMATION', false))
     );
   }
   get(id: string, pageSize = 50, page = 0): Observable<Automation[]> {
