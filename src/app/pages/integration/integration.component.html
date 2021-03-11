@@ -64,18 +64,18 @@
         Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
       </div>
     </div>
-    <ng-container *ngIf="garbage.calendly?.email == '' && garbage.calendly?.token == ''; else selectEvent">
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendly()">
-        Connect account
-      </button>
-    </ng-container>
-    <ng-template #selectEvent>
+    <ng-container *ngIf="garbage?.calendly && garbage.calendly?.email != '' && garbage.calendly?.token != ''; else connectEvent">
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="selectCalendly()">
         Select Event
       </button>
+    </ng-container>
+    <ng-template #connectEvent>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendly()">
+        Connect account
+      </button>
     </ng-template>
     <div class="accounts">
-      <ng-container *ngIf="garbage.calendly?.email != '' && garbage.calendly?.token != ''">
+      <ng-container *ngIf="garbage?.calendly && garbage.calendly?.email != '' && garbage.calendly?.token != ''">
         <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
         <div class="v-center mb-1">
           <div class="f-1 font-weight-bold mr-1">{{garbage.calendly?.email}}</div>
