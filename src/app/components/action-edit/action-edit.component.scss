@@ -408,6 +408,13 @@ button:disabled {
   border-bottom-left-radius: 0px;
 }
 
+.selected-media {
+  max-width: 260px;
+
+  @media screen and (max-width: 576px) {
+    max-width: 200px;
+  }
+}
 
 :host ::ng-deep {
   .dropdown-menu {

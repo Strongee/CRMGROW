@@ -67,6 +67,33 @@
               </ng-container>
             </ng-container>
           </div>
+          <div class="selected-material mt-3" *ngIf="material && material._id">
+            <table class="table">
+              <thead>
+              <th class="selected-media op-full pb-1">
+                Selected Media
+              </th>
+              <th class="type op-full pb-1">Type</th>
+              </thead>
+              <tbody>
+              <tr>
+                <td class="selected-media">
+                  <div class="c-blue f-2 font-weight-bold">{{material.title}}</div>
+                </td>
+                <td class="type">
+                  <div class="v-center border-0 bgc-trans">
+                    <i class="i-icon bgc-black" aria-hidden="true"
+                       [class.i-video]="getMaterialType(material) == 'video'"
+                       [class.i-pdf]="getMaterialType(material) == 'pdf'"
+                       [class.i-image]="getMaterialType(material) == 'image'"
+                    ></i>
+                    <span class="f-2 ml-2">{{getMaterialType(material)}}</span>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="text-danger error" *ngIf="materialError">{{materialError}}</div>
         </div>
       </ng-container>
