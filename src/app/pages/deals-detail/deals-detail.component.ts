@@ -396,6 +396,8 @@ export class DealsDetailComponent implements OnInit {
       });
   }
 
+  openSendText(): void {}
+
   openTaskDlg(): void {
     this.dialog
       .open(TaskCreateComponent, {
@@ -429,8 +431,6 @@ export class DealsDetailComponent implements OnInit {
         }
       });
   }
-
-  openSendText(): void {}
 
   editDeal(): void {
     this.dealPanel = !this.dealPanel;
