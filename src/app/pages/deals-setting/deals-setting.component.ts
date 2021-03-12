@@ -116,6 +116,7 @@ export class DealsSettingComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toastr.success('Deal Stage successfully created.');
           this.dealsService.createStage$(new DealStage().deserialize(res));
         }
       });

@@ -8,6 +8,7 @@ import { DialogSettings } from 'src/app/constants/variable.constants';
 import { Guest } from 'src/app/models/guest.model';
 import { GuestService } from 'src/app/services/guest.service';
 import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-assistant',
@@ -27,7 +28,8 @@ export class AssistantComponent implements OnInit, OnDestroy {
   constructor(
     private guestService: GuestService,
     private userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +73,7 @@ export class AssistantComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toast.success('New Assistant successfully created.');
           this.guests.push(res);
         }
       });
@@ -93,6 +96,7 @@ export class AssistantComponent implements OnInit, OnDestroy {
               this.guests.splice(index, 1);
             }
           });
+          this.toast.success('Assistant successfully deleted.');
         }
       });
   }
