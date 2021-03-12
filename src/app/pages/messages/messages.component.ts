@@ -93,9 +93,14 @@ export class MessagesComponent implements OnInit {
   }
 
   keyTrigger(evt: any): void {
-    if (!evt.shiftKey && evt.key === 'Enter') {
-      evt.preventDefault();
-      this.sendMessage();
+    if (evt.key === 'Enter') {
+      if (evt.ctrlKey || evt.altKey) {
+        return;
+      }
+      if (!evt.shiftKey) {
+        evt.preventDefault();
+        this.sendMessage();
+      }
     }
   }
 

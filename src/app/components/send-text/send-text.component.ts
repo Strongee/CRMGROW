@@ -173,9 +173,14 @@ export class SendTextComponent implements OnInit, OnDestroy {
   }
 
   keyTrigger(event): void {
-    if (!event.shiftKey && event.key === 'Enter') {
-      event.preventDefault();
-      this.send();
+    if (event.key === 'Enter') {
+      if (event.ctrlKey || event.altKey) {
+        return;
+      }
+      if (!event.shiftKey) {
+        event.preventDefault();
+        this.send();
+      }
     }
   }
 }
