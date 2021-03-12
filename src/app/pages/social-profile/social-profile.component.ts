@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-social-profile',
@@ -14,7 +15,7 @@ export class SocialProfileComponent implements OnInit, OnDestroy {
   saveSocialProfileSubscription: Subscription;
   profileSubscription: Subscription;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private toast: ToastrService) {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -39,6 +40,7 @@ export class SocialProfileComponent implements OnInit, OnDestroy {
       .subscribe(
         () => {
           this.socialProfileSaving = false;
+          this.toast.success('Social Profile successfully updated.');
           this.userService.updateProfileImpl({ social_link });
         },
         () => {
