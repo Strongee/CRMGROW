@@ -267,6 +267,7 @@ export class LeadCaptureComponent implements OnInit {
     this.userService.updateGarbage(this.garbage).subscribe(
       () => {
         this.saving = false;
+        this.toast.success('Lead Capture successfully updated.');
         this.userService.updateGarbageImpl(this.garbage);
       },
       () => {

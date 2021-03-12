@@ -5,6 +5,7 @@ import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { REMINDER } from '../../constants/variable.constants';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-notifications',
@@ -44,7 +45,8 @@ export class NotificationsComponent implements OnInit {
   constructor(
     public userService: UserService,
     private swPush: SwPush,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private toast: ToastrService
   ) {
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
@@ -190,6 +192,7 @@ export class NotificationsComponent implements OnInit {
     this.userService.updateGarbage(this.garbage).subscribe(
       () => {
         this.saving = false;
+        this.toast.success('Notifications successfully updated.');
         this.userService.updateGarbageImpl(this.garbage);
       },
       () => {

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Guest } from 'src/app/models/guest.model';
 import { GuestService } from 'src/app/services/guest.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-assistant-password',
@@ -14,7 +15,8 @@ export class AssistantPasswordComponent implements OnInit {
   constructor(
     private guestService: GuestService,
     private dialogRef: MatDialogRef<AssistantPasswordComponent>,
-    @Inject(MAT_DIALOG_DATA) public assistant: Guest
+    @Inject(MAT_DIALOG_DATA) public assistant: Guest,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {}
@@ -30,6 +32,7 @@ export class AssistantPasswordComponent implements OnInit {
     this.guestService.update(this.assistant._id, this.assistant).subscribe(
       () => {
         this.updating = false;
+        this.toast.success('Assistant Password successfully updated.');
         this.dialogRef.close(true);
       },
       () => {

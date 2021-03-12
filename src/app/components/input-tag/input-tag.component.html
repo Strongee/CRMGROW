@@ -6,12 +6,12 @@
         [selectable]="selectable"
         [removable]="true"
         (removed)="remove(tag)">
-        <div class="v-center chip p-1 bgc-blue rounded-pill mr-1">
-          <div class="info text-white ml-1">
+        <div class="v-center chip p-1 rounded-pill mr-1">
+          <div class="info c-dark font-weight-bold ml-1">
             {{tag}}
           </div>
           <div class="close-icon-wrapper rounded-circle bg-white ml-1">
-            <div class="i-icon i-close bgc-blue" matChipRemove></div>
+            <div class="i-icon i-close bgc-dark" matChipRemove></div>
           </div>
         </div>
       </mat-basic-chip>

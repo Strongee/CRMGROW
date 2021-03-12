@@ -3,6 +3,7 @@ import { AUTO_FOLLOW_DELAY } from '../../constants/variable.constants';
 import { Garbage } from 'src/app/models/garbage.model';
 import { UserService } from 'src/app/services/user.service';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-auto-follow-up',
@@ -18,7 +19,11 @@ export class AutoFollowUpComponent implements OnInit {
   garbage: Garbage = new Garbage();
   saving = false;
 
-  constructor(public userService: UserService, public location: Location) {
+  constructor(
+    public userService: UserService,
+    public location: Location,
+    private toast: ToastrService
+  ) {
     this.userService.garbage$.subscribe((res) => {
       this.garbage = new Garbage().deserialize(res);
     });
@@ -37,6 +42,7 @@ export class AutoFollowUpComponent implements OnInit {
     this.userService.updateGarbage(this.garbage).subscribe(
       () => {
         this.saving = false;
+        this.toast.success('Auto Follow Up successfully updated.');
         this.userService.updateGarbageImpl(this.garbage);
       },
       () => {

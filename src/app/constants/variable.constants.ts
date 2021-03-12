@@ -1082,7 +1082,7 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Send via SMS',
+      label: 'Send via Text',
       type: 'button',
       icon: 'i-sms-sent',
       command: 'text',
