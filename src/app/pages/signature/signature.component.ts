@@ -23,8 +23,7 @@ export class SignatureComponent implements OnInit, OnDestroy {
     { layout: 'img_text_hor', icon: 'i-signature-1' },
     { layout: 'text_img_hor', icon: 'i-signature-2' },
     { layout: 'text_img_ver', icon: 'i-signature-3' },
-    { layout: 'img_text_ver', icon: 'i-signature-4' },
-    { layout: 'custom', icon: 'i-signature-5' }
+    { layout: 'img_text_ver', icon: 'i-signature-4' }
   ];
   currentTemplate = '';
   submitted = false;
