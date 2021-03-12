@@ -168,6 +168,7 @@ export class MessagesComponent implements OnInit {
 
   newMessage(): void {
     this.isNew = true;
+    this.newContacts = [];
   }
 
   sendMessage(): void {
