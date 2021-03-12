@@ -1,4 +1,14 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+  OnDestroy
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { AppointmentService } from 'src/app/services/appointment.service';
 
 @Component({
@@ -6,27 +16,50 @@ import { AppointmentService } from 'src/app/services/appointment.service';
   templateUrl: './select-calendar.component.html',
   styleUrls: ['./select-calendar.component.scss']
 })
-export class SelectCalendarComponent implements OnInit {
+export class SelectCalendarComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @Input() calendar;
   @Output() calendarChange: EventEmitter<any> = new EventEmitter();
   accounts: any[] = [];
-  constructor(public appointmentService: AppointmentService) {
-    this.appointmentService.calendars$.subscribe((data) => {
-      data.forEach((account) => {
-        const acc = { email: account.email };
-        if (account.data) {
-          const calendars = [];
-          account.data.forEach((e) => {
-            calendars.push({ ...e, account: account.email });
-          });
-          acc['calendars'] = calendars;
-          this.accounts.push(acc);
+  loadSubscription: Subscription;
+
+  calendarControl: FormControl = new FormControl();
+
+  constructor(public appointmentService: AppointmentService) {}
+
+  ngOnInit(): void {
+    this.loadSubscription = this.appointmentService.calendars$.subscribe(
+      (data) => {
+        let defaultCalendar;
+        data.forEach((account) => {
+          const acc = { email: account.email };
+          if (account.data) {
+            const calendars = [];
+            account.data.forEach((e) => {
+              const calendar = { ...e, account: account.email };
+              calendars.push(calendar);
+              if (!defaultCalendar) {
+                defaultCalendar = calendar;
+              }
+            });
+            acc['calendars'] = calendars;
+            this.accounts.push(acc);
+          }
+        });
+        if (defaultCalendar) {
+          setTimeout(() => {
+            this.calendarControl.setValue(defaultCalendar);
+          }, 10);
         }
-      });
-    });
+      }
+    );
   }
 
-  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {}
 
   changeCalendar(): void {
     this.calendarChange.emit(this.calendar);

@@ -16,7 +16,6 @@ import * as moment from 'moment';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { Contact } from 'src/app/models/contact.model';
 import { DealsService } from '../../services/deals.service';
-
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',
