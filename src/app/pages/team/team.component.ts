@@ -605,21 +605,11 @@ export class TeamComponent implements OnInit, OnDestroy {
         }
       });
   }
-  status(team): any {
-    let index;
-    if (team.owner.length) {
-      index = team.owner.filter((item) => item._id === this.userId).length;
-      if (index > 0) {
-        return 'Owner';
-      }
+  status(): any {
+    if (this.role) {
+      return this.role[0].toUpperCase() + this.role.slice(1);
     }
-    if (team.editors.length) {
-      index = team.editors.filter((item) => item._id === this.userId).length;
-      if (index > 0) {
-        return 'Editor';
-      }
-    }
-    return 'Viewer';
+    return this.role;
   }
 
   changeTab(tab: TabItem): void {

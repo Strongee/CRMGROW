@@ -1,9 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog
+} from '@angular/material/dialog';
 import { User } from 'src/app/models/user.model';
 import { TeamService } from 'src/app/services/team.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { ConfirmComponent } from '../confirm/confirm.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-invite-team',
@@ -13,8 +19,9 @@ import { Subscription } from 'rxjs';
 export class InviteTeamComponent implements OnInit {
   newMembers: User[] = [];
   oldMembers: User[] = [];
-  teamLink = '';
+  joinLink = '';
   teamId = '';
+  team;
 
   inviteSubscription: Subscription;
   inviting = false;
@@ -22,17 +29,22 @@ export class InviteTeamComponent implements OnInit {
   resendingMembers: string[] = []; // user id | referral emails
   cancelSubscription: Subscription[];
   cancelingMembers: string[] = []; // userid | referral email
+  canceling = false;
+  resending = false;
 
   constructor(
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<InviteTeamComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private toast: ToastrService
   ) {
     if (this.data._id) {
       this.teamId = this.data._id;
+      this.team = this.data;
     }
-    if (this.data.teamLink) {
-      this.teamLink = this.data.teamLink;
+    if (this.data.join_link) {
+      this.joinLink = `https://crmgrow.com/invite.ref=${this.data.join_link}`;
     }
     if (this.data.invites) {
       this.data.invites.forEach((e) => {
@@ -100,11 +112,32 @@ export class InviteTeamComponent implements OnInit {
    * resend the invitation to the User or Referrals
    * @param event: User
    */
-  resendInvitation(event: User): void {
-    if (event._id) {
+  resendInvitation(member: User): void {
+    if (member) {
       // Send Invitation
-    } else {
-      // Send Referral
+      const invitations = [];
+      const referrals = [];
+      const invitationIds = [];
+      const referralEmails = [];
+      if (member._id) {
+        invitationIds.push(member._id);
+        invitations.push(member);
+      } else {
+        referralEmails.push(member.email);
+        referrals.push(member);
+      }
+      this.resending = true;
+      this.inviteSubscription = this.teamService
+        .inviteUsers(this.teamId, invitationIds, referrals)
+        .subscribe(
+          () => {
+            this.resending = false;
+            this.dialogRef.close();
+          },
+          () => {
+            this.resending = false;
+          }
+        );
     }
   }
 
@@ -112,11 +145,55 @@ export class InviteTeamComponent implements OnInit {
    * cancel the invitation
    * @param event: User
    */
-  cancelInvitation(event: User): void {
-    if (event._id) {
-      // Cancel Invitaion
-    } else {
-      // Cancel Referral
+  cancelInvitation(member: User): void {
+    if (member && member._id) {
+      this.dialog
+        .open(ConfirmComponent, {
+          maxWidth: '360px',
+          width: '96vw',
+          data: {
+            title: 'Cancel Invitation',
+            message: 'Are you sure to cancel this invitation?',
+            cancelLabel: 'No',
+            confirmLabel: 'Ok'
+          }
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            const newInvites = [];
+            this.team.invites.forEach((e) => {
+              if (e._id !== member._id) {
+                newInvites.push(e._id);
+              }
+            });
+            this.canceling = true;
+            this.teamService
+              .updateTeam(this.teamId, { invites: newInvites })
+              .subscribe(
+                (response) => {
+                  this.canceling = false;
+                  this.team.invites.some((e, index) => {
+                    if (e._id === member._id) {
+                      this.team.invites.splice(index, 1);
+                      return true;
+                    }
+                  });
+                  const searchQ = { _id: member._id };
+                  const positionInOld = _.findIndex(this.oldMembers, searchQ);
+                  if (positionInOld !== -1) {
+                    this.oldMembers.splice(positionInOld, 1);
+                  }
+                  this.toast.success(
+                    'You cancelled the invitation successfully.'
+                  );
+                },
+                (err) => {
+                  this.canceling = false;
+                }
+              );
+          }
+        });
     }
   }
 

@@ -93,7 +93,7 @@
         <div class="ml-5">
           <label class="f-2 op-75 text-uppercase">Your Status</label>
           <div class="value v-center">
-            <div class="status font-weight-bold f-1 c-white" [class] = "status(team)">{{status(team)}}</div>
+            <div class="status font-weight-bold f-1 c-white" [class] = "status()">{{status()}}</div>
           </div>
         </div>
       </div>
@@ -205,8 +205,10 @@
                   </div>
                 </td>
                 <td class="status-cell">
-                  <div class="status">
-                    <div class="Owner c-white text-center f-1 font-weight-bold">Owner</div>
+                  <div class="label-cell">
+                    <div class="value v-center">
+                      <div class="status Owner font-weight-bold f-1 c-white">Owner</div>
+                    </div>
                   </div>
                 </td>
                 <td class="added-cell f-3">
@@ -234,19 +236,28 @@
                   </div>
                 </td>
                 <td class="status-cell">
-                  <div class="label-cell status">
-                    <select (change)="toggleMember(member)"
-                            class="c-white f-1 font-weight-bold"
-                            [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
-                            [disabled]="role != 'owner'"
-                    >
-                      <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
-                        Viewer
-                      </option>
-                      <option [value]="'Editor'" class="Editor c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) !== -1">
-                        Editor
-                      </option>
-                    </select>
+                  <div class="label-cell">
+                    <ng-container *ngIf="role == 'owner'; else noOwnerTemplate">
+                      <select (change)="toggleMember(member)"
+                              class="c-white f-1 font-weight-bold"
+                              [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
+                              [disabled]="role != 'owner'"
+                      >
+                        <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
+                          Viewer
+                        </option>
+                        <option [value]="'Editor'" class="Editor c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) !== -1">
+                          Editor
+                        </option>
+                      </select>
+                    </ng-container>
+                    <ng-template #noOwnerTemplate>
+                      <div class="value v-center">
+                        <div class="status font-weight-bold f-1 c-white" [class] = "team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
+                          {{team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'}}
+                        </div>
+                      </div>
+                    </ng-template>
                   </div>
                 </td>
                 <td class="added-cell">
