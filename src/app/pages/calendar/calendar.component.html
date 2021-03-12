@@ -51,10 +51,10 @@
                 <i class="i-icon i-plus bg-white d-block mr-2"></i>
                 <span>New meeting</span>
             </button>
-            <div class="form-group p-2 m-0" ngbDropdown>
-                <i class="d-block i-icon i-calendar bgc-blue" ngbDropdownToggle></i>
-                <div ngbDropdownMenu class="light px-3" *ngIf="accounts.length">
-                    <button class="btn btn-white f-3 font-weight-bold p-0">Hide</button>
+            <div class="p-2 m-0 calendar-list">
+                <button class="btn btn-tras" (click)="isShowCalendarList = !isShowCalendarList"><i class="d-block i-icon i-calendar bgc-blue"></i></button>
+                <div class="light px-3 calendar-list-content py-2" *ngIf="accounts.length" [class.d-none]="!isShowCalendarList">
+                    <button class="btn btn-white f-3 font-weight-bold p-0" (click)="isShowCalendarList = false;">Hide</button>
                     <div class="first-calendar" *ngFor="let account of accounts">
                         <label class="f-1 font-weight-bold m-0">{{account.email}}</label>
                         <div class="v-center mt-1" *ngFor="let calendar of account.calendars">
