@@ -1,19 +1,19 @@
 <div class="page-content">
   <div class="page-header">
-    <h1 class="f-24 font-weight-bold m-0" *ngIf="!selectedFolder; else folderTitleTemplate">Materials</h1>
+    <h1 class="page-title" *ngIf="!selectedFolder; else folderTitleTemplate">Materials</h1>
     <ng-template #folderTitleTemplate>
-      <h1 class="f-24 font-weight-bold m-0 v-center">
+      <h1 class="page-title d-flex">
         <a [routerLink]="['/materials/']" class="c-pointer c-dark to-root">Materials</a>
-        <span class="f-8 v-center"><i class="i-icon i-chev-right d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
+        <span class="f-6 v-center"><i class="i-icon i-chev-right d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
       </h1>
     </ng-template>
     <div class="v-center create-actions">
-      <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record p-2" (click)="recordSetting()">
+      <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record px-2" (click)="recordSetting()">
         <i class="bgc-white i-icon i-record mr-2"></i>
         Record new video
       </button>
       <div class="ml-1 ml-sm-3 border border-primary rounded" ngbDropdown>
-        <div class="font-weight-bold c-dark c-pointer px-2 px-sm-3 py-2 button-add" ngbDropdownToggle>
+        <div class="font-weight-bold c-dark c-pointer px-2 button-add" ngbDropdownToggle>
           Add new
         </div>
         <div ngbDropdownMenu>

@@ -255,11 +255,14 @@ ul {
 }
 .page-title {
   font-size: 26px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   font-weight: bold !important;
+  height: 38px;
+  margin-bottom: 0px;
 
   @media screen and (max-width: 575px) {
     font-size: 22px;
+    height: 28px;
   }
 }
 .ls-1{

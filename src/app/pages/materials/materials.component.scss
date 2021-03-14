@@ -1,5 +1,9 @@
 @import  "src/variables.scss";
 
+.page-title span {
+    letter-spacing: 0px;
+}
+
 .page-header {
     display: flex;
     align-items: center;
@@ -26,6 +30,8 @@
 
 .button-record, .button-add {
     font-size: 16px;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 .mat-table-wrapper table {

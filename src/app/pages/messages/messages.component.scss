@@ -1,7 +1,8 @@
 @import 'src/variables.scss';
 
 .page-content {
-    padding: 0 0 0 2rem;
+    padding-right: 0px;
+    padding-bottom: 0px;
     height: calc(100vh - 64px);
     @media screen and (max-width: 576px) {
         padding: 0 !important;
@@ -9,17 +10,7 @@
 }
 
 .page-header {
-    padding: 2rem 1rem 1rem 0;
-    button {
-        &:hover {
-            color: white;
-        }
-        i {
-            width: 14px;
-            height: 14px;
-            min-width: 14px;
-        }
-    }
+    padding: 0rem 1rem 1rem 0;
 }
 .back-contacts {
     display: none;

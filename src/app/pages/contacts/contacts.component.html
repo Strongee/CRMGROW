@@ -1,25 +1,26 @@
 <div class="page-content">
-  <div class="status-header v-center mb-2">
-    <div class="count-status">
-      <div class="f-24 font-weight-bold">
-        Contacts
-        <!-- <span *ngIf="searchStr || !searchOption.isEmpty()" class="op-56"> / Found {{(storeService.pageContacts$ | async).length}} contacts</span>
-        <span *ngIf="selection.length" class="op-56"> / Selected {{selection.length}} contacts</span> -->
-      </div>
-      <div class="f-6 font-weight-bold op-64">
-        {{contactService.total$ | async}} contacts
-      </div>
+  <div class="status-header v-center">
+    <h1 class="page-title">
+      Contacts
+      <!-- <span *ngIf="searchStr || !searchOption.isEmpty()" class="op-56"> / Found {{(storeService.pageContacts$ | async).length}} contacts</span>
+      <span *ngIf="selection.length" class="op-56"> / Selected {{selection.length}} contacts</span> -->
+    </h1>
+    <div class="f-6 font-weight-bold op-64 contact-count mobile">
+      {{contactService.total$ | async}} contacts
     </div>
     <div class="ml-auto v-center create-actions">
-      <button class="v-center btn btn-blue f-6 font-weight-bold text-white rounded shadow mr-2 px-3 py-2" (click)="createContact()">
-        <i class="d-block i-icon i-plus bgc-white mr-2"></i>
+      <button class="v-center btn btn-blue f-6 font-weight-bold text-white rounded shadow mr-2 px-3" (click)="createContact()">
+        <i class="d-block i-icon i-plus bgc-white mr-2 sm"></i>
         <span class="normal">Create new contact</span>
         <span class="mobile">New Contact</span>
       </button>
-      <button class="btn btn-white border border-primary f-6 font-weight-bold rounded px-3 py-2" (click)="importContacts()">
+      <button class="btn btn-white border border-primary f-6 font-weight-bold rounded px-3" (click)="importContacts()">
         Import
       </button>
     </div>
+  </div>
+  <div class="f-6 font-weight-bold op-64 mb-2 contact-count desktop">
+    {{contactService.total$ | async}} contacts
   </div>
   <div class="v-center contact-list-controls">
     <div class="form-group mb-0 search-form">

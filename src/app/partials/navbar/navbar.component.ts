@@ -5,15 +5,12 @@ import { ContactCreateComponent } from 'src/app/components/contact-create/contac
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
-import { ContactService } from 'src/app/services/contact.service';
-import { StoreService } from 'src/app/services/store.service';
 import { UserService } from 'src/app/services/user.service';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { SendEmailComponent } from '../../components/send-email/send-email.component';
 import { HandlerService } from 'src/app/services/handler.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ConnectService } from 'src/app/services/connect.service';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -24,6 +21,11 @@ export class NavbarComponent implements OnInit {
   actions: any[] = [
     { icon: 'i-plus bg-white', label: 'Add new Contact', id: 'contact' },
     { icon: 'i-task bg-white', label: 'Add new Task', id: 'task' },
+    {
+      icon: 'i-calendar bg-white',
+      label: 'Add new Meeting',
+      id: 'appointment'
+    },
     { icon: 'i-template bg-white', label: 'Add new Note', id: 'note' },
     { icon: 'i-message bg-white', label: 'Send Email', id: 'message' },
     { icon: 'i-record bg-white', label: 'Record Video', id: 'record' },

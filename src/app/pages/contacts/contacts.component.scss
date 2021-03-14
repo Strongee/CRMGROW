@@ -34,12 +34,18 @@ tr.mat-row {
 .status-header .create-actions .mobile {
   display: none;
 }
+
+.contact-count.mobile {
+  display: none;
+}
+
 @media screen and (max-width: 480px) {
   .status-header {
     display: block!important;
 
     .create-actions {
       margin-top: 6px;
+      margin-bottom: 12px;
       & > * {
         width: 50%;
         text-align: center;
@@ -47,6 +53,12 @@ tr.mat-row {
         font-size: 13px;
       }
     }
+  }
+  .contact-count.mobile {
+    display: block;
+  }
+  .contact-count.desktop {
+    display: none;
   }
 }
 
