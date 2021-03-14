@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialService } from 'src/app/services/material.service';
@@ -26,12 +26,15 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
+import { Team } from '../../models/team.model';
 @Component({
-  selector: 'app-materials',
-  templateUrl: './materials.component.html',
-  styleUrls: ['./materials.component.scss']
+  selector: 'app-team-share-material',
+  templateUrl: './team-share-material.component.html',
+  styleUrls: ['./team-share-material.component.scss']
 })
-export class MaterialsComponent implements OnInit {
+export class TeamShareMaterialComponent implements OnInit, OnChanges {
+  @Input('materials') materials: any[] = [];
+  @Input('team') team: Team;
   DISPLAY_COLUMNS = [
     'select',
     'material_name',
@@ -48,7 +51,6 @@ export class MaterialsComponent implements OnInit {
   siteUrl = environment.website;
   user_id = '';
 
-  materials: any[] = [];
   filteredMaterials: any[] = [];
   selection: any[] = [];
 
@@ -81,6 +83,7 @@ export class MaterialsComponent implements OnInit {
   userOptions = [];
   folderOptions = [];
   isAdmin = false;
+  page = 1;
 
   constructor(
     private dialog: MatDialog,
@@ -108,61 +111,17 @@ export class MaterialsComponent implements OnInit {
       this.captureImages = garbage['capture_images'] || [];
       this.editedImages = garbage['edited_image'] || [];
     });
-
-    this.routeChangeSubscription = this.route.params.subscribe((params) => {
-      const folder_id = params['folder'];
-
-      this.loadSubscription && this.loadSubscription.unsubscribe();
-      this.loadSubscription = this.storeService.materials$.subscribe(
-        (materials) => {
-          materials.sort((a, b) => (a.folder ? -1 : 1));
-          this.materials = materials;
-          console.log("materials ==========>", materials);
-          this.materials = _.uniqBy(this.materials, '_id');
-          const folders = materials.filter((e) => {
-            return e.material_type === 'folder';
-          });
-          this.folders = folders;
-          this.folders.forEach((folder) => {
-            this.foldersKeyValue[folder._id] = { ...folder };
-          });
-          const materialFolderMatch = {};
-          folders.forEach((folder) => {
-            folder.shared_materials.forEach((e) => {
-              materialFolderMatch[e] = folder._id;
-            });
-          });
-          materials.forEach((e) => {
-            if (materialFolderMatch[e._id]) {
-              e.folder = materialFolderMatch[e._id];
-            }
-          });
-          if (folder_id && folder_id !== 'root') {
-            this.openFolder(this.foldersKeyValue[folder_id]);
-          } else {
-            this.selectedFolder = null;
-            this.filter();
-          }
-        }
-      );
-    });
   }
 
   ngOnInit(): void {
-    if (
-      !this.handlerService.previousUrl ||
-      this.handlerService.previousUrl.indexOf('/materials') === -1 ||
-      this.handlerService.previousUrl.indexOf('/materials/create') !== -1 ||
-      this.handlerService.previousUrl.indexOf('/materials/analytics') !== -1
-    ) {
-      this.materialService.loadMaterial(true);
-      this.teamService.loadAll(true);
+    this.selectedFolder = null;
+    this.filter();
+  }
+
+  ngOnChanges(changes): void {
+    if (changes.materials) {
+      this.filter();
     }
-    this.convertLoaderTimer = setInterval(() => {
-      if (this.convertingVideos.length) {
-        this.loadConvertingStatus();
-      }
-    }, 5000);
   }
 
   ngOnDestroy(): void {

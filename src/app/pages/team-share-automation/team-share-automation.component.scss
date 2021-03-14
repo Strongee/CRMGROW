@@ -1,0 +1,87 @@
+.page-content {
+  padding: 0;
+}
+
+.automation-table {
+  td {
+    padding: 10px;
+  }
+
+  .action-count,
+  .contacts,
+  .created,
+  .actions {
+    text-align: right;
+  }
+
+  .icon-button {
+    cursor: pointer;
+  }
+
+  .button-more {
+    a {
+      &::after {
+        content: none;
+      }
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .action-count, .contacts, .created {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 375px) {
+    .auth {
+      display: none;
+    }
+  }
+}
+
+.i-triangle-up.disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+
+tr.mat-row {
+  &.automation-detail-row {
+    height: unset;
+
+    td {
+      padding: 0px;
+
+      .automation-detail {
+        padding: 15px;
+        border-radius: 10px;
+        background-color: #eee;
+        min-height: 150px;
+
+        .loader {
+          width: 100px;
+          height: 100px;
+        }
+      }
+    }
+  }
+}
+
+
+tr td {
+  background-color: white;
+}
+
+.contact-chip {
+  .form-avatar {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+  }
+}
+
+input.disabled {
+  pointer-events: none;
+  background-color: #f8f8f8;
+}

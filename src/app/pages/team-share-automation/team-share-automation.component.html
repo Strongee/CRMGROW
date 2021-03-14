@@ -1,0 +1,126 @@
+<script src="../team-share-contact/team-share-contact.component.ts"></script>
+<div class="page-content">
+  <div class="v-center">
+    <div class="form-group mb-0 search-form">
+      <div class="input-group-prepend">
+        <i class="i-icon i-search d-block bgc-dark"></i>
+      </div>
+      <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="changeSearchStr()" [class.disabled]="automations.length <= 0">
+      <ng-container *ngIf="searchStr">
+        <div class="cancel-action c-pointer" (click)="clearSearchStr()">
+          <i class="i-icon i-close d-block bgc-dark"></i>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="my-3 position-relative">
+    <ng-container *ngIf="automations.length">
+      <table
+        mat-table
+        class="table automation-table" multiTemplateDataRows
+        [dataSource]="filteredResult | paginate: {itemsPerPage: 5, currentPage: page, id: 'automationTable', total: filteredResult.length}">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef class="title">Title</th>
+          <td mat-cell *matCellDef="let automation" class="title">
+            <a  [routerLink]="['/autoflow/edit/' + automation._id]" class="td-none"><span class="f-3 font-weight-bold">{{automation.title}}</span></a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="owner">
+          <th mat-header-cell *matHeaderCellDef class="auth">Owner</th>
+          <td mat-cell *matCellDef="let automation" class="auth">
+            <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === userId" [class.shared]="automation.role === 'team' && automation.user !== userId"></div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action-count">
+          <th mat-header-cell *matHeaderCellDef class="action-count">Actions</th>
+          <td mat-cell *matCellDef="let automation" class="action-count">
+            <div class="f-3">{{automation.automations && automation.automations.length}}</div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="contacts">
+          <th mat-header-cell *matHeaderCellDef class="contacts">Contacts</th>
+          <td mat-cell *matCellDef="let automation" class="contacts">
+            <div class="f-3">{{automation.contacts}}</div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="created">
+          <th mat-header-cell *matHeaderCellDef class="created">Created</th>
+          <td mat-cell *matCellDef="let automation" class="created">
+            <div class="f-3">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions"></th>
+          <td mat-cell *matCellDef="let automation" class="actions">
+            <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
+              <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+              </a>
+              <div ngbDropdownMenu class="light">
+                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="assignAutomation($event, automation)">
+                  <span class="f-3 font-weight-bold">Assign</span>
+                </button>
+                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item"
+                          (click)="openAutomation($event, automation)"
+                  >
+                    <span class="f-3 font-weight-bold">Edit</span>
+                  </button>
+                </ng-container>
+                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
+                  <span class="f-3 font-weight-bold">Clone</span>
+                </button>
+                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId">
+                  <hr class="my-0">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item"
+                          (click)="deleteAutomation($event, automation)"
+                  >
+                    <span class="f-3 c-red font-weight-bold">Delete automation</span>
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="DISPLAY_COLUMNS.length">
+            <div class="automation-detail"
+                 [@detailExpand]="element._id == selectedAutomation ? 'expanded' : 'collapsed'">
+              <ng-container *ngIf="detailLoading; else contactsList">
+                <div class="loader"></div>
+                <div class="text-center f-8 font-weight-bold">
+                  Loading the assigned contacts
+                </div>
+              </ng-container>
+              <ng-template #contactsList>
+                <h5 class="font-weight-bold border-bottom pb-2">Assigned Contacts</h5>
+                <div class="chip d-flex p-1 contact-chip c-pointer" *ngFor="let contact of contacts">
+                  <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
+                  <div class="info">
+                    <div class="f-5 font-weight-bold">{{contact.fullName}}</div>
+                    <div class="f-2">{{contact.email}}</div>
+                    <div class="f-2">{{contact.cell_phone}}</div>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+        <tr mat-row *matRowDef="let element; columns: DISPLAY_COLUMNS;"
+            class="example-element-row"
+            [class.example-expanded-row]="selectedAutomation === element._id">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="automation-detail-row"></tr>
+      </table>
+      <div class="d-flex justify-content-center align-items-center mt-4">
+        <div class="ml-3 pagination-wrapper">
+          <pagination-controls (pageChange)="page = $event" id="automationTable" maxSize="5" previousLabel=""
+                               nextLabel=""></pagination-controls>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

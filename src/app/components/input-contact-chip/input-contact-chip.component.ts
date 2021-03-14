@@ -6,7 +6,8 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
-  TemplateRef, OnChanges
+  TemplateRef,
+  OnChanges
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
@@ -163,7 +164,6 @@ export class InputContactChipComponent implements OnInit, OnChanges {
         _SELF.inputField.nativeElement.focus();
       }
     }, 300);
-
   }
 
   getMaterialLatestContact(): void {

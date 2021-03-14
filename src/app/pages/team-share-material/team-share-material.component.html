@@ -1,0 +1,425 @@
+<div class="page-content">
+  <div class="v-center contact-list-controls mt-3 mb-2">
+    <div class="form-group mb-0 search-form">
+      <div class="input-group-prepend">
+        <i class="i-icon i-search d-block bgc-dark"></i>
+      </div>
+      <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="filter()">
+      <ng-container *ngIf="searchStr">
+        <div class="cancel-action c-pointer" (click)="clearSearchStr()">
+          <i class="i-icon i-close d-block bgc-dark"></i>
+        </div>
+      </ng-container>
+    </div>
+    <div class="pl-3 pr-0 py-1 text-center ml-auto mr-2">
+      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer v-center" (click)="drawer.toggle()">
+        <span>Filter</span>
+        <img class="ml-1" src="../../../assets/img/filter.svg" alt="filter-icon" style="width: 23px;"/>
+      </a>
+    </div>
+  </div>
+
+  <!-- Material List -->
+  <div class="custom-mat-table material-table-container position-relative">
+    <div class="mat-table-wrapper">
+      <table class="w-100 page-table"
+             mat-table
+             [dataSource]="filteredMaterials | paginate: {itemsPerPage: 5, currentPage: page, id: 'materialTable', total: filteredMaterials.length}">
+
+        <ng-container matColumnDef="select">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="pl-0 checkbox-col">
+            <div class="custom-control custom-checkbox"
+                 [class.indeterminate]="selection.length && !isAllSelected()">
+              <input type="checkbox"
+                     class="custom-control-input"
+                     id="selectAllMaterials"
+                     (change)="$event ? masterToggle() : null"
+                     [checked]="isAllSelected()" />
+              <label class="custom-control-label"
+                     for="selectAllMaterials"></label>
+            </div>
+          </th>
+          <td mat-cell
+              *matCellDef="let element"
+              class="pl-0 checkbox-col">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox"
+                     class="custom-control-input"
+                     id="material-{{element._id}}"
+                     (change)="toggleElement(element)"
+                     [checked]="isSelected(element)" />
+              <label class="custom-control-label"
+                     for="material-{{element._id}}"></label>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="material_name">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length; else toolHeader" class="name-col">name </th>
+            <ng-template #toolHeader>
+              <th mat-header-cell colspan="8">
+                <div class="v-center">
+                  <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
+                  <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
+                </div>
+              </th>
+            </ng-template>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="name-col">
+            <ng-container *ngIf="element.material_type === 'folder'; else materialInfoTemplate">
+              <a class="v-center c-pointer material-main-info td-none" [routerLink]="['/materials/' + element._id]">
+                <div class="thumbnail">
+                  <a>
+                    <div class="folder-thumb">
+                    </div>
+                  </a>
+                </div>
+                <span class="font-weight-bold ci-dark">{{(element.title || '') | shorten: 40: '...'}}</span>
+              </a>
+            </ng-container>
+            <ng-template #materialInfoTemplate>
+              <div class="v-center c-pointer material-main-info">
+                <div class="thumbnail">
+                  <ng-container [ngSwitch]="element.material_type">
+                    <a
+                      *ngSwitchCase="'video'"
+                      href="{{siteUrl}}/video?video={{element._id}}&user={{user_id}}" target="_blank">
+                      <div class="thumb-prev-wrapper">
+                        <img [src]="element.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                        <img [src]="element.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                      </div>
+                    </a>
+                    <a
+                      *ngSwitchCase="'pdf'"
+                      href="{{siteUrl}}/pdf?pdf={{element._id}}&user={{user_id}}" target="_blank">
+                      <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                    </a>
+                    <a
+                      *ngSwitchCase="'image'"
+                      href="{{siteUrl}}/image?image={{element._id}}&user={{user_id}}" target="_blank">
+                      <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                    </a>
+                  </ng-container>
+                </div>
+                <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
+                  <ng-container *ngIf="!selectedFolder && isEnableSearchOptions() && element.folder && foldersKeyValue[element.folder]">
+                    <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
+                  </ng-container>
+                </span>
+              </div>
+            </ng-template>
+            <div class="responsive-data">
+              <div class="type">
+                <span class="info-title">type:</span>
+                <span class="info-value">{{element.material_type}}</span>
+              </div>
+              <div class="time">
+                <span class="info-title">created at:</span>
+                <span class="info-value">{{element.created_at | date : 'mediumDate'}}</span>
+              </div>
+              <div class="analytics v-center">
+                <span class="info-title">views:</span>
+                <div class="info-value">
+                  <a [routerLink]="['/materials/analytics/' + element._id]" class="text-decoration-none">
+                    <div class="v-center justify-content-end">
+                      <span class="f-3 c-dark">{{element.views}}</span>
+                      <i class="i-icon i-analytics bgc-blue ml-1 sm" aria-hidden="true"></i>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="owner">
+                <span class="info-title">owner:</span>
+                <span class="info-value">
+                  {{element.user ? (element.user._id ? (element.user._id === user_id ? 'Me' : element.user.user_name) : (element.user === user_id ? 'Me' : 'Unknown User')) : 'Admin'}}
+                </span>
+              </div>
+              <div class="share">
+                <span class="info-title">share with:</span>
+                <span class="info-value">
+                  {{element.team ? element.team.name : '--'}}
+                </span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Owner Column -->
+        <ng-container matColumnDef="creator">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length" class="owner-col">owner</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="owner-col">
+            {{element.user ? (element.user._id ? (element.user._id === user_id ? 'Me' : element.user.user_name) : (element.user === user_id ? 'Me' : 'Unknown User')) : 'Admin'}}
+          </td>
+        </ng-container>
+
+        <!-- Share Column -->
+        <ng-container matColumnDef="share">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length" class="share-col">shared with</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="share-col">
+            {{element.team ? element.team.name : '--'}}
+          </td>
+        </ng-container>
+
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length" class="type-col">type</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="type-col {{element.material_type}}">
+            {{element.material_type}}
+          </td>
+        </ng-container>
+
+        <!-- Added Column -->
+        <ng-container matColumnDef="created_at">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell class="time-col"
+                *ngIf="!selection.length">added</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="time-col">
+            {{element.created_at | date : 'mediumDate'}}
+          </td>
+        </ng-container>
+
+        <!-- Analytics Column -->
+        <ng-container matColumnDef="analytics">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length" class="analytics-col">views</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="analytics-col">
+            <ng-container *ngIf="element.material_type === 'folder'; else materialViewTemplate">
+              <div class="text-right pr-3">--</div>
+            </ng-container>
+            <ng-template #materialViewTemplate>
+              <a [routerLink]="['/materials/analytics/' + element._id]" class="text-decoration-none">
+                <div class="v-center justify-content-end py-2">
+                  <span class="f-2 c-dark mt-2">{{element.views}}</span>
+                  <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                </div>
+              </a>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Lead Capture Column -->
+        <ng-container matColumnDef="lead_capture">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length" class="capture-col">lead capture</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="capture-col">
+            <div class="v-center custom-control custom-switch" *ngIf="element.material_type !== 'folder'">
+              <label class="custom-toggle mb-0" placement="top">
+                <input
+                  type="checkbox"
+                  (change)="setCapture(element)"
+                  [checked]="isCaptured(element)"
+                  id="capture-{{element._id}}"
+                />
+                <span class="custom-toggle-slider rounded-circle"></span>
+              </label>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Main Action Column -->
+        <ng-container matColumnDef="actions">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length" class="item-action"></th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="item-action">
+            <div ngbDropdown placement="bottom-right">
+              <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 no-carot px-0">
+                <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+              </a>
+              <div ngbDropdownMenu class="light">
+                <ng-container *ngIf="element.material_type === 'folder'; else materialActionsTemplate">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editFolder(element)">
+                    <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="removeFolder(element)">
+                    <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                  </button>
+                </ng-container>
+                <ng-template #materialActionsTemplate>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="sendMaterial(element)">
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Send</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(element)">
+                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Copy link</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(element)">
+                    <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(element)">
+                    <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Edit template</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(element)">
+                    <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(element)">
+                    <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="moveToFolder(element)">
+                    <i class="i-icon i-folder bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Move To</span>
+                  </button>
+                </ng-template>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+      </table>
+      <div class="d-flex justify-content-center align-items-center mt-4">
+        <div class="ml-3 pagination-wrapper">
+          <pagination-controls (pageChange)="page = $event" id="materialTable" maxSize="5" previousLabel=""
+                               nextLabel=""></pagination-controls>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="!filteredMaterials.length">
+      <div class="empty-list py-5">
+        <div class="object-icon v-center">
+          <i class="i-icon i-lunch d-block bgc-dark"></i>
+        </div>
+        <h4 class="font-weight-bold mt-4 mb-3">
+          There is no materials for the filter options.
+        </h4>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<mat-drawer-container [hasBackdrop]="true">
+  <mat-drawer #drawer
+              position="end">
+    <div class="p-4c panel">
+      <div class="v-center mb-3">
+        <h4 class="font-weight-bold mb-0 title">Advanced Filter</h4>
+        <div class="c-blue f-1 text-uppercase ml-2 mt-2 c-pointer" (click)="clearAllFilters()">Clear All Filters</div>
+        <button class="v-center border-0 bgc-trans ml-auto" type="button" (click)="drawer.toggle()">
+          <i class="d-block i-icon i-close bgc-dark"></i>
+        </button>
+      </div>
+      <form #actionForm="ngForm" [class.was-validated]="actionForm.submitted">
+        <div class="form-group">
+          <label>file type</label>
+          <div class="border rounded py-2 pr-2 pl-3 mt-1">
+            <mat-select [(ngModel)]="matType" (ngModelChange)="filter()" id="filter-folder" name="folder" #folder="ngModel" required>
+              <mat-option value="">All types</mat-option>
+              <mat-option value="folder" *ngIf="!selectedFolder || folderOptions.length">
+                <div class="f-3 c-black">
+                  Folder
+                </div>
+              </mat-option>
+              <mat-option value="video">
+                <div class="f-3 c-black">
+                  Video
+                </div>
+              </mat-option>
+              <mat-option value="pdf">
+                <div class="f-3 c-black">
+                  Pdf
+                </div>
+              </mat-option>
+              <mat-option value="image">
+                <div class="f-3 c-black">
+                  Image
+                </div>
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="folders.length > 1">
+          <label class="mb-2">folders</label>
+          <div class="filter-check-item" *ngFor="let folder of folders">
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mff-{{folder._id}}" name="mff-{{folder._id}}"
+                     (change)="toggleFolderOption(folder._id)" [checked]="folderOptions.indexOf(folder._id) !== -1">
+              <label class="custom-control-label" for="mff-{{folder._id}}">
+                <div class="f-3 mt-1">{{folder.title}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="mb-2">owner & members</label>
+          <div class="filter-check-item">
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mfu-admin" name="mfu-admin"
+                     (change)="toggleAdminOption()" [checked]="isAdmin">
+              <label class="custom-control-label" for="mfu-admin">
+                <div class="f-3 mt-1">Admin</div>
+              </label>
+            </div>
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mfu-me" name="mfu-me"
+                     (change)="toggleUserOption(user_id)" [checked]="userOptions.indexOf(user_id) !== -1">
+              <label class="custom-control-label" for="mfu-me">
+                <div class="f-3 mt-1">Me</div>
+              </label>
+            </div>
+            <ng-container *ngFor="let user of team.owner">
+              <div class="custom-checkbox mb-1" *ngIf="user._id != user_id">
+                <input type="checkbox" class="custom-control-input" id="mfu-{{user._id}}" name="mfu-{{user._id}}"
+                       (change)="toggleUserOption(user._id)" [checked]="userOptions.indexOf(user._id) !== -1">
+                <label class="custom-control-label" for="mfu-{{user._id}}">
+                  <div class="f-3 mt-1">{{user.user_name}}</div>
+                </label>
+              </div>
+            </ng-container>
+            <ng-container *ngFor="let user of team.editors">
+              <div class="custom-checkbox mb-1" *ngIf="user._id != user_id">
+                <input type="checkbox" class="custom-control-input" id="mfu-{{user._id}}" name="mfu-{{user._id}}"
+                       (change)="toggleUserOption(user._id)" [checked]="userOptions.indexOf(user._id) !== -1">
+                <label class="custom-control-label" for="mfu-{{user._id}}">
+                  <div class="f-3 mt-1">{{user.user_name}}</div>
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="mt-4 d-flex">
+          <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="drawer.toggle()">Close</button>
+        </div>
+      </form>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>
