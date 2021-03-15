@@ -240,7 +240,8 @@ export const REGIONS = {
     'Washington',
     'West Virginia',
     'Wisconsin',
-    'Wyoming'
+    'Wyoming',
+    'District of Columbia'
   ],
   CA: [
     'Alberta',
@@ -1081,7 +1082,7 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Send via SMS',
+      label: 'Send via Text',
       type: 'button',
       icon: 'i-sms-sent',
       command: 'text',

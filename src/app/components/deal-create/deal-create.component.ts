@@ -4,6 +4,7 @@ import { DealsService } from 'src/app/services/deals.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DealStage } from 'src/app/models/deal-stage.model';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-deal-create',
@@ -20,11 +21,14 @@ export class DealCreateComponent implements OnInit {
   saving = false;
   createSubscription: Subscription;
   keepContacts: Contact[] = [];
+  maxValueFlag = false;
+  decimalPointFlag = false;
 
   constructor(
     private dealsService: DealsService,
     private dialogRef: MatDialogRef<DealCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private toastr: ToastrService
   ) {
     if (this.data && this.data.contact) {
       this.keepContacts = [this.data.contact];
@@ -42,12 +46,29 @@ export class DealCreateComponent implements OnInit {
             this.selectedStage = stage._id;
           }
         });
+      } else {
+        this.selectedStage = this.stages[0]?._id;
       }
     });
   }
 
+  changeValue(): void {
+    if (this.value > 10000000) {
+      this.maxValueFlag = true;
+    } else {
+      this.maxValueFlag = false;
+    }
+    const values = this.value.toString().split('.');
+
+    if (values && values[1]?.length > 2) {
+      this.maxValueFlag = true;
+    } else {
+      this.decimalPointFlag = false;
+    }
+  }
+
   createDeals(): void {
-    if (this.contacts.length == 0 || this.value > 9999999) {
+    if (this.contacts.length == 0 || this.maxValueFlag || this.maxValueFlag) {
       return;
     } else {
       this.saving = true;
@@ -65,6 +86,7 @@ export class DealCreateComponent implements OnInit {
         (res) => {
           if (res) {
             this.saving = false;
+            this.toastr.success('New Deal successfully created.');
             this.dialogRef.close(res['data']);
           }
         },

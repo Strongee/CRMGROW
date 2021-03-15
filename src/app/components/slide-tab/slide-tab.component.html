@@ -15,7 +15,7 @@
       <ng-template mat-tab-label>
         <i *ngIf="tab.icon" class="tab-icon {{tab.icon}} mr-2"></i>
         <span class="tab-label">{{tab.label | translate}}</span>
-        <span class="badge" *ngIf="tab.badge !== undefined">{{tab.badge}}</span>
+        <span class="badge" *ngIf="tab.badge">{{tab.badge}}</span>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

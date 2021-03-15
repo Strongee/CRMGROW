@@ -155,7 +155,9 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   updateFilter(): void {
-    this.contactService.searchOption.next(this.searchOption);
+    this.contactService.searchOption.next(
+      new SearchOption().deserialize(this.searchOption)
+    );
   }
 
   clearAllFilters(): void {
@@ -172,7 +174,9 @@ export class AdvancedFilterComponent implements OnInit {
   clearLabel(): void {
     this.searchOption.includeLabel = true;
     this.searchOption.labelCondition = [];
-    this.contactService.searchOption.next(this.searchOption);
+    this.contactService.searchOption.next(
+      new SearchOption().deserialize(this.searchOption)
+    );
   }
 
   applyFilters(): void {}
@@ -209,7 +213,9 @@ export class AdvancedFilterComponent implements OnInit {
         action.count = 0;
       });
       this.searchOption.materialCondition = new MaterialCondition();
-      this.contactService.searchOption.next(this.searchOption);
+      this.contactService.searchOption.next(
+        new SearchOption().deserialize(this.searchOption)
+      );
     } else {
       this.selectedMaterialActions = title;
       this.materialActions.forEach((action) => {
@@ -233,7 +239,9 @@ export class AdvancedFilterComponent implements OnInit {
         this.searchOption.materialCondition.not_watched_pdf.flag = true;
         this.searchOption.materialCondition.not_watched_image.flag = true;
       }
-      this.contactService.searchOption.next(this.searchOption);
+      this.contactService.searchOption.next(
+        new SearchOption().deserialize(this.searchOption)
+      );
     }
   }
 
@@ -330,7 +338,9 @@ export class AdvancedFilterComponent implements OnInit {
                 break;
             }
           }
-          this.contactService.searchOption.next(this.searchOption);
+          this.contactService.searchOption.next(
+            new SearchOption().deserialize(this.searchOption)
+          );
         }
       });
   }
@@ -346,7 +356,9 @@ export class AdvancedFilterComponent implements OnInit {
     } else {
       this.searchOption.labelCondition.push(label);
     }
-    this.contactService.searchOption.next(this.searchOption);
+    this.contactService.searchOption.next(
+      new SearchOption().deserialize(this.searchOption)
+    );
   }
 
   toggleActivities(activity: string): void {
@@ -367,7 +379,9 @@ export class AdvancedFilterComponent implements OnInit {
         this.searchOption.lastMaterial.watched_image.flag = !this.searchOption
           .lastMaterial.watched_image.flag;
       }
-      this.contactService.searchOption.next(this.searchOption);
+      this.contactService.searchOption.next(
+        new SearchOption().deserialize(this.searchOption)
+      );
     } else {
       const pos = this.searchOption.activityCondition.indexOf(
         this.activityDefine[activity]
@@ -377,7 +391,9 @@ export class AdvancedFilterComponent implements OnInit {
       } else {
         this.searchOption.activityCondition.push(this.activityDefine[activity]);
       }
-      this.contactService.searchOption.next(this.searchOption);
+      this.contactService.searchOption.next(
+        new SearchOption().deserialize(this.searchOption)
+      );
     }
   }
 
@@ -386,26 +402,34 @@ export class AdvancedFilterComponent implements OnInit {
       case 'label':
         this.searchOption.includeLabel = !this.searchOption.includeLabel;
         if (this.searchOption.labelCondition.length) {
-          this.contactService.searchOption.next(this.searchOption);
+          this.contactService.searchOption.next(
+            new SearchOption().deserialize(this.searchOption)
+          );
         }
         break;
       case 'source':
         this.searchOption.includeSource = !this.searchOption.includeSource;
         if (this.searchOption.sourceCondition.length) {
-          this.contactService.searchOption.next(this.searchOption);
+          this.contactService.searchOption.next(
+            new SearchOption().deserialize(this.searchOption)
+          );
         }
         break;
       case 'brokerage':
         this.searchOption.includeBrokerage = !this.searchOption
           .includeBrokerage;
         if (this.searchOption.brokerageCondition.length) {
-          this.contactService.searchOption.next(this.searchOption);
+          this.contactService.searchOption.next(
+            new SearchOption().deserialize(this.searchOption)
+          );
         }
         break;
       case 'tag':
         this.searchOption.includeTag = !this.searchOption.includeTag;
         if (this.searchOption.tagsCondition.length) {
-          this.contactService.searchOption.next(this.searchOption);
+          this.contactService.searchOption.next(
+            new SearchOption().deserialize(this.searchOption)
+          );
         }
         break;
     }

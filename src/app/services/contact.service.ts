@@ -340,6 +340,12 @@ export class ContactService extends HttpService {
   }
   advancedSearchImpl(str: string): Observable<ContactActivity[]> {
     const searchOption = this.searchOption.getValue();
+    if (
+      searchOption.countryCondition &&
+      !searchOption.countryCondition.length
+    ) {
+      delete searchOption.countryCondition;
+    }
     return this.httpClient
       .post(this.server + CONTACT.ADVANCE_SERACH, {
         ...searchOption,

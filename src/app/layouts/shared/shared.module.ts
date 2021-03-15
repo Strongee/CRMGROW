@@ -48,6 +48,7 @@ import { SocialLoginModule } from 'angularx-social-login';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
+import { MakeRedirectPipe } from '../../pipes/make-redirect.pipe';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { HighlightPipe } from '../../pipes/highlight.pipe';
     DurationPipe,
     PhonePipe,
     TimeDurationPipe,
-    HighlightPipe
+    HighlightPipe,
+    MakeRedirectPipe
   ],
   imports: [
     CommonModule,
@@ -142,7 +144,8 @@ import { HighlightPipe } from '../../pipes/highlight.pipe';
     SocialLoginModule,
     MatProgressBarModule,
     TimeDurationPipe,
-    HighlightPipe
+    HighlightPipe,
+    MakeRedirectPipe
   ]
 })
 export class SharedModule {}

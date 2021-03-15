@@ -111,11 +111,15 @@ export class DealsSettingComponent implements OnInit {
       .open(DealStageCreateComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '400px'
+        maxWidth: '400px',
+        data: {
+          priority: this.stages.length
+        }
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toastr.success('Deal Stage successfully created.');
           this.dealsService.createStage$(new DealStage().deserialize(res));
         }
       });

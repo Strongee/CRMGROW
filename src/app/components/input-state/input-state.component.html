@@ -27,7 +27,7 @@
             #auto="matAutocomplete"
             (optionSelected)="onSelectOption($event)"
         >
-          <ng-container *ngIf="!selectedCountries.length; else selectedCountriesStates;">
+          <ng-container *ngIf="!selectedCountries || !selectedCountries.length; else selectedCountriesStates;">
             <mat-option disabled>
               <div class="py-2">
                 Select the country at first

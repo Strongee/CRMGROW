@@ -12,6 +12,7 @@ export class SettingsComponent implements OnInit {
   menuItems: PageMenuItem[] = [
     { id: 'notifications', icon: 'i-notification', label: 'Notifications' },
     { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
+    { id: 'affiliate', icon: 'i-affiliate', label: 'Affiliate' },
     { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
     { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
     { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },

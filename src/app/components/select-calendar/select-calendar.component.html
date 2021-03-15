@@ -1,4 +1,4 @@
-<mat-select [(ngModel)]="calendar" name="calendar" placeholder="Select Calendar" (ngModelChange)="changeCalendar()">
+<mat-select [(ngModel)]="calendar" name="calendar" placeholder="Select Calendar" (ngModelChange)="changeCalendar()" [formControl]="calendarControl">
   <mat-select-trigger>
     <div class="template-item selected v-center" *ngIf="calendar">
       <div [ngStyle]="{'background-color': calendar.color || 'blue'}" class="color"></div>

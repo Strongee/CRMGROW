@@ -66,6 +66,7 @@ export class CalendarComponent implements OnInit {
   event: any;
   selectedDate: any;
 
+  isShowCalendarList = false;
   constructor(
     private dialog: MatDialog,
     private appointmentService: AppointmentService,
@@ -296,10 +297,8 @@ export class CalendarComponent implements OnInit {
     this.overlayService.close(null);
     this.dialog
       .open(CalendarDialogComponent, {
-        position: { top: '100px' },
         width: '100vw',
-        maxWidth: '600px',
-        maxHeight: '700px'
+        maxWidth: '600px'
       })
       .afterClosed()
       .subscribe((res) => {

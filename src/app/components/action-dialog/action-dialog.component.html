@@ -2,7 +2,7 @@
   <span *ngIf="stepIndex === 1">Select the action</span>
 <!--  <span *ngIf="stepIndex === 2">Setting the {{ActivityName[type]}}</span>-->
   <ng-container *ngIf="isMaterialSetting(); else noMaterialTitle">
-    <span *ngIf="stepIndex === 2">Choose media to email</span>
+    <span *ngIf="stepIndex === 2">Choose Material</span>
   </ng-container>
   <ng-template #noMaterialTitle>
     <span *ngIf="stepIndex === 2">Setting the {{ActivityName[type]}}</span>
@@ -55,7 +55,7 @@
             <div class="input-group-prepend">
               <i class="i-icon i-search d-block bgc-dark"></i>
             </div>
-            <input type="text" class="form-control" name="search" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="filter()">
+            <input type="text" class="form-control" #searchInput name="search" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="filter()">
             <ng-container *ngIf="searchStr">
               <div class="cancel-action c-pointer" (click)="clearSearchStr()">
                 <i class="i-icon i-close d-block bgc-dark"></i>
@@ -480,6 +480,15 @@
               <span class="error text-danger"
                     *ngIf="content.errors && (content.dirty || content.touched || submitted) && submitted">Content is
               required.</span>
+            </div>
+            <div class="form-group">
+              <label class="theme-label">Template</label>
+              <app-input-template
+                [type]="'text'"
+                [placeholder]="'Search templates'"
+                [(template)]="selectedTemplate"
+                (templateChange)="selectTemplate($event)">
+              </app-input-template>
             </div>
           </div>
         </ng-container>

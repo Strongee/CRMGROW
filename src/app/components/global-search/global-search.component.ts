@@ -139,6 +139,8 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
             });
           }
         );
+      } else {
+        this.searchedResults['contacts'] = [];
       }
     });
 

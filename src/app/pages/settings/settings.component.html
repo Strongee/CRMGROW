@@ -1,5 +1,5 @@
-<div class="page-content pt-0 pt-sm-3 px-3 pb-3 px-sm-4c">
-  <h6 class="font-weight-bold mt-3 mt-sm-4 mb-3 mb-sm-4">SETTINGS</h6>
+<div class="page-content">
+  <h1 class="page-title mb-3 mb-sm-4">Settings</h1>
   <div class="sub-sidebar-mobile mb-2">
     <div ngbDropdown class="sidebar-menu p-2">
       <div ngbDropdownToggle class="v-center">
@@ -21,7 +21,7 @@
       <ul class="m-0 p-0">
         <ng-container *ngFor="let menuItem of menuItems" class="nav-item">
           <li>
-            <a class="d-flex nav-link c-dark c-pointer px-0" [ngClass]="{active: currentPage === menuItem.id}" (click)="changeMenu(menuItem)">
+            <a class="d-flex nav-link c-dark c-pointer px-0 {{menuItem.id}}" [ngClass]="{active: currentPage === menuItem.id}" (click)="changeMenu(menuItem)">
               <i class="i-icon bgc-dark {{menuItem.icon}} mr-2"></i>
               <span class="f-3 menu-label font-weight-bold">{{menuItem.label | translate}}</span>
             </a>
@@ -33,6 +33,7 @@
       <ng-container [ngSwitch]="currentPage">
         <app-notifications *ngSwitchCase="'notifications'"></app-notifications>
         <app-sms-limits *ngSwitchCase="'sms-limits'"></app-sms-limits>
+        <app-affiliate *ngSwitchCase="'affiliate'"></app-affiliate>
         <app-assistant *ngSwitchCase="'assistant'"></app-assistant>
         <app-lead-capture *ngSwitchCase="'lead-capture'"></app-lead-capture>
         <app-tag-manager *ngSwitchCase="'tag-manager'"></app-tag-manager>

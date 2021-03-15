@@ -41,7 +41,7 @@
                 </div>
             </ng-template>
             <div class="label-container v-center flex-wrap">
-                <div class="v-center mb-2 ml-2" *ngFor="let item of this.selectedLabels">
+                <div class="v-center mb-1 ml-2" *ngFor="let item of this.selectedLabels">
                   <ng-container *ngIf="item; else noLabelTemplate">
                     <i class="d-block i-icon i-label mr-1"
                        [style.backgroundColor]="item.color === '#FFF' ? '#000' : item.color">

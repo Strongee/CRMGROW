@@ -171,7 +171,7 @@ button:disabled {
   &.send_email_image,
   &.send_text_image {
     width: 90vw;
-    max-width: calc(900px + 4.5rem);
+    max-width: calc(900px + 5.5rem);
 
     @media screen and (max-width: 575px) {
       width: 98vw;
@@ -278,7 +278,7 @@ button:disabled {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   grid-row-gap: 20px;
-  max-height: calc( 65vh - 220px );
+  max-height: 350px;
   overflow: auto;
   width: 450px;
   padding-right: 20px;

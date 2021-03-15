@@ -49,7 +49,15 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     'created',
     'actions'
   ];
+  PAGE_COUNTS = [
+    { id: 8, label: '8' },
+    { id: 10, label: '10' },
+    { id: 25, label: '25' },
+    { id: 50, label: '50' }
+  ];
   STATUS = STATUS;
+
+  pageSize = this.PAGE_COUNTS[1];
 
   userId = '';
   page = 1;
@@ -113,6 +121,10 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   clearSearchStr(): void {
     this.searchStr = '';
     this.changeSearchStr();
+  }
+
+  changePageSize(type: any): void {
+    this.pageSize = type;
   }
   /**
    * Redirects to the selected Automation

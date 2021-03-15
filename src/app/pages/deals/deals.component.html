@@ -1,8 +1,8 @@
 <div class="page-content position-relative">
     <div class="v-center mb-3">
-        <div class="f-26 font-weight-bold">
+        <h1 class="page-title mb-0">
             Deals
-        </div>
+        </h1>
         <a class="btn text-primary border border-primary bg-white font-weight-bold ml-auto" [routerLink]="['/settings/deals-setting']">Edit stages</a>
     </div>
 
@@ -78,7 +78,7 @@
                                     <div class="c-white">+{{deal.contacts.length - 1}}</div>
                                 </div>
                             </div>
-                            <div class="f-3 op-64 mt-2">
+                            <div class="f-3 op-64 mt-2" *ngIf="deal.value">
                                 ${{deal.value}}
                             </div>
                         </div>

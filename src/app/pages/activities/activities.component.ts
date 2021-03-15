@@ -17,6 +17,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     'contact_name',
     'contact_label',
     'activity',
+    'activity_time',
     'contact_email',
     'contact_phone',
     'contact_address'

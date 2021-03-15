@@ -14,7 +14,15 @@ import { STATUS } from 'src/app/constants/variable.constants';
   styleUrls: ['./templates.component.scss']
 })
 export class TemplatesComponent implements OnInit, OnDestroy {
+  PAGE_COUNTS = [
+    { id: 8, label: '8' },
+    { id: 10, label: '10' },
+    { id: 25, label: '25' },
+    { id: 50, label: '50' }
+  ];
   STATUS = STATUS;
+
+  pageSize = this.PAGE_COUNTS[1];
 
   page = 1;
   userId = '';
@@ -160,5 +168,9 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   clearSearchStr(): void {
     this.searchStr = '';
     this.filteredResult = this.templates;
+  }
+
+  changePageSize(type: any): void {
+    this.pageSize = type;
   }
 }

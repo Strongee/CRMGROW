@@ -55,12 +55,6 @@
         <div class="form-group">
             <div class="v-center">
                 <label class="mb-0">value</label>
-                <span
-                    class="invalid-error f-3 c-red ml-auto"
-                    *ngIf="dealForm.submitted && this.deal.value > 9999999"
-                >
-                    Max value is 9999999
-                </span>
             </div>
             <input
                 class="form-control"
@@ -68,10 +62,22 @@
                 name="dealValue"
                 #dealValue="ngModel"
                 [(ngModel)]="deal.value"
+                (ngModelChange)="changeValue()"
                 min="0"
                 max="9999999"
-                required
             >
+            <div
+                class="invalid-error f-3 c-red"
+                *ngIf="maxValueFlag"
+            >
+                ※ Max value is 10000000.
+            </div>
+            <div
+                class="invalid-error f-3 c-red"
+                *ngIf="decimalPointFlag"
+            >
+                ※ Allow up to two decimal places.
+            </div>
         </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">

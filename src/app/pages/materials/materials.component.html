@@ -1,19 +1,19 @@
 <div class="page-content">
   <div class="page-header">
-    <h1 class="f-24 font-weight-bold m-0" *ngIf="!selectedFolder; else folderTitleTemplate">Materials</h1>
+    <h1 class="page-title" *ngIf="!selectedFolder; else folderTitleTemplate">Materials</h1>
     <ng-template #folderTitleTemplate>
-      <h1 class="f-24 font-weight-bold m-0 v-center">
+      <h1 class="page-title d-flex">
         <a [routerLink]="['/materials/']" class="c-pointer c-dark to-root">Materials</a>
-        <span class="f-8 v-center"><i class="i-icon i-chev-right d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
+        <span class="f-6 v-center"><i class="i-icon i-chev-right d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
       </h1>
     </ng-template>
     <div class="v-center create-actions">
-      <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record p-2" (click)="recordSetting()">
+      <button class="v-center btn btn-blue shadow font-weight-bold text-white button-record px-2" (click)="recordSetting()">
         <i class="bgc-white i-icon i-record mr-2"></i>
         Record new video
       </button>
       <div class="ml-1 ml-sm-3 border border-primary rounded" ngbDropdown>
-        <div class="font-weight-bold c-dark c-pointer px-2 px-sm-3 py-2 button-add" ngbDropdownToggle>
+        <div class="font-weight-bold c-dark c-pointer px-2 button-add" ngbDropdownToggle>
           Add new
         </div>
         <div ngbDropdownMenu>
@@ -64,7 +64,7 @@
     <div class="mat-table-wrapper">
       <table class="w-100 page-table"
         mat-table
-        [dataSource]="filteredMaterials">
+        [dataSource]="filteredMaterials | paginate: {id: 'materialPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: filteredMaterials.length}">
 
         <ng-container matColumnDef="loader-cell">
           <th mat-header-cell
@@ -359,6 +359,42 @@
         <tr mat-row
           *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
+      <ng-container *ngIf="filteredMaterials.length">
+        <div class="my-2 table-control mode-1">
+          <div class="pagination-wrapper m-auto">
+            <pagination-controls
+              (pageChange)="page = $event"
+              (pageBoundsCorrection)="page = $event"
+              id="materialPages"
+              maxSize="5"
+              previousLabel=""
+              nextLabel="">
+            </pagination-controls>
+          </div>
+          <div class="shadow-dropdown ml-auto page-size-control"
+            ngbDropdown
+            placement="top-right">
+            <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+              ngbDropdownToggle>
+              <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
+            </div>
+            <div ngbDropdownMenu
+              aria-labelledby="contactPageSize">
+              <div class="py-2"
+                ngbDropdownItem
+                *ngFor="let type of PAGE_COUNTS"
+                (click)="changePageSize(type)">
+                <span class="f-3 v-center"
+                  [class.font-weight-bold]="type.id === pageSize.id">
+                  Show {{type.label}} rows per page
+                  <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                    *ngIf="type.id === pageSize.id"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
     <ng-container *ngIf="!(storeService.materials$ | async).length; else showingStatusTemplate">
       <ng-container [ngSwitch]="(materialService.loading$ | async)">

@@ -95,6 +95,10 @@ export class User implements Deserializable {
     google_refresh_token?: string;
     outlook_refresh_token?: string;
   }[];
+  assistant_info?: {
+    is_limit: boolean;
+    max_count: 1;
+  };
 
   deserialize(input: any): this {
     return Object.assign(this, input);

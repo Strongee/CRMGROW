@@ -28,3 +28,20 @@
         display: none;
     }
 }
+
+.sub-sidebar {
+    .affiliate.nav-link {
+        align-items: center;
+        padding-top: 2px;
+        padding-bottom: 6px;
+
+        .i-affiliate.i-icon  {
+            width: 28px;
+            height: 28px;
+            margin-left: -5px;
+        }
+        span.menu-label {
+            margin-left: -5px;
+        }
+    }
+}

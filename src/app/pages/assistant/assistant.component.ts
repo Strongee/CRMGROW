@@ -1,25 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { AssistantCreateComponent } from 'src/app/components/assistant-create/assistant-create.component';
 import { AssistantPasswordComponent } from 'src/app/components/assistant-password/assistant-password.component';
 import { AssistantRemoveComponent } from 'src/app/components/assistant-remove/assistant-remove.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
 import { Guest } from 'src/app/models/guest.model';
 import { GuestService } from 'src/app/services/guest.service';
+import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-assistant',
   templateUrl: './assistant.component.html',
   styleUrls: ['./assistant.component.scss']
 })
-export class AssistantComponent implements OnInit {
+export class AssistantComponent implements OnInit, OnDestroy {
   guests: Guest[] = [];
   loading = false;
   toggling = false;
-  constructor(private guestService: GuestService, private dialog: MatDialog) {}
+  limitInfo = {
+    is_limit: true,
+    max_count: 1
+  };
+  profileSubscription: Subscription;
+
+  constructor(
+    private guestService: GuestService,
+    private userService: UserService,
+    private dialog: MatDialog,
+    private toast: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.loadGuests();
+
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
+      if (user.assistant_info) {
+        this.limitInfo = user.assistant_info;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
   }
 
   /**
@@ -49,6 +73,7 @@ export class AssistantComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+          this.toast.success('New Assistant successfully created.');
           this.guests.push(res);
         }
       });
@@ -57,16 +82,21 @@ export class AssistantComponent implements OnInit {
   /**
    * Open delete Dialog & clean list after success
    */
-  openDeleteDialog(): void {
+  openDeleteDialog(guest: Guest): void {
     this.dialog
       .open(AssistantRemoveComponent, {
         ...DialogSettings.CONFIRM,
-        data: this.guests[0]
+        data: guest
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.guests = [];
+          this.guests.some((e, index) => {
+            if (e._id === guest._id) {
+              this.guests.splice(index, 1);
+            }
+          });
+          this.toast.success('Assistant successfully deleted.');
         }
       });
   }
@@ -74,27 +104,27 @@ export class AssistantComponent implements OnInit {
   /**
    * Open password edit dialog
    */
-  openPasswordEditDialog(): void {
+  openPasswordEditDialog(guest: Guest): void {
     this.dialog.open(AssistantPasswordComponent, {
       ...DialogSettings.ASSISTANT,
-      data: this.guests[0]
+      data: guest
     });
   }
 
   /**
    *
    */
-  toggleAssistant(): void {
-    const status = this.guests[0].disabled;
-    this.guests[0].disabled = !status;
+  toggleAssistant(guest: Guest): void {
+    const status = guest.disabled;
+    guest.disabled = !status;
     this.toggling = true;
-    this.guestService.update(this.guests[0]._id, this.guests[0]).subscribe(
+    this.guestService.update(guest._id, guest).subscribe(
       () => {
         this.toggling = false;
       },
       () => {
         this.toggling = false;
-        this.guests[0].disabled = status;
+        guest.disabled = status;
       }
     );
   }

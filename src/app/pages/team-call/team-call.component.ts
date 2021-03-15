@@ -32,6 +32,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     { id: 'denied', label: 'Denied' }
   ];
   selectedTab = this.TABS[0];
+  pageSize = { id: 8, label: '8' };
 
   currentUser: any;
   userId = '';
@@ -126,7 +127,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     let skip = 0;
     if (page) {
       this.page[type] = page;
-      skip = (page - 1) * 8;
+      skip = (page - 1) * this.pageSize.id;
     } else {
       this.page[type] = 1;
       skip = 0;
@@ -135,7 +136,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loading[type] = true;
     this.subscriptions[type] && this.subscriptions[type].unsubscribe();
     this.subscriptions[type] = this.teamService
-      .loadTeamCalls(type, skip)
+      .loadTeamCalls(type, skip, this.pageSize.id)
       .subscribe((res) => {
         this.loading[type] = false;
         if (res) {
@@ -508,5 +509,9 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
         event: calendarData
       }
     });
+  }
+  changePageSize(type: any): void {
+    this.pageSize = type;
+    this.changePage(this.page);
   }
 }

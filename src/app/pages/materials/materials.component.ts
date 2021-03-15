@@ -43,10 +43,19 @@ export class MaterialsComponent implements OnInit {
     'lead_capture',
     'actions'
   ];
+  PAGE_COUNTS = [
+    { id: 8, label: '8' },
+    { id: 10, label: '10' },
+    { id: 25, label: '25' },
+    { id: 50, label: '50' }
+  ];
   ACTIONS = BulkActions.Materials;
   STATUS = STATUS;
   siteUrl = environment.website;
   user_id = '';
+
+  pageSize = this.PAGE_COUNTS[2];
+  page = 1;
 
   materials: any[] = [];
   filteredMaterials: any[] = [];
@@ -1336,5 +1345,11 @@ export class MaterialsComponent implements OnInit {
       }
       return true;
     });
+    this.page = 1;
+  }
+
+  changePageSize(type: any): void {
+    this.pageSize = type;
+    this.page = 1;
   }
 }

@@ -437,3 +437,21 @@
     }
   }
 }
+
+.leader {
+  min-width: 64px;
+}
+
+.partner-info {
+  @media screen and (max-width: 360px) {
+    flex-wrap: wrap;
+  }
+
+  .contacts {
+    min-width: 64px;
+  }
+
+  .time {
+    min-width: 80px;
+  }
+}

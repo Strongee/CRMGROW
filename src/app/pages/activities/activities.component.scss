@@ -19,6 +19,9 @@ td .c-blue {
   margin-right: 3px;
 }
 
+.pagination-wrapper .disabled {
+  pointer-events: none;
+}
 .pagination-wrapper .disabled .i-icon{
   background-color: #cacaca;
 }

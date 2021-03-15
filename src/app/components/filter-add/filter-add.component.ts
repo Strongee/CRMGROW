@@ -166,6 +166,7 @@ export class FilterAddComponent implements OnInit {
         .subscribe((result) => {
           this.saving = false;
           if (result) {
+            this.filterService.create$(result);
             this.dialogRef.close();
           }
         });

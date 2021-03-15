@@ -22,38 +22,47 @@
             </div>
         </div>
         <div class="table-body">
-            <div *ngFor="let tag of tags">
-                <mat-accordion>
-                    <mat-expansion-panel hideToggle>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <div class="tag-col px-1">
-                                    <div class="f-3 bgc-pale px-2 py-1 tag-label">{{tag._id}}</div>
-                                </div>
-                                <div class="edit-col text-center px-1" (click)="editTag(tag)">
-                                    <i class="d-block mx-auto i-icon i-edit bgc-dark"></i>
-                                </div>
-                                <div class="f-3 font-weight-bold text-primary text-right time-col">
-                                    {{tag.count}}
-                                </div>
-                                <div class="delete-col text-right px-1" (click)="deleteTag(tag)">
-                                    <i class="d-block ml-auto i-icon i-trash bgc-red"></i>
-                                </div>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div class="v-center" *ngFor="let contact of tag.contacts">
-                            <div class="v-center py-2 avatar-wrapper">
-                                <div class="v-center justify-content-center f-4 font-weight-bold text-white avatar">
-                                    {{contact.shortName}}
-                                </div>
-                                <div class="f-3 font-weight-bold text-primary name">
-                                    {{contact.first_name}} {{contact.last_name}}
-                                </div>
+            <ng-container *ngIf="tags.length; else noTags">
+                <div *ngFor="let tag of tags">
+                    <mat-accordion>
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <div class="tag-col px-1">
+                                        <div class="f-3 bgc-pale px-2 py-1 tag-label">{{tag._id}}</div>
+                                    </div>
+                                    <div class="edit-col text-center px-1" (click)="editTag(tag)">
+                                        <i class="d-block mx-auto i-icon i-edit bgc-dark"></i>
+                                    </div>
+                                    <div class="f-3 font-weight-bold text-primary text-right time-col">
+                                        {{tag.count}}
+                                    </div>
+                                    <div class="delete-col text-right px-1" (click)="deleteTag(tag)">
+                                        <i class="d-block ml-auto i-icon i-trash bgc-red"></i>
+                                    </div>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="v-center" *ngFor="let contact of tag.contacts">
+                                <a class="v-center py-2 avatar-wrapper" [routerLink]="['/contacts/' + contact._id]">
+                                    <div class="v-center justify-content-center f-4 font-weight-bold text-white avatar">
+                                        {{contact.shortName}}
+                                    </div>
+                                    <div class="f-3 font-weight-bold text-primary name">
+                                        {{contact.first_name}} {{contact.last_name}}
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </ng-container>
+            <ng-template #noTags>
+                <div class="empty-list py-5">
+                    <h4 class="font-weight-bold">
+                      There is no tags.
+                    </h4>
+                  </div>
+            </ng-template>
         </div>
     </div>
 </div>

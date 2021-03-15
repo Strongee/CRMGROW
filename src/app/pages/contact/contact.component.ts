@@ -49,6 +49,7 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
 import { ToastrService } from 'ngx-toastr';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 import { environment } from 'src/environments/environment';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-contact',
@@ -90,6 +91,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   detailData: any = {};
   sendActions = {};
   showingDetails = [];
+  editors = {};
   _id = '';
   next: string = null;
   prev: string = null;
@@ -172,8 +174,16 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
 
     this.teamSubscription && this.teamSubscription.unsubscribe();
-    this.teamSubscription = this.teamService.teams$.subscribe(() => {
+    this.teamSubscription = this.teamService.teams$.subscribe((teams) => {
       this.checkSharable();
+
+      teams.forEach((team) => {
+        if (team.editors && team.editors.length) {
+          team.editors.forEach((e) => {
+            this.editors[e._id] = new User().deserialize(e);
+          });
+        }
+      });
     });
   }
 
