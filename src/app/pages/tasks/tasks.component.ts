@@ -409,6 +409,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   changeSort(): void {
     const sortDir = this.taskService.sortOption.getValue();
     this.taskService.sortOption.next(sortDir * -1);
+    this.changePage(1);
   }
 
   taskComplete(task: TaskDetail): void {
