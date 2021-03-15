@@ -114,23 +114,11 @@
     </table>
   </div>
   <ng-container *ngIf="(storeService.activities$ | async).length || (activityService.total$ | async); else emptyListTemplate">
-    <!-- <div class="updating-status"
-      *ngIf="(activityService.loading$ | async) === STATUS.REQUEST">
-      LOADING
-    </div> -->
     <div class="my-2 table-control mode-1">
       <div class="pagination-wrapper m-auto v-center">
-        <!-- <pagination-controls (pageChange)="changePage($event)"
-          (pageBoundsCorrection)="onOverPages($event)"
-          id="activityPages"
-          maxSize="5"
-          previousLabel=""
-          nextLabel="">
-        </pagination-controls> -->
         <a class="c-pointer" (click)="loadPage('first')" [class.disabled]="(storeService.activities$ | async)[0]?._id === (activityService.latest$ | async)"><i class="i-icon i-first d-block"></i></a>
         <a class="c-pointer" (click)="loadPage('prev')" [class.disabled]="(storeService.activities$ | async)[0]?._id === (activityService.latest$ | async)"><i class="i-icon i-prev d-block"></i></a>
         <a class="c-pointer" (click)="loadPage('next')"><i class="i-icon i-next d-block"></i></a>
-        <!-- <a (click)="loadPage('last')"><i class="i-icon i-end d-block"></i></a> -->
       </div>
       <div class="shadow-dropdown ml-auto page-size-control"
         ngbDropdown
@@ -173,5 +161,3 @@
     </ng-container>
   </ng-template>
 </div>
-
-<!-- | paginate: {id: 'activityPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: activityService.total$ | async} -->
