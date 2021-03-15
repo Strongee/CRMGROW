@@ -834,6 +834,13 @@ form.was-validated {
     background-color: #fff!important;
   }
 }
+.bottom-right .dropdown-menu {
+  right: 0px!important;
+  top: unset!important;
+  left: unset!important;
+  bottom: 0px!important;
+  transform: translateY(100%)!important;
+}
 
 /** ==== Badge Style === */
 .c-badge {
@@ -1100,12 +1107,24 @@ table {
   }
 }
 
+.has-sticky-header {
+  thead tr:first-child th {
+    position: sticky;
+    top: 64px;
+    background-color: white;
+    z-index: 2;
+    opacity: 1;
+    color: rgba(0,0,0,.54);
+  }
+}
+
 .page-table {
   thead tr:first-child th {
     position: sticky;
     top: 64px;
     background-color: white;
     z-index: 2;
+    opacity: 1;
   }
 
   thead tr.table-header th {

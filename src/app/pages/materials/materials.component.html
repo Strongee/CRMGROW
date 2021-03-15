@@ -64,7 +64,7 @@
     <div class="mat-table-wrapper">
       <table class="w-100 page-table"
         mat-table
-        [dataSource]="filteredMaterials">
+        [dataSource]="filteredMaterials | paginate: {id: 'materialPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: filteredMaterials.length}">
 
         <ng-container matColumnDef="loader-cell">
           <th mat-header-cell
@@ -359,6 +359,42 @@
         <tr mat-row
           *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
+      <ng-container *ngIf="filteredMaterials.length">
+        <div class="my-2 table-control mode-1">
+          <div class="pagination-wrapper m-auto">
+            <pagination-controls
+              (pageChange)="page = $event"
+              (pageBoundsCorrection)="page = $event"
+              id="materialPages"
+              maxSize="5"
+              previousLabel=""
+              nextLabel="">
+            </pagination-controls>
+          </div>
+          <div class="shadow-dropdown ml-auto page-size-control"
+            ngbDropdown
+            placement="top-right">
+            <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+              ngbDropdownToggle>
+              <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
+            </div>
+            <div ngbDropdownMenu
+              aria-labelledby="contactPageSize">
+              <div class="py-2"
+                ngbDropdownItem
+                *ngFor="let type of PAGE_COUNTS"
+                (click)="changePageSize(type)">
+                <span class="f-3 v-center"
+                  [class.font-weight-bold]="type.id === pageSize.id">
+                  Show {{type.label}} rows per page
+                  <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                    *ngIf="type.id === pageSize.id"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
     <ng-container *ngIf="!(storeService.materials$ | async).length; else showingStatusTemplate">
       <ng-container [ngSwitch]="(materialService.loading$ | async)">

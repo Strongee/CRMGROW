@@ -10,14 +10,16 @@
     <div class="updating-status" *ngIf="(teamService.loading$ | async) === STATUS.REQUEST">
       LOADING
     </div>
-    <table class="table teams-table">
+    <table class="table teams-table has-sticky-header">
       <thead>
-        <th class="team-name">Team Name</th>
-        <th class="team-members">Members</th>
-        <th class="team-materials">Materials</th>
-        <th class="team-owner">Owner</th>
-        <th class="team-status">Your status</th>
-        <th class="team-actions"></th>
+        <tr>
+          <th class="team-name">Team Name</th>
+          <th class="team-members">Members</th>
+          <th class="team-materials">Materials</th>
+          <th class="team-owner">Owner</th>
+          <th class="team-status">Your status</th>
+          <th class="team-actions"></th>
+        </tr>
       </thead>
       <tbody class="position-relative">
         <tr
@@ -84,7 +86,7 @@
           </div>
         </td>
         <td class="team-actions">
-          <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
+          <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
             <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
               <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
             </a>
@@ -111,8 +113,8 @@
         </tr>
       </tbody>
     </table>
-    <div class="d-flex justify-content-center align-items-center my-2">
-      <div class="ml-3 pagination-wrapper">
+    <div class="table-control mode-1 py-2">
+      <div class="pagination-wrapper m-auto">
         <pagination-controls (pageChange)="page = $event" id="teamTable" maxSize="5" previousLabel=""
                              nextLabel=""></pagination-controls>
       </div>
@@ -128,8 +130,6 @@
           There are no teams that related with you..
         </h4>
         <p class="mb-4">Please create team or send join request to another teams.</p>
-<!--        <button class="btn btn-primary font-weight-bold mr-2" (click)="openForm()">Create Team</button>-->
-<!--        <button class="btn btn-primary font-weight-bold" (click)="joinForm()">Join Team</button>-->
       </div>
       <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
         <div class="loader mt-5 lg"></div>

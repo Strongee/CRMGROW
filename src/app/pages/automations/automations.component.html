@@ -26,8 +26,8 @@
       </div>
       <table
         mat-table
-        class="table automation-table" multiTemplateDataRows
-        [dataSource]="filteredResult | paginate: {itemsPerPage: 10, currentPage: page, id: 'automationTable', total: filteredResult.length}">
+        class="table automation-table page-table" multiTemplateDataRows
+        [dataSource]="filteredResult | paginate: {itemsPerPage: pageSize.id, currentPage: page, id: 'automationTable', total: filteredResult.length}">
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">Title</th>
           <td mat-cell *matCellDef="let automation" class="title">
@@ -61,7 +61,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="actions"></th>
           <td mat-cell *matCellDef="let automation" class="actions">
-            <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
+            <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right" placement="bottom-right" >
               <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                 <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
               </a>
@@ -89,32 +89,6 @@
                 </ng-container>
               </div>
             </div>
-<!--            <div class="v-center justify-content-end">-->
-<!--              <button type="button" class="btn btn-white f-3 font-weight-bold p-1" (click)="assignAutomation($event, automation)">-->
-<!--                Assign-->
-<!--              </button>-->
-<!--              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">-->
-<!--                <div class="icon-button v-center justify-content-center ml-2" (click)="openAutomation($event, automation)">-->
-<!--                  <i class="i-icon bgc-black i-edit"></i>-->
-<!--                </div>-->
-<!--              </ng-container>-->
-<!--              <ng-template #noneEditable>-->
-<!--                <div class="icon-button v-center justify-content-center ml-2">-->
-<!--                  <i class="i-icon bgc-white i-edit"></i>-->
-<!--                </div>-->
-<!--              </ng-template>-->
-<!--              <div class="icon-button v-center justify-content-center ml-2">-->
-<!--                <i class="i-icon bgc-black sm i-triangle-up" [class.disabled]="!automation.contacts.length" (click)="expandElement(automation)"></i>-->
-<!--              </div>-->
-<!--              <div class="icon-button v-center justify-content-center ml-2" (click)="duplicate($event, automation)">-->
-<!--                <i class="i-icon bgc-black i-duplicate"></i>-->
-<!--              </div>-->
-<!--              <ng-container *ngIf="automation.role != 'admin' && automation.user == userId; else noneEditable">-->
-<!--                <div class="icon-button v-center justify-content-center ml-2" (click)="deleteAutomation($event, automation)">-->
-<!--                  <i class="i-icon bgc-black i-trash"></i>-->
-<!--                </div>-->
-<!--              </ng-container>-->
-<!--            </div>-->
           </td>
         </ng-container>
 
@@ -150,10 +124,38 @@
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="automation-detail-row"></tr>
       </table>
-      <div class="d-flex justify-content-center align-items-center mt-4">
-        <div class="ml-3 pagination-wrapper">
-          <pagination-controls (pageChange)="page = $event" id="automationTable" maxSize="5" previousLabel=""
-                               nextLabel=""></pagination-controls>
+      <div class="my-2 table-control mode-1">
+        <div class="pagination-wrapper m-auto">
+          <pagination-controls
+            (pageChange)="page = $event"
+            (pageBoundsCorrection)="page = $event"
+            id="automationTable"
+            maxSize="5"
+            previousLabel=""
+            nextLabel="">
+          </pagination-controls>
+        </div>
+        <div class="shadow-dropdown ml-auto page-size-control"
+          ngbDropdown
+          placement="top-right">
+          <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+            ngbDropdownToggle>
+            <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
+          </div>
+          <div ngbDropdownMenu
+            aria-labelledby="contactPageSize">
+            <div class="py-2"
+              ngbDropdownItem
+              *ngFor="let type of PAGE_COUNTS"
+              (click)="changePageSize(type)">
+              <span class="f-3 v-center"
+                [class.font-weight-bold]="type.id === pageSize.id">
+                Show {{type.label}} rows per page
+                <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                  *ngIf="type.id === pageSize.id"></i>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </ng-container>

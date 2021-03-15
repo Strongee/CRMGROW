@@ -1,5 +1,9 @@
 @import "src/variables";
 
+.sub-page-header {
+  z-index: 3;
+}
+
 .table {
   th, td {
     padding: 10px 0px;
@@ -224,4 +228,16 @@
   .call-status {
     display: none;
   }
+}
+
+.has-sticky-header {
+  thead tr:first-child th {
+    top: 112px;
+    height: 45px;
+  }
+}
+
+.sub-sidebar.desktop ul {
+  position: sticky;
+  top: 120px;
 }

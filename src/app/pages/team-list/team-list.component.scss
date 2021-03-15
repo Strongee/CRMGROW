@@ -110,3 +110,10 @@
     }
   }
 }
+
+.has-sticky-header {
+  thead tr:first-child th {
+    top: 112px;
+    height: 45px;
+  }
+}

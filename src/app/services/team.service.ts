@@ -376,11 +376,12 @@ export class TeamService extends HttpService {
       catchError(this.handleError('LOAD INQUIRY CALL', []))
     );
   }
-  loadTeamCalls(type: string, skip: number): Observable<any> {
+  loadTeamCalls(type: string, skip: number, count: number): Observable<any> {
     return this.httpClient
       .post(this.server + TEAM.TEAM_CALL_LOAD, {
         type,
-        skip
+        skip,
+        count
       })
       .pipe(
         map((res) => res),
