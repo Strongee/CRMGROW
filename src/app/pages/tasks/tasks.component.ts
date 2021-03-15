@@ -283,12 +283,18 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   openEdit(element: TaskDetail): void {
-    this.dialog.open(TaskEditComponent, {
-      ...DialogSettings.TASK,
-      data: {
-        task: element
-      }
-    });
+    this.dialog
+      .open(TaskEditComponent, {
+        ...DialogSettings.TASK,
+        data: {
+          task: element
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        const sortDir = this.taskService.sortOption.getValue();
+        this.taskService.sortOption.next(sortDir);
+      });
   }
 
   toggle(task: TaskDetail): void {
@@ -534,13 +540,19 @@ export class TasksComponent implements OnInit, OnDestroy {
       }
     });
     if (selected.length > 1) {
-      this.dialog.open(TaskBulkComponent, {
-        width: '100vw',
-        maxWidth: '450px',
-        data: {
-          ids: selected
-        }
-      });
+      this.dialog
+        .open(TaskBulkComponent, {
+          width: '100vw',
+          maxWidth: '450px',
+          data: {
+            ids: selected
+          }
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          const sortDir = this.taskService.sortOption.getValue();
+          this.taskService.sortOption.next(sortDir);
+        });
     } else if (selected.length == 1) {
       this.openEdit(this.selectedTasks[0]);
     }

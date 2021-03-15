@@ -101,9 +101,9 @@
         <input type="text" id="source_cc" class="form-control" name="source"  #source="ngModel" [(ngModel)]="contact.source" />
       </div>
       <div class="col-sm-4 form-group">
-        <label for="stage_cc">stage</label>
+        <label for="stage_cc">create stage</label>
         <select id="stage_cc" class="form-control" [(ngModel)]="contact.recruiting_stage" name="stage" #stage="ngModel">
-          <option *ngFor="let stage of STAGES" value="{{stage}}">{{stage}}</option>
+          <option *ngFor="let stage of stages" value="{{stage._id}}">{{stage.title}}</option>
         </select>
       </div>
     </div>

@@ -16,6 +16,7 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Automation } from 'src/app/models/automation.model';
 import { AutomationService } from 'src/app/services/automation.service';
+import {DealsService} from "../../services/deals.service";
 
 @Component({
   selector: 'app-contact-create',
@@ -68,17 +69,23 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
   automation: Automation = new Automation();
+  stages;
 
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
     private contactService: ContactService,
     private handlerService: HandlerService,
+    private dealsService: DealsService,
     private automationService: AutomationService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.contact.tags = [];
+    this.dealsService.getStage();
+    this.dealsService.stages$.subscribe((res) => {
+      this.stages = res;
+    });
   }
   ngOnDestroy(): void {}
 
