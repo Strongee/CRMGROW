@@ -34,7 +34,8 @@ export const USER = {
   CREATE_AFFILIATE: 'affiliate',
   LOAD_REFERRALS: 'affiliate/referrals/',
   UPDATE_GARBAGE: 'garbage',
-  CONNECT_SMTP: 'integration/sync-smtp'
+  CONNECT_SMTP: 'integration/sync-smtp',
+  DISCONNECT_CALENDAR: 'user/discon-calendar'
 };
 export const GUEST = {
   LOAD: 'guest/load',
@@ -321,6 +322,7 @@ export const SMS = {
 
 export const INTEGRATION = {
   CHECK_CALENDLY: 'integration/calendly/check-auth',
+  DISCONNECT_CALENDLY: 'integration/calendly/disconnect',
   GET_CALENDLY: 'integration/calendly',
   SET_EVENT: 'integration/calendly/set-event',
   GET_TOKEN: 'integration/token'

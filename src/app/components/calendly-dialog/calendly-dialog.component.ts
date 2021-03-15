@@ -33,7 +33,7 @@ export class CalendlyDialogComponent implements OnInit {
         if (res && res['status']) {
           this.isConfirm = false;
           this.toast.success('Calendly connected successfully');
-          this.dialogRef.close(res['status']);
+          this.dialogRef.close(res);
         }
       },
       (err) => {

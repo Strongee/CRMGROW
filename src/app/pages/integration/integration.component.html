@@ -18,7 +18,7 @@
           <div class="v-center mb-1">
             <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
             <span class="f-1">connected</span>
-            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar)">
+            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email)">
               <div class="f-2">Disconnect</div>
             </button>
           </div>
@@ -80,7 +80,7 @@
         <div class="v-center mb-1">
           <div class="f-1 font-weight-bold mr-1">{{garbage.calendly?.email}}</div>
           <span class="f-1">connected</span>
-          <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendly(calendar)">
+          <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendly()">
             <div class="f-2">Disconnect</div>
           </button>
         </div>
@@ -106,7 +106,7 @@
           <div class="v-center mb-1">
             <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
             <span class="f-1">connected</span>
-            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar)">
+            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email)">
               <div class="f-2">Disconnect</div>
             </button>
           </div>

@@ -50,7 +50,6 @@ export class IntegrationComponent implements OnInit {
         }
       }
     );
-    this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
       this.garbage = res;
     });
@@ -107,6 +106,14 @@ export class IntegrationComponent implements OnInit {
     }
   }
 
+  disconnectCalendar(email: string): void {
+    this.userService.disconnectCalendar(email).subscribe((res) => {
+      if (res) {
+        console.log('##', res);
+      }
+    });
+  }
+
   connectZapier(): void {
     this.dialog.open(ZapierDialogComponent, {
       width: '100vw',
@@ -157,6 +164,15 @@ export class IntegrationComponent implements OnInit {
       maxWidth: '1000px',
       data: {
         key: this.garbage.calendly?.id
+      }
+    });
+  }
+
+  disconnectCalendly(): void {
+    this.connectService.disconnectCalendly().subscribe((res) => {
+      if (res) {
+        this.garbage.calendly.email = '';
+        this.garbage.calendly.token = '';
       }
     });
   }

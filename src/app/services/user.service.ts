@@ -320,6 +320,12 @@ export class UserService extends HttpService {
         return this.httpClient.get(this.server + USER.CALENDAR_SYNC_OUTLOOK);
     }
   }
+  public disconnectCalendar(email: string): any {
+    const data = {
+      connected_eamil: email
+    };
+    return this.httpClient.post(this.server + USER.DISCONNECT_CALENDAR, data);
+  }
   public loadAffiliate(): Observable<any> {
     return this.httpClient.get(this.server + USER.LOAD_AFFILIATE).pipe(
       map((res) => res),
