@@ -68,13 +68,13 @@ export class SendTextComponent implements OnInit, OnDestroy {
             let url;
             switch (e.material_type) {
               case 'video':
-                url = `${environment.website}/video?video=${e._id}&user=${this.userId}`;
+                url = `${environment.website}/video?video=${e._id}`;
                 break;
               case 'pdf':
-                url = `${environment.website}/pdf?pdf=${e._id}&user=${this.userId}`;
+                url = `${environment.website}/pdf?pdf=${e._id}`;
                 break;
               case 'image':
-                url = `${environment.website}/image?image=${e._id}&user=${this.userId}`;
+                url = `${environment.website}/image?image=${e._id}`;
                 break;
             }
             // first element insert
@@ -98,42 +98,33 @@ export class SendTextComponent implements OnInit, OnDestroy {
     const imageIds = [];
 
     const videoReg = new RegExp(
-      environment.website + '/video[?]video=\\w+&user=' + this.userId,
+      environment.website + '/video[?]video=\\w+',
       'g'
     );
-    const pdfReg = new RegExp(
-      environment.website + '/pdf[?]pdf=\\w+&user=' + this.userId,
-      'g'
-    );
+    const pdfReg = new RegExp(environment.website + '/pdf[?]pdf=\\w+', 'g');
     const imageReg = new RegExp(
-      environment.website + '/image[?]image=\\w+&user=' + this.userId,
+      environment.website + '/image[?]image=\\w+',
       'g'
     );
 
     let matches = this.message.match(videoReg);
     if (matches && matches.length) {
       matches.forEach((e) => {
-        const videoId = e
-          .replace(environment.website + '/video?video=', '')
-          .replace('&user=' + this.userId, '');
+        const videoId = e.replace(environment.website + '/video?video=', '');
         videoIds.push(videoId);
       });
     }
     matches = this.message.match(pdfReg);
     if (matches && matches.length) {
       matches.forEach((e) => {
-        const pdfId = e
-          .replace(environment.website + '/pdf?pdf=', '')
-          .replace('&user=' + this.userId, '');
+        const pdfId = e.replace(environment.website + '/pdf?pdf=', '');
         pdfIds.push(pdfId);
       });
     }
     matches = this.message.match(imageReg);
     if (matches && matches.length) {
       matches.forEach((e) => {
-        const imageId = e
-          .replace(environment.website + '/image?image=', '')
-          .replace('&user=' + this.userId, '');
+        const imageId = e.replace(environment.website + '/image?image=', '');
         imageIds.push(imageId);
       });
     }
@@ -151,6 +142,26 @@ export class SendTextComponent implements OnInit, OnDestroy {
     }
     const { videoIds, imageIds, pdfIds } = this.getMaterials();
 
+    let contentToSend = this.message;
+    videoIds.forEach((video) => {
+      contentToSend = contentToSend.replace(
+        environment.website + '/video?video=' + video,
+        '{{' + video + '}}'
+      );
+    });
+    pdfIds.forEach((pdf) => {
+      contentToSend = contentToSend.replace(
+        environment.website + '/pdf?pdf=' + pdf,
+        '{{' + pdf + '}}'
+      );
+    });
+    imageIds.forEach((image) => {
+      contentToSend = contentToSend.replace(
+        environment.website + '/image?image=' + image,
+        '{{' + image + '}}'
+      );
+    });
+
     this.sending = true;
     this.sendSubscription && this.sendSubscription.unsubscribe();
     this.sendSubscription = this.materialService
@@ -158,13 +169,16 @@ export class SendTextComponent implements OnInit, OnDestroy {
         video_ids: videoIds,
         pdf_ids: pdfIds,
         image_ids: imageIds,
-        content: this.message,
+        content: contentToSend,
         contacts: [this.contact._id],
         mode: 'api'
       })
       .subscribe((res) => {
         this.sending = false;
-        console.log('send result', res);
+        this.dialogRef.close({
+          status: true,
+          count: videoIds.length + pdfIds.length + imageIds.length + 1
+        });
       });
   }
 

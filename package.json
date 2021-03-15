@@ -65,6 +65,7 @@
     "ngx-cropperjs-wrapper": "^0.1.6",
     "ngx-google-places-autocomplete": "^2.0.4",
     "ngx-intl-tel-input": "^3.0.3",
+    "ngx-mask": "^11.1.4",
     "ngx-mat-select-search": "^3.1.2",
     "ngx-pagination": "^5.0.0",
     "ngx-papaparse": "^5.0.0",

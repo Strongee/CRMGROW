@@ -589,19 +589,26 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   openSendText(): void {
-    this.dialog.open(SendTextComponent, {
-      position: {
-        bottom: '0px',
-        right: '0px'
-      },
-      width: '100vw',
-      panelClass: 'send-email',
-      backdropClass: 'cdk-send-email',
-      disableClose: false,
-      data: {
-        contact: this.contact
-      }
-    });
+    this.dialog
+      .open(SendTextComponent, {
+        position: {
+          bottom: '0px',
+          right: '0px'
+        },
+        width: '100vw',
+        panelClass: 'send-email',
+        backdropClass: 'cdk-send-email',
+        disableClose: false,
+        data: {
+          contact: this.contact
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.status) {
+          this.contactService.addLatestActivity(res.count + 2);
+        }
+      });
   }
 
   openDealDlg(): void {

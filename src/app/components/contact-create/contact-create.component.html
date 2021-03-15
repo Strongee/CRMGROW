@@ -67,7 +67,8 @@
           [formControl]="phoneInput"
           [(ngModel)]="cell_phone"
           (ngModelChange)="checkPhoneDuplicate($event)"
-          autocomplete="off">
+          autocomplete="off"
+          >
         </ngx-intl-tel-input>
         <span class="error" *ngIf="cell_phone && phoneInput.valid">
           <ng-template #phoneFormat>Wrong phone number!</ng-template>
