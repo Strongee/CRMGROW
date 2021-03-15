@@ -3,9 +3,6 @@
 }
 
 .automation-table {
-  td {
-    padding: 10px;
-  }
 
   .action-count,
   .contacts,
@@ -84,4 +81,10 @@ tr td {
 input.disabled {
   pointer-events: none;
   background-color: #f8f8f8;
+}
+
+:host ::ng-deep {
+  th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    padding-left: 0;
+  }
 }

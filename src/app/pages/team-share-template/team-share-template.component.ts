@@ -15,7 +15,14 @@ import { STATUS } from 'src/app/constants/variable.constants';
 })
 export class TeamShareTemplateComponent implements OnInit, OnChanges {
   STATUS = STATUS;
-
+  DISPLAY_COLUMNS = [
+    'title',
+    'owner',
+    'template-content',
+    'template-type',
+    'template-action'
+  ];
+  selectedTemplate: string = '';
   page = 1;
   userId = '';
   emailDefault = '';

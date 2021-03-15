@@ -42,7 +42,7 @@
         </div>
       </div>
       <h6 class="font-weight-bold mt-4">Details</h6>
-      <div class="team-info-container d-flex">
+      <div class="team-info-container d-flex mb-3">
         <div class="owner">
           <label class="f-2 op-75 text-uppercase">Owner</label>
           <div class="v-center value">
@@ -91,20 +91,9 @@
           <div class="value f-37 font-weight-bold">{{getMemberCount()}}</div>
         </div>
         <div class="ml-5">
-          <label class="f-2 op-75 text-uppercase">Your Status</label>
+          <label class="f-2 op-75 text-uppercase">Your Role</label>
           <div class="value v-center">
             <div class="status font-weight-bold f-1 c-white" [class] = "status()">{{status()}}</div>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="team-info-container form-group v-center justify-content-between mt-5">
-        <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-0 mt-lg-3 mt-md-3 mt-sm-3 mt-3">
-          <div class="d-flex tabs">
-            <!-- <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
-            </app-slide-tab> -->
           </div>
         </div>
       </div>
@@ -161,7 +150,7 @@
             <thead>
             <tr>
               <th class="name-cell border-top-0">Members</th>
-              <th class="status-cell border-top-0">Status</th>
+              <th class="status-cell border-top-0">Role</th>
               <th class="added-cell border-top-0">Added</th>
               <th class="action-cell border-top-0" *ngIf="role=='editor' || role == 'owner'"></th>
             </tr>
@@ -234,9 +223,8 @@
                   {{member.created_at | date: 'dd.MM.yyyy'}}
                 </td>
                 <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
-                  <button class="v-center btn bgc-white c-dark f-3 ml-2 opacity-3 justify-content-end" (click)="removeMember(member)">
-                    <i class="bgc-dark i-icon i-trash mr-2"></i>
-                    <span class="button-label">Remove</span>
+                  <button class="v-center btn bgc-white c-black f-3 justify-content-end" (click)="removeMember(member)">
+                    <i class="bgc-black i-icon i-trash"></i>
                   </button>
                 </td>
               </tr>
@@ -276,10 +264,12 @@
 
         <div *ngSwitchCase="'materials'" class="materials-container mt-4">
           <div class="v-center with-tab panel-header contact-header">
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareMaterial(selectedMaterialTab.id)" *ngIf="role=='editor' || role == 'owner'">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+              (click)="shareMaterial(selectedMaterialTab.id)" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share material</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
           <ng-container *ngIf="materials.length > 0; else emptyMaterialListTemplate">
             <app-team-share-material [materials]="materials" [team]="team"></app-team-share-material>
@@ -301,10 +291,12 @@
 
         <div class="mt-4" *ngSwitchCase="'contacts'">
           <div class="v-center with-tab panel-header contact-header">
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareContact()" *ngIf="role=='editor' || role == 'owner'">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+                (click)="shareContact()" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share contact</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
           <ng-container *ngIf="sharedContacts.length > 0; else emptySharedListTemplate">
             <app-team-share-contact [contacts]="sharedContacts"></app-team-share-contact>
@@ -326,10 +318,12 @@
 
         <div class="automation-list-wrapper mt-4" *ngSwitchCase="'automations'">
           <div class="v-center with-tab panel-header contact-header">
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareAutomation()" *ngIf="role=='editor' || role == 'owner'">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+                (click)="shareAutomation()" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share automation</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
           <ng-container *ngIf="team.automations.length > 0; else emptyAutomationListTemplate">
             <app-team-share-automation [automations]="team.automations"></app-team-share-automation>
@@ -351,10 +345,12 @@
 
         <div class="template-list-wrapper mt-4" *ngSwitchCase="'templates'">
           <div class="v-center with-tab panel-header contact-header">
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareEmailTemplate()" *ngIf="role=='editor' || role == 'owner'">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+                (click)="shareEmailTemplate()" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share template</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
           <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
             <app-team-share-template [templates]="team.email_templates"></app-team-share-template>

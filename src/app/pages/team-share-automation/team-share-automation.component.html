@@ -15,10 +15,11 @@
   </div>
   <div class="my-3 position-relative">
     <ng-container *ngIf="automations.length">
-      <table
+      <table class="w-100 page-table automation-table"
         mat-table
-        class="table automation-table" multiTemplateDataRows
-        [dataSource]="filteredResult | paginate: {itemsPerPage: 5, currentPage: page, id: 'automationTable', total: filteredResult.length}">
+        multiTemplateDataRows
+        [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'automationTable', total: filteredResult.length}"
+      >
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">Title</th>
           <td mat-cell *matCellDef="let automation" class="title">

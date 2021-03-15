@@ -1,5 +1,5 @@
 <div class="page-content">
-  <div class="v-center contact-list-controls">
+  <div class="v-center contact-list-controls mb-2">
     <div class="form-group mb-0 search-form">
       <div class="input-group-prepend">
         <i class="i-icon i-search d-block bgc-dark"></i>
@@ -10,35 +10,6 @@
           <i class="i-icon i-close d-block bgc-dark"></i>
         </div>
       </ng-container>
-    </div>
-    <div class="ml-auto"
-         ngbDropdown
-         placement="bottom-right">
-      <div class="v-center c-pointer f-3 p-3 mr-2 font-weight-bold"
-           ngbDropdownToggle>
-        <span class="pr-2">Sort by</span>
-      </div>
-      <div ngbDropdownMenu
-           aria-labelledby="taskSortTypes">
-        <div class="py-2"
-             ngbDropdownItem
-             *ngFor="let type of SORT_TYPES"
-             (click)="changeSort(type)">
-          <span class="f-3 v-center"
-                [class.font-weight-bold]="type.id === sortType.id">
-            {{type.label}}
-            <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
-               *ngIf="type.id === sortType.id"></i>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="border-left pl-3 pr-0 py-1 text-center ml-3 mr-2">
-      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer v-center"
-         (click)="drawer.toggle()">
-        <span>Filter</span>
-        <img class="ml-1" src="../../../assets/img/filter.svg" alt="filter-icon" style="width: 23px;"/>
-      </a>
     </div>
   </div>
   <div class="custom-mat-table position-relative">
@@ -216,13 +187,3 @@
     </div>
   </div>
 </div>
-
-<!-- <app-actions-bar [actions]="ACTIONS" [isActive]="selection.length + pageSelection.length" (doCommand)="doAction($event)"></app-actions-bar> -->
-
-<mat-drawer-container [hasBackdrop]="true">
-  <mat-drawer #drawer
-              position="end" (openedChange)="setPanelType($event)">
-    <app-advanced-filter [hidden]="panelType" (onClose)="drawer.close()" #filterPanel></app-advanced-filter>
-    <app-contact-bulk [hidden]="panelType !== 'editor'" (onClose)="drawer.close()" [contacts]="selection" #editPanel></app-contact-bulk>
-  </mat-drawer>
-</mat-drawer-container>

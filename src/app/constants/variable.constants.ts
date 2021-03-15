@@ -1115,6 +1115,35 @@ export const BulkActions = {
       loading: false
     }
   ],
+  TeamMaterials: [
+    {
+      label: 'Send via email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'email',
+      loading: false
+    },
+    {
+      label: 'Send via SMS',
+      type: 'button',
+      icon: 'i-sms-sent',
+      command: 'text',
+      loading: false
+    },
+    {
+      label: 'Lead Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
+    }
+  ],
   Compaigns: [],
   CompaignContacts: [],
   BulkMailng: [],
