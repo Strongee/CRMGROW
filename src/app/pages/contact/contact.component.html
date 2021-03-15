@@ -412,7 +412,7 @@
                               <span class="ml-3 f-2 font-weight-bold">Complete</span>
                             </button>
                             <button
-                              class="v-center border-0 py-1 c-dark dropdown-item" 
+                              class="v-center border-0 py-1 c-dark dropdown-item"
                               (click)="archiveTask(activity)"
                             >
                               <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
@@ -488,7 +488,7 @@
                         <div class="content">
                           <div class="f-3 fw-600 c-blue mt-1">
                             See details
-                          </div>      
+                          </div>
                         </div>
                       </ng-template>
                       <ng-template #hide>
@@ -509,7 +509,7 @@
                   </div>
                 </div>
               </div>
-  
+
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'note') && activity.type == 'notes'">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
@@ -575,9 +575,9 @@
                       <span>Can't see the detail as it is deleted.</span>
                     </div>
                   </ng-template>
-                </div> 
+                </div>
               </div>
-  
+
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'emails' || activity.type == 'email_trackers')">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
@@ -691,7 +691,7 @@
                   </ng-template>
                 </div>
               </div>
-  
+
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'videos' || activity.type == 'video_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
@@ -724,7 +724,7 @@
                           </a>
                           <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                        </div> 
+                        </div>
                       </ng-container>
                       <ng-template #multiVideoHistory>
                         <div class="summary position-relative">
@@ -775,7 +775,7 @@
                   </ng-container>
                 </div>
               </div>
-  
+
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'pdfs' || activity.type == 'pdf_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
@@ -808,7 +808,7 @@
                           </a>
                           <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                        </div> 
+                        </div>
                       </ng-container>
                       <ng-template #multiPdfHistory>
                         <div class="summary position-relative">
@@ -843,7 +843,7 @@
                   </ng-container>
                 </div>
               </div>
-  
+
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'images' || activity.type == 'image_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
@@ -877,7 +877,7 @@
                           </a>
                           <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                        </div> 
+                        </div>
                       </ng-container>
                       <ng-template #multiImageHistory>
                         <div class="summary position-relative">
@@ -912,7 +912,7 @@
                   </ng-container>
                 </div>
               </div>
-  
+
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'appointment') && activity.type == 'appointments'">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
@@ -949,7 +949,7 @@
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
-                            </div>      
+                            </div>
                           </div>
                         </ng-template>
                         <ng-template #hide>
@@ -1002,7 +1002,7 @@
                         </div>
                       </div>
                     </div>
-                  </ng-container>  
+                  </ng-container>
                   <ng-template #removedAppointmentTemplate>
                     <div class="d-flex">
                       <mat-icon class="mr-2">warning</mat-icon>
@@ -1137,7 +1137,7 @@
                         </div>
                       </div>
                     </div>
-                  </ng-container>  
+                  </ng-container>
                   <ng-template #removedAppointmentTemplate>
                     <div class="d-flex">
                       <mat-icon class="mr-2">warning</mat-icon>
@@ -1146,16 +1146,16 @@
                   </ng-template>
                 </div>
               </div>
-  
+
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'deal') && activity.type == 'deals'">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
-                    <div class="v-center">
+                    <a class="v-center link-wrapper" [routerLink]="['/deals/' + activity.activity_detail._id]">
                       <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
-                    </div>
+                    </a>
                     <div class="v-center">
                       <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                       <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
@@ -1246,7 +1246,7 @@
                     </div>
                   </ng-container>
                   <ng-template #canceledUserTemplate>
-                    
+
                   </ng-template>
                 </div>
               </div>
@@ -1450,7 +1450,7 @@
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
-                            </div>      
+                            </div>
                           </div>
                         </ng-template>
                         <ng-template #hide>
@@ -1504,7 +1504,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="history-detail group_calls-detail p-3 mt-3" *ngSwitchCase="'group_call'">
                     <div class="v-center justify-content-between mb-3">
                       <div class="history-icon mr-3"><i class="act-icon act-team_calls"></i></div>
@@ -1645,7 +1645,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="history-detail follow_ups-detail p-3 mt-3" *ngSwitchCase="'follow_up'">
                     <div class="v-center justify-content-between mb-3">
                       <div class="history-icon mr-3"><i class="act-icon act-follow_ups"></i></div>
@@ -1731,7 +1731,7 @@
                             <div class="">
                               <div class="f-3 fw-600 c-blue mt-1">
                                 See details
-                              </div>      
+                              </div>
                             </div>
                           </ng-template>
                           <ng-template #hide>
@@ -1755,8 +1755,10 @@
 
                   <div class="history-detail deals-detail p-3 mt-3" *ngSwitchCase="'deal'">
                     <div class="v-center justify-content-between mb-3">
-                      <div class="history-icon mr-3"><i class="act-icon act-deals"></i></div>
-                      <div class="">deal</div>
+                      <a class="v-center link-wrapper" [routerLink]="['/deals/' + detail._id]">
+                        <div class="history-icon mr-3"><i class="act-icon act-deals"></i></div>
+                        <div class="">deal</div>
+                      </a>
                       <div class="ml-auto f-3 op-56">
                         {{detail.created_at | date :'MMM d, hh:mm a'}}
                       </div>
@@ -1797,14 +1799,29 @@
                             </div>
                           </ng-container>
                         </div>
-                        <div class="contacts ml-5">
-                          <div class="f-4 fw-600 op-40">
-                            Contacts
+                        <div class="d-flex" ngbDropdown>
+                          <div class="contacts ml-5" ngbDropdownToggle>
+                            <div class="f-4 fw-600 op-40">
+                              Contacts
+                            </div>
+                            <div class="v-center mt-1">
+                              <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
+                              <span class="f-4">{{detail.contacts?.length || 0}}</span>
+                            </div>
                           </div>
-                          <div class="v-center mt-1">
-                            <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
-                            <span class="f-4">{{detail.contacts?.length || 0}}</span>
-                          </div>
+                          <ng-container *ngIf="detail.contacts?.length > 0">
+                            <div ngbDropdownMenu class="light">
+                              <ng-container *ngFor="let contact of detail.contacts">
+                                <div class="v-center p-1">
+                                  <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
+                                  <div class="info ml-2">
+                                    <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
+                                    <div class="f-2">{{contact.email}}</div>
+                                  </div>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="value ml-5">
                           <div class="f-4 fw-600 op-40">

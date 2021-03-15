@@ -153,6 +153,7 @@ export class TasksComponent implements OnInit, OnDestroy {
    * @param value : Deadline Type -> {label: '', id: ''}
    */
   changeDeadlineType(value: any): void {
+    this.page = 1;
     this.deadline = value;
 
     const durationOption = new TaskDurationOption();

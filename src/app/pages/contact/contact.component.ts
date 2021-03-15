@@ -744,6 +744,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         (a, b) =>
           new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
       );
+      console.log("show details ============>", this.showingDetails);
     }
   }
 
