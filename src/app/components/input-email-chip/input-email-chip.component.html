@@ -13,13 +13,13 @@
             </div>
             <div ngbDropdownMenu class="light py-1">
               <ng-container *ngIf="isContact(contact); else noContactTemplate">
-                <div class="v-center px-2">
+                <a class="v-center px-2 c-pointer link-wrapper" href="{{siteUrl}}/contact/{{contact._id}}" target="_blank">
                   <div class="form-avatar rounded-circle bg-dark mr-1">{{contact.avatarName}}</div>
                   <div class="info ml-2">
                     <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
                     <div class="f-2">{{contact[display]}}</div>
                   </div>
-                </div>
+                </a>
               </ng-container>
               <ng-template #noContactTemplate>
                 <div class="v-center p-2">

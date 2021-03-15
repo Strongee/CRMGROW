@@ -138,6 +138,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   profileSubscription: Subscription;
   teamSubscription: Subscription;
   updateSubscription: Subscription;
+  loadingContact = false;
+  detailContacts = [];
+  siteUrl = environment.website;
+  loadContactSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -736,11 +740,15 @@ export class ContactComponent implements OnInit, OnDestroy {
                   ...this.groupActions[e['group_id']]
                 ];
               } else {
-                this.sendActions[e['emails']] = this.groupActions[e['group_id']];
+                this.sendActions[e['emails']] = this.groupActions[
+                  e['group_id']
+                ];
               }
             } else {
               this.showingDetails.push(e);
-              this.sendActions[e['group_id']] = this.groupActions[e['group_id']];
+              this.sendActions[e['group_id']] = this.groupActions[
+                e['group_id']
+              ];
             }
           }
         } else if (e['data_type'] === dataType) {
@@ -1293,6 +1301,19 @@ export class ContactComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  loadContacts(ids): void {
+    if (ids && ids.length >= 0) {
+      this.loadingContact = true;
+      this.loadContactSubscription && this.loadContactSubscription.unsubscribe();
+      this.loadContactSubscription = this.contactService.getContactsByIds(ids).subscribe((contacts) => {
+        this.loadingContact = false;
+        if (contacts) {
+          this.detailContacts = contacts;
+        }
+      });
+    }
   }
 
   ICONS = {

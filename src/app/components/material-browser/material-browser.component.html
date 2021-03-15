@@ -133,36 +133,46 @@
               <div class="v-center c-pointer material-main-info">
                 <div class="thumbnail">
                   <ng-container [ngSwitch]="element.material_type">
-                    <a
+                    <a class="v-center link-wrapper"
                       *ngSwitchCase="'video'"
                       href="{{siteUrl}}/video?video={{element._id}}&user={{user_id}}" target="_blank">
                       <div class="thumb-prev-wrapper">
                         <img [src]="element.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
                         <img [src]="element.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
                       </div>
+                      <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
+                        <ng-container *ngIf="!selectedFolder && searchStr && element.folder && foldersKeyValue[element.folder]">
+                          <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
+                        </ng-container>
+                      </span>
                     </a>
-                    <a
+                    <a class="v-center link-wrapper"
                       *ngSwitchCase="'pdf'"
                       href="{{siteUrl}}/pdf?pdf={{element._id}}&user={{user_id}}" target="_blank">
                       <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                      <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
+                        <ng-container *ngIf="!selectedFolder && searchStr && element.folder && foldersKeyValue[element.folder]">
+                          <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
+                        </ng-container>
+                      </span>
                     </a>
-                    <a
+                    <a class="v-center link-wrapper"
                       *ngSwitchCase="'image'"
                       href="{{siteUrl}}/image?image={{element._id}}&user={{user_id}}" target="_blank">
                       <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                      <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
+                        <ng-container *ngIf="!selectedFolder && searchStr && element.folder && foldersKeyValue[element.folder]">
+                          <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
+                        </ng-container>
+                      </span>
                     </a>
                   </ng-container>
                 </div>
-                <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
-                  <ng-container *ngIf="!selectedFolder && searchStr && element.folder && foldersKeyValue[element.folder]">
-                    <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
-                  </ng-container>
-                </span>
               </div>
             </ng-template>
             <div class="responsive-data">
               <div class="type">
-                <span class="info-title">type:</span> 
+                <span class="info-title">type:</span>
                 <span class="info-value">{{element.material_type}}</span>
               </div>
               <div class="time">
@@ -232,7 +242,7 @@
             {{element.material_type}}
           </td>
         </ng-container>
-        
+
 
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
