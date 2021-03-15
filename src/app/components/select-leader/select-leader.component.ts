@@ -35,9 +35,14 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input('resultItem') resultItemTemplate: TemplateRef<HTMLElement>;
   @Input('placeholder') placeholder = 'Search Team Leader';
   @Input('formPlaceholder') formPlaceholder = 'Search Team Leader';
-  @Input('leader') leader = null;
   @Output() onSelect = new EventEmitter();
-
+  @Input() public set leader(val: User) {
+    if (val) {
+      this.filteredResults.next([val]);
+      this.formControl.setValue(val, { emitEvent: false });
+      this.onSelect.emit(val);
+    }
+  }
   formControl: FormControl = new FormControl();
   inputControl: FormControl = new FormControl();
   @ViewChild('inputField') inputField: ElementRef;
@@ -126,7 +131,9 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         [{ _id: this.userId }],
         '_id'
       );
-      this.filteredResults.next(this.teamLeaders);
+      if (this.leader) {
+        this.filteredResults.next(this.teamLeaders);
+      }
     });
   }
 }

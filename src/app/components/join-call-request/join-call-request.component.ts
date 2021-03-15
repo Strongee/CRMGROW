@@ -15,6 +15,7 @@ import { SelectContactComponent } from '../select-contact/select-contact.compone
 import * as _ from 'lodash';
 import { DealsService } from 'src/app/services/deals.service';
 import { User } from 'src/app/models/user.model';
+
 @Component({
   selector: 'app-join-call-request',
   templateUrl: './join-call-request.component.html',
@@ -48,7 +49,8 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
 
   isDeal = false;
   dealId = '';
-
+  type = '';
+  callId = '';
   profileSubscription: Subscription;
 
   @ViewChild('contactSelector') contactSelector: SelectContactComponent;
@@ -89,6 +91,60 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
 
     if (this.data && this.data.onlyRemove) {
       this.onlyRemove = this.data.onlyRemove;
+    }
+
+    if (this.data && this.data.type) {
+      this.type = this.data.type;
+      const callData = this.data.callData;
+      this.callId = callData._id;
+      this.subject = callData.subject;
+      const leader = callData.leader;
+      this.leader = new User().deserialize({
+        user_name: leader.user_name,
+        email: leader.email,
+        picture_profile: leader.picture_profile,
+        _id: leader._id
+      });
+
+      if (callData.contacts && callData.contacts.length > 0) {
+        for (const contact of callData.contacts) {
+          const guests = new Contact().deserialize({
+            _id: contact._id,
+            first_name: contact.first_name,
+            last_name: contact.last_name,
+            email: contact.email,
+            cell_phone: contact.cell
+          });
+          this.contacts.push(guests);
+        }
+      }
+      // this.contacts = callData.contacts;
+      if (callData.proposed_at && callData.proposed_at.length > 0) {
+        this.callDateTimes = [];
+        for (const proposed_at of callData.proposed_at) {
+          const dateTime = moment(proposed_at);
+          const year = dateTime.year();
+          const month = dateTime.month() + 1;
+          const day = dateTime.date();
+          const time = dateTime.format('hh:mm:ss') + '.000';
+          this.callDateTimes.push({
+            id: Date.now(),
+            date: {
+              year,
+              month,
+              day
+            },
+            time
+          });
+        }
+      }
+      if (callData.duration === 60) {
+        this.duration = '1 hour';
+      } else {
+        this.duration = callData.duration + ' mins';
+      }
+
+      this.description = callData.description;
     }
   }
 
@@ -201,10 +257,17 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
         this.dialogRef.close(response);
       });
     } else {
-      this.teamService.requestCall(data).subscribe((response) => {
-        this.isLoading = false;
-        this.dialogRef.close({ data: response });
-      });
+      if (this.type !== 'edit') {
+        this.teamService.requestCall(data).subscribe((response) => {
+          this.isLoading = false;
+          this.dialogRef.close({ data: response });
+        });
+      } else {
+        this.teamService.updateCall(this.callId, data).subscribe((response) => {
+          this.isLoading = false;
+          this.dialogRef.close({ data: response });
+        });
+      }
     }
   }
 

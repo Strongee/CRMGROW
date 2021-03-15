@@ -425,6 +425,14 @@ button:disabled {
   }
 }
 
+.selected-media {
+  max-width: 260px;
+
+  @media screen and (max-width: 576px) {
+    max-width: 200px;
+  }
+}
+
 .label-group {
   margin-bottom: 0.3rem;
 

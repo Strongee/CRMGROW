@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-deal-stage-create',
@@ -17,8 +18,9 @@ export class DealStageCreateComponent implements OnInit {
 
   constructor(
     private dealsService: DealsService,
+    private toastr: ToastrService,
     private dialogRef: MatDialogRef<DealStageCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.priority) {
       this.priority = this.data.priority;
@@ -41,6 +43,9 @@ export class DealStageCreateComponent implements OnInit {
         .subscribe((res) => {
           this.saving = false;
           if (res) {
+            this.toastr.success(
+              'New Deal stage has been successfully created.'
+            );
             this.dialogRef.close(res);
           }
         });
