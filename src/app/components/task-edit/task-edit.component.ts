@@ -144,8 +144,11 @@ export class TaskEditComponent implements OnInit {
   submit(): void {
     let due_date = '';
     if (this.timezone.tz_name) {
-      const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
-      due_date = moment.tz(dateStr, this.timezone.tz_name).format();
+      // const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
+      // due_date = moment.tz(dateStr, this.timezone.tz_name).format();
+      due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
+        this.date.day
+      )}T${this.time}${this.timezone.zone}`;
     } else {
       due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
         this.date.day

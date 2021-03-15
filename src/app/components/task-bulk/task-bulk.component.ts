@@ -36,6 +36,7 @@ export class TaskBulkComponent implements OnInit {
     private dialogRef: MatDialogRef<TaskBulkComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
+    private helperService: HelperService,
     private handlerService: HandlerService,
     private taskService: TaskService
   ) {
@@ -54,6 +55,32 @@ export class TaskBulkComponent implements OnInit {
       }
     });
     this.ids = this.data.ids;
+    if (this.ids.length > 1) {
+      this.initTime();
+    }
+  }
+
+  initTime(): void {
+    const standardTime = moment.tz(new Date(), '');
+    let dateTimeObj;
+    if (this.timezone.tz_name) {
+      const myTime = standardTime.clone().tz(this.timezone.tz_name);
+      dateTimeObj = {
+        year: myTime.get('year'),
+        month: myTime.get('month') + 1,
+        day: myTime.get('date')
+      };
+    } else {
+      dateTimeObj = this.helperService.customTzTime(
+        standardTime.format(),
+        this.timezone.zone
+      );
+    }
+    this.date = {
+      year: dateTimeObj.year,
+      month: dateTimeObj.month,
+      day: dateTimeObj.day
+    };
   }
 
   ngOnInit(): void {}
@@ -65,8 +92,11 @@ export class TaskBulkComponent implements OnInit {
         return;
       }
       if (this.timezone.tz_name) {
-        const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
-        due_date = moment.tz(dateStr, this.timezone.tz_name).format();
+        // const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
+        // due_date = moment.tz(dateStr, this.timezone.tz_name).format();
+        due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
+          this.date.day
+        )}T${this.time}${this.timezone.zone}`;
       } else {
         due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
           this.date.day
