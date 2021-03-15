@@ -6,7 +6,8 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
-  TemplateRef, OnChanges
+  TemplateRef,
+  OnChanges
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
@@ -30,6 +31,7 @@ import * as _ from 'lodash';
 import { validateEmail } from 'src/app/utils/functions';
 import { Contact } from 'src/app/models/contact.model';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { environment } from '../../../environments/environment';
 const phone = require('phone');
 
 @Component({
@@ -67,6 +69,7 @@ export class InputContactChipComponent implements OnInit, OnChanges {
 
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
   filteredContacts: Contact[] = [];
+  siteUrl = environment.website;
 
   constructor(private contactService: ContactService) {}
 
@@ -163,7 +166,6 @@ export class InputContactChipComponent implements OnInit, OnChanges {
         _SELF.inputField.nativeElement.focus();
       }
     }, 300);
-
   }
 
   getMaterialLatestContact(): void {
@@ -321,4 +323,6 @@ export class InputContactChipComponent implements OnInit, OnChanges {
     this.isFocus = true;
     this.onFocus.emit();
   }
+
+  contactDetail(contact): void {}
 }

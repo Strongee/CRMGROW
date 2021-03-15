@@ -23,7 +23,6 @@
 }
 .thumbnail {
     padding: 0px;
-    width: 54px;
     height: 30px;
     object-fit: contain;
     border: none;
@@ -36,6 +35,7 @@
     width: 54px;
     height: 30px;
     object-fit: cover;
+    margin-right: 12px;
 }
 
 .thumb-prev-wrapper .preview {
@@ -248,4 +248,13 @@ td.type-col {
 
 tr.selected {
   background: #e2e2fb;
+}
+
+.link-wrapper {
+  color: $color-dark;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-dark;
+  }
 }

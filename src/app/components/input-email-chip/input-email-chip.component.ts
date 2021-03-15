@@ -30,6 +30,7 @@ import * as _ from 'lodash';
 import { validateEmail } from 'src/app/utils/functions';
 import { Contact } from 'src/app/models/contact.model';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { environment } from '../../../environments/environment';
 const phone = require('phone');
 
 @Component({
@@ -38,7 +39,6 @@ const phone = require('phone');
   styleUrls: ['./input-email-chip.component.scss']
 })
 export class InputEmailChipComponent implements OnInit {
-
   separatorKeyCodes: number[] = [ENTER, COMMA];
   keyword = '';
   searching = false;
@@ -69,6 +69,7 @@ export class InputEmailChipComponent implements OnInit {
 
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
   filteredContacts: Contact[] = [];
+  siteUrl = environment.website;
 
   constructor(private contactService: ContactService) {}
 

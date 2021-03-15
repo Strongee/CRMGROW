@@ -1,3 +1,5 @@
+@import 'src/variables.scss';
+
 .mat-basic-chip {
   outline: none!important;
   .chip {
@@ -24,6 +26,15 @@
 .more-address {
   border: 1px solid rgba(16, 19, 54, 0.4);
   border-radius: 5px;
+}
+
+.link-wrapper {
+  color: $color-dark;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-dark;
+  }
 }
 
 :host ::ng-deep {
