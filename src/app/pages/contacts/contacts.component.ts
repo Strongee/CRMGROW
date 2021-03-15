@@ -136,7 +136,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
     const sortInfo = this.contactService.sort.getValue();
     this.SORT_TYPES.some((e) => {
-      if (e.id === sortInfo) {
+      if (e.id === sortInfo.name) {
         this.sortType = e;
         return true;
       }

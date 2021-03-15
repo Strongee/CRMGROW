@@ -130,10 +130,19 @@ export class TasksComponent implements OnInit, OnDestroy {
   loadTasks(): void {
     const page = this.taskService.page.getValue();
     const pageSize = this.taskService.pageSize.getValue();
+    const durationOption = this.taskService.durationOption.getValue();
+
     this.changePage(page || 1);
     this.PAGE_COUNTS.some((e) => {
       if (e.id === pageSize) {
         this.pageSize = e;
+        return true;
+      }
+    });
+
+    this.DEADLINE_TYPES.some((e) => {
+      if (e.id === durationOption.name) {
+        this.deadline = e;
         return true;
       }
     });
