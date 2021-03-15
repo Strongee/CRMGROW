@@ -43,14 +43,14 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="v-center" *ngFor="let contact of tag.contacts">
-                                <div class="v-center py-2 avatar-wrapper">
+                                <a class="v-center py-2 avatar-wrapper" [routerLink]="['/contacts/' + contact._id]">
                                     <div class="v-center justify-content-center f-4 font-weight-bold text-white avatar">
                                         {{contact.shortName}}
                                     </div>
                                     <div class="f-3 font-weight-bold text-primary name">
                                         {{contact.first_name}} {{contact.last_name}}
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </mat-expansion-panel>
                     </mat-accordion>
