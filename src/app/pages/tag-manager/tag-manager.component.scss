@@ -82,6 +82,9 @@
               margin-right: 10px;
               box-shadow: unset;
             }
+            &:hover {
+                text-decoration: none;
+            }
         }
     }
 }
