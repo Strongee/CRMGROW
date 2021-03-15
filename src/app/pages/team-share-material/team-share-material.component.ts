@@ -136,15 +136,19 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     } else {
       let count = 0;
       count = this.filteredMaterials.length - page * this.perPageCount;
-      if (count >= 5) {
-        count = 5;
+      if (count > this.perPageCount) {
+        count = this.perPageCount;
       }
-      this.pageMaterials = this.filteredMaterials.slice(page * this.perPageCount, count);
-      for (const selection of this.selection) {
-        for (const material of this.pageMaterials) {
-          if (selection._id !== material._id) {
-            return false;
-          }
+      const start = page * this.perPageCount;
+      this.pageMaterials = this.filteredMaterials.slice(start, start + count);
+      if (this.pageMaterials.length <= 0 || this.selection.length <= 0) {
+        return false;
+      }
+      for (const material of this.pageMaterials) {
+        if (this.selection.indexOf(material._id) >= 0) {
+          continue;
+        } else {
+          return false;
         }
       }
       return true;
@@ -165,25 +169,34 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
       this.selection = [];
     } else {
       this.filteredMaterials.forEach((e) => {
-        this.selection.push(e._id);
+        if (this.selection.indexOf(e._id) < 0) {
+          this.selection.push(e._id);
+        }
       });
     }
     this.changeCaptureAction();
   }
 
   masterPageToggle(page): void {
+    let count = 0;
+    count = this.filteredMaterials.length - page * this.perPageCount;
+    if (count > this.perPageCount) {
+      count = this.perPageCount;
+    }
+    const start = page * this.perPageCount;
+    this.pageMaterials = this.filteredMaterials.slice(start, start + count);
     if (this.isPageSelected(page)) {
-      this.selection = [];
-    } else {
-      this.selection = [];
-      let count = 0;
-      count = this.filteredMaterials.length - page * this.perPageCount;
-      if (count >= 5) {
-        count = 5;
-      }
-      this.pageMaterials = this.filteredMaterials.slice(page * this.perPageCount, count);
       this.pageMaterials.forEach((e) => {
-        this.selection.push(e._id);
+        const index = this.selection.indexOf(e._id);
+        if (index >= 0) {
+          this.selection.splice(index, 1);
+        }
+      });
+    } else {
+      this.pageMaterials.forEach((e) => {
+        if (this.selection.indexOf(e._id) < 0) {
+          this.selection.push(e._id);
+        }
       });
     }
     this.changeCaptureAction();
@@ -686,55 +699,11 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     this.selection = [];
     const reg = new RegExp(this.searchStr, 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
-      if (this.selectedFolder) {
-        if (this.selectedFolder._id !== material.folder) {
-          return false;
-        }
-      } else if (!this.isEnableSearchOptions() && material.folder) {
-        return false;
-      }
       if (this.matType && material.material_type != this.matType) {
         return false;
       }
       if (!reg.test(material.title)) {
         return false;
-      }
-      if (
-        this.folderOptions.length &&
-        (!material.folder || this.folderOptions.indexOf(material.folder) === -1)
-      ) {
-        return false;
-      }
-      if (
-        this.teamOptions.length &&
-        (!material.team || this.userOptions.indexOf(material.team._id) === -1)
-      ) {
-        return false;
-      }
-      if (this.isAdmin && this.userOptions.length) {
-        if (material.role === 'admin') {
-          return true;
-        }
-        const userId =
-          material.user && material.user._id
-            ? material.user._id
-            : material.user;
-        if (this.userOptions.indexOf(userId) !== -1) {
-          return true;
-        }
-        return false;
-      }
-      if (this.isAdmin && material.role != 'admin') {
-        return false;
-      }
-      if (this.userOptions.length) {
-        const userId =
-          material.user && material.user._id
-            ? material.user._id
-            : material.user;
-        if (this.userOptions.indexOf(userId) === -1) {
-          return false;
-        }
       }
       return true;
     });

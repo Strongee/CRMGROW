@@ -39,6 +39,7 @@
 .checkbox-col {
   width: 36px;
 }
+
 .thumbnail {
   padding: 0px;
   width: 54px;
@@ -68,6 +69,7 @@
     display: none;
   }
 }
+
 .folder-thumb {
   height: 26px;
   background-size: 100% 100%;
@@ -256,13 +258,18 @@ td.type-col {
   }
 }
 
-.to-root {
-  text-decoration: none!important;
-  color: $color-dark!important;
-}
 
 :host ::ng-deep {
   .show.dropdown {
     position: unset;
+  }
+
+  .page-table thead tr.selected th {
+    background-color: #f5f6fd;
+  }
+
+  .page-table thead tr.selection-info th {
+    background-color: #f5f6fd;
+    border-bottom: none;
   }
 }
