@@ -51,13 +51,14 @@
     }
 }
 .folder-thumb {
-    height: 26px;
+    height: 20px;
     background-size: 100% 100%;
     width: 40px;
     transform: translateX(-4px) scaleX(1.25);
     background-position: 0px 0px;
     transform-origin: left top;
     background-image: url(../../../assets/img/folder.svg);
+    margin-top: 4px;
 }
 
 td {
