@@ -10,13 +10,14 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Subscription } from 'rxjs';
 import { Template } from 'src/app/models/template.model';
 import { FileService } from 'src/app/services/file.service';
 import { TemplatesService } from 'src/app/services/templates.service';
-
+import * as QuillNamespace from 'quill';
+const Quill: any = QuillNamespace;
+const Delta = Quill.import('delta');
 @Component({
   selector: 'app-template-create',
   templateUrl: './template-create.component.html',
@@ -33,6 +34,13 @@ export class TemplateCreateComponent implements OnInit {
   hasToken: boolean = false;
   required: boolean = false;
 
+  cursor: number = 0;
+
+  @Input()
+  public set subject(value: string) {
+    this.template.subject = value;
+    this.cursor = value.length;
+  }
   @Input() value: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
   @Output() onClose: EventEmitter<boolean> = new EventEmitter();
@@ -50,6 +58,9 @@ export class TemplateCreateComponent implements OnInit {
     },
     blotFormatter: {}
   };
+
+  isShowTokens = false;
+
   constructor(
     private fileService: FileService,
     public templateService: TemplatesService,
@@ -115,5 +126,41 @@ export class TemplateCreateComponent implements OnInit {
           this.onClose.emit(true);
         }
       });
+  }
+
+  insertEmailContentValue(value: string): void {
+    if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
+      this.emailEditor.quillEditor.focus();
+      const range = this.emailEditor.quillEditor.getSelection();
+      let index = 0;
+      if (range) {
+        index = range.index;
+      }
+      const delta = this.quillEditorRef.clipboard.convert({
+        html: value
+      });
+      this.emailEditor.quillEditor.updateContents(
+        new Delta().retain(index).concat(delta),
+        'user'
+      );
+      const length = this.emailEditor.quillEditor.getLength();
+      this.emailEditor.quillEditor.setSelection(length, 0, 'user');
+      // this.emailEditor.quillEditor.setContents(delta, 'user');
+    }
+  }
+
+  keepCursor(field): void {
+    if (field.selectionStart || field.selectionStart === '0') {
+      this.cursor = field.selectionStart;
+    }
+  }
+
+  insertEmailSubjectValue(value: string): void {
+    let text = this.template.subject;
+    text =
+      text.substr(0, this.cursor) +
+      value +
+      text.substr(this.cursor, text.length - this.cursor);
+    this.template.subject = text;
   }
 }

@@ -23,6 +23,7 @@ import { Template } from 'src/app/models/template.model';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
+import { HandlerService } from 'src/app/services/handler.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 // import ImageResize from 'quill-image-resize-module';
@@ -39,6 +40,7 @@ export class HtmlEditorComponent implements OnInit {
   @Input() class = '';
   @Input() hasToken: boolean = false;
   @Input() required: boolean = false;
+  @Input() subject: string = '';
   @Input()
   public set hasAttachment(val: boolean) {
     if (val) {
@@ -122,6 +124,7 @@ export class HtmlEditorComponent implements OnInit {
   constructor(
     private fileService: FileService,
     public templateService: TemplatesService,
+    private handlerService: HandlerService,
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef,
     private overlay: Overlay,

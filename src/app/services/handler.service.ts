@@ -1,11 +1,12 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Activity } from '../models/activity.model';
 import { DetailActivity, PureActivity } from '../models/activityDetail.model';
 import { Contact, ContactActivity } from '../models/contact.model';
+import { Template } from '../models/template.model';
 import { ActivityService } from './activity.service';
 import { AutomationService } from './automation.service';
 import { ContactService } from './contact.service';

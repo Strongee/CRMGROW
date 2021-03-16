@@ -71,6 +71,7 @@
         hasTemplates="true"
         (onChangeTemplate)="selectTemplate($event)"
         [style]="{height: '200px'}"
+        [subject]="email.subject"
         #emailEditor
         >
     </app-html-editor>

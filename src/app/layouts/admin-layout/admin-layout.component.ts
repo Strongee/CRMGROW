@@ -1,8 +1,8 @@
+import { TemplatePortal } from '@angular/cdk/portal';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwPush } from '@angular/service-worker';
-import { ToastrService } from 'ngx-toastr';
 import { Garbage } from 'src/app/models/garbage.model';
 import { SearchOption } from 'src/app/models/searchOption.model';
 import { User } from 'src/app/models/user.model';
@@ -21,6 +21,7 @@ import { environment } from 'src/environments/environment';
 export class AdminLayoutComponent implements OnInit {
   @ViewChild('drawer') manageLabelPanel: MatDrawer;
   showDialog = false;
+
   constructor(
     public handlerService: HandlerService,
     private userService: UserService,

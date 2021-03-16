@@ -10,6 +10,7 @@
         <label>Title</label>
         <input type="text"
           class="form-control"
+          style="padding-right: 60px;"
           required
           [(ngModel)]="template.title"
           name="title"
@@ -19,12 +20,13 @@
           (title.touched || title.dirty)">Please input template name.</span>
       </div>
   
-      <div class="form-group">
+      <div class="form-group position-relative">
         <label>Subject</label>
         <input type="text"
           class="form-control"
           #subjectField
           [(ngModel)]="template.subject"
+          (blur)="keepCursor(subjectField)"
           name="mailSubject"
           #mailSubject="ngModel"
           required />
@@ -32,22 +34,66 @@
           *ngIf="mailSubject.errors &&
           (mailSubject.touched || mailSubject.dirty)">
         Please input the email template subject.</span>
+        <div ngbDropdown class="insert-token for-subject bottom-right">
+          <div class="v-center no-carot" ngbDropdownToggle>
+            <span class="f-1 font-weight-bold mr-1">Token</span>
+            <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+            <i class="d-block i-icon i-triangle-up bgc-blue"></i>
+          </div>
+          <div ngbDropdownMenu class="light p-2">
+            <div class="f-3 p-1 c-pointer" (click)="insertEmailSubjectValue('{contact_first_name}')">Contact Firstname</div>
+            <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailSubjectValue('{user_name}')">Your name</div>
+            <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailSubjectValue('{user_email}')">Your email</div>
+            <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailSubjectValue('{user_phone}')">Your phone</div>
+          </div>
+        </div>
       </div>
     
       <div class="form-group">
         <label>Content</label>
-        <quill-editor
-        [placeholder]="placeholder"
-        [ngModel]="value"
-        [modules]="config"
-        [styles]="style"
-        [class]="class"
-        image-resize="true"
-        [required]="required ? true : false"
-        (onEditorCreated)="getEditorInstance($event)"
-        [formControl]="editorForm"
-        #emailEditor>
-      </quill-editor>
+        <div class="position-relative">
+          <quill-editor
+            [placeholder]="placeholder"
+            [ngModel]="value"
+            [modules]="config"
+            [styles]="style"
+            [class]="class"
+            image-resize="true"
+            [required]="required ? true : false"
+            (onEditorCreated)="getEditorInstance($event)"
+            [formControl]="editorForm"
+            #emailEditor>
+          </quill-editor>
+
+          <div ngbDropdown class="insert-token bottom-right">
+            <div class="v-center no-carot" ngbDropdownToggle>
+              <span class="f-1 font-weight-bold mr-1">Token</span>
+              <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+              <i class="d-block i-icon i-triangle-up bgc-blue"></i>
+            </div>
+            <div ngbDropdownMenu class="light p-2">
+              <div class="f-3 p-1 c-pointer" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</div>
+              <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_name}')">Your name</div>
+              <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_email}')">Your email</div>
+              <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_phone}')">Your phone</div>
+            </div>
+          </div>
+
+          <!-- <div class="tokens-wrapper" [class.show]="isShowTokens">
+            <div (click)="isShowTokens = !isShowTokens" class="v-center">
+              <span class="f-1 font-weight-bold mr-1">Insert Token</span>
+              <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+              <i class="d-block i-icon i-triangle-up bgc-blue"></i>
+            </div>
+            <div class="token-menu">
+              <div class="f-3 py-1 px-2 c-pointer" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</div>
+              <div class="f-3 py-1 px-2 mt-1 c-pointer" (click)="insertEmailContentValue('{user_name}')">Your name</div>
+              <div class="f-3 py-1 px-2 mt-1 c-pointer" (click)="insertEmailContentValue('{user_email}')">Your email</div>
+              <div class="f-3 py-1 px-2 mt-1 c-pointer" (click)="insertEmailContentValue('{user_phone}')">Your phone</div>
+            </div>
+          </div> -->
+
+        </div>
       </div>
     </div>
   
