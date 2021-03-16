@@ -18,7 +18,34 @@
           <div class="v-center mb-1">
             <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
             <span class="f-1">connected</span>
-            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email)">
+            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email, 'gmail')">
+              <div class="f-2">Disconnect</div>
+            </button>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/outlook_calendar.png">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Outlook Calendar</div>
+      <div class="desc f-2 op-75">
+        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+      </div>
+    </div>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">Connect account</button>
+    <div class="accounts">
+      <ng-container *ngIf="outlookCalendars.length">
+        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+        <ng-container *ngFor="let calendar of outlookCalendars">
+          <div class="v-center mb-1">
+            <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
+            <span class="f-1">connected</span>
+            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email, 'outlook')">
               <div class="f-2">Disconnect</div>
             </button>
           </div>
@@ -87,34 +114,6 @@
       </ng-container>
     </div>
   </div>
-
-  <div class="integration-account">
-    <div class="icon">
-      <img src="../../../assets/img/outlook_calendar.png">
-    </div>
-    <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">Outlook Calendar</div>
-      <div class="desc f-2 op-75">
-        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
-      </div>
-    </div>
-    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">Connect account</button>
-    <div class="accounts">
-      <ng-container *ngIf="outlookCalendars.length">
-        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
-        <ng-container *ngFor="let calendar of outlookCalendars">
-          <div class="v-center mb-1">
-            <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
-            <span class="f-1">connected</span>
-            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email)">
-              <div class="f-2">Disconnect</div>
-            </button>
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
-
 
   <h6 class="font-weight-bold">Email apps</h6>
   <div class="integration-account">

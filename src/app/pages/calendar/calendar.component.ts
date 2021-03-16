@@ -121,6 +121,15 @@ export class CalendarComponent implements OnInit {
             .authorizeOutlookCalendar(params['code'])
             .subscribe((res) => {
               if (res['status']) {
+                const data = {
+                  connected_calendar_type: 'outlook',
+                  connected_email: res['data'],
+                  outlook_refresh_token: params['code']
+                };
+                this.user.calendar_list.push(data);
+                this.userService.updateProfile(this.user).subscribe((data) => {
+                  this.userService.updateProfileImpl(data);
+                });
                 this.toast.success(
                   'Your Outlook Calendar is connected successfully.'
                 );
@@ -133,6 +142,15 @@ export class CalendarComponent implements OnInit {
             .authorizeGoogleCalendar(params['code'])
             .subscribe((res) => {
               if (res['status']) {
+                const data = {
+                  connected_calendar_type: 'google',
+                  connected_email: res['data'],
+                  google_refresh_token: params['code']
+                };
+                this.user.calendar_list.push(data);
+                this.userService.updateProfile(this.user).subscribe((data) => {
+                  this.userService.updateProfileImpl(data);
+                });
                 this.toast.success(
                   'Your Google Calendar is connected successfully.'
                 );

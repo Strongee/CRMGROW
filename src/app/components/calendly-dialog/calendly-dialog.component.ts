@@ -33,11 +33,14 @@ export class CalendlyDialogComponent implements OnInit {
         if (res && res['status']) {
           this.isConfirm = false;
           this.toast.success('Calendly connected successfully');
-          this.dialogRef.close(res);
+          this.dialogRef.close(res['data']);
         }
       },
       (err) => {
         this.isConfirm = false;
+        if (err.status === 400) {
+          this.toast.error('Please check your calendly api key.');
+        }
       }
     );
   }

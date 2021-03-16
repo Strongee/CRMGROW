@@ -322,7 +322,7 @@ export class UserService extends HttpService {
   }
   public disconnectCalendar(email: string): any {
     const data = {
-      connected_eamil: email
+      connected_email: email
     };
     return this.httpClient.post(this.server + USER.DISCONNECT_CALENDAR, data);
   }
