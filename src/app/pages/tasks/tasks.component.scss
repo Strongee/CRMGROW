@@ -47,3 +47,12 @@ tr.completed + tr.completed-extension .completed-cell .completed-mark {
   width: 75px;
   font-size: 12px;
 }
+
+tr.completed td span {
+  color: #6b6b6b;
+  text-decoration: line-through;
+}
+tr.completed .label-cell {
+  color: #6b6b6b;
+  text-decoration: line-through;
+}
