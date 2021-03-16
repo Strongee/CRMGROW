@@ -31,6 +31,12 @@ export class ConnectService {
     );
   }
 
+  public disconnectCalendly(): any {
+    return this.httpClient.get(
+      environment.api + INTEGRATION.DISCONNECT_CALENDLY
+    );
+  }
+
   public getToken(): any {
     return this.httpClient.get(environment.api + INTEGRATION.GET_TOKEN);
   }

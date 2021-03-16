@@ -9,6 +9,7 @@ import { ZapierDialogComponent } from 'src/app/components/zapier-dialog/zapier-d
 import { CalendlyDialogComponent } from 'src/app/components/calendly-dialog/calendly-dialog.component';
 import { Garbage } from 'src/app/models/garbage.model';
 import { CalendlyListComponent } from 'src/app/components/calendly-list/calendly-list.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-integration',
@@ -37,7 +38,6 @@ export class IntegrationComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user = profile;
-
         if (this.user.calendar_list) {
           this.googleCalendars = this.user.calendar_list.filter((e) => {
             if (e.connected_calendar_type === 'google') {
@@ -50,7 +50,6 @@ export class IntegrationComponent implements OnInit {
         }
       }
     );
-    this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
       this.garbage = res;
     });
@@ -107,6 +106,26 @@ export class IntegrationComponent implements OnInit {
     }
   }
 
+  disconnectCalendar(email: string, type: string): void {
+    this.userService.disconnectCalendar(email).subscribe((res) => {
+      if (res) {
+        if (type == 'gmail') {
+          const pos = _.findIndex(
+            this.googleCalendars,
+            (e) => e.connected_email == email
+          );
+          this.googleCalendars.splice(pos, 1);
+        } else {
+          const pos = _.findIndex(
+            this.outlookCalendars,
+            (e) => e.connected_email == email
+          );
+          this.outlookCalendars.splice(pos, 1);
+        }
+      }
+    });
+  }
+
   connectZapier(): void {
     this.dialog.open(ZapierDialogComponent, {
       width: '100vw',
@@ -146,7 +165,8 @@ export class IntegrationComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          console.log('###', res);
+          this.garbage.calendly.email = res.calendly.email;
+          this.garbage.calendly.token = res.calendly.token;
         }
       });
   }
@@ -157,6 +177,15 @@ export class IntegrationComponent implements OnInit {
       maxWidth: '1000px',
       data: {
         key: this.garbage.calendly?.id
+      }
+    });
+  }
+
+  disconnectCalendly(): void {
+    this.connectService.disconnectCalendly().subscribe((res) => {
+      if (res) {
+        this.garbage.calendly.email = '';
+        this.garbage.calendly.token = '';
       }
     });
   }
