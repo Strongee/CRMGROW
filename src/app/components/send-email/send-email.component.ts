@@ -203,10 +203,12 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         if (res && res.materials) {
           this.materials = _.intersectionBy(this.materials, materials, '_id');
           this.materials = [...this.materials, ...res.materials];
+          this.htmlEditor.insertBeforeMaterials();
           for (let i = 0; i < res.materials.length; i++) {
             const material = res.materials[i];
             this.htmlEditor.insertMaterials(material);
           }
+          this.htmlEditor.insertAfterMaterials();
         }
       });
   }

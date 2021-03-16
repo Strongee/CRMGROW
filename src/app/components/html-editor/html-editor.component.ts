@@ -209,16 +209,75 @@ export class HtmlEditorComponent implements OnInit {
     this.valueChange.emit(value);
   }
 
-  insertMaterials(material: any): void {
+  insertBeforeMaterials(): void {
+    this.emailEditor.quillEditor.focus();
     const range = this.quillEditorRef.getSelection();
     const length = this.emailEditor.quillEditor.getLength();
+
+    let next;
+    let prev;
+    let selection = 0;
+    if (range && range.index) {
+      const prevDelta = this.emailEditor.quillEditor.getContents(
+        range.index - 1,
+        1
+      );
+      const nextDelta = this.emailEditor.quillEditor.getContents(
+        range.index,
+        1
+      );
+      next = nextDelta.ops[0].insert;
+      prev = prevDelta.ops[0].insert;
+      selection = range.index;
+      console.log('prevDetal', prevDelta, nextDelta);
+    } else {
+      const nextDelta = this.emailEditor.quillEditor.getContents(length - 1, 1);
+      const prevDelta = this.emailEditor.quillEditor.getContents(length - 2, 1);
+      next = nextDelta.ops[0].insert;
+      prev = prevDelta.ops[0].insert;
+      selection = length;
+    }
+    if (next === '\n' && prev === '\n') {
+      return;
+    } else if (next === '\n') {
+      this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
+      this.emailEditor.quillEditor.setSelection(selection + 1, 0, 'user');
+      return;
+    } else if (prev === '\n') {
+      return;
+    } else {
+      this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
+      this.emailEditor.quillEditor.setSelection(selection + 1, 0, 'user');
+    }
+  }
+
+  insertAfterMaterials(): void {
+    this.emailEditor.quillEditor.focus();
+    const range = this.quillEditorRef.getSelection();
+    const length = this.emailEditor.quillEditor.getLength();
+    let selection = 0;
+    if (range && range.index) {
+      selection = range.index;
+    } else {
+      selection = length;
+    }
+    this.emailEditor.quillEditor.insertText(selection, '\n\n', {}, 'user');
+    this.emailEditor.quillEditor.setSelection(selection + 2, 0, 'user');
+  }
+
+  insertMaterials(material: any): void {
+    this.emailEditor.quillEditor.focus();
+
+    const range = this.quillEditorRef.getSelection();
+    const length = this.emailEditor.quillEditor.getLength();
+
     if (range && range.index) {
       let selection = range.index;
       this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
       selection += 1;
       this.emailEditor.quillEditor.insertText(
         selection,
-        material.title,
+        material.title + '\n',
         'bold',
         'user'
       );

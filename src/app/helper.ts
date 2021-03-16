@@ -240,10 +240,10 @@ export class MaterialBlot extends Embed {
     };
   }
 }
+Quill.register(MaterialBlot, true);
 Block.tagName = 'DIV';
 // Quill.register(SignatureBlot, true);
 Quill.register(Block, true);
-Quill.register(MaterialBlot, true);
 
 export function toInteger(value: any): number {
   return parseInt(`${value}`, 10);
