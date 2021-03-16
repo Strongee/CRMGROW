@@ -4,7 +4,7 @@ import { HttpService } from './http.service';
 import { ErrorService } from './error.service';
 import { APPOINTMENT } from '../constants/api.constant';
 import { catchError, map } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { STATUS } from '../constants/variable.constants';
 
 @Injectable({
@@ -36,6 +36,9 @@ export class AppointmentService extends HttpService {
   calendars$ = this.calendars.asObservable();
   subCalendars: BehaviorSubject<any> = new BehaviorSubject(null);
   subCalendars$ = this.subCalendars.asObservable();
+
+  updateCommand = new Subject<any>();
+  updateCommand$ = this.updateCommand.asObservable();
 
   public loadCalendars(force = false): void {
     if (!force) {

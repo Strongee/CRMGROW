@@ -1,5 +1,7 @@
 import * as Quill from 'quill';
+const InlineBlock = Quill.import('blots/inline');
 const Embed = Quill.import('blots/embed');
+const BlockEmbed = Quill.import('blots/block/embed');
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
 const Block = Quill.import('blots/block');
@@ -217,8 +219,12 @@ export class MaterialBlot extends Embed {
   static className = 'material-object';
   static blotName = 'materialLink';
   static create(data) {
+    if (!data || !data._id || !data.preview) {
+      return;
+    }
     const node = super.create();
     node.setAttribute('href', data._id);
+    node.setAttribute('contenteditable', false);
     const img = document.createElement('img');
     img.setAttribute('src', data.preview);
     img.alt = 'Preview image went something wrong. Please click here';

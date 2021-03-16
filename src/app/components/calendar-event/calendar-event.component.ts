@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
-import { OverlayService } from 'src/app/services/overlay.service';
 import { ToastrService } from 'ngx-toastr';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
 import { CalendarDeclineComponent } from '../calendar-decline/calendar-decline.component';
@@ -16,7 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class CalendarEventComponent implements OnInit {
   @Input('event') viewEvent;
-  @Output() onClose: EventEmitter<any> = new EventEmitter();
+  @Output() onClose: EventEmitter<any> = new EventEmitter(null);
   event = {
     title: '',
     start: '',
@@ -43,7 +42,6 @@ export class CalendarEventComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private appointmentService: AppointmentService,
-    private overlayService: OverlayService,
     private toast: ToastrService
   ) {}
 
@@ -93,20 +91,21 @@ export class CalendarEventComponent implements OnInit {
                 this.event.meta.calendar_id,
                 connected_email
               )
-              .subscribe(
-                (res) => {
-                  if (res['status'] == true) {
-                    const data = {
-                      recurrence_id: this.event.meta.recurrence_id
-                    };
-                    this.toast.success('Event is removed successfully');
-                    this.overlayService.close(data);
-                  }
-                },
-                (err) => {
-                  this.overlayService.close(null);
+              .subscribe((res) => {
+                if (res['status']) {
+                  const data = {
+                    event_id: this.event.meta.event_id,
+                    recurrence_id: this.event.meta.recurrence_id,
+                    calendar_id: this.event.meta.calendar_id,
+                    connected_email: connected_email
+                  };
+                  this.appointmentService.updateCommand.next({
+                    command: 'delete',
+                    data: data
+                  });
+                  this.toast.success('Event is removed successfully');
                 }
-              );
+              });
           }
         });
     } else {
@@ -118,20 +117,18 @@ export class CalendarEventComponent implements OnInit {
           this.event.meta.calendar_id,
           connected_email
         )
-        .subscribe(
-          (res) => {
-            if (res['status'] == true) {
-              const data = {
-                id: this.event.meta.event_id
-              };
-              this.toast.success('Event is removed successfully');
-              this.overlayService.close(data);
-            }
-          },
-          (err) => {
-            this.overlayService.close(null);
+        .subscribe((res) => {
+          if (res['status']) {
+            const data = {
+              event_id: this.event.meta.event_id,
+              recurrence_id: this.event.meta.recurrence_id,
+              calendar_id: this.event.meta.calendar_id,
+              connected_email: connected_email
+            };
+            this.onClose.emit({ command: 'delete', data: data });
+            this.toast.success('Event is removed successfully');
           }
-        );
+        });
     }
   }
 
@@ -210,6 +207,10 @@ export class CalendarEventComponent implements OnInit {
       panelClass: 'decline-panel',
       backdropClass: 'decline-backdrop'
     });
+  }
+
+  closeWithData(data: any): void {
+    this.onClose.emit(data);
   }
 
   close(): void {

@@ -80,7 +80,30 @@ export class CalendarComponent implements OnInit {
     private toast: ToastrService,
     private overlay: Overlay,
     private _viewContainerRef: ViewContainerRef
-  ) {}
+  ) {
+    this.appointmentService.updateCommand$.subscribe((data) => {
+      if (data) {
+        if (data.command === 'delete') {
+          if (data.data.recurrence_id) {
+            const events = this.events.filter((e) => {
+              if (e.meta.recurrence_id !== data.data.recurrence_id) {
+                return true;
+              }
+            });
+            this.events = events;
+          } else {
+            this.events.some((e, index) => {
+              if (e.meta.event_id === data.data.event_id) {
+                this.events.splice(index, 1);
+                return true;
+              }
+            });
+          }
+          this.filterEvents();
+        }
+      }
+    });
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -326,73 +349,6 @@ export class CalendarComponent implements OnInit {
           this.loadEvent(eventDate, this.selectedTab.id);
           this.changeDetectorRef.detectChanges();
         }
-      });
-  }
-
-  hourClicked(date: any, origin: any, content: any): void {
-    this.overlayService
-      .open(origin, content, this.viewContainerRef, 'create', {
-        data: {
-          start_date: date,
-          type: 'week'
-        }
-      })
-      .subscribe((res) => {
-        if (res) {
-          const eventDate = this.viewDate.toISOString();
-          this.loadEvent(eventDate, this.selectedTab.id);
-          this.changeDetectorRef.detectChanges();
-        }
-      });
-  }
-
-  handleEvent(event: any, origin: any, content: any, $event: MouseEvent): void {
-    this.overlayService
-      .open(origin, content, this.viewContainerRef, 'edit', {
-        data: {
-          event: event
-        }
-      })
-      .subscribe((res) => {
-        if (res) {
-          if (res.id) {
-            const events = this.events.filter(
-              (item) => item.meta.event_id != res.id
-            );
-            this.events = [];
-            this.events = events;
-          } else {
-            this.isLoading = true;
-            const eventDate = this.viewDate.toISOString();
-            this.appointmentService
-              .getEvents(eventDate, this.view)
-              .subscribe((res) => {
-                if (res['status'] == true) {
-                  this.events = res['data'].map((item) => {
-                    return {
-                      title: item.title,
-                      start: new Date(item.due_start),
-                      end: new Date(item.due_end),
-                      meta: {
-                        contacts: item.contacts,
-                        calendar_id: item.calendar_id,
-                        description: item.description,
-                        location: item.location,
-                        type: item.type,
-                        guests: item.guests,
-                        event_id: item.event_id,
-                        recurrence: item.recurrence,
-                        recurrence_id: item.recurrence_id,
-                        is_organizer: item.is_organizer
-                      }
-                    };
-                  });
-                  this.isLoading = false;
-                }
-              });
-          }
-        }
-        this.changeDetectorRef.detectChanges();
       });
   }
 
@@ -648,9 +604,20 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  closeOverlay(): void {
+  closeOverlay(event: any): void {
     if (this.overlayRef) {
       this.overlayRef.detach();
+    }
+    if (event) {
+      if (event.command === 'delete' && event.data) {
+        this.events.some((e, index) => {
+          if (e.meta.event_id === event.data.event_id) {
+            this.events.splice(index, 1);
+            return true;
+          }
+        });
+        this.filterEvents();
+      }
     }
   }
 
@@ -684,4 +651,91 @@ export class CalendarComponent implements OnInit {
     };
     return res;
   }
+
+  getDurationOption(start, end): boolean {
+    let startDate, endDate;
+    if (typeof start === 'string') {
+      startDate = new Date(start);
+    } else {
+      startDate = start;
+    }
+    if (typeof end === 'string') {
+      endDate = new Date(end);
+    } else {
+      endDate = end;
+    }
+    const startHour = startDate.getHours();
+    const endHour = endDate.getHours();
+
+    return (
+      (startHour >= 12 && endHour >= 12) || (startHour <= 12 && endHour <= 12)
+    );
+  }
+
+  // hourClicked(date: any, origin: any, content: any): void {
+  //   this.overlayService
+  //     .open(origin, content, this.viewContainerRef, 'create', {
+  //       data: {
+  //         start_date: date,
+  //         type: 'week'
+  //       }
+  //     })
+  //     .subscribe((res) => {
+  //       if (res) {
+  //         const eventDate = this.viewDate.toISOString();
+  //         this.loadEvent(eventDate, this.selectedTab.id);
+  //         this.changeDetectorRef.detectChanges();
+  //       }
+  //     });
+  // }
+
+  // handleEvent(event: any, origin: any, content: any, $event: MouseEvent): void {
+  //   this.overlayService
+  //     .open(origin, content, this.viewContainerRef, 'edit', {
+  //       data: {
+  //         event: event
+  //       }
+  //     })
+  //     .subscribe((res) => {
+  //       if (res) {
+  //         if (res.id) {
+  //           const events = this.events.filter(
+  //             (item) => item.meta.event_id != res.id
+  //           );
+  //           this.events = [];
+  //           this.events = events;
+  //         } else {
+  //           this.isLoading = true;
+  //           const eventDate = this.viewDate.toISOString();
+  //           this.appointmentService
+  //             .getEvents(eventDate, this.view)
+  //             .subscribe((res) => {
+  //               if (res['status'] == true) {
+  //                 this.events = res['data'].map((item) => {
+  //                   return {
+  //                     title: item.title,
+  //                     start: new Date(item.due_start),
+  //                     end: new Date(item.due_end),
+  //                     meta: {
+  //                       contacts: item.contacts,
+  //                       calendar_id: item.calendar_id,
+  //                       description: item.description,
+  //                       location: item.location,
+  //                       type: item.type,
+  //                       guests: item.guests,
+  //                       event_id: item.event_id,
+  //                       recurrence: item.recurrence,
+  //                       recurrence_id: item.recurrence_id,
+  //                       is_organizer: item.is_organizer
+  //                     }
+  //                   };
+  //                 });
+  //                 this.isLoading = false;
+  //               }
+  //             });
+  //         }
+  //       }
+  //       this.changeDetectorRef.detectChanges();
+  //     });
+  // }
 }

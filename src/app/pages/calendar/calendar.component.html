@@ -131,7 +131,12 @@
                         {{weekEvent.event.title}}
                     </div>
                     <div class="f-1 font-weight-bold c-white cal-event-title">
-                        {{weekEvent.event.start | date:'HH:mm'}}-{{weekEvent.event.end | date:'HH:mm'}}
+                        <ng-container *ngIf="getDurationOption(weekEvent.event.start, weekEvent.event.end); else notSameNoon;">
+                            {{weekEvent.event.start | date:'h:mm'}}-{{weekEvent.event.end | date:'h:mm a'}}
+                        </ng-container>
+                        <ng-template #notSameNoon>
+                            {{weekEvent.event.start | date:'h:mm a'}}-{{weekEvent.event.end | date:'h:mm a'}}
+                        </ng-template>
                     </div>
                 </div>
             </ng-template>
@@ -240,7 +245,7 @@
         </app-calendar-overlay>
     </ng-template>
     <ng-template #detailPortalContent>
-        <app-calendar-event [event]="event" (onClose)="closeOverlay()" >
+        <app-calendar-event [event]="event" (onClose)="closeOverlay($event)" >
         </app-calendar-event>
     </ng-template>
 </div>
