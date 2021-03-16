@@ -1150,7 +1150,7 @@
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'deal') && activity.type == 'deals'">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
-                    <a class="v-center link-wrapper" [routerLink]="['/deals/' + activity.activity_detail._id]">
+                    <a class="v-center link-wrapper" [routerLink]="['/deals/' + activity.activity_detail?._id]">
                       <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>

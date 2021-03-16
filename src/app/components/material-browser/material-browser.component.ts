@@ -139,7 +139,7 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
   }
 
   filter(): void {
-    this.selection = [];
+    // this.selection = [];
     const reg = new RegExp(this.searchStr, 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
       if (this.selectedFolder) {
@@ -160,9 +160,17 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
   }
 
   isAllSelected(): boolean {
+    const filteredMaterialIds = [];
+    this.filteredMaterials.forEach((e) => {
+      filteredMaterialIds.push(e._id);
+    });
+    const selectedMaterials = _.intersection(
+      this.selection,
+      filteredMaterialIds
+    );
     return (
       this.filteredMaterials.length &&
-      this.selection.length === this.filteredMaterials.length
+      selectedMaterials.length === this.filteredMaterials.length
     );
   }
 
@@ -177,13 +185,24 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
 
   masterToggle(): void {
     if (this.isAllSelected()) {
-      this.selection = [];
-    } else {
-      this.selection = [];
       this.filteredMaterials.forEach((e) => {
-        this.selection.push(e._id);
+        const pos = this.selection.indexOf(e._id);
+        if (pos !== -1) {
+          this.selection.splice(pos, 1);
+        }
+      });
+    } else {
+      this.filteredMaterials.forEach((e) => {
+        const pos = this.selection.indexOf(e._id);
+        if (pos === -1) {
+          this.selection.push(e._id);
+        }
       });
     }
+  }
+
+  clearSelection(): void {
+    this.selection = [];
   }
 
   toggleElement(element: Material): void {

@@ -82,11 +82,19 @@ export class SendTextComponent implements OnInit, OnDestroy {
               index === 0 &&
               (!this.message || this.message.slice(-1) === '\n')
             ) {
-              this.message += url;
+              this.message = this.message + '\n' + url;
+              return;
+            }
+            if (index === 0) {
+              this.message = this.message + '\n\n' + url;
               return;
             }
             // middle element insert
             this.message = this.message + '\n' + url;
+
+            if (index === res.materials.length - 1) {
+              this.message += '\n';
+            }
           });
         }
       });

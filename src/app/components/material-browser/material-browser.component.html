@@ -112,6 +112,9 @@
                 <th mat-header-cell colspan="8">
                   <div class="v-center">
                     <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
+                    <div class="px-3 border-left ml-3">
+                      <a class="c-blue c-pointer" (click)="clearSelection()">Clear selection</a>
+                    </div>
                   </div>
                 </th>
               </ng-template>
