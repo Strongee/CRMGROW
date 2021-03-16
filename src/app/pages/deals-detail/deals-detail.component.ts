@@ -502,7 +502,7 @@ export class DealsDetailComponent implements OnInit {
         position: { top: '100px' },
         data: {
           title: 'Delete Contact',
-          message: 'Are you sure to delete this contact?',
+          message: 'Are you sure you want to remove contact from this deal?',
           cancelLabel: 'Cancel',
           confirmLabel: 'Confirm'
         }
