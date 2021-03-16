@@ -1266,12 +1266,20 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   convertContent(content = ''): any {
-    const htmlContent = content.split('<div>');
+    // const htmlContent = content.split('<div>');
+    // let convertString = '';
+    // htmlContent.forEach((html) => {
+    //   if (html.indexOf('material-object') !== -1) {
+    //     convertString = convertString + html.match('<a(.*)a>')[0];
+    //   }
+    // });
+    // return convertString;
+    const dom = document.createElement('div');
+    dom.innerHTML = content;
+    const materials = dom.querySelectorAll('.material-object');
     let convertString = '';
-    htmlContent.forEach((html) => {
-      if (html.indexOf('material-object') !== -1) {
-        convertString = convertString + html.match('<a(.*)a>')[0];
-      }
+    materials.forEach((material) => {
+      convertString += material.outerHTML;
     });
     return convertString;
   }
