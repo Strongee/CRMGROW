@@ -39,6 +39,11 @@
           </div>
         </div>
       </mat-option>
+      <mat-option *ngIf="(filteredResults | async)?.length && !((filteredResults | async)?.length % 8)" [disabled]="true">
+        <div class="" (click)="loadMore()">
+          Load more
+        </div>
+      </mat-option>
     </mat-select>
   </mat-form-field>
 </div>

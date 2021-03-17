@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ContactService } from 'src/app/services/contact.service';
-import { Subject, ReplaySubject } from 'rxjs';
+import { Subject, ReplaySubject, Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { MatSelect } from '@angular/material/select';
 import {
@@ -55,6 +55,11 @@ export class SelectContactComponent
   searching = false;
   keyword = '';
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
+
+  loadingMore = false;
+  loadMoreSubscription: Subscription;
+  getCurrentSubscription: Subscription;
+  hasMore = true;
 
   constructor(private contactService: ContactService) {}
 
@@ -136,6 +141,34 @@ export class SelectContactComponent
   }
 
   ngOnDestroy(): void {}
+
+  loadMore(): void {
+    this.getCurrentSubscription = this.filteredResults.subscribe(
+      (currentResults) => {
+        this.loadingMore = true;
+        this.loadMoreSubscription = this.contactService
+          .easySearch(this.keyword, currentResults.length)
+          .subscribe((contacts) => {
+            this.loadingMore = false;
+            if (contacts) {
+              contacts.forEach((e) => {
+                currentResults.push(e);
+              });
+              // this.filteredResults.next([...currentResults, ...contacts]);
+              const panel = this.selector.panel.nativeElement;
+              setTimeout(() => {
+                panel.children[
+                  currentResults.length - contacts.length - 2
+                ].scrollIntoView({
+                  behavior: 'smooth'
+                });
+              }, 200);
+            }
+          });
+      }
+    );
+    this.getCurrentSubscription.unsubscribe();
+  }
 
   cancelSelect(): void {
     this.formControl.setValue(null, { emitEvent: false });

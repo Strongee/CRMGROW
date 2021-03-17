@@ -443,9 +443,9 @@ export class ContactService extends HttpService {
    * Search the contacts using keyword.
    * @param keyword : keyword
    */
-  easySearch(keyword: string): Observable<Contact[]> {
+  easySearch(keyword: string, skip: number = 0): Observable<Contact[]> {
     return this.httpClient
-      .post(this.server + CONTACT.QUICK_SEARCH, { search: keyword })
+      .post(this.server + CONTACT.QUICK_SEARCH, { search: keyword, skip })
       .pipe(
         map((res) =>
           (res['data'] || []).map((data) => new Contact().deserialize(data))
