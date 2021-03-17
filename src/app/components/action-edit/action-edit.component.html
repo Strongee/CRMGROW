@@ -175,7 +175,7 @@
                 </ng-template>
               </div>
             </div>
-            <ng-container *ngIf="type==='follow_up' || type === 'update_follow_up'">
+            <ng-container *ngIf="type==='follow_up'">
               <div class="col-12 form-group">
                 <label>type of the task</label>
                 <div>
@@ -252,7 +252,7 @@
                       <div class="form-group">
                         <label class="theme-label">FOLLOW UP DATE</label>
                         <div class="v-center">
-                          <app-date-input type="prepend" [(value)]="due_date"></app-date-input>
+                          <app-date-input type="prepend" [(value)]="due_date" [minDate]="minDate"></app-date-input>
                         </div>
                         <span
                           class="invalid-error f-3 c-red"
@@ -527,6 +527,35 @@
           </mat-form-field>
           <div class="c-red f-3 error" *ngIf="!selectedFollow && submitted">Follow up is required!</div>
           <ng-container *ngIf="selectedFollow">
+            <ng-container *ngIf="type === 'update_follow_up'">
+              <div class="col-12 form-group">
+                <label>type of the task</label>
+                <div>
+                  <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="task.type">
+                    <label class="btn px-2 rounded no-shadow" title="General" ngbButtonLabel>
+                      <input type="radio" name="options" value="task" ngbButton>
+                      <i class="i-icon i-task d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" title="Call" ngbButtonLabel>
+                      <input type="radio" name="options" value="call" ngbButton>
+                      <i class="i-icon i-phone d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" title="Meeting" ngbButtonLabel>
+                      <input type="radio" name="options" value="meeting" ngbButton>
+                      <i class="i-icon i-lunch d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" title="Email" ngbButtonLabel>
+                      <input type="radio" name="options" value="email" ngbButton>
+                      <i class="i-icon i-message d-block bgc-dark"></i>
+                    </label>
+                    <label class="btn px-2 rounded no-shadow" title="Media" ngbButtonLabel>
+                      <input type="radio" name="options" value="material" ngbButton>
+                      <i class="i-icon i-video d-block bgc-dark"></i>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
             <div class="theme-radios">
               <div class="theme-radio">
                 <input type="radio" class="custom-control-input" id="follow_up_update" name="follow_up_update_option"
@@ -569,7 +598,7 @@
                             <div class="form-group">
                               <label class="theme-label">FOLLOW UP DATE</label>
                               <div class="v-center">
-                                <app-date-input type="prepend" [(value)]="update_due_date"></app-date-input>
+                                <app-date-input type="prepend" [(value)]="update_due_date" [minDate]="minDate"></app-date-input>
                               </div>
                               <span
                                 class="invalid-error f-3 c-red"

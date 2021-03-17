@@ -616,36 +616,9 @@
           <div class="text-danger error" *ngIf="error">{{error}}</div>
         </ng-container>
         <ng-container *ngIf="type === 'update_follow_up'">
-          <div class="form-group">
-            <label>type of the task</label>
-            <div>
-              <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="task.type">
-                <label class="btn px-2 rounded no-shadow" title="General" ngbButtonLabel>
-                  <input type="radio" name="options" value="task" ngbButton>
-                  <i class="i-icon i-task d-block bgc-dark"></i>
-                </label>
-                <label class="btn px-2 rounded no-shadow" title="Call" ngbButtonLabel>
-                  <input type="radio" name="options" value="call" ngbButton>
-                  <i class="i-icon i-phone d-block bgc-dark"></i>
-                </label>
-                <label class="btn px-2 rounded no-shadow" title="Meeting" ngbButtonLabel>
-                  <input type="radio" name="options" value="meeting" ngbButton>
-                  <i class="i-icon i-lunch d-block bgc-dark"></i>
-                </label>
-                <label class="btn px-2 rounded no-shadow" title="Email" ngbButtonLabel>
-                  <input type="radio" name="options" value="email" ngbButton>
-                  <i class="i-icon i-message d-block bgc-dark"></i>
-                </label>
-                <label class="btn px-2 rounded no-shadow" title="Media" ngbButtonLabel>
-                  <input type="radio" name="options" value="material" ngbButton>
-                  <i class="i-icon i-video d-block bgc-dark"></i>
-                </label>
-              </div>
-            </div>
-          </div>
           <label class="theme-label mt-3">SELECT THE FOLLOW UP <span class="description">(CREATED IN PREVIOUS ACTIONS)</span></label>
           <mat-form-field appearance="fill" class="mat-custom-select">
-            <mat-select [(value)]="selectedFollow" (selectionChange)="selectFollow($event)">
+            <mat-select [(value)]="selectedFollow" (selectionChange)="selectFollow($event)" [disabled]="data.follows.length < 2">
               <mat-select-trigger>
                 <div class="template-item selected" *ngIf="selectedFollow">
                   <div class="name">{{selectedFollow.content}}</div>
@@ -663,6 +636,33 @@
           </mat-form-field>
           <div class="c-red f-3 error" *ngIf="!selectedFollow && submitted">Follow up is required!</div>
           <ng-container *ngIf="selectedFollow">
+            <div class="form-group">
+              <label>type of the task</label>
+              <div>
+                <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="task.type">
+                  <label class="btn px-2 rounded no-shadow" title="General" ngbButtonLabel>
+                    <input type="radio" name="options" value="task" ngbButton>
+                    <i class="i-icon i-task d-block bgc-dark"></i>
+                  </label>
+                  <label class="btn px-2 rounded no-shadow" title="Call" ngbButtonLabel>
+                    <input type="radio" name="options" value="call" ngbButton>
+                    <i class="i-icon i-phone d-block bgc-dark"></i>
+                  </label>
+                  <label class="btn px-2 rounded no-shadow" title="Meeting" ngbButtonLabel>
+                    <input type="radio" name="options" value="meeting" ngbButton>
+                    <i class="i-icon i-lunch d-block bgc-dark"></i>
+                  </label>
+                  <label class="btn px-2 rounded no-shadow" title="Email" ngbButtonLabel>
+                    <input type="radio" name="options" value="email" ngbButton>
+                    <i class="i-icon i-message d-block bgc-dark"></i>
+                  </label>
+                  <label class="btn px-2 rounded no-shadow" title="Media" ngbButtonLabel>
+                    <input type="radio" name="options" value="material" ngbButton>
+                    <i class="i-icon i-video d-block bgc-dark"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
             <div class="theme-radios">
               <div class="theme-radio">
                 <input type="radio" class="custom-control-input" id="follow_up_update" name="follow_up_update_option"

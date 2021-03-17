@@ -342,6 +342,9 @@ export class VideoCreateComponent implements OnInit {
             this.toast.error("Can't read video's detail information.");
             return;
           }
+          if (this.currentFolder !== '') {
+            this.video['folder'] = this.currentFolder;
+          }
           this.materialService
             .createVideo({
               ...this.video,
@@ -417,6 +420,7 @@ export class VideoCreateComponent implements OnInit {
     if (this.currentFolder !== '') {
       newVideo['folder'] = this.currentFolder;
     }
+
     this.materialService.uploadVideoDetail(videoId, newVideo).subscribe(
       (res) => {
         this.uploading = false;
