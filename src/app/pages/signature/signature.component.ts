@@ -12,6 +12,8 @@ import BlotFormatter from 'quill-blot-formatter';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 Quill.register('modules/blotFormatter', BlotFormatter);
+const Parchment = Quill.import('parchment');
+const ImageBlot = Quill.import('formats/image');
 @Component({
   selector: 'app-signature',
   templateUrl: './signature.component.html',
@@ -245,6 +247,17 @@ export class SignatureComponent implements OnInit, OnDestroy {
       });
       this.emailEditor.quillEditor.setContents(delta, 'user');
     }
+
+    this.emailEditor.quillEditor.container.addEventListener('click', (ev) => {
+      const img = Parchment.Registry.find(ev.target);
+      if (img instanceof ImageBlot) {
+        this.emailEditor.quillEditor.setSelection(
+          img.offset(this.emailEditor.quillEditor.scroll),
+          1,
+          'user'
+        );
+      }
+    });
   }
 
   initImageHandler = (): void => {

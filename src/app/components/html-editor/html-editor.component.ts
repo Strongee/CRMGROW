@@ -26,6 +26,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
+const Parchment = Quill.import('parchment');
+const ImageBlot = Quill.import('formats/image');
 // import ImageResize from 'quill-image-resize-module';
 // Quill.register('modules/imageResize', ImageResize);
 
@@ -173,6 +175,17 @@ export class HtmlEditorComponent implements OnInit {
       this.setValue(this.value);
     }
     this.onInit.emit();
+
+    this.emailEditor.quillEditor.container.addEventListener('click', (ev) => {
+      const img = Parchment.Registry.find(ev.target);
+      if (img instanceof ImageBlot) {
+        this.emailEditor.quillEditor.setSelection(
+          img.offset(this.emailEditor.quillEditor.scroll),
+          1,
+          'user'
+        );
+      }
+    });
   }
 
   initImageHandler = (): void => {
@@ -232,7 +245,6 @@ export class HtmlEditorComponent implements OnInit {
       next = nextDelta.ops[0].insert;
       prev = prevDelta.ops[0].insert;
       selection = range.index;
-      console.log('prevDetal', prevDelta, nextDelta);
     } else {
       const nextDelta = this.emailEditor.quillEditor.getContents(length - 1, 1);
       const prevDelta = this.emailEditor.quillEditor.getContents(length - 2, 1);

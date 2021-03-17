@@ -18,6 +18,8 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import * as QuillNamespace from 'quill';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
+const Parchment = Quill.import('parchment');
+const ImageBlot = Quill.import('formats/image');
 @Component({
   selector: 'app-template-create',
   templateUrl: './template-create.component.html',
@@ -83,6 +85,17 @@ export class TemplateCreateComponent implements OnInit {
     if (this.value) {
       this.setValue(this.value);
     }
+
+    this.emailEditor.quillEditor.container.addEventListener('click', (ev) => {
+      const img = Parchment.Registry.find(ev.target);
+      if (img instanceof ImageBlot) {
+        this.emailEditor.quillEditor.setSelection(
+          img.offset(this.emailEditor.quillEditor.scroll),
+          1,
+          'user'
+        );
+      }
+    });
   }
 
   initImageHandler = (): void => {
