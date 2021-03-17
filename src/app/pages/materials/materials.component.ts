@@ -117,7 +117,6 @@ export class MaterialsComponent implements OnInit {
         (materials) => {
           materials.sort((a, b) => (a.folder ? -1 : 1));
           this.materials = materials;
-          console.log("materials ==========>", materials);
           this.materials = _.uniqBy(this.materials, '_id');
           const folders = materials.filter((e) => {
             return e.material_type === 'folder';

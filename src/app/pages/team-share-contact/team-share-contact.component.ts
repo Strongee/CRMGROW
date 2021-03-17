@@ -108,7 +108,6 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     this.pageContacts = [...this.contacts];
     this.filteredResult = [...this.contacts];
 
-    console.log("page contacts ============>", this.pageContacts);
     this.pageSelection = [];
     this.selection = [];
   }

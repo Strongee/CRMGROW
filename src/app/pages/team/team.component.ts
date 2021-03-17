@@ -174,7 +174,6 @@ export class TeamComponent implements OnInit, OnDestroy {
             this.sharedContacts = contacts;
           }
           this.arrangeTeamData();
-          console.log("shared contact ==============>", this.sharedContacts);
         });
         if (this.team.videos && this.team.videos.length > 0) {
           for (const video of this.team.videos) {
@@ -203,7 +202,6 @@ export class TeamComponent implements OnInit, OnDestroy {
             this.materials.push(data);
           }
         }
-        console.log("team ==========>", this.team);
       },
       () => {
         this.loading = false;
