@@ -27,9 +27,13 @@ export class LabelSelectComponent implements OnInit, AfterViewInit {
   public set value(val: string) {
     if (typeof val !== 'undefined') {
       const labels = this.labelService.labels.getValue();
-      const selected = _.find(labels, (e) => e._id === val);
-      this.label = selected && selected._id ? selected._id : '';
-      this.formControl.setValue(selected, { emitEvent: false });
+      if (labels.length) {
+        const selected = _.find(labels, (e) => e._id === val);
+        this.label = selected && selected._id ? selected._id : '';
+        this.formControl.setValue(selected, { emitEvent: false });
+      } else {
+        this.label = val;
+      }
     }
   }
   @Output() valueChange = new EventEmitter();
