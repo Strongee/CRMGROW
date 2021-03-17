@@ -47,7 +47,9 @@ export class TeamContactShareComponent implements OnInit {
         members.push(owner);
       }
       for (const member of this.team.members) {
-        members.push(member);
+        if (member._id !== this.userId) {
+          members.push(member);
+        }
       }
       this.members = members;
     }
