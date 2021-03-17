@@ -49,6 +49,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { MakeRedirectPipe } from '../../pipes/make-redirect.pipe';
+import { TimezonePipe } from '../../pipes/timezone.pipe';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { MakeRedirectPipe } from '../../pipes/make-redirect.pipe';
     PhonePipe,
     TimeDurationPipe,
     HighlightPipe,
-    MakeRedirectPipe
+    MakeRedirectPipe,
+    TimezonePipe
   ],
   imports: [
     CommonModule,
@@ -145,7 +147,8 @@ import { MakeRedirectPipe } from '../../pipes/make-redirect.pipe';
     MatProgressBarModule,
     TimeDurationPipe,
     HighlightPipe,
-    MakeRedirectPipe
+    MakeRedirectPipe,
+    TimezonePipe
   ]
 })
 export class SharedModule {}

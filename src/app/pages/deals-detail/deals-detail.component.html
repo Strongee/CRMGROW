@@ -315,7 +315,7 @@
                               </div>
                               <div class="v-center mt-1">
                                 <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                                <span class="f-4">{{activity.activity_detail.due_date | date: 'MM/dd/yyyy'}} at {{activity.activity_detail.due_date | date: 'shortTime'}}</span>
+                                <span class="f-4">{{activity.activity_detail.due_date | timezone: timezone:'MM/D/YYYY'}} at {{activity.activity_detail.due_date | timezone: timezone: 'hh:mm A'}}</span>
                               </div>
                             </div>
                             <div class="type ml-5">
@@ -1165,7 +1165,7 @@
                               </div>
                               <div class="v-center mt-1">
                                 <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                                <span class="f-4">{{detail.due_date | date: 'MM/dd/yyyy'}} at {{detail.due_date | date: 'shortTime'}}</span>
+                                <span class="f-4">{{detail.due_date | timezone: timezone:'MM/D/YYYY'}} at {{detail.due_date | timezone: timezone: 'hh:mm A'}}</span>
                               </div>
                             </div>
                             <div class="type ml-5">

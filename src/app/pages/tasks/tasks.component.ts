@@ -25,7 +25,6 @@ import { TaskBulkComponent } from '../../components/task-bulk/task-bulk.componen
 import { ActivityService } from '../../services/activity.service';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { ToastrService } from 'ngx-toastr';
-import { Time } from '@angular/common';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',

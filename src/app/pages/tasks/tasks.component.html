@@ -176,7 +176,7 @@
           </ng-container>
           <td mat-cell *matCellDef="let element">
             <a class="v-center c-pointer undecoration" (click)="element.status !== 1 ? openEdit(element) : false;">
-              <span class="c-dark">{{element.due_date | date: 'MMM dd, hh:mm a'}}</span>
+              <span class="c-dark f-2">{{element.due_date | timezone: timezone: 'MMM D, hh:mm A' }}</span>
             </a>
           </td>
         </ng-container>
