@@ -150,19 +150,8 @@ export class SelectContactComponent
           .easySearch(this.keyword, currentResults.length)
           .subscribe((contacts) => {
             this.loadingMore = false;
-            if (contacts) {
-              contacts.forEach((e) => {
-                currentResults.push(e);
-              });
-              // this.filteredResults.next([...currentResults, ...contacts]);
-              const panel = this.selector.panel.nativeElement;
-              setTimeout(() => {
-                panel.children[
-                  currentResults.length - contacts.length - 2
-                ].scrollIntoView({
-                  behavior: 'smooth'
-                });
-              }, 200);
+            if (contacts && contacts.length) {
+              this.filteredResults.next([...currentResults, ...contacts]);
             }
           });
       }
