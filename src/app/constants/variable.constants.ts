@@ -930,6 +930,11 @@ export const DialogSettings = {
     maxWidth: '394px',
     disableClose: true
   },
+  DEAL: {
+    width: '100vw',
+    maxWidth: '600px',
+    disableClose: true
+  },
   NOTE: {
     width: '98vw',
     maxWidth: '394px',
