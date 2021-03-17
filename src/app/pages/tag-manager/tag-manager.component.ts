@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { TagDeleteComponent } from 'src/app/components/tag-delete/tag-delete.component';
 import { TagEditComponent } from 'src/app/components/tag-edit/tag-edit.component';
 import { TagService } from '../../services/tag.service';
@@ -11,11 +12,15 @@ import { TagService } from '../../services/tag.service';
 })
 export class TagManagerComponent implements OnInit {
   tags = [];
+  loading = false;
+  loadSubscription: Subscription;
 
   constructor(private dialog: MatDialog, private tagService: TagService) {}
 
   ngOnInit(): void {
-    this.tagService.tagLoad().subscribe((res) => {
+    this.loading = true;
+    this.loadSubscription = this.tagService.tagLoad().subscribe((res) => {
+      this.loading = false;
       if (res['status'] == true) {
         this.tags = res['data'];
         let data;

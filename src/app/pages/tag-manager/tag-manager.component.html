@@ -57,11 +57,19 @@
                 </div>
             </ng-container>
             <ng-template #noTags>
-                <div class="empty-list py-5">
-                    <h4 class="font-weight-bold">
-                      There is no tags.
-                    </h4>
-                  </div>
+                <ng-container *ngIf="loading; else emptyResult">
+                    <div class="list-loading text-center">
+                        <div class="loader mt-5 lg"></div>
+                        <h4 class="fw-600 mt-2">Loading tags...</h4>
+                    </div>
+                </ng-container>
+                <ng-template #emptyResult>
+                    <div class="empty-list py-5">
+                        <h4 class="font-weight-bold mt-4 mb-3">
+                        There is no tags.
+                        </h4>
+                    </div>
+                </ng-template>
             </ng-template>
         </div>
     </div>
