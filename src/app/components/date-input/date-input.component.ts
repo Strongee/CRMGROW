@@ -1,4 +1,5 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import {
   Component,
   Input,
@@ -21,7 +22,7 @@ export class DateInputComponent implements OnInit {
   @Input()
   public set value(val: number) {
     if (val) {
-      this.dateObj = val;
+      this.dateObj = { day: val['day'], month: val['month'], year: val['year'] };
       this.dateString =
         this.dateObj.month + '-' + this.dateObj.day + '-' + this.dateObj.year;
     } else {
@@ -38,7 +39,7 @@ export class DateInputComponent implements OnInit {
   dateInput: FormControl = new FormControl();
   @ViewChild('trigger') triggerElement: CdkOverlayOrigin;
 
-  dateObj = null;
+  dateObj: NgbDateStruct;
   dateString;
   constructor() {}
 

@@ -798,6 +798,7 @@ export const ActionName = {
   send_email_image: 'Send Image Email',
   send_text_image: 'Send Image Text',
   follow_up: 'Follow up',
+  update_follow_up: 'Update Follow up',
   watched_video: 'Watched Video',
   watched_pdf: 'Watched PDF',
   watched_image: 'Watched Image',

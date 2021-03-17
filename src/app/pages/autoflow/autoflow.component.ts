@@ -286,6 +286,7 @@ export class AutoflowComponent
           };
           if (e.action) {
             node['type'] = e.action.type;
+            node['task_type'] = e.action.task_type;
             node['content'] = e.action.content;
             node['subject'] = e.action.subject;
             node['due_date'] = e.action.due_date;
@@ -389,6 +390,7 @@ export class AutoflowComponent
           };
           if (e.action) {
             node['type'] = e.action.type;
+            node['task_type'] = e.action.task_type;
             node['content'] = e.action.content;
             node['subject'] = e.action.subject;
             node['due_date'] = e.action.due_date;
@@ -671,7 +673,6 @@ export class AutoflowComponent
         prevFollowUps.push(e);
       }
     });
-
     this.dialog
       .open(ActionEditComponent, {
         ...DialogSettings.AUTOMATION_ACTION,
@@ -684,7 +685,6 @@ export class AutoflowComponent
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.toastr.success('Automation has been successfully updated.');
           for (const key in res) {
             node[key] = res[key];
           }
@@ -1338,6 +1338,7 @@ export class AutoflowComponent
               status: 'pending',
               action: {
                 type: e.type,
+                task_type: e.task_type,
                 content: e.content,
                 subject: e.subject,
                 due_date: e.due_date,
@@ -1396,6 +1397,7 @@ export class AutoflowComponent
         }
       }
     });
+
     if (this.automation_id) {
       this.isSaving = true;
       this.automationService

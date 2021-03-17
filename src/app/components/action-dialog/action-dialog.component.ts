@@ -178,6 +178,7 @@ export class ActionDialogComponent implements OnInit {
     setTimeout(() => {
       _SELF.searchField.nativeElement.blur();
     }, 300);
+
   }
 
   removeError(): void {
@@ -205,6 +206,9 @@ export class ActionDialogComponent implements OnInit {
       this.update_due_time = '12:00:00.000';
       this.update_due_duration = 0;
       this.setUpdateDateTime();
+      if (this.data.follows && this.data.follows.length > 0) {
+        this.selectedFollow = this.data.follows[0];
+      }
     }
     if (
       (action.type === 'send_text_material' ||

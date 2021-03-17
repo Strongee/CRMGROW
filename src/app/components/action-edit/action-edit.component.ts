@@ -250,7 +250,10 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       if (_SELF.htmlEditor && _SELF.action.content) {
         _SELF.htmlEditor.setValue(_SELF.action.content);
       }
-      _SELF.searchField.nativeElement.blur();
+      if (_SELF.searchField) {
+        _SELF.searchField.nativeElement.blur();
+      }
+
     }, 300);
 
     if (
