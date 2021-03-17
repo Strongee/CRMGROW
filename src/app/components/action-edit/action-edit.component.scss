@@ -7,7 +7,7 @@
 .action-setting {
   display: flex;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1270px) {
     display: block;
   }
 }
@@ -173,14 +173,17 @@ button:disabled {
     width: 90vw;
     max-width: calc(900px + 5.5rem);
 
-    @media screen and (max-width: 575px) {
-      width: 98vw;
+    @media screen and (max-width: 1270px) {
+      width: unset;
     }
+
   }
 
   @media screen and (max-width: 575px) {
     width: 98vw;
   }
+
+
 }
 
 :host ::ng-deep {
@@ -211,6 +214,10 @@ button:disabled {
     &.mat-form-field-appearance-fill .mat-select-arrow-wrapper  {
       transform: none;
     }
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0.75rem;
   }
 }
 

@@ -88,12 +88,12 @@
         </div>
         <div class="members ml-5">
           <label class="f-2 op-75 text-uppercase">Members</label>
-          <div class="value f-37 font-weight-bold">{{team.owner.length + team.members.length}}</div>
+          <div class="value f-37 font-weight-bold">{{getMemberCount()}}</div>
         </div>
         <div class="ml-5">
-          <label class="f-2 op-75 text-uppercase">Your Status</label>
+          <label class="f-2 op-75 text-uppercase">Your Role</label>
           <div class="value v-center">
-            <div class="status font-weight-bold f-1 c-white" [class] = "status(team)">{{status(team)}}</div>
+            <div class="status font-weight-bold f-1 c-white" [class] = "status()">{{status()}}</div>
           </div>
         </div>
       </div>
@@ -107,24 +107,12 @@
             <div class="f-6 font-weight-bold">Requests</div>
             <table class="table join-request-table mt-3 mb-5">
               <thead>
-              <th class="check-cell border-top-0">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="selectAllJoinRequest" (change)="selectAllJoinRequestPage()" [checked]="isSelectedJoinRequestPage()">
-                  <label class="custom-control-label" for="selectAllJoinRequest"></label>
-                </div>
-              </th>
               <th class="name-cell">Members</th>
               <th class="invite-received">Invite Received</th>
               <th class="team-actions text-right">Actions</th>
               </thead>
               <tbody>
               <tr *ngFor="let user of team.requests">
-                <td class="check-cell">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="request-{{user._id}}" (change)="selectedJoinRequest.toggle(user._id)" [checked]="selectedJoinRequest.isSelected(user._id)">
-                    <label class="custom-control-label" for="request-{{user._id}}"></label>
-                  </div>
-                </td>
                 <td class="name-cell">
                   <div class="v-center">
                     <ng-container *ngIf="user.picture_profile; else ownNamePlaceholder">
@@ -161,14 +149,8 @@
           <table class="table members-table mt-3">
             <thead>
             <tr>
-              <th class="check-cell border-top-0">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="selectAllMembers" (change)="selectAllPage()" [checked]="isSelectedPage()">
-                  <label class="custom-control-label" for="selectAllMembers"></label>
-                </div>
-              </th>
               <th class="name-cell border-top-0">Members</th>
-              <th class="status-cell border-top-0">Status</th>
+              <th class="status-cell border-top-0">Role</th>
               <th class="added-cell border-top-0">Added</th>
               <th class="action-cell border-top-0" *ngIf="role=='editor' || role == 'owner'"></th>
             </tr>
@@ -176,12 +158,6 @@
             <tbody>
             <ng-container *ngIf="team.members.length + team.owner.length + team.invites.length">
               <tr *ngFor="let own of team.owner">
-                <td class="check-cell">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="own-{{own._id}}" (change)="selectedMembers.toggle(own._id)" [checked]="selectedMembers.isSelected(own._id)">
-                    <label class="custom-control-label" for="own-{{own._id}}"></label>
-                  </div>
-                </td>
                 <td class="name-cell">
                   <div class="v-center">
                     <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
@@ -194,8 +170,10 @@
                   </div>
                 </td>
                 <td class="status-cell">
-                  <div class="status">
-                    <div class="Owner c-white text-center f-1 font-weight-bold">Owner</div>
+                  <div class="label-cell">
+                    <div class="value v-center">
+                      <div class="status Owner font-weight-bold f-1 c-white">Owner</div>
+                    </div>
                   </div>
                 </td>
                 <td class="added-cell f-3">
@@ -205,12 +183,6 @@
                 </td>
               </tr>
               <tr *ngFor="let member of team.members">
-                <td class="check-cell">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="member-{{member._id}}" (change)="selectedMembers.toggle(member._id)" [checked]="selectedMembers.isSelected(member._id)">
-                    <label class="custom-control-label" for="member-{{member._id}}"></label>
-                  </div>
-                </td>
                 <td class="name-cell">
                   <div class="v-center">
                     <ng-container *ngIf="member.picture_profile; else memberNamePlaceholder">
@@ -223,38 +195,40 @@
                   </div>
                 </td>
                 <td class="status-cell">
-                  <div class="label-cell status">
-                    <select (change)="toggleMember(member)"
-                            class="c-white f-1 font-weight-bold"
-                            [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
-                            [disabled]="role != 'owner'"
-                    >
-                      <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
-                        Viewer
-                      </option>
-                      <option [value]="'Editor'" class="Editor c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) !== -1">
-                        Editor
-                      </option>
-                    </select>
+                  <div class="label-cell">
+                    <ng-container *ngIf="role == 'owner'; else noOwnerTemplate">
+                      <select (change)="toggleMember(member)"
+                              class="c-white f-1 font-weight-bold"
+                              [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
+                              [disabled]="role != 'owner'"
+                      >
+                        <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
+                          Viewer
+                        </option>
+                        <option [value]="'Editor'" class="Editor c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) !== -1">
+                          Editor
+                        </option>
+                      </select>
+                    </ng-container>
+                    <ng-template #noOwnerTemplate>
+                      <div class="value v-center">
+                        <div class="status font-weight-bold f-1 c-white" [class] = "team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
+                          {{team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'}}
+                        </div>
+                      </div>
+                    </ng-template>
                   </div>
                 </td>
                 <td class="added-cell">
                   {{member.created_at | date: 'dd.MM.yyyy'}}
                 </td>
                 <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
-                  <button class="v-center btn bgc-white c-dark f-3 ml-2 opacity-3 justify-content-end" (click)="removeMember(member)">
-                    <i class="bgc-dark i-icon i-trash mr-2"></i>
-                    <span class="button-label">Remove</span>
+                  <button class="v-center btn bgc-white c-black f-3 justify-content-end" (click)="removeMember(member)">
+                    <i class="bgc-black i-icon i-trash"></i>
                   </button>
                 </td>
               </tr>
               <tr *ngFor="let invite of team.invites">
-                <td class="check-cell">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="invite-{{invite._id}}" (change)="selectedMembers.toggle(invite._id)" [checked]="selectedMembers.isSelected(invite._id)">
-                    <label class="custom-control-label" for="invite-{{invite._id}}"></label>
-                  </div>
-                </td>
                 <td class="name-cell">
                   <div class="v-center">
                     <ng-container *ngIf="invite.picture_profile; else inviteNamePlaceholder">
@@ -288,545 +262,77 @@
           </table>
         </div>
 
-        <div *ngSwitchCase="'materials'" class="mt-4">
-          <div class="v-center with-tab panel-header material-header">
-            <app-slide-tab [tabs]="materialTabs" [selected]="selectedMaterialTab" (onChange)="changeMaterialTab($event)">
-            </app-slide-tab>
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareMaterial(selectedMaterialTab.id)" *ngIf="role=='editor' || role == 'owner'">
+        <div *ngSwitchCase="'materials'" class="materials-container mt-4">
+          <div class="v-center with-tab panel-header contact-header">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+              (click)="shareMaterial(selectedMaterialTab.id)" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share material</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
-          <ng-container [ngSwitch]="selectedMaterialTab.id">
-            <div class="materials-list-wrapper list-wrapper tab-panel" *ngSwitchCase="'video'">
-              <div class="materials mt-3">
-                <ng-container *ngIf="team.videos.length; else emptyVideoListTemplate">
-                  <table class="table material-share-table mt-3">
-                    <thead>
-                    <tr>
-                      <th class="checkbox-col border-top-0">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="selectAllVideos" (change)="selectAllVideos()" [checked]="isSelectedVideos()">
-                          <label class="custom-control-label" for="selectAllVideos"></label>
-                        </div>
-                      </th>
-                      <th class="thumbnail-col border-top-0">
-                        <span class="f-1 c-dark">NAME</span>
-                      </th>
-                      <th class="name-col border-top-0">
-
-                      </th>
-                      <th class="view-col border-top-0 text-right">
-                        <span class="f-1 c-dark">VIEWS</span>
-                      </th>
-                      <th class="time-col border-top-0">
-                        <span class="f-1 c-dark">ADDED</span>
-                      </th>
-                      <th class="actions-col border-top-0">
-
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let video of team.videos">
-                      <td class="checkbox-col">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="video-{{video._id}}" (change)="selectedVideos.toggle(video._id)" [checked]="selectedVideos.isSelected(video._id)">
-                          <label class="custom-control-label" for="video-{{video._id}}"></label>
-                        </div>
-                      </td>
-                      <td class="thumbnail-col">
-                        <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
-                          <div class="thumb-prev-wrapper">
-                            <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
-                            <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
-                          </div>
-                        </a>
-                      </td>
-                      <td class="name-col">
-                        <a href="{{siteUrl}}/video?video={{video._id}}" target="_blank">
-                          <div class="thumb-prev-wrapper">
-                            <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
-                            <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg' );"/>
-                          </div>
-                        </a>
-                        <h5 class="f-4 font-weight-bold c-dark m-0">{{video.title}}</h5>
-                        <span class="f-1 c-dark">{{(video.description || '') | stripTags | shorten: 120: '...'}}</span>
-                      </td>
-                      <td class="view-col">
-                        <div class="v-center justify-content-end f-4 c-dark py-2">
-                          {{video.views || 0}}
-                        </div>
-                      </td>
-                      <td class="time-col f-4 c-dark">
-                        <div class="v-centerf-4 c-dark py-2">
-                          {{video.created_at | date : 'mediumDate'}}
-                        </div>
-                      </td>
-                      <td class="actions-col">
-                        <div class="actions-wrapper v-center justify-content-end">
-                          <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterial(video, 'video')">
-                            <i class="bgc-dark i-icon i-send mr-2"></i>
-                          </button>
-                          <button class="v-center btn bgc-white c-dark f-3" (click)="copyLink(video, 'video')">
-                            <i class="bgc-dark i-icon i-copy-link mr-2"></i>
-                          </button>
-                          <div ngbDropdown class="material-action">
-                            <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                              <i class="bgc-dark i-icon i-share mr-2"></i>
-                            </a>
-                            <div ngbDropdownMenu>
-                              <share-buttons [theme]="'circles-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                             [size]="-2" [show]="3" url="{{ siteUrl }}/video?video={{ video._id }}&user={{userId}}"
-                                             [autoSetMeta]="false"></share-buttons>
-                            </div>
-                          </div>
-                          <button class="v-center btn bgc-white c-dark f-3"
-                            (click)="editTemplate(video._id)"
-                            *ngIf="role=='editor' || role == 'owner'"
-                          >
-                            <i class="bgc-dark i-icon i-edit-template mr-2"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </ng-container>
-                <ng-template #emptyVideoListTemplate>
-                  <div class="empty-materials mt-3">
-                    <div class="empty-list">
-                      <div class="object-icon sm v-center">
-                        <i class="i-icon i-video d-block bgc-dark"></i>
-                      </div>
-                      <h5 class="font-weight-bold mt-4 mb-3">
-                        There is no videos for share yet.
-                      </h5>
-                      <p class="mb-4">Please add video to use for sharing.</p>
-                    </div>
-                  </div>
-                </ng-template>
-              </div>
-            </div>
-            <div class="materials-list-wrapper list-wrapper tab-panel" *ngSwitchCase="'pdf'">
-              <div class="materials mt-3">
-                <ng-container *ngIf="team.pdfs.length; else emptyPdfListTemplate">
-                  <table class="table material-share-table mt-3">
-                    <thead>
-                    <tr>
-                      <th class="checkbox-col border-top-0">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="selectAllPdfs" (change)="selectAllPdfs()" [checked]="isSelectedPdfs()">
-                          <label class="custom-control-label" for="selectAllPdfs"></label>
-                        </div>
-                      </th>
-                      <th class="thumbnail-col border-top-0">
-                        <span class="f-1 c-dark">NAME</span>
-                      </th>
-                      <th class="name-col border-top-0">
-
-                      </th>
-                      <th class="view-col border-top-0 text-right">
-                        <span class="f-1 c-dark">VIEWS</span>
-                      </th>
-                      <th class="time-col border-top-0">
-                        <span class="f-1 c-dark">ADDED</span>
-                      </th>
-                      <th class="actions-col border-top-0">
-
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let pdf of team.pdfs">
-                      <td class="checkbox-col">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="pdf-{{pdf._id}}" (change)="selectedPdfs.toggle(pdf._id)" [checked]="selectedPdfs.isSelected(pdf._id)">
-                          <label class="custom-control-label" for="pdf-{{pdf._id}}"></label>
-                        </div>
-                      </td>
-                      <td class="thumbnail-col">
-                        <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
-                          <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
-                        </a>
-                      </td>
-                      <td class="name-col">
-                        <a href="{{siteUrl}}/pdf?pdf={{pdf._id}}" target="_blank">
-                          <img class="thumbnail" src="{{pdf.preview}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
-                        </a>
-                        <h5 class="f-4 font-weight-bold c-dark m-0">{{pdf.title}}</h5>
-                        <span class="f-1 c-dark">{{(pdf.description || '') | stripTags | shorten: 120: '...'}}</span>
-                      </td>
-                      <td class="view-col">
-                        <div class="v-center justify-content-end f-4 c-dark py-2">
-                          {{pdf.views || 0}}
-                        </div>
-                      </td>
-                      <td class="time-col f-4 c-dark">
-                        <div class="v-centerf-4 c-dark py-2">
-                          {{pdf.created_at | date : 'mediumDate'}}
-                        </div>
-                      </td>
-                      <td class="actions-col">
-                        <div class="actions-wrapper v-center justify-content-end">
-                          <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterial(pdf, 'pdf')">
-                            <i class="bgc-dark i-icon i-send mr-2"></i>
-                          </button>
-                          <button class="v-center btn bgc-white c-dark f-3" (click)="copyLink(pdf, 'pdf')">
-                            <i class="bgc-dark i-icon i-copy-link mr-2"></i>
-                          </button>
-                          <div ngbDropdown class="material-action">
-                            <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                              <i class="bgc-dark i-icon i-share mr-2"></i>
-                            </a>
-                            <div ngbDropdownMenu>
-                              <share-buttons [theme]="'circle-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                             [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ pdf._id }}&user={{userId}}"
-                                             [autoSetMeta]="false"></share-buttons>
-                            </div>
-                          </div>
-                          <button class="v-center btn bgc-white c-dark f-3"
-                            (click)="editTemplate(pdf._id)"
-                            *ngIf="role=='editor' || role == 'owner'"
-                          >
-                            <i class="bgc-dark i-icon i-edit-template mr-2"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </ng-container>
-                <ng-template #emptyPdfListTemplate>
-                  <div class="empty-materials mt-3">
-                    <div class="empty-materials mt-3">
-                      <div class="empty-list">
-                        <div class="object-icon sm v-center">
-                          <i class="i-icon i-pdf d-block bgc-dark"></i>
-                        </div>
-                        <h5 class="font-weight-bold mt-4 mb-3">
-                          There is no PDFs for share yet.
-                        </h5>
-                        <p class="mb-4">Please add PDF to use for sharing.</p>
-                      </div>
-                    </div>
-                  </div>
-                </ng-template>
-              </div>
-            </div>
-            <div class="materials-list-wrapper list-wrapper tab-panel" *ngSwitchCase="'image'">
-              <div class="materials mt-3">
-                <ng-container *ngIf="team.images.length; else emptyImageListTemplate">
-                  <table class="table material-share-table mt-3">
-                    <thead>
-                    <tr>
-                      <th class="checkbox-col border-top-0">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="selectAllImages" (change)="selectAllImages()" [checked]="isSelectedImages()">
-                          <label class="custom-control-label" for="selectAllImages"></label>
-                        </div>
-                      </th>
-                      <th class="thumbnail-col border-top-0">
-                        <span class="f-1 c-dark">NAME</span>
-                      </th>
-                      <th class="name-col border-top-0">
-
-                      </th>
-                      <th class="view-col border-top-0 text-right">
-                        <span class="f-1 c-dark">VIEWS</span>
-                      </th>
-                      <th class="time-col border-top-0">
-                        <span class="f-1 c-dark">ADDED</span>
-                      </th>
-                      <th class="actions-col border-top-0">
-
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let image of team.images">
-                      <td class="checkbox-col">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="image-{{image._id}}" (change)="selectedImages.toggle(image._id)" [checked]="selectedImages.isSelected(image._id)">
-                          <label class="custom-control-label" for="image-{{image._id}}"></label>
-                        </div>
-                      </td>
-                      <td class="thumbnail-col">
-                        <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
-                          <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
-                        </a>
-                      </td>
-                      <td class="name-col">
-                        <a href="{{siteUrl}}/image?image={{image._id}}" target="_blank">
-                          <img class="thumbnail" src="{{image.preview}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
-                        </a>
-                        <h5 class="f-4 font-weight-bold c-dark m-0">{{image.title}}</h5>
-                        <span class="f-1 c-dark">{{(image.description || '') | stripTags | shorten: 120: '...'}}</span>
-                      </td>
-                      <td class="view-col">
-                        <div class="v-center justify-content-end f-4 c-dark py-2">
-                          {{image.views || 0}}
-                        </div>
-                      </td>
-                      <td class="time-col f-4 c-dark">
-                        <div class="v-centerf-4 c-dark py-2">
-                          {{image.created_at | date : 'mediumDate'}}
-                        </div>
-                      </td>
-                      <td class="actions-col">
-                        <div class="actions-wrapper v-center justify-content-end">
-                          <button class="v-center btn bgc-white c-dark f-3" (click)="sendMaterial(image, 'image')">
-                            <i class="bgc-dark i-icon i-send mr-2"></i>
-                          </button>
-                          <button class="v-center btn bgc-white c-dark f-3" (click)="copyLink(image, 'image')">
-                            <i class="bgc-dark i-icon i-copy-link mr-2"></i>
-                          </button>
-                          <div ngbDropdown class="material-action">
-                            <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3">
-                              <i class="bgc-dark i-icon i-share mr-2"></i>
-                            </a>
-                            <div ngbDropdownMenu>
-                              <share-buttons [theme]="'circle-dark'" [include]="['facebook', 'twitter', 'linkedin']"
-                                             [size]="-2" [show]="3" url="{{ siteUrl }}/image?image={{ image._id }}&user={{userId}}"
-                                             [autoSetMeta]="false"></share-buttons>
-                            </div>
-                          </div>
-                          <button class="v-center btn bgc-white c-dark f-3"
-                            (click)="editTemplate(image._id)"
-                            *ngIf="role=='editor' || role == 'owner'"
-                          >
-                            <i class="bgc-dark i-icon i-edit-template mr-2"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </ng-container>
-                <ng-template #emptyImageListTemplate>
-                  <div class="empty-materials mt-3">
-                    <div class="empty-list">
-                      <div class="object-icon sm v-center">
-                        <i class="i-icon i-notification d-block bgc-dark"></i>
-                      </div>
-                      <h5 class="font-weight-bold mt-4 mb-3">
-                        There is no images for share yet.
-                      </h5>
-                      <p class="mb-4">Please add image to use for sharing.</p>
-                    </div>
-                  </div>
-                </ng-template>
-              </div>
-            </div>
+          <ng-container *ngIf="materials.length > 0; else emptyMaterialListTemplate">
+            <app-team-share-material [materials]="materials" [team]="team"></app-team-share-material>
           </ng-container>
+          <ng-template #emptyMaterialListTemplate>
+            <div class="empty-materials mt-3">
+              <div class="empty-list">
+                <div class="object-icon sm v-center">
+                  <i class="i-icon i-video d-block bgc-dark"></i>
+                </div>
+                <h5 class="font-weight-bold mt-4 mb-3">
+                  There is no materials for share yet.
+                </h5>
+                <p class="mb-4">Please add materials to use for sharing.</p>
+              </div>
+            </div>
+          </ng-template>
         </div>
 
         <div class="mt-4" *ngSwitchCase="'contacts'">
           <div class="v-center with-tab panel-header contact-header">
-            <app-slide-tab [tabs]="contactTabs" [selected]="selectedContactTab" (onChange)="changeContactTab($event)">
-            </app-slide-tab>
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareContact()" *ngIf="role=='editor' || role == 'owner'">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+                (click)="shareContact()" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share contact</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
-          <div class="contact-list-wrapper">
-            <ng-container *ngIf="selectedContactTab.id === 'share-with'; else myContactList">
-              <ng-container *ngIf="otherContacts.length; else emptyContactListTemplate">
-                <table class="table contact-table mt-3">
-                  <thead>
-                  <th class="contact-name">Contact Name</th>
-                  <th class="contact-email">Email</th>
-                  <th class="phone-number">Phone Number</th>
-                  <th class="last-activity">Lastest Activity</th>
-                  <th class="shared-with">Shared By</th>
-                  <th class="share-status" *ngIf="role=='editor' || role == 'owner'"></th>
-                  </thead>
-                  <tbody>
-                  <tr *ngFor="let contact of otherContacts">
-                    <td class="contact-name">
-                      <div class="v-center">
-                        <div class="contact-avatar f-3 mr-2">{{getAvatarName(contact)}}</div>
-                        <div class="f-3">{{contact.first_name + ' ' + contact.last_name}}</div>
-                      </div>
-                    </td>
-                    <td class="contact-email">
-                      <div class="f-3">{{contact.email}}</div>
-                    </td>
-                    <td class="phone-number">
-                      <div class="c-blue font-weight-bold">{{contact.cell_phone | phone_format}}</div>
-                    </td>
-                    <td class="last-activity">
-                      <div class="v-center">
-                        <i class="act-icon normal {{'act-'+ contact.last_activity?.type}} d-block mr-2"></i>
-                        <span>{{contact.last_activity?.content}}</span>
-                      </div>
-                    </td>
-                    <td class="shared-with">
-                      <div class="v-center c-pointer">
-                        <div class="contact-avatar f-3 mr-2">
-                          {{getAvatarName(contact.user[0])}}
-                        </div>
-                        <div class="f-3">{{contact.user[0].user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="share-status" *ngIf="role=='editor' || role == 'owner'">
-                      <!-- <div class="f-3 font-weight-bold c-red text-right" (click)="changeShareStatus(contact)">Stop sharing</div> -->
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </ng-container>
-              <ng-template #emptyContactListTemplate>
-                <div class="empty-materials mt-3">
-                  <div class="empty-list">
-                    <div class="object-icon sm v-center">
-                      <i class="i-icon i-notification d-block bgc-dark"></i>
-                    </div>
-                    <h5 class="font-weight-bold mt-4 mb-3">
-                      There is no automations for share yet.
-                    </h5>
-                    <p class="mb-4">Please add automation to use for sharing.</p>
-                  </div>
+          <ng-container *ngIf="sharedContacts.length > 0; else emptySharedListTemplate">
+            <app-team-share-contact [contacts]="sharedContacts"></app-team-share-contact>
+          </ng-container>
+          <ng-template #emptySharedListTemplate>
+            <div class="empty-materials mt-3">
+              <div class="empty-list">
+                <div class="object-icon sm v-center">
+                  <i class="i-icon i-lunch d-block bgc-dark"></i>
                 </div>
-              </ng-template>
-            </ng-container>
-            <ng-template #myContactList>
-              <ng-container *ngIf="myContacts.length; else emptyMyContactListTemplate">
-                <table class="table contact-table mt-3">
-                  <thead>
-                  <th class="contact-name">Contact Name</th>
-                  <th class="contact-email">Email</th>
-                  <th class="phone-number">Phone Number</th>
-                  <th class="last-activity">Lastest Activity</th>
-                  <th class="shared-with">Shared With</th>
-                  <th class="share-status" *ngIf="role=='editor' || role == 'owner'"></th>
-                  </thead>
-                  <tbody>
-                  <tr *ngFor="let contact of myContacts">
-                    <td class="contact-name">
-                      <div class="v-center">
-                        <div class="contact-avatar f-3 mr-2">{{getAvatarName(contact)}}</div>
-                        <div class="f-3">{{contact.first_name + ' ' + contact.last_name}}</div>
-                      </div>
-                    </td>
-                    <td class="contact-email">
-                      <div class="f-3">{{contact.email}}</div>
-                    </td>
-                    <td class="phone-number">
-                      <div class="c-blue font-weight-bold">{{contact.cell_phone | phone_format}}</div>
-                    </td>
-                    <td class="last-activity">
-                      <div class="v-center">
-                        <i class="act-icon normal {{'act-'+ contact.last_activity?.type}} d-block mr-2"></i>
-                        <span>{{contact.last_activity?.content}}</span>
-                      </div>
-                    </td>
-                    <td class="shared-with">
-                      <div ngbDropdown class="d-flex" *ngIf="contact.shared_members.length">
-                        <div class="v-center c-pointer" ngbDropdownToggle>
-                          <div class="contact-avatar f-3 mr-2">
-                            {{getAvatarName(contact.shared_members[0])}}
-                          </div>
-                          <div class="f-3">{{contact.shared_members[0].user_name}}</div>
-                          <div class="f-5 font-weight-bold ml-2" *ngIf="contact.shared_members.length > 1">
-                            +{{contact.shared_members.length - 1}}
-                          </div>
-                        </div>
-                        <div ngbDropdownMenu class="light">
-                          <ng-container *ngFor="let member of contact.shared_members">
-                            <div class="my-1 p-2">
-                              <div class="d-flex">
-                                <div class="form-avatar rounded-circle bg-dark">{{getAvatarName(member)}}</div>
-                                <div class="info ml-1">
-                                  <div class="f-5 font-weight-bold">{{member.user_name}}</div>
-                                  <div class="f-2">{{member['email'] || 'Undefined'}}</div>
-                                  <div class="f-2">{{member['cell_phone'] || 'Undefined'}}</div>
-                                </div>
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="share-status" *ngIf="role=='editor' || role == 'owner'">
-                      <div class="f-3 font-weight-bold c-red text-right" (click)="changeShareStatus(contact)">Stop sharing</div>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </ng-container>
-              <ng-template #emptyMyContactListTemplate>
-                <div class="empty-materials mt-3">
-                  <div class="empty-list">
-                    <div class="object-icon sm v-center">
-                      <i class="i-icon i-notification d-block bgc-dark"></i>
-                    </div>
-                    <h5 class="font-weight-bold mt-4 mb-3">
-                      You did not share any contacts yet.
-                    </h5>
-                    <p class="mb-4">Please share contacts with team members.</p>
-                  </div>
-                </div>
-              </ng-template>
-            </ng-template>
-          </div>
+                <h5 class="font-weight-bold mt-4 mb-3">
+                  There is no contacts for share yet.
+                </h5>
+                <p class="mb-4">Please add contacts to use for sharing.</p>
+              </div>
+            </div>
+          </ng-template>
         </div>
 
         <div class="automation-list-wrapper mt-4" *ngSwitchCase="'automations'">
-          <div class="v-center">
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareAutomation()" *ngIf="role=='editor' || role == 'owner'">
+          <div class="v-center with-tab panel-header contact-header">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+                (click)="shareAutomation()" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share automation</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
-          <ng-container *ngIf="team.automations.length; else emptyAutomationListTemplate">
-            <table class="table automation-table">
-              <thead>
-              <th class="material-name">Title</th>
-              <th class="material-actions-count text-right">Actions</th>
-              <th class="material-contacts text-right">Contacts</th>
-              <th class="material-created text-right">Created</th>
-              <th class="material-assign" *ngIf="role=='editor' || role == 'owner'"></th>
-              </thead>
-              <tbody>
-              <ng-container *ngIf="team.automations.length">
-                <tr *ngFor="let automation of team.automations">
-                  <td class="material-name">
-                    <div class="title f-5 c-blue font-weight-bold">
-                      {{automation.title}}
-                    </div>
-                  </td>
-                  <td class="material-actions-count f-6 font-weight-bold text-right">
-                    {{automation.automations.length}}
-                  </td>
-                  <td class="material-contacts text-right">
-                    <span class="f-3 opacity-6 text-uppercase mr-2">Show</span>
-                    <span class="f-6 c-blue font-weight-bold">3</span>
-                  </td>
-                  <td class="material-created text-right">
-                    {{automation.created_at | date: 'MMM dd, yyyy'}}
-                  </td>
-                  <td class="material-assign" *ngIf="role=='editor' || role == 'owner'">
-                    <div class="v-center justify-content-end">
-                      <button class="btn btn-white f-3 c-blue font-weight-bold mr-2" (click)="assignContact(automation)">
-                        Assign to contact
-                      </button>
-                      <button class="btn btn-white v-center f-3">
-                        <i class="bgc-dark i-icon i-small-icon i-triangle-up"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </ng-container>
-              </tbody>
-            </table>
+          <ng-container *ngIf="team.automations.length > 0; else emptyAutomationListTemplate">
+            <app-team-share-automation [automations]="team.automations"></app-team-share-automation>
           </ng-container>
           <ng-template #emptyAutomationListTemplate>
             <div class="empty-materials mt-3">
               <div class="empty-list">
                 <div class="object-icon sm v-center">
-                  <i class="i-icon i-notification d-block bgc-dark"></i>
+                  <i class="i-icon i-task d-block bgc-dark"></i>
                 </div>
                 <h5 class="font-weight-bold mt-4 mb-3">
                   There is no automations for share yet.
@@ -838,55 +344,16 @@
         </div>
 
         <div class="template-list-wrapper mt-4" *ngSwitchCase="'templates'">
-          <div class="v-center">
-            <a class="v-center ml-auto td-none c-pointer" (click)="shareEmailTemplate()" *ngIf="role=='editor' || role == 'owner'">
+          <div class="v-center with-tab panel-header contact-header">
+            <button type="button" class="btn btn-white-blue v-center ml-auto"
+                (click)="shareEmailTemplate()" *ngIf="role=='editor' || role == 'owner'"
+            >
+              <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share template</span>
-              <i class="i-icon i-plus d-block bgc-blue sm ml-2"></i>
-            </a>
+            </button>
           </div>
           <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
-            <table class="table template-table">
-              <thead>
-              <th class="material-name">Title</th>
-              <th class="material-template">Template</th>
-              <th class="material-type"></th>
-              </thead>
-              <tbody>
-              <ng-container *ngIf="team.email_templates.length">
-                <tr *ngFor="let template of team.email_templates">
-                  <td class="material-name">
-                    <div class="title f-5 c-blue font-weight-bold">
-                      {{template.title}}
-                    </div>
-                  </td>
-                  <td class="material-template">
-                    <div class="template-content">
-                      <div class="f-3 c-black font-weight-bold">
-                        {{template.subject}}
-                      </div>
-                      <div class="f-3 c-dark opacity-6" *ngIf="template.content">
-                        {{template.content | stripTags | shorten: 80: '...'}}
-                      </div>
-                    </div>
-                  </td>
-                  <td class="material-type">
-                    <ng-container *ngIf="template.type === 'text'">
-                      <div class="v-center f-3">
-                        <i class="bgc-dark i-icon i-phone mr-2"></i>
-                        <span class="button-label">Text</span>
-                      </div>
-                    </ng-container>
-                    <ng-container *ngIf="template.type === 'email'">
-                      <div class="v-center f-3">
-                        <i class="bgc-dark i-icon i-message mr-2"></i>
-                        <span class="button-label">Email</span>
-                      </div>
-                    </ng-container>
-                  </td>
-                </tr>
-              </ng-container>
-              </tbody>
-            </table>
+            <app-team-share-template [templates]="team.email_templates"></app-team-share-template>
           </ng-container>
           <ng-template #emptyTemplateListTemplate>
             <div class="empty-materials mt-3">
@@ -903,92 +370,6 @@
           </ng-template>
         </div>
       </ng-container>
-
-      <div class="share-table-container mt-5" *ngIf="selectedTab.id === 'shared'">
-        <div class="material-tabs">
-          <mat-tab-group animationDuration="0ms">
-            <mat-tab label="video">
-              <ng-template mat-tab-label>
-                VIDEO
-              </ng-template>
-              <div class="materials-list-wrapper list-wrapper tab-panel">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto"
-                  (click)="shareMaterial('video')"
-                  *ngIf="role=='editor' || role == 'owner'"
-                >
-                  Share Video
-                </button>
-              </div>
-            </mat-tab>
-            <mat-tab label="pdf">
-              <ng-template mat-tab-label>
-                PDF
-              </ng-template>
-              <div class="materials-list-wrapper list-wrapper tab-panel">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto"
-                  (click)="shareMaterial('pdf')"
-                  *ngIf="role=='editor' || role == 'owner'"
-                >
-                  Share PDF
-                </button>
-
-              </div>
-            </mat-tab>
-            <mat-tab label="image">
-              <ng-template mat-tab-label>
-                IMAGE
-              </ng-template>
-              <div class="materials-list-wrapper list-wrapper tab-panel">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto"
-                  (click)="shareMaterial('image')"
-                  *ngIf="role=='editor' || role == 'owner'"
-                >
-                  Share image
-                </button>
-
-              </div>
-            </mat-tab>
-            <mat-tab label="template">
-              <ng-template mat-tab-label>
-                TEMPLATE
-              </ng-template>
-              <div class="template-list-wrapper list-wrapper tab-panel mt-3">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto"
-                  (click)="shareEmailTemplate()"
-                  *ngIf="role=='editor' || role == 'owner'"
-                >
-                  Share template
-                </button>
-
-              </div>
-            </mat-tab>
-            <mat-tab label="automation">
-              <ng-template mat-tab-label>
-                AUTOMATION
-              </ng-template>
-              <div class="automation-list-wrapper list-wrapper tab-panel mt-3">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto"
-                  (click)="shareAutomation()"
-                  *ngIf="role=='editor' || role == 'owner'"
-                >
-                  Share automation
-                </button>
-              </div>
-            </mat-tab>
-            <mat-tab label="contact">
-              <ng-template mat-tab-label>
-                CONTACT
-              </ng-template>
-              <div class="contact-list-wrapper list-wrapper tab-panel mt-3">
-                <button class="btn btn-primary absolute-right-button f-3 font-weight-bold ml-auto"
-
-                >Share Contact</button>
-
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-        </div>
-      </div>
     </ng-container>
   </div>
 </div>

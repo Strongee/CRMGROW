@@ -26,6 +26,7 @@ import { MaterialSendComponent } from '../../components/material-send/material-s
 import { MaterialEditTemplateComponent } from '../../components/material-edit-template/material-edit-template.component';
 import { MaterialBrowserComponent } from 'src/app/components/material-browser/material-browser.component';
 
+
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
@@ -81,6 +82,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   sharedContacts = [];
   myContacts = [];
   otherContacts = [];
+  materials: any[] = [];
 
   profileSubscription: Subscription;
 
@@ -173,6 +175,33 @@ export class TeamComponent implements OnInit, OnDestroy {
           }
           this.arrangeTeamData();
         });
+        if (this.team.videos && this.team.videos.length > 0) {
+          for (const video of this.team.videos) {
+            const data = {
+              ...video,
+              material_type: 'video'
+            };
+            this.materials.push(data);
+          }
+        }
+        if (this.team.pdfs && this.team.pdfs.length > 0) {
+          for (const pdf of this.team.pdfs) {
+            const data = {
+              ...pdf,
+              material_type: 'pdf'
+            };
+            this.materials.push(data);
+          }
+        }
+        if (this.team.images && this.team.images.length > 0) {
+          for (const image of this.team.images) {
+            const data = {
+              ...image,
+              material_type: 'image'
+            };
+            this.materials.push(data);
+          }
+        }
       },
       () => {
         this.loading = false;
@@ -241,6 +270,11 @@ export class TeamComponent implements OnInit, OnDestroy {
                   res.materials,
                   '_id'
                 );
+                this.materials = _.unionBy(
+                  this.materials,
+                  res.materials,
+                  '_id'
+                );
               });
           } else if (type === 'pdf') {
             this.teamService
@@ -251,6 +285,11 @@ export class TeamComponent implements OnInit, OnDestroy {
                   res.materials,
                   '_id'
                 );
+                this.materials = _.unionBy(
+                  this.materials,
+                  res.materials,
+                  '_id'
+                );
               });
           } else if (type === 'image') {
             this.teamService
@@ -258,6 +297,11 @@ export class TeamComponent implements OnInit, OnDestroy {
               .subscribe((status) => {
                 this.team.images = _.unionBy(
                   this.team.images,
+                  res.materials,
+                  '_id'
+                );
+                this.materials = _.unionBy(
+                  this.materials,
                   res.materials,
                   '_id'
                 );
@@ -605,21 +649,11 @@ export class TeamComponent implements OnInit, OnDestroy {
         }
       });
   }
-  status(team): any {
-    let index;
-    if (team.owner.length) {
-      index = team.owner.filter((item) => item._id === this.userId).length;
-      if (index > 0) {
-        return 'Owner';
-      }
+  status(): any {
+    if (this.role) {
+      return this.role[0].toUpperCase() + this.role.slice(1);
     }
-    if (team.editors.length) {
-      index = team.editors.filter((item) => item._id === this.userId).length;
-      if (index > 0) {
-        return 'Editor';
-      }
-    }
-    return 'Viewer';
+    return this.role;
   }
 
   changeTab(tab: TabItem): void {
@@ -897,5 +931,16 @@ export class TeamComponent implements OnInit, OnDestroy {
       return contact.last_name[0];
     }
     return 'UC';
+  }
+
+  getMemberCount(): any {
+    let count = 0;
+    if (this.team.owner && this.team.owner.length > 0) {
+      count += this.team.owner.length;
+    }
+    if (this.team.members && this.team.members.length > 0) {
+      count += this.team.members.length;
+    }
+    return count;
   }
 }

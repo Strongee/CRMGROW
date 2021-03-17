@@ -798,6 +798,7 @@ export const ActionName = {
   send_email_image: 'Send Image Email',
   send_text_image: 'Send Image Text',
   follow_up: 'Follow up',
+  update_follow_up: 'Update Follow up',
   watched_video: 'Watched Video',
   watched_pdf: 'Watched PDF',
   watched_image: 'Watched Image',
@@ -1112,6 +1113,35 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-trash',
       command: 'delete',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
+    }
+  ],
+  TeamMaterials: [
+    {
+      label: 'Send via email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'email',
+      loading: false
+    },
+    {
+      label: 'Send via SMS',
+      type: 'button',
+      icon: 'i-sms-sent',
+      command: 'text',
+      loading: false
+    },
+    {
+      label: 'Lead Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture',
       loading: false
     },
     {

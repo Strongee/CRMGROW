@@ -67,6 +67,10 @@ import { SmsLimitsComponent } from '../../pages/sms-limits/sms-limits.component'
 import { DealsSettingComponent } from '../../pages/deals-setting/deals-setting.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MessagesComponent } from 'src/app/pages/messages/messages.component';
+import { TeamShareMaterialComponent } from '../../pages/team-share-material/team-share-material.component';
+import { TeamShareContactComponent } from '../../pages/team-share-contact/team-share-contact.component';
+import { TeamShareAutomationComponent } from '../../pages/team-share-automation/team-share-automation.component';
+import { TeamShareTemplateComponent } from '../../pages/team-share-template/team-share-template.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +125,11 @@ import { MessagesComponent } from 'src/app/pages/messages/messages.component';
     NotificationsListComponent,
     SmsLimitsComponent,
     DealsSettingComponent,
-    MessagesComponent
+    MessagesComponent,
+    TeamShareMaterialComponent,
+    TeamShareContactComponent,
+    TeamShareAutomationComponent,
+    TeamShareTemplateComponent
   ],
   imports: [
     CommonModule,
