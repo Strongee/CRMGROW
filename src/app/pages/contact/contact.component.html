@@ -640,8 +640,8 @@
                                 </td>
                                 <td class="duration-col">{{details[activity.emails]?.duration || '' | timeDuration}}</td>
                                 <td class="date-col">
-                                  <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
-                                    {{detailActivity.created_at | date: 'MMMM dd'}}
+                                  <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
+                                    {{detailActivity.created_at | date: 'MMM dd yyyy'}}
                                   </div>
                                 </td>
                               </tr>
@@ -761,8 +761,8 @@
                                 </td>
                                 <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
                                 <td class="date-col">
-                                  <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
-                                    {{detailActivity.created_at | date: 'MMMM dd'}}
+                                  <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
+                                    {{detailActivity.created_at | date: 'MMM dd yyyy'}}
                                   </div>
                                 </td>
                               </tr>
@@ -1414,8 +1414,8 @@
                                   <span class="f-3 font-weight-bold">{{(detailActivity.activity_detail && detailActivity.activity_detail.duration ? detailActivity.activity_detail.duration + 's' : '') | timeDuration}}</span>
                                 </td>
                                 <td class="date-col">
-                                  <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
-                                    {{detailActivity.created_at | date: 'MMMM dd'}}
+                                  <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
+                                    {{detailActivity.created_at | date: 'MMM dd yyyy'}}
                                   </div>
                                 </td>
                               </tr>
