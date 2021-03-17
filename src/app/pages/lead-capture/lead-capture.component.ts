@@ -96,7 +96,12 @@ export class LeadCaptureComponent implements OnInit {
             this.garbage['intro_video'] = '';
             this.garbage['intro_video'] = response['data']['intro_video'];
             this.userService.updateGarbage(this.garbage).subscribe(() => {
+              this.toast.success(
+                '',
+                'Lead capture video is updated successfully.'
+              );
               this.userService.updateGarbageImpl(this.garbage);
+              this.replaceVideo();
             });
             this.changeDetectorRef.detectChanges();
           }
@@ -228,6 +233,13 @@ export class LeadCaptureComponent implements OnInit {
                 this.videoUploader.addToQueue([video]);
                 this.uploadingIntroVideo = true;
                 this.videoUploader.uploadAll();
+                this.pauseVideo();
+              } else {
+                this.toast.error(
+                  '',
+                  'Video length should be less than 1 minute.',
+                  { closeButton: true }
+                );
               }
             })
             .catch((err) => {
@@ -255,11 +267,26 @@ export class LeadCaptureComponent implements OnInit {
     }
   }
 
+  pauseVideo(): void {
+    const introVideoElement: HTMLVideoElement = this.introVideo.nativeElement;
+    if (!introVideoElement.paused) {
+      introVideoElement.pause();
+      this.introVideoPlaying = false;
+    }
+  }
+
   removeVideo(): void {
     this.garbage.intro_video = '';
     this.userService.updateGarbage(this.garbage).subscribe(() => {
       this.userService.updateGarbageImpl(this.garbage);
     });
+  }
+
+  replaceVideo(): void {
+    setTimeout(() => {
+      const introVideoElement: HTMLVideoElement = this.introVideo.nativeElement;
+      introVideoElement.load();
+    }, 200);
   }
 
   saveDelay(): void {

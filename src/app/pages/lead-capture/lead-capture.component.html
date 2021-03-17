@@ -79,7 +79,7 @@
             Now you can also add lead capture video for your contacts to see
         </div>
         <div class="v-center mt-3">
-            <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm py-2" *ngIf="!garbage.intro_video" (click)="browseVideo()">
+            <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm py-2" *ngIf="!garbage.intro_video" (click)="browseVideo()" [class.loading]="videoUploader.isUploading">
                 Upload video
             </button>
         </div>
@@ -94,11 +94,14 @@
                 <div class="f-3 font-weight-bold">
                     Your uploaded video
                 </div>
-                <div class="f-3 mt-1">
+                <div class="f-3 mt-1" *ngIf="!videoUploader.isUploading; else uploadingTemplate;">
                     <a class="font-weight-bold c-red c-pointer" (click)="removeVideo()">Remove</a>
                      or 
                      <a class="font-weight-bold c-blue c-pointer" (click)="browseVideo()">reupload</a>
                 </div>
+                <ng-template #uploadingTemplate>
+                    <div class="loader video-uploading"></div>
+                </ng-template>
             </div>
         </div>
     </div>

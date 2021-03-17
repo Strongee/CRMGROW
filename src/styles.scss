@@ -483,6 +483,10 @@ button {
     pointer-events: none;
   }
 }
+.btn.c-blue.loading{
+  color: transparent!important;
+  background-image: url('/assets/img/spinner-dark.svg');
+}
 .btn-blue {
   background-color: $color-blue;
   border-color: $color-blue;
