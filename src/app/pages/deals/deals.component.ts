@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
-import { STATUS } from 'src/app/constants/variable.constants';
+import { DialogSettings, STATUS } from 'src/app/constants/variable.constants';
 import { DealStage } from 'src/app/models/deal-stage.model';
 import { DealStageCreateComponent } from 'src/app/components/deal-stage-create/deal-stage-create.component';
 
@@ -89,6 +89,17 @@ export class DealsComponent implements OnInit {
           id: dealStage._id
         }
       })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.dealsService.getStage(true);
+        }
+      });
+  }
+
+  addNewDeal(): void {
+    this.dialog
+      .open(DealCreateComponent, DialogSettings.DEAL)
       .afterClosed()
       .subscribe((res) => {
         if (res) {
