@@ -50,6 +50,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/user.model';
+import { finished } from 'stream';
 
 @Component({
   selector: 'app-contact',
@@ -1314,13 +1315,49 @@ export class ContactComponent implements OnInit, OnDestroy {
   loadContacts(ids): void {
     if (ids && ids.length >= 0) {
       this.loadingContact = true;
-      this.loadContactSubscription && this.loadContactSubscription.unsubscribe();
-      this.loadContactSubscription = this.contactService.getContactsByIds(ids).subscribe((contacts) => {
-        this.loadingContact = false;
-        if (contacts) {
-          this.detailContacts = contacts;
-        }
-      });
+      this.loadContactSubscription &&
+        this.loadContactSubscription.unsubscribe();
+      this.loadContactSubscription = this.contactService
+        .getContactsByIds(ids)
+        .subscribe((contacts) => {
+          this.loadingContact = false;
+          if (contacts) {
+            this.detailContacts = contacts;
+          }
+        });
+    }
+  }
+
+  getVideoBadge(activity): string {
+    let hasThumbed = false;
+    let finishedCount = 0;
+    const material = this.details[activity.videos];
+    this.groupActions[activity.group_id].forEach((e) => {
+      if (!e.activity_detail) {
+        return;
+      }
+      if (e.activity_detail.type === 'thumbs up') {
+        hasThumbed = true;
+        return;
+      }
+      if (
+        e.activity_detail.type === 'watch' &&
+        e.activity_detail.duration / material.duration > 0.97
+      ) {
+        finishedCount++;
+      }
+    });
+    if (hasThumbed || finishedCount) {
+      let html = `<div class="c-blue font-weight-bold">${material.title}</div>`;
+      if (hasThumbed) {
+        html += '<div class="i-icon i-like bgc-blue thumb-icon mx-1"></div>';
+      }
+      if (finishedCount) {
+        html += `<div class="full-badge text-center f-3 font-weight-bold ml-auto">${finishedCount}</div><div class="c-blue font-weight-bold f-5">Video finished!</div>`;
+      }
+      return html;
+    } else {
+      return '';
     }
   }
 

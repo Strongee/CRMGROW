@@ -705,7 +705,16 @@
                   <ng-container *ngIf="activity.activity_detail;">
                     <div class="main-history-item">
                       <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiVideoHistory">
-                        <div class="summary position-relative">
+                        <div class="video-sent-activity-content">
+                          <div class="title f-6 font-weight-bold">
+                            {{details[activity.videos]?.title}}
+                          </div>
+                          <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
+                            <img src="{{details[activity.videos]?.preview}}"/>
+                          </a>
+                          <div class="f-6 mb-3 description" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
+                        </div>
+                        <!-- <div class="summary position-relative">
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.videos]?.title}}
                           </div>
@@ -724,9 +733,10 @@
                           </a>
                           <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
-                        </div>
+                        </div> -->
                       </ng-container>
                       <ng-template #multiVideoHistory>
+                        <div [innerHTML]="getVideoBadge(activity)" class="d-flex"></div>
                         <div class="summary position-relative">
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.videos]?.title}}

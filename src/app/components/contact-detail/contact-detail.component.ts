@@ -11,8 +11,8 @@ import { ContactService } from '../../services/contact.service';
 import { DetailActivity } from '../../models/activityDetail.model';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { listToTree } from '../../helper';
-import {DealsService} from "../../services/deals.service";
-import {CALENDAR_DURATION} from "../../constants/variable.constants";
+import { DealsService } from '../../services/deals.service';
+import { CALENDAR_DURATION } from '../../constants/variable.constants';
 
 @Component({
   selector: 'app-contact-detail',
