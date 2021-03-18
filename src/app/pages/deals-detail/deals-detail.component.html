@@ -84,8 +84,8 @@
                             <div class="v-center w-100">
                                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                                 <span class="f-6 font-weight-bold ml-2">About this deal</span>
-                                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center" (click)="editDeal()">
-                                    <i class="i-icon i-edit d-block bgc-blue sm mr-1"></i>
+                                <button class="btn border-0 border-primary f-2 op-28 font-weight-bold c-dark ml-auto btn-sm v-center" (click)="editDeal()">
+                                    <i class="i-icon i-edit d-block bgc-dark sm mr-1"></i>
                                     <span>Edit</span>
                                 </button>
                             </div>
@@ -119,8 +119,8 @@
                             <div class="v-center w-100">
                                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
                                 <span class="f-6 font-weight-bold ml-2">Contacts ({{deal.contacts.length}})</span>
-                                <button class="btn border-0 border-primary f-2 font-weight-bold c-blue ml-auto btn-sm v-center" (click)="addContact()">
-                                    <i class="i-icon i-plus d-block bgc-blue sm mr-1"></i>
+                                <button class="btn border-0 border-primary f-2 font-weight-bold op-28 c-dark ml-auto btn-sm v-center" (click)="addContact()">
+                                    <i class="i-icon i-plus d-block bgc-dark sm mr-1"></i>
                                     <span>Add contact</span>
                                 </button>
                             </div>
@@ -272,7 +272,7 @@
                                   <span class="ml-3 f-2 font-weight-bold">Complete</span>
                                 </button>
                                 <button
-                                  class="v-center border-0 py-1 c-dark dropdown-item" 
+                                  class="v-center border-0 py-1 c-dark dropdown-item"
                                   (click)="archiveTask(activity)"
                                 >
                                   <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
@@ -348,7 +348,7 @@
                             <div class="content">
                               <div class="f-3 fw-600 c-blue mt-1">
                                 See details
-                              </div>      
+                              </div>
                             </div>
                           </ng-template>
                           <ng-template #hide>
@@ -368,7 +368,7 @@
                         </app-accordion>
                       </div>
                     </div>
-                    
+
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'notes'">
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">
@@ -511,7 +511,7 @@
                     </div>
 
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'texts'">
-                      
+
                     </div>
 
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'team_calls'">
@@ -638,7 +638,7 @@
                             </div>
                           </div>
                         </div>
-                      </ng-container>  
+                      </ng-container>
                       <ng-template #removedAppointmentTemplate>
                         <div class="d-flex">
                           <mat-icon class="mr-2">warning</mat-icon>
@@ -686,7 +686,7 @@
                                 <div class="gradient-bottom"></div>
                                 <div class="f-3 fw-600 c-blue mt-1">
                                   Expand
-                                </div>      
+                                </div>
                               </div>
                             </ng-template>
                             <ng-template #hide>
@@ -739,7 +739,7 @@
                             </div>
                           </div>
                         </div>
-                      </ng-container>  
+                      </ng-container>
                       <ng-template #removedAppointmentTemplate>
                         <div class="d-flex">
                           <mat-icon class="mr-2">warning</mat-icon>
@@ -760,7 +760,7 @@
                     </h4>
                   </div>
                 </ng-container>
-                
+
                 <div class="history-detail p-3 mt-3" *ngIf="activityType.id === 'all'">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
@@ -902,9 +902,9 @@
                         </div>
                       </div>
                       <div class="history-detail texts-detail p-3 mt-3" *ngSwitchCase="'texts'">
-    
+
                       </div>
-    
+
                       <div class="history-detail appointments-detail p-3 mt-3" *ngSwitchCase="'appointments'">
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-appointments"></i></div>
@@ -939,7 +939,7 @@
                                 <div class="gradient-bottom"></div>
                                 <div class="f-3 fw-600 c-blue mt-1">
                                   Expand
-                                </div>      
+                                </div>
                               </div>
                             </ng-template>
                             <ng-template #hide>
@@ -993,7 +993,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                       <div class="history-detail group_calls-detail p-3 mt-3" *ngSwitchCase="'team_calls'">
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-team_calls"></i></div>
@@ -1002,7 +1002,7 @@
                             {{detail.created_at | date :'MMM d, hh:mm a'}}
                           </div>
                         </div>
-    
+
                         <div class="main-history-item">
                           <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                             <ng-template #show>
@@ -1104,7 +1104,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                       <div class="history-detail follow_ups-detail p-3 mt-3" *ngSwitchCase="'follow_ups'">
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-follow_ups"></i></div>
@@ -1190,7 +1190,7 @@
                                 <div class="">
                                   <div class="f-3 fw-600 c-blue mt-1">
                                     See details
-                                  </div>      
+                                  </div>
                                 </div>
                               </ng-template>
                               <ng-template #hide>
