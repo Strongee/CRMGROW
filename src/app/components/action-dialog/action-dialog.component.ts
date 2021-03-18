@@ -699,14 +699,14 @@ export class ActionDialogComponent implements OnInit {
   DisplayActions = [
     {
       type: 'follow_up',
-      title: 'Follow Up',
+      title: 'Task',
       description: '',
       icon: AUTOMATION_ICONS.FOLLOWUP,
       category: ACTION_CAT.NORMAL
     },
     {
       type: 'update_follow_up',
-      title: 'Update Follow up',
+      title: 'Update Task',
       description: '',
       icon: AUTOMATION_ICONS.UPDATE_FOLLOWUP,
       category: ACTION_CAT.NORMAL
@@ -861,7 +861,7 @@ export class ActionDialogComponent implements OnInit {
 
   ActivityName = {
     note: 'Note',
-    follow_up: 'Follow up',
+    follow_up: 'Task',
     email: 'Email',
     send_email_video: 'Video Email',
     send_text_video: 'Video Text',
@@ -873,7 +873,7 @@ export class ActionDialogComponent implements OnInit {
     watched_image: 'Image Watching',
     watched_pdf: 'PDF Watching',
     update_contact: 'Contact update activity',
-    update_follow_up: 'Update Follow up'
+    update_follow_up: 'Update Task'
   };
 
   NoLimitActions = ['note', 'follow_up', 'update_contact', 'update_follow_up'];

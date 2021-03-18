@@ -79,7 +79,7 @@
             </div>
           </th>
         </ng-container>
-        
+
         <ng-container matColumnDef="select">
           <th mat-header-cell
             *matHeaderCellDef
@@ -116,7 +116,7 @@
             <th mat-header-cell
             *ngIf="!selection.length; else toolHeader"> contact name </th>
               <ng-template #toolHeader>
-                <th mat-header-cell colspan="7">
+                <th mat-header-cell [colSpan]="9">
                   <div class="v-center">
                     <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
                     <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
@@ -175,6 +175,21 @@
           </td>
         </ng-container>
 
+        <!-- Activity Added Column -->
+        <ng-container matColumnDef="activity_added">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+                *ngIf="!selection.length"> activity added </th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element"
+              (click)="openContact(element)">
+            <div class="v-center">
+              <span>{{element.last_activity?.created_at | date : 'hh:mm a, dd MMM'}}</span>
+            </div>
+          </td>
+        </ng-container>
+
         <!-- Tags Column -->
         <ng-container matColumnDef="contact_tags">
           <ng-container *matHeaderCellDef>
@@ -217,9 +232,9 @@
         </ng-container>
 
         <ng-container matColumnDef="selection_info">
-          <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
+          <th mat-header-cell *matHeaderCellDef colspan="9" class="text-center">
             <span *ngIf="selection.length !== (contactService.total$ | async); else deselectTemplate">
-              {{selection.length}} contacts are selected. 
+              {{selection.length}} contacts are selected.
               <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
                 <i class="small-spinner"></i>
                 <span class="ml-1">Selecting all. . .</span>
@@ -237,10 +252,11 @@
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
-          *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
+            *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length" class='selection-info'></tr>
         <tr mat-row
-          *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+            *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+
       </table>
     </div>
     <ng-container *ngIf="(storeService.pageContacts$ | async).length; else emptyListTemplate">
@@ -289,7 +305,7 @@
             <i class="i-icon i-lunch d-block bgc-dark"></i>
           </div>
           <h4 class="font-weight-bold mt-4 mb-3">
-            There is no contact 
+            There is no contact
             <ng-container *ngIf="!searchStr && searchOption.isEmpty(); else searchConditionTemplate">
               <span> in your account.</span>
             </ng-container>

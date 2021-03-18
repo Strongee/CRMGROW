@@ -56,7 +56,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     { id: 'alpha_up', label: 'Alphabetical Z-A' },
     { id: 'alpha_down', label: 'Alphabetical A-Z' },
     { id: 'last_added', label: 'Last added' },
-    { id: 'last_active', label: 'Recent active' }
+    { id: 'last_active', label: 'Last activity' }
   ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },

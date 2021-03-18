@@ -148,12 +148,12 @@
                     <a
                       *ngSwitchCase="'pdf'"
                       href="{{siteUrl}}/pdf?pdf={{element._id}}&user={{user_id}}" target="_blank">
-                      <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                      <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
                     </a>
                     <a
                       *ngSwitchCase="'image'"
                       href="{{siteUrl}}/image?image={{element._id}}&user={{user_id}}" target="_blank">
-                      <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
+                      <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
                     </a>
                   </ng-container>
                 </div>
@@ -351,7 +351,6 @@
           </td>
         </ng-container>
 
-
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
@@ -419,7 +418,7 @@
             <i class="i-icon i-material d-block bgc-dark"></i>
           </div>
           <h4 class="font-weight-bold mt-4 mb-3">
-            There is no materials for the filter options.
+            There is no materials yet.
           </h4>
         </div>
       </ng-container>

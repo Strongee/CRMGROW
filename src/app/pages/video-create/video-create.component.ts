@@ -223,19 +223,31 @@ export class VideoCreateComponent implements OnInit {
               (res) => {
                 if (res['status']) {
                   this.toast.success('Image is uploaded successfully.');
-                  this.router.navigate(['/materials']);
+                  if (this.currentFolder) {
+                    this.router.navigate([`/materials/${this.currentFolder}`]);
+                  } else {
+                    this.router.navigate(['/materials']);
+                  }
                 } else {
                   this.toast.success(
                     'Image is uploaded. But the Image information is not saved.'
                   );
-                  this.router.navigate(['/materials']);
+                  if (this.currentFolder) {
+                    this.router.navigate([`/materials/${this.currentFolder}`]);
+                  } else {
+                    this.router.navigate(['/materials']);
+                  }
                 }
               },
               (err) => {
                 this.toast.success(
                   'Image is uploaded. But the Image information is not saved.'
                 );
-                this.router.navigate(['/materials']);
+                if (this.currentFolder) {
+                  this.router.navigate([`/materials/${this.currentFolder}`]);
+                } else {
+                  this.router.navigate(['/materials']);
+                }
               }
             );
         } else {
@@ -353,7 +365,11 @@ export class VideoCreateComponent implements OnInit {
             .subscribe((res) => {
               this.uploading = false;
               this.toast.success('Video is uploaded successfully.');
-              this.router.navigate(['/materials']);
+              if (this.currentFolder) {
+                this.router.navigate([`/materials/${this.currentFolder}`]);
+              } else {
+                this.router.navigate(['/materials']);
+              }
             });
         } else {
           this.uploading = true;
@@ -425,14 +441,22 @@ export class VideoCreateComponent implements OnInit {
       (res) => {
         this.uploading = false;
         this.toast.success('Video is uploaded successfully.');
-        this.router.navigate(['/materials']);
+        if (this.currentFolder) {
+          this.router.navigate([`/materials/${this.currentFolder}`]);
+        } else {
+          this.router.navigate(['/materials']);
+        }
       },
       (err) => {
         this.uploading = false;
         this.toast.success(
           'Video is uploaded. But the video information is not saved.'
         );
-        this.router.navigate(['/materials']);
+        if (this.currentFolder) {
+          this.router.navigate([`/materials/${this.currentFolder}`]);
+        } else {
+          this.router.navigate(['/materials']);
+        }
       }
     );
   }
@@ -455,14 +479,22 @@ export class VideoCreateComponent implements OnInit {
       (res) => {
         this.uploading = false;
         this.toast.success('Pdf is uploaded successfully.');
-        this.router.navigate(['/materials']);
+        if (this.currentFolder) {
+          this.router.navigate([`/materials/${this.currentFolder}`]);
+        } else {
+          this.router.navigate(['/materials']);
+        }
       },
       (err) => {
         this.uploading = false;
         this.toast.success(
           'Pdf is uploaded. But the Pdf information is not saved.'
         );
-        this.router.navigate(['/materials']);
+        if (this.currentFolder) {
+          this.router.navigate([`/materials/${this.currentFolder}`]);
+        } else {
+          this.router.navigate(['/materials']);
+        }
       }
     );
   }
