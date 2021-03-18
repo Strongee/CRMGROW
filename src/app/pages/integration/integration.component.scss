@@ -59,6 +59,12 @@
     height: 42px;
     padding-left: 4px!important;
     padding-right: 4px!important;
+    img {
+      display: inline-block;
+      vertical-align: bottom;
+      width: 18px;
+      margin-right: 8px;
+    }
   }
 
   button.cal-disconnect {
@@ -93,6 +99,10 @@
       grid-template-columns: 60px auto 160px;
       grid-column-gap: 16px;
       grid-row-gap: 12px;
+      
+      @media screen and (max-width: 900px) {
+        grid-template-columns: 60px auto;
+      }
     }
   }
 
