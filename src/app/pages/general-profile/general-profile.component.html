@@ -32,15 +32,29 @@
   </div>
   <div class="row">
     <div class="col-sm-6 col-12">
-      <div class="form-group phone-form" [ngClass]="{invalid: profileForm.submitted && phone.invalid && (phone.dirty || phone.touched || profileForm.submitted)}">
+      <div class="form-group phone-form">
         <div class="d-flex">
           <label for="phone" class="mr-auto">phone</label>
-          <span class="error" *ngIf="phone.errors">
-            <ng-container *ngIf="phone.errors.required; else phoneFormat">Required!</ng-container>
-            <ng-template #phoneFormat>Wrong cell-phone!</ng-template>
+          <span class="error" [class.d-block]="profileForm.submitted">
+            <ng-container *ngIf="!phoneNumber; else wrongTemplate;">Required!</ng-container>
+            <ng-template #wrongTemplate>
+              <ng-container *ngIf="phoneControl && phoneNumber && !phoneControl.valid">
+                Wrong cell-phone!
+              </ng-container>
+            </ng-template>
           </span>
         </div>
-        <ngx-intl-tel-input
+        <app-phone-input
+          [cssClass]="'form-control phone-form'"
+          [onlyCountries]="countries"
+          [selectedCountryISO]="CountryISO.UnitedStates"
+          [(ngModel)]="phoneNumber"
+          (ngModelChange)="confirmPhone($event)"
+          name="phone"
+          #phoneControl
+        >
+        </app-phone-input>
+        <!-- <ngx-intl-tel-input
           [cssClass]="'form-control phone-form'"
           [onlyCountries]="countries"
           [enableAutoCountrySelect]="true"
@@ -55,7 +69,7 @@
           [(ngModel)]="phoneNumber"
           (ngModelChange)="phone.errors ? false : confirmPhone();"
           required>
-        </ngx-intl-tel-input>
+        </ngx-intl-tel-input> -->
       </div>
     </div>
     <div class="col-sm-6 col-12">

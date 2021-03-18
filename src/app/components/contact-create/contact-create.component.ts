@@ -16,7 +16,8 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Automation } from 'src/app/models/automation.model';
 import { AutomationService } from 'src/app/services/automation.service';
-import {DealsService} from "../../services/deals.service";
+import { DealsService } from '../../services/deals.service';
+import { PhoneInputComponent } from '../phone-input/phone-input.component';
 
 @Component({
   selector: 'app-contact-create',
@@ -65,6 +66,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   assignSubscription: Subscription;
 
   phoneInput: FormControl = new FormControl();
+  @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
@@ -99,8 +101,13 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     ) {
       return;
     }
+
+    if (!this.checkPhoneValid()) {
+      return;
+    }
+
     let cell_phone;
-    if (this.phoneInput.valid && this.cell_phone) {
+    if (this.phoneControl.valid && this.cell_phone) {
       if (
         typeof this.cell_phone == 'object' &&
         this.cell_phone['internationalNumber']
@@ -109,6 +116,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
         cell_phone = '+' + cell_phone;
       }
     }
+
     const contactData = this.contact;
     contactData.cell_phone = cell_phone;
     this.isCreating = true;
@@ -171,7 +179,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       phone = evt['internationalNumber'].replace(/\D/g, '');
       phone = '+' + phone;
     }
-    if (this.phoneInput.valid) {
+    if (this.phoneControl.valid) {
       this.contactPhoneSubscription &&
         this.contactPhoneSubscription.unsubscribe();
       this.contactPhoneSubscription = this.contactService
@@ -241,5 +249,15 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
 
   updateLabel(label: string): void {
     this.contact.label = label;
+  }
+
+  checkPhoneValid(): boolean {
+    if (!this.cell_phone) {
+      return true;
+    }
+    if (Object.keys(this.cell_phone).length && !this.phoneControl.valid) {
+      return false;
+    }
+    return true;
   }
 }

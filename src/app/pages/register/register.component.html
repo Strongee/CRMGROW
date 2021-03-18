@@ -93,31 +93,29 @@
           </div>
           <input type="url" class="form-control" [(ngModel)]="user.learn_more" name="learnMore" id="learnMore" required #learnMore="ngModel"/>
         </div>
-        <div class="form-group phone-form" [ngClass]="{invalid: profileForm.submitted && phone.invalid && (phone.dirty || phone.touched || profileForm.submitted)}">
+        <div class="form-group phone-form">
           <div class="d-flex">
             <label for="phone" class="mr-auto">your cell number</label>
-            <span class="error" *ngIf="phone.errors">
-              <ng-container *ngIf="phone.errors.required; else phoneFormat">Required!</ng-container>
-              <ng-template #phoneFormat>Wrong cell-phone!</ng-template>
+            <span class="error" [class.d-block]="profileForm.submitted">
+              <ng-container *ngIf="checkPhoneRequired(); else wrongTemplate;">Required!</ng-container>
+              <ng-template #wrongTemplate>
+                <ng-container *ngIf="!checkPhoneValid()">
+                  Wrong cell-phone!
+                </ng-container>
+              </ng-template>
             </span>
             <span class="error d-inline-block" *ngIf="!checkingPhone && phoneExisting">Phone is already taken</span>
           </div>
-          <ngx-intl-tel-input
+          <app-phone-input
             [cssClass]="'form-control phone-form'"
             [onlyCountries]="countries"
-            [enableAutoCountrySelect]="true"
-            [enablePlaceholder]="false"
-            [selectFirstCountry]="false"
             [selectedCountryISO]="CountryISO.UnitedStates"
-            [maxLength]="15"
-            [phoneValidation]="true"
-            [separateDialCode]="true"
-            name="phone"
-            #phone="ngModel"
             [(ngModel)]="user.phone"
-            (ngModelChange)="phone.errors ? false : confirmPhone();"
-            required>
-          </ngx-intl-tel-input>
+            (ngModelChange)="confirmPhone($event)"
+            name="phone"
+            #phoneControl
+          >
+          </app-phone-input>
           <img class="check-spinner" src="../../../assets/img/spinner.gif" alt="" *ngIf="checkingPhone">
         </div>
         <div class="form-group" [ngClass]="{invalid: profileForm.submitted && timezone.invalid && (timezone.dirty || timezone.touched || profileForm.submitted)}">

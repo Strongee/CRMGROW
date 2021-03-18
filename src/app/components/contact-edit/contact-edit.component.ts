@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
 import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { PhoneInputComponent } from '../phone-input/phone-input.component';
 
 @Component({
   selector: 'app-contact-edit',
@@ -46,6 +47,8 @@ export class ContactEditComponent implements OnInit {
   updateSubscription: Subscription;
 
   phoneInput: FormControl = new FormControl();
+  @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
+  @ViewChild('secondPhoneControl') secondPhoneControl: PhoneInputComponent;
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
@@ -83,7 +86,13 @@ export class ContactEditComponent implements OnInit {
     ) {
       return;
     }
-    this.isUpdating = true;
+
+    if (!this.checkPhoneValid()) {
+      return;
+    }
+    if (!this.checkSecondPhoneValid()) {
+      return;
+    }
     const contactId = this.contact._id;
     if (this.contact_phone && this.contact_phone['internationalNumber']) {
       this.contact.cell_phone = adjustPhoneNumber(
@@ -98,6 +107,8 @@ export class ContactEditComponent implements OnInit {
         this.second_contact_phone['internationalNumber']
       );
     }
+
+    this.isUpdating = true;
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService
       .updateContact(contactId, this.contact)
@@ -150,7 +161,7 @@ export class ContactEditComponent implements OnInit {
       phone = evt['internationalNumber'].replace(/\D/g, '');
       phone = '+' + phone;
     }
-    if (this.phoneInput.valid) {
+    if (this.phoneControl.valid) {
       this.contactPhoneSubscription &&
         this.contactPhoneSubscription.unsubscribe();
       this.contactPhoneSubscription = this.contactService
@@ -213,4 +224,27 @@ export class ContactEditComponent implements OnInit {
     this.addressPlacesRef.reset();
   }
   setContactCountry(): void {}
+
+  checkPhoneValid(): boolean {
+    if (!this.contact_phone || !this.phoneControl) {
+      return true;
+    }
+    if (Object.keys(this.contact_phone).length && !this.phoneControl.valid) {
+      return false;
+    }
+    return true;
+  }
+
+  checkSecondPhoneValid(): boolean {
+    if (!this.second_contact_phone || this.secondPhoneControl) {
+      return true;
+    }
+    if (
+      Object.keys(this.second_contact_phone).length &&
+      !this.secondPhoneControl.valid
+    ) {
+      return false;
+    }
+    return true;
+  }
 }

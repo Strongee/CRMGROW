@@ -31,6 +31,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgxMaskModule } from 'ngx-mask';
 import { MatNavList, MatListItem } from '@angular/material/list';
 import {
   TimeagoModule,
@@ -50,6 +51,7 @@ import { TimeDurationPipe } from '../../pipes/time-duration.pipe';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { MakeRedirectPipe } from '../../pipes/make-redirect.pipe';
 import { TimezonePipe } from '../../pipes/timezone.pipe';
+import { PhoneInputComponent } from '../../components/phone-input/phone-input.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,8 @@ import { TimezonePipe } from '../../pipes/timezone.pipe';
     TimeDurationPipe,
     HighlightPipe,
     MakeRedirectPipe,
-    TimezonePipe
+    TimezonePipe,
+    PhoneInputComponent
   ],
   imports: [
     CommonModule,
@@ -102,7 +105,8 @@ import { TimezonePipe } from '../../pipes/timezone.pipe';
     OverlayModule,
     ChartsModule,
     SocialLoginModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgxMaskModule.forRoot()
   ],
   exports: [
     FormsModule,
@@ -148,7 +152,9 @@ import { TimezonePipe } from '../../pipes/timezone.pipe';
     TimeDurationPipe,
     HighlightPipe,
     MakeRedirectPipe,
-    TimezonePipe
+    TimezonePipe,
+    NgxMaskModule,
+    PhoneInputComponent
   ]
 })
 export class SharedModule {}

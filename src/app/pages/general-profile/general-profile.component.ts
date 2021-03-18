@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { ToastrService } from 'ngx-toastr';
@@ -15,6 +15,7 @@ import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { Subscription } from 'rxjs';
+import { PhoneInputComponent } from 'src/app/components/phone-input/phone-input.component';
 
 @Component({
   selector: 'app-general-profile',
@@ -42,6 +43,7 @@ export class GeneralProfileComponent implements OnInit, OnDestroy {
   });
 
   profileSubscription: Subscription;
+  @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
 
   constructor(
     private userService: UserService,
@@ -175,7 +177,10 @@ export class GeneralProfileComponent implements OnInit, OnDestroy {
   }
 
   updateProfile(form: any): void {
-    console.log('###', form);
+    if (this.checkPhoneRequired() || !this.checkPhoneValid()) {
+      return;
+    }
+
     this.saving = true;
     this.userService.updateProfile(form).subscribe((data) => {
       this.userService.updateProfileImpl(data);
@@ -187,7 +192,7 @@ export class GeneralProfileComponent implements OnInit, OnDestroy {
     this.address = evt.formatted_address;
   }
 
-  confirmPhone(): void {}
+  confirmPhone(event): void {}
 
   confirmCompany(): void {
     if (this.userCompany == 'other') {
@@ -200,5 +205,24 @@ export class GeneralProfileComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  checkPhoneRequired(): boolean {
+    if (!this.phoneNumber || !this.phoneControl) {
+      return true;
+    }
+    if (!Object.keys(this.phoneNumber)) {
+      return true;
+    }
+    return false;
+  }
+  checkPhoneValid(): boolean {
+    if (!this.phoneNumber || !this.phoneControl) {
+      return true;
+    }
+    if (Object.keys(this.phoneNumber).length && !this.phoneControl.valid) {
+      return false;
+    }
+    return true;
   }
 }

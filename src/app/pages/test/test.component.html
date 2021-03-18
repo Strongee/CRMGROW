@@ -1,1 +1,13 @@
 <p>test works!</p>
+<app-phone-input
+  [onlyCountries]="COUNTRIES"
+  [selectedCountryISO]="'us'"
+  [(ngModel)]="phoneNumber"
+  (ngModelChange)="changePhoneNumber($event)"
+  [formControl]="phoneForm"
+  #phoneControl
+></app-phone-input>
+
+{{phoneNumber | json}}
+{{phoneControl.valid}}
+{{phoneForm.value | json}}

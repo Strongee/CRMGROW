@@ -29,6 +29,7 @@ import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analy
 import { NotificationsListComponent } from 'src/app/pages/notifications-list/notifications-list.component';
 import { MaterialComponent } from 'src/app/pages/material/material.component';
 import { MessagesComponent } from 'src/app/pages/messages/messages.component';
+import { TestComponent } from 'src/app/pages/test/test.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -319,5 +320,9 @@ export const AdminLayoutRoutes: Routes = [
     data: {
       title: 'Messages'
     }
+  },
+  {
+    path: 'test',
+    component: TestComponent
   }
 ];

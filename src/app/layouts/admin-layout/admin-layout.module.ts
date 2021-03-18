@@ -71,6 +71,7 @@ import { TeamShareMaterialComponent } from '../../pages/team-share-material/team
 import { TeamShareContactComponent } from '../../pages/team-share-contact/team-share-contact.component';
 import { TeamShareAutomationComponent } from '../../pages/team-share-automation/team-share-automation.component';
 import { TeamShareTemplateComponent } from '../../pages/team-share-template/team-share-template.component';
+import { TestComponent } from '../../pages/test/test.component';
 
 @NgModule({
   declarations: [
@@ -129,7 +130,8 @@ import { TeamShareTemplateComponent } from '../../pages/team-share-template/team
     TeamShareMaterialComponent,
     TeamShareContactComponent,
     TeamShareAutomationComponent,
-    TeamShareTemplateComponent
+    TeamShareTemplateComponent,
+    TestComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { PHONE_COUNTRIES, TIMEZONE } from 'src/app/constants/variable.constants';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +11,7 @@ import { validateEmail } from 'src/app/utils/functions';
 import { Strings } from '../../constants/strings.constant';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { PhoneInputComponent } from 'src/app/components/phone-input/phone-input.component';
 
 @Component({
   selector: 'app-register',
@@ -83,6 +84,8 @@ export class RegisterComponent implements OnInit {
     numeralThousandsGroupStyle: 'wan'
   };
 
+  @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
+
   constructor(
     private dialog: MatDialog,
     private helperService: HelperService,
@@ -123,11 +126,7 @@ export class RegisterComponent implements OnInit {
                 this.location.replaceState('/signup');
                 this.toast.error(
                   `Error: ${
-                    err.message ||
-                    err.error ||
-                    (err.code) ||
-                    err ||
-                    'Unknown'
+                    err.message || err.error || err.code || err || 'Unknown'
                   }`,
                   Strings.SOCIAL_SIGNUP_ERROR,
                   { timeOut: 3000 }
@@ -156,11 +155,7 @@ export class RegisterComponent implements OnInit {
                 this.location.replaceState('/signup');
                 this.toast.error(
                   `Error: ${
-                    err.message ||
-                    err.error ||
-                    (err.code) ||
-                    err ||
-                    'Unknown'
+                    err.message || err.error || err.code || err || 'Unknown'
                   }`,
                   Strings.SOCIAL_SIGNUP_ERROR,
                   { timeOut: 3000 }
@@ -185,6 +180,9 @@ export class RegisterComponent implements OnInit {
 
   fillProfile(): void {
     if (!this.checkingPhone && this.phoneExisting) {
+      return;
+    }
+    if (this.checkPhoneRequired() || !this.checkPhoneValid()) {
       return;
     }
 
@@ -218,11 +216,9 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  confirmPhone(): void {
+  confirmPhone(event): void {
     this.phoneExisting = false;
-    const cell_phone =
-      (this.user.phone && this.user.phone['internationalNumber']) ||
-      this.user.phone;
+    const cell_phone = (event && event['internationalNumber']) || event;
     if (cell_phone) {
       this.checkingPhone = true;
       this.checkPhoneSubscription && this.checkPhoneSubscription.unsubscribe();
@@ -295,5 +291,24 @@ export class RegisterComponent implements OnInit {
         );
       }
     );
+  }
+
+  checkPhoneRequired(): boolean {
+    if (!this.user.phone || !this.phoneControl) {
+      return true;
+    }
+    if (!Object.keys(this.user.phone)) {
+      return true;
+    }
+    return false;
+  }
+  checkPhoneValid(): boolean {
+    if (!this.user.phone || !this.phoneControl) {
+      return true;
+    }
+    if (Object.keys(this.user.phone).length && !this.phoneControl.valid) {
+      return false;
+    }
+    return true;
   }
 }
