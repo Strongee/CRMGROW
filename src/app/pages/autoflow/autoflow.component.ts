@@ -161,7 +161,9 @@ export class AutoflowComponent
       this.automation_title = title;
     }
     if (this._id) {
-      this.loadAutomation(this._id, this.pageSize.id, 0);
+      if (page !== 'contacts') {
+        this.loadAutomation(this._id, this.pageSize.id, 0);
+      }
     } else {
       this.auth = 'owner';
       const curDate = new Date();
@@ -1475,6 +1477,9 @@ export class AutoflowComponent
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+    if (this.selectedTab !== this.tabs[1] && this.nodes.length < 1) {
+      this.loadAutomation(this._id, this.pageSize.id, 0);
+    }
     localStorage.setItem('automation', tab.id);
   }
 
@@ -1909,8 +1914,8 @@ export class AutoflowComponent
     update_contact: AUTOMATION_ICONS.UPDATE_CONTACT
   };
   ACTIONS = {
-    follow_up: 'Follow up',
-    update_follow_up: 'Update Follow up',
+    follow_up: 'Task',
+    update_follow_up: 'Update Task',
     note: 'Create Note',
     email: 'Send Email',
     send_email_video: 'Send Video Email',

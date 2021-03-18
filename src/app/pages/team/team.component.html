@@ -198,7 +198,7 @@
                   <div class="label-cell">
                     <ng-container *ngIf="role == 'owner'; else noOwnerTemplate">
                       <select (change)="toggleMember(member)"
-                              class="c-white f-1 font-weight-bold"
+                              class="c-white status value f-1 font-weight-bold"
                               [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
                               [disabled]="role != 'owner'"
                       >
@@ -223,7 +223,7 @@
                   {{member.created_at | date: 'dd.MM.yyyy'}}
                 </td>
                 <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
-                  <button class="v-center btn bgc-white c-black f-3 justify-content-end" (click)="removeMember(member)">
+                  <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="removeMember(member)">
                     <i class="bgc-black i-icon i-trash"></i>
                   </button>
                 </td>
@@ -241,19 +241,19 @@
                   </div>
                 </td>
                 <td class="status-cell">
-                  <div class="v-center">
-                    <div class="status mr-3">
+                  <div class="value v-center">
+                    <div class=" status mr-3">
                       <div class="Invite c-white text-center f-1 font-weight-bold">Invite sent</div>
                     </div>
-                    <div class="btn-white-blue remind f-1 font-weight-bold">Remind</div>
+                    <div class="btn-white-blue remind f-1 ml-1 font-weight-bold">Remind</div>
                   </div>
                 </td>
                 <td class="added-cell">
                   {{invite.created_at | date: 'dd.MM.yyyy'}}
                 </td>
-                <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
-                  <button class="v-center btn bgc-white c-dark f-3 opacity-3 ml-2" (click)="cancelInvite(invite)">
-                    <i class="bgc-dark i-icon i-trash mr-2"></i>
+                <td class="action-cell value d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
+                  <button class="v-center btn bgc-white c-dark f-3 mt-1" (click)="cancelInvite(invite)">
+                    <i class="i-icon i-trash bgc-black d-block mr-2"></i>
                     <span class="button-label">Cancel invitation</span>
                   </button>
                 </td>

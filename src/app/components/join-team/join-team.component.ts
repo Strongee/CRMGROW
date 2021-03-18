@@ -52,6 +52,13 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
   requesting = false;
   addOnBlur = false;
   error$: Subject<boolean> = new Subject<boolean>();
+  isToggleTeam = true;
+  skip = 0;
+  pageCount = 8;
+  keyword = '';
+  teams = [];
+  users = [];
+  loadingMore = false;
 
   constructor(
     private dialogRef: MatDialogRef<JoinTeamComponent>,
@@ -75,6 +82,9 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
           this.searching = true;
         }),
         map((search) => {
+          this.teams = [];
+          this.users = [];
+          this.keyword = search;
           return this.teamService.searchTeamUser(search);
         })
       )
@@ -86,14 +96,14 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
             const users = [];
             res['team_array'] &&
               res['team_array'].forEach((e) => {
-                teams.push(new Team().deserialize(e));
+                this.teams.push(new Team().deserialize(e));
               });
             res['user_array'] &&
               res['user_array'].forEach((e) => {
-                users.push(new User().deserialize(e));
+                this.users.push(new User().deserialize(e));
               });
-            this.filteredTeams.next(teams);
-            this.filteredUsers.next(users);
+            this.filteredTeams.next(this.teams);
+            this.filteredUsers.next(this.users);
           },
           () => {
             this.searching = false;
@@ -184,5 +194,38 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
           }
         );
     }
+  }
+
+  toggleTeam(): void {
+    this.isToggleTeam = !this.isToggleTeam;
+  }
+
+  loadMore(): void {
+    if (this.loadingMore) {
+      return;
+    }
+
+    this.skip += this.pageCount;
+    this.loadingMore = true;
+    this.teamService
+      .searchTeamUser(this.keyword, this.skip)
+      .subscribe((res) => {
+        if (res) {
+          console.log('search more =========>', res);
+          this.loadingMore = false;
+          const teams = [];
+          const users = [];
+          res['team_array'] &&
+            res['team_array'].forEach((e) => {
+              this.teams.push(new Team().deserialize(e));
+            });
+          res['user_array'] &&
+            res['user_array'].forEach((e) => {
+              this.users.push(new User().deserialize(e));
+            });
+          this.filteredTeams.next(this.teams);
+          this.filteredUsers.next(this.users);
+        }
+      });
   }
 }

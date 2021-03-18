@@ -75,9 +75,12 @@ export class TeamService extends HttpService {
    * Response Data: {status, team_array, user_array}
    * @param keyword : keyword to search
    */
-  searchTeamUser(keyword: string): Observable<any> {
+  searchTeamUser(keyword: string, skip: number = 0): Observable<any> {
     return this.httpClient
-      .post(this.server + TEAM.SEARCH_TEAM_USER, { search: keyword })
+      .post(this.server + TEAM.SEARCH_TEAM_USER, {
+        search: keyword,
+        skip: skip
+      })
       .pipe(
         map((res) => res),
         catchError(this.handleError('SEARCH TEAM AND USERS', {}))
@@ -436,8 +439,6 @@ export class TeamService extends HttpService {
       catchError(this.handleError('REJECT CALL', []))
     );
   }
-
-  
 
   clear$(): void {
     this.teams.next([]);
