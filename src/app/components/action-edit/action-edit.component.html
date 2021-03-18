@@ -221,14 +221,14 @@
           <div class="action-form">
             <div class="form-group has-feedback"
                  [class.has-error]="followUpContent.errors && (followUpContent.touched || followUpContent.dirty|| submitted) && submitted">
-              <label class="theme-label">FOLLOW UP NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
-              <input type="text" class="form-control" placeholder="Type of Follow up note" [(ngModel)]="action['content']"
+              <label class="theme-label">TASK NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
+              <input type="text" class="form-control" placeholder="Type of task note" [(ngModel)]="action['content']"
                      name="followUpContent" #followUpContent="ngModel" autocomplete="off" required />
               <span class="invalid-feedback"
                     *ngIf="followUpContent.errors && (followUpContent.dirty || followUpContent.touched || submitted) && submitted">Follow
               up content is required.</span>
             </div>
-            <label class="theme-label">FOLLOW UP TIME</label>
+            <label class="theme-label">TASK TIME</label>
             <div class="row">
               <div class="col-12">
                 <div class="theme-radios">
@@ -250,7 +250,7 @@
                     <div class="form-group has-feedback calendar position-relative"
                          [class.has-error]="due_date['year'] == '' && due_date['month'] == '' && due_date['day'] == '' && submitted">
                       <div class="form-group">
-                        <label class="theme-label">FOLLOW UP DATE</label>
+                        <label class="theme-label">TASK DATE</label>
                         <div class="v-center">
                           <app-date-input type="prepend" [(value)]="due_date" [minDate]="minDate"></app-date-input>
                         </div>
@@ -265,7 +265,7 @@
                   </div>
                   <div class="col-6">
                     <div class="form-group has-feedback" [class.has-error]="!due_time && submitted">
-                      <label class="theme-label">FOLLOW UP TIME</label>
+                      <label class="theme-label">TASK TIME</label>
                       <select class="form-control theme-control" [(ngModel)]="due_time" name="time" #time="ngModel"
                               [required]="followDueOption === 'date'" [disabled]="followDueOption !== 'date'">
                         <option value="" disabled>Due Time</option>
@@ -280,7 +280,7 @@
               <ng-template #followTimeDelay>
                 <div class="col-12 mt-2">
                   <div class="form-group has-feedback">
-                    <label class="theme-label">TIME UNTIL FOLLOW UP IS DO <span class="description">(IN HOURS)</span></label>
+                    <label class="theme-label">TIME UNTIL TASK IS DO <span class="description">(IN HOURS)</span></label>
                     <input type="number" class="form-control theme-control" [(ngModel)]="due_duration" name="duration" #duration="ngModel"
                            [required]="followDueOption === 'delay'" [disabled]="followDueOption !== 'delay'" />
                     <span class="invalid-feedback"
@@ -507,7 +507,7 @@
           <div class="text-danger error" *ngIf="error">{{error}}</div>
         </ng-container>
         <ng-container *ngIf="type === 'update_follow_up'">
-          <label class="theme-label mt-3">SELECT THE FOLLOW UP <span class="description">(CREATED IN PREVIOUS ACTIONS)</span></label>
+          <label class="theme-label mt-3">SELECT THE TASK <span class="description">(CREATED IN PREVIOUS ACTIONS)</span></label>
           <mat-form-field appearance="fill" class="mat-custom-select">
             <mat-select [(value)]="selectedFollow" (selectionChange)="selectFollow($event)">
               <mat-select-trigger>
@@ -525,7 +525,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <div class="c-red f-3 error" *ngIf="!selectedFollow && submitted">Follow up is required!</div>
+          <div class="c-red f-3 error" *ngIf="!selectedFollow && submitted">Task is required!</div>
           <ng-container *ngIf="selectedFollow">
             <ng-container *ngIf="type === 'update_follow_up'">
               <div class="col-12 form-group">
@@ -560,12 +560,12 @@
               <div class="theme-radio">
                 <input type="radio" class="custom-control-input" id="follow_up_update" name="follow_up_update_option"
                        [(ngModel)]="followUpdateOption" #follow_up_update_option="ngModel" value="update_follow_up" (ngModelChange)="removeError()">
-                <label class="custom-theme-label" for="follow_up_update">Update Follow up</label>
+                <label class="custom-theme-label" for="follow_up_update">Update task</label>
               </div>
               <div class="theme-radio">
                 <input type="radio" class="custom-control-input" id="follow_up_complete" name="follow_up_update_option"
                        [(ngModel)]="followUpdateOption" #follow_up_update_option="ngModel" value="complete_follow_up" (ngModelChange)="removeError()">
-                <label class="custom-theme-label" for="follow_up_complete">Complete Follow up</label>
+                <label class="custom-theme-label" for="follow_up_complete">Complete task</label>
               </div>
             </div>
 
@@ -574,14 +574,14 @@
                 <div class="action-form">
                   <div class="form-group has-feedback mt-2"
                        [class.has-error]="followUpdateContent.errors && (followUpdateContent.touched || followUpdateContent.dirty|| submitted) && submitted">
-                    <label class="theme-label">FOLLOW UP NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
-                    <input type="text" class="form-control theme-control" placeholder="Type new content for this Follow up" [(ngModel)]="action.content"
+                    <label class="theme-label">TASK NOTE <span class="description">(REMINDER TO YOURSELF)</span></label>
+                    <input type="text" class="form-control theme-control" placeholder="Type new content for this task" [(ngModel)]="action.content"
                            name="followUpdateContent" #followUpdateContent="ngModel" autocomplete="off" required />
                     <span class="invalid-feedback"
                           *ngIf="followUpdateContent.errors && (followUpdateContent.dirty || followUpdateContent.touched || submitted) && submitted">Follow
                     up content is required.</span>
                   </div>
-                  <label class="theme-label">FOLLOW UP TIME</label>
+                  <label class="theme-label">TASK TIME</label>
                   <div class="row">
                     <div class="col-12">
                       <select class="form-control theme-control" [(ngModel)]="updateFollowDueOption" name="updateFollowUpDueOption" #updateFollowUpDueOption="ngModel" required>
@@ -596,7 +596,7 @@
                           <div class="form-group has-feedback calendar position-relative"
                                [class.has-error]="update_due_date['year'] == '' && update_due_date['month'] == '' && update_due_date['day'] == '' && submitted">
                             <div class="form-group">
-                              <label class="theme-label">FOLLOW UP DATE</label>
+                              <label class="theme-label">TASK DATE</label>
                               <div class="v-center">
                                 <app-date-input type="prepend" [(value)]="update_due_date" [minDate]="minDate"></app-date-input>
                               </div>
@@ -611,7 +611,7 @@
                         </div>
                         <div class="col-6">
                           <div class="form-group has-feedback" [class.has-error]="!due_time && submitted">
-                            <label class="theme-label">FOLLOW UP TIME</label>
+                            <label class="theme-label">TASK TIME</label>
                             <select class="form-control theme-control" [(ngModel)]="update_due_time" name="time" #time="ngModel"
                                     [required]="followDueOption === 'date'">
                               <option value="" disabled>Due Time</option>
@@ -625,7 +625,7 @@
                     </div>
                     <div class="col-12 mt-2" *ngIf="updateFollowDueOption === 'update_due_duration'">
                       <div class="form-group has-feedback">
-                        <label class="theme-label">TIME UNTIL FOLLOW UP IS DO <span class="description">(IN HOURS)</span></label>
+                        <label class="theme-label">TIME UNTIL TASK IS DO <span class="description">(IN HOURS)</span></label>
                         <input type="number" class="form-control theme-control" [(ngModel)]="update_due_duration" name="duration" #duration="ngModel"
                                [required]="followDueOption === 'delay'" min="0" />
                         <span class="invalid-feedback"
@@ -637,7 +637,7 @@
                 </div>
               </div>
               <div *ngSwitchCase="'complete_follow_up'">
-                <div class="action-guide">Complete the selected follow up.</div>
+                <div class="action-guide">Complete the selected task.</div>
               </div>
             </ng-container>
           </ng-container>
