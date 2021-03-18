@@ -176,7 +176,9 @@ export class ActionDialogComponent implements OnInit {
 
     const _SELF = this;
     setTimeout(() => {
-      _SELF.searchField.nativeElement.blur();
+      if (_SELF.searchField) {
+        _SELF.searchField.nativeElement.blur();
+      }
     }, 300);
 
   }
