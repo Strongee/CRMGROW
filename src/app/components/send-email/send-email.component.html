@@ -24,7 +24,7 @@
                 class="w-100 ml-2"
               ></app-input-contact-chip>
             </div>
-            <div class="v-center justify-content-end" (click)="blueAll()">
+            <div class="v-center justify-content-end" *ngIf="isFocus()">
               <div class="f-3 c-blue p-1 c-pointer" (click)="ccFlag = !ccFlag">{{ccFlag ? "Disable Cc" : "Add Cc"}}</div>
               <div class="f-3 c-blue p-1 c-pointer" (click)="bccFlag = !bccFlag">{{bccFlag ? "Disable Bcc" : "Add Bcc"}}</div>
             </div>
