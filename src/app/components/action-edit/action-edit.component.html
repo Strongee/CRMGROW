@@ -51,10 +51,10 @@
                       <img [src]="materialItem.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
                     </div>
                     <div class="thumb-wrapper" *ngSwitchCase="'pdf'">
-                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/pdf_overlay.jpg');"/>
+                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/pdf_overlay.png');"/>
                     </div>
                     <div class="thumb-wrapper" *ngSwitchCase="'image'">
-                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/image_overlay.jpg');"/>
+                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/image_overlay.png');"/>
                     </div>
                   </ng-container>
                   <div class="material-title f-1 font-weight-bold mt-3">
