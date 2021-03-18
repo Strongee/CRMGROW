@@ -48,11 +48,7 @@ export class CalendlyDialogComponent implements OnInit {
                     this.garbage.calendly.link =
                       event['data'][0].attributes.url;
                     this.garbage.calendly.id = event['data'][0].id;
-                    this.userService
-                      .updateGarbage(this.garbage)
-                      .subscribe(() => {
-                        this.userService.updateGarbageImpl(this.garbage);
-                      });
+                    this.userService.updateGarbageImpl(this.garbage);
                   }
                 });
               }

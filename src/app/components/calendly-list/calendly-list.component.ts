@@ -63,11 +63,9 @@ export class CalendlyListComponent implements OnInit {
       if (res && res['status']) {
         this.garbage.calendly.link = this.calendlyList[index].attributes.url;
         this.garbage.calendly.id = this.calendlyList[index].id;
-        this.userService.updateGarbage(this.garbage).subscribe(() => {
-          this.toast.success('Event is selected successfully.');
-          this.userService.updateGarbageImpl(this.garbage);
-          this.dialogRef.close();
-        });
+        this.toast.success('Event is selected successfully.');
+        this.userService.updateGarbageImpl(this.garbage);
+        this.dialogRef.close();
       }
     });
   }
