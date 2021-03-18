@@ -13,3 +13,6 @@
 .team:not(.selected) .deselect {
   display: none;
 }
+.more-button-container {
+  border-top: 1px solid $color-trans08;
+}
