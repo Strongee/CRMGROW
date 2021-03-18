@@ -25,6 +25,8 @@ export class IntegrationComponent implements OnInit {
   googleCalendars = [];
   outlookCalendars = [];
 
+  calendlyLength = 0;
+
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
 
@@ -52,6 +54,13 @@ export class IntegrationComponent implements OnInit {
     );
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
       this.garbage = res;
+      if (this.garbage.calendly?.email != '') {
+        this.connectService.getEvent().subscribe((res) => {
+          if (res && res['status']) {
+            this.calendlyLength = res['data'].length;
+          }
+        });
+      }
     });
   }
 
@@ -108,19 +117,25 @@ export class IntegrationComponent implements OnInit {
 
   disconnectCalendar(email: string, type: string): void {
     this.userService.disconnectCalendar(email).subscribe((res) => {
-      if (res) {
+      if (res && res['status']) {
         if (type == 'gmail') {
           const pos = _.findIndex(
             this.googleCalendars,
             (e) => e.connected_email == email
           );
           this.googleCalendars.splice(pos, 1);
+          this.toast.success(
+            'Your Google Calendar is disconnected successfully.'
+          );
         } else {
           const pos = _.findIndex(
             this.outlookCalendars,
             (e) => e.connected_email == email
           );
           this.outlookCalendars.splice(pos, 1);
+          this.toast.success(
+            'Your Outlook Calendar is disconnected successfully.'
+          );
         }
       }
     });
@@ -165,8 +180,9 @@ export class IntegrationComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.garbage.calendly.email = res.calendly.email;
-          this.garbage.calendly.token = res.calendly.token;
+          this.garbage.calendly.email = res.email;
+          this.garbage.calendly.token = res.token;
+          this.calendlyLength = res.length;
         }
       });
   }
@@ -174,7 +190,7 @@ export class IntegrationComponent implements OnInit {
   selectCalendly(): void {
     this.dialog.open(CalendlyListComponent, {
       width: '100vw',
-      maxWidth: '1000px',
+      maxWidth: '800px',
       data: {
         key: this.garbage.calendly?.id
       }
@@ -183,9 +199,10 @@ export class IntegrationComponent implements OnInit {
 
   disconnectCalendly(): void {
     this.connectService.disconnectCalendly().subscribe((res) => {
-      if (res) {
+      if (res && res['status']) {
         this.garbage.calendly.email = '';
         this.garbage.calendly.token = '';
+        this.toast.success('Calendly disconnected successfully.');
       }
     });
   }
