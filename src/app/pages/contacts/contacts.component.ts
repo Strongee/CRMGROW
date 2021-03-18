@@ -34,7 +34,7 @@ import { NotifyComponent } from 'src/app/components/notify/notify.component';
 export class ContactsComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
   ACTIONS = BulkActions.Contacts;
-  DISPLAY_COLUMNS = [
+  NORMAL_COLUMNS = [
     'select',
     'contact_name',
     'contact_label',
@@ -44,11 +44,23 @@ export class ContactsComponent implements OnInit, OnDestroy {
     'contact_phone',
     'contact_address'
   ];
+  SORTED_COLUMNS = [
+    'select',
+    'contact_name',
+    'contact_label',
+    'activity',
+    'activity_added',
+    'contact_tags',
+    'contact_email',
+    'contact_phone',
+    'contact_address'
+  ];
+  DISPLAY_COLUMNS = this.NORMAL_COLUMNS;
   SORT_TYPES = [
     { id: 'alpha_up', label: 'Alphabetical Z-A' },
     { id: 'alpha_down', label: 'Alphabetical A-Z' },
     { id: 'last_added', label: 'Last added' },
-    { id: 'last_active', label: 'Recent active' }
+    { id: 'last_activity', label: 'Last activity' }
   ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },
@@ -138,6 +150,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.SORT_TYPES.some((e) => {
       if (e.id === sortInfo.name) {
         this.sortType = e;
+        if (e.id === 'last_activity') {
+          this.DISPLAY_COLUMNS = this.SORTED_COLUMNS;
+        } else {
+          this.DISPLAY_COLUMNS = this.NORMAL_COLUMNS;
+        }
         return true;
       }
     });
@@ -210,6 +227,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
       ...CONTACT_SORT_OPTIONS[type.id],
       page: this.page
     });
+    if (type.id === 'last_activity') {
+      this.DISPLAY_COLUMNS = this.SORTED_COLUMNS;
+    } else {
+      this.DISPLAY_COLUMNS = this.NORMAL_COLUMNS;
+    }
   }
 
   /**
