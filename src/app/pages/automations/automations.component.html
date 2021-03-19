@@ -20,14 +20,15 @@
     </div>
   </div>
   <div class="my-3 position-relative">
-    <ng-container *ngIf="(automationService.automations$ | async).length; else emptyListTemplate">
-      <div class="updating-status" *ngIf="(automationService.loading$ | async) === STATUS.REQUEST">
+    <div class="mat-table-wrapper">
+      <div class="updating-status" *ngIf="automations.length && (automationService.loading$ | async) === STATUS.REQUEST">
         LOADING
       </div>
       <table
         mat-table
         class="table automation-table page-table" multiTemplateDataRows
         [dataSource]="filteredResult | paginate: {itemsPerPage: pageSize.id, currentPage: page, id: 'automationTable', total: filteredResult.length}">
+
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">Title</th>
           <td mat-cell *matCellDef="let automation" class="title">
@@ -124,6 +125,8 @@
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="automation-detail-row"></tr>
       </table>
+    </div>
+    <ng-container *ngIf="filteredResult.length">
       <div class="my-2 table-control mode-1">
         <div class="pagination-wrapper m-auto">
           <pagination-controls
@@ -159,7 +162,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-template #emptyListTemplate>
+    <ng-container *ngIf="!(automationService.automations$ | async).length; else showingStatusTemplate">
       <ng-container [ngSwitch]="(automationService.loading$ | async)">
         <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
           <div class="object-icon v-center">
@@ -176,6 +179,18 @@
         <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
           <div class="loader mt-5 lg"></div>
           <h4 class="fw-600 mt-2">Loading automations for auto-recruiting...</h4>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #showingStatusTemplate>
+      <ng-container *ngIf="!filteredResult.length">
+        <div class="empty-list py-5">
+          <div class="object-icon v-center">
+            <i class="i-icon i-automation d-block bgc-dark"></i>
+          </div>
+          <h4 class="font-weight-bold text-center mt-4 mb-3">
+            There is no automations to match your filter conditions.
+          </h4>
         </div>
       </ng-container>
     </ng-template>
