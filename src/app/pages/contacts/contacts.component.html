@@ -300,11 +300,11 @@
     </ng-container>
     <ng-template #emptyListTemplate>
       <ng-container [ngSwitch]="(contactService.loading$ | async)">
-        <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
+        <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
           <div class="object-icon v-center">
             <i class="i-icon i-lunch d-block bgc-dark"></i>
           </div>
-          <h4 class="font-weight-bold mt-4 mb-3">
+          <h4 class="font-weight-bold mt-3 mb-3">
             There is no contact
             <ng-container *ngIf="!searchStr && searchOption.isEmpty(); else searchConditionTemplate">
               <span> in your account.</span>
@@ -313,7 +313,7 @@
               <span> to match your filter conditions.</span>
             </ng-template>
           </h4>
-          <p class="mb-4">Please create contact for your recruiting business.</p>
+          <p class="mb-3">Please create contact for your recruiting business.</p>
           <a class="btn btn-primary" (click)="createContact()">
             <span class="font-weight-bold f-3">Create contact</span>
           </a>
