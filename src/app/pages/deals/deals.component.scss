@@ -1,8 +1,30 @@
 @import 'src/variables.scss';
 
+.page-content {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+
+    .deals-header {
+        position: sticky;
+        left: 192px;
+        width: calc(100vw - 240px);
+
+        @media screen and (max-width: 992px) {
+            left: 60px;
+            width: calc(100vw - 108px);
+        }
+
+        @media screen and (max-width: 680px) {
+            left: 16px;
+            width: calc(100vw - 47px);
+        }
+    }
+}
+
 .stages {
     flex-wrap: nowrap;
-    max-width: calc(100vw-160px);
+    width: fit-content;
     .stage {
         width: 240px;
         min-width: 240px;

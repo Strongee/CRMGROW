@@ -37,6 +37,7 @@ import { getCurrentTimezone } from 'src/app/helper';
 import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { FormControl } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
+import { SendBulkTextComponent } from 'src/app/components/send-bulk-text/send-bulk-text.component';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -420,7 +421,28 @@ export class DealsDetailComponent implements OnInit {
       });
   }
 
-  openSendText(): void {}
+  openSendText(): void {
+    this.dialog
+      .open(SendBulkTextComponent, {
+        position: {
+          bottom: '0px',
+          right: '0px'
+        },
+        panelClass: 'send-email',
+        backdropClass: 'cdk-send-email',
+        disableClose: false,
+        data: {
+          deal: this.dealId,
+          contacts: this.deal.contacts
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.addLatestActivity(2);
+        }
+      });
+  }
 
   openTaskDlg(): void {
     this.dialog
