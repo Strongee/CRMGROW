@@ -151,7 +151,20 @@ export class SelectContactComponent
           .subscribe((contacts) => {
             this.loadingMore = false;
             if (contacts && contacts.length) {
-              this.filteredResults.next([...currentResults, ...contacts]);
+              if (contacts.length == 8) {
+                this.hasMore = true;
+              } else {
+                this.hasMore = false;
+              }
+              contacts.forEach((e) => {
+                if (this.mustField) {
+                  if (e[this.mustField]) {
+                    currentResults.push(e);
+                  }
+                } else {
+                  currentResults.push(e);
+                }
+              });
             }
           });
       }
