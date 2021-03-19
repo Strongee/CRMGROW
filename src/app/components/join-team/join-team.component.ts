@@ -211,7 +211,6 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
       .searchTeamUser(this.keyword, this.skip)
       .subscribe((res) => {
         if (res) {
-          console.log('search more =========>', res);
           this.loadingMore = false;
           const teams = [];
           const users = [];
