@@ -28,7 +28,7 @@
     <div class="content">
       <div class="title f-3 font-weight-bold mb-1">Outlook mail</div>
       <div class="desc f-2 op-75">
-        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+        Our Platform can deliver the emails through your outlook mail. Email Deliverity will be upgraded.
       </div>
     </div>
     <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('outlook')">Connect account</button>
@@ -122,11 +122,18 @@
       <p class="f-3 font-weight-bold m-0">Your API Key</p>
       <input class="form-control f-3 w-50 p-1" type="text" [ngModel]="garbage?.access_token" readonly>
       <div class="d-flex justify-content-center header-button">
-        <button class="bg-white border-0 my-auto f-3 font-weight-bold key-copy" (click)="copyKey()">
-          <img src="../../../assets/img/pin.png" class="mr-2">Copy Key
-        </button>
+        <ng-container *ngIf="isCopied; else copyButton">
+          <button class="bg-white border-0 my-auto f-3 font-weight-bold key-copy">
+            <img src="../../../assets/img/check.png" class="mr-2">Copied
+          </button>
+        </ng-container>
+        <ng-template #copyButton>
+          <button class="bg-white border-0 my-auto f-3 font-weight-bold key-copy" (click)="copyKey()">
+            <img src="../../../assets/img/pin.png" class="mr-2">Copy Key
+          </button>
+        </ng-template>
         <button class="bg-white border-0 my-auto f-3 font-weight-bold key-regenerate" (click)="getToken()">
-          <img src="../../../assets/img/reload.png" class="mr-2">Regenerate Key
+          <img src="../../../assets/img/reload.png" class="mr-2" [class.spinner]="isRegenerated">Regenerate Key
         </button>
       </div>
     </div>
@@ -137,7 +144,7 @@
       <div class="content">
         <div class="title f-3 font-weight-bold mb-1">Zapier</div>
         <div class="desc f-2 op-75">
-          Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+          These templates can help you start saving time right away.
         </div>
       </div>
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectZapier()">See Templates</button>
@@ -151,7 +158,7 @@
     <div class="content">
       <div class="title f-3 font-weight-bold mb-1">Calendly</div>
       <div class="desc f-2 op-75">
-        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+        Add Calendly scheduler to your material landing page.
       </div>
     </div>
     <ng-container *ngIf="garbage?.calendly && garbage.calendly?.email != '' && garbage.calendly?.token != ''; else connectEvent">
