@@ -25,7 +25,7 @@ import {
   distinctUntilChanged,
   map
 } from 'rxjs/operators';
-import { Subject, ReplaySubject, Observable } from 'rxjs';
+import { Subject, ReplaySubject, Observable, Subscription } from 'rxjs';
 import { ContactService } from 'src/app/services/contact.service';
 import * as _ from 'lodash';
 import { validateEmail } from 'src/app/utils/functions';
@@ -70,6 +70,11 @@ export class InputContactChipComponent implements OnInit, OnChanges {
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
   filteredContacts: Contact[] = [];
   siteUrl = environment.website;
+
+  loadingMore = false;
+  loadMoreSubscription: Subscription;
+  getCurrentSubscription: Subscription;
+  hasMore = true;
 
   constructor(private contactService: ContactService) {}
 
@@ -317,6 +322,36 @@ export class InputContactChipComponent implements OnInit, OnChanges {
     this.formControl.setValue(null);
     this.keyword = '';
     this.optionsFocused = false;
+  }
+
+  loadMore(): void {
+    this.getCurrentSubscription = this.filteredResults.subscribe(
+      (currentResults) => {
+        this.loadingMore = true;
+        this.loadMoreSubscription = this.contactService
+          .easySearch(this.keyword, currentResults.length)
+          .subscribe((contacts) => {
+            this.loadingMore = false;
+            if (contacts && contacts.length) {
+              if (contacts.length == 8) {
+                this.hasMore = true;
+              } else {
+                this.hasMore = false;
+              }
+              contacts.forEach((e) => {
+                if (this.display) {
+                  if (e[this.display]) {
+                    currentResults.push(e);
+                  }
+                } else {
+                  currentResults.push(e);
+                }
+              });
+            }
+          });
+      }
+    );
+    this.getCurrentSubscription.unsubscribe();
   }
 
   setFocus(): void {

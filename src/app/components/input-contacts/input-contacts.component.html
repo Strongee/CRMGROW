@@ -53,6 +53,19 @@
           </div>
         </div>
       </mat-option>
+      <mat-option *ngIf="(filteredResults | async)?.length && hasMore" [disabled]="true">
+        <div class="v-center justify-content-center more-button-container p-2"
+            (click)="loadMore()"
+            [class.c-pointer]="!loadingMore"
+        >
+          <div class="v-center">
+            <i class="small-spinner" *ngIf="loadingMore"></i>
+            <i class="d-block i-icon sm i-plus bgc-blue" *ngIf="!loadingMore"></i>
+            <span class="f-2 font-weight-bold c-blue">&nbsp;</span>
+            <span class="f-2 font-weight-bold c-blue ml-2">Load more</span>
+          </div>
+        </div>
+      </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 </div>

@@ -54,7 +54,8 @@ export class IntegrationComponent implements OnInit {
     );
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
       this.garbage = res;
-      if (this.garbage.calendly?.email != '') {
+      if (this.garbage.calendly) {
+        console.log('###', this.garbage);
         this.connectService.getEvent().subscribe((res) => {
           if (res && res['status']) {
             this.calendlyLength = res['data'].length;
