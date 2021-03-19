@@ -27,46 +27,50 @@
             </ng-container>
           </div>
           <ng-container *ngIf="materialsLoading">
-            <div class="list-loading text-center">
-              <div class="loader mt-5"></div>
+            <div class="empty-material-container text-center">
+              <div class="loader"></div>
               <h4 class="fw-600 mt-2">Loading materials...</h4>
             </div>
           </ng-container>
-          <div class="empty-list" *ngIf="!materialsLoading && materials.length == 0">
-            <div class="object-icon v-center">
-              <i class="i-icon i-template d-block bgc-dark"></i>
-            </div>
-            <h4 class="font-weight-bold mt-4 mb-3">
-              There is no materials.
-            </h4>
-          </div>
-          <div class="material-container mt-2">
-            <ng-container *ngIf="!materialsLoading">
-              <ng-container *ngFor="let materialItem of filterMaterials">
-                <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material && material._id && material._id == materialItem._id">
-                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material && material._id && material._id == materialItem._id">
-                  <ng-container [ngSwitch]="getMaterialType(materialItem)">
-                    <div class="thumb-wrapper video-wrapper" *ngSwitchCase="'video'">
-                      <img [src]="materialItem.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
-                      <img [src]="materialItem.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+          <ng-container *ngIf="!materialsLoading">
+            <ng-container *ngIf="filterMaterials.length > 0; else emptyMaterial">
+              <div class="material-container">
+                <ng-container *ngFor="let materialItem of filterMaterials">
+                  <div class="material-item" (click)="toggleMaterial(materialItem)" [class.active]="material && material._id && material._id == materialItem._id">
+                    <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="material && material._id && material._id == materialItem._id">
+                    <ng-container [ngSwitch]="getMaterialType(materialItem)">
+                      <div class="thumb-wrapper video-wrapper" *ngSwitchCase="'video'">
+                        <img [src]="materialItem.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                        <img [src]="materialItem.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                      </div>
+                      <div class="thumb-wrapper" *ngSwitchCase="'pdf'">
+                        <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/pdf_overlay.png');"/>
+                      </div>
+                      <div class="thumb-wrapper" *ngSwitchCase="'image'">
+                        <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/image_overlay.png');"/>
+                      </div>
+                    </ng-container>
+                    <div class="material-title f-1 font-weight-bold mt-3">
+                      {{materialItem.title}}
                     </div>
-                    <div class="thumb-wrapper" *ngSwitchCase="'pdf'">
-                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/pdf_overlay.png');"/>
+                    <div class="material-description f-1 mt-2">
+                      {{materialItem.description || '' | stripTags | slice :0:80}}
                     </div>
-                    <div class="thumb-wrapper" *ngSwitchCase="'image'">
-                      <img [src]="materialItem.thumbnail || materialItem.preview" class="preview" onerror="( this.src = './assets/img/image_overlay.png');"/>
-                    </div>
-                  </ng-container>
-                  <div class="material-title f-1 font-weight-bold mt-3">
-                    {{materialItem.title}}
                   </div>
-                  <div class="material-description f-1 mt-2">
-                    {{materialItem.description || '' | stripTags | slice :0:80}}
-                  </div>
-                </div>
-              </ng-container>
+                </ng-container>
+              </div>
             </ng-container>
-          </div>
+            <ng-template #emptyMaterial>
+              <div class="empty-material-container v-center justify-content-center mt-3">
+                <div class="object-icon v-center mt-1 mr-2">
+                  <i class="i-icon d-block bgc-dark" [class]="'i-' + getMaterialType(material)"></i>
+                </div>
+                <div class="f-8 font-weight-bold mt-4 mb-3">
+                  There is no filtered materials.
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
           <div class="selected-material mt-3" *ngIf="material && material._id">
             <table class="table">
               <thead>

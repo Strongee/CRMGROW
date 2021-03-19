@@ -65,101 +65,117 @@
           <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" type="same">
           </app-slide-tab>
           <ng-container *ngIf="videosLoading && selectedTab.id == 'videos'">
-            <div class="list-loading text-center">
+            <div class="empty-material-container text-center">
               <div class="loader mt-5"></div>
               <h4 class="fw-600 mt-2">Loading videos...</h4>
             </div>
           </ng-container>
-          <div class="empty-list" *ngIf="!videosLoading && selectedTab.id == 'videos' && videos.length == 0">
-            <div class="object-icon v-center">
-              <i class="i-icon i-template d-block bgc-dark"></i>
-            </div>
-            <h4 class="font-weight-bold mt-4 mb-3">
-              There is no videos.
-            </h4>
-          </div>
-          <ng-container *ngIf="selectedTab.label == 'VIDEO'">
-            <div class="material-container mt-3">
-              <ng-container *ngFor="let video of filterVideos">
-                <div class="material-item" (click)="toggleVideo(video)" [class.active]="action['video'] == video">
-                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['video'] == video">
-                  <div class="thumb-wrapper video-wrapper">
-                    <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
-                    <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+          <ng-container *ngIf="selectedTab.id == 'videos' && !videosLoading">
+            <ng-container  *ngIf="filterVideos.length > 0; else emptyVideo">
+              <div class="material-container mt-3">
+                <ng-container *ngFor="let video of filterVideos">
+                  <div class="material-item" (click)="toggleVideo(video)" [class.active]="action['video'] == video">
+                    <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['video'] == video">
+                    <div class="thumb-wrapper video-wrapper">
+                      <img [src]="video.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                      <img [src]="video.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
+                    </div>
+                    <div class="material-title f-1 font-weight-bold mt-3">
+                      {{video.title}}
+                    </div>
+                    <div class="material-description f-1 mt-2">
+                      {{video.description || '' | stripTags | shorten: 80: '...'}}
+                    </div>
                   </div>
-                  <div class="material-title f-1 font-weight-bold mt-3">
-                    {{video.title}}
-                  </div>
-                  <div class="material-description f-1 mt-2">
-                    {{video.description || '' | stripTags | shorten: 80: '...'}}
-                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+            <ng-template #emptyVideo>
+              <div class="empty-material-container v-center justify-content-center mt-3">
+                <div class="object-icon v-center mt-1 mr-2">
+                  <i class="i-icon i-video d-block bgc-dark"></i>
                 </div>
-              </ng-container>
-            </div>
+                <div class="f-8 font-weight-bold mt-4 mb-3">
+                  There is no filtered videos.
+                </div>
+              </div>
+            </ng-template>
           </ng-container>
-          <ng-container *ngIf="selectedTab.label == 'PDF'">
+          <ng-container *ngIf="selectedTab.id == 'pdfs'">
             <ng-container *ngIf="pdfsLoading && selectedTab.id == 'pdfs'">
-              <div class="list-loading text-center">
+              <div class="empty-material-container text-center">
                 <div class="loader mt-5"></div>
                 <h4 class="fw-600 mt-2">Loading PDFs...</h4>
               </div>
             </ng-container>
-            <div class="empty-list" *ngIf="!pdfsLoading && selectedTab.id == 'pdfs' && pdfs.length == 0">
-              <div class="object-icon v-center">
-                <i class="i-icon i-template d-block bgc-dark"></i>
-              </div>
-              <h4 class="font-weight-bold mt-4 mb-3">
-                There is no PDFs.
-              </h4>
-            </div>
-            <div class="material-container mt-3">
-              <ng-container *ngFor="let pdf of filterPdfs">
-                <div class="material-item" (click)="togglePdf(pdf)" [class.active]="action['pdf'] == pdf">
-                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['pdf'] == pdf">
-                  <div class="thumb-wrapper">
-                    <img class="thumbnail" src="{{pdf.thumbnail || pdf.preview}}" alt="{{pdf.title}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
-                  </div>
-                  <div class="material-title f-1 font-weight-bold mt-3">
-                    {{pdf.title}}
-                  </div>
-                  <div class="material-description f-1 mt-2">
-                    {{pdf.description || '' | stripTags | shorten: 80: '...'}}
-                  </div>
+            <ng-container *ngIf="selectedTab.id == 'pdfs' && !pdfsLoading">
+              <ng-container *ngIf="filterPdfs.length > 0; else emptyPdf">
+                <div class="material-container mt-3">
+                  <ng-container *ngFor="let pdf of filterPdfs">
+                    <div class="material-item" (click)="togglePdf(pdf)" [class.active]="action['pdf'] == pdf">
+                      <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['pdf'] == pdf">
+                      <div class="thumb-wrapper">
+                        <img class="thumbnail" src="{{pdf.thumbnail || pdf.preview}}" alt="{{pdf.title}}" onerror="( this.src = './assets/img/pdf_overlay.png' );" />
+                      </div>
+                      <div class="material-title f-1 font-weight-bold mt-3">
+                        {{pdf.title}}
+                      </div>
+                      <div class="material-description f-1 mt-2">
+                        {{pdf.description || '' | stripTags | shorten: 80: '...'}}
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
               </ng-container>
-            </div>
+              <ng-template #emptyPdf>
+                <div class="empty-material-container v-center justify-content-center mt-3">
+                  <div class="object-icon v-center mt-1 mr-2">
+                    <i class="i-icon i-pdf d-block bgc-dark"></i>
+                  </div>
+                  <div class="f-8 font-weight-bold mt-4 mb-3">
+                    There is no filtered PDFs.
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
           </ng-container>
-          <ng-container *ngIf="selectedTab.label == 'IMAGE'">
-            <ng-container *ngIf="imagesLoading && selectedTab.id == 'image'">
-              <div class="list-loading text-center">
+          <ng-container *ngIf="selectedTab.id == 'images'">
+            <ng-container *ngIf="imagesLoading && selectedTab.id == 'images'">
+              <div class="empty-material-container text-center">
                 <div class="loader mt-5"></div>
                 <h4 class="fw-600 mt-2">Loading images...</h4>
               </div>
             </ng-container>
-            <div class="empty-list" *ngIf="!imagesLoading && selectedTab.id == 'images' && images.length == 0">
-              <div class="object-icon v-center">
-                <i class="i-icon i-template d-block bgc-dark"></i>
-              </div>
-              <h4 class="font-weight-bold mt-4 mb-3">
-                There is no images.
-              </h4>
-            </div>
-            <div class="material-container mt-3">
-              <ng-container *ngFor="let image of filterImages">
-                <div class="material-item" (click)="toggleImage(image)" [class.active]="action['image'] == image">
-                  <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['image'] == image">
-                  <div class="thumb-wrapper">
-                    <img class="thumbnail" src="{{image.thumbnail || image.preview}}" alt="{{image.title}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
-                  </div>
-                  <div class="material-title f-1 font-weight-bold mt-3">
-                    {{image.title}}
-                  </div>
-                  <div class="material-description f-1 mt-2">
-                    {{image.description || '' | stripTags | shorten: 80: '...'}}
-                  </div>
+            <ng-container *ngIf="selectedTab.id == 'images' && !imagesLoading">
+              <ng-container *ngIf="filterImages.length > 0; else emptyImage">
+                <div class="material-container mt-3">
+                  <ng-container *ngFor="let image of filterImages">
+                    <div class="material-item" (click)="toggleImage(image)" [class.active]="action['image'] == image">
+                      <img class="confirm" src="../../../assets/img/confirm.svg" alt="check" *ngIf="action['image'] == image">
+                      <div class="thumb-wrapper">
+                        <img class="thumbnail" src="{{image.thumbnail || image.preview}}" alt="{{image.title}}" onerror="( this.src = './assets/img/image_overlay.png' );" />
+                      </div>
+                      <div class="material-title f-1 font-weight-bold mt-3">
+                        {{image.title}}
+                      </div>
+                      <div class="material-description f-1 mt-2">
+                        {{image.description || '' | stripTags | shorten: 80: '...'}}
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
               </ng-container>
-            </div>
+              <ng-template #emptyImage>
+                <div class="empty-material-container v-center justify-content-center mt-3">
+                  <div class="object-icon v-center mt-1 mr-2">
+                    <i class="i-icon i-image d-block bgc-dark"></i>
+                  </div>
+                  <div class="f-8 font-weight-bold mt-4 mb-3">
+                    There is no filtered images.
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
           </ng-container>
           <div class="selected-material mt-3"
                *ngIf="action['video'] && action['video']['_id'] ||

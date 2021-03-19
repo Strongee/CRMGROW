@@ -329,18 +329,41 @@ button:disabled {
   }
 }
 
+.empty-material-container {
+  min-height: 320px;
+  max-height: 320px;
+  width: 450px;
+  padding-right: 20px;
+
+  @media screen and (max-width: 768px) {
+    width: auto;
+    min-height: 300px;
+    max-height: 400px;
+  }
+
+  @media screen and (max-width: 576px) {
+    grid-template-columns: repeat(1, 1fr);
+
+    .material-item {
+      margin: 0 auto;
+    }
+  }
+}
+
 .material-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   grid-row-gap: 20px;
-  max-height: 350px;
+  min-height: 320px;
+  max-height: 320px;
   overflow: auto;
   width: 450px;
   padding-right: 20px;
 
   @media screen and (max-width: 768px) {
     width: auto;
+    min-height: 300px;
     max-height: 400px;
   }
 
