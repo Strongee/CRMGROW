@@ -52,7 +52,7 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
   requesting = false;
   addOnBlur = false;
   error$: Subject<boolean> = new Subject<boolean>();
-  isToggleTeam = true;
+  isToggleTeam = false;
   skip = 0;
   pageCount = 8;
   keyword = '';
@@ -85,6 +85,7 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
           this.teams = [];
           this.users = [];
           this.keyword = search;
+          this.skip = 0;
           return this.teamService.searchTeamUser(search);
         })
       )
@@ -92,8 +93,6 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
         api.subscribe(
           (res) => {
             this.searching = false;
-            const teams = [];
-            const users = [];
             res['team_array'] &&
               res['team_array'].forEach((e) => {
                 this.teams.push(new Team().deserialize(e));
@@ -212,8 +211,6 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           this.loadingMore = false;
-          const teams = [];
-          const users = [];
           res['team_array'] &&
             res['team_array'].forEach((e) => {
               this.teams.push(new Team().deserialize(e));
