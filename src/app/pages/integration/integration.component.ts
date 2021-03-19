@@ -17,6 +17,8 @@ import * as _ from 'lodash';
   styleUrls: ['./integration.component.scss']
 })
 export class IntegrationComponent implements OnInit {
+  isCopied = false;
+  isRegenerated = false;
   user: User = new User();
   connectingMail = '';
   connectingCalendar = '';
@@ -160,12 +162,18 @@ export class IntegrationComponent implements OnInit {
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
+    this.isCopied = true;
     this.toast.success('Copied the key to clipboard');
+    setTimeout(() => {
+      this.isCopied = false;
+    }, 2000);
   }
 
   getToken(): void {
+    this.isRegenerated = true;
     this.connectService.getToken().subscribe((res) => {
       if (res['status'] == true) {
+        this.isRegenerated = false;
         this.garbage.access_token = res['token'];
         this.toast.success('API Key regenerated successfully.');
       }

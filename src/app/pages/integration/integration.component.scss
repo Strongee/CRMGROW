@@ -93,6 +93,15 @@
           box-shadow: none;
         }
       }
+      .header-button {
+        .key-regenerate {
+          img {
+            &.spinner {
+              animation: rotation 1s infinite linear;
+            }
+          }
+        }
+      }
     }
     .integration-body {
       display: grid;
@@ -134,5 +143,14 @@
         width: 100%;
       }
     }
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
   }
 }
