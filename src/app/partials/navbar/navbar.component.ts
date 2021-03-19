@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit {
   actions: any[] = [
     { icon: 'i-plus bg-white', label: 'Add new Contact', id: 'contact' },
     { icon: 'i-task bg-white', label: 'Add new Task', id: 'task' },
-    { icon: 'i-deals bg-white', label: 'Add new deal', id: 'deal' },
+    { icon: 'i-deals bg-white', label: 'Add new Deal', id: 'deal' },
     {
       icon: 'i-calendar bg-white',
       label: 'Add new Meeting',
