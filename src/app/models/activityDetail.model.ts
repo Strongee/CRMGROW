@@ -67,6 +67,7 @@ export class ActivityDetail implements Deserializable {
 export class DetailActivity extends PureActivity {
   group_id: string;
   activity_detail: any; // VIDEO_Tracker, PDF_Tracker, IMAGE_tracker, VIDEO, PDF, IMAGE, TASK, NOTE, PHONE_LOG
+  contact_details: any[];
 
   deserialize(input: any): this {
     Object.assign(this, input);

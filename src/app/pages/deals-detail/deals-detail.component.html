@@ -239,6 +239,63 @@
               <ng-container *ngIf="tab.id === 'all'; else detailsTemplate">
                 <ng-container *ngFor="let activity of showingTimelines">
                   <ng-container [ngSwitch]="activity.type">
+                    
+                    <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'deals'">
+                      <div class="v-center justify-content-between mb-3">
+                        <div class="v-center">
+                          <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                          <div class="f-6">
+                            <span>{{activity.content}}</span>
+                          </div>
+                        </div>
+                        <div class="v-center">
+                          <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                        </div>
+                      </div>
+                      <ng-container>
+                        <div class="main-history-item">
+                          <div class="summary-description mb-3">
+                            <span>{{activity.contact_details?.length}} contact(s) were 
+                              <ng-container *ngIf="activity.content.indexOf('added') !== -1; else removedDescription">
+                                added to this deal.
+                              </ng-container>
+                              <ng-template #removedDescription>
+                                removed from this deal.
+                              </ng-template>
+                            </span>
+                          </div>
+                          <div class="summary position-relative">
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Show contact details</div>
+                          </div>
+                          <div class="detail">
+                            <div class="contact-details">
+                              <div class="contact f-3" *ngFor="let contact of activity.contact_details">
+                                <ng-container *ngIf="contact && contact._id; else removedContact">
+                                  <a class="v-center avatar-wrapper ci-dark mb-2 td-none" [routerLink]="['/contacts/' + contact._id]">
+                                    <div class="avatar bgc-dark text-center text-white mr-1 text-uppercase">{{contact.avatarName}}</div>
+                                    <div class="name font-weight-bold">{{contact.fullName}}</div>
+                                  </a>
+                                  <div class="v-center">
+                                    <i class="i-icon bgc-dark i-message sm mr-1 mt-1"></i>
+                                    <span>{{contact.email}}</span>
+                                  </div>
+                                  <div class="v-center">
+                                    <i class="i-icon bgc-dark i-contact-phone sm mr-1"></i>
+                                    <span>{{contact.cell_phone}}</span>
+                                  </div>
+                                </ng-container>
+                                <ng-template #removedContact>
+                                  As this contact has been removed from your account, you can not see the detail information.
+                                </ng-template>
+                              </div>
+                            </div>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Hide</div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                    
+
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'follow_ups'">
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">

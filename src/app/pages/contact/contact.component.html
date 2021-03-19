@@ -1252,6 +1252,23 @@
                           </div>
                         </div>
                       </div>
+                      <ng-container *ngIf="groupActions[activity.group_id].length > 1">
+                        <div class="summary">
+                          <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                        </div>
+                        <div class="detail">
+                          <div class="relative-activities pt-3">
+                            <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <div class="d-flex mb-1">
+                                <div class="mr-2 f-3 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
+                                <div class="mr-2 f-3 text-capitalize rounded-pill bgc-green-weak text-white px-3">{{detailActivity.content}}</div>
+                                <div class="ml-auto f-3 c-trans56">{{detailActivity.created_at | date: 'MMM dd, hh:mm a'}}</div>
+                              </div>
+                            </ng-container>
+                          </div>
+                          <div class="c-blue mt-2 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                        </div>
+                      </ng-container>
                     </div>
                   </ng-container>
                   <ng-template #removedDealTemplate>

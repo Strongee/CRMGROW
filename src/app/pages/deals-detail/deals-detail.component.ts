@@ -234,14 +234,38 @@ export class DealsDetailComponent implements OnInit {
       .getActivity({ deal: this.dealId })
       .subscribe((res) => {
         if (res) {
-          const activities = res
-            .filter((e) => {
-              return e.type !== 'deals';
-            })
-            .sort((a, b) => {
-              return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
-            });
-          this.activities = activities;
+          const activities = [];
+          let last_activity;
+          let contact_activity;
+          res.forEach((e) => {
+            if (e.type === 'deals') {
+              const activity = e;
+              if (
+                last_activity &&
+                last_activity.type === 'deals' &&
+                ((last_activity.content.indexOf('added') !== -1 &&
+                  e.content.indexOf('added') !== -1) ||
+                  (last_activity.content.indexOf('removed') !== -1 &&
+                    e.content.indexOf('removed') !== -1))
+              ) {
+                contact_activity.contact_details.push(
+                  new Contact().deserialize(e.activity_detail)
+                );
+              } else {
+                activity.contact_details = [
+                  new Contact().deserialize(e.activity_detail)
+                ];
+                contact_activity = activity;
+                activities.push(e);
+              }
+            } else {
+              activities.push(e);
+            }
+            last_activity = { type: e.type, content: e.content };
+          });
+          this.activities = activities.sort((a, b) => {
+            return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
+          });
           this.arrangeActivity();
         }
       });
