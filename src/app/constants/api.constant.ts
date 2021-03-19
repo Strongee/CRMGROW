@@ -317,7 +317,8 @@ export const FILTER = {
 };
 
 export const SMS = {
-  GET: 'sms',
+  GET: 'sms/',
+  GET_MESSAGE: 'sms/get-messages',
   SEARCH_NUMBER: 'sms/search-numbers'
 };
 

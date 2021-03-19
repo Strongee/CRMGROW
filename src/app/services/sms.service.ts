@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { SMS, TASK } from '../constants/api.constant';
+import { Contact } from '../models/contact.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
 
@@ -16,6 +17,15 @@ export class SmsService extends HttpService {
 
   getAllMessage(): any {
     return this.httpClient.get(this.server + SMS.GET);
+  }
+
+  getMessage(contact: Contact): any {
+    return this.httpClient
+      .post(this.server + SMS.GET_MESSAGE, { contact: contact })
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('SMS GET MESSAGE', null))
+      );
   }
 
   searchNumbers(data: any): Observable<any> {
