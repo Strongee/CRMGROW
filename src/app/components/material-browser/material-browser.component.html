@@ -58,7 +58,7 @@
 
   <!-- Material List -->
   <div class="custom-mat-table position-relative">
-    <div class="mat-table-wrapper">
+    <div class="mat-table-wrapper" [class.empty]="!filteredMaterials.length">
       <table class="w-100 page-table"
         mat-table
         [dataSource]="filteredMaterials">

@@ -958,6 +958,14 @@ body{
   table {
     min-width: 1000px;
   }
+
+  &.empty {
+    min-height: 80px;
+  }
+
+  &.mode-2 {
+    min-height: 80px;
+  }
 }
 
 @media screen and (max-width: 992px) and (min-width: 681px) {

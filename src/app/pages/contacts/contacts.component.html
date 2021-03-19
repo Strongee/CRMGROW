@@ -65,7 +65,7 @@
     </div>
   </div>
   <div class="custom-mat-table position-relative">
-    <div class="mat-table-wrapper">
+    <div class="mat-table-wrapper" [class.empty]="!(storeService.pageContacts$ | async).length">
       <table class="w-100 page-table"
         mat-table
         [dataSource]="storeService.pageContacts$ | async | paginate: {id: 'contactPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: contactService.total$ | async}">

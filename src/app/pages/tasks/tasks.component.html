@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="position-relative">
-    <div class="mat-table-wrapper">
+    <div class="mat-table-wrapper" [class.empty]="!(storeService.tasks$ | async).length && !(taskService.total$ | async)">
       <table class="w-100 page-table" mat-table multiTemplateDataRows [dataSource]="storeService.tasks$ | async | paginate: {id: 'tasks', itemsPerPage: pageSize.id, currentPage: page, totalItems: taskService.total$ | async}">
 
         <ng-container matColumnDef="loader-cell">

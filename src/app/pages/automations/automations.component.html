@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="my-3 position-relative">
-    <div class="mat-table-wrapper">
+    <div class="mat-table-wrapper" [class.empty]="!filteredResult.length">
       <div class="updating-status" *ngIf="automations.length && (automationService.loading$ | async) === STATUS.REQUEST">
         LOADING
       </div>
