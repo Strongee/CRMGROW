@@ -8,19 +8,21 @@ import { Automation } from '../models/automation.model';
 import { Contact } from '../models/contact.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
+import {SearchOption} from "../models/searchOption.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutomationService extends HttpService {
-  constructor(errorService: ErrorService, private httpClient: HttpClient) {
-    super(errorService);
-  }
 
   automations: BehaviorSubject<Automation[]> = new BehaviorSubject([]);
   automations$ = this.automations.asObservable();
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loading$ = this.loadStatus.asObservable();
+
+  constructor(errorService: ErrorService, private httpClient: HttpClient) {
+    super(errorService);
+  }
 
   /**
    * Load All Automations
@@ -67,6 +69,7 @@ export class AutomationService extends HttpService {
         catchError(this.handleError('SEARCH AUTOMATION', []))
       );
   }
+
   getByPage(page: string): Observable<any> {
     return this.httpClient.get(this.server + AUTOMATION.LOAD_PAGE).pipe(
       map((res) => res),
@@ -172,5 +175,16 @@ export class AutomationService extends HttpService {
   clear$(): void {
     this.loadStatus.next(STATUS.NONE);
     this.automations.next([]);
+  }
+
+  searchContact(id: string, keyword: string): Observable<Contact[]> {
+    return this.httpClient
+      .post(this.server + AUTOMATION.SEARCH_CONTACT, { automation: id, search: keyword })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new Contact().deserialize(e))
+        ),
+        catchError(this.handleError('SEARCH AUTOMATION CONTACT', []))
+      );
   }
 }

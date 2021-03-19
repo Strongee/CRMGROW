@@ -194,7 +194,8 @@ export const AUTOMATION = {
   ASSIGN: 'timeline/create',
   ASSIGN_NEW: 'timeline/create_new',
   CANCEL: 'timeline/cancel/',
-  LOAD_OWN: 'automation/list/own'
+  LOAD_OWN: 'automation/list/own',
+  SEARCH_CONTACT: 'automation/search-contact'
 };
 export const APPOINTMENT = {
   LOAD_CALENDARS: 'appointment/calendar',

@@ -163,6 +163,8 @@ export class AutoflowComponent
     if (this._id) {
       if (page !== 'contacts') {
         this.loadAutomation(this._id, this.pageSize.id, 0);
+      } else {
+        this.loadContacts(this._id, this.pageSize.id, 0);
       }
     } else {
       this.auth = 'owner';
@@ -226,11 +228,39 @@ export class AutoflowComponent
       );
   }
 
-  loadContacts(id): void {
-    this.automationService.getAssignedContacts(id).subscribe((res) => {
-      if (res) {
-      }
-    });
+  loadContacts(id: string, count: number, page: number): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.automationService
+      .get(id, count, page)
+      .subscribe(
+        (res) => {
+          this.automation = res;
+          this.contacts = this.automation.contacts.count;
+          const mode = this.route.snapshot.params['mode'];
+          if (this.automation.contacts.contacts.length) {
+            this.assignedContactLoading = true;
+            this.automationService
+              .getStatus(this.automation._id, this.automation.contacts.contacts)
+              .subscribe((contacts) => {
+                this.assignedContactLoading = false;
+                this.pageContacts = [];
+                console.log("load contacts ==========>", contacts);
+                for (let i = 0; i < contacts.length; i++) {
+                  const newContact = new ContactActivity().deserialize(
+                    contacts[i]
+                  );
+                  this.pageContacts.push(newContact);
+                }
+              });
+          }
+
+          if (mode === 'edit') {
+            this.automation_id = res['_id'];
+          }
+          this.automation_title = res['title'];
+        },
+        (err) => {}
+      );
   }
 
   arrangeAutomationData(): void {
@@ -1592,7 +1622,9 @@ export class AutoflowComponent
     // Normal Load by Page
     let skip = (page - 1) * this.pageSize.id;
     skip = skip < 0 ? 0 : skip;
-    this.loadAutomation(this._id, this.pageSize.id, skip);
+    if (this.searchStr === '') {
+      this.loadAutomation(this._id, this.pageSize.id, skip);
+    }
   }
   /**
    * Change the Page Size
@@ -1617,11 +1649,23 @@ export class AutoflowComponent
   }
 
   changeSearchStr(): void {
-    this.contactService.searchStr.next(this.searchStr);
+    this.automationService
+      .searchContact(this.automation._id, this.searchStr)
+      .subscribe((res) => {
+        if (res) {
+          this.pageContacts = [];
+          for (let i = 0; i < res.length; i++) {
+            const newContact = new ContactActivity().deserialize(res[i]);
+            this.pageContacts.push(newContact);
+          }
+          this.contacts = this.pageContacts.length;
+        }
+      });
   }
 
   clearSearchStr(): void {
-    this.contactService.searchStr.next('');
+    this.searchStr = '';
+    this.changePage(1);
   }
 
   openContact(contact: ContactActivity): void {
