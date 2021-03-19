@@ -16,7 +16,10 @@ export class SmsService extends HttpService {
   }
 
   getAllMessage(): any {
-    return this.httpClient.get(this.server + SMS.GET);
+    return this.httpClient.get(this.server + SMS.GET).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('SMS GET ALL', null))
+    );
   }
 
   getMessage(contact: Contact): any {

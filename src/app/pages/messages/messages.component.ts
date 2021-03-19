@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  AfterViewChecked,
-  ElementRef,
-  ViewChild
-} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { UserService } from 'src/app/services/user.service';
@@ -22,7 +16,9 @@ import { Subscription } from 'rxjs';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit, AfterViewChecked {
+export class MessagesComponent implements OnInit {
+  loadingContact = false;
+  loadingMessage = false;
   contacts = [];
   selectedContact: Contact = new Contact();
   messages = [];
@@ -61,14 +57,10 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.loadingContact = true;
     this.messageLoadTimer = setInterval(() => {
       this.loadMessage();
     }, 5000);
-    this.scrollToBottom();
-  }
-
-  ngAfterViewChecked(): void {
-    this.scrollToBottom();
   }
 
   ngOnDestroy(): void {
@@ -77,9 +69,14 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   }
 
   scrollToBottom(): void {
-    try {
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    } catch (err) {}
+    const _SELF = this;
+    setTimeout(() => {
+      _SELF.myScrollContainer.nativeElement.scroll({
+        top: _SELF.myScrollContainer.nativeElement.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 500);
   }
 
   loadMessage(): void {
@@ -87,28 +84,27 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
     this.messageLoadSubscription = this.smsService
       .getAllMessage()
       .subscribe((res) => {
-        if (res['status']) {
-          this.contacts = [];
-          this.messages = [];
-          res['data'].forEach((data) => {
-            if (data.contacts.length > 0) {
-              data.contacts.forEach((contact) => {
-                const contact_item = {
-                  lastest_message: data.content,
-                  lastest_at: data.updated_at
-                };
-                this.contacts.push(
-                  Object.assign(
-                    new Contact().deserialize(contact),
-                    contact_item
-                  )
-                );
-                if (Object.keys(this.selectedContact).length == 0) {
-                  this.selectContact(this.contacts[0]);
-                }
-              });
+        this.loadingContact = false;
+        this.contacts = [];
+        for (let index = 0; index < res.length; index++) {
+          if (res[index].contacts.length > 0) {
+            for (let i = 0; i < res[index].contacts.length; i++) {
+              const contact_item = {
+                lastest_message: res[index].content,
+                lastest_at: res[index].updated_at
+              };
+              this.contacts.push(
+                Object.assign(
+                  new Contact().deserialize(res[index].contacts[0]),
+                  contact_item
+                )
+              );
+              this.contacts = _.orderBy(this.contacts, ['updated_at'], ['asc']);
             }
-          });
+          }
+        }
+        if (Object.keys(this.selectedContact).length == 0) {
+          this.selectContact(this.contacts[0]);
         }
       });
   }
@@ -150,14 +146,19 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   }
 
   selectContact(contact: any): void {
+    this.loadingMessage = true;
     this.selectedContact = new Contact().deserialize(contact);
     this.smsService.getMessage(this.selectedContact).subscribe((res) => {
-      this.messages = [];
-      const message = {
-        id: contact._id,
-        messages: res
-      };
-      this.messages.push(message);
+      if (res) {
+        this.loadingMessage = false;
+        this.messages = [];
+        const message = {
+          id: contact._id,
+          messages: res
+        };
+        this.messages.push(message);
+        this.scrollToBottom();
+      }
     });
     this.isNew = false;
     this.showMessage = true;
@@ -303,6 +304,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
             this.selectedContact = this.contacts[0];
             this.messageText = '';
           }
+          this.scrollToBottom();
         });
       }
     });
