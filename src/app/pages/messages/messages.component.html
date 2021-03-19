@@ -27,10 +27,24 @@
                 <div class="contact-name w-100">
                     <div class="v-center justify-content-between">
                         <span class="f-3 fw-600">{{contact.fullName}}</span>
-                        <span class="f-1 op-56">{{contact.received_at}}</span>
+                        <ng-container *ngIf="calcDate(contact.lastest_at) == 0">
+                            <span class="f-1 op-56">
+                                {{contact.lastest_at | date:'h:mm a'}}
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="calcDate(contact.lastest_at) > 0 && calcDate(contact.lastest_at) < 8">
+                            <span class="f-1 op-56">
+                                {{contact.lastest_at | date:'EEE'}}
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="calcDate(contact.lastest_at) > 8">
+                            <span class="f-1 op-56">
+                                {{contact.lastest_at | date:'EEE dd, YYYY'}}
+                            </span>
+                        </ng-container>
                     </div>
                     <div class="f-1 mt-1">
-                        {{contact.latest_message}}
+                        {{contact.lastest_message}}
                     </div>
                 </div>
             </div>
@@ -64,7 +78,7 @@
                     ></app-input-contacts>
                 </div>
             </ng-template>
-            <div class="p-3 border-bottom message-list">
+            <div #scrollBottom class="p-3 border-bottom message-list">
                 <ng-container *ngFor="let messageList of messages">
                     <ng-container *ngFor="let newContact of newContacts">
                         <ng-container *ngIf="isNew && messageList.id === newContact._id">
