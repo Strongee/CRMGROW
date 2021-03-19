@@ -88,6 +88,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   selectedContact: Contact = new Contact();
   groupActions = {};
   mainTimelines: DetailActivity[] = [];
+  sentHistory = {}; // {send activity id: material id}
   details: any = {};
   detailData: any = {};
   sendActions = {};
@@ -235,6 +236,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.groupActions = {};
     this.mainTimelines = [];
     this.details = {};
+    this.sentHistory = {};
     for (let i = this.contact.activity.length - 1; i >= 0; i--) {
       const e = this.contact.activity[i];
       const group = this.generateUniqueId(e);
@@ -329,6 +331,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (activity.type !== 'emails') {
           activity.activity_detail['content'] = activity.content;
           activity.activity_detail['subject'] = activity.subject;
+          this.sentHistory[activity._id] = material_id;
         }
         this.details[material_id] = activity.activity_detail;
         const group_id = `${material_id}_${activity._id}`;
@@ -1267,21 +1270,33 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   convertContent(content = ''): any {
-    // const htmlContent = content.split('<div>');
-    // let convertString = '';
-    // htmlContent.forEach((html) => {
-    //   if (html.indexOf('material-object') !== -1) {
-    //     convertString = convertString + html.match('<a(.*)a>')[0];
-    //   }
-    // });
-    // return convertString;
     const dom = document.createElement('div');
     dom.innerHTML = content;
     const materials = dom.querySelectorAll('.material-object');
     let convertString = '';
+    const activityIds = [];
     materials.forEach((material) => {
+      const url = material.getAttribute('href');
+      const id = url.replace(
+        new RegExp(
+          environment.website +
+            '/video1/|' +
+            environment.website +
+            '/pdf1/|' +
+            environment.website +
+            '/image1/',
+          'gi'
+        ),
+        ''
+      );
+      activityIds.push(id);
       convertString += material.outerHTML;
     });
+    if (materials.length === 1) {
+      const material = this.details[this.sentHistory[activityIds[0]]];
+      convertString += `<div class="title">${material?.title}</div><div class="description">${material?.description}</div>`;
+      convertString = `<div class="single-material-send">${convertString}</div>`;
+    }
     return convertString;
   }
 
@@ -1348,7 +1363,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     });
     if (hasThumbed || finishedCount) {
-      let html = `<div class="c-blue font-weight-bold">${material.title}</div>`;
+      let html = `<div class="c-blue font-weight-bold">${material?.title}</div>`;
       if (hasThumbed) {
         html += '<div class="i-icon i-like bgc-blue thumb-icon mx-1"></div>';
       }
@@ -1357,7 +1372,30 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
       return html;
     } else {
-      return '';
+      return `<div class="font-weight-bold">${material?.title}</div>`;
+    }
+  }
+
+  getPdfImageBadge(activity): string {
+    let hasThumbed = false;
+    const material = this.details[activity.videos];
+    this.groupActions[activity.group_id].some((e) => {
+      if (!e.activity_detail) {
+        return;
+      }
+      if (e.activity_detail.type === 'thumbs up') {
+        hasThumbed = true;
+        return true;
+      }
+    });
+    if (hasThumbed) {
+      let html = `<div class="c-blue font-weight-bold">${material?.title}</div>`;
+      if (hasThumbed) {
+        html += '<div class="i-icon i-like bgc-blue thumb-icon mx-1"></div>';
+      }
+      return html;
+    } else {
+      return `<div class="font-weight-bold">${material?.title}</div>`;
     }
   }
 

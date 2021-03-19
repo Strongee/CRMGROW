@@ -701,11 +701,14 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
+                    <div class="v-center ml-auto">
+                      <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                    </div>
                   </div>
                   <ng-container *ngIf="activity.activity_detail;">
                     <div class="main-history-item">
                       <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiVideoHistory">
-                        <div class="video-sent-activity-content">
+                        <div class="material-sent-activity-content">
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.videos]?.title}}
                           </div>
@@ -738,21 +741,32 @@
                       <ng-template #multiVideoHistory>
                         <div [innerHTML]="getVideoBadge(activity)" class="d-flex"></div>
                         <div class="summary position-relative">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.videos]?.title}}
-                          </div>
                           <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.videos]?.preview}}"/>
+                            <div class="video-duration">{{details[activity.videos]?.duration | timeDuration}}</div>
                           </a>
+                          <div class="recent-activity v-center mb-4">
+                            <div class="content font-weight-bold">{{activity.content}}</div>
+                            <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
+                              <div class="duration ml-auto">
+                                {{(activity.activity_detail.type ? (activity.activity_detail.duration || '--') + 's' : '') | timeDuration}}
+                              </div>
+                              <div class="from">
+                                {{(activity.activity_detail.start * 1000 || (activity.activity_detail.material_last ? activity.activity_detail.material_last * 1000 - activity.activity_detail.duration : 0)) | timeDuration}}
+                              </div>
+                              <div class="to">
+                                {{(activity.activity_detail.to *1000 || activity.activity_detail.material_last*1000) | timeDuration}}
+                              </div>
+                            </ng-container>
+                            <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
+                          </div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
                         <div class="detail">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.videos]?.title}}
-                          </div>
                           <a class="material-thumbnail" href="{{SITE}}/video?video={{details[activity.videos]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.videos]?.preview}}"/>
+                            <div class="video-duration">{{details[activity.videos]?.duration | timeDuration}}</div>
                           </a>
                           <div class="f-6 mb-3" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
                           <table class="table">
@@ -760,6 +774,8 @@
                               <tr>
                                 <th class="session-col">session</th>
                                 <th class="duration-col">duration</th>
+                                <th class="start-col">from</th>
+                                <th class="end-col">to</th>
                                 <th class="date-col">date</th>
                               </tr>
                             </thead>
@@ -769,7 +785,17 @@
                                   <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
                                   <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
                                 </td>
-                                <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
+                                <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
+                                  <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
+                                  <td class="start-col">{{(detailActivity.activity_detail.start * 1000 || (detailActivity.activity_detail.material_last ? detailActivity.activity_detail.material_last * 1000 - detailActivity.activity_detail.duration : 0)) | timeDuration}}</td>
+                                  <td class="end-col">{{(detailActivity.activity_detail.to *1000 || detailActivity.activity_detail.material_last*1000) | timeDuration}}</td>
+                                </ng-container>
+                                <ng-template #normalTracker>
+                                  <td class="duration-col"></td>
+                                  <td class="start-col"></td>
+                                  <td class="end-col"></td>
+                                </ng-template>
+                                
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
                                     {{detailActivity.created_at | date: 'MMM dd yyyy'}}
@@ -795,21 +821,14 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
+                    <div class="v-center ml-auto">
+                      <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                    </div>
                   </div>
-                  <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                  <ng-container *ngIf="activity.activity_detail;">
                     <div class="main-history-item">
                       <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiPdfHistory">
-                        <div class="summary position-relative">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.pdfs]?.title}}
-                          </div>
-                          <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
-                            <img src="{{details[activity.pdfs]?.preview}}"/>
-                          </a>
-                          <div class="gradient-bottom"></div>
-                          <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
-                        </div>
-                        <div class="detail">
+                        <div class="material-sent-activity-content">
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.pdfs]?.title}}
                           </div>
@@ -817,24 +836,25 @@
                             <img src="{{details[activity.pdfs]?.preview}}"/>
                           </a>
                           <div class="f-6 mb-3" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
-                          <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                         </div>
                       </ng-container>
                       <ng-template #multiPdfHistory>
+                        <div [innerHTML]="getPdfImageBadge(activity)" class="d-flex"></div>
                         <div class="summary position-relative">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.pdfs]?.title}}
-                          </div>
                           <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.pdfs]?.preview}}"/>
                           </a>
+                          <div class="recent-activity v-center mb-4">
+                            <div class="content font-weight-bold">{{activity.content}}</div>
+                            <ng-container *ngIf="activity.type === 'watched'">
+                              <div class="duration"></div>
+                            </ng-container>
+                            <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
+                          </div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
                         <div class="detail">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.pdfs]?.title}}
-                          </div>
                           <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.pdfs]?.preview}}"/>
                           </a>
@@ -863,47 +883,40 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
-
+                    <div class="v-center ml-auto">
+                      <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                    </div>
                   </div>
                   <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
                     <div class="main-history-item">
                       <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiImageHistory">
-                        <div class="summary position-relative">
+                        <div class="material-sent-activity-content">
                           <div class="title f-6 font-weight-bold">
                             {{details[activity.images]?.title}}
                           </div>
                           <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.images]?.preview}}"/>
                           </a>
-                          <div class="gradient-bottom"></div>
-                          <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
-                        </div>
-                        <div class="detail">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.images]?.title}}
-                          </div>
-                          <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
-                            <img src="{{details[activity.images]?.preview}}"/>
-                          </a>
-                          <div class="f-6 mb-3" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
-                          <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          <div class="f-6 mb-3 description" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
                         </div>
                       </ng-container>
                       <ng-template #multiImageHistory>
+                        <div [innerHTML]="getPdfImageBadge(activity)" class="d-flex"></div>
                         <div class="summary position-relative">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.images]?.title}}
-                          </div>
                           <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.images]?.preview}}"/>
                           </a>
+                          <div class="recent-activity v-center mb-4">
+                            <div class="content font-weight-bold">{{activity.content}}</div>
+                            <ng-container *ngIf="activity.type === 'watched'">
+                              <div class="duration"></div>
+                            </ng-container>
+                            <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
+                          </div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                         </div>
                         <div class="detail">
-                          <div class="title f-6 font-weight-bold">
-                            {{details[activity.images]?.title}}
-                          </div>
                           <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.images]?.preview}}"/>
                           </a>
@@ -1410,7 +1423,9 @@
                             <thead>
                               <tr>
                                 <th class="session-col">session</th>
-                                <th class="duration-col"></th>
+                                <th class="duration-col">duration</th>
+                                <th class="start-col">from</th>
+                                <th class="end-col">to</th>
                                 <th class="date-col">date</th>
                               </tr>
                             </thead>
@@ -1420,9 +1435,16 @@
                                   <span class="f-3 font-weight-bold">#{{(detail.data_type === 'emails' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
                                   <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
                                 </td>
-                                <td class="duration-col">
-                                  <span class="f-3 font-weight-bold">{{(detailActivity.activity_detail && detailActivity.activity_detail.duration ? detailActivity.activity_detail.duration + 's' : '') | timeDuration}}</span>
-                                </td>
+                                <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
+                                  <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
+                                  <td class="start-col">{{(detailActivity.activity_detail.start * 1000 || (detailActivity.activity_detail.material_last ? detailActivity.activity_detail.material_last * 1000 - detailActivity.activity_detail.duration : 0)) | timeDuration}}</td>
+                                  <td class="end-col">{{(detailActivity.activity_detail.to *1000 || detailActivity.activity_detail.material_last*1000) | timeDuration}}</td>
+                                </ng-container>
+                                <ng-template #normalTracker>
+                                  <td class="duration-col"></td>
+                                  <td class="start-col"></td>
+                                  <td class="end-col"></td>
+                                </ng-template>
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
                                     {{detailActivity.created_at | date: 'MMM dd yyyy'}}
