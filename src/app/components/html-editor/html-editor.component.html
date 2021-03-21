@@ -18,13 +18,13 @@
           <a class="f-3 font-weight-bold">Create New Template ...</a>
         </div>
         <ng-container *ngFor="let template of (templateService.templates$ | async)">
-          <div class="template" *ngIf="template.type === 'email'" (click)="selectTemplate(template)">
+          <div class="template" *ngIf="template.type === 'email'">
             <div class="v-center">
-              <div class="f-3 font-weight-bold">{{template.title}}</div>
-              <div class="c-badge rect ml-auto text-uppercase" [class]="template.role || 'own'">{{template.role || 'own'}}</div>
+              <div class="f-3 font-weight-bold w-100" (click)="selectTemplate(template)">{{template.title}}</div>
+              <a class="ml-auto" [routerLink]="['templates/' + template._id]" target="blank">
+                <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+              </a>
             </div>
-            <!-- <div class="f-2 font-weight-bold">{{template.subject}}</div> -->
-            <!-- <div class="f-1">{{template.content | stripTags | shorten: 40: '...'}}</div> -->
           </div>
         </ng-container>
       </div>
