@@ -38,6 +38,7 @@ import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { FormControl } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { SendBulkTextComponent } from 'src/app/components/send-bulk-text/send-bulk-text.component';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -133,6 +134,7 @@ export class DealsDetailComponent implements OnInit {
     private appointmentService: AppointmentService,
     private teamService: TeamService,
     private handlerService: HandlerService,
+    private toast: ToastrService,
     private location: Location,
     private element: ElementRef
   ) {
@@ -422,18 +424,33 @@ export class DealsDetailComponent implements OnInit {
   }
 
   openSendText(): void {
+    const contacts = [];
+    this.deal.contacts.forEach((e) => {
+      if (e.cell_phone) {
+        contacts.push(e);
+      }
+    });
+    if (!contacts.length) {
+      this.toast.error(
+        '',
+        `You can't message as any contacts of this deal don't have cell phone number.`
+      );
+      return;
+    }
     this.dialog
       .open(SendBulkTextComponent, {
         position: {
           bottom: '0px',
           right: '0px'
         },
-        panelClass: 'send-email',
-        backdropClass: 'cdk-send-email',
+        width: '96vw',
+        maxWidth: '600px',
+        panelClass: 'full-panel',
+        backdropClass: 'cdk-full-panel-bg',
         disableClose: false,
         data: {
           deal: this.dealId,
-          contacts: this.deal.contacts
+          contacts: contacts
         }
       })
       .afterClosed()

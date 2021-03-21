@@ -1352,4 +1352,11 @@ export class MaterialsComponent implements OnInit {
     this.pageSize = type;
     this.page = 1;
   }
+
+  download(video): void {
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = video.url;
+    a.click();
+  }
 }

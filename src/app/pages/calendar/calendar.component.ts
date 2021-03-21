@@ -53,6 +53,9 @@ export class CalendarComponent implements OnInit {
   dayEvents: any = {};
   showingEvents: CalendarEvent[] = [];
 
+  // Event id from router
+  eventId: string = '';
+
   // Calendars
   accounts: any[] = [];
   calendars = {};
@@ -178,6 +181,10 @@ export class CalendarComponent implements OnInit {
             });
         }
       }
+
+      if (params['event']) {
+        this.eventId = params['event'];
+      }
     });
     let mode, year, month, day;
     mode = this.route.snapshot.params['mode'];
@@ -271,6 +278,7 @@ export class CalendarComponent implements OnInit {
               });
             }
           });
+
           this.filterEvents();
         }
       });
@@ -328,6 +336,22 @@ export class CalendarComponent implements OnInit {
         }
       }
     });
+
+    // Open the popup if the router has event id
+    if (this.eventId) {
+      setTimeout(() => {
+        const dom = document.querySelector(`[event='${this.eventId}']`);
+        this.events.some((e) => {
+          if (this.eventId === e.meta.event_id) {
+            if (dom) {
+              this.openDetail(e, dom);
+            }
+            return true;
+          }
+        });
+        this.eventId = '';
+      }, 1000);
+    }
   }
 
   newEvent(): void {

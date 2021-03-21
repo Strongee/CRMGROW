@@ -337,6 +337,10 @@
                     <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                   </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="element.material_type === 'video' && element.type !== 'youtube' && element.type !== 'vimeo'" (click)="download(element)">
+                    <i class="i-icon i-download bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Download</span>
+                  </button>
                   <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(element)">
                     <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-3 f-3 font-weight-bold">Delete</span>

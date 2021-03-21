@@ -1291,7 +1291,12 @@ table {
     height: 48px;
     font-size: 20px;
     line-height: 48px;
+    min-width: 48px;
   }
+}
+
+.text-overflow-wrap {
+  overflow-wrap: anywhere;
 }
 
 .avatar {
@@ -1983,6 +1988,21 @@ body {
   }
   @media screen and (max-width: 576px) {
     margin-right: 0 !important;
+  }
+}
+
+.cdk-full-panel {
+  background-color: transparent;
+}
+.full-panel {
+  transform: translate(-50px, -50px);
+
+  mat-dialog-container {
+    padding: 0px;
+  }
+  
+  @media screen and (max-width: 708px) {
+    transform: translate(-2vw, -16px);
   }
 }
 

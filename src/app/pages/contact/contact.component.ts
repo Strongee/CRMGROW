@@ -1129,8 +1129,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     const durationTime = this.durations.filter(
       (time) => time.value == duration
     );
-    if (durationTime) {
+    if (durationTime && durationTime.length) {
       return durationTime[0].text;
+    } else {
+      return '';
     }
   }
 
@@ -1344,6 +1346,23 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.detailContacts = contacts;
           }
         });
+    }
+  }
+
+  openDetailEvent(detail): void {
+    if (detail && detail.due_start) {
+      let due_date;
+      if (detail.due_start instanceof Date) {
+        due_date = detail.due_start;
+      } else {
+        due_date = new Date(detail.due_start + '');
+      }
+      const month = due_date.getMonth() + 1;
+      const year = due_date.getFullYear();
+      const route = `/calendar/month/${year}/${month}/1`;
+      this.router.navigate([route], {
+        queryParams: { event: detail.event_id }
+      });
     }
   }
 

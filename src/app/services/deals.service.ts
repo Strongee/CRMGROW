@@ -306,4 +306,11 @@ export class DealsService extends HttpService {
         catchError(this.handleError('REMOVE DEAL GROUP CALL', false))
       );
   }
+
+  sendText(data: any): Observable<boolean> {
+    return this.httpClient.post(this.server + DEAL.SEND_TEXT, data).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('SEND DEAL TEXT', false))
+    );
+  }
 }

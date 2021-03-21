@@ -286,6 +286,7 @@ export const DEAL = {
   GET_GROUP_CALL: 'deal/get-team-calls',
   UPDAGE_GROUP_CALL: '',
   REMOVE_GROUP_CALL: '',
+  SEND_TEXT: 'deal/send-text',
   UPDATE_CONTACT: 'deal/update-contact/'
 };
 

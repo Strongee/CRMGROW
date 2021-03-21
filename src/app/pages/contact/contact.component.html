@@ -10,7 +10,7 @@
           {{contact.avatarName}}
         </div>
         <div class="contact-main-info ml-3">
-          <div class="f-20 font-weight-bold">{{contact.fullName}}</div>
+          <div class="f-20 font-weight-bold text-overflow-wrap">{{contact.fullName}}</div>
           <div class="f-3 op-40">{{contact.last_activity_time | date :'MM/dd/yyyy'}}</div>
         </div>
         <div ngbDropdown class="ml-auto button-more p-0">
@@ -962,31 +962,29 @@
                   </div>
                   <ng-container *ngIf="activity.activity_detail; else removedAppointmentTemplate">
                     <div class="main-history-item">
-                      <app-accordion [showIndicator]="show" [hideIndicator]="hide">
-                        <ng-template #show>
-                          <div class="content f-6 position-relative">
-                            <div class="font-weight-bold">
-                              {{activity.activity_detail.title}}
-                            </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
-                            <div class="gradient-bottom"></div>
-                            <div class="f-3 fw-600 c-blue mt-1">
-                              Expand
-                            </div>
+                      <div class="summary">
+                        <div class="content f-6 position-relative">
+                          <a class="font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(activity.activity_detail)">
+                            {{activity.activity_detail.title}}
+                          </a>
+                          <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
+                          <div class="gradient-bottom"></div>
+                          <div class="f-3 fw-600 c-blue mt-1 c-pointer" (click)="showDetail($event)">
+                            Expand
                           </div>
-                        </ng-template>
-                        <ng-template #hide>
-                          <div class="content">
-                            <div class="f-6 font-weight-bold">
-                              {{activity.activity_detail.title}}
-                            </div>
-                            <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | makeRedirect"></div>
-                            <div class="f-3 fw-600 c-blue mt-1">
-                              Collapse
-                            </div>
+                        </div>
+                      </div>
+                      <div class="detail">
+                        <div class="content">
+                          <a class="f-6 font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(activity.activity_detail)">
+                            {{activity.activity_detail.title}}
+                          </a>
+                          <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | makeRedirect"></div>
+                          <div class="f-3 fw-600 c-blue mt-1 c-pointer" (click)="hideDetail($event)">
+                            Collapse
                           </div>
-                        </ng-template>
-                      </app-accordion>
+                        </div>
+                      </div>
                       <div class="v-center mt-3">
                         <div class="date">
                           <div class="f-4 fw-600 op-40">
@@ -1538,31 +1536,29 @@
                       </div> -->
                     </div>
                     <div class="main-history-item">
-                      <app-accordion [showIndicator]="show" [hideIndicator]="hide">
-                        <ng-template #show>
-                          <div class="content f-6 position-relative">
-                            <div class="font-weight-bold">
-                              {{detail.title}}
-                            </div>
-                            <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
-                            <div class="gradient-bottom"></div>
-                            <div class="f-3 fw-600 c-blue mt-1">
-                              Expand
-                            </div>
+                      <div class="summary">
+                        <div class="content f-6 position-relative">
+                          <a class="font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(detail)">
+                            {{detail.title}}
+                          </a>
+                          <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
+                          <div class="gradient-bottom"></div>
+                          <div class="f-3 fw-600 c-blue mt-1 c-pointer" (click)="showDetail($event)">
+                            Expand
                           </div>
-                        </ng-template>
-                        <ng-template #hide>
-                          <div class="content">
-                            <div class="f-6 font-weight-bold">
-                              {{detail.title}}
-                            </div>
-                            <div class="f-6" [innerHTML]="detail.description || '' | makeRedirect"></div>
-                            <div class="f-3 fw-600 c-blue mt-1">
-                              Collapse
-                            </div>
+                        </div>
+                      </div>
+                      <div class="detail">
+                        <div class="content">
+                          <a class="f-6 font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(detail)">
+                            {{detail.title}}
+                          </a>
+                          <div class="f-6" [innerHTML]="detail.description || '' | makeRedirect"></div>
+                          <div class="f-3 fw-600 c-blue mt-1 c-pointer" (click)="hideDetail($event)">
+                            Collapse
                           </div>
-                        </ng-template>
-                      </app-accordion>
+                        </div>
+                      </div>
                       <div class="v-center mt-3">
                         <div class="date">
                           <div class="f-4 fw-600 op-40">

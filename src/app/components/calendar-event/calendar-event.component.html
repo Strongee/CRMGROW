@@ -51,7 +51,7 @@
                 <label for="guests" class="mb-1">{{event.meta.guests.length}} guests</label>
                 <ng-container *ngFor="let guest of event.meta.guests">
                     <div class="v-center member mb-1">
-                        <div class="avatar {{guest.response}} mr-1"></div>
+                        <div class="response {{guest.response}} mr-1"></div>
                         <span class="f-2 fw-600">{{guest.email}}</span>
                     </div>
                 </ng-container>

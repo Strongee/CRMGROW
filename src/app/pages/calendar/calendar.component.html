@@ -92,7 +92,8 @@
                     <div class="cal-event m-0" *ngFor="let event of day.events"
                         [ngStyle]="{'background-color': calendars[event.meta.calendar_id]?.color}"
                         #monthEventView
-                        (mwlClick)="openDetail(event, monthEventView)">
+                        (mwlClick)="openDetail(event, monthEventView)"
+                        [attr.event]="event.meta?.event_id">
                         <div class="f-2 font-weight-bold c-white p-1 cal-event-body">
                             {{(event.title || '(No Title)') | stripTags | shorten: 20: '...'}}
                         </div>
