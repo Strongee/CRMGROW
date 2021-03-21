@@ -16,38 +16,55 @@
                 <h3 class="f-8 font-weight-bold m-0" *ngIf="!isNew">Contacts</h3>
                 <h3 class="f-8 font-weight-bold m-0" *ngIf="isNew">New message</h3>
             </div>
-            <div class="d-flex p-2 c-pointer contact"
-                [class]="{'selected': contact._id == selectedContact._id}"
-                *ngFor="let contact of contacts" ngbDropdown
-                (click)="selectContact(contact)"
-            >
-                <div class="contact-avatar f-3 font-weight-bold mr-2">
-                    {{contact.avatarName}}
-                </div>
-                <div class="contact-name w-100">
-                    <div class="v-center justify-content-between">
-                        <span class="f-3 fw-600">{{contact.fullName}}</span>
-                        <ng-container *ngIf="calcDate(contact.lastest_at) == 0">
-                            <span class="f-1 op-56">
-                                {{contact.lastest_at | date:'h:mm a'}}
-                            </span>
-                        </ng-container>
-                        <ng-container *ngIf="calcDate(contact.lastest_at) > 0 && calcDate(contact.lastest_at) < 8">
-                            <span class="f-1 op-56">
-                                {{contact.lastest_at | date:'EEE'}}
-                            </span>
-                        </ng-container>
-                        <ng-container *ngIf="calcDate(contact.lastest_at) > 8">
-                            <span class="f-1 op-56">
-                                {{contact.lastest_at | date:'EEE dd, YYYY'}}
-                            </span>
-                        </ng-container>
+            <ng-container *ngIf="contacts.length; else noContacts">
+                <div class="d-flex p-2 c-pointer contact"
+                    [class]="{'selected': contact._id == selectedContact._id}"
+                    *ngFor="let contact of contacts" ngbDropdown
+                    (click)="selectContact(contact)"
+                >
+                    <div class="contact-avatar f-3 font-weight-bold mr-2">
+                        {{contact.avatarName}}
                     </div>
-                    <div class="f-1 mt-1">
-                        {{contact.lastest_message}}
+                    <div class="contact-name w-100">
+                        <div class="v-center justify-content-between">
+                            <span class="f-3 fw-600">{{contact.fullName}}</span>
+                            <ng-container *ngIf="calcDate(contact.lastest_at) == 0">
+                                <span class="f-1 op-56">
+                                    {{contact.lastest_at | date:'h:mm a'}}
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="calcDate(contact.lastest_at) > 0 && calcDate(contact.lastest_at) < 8">
+                                <span class="f-1 op-56">
+                                    {{contact.lastest_at | date:'EEE'}}
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="calcDate(contact.lastest_at) > 8">
+                                <span class="f-1 op-56">
+                                    {{contact.lastest_at | date:'EEE dd, YYYY'}}
+                                </span>
+                            </ng-container>
+                        </div>
+                        <div class="f-1 mt-1">
+                            {{contact.lastest_message | shorten: 35: '...'}}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </ng-container>
+            <ng-template #noContacts>
+                <ng-container *ngIf="loadingContact; else emptyResult">
+                    <div class="list-loading text-center">
+                        <div class="loader mt-5 lg"></div>
+                        <h4 class="fw-600 mt-2">Loading contacts...</h4>
+                    </div>
+                </ng-container>
+                <ng-template #emptyResult>
+                    <div class="empty-list py-5">
+                        <h4 class="font-weight-bold mt-4 mb-3">
+                        There is no contacts.
+                        </h4>
+                    </div>
+                </ng-template>
+            </ng-template>
         </div>
         <div class="message-box" [class.show]="showMessage">
             <div class="v-center justify-content-between border-bottom px-3 message-box-header" *ngIf="!isNew; else newMessageHeader">
@@ -78,13 +95,34 @@
                     ></app-input-contacts>
                 </div>
             </ng-template>
-            <div #scrollBottom class="p-3 border-bottom message-list">
-                <ng-container *ngFor="let messageList of messages">
-                    <ng-container *ngFor="let newContact of newContacts">
-                        <ng-container *ngIf="isNew && messageList.id === newContact._id">
+            <div #scrollMe class="p-3 border-bottom message-list">
+                <ng-container *ngIf="messages.length; else noMessages">
+                    <ng-container *ngFor="let messageList of messages">
+                        <ng-container *ngFor="let newContact of newContacts">
+                            <ng-container *ngIf="isNew && messageList.id === newContact._id">
+                                <ng-container *ngFor="let message of messageList.messages">
+                                    <div class="message mt-3"
+                                    [innerHTML]="parseContent(message.content)"
+                                        [ngClass]="{send: message.type == 0, receive: message.type == 1}"
+                                    ></div>
+                                    <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
+                                        <ng-container *ngIf="calcDate(message.created_at) == 0">
+                                            {{message.created_at | date:'h:mm a'}}
+                                        </ng-container>
+                                        <ng-container *ngIf="calcDate(message.created_at) > 0 && calcDate(message.created_at) < 8">
+                                            {{message.created_at | date:'EEE h:mm a'}}
+                                        </ng-container>
+                                        <ng-container *ngIf="calcDate(message.created_at) > 8">
+                                            {{message.created_at | date:'EEE dd, YYYY'}}
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="!isNew && messageList.id === selectedContact._id">
                             <ng-container *ngFor="let message of messageList.messages">
                                 <div class="message mt-3"
-                                [innerHTML]="parseContent(message.content)"
+                                    [innerHTML]="parseContent(message.content)"
                                     [ngClass]="{send: message.type == 0, receive: message.type == 1}"
                                 ></div>
                                 <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
@@ -101,26 +139,22 @@
                             </ng-container>
                         </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="!isNew && messageList.id === selectedContact._id">
-                        <ng-container *ngFor="let message of messageList.messages">
-                            <div class="message mt-3"
-                                [innerHTML]="parseContent(message.content)"
-                                [ngClass]="{send: message.type == 0, receive: message.type == 1}"
-                            ></div>
-                            <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
-                                <ng-container *ngIf="calcDate(message.created_at) == 0">
-                                    {{message.created_at | date:'h:mm a'}}
-                                </ng-container>
-                                <ng-container *ngIf="calcDate(message.created_at) > 0 && calcDate(message.created_at) < 8">
-                                    {{message.created_at | date:'EEE h:mm a'}}
-                                </ng-container>
-                                <ng-container *ngIf="calcDate(message.created_at) > 8">
-                                    {{message.created_at | date:'EEE dd, YYYY'}}
-                                </ng-container>
-                            </div>
-                        </ng-container>
-                    </ng-container>
                 </ng-container>
+                <ng-template #noMessages>
+                    <ng-container *ngIf="loadingMessage; else emptyResult">
+                        <div class="list-loading text-center">
+                            <div class="loader mt-5 lg"></div>
+                            <h4 class="fw-600 mt-2">Loading messages...</h4>
+                        </div>
+                    </ng-container>
+                    <ng-template #emptyResult>
+                        <div class="empty-list py-5">
+                            <h4 class="font-weight-bold mt-4 mb-3">
+                            There is no messages.
+                            </h4>
+                        </div>
+                    </ng-template>
+                </ng-template>
             </div>
             <div class="p-3 message-action">
                 <div class="form-group">
