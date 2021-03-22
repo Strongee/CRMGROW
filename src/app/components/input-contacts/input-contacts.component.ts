@@ -70,6 +70,7 @@ export class InputContactsComponent implements OnInit {
   filteredContacts: Contact[] = [];
 
   loadingMore = false;
+  searchSubscription: Subscription;
   loadMoreSubscription: Subscription;
   getCurrentSubscription: Subscription;
   hasMore = true;
@@ -113,9 +114,11 @@ export class InputContactsComponent implements OnInit {
         })
       )
       .subscribe((request: Observable<any[]>) => {
-        request.subscribe(
+        this.searchSubscription && this.searchSubscription.unsubscribe();
+        this.searchSubscription = request.subscribe(
           (res: any) => {
             this.searching = false;
+            this.hasMore = true;
             if (this.keyword) {
               if (res.length) {
                 this.filteredResults.next(res);
@@ -342,6 +345,8 @@ export class InputContactsComponent implements OnInit {
                   currentResults.push(e);
                 }
               });
+            } else {
+              this.hasMore = false;
             }
           });
       }

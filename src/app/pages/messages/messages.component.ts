@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { Contact } from 'src/app/models/contact.model';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-messages',
@@ -49,6 +50,7 @@ export class MessagesComponent implements OnInit {
     private smsService: SmsService
   ) {
     this.templateService.loadAll(false);
+    this.loadMessage();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user_id = profile._id;
@@ -73,8 +75,7 @@ export class MessagesComponent implements OnInit {
     setTimeout(() => {
       _SELF.myScrollContainer.nativeElement.scroll({
         top: _SELF.myScrollContainer.nativeElement.scrollHeight,
-        left: 0,
-        behavior: 'smooth'
+        left: 0
       });
     }, 500);
   }
@@ -99,10 +100,12 @@ export class MessagesComponent implements OnInit {
                   contact_item
                 )
               );
-              this.contacts = _.orderBy(this.contacts, ['updated_at'], ['asc']);
             }
           }
         }
+        this.contacts.sort(function (a, b) {
+          return moment.utc(b.lastest_at).diff(moment.utc(a.lastest_at));
+        });
         if (Object.keys(this.selectedContact).length == 0) {
           this.selectContact(this.contacts[0]);
         }
@@ -147,7 +150,7 @@ export class MessagesComponent implements OnInit {
 
   selectContact(contact: any): void {
     this.loadingMessage = true;
-    this.selectedContact = new Contact().deserialize(contact);
+    this.selectedContact = contact;
     this.smsService.getMessage(this.selectedContact).subscribe((res) => {
       if (res) {
         this.loadingMessage = false;
@@ -271,9 +274,11 @@ export class MessagesComponent implements OnInit {
             const message = {
               type: 0,
               content: this.messageText,
-              created_at: new Date()
+              updated_at: new Date()
             };
             messageList.messages.push(message);
+            this.selectedContact.lastest_message = this.messageText;
+            this.selectedContact.lastest_at = new Date();
             this.messageText = '';
             const pos = this.contacts.findIndex(
               (contact) => contact._id === this.selectedContact._id
@@ -292,10 +297,16 @@ export class MessagesComponent implements OnInit {
                 const message = {
                   type: 0,
                   content: this.messageText,
-                  created_at: new Date()
+                  updated_at: new Date()
                 };
                 messageList.messages.push(message);
               }
+              this.newContacts[
+                this.newContacts.length - 1 - i
+              ].lastest_message = this.messageText;
+              this.newContacts[
+                this.newContacts.length - 1 - i
+              ].lastest_at = new Date();
               this.contacts.unshift(
                 this.newContacts[this.newContacts.length - 1 - i]
               );

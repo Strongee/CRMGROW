@@ -10,6 +10,8 @@ export class Contact implements Deserializable {
   email: string;
   user: string;
   last_activity: string;
+  lastest_message: string;
+  lastest_at: Date;
   address: string;
   city: string;
   state: string;
