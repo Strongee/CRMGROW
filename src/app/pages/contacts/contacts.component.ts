@@ -107,6 +107,9 @@ export class ContactsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.handlerService.pageName.next('contacts');
 
+    const pageSize = this.contactService.pageSize.getValue();
+    this.pageSize = { id: pageSize, label: pageSize + '' };
+
     this.storeService.pageContacts$.subscribe((contacts) => {
       if (!this.searchStr && this.searchOption.isEmpty()) {
         this.pageContacts = contacts;
