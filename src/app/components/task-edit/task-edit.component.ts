@@ -69,6 +69,7 @@ export class TaskEditComponent implements OnInit {
         const timezone = getCurrentTimezone();
         this.timezone = { zone: user.time_zone || timezone };
       }
+      console.log('timezone', this.timezone);
       if (this.task && this.task._id) {
         this.initTime();
       }
@@ -144,11 +145,10 @@ export class TaskEditComponent implements OnInit {
   submit(): void {
     let due_date = '';
     if (this.timezone.tz_name) {
-      // const dateStr = `${this.date.year}-${this.date.month}-${this.date.day} ${this.time}`;
-      // due_date = moment.tz(dateStr, this.timezone.tz_name).format();
-      due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
+      const dateStr = `${this.date.year}-${numPad(this.date.month)}-${numPad(
         this.date.day
-      )}T${this.time}${this.timezone.zone}`;
+      )} ${this.time}`;
+      due_date = moment.tz(dateStr, this.timezone.tz_name).format();
     } else {
       due_date = `${this.date.year}-${numPad(this.date.month)}-${numPad(
         this.date.day
