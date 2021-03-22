@@ -58,6 +58,7 @@ export class SelectContactComponent
 
   loadingMore = false;
   loadMoreSubscription: Subscription;
+  searchSubscription: Subscription;
   getCurrentSubscription: Subscription;
   hasMore = true;
 
@@ -80,7 +81,8 @@ export class SelectContactComponent
       )
       .subscribe(
         (api) => {
-          api.subscribe((res) => {
+          this.searchSubscription && this.searchSubscription.unsubscribe();
+          this.searchSubscription = api.subscribe((res) => {
             this.searching = false;
             let result;
             if (this.mustField) {
