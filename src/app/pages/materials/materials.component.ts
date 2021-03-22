@@ -26,6 +26,7 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
+import {sortDateArray, sortStringArray} from "../../utils/functions";
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -90,6 +91,14 @@ export class MaterialsComponent implements OnInit {
   userOptions = [];
   folderOptions = [];
   isAdmin = false;
+
+  searchCondition = {
+    title: false,
+    owner: false,
+    material_type: false,
+    created_at: false,
+    views: false
+  };
 
   constructor(
     private dialog: MatDialog,
@@ -1358,5 +1367,47 @@ export class MaterialsComponent implements OnInit {
     a.style.display = 'none';
     a.href = video.url;
     a.click();
+  }
+
+  sort(field): void {
+    if (field === 'created_at') {
+      this.filteredMaterials = sortDateArray(
+        this.filteredMaterials,
+        field,
+        this.searchCondition[field]
+      );
+    } else if (field === 'owner') {
+      for (const material of this.filteredMaterials) {
+        if (material.user) {
+          if (material.user._id) {
+            if (material.user._id === this.user_id) {
+              material.owner = 'Me';
+            } else {
+              material.owner = material.user.user_name;
+            }
+          } else {
+            if (material.user === this.user_id) {
+              material.owner = 'Me';
+            } else {
+              material.owner = 'Unknown User';
+            }
+          }
+        } else {
+          material.owner = 'Admin';
+        }
+      }
+      this.filteredMaterials = sortStringArray(
+        this.filteredMaterials,
+        field,
+        this.searchCondition[field]
+      );
+    } else {
+      this.filteredMaterials = sortStringArray(
+        this.filteredMaterials,
+        field,
+        this.searchCondition[field]
+      );
+    }
+    this.searchCondition[field] = !this.searchCondition[field];
   }
 }

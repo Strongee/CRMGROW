@@ -30,13 +30,25 @@
         [dataSource]="filteredResult | paginate: {itemsPerPage: pageSize.id, currentPage: page, id: 'automationTable', total: filteredResult.length}">
 
         <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef class="title">Title</th>
+          <th mat-header-cell *matHeaderCellDef class="title">
+            <div class="v-center c-pointer" (click)="sort('title')">
+              <span>Title</span>
+              <i class="i-icon s-8 d-block bgc-black ml-2"
+                 [class]="searchCondition.title ? 'i-triangle-up' : 'i-triangle-down'"></i>
+            </div>
+          </th>
           <td mat-cell *matCellDef="let automation" class="title">
             <a  [routerLink]="['/autoflow/edit/' + automation._id]" class="td-none"><span class="f-3 font-weight-bold">{{automation.title}}</span></a>
           </td>
         </ng-container>
         <ng-container matColumnDef="owner">
-          <th mat-header-cell *matHeaderCellDef class="auth">Owner</th>
+          <th mat-header-cell *matHeaderCellDef class="auth">
+            <div class="v-center c-pointer" (click)="sort('role')">
+              <span>Owner</span>
+              <i class="i-icon s-8 d-block bgc-black ml-2"
+                 [class]="searchCondition.role ? 'i-triangle-up' : 'i-triangle-down'"></i>
+            </div>
+          </th>
           <td mat-cell *matCellDef="let automation" class="auth">
             <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === userId" [class.shared]="automation.role === 'team' && automation.user !== userId"></div>
           </td>
@@ -54,7 +66,13 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="created">
-          <th mat-header-cell *matHeaderCellDef class="created">Created</th>
+          <th mat-header-cell *matHeaderCellDef class="created">
+            <div class="v-center justify-content-end c-pointer" (click)="sort('created_at')">
+              <span>Created</span>
+              <i class="i-icon s-8 d-block bgc-black ml-2"
+                 [class]="searchCondition.created_at ? 'i-triangle-up' : 'i-triangle-down'"></i>
+            </div>
+          </th>
           <td mat-cell *matCellDef="let automation" class="created">
             <div class="f-3">{{automation.created_at | date: 'dd/MM/yyyy'}}</div>
           </td>

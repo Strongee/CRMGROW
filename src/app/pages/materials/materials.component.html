@@ -110,7 +110,13 @@
         <ng-container matColumnDef="material_name">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length; else toolHeader" class="name-col">name </th>
+            *ngIf="!selection.length; else toolHeader" class="name-col">
+              <div class="v-center c-pointer" (click)="sort('title')">
+                <span>Name</span>
+                <i class="i-icon s-8 d-block bgc-black ml-2"
+                   [class]="searchCondition.title ? 'i-triangle-up' : 'i-triangle-down'"></i>
+              </div>
+            </th>
               <ng-template #toolHeader>
                 <th mat-header-cell colspan="8">
                   <div class="v-center">
@@ -204,7 +210,13 @@
         <ng-container matColumnDef="creator">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="owner-col">owner</th>
+            *ngIf="!selection.length" class="owner-col">
+              <div class="v-center c-pointer" (click)="sort('owner')">
+                <span>Owner</span>
+                <i class="i-icon s-8 d-block bgc-black ml-2"
+                   [class]="searchCondition.owner ? 'i-triangle-up' : 'i-triangle-down'"></i>
+              </div>
+            </th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="owner-col">
@@ -229,7 +241,13 @@
         <ng-container matColumnDef="type">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="type-col">type</th>
+            *ngIf="!selection.length" class="type-col">
+              <div class="v-center c-pointer" (click)="sort('material_type')">
+                <span>Type</span>
+                <i class="i-icon s-8 d-block bgc-black ml-2"
+                   [class]="searchCondition.material_type ? 'i-triangle-up' : 'i-triangle-down'"></i>
+              </div>
+            </th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="type-col {{element.material_type}}">
@@ -241,7 +259,13 @@
         <ng-container matColumnDef="created_at">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell class="time-col"
-            *ngIf="!selection.length">added</th>
+            *ngIf="!selection.length">
+              <div class="v-center c-pointer" (click)="sort('created_at')">
+                <span>Added</span>
+                <i class="i-icon s-8 d-block bgc-black ml-2"
+                   [class]="searchCondition.created_at ? 'i-triangle-up' : 'i-triangle-down'"></i>
+              </div>
+            </th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="time-col">

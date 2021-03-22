@@ -13,7 +13,7 @@ import {
   MatAutocompleteSelectedEvent
 } from '@angular/material/autocomplete';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -60,6 +60,9 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
   users = [];
   loadingMore = false;
 
+  loadMoreSubscription: Subscription;
+  searchSubscription: Subscription;
+
   constructor(
     private dialogRef: MatDialogRef<JoinTeamComponent>,
     private teamService: TeamService
@@ -90,7 +93,8 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((api) => {
-        api.subscribe(
+        this.searchSubscription && this.searchSubscription.unsubscribe();
+        this.searchSubscription = api.subscribe(
           (res) => {
             this.searching = false;
             res['team_array'] &&
@@ -206,7 +210,8 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
 
     this.skip += this.pageCount;
     this.loadingMore = true;
-    this.teamService
+    this.loadMoreSubscription && this.loadMoreSubscription.unsubscribe();
+    this.loadMoreSubscription = this.teamService
       .searchTeamUser(this.keyword, this.skip)
       .subscribe((res) => {
         if (res) {
