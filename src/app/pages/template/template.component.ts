@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TemplatesService } from 'src/app/services/templates.service';
@@ -32,6 +32,8 @@ export class TemplateComponent
   focusedField = '';
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
+  @ViewChild('subjectField') subjectEl: ElementRef;
+  @ViewChild('smsContentField') textAreaEl: ElementRef;
   constructor(
     private route: ActivatedRoute,
     private templatesService: TemplatesService,
@@ -130,24 +132,34 @@ export class TemplateComponent
       this.htmlEditor.insertEmailContentValue(value);
       return;
     }
-    let text = '';
     if (this.focusedField === 'subject') {
-      text = this.template.subject;
+      this.subjectEl.nativeElement.focus();
+      this.subjectEl.nativeElement.setSelectionRange(
+        this.cursorStart,
+        this.cursorEnd
+      );
+      document.execCommand('insertText', false, value);
+      this.cursorStart += value.length;
+      this.cursorEnd = this.cursorStart;
+      this.subjectEl.nativeElement.setSelectionRange(
+        this.cursorStart,
+        this.cursorEnd
+      );
     } else {
-      text = this.template.content;
-    }
-    text =
-      text.substr(0, this.cursorStart) +
-      value +
-      text.substr(this.cursorEnd, text.length - this.cursorEnd);
-    if (this.focusedField === 'subject') {
-      this.template.subject = text;
-    } else {
-      this.template.content = text;
+      this.textAreaEl.nativeElement.focus();
+      this.textAreaEl.nativeElement.setSelectionRange(
+        this.cursorStart,
+        this.cursorEnd
+      );
+      document.execCommand('insertText', false, value);
+      this.cursorStart += value.length;
+      this.cursorEnd = this.cursorStart;
+      this.textAreaEl.nativeElement.setSelectionRange(
+        this.cursorStart,
+        this.cursorEnd
+      );
     }
     this.saved = false;
-    this.cursorStart += value.length;
-    this.cursorEnd = this.cursorStart;
   }
   focusEditor(): void {
     this.focusedField = 'editor';
