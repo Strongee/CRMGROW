@@ -11,7 +11,7 @@ import {
   TemplateRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, ReplaySubject } from 'rxjs';
+import { Subject, ReplaySubject, Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import {
   filter,
@@ -51,6 +51,8 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
   search = '';
   filteredResults: ReplaySubject<MailList[]> = new ReplaySubject<MailList[]>(1);
 
+  apiSubscription: Subscription;
+
   constructor(private mailListService: MailListService) {}
 
   ngOnInit(): void {
@@ -58,7 +60,7 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(
         filter((search) => !!search),
         takeUntil(this._onDestroy),
-        debounceTime(200),
+        debounceTime(50),
         distinctUntilChanged(),
         tap(() => (this.searching = true)),
         map((search) => {
@@ -68,7 +70,8 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe(
         (api) => {
-          api.subscribe((mailLists) => {
+          this.apiSubscription && this.apiSubscription.unsubscribe();
+          this.apiSubscription = api.subscribe((mailLists) => {
             const res = _.filter(mailLists, (e) => {
               const searchReg = new RegExp(this.search, 'gi');
               if (searchReg.test(e.title)) {

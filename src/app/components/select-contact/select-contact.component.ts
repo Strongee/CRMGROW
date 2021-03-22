@@ -69,7 +69,7 @@ export class SelectContactComponent
       .pipe(
         filter((search) => !!search),
         takeUntil(this._onDestroy),
-        debounceTime(200),
+        debounceTime(50),
         distinctUntilChanged(),
         tap((search) => {
           this.searching = true;

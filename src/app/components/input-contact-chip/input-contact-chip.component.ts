@@ -94,7 +94,7 @@ export class InputContactChipComponent implements OnInit, OnChanges {
           }
         }),
         takeUntil(this._onDestroy),
-        debounceTime(200),
+        debounceTime(50),
         distinctUntilChanged(),
         tap((search) => {
           this.searching = true;

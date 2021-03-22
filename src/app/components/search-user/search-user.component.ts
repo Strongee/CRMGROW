@@ -14,7 +14,7 @@ import {
   MatAutocomplete,
   MatAutocompleteSelectedEvent
 } from '@angular/material/autocomplete';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -51,6 +51,8 @@ export class SearchUserComponent implements OnInit, OnDestroy {
   keyword = '';
   addOnBlur = false;
 
+  apiSubscription: Subscription;
+
   constructor(private teamService: TeamService) {}
 
   ngOnInit(): void {
@@ -64,7 +66,7 @@ export class SearchUserComponent implements OnInit, OnDestroy {
           }
         }),
         takeUntil(this._onDestroy),
-        debounceTime(200),
+        debounceTime(50),
         distinctUntilChanged(),
         tap((search) => {
           this.keyword = search;
@@ -75,7 +77,8 @@ export class SearchUserComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((api) => {
-        api.subscribe(
+        this.apiSubscription && this.apiSubscription.unsubscribe();
+        this.apiSubscription = api.subscribe(
           (res) => {
             this.searching = false;
             if (this.isNewAvailable) {

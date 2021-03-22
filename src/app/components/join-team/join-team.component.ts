@@ -13,7 +13,7 @@ import {
   MatAutocompleteSelectedEvent
 } from '@angular/material/autocomplete';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -59,6 +59,7 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
   teams = [];
   users = [];
   loadingMore = false;
+  apiSubscription: Subscription;
 
   constructor(
     private dialogRef: MatDialogRef<JoinTeamComponent>,
@@ -76,7 +77,7 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
           }
         }),
         takeUntil(this._onDestroy),
-        debounceTime(200),
+        debounceTime(50),
         distinctUntilChanged(),
         tap(() => {
           this.searching = true;
@@ -90,7 +91,8 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((api) => {
-        api.subscribe(
+        this.apiSubscription && this.apiSubscription.unsubscribe();
+        this.apiSubscription = api.subscribe(
           (res) => {
             this.searching = false;
             res['team_array'] &&
