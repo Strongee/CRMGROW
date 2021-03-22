@@ -21,6 +21,7 @@ import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
+import {sortDateArray, sortStringArray} from '../../utils/functions';
 
 @Component({
   selector: 'app-automations',
@@ -40,6 +41,7 @@ import { AutomationCreateComponent } from '../../components/automation-create/au
     ])
   ]
 })
+
 export class AutomationsComponent implements OnInit, OnDestroy {
   DISPLAY_COLUMNS = [
     'title',
@@ -78,6 +80,11 @@ export class AutomationsComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
   loadSubscription: Subscription;
+  searchCondition = {
+    title: false,
+    role: false,
+    created_at: false
+  };
 
   constructor(
     public automationService: AutomationService,
@@ -209,5 +216,22 @@ export class AutomationsComponent implements OnInit, OnDestroy {
         if (res) {
         }
       });
+  }
+
+  sort(field): void {
+    if (field === 'created_at') {
+      this.filteredResult = sortDateArray(
+        this.filteredResult,
+        field,
+        this.searchCondition[field]
+      );
+    } else {
+      this.filteredResult = sortStringArray(
+        this.filteredResult,
+        field,
+        this.searchCondition[field]
+      );
+    }
+    this.searchCondition[field] = !this.searchCondition[field];
   }
 }

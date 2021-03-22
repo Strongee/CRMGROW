@@ -61,6 +61,8 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
   loadingMore = false;
   apiSubscription: Subscription;
 
+  loadMoreSubscription: Subscription;
+
   constructor(
     private dialogRef: MatDialogRef<JoinTeamComponent>,
     private teamService: TeamService
@@ -208,7 +210,8 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
 
     this.skip += this.pageCount;
     this.loadingMore = true;
-    this.teamService
+    this.loadMoreSubscription && this.loadMoreSubscription.unsubscribe();
+    this.loadMoreSubscription = this.teamService
       .searchTeamUser(this.keyword, this.skip)
       .subscribe((res) => {
         if (res) {

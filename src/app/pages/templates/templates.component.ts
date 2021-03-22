@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
+import { ToastrService } from 'ngx-toastr';
+import { sortStringArray } from '../../utils/functions';
 
 @Component({
   selector: 'app-templates',
@@ -40,9 +42,16 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
 
+  searchCondition = {
+    title: false,
+    role: false,
+    type: false
+  };
+
   constructor(
     public templatesService: TemplatesService,
     private userService: UserService,
+    private toast: ToastrService,
     private dialog: MatDialog,
     private router: Router
   ) {}
@@ -110,19 +119,20 @@ export class TemplatesComponent implements OnInit, OnDestroy {
         this.isSetting = false;
         this.userService.updateGarbageImpl({ canned_message: cannedMessage });
         if (template.type === 'email') {
-          if (cannedMessage['email']) {
+          if (cannedMessage.email) {
             this.userService.email.next(template);
           } else {
             this.userService.email.next(null);
           }
         }
         if (template.type === 'sms') {
-          if (cannedMessage['sms']) {
+          if (cannedMessage.sms) {
             this.userService.sms.next(template);
           } else {
             this.userService.sms.next(null);
           }
         }
+        this.toast.success(`Template's default has been successfully changed.`);
       },
       () => {
         this.isSetting = false;
@@ -172,5 +182,14 @@ export class TemplatesComponent implements OnInit, OnDestroy {
 
   changePageSize(type: any): void {
     this.pageSize = type;
+  }
+
+  sort(field): void {
+    this.filteredResult = sortStringArray(
+      this.filteredResult,
+      field,
+      this.searchCondition[field]
+    );
+    this.searchCondition[field] = !this.searchCondition[field];
   }
 }

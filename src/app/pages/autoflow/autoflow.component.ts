@@ -96,11 +96,11 @@ export class AutoflowComponent
   DISPLAY_COLUMNS = [
     'select',
     'contact_name',
-    'contact_address',
     'contact_label',
     'contact_tags',
     'contact_email',
-    'contact_phone'
+    'contact_phone',
+    'contact_address'
   ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },
@@ -121,6 +121,7 @@ export class AutoflowComponent
   // Variables for Label Update
   isUpdating = false;
   updateSubscription: Subscription;
+  searchSubscription: Subscription;
 
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('editPanel') editPanel: ContactBulkComponent;
@@ -153,7 +154,13 @@ export class AutoflowComponent
     this._id = this.route.snapshot.params['id'];
     const title = this.route.snapshot.params['title'];
     const mode = this.route.snapshot.params['mode'];
-    const page = localStorage.getItem('automation');
+    this.editMode = mode;
+    let page = '';
+
+    if (this.editMode !== 'new') {
+      page = localStorage.getItem('automation');
+    }
+
     if (page === 'contacts') {
       this.selectedTab = this.tabs[1];
     }
@@ -164,15 +171,15 @@ export class AutoflowComponent
       if (page !== 'contacts') {
         this.loadAutomation(this._id, this.pageSize.id, 0);
       } else {
-        this.loadContacts(this._id, this.pageSize.id, 0);
+        if (this.editMode !== 'new') {
+          this.loadContacts(this._id, this.pageSize.id, 0);
+        }
       }
     } else {
       this.auth = 'owner';
       const curDate = new Date();
       this.created_at = curDate.toISOString();
-      this.editMode = 'new';
     }
-    this.editMode = mode;
 
     window['confirmReload'] = true;
   }
@@ -199,7 +206,7 @@ export class AutoflowComponent
         (res) => {
           this.automation = res;
           this.contacts = this.automation.contacts.count;
-          const mode = this.route.snapshot.params['mode'];
+          const mode = this.editMode;
           this.arrangeAutomationData();
           if (this.automation.contacts.contacts.length) {
             this.assignedContactLoading = true;
@@ -208,19 +215,22 @@ export class AutoflowComponent
               .subscribe((contacts) => {
                 this.assignedContactLoading = false;
                 this.pageContacts = [];
-                for (let i = 0; i < contacts.length; i++) {
-                  const newContact = new ContactActivity().deserialize(
-                    contacts[i]
-                  );
-                  this.pageContacts.push(newContact);
+                if (this.editMode !== 'new') {
+                  for (let i = 0; i < contacts.length; i++) {
+                    const newContact = new ContactActivity().deserialize(
+                      contacts[i]
+                    );
+                    this.pageContacts.push(newContact);
+                  }
                 }
               });
           }
 
           if (mode === 'edit') {
             this.automation_id = res['_id'];
+            this.automation_title = res['title'];
           }
-          this.automation_title = res['title'];
+
           const actions = res['automations'];
           this.composeGraph(actions);
         },
@@ -244,7 +254,6 @@ export class AutoflowComponent
               .subscribe((contacts) => {
                 this.assignedContactLoading = false;
                 this.pageContacts = [];
-                console.log("load contacts ==========>", contacts);
                 for (let i = 0; i < contacts.length; i++) {
                   const newContact = new ContactActivity().deserialize(
                     contacts[i]
@@ -1441,7 +1450,7 @@ export class AutoflowComponent
           (res) => {
             this.isSaving = false;
             this.saved = true;
-            this.toastr.success('Automation Saved Successfully');
+            this.toastr.success('Automation saved successfully');
           },
           (err) => {
             this.isSaving = false;
@@ -1459,9 +1468,13 @@ export class AutoflowComponent
             if (res) {
               this.isSaving = false;
               this.saved = true;
-              this.toastr.success('Automation Saved Successfully');
+              this.toastr.success('Automation created successfully');
               const path = '/autoflow/edit/' + res['_id'];
               this.router.navigate([path]);
+              this.editMode = 'edit';
+              this._id = res['_id'];
+              this.loadAutomation(res['_id'], this.pageSize.id, 0);
+              this.pageContacts = [];
             }
           },
           (err) => {
@@ -1649,7 +1662,8 @@ export class AutoflowComponent
   }
 
   changeSearchStr(): void {
-    this.automationService
+    this.searchSubscription && this.searchSubscription.unsubscribe();
+    this.searchSubscription = this.automationService
       .searchContact(this.automation._id, this.searchStr)
       .subscribe((res) => {
         if (res) {
