@@ -106,7 +106,6 @@ export class AutomationsComponent implements OnInit, OnDestroy {
       (automations) => {
         this.automations = automations;
         this.filteredResult = automations;
-        console.log("automations ==========>", automations);
       }
     );
     this.automationService.loadAll(true);
