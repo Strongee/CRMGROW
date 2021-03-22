@@ -555,6 +555,7 @@ export class DealsDetailComponent implements OnInit {
             res.data,
             _.isEqual
           );
+          this.addLatestActivity(res.data.length + 1);
         }
       });
   }
@@ -578,6 +579,7 @@ export class DealsDetailComponent implements OnInit {
             .subscribe((status) => {
               if (status) {
                 _.pullAllBy(this.deal.contacts, [{ _id: contact._id }], '_id');
+                this.addLatestActivity(2);
               }
             });
         }
