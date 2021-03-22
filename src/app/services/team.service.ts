@@ -288,11 +288,15 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM SHARE MATERIALS', []))
       );
   }
-  loadSharedContacts(): Observable<any> {
-    return this.httpClient.get(this.server + TEAM.LOAD_SHARE_CONTACTS).pipe(
-      map((res) => res['data'] || []),
-      catchError(this.handleError('TEAM LOAD SHARED CONTACTS', []))
-    );
+  loadSharedContacts(id: string): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.LOAD_SHARE_CONTACTS, {
+        team: id
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED CONTACTS', []))
+      );
   }
   removeVideo(id): Observable<any> {
     return this.httpClient.post(this.server + TEAM.REMOVE_VIDEO + id, {}).pipe(

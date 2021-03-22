@@ -168,7 +168,7 @@ export class TeamComponent implements OnInit, OnDestroy {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
-        this.teamService.loadSharedContacts().subscribe((contacts) => {
+        this.teamService.loadSharedContacts(this.teamId).subscribe((contacts) => {
           this.loading = false;
           if (contacts && contacts.length) {
             this.sharedContacts = contacts;
