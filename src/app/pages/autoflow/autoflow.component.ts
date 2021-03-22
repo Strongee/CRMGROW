@@ -96,11 +96,11 @@ export class AutoflowComponent
   DISPLAY_COLUMNS = [
     'select',
     'contact_name',
-    'contact_address',
     'contact_label',
     'contact_tags',
     'contact_email',
-    'contact_phone'
+    'contact_phone',
+    'contact_address'
   ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },
@@ -121,6 +121,7 @@ export class AutoflowComponent
   // Variables for Label Update
   isUpdating = false;
   updateSubscription: Subscription;
+  searchSubscription: Subscription;
 
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('editPanel') editPanel: ContactBulkComponent;
@@ -174,6 +175,7 @@ export class AutoflowComponent
     }
     this.editMode = mode;
 
+    console.log("automation ==========>", this.editMode, this.automation);
     window['confirmReload'] = true;
   }
 
@@ -1649,7 +1651,8 @@ export class AutoflowComponent
   }
 
   changeSearchStr(): void {
-    this.automationService
+    this.searchSubscription && this.searchSubscription.unsubscribe();
+    this.searchSubscription = this.automationService
       .searchContact(this.automation._id, this.searchStr)
       .subscribe((res) => {
         if (res) {
