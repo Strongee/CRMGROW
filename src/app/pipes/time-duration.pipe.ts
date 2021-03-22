@@ -14,6 +14,9 @@ export class TimeDurationPipe implements PipeTransform {
     if (isNaN(input)) {
       return '';
     }
+    if (input < 0) {
+      input = 0;
+    }
     const dateObj = new Date(input);
     const hours = dateObj.getUTCHours().toString().padStart(2, '0');
     const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');

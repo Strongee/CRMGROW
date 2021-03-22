@@ -70,15 +70,19 @@ export class MaterialSendComponent implements OnInit {
     }
     if (this.data.type) {
       if (this.data.type === 'email') {
-        const defaultEmail = this.userService.email.getValue();
-        if (defaultEmail) {
-          this.emailContent = defaultEmail.content;
-          this.subject = defaultEmail.subject;
-        }
         this.selectedTab = 1;
       } else {
         this.selectedTab = 0;
       }
+    }
+    const defaultEmail = this.userService.email.getValue();
+    if (defaultEmail) {
+      this.emailContent = defaultEmail.content;
+      this.subject = defaultEmail.subject;
+    }
+    const defaultSms = this.userService.sms.getValue();
+    if (defaultSms) {
+      this.textContent = defaultSms.content;
     }
   }
 
@@ -86,8 +90,10 @@ export class MaterialSendComponent implements OnInit {
     this.selectedTab = event;
   }
   selectTextTemplate(event: Template): void {
-    this.textTemplate = event;
-    this.textContent = this.textTemplate.content;
+    if (event.title && event.content) {
+      this.textTemplate = event;
+      this.textContent = this.textTemplate.content;
+    }
   }
   onChangeTemplate(event: Template): void {
     this.subject = event.subject;

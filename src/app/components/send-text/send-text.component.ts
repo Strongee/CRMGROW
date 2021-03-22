@@ -43,7 +43,12 @@ export class SendTextComponent implements OnInit, OnDestroy {
     this.templateService.loadAll(false);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const defaultSms = this.userService.sms.getValue();
+    if (defaultSms) {
+      this.message = defaultSms.content;
+    }
+  }
 
   ngOnDestroy(): void {}
 
