@@ -95,7 +95,7 @@
                     ></app-input-contacts>
                 </div>
             </ng-template>
-            <div #scrollMe class="p-3 border-bottom message-list">
+            <div #scrollMe class="p-3 border-bottom message-list" [scrollTop]="scrollMe.scrollHeight">
                 <ng-container *ngIf="messages.length; else noMessages">
                     <ng-container *ngFor="let messageList of messages">
                         <ng-container *ngFor="let newContact of newContacts">

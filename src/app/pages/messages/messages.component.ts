@@ -70,15 +70,7 @@ export class MessagesComponent implements OnInit {
     clearInterval(this.messageLoadTimer);
   }
 
-  scrollToBottom(): void {
-    const _SELF = this;
-    setTimeout(() => {
-      _SELF.myScrollContainer.nativeElement.scroll({
-        top: _SELF.myScrollContainer.nativeElement.scrollHeight,
-        left: 0
-      });
-    }, 500);
-  }
+  scrollToBottom(): void {}
 
   loadMessage(): void {
     this.messageLoadSubscription && this.messageLoadSubscription.unsubscribe();
@@ -160,7 +152,6 @@ export class MessagesComponent implements OnInit {
           messages: res
         };
         this.messages.push(message);
-        this.scrollToBottom();
       }
     });
     this.isNew = false;
