@@ -5,6 +5,7 @@ const BlockEmbed = Quill.import('blots/block/embed');
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
 const Block = Quill.import('blots/block');
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import 'moment-timezone';
 
@@ -423,5 +424,18 @@ export function convertTimetoObj(dateTime: string, timezone: any): any {
       day: now.getDate(),
       time: '00:00:00.000'
     };
+  }
+}
+
+export function searchReg(content, target): boolean {
+  const words = target.split(' ');
+  const reg = new RegExp(words.join('|'), 'gi');
+  if (!target || !words.length) {
+    return true;
+  }
+  if (
+    _.uniqBy(content.match(reg), (e) => e.toLowerCase()).length === words.length
+  ) {
+    return true;
   }
 }

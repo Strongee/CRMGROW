@@ -21,7 +21,8 @@ import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
-import {sortDateArray, sortStringArray} from '../../utils/functions';
+import { sortDateArray, sortStringArray } from '../../utils/functions';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-automations',
@@ -117,9 +118,18 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const reg = new RegExp(this.searchStr, 'gi');
+    const words = this.searchStr.split(' ');
+    const reg = new RegExp(words.join('|'), 'gi');
     const filtered = this.automations.filter((item) => {
-      return reg.test(item.title);
+      if (!this.searchStr || !words.length) {
+        return true;
+      }
+      if (
+        _.uniqBy(item.title.match(reg), (e) => e.toLowerCase()).length ===
+        words.length
+      ) {
+        return true;
+      }
     });
     this.filteredResult = filtered;
     this.page = 1;
