@@ -44,7 +44,9 @@ export class TeamContactShareComponent implements OnInit {
 
       const members = [];
       for (const owner of this.team.owner) {
-        members.push(owner);
+        if (owner._id !== this.userId) {
+          members.push(owner);
+        }
       }
       for (const member of this.team.members) {
         if (member._id !== this.userId) {
@@ -67,7 +69,7 @@ export class TeamContactShareComponent implements OnInit {
     });
 
     this.contactService
-      .shareContacts(this.member._id, contacts)
+      .shareContacts(this.team._id, this.member._id, contacts)
       .subscribe((res) => {
         this.loading = false;
         if (res) {

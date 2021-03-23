@@ -547,9 +547,10 @@ export class ContactService extends HttpService {
       );
   }
 
-  shareContacts(userId, contacts): Observable<any> {
+  shareContacts(teamId, userId, contacts): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.SHARE_CONTACT, {
+        team: teamId,
         user: userId,
         contacts
       })

@@ -44,7 +44,7 @@ export class InviteTeamComponent implements OnInit {
       this.team = this.data;
     }
     if (this.data.join_link) {
-      this.joinLink = `https://crmgrow.com/invite.ref=${this.data.join_link}`;
+      this.joinLink = `https://crmgrow.com/invite_ref=${this.data.join_link}`;
     }
     if (this.data.invites) {
       this.data.invites.forEach((e) => {
