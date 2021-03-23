@@ -176,12 +176,12 @@ export class TemplatesComponent implements OnInit, OnDestroy {
         return true;
       }
     });
-    this.filteredResult = filtered;
+    this.filteredResult = sortRoleArray(filtered, true);
   }
 
   clearSearchStr(): void {
     this.searchStr = '';
-    this.filteredResult = this.templates;
+    this.filteredResult = sortRoleArray(this.templates, true);
   }
 
   changePageSize(type: any): void {
