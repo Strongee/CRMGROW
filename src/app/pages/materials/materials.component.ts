@@ -26,7 +26,7 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
-import {sortDateArray, sortStringArray} from "../../utils/functions";
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -1300,7 +1300,8 @@ export class MaterialsComponent implements OnInit {
 
   filter(): void {
     this.selection = [];
-    const reg = new RegExp(this.searchStr, 'gi');
+    const words = this.searchStr.split(' ');
+    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
       if (this.selectedFolder) {
         if (this.selectedFolder._id !== material.folder) {
@@ -1312,7 +1313,12 @@ export class MaterialsComponent implements OnInit {
       if (this.matType && material.material_type != this.matType) {
         return false;
       }
-      if (!reg.test(material.title)) {
+      if (
+        this.searchStr &&
+        words.length &&
+        _.uniqBy(material.title.match(reg), (e) => e.toLowerCase()).length !==
+          words.length
+      ) {
         return false;
       }
       if (

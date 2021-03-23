@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
+import { searchReg } from 'src/app/helper';
 import { AutomationService } from 'src/app/services/automation.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { DealsService } from 'src/app/services/deals.service';
@@ -83,17 +84,17 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.materialLoadSubscription = this.storeService.materials$.subscribe(
           (materials) => {
             this.searchedResults['videos'] = materials.filter((e) => {
-              if (e.material_type === 'video' && reg.test(e.title)) {
+              if (e.material_type === 'video' && searchReg(e.title, str)) {
                 return true;
               }
             });
             this.searchedResults['pdfs'] = materials.filter((e) => {
-              if (e.material_type === 'pdf' && reg.test(e.title)) {
+              if (e.material_type === 'pdf' && searchReg(e.title, str)) {
                 return true;
               }
             });
             this.searchedResults['images'] = materials.filter((e) => {
-              if (e.material_type === 'image' && reg.test(e.title)) {
+              if (e.material_type === 'image' && searchReg(e.title, str)) {
                 return true;
               }
             });
@@ -105,7 +106,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.templateLoadSubscription = this.templateService.templates$.subscribe(
           (templates) => {
             this.searchedResults['templates'] = templates.filter((e) => {
-              return reg.test(e.title);
+              return searchReg(e.title, str);
             });
           }
         );
@@ -114,7 +115,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.automationLoadSubscription = this.automationService.automations$.subscribe(
           (automations) => {
             this.searchedResults['automations'] = automations.filter((e) => {
-              return reg.test(e.title);
+              return searchReg(e.title, str);
             });
           }
         );
@@ -122,7 +123,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.teamLoadSubscription = this.teamService.teams$.subscribe(
           (teams) => {
             this.searchedResults['teams'] = teams.filter((e) => {
-              return reg.test(e.name);
+              return searchReg(e.name, str);
             });
           }
         );
@@ -135,7 +136,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
               deals = [...deals, ...e.deals];
             });
             this.searchedResults['deals'] = deals.filter((e) => {
-              return reg.test(e.title);
+              return searchReg(e.title, str);
             });
           }
         );

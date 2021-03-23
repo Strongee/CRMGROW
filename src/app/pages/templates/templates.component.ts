@@ -9,7 +9,7 @@ import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
 import { sortStringArray, sortRoleArray } from '../../utils/functions';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
@@ -166,12 +166,16 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const reg = new RegExp(this.searchStr, 'gi');
+    const words = this.searchStr.split(' ');
+    const reg = new RegExp(words.join('|'), 'gi');
     const filtered = this.templates.filter((template) => {
+      if (!this.searchStr || !words.length) {
+        return true;
+      }
+      const str =
+        template.title + ' ' + template.content + ' ' + template.subject;
       if (
-        reg.test(template.title) ||
-        reg.test(template.content) ||
-        reg.test(template.subject)
+        _.uniqBy(str.match(reg), (e) => e.toLowerCase()).length === words.length
       ) {
         return true;
       }
@@ -181,6 +185,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     } else {
       this.filteredResult = filtered;
     }
+    this.page = 1;
   }
 
   clearSearchStr(): void {
