@@ -11,7 +11,7 @@ export function validateEmail(email: string): boolean {
 export function sortStringArray(
   array: any[],
   field: string,
-  ascending: true
+  ascending = true
 ): any[] {
   if (array.length > 0) {
     const searchDirection = ascending ? 'asc' : 'desc';
@@ -24,7 +24,7 @@ export function sortStringArray(
 export function sortDateArray(
   array: any[],
   field: string,
-  ascending: true
+  ascending= true
 ): any[] {
   if (array.length > 0) {
     const searchDirection = ascending ? 'asc' : 'desc';
