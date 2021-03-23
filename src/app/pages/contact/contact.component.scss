@@ -555,6 +555,28 @@
         }
       }
     }
+    &.texts-detail {
+      .main-history-item {
+        .detail {
+          visibility: hidden;
+          height: 0px;
+          transition: height .3s;
+        }
+        .summary {
+          display: block;
+        }
+
+        &.expanded {
+          .detail {
+            height: unset;
+            visibility: visible;
+          }
+          .summary {
+            display: none;
+          }
+        }
+      }
+    }
     .history-icon {
       width: 20px;
       height: 20px;
