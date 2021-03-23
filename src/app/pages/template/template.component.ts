@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+  ElementRef
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TemplatesService } from 'src/app/services/templates.service';
@@ -20,6 +26,7 @@ export class TemplateComponent
   template: Template = new Template();
   id: string = '';
   role = '';
+  mode = '';
 
   loadSubcription: Subscription;
   saveSubscription: Subscription;
@@ -45,6 +52,7 @@ export class TemplateComponent
 
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
+    this.mode = this.route.snapshot.params.mode;
     if (id) {
       this.id = id;
       this.loadData(id);
@@ -79,22 +87,48 @@ export class TemplateComponent
           }
         );
     } else {
-      const template = { ...this.template, _id: undefined };
-      this.isSaving = true;
-      this.saveSubscription && this.saveSubscription.unsubscribe();
-      this.saveSubscription = this.templatesService
-        .update(this.id, template)
-        .subscribe(
-          () => {
-            this.toastr.success('Template has been successfully updated.');
-            this.router.navigate(['/templates']);
-            this.isSaving = false;
-            this.saved = true;
-          },
-          () => {
-            this.isSaving = false;
-          }
-        );
+      if (this.mode != 'duplicate') {
+        const template = { ...this.template, _id: undefined };
+        this.isSaving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.templatesService
+          .update(this.id, template)
+          .subscribe(
+            () => {
+              this.toastr.success('Template has been successfully updated.');
+              this.router.navigate(['/templates']);
+              this.isSaving = false;
+              this.saved = true;
+            },
+            () => {
+              this.isSaving = false;
+            }
+          );
+      } else {
+        const template = {
+          content: this.template.content,
+          subject: this.template.subject,
+          title: this.template.title,
+          type: this.template.type
+        };
+        this.isSaving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.templatesService
+          .create(new Template().deserialize(template))
+          .subscribe(
+            () => {
+              this.toastr.success(
+                'New Template has been successfully duplicated.'
+              );
+              this.router.navigate(['/templates']);
+              this.isSaving = false;
+              this.saved = true;
+            },
+            () => {
+              this.isSaving = false;
+            }
+          );
+      }
     }
   }
 
@@ -107,6 +141,9 @@ export class TemplateComponent
         this.template.deserialize(res);
         if (this.template.type === 'email') {
           this.htmlEditor.setValue(this.template.content);
+        }
+        if (this.mode == 'duplicate') {
+          this.template.title = '';
         }
       },
       () => (this.isLoading = false)

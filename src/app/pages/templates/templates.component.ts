@@ -8,7 +8,7 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
-import { sortStringArray } from '../../utils/functions';
+import { sortStringArray, sortRoleArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
 @Component({
@@ -77,7 +77,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     this.loadSubscription = this.templatesService.templates$.subscribe(
       (templates) => {
         this.templates = templates;
-        this.filteredResult = templates;
+        this.filteredResult = sortRoleArray(templates, true);
       }
     );
     this.templatesService.loadAll(true);
@@ -142,7 +142,11 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   }
 
   openTemplate(template: Template): void {
-    this.router.navigate(['/templates/' + template._id]);
+    this.router.navigate(['/templates/edit/' + template._id]);
+  }
+
+  duplicateTemplate(template: Template): void {
+    this.router.navigate(['/templates/duplicate/' + template._id]);
   }
 
   deleteTemplate(template: Template): void {
@@ -168,25 +172,37 @@ export class TemplatesComponent implements OnInit, OnDestroy {
         template.title + ' ' + template.content + ' ' + template.subject;
       return searchReg(str, this.searchStr);
     });
-    this.filteredResult = filtered;
+    if (filtered.length) {
+      this.filteredResult = sortRoleArray(filtered, true);
+    } else {
+      this.filteredResult = filtered;
+    }
     this.page = 1;
   }
 
   clearSearchStr(): void {
     this.searchStr = '';
-    this.filteredResult = this.templates;
+    this.filteredResult = sortRoleArray(this.templates, true);
   }
 
   changePageSize(type: any): void {
     this.pageSize = type;
   }
 
-  sort(field): void {
-    this.filteredResult = sortStringArray(
-      this.filteredResult,
-      field,
-      this.searchCondition[field]
-    );
+  sort(field: string): void {
+    if (field == 'role') {
+      this.filteredResult = sortRoleArray(
+        this.filteredResult,
+        this.searchCondition[field]
+      );
+    } else {
+      this.filteredResult = sortStringArray(
+        this.filteredResult,
+        field,
+        this.searchCondition[field]
+      );
+    }
+    this.page = 1;
     this.searchCondition[field] = !this.searchCondition[field];
   }
 }

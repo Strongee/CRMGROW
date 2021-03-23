@@ -193,7 +193,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         maxWidth: '940px',
         data: {
           hideMaterials: materials,
-          title: 'Insert media',
+          title: 'Insert material',
           multiple: true,
           onlyMine: false
         }

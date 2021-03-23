@@ -2,15 +2,18 @@
   <div class="template-container d-flex w-100">
     <div class="template-content my-2">
       <div class="v-center justify-content-between">
-        <ng-container *ngIf="!!id; else createTemplate">
+        <ng-container *ngIf="!!id && mode == 'edit'">
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Edit template</h6>
         </ng-container>
-        <ng-template #createTemplate>
+        <ng-container *ngIf="!!id && mode == 'duplicate'">
+          <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Duplicate template</h6>
+        </ng-container>
+        <ng-container *ngIf="!id">
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Create new template</h6>
-        </ng-template>
+        </ng-container>
       </div>
       <div class="v-center mt-3">
-        <div class="custom-radio-container">
+        <div class="custom-radio-container" *ngIf="template.type === 'email' || !id || (!!id && !template.role)">
           <input class="custom-radio"
             type="radio"
             id="template-type-email"
@@ -20,7 +23,7 @@
           <label class="f-6 font-weight-bold"
             for="template-type-email">Email</label>
         </div>
-        <div class="custom-radio-container">
+        <div class="custom-radio-container" *ngIf="template.type === 'text' || !id || (!!id && !template.role)">
           <input class="custom-radio"
             type="radio"
             id="template-type-text"
@@ -38,6 +41,7 @@
           <label>Title</label>
           <input type="text"
             class="form-control"
+            placeholder="Type title"
             required
             [(ngModel)]="template.title"
             (ngModelChange)="stateChanged()"
@@ -97,6 +101,7 @@
             <label>Subject</label>
             <input type="text"
               class="form-control"
+              placeholder="Type subject"
               #subjectField
               [(ngModel)]="template.subject"
               (click)="setCursorPos(subjectField, 'subject')"
@@ -129,6 +134,7 @@
             <label>Content</label>
             <textarea rows="10"
               class="form-control"
+              placeholder="Enter text content..."
               [(ngModel)]="template.content"
               name="content"
               #content="ngModel"
@@ -145,12 +151,28 @@
           </div>
         </ng-template>
 
-        <div class="d-flex mt-auto">
-          <a class="btn c-blue font-weight-bold"
-            [routerLink]="['/templates']">Cancel</a>
-          <button class="btn btn-primary font-weight-bold ml-2"
-            [class.loading]="isSaving">Save</button>
-        </div>
+        <ng-container *ngIf="template.role == 'admin'">
+          <div class="d-flex justify-content-end">
+            <a class="btn c-blue font-weight-bold"
+              [routerLink]="['/templates']">Back</a>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="(template.role != 'admin' && mode == 'duplicate') || !id">
+          <div class="d-flex justify-content-end">
+            <a class="btn c-blue font-weight-bold"
+              [routerLink]="['/templates']">Cancel</a>
+            <button class="btn btn-primary font-weight-bold ml-2"
+              [class.loading]="isSaving">Create</button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="template.role != 'admin' && mode == 'edit'">
+          <div class="d-flex justify-content-end">
+            <a class="btn c-blue font-weight-bold"
+              [routerLink]="['/templates']">Cancel</a>
+            <button class="btn btn-primary font-weight-bold ml-2"
+              [class.loading]="isSaving">Save</button>
+          </div>
+        </ng-container>
       </form>
     </div>
     <div class="variable-button-group shadow-2">

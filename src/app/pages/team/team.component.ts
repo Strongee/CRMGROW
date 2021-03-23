@@ -250,7 +250,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         maxWidth: '940px',
         disableClose: true,
         data: {
-          title: 'Share media',
+          title: 'Share material',
           buttonLabel: 'Share',
           multiple: true,
           onlyMine: true,
@@ -480,7 +480,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         width: '96vw',
         data: {
           title: 'Remove Member',
-          message: 'Are you sure to remove this member?',
+          message: 'Are you sure you want to remove this member?',
           cancelLabel: 'No',
           confirmLabel: 'Remove'
         }
