@@ -21,7 +21,7 @@
           <div class="template" *ngIf="template.type === 'email'">
             <div class="v-center">
               <div class="f-3 font-weight-bold w-100" (click)="selectTemplate(template)">{{template.title}}</div>
-              <a class="ml-auto" [routerLink]="['templates/' + template._id]" target="blank">
+              <a class="ml-auto" [routerLink]="['/templates/edit/' + template._id]" target="blank">
                 <i class="d-block i-icon i-expand bgc-dark"></i>
               </a>
             </div>
