@@ -1300,7 +1300,10 @@ export class MaterialsComponent implements OnInit {
 
   filter(): void {
     this.selection = [];
-    const words = this.searchStr.split(' ');
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
     const reg = new RegExp(words.join('|'), 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
       if (this.selectedFolder) {

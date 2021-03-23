@@ -680,7 +680,7 @@
                           <div class="op-75 f-3">to {{(userService.profile$ | async).user_name}}</div>
                         </ng-template>
                       </div>
-                      <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
+                      <div class="f-6 text-content opened" [innerHTML]="convertTextContent(activity.activity_detail.content)"></div>
                     </div>
                   </ng-container>
                   <ng-template #removedTextTemplate>
@@ -692,7 +692,7 @@
                 </div>
               </div>
 
-              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'videos' || activity.type == 'video_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'videos' || activity.type == 'video_trackers') && (groupActions[activity.group_id].length > 1 || (!activity.emails && !activity.texts))">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
@@ -812,7 +812,7 @@
                 </div>
               </div>
 
-              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'pdfs' || activity.type == 'pdf_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'pdfs' || activity.type == 'pdf_trackers') && (groupActions[activity.group_id].length > 1 || (!activity.emails && !activity.texts))">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
@@ -874,7 +874,7 @@
                 </div>
               </div>
 
-              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'images' || activity.type == 'image_trackers') && (groupActions[activity.group_id].length > 1 || !activity.emails)">
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'email') && (activity.type == 'images' || activity.type == 'image_trackers') && (groupActions[activity.group_id].length > 1 || (!activity.emails && !activity.texts))">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">

@@ -828,6 +828,23 @@ table.table {
       font-size: 13px;
     }
   }
+  
+  .text-content .material-thumbnail {
+    display: inline-block;
+    margin-right: 0px;
+    margin-top: 4px;
+    &:first-child {
+      display: inline;
+    }
+    &:first-child::before {
+      display: block;
+      content: '';
+    }
+    img {
+      width: 120px;
+      height: auto;
+    }
+  }
 }
 
 .recent-activity {

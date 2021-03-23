@@ -428,7 +428,10 @@ export function convertTimetoObj(dateTime: string, timezone: any): any {
 }
 
 export function searchReg(content, target): boolean {
-  const words = target.split(' ');
+  const words = _.uniqBy(
+    content.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+    (e) => e.toLowerCase()
+  );
   const reg = new RegExp(words.join('|'), 'gi');
   if (!target || !words.length) {
     return true;

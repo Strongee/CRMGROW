@@ -1306,6 +1306,64 @@ export class ContactComponent implements OnInit, OnDestroy {
     return convertString;
   }
 
+  convertTextContent(content = ''): string {
+    const videoReg = new RegExp(
+      environment.website + '/video1/' + '([0-9a-zA-Z]{24})',
+      'gi'
+    );
+    const imageReg = new RegExp(
+      environment.website + '/image1/' + '([0-9a-zA-Z]{24})',
+      'gi'
+    );
+    const pdfReg = new RegExp(
+      environment.website + '/pdf1/' + '([0-9a-zA-Z]{24})',
+      'gi'
+    );
+    const videoLinks = content.match(videoReg) || [];
+    const imageLinks = content.match(imageReg) || [];
+    const pdfLinks = content.match(pdfReg) || [];
+    const activityIds = [];
+    const materials = [...videoLinks, ...imageLinks, ...pdfLinks];
+    materials.forEach((material) => {
+      const id = material.replace(
+        new RegExp(
+          environment.website +
+            '/video1/|' +
+            environment.website +
+            '/pdf1/|' +
+            environment.website +
+            '/image1/',
+          'gi'
+        ),
+        ''
+      );
+      activityIds.push(id);
+    });
+    let resultHTML = content;
+    activityIds.forEach((activity) => {
+      const material = this.details[this.sentHistory[activity]];
+      if (material) {
+        let prefix = 'video?video=';
+        let activityPrefix = 'video1';
+        if (material.type.indexOf('pdf') !== -1) {
+          prefix = 'pdf?pdf=';
+          activityPrefix = 'pdf1';
+        }
+        if (material.type.indexOf('image') !== -1) {
+          prefix = 'image?image=';
+          activityPrefix = 'image1';
+        }
+        const link = `<a target="_blank" href="${environment.website}/${prefix}${material._id}&user=${this.userId}" class="material-thumbnail"><img src="${material.preview}"></a>`;
+        const originalLink = `${environment.website}/${activityPrefix}/${activity}`;
+        resultHTML = resultHTML.replace(originalLink, link);
+      }
+    });
+    if (activityIds.length) {
+      return resultHTML;
+    }
+    return resultHTML;
+  }
+
   getPrevPage(): string {
     if (!this.handlerService.previousUrl) {
       return 'to Contacts';

@@ -23,6 +23,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-automations',
@@ -118,18 +119,8 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const words = this.searchStr.split(' ');
-    const reg = new RegExp(words.join('|'), 'gi');
     const filtered = this.automations.filter((item) => {
-      if (!this.searchStr || !words.length) {
-        return true;
-      }
-      if (
-        _.uniqBy(item.title.match(reg), (e) => e.toLowerCase()).length ===
-        words.length
-      ) {
-        return true;
-      }
+      return searchReg(item.title, this.searchStr);
     });
     this.filteredResult = filtered;
     this.page = 1;
