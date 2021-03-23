@@ -277,7 +277,13 @@
         <ng-container matColumnDef="analytics">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="analytics-col">views</th>
+            *ngIf="!selection.length" class="analytics-col">
+              <div class="v-center c-pointer" (click)="sort('views')">
+                <span>Views</span>
+                <i class="i-icon s-8 d-block bgc-black ml-2"
+                   [class]="searchCondition.views ? 'i-triangle-up' : 'i-triangle-down'"></i>
+              </div>
+            </th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="analytics-col">

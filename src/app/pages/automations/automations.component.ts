@@ -42,7 +42,6 @@ import * as _ from 'lodash';
     ])
   ]
 })
-
 export class AutomationsComponent implements OnInit, OnDestroy {
   DISPLAY_COLUMNS = [
     'title',
@@ -107,6 +106,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
       (automations) => {
         this.automations = automations;
         this.filteredResult = automations;
+        this.sort('role');
       }
     );
     this.automationService.loadAll(true);
@@ -235,6 +235,22 @@ export class AutomationsComponent implements OnInit, OnDestroy {
         field,
         this.searchCondition[field]
       );
+    } else if (field === 'role') {
+      const admins = this.filteredResult.filter(
+        (item) => item.role === 'admin'
+      );
+      const teams = this.filteredResult.filter(
+        (item) => item.role === 'team' && item.user === this.userId
+      );
+      const shares = this.filteredResult.filter(
+        (item) => item.role === 'team' && item.user !== this.userId
+      );
+      const owns = this.filteredResult.filter((item) => !item.role);
+      if (this.searchCondition[field]) {
+        this.filteredResult = [...admins, ...teams, ...owns, ...shares];
+      } else {
+        this.filteredResult = [...owns, ...teams, ...shares, ...admins];
+      }
     } else {
       this.filteredResult = sortStringArray(
         this.filteredResult,
@@ -243,5 +259,6 @@ export class AutomationsComponent implements OnInit, OnDestroy {
       );
     }
     this.searchCondition[field] = !this.searchCondition[field];
+    this.page = 1;
   }
 }
