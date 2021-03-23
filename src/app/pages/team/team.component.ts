@@ -26,7 +26,6 @@ import { MaterialSendComponent } from '../../components/material-send/material-s
 import { MaterialEditTemplateComponent } from '../../components/material-edit-template/material-edit-template.component';
 import { MaterialBrowserComponent } from 'src/app/components/material-browser/material-browser.component';
 
-
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
@@ -168,13 +167,15 @@ export class TeamComponent implements OnInit, OnDestroy {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
-        this.teamService.loadSharedContacts(this.teamId).subscribe((contacts) => {
-          this.loading = false;
-          if (contacts && contacts.length) {
-            this.sharedContacts = contacts;
-          }
-          this.arrangeTeamData();
-        });
+        this.teamService
+          .loadSharedContacts(this.teamId)
+          .subscribe((contacts) => {
+            this.loading = false;
+            if (contacts && contacts.length) {
+              this.sharedContacts = contacts;
+            }
+            this.arrangeTeamData();
+          });
         if (this.team.videos && this.team.videos.length > 0) {
           for (const video of this.team.videos) {
             const data = {
@@ -243,7 +244,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     });
   }
 
-  shareMaterial(type): void {
+  shareMaterial(): void {
     this.dialog
       .open(MaterialBrowserComponent, {
         width: '96vw',
@@ -253,60 +254,63 @@ export class TeamComponent implements OnInit, OnDestroy {
           title: 'Share material',
           buttonLabel: 'Share',
           multiple: true,
-          onlyMine: true,
-          material_type: type
+          onlyMine: true
         }
       })
       .afterClosed()
       .subscribe((res) => {
         if (res && res.materials && res.materials.length) {
-          const materialIds = res.materials.map((e) => e._id);
-          if (type === 'video') {
+          const videoIds = [];
+          const pdfIds = [];
+          const imageIds = [];
+          for (const material of res.materials) {
+            const materialType = this.getMaterialType(material);
+            if (materialType === 'video') {
+              videoIds.push(material._id);
+            } else if (materialType === 'pdf') {
+              pdfIds.push(material._id);
+            } else if (materialType === 'image') {
+              imageIds.push(material._id);
+            }
+          }
+
+          if (videoIds.length > 0) {
             this.teamService
-              .shareVideos(this.teamId, materialIds)
+              .shareVideos(this.teamId, videoIds)
               .subscribe((status) => {
                 this.team.videos = _.unionBy(
                   this.team.videos,
                   res.materials,
                   '_id'
                 );
-                this.materials = _.unionBy(
-                  this.materials,
-                  res.materials,
-                  '_id'
-                );
               });
-          } else if (type === 'pdf') {
+          }
+
+          if (pdfIds.length > 0) {
             this.teamService
-              .sharePdfs(this.teamId, materialIds)
+              .sharePdfs(this.teamId, pdfIds)
               .subscribe((status) => {
                 this.team.pdfs = _.unionBy(
                   this.team.pdfs,
                   res.materials,
                   '_id'
                 );
-                this.materials = _.unionBy(
-                  this.materials,
-                  res.materials,
-                  '_id'
-                );
               });
-          } else if (type === 'image') {
+          }
+
+          if (imageIds.length > 0) {
             this.teamService
-              .shareImages(this.teamId, materialIds)
+              .shareImages(this.teamId, imageIds)
               .subscribe((status) => {
                 this.team.images = _.unionBy(
                   this.team.images,
                   res.materials,
                   '_id'
                 );
-                this.materials = _.unionBy(
-                  this.materials,
-                  res.materials,
-                  '_id'
-                );
               });
           }
+
+          this.materials = _.unionBy(this.materials, res.materials, '_id');
         }
       });
   }
@@ -360,7 +364,8 @@ export class TeamComponent implements OnInit, OnDestroy {
         maxHeight: '60vh',
         disableClose: true,
         data: {
-          team_id: this.teamId
+          team_id: this.teamId,
+          preShared: this.team.email_templates
         }
       })
       .afterClosed()
@@ -942,5 +947,16 @@ export class TeamComponent implements OnInit, OnDestroy {
       count += this.team.members.length;
     }
     return count;
+  }
+
+  getMaterialType(material: any): string {
+    if (material.type) {
+      if (material.type === 'application/pdf') {
+        return 'pdf';
+      } else if (material.type.includes('image')) {
+        return 'image';
+      }
+    }
+    return 'video';
   }
 }

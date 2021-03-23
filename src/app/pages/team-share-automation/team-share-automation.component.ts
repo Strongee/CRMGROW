@@ -1,5 +1,6 @@
 import {
-  Component, Input,
+  Component,
+  Input,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -27,7 +28,7 @@ import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
-
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-team-share-automation',
@@ -48,7 +49,6 @@ import { AutomationCreateComponent } from '../../components/automation-create/au
   ]
 })
 export class TeamShareAutomationComponent implements OnInit, OnChanges {
-
   DISPLAY_COLUMNS = [
     'title',
     'owner',
@@ -72,6 +72,7 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   @Input('automations') automations: Automation[] = [];
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('detailPanel') detailPanel: AutomationStatusComponent;
+  @Input('role') role: string;
 
   filteredResult: Automation[] = [];
   searchStr = '';
@@ -86,7 +87,8 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private location: Location,
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private teamService: TeamService
   ) {}
 
   ngOnInit(): void {
@@ -204,6 +206,52 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
+        }
+      });
+  }
+
+  isStopSharable(automation): any {
+    if (automation.role === 'admin') {
+      return true;
+    } else {
+      if (automation.role === 'team' && automation.user === this.userId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  stopShareAutomation(automation): any {
+    this.dialog
+      .open(ConfirmComponent, {
+        data: {
+          title: 'Stop Sharing',
+          message: 'Are you sure to remove this automation?',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.teamService.removeAutomation(automation._id).subscribe(
+            (res) => {
+              const index = this.automations.findIndex(
+                (item) => item._id === automation._id
+              );
+              if (index >= 0) {
+                this.automations.splice(index, 1);
+              }
+              const filterIndex = this.filteredResult.findIndex(
+                (item) => item._id === automation._id
+              );
+              if (filterIndex >= 0) {
+                this.filteredResult.splice(filterIndex, 1);
+              }
+              this.toastr.success('You removed the automation successfully.');
+            },
+            (err) => {}
+          );
         }
       });
   }

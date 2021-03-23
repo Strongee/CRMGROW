@@ -33,8 +33,8 @@
             <div class="" ngbDropdownMenu>
               <a class="dropdown-item f-3" (click)="editTeam()">Edit team</a>
               <hr class="my-1">
-              <a class="dropdown-item f-3">Share material</a>
-              <a class="dropdown-item f-3" (click)="shareTemplate()">Share template</a>
+              <a class="dropdown-item f-3" (click)="shareMaterial()">Share material</a>
+              <a class="dropdown-item f-3" (click)="shareEmailTemplate()">Share template</a>
               <a class="dropdown-item f-3" (click)="shareAutomation()">Share automation</a>
               <a class="dropdown-item f-3" (click)="shareContact()">Share contact</a>
             </div>
@@ -265,14 +265,18 @@
         <div *ngSwitchCase="'materials'" class="materials-container mt-4">
           <div class="v-center with-tab panel-header contact-header">
             <button type="button" class="btn btn-white-blue v-center ml-auto"
-              (click)="shareMaterial(selectedMaterialTab.id)" *ngIf="role=='editor' || role == 'owner'"
+              (click)="shareMaterial()" *ngIf="role=='editor' || role == 'owner'"
             >
               <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share material</span>
             </button>
           </div>
           <ng-container *ngIf="materials.length > 0; else emptyMaterialListTemplate">
-            <app-team-share-material [materials]="materials" [team]="team"></app-team-share-material>
+            <app-team-share-material
+              [materials]="materials"
+              [team]="team"
+              [role]="role"
+            ></app-team-share-material>
           </ng-container>
           <ng-template #emptyMaterialListTemplate>
             <div class="empty-materials mt-3">
@@ -299,7 +303,7 @@
             </button>
           </div>
           <ng-container *ngIf="sharedContacts.length > 0; else emptySharedListTemplate">
-            <app-team-share-contact [contacts]="sharedContacts"></app-team-share-contact>
+            <app-team-share-contact [team]="team"></app-team-share-contact>
           </ng-container>
           <ng-template #emptySharedListTemplate>
             <div class="empty-materials mt-3">
@@ -353,7 +357,10 @@
             </button>
           </div>
           <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
-            <app-team-share-template [templates]="team.email_templates"></app-team-share-template>
+            <app-team-share-template
+              [templates]="team.email_templates"
+              [role]="role"
+            ></app-team-share-template>
           </ng-container>
           <ng-template #emptyTemplateListTemplate>
             <div class="empty-materials mt-3">

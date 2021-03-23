@@ -248,6 +248,13 @@
                     <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                   </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item"
+                    (click)="stopShareMaterial(element)"
+                    *ngIf="isStopSharable(element)"
+                  >
+                    <i class="i-icon i-block bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Stop Share</span>
+                  </button>
                 </ng-template>
               </div>
             </div>

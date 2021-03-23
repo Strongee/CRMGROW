@@ -324,6 +324,14 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM REMOVE TEMPLATE', []))
       );
   }
+  removeAutomation(id): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.REMOVE_AUTOMATION + id, {})
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM REMOVE AUTOMATION', []))
+      );
+  }
   updateTeam(teamId, data): Observable<any> {
     return this.httpClient
       .post(this.server + TEAM.UPDATE_TEAM, {
