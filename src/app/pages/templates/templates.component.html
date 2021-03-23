@@ -55,10 +55,10 @@
         <tbody class="position-relative">
           <tr
             *ngFor="let template of filteredResult
-            | paginate : {id: 'templateTable', itemsPerPage: pageSize.id, currentPage: page, totalItems: filteredResult.length}
+            | paginate : {id: 'templateTable', itemsPerPage: pageSize.id, currentPage: page, totalItems: filteredResult?.length}
           ">
             <td class="template-title">
-              <a [routerLink]="['/templates/' + template._id]"
+              <a [routerLink]="['/templates/edit/' + template._id]"
                  class="hover-bottom font-weight-bold f-4">{{template.title}}</a>
             </td>
             <td class="template-auth">
@@ -88,11 +88,16 @@
                 </label>
                 <div class="v-center ml-4">
                   <ng-container *ngIf="template.role != 'admin' && template.user == userId">
-                    <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" [class.disabled]="template.role == 'admin'">
+                    <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)">
                       <i class="i-icon bgc-dark i-edit"></i>
                     </div>
-                    <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)" [class.disabled]="template.role == 'admin'">
+                    <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)">
                       <i class="i-icon bgc-dark i-trash ml-2"></i>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="template.role == 'team' && template.user != userId">
+                    <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
+                      <i class="i-icon bgc-dark i-duplicate"></i>
                     </div>
                   </ng-container>
                 </div>
@@ -102,7 +107,7 @@
         </tbody>
       </table>
     </div>
-    <ng-container *ngIf="filteredResult.length">
+    <ng-container *ngIf="filteredResult?.length">
       <div class="my-2 table-control mode-1">
         <div class="m-auto pagination-wrapper">
           <pagination-controls

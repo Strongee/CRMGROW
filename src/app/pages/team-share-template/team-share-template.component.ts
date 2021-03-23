@@ -131,7 +131,7 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   }
 
   openTemplate(template: Template): void {
-    this.router.navigate(['/templates/' + template._id]);
+    this.router.navigate(['/templates/edit/' + template._id]);
   }
 
   deleteTemplate(template: Template): void {

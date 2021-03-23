@@ -8,7 +8,7 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
-import { sortStringArray } from '../../utils/functions';
+import { sortStringArray, sortRoleArray } from '../../utils/functions';
 
 @Component({
   selector: 'app-templates',
@@ -76,7 +76,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     this.loadSubscription = this.templatesService.templates$.subscribe(
       (templates) => {
         this.templates = templates;
-        this.filteredResult = templates;
+        this.filteredResult = sortRoleArray(templates, true);
       }
     );
     this.templatesService.loadAll(true);
@@ -141,7 +141,11 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   }
 
   openTemplate(template: Template): void {
-    this.router.navigate(['/templates/' + template._id]);
+    this.router.navigate(['/templates/edit/' + template._id]);
+  }
+
+  duplicateTemplate(template: Template): void {
+    this.router.navigate(['/templates/duplicate/' + template._id]);
   }
 
   deleteTemplate(template: Template): void {
@@ -184,12 +188,20 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     this.pageSize = type;
   }
 
-  sort(field): void {
-    this.filteredResult = sortStringArray(
-      this.filteredResult,
-      field,
-      this.searchCondition[field]
-    );
+  sort(field: string): void {
+    if (field == 'role') {
+      this.filteredResult = sortRoleArray(
+        this.filteredResult,
+        this.searchCondition[field]
+      );
+    } else {
+      this.filteredResult = sortStringArray(
+        this.filteredResult,
+        field,
+        this.searchCondition[field]
+      );
+    }
+    this.page = 1;
     this.searchCondition[field] = !this.searchCondition[field];
   }
 }

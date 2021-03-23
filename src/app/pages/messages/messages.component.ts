@@ -11,6 +11,7 @@ import { Contact } from 'src/app/models/contact.model';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
+import { sortDateArray } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-messages',
@@ -95,9 +96,7 @@ export class MessagesComponent implements OnInit {
             }
           }
         }
-        this.contacts.sort(function (a, b) {
-          return moment.utc(b.lastest_at).diff(moment.utc(a.lastest_at));
-        });
+        this.contacts = sortDateArray(this.contacts, 'lastest_at', false);
         if (Object.keys(this.selectedContact).length == 0) {
           this.selectContact(this.contacts[0]);
         }

@@ -258,7 +258,15 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'templates/:id',
+    path: 'templates/:mode/:id',
+    component: TemplateComponent,
+    data: {
+      title: 'Template'
+    },
+    canDeactivate: [PageExitGuard]
+  },
+  {
+    path: 'templates/:mode/:id',
     component: TemplateComponent,
     data: {
       title: 'Template'
