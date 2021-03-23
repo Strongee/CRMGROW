@@ -63,6 +63,11 @@
                     <i class="i-icon bgc-dark i-edit"></i>
                   </div>
                 </ng-container>
+                <ng-container *ngIf="isStopSharable(template)">
+                  <div class="icon-button v-center justify-content-center" (click)="stopShareTemplate(template)" [class.disabled]="template.role == 'admin'">
+                    <i class="i-icon bgc-dark i-block"></i>
+                  </div>
+                </ng-container>
               </div>
             </td>
           </ng-container>

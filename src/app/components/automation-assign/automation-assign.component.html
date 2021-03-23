@@ -9,7 +9,13 @@
         </div>
       </div>
       <div class="my-3">
-        <label>Invite contacts</label>
+        <div class="v-center justify-content-between">
+          <label>Contacts</label>
+          <div class="v-center c-pointer" (click)="showAddContact()">
+            <i class="i-icon i-plus d-block sm bgc-blue"></i>
+            <span class="f-3 font-weight-bold ml-2 c-blue">Add Contact</span>
+          </div>
+        </div>
         <app-select-contact
           (onSelect)="addContacts($event)"
           #contactSelector
@@ -29,7 +35,7 @@
                 <div class="f-5">{{contact.fullName}}</div>
               </div>
               <button type="button" class="v-center border-0 bgc-trans ml-1" (click)="removeContact(contact)">
-                <span class="text-danger f-3 fw-600">Unassign</span>
+                <span class="text-danger f-3 fw-600">Remove</span>
               </button>
             </div>
           </div>

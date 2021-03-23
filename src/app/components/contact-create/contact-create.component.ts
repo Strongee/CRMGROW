@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountryISO } from 'ngx-intl-tel-input';
 import {
   COUNTRIES,
+  DialogSettings,
   PHONE_COUNTRIES,
   REGIONS,
   STAGES
 } from 'src/app/constants/variable.constants';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
@@ -18,6 +19,7 @@ import { Automation } from 'src/app/models/automation.model';
 import { AutomationService } from 'src/app/services/automation.service';
 import { DealsService } from '../../services/deals.service';
 import { PhoneInputComponent } from '../phone-input/phone-input.component';
+import { UploadContactsComponent } from '../upload-contacts/upload-contacts.component';
 
 @Component({
   selector: 'app-contact-create',
@@ -79,7 +81,8 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     private handlerService: HandlerService,
     private dealsService: DealsService,
     private automationService: AutomationService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -259,5 +262,9 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       return false;
     }
     return true;
+  }
+
+  importCSV(): void {
+    this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
   }
 }

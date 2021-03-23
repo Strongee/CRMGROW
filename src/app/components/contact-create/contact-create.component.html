@@ -172,14 +172,25 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-12 mb-3">
+      <div class="col-12 mb-3 form-group">
         <label>Automation</label>
         <app-input-automation (automationChange)="selectAutomation($event)"></app-input-automation>
       </div>
     </div>
   </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button type="button" mat-dialog-close class="btn c-blue">Cancel</button>
-    <button type="submit" class="btn btn-primary" [class.loading]="isCreating">Add</button>
+  <mat-dialog-actions>
+    <div class="ml-auto">
+      <button type="button" mat-dialog-close class="btn c-blue">Cancel</button>
+      <button type="submit" class="btn btn-primary" [class.loading]="isCreating">Add</button>
+    </div>
+    <div class="v-center mt-2">
+      <i class="i-icon i-lunch d-block bgc-blue"></i>
+      <div class="ml-2">
+        <span class="f-5 font-weight-bold">Bulk Imports</span>
+        <span class="f-3 ml-2">Upload your contact list with a .csv file by clicking</span>
+        <span class="f-3 font-weight-bold c-blue ml-1 c-pointer" (click)="importCSV()">here</span>
+      </div>
+    </div>
+
   </mat-dialog-actions>
 </form>

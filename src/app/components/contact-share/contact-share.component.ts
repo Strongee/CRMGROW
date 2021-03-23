@@ -78,7 +78,7 @@ export class ContactShareComponent implements OnInit {
     }
     this.loading = true;
     this.contactService
-      .shareContacts(this.selectedMember._id, [this.contact])
+      .shareContacts(this.selectedTeam._id, this.selectedMember._id, [this.contact])
       .subscribe((res) => {
         this.loading = false;
         if (res) {
