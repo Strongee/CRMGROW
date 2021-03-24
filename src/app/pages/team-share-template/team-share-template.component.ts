@@ -7,6 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
+import { TeamService } from '../../services/team.service';
+import { filter } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { Team } from '../../models/team.model';
 
 @Component({
   selector: 'app-team-share-template',
@@ -31,20 +35,25 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   deleting = false;
   currentUser: any;
 
+  templates: Template[] = [];
   filteredResult: Template[] = [];
   searchStr = '';
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
+  loading = false;
 
-  @Input('templates') templates: Template[] = [];
+  @Input('team') team: Team;
+  @Input('role') role: string;
 
   constructor(
     public templatesService: TemplatesService,
     private userService: UserService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private teamService: TeamService,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +72,23 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
         this.userId = profile._id;
       }
     );
-    this.filteredResult = this.templates;
+
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.teamService
+      .loadSharedTemplates(this.team._id)
+      .subscribe(
+        (res) => {
+          if (res) {
+            this.loading = false;
+            this.templates = res;
+            this.filteredResult = this.templates;
+          }
+        },
+        (error) => {
+          this.loading = false;
+        }
+      );
   }
 
   ngOnChanges(changes): void {
@@ -168,5 +193,51 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   clearSearchStr(): void {
     this.searchStr = '';
     this.filteredResult = this.templates;
+  }
+
+  isStopSharable(template): any {
+    if (template.role === 'admin') {
+      return true;
+    } else if (template.role === 'team') {
+      if (template.user === this.userId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  stopShareTemplate(template): any {
+    this.dialog
+      .open(ConfirmComponent, {
+        data: {
+          title: 'Stop Sharing',
+          message: 'Are you sure to remove this template?',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.teamService.removeTemplate(template._id).subscribe(
+            (res) => {
+              const index = this.templates.findIndex(
+                (item) => item._id === template._id
+              );
+              if (index >= 0) {
+                this.templates.splice(index, 1);
+              }
+              const filterIndex = this.filteredResult.findIndex(
+                (item) => item._id === template._id
+              );
+              if (filterIndex >= 0) {
+                this.filteredResult.splice(filterIndex, 1);
+              }
+              this.toast.success('You removed the template successfully.');
+            },
+            (err) => {}
+          );
+        }
+      });
   }
 }

@@ -24,7 +24,7 @@ export class SmsService extends HttpService {
 
   getMessage(contact: Contact): any {
     return this.httpClient
-      .post(this.server + SMS.GET_MESSAGE, { contact: contact })
+      .post(this.server + SMS.GET_MESSAGE, { contact: contact._id })
       .pipe(
         map((res) => res['data']),
         catchError(this.handleError('SMS GET MESSAGE', null))

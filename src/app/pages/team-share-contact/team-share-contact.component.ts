@@ -33,6 +33,8 @@ import { ContactCreateComponent } from 'src/app/components/contact-create/contac
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
+import { Team } from '../../models/team.model';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-team-share-contact',
@@ -65,7 +67,8 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     { id: 50, label: '50' }
   ];
 
-  @Input('contacts') contacts: any[] = [];
+  @Input('team') team: Team;
+  @Input('role') role: string;
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('editPanel') editPanel: ContactBulkComponent;
   panelType = '';
@@ -88,6 +91,9 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   updateSubscription: Subscription;
   filteredResult: Contact[] = [];
 
+  loading = false;
+  contacts: Contact[] = [];
+
   constructor(
     public router: Router,
     private route: ActivatedRoute,
@@ -95,7 +101,8 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     public contactService: ContactService,
     public userService: UserService,
     private handlerService: HandlerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private teamService: TeamService
   ) {}
 
   ngOnDestroy(): void {
@@ -105,8 +112,14 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.handlerService.pageName.next('contacts');
 
-    this.pageContacts = [...this.contacts];
-    this.filteredResult = [...this.contacts];
+    this.teamService.loadSharedContacts(this.team._id).subscribe((res) => {
+      this.loading = false;
+      if (res && res.contacts && res.contacts.length > 0) {
+        this.contacts = res.contacts;
+        this.pageContacts = [...this.contacts];
+        this.filteredResult = [...this.contacts];
+      }
+    });
 
     this.pageSelection = [];
     this.selection = [];
@@ -250,7 +263,9 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    * @param contact : ContactActivity
    */
   isSelected(contact: ContactActivity): boolean {
-    const index = this.pageSelection.findIndex((item) => item._id === contact._id);
+    const index = this.pageSelection.findIndex(
+      (item) => item._id === contact._id
+    );
     if (index >= 0) {
       return true;
     }

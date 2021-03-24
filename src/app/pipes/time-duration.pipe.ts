@@ -18,11 +18,16 @@ export class TimeDurationPipe implements PipeTransform {
       input = 0;
     }
     const dateObj = new Date(input);
-    const hours = dateObj.getUTCHours().toString().padStart(2, '0');
-    const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');
+    const hours = dateObj.getUTCHours();
+    const hourString = hours.toString();
+    const minutes = dateObj.getUTCMinutes().toString();
     const seconds = dateObj.getSeconds().toString().padStart(2, '0');
-
-    const timeString = hours + ':' + minutes + ':' + seconds;
-    return timeString;
+    if (hours) {
+      const timeString =
+        hourString + ':' + minutes.padStart(2, '0') + ':' + seconds;
+      return timeString;
+    } else {
+      return minutes + ':' + seconds;
+    }
   }
 }

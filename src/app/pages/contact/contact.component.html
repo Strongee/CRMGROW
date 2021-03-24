@@ -641,7 +641,7 @@
                                 <td class="duration-col">{{details[activity.emails]?.duration || '' | timeDuration}}</td>
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
-                                    {{detailActivity.created_at | date: 'MMM dd yyyy'}}
+                                    {{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}
                                   </div>
                                 </td>
                               </tr>
@@ -798,7 +798,7 @@
                                 
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
-                                    {{detailActivity.created_at | date: 'MMM dd yyyy'}}
+                                    {{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}
                                   </div>
                                 </td>
                               </tr>
@@ -1379,7 +1379,7 @@
                         </ng-container>
                       </div>
                       <div class="ml-auto f-3 op-56">
-                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
@@ -1462,7 +1462,7 @@
                                 </ng-template>
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
-                                    {{detailActivity.created_at | date: 'MMM dd yyyy'}}
+                                    {{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}
                                   </div>
                                 </td>
                               </tr>
@@ -1476,24 +1476,97 @@
 
                   <div class="history-detail texts-detail p-3 mt-3" *ngSwitchCase="'text'">
                     <div class="v-center justify-content-between mb-3">
-                      <div class="history-icon mr-3"><i class="act-icon act-texts"></i></div>
-                      <div class="">text</div>
+                      <div class="history-icon mr-3"><i class="act-icon act-{{detail.data_type}}"></i></div>
+                      <div class="">
+                        <ng-container [ngSwitch]="detail.data_type">
+                          <span *ngSwitchCase="'texts'">text</span>
+                          <span *ngSwitchCase="'videos'">video</span>
+                          <span *ngSwitchCase="'pdfs'">pdf</span>
+                          <span *ngSwitchCase="'images'">image</span>
+                        </ng-container>
+                      </div>
                       <div class="ml-auto f-3 op-56">
-                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
                     <div class="main-history-item">
-                      <div class="text-direction mb-3">
-                        <ng-container *ngIf="detail['sent']; else receivedDir">
-                          <h6 class="font-weight-bold mb-0">{{(userService.profile$ | async).user_name}}</h6>
-                          <div class="op-75 f-3">to {{contact.fullName}}</div>
+                      <ng-container *ngIf="detail.data_type === 'texts'; else materialTextTemplate">
+                        <div class="text-direction mb-3">
+                          <ng-container *ngIf="detail['sent']; else receivedDir">
+                            <h6 class="font-weight-bold mb-0">{{(userService.profile$ | async).user_name}}</h6>
+                            <div class="op-75 f-3">to {{contact.fullName}}</div>
+                          </ng-container>
+                          <ng-template #receivedDir>
+                            <h6 class="font-weight-bold mb-0">{{contact.fullName}}</h6>
+                            <div class="op-75 f-3">to {{(userService.profile$ | async).user_name}}</div>
+                          </ng-template>
+                        </div>
+                        <div class="f-6 text-content opened" [innerHTML]="convertTextContent(detail.content)"></div>
+                      </ng-container>
+                      <ng-template #materialTextTemplate>
+                        <div class="title f-6 font-weight-bold">
+                          {{detail.title}}
+                        </div>
+                        <ng-container [ngSwitch]="detail.data_type">
+                          <a *ngSwitchCase="'videos'" class="material-thumbnail" href="{{SITE}}/video?video={{detail._id}}&user={{userId}}" target="_blank">
+                            <img src="{{detail.preview}}"/>
+                          </a>
+                          <a *ngSwitchCase="'pdfs'" class="material-thumbnail" href="{{SITE}}/pdf?pdf={{detail._id}}&user={{userId}}" target="_blank">
+                            <img src="{{detail.preview}}"/>
+                          </a>
+                          <a *ngSwitchCase="'images'" class="material-thumbnail" href="{{SITE}}/image?image={{detail._id}}&user={{userId}}" target="_blank">
+                            <img src="{{detail.preview}}"/>
+                          </a>
                         </ng-container>
-                        <ng-template #receivedDir>
-                          <h6 class="font-weight-bold mb-0">{{contact.fullName}}</h6>
-                          <div class="op-75 f-3">to {{(userService.profile$ | async).user_name}}</div>
-                        </ng-template>
-                      </div>
-                      <div class="f-6 note-content opened">{{detail.content}}</div>
+                      </ng-template>
+                      <ng-container *ngIf="sendActions[detail._id]?.length > 1 || sendActions[detail.group_id]?.length > 1 || detail.description">
+                        <div class="summary">
+                          <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
+                        </div>
+                        <div class="detail">
+                          <div class="pt-3">
+                            <ng-container *ngIf="detail.data_type !== 'texts'">
+                              <div class="f-6 mb-3" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...'  | makeRedirect"></div>
+                            </ng-container>
+                            <table class="table"
+                                *ngIf="(detail.data_type === 'texts' && sendActions[detail._id]?.length > 1) || (detail.data_type !== 'texts' && sendActions[detail.group_id]?.length > 1)">
+                                <thead>
+                                  <tr>
+                                    <th class="session-col">session</th>
+                                    <th class="duration-col">duration</th>
+                                    <th class="start-col">from</th>
+                                    <th class="end-col">to</th>
+                                    <th class="date-col">date</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let detailActivity of (detail.data_type === 'texts' ? sendActions[detail._id] : sendActions[detail.group_id]); let i = index;">
+                                    <td class="session-col">
+                                      <span class="f-3 font-weight-bold">#{{(detail.data_type === 'texts' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
+                                      <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                    </td>
+                                    <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
+                                      <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
+                                      <td class="start-col">{{(detailActivity.activity_detail.start * 1000 || (detailActivity.activity_detail.material_last ? detailActivity.activity_detail.material_last * 1000 - detailActivity.activity_detail.duration : 0)) | timeDuration}}</td>
+                                      <td class="end-col">{{(detailActivity.activity_detail.to *1000 || detailActivity.activity_detail.material_last*1000) | timeDuration}}</td>
+                                    </ng-container>
+                                    <ng-template #normalTracker>
+                                      <td class="duration-col"></td>
+                                      <td class="start-col"></td>
+                                      <td class="end-col"></td>
+                                    </ng-template>
+                                    <td class="date-col">
+                                      <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
+                                        {{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
+                          </div>
+                        </div>
+                      </ng-container>
                     </div>
                   </div>
 

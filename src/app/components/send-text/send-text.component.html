@@ -36,8 +36,29 @@
       </div>
     </div>
   </div>
-  <div class="conversation-info">
-
+  <div class="conversation-info" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <ng-container *ngIf="loading; else messagesTemplate">
+      <div class="loader"></div>
+    </ng-container>
+    <ng-template #messagesTemplate>
+      <ng-container *ngFor="let message of messages">
+        <div class="message mt-3"
+          [ngClass]="{send: message.type == 0, receive: message.type == 1}"
+          [innerHTML]="parseContent(message.content)"
+        ></div>
+        <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
+            <ng-container *ngIf="calcDate(message.updated_at) == 0">
+                {{message.updated_at | date:'h:mm a'}}
+            </ng-container>
+            <ng-container *ngIf="calcDate(message.updated_at) > 0 && calcDate(message.updated_at) < 8">
+                {{message.updated_at | date:'EEE h:mm a'}}
+            </ng-container>
+            <ng-container *ngIf="calcDate(message.updated_at) > 8">
+                {{message.updated_at | date:'EEE dd, yyyy'}}
+            </ng-container>
+        </div>
+      </ng-container>
+    </ng-template>
   </div>
   <div class="message-info px-3 py-2 border-top">
     <mat-form-field class="w-100">

@@ -9,9 +9,12 @@
     <ng-container *ngIf="step == 3">
       <div class="f-22 font-weight-bold c-black">
         {{this.failedData.length > 0 ? 'Duplicates with Contacts' : 'Duplicates'}}
-        <span class="dup-notification-text f-6 ml-md-5 ml-sm-3 ml-3 c-red" *ngIf="isDuplicatedExist">
-          Contact is duplicated. Please merge duplicated contacts.
-        </span>
+<!--        <span class="dup-notification-text f-6 ml-md-5 ml-sm-3 ml-3 c-red" *ngIf="isDuplicatedExist">-->
+<!--          Contact is duplicated. Please merge duplicated contacts.-->
+<!--        </span>-->
+        <div class="f-5 font-weight-bold mb-3" *ngIf="getDuplicateContactCount() > 0">
+          There were <span class="f-8 c-blue">{{getDuplicateContactCount()}}</span> record duplicates. Please merge or edit primary data.
+        </div>
       </div>
     </ng-container>
     <ng-container *ngIf="step == 4">
@@ -121,9 +124,9 @@
     <ng-container *ngIf="step == 3">
       <div class="duplicate-wrapper pr-2">
         <div class="dups-container" *ngIf="sameContacts.length">
-          <div class="f-5 font-weight-bold mb-3" *ngIf="getDuplicateContactCount() > 0">
-            There were <span class="f-8 c-blue">{{getDuplicateContactCount()}}</span> record duplicates. Please merge or edit primary data.
-          </div>
+<!--          <div class="f-5 font-weight-bold mb-3" *ngIf="getDuplicateContactCount() > 0">-->
+<!--            There were <span class="f-8 c-blue">{{getDuplicateContactCount()}}</span> record duplicates. Please merge or edit primary data.-->
+<!--          </div>-->
           <ng-container  *ngFor="let dupItem of sameContacts; let dupIndex = index;">
             <div id="contact-group-{{dupIndex}}" class="merge-group-wrapper mb-3">
               <div class="table-wrapper">

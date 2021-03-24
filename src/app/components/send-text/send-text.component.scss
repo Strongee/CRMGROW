@@ -13,6 +13,37 @@
 
   .conversation-info {
     flex-grow: 1;
+    overflow: auto;
+    padding: 15px;
+    font-size: 13px;
+    
+    .message {
+      padding: 0.5rem 1rem;
+      max-width: 350px;
+      word-break: break-all;
+      white-space: break-spaces;
+
+      &:first-child {
+          margin-top: 0 !important;
+      }
+      &.send {
+          border-radius: 22px 22px 6px 22px;
+          background-color: #e0f2f1;
+          color: #004d40;
+          margin-left: auto;
+      }
+      &.receive {
+          border-radius: 22px 22px 22px 6px;
+          background-color: #EFF1F4;
+          color: $color-dark;
+          border: 1px solid rgba(16,19,54,0.24);
+      }
+    }
+    .message-date {
+        &.send {
+            text-align: right;
+        }
+    }
   }
 
   .template-info {

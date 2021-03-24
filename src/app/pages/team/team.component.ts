@@ -12,20 +12,14 @@ import { environment } from 'src/environments/environment';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { TabItem } from '../../utils/data.types';
-import { VideoShareComponent } from '../../components/video-share/video-share.component';
 import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
 import { InviteTeamComponent } from 'src/app/components/invite-team/invite-team.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
-import { MaterialShareComponent } from '../../components/material-share/material-share.component';
 import { TemplateShareComponent } from '../../components/template-share/template-share.component';
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { NotifyComponent } from '../../components/notify/notify.component';
-import { AutomationAssignComponent } from '../../components/automation-assign/automation-assign.component';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
-import { MaterialSendComponent } from '../../components/material-send/material-send.component';
-import { MaterialEditTemplateComponent } from '../../components/material-edit-template/material-edit-template.component';
 import { MaterialBrowserComponent } from 'src/app/components/material-browser/material-browser.component';
-
 
 @Component({
   selector: 'app-team',
@@ -42,7 +36,6 @@ export class TeamComponent implements OnInit, OnDestroy {
   loadSubscription: Subscription;
   updating = false;
   updateSubscription: Subscription;
-  paramSubscription: Subscription;
   role = 'member'; // owner | editor | member
   siteUrl = environment.website;
   createubscription: Subscription;
@@ -54,8 +47,6 @@ export class TeamComponent implements OnInit, OnDestroy {
   selectedVideos = new SelectionModel<any>(true, []);
   selectedPdfs = new SelectionModel<any>(true, []);
   selectedImages = new SelectionModel<any>(true, []);
-  loadAffiliateSubscription: Subscription;
-  createAffiliateSubscription: Subscription;
   selectedMembers = new SelectionModel(true, []);
   selectedJoinRequest = new SelectionModel(true, []);
   shareUrl = 'https://www.crmgrow.com/';
@@ -67,19 +58,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     { icon: '', label: 'Templates', id: 'templates' }
   ];
   selectedTab: TabItem = this.tabs[0];
-  materialTabs: TabItem[] = [
-    { icon: '', label: 'Video', id: 'video' },
-    { icon: '', label: 'PDF', id: 'pdf' },
-    { icon: '', label: 'Image', id: 'image' }
-  ];
-  selectedMaterialTab: TabItem = this.materialTabs[0];
-  contactTabs: TabItem[] = [
-    { icon: '', label: 'SHARED WITH ME', id: 'share-with' },
-    { icon: '', label: 'SHARED BY ME', id: 'share-by' }
-  ];
-  selectedContactTab: TabItem = this.contactTabs[0];
-  selectedSharedTab: TabItem;
-  sharedContacts = [];
+
   myContacts = [];
   otherContacts = [];
   materials: any[] = [];
@@ -162,46 +141,14 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.teamService.read(this.teamId).subscribe(
       (res) => {
+        this.loading = false;
         this.team = {
           ...res,
           owner: res['owner'],
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
-        this.teamService.loadSharedContacts(this.teamId).subscribe((contacts) => {
-          this.loading = false;
-          if (contacts && contacts.length) {
-            this.sharedContacts = contacts;
-          }
-          this.arrangeTeamData();
-        });
-        if (this.team.videos && this.team.videos.length > 0) {
-          for (const video of this.team.videos) {
-            const data = {
-              ...video,
-              material_type: 'video'
-            };
-            this.materials.push(data);
-          }
-        }
-        if (this.team.pdfs && this.team.pdfs.length > 0) {
-          for (const pdf of this.team.pdfs) {
-            const data = {
-              ...pdf,
-              material_type: 'pdf'
-            };
-            this.materials.push(data);
-          }
-        }
-        if (this.team.images && this.team.images.length > 0) {
-          for (const image of this.team.images) {
-            const data = {
-              ...image,
-              material_type: 'image'
-            };
-            this.materials.push(data);
-          }
-        }
+        this.arrangeTeamData();
       },
       () => {
         this.loading = false;
@@ -233,17 +180,9 @@ export class TeamComponent implements OnInit, OnDestroy {
         this.role = 'viewer';
       }
     }
-
-    this.sharedContacts.forEach((e) => {
-      if (e.user[0]._id === this.userId) {
-        this.myContacts.push(e);
-      } else {
-        this.otherContacts.push(e);
-      }
-    });
   }
 
-  shareMaterial(type): void {
+  shareMaterial(): void {
     this.dialog
       .open(MaterialBrowserComponent, {
         width: '96vw',
@@ -253,55 +192,56 @@ export class TeamComponent implements OnInit, OnDestroy {
           title: 'Share material',
           buttonLabel: 'Share',
           multiple: true,
-          onlyMine: true,
-          material_type: type
+          onlyMine: true
         }
       })
       .afterClosed()
       .subscribe((res) => {
         if (res && res.materials && res.materials.length) {
-          const materialIds = res.materials.map((e) => e._id);
-          if (type === 'video') {
+          const videoIds = [];
+          const pdfIds = [];
+          const imageIds = [];
+          for (const material of res.materials) {
+            const materialType = this.getMaterialType(material);
+            if (materialType === 'video') {
+              videoIds.push(material._id);
+            } else if (materialType === 'pdf') {
+              pdfIds.push(material._id);
+            } else if (materialType === 'image') {
+              imageIds.push(material._id);
+            }
+          }
+
+          if (videoIds.length > 0) {
             this.teamService
-              .shareVideos(this.teamId, materialIds)
+              .shareVideos(this.teamId, videoIds)
               .subscribe((status) => {
                 this.team.videos = _.unionBy(
                   this.team.videos,
                   res.materials,
                   '_id'
                 );
-                this.materials = _.unionBy(
-                  this.materials,
-                  res.materials,
-                  '_id'
-                );
               });
-          } else if (type === 'pdf') {
+          }
+
+          if (pdfIds.length > 0) {
             this.teamService
-              .sharePdfs(this.teamId, materialIds)
+              .sharePdfs(this.teamId, pdfIds)
               .subscribe((status) => {
                 this.team.pdfs = _.unionBy(
                   this.team.pdfs,
                   res.materials,
                   '_id'
                 );
-                this.materials = _.unionBy(
-                  this.materials,
-                  res.materials,
-                  '_id'
-                );
               });
-          } else if (type === 'image') {
+          }
+
+          if (imageIds.length > 0) {
             this.teamService
-              .shareImages(this.teamId, materialIds)
+              .shareImages(this.teamId, imageIds)
               .subscribe((status) => {
                 this.team.images = _.unionBy(
                   this.team.images,
-                  res.materials,
-                  '_id'
-                );
-                this.materials = _.unionBy(
-                  this.materials,
                   res.materials,
                   '_id'
                 );
@@ -345,10 +285,7 @@ export class TeamComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res && res.data) {
-          this.sharedContacts = _.unionBy(res.data, this.sharedContacts, '_id');
-          this.myContacts = _.unionBy(res.data, this.myContacts, '_id');
-        }
+
       });
   }
 
@@ -360,7 +297,8 @@ export class TeamComponent implements OnInit, OnDestroy {
         maxHeight: '60vh',
         disableClose: true,
         data: {
-          team_id: this.teamId
+          team_id: this.teamId,
+          preShared: this.team.email_templates
         }
       })
       .afterClosed()
@@ -375,37 +313,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         }
       });
   }
-  cancelReferral(member): void {
-    this.dialog
-      .open(ConfirmComponent, {
-        data: {
-          message: 'Are you sure to cancel this invitation?',
-          cancelLabel: 'No',
-          confirmLabel: 'Cancel'
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          const referrals = [...this.team.referrals];
-          const pos = referrals.indexOf(member);
-          if (pos !== -1) {
-            referrals.splice(pos, 1);
-          }
-          this.updating = true;
-          this.teamService.updateTeam(this.teamId, { referrals }).subscribe(
-            (response) => {
-              this.updating = false;
-              this.team.referrals = referrals;
-              this.toast.success('You canceled the invitation successfully.');
-            },
-            (err) => {
-              this.updating = false;
-            }
-          );
-        }
-      });
-  }
+
   cancelInvite(member): void {
     this.dialog
       .open(ConfirmComponent, {
@@ -565,90 +473,7 @@ export class TeamComponent implements OnInit, OnDestroy {
       }
     );
   }
-  sendMaterial(material: any, type: string): void {
-    this.dialog.open(MaterialSendComponent, {
-      position: { top: '5vh' },
-      width: '100vw',
-      maxWidth: '600px',
-      disableClose: false,
-      data: {
-        material: [{ ...material, material_type: type }],
-        material_type: type,
-        type: 'email'
-      }
-    });
-  }
 
-  editTemplate(material_id: string): void {
-    this.dialog.open(MaterialEditTemplateComponent, {
-      position: { top: '10vh' },
-      width: '100vw',
-      maxWidth: '600px',
-      height: '550px',
-      disableClose: true,
-      data: {
-        id: material_id
-      }
-    });
-  }
-
-  copyLink(material, type): void {
-    let url;
-
-    if (type === 'video') {
-      url =
-        environment.website +
-        '/video?video=' +
-        material._id +
-        '&user=' +
-        this.userId +
-        '&team=' +
-        this.teamId;
-    } else if (type === 'pdf') {
-      url =
-        environment.website +
-        '/pdf?pdf=' +
-        material._id +
-        '&user=' +
-        this.userId +
-        '&team=' +
-        this.teamId;
-    } else if (type === 'image') {
-      url =
-        environment.website +
-        '/image?image=' +
-        material._id +
-        '&user=' +
-        this.userId +
-        '&team=' +
-        this.teamId;
-    }
-    const el = document.createElement('textarea');
-    el.value = url;
-    el.setAttribute('readonly', '');
-    el.style.position = 'absolute';
-    el.style.left = '-9999px';
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    this.toast.success('Copied the link to clipboard');
-  }
-  assignContact(automation): void {
-    this.dialog
-      .open(AutomationAssignComponent, {
-        width: '500px',
-        maxWidth: '90vw',
-        data: {
-          automation
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-        }
-      });
-  }
   status(): any {
     if (this.role) {
       return this.role[0].toUpperCase() + this.role.slice(1);
@@ -659,51 +484,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
   }
-  changeMaterialTab(tab: TabItem): void {
-    this.selectedMaterialTab = tab;
-  }
-  changeContactTab(tab: TabItem): void {
-    this.selectedContactTab = tab;
-  }
-  changeSharedTab(tab: TabItem): void {
-    this.selectedSharedTab = tab;
-  }
 
-  selectAllPage(): void {
-    if (this.isSelectedPage()) {
-      this.team.members.forEach((e) => {
-        if (this.selectedMembers.isSelected(e._id)) {
-          this.selectedMembers.deselect(e._id);
-        }
-      });
-      this.team.invites.forEach((e) => {
-        if (this.selectedMembers.isSelected(e._id)) {
-          this.selectedMembers.deselect(e._id);
-        }
-      });
-      this.team.owner.forEach((e) => {
-        if (this.selectedMembers.isSelected(e._id)) {
-          this.selectedMembers.deselect(e._id);
-        }
-      });
-    } else {
-      this.team.members.forEach((e) => {
-        if (!this.selectedMembers.isSelected(e._id)) {
-          this.selectedMembers.select(e._id);
-        }
-      });
-      this.team.invites.forEach((e) => {
-        if (!this.selectedMembers.isSelected(e._id)) {
-          this.selectedMembers.select(e._id);
-        }
-      });
-      this.team.owner.forEach((e) => {
-        if (!this.selectedMembers.isSelected(e._id)) {
-          this.selectedMembers.select(e._id);
-        }
-      });
-    }
-  }
   isSelectedPage(): any {
     let selectedMember = false;
     let selectedOwner = false;
@@ -787,21 +568,7 @@ export class TeamComponent implements OnInit, OnDestroy {
       return 'Editor';
     }
   }
-  selectAllVideos(): void {
-    if (this.isSelectedVideos()) {
-      this.team.videos.forEach((e) => {
-        if (this.selectedVideos.isSelected(e._id)) {
-          this.selectedVideos.deselect(e._id);
-        }
-      });
-    } else {
-      this.team.videos.forEach((e) => {
-        if (!this.selectedVideos.isSelected(e._id)) {
-          this.selectedVideos.select(e._id);
-        }
-      });
-    }
-  }
+
   isSelectedVideos(): any {
     if (this.team.videos.length) {
       for (let i = 0; i < this.team.videos.length; i++) {
@@ -813,21 +580,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     }
     return true;
   }
-  selectAllPdfs(): void {
-    if (this.isSelectedPdfs()) {
-      this.team.pdfs.forEach((e) => {
-        if (this.selectedPdfs.isSelected(e._id)) {
-          this.selectedPdfs.deselect(e._id);
-        }
-      });
-    } else {
-      this.team.pdfs.forEach((e) => {
-        if (!this.selectedPdfs.isSelected(e._id)) {
-          this.selectedPdfs.select(e._id);
-        }
-      });
-    }
-  }
+
   isSelectedPdfs(): any {
     if (this.team.pdfs.length) {
       for (let i = 0; i < this.team.pdfs.length; i++) {
@@ -839,21 +592,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     }
     return true;
   }
-  selectAllImages(): void {
-    if (this.isSelectedImages()) {
-      this.team.images.forEach((e) => {
-        if (this.selectedImages.isSelected(e._id)) {
-          this.selectedImages.deselect(e._id);
-        }
-      });
-    } else {
-      this.team.images.forEach((e) => {
-        if (!this.selectedImages.isSelected(e._id)) {
-          this.selectedImages.select(e._id);
-        }
-      });
-    }
-  }
+
   isSelectedImages(): any {
     if (this.team.images.length) {
       for (let i = 0; i < this.team.images.length; i++) {
@@ -913,8 +652,6 @@ export class TeamComponent implements OnInit, OnDestroy {
       });
   }
 
-  changeShareStatus(contact): void {}
-
   getAvatarName(contact): any {
     if (contact.user_name) {
       const names = contact.user_name.split(' ');
@@ -942,5 +679,16 @@ export class TeamComponent implements OnInit, OnDestroy {
       count += this.team.members.length;
     }
     return count;
+  }
+
+  getMaterialType(material: any): string {
+    if (material.type) {
+      if (material.type === 'application/pdf') {
+        return 'pdf';
+      } else if (material.type.includes('image')) {
+        return 'image';
+      }
+    }
+    return 'video';
   }
 }

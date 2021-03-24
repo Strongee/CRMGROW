@@ -331,6 +331,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (activity.type !== 'emails') {
           activity.activity_detail['content'] = activity.content;
           activity.activity_detail['subject'] = activity.subject;
+          activity.activity_detail['updated_at'] = activity.updated_at;
           this.sentHistory[activity._id] = material_id;
         }
         this.details[material_id] = activity.activity_detail;
@@ -339,6 +340,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.detailData[group_id]['data_type'] = activity.type;
         this.detailData[group_id]['group_id'] = group_id;
         this.detailData[group_id]['emails'] = activity.emails;
+        this.detailData[group_id]['texts'] = activity.texts;
         return group_id;
       case 'texts':
         material_id = activity.activity_detail['_id'];
@@ -351,7 +353,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (activity.content.indexOf('sent') !== -1) {
           this.detailData[text_group_id]['sent'] = true;
         }
-        return activity._id;
+        return text_group_id;
       default:
         const detailKey = activity.activity_detail['_id'];
         this.detailData[detailKey] = activity.activity_detail;
@@ -748,11 +750,48 @@ export class ContactComponent implements OnInit, OnDestroy {
                   e['group_id']
                 ];
               }
-            } else {
-              this.showingDetails.push(e);
-              this.sendActions[e['group_id']] = this.groupActions[
-                e['group_id']
+            } else if (!e['texts']) {
+              if (e['content'].indexOf('email') !== -1) {
+                this.showingDetails.push(e);
+                this.sendActions[e['group_id']] = this.groupActions[
+                  e['group_id']
+                ];
+              }
+            }
+          }
+        } else if (dataType === 'texts') {
+          if (e['data_type'] === 'texts') {
+            this.showingDetails.push(e);
+            if (this.sendActions[e['_id']]) {
+              this.sendActions[e['_id']] = [
+                ...this.sendActions[e['_id']],
+                ...this.groupActions[e['group_id']]
               ];
+            } else {
+              this.sendActions[e['_id']] = this.groupActions[e['group_id']];
+            }
+          }
+          if (
+            e['data_type'] === 'videos' ||
+            e['data_type'] === 'pdfs' ||
+            e['data_type'] === 'images'
+          ) {
+            if (e['texts']) {
+              if (this.sendActions[e['texts']]) {
+                this.sendActions[e['texts']] = [
+                  ...this.sendActions[e['texts']],
+                  ...this.groupActions[e['group_id']]
+                ];
+              } else {
+                this.sendActions[e['texts']] = this.groupActions[e['group_id']];
+              }
+            } else if (!e['emails']) {
+              if (e['content'].indexOf('sms') !== -1) {
+                this.showingDetails.push(e);
+                this.sendActions[e['group_id']] = this.groupActions[
+                  e['group_id']
+                ];
+              }
             }
           }
         } else if (e['data_type'] === 'deals') {

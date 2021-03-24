@@ -33,8 +33,8 @@
             <div class="" ngbDropdownMenu>
               <a class="dropdown-item f-3" (click)="editTeam()">Edit team</a>
               <hr class="my-1">
-              <a class="dropdown-item f-3">Share material</a>
-              <a class="dropdown-item f-3" (click)="shareTemplate()">Share template</a>
+              <a class="dropdown-item f-3" (click)="shareMaterial()">Share material</a>
+              <a class="dropdown-item f-3" (click)="shareEmailTemplate()">Share template</a>
               <a class="dropdown-item f-3" (click)="shareAutomation()">Share automation</a>
               <a class="dropdown-item f-3" (click)="shareContact()">Share contact</a>
             </div>
@@ -265,28 +265,13 @@
         <div *ngSwitchCase="'materials'" class="materials-container mt-4">
           <div class="v-center with-tab panel-header contact-header">
             <button type="button" class="btn btn-white-blue v-center ml-auto"
-              (click)="shareMaterial(selectedMaterialTab.id)" *ngIf="role=='editor' || role == 'owner'"
+              (click)="shareMaterial()" *ngIf="role=='editor' || role == 'owner'"
             >
               <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
               <span class="f-3 font-weight-bold c-blue">Share material</span>
             </button>
           </div>
-          <ng-container *ngIf="materials.length > 0; else emptyMaterialListTemplate">
-            <app-team-share-material [materials]="materials" [team]="team"></app-team-share-material>
-          </ng-container>
-          <ng-template #emptyMaterialListTemplate>
-            <div class="empty-materials mt-3">
-              <div class="empty-list">
-                <div class="object-icon sm v-center">
-                  <i class="i-icon i-material d-block bgc-dark"></i>
-                </div>
-                <h5 class="font-weight-bold mt-4 mb-3">
-                  There is no materials for share yet.
-                </h5>
-                <p class="mb-4">Please add materials to use for sharing.</p>
-              </div>
-            </div>
-          </ng-template>
+          <app-team-share-material [team]="team" [role]="role"></app-team-share-material>
         </div>
 
         <div class="mt-4" *ngSwitchCase="'contacts'">
@@ -298,22 +283,7 @@
               <span class="f-3 font-weight-bold c-blue">Share contact</span>
             </button>
           </div>
-          <ng-container *ngIf="sharedContacts.length > 0; else emptySharedListTemplate">
-            <app-team-share-contact [contacts]="sharedContacts"></app-team-share-contact>
-          </ng-container>
-          <ng-template #emptySharedListTemplate>
-            <div class="empty-materials mt-3">
-              <div class="empty-list">
-                <div class="object-icon sm v-center">
-                  <i class="i-icon i-lunch d-block bgc-dark"></i>
-                </div>
-                <h5 class="font-weight-bold mt-4 mb-3">
-                  There is no contacts for share yet.
-                </h5>
-                <p class="mb-4">Please add contacts to use for sharing.</p>
-              </div>
-            </div>
-          </ng-template>
+          <app-team-share-contact [team]="team"></app-team-share-contact>
         </div>
 
         <div class="automation-list-wrapper mt-4" *ngSwitchCase="'automations'">
@@ -325,22 +295,7 @@
               <span class="f-3 font-weight-bold c-blue">Share automation</span>
             </button>
           </div>
-          <ng-container *ngIf="team.automations.length > 0; else emptyAutomationListTemplate">
-            <app-team-share-automation [automations]="team.automations"></app-team-share-automation>
-          </ng-container>
-          <ng-template #emptyAutomationListTemplate>
-            <div class="empty-materials mt-3">
-              <div class="empty-list">
-                <div class="object-icon sm v-center">
-                  <i class="i-icon i-automation d-block bgc-dark"></i>
-                </div>
-                <h5 class="font-weight-bold mt-4 mb-3">
-                  There is no automations for share yet.
-                </h5>
-                <p class="mb-4">Please add automation to use for sharing.</p>
-              </div>
-            </div>
-          </ng-template>
+          <app-team-share-automation [team]="team" [role]="role"></app-team-share-automation>
         </div>
 
         <div class="template-list-wrapper mt-4" *ngSwitchCase="'templates'">
@@ -352,22 +307,7 @@
               <span class="f-3 font-weight-bold c-blue">Share template</span>
             </button>
           </div>
-          <ng-container *ngIf="team.email_templates.length; else emptyTemplateListTemplate">
-            <app-team-share-template [templates]="team.email_templates"></app-team-share-template>
-          </ng-container>
-          <ng-template #emptyTemplateListTemplate>
-            <div class="empty-materials mt-3">
-              <div class="empty-list">
-                <div class="object-icon sm v-center">
-                  <i class="i-icon i-template d-block bgc-dark"></i>
-                </div>
-                <h5 class="font-weight-bold mt-4 mb-3">
-                  There is no templates for share yet.
-                </h5>
-                <p class="mb-4">Please add template to use for sharing.</p>
-              </div>
-            </div>
-          </ng-template>
+          <app-team-share-template [team]="team" [role]="role"></app-team-share-template>
         </div>
       </ng-container>
     </ng-container>

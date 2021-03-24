@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { Template } from 'src/app/models/template.model';
 import { MaterialService } from 'src/app/services/material.service';
+import { SmsService } from 'src/app/services/sms.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
@@ -23,6 +24,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
   message: string = '';
   conversation: any;
   userId: string = '';
+  messages: any[] = [];
 
   loading = false;
   loadSubscription: Subscription;
@@ -34,6 +36,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
     public templateService: TemplatesService,
     private materialService: MaterialService,
     public userService: UserService,
+    public smsService: SmsService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.contact) {
@@ -48,9 +51,22 @@ export class SendTextComponent implements OnInit, OnDestroy {
     if (defaultSms) {
       this.message = defaultSms.content;
     }
+    this.load();
   }
 
   ngOnDestroy(): void {}
+
+  load(): void {
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.smsService
+      .getMessage(this.contact)
+      .subscribe((messages) => {
+        console.log('messages', messages);
+        this.loading = false;
+        this.messages = messages;
+      });
+  }
 
   openMaterialsDlg(): void {
     const { videoIds, imageIds, pdfIds } = this.getMaterials();
@@ -201,13 +217,39 @@ export class SendTextComponent implements OnInit, OnDestroy {
 
   keyTrigger(event): void {
     if (event.key === 'Enter') {
-      if (event.ctrlKey || event.altKey) {
+      event.preventDefault();
+      if (event.ctrlKey || event.altKey || event.shiftKey) {
+        if (event.shiftKey && !event.ctrlKey && !event.altKey) {
+          this.send();
+        }
         return;
-      }
-      if (!event.shiftKey) {
-        event.preventDefault();
-        this.send();
+      } else {
+        document.execCommand('insertText', false, '\n');
       }
     }
+  }
+
+  calcDate(date: any): number {
+    const currentDate = new Date();
+    const dateSent = new Date(date);
+    return Math.floor(
+      (Date.UTC(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate()
+      ) -
+        Date.UTC(
+          dateSent.getFullYear(),
+          dateSent.getMonth(),
+          dateSent.getDate()
+        )) /
+        (1000 * 60 * 60 * 24)
+    );
+  }
+
+  parseContent(content: string): any {
+    return content.replace(/(https?:\/\/[^\s]+)/g, function (url) {
+      return '<a href="' + url + '">' + url + '</a>';
+    });
   }
 }

@@ -30,8 +30,9 @@ import { Team } from '../../models/team.model';
   styleUrls: ['./team-share-material.component.scss']
 })
 export class TeamShareMaterialComponent implements OnInit, OnChanges {
-  @Input('materials') materials: any[] = [];
   @Input('team') team: Team;
+  @Input('role') role: string;
+  materials: Material[] = [];
   DISPLAY_COLUMNS = [
     'select',
     'material_name',
@@ -76,6 +77,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   page = 1;
   perPageCount = 8;
   pageMaterials: any = [];
+  loading = false;
 
   constructor(
     private dialog: MatDialog,
@@ -107,6 +109,24 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.selectedFolder = null;
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.teamService.loadSharedMaterials(this.team._id).subscribe(
+      (res) => {
+        if (res) {
+          this.loading = false;
+          this.materials = [
+            ...res['video_data'],
+            ...res['pdf_data'],
+            ...res['image_data']
+          ];
+          this.filteredMaterials = this.materials;
+        }
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
     this.filter();
   }
 
@@ -707,5 +727,150 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
       }
       return true;
     });
+  }
+
+  isStopSharable(material): any {
+    if (this.role === 'owner') {
+      return true;
+    } else if (this.role === 'editor') {
+      if (material.user) {
+        if (material.user._id) {
+          if (material.user._id === this.user_id) {
+            return true;
+          }
+        } else {
+          if (material.user === this.user_id) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    return false;
+  }
+
+  getMaterialType(material: any): string {
+    if (material.type) {
+      if (material.type === 'application/pdf') {
+        return 'pdf';
+      } else if (material.type.includes('image')) {
+        return 'image';
+      }
+    }
+    return 'video';
+  }
+
+  stopShareMaterial(material): any {
+    const materialType = this.getMaterialType(material);
+    if (materialType === 'video') {
+      this.removeTeamVideo(material);
+    } else if (materialType === 'pdf') {
+      this.removeTeamPdf(material);
+    } else if (materialType === 'image') {
+      this.removeTeamImage(material);
+    }
+  }
+
+  removeTeamVideo(material): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        data: {
+          title: 'Stop Sharing',
+          message: 'Are you sure to remove this video?',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.teamService.removeVideo(material._id).subscribe(
+            (res) => {
+              const index = this.materials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (index >= 0) {
+                this.materials.splice(index, 1);
+              }
+              const filterIndex = this.filteredMaterials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (filterIndex >= 0) {
+                this.filteredMaterials.splice(filterIndex, 1);
+              }
+              this.toast.success('You removed the video successfully.');
+            },
+            (err) => {}
+          );
+        }
+      });
+  }
+  removeTeamPdf(material): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        data: {
+          title: 'Stop Sharing',
+          message: 'Are you sure to remove this pdf?',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.teamService.removePdf(material._id).subscribe(
+            (res) => {
+              const index = this.materials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (index >= 0) {
+                this.materials.splice(index, 1);
+              }
+              const filterIndex = this.filteredMaterials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (filterIndex >= 0) {
+                this.filteredMaterials.splice(filterIndex, 1);
+              }
+              this.toast.success('You removed the pdf successfully.');
+            },
+            (err) => {}
+          );
+        }
+      });
+  }
+  removeTeamImage(material): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        data: {
+          title: 'Stop Sharing',
+          message: 'Are you sure to remove this image?',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.teamService.removeImage(material._id).subscribe(
+            (res) => {
+              const index = this.materials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (index >= 0) {
+                this.materials.splice(index, 1);
+              }
+              const filterIndex = this.filteredMaterials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (filterIndex >= 0) {
+                this.filteredMaterials.splice(filterIndex, 1);
+              }
+              this.toast.success('You removed the image successfully.');
+            },
+            (err) => {}
+          );
+        }
+      });
   }
 }
