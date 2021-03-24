@@ -74,14 +74,22 @@
           <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
           <tr mat-row *matRowDef="let element; columns: DISPLAY_COLUMNS;"></tr>
         </table>
-        <div class="d-flex justify-content-center align-items-center my-2 py-3 table-control mode-1">
-          <div class="ml-3 pagination-wrapper">
-            <pagination-controls (pageChange)="page = $event" id="templateTable" maxSize="5" previousLabel=""
-                                 nextLabel=""></pagination-controls>
+        <ng-container *ngIf="filteredResult.length > 0 && !loading">
+          <div class="d-flex justify-content-center align-items-center my-2 py-3 table-control mode-1">
+            <div class="ml-3 pagination-wrapper">
+              <pagination-controls (pageChange)="page = $event" id="templateTable" maxSize="5" previousLabel=""
+                                   nextLabel=""></pagination-controls>
+            </div>
           </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!templates.length && loading">
+        <div class="list-loading text-center">
+          <div class="loader mt-5 lg"></div>
+          <h4 class="fw-600 mt-2">Loading templates...</h4>
         </div>
       </ng-container>
-      <ng-container *ngIf="!filteredResult.length">
+      <ng-container *ngIf="!filteredResult.length && !loading">
         <div class="empty-list py-5">
           <div class="object-icon v-center">
             <i class="i-icon i-template d-block bgc-dark"></i>

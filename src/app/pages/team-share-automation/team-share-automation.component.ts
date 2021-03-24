@@ -29,6 +29,7 @@ import { AutomationStatusComponent } from 'src/app/components/automation-status/
 import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 import { TeamService } from '../../services/team.service';
+import { Team } from '../../models/team.model';
 
 @Component({
   selector: 'app-team-share-automation',
@@ -69,16 +70,18 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   detailLoadSubscription: Subscription;
   contacts: Contact[] = [];
 
-  @Input('automations') automations: Automation[] = [];
+  @Input('team') team: Team;
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('detailPanel') detailPanel: AutomationStatusComponent;
   @Input('role') role: string;
 
+  automations = [];
   filteredResult: Automation[] = [];
   searchStr = '';
 
   profileSubscription: Subscription;
   loadSubscription: Subscription;
+  loading = false;
 
   constructor(
     public automationService: AutomationService,
@@ -96,6 +99,23 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.userId = res._id;
     });
+
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.teamService
+      .loadSharedAutomations(this.team._id)
+      .subscribe(
+        (res) => {
+          if (res) {
+            this.loading = false;
+            this.automations = res;
+            this.filteredResult = this.automations;
+          }
+        },
+        (error) => {
+          this.loading = false;
+        }
+      );
 
     this.filteredResult = this.automations;
   }
