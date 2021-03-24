@@ -68,6 +68,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   ];
 
   @Input('team') team: Team;
+  @Input('role') role: string;
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('editPanel') editPanel: ContactBulkComponent;
   panelType = '';
@@ -111,15 +112,14 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.handlerService.pageName.next('contacts');
 
-    this.teamService.loadSharedContacts(this.team._id).subscribe((contacts) => {
+    this.teamService.loadSharedContacts(this.team._id).subscribe((res) => {
       this.loading = false;
-      if (contacts && contacts.length) {
-        this.contacts = contacts;
+      if (res && res.contacts && res.contacts.length > 0) {
+        this.contacts = res.contacts;
+        this.pageContacts = [...this.contacts];
+        this.filteredResult = [...this.contacts];
       }
     });
-
-    this.pageContacts = [...this.contacts];
-    this.filteredResult = [...this.contacts];
 
     this.pageSelection = [];
     this.selection = [];

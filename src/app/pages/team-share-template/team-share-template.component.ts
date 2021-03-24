@@ -10,6 +10,7 @@ import { STATUS } from 'src/app/constants/variable.constants';
 import { TeamService } from '../../services/team.service';
 import { filter } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { Team } from '../../models/team.model';
 
 @Component({
   selector: 'app-team-share-template',
@@ -34,14 +35,16 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   deleting = false;
   currentUser: any;
 
+  templates: Template[] = [];
   filteredResult: Template[] = [];
   searchStr = '';
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
+  loading = false;
 
-  @Input('templates') templates: Template[] = [];
+  @Input('team') team: Team;
   @Input('role') role: string;
 
   constructor(
@@ -69,7 +72,23 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
         this.userId = profile._id;
       }
     );
-    this.filteredResult = this.templates;
+
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.teamService
+      .loadSharedTemplates(this.team._id)
+      .subscribe(
+        (res) => {
+          if (res) {
+            this.loading = false;
+            this.templates = res;
+            this.filteredResult = this.templates;
+          }
+        },
+        (error) => {
+          this.loading = false;
+        }
+      );
   }
 
   ngOnChanges(changes): void {
