@@ -299,22 +299,20 @@
               <span class="f-3 font-weight-bold c-blue">Share contact</span>
             </button>
           </div>
-          <ng-container *ngIf="sharedContacts.length > 0; else emptySharedListTemplate">
-            <app-team-share-contact [team]="team"></app-team-share-contact>
-          </ng-container>
-          <ng-template #emptySharedListTemplate>
-            <div class="empty-materials mt-3">
-              <div class="empty-list">
-                <div class="object-icon sm v-center">
-                  <i class="i-icon i-lunch d-block bgc-dark"></i>
-                </div>
-                <h5 class="font-weight-bold mt-4 mb-3">
-                  There is no contacts for share yet.
-                </h5>
-                <p class="mb-4">Please add contacts to use for sharing.</p>
-              </div>
-            </div>
-          </ng-template>
+          <app-team-share-contact [team]="team"></app-team-share-contact>
+<!--          <ng-template #emptySharedListTemplate>-->
+<!--            <div class="empty-materials mt-3">-->
+<!--              <div class="empty-list">-->
+<!--                <div class="object-icon sm v-center">-->
+<!--                  <i class="i-icon i-lunch d-block bgc-dark"></i>-->
+<!--                </div>-->
+<!--                <h5 class="font-weight-bold mt-4 mb-3">-->
+<!--                  There is no contacts for share yet.-->
+<!--                </h5>-->
+<!--                <p class="mb-4">Please add contacts to use for sharing.</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </ng-template>-->
         </div>
 
         <div class="automation-list-wrapper mt-4" *ngSwitchCase="'automations'">

@@ -59,7 +59,6 @@ export class TeamComponent implements OnInit, OnDestroy {
   ];
   selectedTab: TabItem = this.tabs[0];
 
-  sharedContacts = [];
   myContacts = [];
   otherContacts = [];
   materials: any[] = [];
@@ -149,6 +148,7 @@ export class TeamComponent implements OnInit, OnDestroy {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
+        this.arrangeTeamData();
       },
       () => {
         this.loading = false;
@@ -180,14 +180,6 @@ export class TeamComponent implements OnInit, OnDestroy {
         this.role = 'viewer';
       }
     }
-
-    this.sharedContacts.forEach((e) => {
-      if (e.user[0]._id === this.userId) {
-        this.myContacts.push(e);
-      } else {
-        this.otherContacts.push(e);
-      }
-    });
   }
 
   shareMaterial(): void {
@@ -293,10 +285,7 @@ export class TeamComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res && res.data) {
-          this.sharedContacts = _.unionBy(res.data, this.sharedContacts, '_id');
-          this.myContacts = _.unionBy(res.data, this.myContacts, '_id');
-        }
+
       });
   }
 
