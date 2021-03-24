@@ -6,8 +6,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../shared/shared.module';
-import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
-import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+
 import { ComponentsModule } from '../../components/components.module';
 import { AdminLayoutRoutes } from './admin-layout.routing.module';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -140,8 +139,6 @@ import { TestComponent } from '../../pages/test/test.component';
     RouterModule.forChild(AdminLayoutRoutes),
     TranslateModule.forChild({ extend: true }),
     NgxSpinnerModule,
-    ShareButtonsModule,
-    ShareIconsModule,
     DragDropModule,
     NgxGraphModule,
     PdfViewerModule,

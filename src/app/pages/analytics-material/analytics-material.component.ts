@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
 import { Subscription } from 'rxjs';
 import { MaterialService } from '../../services/material.service';
@@ -20,6 +20,7 @@ export class AnalyticsMaterialComponent implements OnInit {
   labels = [];
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private materialService: MaterialService,
     private labelService: LabelService
   ) {}
@@ -98,5 +99,9 @@ export class AnalyticsMaterialComponent implements OnInit {
 
   changeExpanded(): void {
     this.topExpanded = !this.topExpanded;
+  }
+
+  toContact(id: string): void {
+    this.router.navigate(['/contacts/' + id]);
   }
 }

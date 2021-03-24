@@ -26,7 +26,13 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
-import { sortDateArray, sortStringArray } from '../../utils/functions';
+import {
+  sortDateArray,
+  sortStringArray,
+  sortMaterialRoleArray,
+  sortTypeArray
+} from '../../utils/functions';
+import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -160,6 +166,41 @@ export class MaterialsComponent implements OnInit {
             this.selectedFolder = null;
             this.filter();
           }
+          if (this.filteredMaterials.length) {
+            for (const material of this.filteredMaterials) {
+              if (material.user) {
+                if (material.user._id) {
+                  if (material.user._id === this.user_id) {
+                    material.owner = 'Me';
+                  } else {
+                    material.owner = material.user.user_name;
+                  }
+                } else {
+                  if (material.user === this.user_id) {
+                    material.owner = 'Me';
+                  } else {
+                    material.owner = 'Unknown';
+                  }
+                }
+              } else {
+                material.owner = 'Admin';
+              }
+            }
+            const ownerFolders = this.filteredMaterials.filter((e) => {
+              return e.material_type === 'folder';
+            });
+            const ownerNormals = this.filteredMaterials.filter((e) => {
+              return e.material_type !== 'folder';
+            });
+            const filterdFolders = sortMaterialRoleArray(ownerFolders, true);
+            const filterdNormals = sortMaterialRoleArray(ownerNormals, true);
+            this.filteredMaterials = [];
+            this.filteredMaterials = [
+              ...this.filteredMaterials,
+              ...filterdFolders,
+              ...filterdNormals
+            ];
+          }
         }
       );
     });
@@ -174,6 +215,7 @@ export class MaterialsComponent implements OnInit {
     ) {
       this.materialService.loadMaterial(true);
       this.teamService.loadAll(true);
+      // this.sort('owner');
     }
     this.convertLoaderTimer = setInterval(() => {
       if (this.convertingVideos.length) {
@@ -282,7 +324,7 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-  sendMaterial(material: Material): void {
+  sendMaterial(material: Material, type: string = 'email'): void {
     this.dialog.open(MaterialSendComponent, {
       position: { top: '5vh' },
       width: '100vw',
@@ -290,7 +332,7 @@ export class MaterialsComponent implements OnInit {
       disableClose: true,
       data: {
         material: [material],
-        type: 'email'
+        type: type
       }
     });
   }
@@ -682,6 +724,18 @@ export class MaterialsComponent implements OnInit {
           });
         break;
     }
+  }
+
+  shareMaterial(material: any): void {
+    const url = `${this.siteUrl}/${material.material_type}?${material.material_type}=${material._id}&user=${this.user_id}`;
+    this.dialog.open(SocialShareComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '600px',
+      data: {
+        url: url
+      }
+    });
   }
 
   deleteMaterial(material: any): void {
@@ -1378,13 +1432,30 @@ export class MaterialsComponent implements OnInit {
     a.click();
   }
 
-  sort(field): void {
+  sort(field: string): void {
+    const folders = this.filteredMaterials.filter((e) => {
+      return e.material_type === 'folder';
+    });
+    const normals = this.filteredMaterials.filter((e) => {
+      return e.material_type !== 'folder';
+    });
     if (field === 'created_at') {
-      this.filteredMaterials = sortDateArray(
-        this.filteredMaterials,
+      const filterdFolders = sortDateArray(
+        folders,
         field,
         this.searchCondition[field]
       );
+      const filterdNormals = sortDateArray(
+        normals,
+        field,
+        this.searchCondition[field]
+      );
+      this.filteredMaterials = [];
+      this.filteredMaterials = [
+        ...this.filteredMaterials,
+        ...filterdFolders,
+        ...filterdNormals
+      ];
     } else if (field === 'owner') {
       for (const material of this.filteredMaterials) {
         if (material.user) {
@@ -1398,25 +1469,64 @@ export class MaterialsComponent implements OnInit {
             if (material.user === this.user_id) {
               material.owner = 'Me';
             } else {
-              material.owner = 'Unknown User';
+              material.owner = 'Unknown';
             }
           }
         } else {
           material.owner = 'Admin';
         }
       }
-      this.filteredMaterials = sortStringArray(
+      const ownerFolders = this.filteredMaterials.filter((e) => {
+        return e.material_type === 'folder';
+      });
+      const ownerNormals = this.filteredMaterials.filter((e) => {
+        return e.material_type !== 'folder';
+      });
+      const filterdFolders = sortMaterialRoleArray(
+        ownerFolders,
+        this.searchCondition[field]
+      );
+      const filterdNormals = sortMaterialRoleArray(
+        ownerNormals,
+        this.searchCondition[field]
+      );
+      this.filteredMaterials = [];
+      this.filteredMaterials = [
+        ...this.filteredMaterials,
+        ...filterdFolders,
+        ...filterdNormals
+      ];
+    } else if (field === 'material_type') {
+      this.filteredMaterials = sortTypeArray(
         this.filteredMaterials,
-        field,
         this.searchCondition[field]
       );
     } else {
-      this.filteredMaterials = sortStringArray(
-        this.filteredMaterials,
+      const filterdFolders = sortStringArray(
+        folders,
         field,
         this.searchCondition[field]
       );
+      const filterdNormals = sortStringArray(
+        normals,
+        field,
+        this.searchCondition[field]
+      );
+      this.filteredMaterials = [];
+      this.filteredMaterials = [
+        ...this.filteredMaterials,
+        ...filterdFolders,
+        ...filterdNormals
+      ];
     }
     this.searchCondition[field] = !this.searchCondition[field];
+  }
+
+  checkType(url: string): boolean {
+    if (url.indexOf('youtube.com') == -1 && url.indexOf('vimeo.com') == -1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -106,7 +106,7 @@
                   <ng-container *ngIf="contacts">
                     <tr *ngFor="let contact of contacts">
                       <td class="name">
-                        <div class="v-center">
+                        <div class="v-center c-pointer" (click)="toContact(contact._id)">
                           <div>
                             <img *ngIf="contact.picture_profile; else avatarNameTemplate" [src]="contact.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
                             <ng-template #avatarNameTemplate>

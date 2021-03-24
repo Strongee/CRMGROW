@@ -4,6 +4,7 @@
 >
   <mat-dialog-content>
     <ng-container *ngIf="type !== 'update'">
+      <label class="calendar-label mb-0">Choose calendar</label>
       <div class="form-group">
         <app-select-calendar [(calendar)]="calendar"></app-select-calendar>
         <span
