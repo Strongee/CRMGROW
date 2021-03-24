@@ -7,6 +7,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-material-send',
@@ -37,7 +38,7 @@ export class MaterialSendComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.data.material.length > 1) {
+    if (this.data.material.length) {
       if (this.data.material_type) {
         switch (this.data.material_type) {
           case 'video':
@@ -172,10 +173,26 @@ export class MaterialSendComponent implements OnInit {
       materialType = 'image';
       data['images'] = image_ids;
     }
+    let message = this.textContent;
+    if (this.textContent && this.textContent.slice(-1) !== '\n') {
+      message += '\n';
+    }
+    video_ids.forEach((e) => {
+      const url = `{{${e}}}`;
+      message = message + '\n' + url;
+    });
+    pdf_ids.forEach((e) => {
+      const url = `{{${e}}}`;
+      message = message + '\n' + url;
+    });
+    image_ids.forEach((e) => {
+      const url = `{{${e}}}`;
+      message = message + '\n' + url;
+    });
 
     this.sending = true;
     this.materialService
-      .sendText({ ...data, content: this.textContent, contacts }, materialType)
+      .sendMessage({ ...data, content: message, contacts })
       .subscribe((status) => {
         this.sending = false;
         if (status) {
@@ -201,7 +218,7 @@ export class MaterialSendComponent implements OnInit {
     this.images.forEach((e) => image_ids.push(e._id));
     email += '<br/><br/><br/>';
     this.data.material.forEach((e) => {
-      const html = `<div><strong>${e.title}</strong></div><div><a href="{${e._id}}"><img src="${e.preview}" width="320" height="176" alt="preview image of material" /></a></div><br/>`;
+      const html = `<div><strong>${e.title}</strong></div><div><a href="{{${e._id}}}"><img src="${e.preview}" width="320" height="176" alt="preview image of material" /></a></div><br/>`;
       email += html;
     });
     const data = {

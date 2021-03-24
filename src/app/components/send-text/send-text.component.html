@@ -36,7 +36,7 @@
       </div>
     </div>
   </div>
-  <div class="conversation-info">
+  <div class="conversation-info" #scrollMe [scrollTop]="scrollMe.scrollHeight">
     <ng-container *ngIf="loading; else messagesTemplate">
       <div class="loader"></div>
     </ng-container>

@@ -34,3 +34,8 @@
     font-size: 24px;
     font-weight: bold;
 }
+:host ::ng-deep {
+    .mat-dialog-content {
+        max-height: calc(65vh - 50px);
+    }
+}

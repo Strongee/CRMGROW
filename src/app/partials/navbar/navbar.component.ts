@@ -75,6 +75,8 @@ export class NavbarComponent implements OnInit {
       case 'note':
         this.dialog.open(NoteCreateComponent, DialogSettings.NOTE);
         break;
+      case 'appointment':
+        break;
       case 'message':
         this.dialog.open(SendEmailComponent, {
           position: {
@@ -100,7 +102,7 @@ export class NavbarComponent implements OnInit {
         });
         break;
       case 'video':
-        this.router.navigate(['./materials/create']);
+        this.router.navigate(['./materials/create/video']);
         break;
     }
     this.closeSearchBar();
