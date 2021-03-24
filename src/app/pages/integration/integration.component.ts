@@ -63,6 +63,13 @@ export class IntegrationComponent implements OnInit {
           }
         });
       }
+      if (this.garbage.access_token == '') {
+        this.connectService.getToken().subscribe((res) => {
+          if (res['status'] == true) {
+            this.garbage.access_token = res['token'];
+          }
+        });
+      }
     });
   }
 

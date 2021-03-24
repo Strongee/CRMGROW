@@ -780,6 +780,7 @@ export class MaterialsComponent implements OnInit {
                       this.toggleElement(material);
                     }
                     this.materialService.delete$([material._id]);
+                    this.toast.success('Video has been deleted successfully.');
                   });
               }
             }
@@ -796,6 +797,7 @@ export class MaterialsComponent implements OnInit {
                     this.toggleElement(material);
                   }
                   this.materialService.delete$([material._id]);
+                  this.toast.success('Video has been deleted successfully.');
                 });
             }
           });
@@ -831,6 +833,7 @@ export class MaterialsComponent implements OnInit {
                       this.toggleElement(material);
                     }
                     this.materialService.delete$([material._id]);
+                    this.toast.success('Image has been deleted successfully.');
                   });
               }
             }
@@ -847,6 +850,7 @@ export class MaterialsComponent implements OnInit {
                     this.toggleElement(material);
                   }
                   this.materialService.delete$([material._id]);
+                  this.toast.success('Image has been deleted successfully.');
                 });
             }
           });
@@ -882,6 +886,7 @@ export class MaterialsComponent implements OnInit {
                       this.toggleElement(material);
                     }
                     this.materialService.delete$([material._id]);
+                    this.toast.success('Pdf has been deleted successfully.');
                   });
               }
             }
@@ -898,6 +903,7 @@ export class MaterialsComponent implements OnInit {
                     this.toggleElement(material);
                   }
                   this.materialService.delete$([material._id]);
+                  this.toast.success('Pdf has been deleted successfully.');
                 });
             }
           });
@@ -1117,6 +1123,9 @@ export class MaterialsComponent implements OnInit {
                   .bulkRemove(removeData)
                   .subscribe((status) => {
                     if (status) {
+                      this.toast.success(
+                        'Selected materials have been deleted successfully.'
+                      );
                     }
                   });
               }
@@ -1461,11 +1470,12 @@ export class MaterialsComponent implements OnInit {
         this.searchCondition[field]
       );
       this.filteredMaterials = [];
-      this.filteredMaterials = [
-        ...this.filteredMaterials,
-        ...filterdFolders,
-        ...filterdNormals
-      ];
+      if (filterdFolders?.length) {
+        this.filteredMaterials = [...this.filteredMaterials, ...filterdFolders];
+      }
+      if (filterdNormals?.length) {
+        this.filteredMaterials = [...this.filteredMaterials, ...filterdNormals];
+      }
     } else if (field === 'owner') {
       for (const material of this.filteredMaterials) {
         if (material.user) {
@@ -1501,11 +1511,12 @@ export class MaterialsComponent implements OnInit {
         this.searchCondition[field]
       );
       this.filteredMaterials = [];
-      this.filteredMaterials = [
-        ...this.filteredMaterials,
-        ...filterdFolders,
-        ...filterdNormals
-      ];
+      if (filterdFolders?.length) {
+        this.filteredMaterials = [...this.filteredMaterials, ...filterdFolders];
+      }
+      if (filterdNormals?.length) {
+        this.filteredMaterials = [...this.filteredMaterials, ...filterdNormals];
+      }
     } else if (field === 'material_type') {
       this.filteredMaterials = sortTypeArray(
         this.filteredMaterials,
@@ -1523,11 +1534,12 @@ export class MaterialsComponent implements OnInit {
         this.searchCondition[field]
       );
       this.filteredMaterials = [];
-      this.filteredMaterials = [
-        ...this.filteredMaterials,
-        ...filterdFolders,
-        ...filterdNormals
-      ];
+      if (filterdFolders?.length) {
+        this.filteredMaterials = [...this.filteredMaterials, ...filterdFolders];
+      }
+      if (filterdNormals?.length) {
+        this.filteredMaterials = [...this.filteredMaterials, ...filterdNormals];
+      }
     }
     this.searchCondition[field] = !this.searchCondition[field];
   }
