@@ -195,11 +195,18 @@ export class MaterialsComponent implements OnInit {
             const filterdFolders = sortMaterialRoleArray(ownerFolders, true);
             const filterdNormals = sortMaterialRoleArray(ownerNormals, true);
             this.filteredMaterials = [];
-            this.filteredMaterials = [
-              ...this.filteredMaterials,
-              ...filterdFolders,
-              ...filterdNormals
-            ];
+            if (filterdFolders?.length) {
+              this.filteredMaterials = [
+                ...this.filteredMaterials,
+                ...filterdFolders
+              ];
+            }
+            if (filterdNormals?.length) {
+              this.filteredMaterials = [
+                ...this.filteredMaterials,
+                ...filterdNormals
+              ];
+            }
           }
         }
       );
