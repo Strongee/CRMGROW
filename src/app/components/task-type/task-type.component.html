@@ -1,21 +1,21 @@
 <div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="value" (ngModelChange)="updateValue($event)">
-  <label class="btn px-2 rounded no-shadow" title="General" ngbButtonLabel>
+  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="General" ngbButtonLabel>
     <input type="radio" name="options" value="task" ngbButton>
     <i class="i-icon i-task d-block bgc-dark"></i>
   </label>
-  <label class="btn px-2 rounded no-shadow" title="Call" ngbButtonLabel>
+  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Call" ngbButtonLabel>
     <input type="radio" name="options" value="call" ngbButton>
     <i class="i-icon i-phone d-block bgc-dark"></i>
   </label>
-  <label class="btn px-2 rounded no-shadow" title="Meeting" ngbButtonLabel>
+  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Meeting" ngbButtonLabel>
     <input type="radio" name="options" value="meeting" ngbButton>
     <i class="i-icon i-lunch d-block bgc-dark"></i>
   </label>
-  <label class="btn px-2 rounded no-shadow" title="Email" ngbButtonLabel>
+  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Email" ngbButtonLabel>
     <input type="radio" name="options" value="email" ngbButton>
     <i class="i-icon i-message d-block bgc-dark"></i>
   </label>
-  <label class="btn px-2 rounded no-shadow" title="Media" ngbButtonLabel>
+  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Media" ngbButtonLabel>
     <input type="radio" name="options" value="material" ngbButton>
     <i class="i-icon i-video d-block bgc-dark"></i>
   </label>

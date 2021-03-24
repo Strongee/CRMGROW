@@ -181,7 +181,7 @@
             </ng-container>
             <ng-template #materialViewTemplate>
               <a [routerLink]="['/materials/analytics/' + element._id]" class="text-decoration-none">
-                <div class="v-center justify-content-end py-2">
+                <div class="v-center justify-content-end py-2" placement="bottom" ngbTooltip="Click into view detail">
                   <span class="f-2 c-dark mt-2">{{element.views}}</span>
                   <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
                 </div>

@@ -89,6 +89,10 @@
   max-height: 150px;
   min-height: 80px;
   overflow: auto;
+
+  .table td {
+    height: auto;
+  }
 }
 
 td {

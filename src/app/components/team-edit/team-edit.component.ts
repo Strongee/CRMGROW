@@ -41,11 +41,18 @@ export class TeamEditComponent implements OnInit {
   }
 
   update(): void {
-    const data = {
-      ...this.team,
-      name: this.name,
-      picture: this.picture
-    };
+    let data;
+    if (this.picture && this.picture.includes('https')) {
+      data = {
+        name: this.name
+      };
+    } else {
+      data = {
+        name: this.name,
+        picture: this.picture
+      };
+    }
+
     this.updating = true;
     this.updateSubscription = this.teamService
       .update(this.team._id, data)
