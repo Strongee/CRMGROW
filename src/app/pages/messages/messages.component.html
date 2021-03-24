@@ -68,7 +68,7 @@
         </div>
         <div class="message-box" [class.show]="showMessage">
             <div class="v-center justify-content-between border-bottom px-3 message-box-header" *ngIf="!isNew; else newMessageHeader">
-                <a class="v-center c-pointer" [routerLink]="['/contacts/' + selectedContact._id]" target="_blank" *ngIf="selectedContact._id">
+                <a class="v-center c-pointer" [routerLink]="['/contacts/' + selectedContact?._id]" target="_blank" *ngIf="selectedContact?._id">
                     <div class="contact-avatar f-3 font-weight-bold c-white mr-2">
                         {{selectedContact.avatarName}}
                     </div>
@@ -119,7 +119,7 @@
                                 </ng-container>
                             </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="!isNew && messageList.id === selectedContact._id">
+                        <ng-container *ngIf="!isNew && messageList.id === selectedContact?._id">
                             <ng-container *ngFor="let message of messageList.messages">
                                 <div class="message mt-3"
                                     [innerHTML]="parseContent(message.content)"

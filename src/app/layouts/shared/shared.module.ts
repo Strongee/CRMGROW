@@ -52,6 +52,8 @@ import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { MakeRedirectPipe } from '../../pipes/make-redirect.pipe';
 import { TimezonePipe } from '../../pipes/timezone.pipe';
 import { PhoneInputComponent } from '../../components/phone-input/phone-input.component';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 
 @NgModule({
   declarations: [
@@ -106,7 +108,9 @@ import { PhoneInputComponent } from '../../components/phone-input/phone-input.co
     ChartsModule,
     SocialLoginModule,
     MatProgressBarModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    ShareButtonsModule,
+    ShareIconsModule
   ],
   exports: [
     FormsModule,
@@ -154,7 +158,9 @@ import { PhoneInputComponent } from '../../components/phone-input/phone-input.co
     MakeRedirectPipe,
     TimezonePipe,
     NgxMaskModule,
-    PhoneInputComponent
+    PhoneInputComponent,
+    ShareButtonsModule,
+    ShareIconsModule
   ]
 })
 export class SharedModule {}

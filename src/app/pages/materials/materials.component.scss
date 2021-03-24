@@ -92,10 +92,6 @@ td {
 .analytics-col {
     width: 60px;
 }
-th.analytics-col {
-    text-align: right;
-    padding-right: 8px;
-}
 .time-col {
     width: 90px;
 }
@@ -267,5 +263,14 @@ td.type-col {
 :host ::ng-deep {
   .show.dropdown {
     position: unset;
+  }
+  thead tr.selected {
+    th {
+      background-color: #f5f6fd;
+    }
+  }
+  thead tr.selection-info th {
+    background-color: #f5f6fd;
+    border-bottom: none;
   }
 }

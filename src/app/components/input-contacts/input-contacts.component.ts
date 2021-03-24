@@ -118,7 +118,13 @@ export class InputContactsComponent implements OnInit {
         this.searchSubscription = request.subscribe(
           (res: any) => {
             this.searching = false;
-            this.hasMore = true;
+            if (res && res.length) {
+              if (res.length == 8) {
+                this.hasMore = true;
+              } else {
+                this.hasMore = false;
+              }
+            }
             if (this.keyword) {
               if (res.length) {
                 this.filteredResults.next(res);
@@ -330,21 +336,29 @@ export class InputContactsComponent implements OnInit {
           .easySearch(this.keyword, currentResults.length)
           .subscribe((contacts) => {
             this.loadingMore = false;
-            if (contacts && contacts.length) {
-              if (contacts.length == 8) {
+            if (contacts && contacts?.length) {
+              if (contacts?.length == 8) {
                 this.hasMore = true;
               } else {
                 this.hasMore = false;
               }
-              contacts.forEach((e) => {
-                if (this.display) {
+              let result;
+              if (this.display) {
+                const data = [];
+                contacts.map((e) => {
                   if (e[this.display]) {
-                    currentResults.push(e);
+                    data.push(e);
                   }
-                } else {
+                });
+                result = data;
+              } else {
+                result = contacts;
+              }
+              if (result.length) {
+                result.forEach((e) => {
                   currentResults.push(e);
-                }
-              });
+                });
+              }
             } else {
               this.hasMore = false;
             }

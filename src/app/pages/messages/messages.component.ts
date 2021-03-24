@@ -97,7 +97,11 @@ export class MessagesComponent implements OnInit {
           }
         }
         this.contacts = sortDateArray(this.contacts, 'lastest_at', false);
-        if (Object.keys(this.selectedContact).length == 0) {
+        if (
+          this.contacts.length &&
+          this.selectedContact &&
+          Object.keys(this.selectedContact).length == 0
+        ) {
           this.selectContact(this.contacts[0]);
         }
       });

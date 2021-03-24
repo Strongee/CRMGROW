@@ -2079,3 +2079,34 @@ body {
   font-size: 16px;
   font-weight: bold;
 }
+
+
+////////// table header sort symbol ////////
+.sortable-header {
+  position: relative;
+  padding-right: 15px;
+  min-height: 20px;
+
+  &::after {
+    content: "\2B9F";
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    color: #ddd;
+  }
+
+  &::before {
+    content: "\2B9D";
+    position: absolute;
+    top: -4px;
+    right: 0px;
+    color: #ddd;
+  }
+
+  &.inc::before {
+    color: black;
+  }
+  &.dec::after {
+    color: black;
+  }
+}

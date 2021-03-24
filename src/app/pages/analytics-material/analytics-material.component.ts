@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
 import { Subscription } from 'rxjs';
 import { MaterialService } from '../../services/material.service';
 import { LabelService } from '../../services/label.service';
+import { HandlerService } from 'src/app/services/handler.service';
 
 @Component({
   selector: 'app-analytics-material',
@@ -20,8 +21,10 @@ export class AnalyticsMaterialComponent implements OnInit {
   labels = [];
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private materialService: MaterialService,
-    private labelService: LabelService
+    private labelService: LabelService,
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {
@@ -98,5 +101,13 @@ export class AnalyticsMaterialComponent implements OnInit {
 
   changeExpanded(): void {
     this.topExpanded = !this.topExpanded;
+  }
+
+  toContact(id: string): void {
+    this.router.navigate(['/contacts/' + id]);
+  }
+
+  goToBack(): void {
+    this.handlerService.goBack('/materials');
   }
 }
