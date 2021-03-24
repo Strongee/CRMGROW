@@ -264,7 +264,7 @@ export class UploadContactsComponent implements OnInit {
     this.sameContacts = [];
     let importField = false;
     this.initPropertyColumn = { ...this.updateColumn };
-    this.initColumns = [ ...this.columns ];
+    this.initColumns = [...this.columns];
     this.columns.some((e) => {
       if (this.updateColumn[e]) {
         importField = true;
@@ -655,25 +655,45 @@ export class UploadContactsComponent implements OnInit {
               this.sameContacts[dupIndex][i][emailKey] ===
               this.sameContacts[dupIndex][j][emailKey]
             ) {
-              isEmailDuplicate = true;
+              if (
+                !!this.sameContacts[dupIndex][i][emailKey] ||
+                !!this.sameContacts[dupIndex][j][emailKey]
+              ) {
+                isEmailDuplicate = true;
+              }
             }
             if (
               this.sameContacts[dupIndex][i][phoneKey] ===
               this.sameContacts[dupIndex][j][phoneKey]
             ) {
-              isPhoneDuplicate = true;
+              if (
+                !!this.sameContacts[dupIndex][i][phoneKey] ||
+                !!this.sameContacts[dupIndex][j][phoneKey]
+              ) {
+                isPhoneDuplicate = true;
+              }
             }
             if (
               this.sameContacts[dupIndex][i][firstNameKey] ===
               this.sameContacts[dupIndex][j][firstNameKey]
             ) {
-              isFirstNameDuplicate = true;
+              if (
+                !!this.sameContacts[dupIndex][i][firstNameKey] ||
+                !!this.sameContacts[dupIndex][j][firstNameKey]
+              ) {
+                isFirstNameDuplicate = true;
+              }
             }
             if (
               this.sameContacts[dupIndex][i][lastNameKey] ===
               this.sameContacts[dupIndex][j][lastNameKey]
             ) {
-              isLastNameDuplicate = true;
+              if (
+                !!this.sameContacts[dupIndex][i][lastNameKey] ||
+                !!this.sameContacts[dupIndex][j][lastNameKey]
+              ) {
+                isLastNameDuplicate = true;
+              }
             }
           }
         }
@@ -1190,7 +1210,7 @@ export class UploadContactsComponent implements OnInit {
   back(): void {
     if (this.step === 3) {
       this.updateColumn = { ...this.initPropertyColumn };
-      this.columns = [ ...this.initColumns ];
+      this.columns = [...this.initColumns];
       this.step--;
     } else if (this.step === 4) {
       if (this.sameContacts.length > 0) {
@@ -1379,11 +1399,7 @@ export class UploadContactsComponent implements OnInit {
     },
     {
       value: 'brokerage',
-      label: 'Current Brokerage'
-    },
-    {
-      value: 'recruiting_stage',
-      label: 'Recruiting Stage'
+      label: 'Company'
     },
     {
       value: 'address',
