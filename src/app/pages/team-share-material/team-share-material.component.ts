@@ -30,9 +30,10 @@ import { Team } from '../../models/team.model';
   styleUrls: ['./team-share-material.component.scss']
 })
 export class TeamShareMaterialComponent implements OnInit, OnChanges {
-  @Input('materials') materials: any[] = [];
+
   @Input('team') team: Team;
   @Input('role') role: string;
+  materials: Material[] = [];
   DISPLAY_COLUMNS = [
     'select',
     'material_name',
@@ -108,6 +109,12 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.selectedFolder = null;
+    this.teamService.loadSharedMaterials(this.team._id).subscribe((res) => {
+      if (res) {
+        this.materials = res;
+        console.log("load shared materials ===========>");
+      }
+    });
     this.filter();
   }
 

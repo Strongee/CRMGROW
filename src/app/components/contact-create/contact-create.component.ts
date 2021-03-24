@@ -73,7 +73,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
 
   automation: Automation = new Automation();
-  stages;
+  stages = [];
 
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
@@ -89,13 +89,17 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     this.contact.tags = [];
     this.dealsService.getStage();
     this.dealsService.stages$.subscribe((res) => {
-      this.stages = res;
+      this.stages.push({
+        _id: null,
+        title: ''
+      });
+      this.stages = [...this.stages, ...res];
     });
   }
   ngOnDestroy(): void {}
 
   create(): any {
-    if (this.contact.state == 'None') {
+    if (this.contact.state === 'None') {
       this.contact.state = '';
     }
     if (
@@ -266,5 +270,6 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
 
   importCSV(): void {
     this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
+    this.dialogRef.close();
   }
 }

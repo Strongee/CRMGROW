@@ -271,26 +271,23 @@
               <span class="f-3 font-weight-bold c-blue">Share material</span>
             </button>
           </div>
-          <ng-container *ngIf="materials.length > 0; else emptyMaterialListTemplate">
-            <app-team-share-material
-              [materials]="materials"
-              [team]="team"
-              [role]="role"
-            ></app-team-share-material>
-          </ng-container>
-          <ng-template #emptyMaterialListTemplate>
-            <div class="empty-materials mt-3">
-              <div class="empty-list">
-                <div class="object-icon sm v-center">
-                  <i class="i-icon i-material d-block bgc-dark"></i>
-                </div>
-                <h5 class="font-weight-bold mt-4 mb-3">
-                  There is no materials for share yet.
-                </h5>
-                <p class="mb-4">Please add materials to use for sharing.</p>
-              </div>
-            </div>
-          </ng-template>
+          <app-team-share-material
+            [team]="team"
+            [role]="role"
+          ></app-team-share-material>
+<!--          <ng-template #emptyMaterialListTemplate>-->
+<!--            <div class="empty-materials mt-3">-->
+<!--              <div class="empty-list">-->
+<!--                <div class="object-icon sm v-center">-->
+<!--                  <i class="i-icon i-material d-block bgc-dark"></i>-->
+<!--                </div>-->
+<!--                <h5 class="font-weight-bold mt-4 mb-3">-->
+<!--                  There is no materials for share yet.-->
+<!--                </h5>-->
+<!--                <p class="mb-4">Please add materials to use for sharing.</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </ng-template>-->
         </div>
 
         <div class="mt-4" *ngSwitchCase="'contacts'">
