@@ -214,6 +214,19 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
     }
   }
 
+  getMaterialById(id): any {
+    const index = this.filteredMaterials.findIndex((item) => item._id === id);
+    if (index >= 0) {
+      return this.filteredMaterials[index];
+    }
+    return null;
+  }
+
+  capitalizeFirstLetter(type: string): any {
+    return type.charAt(0).toUpperCase() + type.slice(1);
+  }
+
+
   openFolder(element: Material): void {
     this.selectedFolder = element;
     this.filter();

@@ -30,9 +30,9 @@ import { Team } from '../../models/team.model';
   styleUrls: ['./team-share-material.component.scss']
 })
 export class TeamShareMaterialComponent implements OnInit, OnChanges {
-  @Input('materials') materials: any[] = [];
   @Input('team') team: Team;
   @Input('role') role: string;
+  materials: Material[] = [];
   DISPLAY_COLUMNS = [
     'select',
     'material_name',
@@ -77,6 +77,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   page = 1;
   perPageCount = 8;
   pageMaterials: any = [];
+  loading = false;
 
   constructor(
     private dialog: MatDialog,
@@ -108,6 +109,24 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.selectedFolder = null;
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.teamService.loadSharedMaterials(this.team._id).subscribe(
+      (res) => {
+        if (res) {
+          this.loading = false;
+          this.materials = [
+            ...res['video_data'],
+            ...res['pdf_data'],
+            ...res['image_data']
+          ];
+          this.filteredMaterials = this.materials;
+        }
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
     this.filter();
   }
 

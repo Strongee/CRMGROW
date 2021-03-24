@@ -82,8 +82,9 @@
 .status {
   padding: 4px 5px;
   border-radius: 4px;
-  width: 60px;
+  width: 70px;
   text-align: center;
+  height: 24px;
 
   &.Owner {
     background-color: #F1305E;
@@ -130,7 +131,7 @@ select.status {
       border-radius: 4px;
       font-size: 12px;
       display: block;
-      height: 22px;
+      height: 24px;
     }
     select:focus {
       border: none;

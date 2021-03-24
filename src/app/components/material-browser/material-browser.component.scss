@@ -61,6 +61,36 @@
     margin-top: 4px;
 }
 
+.browser-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 65vh;
+  overflow: hidden;
+  width: 100%;
+
+  .contact-list-controls {
+    position: inherit;
+    display: block;
+    min-height: 70px;
+  }
+
+  .custom-mat-table {
+    height: calc(65vh - 150px);
+    overflow: auto;
+
+    &.no-selected {
+      height: calc(65vh - 70px);
+    }
+  }
+}
+
+.selected-materials-wrapper {
+  max-height: 150px;
+  min-height: 80px;
+  overflow: auto;
+}
+
 td {
     height: 64px;
 }
@@ -243,6 +273,14 @@ td.type-col {
 :host ::ng-deep {
   thead tr.table-header th {
     top: 64px!important;
+  }
+
+  .mat-dialog-container {
+    display: flex;
+  }
+
+  .browser-container .page-table thead tr.table-header th {
+    position: inherit;
   }
 }
 

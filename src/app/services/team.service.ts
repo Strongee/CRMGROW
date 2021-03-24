@@ -11,6 +11,9 @@ import { User } from '../models/user.model';
 import { environment } from 'src/environments/environment';
 import { STATUS } from '../constants/variable.constants';
 import * as _ from 'lodash';
+import { Material } from '../models/material.model';
+import { Automation } from '../models/automation.model';
+import { Template } from '../models/template.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -277,17 +280,6 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM SHARE IMAGES', []))
       );
   }
-  shareMaterials(teamId, data): Observable<any> {
-    return this.httpClient
-      .post(this.server + TEAM.SHARE_MATERIALS, {
-        team_id: teamId,
-        ...data
-      })
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('TEAM SHARE MATERIALS', []))
-      );
-  }
   loadSharedContacts(id: string): Observable<any> {
     return this.httpClient
       .post(this.server + TEAM.LOAD_SHARE_CONTACTS, {
@@ -296,6 +288,30 @@ export class TeamService extends HttpService {
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('TEAM LOAD SHARED CONTACTS', []))
+      );
+  }
+  loadSharedMaterials(teamId: string): Observable<any[]> {
+    return this.httpClient
+      .get(this.server + TEAM.LOAD_SHARE_MATERIALS + teamId)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED MATERIALS', []))
+      );
+  }
+  loadSharedAutomations(teamId: string): Observable<any[]> {
+    return this.httpClient
+      .get(this.server + TEAM.LOAD_SHARE_AUTOMATIONS + teamId)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED AUTOMATIONS', []))
+      );
+  }
+  loadSharedTemplates(teamId: string): Observable<any[]> {
+    return this.httpClient
+      .get(this.server + TEAM.LOAD_SHARE_TEMPLATES + teamId)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED TEMPLATES', []))
       );
   }
   removeVideo(id): Observable<any> {
