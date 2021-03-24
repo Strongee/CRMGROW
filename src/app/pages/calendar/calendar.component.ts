@@ -153,7 +153,7 @@ export class CalendarComponent implements OnInit {
                   outlook_refresh_token: params['code']
                 };
                 this.user.calendar_list.push(data);
-                this.userService.updateProfileImpl(data);
+                this.userService.updateProfileImpl(this.user);
                 this.toast.success(
                   'Your Outlook Calendar is connected successfully.'
                 );
@@ -172,7 +172,7 @@ export class CalendarComponent implements OnInit {
                   google_refresh_token: params['code']
                 };
                 this.user.calendar_list.push(data);
-                this.userService.updateProfileImpl(data);
+                this.userService.updateProfileImpl(this.user);
                 this.toast.success(
                   'Your Google Calendar is connected successfully.'
                 );
