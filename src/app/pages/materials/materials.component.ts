@@ -67,6 +67,7 @@ export class MaterialsComponent implements OnInit {
   materials: any[] = [];
   filteredMaterials: any[] = [];
   selection: any[] = [];
+  selecting = false;
 
   convertLoaderTimer;
   convertingVideos = [];
@@ -255,6 +256,7 @@ export class MaterialsComponent implements OnInit {
   }
 
   masterToggle(): void {
+    this.selecting = true;
     if (this.isAllSelected()) {
       this.selection = [];
     } else {
@@ -263,6 +265,7 @@ export class MaterialsComponent implements OnInit {
         this.selection.push(e._id);
       });
     }
+    this.selecting = false;
     this.changeCaptureAction();
   }
 

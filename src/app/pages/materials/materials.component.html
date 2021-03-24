@@ -398,10 +398,29 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="selection_info">
+          <th mat-header-cell *matHeaderCellDef colspan="9" class="text-center">
+            <span *ngIf="selection.length !== filteredMaterials.length; else deselectTemplate">
+              {{selection.length}} materials are selected.
+              <span  class="c-blue font-weight-bold" *ngIf="selecting">
+                <i class="small-spinner"></i>
+                <span class="ml-1">Selecting all. . .</span>
+              </span>
+              <span class="c-blue font-weight-bold c-pointer" *ngIf="!selecting" (click)="masterToggle()">
+                Select all {{filteredMaterials.length}} materials
+              </span>
+            </span>
+            <ng-template #deselectTemplate>
+              All {{filteredMaterials.length}} materials are selected. <span class="c-blue c-pointer font-weight-bold" (click)="masterToggle()">Clear selection</span>
+            </ng-template>
+          </th>
+        </ng-container>
+
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
           *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
+        <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length" class='selection-info'></tr>
         <tr mat-row
           *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>

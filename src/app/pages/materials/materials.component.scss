@@ -264,4 +264,13 @@ td.type-col {
   .show.dropdown {
     position: unset;
   }
+  thead tr.selected {
+    th {
+      background-color: #f5f6fd;
+    }
+  }
+  thead tr.selection-info th {
+    background-color: #f5f6fd;
+    border-bottom: none;
+  }
 }
