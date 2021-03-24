@@ -292,7 +292,7 @@
             </ng-container>
             <ng-template #materialViewTemplate>
               <a [routerLink]="['/materials/analytics/' + element._id]" class="text-decoration-none">
-                <div class="v-center py-2">
+                <div class="v-center py-2" placement="bottom" ngbTooltip="Click into detail view">
                   <span class="f-2 c-dark">{{element.views}}</span>
                   <i class="i-icon i-analytics bgc-blue ml-1 mb-2" aria-hidden="true"></i>
                 </div>
@@ -333,13 +333,13 @@
             *matCellDef="let element" class="item-action">
             <div class="v-center">
               <ng-container *ngIf="element.material_type !== 'folder'">
-                <button class="v-center btn py-2 c-dark" (click)="sendMaterial(element, 'email')">
+                <button class="v-center btn py-2 c-dark" (click)="sendMaterial(element, 'email')" placement="bottom" ngbTooltip="Send via Email">
                   <i class="i-icon i-message bgc-dark ml-1" aria-hidden="true"></i>
                 </button>
-                <button class="v-center btn py-2 c-dark" (click)="sendMaterial(element, 'text')">
+                <button class="v-center btn py-2 c-dark" (click)="sendMaterial(element, 'text')" placement="bottom" ngbTooltip="Send via Text">
                   <i class="i-icon i-sms-sent bgc-dark ml-1" aria-hidden="true"></i>
                 </button>
-                <button class="v-center btn py-2 c-dark" (click)="copyLink(element)">
+                <button class="v-center btn py-2 c-dark" (click)="copyLink(element)" placement="bottom" ngbTooltip="Copy link">
                   <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
                 </button>
               </ng-container>

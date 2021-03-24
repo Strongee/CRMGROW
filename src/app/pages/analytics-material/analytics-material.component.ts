@@ -4,6 +4,7 @@ import { ActivityService } from '../../services/activity.service';
 import { Subscription } from 'rxjs';
 import { MaterialService } from '../../services/material.service';
 import { LabelService } from '../../services/label.service';
+import { HandlerService } from 'src/app/services/handler.service';
 
 @Component({
   selector: 'app-analytics-material',
@@ -22,7 +23,8 @@ export class AnalyticsMaterialComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private materialService: MaterialService,
-    private labelService: LabelService
+    private labelService: LabelService,
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {
@@ -103,5 +105,9 @@ export class AnalyticsMaterialComponent implements OnInit {
 
   toContact(id: string): void {
     this.router.navigate(['/contacts/' + id]);
+  }
+
+  goToBack(): void {
+    this.handlerService.goBack('/materials');
   }
 }
