@@ -165,13 +165,13 @@ export class MaterialSendComponent implements OnInit {
     this.images.forEach((e) => image_ids.push(e._id));
     if (video_ids.length) {
       materialType = 'video';
-      data['videos'] = video_ids;
+      data['video_ids'] = video_ids;
     } else if (pdf_ids.length) {
       materialType = 'pdf';
-      data['pdfs'] = pdf_ids;
+      data['pdf_ids'] = pdf_ids;
     } else if (image_ids.length) {
       materialType = 'image';
-      data['images'] = image_ids;
+      data['image_ids'] = image_ids;
     }
     let message = this.textContent;
     if (this.textContent && this.textContent.slice(-1) !== '\n') {
