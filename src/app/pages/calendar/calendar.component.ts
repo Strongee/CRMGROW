@@ -32,6 +32,7 @@ export class CalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
+  today: Date = new Date();
 
   @Input() locale = 'en';
   public user: any = {};
