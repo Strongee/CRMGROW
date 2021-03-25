@@ -105,7 +105,7 @@ td.type-col {
     text-transform: uppercase;
 }
 .capture-col {
-    width: 100px;
+    width: 52px;
 }
 .share-col {
     max-width: 120px;
@@ -181,14 +181,6 @@ td.type-col {
         }
     }
 }
-@media screen and (max-width: 600px) {
-    .capture-col {
-        width: 52px;
-    }
-    .capture-col .custom-switch {
-        padding: 0px;
-    }
-}
 @media screen and (max-width: 400px) {
     td {
         height: 138px;
@@ -231,6 +223,13 @@ td.type-col {
     width: 30px;
 }
 
+.sub-item-action {
+    width: 132px;
+    .items {
+        display: none;
+    }
+}
+
 .panel {
     max-width: 400px;
     @media screen and (max-width: 360px) {
@@ -261,16 +260,25 @@ td.type-col {
 }
 
 :host ::ng-deep {
-  .show.dropdown {
-    position: unset;
-  }
-  thead tr.selected {
-    th {
-      background-color: #f5f6fd;
+    .show.dropdown {
+        position: unset;
     }
-  }
-  thead tr.selection-info th {
-    background-color: #f5f6fd;
-    border-bottom: none;
-  }
+    thead tr.selected {
+        th {
+            background-color: #f5f6fd;
+        }
+    }
+    thead tr.selection-info th {
+        background-color: #f5f6fd;
+        border-bottom: none;
+    }
+    tbody {
+        tr:hover {
+            .sub-item-action {
+                .items {
+                    display: flex;
+                }    
+            }
+        }
+    }
 }

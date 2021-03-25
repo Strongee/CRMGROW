@@ -47,6 +47,7 @@ export class MaterialsComponent implements OnInit {
     'type',
     'created_at',
     'analytics',
+    'sub_actions',
     'lead_capture',
     'actions'
   ];
@@ -1541,6 +1542,7 @@ export class MaterialsComponent implements OnInit {
         this.filteredMaterials = [...this.filteredMaterials, ...filterdNormals];
       }
     }
+    this.page = 1;
     this.searchCondition[field] = !this.searchCondition[field];
   }
 

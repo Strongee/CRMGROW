@@ -2088,25 +2088,33 @@ body {
   min-height: 20px;
 
   &::after {
-    content: "\2B9F";
+    content: "";
     position: absolute;
-    bottom: 0px;
+    bottom: 4px;
     right: 0px;
-    color: #ddd;
+    width: 9px;
+    height: 6px;
+    mask-image: url('/assets/img/down_triangle.svg');
+    mask-repeat: no-repeat;
+    background-color: #ddd;
   }
 
   &::before {
-    content: "\2B9D";
+    content: "";
     position: absolute;
-    top: -4px;
+    top: 2px;
     right: 0px;
-    color: #ddd;
+    width: 9px;
+    height: 6px;
+    mask-image: url('/assets/img/up_triangle.svg');
+    mask-repeat: no-repeat;
+    background-color: #ddd;
   }
 
   &.inc::before {
-    color: black;
+    background-color: $color-dark;
   }
   &.dec::after {
-    color: black;
+    background-color: $color-dark;
   }
 }
