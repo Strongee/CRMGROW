@@ -43,7 +43,11 @@ export class ActivityService extends HttpService {
         ? this.loadStatus.next(STATUS.SUCCESS)
         : this.loadStatus.next(STATUS.FAILURE);
       if (res && res['activities']) {
-        this.storeService.activities.next(res['activities']);
+        this.storeService.activities.next(
+          command['ending_before']
+            ? res['activities'].reverse()
+            : res['activities']
+        );
         this.latest.next(res['latest'] ? res['latest']['_id'] : '');
         this.command.next(command);
       }

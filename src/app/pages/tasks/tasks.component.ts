@@ -58,7 +58,8 @@ export class TasksComponent implements OnInit, OnDestroy {
     { id: 'today', label: 'Today' },
     { id: 'tomorrow', label: 'Tomorrow' },
     { id: 'this week', label: 'This week' },
-    { id: 'next week', label: 'Next week' }
+    { id: 'next week', label: 'Next week' },
+    { id: 'future', label: 'Future' }
   ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },

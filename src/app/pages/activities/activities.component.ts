@@ -116,7 +116,13 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     if (param === 'prev') {
       // this.activityService.load(0);
       const first_activity = this.storeService.activities.getValue()[0];
-      this.activityService.load({ before_ending: first_activity._id });
+      // const first_id =
+      //   first_activity.additional_field &&
+      //   first_activity.additional_field.length
+      //     ? first_activity.additional_field.slice(-1)[0]
+      //     : first_activity._id;
+      const first_id = first_activity._id;
+      this.activityService.load({ ending_before: first_id });
       return;
     }
   }
