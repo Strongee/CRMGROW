@@ -1,5 +1,5 @@
 <div class="event-container" [class.other]="!event.meta.is_organizer">
-    <div class="v-center mb-0 header px-3 py-2 decide-actions" *ngIf="!event.meta.is_organizer">
+    <div class="v-center mb-0 header p-3 decide-actions" *ngIf="!event.meta.is_organizer">
         <div class="col-6 pl-0 pr-1">
             <button class="btn btn-accept f-1 font-weight-bold w-100 py-2" (click)="accept()">Accept</button>
         </div>
@@ -7,7 +7,7 @@
             <button class="btn btn-red f-1 font-weight-bold w-100 py-2" (click)="decline()">Decline</button>
         </div>
     </div>
-    <div class="v-center header px-3 py-2 mb-0 main-actions" *ngIf="event.meta.is_organizer">
+    <div class="v-center header p-3 mb-0 main-actions" *ngIf="event.meta.is_organizer">
         <span class="mr-2 c-pointer ml-auto" (click)="update()"><i class="i-icon i-edit d-block bgc-blue"></i></span>
         <span class="c-pointer" (click)="remove()"><i class="i-icon i-trash d-block bgc-red"></i></span>
         <button type="button" class="v-center border-0 bgc-trans close-button p-0 ml-2" (click)="close()">
