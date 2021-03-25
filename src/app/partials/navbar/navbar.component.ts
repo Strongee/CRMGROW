@@ -20,7 +20,7 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
 })
 export class NavbarComponent implements OnInit {
   actions: any[] = [
-    { icon: 'i-plus bg-white', label: 'Add new Contact', id: 'contact' },
+    { icon: 'i-contact bg-white', label: 'Add new Contact', id: 'contact' },
     { icon: 'i-task bg-white', label: 'Add new Task', id: 'task' },
     { icon: 'i-deals bg-white', label: 'Add new Deal', id: 'deal' },
     {
