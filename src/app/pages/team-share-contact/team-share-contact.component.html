@@ -1,5 +1,13 @@
 <div class="page-content">
-  <div class="v-center contact-list-controls mb-2">
+  <div class="v-center with-tab panel-header contact-header">
+    <button type="button" class="btn btn-white-blue v-center ml-auto"
+            (click)="shareContact()" *ngIf="role=='editor' || role == 'owner'"
+    >
+      <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
+      <span class="f-3 font-weight-bold c-blue">Share contact</span>
+    </button>
+  </div>
+  <div class="v-center contact-list-controls my-2">
     <div class="form-group mb-0 search-form">
       <div class="input-group-prepend">
         <i class="i-icon i-search d-block bgc-dark"></i>
@@ -16,14 +24,14 @@
     <div class="mat-table-wrapper mode-2">
       <table class="w-100 page-table"
              mat-table
-             [dataSource]="filteredResult | paginate: {itemsPerPage: 5, currentPage: page, id: 'contactTable', total: filteredResult.length}">
+             [dataSource]="pageContacts | paginate: {itemsPerPage: 8, currentPage: page, id: 'contactTable', total: pageContacts.length}">
 
         <ng-container matColumnDef="select">
           <th mat-header-cell
               *matHeaderCellDef
               class="pl-2">
             <div class="custom-control custom-checkbox"
-                 [class.indeterminate]="pageSelection.length && !isAllSelected()">
+                 [class.indeterminate]="pageContacts.length && !isAllSelected()">
               <input type="checkbox"
                      class="custom-control-input"
                      id="selectAllContacts"
@@ -69,19 +77,6 @@
               <div class="contact-avatar f-3 mr-2">{{avatarName(element)}}</div>
               <span class="fw-600">{{element.first_name + ' ' + element.last_name}}</span>
             </div>
-          </td>
-        </ng-container>
-
-        <!-- Country Column -->
-        <ng-container matColumnDef="contact_address">
-          <ng-container *matHeaderCellDef>
-            <th mat-header-cell class="address-col" *ngIf="!selection.length">address</th>
-          </ng-container>
-          <td mat-cell
-              *matCellDef="let element" class="address-col">
-            <a class="c-pointer undecoration c-dark d-block" [routerLink]="['/contacts/' + element._id]">
-              <span class="c-dark">{{element.shortAddress}}</span>
-            </a>
           </td>
         </ng-container>
 
@@ -154,6 +149,37 @@
           </td>
         </ng-container>
 
+        <!-- Country Column -->
+        <ng-container matColumnDef="contact_address">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell class="address-col" *ngIf="!selection.length">address</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="address-col">
+            <span class="c-dark">{{element.shortAddress || '---' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Shared With Column -->
+        <ng-container matColumnDef="shared_with">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell class="shared-col" *ngIf="!selection.length">Shared with</th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="address-col">
+            <ng-container *ngIf="isSharedByMe(element); else sharedWithMeTemplate">
+              <div class="v-center c-pointer">
+                <div class="contact-avatar f-3 mr-2">{{userAvatarName(element.user[0].user_name)}}</div>
+                <span class="fw-600">{{element.user[0].user_name}}</span>
+                <span class="f-3 ml-2 c-blue" *ngIf="element.user.length > 1">+{{element.user.length - 1}}</span>
+              </div>
+            </ng-container>
+            <ng-template #sharedWithMeTemplate>
+
+            </ng-template>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="selection_info">
           <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
             <span *ngIf="!isAllSelected(); else deselectTemplate">
@@ -178,12 +204,30 @@
         <tr mat-row
             *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
-      <div class="d-flex justify-content-center align-items-center mt-4">
-        <div class="ml-3 pagination-wrapper">
-          <pagination-controls (pageChange)="page = $event" id="contactTable" maxSize="5" previousLabel=""
-                               nextLabel=""></pagination-controls>
+      <ng-container *ngIf="pageContacts.length; else emptyListTemplate">
+        <div class="d-flex justify-content-center align-items-center mt-4">
+          <div class="ml-3 pagination-wrapper">
+            <pagination-controls (pageChange)="changePage($event)" id="contactTable" maxSize="5" previousLabel=""
+                                 nextLabel=""></pagination-controls>
+          </div>
         </div>
-      </div>
+      </ng-container>
+      <ng-template #emptyListTemplate>
+        <ng-container>
+          <div class="empty-list py-5" *ngIf="!loading">
+            <div class="object-icon v-center">
+              <i class="i-icon i-lunch d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no contacts.
+            </h4>
+          </div>
+          <div class="list-loading text-center" *ngIf="loading">
+            <div class="loader mt-5 lg"></div>
+            <h4 class="fw-600 mt-2">Loading contacts...</h4>
+          </div>
+        </ng-container>
+      </ng-template>
     </div>
   </div>
 </div>

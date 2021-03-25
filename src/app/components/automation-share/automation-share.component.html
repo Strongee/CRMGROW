@@ -7,12 +7,12 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!loading && !automations.length">
-    <div class="object-icon v-center">
+    <div class="object-icon v-center justify-content-center my-5 py-5">
       <i class="i-icon i-automation d-block bgc-dark"></i>
+      <div class="f-5 font-weight-bold ml-2">
+        There is no automations for share yet.
+      </div>
     </div>
-    <h4 class="font-weight-bold mt-4 mb-3">
-      There is no automations for share yet.
-    </h4>
   </ng-container>
   <ng-container *ngIf="!loading && automations.length">
     <div class="automations-container mt-3">

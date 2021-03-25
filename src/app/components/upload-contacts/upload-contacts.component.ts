@@ -401,7 +401,8 @@ export class UploadContactsComponent implements OnInit {
           if (
             this.contacts[i][key] &&
             this.contacts[j][key] &&
-            this.contacts[i][key] === this.contacts[j][key]
+            this.contacts[i][key].toLowerCase() ===
+              this.contacts[j][key].toLowerCase()
           ) {
             return true;
           }
@@ -480,8 +481,10 @@ export class UploadContactsComponent implements OnInit {
               !!firstContact.last_name &&
               !!secondContact.first_name &&
               !!secondContact.last_name &&
-              firstContact.first_name === secondContact.first_name &&
-              firstContact.last_name === secondContact.last_name
+              firstContact.first_name.toLowerCase() ===
+                secondContact.first_name.toLowerCase() &&
+              firstContact.last_name.toLowerCase() ===
+                secondContact.last_name.toLowerCase()
             ) {
               merge.push(secondContact);
               continue;
@@ -492,7 +495,8 @@ export class UploadContactsComponent implements OnInit {
             if (
               !!firstContact.primary_email &&
               !!secondContact.primary_email &&
-              firstContact.primary_email === secondContact.primary_email
+              firstContact.primary_email.toLowerCase() ===
+                secondContact.primary_email.toLowerCase()
             ) {
               merge.push(secondContact);
               continue;
@@ -503,7 +507,8 @@ export class UploadContactsComponent implements OnInit {
             if (
               !!firstContact.primary_phone &&
               !!secondContact.primary_phone &&
-              firstContact.primary_phone === secondContact.primary_phone
+              firstContact.primary_phone.toLowerCase() ===
+                secondContact.primary_phone.toLowerCase()
             ) {
               merge.push(secondContact);
               continue;
@@ -546,7 +551,7 @@ export class UploadContactsComponent implements OnInit {
         if (
           !!contactItem[key] &&
           !!contact[key] &&
-          contactItem[key] === contact[key] &&
+          contactItem[key].toLowerCase() === contact[key].toLowerCase() &&
           contactItem.id !== contact.id
         ) {
           return true;
@@ -652,45 +657,45 @@ export class UploadContactsComponent implements OnInit {
             continue;
           } else {
             if (
-              this.sameContacts[dupIndex][i][emailKey] ===
-              this.sameContacts[dupIndex][j][emailKey]
+              this.sameContacts[dupIndex][i][emailKey].toLowerCase() ===
+              this.sameContacts[dupIndex][j][emailKey].toLowerCase()
             ) {
               if (
-                !!this.sameContacts[dupIndex][i][emailKey] ||
-                !!this.sameContacts[dupIndex][j][emailKey]
+                this.sameContacts[dupIndex][i][emailKey] !== '' ||
+                this.sameContacts[dupIndex][j][emailKey] !== ''
               ) {
                 isEmailDuplicate = true;
               }
             }
             if (
-              this.sameContacts[dupIndex][i][phoneKey] ===
-              this.sameContacts[dupIndex][j][phoneKey]
+              this.sameContacts[dupIndex][i][phoneKey].toLowerCase() ===
+              this.sameContacts[dupIndex][j][phoneKey].toLowerCase()
             ) {
               if (
-                !!this.sameContacts[dupIndex][i][phoneKey] ||
-                !!this.sameContacts[dupIndex][j][phoneKey]
+                this.sameContacts[dupIndex][i][phoneKey] !== '' ||
+                this.sameContacts[dupIndex][j][phoneKey] !== ''
               ) {
                 isPhoneDuplicate = true;
               }
             }
             if (
-              this.sameContacts[dupIndex][i][firstNameKey] ===
-              this.sameContacts[dupIndex][j][firstNameKey]
+              this.sameContacts[dupIndex][i][firstNameKey].toLowerCase() ===
+              this.sameContacts[dupIndex][j][firstNameKey].toLowerCase()
             ) {
               if (
-                !!this.sameContacts[dupIndex][i][firstNameKey] ||
-                !!this.sameContacts[dupIndex][j][firstNameKey]
+                this.sameContacts[dupIndex][i][firstNameKey] !== '' ||
+                this.sameContacts[dupIndex][j][firstNameKey] !== ''
               ) {
                 isFirstNameDuplicate = true;
               }
             }
             if (
-              this.sameContacts[dupIndex][i][lastNameKey] ===
-              this.sameContacts[dupIndex][j][lastNameKey]
+              this.sameContacts[dupIndex][i][lastNameKey].toLowerCase() ===
+              this.sameContacts[dupIndex][j][lastNameKey].toLowerCase()
             ) {
               if (
-                !!this.sameContacts[dupIndex][i][lastNameKey] ||
-                !!this.sameContacts[dupIndex][j][lastNameKey]
+                this.sameContacts[dupIndex][i][lastNameKey] !== '' ||
+                this.sameContacts[dupIndex][j][lastNameKey] !== ''
               ) {
                 isLastNameDuplicate = true;
               }

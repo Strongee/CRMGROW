@@ -113,7 +113,7 @@
       </div>
       <div class="col-sm-4 form-group">
         <label for="stage_cc">create stage</label>
-        <select id="stage_cc" class="form-control" [(ngModel)]="contact.recruiting_stage" name="stage" #stage="ngModel">
+        <select id="stage_cc" class="form-control" [(ngModel)]="contact.deal_stage" name="stage" #stage="ngModel">
           <option *ngFor="let stage of stages" value="{{stage._id}}">{{stage.title}}</option>
         </select>
       </div>

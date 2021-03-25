@@ -18,7 +18,7 @@ export class TemplateShareComponent implements OnInit {
   selectedTemplates: any[] = [];
   sharing = false;
   teamId = '';
-  preShared: any[] = [];
+  hideTemplates: any[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<TemplateShareComponent>,
@@ -29,7 +29,7 @@ export class TemplateShareComponent implements OnInit {
 
   ngOnInit(): void {
     this.teamId = this.data.team_id;
-    this.preShared = this.data.preShared;
+    this.hideTemplates = this.data.hideTemplates;
     this.loadTemplates();
   }
 
@@ -40,15 +40,12 @@ export class TemplateShareComponent implements OnInit {
       (res) => {
         this.loading = false;
         const templates = res;
-        if (this.preShared && this.preShared.length > 0) {
-          for (const shared of this.preShared) {
-            const index = templates.findIndex((item) => item._id === shared._id);
-            if (index >= 0) {
-              templates.splice(index, 1);
-            }
+        this.templates = templates.filter((e) => {
+          if (this.hideTemplates.indexOf(e._id) >= 0) {
+            return false;
           }
-        }
-        this.templates = templates;
+          return true;
+        });
       },
       (err) => {
         this.loading = false;

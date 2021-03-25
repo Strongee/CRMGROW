@@ -7,15 +7,15 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!loading && !templates.length">
-    <div class="object-icon v-center">
+    <div class="object-icon v-center justify-content-center my-5 py-5">
       <i class="i-icon i-template d-block bgc-dark"></i>
+      <div class="f-5 font-weight-bold ml-2">
+        There is no templates for share yet.
+      </div>
     </div>
-    <h4 class="font-weight-bold mt-4 mb-3">
-      There is no templates for share yet.
-    </h4>
   </ng-container>
   <ng-container *ngIf="!loading && templates.length">
-    <div class="templates-container">
+    <div class="templates-container mt-3">
       <div class="material template mt-2" *ngFor="let template of templates">
         <div class="v-center">
           <div class="custom-control custom-checkbox">

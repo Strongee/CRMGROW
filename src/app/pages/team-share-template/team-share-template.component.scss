@@ -10,7 +10,8 @@
   padding: 3px 8px;
   background: #f28422;
   border-radius: 3px;
-  width: fit-content;
+  width: 60px;
+  text-align: center;
   color: white;
   line-height: 14px;
   &.admin {
@@ -36,10 +37,13 @@
   }
 }
 
-.template-table {
+.page-table {
+  .auth {
+    width: 90px;
+  }
 
   .template-type {
-    min-width: 100px
+    width: 100px;
   }
 }
 

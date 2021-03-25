@@ -15,7 +15,7 @@ export class AutomationShareComponent implements OnInit {
   loadSubscription: Subscription;
 
   selectedAutomations: any[] = [];
-
+  hideAutomations: any[] = [];
   sharing = false;
   shareSubscription: Subscription;
 
@@ -29,6 +29,9 @@ export class AutomationShareComponent implements OnInit {
 
   ngOnInit(): void {
     this.teamId = this.data.team_id;
+    if (this.data.hideAutomations && this.data.hideAutomations.length > 0) {
+      this.hideAutomations = this.data.hideAutomations;
+    }
     this.loadAutomations();
   }
 
@@ -36,9 +39,14 @@ export class AutomationShareComponent implements OnInit {
     this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.automationService.loadOwn().subscribe(
-      (res) => {
+      (automations) => {
         this.loading = false;
-        this.automations = res;
+        this.automations = automations.filter((e) => {
+          if (this.hideAutomations.indexOf(e._id) >= 0) {
+            return false;
+          }
+          return true;
+        });
       },
       (err) => {
         this.loading = false;

@@ -1675,6 +1675,7 @@ export class AutoflowComponent
           this.contacts = this.pageContacts.length;
         }
       });
+    this.page = 1;
   }
 
   clearSearchStr(): void {

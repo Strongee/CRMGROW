@@ -24,6 +24,7 @@ import { FolderComponent } from 'src/app/components/folder/folder.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
 import { Team } from '../../models/team.model';
+import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
 @Component({
   selector: 'app-team-share-material',
   templateUrl: './team-share-material.component.html',
@@ -189,12 +190,15 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   masterToggle(): void {
     if (this.isAllSelected()) {
       this.selection = [];
+      this.updateSelectActionStatus(true);
     } else {
       this.filteredMaterials.forEach((e) => {
         if (this.selection.indexOf(e._id) < 0) {
           this.selection.push(e._id);
         }
       });
+      this.updateActionsStatus('select', false);
+      this.updateSelectActionStatus(false);
     }
     this.changeCaptureAction();
   }
@@ -222,6 +226,11 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
       });
     }
     this.changeCaptureAction();
+    if (!this.isAllSelected()) {
+      this.updateSelectActionStatus(true);
+    } else {
+      this.updateSelectActionStatus(false);
+    }
   }
 
   toggleElement(element: Material): void {
@@ -232,6 +241,11 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
       this.selection.push(element._id);
     }
     this.changeCaptureAction();
+    if (!this.isAllSelected()) {
+      this.updateSelectActionStatus(true);
+    } else {
+      this.updateSelectActionStatus(false);
+    }
   }
 
   changeCaptureAction(): void {
@@ -501,6 +515,23 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     });
   }
 
+  updateSelectActionStatus(status: boolean): void {
+    this.ACTIONS.some((e) => {
+      if (e.command === 'select') {
+        e.spliter = status;
+      }
+    });
+  }
+
+  updateActionsStatus(command: string, loading: boolean): void {
+    this.ACTIONS.some((e) => {
+      if (e.command === command) {
+        e.loading = loading;
+        return true;
+      }
+    });
+  }
+
   doAction(evt: any): void {
     const selectedMaterials = this.filteredMaterials.filter((e) => {
       if (
@@ -536,8 +567,12 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
           }
         });
         break;
+      case 'select':
+        this.masterToggle();
+        break;
       case 'deselect':
         this.selection = [];
+        this.updateSelectActionStatus(true);
         break;
       case 'lead_capture':
         const bulkSetCapture = this.ACTIONS.filter(
@@ -732,23 +767,27 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   }
 
   isStopSharable(material): any {
-    if (this.role === 'owner') {
+    if (material && material.user && material.user._id === this.user_id) {
       return true;
-    } else if (this.role === 'editor') {
-      if (material.user) {
-        if (material.user._id) {
-          if (material.user._id === this.user_id) {
-            return true;
-          }
-        } else {
-          if (material.user === this.user_id) {
-            return true;
-          }
-        }
-      }
-      return false;
     }
     return false;
+    // if (this.role === 'owner') {
+    //   return true;
+    // } else if (this.role === 'editor') {
+    //   if (material.user) {
+    //     if (material.user._id) {
+    //       if (material.user._id === this.user_id) {
+    //         return true;
+    //       }
+    //     } else {
+    //       if (material.user === this.user_id) {
+    //         return true;
+    //       }
+    //     }
+    //   }
+    //   return false;
+    // }
+    // return false;
   }
 
   getMaterialType(material: any): string {
@@ -763,12 +802,11 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   }
 
   stopShareMaterial(material): any {
-    const materialType = this.getMaterialType(material);
-    if (materialType === 'video') {
+    if (material.material_type === 'video') {
       this.removeTeamVideo(material);
-    } else if (materialType === 'pdf') {
+    } else if (material.material_type === 'pdf') {
       this.removeTeamPdf(material);
-    } else if (materialType === 'image') {
+    } else if (material.material_type === 'image') {
       this.removeTeamImage(material);
     }
   }
@@ -872,6 +910,77 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
             },
             (err) => {}
           );
+        }
+      });
+  }
+
+  shareMaterial(): void {
+    console.log("share material ==============>");
+    this.dialog
+      .open(MaterialBrowserComponent, {
+        width: '96vw',
+        maxWidth: '940px',
+        disableClose: true,
+        data: {
+          title: 'Share material',
+          buttonLabel: 'Share',
+          multiple: true,
+          onlyMine: true,
+          hideMaterials: this.materials
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.materials && res.materials.length) {
+          const videoIds = [];
+          const pdfIds = [];
+          const imageIds = [];
+          for (const material of res.materials) {
+            if (material.material_type === 'video') {
+              videoIds.push(material._id);
+            } else if (material.material_type === 'pdf') {
+              pdfIds.push(material._id);
+            } else if (material.material_type === 'image') {
+              imageIds.push(material._id);
+            }
+          }
+
+          if (videoIds.length > 0) {
+            this.teamService
+              .shareVideos(this.team._id, videoIds)
+              .subscribe((materials) => {
+                if (materials && materials.length > 0) {
+                  for (const material of materials) {
+                    material.material_type = 'video';
+                  }
+                  this.materials = [...this.materials, ...materials];
+                  this.filter();
+                }
+              });
+          }
+
+          if (pdfIds.length > 0) {
+            this.teamService
+              .sharePdfs(this.team._id, pdfIds)
+              .subscribe((materials) => {
+                if (materials && materials.length > 0) {
+                  this.materials = [...this.materials, ...materials];
+                  this.filter();
+                }
+              });
+          }
+
+          if (imageIds.length > 0) {
+            this.teamService
+              .shareImages(this.team._id, imageIds)
+              .subscribe((material) => {
+                if (material && material.length > 0) {
+                  this.materials = [...this.materials, ...material];
+                  this.filter();
+                }
+              });
+          }
+          this.toast.success('Selected materials has been shared successfully');
         }
       });
   }

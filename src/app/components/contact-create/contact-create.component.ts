@@ -89,11 +89,18 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
     this.contact.tags = [];
     this.dealsService.getStage();
     this.dealsService.stages$.subscribe((res) => {
-      this.stages.push({
-        _id: null,
-        title: ''
-      });
-      this.stages = [...this.stages, ...res];
+      const index = res.findIndex((item) => item._id === null);
+      const nullStage = [
+        {
+          _id: null,
+          title: 'None'
+        }
+      ];
+      if (index < 0) {
+        this.stages = [...nullStage, ...res];
+      } else {
+        this.stages = res;
+      }
     });
   }
   ngOnDestroy(): void {}

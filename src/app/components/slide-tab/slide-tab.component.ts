@@ -26,13 +26,14 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
   @ViewChild('indicator') indicator: ElementRef;
   tabIndicatorPos = { x: 0, width: 0 };
 
+  currentIndex = 0;
   constructor() {}
 
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
+    const tabIndex = _.findIndex(this.tabs, { id: this.selected.id });
     if (this.tabs.length < 5) {
-      const tabIndex = _.findIndex(this.tabs, { id: this.selected.id });
       const tabBound = this.container.nativeElement.children[
         tabIndex + 1
       ].getBoundingClientRect();
@@ -42,6 +43,7 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
       this.indicator.nativeElement.style.width =
         Math.floor(tabBound.width) + 'px';
     }
+    this.currentIndex = tabIndex ? tabIndex : 0;
   }
 
   changeTab(event: Event, item: TabItem): void {
