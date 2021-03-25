@@ -77,8 +77,6 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.teamService.loadAll(false);
         this.dealsService.getStage(false);
 
-        const reg = new RegExp(str, 'gi');
-
         this.materialLoadSubscription &&
           this.materialLoadSubscription.unsubscribe();
         this.materialLoadSubscription = this.storeService.materials$.subscribe(

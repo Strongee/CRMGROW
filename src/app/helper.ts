@@ -429,7 +429,7 @@ export function convertTimetoObj(dateTime: string, timezone: any): any {
 
 export function searchReg(content, target): boolean {
   const words = _.uniqBy(
-    content.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+    target.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
     (e) => e.toLowerCase()
   );
   const reg = new RegExp(words.join('|'), 'gi');
@@ -441,4 +441,5 @@ export function searchReg(content, target): boolean {
   ) {
     return true;
   }
+  return false;
 }
