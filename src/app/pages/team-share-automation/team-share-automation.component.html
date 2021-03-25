@@ -1,6 +1,14 @@
 <script src="../team-share-contact/team-share-contact.component.ts"></script>
 <div class="page-content">
-  <div class="v-center">
+  <div class="v-center with-tab panel-header contact-header">
+    <button type="button" class="btn btn-white-blue v-center ml-auto"
+            (click)="shareAutomation()" *ngIf="role=='editor' || role == 'owner'"
+    >
+      <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
+      <span class="f-3 font-weight-bold c-blue">Share automation</span>
+    </button>
+  </div>
+  <div class="v-center my-2">
     <div class="form-group mb-0 search-form">
       <div class="input-group-prepend">
         <i class="i-icon i-search d-block bgc-dark"></i>
@@ -13,7 +21,7 @@
       </ng-container>
     </div>
   </div>
-  <div class="my-3 position-relative">
+  <div class="position-relative">
     <ng-container *ngIf="automations.length">
       <table class="w-100 page-table automation-table"
         mat-table
@@ -76,14 +84,6 @@
                           (click)="stopShareAutomation(automation)"
                   >
                     <span class="f-3 font-weight-bold">Stop Share</span>
-                  </button>
-                </ng-container>
-                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId">
-                  <hr class="my-0">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item"
-                          (click)="deleteAutomation($event, automation)"
-                  >
-                    <span class="f-3 c-red font-weight-bold">Delete automation</span>
                   </button>
                 </ng-container>
               </div>

@@ -30,6 +30,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 import { TeamService } from '../../services/team.service';
 import { Team } from '../../models/team.model';
+import {AutomationShareComponent} from "../../components/automation-share/automation-share.component";
 
 @Component({
   selector: 'app-team-share-automation',
@@ -231,14 +232,18 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   }
 
   isStopSharable(automation): any {
-    if (automation.role === 'admin') {
+    if (automation.user && automation.user === this.userId) {
       return true;
-    } else {
-      if (automation.role === 'team' && automation.user === this.userId) {
-        return true;
-      }
     }
     return false;
+    // if (automation.role === 'admin') {
+    //   return true;
+    // } else {
+    //   if (automation.role === 'team' && automation.user === this.userId) {
+    //     return true;
+    //   }
+    // }
+    // return false;
   }
 
   stopShareAutomation(automation): any {
@@ -272,6 +277,32 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
             },
             (err) => {}
           );
+        }
+      });
+  }
+
+  shareAutomation(): void {
+    const hideAutomations = [];
+    for (const automation of this.automations) {
+      hideAutomations.push(automation._id);
+    }
+    this.dialog
+      .open(AutomationShareComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        disableClose: true,
+        data: {
+          team_id: this.team._id,
+          hideAutomations
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.automations) {
+            this.automations = [...this.automations, ...res.automations];
+            this.changeSearchStr();
+          }
         }
       });
   }

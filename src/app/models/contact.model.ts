@@ -24,6 +24,7 @@ export class Contact implements Deserializable {
   brokerage: string;
   tags: string[];
   recruiting_stage: string;
+  deal_stage: string;
   website: string;
   secondary_email: string;
   secondary_phone: string;

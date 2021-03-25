@@ -35,6 +35,7 @@ import { SendEmailComponent } from 'src/app/components/send-email/send-email.com
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { Team } from '../../models/team.model';
 import { TeamService } from '../../services/team.service';
+import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 
 @Component({
   selector: 'app-team-share-contact',
@@ -52,7 +53,8 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     'contact_tags',
     'contact_email',
     'contact_phone',
-    'contact_address'
+    'contact_address',
+    'shared_with'
   ];
   SORT_TYPES = [
     { id: 'alpha_up', label: 'Alphabetical Z-A' },
@@ -74,7 +76,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   panelType = '';
 
   sortType = this.SORT_TYPES[1];
-  pageSize = this.PAGE_COUNTS[3];
+  pageSize = this.PAGE_COUNTS[0];
   page = 1;
   searchOption: SearchOption = new SearchOption();
   searchStr = '';
@@ -89,10 +91,14 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   // Variables for Label Update
   isUpdating = false;
   updateSubscription: Subscription;
-  filteredResult: Contact[] = [];
 
+  profileSubscription: Subscription;
+  loadSubscription: Subscription;
+  searchSubscription: Subscription;
   loading = false;
   contacts: Contact[] = [];
+  contactCount = 0;
+  userId = '';
 
   constructor(
     public router: Router,
@@ -110,19 +116,30 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.handlerService.pageName.next('contacts');
-
-    this.teamService.loadSharedContacts(this.team._id).subscribe((res) => {
-      this.loading = false;
-      if (res && res.contacts && res.contacts.length > 0) {
-        this.contacts = res.contacts;
-        this.pageContacts = [...this.contacts];
-        this.filteredResult = [...this.contacts];
-      }
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
+      this.userId = res._id;
     });
+
+    this.handlerService.pageName.next('contacts');
+    this.loadContact(0);
 
     this.pageSelection = [];
     this.selection = [];
+  }
+
+  loadContact(page: number): void {
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.teamService
+      .loadSharedContacts(this.team._id, this.pageSize.id, page)
+      .subscribe((res) => {
+        this.loading = false;
+        if (res && res.contacts && res.contacts.length > 0) {
+          this.contactCount = this.contacts.length;
+          this.pageContacts = res.contacts;
+        }
+      });
   }
 
   ngOnChanges(changes): void {
@@ -142,24 +159,11 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    */
   changePage(page: number): void {
     this.page = page;
-    if (!this.searchStr && this.searchOption.isEmpty()) {
-      // Normal Load by Page
-      let skip = (page - 1) * this.pageSize.id;
-      skip = skip < 0 ? 0 : skip;
-      this.contactService.load(skip);
-    } else {
-      // Change the Page Selection
-      let skip = (page - 1) * this.pageSize.id;
-      skip = skip < 0 ? 0 : skip;
-      // Reset the Page Contacts
-      const contacts = this.storeService.pageContacts.getValue();
-      this.pageContacts = contacts.slice(skip, skip + this.pageSize.id);
-      // Clear the page selection
-      this.pageSelection = _.intersectionBy(
-        this.selection,
-        this.pageContacts,
-        '_id'
-      );
+    // Normal Load by Page
+    let skip = (page - 1) * 8;
+    skip = skip < 0 ? 0 : skip;
+    if (this.searchStr === '') {
+      this.loadContact(skip);
     }
   }
   /**
@@ -169,7 +173,6 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   changePageSize(type: any): void {
     const currentSize = this.pageSize.id;
     this.pageSize = type;
-    this.contactService.pageSize.next(this.pageSize.id);
     // Check with the Prev Page Size
     if (currentSize < this.pageSize.id) {
       // If page size get bigger
@@ -179,13 +182,9 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
       this.changePage(newPage);
     } else {
       // if page size get smaller: TODO -> Set Selection and Page contacts
-      if (this.searchOption.isEmpty() && !this.searchStr) {
-        const skipped = (this.page - 1) * currentSize;
-        const newPage = Math.floor(skipped / this.pageSize.id) + 1;
-        this.changePage(newPage);
-      } else {
-        this.changePage(this.page);
-      }
+      const skipped = (this.page - 1) * currentSize;
+      const newPage = Math.floor(skipped / this.pageSize.id) + 1;
+      this.changePage(newPage);
     }
   }
   /**
@@ -204,17 +203,21 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    * Change the search str
    */
   changeSearchStr(): void {
-    const reg = new RegExp(this.searchStr, 'gi');
-    const filtered = this.pageContacts.filter((item) => {
-      return reg.test(item.first_name + item.last_name);
-    });
-    this.filteredResult = filtered;
+    this.searchSubscription && this.searchSubscription.unsubscribe();
+    this.searchSubscription = this.teamService
+      .searchContact(this.team._id, this.searchStr)
+      .subscribe((res) => {
+        if (res) {
+          this.pageContacts = res['contacts'];
+          this.contactCount = this.pageContacts.length;
+        }
+      });
     this.page = 1;
   }
 
   clearSearchStr(): void {
-    this.filteredResult = this.pageContacts;
-    this.deselectAll();
+    this.searchStr = '';
+    this.changePage(1);
   }
 
   /**
@@ -614,8 +617,35 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     }
   }
 
-  // Reset the Selection without current Contact page to fix when merge
-  // this.selection = _.differenceBy(this.selection, this.pageContacts, '_id');
-  // Merge the All Selection with page Selection
-  // this.selection = _.unionBy(this.selection, this.pageSelection, '_id');
+  shareContact(): void {
+    this.dialog
+      .open(TeamContactShareComponent, {
+        width: '500px',
+        maxWidth: '90vw',
+        data: {
+          team: this.team
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {});
+  }
+
+  isSharedByMe(contact): any {
+    if (contact && contact.user && contact.user.length > 0) {
+      const index = contact.user.findIndex((item) => item._id === this.userId);
+      if (index >= 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  userAvatarName(user_name): string {
+    const names = user_name.split(' ');
+    if (names.length > 1) {
+      return names[0][0] + names[1][0];
+    } else {
+      return names[0][0];
+    }
+  }
 }

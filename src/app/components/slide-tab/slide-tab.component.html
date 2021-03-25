@@ -10,7 +10,12 @@
   </div>
 </ng-container>
 <ng-template #matTemplate>
-  <mat-tab-group animationDuration="0ms" disableRipple="true" (selectedIndexChange)="changeTabIndex($event)">
+  <mat-tab-group
+    animationDuration="0ms"
+    disableRipple="true"
+    [(selectedIndex)]="currentIndex"
+    (selectedIndexChange)="changeTabIndex($event)"
+  >
     <mat-tab *ngFor="let tab of tabs" label="{{tab.id}}">
       <ng-template mat-tab-label>
         <i *ngIf="tab.icon" class="tab-icon {{tab.icon}} mr-2"></i>

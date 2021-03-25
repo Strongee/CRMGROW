@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import { Material } from '../models/material.model';
 import { Automation } from '../models/automation.model';
 import { Template } from '../models/template.model';
+import { Contact } from '../models/contact.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -254,7 +255,9 @@ export class TeamService extends HttpService {
         video_ids: videoIds
       })
       .pipe(
-        map((res) => res['data'] || []),
+        map((res) =>
+          (res['data'] || []).map((e) => new Material().deserialize(e))
+        ),
         catchError(this.handleError('TEAM SHARE VIDEOS', []))
       );
   }
@@ -280,10 +283,12 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM SHARE IMAGES', []))
       );
   }
-  loadSharedContacts(id: string): Observable<any> {
+  loadSharedContacts(id: string, count: number, page: number): Observable<any> {
     return this.httpClient
       .post(this.server + TEAM.LOAD_SHARE_CONTACTS, {
-        team: id
+        team: id,
+        count,
+        skip: page
       })
       .pipe(
         map((res) => res['data'] || []),
@@ -466,6 +471,15 @@ export class TeamService extends HttpService {
       map((res) => res['data'] || []),
       catchError(this.handleError('REJECT CALL', []))
     );
+  }
+
+  searchContact(id: string, keyword: string): Observable<Contact[]> {
+    return this.httpClient
+      .post(this.server + TEAM.SEARCH_CONTACT, { team: id, search: keyword })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('SEARCH TEAM CONTACT', []))
+      );
   }
 
   clear$(): void {

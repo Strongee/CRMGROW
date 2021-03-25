@@ -1146,6 +1146,13 @@ export const BulkActions = {
       loading: false
     },
     {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select',
+      loading: false
+    },
+    {
       label: 'Deselect',
       type: 'button',
       command: 'deselect',

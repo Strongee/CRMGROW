@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { TeamService } from 'src/app/services/team.service';
@@ -19,14 +25,17 @@ import { TemplateShareComponent } from '../../components/template-share/template
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { NotifyComponent } from '../../components/notify/notify.component';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
-import { MaterialBrowserComponent } from 'src/app/components/material-browser/material-browser.component';
+import { TeamShareMaterialComponent } from '../team-share-material/team-share-material.component';
+import {TeamShareAutomationComponent} from "../team-share-automation/team-share-automation.component";
+import {TeamShareTemplateComponent} from "../team-share-template/team-share-template.component";
+import {TeamShareContactComponent} from "../team-share-contact/team-share-contact.component";
 
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss']
 })
-export class TeamComponent implements OnInit, OnDestroy {
+export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   loading = false;
   loadError = false;
   team;
@@ -65,6 +74,11 @@ export class TeamComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
 
+  @ViewChild(TeamShareMaterialComponent)
+  shareMaterialComponent: TeamShareMaterialComponent;
+  @ViewChild(TeamShareContactComponent) shareContactComponent: TeamShareContactComponent;
+  @ViewChild(TeamShareAutomationComponent) shareAutomationComponent: TeamShareAutomationComponent;
+  @ViewChild(TeamShareTemplateComponent) shareTemplateComponent: TeamShareTemplateComponent;
   constructor(
     private teamService: TeamService,
     private userService: UserService,
@@ -83,6 +97,16 @@ export class TeamComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    const selectedTab = this.route.snapshot.params['tab'];
+    if (selectedTab) {
+      const index = this.tabs.findIndex((item) => item.id === selectedTab);
+      if (index >= 0) {
+        this.selectedTab = this.tabs[index];
+      }
+    }
   }
 
   load(): void {
@@ -112,9 +136,11 @@ export class TeamComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   goToBack(): void {
     this.location.back();
   }
+
   acceptInvitation(): void {
     this.accepting = true;
     this.acceptSubscription && this.acceptSubscription.unsubscribe();
@@ -183,95 +209,17 @@ export class TeamComponent implements OnInit, OnDestroy {
   }
 
   shareMaterial(): void {
-    this.dialog
-      .open(MaterialBrowserComponent, {
-        width: '96vw',
-        maxWidth: '940px',
-        disableClose: true,
-        data: {
-          title: 'Share material',
-          buttonLabel: 'Share',
-          multiple: true,
-          onlyMine: true
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && res.materials && res.materials.length) {
-          const videoIds = [];
-          const pdfIds = [];
-          const imageIds = [];
-          for (const material of res.materials) {
-            const materialType = this.getMaterialType(material);
-            if (materialType === 'video') {
-              videoIds.push(material._id);
-            } else if (materialType === 'pdf') {
-              pdfIds.push(material._id);
-            } else if (materialType === 'image') {
-              imageIds.push(material._id);
-            }
-          }
-
-          if (videoIds.length > 0) {
-            this.teamService
-              .shareVideos(this.teamId, videoIds)
-              .subscribe((status) => {
-                this.team.videos = _.unionBy(
-                  this.team.videos,
-                  res.materials,
-                  '_id'
-                );
-              });
-          }
-
-          if (pdfIds.length > 0) {
-            this.teamService
-              .sharePdfs(this.teamId, pdfIds)
-              .subscribe((status) => {
-                this.team.pdfs = _.unionBy(
-                  this.team.pdfs,
-                  res.materials,
-                  '_id'
-                );
-              });
-          }
-
-          if (imageIds.length > 0) {
-            this.teamService
-              .shareImages(this.teamId, imageIds)
-              .subscribe((status) => {
-                this.team.images = _.unionBy(
-                  this.team.images,
-                  res.materials,
-                  '_id'
-                );
-              });
-          }
-        }
-      });
+    this.changeTab(this.tabs[1]);
+    if (this.shareMaterialComponent) {
+      this.shareMaterialComponent.shareMaterial();
+    }
   }
 
   shareAutomation(): void {
-    this.dialog
-      .open(AutomationShareComponent, {
-        width: '96vw',
-        maxWidth: '500px',
-        disableClose: true,
-        data: {
-          team_id: this.teamId
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          if (res.automations) {
-            this.team.automations = [
-              ...this.team.automations,
-              ...res.automations
-            ];
-          }
-        }
-      });
+    this.changeTab(this.tabs[3]);
+    if (this.shareAutomationComponent) {
+      this.shareAutomationComponent.shareAutomation();
+    }
   }
 
   shareContact(): void {
@@ -284,34 +232,14 @@ export class TeamComponent implements OnInit, OnDestroy {
         }
       })
       .afterClosed()
-      .subscribe((res) => {
-
-      });
+      .subscribe((res) => {});
   }
 
   shareEmailTemplate(): void {
-    this.dialog
-      .open(TemplateShareComponent, {
-        width: '96vw',
-        maxWidth: '500px',
-        maxHeight: '60vh',
-        disableClose: true,
-        data: {
-          team_id: this.teamId,
-          preShared: this.team.email_templates
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          if (res.templates) {
-            this.team.email_templates = [
-              ...this.team.email_templates,
-              ...res.templates
-            ];
-          }
-        }
-      });
+    this.changeTab(this.tabs[4]);
+    if (this.shareTemplateComponent) {
+      this.shareTemplateComponent.shareEmailTemplate();
+    }
   }
 
   cancelInvite(member): void {
@@ -483,6 +411,9 @@ export class TeamComponent implements OnInit, OnDestroy {
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+    this.location.replaceState(
+      `/teams/${this.team._id}/${this.selectedTab.id}`
+    );
   }
 
   isSelectedPage(): any {

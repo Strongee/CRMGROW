@@ -181,7 +181,8 @@ export const TEAM = {
   ACCEPT_CALL: '/team/accept-call/',
   UPDATE_CALL: '/team/call/',
   DELETE_CALL: '/team/call/',
-  TEAM_CALL_LOAD: '/team/load-call'
+  TEAM_CALL_LOAD: '/team/load-call',
+  SEARCH_CONTACT: '/team/search-contact'
 };
 export const AUTOMATION = {
   SEARCH: 'automation/search',

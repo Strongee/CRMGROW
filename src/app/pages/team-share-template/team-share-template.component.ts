@@ -11,6 +11,7 @@ import { TeamService } from '../../services/team.service';
 import { filter } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Team } from '../../models/team.model';
+import {TemplateShareComponent} from "../../components/template-share/template-share.component";
 
 @Component({
   selector: 'app-team-share-template',
@@ -196,12 +197,15 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   }
 
   isStopSharable(template): any {
-    if (template.role === 'admin') {
+    if (template.user && template.user === this.userId) {
       return true;
-    } else if (template.role === 'team') {
-      if (template.user === this.userId) {
-        return true;
-      }
+    }
+    return false;
+  }
+
+  isDuplicatable(template): any {
+    if (template.user && template.user !== this.userId) {
+      return true;
     }
     return false;
   }
@@ -239,5 +243,36 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
           );
         }
       });
+  }
+
+  shareEmailTemplate(): void {
+    const hideTemplates = [];
+    for (const template of this.templates) {
+      hideTemplates.push(template._id);
+    }
+    this.dialog
+      .open(TemplateShareComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        maxHeight: '60vh',
+        disableClose: true,
+        data: {
+          team_id: this.team._id,
+          hideTemplates
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          if (res.templates) {
+            this.templates = [...this.templates, ...res.templates];
+            this.changeSearchStr();
+          }
+        }
+      });
+  }
+
+  duplicateTemplate(template: Template): void {
+    this.router.navigate(['/templates/duplicate/' + template._id]);
   }
 }

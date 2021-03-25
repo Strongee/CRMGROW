@@ -1,5 +1,13 @@
 <div class="page-content">
-  <div class="v-center contact-list-controls mb-2">
+  <div class="v-center with-tab panel-header contact-header">
+    <button type="button" class="btn btn-white-blue v-center ml-auto"
+            (click)="shareMaterial()" *ngIf="role=='editor' || role == 'owner'"
+    >
+      <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
+      <span class="f-3 font-weight-bold c-blue">Share material</span>
+    </button>
+  </div>
+  <div class="v-center contact-list-controls my-2">
     <div class="form-group mb-0 search-form">
       <div class="input-group-prepend">
         <i class="i-icon i-search d-block bgc-dark"></i>
@@ -181,7 +189,7 @@
             </ng-container>
             <ng-template #materialViewTemplate>
               <a [routerLink]="['/materials/analytics/' + element._id]" class="text-decoration-none">
-                <div class="v-center justify-content-end py-2" placement="bottom" ngbTooltip="Click into view detail">
+                <div class="v-center justify-content-end py-2" placement="bottom" ngbTooltip="Click into detail view">
                   <span class="f-2 c-dark mt-2">{{element.views}}</span>
                   <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
                 </div>

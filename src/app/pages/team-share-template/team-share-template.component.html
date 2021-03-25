@@ -1,6 +1,14 @@
 <div class="page-content">
   <div class="">
-    <div class="v-center">
+    <div class="v-center with-tab panel-header contact-header">
+      <button type="button" class="btn btn-white-blue v-center ml-auto"
+              (click)="shareEmailTemplate()" *ngIf="role=='editor' || role == 'owner'"
+      >
+        <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
+        <span class="f-3 font-weight-bold c-blue">Share template</span>
+      </button>
+    </div>
+    <div class="v-center my-2">
       <div class="form-group mb-0 search-form">
         <div class="input-group-prepend">
           <i class="i-icon i-search d-block bgc-dark"></i>
@@ -13,7 +21,7 @@
         </ng-container>
       </div>
     </div>
-    <div class="my-3 position-relative">
+    <div class="position-relative">
       <ng-container *ngIf="templates.length">
         <table class="w-100 page-table"
            mat-table
@@ -44,11 +52,11 @@
             <td mat-cell *matCellDef="let template" class="template-type">
               <div class="v-center">
                 <ng-container *ngIf="template.type=='text'; else emailType">
-                  <i class="i-icon bgc-dark i-phone mr-2"></i>
+                  <i class="i-icon bgc-dark i-phone mr-1"></i>
                   <span class="f-4 menu-label font-weight-bold ml-1">{{template.type}}</span>
                 </ng-container>
                 <ng-template #emailType>
-                  <i class="i-icon bgc-dark i-message mr-2"></i>
+                  <i class="i-icon bgc-dark i-message mr-1"></i>
                   <span class="f-4 menu-label font-weight-bold ml-1">Email</span>
                 </ng-template>
               </div>
@@ -57,7 +65,12 @@
           <ng-container matColumnDef="template-action">
             <th mat-header-cell *matHeaderCellDef class="template-action"></th>
             <td mat-cell *matCellDef="let template" class="template-action">
-              <div class="v-center justify-content-end">
+              <div class="v-center">
+                <ng-container *ngIf="isDuplicatable(template)">
+                  <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
+                    <i class="i-icon bgc-dark i-duplicate"></i>
+                  </div>
+                </ng-container>
                 <ng-container *ngIf="template.role != 'admin' && template.user == userId">
                   <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" [class.disabled]="template.role == 'admin'">
                     <i class="i-icon bgc-dark i-edit"></i>
