@@ -424,7 +424,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
           first_name: e.contact.first_name,
           last_name: e.contact.last_name,
           email: e.contact.email,
-          phone: e.contact.phone,
+          phone: e.contact.cell_phone,
           source: e.contact.source,
           brokerage: e.contact.brokerage,
           city: e.contact.city,

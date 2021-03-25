@@ -1076,7 +1076,8 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-download',
       command: 'download',
-      loading: false
+      loading: false,
+      loadingLabel: 'Downloading'
     }
   ],
   Materials: [
