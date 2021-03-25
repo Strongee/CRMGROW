@@ -77,7 +77,8 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     this.loadSubscription = this.templatesService.templates$.subscribe(
       (templates) => {
         this.templates = templates;
-        this.filteredResult = sortRoleArray(templates, true);
+        this.templates = _.uniqBy(this.templates, '_id');
+        this.filteredResult = sortRoleArray(this.templates, true);
       }
     );
     this.templatesService.loadAll(true);

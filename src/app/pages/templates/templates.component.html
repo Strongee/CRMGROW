@@ -29,24 +29,24 @@
           <tr>
             <th class="template-title">
               <div class="v-center c-pointer" (click)="sort('title')">
-                <span>Title</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.title ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.title" [class.dec]="!searchCondition.title">
+                  <span>Title</span>
+                </div>
               </div>
             </th>
             <th class="template-auth">
               <div class="v-center c-pointer" (click)="sort('role')">
-                <span>Owner</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.role ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.role" [class.dec]="!searchCondition.role">
+                  <span>Owner</span>
+                </div>
               </div>
             </th>
             <th class="template-content">Template</th>
             <th class="template-type">
               <div class="v-center c-pointer" (click)="sort('type')">
-                <span>Type</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.type ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.type" [class.dec]="!searchCondition.type">
+                  <span>Type</span>
+                </div>
               </div>
             </th>
             <th class="template-action">Default</th>

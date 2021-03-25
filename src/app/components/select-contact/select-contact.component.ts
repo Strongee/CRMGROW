@@ -84,6 +84,13 @@ export class SelectContactComponent
           this.searchSubscription && this.searchSubscription.unsubscribe();
           this.searchSubscription = api.subscribe((res) => {
             this.searching = false;
+            if (res && res.length) {
+              if (res.length == 8) {
+                this.hasMore = true;
+              } else {
+                this.hasMore = false;
+              }
+            }
             let result;
             if (this.mustField) {
               const data = [];
@@ -158,15 +165,25 @@ export class SelectContactComponent
               } else {
                 this.hasMore = false;
               }
-              contacts.forEach((e) => {
-                if (this.mustField) {
+              let result;
+              if (this.mustField) {
+                const data = [];
+                contacts.map((e) => {
                   if (e[this.mustField]) {
-                    currentResults.push(e);
+                    data.push(e);
                   }
-                } else {
+                });
+                result = data;
+              } else {
+                result = contacts;
+              }
+              if (result.length) {
+                result.forEach((e) => {
                   currentResults.push(e);
-                }
-              });
+                });
+              }
+            } else {
+              this.hasMore = false;
             }
           });
       }

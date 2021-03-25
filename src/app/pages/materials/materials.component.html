@@ -112,9 +112,9 @@
             <th mat-header-cell
             *ngIf="!selection.length; else toolHeader" class="name-col">
               <div class="v-center c-pointer" (click)="sort('title')">
-                <span>Name</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.title ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.title" [class.dec]="!searchCondition.title">
+                  <span>Name</span>
+                </div>
               </div>
             </th>
               <ng-template #toolHeader>
@@ -212,9 +212,9 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="owner-col">
               <div class="v-center c-pointer" (click)="sort('owner')">
-                <span>Owner</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.owner ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.owner" [class.dec]="!searchCondition.owner">
+                  <span>Owner</span>
+                </div>
               </div>
             </th>
           </ng-container>
@@ -243,9 +243,9 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="type-col">
               <div class="v-center c-pointer" (click)="sort('material_type')">
-                <span>Type</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.material_type ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.material_type" [class.dec]="!searchCondition.material_type">
+                  <span>Type</span>
+                </div>
               </div>
             </th>
           </ng-container>
@@ -261,9 +261,9 @@
             <th mat-header-cell class="time-col"
             *ngIf="!selection.length">
               <div class="v-center c-pointer" (click)="sort('created_at')">
-                <span>Added</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.created_at ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.created_at" [class.dec]="!searchCondition.created_at">
+                  <span>Added</span>
+                </div>
               </div>
             </th>
           </ng-container>
@@ -279,22 +279,22 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="analytics-col">
               <div class="v-center c-pointer" (click)="sort('views')">
-                <span>Views</span>
-                <i class="i-icon s-8 d-block bgc-black ml-2"
-                   [class]="searchCondition.views ? 'i-triangle-up' : 'i-triangle-down'"></i>
+                <div class="sortable-header" [class.inc]="searchCondition.views" [class.dec]="!searchCondition.views">
+                  <span>Views</span>
+                </div>
               </div>
             </th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="analytics-col">
             <ng-container *ngIf="element.material_type === 'folder'; else materialViewTemplate">
-              <div class="text-right pr-3">--</div>
+              <div class="pr-3">--</div>
             </ng-container>
             <ng-template #materialViewTemplate>
               <a [routerLink]="['/materials/analytics/' + element._id]" class="text-decoration-none">
-                <div class="v-center justify-content-end py-2">
-                  <span class="f-2 c-dark mt-2">{{element.views}}</span>
-                  <i class="i-icon i-analytics bgc-blue ml-1" aria-hidden="true"></i>
+                <div class="v-center py-2" placement="bottom" ngbTooltip="Click into detail view">
+                  <span class="f-2 c-dark">{{element.views}}</span>
+                  <i class="i-icon i-analytics bgc-blue ml-1 mb-2" aria-hidden="true"></i>
                 </div>
               </a>
             </ng-template>
@@ -309,7 +309,7 @@
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="capture-col">
-            <div class="v-center custom-control custom-switch" *ngIf="element.material_type !== 'folder'">
+            <div class="v-center custom-control custom-switch p-0" *ngIf="element.material_type !== 'folder'">
               <label class="custom-toggle mb-0" placement="top">
                 <input
                   type="checkbox"
@@ -331,64 +331,96 @@
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="item-action">
-            <div ngbDropdown placement="bottom-right">
-              <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 no-carot px-0">
-                <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
-              </a>
-              <div ngbDropdownMenu class="light">
-                <ng-container *ngIf="element.material_type === 'folder'; else materialActionsTemplate">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editFolder(element)">
-                    <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Edit</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="removeFolder(element)">
-                    <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Delete</span>
-                  </button>
-                </ng-container>
-                <ng-template #materialActionsTemplate>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="sendMaterial(element)">
-                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Send</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(element)">
-                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Copy link</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(element)">
-                    <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Edit</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(element)">
-                    <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Edit template</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(element)">
-                    <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" *ngIf="element.material_type === 'video' && element.type !== 'youtube' && element.type !== 'vimeo'" (click)="download(element)">
-                    <i class="i-icon i-download bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Download</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(element)">
-                    <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Delete</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="moveToFolder(element)">
-                    <i class="i-icon i-folder bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Move To</span>
-                  </button>
-                </ng-template>
+            <div class="v-center">
+              <ng-container *ngIf="element.material_type !== 'folder'">
+                <button class="v-center btn py-2 c-dark" (click)="sendMaterial(element, 'email')" placement="bottom" ngbTooltip="Send via Email">
+                  <i class="i-icon i-message bgc-dark ml-1" aria-hidden="true"></i>
+                </button>
+                <button class="v-center btn py-2 c-dark" (click)="sendMaterial(element, 'text')" placement="bottom" ngbTooltip="Send via Text">
+                  <i class="i-icon i-sms-sent bgc-dark ml-1" aria-hidden="true"></i>
+                </button>
+                <button class="v-center btn py-2 c-dark" (click)="copyLink(element)" placement="bottom" ngbTooltip="Copy link">
+                  <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
+                </button>
+              </ng-container>
+              <div ngbDropdown placement="bottom-right" class="ml-auto">
+                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 no-carot px-0">
+                  <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
+                </a>
+                <div ngbDropdownMenu class="light">
+                  <ng-container *ngIf="element.material_type === 'folder'; else materialActionsTemplate">
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editFolder(element)">
+                      <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                    </button>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="removeFolder(element)">
+                      <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                    </button>
+                  </ng-container>
+                  <ng-template #materialActionsTemplate>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(element)">
+                      <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                    </button>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(element)">
+                      <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Edit template</span>
+                    </button>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(element)">
+                      <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
+                    </button>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareMaterial(element)">
+                      <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Social share</span>
+                    </button>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item"
+                      *ngIf="element.material_type === 'video' && checkType(element.url) &&
+                      (element.user?._id === user_id || element.user === user_id)"
+                      (click)="download(element)"
+                    >
+                      <i class="i-icon i-download bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Download</span>
+                    </button>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(element)">
+                      <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                    </button>
+                    <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="moveToFolder(element)">
+                      <i class="i-icon i-folder bgc-dark ml-1" aria-hidden="true"></i>
+                      <span class="ml-3 f-3 font-weight-bold">Move To</span>
+                    </button>
+                  </ng-template>
+                </div>
               </div>
             </div>
           </td>
+        </ng-container>
+
+        <ng-container matColumnDef="selection_info">
+          <th mat-header-cell *matHeaderCellDef colspan="9" class="text-center">
+            <span *ngIf="selection.length !== filteredMaterials.length; else deselectTemplate">
+              {{selection.length}} materials are selected.
+              <span  class="c-blue font-weight-bold" *ngIf="selecting">
+                <i class="small-spinner"></i>
+                <span class="ml-1">Selecting all. . .</span>
+              </span>
+              <span class="c-blue font-weight-bold c-pointer" *ngIf="!selecting" (click)="masterToggle()">
+                Select all {{filteredMaterials.length}} materials
+              </span>
+            </span>
+            <ng-template #deselectTemplate>
+              All {{filteredMaterials.length}} materials are selected. <span class="c-blue c-pointer font-weight-bold" (click)="masterToggle()">Clear selection</span>
+            </ng-template>
+          </th>
         </ng-container>
 
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
           *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
+        <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length" class='selection-info'></tr>
         <tr mat-row
           *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>

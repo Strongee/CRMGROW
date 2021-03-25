@@ -1,4 +1,8 @@
 <div class="page-content">
+  <div class="v-center op-56 c-pointer back-menu" (click)="goToBack()">
+    <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
+    <span class="f-5 font-weight-bold">Back</span>
+  </div>
   <div class="my-2">
     <div class="d-flex justify-content-between">
       <h6 class="page-title font-weight-bold my-2">Material Analytics</h6>
@@ -106,7 +110,7 @@
                   <ng-container *ngIf="contacts">
                     <tr *ngFor="let contact of contacts">
                       <td class="name">
-                        <div class="v-center">
+                        <div class="v-center c-pointer" (click)="toContact(contact._id)">
                           <div>
                             <img *ngIf="contact.picture_profile; else avatarNameTemplate" [src]="contact.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
                             <ng-template #avatarNameTemplate>
