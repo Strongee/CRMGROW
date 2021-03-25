@@ -555,7 +555,17 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.taskService.sortOption.next(sortDir);
         });
     } else if (selected.length == 1) {
+      // TODO: load the event from id
       this.openEdit(this.selectedTasks[0]);
+    } else {
+      this.dialog.open(NotifyComponent, {
+        ...DialogSettings.ALERT,
+        data: {
+          message:
+            'Selected tasks could not be updated because they are completed already',
+          label: 'OK'
+        }
+      });
     }
   }
 }
