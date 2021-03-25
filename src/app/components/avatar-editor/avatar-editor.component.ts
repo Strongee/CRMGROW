@@ -83,6 +83,12 @@ export class AvatarEditorComponent implements OnInit {
     });
   }
 
+  onZoom(evt): void {
+    const zoomValue =
+      Math.floor((evt.detail.ratio / this.naturalRatio) * 10) / 10;
+    this.zoomValue = zoomValue;
+  }
+
   /**
    * Zoom the image
    * @param evt : Zoom value

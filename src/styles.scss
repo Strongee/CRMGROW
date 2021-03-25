@@ -1380,6 +1380,10 @@ table {
     &::after {
       content: 'Dismiss';
     }
+
+    &:hover {
+      color: white;
+    }
   }
 
   .toast-title {
