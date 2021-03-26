@@ -11,6 +11,12 @@
     right: 16px;
     bottom: 20px;
     transform: translateY(50%);
+
+    .i-triangle-down {
+        width: 10px;
+        height: 10px;
+        min-width: 10px;
+    }
 }
 .form-checking-result {
     position: absolute;

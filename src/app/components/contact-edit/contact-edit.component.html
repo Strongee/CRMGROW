@@ -37,12 +37,12 @@
             <div class="form-checking-result p-2" [hidden]="!sameEmailsFlag"
               *ngIf="sameEmailContacts.length">
               <div class="contact-item" *ngFor="let item of sameEmailContacts">
-                <div class="d-flex chip py-2">
+                <div class="d-flex chip">
                   <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
                   <div class="info">
-                    <div class="f-5 font-weight-bold text-primary c-pointer">
+                    <a class="f-3 font-weight-bold text-primary c-pointer td-none" (click)="redirectContact(item)">
                       {{item.fullName}}
-                    </div>
+                    </a>
                     <div class="f-2">{{item['email'] || 'Undefined'}}</div>
                     <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
                   </div>
@@ -65,21 +65,6 @@
             #phoneControl
           >
           </app-phone-input>
-          <!-- <ngx-intl-tel-input
-            id="cell_phone_cc"
-            [cssClass]="'form-control phone-form'"
-            [onlyCountries]="countries"
-            [enableAutoCountrySelect]="true"
-            [enablePlaceholder]="false"
-            [selectFirstCountry]="false"
-            [selectedCountryISO]="CountryISO.UnitedStates"
-            [maxLength]="15"
-            [phoneValidation]="true"
-            [separateDialCode]="true"
-            [formControl]="phoneInput"
-            [(ngModel)]="contact_phone"
-            (ngModelChange)="checkPhoneDuplicate($event)">
-          </ngx-intl-tel-input> -->
           <span class="error d-block mt-1" *ngIf="phoneControl && contact_phone && !phoneControl.valid">
             Wrong phone number!
           </span>
@@ -90,10 +75,12 @@
           <div class="form-checking-result p-2" [hidden]="!samePhonesFlag"
             *ngIf="sameCellPhoneContacts.length">
             <div class="contact-item" *ngFor="let item of sameCellPhoneContacts">
-              <div class="d-flex chip py-2">
+              <div class="d-flex chip">
                 <div class="form-avatar rounded-circle bg-dark mr-2 mt-1">{{item.avatarName}}</div>
                 <div class="info">
-                  <div class="f-5 font-weight-bold text-primary c-pointer">{{item.fullName}}</div>
+                  <a class="f-3 font-weight-bold text-primary c-pointer td-none" (click)="redirectContact(item)">
+                    {{item.fullName}}
+                  </a>
                   <div class="f-2">{{item['email'] || 'Undefined'}}</div>
                   <div class="f-2">{{item['cell_phone'] || 'Undefined'}}</div>
                 </div>
@@ -168,21 +155,6 @@
             #secondPhoneControl
           >
           </app-phone-input>
-          <!-- <ngx-intl-tel-input
-            id="second_phone_call"
-            [cssClass]="'form-control phone-form'"
-            [onlyCountries]="countries"
-            [enableAutoCountrySelect]="true"
-            [enablePlaceholder]="false"
-            [selectFirstCountry]="false"
-            [selectedCountryISO]="CountryISO.UnitedStates"
-            [maxLength]="15"
-            [phoneValidation]="true"
-            [separateDialCode]="true"
-            name="secondPhone" 
-            #secondPhone="ngModel"
-            [(ngModel)]="second_contact_phone">
-          </ngx-intl-tel-input> -->
           <span class="error" *ngIf="secondPhoneControl && second_contact_phone && !secondPhoneControl.valid">
             Wrong phone number!
           </span>

@@ -50,7 +50,6 @@ import { ToastrService } from 'ngx-toastr';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/user.model';
-import { finished } from 'stream';
 
 @Component({
   selector: 'app-contact',
@@ -145,6 +144,8 @@ export class ContactComponent implements OnInit, OnDestroy {
   siteUrl = environment.website;
   loadContactSubscription: Subscription;
 
+  routeChangeSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -164,7 +165,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private viewContainerRef: ViewContainerRef,
     private toastr: ToastrService
   ) {
-    this.teamService.loadAll(true);
+    this.teamService.loadAll(false);
     this.appointmentService.loadCalendars(false);
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
@@ -191,12 +192,19 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
       });
     });
+
+    this.routeChangeSubscription = this.route.params.subscribe((params) => {
+      if (this._id !== params['id']) {
+        this.contact = new ContactDetail();
+        this.selectedContact = new ContactDetail();
+        this.clearContact();
+        this._id = params['id'];
+        this.loadContact(this._id);
+      }
+    });
   }
 
   ngOnInit(): void {
-    this._id = this.route.snapshot.params['id'];
-    this.loadContact(this._id);
-
     this.storeService.selectedContact$.subscribe((res) => {
       this.contact = res;
       this.selectedContact = res;
@@ -219,6 +227,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.teamSubscription && this.teamSubscription.unsubscribe();
+    this.routeChangeSubscription && this.routeChangeSubscription.unsubscribe();
   }
 
   /**
@@ -227,6 +236,34 @@ export class ContactComponent implements OnInit, OnDestroy {
    */
   loadContact(_id: string): void {
     this.contactService.read(_id);
+  }
+
+  clearContact(): void {
+    this.groupActions = {};
+    this.mainTimelines = [];
+    this.sentHistory = {}; // {send activity id: material id}
+    this.details = {};
+    this.detailData = {};
+    this.sendActions = {};
+    this.showingDetails = [];
+    this.activityCounts = {
+      note: 0,
+      email: 0,
+      text: 0,
+      appointment: 0,
+      group_call: 0,
+      follow_up: 0,
+      deal: 0
+    };
+    this.detailCounts = {
+      notes: 0,
+      emails: 0,
+      texts: 0,
+      appointments: 0,
+      team_calls: 0,
+      follow_ups: 0,
+      deals: 0
+    };
   }
 
   /**

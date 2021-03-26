@@ -15,6 +15,7 @@ import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
 import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { PhoneInputComponent } from '../phone-input/phone-input.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact-edit',
@@ -55,6 +56,7 @@ export class ContactEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<ContactEditComponent>,
     private contactService: ContactService,
+    private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
@@ -250,5 +252,10 @@ export class ContactEditComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  redirectContact(contact): void {
+    this.router.navigate(['/contacts/' + contact._id]);
+    this.dialogRef.close();
   }
 }
