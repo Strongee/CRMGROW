@@ -560,7 +560,7 @@
                         </ng-template>
                         <ng-template #hide>
                           <div class="content">
-                            <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
+                            <div class="f-6 note-content opened" [innerHTML]="activity.activity_detail.content"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
@@ -1391,7 +1391,7 @@
                         </ng-template>
                         <ng-template #hide>
                           <div class="content">
-                            <div class="f-6 note-content opened">{{detail.content}}</div>
+                            <div class="f-6 note-content opened" [innerHTML]="detail.content"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>

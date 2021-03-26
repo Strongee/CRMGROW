@@ -135,11 +135,10 @@
               </ng-container>
               <ng-template #materialInfoTemplate>
                 <div class="v-center c-pointer material-main-info">
-                  <div class="thumbnail">
+                  <div class="thumbnail" (click)="toggleElement(element)">
                     <ng-container [ngSwitch]="element.material_type">
-                      <a class="v-center link-wrapper"
-                         *ngSwitchCase="'video'"
-                         href="{{siteUrl}}/video?video={{element._id}}&user={{user_id}}" target="_blank">
+                      <div class="v-center link-wrapper"
+                         *ngSwitchCase="'video'">
                         <div class="thumb-prev-wrapper">
                           <img [src]="element.thumbnail" class="thumbnail" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
                           <img [src]="element.preview" class="preview" onerror="( this.src = './assets/img/video_thumb.jpg');"/>
@@ -149,27 +148,25 @@
                             <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
                           </ng-container>
                         </span>
-                      </a>
-                      <a class="v-center link-wrapper"
-                         *ngSwitchCase="'pdf'"
-                         href="{{siteUrl}}/pdf?pdf={{element._id}}&user={{user_id}}" target="_blank">
+                      </div>
+                      <div class="v-center link-wrapper"
+                         *ngSwitchCase="'pdf'">
                         <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
                         <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
                           <ng-container *ngIf="!selectedFolder && searchStr && element.folder && foldersKeyValue[element.folder]">
                             <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
                           </ng-container>
                         </span>
-                      </a>
-                      <a class="v-center link-wrapper"
-                         *ngSwitchCase="'image'"
-                         href="{{siteUrl}}/image?image={{element._id}}&user={{user_id}}" target="_blank">
+                      </div>
+                      <div class="v-center link-wrapper"
+                         *ngSwitchCase="'image'">
                         <img class="thumbnail" src="{{element.preview}}" onerror="( this.src = './assets/img/video_thumb.jpg' );" />
                         <span class="font-weight-bold">{{(element.title || '') | shorten: 40: '...'}}
                           <ng-container *ngIf="!selectedFolder && searchStr && element.folder && foldersKeyValue[element.folder]">
                             <br/> <span class="fw-400 f-2">\ <a class="folder-info" (click)="openFolder(foldersKeyValue[element.folder])">{{foldersKeyValue[element.folder].title}}</a></span>
                           </ng-container>
                         </span>
-                      </a>
+                      </div>
                     </ng-container>
                   </div>
                 </div>

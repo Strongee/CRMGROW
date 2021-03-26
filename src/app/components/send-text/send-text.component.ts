@@ -199,8 +199,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
         pdf_ids: pdfIds,
         image_ids: imageIds,
         content: contentToSend,
-        contacts: [this.contact._id],
-        mode: 'api'
+        contacts: [this.contact._id]
       })
       .subscribe((res) => {
         this.sending = false;
