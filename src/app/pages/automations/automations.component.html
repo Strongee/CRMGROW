@@ -31,10 +31,10 @@
 
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">
-            <div class="v-center c-pointer" (click)="sort('title')">
-              <span>Title</span>
-              <i class="i-icon s-8 d-block bgc-black ml-2"
-                 [class]="searchCondition.title ? 'i-triangle-up' : 'i-triangle-down'"></i>
+            <div class="v-center c-pointer head-sort" (click)="sort('title')">
+              <span [class]="selectedSort == 'title' ? 'font-weight-bold c-dark' : ''">Title</span>
+              <i class="i-icon d-block bgc-black ml-2"
+                 [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
             </div>
           </th>
           <td mat-cell *matCellDef="let automation" class="title">
@@ -43,10 +43,10 @@
         </ng-container>
         <ng-container matColumnDef="owner">
           <th mat-header-cell *matHeaderCellDef class="auth">
-            <div class="v-center c-pointer" (click)="sort('role')">
-              <span>Owner</span>
-              <i class="i-icon s-8 d-block bgc-black ml-2"
-                 [class]="searchCondition.role ? 'i-triangle-up' : 'i-triangle-down'"></i>
+            <div class="v-center c-pointer head-sort" (click)="sort('role')">
+              <span [class]="selectedSort == 'role' ? 'font-weight-bold c-dark' : ''">Owner</span>
+              <i class="i-icon d-block bgc-black ml-2"
+                 [class]="searchCondition.role ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'role'"></i>
             </div>
           </th>
           <td mat-cell *matCellDef="let automation" class="auth">
@@ -67,10 +67,10 @@
         </ng-container>
         <ng-container matColumnDef="created">
           <th mat-header-cell *matHeaderCellDef class="created">
-            <div class="v-center justify-content-end c-pointer" (click)="sort('created_at')">
-              <span>Created</span>
-              <i class="i-icon s-8 d-block bgc-black ml-2"
-                 [class]="searchCondition.created_at ? 'i-triangle-up' : 'i-triangle-down'"></i>
+            <div class="v-center justify-content-end c-pointer head-sort" (click)="sort('created_at')">
+              <span [class]="selectedSort == 'created_at' ? 'font-weight-bold c-dark' : ''">Added</span>
+              <i class="i-icon d-block bgc-black ml-2"
+                 [class]="searchCondition.created_at ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'created_at'"></i>
             </div>
           </th>
           <td mat-cell *matCellDef="let automation" class="created">

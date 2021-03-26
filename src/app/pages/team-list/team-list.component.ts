@@ -33,6 +33,8 @@ export class TeamListComponent implements OnInit, OnDestroy {
   isAcceptInviting = false;
   isDeclineInviting = false;
 
+  teams = [];
+
   profileSubscription: Subscription;
   constructor(
     public teamService: TeamService,
@@ -44,9 +46,11 @@ export class TeamListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.userId = res._id;
+      const profile = this.userService.profile.getValue();
+      this.userId = profile._id;
       this.currentUser = res;
     });
+
     this.load();
   }
 
@@ -59,15 +63,52 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.teamService.loadInvites(true);
     this.teamService.teams$.subscribe((res) => {
       const teams = this.teamService.teams.getValue();
+
       for (const team of teams) {
         if (team.owner && team.owner.length > 0) {
-          const index = team.owner.findIndex((item) => item._id === this.userId);
+          const index = team.owner.findIndex(
+            (item) => item._id === this.userId
+          );
           if (index >= 0) {
             this.hasOwnTeam = true;
-            return;
           }
         }
       }
+
+      const ownerTeams = [];
+      const editorTeams = [];
+      const viewerTeams = [];
+
+      for (const team of teams) {
+        if (team.owner && team.owner.length > 0) {
+          const index = team.owner.findIndex(
+            (item) => item._id === this.userId
+          );
+          if (index >= 0) {
+            ownerTeams.push(team);
+            continue;
+          }
+        }
+        if (team.editors && team.editors.length > 0) {
+          const index = team.editors.findIndex(
+            (item) => item._id === this.userId
+          );
+          if (index >= 0) {
+            editorTeams.push(team);
+            continue;
+          }
+        }
+        if (team.members && team.members.length > 0) {
+          const index = team.members.findIndex(
+            (item) => item._id === this.userId
+          );
+          if (index >= 0) {
+            viewerTeams.push(team);
+          }
+        }
+      }
+
+      this.teams = [...ownerTeams, ...editorTeams, ...viewerTeams];
     });
   }
 
@@ -128,7 +169,9 @@ export class TeamListComponent implements OnInit, OnDestroy {
           const teams = this.teamService.teams.getValue();
           for (const teamItem of teams) {
             if (teamItem.owner && teamItem.owner.length > 0) {
-              const index = teamItem.owner.findIndex((item) => item._id === this.userId);
+              const index = teamItem.owner.findIndex(
+                (item) => item._id === this.userId
+              );
               if (index >= 0) {
                 this.hasOwnTeam = true;
                 return;
