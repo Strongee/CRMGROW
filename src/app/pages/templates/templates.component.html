@@ -28,25 +28,25 @@
         <thead>
           <tr>
             <th class="template-title">
-              <div class="v-center c-pointer" (click)="sort('title')">
-                <div class="sortable-header" [class.inc]="searchCondition.title" [class.dec]="!searchCondition.title">
-                  <span>Title</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('title')">
+                <span>Title</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                  [class]="searchCondition.title ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'title'"></i>
               </div>
             </th>
             <th class="template-auth">
-              <div class="v-center c-pointer" (click)="sort('role')">
-                <div class="sortable-header" [class.inc]="searchCondition.role" [class.dec]="!searchCondition.role">
-                  <span>Owner</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('role')">
+                <span>Owner</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                  [class]="searchCondition.role ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'role'"></i>
               </div>
             </th>
             <th class="template-content">Template</th>
             <th class="template-type">
-              <div class="v-center c-pointer" (click)="sort('type')">
-                <div class="sortable-header" [class.inc]="searchCondition.type" [class.dec]="!searchCondition.type">
-                  <span>Type</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('type')">
+                <span>Type</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                  [class]="searchCondition.type ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'type'"></i>
               </div>
             </th>
             <th class="template-action">Default</th>

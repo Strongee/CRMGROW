@@ -19,8 +19,12 @@ export class ActionsHeaderComponent implements OnInit {
   public set actions(_actions: ActionItem[]) {
     if (!this._actions.length) {
       this._actions = _actions;
-      this.showActions = _actions.slice(0, 5);
-      this.moreActions = _actions.slice(5);
+      if (_actions.length < 7) {
+        this.showActions = _actions;
+      } else {
+        this.showActions = _actions.slice(0, 5);
+        this.moreActions = _actions.slice(5);
+      }
     }
   }
   @Output() doCommand: EventEmitter<any> = new EventEmitter();

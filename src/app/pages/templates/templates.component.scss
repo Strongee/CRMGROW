@@ -75,4 +75,11 @@ input.disabled {
 
 th {
   height: 45px;
+  .head-sort {
+    i {
+        width: 14px;
+        height: 14px;
+        min-width: 14px;
+    }
+}
 }

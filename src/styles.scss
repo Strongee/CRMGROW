@@ -1562,9 +1562,10 @@ ul.ngx-pagination {
   padding: 3px 8px;
   background: #f28422;
   border-radius: 3px;
-  width: fit-content;
+  width: 60px;
   color: white;
   line-height: 14px;
+  text-align: center;
   &.admin {
     background-color: #0000ff;
   }

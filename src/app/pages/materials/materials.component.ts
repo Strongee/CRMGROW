@@ -26,13 +26,9 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
-import {
-  sortDateArray,
-  sortStringArray,
-  sortMaterialRoleArray,
-  sortTypeArray
-} from '../../utils/functions';
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
+import { isObject } from 'ngx-pipes/src/ng-pipes/pipes/helpers/helpers';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -99,6 +95,7 @@ export class MaterialsComponent implements OnInit {
   userOptions = [];
   folderOptions = [];
   isAdmin = false;
+  selectedSort = 'owner';
 
   searchCondition = {
     title: false,
@@ -188,27 +185,7 @@ export class MaterialsComponent implements OnInit {
                 material.owner = 'Admin';
               }
             }
-            const ownerFolders = this.filteredMaterials.filter((e) => {
-              return e.material_type === 'folder';
-            });
-            const ownerNormals = this.filteredMaterials.filter((e) => {
-              return e.material_type !== 'folder';
-            });
-            const filterdFolders = sortMaterialRoleArray(ownerFolders, true);
-            const filterdNormals = sortMaterialRoleArray(ownerNormals, true);
-            this.filteredMaterials = [];
-            if (filterdFolders?.length) {
-              this.filteredMaterials = [
-                ...this.filteredMaterials,
-                ...filterdFolders
-              ];
-            }
-            if (filterdNormals?.length) {
-              this.filteredMaterials = [
-                ...this.filteredMaterials,
-                ...filterdNormals
-              ];
-            }
+            this.sort('owner', true);
           }
         }
       );
@@ -224,7 +201,6 @@ export class MaterialsComponent implements OnInit {
     ) {
       this.materialService.loadMaterial(true);
       this.teamService.loadAll(true);
-      // this.sort('owner');
     }
     this.convertLoaderTimer = setInterval(() => {
       if (this.convertingVideos.length) {
@@ -1452,98 +1428,213 @@ export class MaterialsComponent implements OnInit {
     a.click();
   }
 
-  sort(field: string): void {
+  sort(field: string, keep: boolean = false): void {
     const folders = this.filteredMaterials.filter((e) => {
       return e.material_type === 'folder';
     });
     const normals = this.filteredMaterials.filter((e) => {
       return e.material_type !== 'folder';
     });
-    if (field === 'created_at') {
-      const filterdFolders = sortDateArray(
-        folders,
-        field,
-        this.searchCondition[field]
-      );
-      const filterdNormals = sortDateArray(
-        normals,
-        field,
-        this.searchCondition[field]
-      );
-      this.filteredMaterials = [];
-      if (filterdFolders?.length) {
-        this.filteredMaterials = [...this.filteredMaterials, ...filterdFolders];
-      }
-      if (filterdNormals?.length) {
-        this.filteredMaterials = [...this.filteredMaterials, ...filterdNormals];
-      }
-    } else if (field === 'owner') {
-      for (const material of this.filteredMaterials) {
-        if (material.user) {
-          if (material.user._id) {
-            if (material.user._id === this.user_id) {
-              material.owner = 'Me';
-            } else {
-              material.owner = material.user.user_name;
-            }
-          } else {
-            if (material.user === this.user_id) {
-              material.owner = 'Me';
-            } else {
-              material.owner = 'Unknown';
-            }
-          }
+    if (this.selectedSort != field) {
+      this.selectedSort = field;
+      return;
+    } else {
+      if (field === 'created_at') {
+        const sortBeforeFolders = sortStringArray(
+          folders,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortBeforeNormals = sortStringArray(
+          normals,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedFolders = sortDateArray(
+          sortBeforeFolders,
+          field,
+          this.searchCondition[field]
+        );
+        const sortedNormals = sortDateArray(
+          sortBeforeNormals,
+          field,
+          this.searchCondition[field]
+        );
+        this.filteredMaterials = [];
+        if (sortedFolders?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedFolders
+          ];
+        }
+        if (sortedNormals?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedNormals
+          ];
+        }
+      } else if (field === 'owner') {
+        const admins = normals.filter((item) => item.owner === 'Admin');
+        const owns = normals.filter((item) => item.owner === 'Me');
+        const users = normals.filter(
+          (item) =>
+            item.owner !== 'Admin' &&
+            item.owner !== 'Me' &&
+            item.owner !== 'Unknown'
+        );
+        const unknowns = normals.filter((item) => item.owner === 'Unknown');
+        let sortedFolders,
+          sortedAdmins,
+          sortedOwns,
+          sortedUsers,
+          sortedUnknowns;
+        if (keep) {
+          sortedFolders = sortStringArray(folders, 'title', true);
+          sortedAdmins = sortStringArray(admins, 'priority', true);
+          sortedOwns = sortStringArray(owns, 'title', true);
+          sortedUsers = sortStringArray(users, 'title', true);
+          sortedUnknowns = sortStringArray(unknowns, 'title', true);
         } else {
-          material.owner = 'Admin';
+          sortedFolders = sortStringArray(
+            folders,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedAdmins = sortStringArray(
+            admins,
+            'priority',
+            this.searchCondition[field]
+          );
+          sortedOwns = sortStringArray(
+            owns,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedUsers = sortStringArray(
+            users,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedUnknowns = sortStringArray(
+            unknowns,
+            'title',
+            this.searchCondition[field]
+          );
+        }
+        this.filteredMaterials = [];
+        if (keep) {
+          this.filteredMaterials = [
+            ...sortedFolders,
+            ...sortedAdmins,
+            ...sortedOwns,
+            ...sortedUsers,
+            ...sortedUnknowns
+          ];
+        } else {
+          if (this.searchCondition[field]) {
+            this.filteredMaterials = [
+              ...sortedFolders,
+              ...sortedAdmins,
+              ...sortedOwns,
+              ...sortedUsers,
+              ...sortedUnknowns
+            ];
+          } else {
+            this.filteredMaterials = [
+              ...sortedFolders,
+              ...sortedOwns,
+              ...sortedAdmins,
+              ...sortedUsers,
+              ...sortedUnknowns
+            ];
+          }
+        }
+      } else if (field === 'material_type') {
+        const videos = this.filteredMaterials.filter(
+          (item) => item.material_type === 'video'
+        );
+        const pdfs = this.filteredMaterials.filter(
+          (item) => item.material_type === 'pdf'
+        );
+        const images = this.filteredMaterials.filter(
+          (item) => item.material_type === 'image'
+        );
+        const sortedFolders = sortStringArray(
+          folders,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedVideos = sortStringArray(
+          videos,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedPdfs = sortStringArray(
+          pdfs,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedImages = sortStringArray(
+          images,
+          'title',
+          this.searchCondition[field]
+        );
+        this.filteredMaterials = [];
+        if (this.searchCondition[field]) {
+          this.filteredMaterials = [
+            ...sortedFolders,
+            ...sortedVideos,
+            ...sortedPdfs,
+            ...sortedImages
+          ];
+        } else {
+          this.filteredMaterials = [
+            ...sortedImages,
+            ...sortedPdfs,
+            ...sortedVideos,
+            ...sortedFolders
+          ];
+        }
+      } else {
+        const sortBeforeFolders = sortStringArray(
+          folders,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortBeforeNormals = sortStringArray(
+          normals,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedFolders = sortStringArray(
+          sortBeforeFolders,
+          field,
+          this.searchCondition[field]
+        );
+        const sortedNormals = sortStringArray(
+          sortBeforeNormals,
+          field,
+          this.searchCondition[field]
+        );
+        this.filteredMaterials = [];
+        if (sortedFolders?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedFolders
+          ];
+        }
+        if (sortedNormals?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedNormals
+          ];
         }
       }
-      const ownerFolders = this.filteredMaterials.filter((e) => {
-        return e.material_type === 'folder';
-      });
-      const ownerNormals = this.filteredMaterials.filter((e) => {
-        return e.material_type !== 'folder';
-      });
-      const filterdFolders = sortMaterialRoleArray(
-        ownerFolders,
-        this.searchCondition[field]
-      );
-      const filterdNormals = sortMaterialRoleArray(
-        ownerNormals,
-        this.searchCondition[field]
-      );
-      this.filteredMaterials = [];
-      if (filterdFolders?.length) {
-        this.filteredMaterials = [...this.filteredMaterials, ...filterdFolders];
-      }
-      if (filterdNormals?.length) {
-        this.filteredMaterials = [...this.filteredMaterials, ...filterdNormals];
-      }
-    } else if (field === 'material_type') {
-      this.filteredMaterials = sortTypeArray(
-        this.filteredMaterials,
-        this.searchCondition[field]
-      );
-    } else {
-      const filterdFolders = sortStringArray(
-        folders,
-        field,
-        this.searchCondition[field]
-      );
-      const filterdNormals = sortStringArray(
-        normals,
-        field,
-        this.searchCondition[field]
-      );
-      this.filteredMaterials = [];
-      if (filterdFolders?.length) {
-        this.filteredMaterials = [...this.filteredMaterials, ...filterdFolders];
-      }
-      if (filterdNormals?.length) {
-        this.filteredMaterials = [...this.filteredMaterials, ...filterdNormals];
+      this.page = 1;
+      if (!keep) {
+        this.searchCondition[field] = !this.searchCondition[field];
       }
     }
-    this.page = 1;
-    this.searchCondition[field] = !this.searchCondition[field];
   }
 
   checkType(url: string): boolean {

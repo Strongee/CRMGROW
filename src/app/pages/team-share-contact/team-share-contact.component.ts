@@ -44,7 +44,7 @@ import { TeamContactShareComponent } from '../../components/team-contact-share/t
 })
 export class TeamShareContactComponent implements OnInit, OnChanges {
   STATUS = STATUS;
-  ACTIONS = BulkActions.Contacts;
+  ACTIONS = BulkActions.TeamContacts;
   DISPLAY_COLUMNS = [
     'select',
     'contact_name',
@@ -99,6 +99,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   contacts: Contact[] = [];
   contactCount = 0;
   userId = '';
+  userOptions = [];
 
   constructor(
     public router: Router,
@@ -126,6 +127,8 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
 
     this.pageSelection = [];
     this.selection = [];
+
+    console.log("team ===========>", this.team);
   }
 
   loadContact(page: number): void {
@@ -633,7 +636,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   isSharedByMe(contact): any {
     if (contact && contact.user && contact.user.length > 0) {
       const index = contact.user.findIndex((item) => item._id === this.userId);
-      if (index >= 0) {
+      if (index < 0) {
         return true;
       }
     }
@@ -647,5 +650,24 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     } else {
       return names[0][0];
     }
+  }
+
+  toggleUserOption(id: string): void {
+    this.userOptions = _.xor(this.userOptions, [id]);
+  }
+
+  clearAllFilters(): void {
+    this.searchStr = '';
+    this.userOptions = [];
+  }
+
+  getEditorUserName(id): any {
+    if (this.team.members && this.team.members.length > 0) {
+      const index = this.team.members.findIndex((item) => item._id === id);
+      if (index >= 0) {
+        return this.team.members[index].user_name;
+      }
+    }
+    return '';
   }
 }

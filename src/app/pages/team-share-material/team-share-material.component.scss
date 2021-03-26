@@ -1,7 +1,7 @@
 @import  "src/variables.scss";
 
-.page-content {
-  padding: 0;
+.page-title span {
+  letter-spacing: 0px;
 }
 
 .page-header {
@@ -30,6 +30,8 @@
 
 .button-record, .button-add {
   font-size: 16px;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 .mat-table-wrapper table {
@@ -39,7 +41,6 @@
 .checkbox-col {
   width: 36px;
 }
-
 .thumbnail {
   padding: 0px;
   width: 54px;
@@ -69,15 +70,15 @@
     display: none;
   }
 }
-
 .folder-thumb {
-  height: 26px;
+  height: 20px;
   background-size: 100% 100%;
   width: 40px;
   transform: translateX(-4px) scaleX(1.25);
   background-position: 0px 0px;
   transform-origin: left top;
   background-image: url(../../../assets/img/folder.svg);
+  margin-top: 4px;
 }
 
 .material-table-container {
@@ -90,10 +91,6 @@ td {
 
 .analytics-col {
   width: 60px;
-}
-th.analytics-col {
-  text-align: right;
-  padding-right: 8px;
 }
 .time-col {
   width: 90px;
@@ -108,7 +105,7 @@ td.type-col {
   text-transform: uppercase;
 }
 .capture-col {
-  width: 100px;
+  width: 52px;
 }
 .share-col {
   max-width: 120px;
@@ -184,14 +181,6 @@ td.type-col {
     }
   }
 }
-@media screen and (max-width: 600px) {
-  .capture-col {
-    width: 52px;
-  }
-  .capture-col .custom-switch {
-    padding: 0px;
-  }
-}
 @media screen and (max-width: 400px) {
   td {
     height: 138px;
@@ -234,6 +223,14 @@ td.type-col {
   width: 30px;
 }
 
+.sub-item-action {
+  width: 112px;
+  max-width: 112px;
+  .items {
+    display: none;
+  }
+}
+
 .panel {
   max-width: 400px;
   @media screen and (max-width: 360px) {
@@ -258,18 +255,31 @@ td.type-col {
   }
 }
 
+.to-root {
+  text-decoration: none!important;
+  color: $color-dark!important;
+}
 
 :host ::ng-deep {
   .show.dropdown {
     position: unset;
   }
-
-  .page-table thead tr.selected th {
-    background-color: #f5f6fd;
+  thead tr.selected {
+    th {
+      background-color: #f5f6fd;
+    }
   }
-
-  .page-table thead tr.selection-info th {
+  thead tr.selection-info th {
     background-color: #f5f6fd;
     border-bottom: none;
+  }
+  tbody {
+    tr:hover {
+      .sub-item-action {
+        .items {
+          display: flex;
+        }
+      }
+    }
   }
 }
