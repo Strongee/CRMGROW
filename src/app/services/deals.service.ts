@@ -30,6 +30,34 @@ export class DealsService extends HttpService {
   loadDealStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loadingDeal$ = this.loadDealStatus.asObservable();
 
+  easyLoad(force = false): void {
+    if (!force) {
+      const loadStatus = this.loadStageStatus.getValue();
+      if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadStageStatus.next(STATUS.REQUEST);
+    this.easyLoadImpl().subscribe((dealStages) => {
+      dealStages
+        ? this.loadStageStatus.next(STATUS.SUCCESS)
+        : this.loadStageStatus.next(STATUS.FAILURE);
+      dealStages.forEach((e) => {
+        e.deals = [];
+      });
+      this.stages.next(dealStages || []);
+    });
+  }
+
+  easyLoadImpl(): Observable<DealStage[]> {
+    return this.httpClient.get(this.server + DEALSTAGE.EASY_LOAD).pipe(
+      map((res) =>
+        (res['data'] || []).map((e) => new DealStage().deserialize(e))
+      ),
+      catchError(this.handleError('LOAD STAGES', null))
+    );
+  }
+
   /**
    * LOAD ALL DEAL STAGES
    * @param force Flag to load force

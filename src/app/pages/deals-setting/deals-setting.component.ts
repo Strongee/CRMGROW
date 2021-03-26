@@ -22,9 +22,7 @@ export class DealsSettingComponent implements OnInit {
     private dialog: MatDialog,
     public dealsService: DealsService,
     private toastr: ToastrService
-  ) {
-    this.dealsService.getStage(true);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.dealsService.stages$.subscribe((res) => {

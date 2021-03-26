@@ -98,6 +98,8 @@ export class ContactEditComponent implements OnInit {
       this.contact.cell_phone = adjustPhoneNumber(
         this.contact_phone['internationalNumber']
       );
+    } else {
+      this.contact.cell_phone = '';
     }
     if (
       this.second_contact_phone &&
@@ -106,6 +108,8 @@ export class ContactEditComponent implements OnInit {
       this.contact.secondary_phone = adjustPhoneNumber(
         this.second_contact_phone['internationalNumber']
       );
+    } else {
+      this.contact.secondary_phone = '';
     }
 
     this.isUpdating = true;

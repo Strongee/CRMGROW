@@ -265,7 +265,8 @@ export const DEALSTAGE = {
   GET: 'deal-stage',
   DELETE: 'deal-stage/remove',
   EDIT: 'deal-stage/',
-  CHANGE_ORDER: 'deal-stage/change-order'
+  CHANGE_ORDER: 'deal-stage/change-order',
+  EASY_LOAD: 'deal-stage/easy-load'
 };
 
 export const DEAL = {
