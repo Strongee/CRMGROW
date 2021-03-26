@@ -39,10 +39,16 @@
   .template-type {
     min-width: 100px
   }
+  .auth {
+    min-width: 60px;
+  }
   th {
     height: 45px;
     color: rgba(0,0,0,.54);
     .head-sort {
+      span {
+        line-height: 1;
+      }
       i {
           width: 8px;
           height: 12px;
@@ -82,4 +88,14 @@
 input.disabled {
   pointer-events: none;
   background-color: #f8f8f8;
+}
+
+:host ::ng-deep {
+  th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    padding-left: 0;
+  }
+
+  td.mat-cell, td.mat-footer-cell {
+    padding: 10px 0px;
+  }
 }
