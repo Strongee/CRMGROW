@@ -34,7 +34,6 @@ export class DealCreateComponent implements OnInit {
       this.keepContacts = [this.data.contact];
       this.contacts = [...this.keepContacts];
     }
-    this.dealsService.getStage(false);
   }
 
   ngOnInit(): void {

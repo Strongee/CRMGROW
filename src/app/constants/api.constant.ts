@@ -217,7 +217,8 @@ export const LABEL = {
   PUT: 'label/',
   GET: 'label',
   BULK_CREATE: 'label/create',
-  DELETE: 'label/'
+  DELETE: 'label/',
+  CHANGE_ORDER: 'label/order'
 };
 
 export const MAILLIST = {
@@ -264,7 +265,8 @@ export const DEALSTAGE = {
   GET: 'deal-stage',
   DELETE: 'deal-stage/remove',
   EDIT: 'deal-stage/',
-  CHANGE_ORDER: 'deal-stage/change-order'
+  CHANGE_ORDER: 'deal-stage/change-order',
+  EASY_LOAD: 'deal-stage/easy-load'
 };
 
 export const DEAL = {

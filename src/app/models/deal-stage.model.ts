@@ -8,9 +8,12 @@ export class DealStage implements Deserializable {
   deals: Deal[];
   created_at: Date;
   updated_at: Date;
+  deals_count: number = 0;
   static deserilize: any;
 
   deserialize(input: any): this {
-    return Object.assign(this, input);
+    Object.assign(this, input);
+    this.deals_count = this.deals.length;
+    return this;
   }
 }

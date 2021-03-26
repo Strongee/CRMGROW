@@ -111,10 +111,10 @@
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
             *ngIf="!selection.length; else toolHeader" class="name-col">
-              <div class="v-center c-pointer" (click)="sort('title')">
-                <div class="sortable-header" [class.inc]="searchCondition.title" [class.dec]="!searchCondition.title">
-                  <span>Name</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('title')">
+                <span>Name</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.title ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'title'"></i>
               </div>
             </th>
               <ng-template #toolHeader>
@@ -211,16 +211,16 @@
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
             *ngIf="!selection.length" class="owner-col">
-              <div class="v-center c-pointer" (click)="sort('owner')">
-                <div class="sortable-header" [class.inc]="searchCondition.owner" [class.dec]="!searchCondition.owner">
-                  <span>Owner</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('owner')">
+                <span>Owner</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.owner ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'owner'"></i>
               </div>
             </th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="owner-col">
-            {{element.user ? (element.user._id ? (element.user._id === user_id ? 'Me' : element.user.user_name) : (element.user === user_id ? 'Me' : 'Unknown User')) : 'Admin'}}
+            {{element.owner}}
           </td>
         </ng-container>
 
@@ -242,10 +242,10 @@
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
             *ngIf="!selection.length" class="type-col">
-              <div class="v-center c-pointer" (click)="sort('material_type')">
-                <div class="sortable-header" [class.inc]="searchCondition.material_type" [class.dec]="!searchCondition.material_type">
-                  <span>Type</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('material_type')">
+                <span>Type</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.material_type ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'material_type'"></i>
               </div>
             </th>
           </ng-container>
@@ -260,10 +260,10 @@
           <ng-container *matHeaderCellDef>
             <th mat-header-cell class="time-col"
             *ngIf="!selection.length">
-              <div class="v-center c-pointer" (click)="sort('created_at')">
-                <div class="sortable-header" [class.inc]="searchCondition.created_at" [class.dec]="!searchCondition.created_at">
-                  <span>Added</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('created_at')">
+                <span>Added</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.created_at ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'created_at'"></i>
               </div>
             </th>
           </ng-container>
@@ -278,10 +278,10 @@
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
             *ngIf="!selection.length" class="analytics-col">
-              <div class="v-center c-pointer" (click)="sort('views')">
-                <div class="sortable-header" [class.inc]="searchCondition.views" [class.dec]="!searchCondition.views">
-                  <span>Views</span>
-                </div>
+              <div class="v-center c-pointer head-sort" (click)="sort('views')">
+                <span>Views</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.views ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'views'"></i>
               </div>
             </th>
           </ng-container>

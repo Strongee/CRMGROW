@@ -43,7 +43,7 @@ export class LabelService extends HttpService {
   }
   create$(label: Label): void {
     const labels = this.labels.getValue();
-    labels.push(label);
+    labels.unshift(label);
     this.labels.next(labels);
   }
   updateLabel(id: string, label: any): Observable<boolean> {
@@ -86,7 +86,26 @@ export class LabelService extends HttpService {
   changeOrder(prevIndex: number, currentIndex: number): void {
     const labelList = this.labels.getValue();
     moveItemInArray(labelList, prevIndex, currentIndex);
-    this.labels.next(labelList);
+    const data = [];
+    labelList.forEach((e) => {
+      if (e.role !== 'admin') {
+        data.push({ _id: e._id, name: e.name });
+      }
+    });
+    this.changeOrderImpl(data).subscribe((status) => {
+      if (status) {
+        this.labels.next(labelList);
+      }
+    });
+  }
+
+  changeOrderImpl(data: any[]): Observable<boolean> {
+    return this.httpClient
+      .post(this.server + LABEL.CHANGE_ORDER, { data: data.reverse() })
+      .pipe(
+        map((res) => res['status'] || false),
+        catchError(this.handleError('UPDATE LABEL', false))
+      );
   }
 
   clear$(): void {

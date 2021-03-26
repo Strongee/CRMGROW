@@ -8,7 +8,7 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
-import { sortStringArray, sortRoleArray } from '../../utils/functions';
+import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
 @Component({
@@ -38,6 +38,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   templates: Template[] = [];
   filteredResult: Template[] = [];
   searchStr = '';
+  selectedSort = 'role';
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
@@ -78,7 +79,10 @@ export class TemplatesComponent implements OnInit, OnDestroy {
       (templates) => {
         this.templates = templates;
         this.templates = _.uniqBy(this.templates, '_id');
-        this.filteredResult = sortRoleArray(this.templates, true);
+        this.filteredResult = this.templates;
+        if (this.templates.length) {
+          this.sort('role', true);
+        }
       }
     );
     this.templatesService.loadAll(true);
@@ -173,37 +177,123 @@ export class TemplatesComponent implements OnInit, OnDestroy {
         template.title + ' ' + template.content + ' ' + template.subject;
       return searchReg(str, this.searchStr);
     });
-    if (filtered.length) {
-      this.filteredResult = sortRoleArray(filtered, true);
-    } else {
-      this.filteredResult = filtered;
-    }
+    this.filteredResult = filtered;
+    this.sort(this.selectedSort, true);
     this.page = 1;
   }
 
   clearSearchStr(): void {
     this.searchStr = '';
-    this.filteredResult = sortRoleArray(this.templates, true);
+    this.changeSearchStr();
   }
 
   changePageSize(type: any): void {
     this.pageSize = type;
   }
 
-  sort(field: string): void {
-    if (field == 'role') {
-      this.filteredResult = sortRoleArray(
-        this.filteredResult,
-        this.searchCondition[field]
-      );
+  sort(field: string, keep: boolean = false): void {
+    if (this.selectedSort != field) {
+      this.selectedSort = field;
+      return;
     } else {
-      this.filteredResult = sortStringArray(
-        this.filteredResult,
-        field,
-        this.searchCondition[field]
-      );
+      if (field == 'role') {
+        const admins = this.filteredResult.filter(
+          (item) => item.role === 'admin'
+        );
+        const owns = this.filteredResult.filter(
+          (item) => item.role === undefined
+        );
+        const teams = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user === this.userId
+        );
+        const shared = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user !== this.userId
+        );
+        let sortedAdmins, sortedOwns, sortedTeams, sortedShared;
+        if (keep) {
+          sortedAdmins = sortStringArray(admins, 'title', true);
+          sortedOwns = sortStringArray(owns, 'title', true);
+          sortedTeams = sortStringArray(teams, 'title', true);
+          sortedShared = sortStringArray(shared, 'title', true);
+        } else {
+          sortedAdmins = sortStringArray(
+            admins,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedOwns = sortStringArray(
+            owns,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedTeams = sortStringArray(
+            teams,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedShared = sortStringArray(
+            shared,
+            'title',
+            this.searchCondition[field]
+          );
+        }
+        this.filteredResult = [];
+        if (keep) {
+          this.filteredResult = [
+            ...sortedAdmins,
+            ...sortedOwns,
+            ...sortedTeams,
+            ...sortedShared
+          ];
+        } else {
+          if (this.searchCondition[field]) {
+            this.filteredResult = [
+              ...sortedAdmins,
+              ...sortedOwns,
+              ...sortedTeams,
+              ...sortedShared
+            ];
+          } else {
+            this.filteredResult = [
+              ...sortedOwns,
+              ...sortedTeams,
+              ...sortedShared,
+              ...sortedAdmins
+            ];
+          }
+        }
+      } else if (field == 'type') {
+        const text = this.filteredResult.filter((item) => item.type === 'text');
+        const email = this.filteredResult.filter(
+          (item) => item.type === 'email'
+        );
+        const sortedText = sortStringArray(
+          text,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedEmail = sortStringArray(
+          email,
+          'title',
+          this.searchCondition[field]
+        );
+        this.filteredResult = [];
+        if (this.searchCondition[field]) {
+          this.filteredResult = [...sortedEmail, ...sortedText];
+        } else {
+          this.filteredResult = [...sortedText, ...sortedEmail];
+        }
+      } else {
+        this.filteredResult = sortStringArray(
+          this.filteredResult,
+          field,
+          this.searchCondition[field]
+        );
+      }
+      this.page = 1;
+      if (!keep) {
+        this.searchCondition[field] = !this.searchCondition[field];
+      }
     }
-    this.page = 1;
-    this.searchCondition[field] = !this.searchCondition[field];
   }
 }

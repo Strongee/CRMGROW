@@ -7,6 +7,7 @@ import { Garbage } from 'src/app/models/garbage.model';
 import { SearchOption } from 'src/app/models/searchOption.model';
 import { User } from 'src/app/models/user.model';
 import { ContactService } from 'src/app/services/contact.service';
+import { DealsService } from 'src/app/services/deals.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { LabelService } from 'src/app/services/label.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -26,6 +27,7 @@ export class AdminLayoutComponent implements OnInit {
     public handlerService: HandlerService,
     private userService: UserService,
     private labelService: LabelService,
+    private dealsService: DealsService,
     private tagService: TagService,
     private contactService: ContactService,
     private notificationService: NotificationService,
@@ -56,6 +58,7 @@ export class AdminLayoutComponent implements OnInit {
     this.tagService.getAllTags();
     this.tagService.getAllCompanies();
     this.tagService.getAllSources();
+    this.dealsService.easyLoad(false);
 
     // Open or Close Manage Label
     this.labelService.manageLabel$.subscribe((flg) => {

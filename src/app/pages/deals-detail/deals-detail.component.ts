@@ -138,7 +138,6 @@ export class DealsDetailComponent implements OnInit {
     private location: Location,
     private element: ElementRef
   ) {
-    this.dealsService.getStage(false);
     this.appointmentService.loadCalendars(false);
     this.teamService.loadAll(true);
 

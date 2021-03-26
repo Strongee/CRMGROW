@@ -794,7 +794,7 @@ export class ContactComponent implements OnInit, OnDestroy {
               }
             }
           }
-        } else if (e['data_type'] === 'deals') {
+        } else if (dataType === 'deals' && e['data_type'] === 'deals') {
           if (e['contacts'] && e['contacts'].indexOf(this.contact._id) !== -1) {
             this.showingDetails.push(e);
           }
