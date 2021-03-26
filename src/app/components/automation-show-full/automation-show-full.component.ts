@@ -18,6 +18,7 @@ import { OverlayService } from 'src/app/services/overlay.service';
 import { PageCanDeactivate } from 'src/app/variables/abstractors';
 import { Subject } from 'rxjs';
 import { Layout } from '@swimlane/ngx-graph';
+import { Automation } from 'src/app/models/automation.model';
 
 @Component({
   selector: 'app-automation-show-full',
@@ -37,7 +38,6 @@ export class AutomationShowFullComponent
   initNodes = [{ id: 'start', label: '' }];
   edges = [];
   nodes = [];
-  automation;
   saved = true;
   identity = 1;
   autoZoom = false;
@@ -48,6 +48,9 @@ export class AutomationShowFullComponent
   wrapperHeight = 0;
   offsetX = 0;
   offsetY = 0;
+
+  automation;
+  automationSummary: Automation = new Automation();
 
   constructor(
     private dialogRef: MatDialogRef<AutomationShowFullComponent>,
@@ -67,6 +70,12 @@ export class AutomationShowFullComponent
     document.body.classList.add('overflow-hidden');
     if (window.innerWidth < 576) {
       this.zoomLevel = 0.6;
+    }
+
+    if (this.data && this.data.automation) {
+      this.automationSummary = new Automation().deserialize(
+        this.data.automation
+      );
     }
   }
 

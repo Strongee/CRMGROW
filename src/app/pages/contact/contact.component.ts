@@ -1259,6 +1259,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       height: 'calc(65vh + 70px)',
       data: {
         id: this.contact.automation._id,
+        automation: this.contact.automation,
         automations: this.contact.time_lines
       }
     });
