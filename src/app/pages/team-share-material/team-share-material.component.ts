@@ -92,11 +92,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     private clipboard: Clipboard,
     private route: ActivatedRoute
   ) {
-    this.profileSubscription = this.userService.profile$.subscribe(
-      (profile) => {
-        this.user_id = profile._id;
-      }
-    );
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
       const garbage = new Garbage().deserialize(res);
       this.captureVideos = garbage['capture_videos'] || [];
@@ -109,6 +104,8 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    const profile = this.userService.profile.getValue();
+    this.user_id = profile._id;
     this.selectedFolder = null;
     this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
@@ -915,7 +912,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   }
 
   shareMaterial(): void {
-    console.log("share material ==============>");
     this.dialog
       .open(MaterialBrowserComponent, {
         width: '96vw',

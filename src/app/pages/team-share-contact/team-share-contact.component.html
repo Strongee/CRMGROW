@@ -1,6 +1,7 @@
 <div class="page-content">
-  <div class="v-center with-tab panel-header contact-header">
-    <button type="button" class="btn btn-white-blue v-center ml-auto"
+  <div class="d-flex justify-content-between with-tab panel-header contact-header">
+    <div class="f-6 font-weight-bold">Contacts</div>
+    <button type="button" class="btn btn-white-blue v-center"
             (click)="shareContact()" *ngIf="role=='editor' || role == 'owner'"
     >
       <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
