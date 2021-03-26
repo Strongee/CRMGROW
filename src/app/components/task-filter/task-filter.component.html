@@ -10,7 +10,7 @@
     <div class="form-group">
       <label for="task-search">Global Search</label>
       <input type="text" class="form-control" [(ngModel)]="search" placeholder="Type in string"
-        name="taskSearch" #taskSearch="ngModel" id="task-search" />
+        name="taskSearch" #taskSearch="ngModel" id="task-search" (ngModelChange)="applyFilters()" />
     </div>
     <div class="form-group">
       <label>type of task</label>
@@ -69,13 +69,13 @@
       <div class="col-6">
         <div class="form-group">
           <label>start date</label>
-          <app-date-input type="prepend" [clearable]="true" [(value)]="startDate"></app-date-input>
+          <app-date-input type="prepend" [clearable]="true" [(value)]="startDate" (valueChange)="applyFilters()"></app-date-input>
         </div>
       </div>
       <div class="col-6">
         <div class="form-group">
           <label>time</label>
-          <select class="form-control" name="start_time" #start_time="ngModel" [(ngModel)]="startTime">
+          <select class="form-control" name="start_time" #start_time="ngModel" [(ngModel)]="startTime" (ngModelChange)="changeTime('start')">
             <option *ngFor="let time of TIMES" [value]="time.id">
               {{time.text}}
             </option>
@@ -87,13 +87,13 @@
       <div class="col-6">
         <div class="form-group">
           <label>end date</label>
-          <app-date-input type="prepend" [clearable]="true" [(value)]="endDate"></app-date-input>
+          <app-date-input type="prepend" [clearable]="true" [(value)]="endDate" (valueChange)="applyFilters()"></app-date-input>
         </div>
       </div>
       <div class="col-6">
         <div class="form-group">
           <label>time</label>
-          <select class="form-control" name="end_time" #end_time="ngModel" [(ngModel)]="endTime">
+          <select class="form-control" name="end_time" #end_time="ngModel" [(ngModel)]="endTime" (ngModelChange)="changeTime('end')">
             <option *ngFor="let time of TIMES" [value]="time.id">
               {{time.text}}
             </option>
@@ -103,7 +103,6 @@
     </div>
     <div class="d-flex mt-4">
       <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="close()">Cancel</button>
-      <button type="submit" class="btn btn-primary ml-2" [class.loading]="loading">Apply filters</button>
     </div>
   </form>
 </div>

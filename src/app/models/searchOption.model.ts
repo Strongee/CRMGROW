@@ -169,6 +169,19 @@ export class TaskSearchOption implements Deserializable {
   deserialize(input: any): this {
     return Object.assign(this, input);
   }
+
+  get isActive(): boolean {
+    if (
+      this.str ||
+      this.contact ||
+      (this.labels && this.labels.length) ||
+      this.start_date ||
+      this.end_date
+    ) {
+      return true;
+    }
+    return false;
+  }
 }
 export class TaskDurationOption implements Deserializable {
   start_date: string;

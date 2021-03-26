@@ -106,6 +106,18 @@ export class TaskFilterComponent implements OnInit {
     this.applyFilters();
   }
 
+  changeTime(type: string): void {
+    if (type === 'start') {
+      if (this.startDate) {
+        this.applyFilters();
+      }
+    } else {
+      if (this.endDate) {
+        this.applyFilters();
+      }
+    }
+  }
+
   /**
    * Apply Filter to the Task List
    */
