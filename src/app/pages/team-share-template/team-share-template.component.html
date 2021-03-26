@@ -24,7 +24,7 @@
     </div>
     <div class="position-relative">
       <ng-container *ngIf="templates.length">
-        <table class="w-100 page-table"
+        <table class="w-100 template-table page-table"
            mat-table
            multiTemplateDataRows
            [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"

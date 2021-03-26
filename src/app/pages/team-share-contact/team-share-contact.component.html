@@ -20,6 +20,35 @@
         </div>
       </ng-container>
     </div>
+    <div class="ml-auto"
+         ngbDropdown
+         placement="bottom-right">
+      <div class="v-center c-pointer f-3 p-3 mr-2 font-weight-bold"
+           ngbDropdownToggle>
+        <span class="pr-2">Sort by</span>
+      </div>
+      <div ngbDropdownMenu
+           aria-labelledby="taskSortTypes">
+        <div class="py-2"
+             ngbDropdownItem
+             *ngFor="let type of SORT_TYPES"
+             (click)="changeSort(type)">
+          <span class="f-3 v-center"
+                [class.font-weight-bold]="type.id === sortType.id">
+            {{type.label}}
+            <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+               *ngIf="type.id === sortType.id"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="border-left pl-3 pr-0 py-1 text-center ml-3 mr-2">
+      <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer v-center"
+         (click)="drawer.toggle()">
+        <span>Filter</span>
+        <img class="ml-1" src="../../../assets/img/filter.svg" alt="filter-icon" style="width: 23px;"/>
+      </a>
+    </div>
   </div>
   <div class="custom-mat-table position-relative">
     <div class="mat-table-wrapper mode-2">
@@ -63,7 +92,7 @@
             <th mat-header-cell
                 *ngIf="!selection.length; else toolHeader"> contact name </th>
             <ng-template #toolHeader>
-              <th mat-header-cell colspan="7">
+              <th mat-header-cell colspan="8">
                 <div class="v-center">
                   <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
                   <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
@@ -182,7 +211,7 @@
         </ng-container>
 
         <ng-container matColumnDef="selection_info">
-          <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
+          <th mat-header-cell *matHeaderCellDef colspan="9" class="text-center">
             <span *ngIf="!isAllSelected(); else deselectTemplate">
               {{selection.length}} contacts are selected.
               <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
@@ -232,3 +261,54 @@
     </div>
   </div>
 </div>
+
+<mat-drawer-container [hasBackdrop]="true">
+  <mat-drawer #drawer
+              position="end">
+    <div class="p-4c panel">
+      <div class="v-center mb-3">
+        <h4 class="font-weight-bold mb-0 title">Advanced Filter</h4>
+        <div class="c-blue f-1 text-uppercase ml-2 mt-2 c-pointer" (click)="clearAllFilters()">Clear All Filters</div>
+        <button class="v-center border-0 bgc-trans ml-auto" type="button" (click)="drawer.toggle()">
+          <i class="d-block i-icon i-close bgc-dark"></i>
+        </button>
+      </div>
+      <form #actionForm="ngForm" [class.was-validated]="actionForm.submitted">
+        <div class="form-group">
+          <label class="mb-2">Members</label>
+          <div class="filter-check-item">
+            <div class="custom-checkbox mb-1">
+              <input type="checkbox" class="custom-control-input" id="mfu-me" name="mfu-me"
+                     (change)="toggleUserOption(userId)" [checked]="userOptions.indexOf(userId) !== -1">
+              <label class="custom-control-label" for="mfu-me">
+                <div class="f-3 mt-1">Me</div>
+              </label>
+            </div>
+            <ng-container *ngFor="let user of team.owner">
+              <div class="custom-checkbox mb-1" *ngIf="user._id != userId">
+                <input type="checkbox" class="custom-control-input" id="mfu-{{user._id}}" name="mfu-{{user._id}}"
+                       (change)="toggleUserOption(user._id)" [checked]="userOptions.indexOf(user._id) !== -1">
+                <label class="custom-control-label" for="mfu-{{user._id}}">
+                  <div class="f-3 mt-1">{{user.user_name}}</div>
+                </label>
+              </div>
+            <ng-container *ngFor="let editorId of team.editors">
+              <div class="custom-checkbox mb-1" *ngIf="editorId != userId">
+                <input type="checkbox" class="custom-control-input" id="mfu-{{editorId}}" name="mfu-{{editorId}}"
+                       (change)="toggleUserOption(editorId)" [checked]="userOptions.indexOf(editorId) !== -1">
+                <label class="custom-control-label" for="mfu-{{editorId}}">
+                  <div class="f-3 mt-1">{{getEditorUserName(editorId)}}</div>
+                </label>
+              </div>
+            </ng-container>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="mt-4 d-flex">
+          <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="drawer.toggle()">Close</button>
+        </div>
+      </form>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>

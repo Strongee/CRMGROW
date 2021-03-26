@@ -40,6 +40,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     'type',
     'created_at',
     'analytics',
+    'sub_actions',
     'lead_capture',
     'actions'
   ];
