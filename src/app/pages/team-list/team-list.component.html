@@ -23,7 +23,7 @@
       </thead>
       <tbody class="position-relative">
         <tr
-          *ngFor="let team of teamService.teams$ | async
+          *ngFor="let team of teams
           | paginate : {id: 'teamTable', itemsPerPage: 10, currentPage: page, totalItems: (teamService.teams$ | async).length}
         ">
         <td class="team-name">

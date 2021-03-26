@@ -39,6 +39,21 @@
   .template-type {
     min-width: 100px
   }
+  th {
+    height: 45px;
+    color: rgba(0,0,0,.54);
+    .head-sort {
+      span {
+        line-height: 1;
+      }
+
+      i {
+          width: 8px;
+          height: 12px;
+          min-width: 8px;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -71,15 +86,4 @@
 input.disabled {
   pointer-events: none;
   background-color: #f8f8f8;
-}
-
-th {
-  height: 45px;
-  .head-sort {
-    i {
-        width: 14px;
-        height: 14px;
-        min-width: 14px;
-    }
-}
 }

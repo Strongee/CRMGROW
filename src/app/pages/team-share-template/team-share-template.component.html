@@ -30,13 +30,25 @@
            [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"
         >
           <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef class="title">Title</th>
+            <th mat-header-cell *matHeaderCellDef class="title">
+              <div class="v-center c-pointer head-sort" (click)="sort('title')">
+                <span [class]="selectedSort == 'title' ? 'fw-600 c-dark' : ''">Title</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
+              </div>
+            </th>
             <td mat-cell *matCellDef="let template" class="title">
               <a [routerLink]="['/templates/edit/' + template._id]" class="td-none"><span class="f-3 font-weight-bold">{{template.title}}</span></a>
             </td>
           </ng-container>
           <ng-container matColumnDef="owner">
-            <th mat-header-cell *matHeaderCellDef class="auth">Owner</th>
+            <th mat-header-cell *matHeaderCellDef class="auth">
+              <div class="v-center c-pointer head-sort" (click)="sort('role')">
+                <span [class]="selectedSort == 'role' ? 'fw-600 c-dark' : ''">Owner</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.role ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'role'"></i>
+              </div>
+            </th>
             <td mat-cell *matCellDef="let template" class="auth">
               <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
             </td>
@@ -49,7 +61,13 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="template-type">
-            <th mat-header-cell *matHeaderCellDef class="template-type">Type</th>
+            <th mat-header-cell *matHeaderCellDef class="template-type">
+              <div class="v-center c-pointer head-sort" (click)="sort('type')">
+                <span [class]="selectedSort == 'type' ? 'fw-600 c-dark' : ''">Type</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'type'"></i>
+              </div>
+            </th>
             <td mat-cell *matCellDef="let template" class="template-type">
               <div class="v-center">
                 <ng-container *ngIf="template.type=='text'; else emailType">

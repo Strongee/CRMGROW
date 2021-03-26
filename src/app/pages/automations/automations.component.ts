@@ -87,6 +87,8 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     created_at: false
   };
 
+  selectedSort = 'role';
+
   constructor(
     public automationService: AutomationService,
     private dialog: MatDialog,
@@ -123,6 +125,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
       return searchReg(item.title, this.searchStr);
     });
     this.filteredResult = filtered;
+    this.sort(this.selectedSort, true);
     this.page = 1;
   }
 
@@ -219,37 +222,45 @@ export class AutomationsComponent implements OnInit, OnDestroy {
       });
   }
 
-  sort(field): void {
-    if (field === 'created_at') {
-      this.filteredResult = sortDateArray(
-        this.filteredResult,
-        field,
-        this.searchCondition[field]
-      );
-    } else if (field === 'role') {
-      const admins = this.filteredResult.filter(
-        (item) => item.role === 'admin'
-      );
-      const teams = this.filteredResult.filter(
-        (item) => item.role === 'team' && item.user === this.userId
-      );
-      const shares = this.filteredResult.filter(
-        (item) => item.role === 'team' && item.user !== this.userId
-      );
-      const owns = this.filteredResult.filter((item) => !item.role);
-      if (this.searchCondition[field]) {
-        this.filteredResult = [...admins, ...teams, ...owns, ...shares];
-      } else {
-        this.filteredResult = [...owns, ...teams, ...shares, ...admins];
-      }
+  sort(field: string, keep: boolean = false): void {
+    if (this.selectedSort !== field) {
+      this.selectedSort = field;
+      return;
     } else {
-      this.filteredResult = sortStringArray(
-        this.filteredResult,
-        field,
-        this.searchCondition[field]
-      );
+      if (field === 'created_at') {
+        this.filteredResult = sortDateArray(
+          this.filteredResult,
+          field,
+          this.searchCondition[field]
+        );
+      } else if (field === 'role') {
+        const admins = this.filteredResult.filter(
+          (item) => item.role === 'admin'
+        );
+        const teams = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user === this.userId
+        );
+        const shares = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user !== this.userId
+        );
+        const owns = this.filteredResult.filter((item) => !item.role);
+        if (this.searchCondition[field]) {
+          this.filteredResult = [...admins, ...teams, ...owns, ...shares];
+        } else {
+          this.filteredResult = [...owns, ...teams, ...shares, ...admins];
+        }
+      } else {
+        this.filteredResult = sortStringArray(
+          this.filteredResult,
+          field,
+          this.searchCondition[field]
+        );
+      }
     }
-    this.searchCondition[field] = !this.searchCondition[field];
+    if (!keep) {
+      this.searchCondition[field] = !this.searchCondition[field];
+    }
+
     this.page = 1;
   }
 }
