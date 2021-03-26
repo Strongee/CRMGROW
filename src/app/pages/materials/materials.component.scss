@@ -108,11 +108,11 @@ td.type-col {
     width: 52px;
 }
 .share-col {
-    max-width: 120px;
+    width: 120px;
     overflow-wrap: break-word;
 }
 .owner-col {
-    max-width: 120px;
+    width: 120px;
     overflow-wrap: break-word;
 }
 .responsive-data {
@@ -269,9 +269,9 @@ td.type-col {
                 line-height: 1;
             }
             i {
-                width: 14px;
-                height: 14px;
-                min-width: 14px;
+                width: 8px;
+                height: 12px;
+                min-width: 8px;
             }
         }
     }

@@ -112,9 +112,9 @@
             <th mat-header-cell
             *ngIf="!selection.length; else toolHeader" class="name-col">
               <div class="v-center c-pointer head-sort" (click)="sort('title')">
-                <span>Name</span>
+                <span [class]="selectedSort == 'title' ? 'font-weight-bold c-dark' : ''">Name</span>
                 <i class="i-icon d-block bgc-black ml-2"
-                   [class]="searchCondition.title ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'title'"></i>
+                   [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
               </div>
             </th>
               <ng-template #toolHeader>
@@ -212,15 +212,15 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="owner-col">
               <div class="v-center c-pointer head-sort" (click)="sort('owner')">
-                <span>Owner</span>
+                <span [class]="selectedSort == 'owner' ? 'font-weight-bold c-dark' : ''">Owner</span>
                 <i class="i-icon d-block bgc-black ml-2"
-                   [class]="searchCondition.owner ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'owner'"></i>
+                   [class]="searchCondition.owner ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'owner'"></i>
               </div>
             </th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="owner-col">
-            {{element.owner}}
+            {{element.owner | shorten: 15: '...'}}
           </td>
         </ng-container>
 
@@ -232,7 +232,7 @@
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="share-col">
-            {{element.team ? element.team.name : '--'}}
+            {{element.team ? element.team.name : '--' | shorten: 15: '...'}}
           </td>
         </ng-container>
 
@@ -243,9 +243,9 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="type-col">
               <div class="v-center c-pointer head-sort" (click)="sort('material_type')">
-                <span>Type</span>
+                <span [class]="selectedSort == 'material_type' ? 'font-weight-bold c-dark' : ''">Type</span>
                 <i class="i-icon d-block bgc-black ml-2"
-                   [class]="searchCondition.material_type ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'material_type'"></i>
+                   [class]="searchCondition.material_type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'material_type'"></i>
               </div>
             </th>
           </ng-container>
@@ -261,9 +261,9 @@
             <th mat-header-cell class="time-col"
             *ngIf="!selection.length">
               <div class="v-center c-pointer head-sort" (click)="sort('created_at')">
-                <span>Added</span>
+                <span [class]="selectedSort == 'created_at' ? 'font-weight-bold c-dark' : ''">Added</span>
                 <i class="i-icon d-block bgc-black ml-2"
-                   [class]="searchCondition.created_at ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'created_at'"></i>
+                   [class]="searchCondition.created_at ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'created_at'"></i>
               </div>
             </th>
           </ng-container>
@@ -279,9 +279,9 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="analytics-col">
               <div class="v-center c-pointer head-sort" (click)="sort('views')">
-                <span>Views</span>
+                <span [class]="selectedSort == 'views' ? 'font-weight-bold c-dark' : ''">Views</span>
                 <i class="i-icon d-block bgc-black ml-2"
-                   [class]="searchCondition.views ? 'i-sort-up' : 'i-sort-down'" *ngIf="selectedSort == 'views'"></i>
+                   [class]="searchCondition.views ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'views'"></i>
               </div>
             </th>
           </ng-container>
