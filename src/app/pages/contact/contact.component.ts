@@ -1377,7 +1377,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
     if (materials.length === 1) {
       const material = this.details[this.sentHistory[activityIds[0]]];
-      convertString += `<div class="title">${material?.title}</div><div class="description">${material?.description}</div>`;
+      convertString += `<div class="title">${
+        material ? material.title : ''
+      }</div><div class="description">${
+        material ? material.description : ''
+      }</div>`;
       convertString = `<div class="single-material-send">${convertString}</div>`;
     }
     return convertString;

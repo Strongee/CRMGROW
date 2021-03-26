@@ -587,7 +587,7 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
-                    <div class="v-center ml-auto">
+                    <div class="v-center ml-auto mr-span">
                       <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
@@ -664,7 +664,7 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
-                    <div class="v-center ml-auto">
+                    <div class="v-center ml-auto mr-span">
                       <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
@@ -701,7 +701,7 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
-                    <div class="v-center ml-auto">
+                    <div class="v-center ml-auto mr-span">
                       <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
@@ -745,7 +745,22 @@
                             <img src="{{details[activity.videos]?.preview}}"/>
                             <div class="video-duration">{{details[activity.videos]?.duration | timeDuration}}</div>
                           </a>
-                          <div class="recent-activity v-center mb-4">
+                          <div class="recent-activity v-center f-3 border-bottom mb-1">
+                            <div class="content label">SESSION</div>
+                            <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
+                              <div class="duration ml-auto label">
+                                DURATION
+                              </div>
+                              <div class="from label">
+                                FROM
+                              </div>
+                              <div class="to label">
+                                TO
+                              </div>
+                            </ng-container>
+                            <div class="label date text-right">DATE</div>
+                          </div>
+                          <div class="recent-activity v-center mb-4 f-3">
                             <div class="content font-weight-bold">{{activity.content}}</div>
                             <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration ml-auto">
@@ -758,7 +773,7 @@
                                 {{(activity.activity_detail.to *1000 || activity.activity_detail.material_last*1000) | timeDuration}}
                               </div>
                             </ng-container>
-                            <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
+                            <div class="date border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
                           </div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
@@ -821,7 +836,7 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
-                    <div class="v-center ml-auto">
+                    <div class="v-center ml-auto mr-span">
                       <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
@@ -844,9 +859,18 @@
                           <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.pdfs]?.preview}}"/>
                           </a>
+                          <div class="recent-activity v-center f-3 border-bottom mb-1">
+                            <div class="content label">SESSION</div>
+                            <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
+                              <div class="duration ml-auto label">
+                                DURATION
+                              </div>
+                            </ng-container>
+                            <div class="label date text-right">DATE</div>
+                          </div>
                           <div class="recent-activity v-center mb-4">
                             <div class="content font-weight-bold">{{activity.content}}</div>
-                            <ng-container *ngIf="activity.type === 'watched'">
+                            <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration"></div>
                             </ng-container>
                             <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
@@ -883,7 +907,7 @@
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
-                    <div class="v-center ml-auto">
+                    <div class="v-center ml-auto mr-span">
                       <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
@@ -906,9 +930,18 @@
                           <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.images]?.preview}}"/>
                           </a>
+                          <div class="recent-activity v-center f-3 border-bottom mb-1">
+                            <div class="content label">SESSION</div>
+                            <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
+                              <div class="duration ml-auto label">
+                                DURATION
+                              </div>
+                            </ng-container>
+                            <div class="label date text-right">DATE</div>
+                          </div>
                           <div class="recent-activity v-center mb-4">
                             <div class="content font-weight-bold">{{activity.content}}</div>
-                            <ng-container *ngIf="activity.type === 'watched'">
+                            <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration"></div>
                             </ng-container>
                             <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
@@ -1178,12 +1211,12 @@
                       </div>
                     </a>
                     <div class="v-center">
-                      <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
-                      <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
+                      <span class="f-3 op-56 ml-auto mr-span">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                      <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
                           <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
                         </a>
-                        <!-- <div ngbDropdownMenu class="light py-1">
+                        <div ngbDropdownMenu class="light py-1">
                           <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="updateNote(activity)">
                             <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Exclude from deal</span>
@@ -1192,8 +1225,8 @@
                             <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                             <span class="ml-3 f-2 font-weight-bold">Delete</span>
                           </button>
-                        </div> -->
-                      </div>
+                        </div>
+                      </div> -->
                     </div>
                   </div>
                   <ng-container *ngIf="activity.activity_detail; else removedDealTemplate">
@@ -1288,7 +1321,7 @@
                       </div>
                     </div>
                     <div class="v-center">
-                      <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
+                      <span class="f-3 op-56 ml-auto mr-span">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
                   <ng-container *ngIf="activity.activity_detail; else canceledUserTemplate">
@@ -1378,7 +1411,7 @@
                           <span *ngSwitchCase="'images'">image</span>
                         </ng-container>
                       </div>
-                      <div class="ml-auto f-3 op-56">
+                      <div class="ml-auto f-3 op-56 mr-span">
                         {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
@@ -1485,7 +1518,7 @@
                           <span *ngSwitchCase="'images'">image</span>
                         </ng-container>
                       </div>
-                      <div class="ml-auto f-3 op-56">
+                      <div class="ml-auto f-3 op-56 mr-span">
                         {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
@@ -1574,7 +1607,7 @@
                     <div class="v-center justify-content-between mb-3">
                       <div class="history-icon mr-3"><i class="act-icon act-appointments"></i></div>
                       <div class="">appointment</div>
-                      <div class="ml-auto f-3 op-56">
+                      <div class="ml-auto f-3 op-56 mr-span">
                         {{detail.created_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
@@ -1676,7 +1709,7 @@
                     <div class="v-center justify-content-between mb-3">
                       <div class="history-icon mr-3"><i class="act-icon act-team_calls"></i></div>
                       <div class="">group call</div>
-                      <div class="ml-auto f-3 op-56">
+                      <div class="ml-auto f-3 op-56 mr-span">
                         {{detail.created_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
@@ -1926,7 +1959,7 @@
                         <div class="history-icon mr-3"><i class="act-icon act-deals"></i></div>
                         <div class="">deal</div>
                       </a>
-                      <div class="ml-auto f-3 op-56">
+                      <div class="ml-auto f-3 op-56 mr-span">
                         {{detail.created_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
