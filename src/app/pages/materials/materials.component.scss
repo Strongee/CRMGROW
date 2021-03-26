@@ -263,6 +263,18 @@ td.type-col {
     .show.dropdown {
         position: unset;
     }
+    th {
+        .head-sort {
+            span {
+                line-height: 1;
+            }
+            i {
+                width: 14px;
+                height: 14px;
+                min-width: 14px;
+            }
+        }
+    }
     thead tr.selected {
         th {
             background-color: #f5f6fd;
