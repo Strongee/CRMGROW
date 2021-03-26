@@ -73,6 +73,8 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   myContacts = [];
   otherContacts = [];
   materials: any[] = [];
+  viewers = [];
+  editors = [];
 
   profileSubscription: Subscription;
 
@@ -179,6 +181,15 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
           highlights: res['highlights'] || [],
           brands: res['brands'] || []
         };
+
+        for (const member of this.team.members) {
+          if (this.team.editors.indexOf(member._id) >= 0) {
+            this.editors.push(member);
+          } else {
+            this.viewers.push(member);
+          }
+        }
+
         this.arrangeTeamData();
       },
       () => {

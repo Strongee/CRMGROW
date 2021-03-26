@@ -63,7 +63,13 @@
         <ng-container matColumnDef="material_name">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-                *ngIf="!selection.length; else toolHeader" class="name-col">name </th>
+                *ngIf="!selection.length; else toolHeader" class="name-col">
+              <div class="v-center c-pointer head-sort" (click)="sort('title')">
+                <span [class]="selectedSort == 'title' ? 'font-weight-bold c-dark' : ''">Name</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
+              </div>
+            </th>
             <ng-template #toolHeader>
               <th mat-header-cell colspan="8">
                 <div class="v-center">
@@ -157,7 +163,13 @@
         <ng-container matColumnDef="type">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-                *ngIf="!selection.length" class="type-col">type</th>
+                *ngIf="!selection.length" class="type-col">
+              <div class="v-center c-pointer head-sort" (click)="sort('material_type')">
+                <span [class]="selectedSort == 'material_type' ? 'font-weight-bold c-dark' : ''">Type</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.material_type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'material_type'"></i>
+              </div>
+            </th>
           </ng-container>
           <td mat-cell
               *matCellDef="let element" class="type-col {{element.material_type}}">
@@ -169,7 +181,13 @@
         <ng-container matColumnDef="created_at">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell class="time-col"
-                *ngIf="!selection.length">added</th>
+                *ngIf="!selection.length">
+              <div class="v-center c-pointer head-sort" (click)="sort('created_at')">
+                <span [class]="selectedSort == 'created_at' ? 'font-weight-bold c-dark' : ''">Added</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.created_at ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'created_at'"></i>
+              </div>
+            </th>
           </ng-container>
           <td mat-cell
               *matCellDef="let element" class="time-col">
@@ -181,7 +199,13 @@
         <ng-container matColumnDef="analytics">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-                *ngIf="!selection.length" class="analytics-col">views</th>
+                *ngIf="!selection.length" class="analytics-col">
+              <div class="v-center c-pointer head-sort" (click)="sort('views')">
+                <span [class]="selectedSort == 'views' ? 'font-weight-bold c-dark' : ''">Views</span>
+                <i class="i-icon d-block bgc-black ml-2"
+                   [class]="searchCondition.views ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'views'"></i>
+              </div>
+            </th>
           </ng-container>
           <td mat-cell
               *matCellDef="let element" class="analytics-col">

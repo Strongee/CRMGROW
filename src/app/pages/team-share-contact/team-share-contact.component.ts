@@ -128,7 +128,6 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     this.pageSelection = [];
     this.selection = [];
 
-    console.log("team ===========>", this.team);
   }
 
   loadContact(page: number): void {

@@ -12,6 +12,7 @@ import { filter } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Team } from '../../models/team.model';
 import {TemplateShareComponent} from "../../components/template-share/template-share.component";
+import {sortStringArray} from "../../utils/functions";
 
 @Component({
   selector: 'app-team-share-template',
@@ -44,6 +45,13 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
   loading = false;
+
+  selectedSort = 'role';
+  searchCondition = {
+    title: false,
+    role: false,
+    type: false
+  };
 
   @Input('team') team: Team;
   @Input('role') role: string;
@@ -274,5 +282,111 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
 
   duplicateTemplate(template: Template): void {
     this.router.navigate(['/templates/duplicate/' + template._id]);
+  }
+
+  sort(field: string, keep: boolean = false): void {
+    if (this.selectedSort != field) {
+      this.selectedSort = field;
+      return;
+    } else {
+      if (field == 'role') {
+        const admins = this.filteredResult.filter(
+          (item) => item.role === 'admin'
+        );
+        const owns = this.filteredResult.filter(
+          (item) => item.role === undefined
+        );
+        const teams = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user === this.userId
+        );
+        const shared = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user !== this.userId
+        );
+        let sortedAdmins, sortedOwns, sortedTeams, sortedShared;
+        if (keep) {
+          sortedAdmins = sortStringArray(admins, 'title', true);
+          sortedOwns = sortStringArray(owns, 'title', true);
+          sortedTeams = sortStringArray(teams, 'title', true);
+          sortedShared = sortStringArray(shared, 'title', true);
+        } else {
+          sortedAdmins = sortStringArray(
+            admins,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedOwns = sortStringArray(
+            owns,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedTeams = sortStringArray(
+            teams,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedShared = sortStringArray(
+            shared,
+            'title',
+            this.searchCondition[field]
+          );
+        }
+        this.filteredResult = [];
+        if (keep) {
+          this.filteredResult = [
+            ...sortedAdmins,
+            ...sortedOwns,
+            ...sortedTeams,
+            ...sortedShared
+          ];
+        } else {
+          if (this.searchCondition[field]) {
+            this.filteredResult = [
+              ...sortedAdmins,
+              ...sortedOwns,
+              ...sortedTeams,
+              ...sortedShared
+            ];
+          } else {
+            this.filteredResult = [
+              ...sortedOwns,
+              ...sortedTeams,
+              ...sortedShared,
+              ...sortedAdmins
+            ];
+          }
+        }
+      } else if (field == 'type') {
+        const text = this.filteredResult.filter((item) => item.type === 'text');
+        const email = this.filteredResult.filter(
+          (item) => item.type === 'email'
+        );
+        const sortedText = sortStringArray(
+          text,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedEmail = sortStringArray(
+          email,
+          'title',
+          this.searchCondition[field]
+        );
+        this.filteredResult = [];
+        if (this.searchCondition[field]) {
+          this.filteredResult = [...sortedEmail, ...sortedText];
+        } else {
+          this.filteredResult = [...sortedText, ...sortedEmail];
+        }
+      } else {
+        this.filteredResult = sortStringArray(
+          this.filteredResult,
+          field,
+          this.searchCondition[field]
+        );
+      }
+      this.page = 1;
+      if (!keep) {
+        this.searchCondition[field] = !this.searchCondition[field];
+      }
+    }
   }
 }

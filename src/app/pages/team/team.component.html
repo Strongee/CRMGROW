@@ -177,12 +177,12 @@
                   </div>
                 </td>
                 <td class="added-cell f-3">
-                  {{own.created_at | date: 'dd.MM.yyyy'}}
+                  {{own.created_at | date: 'MM.dd.yyyy'}}
                 </td>
                 <td class="action-cell" *ngIf="role=='editor' || role == 'owner'">
                 </td>
               </tr>
-              <tr *ngFor="let member of team.members">
+              <tr *ngFor="let member of editors">
                 <td class="name-cell">
                   <div class="v-center">
                     <ng-container *ngIf="member.picture_profile; else memberNamePlaceholder">
@@ -220,7 +220,53 @@
                   </div>
                 </td>
                 <td class="added-cell">
-                  {{member.created_at | date: 'dd.MM.yyyy'}}
+                  {{member.created_at | date: 'MM.dd.yyyy'}}
+                </td>
+                <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
+                  <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="removeMember(member)">
+                    <i class="bgc-black i-icon i-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngFor="let member of viewers">
+                <td class="name-cell">
+                  <div class="v-center">
+                    <ng-container *ngIf="member.picture_profile; else memberNamePlaceholder">
+                      <img [src]="member.picture_profile" class="avatar mr-3" />
+                    </ng-container>
+                    <ng-template #memberNamePlaceholder>
+                      <div class="name-avatar mr-3">{{member.user_name[0]}}</div>
+                    </ng-template>
+                    <div class="font-weight-bold">{{member.user_name}}</div>
+                  </div>
+                </td>
+                <td class="status-cell">
+                  <div class="label-cell">
+                    <ng-container *ngIf="role == 'owner'; else noOwnerTemplate">
+                      <select (change)="toggleMember(member)"
+                              class="c-white status value f-1 font-weight-bold"
+                              [class]="team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'"
+                              [disabled]="role != 'owner'"
+                      >
+                        <option [value]="'Viewer'" class="Viewer c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) === -1">
+                          Viewer
+                        </option>
+                        <option [value]="'Editor'" class="Editor c-white f-1 font-weight-bold" [selected]="team.editors.indexOf(member._id) !== -1">
+                          Editor
+                        </option>
+                      </select>
+                    </ng-container>
+                    <ng-template #noOwnerTemplate>
+                      <div class="value v-center">
+                        <div class="status font-weight-bold f-1 c-white" [class] = "team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'">
+                          {{team.editors.indexOf(member._id) === -1 ? 'Viewer' : 'Editor'}}
+                        </div>
+                      </div>
+                    </ng-template>
+                  </div>
+                </td>
+                <td class="added-cell">
+                  {{member.created_at | date: 'MM.dd.yyyy'}}
                 </td>
                 <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
                   <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="removeMember(member)">
@@ -249,7 +295,7 @@
                   </div>
                 </td>
                 <td class="added-cell">
-                  {{invite.created_at | date: 'dd.MM.yyyy'}}
+                  {{invite.created_at | date: 'MM.dd.yyyy'}}
                 </td>
                 <td class="action-cell value d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
                   <button class="v-center btn bgc-white c-dark f-3 mt-1" (click)="cancelInvite(invite)">

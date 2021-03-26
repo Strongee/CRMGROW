@@ -25,6 +25,7 @@ import { DeleteFolderComponent } from '../../components/delete-folder/delete-fol
 import { HandlerService } from 'src/app/services/handler.service';
 import { Team } from '../../models/team.model';
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
+import {sortDateArray, sortStringArray} from "../../utils/functions";
 @Component({
   selector: 'app-team-share-material',
   templateUrl: './team-share-material.component.html',
@@ -80,6 +81,16 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   perPageCount = 8;
   pageMaterials: any = [];
   loading = false;
+
+  selectedSort = 'title';
+
+  searchCondition = {
+    title: false,
+    owner: false,
+    material_type: false,
+    created_at: false,
+    views: false
+  };
 
   constructor(
     private dialog: MatDialog,
@@ -980,5 +991,214 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
           this.toast.success('Selected materials has been shared successfully');
         }
       });
+  }
+
+  sort(field: string, keep: boolean = false): void {
+    const folders = this.filteredMaterials.filter((e) => {
+      return e.material_type === 'folder';
+    });
+    const normals = this.filteredMaterials.filter((e) => {
+      return e.material_type !== 'folder';
+    });
+    if (this.selectedSort != field) {
+      this.selectedSort = field;
+      return;
+    } else {
+      if (field === 'created_at') {
+        const sortBeforeFolders = sortStringArray(
+          folders,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortBeforeNormals = sortStringArray(
+          normals,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedFolders = sortDateArray(
+          sortBeforeFolders,
+          field,
+          this.searchCondition[field]
+        );
+        const sortedNormals = sortDateArray(
+          sortBeforeNormals,
+          field,
+          this.searchCondition[field]
+        );
+        this.filteredMaterials = [];
+        if (sortedFolders?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedFolders
+          ];
+        }
+        if (sortedNormals?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedNormals
+          ];
+        }
+      } else if (field === 'owner') {
+        const admins = normals.filter((item) => item.owner === 'Admin');
+        const owns = normals.filter((item) => item.owner === 'Me');
+        const users = normals.filter(
+          (item) =>
+            item.owner !== 'Admin' &&
+            item.owner !== 'Me' &&
+            item.owner !== 'Unknown'
+        );
+        const unknowns = normals.filter((item) => item.owner === 'Unknown');
+        let sortedFolders,
+          sortedAdmins,
+          sortedOwns,
+          sortedUsers,
+          sortedUnknowns;
+        if (keep) {
+          sortedFolders = sortStringArray(folders, 'title', true);
+          sortedAdmins = sortStringArray(admins, 'priority', true);
+          sortedOwns = sortStringArray(owns, 'title', true);
+          sortedUsers = sortStringArray(users, 'title', true);
+          sortedUnknowns = sortStringArray(unknowns, 'title', true);
+        } else {
+          sortedFolders = sortStringArray(
+            folders,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedAdmins = sortStringArray(
+            admins,
+            'priority',
+            this.searchCondition[field]
+          );
+          sortedOwns = sortStringArray(
+            owns,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedUsers = sortStringArray(
+            users,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedUnknowns = sortStringArray(
+            unknowns,
+            'title',
+            this.searchCondition[field]
+          );
+        }
+        this.filteredMaterials = [];
+        if (keep) {
+          this.filteredMaterials = [
+            ...sortedFolders,
+            ...sortedAdmins,
+            ...sortedOwns,
+            ...sortedUsers,
+            ...sortedUnknowns
+          ];
+        } else {
+          if (this.searchCondition[field]) {
+            this.filteredMaterials = [
+              ...sortedFolders,
+              ...sortedAdmins,
+              ...sortedOwns,
+              ...sortedUsers,
+              ...sortedUnknowns
+            ];
+          } else {
+            this.filteredMaterials = [
+              ...sortedFolders,
+              ...sortedOwns,
+              ...sortedAdmins,
+              ...sortedUsers,
+              ...sortedUnknowns
+            ];
+          }
+        }
+      } else if (field === 'material_type') {
+        const videos = this.filteredMaterials.filter(
+          (item) => item.material_type === 'video'
+        );
+        const pdfs = this.filteredMaterials.filter(
+          (item) => item.material_type === 'pdf'
+        );
+        const images = this.filteredMaterials.filter(
+          (item) => item.material_type === 'image'
+        );
+        const sortedFolders = sortStringArray(
+          folders,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedVideos = sortStringArray(
+          videos,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedPdfs = sortStringArray(
+          pdfs,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedImages = sortStringArray(
+          images,
+          'title',
+          this.searchCondition[field]
+        );
+        this.filteredMaterials = [];
+        if (this.searchCondition[field]) {
+          this.filteredMaterials = [
+            ...sortedFolders,
+            ...sortedVideos,
+            ...sortedPdfs,
+            ...sortedImages
+          ];
+        } else {
+          this.filteredMaterials = [
+            ...sortedImages,
+            ...sortedPdfs,
+            ...sortedVideos,
+            ...sortedFolders
+          ];
+        }
+      } else {
+        const sortBeforeFolders = sortStringArray(
+          folders,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortBeforeNormals = sortStringArray(
+          normals,
+          'title',
+          this.searchCondition[field]
+        );
+        const sortedFolders = sortStringArray(
+          sortBeforeFolders,
+          field,
+          this.searchCondition[field]
+        );
+        const sortedNormals = sortStringArray(
+          sortBeforeNormals,
+          field,
+          this.searchCondition[field]
+        );
+        this.filteredMaterials = [];
+        if (sortedFolders?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedFolders
+          ];
+        }
+        if (sortedNormals?.length) {
+          this.filteredMaterials = [
+            ...this.filteredMaterials,
+            ...sortedNormals
+          ];
+        }
+      }
+      this.page = 1;
+      if (!keep) {
+        this.searchCondition[field] = !this.searchCondition[field];
+      }
+    }
   }
 }
