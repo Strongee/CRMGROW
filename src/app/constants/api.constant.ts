@@ -217,7 +217,8 @@ export const LABEL = {
   PUT: 'label/',
   GET: 'label',
   BULK_CREATE: 'label/create',
-  DELETE: 'label/'
+  DELETE: 'label/',
+  CHANGE_ORDER: 'label/order'
 };
 
 export const MAILLIST = {

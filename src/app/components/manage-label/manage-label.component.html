@@ -20,7 +20,7 @@
               <div class="v-center">
                 <input type="text" class="form-control label-name-input ml-2" [(ngModel)]="newLabel.name" placeholder="Name new label"
                        name="edit_label_name" #edit_label_name="ngModel" required/>
-                <button type="submit" class="v-center btn btn-primary ml-2 px-2" [class.loading]="loading">
+                <button type="submit" class="v-center btn btn-primary ml-2 px-2 save-btn" [class.loading]="loading">
                   <i class="i-icon i-plus i-small bgc-white" [class.d-none]="loading"></i>
                   <span class="f-3 font-weight-bold ml-2">Save</span>
                 </button>
@@ -43,7 +43,9 @@
                 <div class="v-center">
                   <button type="button" class="v-center btn bgc-trans c-blue border-0 py-1" (click)="editLabel(item)">
                     <i class="i-icon i-edit bgc-blue"></i>
-                    <span class="f-3 ml-2 c-blue fw-600">Edit label</span>
+                    <span class="f-3 ml-2 c-blue fw-600">Edit
+                      <span>label</span>
+                    </span>
                   </button>
                   <button type="button" class="v-center btn bgc-trans c-red border-0 py-1" (click)="removeLabel(item)">
                     <i class="i-icon i-trash bgc-red"></i>
