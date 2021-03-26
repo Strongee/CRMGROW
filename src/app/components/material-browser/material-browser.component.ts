@@ -81,8 +81,8 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
           if (this.hideMaterials.indexOf(e._id) !== -1) {
             return false;
           }
+          const userId = e.user && e.user._id ? e.user._id : e.user;
           if (this.onlyMine) {
-            const userId = e.user && e.user._id ? e.user._id : e.user;
             if (e.role === 'admin') {
               return false;
             }

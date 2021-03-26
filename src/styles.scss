@@ -1562,9 +1562,10 @@ ul.ngx-pagination {
   padding: 3px 8px;
   background: #f28422;
   border-radius: 3px;
-  width: fit-content;
+  width: 60px;
   color: white;
   line-height: 14px;
+  text-align: center;
   &.admin {
     background-color: #0000ff;
   }
@@ -2082,4 +2083,43 @@ body {
   height: 32px !important;
   font-size: 16px;
   font-weight: bold;
+}
+
+
+////////// table header sort symbol ////////
+.sortable-header {
+  position: relative;
+  padding-right: 15px;
+  min-height: 20px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    right: 0px;
+    width: 9px;
+    height: 6px;
+    mask-image: url('/assets/img/down_triangle.svg');
+    mask-repeat: no-repeat;
+    background-color: #ddd;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    width: 9px;
+    height: 6px;
+    mask-image: url('/assets/img/up_triangle.svg');
+    mask-repeat: no-repeat;
+    background-color: #ddd;
+  }
+
+  &.inc::before {
+    background-color: $color-dark;
+  }
+  &.dec::after {
+    background-color: $color-dark;
+  }
 }

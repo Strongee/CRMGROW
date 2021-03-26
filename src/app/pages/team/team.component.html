@@ -102,7 +102,7 @@
       </app-slide-tab>
 
       <ng-container [ngSwitch]="selectedTab.id">
-        <div class="members-table-container mt-4" *ngSwitchCase="'members'">
+        <div class="members-table-container mt-3" *ngSwitchCase="'members'">
           <ng-container *ngIf="team.requests.length && (role=='editor' || role == 'owner')">
             <div class="f-6 font-weight-bold">Requests</div>
             <table class="table join-request-table mt-3 mb-5">
@@ -262,19 +262,19 @@
           </table>
         </div>
 
-        <div *ngSwitchCase="'materials'" class="materials-container mt-4">
+        <div *ngSwitchCase="'materials'" class="materials-container mt-3">
           <app-team-share-material [team]="team" [role]="role"></app-team-share-material>
         </div>
 
-        <div class="mt-4" *ngSwitchCase="'contacts'">
+        <div class="contacts-container mt-3" *ngSwitchCase="'contacts'">
           <app-team-share-contact [team]="team" [role]="role"></app-team-share-contact>
         </div>
 
-        <div class="automation-list-wrapper mt-4" *ngSwitchCase="'automations'">
+        <div class="automation-list-wrapper mt-3" *ngSwitchCase="'automations'">
           <app-team-share-automation [team]="team" [role]="role"></app-team-share-automation>
         </div>
 
-        <div class="template-list-wrapper mt-4" *ngSwitchCase="'templates'">
+        <div class="template-list-wrapper mt-3" *ngSwitchCase="'templates'">
           <app-team-share-template [team]="team" [role]="role"></app-team-share-template>
         </div>
       </ng-container>

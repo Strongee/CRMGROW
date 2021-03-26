@@ -1,7 +1,8 @@
 <div class="page-content">
   <div class="">
-    <div class="v-center with-tab panel-header contact-header">
-      <button type="button" class="btn btn-white-blue v-center ml-auto"
+    <div class="d-flex justify-content-between with-tab panel-header contact-header">
+      <div class="f-6 font-weight-bold">Templates</div>
+      <button type="button" class="btn btn-white-blue v-center"
               (click)="shareEmailTemplate()" *ngIf="role=='editor' || role == 'owner'"
       >
         <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
@@ -23,7 +24,7 @@
     </div>
     <div class="position-relative">
       <ng-container *ngIf="templates.length">
-        <table class="w-100 page-table"
+        <table class="w-100 template-table page-table"
            mat-table
            multiTemplateDataRows
            [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"
@@ -65,7 +66,7 @@
           <ng-container matColumnDef="template-action">
             <th mat-header-cell *matHeaderCellDef class="template-action"></th>
             <td mat-cell *matCellDef="let template" class="template-action">
-              <div class="v-center">
+              <div class="v-center justify-content-end">
                 <ng-container *ngIf="isDuplicatable(template)">
                   <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
                     <i class="i-icon bgc-dark i-duplicate"></i>

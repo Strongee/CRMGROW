@@ -1080,6 +1080,57 @@ export const BulkActions = {
       loadingLabel: 'Downloading'
     }
   ],
+  TeamContacts: [
+    {
+      label: 'Add tasks',
+      type: 'button',
+      icon: 'i-task',
+      command: 'add_task',
+      loading: false
+    },
+    {
+      label: 'Send email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'message',
+      loading: false
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
+    },
+    {
+      label: 'Add notes',
+      type: 'button',
+      icon: 'i-template',
+      command: 'add_note',
+      loading: false
+    },
+    {
+      label: 'Add automation',
+      type: 'button',
+      icon: 'i-automation',
+      command: 'automation',
+      loading: false
+    },
+    {
+      label: 'Download',
+      type: 'button',
+      icon: 'i-download',
+      command: 'download',
+      loading: false,
+      loadingLabel: 'Downloading'
+    }
+  ],
   Materials: [
     {
       label: 'Send via email',
