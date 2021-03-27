@@ -30,7 +30,8 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 import { TeamService } from '../../services/team.service';
 import { Team } from '../../models/team.model';
-import {AutomationShareComponent} from "../../components/automation-share/automation-share.component";
+import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 
 @Component({
   selector: 'app-team-share-automation',
@@ -83,6 +84,13 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   profileSubscription: Subscription;
   loadSubscription: Subscription;
   loading = false;
+  searchCondition = {
+    title: false,
+    role: false,
+    created_at: false
+  };
+
+  selectedSort = 'role';
 
   constructor(
     public automationService: AutomationService,
@@ -305,5 +313,47 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
           }
         }
       });
+  }
+
+  sort(field: string, keep: boolean = false): void {
+    if (this.selectedSort !== field) {
+      this.selectedSort = field;
+      return;
+    } else {
+      if (field === 'created_at') {
+        this.filteredResult = sortDateArray(
+          this.filteredResult,
+          field,
+          this.searchCondition[field]
+        );
+      } else if (field === 'role') {
+        const admins = this.filteredResult.filter(
+          (item) => item.role === 'admin'
+        );
+        const teams = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user === this.userId
+        );
+        const shares = this.filteredResult.filter(
+          (item) => item.role === 'team' && item.user !== this.userId
+        );
+        const owns = this.filteredResult.filter((item) => !item.role);
+        if (this.searchCondition[field]) {
+          this.filteredResult = [...admins, ...teams, ...owns, ...shares];
+        } else {
+          this.filteredResult = [...owns, ...teams, ...shares, ...admins];
+        }
+      } else {
+        this.filteredResult = sortStringArray(
+          this.filteredResult,
+          field,
+          this.searchCondition[field]
+        );
+      }
+    }
+    if (!keep) {
+      this.searchCondition[field] = !this.searchCondition[field];
+    }
+
+    this.page = 1;
   }
 }

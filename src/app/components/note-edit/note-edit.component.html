@@ -16,10 +16,19 @@
       </ng-template>
       <div class="form-group has-feedback">
         <div class="d-flex">
-          <label for="noteContent" class="mb-0">content</label>
-          <span class="ml-auto error" *ngIf="content.errors">Required!</span>
+          <label class="mb-0">content</label>
+          <span class="ml-auto error" *ngIf="!note.content">Required!</span>
         </div>
-        <textarea id="noteContent" class="form-control" name="content" #content="ngModel" [(ngModel)]="note.content" rows="7" required></textarea>
+        <app-html-editor
+          [(value)]="note.content"
+          [hasToken]="false"
+          [hasTemplates]="false"
+          [noImage]="true"
+          [style]="{height: '120px'}"
+          #editor
+        >
+        </app-html-editor>
+        <!-- <textarea id="noteContent" class="form-control" name="content" #content="ngModel" [(ngModel)]="note.content" rows="7" required></textarea> -->
       </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">

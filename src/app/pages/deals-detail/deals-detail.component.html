@@ -466,7 +466,7 @@
                           <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail.content">
                             <ng-template #show>
                               <div class="content f-6 position-relative">
-                                <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
+                                <div class="note-content">{{activity.activity_detail.content || '' | stripTags | shorten: 300: '...' }}</div>
                                 <div class="gradient-bottom"></div>
                                 <div class="f-3 fw-600 c-blue mt-1">
                                   Expand
@@ -475,7 +475,7 @@
                             </ng-template>
                             <ng-template #hide>
                               <div class="content">
-                                <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
+                                <div class="f-6 note-content opened" [innerHTML]="activity.activity_detail.content"></div>
                                 <div class="f-3 fw-600 c-blue mt-1">
                                   Collapse
                                 </div>
@@ -881,7 +881,7 @@
                             </ng-template>
                             <ng-template #hide>
                               <div class="content">
-                                <div class="f-6 note-content opened">{{detail.content}}</div>
+                                <div class="f-6 note-content opened" [innerHTML]="detail.content"></div>
                                 <div class="f-3 fw-600 c-blue mt-1">
                                   Collapse
                                 </div>

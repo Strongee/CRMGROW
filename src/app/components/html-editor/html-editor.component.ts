@@ -55,6 +55,19 @@ export class HtmlEditorComponent implements OnInit {
       this.config.toolbar.container.push(['template']);
     }
   }
+  @Input()
+  public set noImage(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.forEach((e) => {
+        e.some((item, index) => {
+          if (item === 'image' || item.list === 'image') {
+            e.splice(index, 1);
+            return true;
+          }
+        });
+      });
+    }
+  }
   @Input() templateSelectMethod = 'insert';
   @Input() hasNewTemplateLink = true;
 

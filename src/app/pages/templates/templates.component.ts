@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
+
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
@@ -199,11 +200,11 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   }
 
   sort(field: string, keep: boolean = false): void {
-    if (this.selectedSort != field) {
+    if (this.selectedSort !== field) {
       this.selectedSort = field;
       return;
     } else {
-      if (field == 'role') {
+      if (field === 'role') {
         const admins = this.filteredResult.filter(
           (item) => item.role === 'admin'
         );
@@ -269,7 +270,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
             ];
           }
         }
-      } else if (field == 'type') {
+      } else if (field === 'type') {
         const text = this.filteredResult.filter((item) => item.type === 'text');
         const email = this.filteredResult.filter(
           (item) => item.type === 'email'
