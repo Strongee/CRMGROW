@@ -24,6 +24,13 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     { id: 25, label: '25' },
     { id: 50, label: '50' }
   ];
+  DISPLAY_COLUMNS = [
+    'title',
+    'owner',
+    'template-content',
+    'template-type',
+    'template-action'
+  ];
   STATUS = STATUS;
 
   pageSize = this.PAGE_COUNTS[1];
