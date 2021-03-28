@@ -38,6 +38,19 @@
         <div class="f-22 font-weight-bold c-black">Checking duplicated contacts</div>
       </ng-container>
     </ng-container>
+    <ng-container *ngIf="step == 6">
+      <div class="d-flex align-items-end">
+        <div class="f-22 font-weight-bold c-black">
+          {{exceedContacts.length}} contacts are exceeded
+        </div>
+        <!--        <div class="f-6 ml-5 font-weight-bold">-->
+        <!--          <span class="mr-2" *ngIf="selectedImportContactsCount() > 0">-->
+        <!--            {{selectedImportContactsCount()}} selected /-->
+        <!--          </span>-->
+        <!--          {{contactsToUpload.length}} contact(s)-->
+        <!--        </div>-->
+      </div>
+    </ng-container>
 <!--    <button type="button" class="v-center border-0 bgc-trans close-button" mat-dialog-close>-->
 <!--      <i class="i-icon i-close bgc-black ml-1" aria-hidden="true"></i>-->
 <!--    </button>-->
@@ -148,7 +161,17 @@
                         {{column}}
                       </th>
                     </ng-container>
-                    <th class="actions sticky-action-col">&nbsp;</th>
+                    <th class="actions sticky-action-col">
+                      <div class="v-center justify-content-end">
+                        <button type="button" class="v-center border-0 p-0 bgc-trans"
+                            (click)="bulkRemove(dupIndex)"
+                            *ngIf="sameContacts[dupIndex] && sameContacts[dupIndex].length > 0 && selectedMergeContacts[dupIndex].selected.length > 1"
+                        >
+                          <i class="small-spinner" *ngIf="bulkDeleting[dupIndex]"></i>
+                          <i class="i-icon i-trash bgc-black" aria-hidden="true" *ngIf="!bulkDeleting[dupIndex]"></i>
+                        </button>
+                      </div>
+                    </th>
                   </tr>
                   </thead>
                   <tbody>
@@ -182,12 +205,15 @@
                     <td class="actions sticky-action-col"
                         [class.last-field]="row == dupItem.length - 1 ? true : false"
                     >
-                      <div class="v-center" *ngIf="!isContact(contact)">
+                      <div class="v-center">
                         <button type="button" class="v-center border-0 bgc-trans" (click)="editContact(contact.id)">
                           <i class="i-icon i-edit bgc-black" aria-hidden="true"></i>
                         </button>
-                        <button type="button" class="v-center border-0 bgc-trans ml-2" (click)="removeContact(contact.id, dupIndex)">
-                          <i class="i-icon i-trash bgc-black" aria-hidden="true"></i>
+                        <button type="button" class="v-center border-0 bgc-trans ml-2 p-0"
+                                (click)="removeContact(contact.id, dupIndex)"
+                        >
+                          <i class="small-spinner" *ngIf="bulkDeleting[dupIndex]"></i>
+                          <i class="i-icon i-trash bgc-black" aria-hidden="true" *ngIf="!bulkDeleting[dupIndex]"></i>
                         </button>
                       </div>
                     </td>
@@ -196,14 +222,14 @@
                 </table>
               </div>
               <div class="v-center p-2">
-                <div class="duplicate-error f-1 font-weight-bold c-red" *ngIf="isDuplicatedExist">
+                <div class="duplicate-error f-1 font-weight-bold c-red">
                   {{getDuplicateContactsText(dupIndex)}}
                 </div>
                 <div class="v-center ml-auto">
                   <button type="button"
                     class="btn btn-primary btn-sm f-3 font-weight-bold px-3"
                     (click)="merge(dupIndex)"
-                    [disabled]="this.selectedMergeContacts[dupIndex].selected.length < 2"
+                    [disabled]="selectedMergeContacts[dupIndex].selected.length < 2"
                   >
                     {{dupItem.length > 1 ? 'Merge' : 'Merged'}}
                   </button>
@@ -279,6 +305,36 @@
         </div>
       </div>
     </ng-container>
+    <ng-container *ngIf="step == 6">
+      <div class="review-container">
+        <table class="table review-table">
+          <thead>
+          <tr>
+            <ng-container *ngFor="let column of columns">
+              <th *ngIf="updateColumn[column]">
+                {{column}}
+              </th>
+            </ng-container>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let exceed of exceedContacts; let row = index;">
+            <ng-container *ngFor="let column of columns; let i = index;">
+              <td *ngIf="updateColumn[column]"
+                  class="{{updateColumn[column]}}-cell f-3 font-weight-bold last-row"
+              >
+                <div [class]="column">
+                  {{isSelectableColumn(updateColumn[column]) ?
+                  (selectableContent(column, exceed) || '' | stripTags | shorten: 80: '...') :
+                  (exceed[updateColumn[column]] || '' | stripTags | shorten: 80: '...')}}
+                </div>
+              </td>
+            </ng-container>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
   </mat-dialog-content>
   <mat-dialog-actions>
     <ng-container *ngIf="step == 1">
@@ -294,8 +350,22 @@
           <span class="ml-2">Back</span>
         </button>
         <div class="d-flex">
-          <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-          <button class="btn btn-primary" type="button" (click)="review()">Next</button>
+          <button class="btn btn-white c-blue font-weight-bold" type="button"
+                  (click)="close()"
+                  [disabled]="duplicateLoading"
+          >Cancel</button>
+          <button class="btn btn-primary loading" type="button"
+                  (click)="review()"
+                  *ngIf="duplicateLoading"
+          >
+            Next
+          </button>
+          <button class="btn btn-primary" type="button"
+                  (click)="review()"
+                  *ngIf="!duplicateLoading"
+          >
+            Next
+          </button>
         </div>
       </div>
     </ng-container>
@@ -308,8 +378,17 @@
           <span class="ml-2">Back</span>
         </button>
         <div class="d-flex">
-          <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-          <button class="btn btn-primary" type="button" (click)="goToReview()" [class.loading]="uploading">{{firstImport ? 'Review' : 'Import'}}</button>
+          <button class="btn btn-white c-blue font-weight-bold" type="button"
+                  (click)="close()"
+          >
+            Cancel
+          </button>
+          <button class="btn btn-primary" type="button"
+                  (click)="goToReview()"
+                  [class.loading]="uploading"
+          >
+            {{firstImport ? 'Review' : 'Import'}}
+          </button>
         </div>
       </div>
     </ng-container>
@@ -322,6 +401,17 @@
         <div class="d-flex">
           <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
           <button class="btn btn-primary" (click)="upload()" [class.loading]="uploading">Import {{selectedImportContactsCount()}} contact(s)</button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step == 6">
+      <div class="d-flex justify-content-end w-100">
+        <div class="v-center">
+          <button class="btn btn-white v-center f-3 border-0 c-blue font-weight-bold" (click)="downloadExceed()">
+            <i class="i-icon sm d-block i-download bgc-blue" aria-hidden="true"></i>
+            <span class="ml-2">Download Template</span>
+          </button>
+          <button class="btn btn-primary" (click)="exceed()">Next</button>
         </div>
       </div>
     </ng-container>

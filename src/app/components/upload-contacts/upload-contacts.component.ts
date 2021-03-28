@@ -17,7 +17,8 @@ import { HandlerService } from '../../services/handler.service';
 import { ElementRef } from '@angular/core';
 import { NotifyComponent } from '../notify/notify.component';
 import { ToastrService } from 'ngx-toastr';
-
+import { saveAs } from 'file-saver';
+import { ContactEditComponent } from '../contact-edit/contact-edit.component';
 const phone = require('phone');
 
 @Component({
@@ -92,6 +93,12 @@ export class UploadContactsComponent implements OnInit {
   isDuplicatedExist = false;
   initPropertyColumn = {};
   initColumns;
+  exceedContacts = [];
+
+  duplicateLoading = false;
+  lastUploadCount = 0;
+  bulkDeleting = [];
+
   constructor(
     private dialogRef: MatDialogRef<UploadContactsComponent>,
     private userService: UserService,
@@ -120,7 +127,11 @@ export class UploadContactsComponent implements OnInit {
 
       if (response.status) {
         this.uploading = false;
-        this.uploadedContacts = response.failure;
+        this.uploadedContacts = response.duplicate_contacts;
+        this.exceedContacts = [
+          ...this.exceedContacts,
+          ...response.exceed_contacts
+        ];
         this.isUploading = false;
         this.isCompleteUpload =
           this.uploadedCount >= this.overallContacts ? true : false;
@@ -146,14 +157,33 @@ export class UploadContactsComponent implements OnInit {
             this.uploadedCount += uploads.length;
           }
           this.uploadRecursive(uploads);
-        } else {
-          this.confirmDuplicates();
         }
+        // this.confirmDuplicates();
       } else {
         this.uploading = false;
         this.isUploading = false;
         this.isUploadCancel = true;
-        this.file.nativeElement.value = '';
+        const from = this.uploadedCount - this.lastUploadCount;
+        const exceed = this.contactsToUpload.slice(from);
+        this.exceedContacts = [...this.exceedContacts, ...exceed];
+      }
+
+      if (this.exceedContacts.length > 0) {
+        for (const contact of this.exceedContacts) {
+          if (!Array.isArray(contact['tags'])) {
+            if (!!contact['tags']) {
+              contact['tags'] = contact['tags'].split(',');
+            }
+          }
+          // if (!Array.isArray(contact['note'])) {
+          //   if (!!contact['note']) {
+          //     contact['note'] = contact['note'].split()
+          //   }
+          // }
+        }
+        this.step = 6;
+      } else {
+        this.confirmDuplicates();
       }
     };
   }
@@ -250,6 +280,7 @@ export class UploadContactsComponent implements OnInit {
     this.isCSVFile = false;
     this.fileName = '';
     this.filePlaceholder = 'Drag your csv files here or click in this area.';
+    this.updateColumn = {};
   }
 
   review(): void {
@@ -262,6 +293,7 @@ export class UploadContactsComponent implements OnInit {
     this.previewEmails = [];
     this.previewPhones = [];
     this.sameContacts = [];
+    this.failedData = [];
     let importField = false;
     this.initPropertyColumn = { ...this.updateColumn };
     this.initColumns = [...this.columns];
@@ -293,17 +325,22 @@ export class UploadContactsComponent implements OnInit {
         });
         this.contacts.push({ ...contact, id: this.contacts.length });
       });
-      const dupTest = this.checkDuplicate();
-      console.log(dupTest, this.sameEmails);
-      this.rebuildColumns();
-      this.rebuildContacts();
-      if (dupTest) {
-        this.step = 3;
-      } else {
-        this.step = 4;
-        this.contactsToUpload = this.contacts;
-        this.selectAllContacts();
-      }
+      this.duplicateLoading = true;
+      const _SELF = this;
+      setTimeout(function () {
+        const dupTest = _SELF.checkDuplicate();
+        _SELF.rebuildColumns();
+        _SELF.rebuildContacts();
+        _SELF.isDuplicatedEmail();
+        _SELF.duplicateLoading = false;
+        if (dupTest) {
+          _SELF.step = 3;
+        } else {
+          _SELF.step = 4;
+          _SELF.contactsToUpload = _SELF.contacts;
+          _SELF.selectAllContacts();
+        }
+      }, 100);
     } else {
       this.importError = true;
     }
@@ -523,9 +560,11 @@ export class UploadContactsComponent implements OnInit {
       }
     }
 
+    this.bulkDeleting = [];
     mergeList.forEach((e, index) => {
       if (e.length > 1) {
         this.sameContacts.push(e);
+        this.bulkDeleting.push(false);
         this.selectedMergeContacts.push(new SelectionModel<any>(true, []));
       } else if (e.length === 1) {
         this.contactsToUpload.push(e[0]);
@@ -657,48 +696,36 @@ export class UploadContactsComponent implements OnInit {
             continue;
           } else {
             if (
+              !!this.sameContacts[dupIndex][i][emailKey] &&
+              !!this.sameContacts[dupIndex][j][emailKey] &&
               this.sameContacts[dupIndex][i][emailKey].toLowerCase() ===
-              this.sameContacts[dupIndex][j][emailKey].toLowerCase()
+                this.sameContacts[dupIndex][j][emailKey].toLowerCase()
             ) {
-              if (
-                this.sameContacts[dupIndex][i][emailKey] !== '' ||
-                this.sameContacts[dupIndex][j][emailKey] !== ''
-              ) {
-                isEmailDuplicate = true;
-              }
+              isEmailDuplicate = true;
             }
             if (
+              this.sameContacts[dupIndex][i][phoneKey] &&
+              this.sameContacts[dupIndex][j][phoneKey] &&
               this.sameContacts[dupIndex][i][phoneKey].toLowerCase() ===
-              this.sameContacts[dupIndex][j][phoneKey].toLowerCase()
+                this.sameContacts[dupIndex][j][phoneKey].toLowerCase()
             ) {
-              if (
-                this.sameContacts[dupIndex][i][phoneKey] !== '' ||
-                this.sameContacts[dupIndex][j][phoneKey] !== ''
-              ) {
-                isPhoneDuplicate = true;
-              }
+              isPhoneDuplicate = true;
             }
             if (
+              this.sameContacts[dupIndex][i][firstNameKey] &&
+              this.sameContacts[dupIndex][j][firstNameKey] &&
               this.sameContacts[dupIndex][i][firstNameKey].toLowerCase() ===
-              this.sameContacts[dupIndex][j][firstNameKey].toLowerCase()
+                this.sameContacts[dupIndex][j][firstNameKey].toLowerCase()
             ) {
-              if (
-                this.sameContacts[dupIndex][i][firstNameKey] !== '' ||
-                this.sameContacts[dupIndex][j][firstNameKey] !== ''
-              ) {
-                isFirstNameDuplicate = true;
-              }
+              isFirstNameDuplicate = true;
             }
             if (
+              this.sameContacts[dupIndex][i][lastNameKey] &&
+              this.sameContacts[dupIndex][j][lastNameKey] &&
               this.sameContacts[dupIndex][i][lastNameKey].toLowerCase() ===
-              this.sameContacts[dupIndex][j][lastNameKey].toLowerCase()
+                this.sameContacts[dupIndex][j][lastNameKey].toLowerCase()
             ) {
-              if (
-                this.sameContacts[dupIndex][i][lastNameKey] !== '' ||
-                this.sameContacts[dupIndex][j][lastNameKey] !== ''
-              ) {
-                isLastNameDuplicate = true;
-              }
+              isLastNameDuplicate = true;
             }
           }
         }
@@ -866,51 +893,48 @@ export class UploadContactsComponent implements OnInit {
       }
 
       this.failedData.forEach((contact, index) => {
-        if (contact.data._id) {
-          contact.data.id = contact.data._id;
-          contact.data.primary_email = contact.data.email;
-          delete contact.data.email;
-          contact.data.primary_phone = contact.data.cell_phone;
-          delete contact.data.cell_phone;
+        if (contact._id) {
+          contact.id = contact._id;
+          contact.primary_email = contact.email;
+          delete contact.email;
+          contact.primary_phone = contact.cell_phone;
+          delete contact.cell_phone;
         } else {
-          contact.data.id = index;
-          contact.data.primary_email = contact.data.email;
-          delete contact.data.email;
-          contact.data.primary_phone = contact.data.cell_phone;
-          delete contact.data.cell_phone;
-          const tags = contact.data.tags;
+          contact.id = index;
+          contact.primary_email = contact.email;
+          delete contact.email;
+          contact.primary_phone = contact.cell_phone;
+          delete contact.cell_phone;
+          const tags = contact.tags;
           if (tags) {
             if (Array.isArray(tags)) {
-              contact.data.tags = tags;
+              contact.tags = tags;
             } else {
-              contact.data.tags = [tags];
+              contact.tags = [tags];
             }
           }
         }
 
-        if (
-          contact.data.label !== undefined &&
-          contact.data.label._id !== undefined
-        ) {
-          const labelName = contact.data.label.name;
-          const labelId = contact.data.label._id;
-          delete contact.data.label;
-          contact.data['label'] = labelName;
-          contact.data['label_id'] = labelId;
+        if (contact.label !== undefined && contact.label._id !== undefined) {
+          const labelName = contact.label.name;
+          const labelId = contact.label._id;
+          delete contact.label;
+          contact['label'] = labelName;
+          contact['label_id'] = labelId;
         }
 
-        if (!contact.data._id && contact.data.notes) {
+        if (!contact._id && contact.notes) {
           // if (Array.isArray(contact.data.notes)) {
-          contact.data.notes = JSON.parse(contact.data.notes);
+          contact.notes = JSON.parse(contact.notes);
           // } else {
           //   contact.data.notes = JSON.stringify(contact.data.notes);
           // }
         }
         const contactIndex = this.contacts.findIndex(
-          (item) => item.id === contact.data.id
+          (item) => item.id === contact.id
         );
         if (contactIndex < 0) {
-          this.contacts.push(contact.data);
+          this.contacts.push(contact);
         }
       });
 
@@ -1011,10 +1035,12 @@ export class UploadContactsComponent implements OnInit {
       let uploads;
       if (this.uploadLines.length >= this.UPLOAD_ONCE) {
         this.uploadedCount += this.UPLOAD_ONCE;
+        this.lastUploadCount = this.UPLOAD_ONCE;
         uploads = this.uploadLines.slice(0, this.UPLOAD_ONCE);
         this.uploadLines.splice(0, this.UPLOAD_ONCE);
       } else {
         this.uploadedCount += this.uploadLines.length;
+        this.lastUploadCount = this.uploadLines.length;
         uploads = this.uploadLines.slice(0, this.uploadLines.length);
         this.uploadLines.splice(0, this.uploadLines.length);
       }
@@ -1097,17 +1123,30 @@ export class UploadContactsComponent implements OnInit {
       }
     });
     if (editContact) {
-      this.dialog
-        .open(ImportContactEditComponent, {
-          data: {
-            ...editContact
-          }
-        })
-        .afterClosed()
-        .subscribe((res) => {
-          if (res) {
-            const updated = res.contact;
-            if (updated) {
+      if (this.isContact(editContact)) {
+        editContact['email'] = editContact['primary_email'];
+        editContact['cell_phone'] = editContact['primary_phone'];
+        const label = editContact['label'];
+        const labelId = editContact['label_id'];
+        editContact['label'] = editContact['label_id'];
+        this.dialog
+          .open(ContactEditComponent, {
+            width: '98vw',
+            maxWidth: '600px',
+            disableClose: true,
+            data: {
+              contact: editContact,
+              type: 'main'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const updated = res;
+              updated['primary_contact'] = updated['email'];
+              updated['primary_phone'] = updated['cell_phone'];
+              updated['label_id'] = updated['label'];
+              updated['label'] = label;
               const contactIndex = this.contacts.findIndex(
                 (contact) => contact.id === id
               );
@@ -1128,9 +1167,49 @@ export class UploadContactsComponent implements OnInit {
               if (nIndex >= 0) {
                 this.contactsToUpload.splice(nIndex, 1, updated);
               }
+            } else {
+              editContact['primary_contact'] = editContact['email'];
+              editContact['primary_phone'] = editContact['cell_phone'];
+              editContact['label_id'] = labelId;
+              editContact['label'] = label;
             }
-          }
-        });
+          });
+      } else {
+        this.dialog
+          .open(ImportContactEditComponent, {
+            data: {
+              ...editContact
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const updated = res.contact;
+              if (updated) {
+                const contactIndex = this.contacts.findIndex(
+                  (contact) => contact.id === id
+                );
+                if (contactIndex >= 0) {
+                  this.contacts.splice(contactIndex, 1, updated);
+                }
+
+                this.sameContacts.some((e, index) => {
+                  e.some((item, idx) => {
+                    if (item.id === id) {
+                      e.splice(idx, 1, updated);
+                    }
+                  });
+                });
+                const nIndex = this.contactsToUpload.findIndex(
+                  (item) => item.id === id
+                );
+                if (nIndex >= 0) {
+                  this.contactsToUpload.splice(nIndex, 1, updated);
+                }
+              }
+            }
+          });
+      }
     }
   }
 
@@ -1149,46 +1228,105 @@ export class UploadContactsComponent implements OnInit {
           (contact) => contact.id === id
         );
         if (contactIndex >= 0) {
-          this.contacts.splice(contactIndex, 1);
-          this.sameContacts.some((e, index) => {
-            e.some((contact, idx) => {
-              if (contact.id === id) {
-                e.splice(idx, 1);
-              }
+          const deleteContact = this.contacts[contactIndex];
+          if (this.isContact(deleteContact)) {
+            this.contactService
+              .bulkDelete([deleteContact._id])
+              .subscribe((status) => {
+                if (status) {
+                  this.contacts.splice(contactIndex, 1);
+                  this.sameContacts.some((e, index) => {
+                    e.some((contact, idx) => {
+                      if (contact.id === id) {
+                        e.splice(idx, 1);
+                      }
+                    });
+                  });
+                  const nIndex = this.contactsToUpload.findIndex(
+                    (item) => item.id === id
+                  );
+                  if (nIndex >= 0) {
+                    this.contactsToUpload.splice(nIndex, 1);
+                  }
+                  if (this.sameContacts[dupIndex].length) {
+                    let isDuplicatedKey = false;
+                    for (
+                      let i = 0;
+                      i < this.sameContacts[dupIndex].length;
+                      i++
+                    ) {
+                      for (
+                        let j = i;
+                        j < this.sameContacts[dupIndex].length;
+                        j++
+                      ) {
+                        if (i === j) {
+                          continue;
+                        } else {
+                          if (
+                            this.sameContacts[dupIndex][i].primary_email ===
+                            this.sameContacts[dupIndex][j].primary_email
+                          ) {
+                            isDuplicatedKey = true;
+                            break;
+                          }
+                        }
+                      }
+                    }
+                    if (!isDuplicatedKey) {
+                      if (this.duplicateItems.length) {
+                        this.duplicateItems[dupIndex] = false;
+                      }
+                    }
+                  }
+
+                  if (this.selectedMergeContacts[dupIndex].isSelected(id)) {
+                    this.selectedMergeContacts[dupIndex].deselect(id);
+                  }
+                }
+              });
+          } else {
+            this.contacts.splice(contactIndex, 1);
+            this.sameContacts.some((e, index) => {
+              e.some((contact, idx) => {
+                if (contact.id === id) {
+                  e.splice(idx, 1);
+                }
+              });
             });
-          });
-          const nIndex = this.contactsToUpload.findIndex(
-            (item) => item.id === id
-          );
-          if (nIndex >= 0) {
-            this.contactsToUpload.splice(nIndex, 1);
-          }
-          if (this.sameContacts[dupIndex].length) {
-            let isDuplicatedKey = false;
-            for (let i = 0; i < this.sameContacts[dupIndex].length; i++) {
-              for (let j = i; j < this.sameContacts[dupIndex].length; j++) {
-                if (i === j) {
-                  continue;
-                } else {
-                  if (
-                    this.sameContacts[dupIndex][i].primary_email ===
-                    this.sameContacts[dupIndex][j].primary_email
-                  ) {
-                    isDuplicatedKey = true;
-                    break;
+            const nIndex = this.contactsToUpload.findIndex(
+              (item) => item.id === id
+            );
+            if (nIndex >= 0) {
+              this.contactsToUpload.splice(nIndex, 1);
+            }
+            if (this.sameContacts[dupIndex].length) {
+              let isDuplicatedKey = false;
+              for (let i = 0; i < this.sameContacts[dupIndex].length; i++) {
+                for (let j = i; j < this.sameContacts[dupIndex].length; j++) {
+                  if (i === j) {
+                    continue;
+                  } else {
+                    if (
+                      this.sameContacts[dupIndex][i].primary_email ===
+                      this.sameContacts[dupIndex][j].primary_email
+                    ) {
+                      isDuplicatedKey = true;
+                      break;
+                    }
                   }
                 }
               }
-            }
-            if (!isDuplicatedKey) {
-              if (this.duplicateItems.length) {
-                this.duplicateItems[dupIndex] = false;
+              if (!isDuplicatedKey) {
+                if (this.duplicateItems.length) {
+                  this.duplicateItems[dupIndex] = false;
+                }
               }
             }
-          }
 
-          if (this.selectedMergeContacts[dupIndex].isSelected(id)) {
-            this.selectedMergeContacts[dupIndex].deselect(id);
+            if (this.selectedMergeContacts[dupIndex].isSelected(id)) {
+              this.selectedMergeContacts[dupIndex].deselect(id);
+            }
           }
         }
       }
@@ -1375,6 +1513,176 @@ export class UploadContactsComponent implements OnInit {
       }
     }
     return count;
+  }
+
+  bulkRemove(dupIndex): void {
+    const selectedContacts = this.selectedMergeContacts[dupIndex].selected;
+    const dialog = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Delete contacts',
+        message: 'Are you sure you want to delete selected contacts?',
+        confirmLabel: 'Delete'
+      }
+    });
+    dialog.afterClosed().subscribe((res) => {
+      if (res) {
+        const contacts = [];
+        for (const id of selectedContacts) {
+          const contactIndex = this.contacts.findIndex(
+            (contact) => contact.id === id
+          );
+          if (contactIndex >= 0) {
+            if (this.isContact(this.contacts[contactIndex])) {
+              contacts.push(this.contacts[contactIndex].id);
+            } else {
+              this.contacts.splice(contactIndex, 1);
+              this.sameContacts.some((e, index) => {
+                e.some((contact, idx) => {
+                  if (contact.id === id) {
+                    e.splice(idx, 1);
+                  }
+                });
+              });
+              const nIndex = this.contactsToUpload.findIndex(
+                (item) => item.id === id
+              );
+              if (nIndex >= 0) {
+                this.contactsToUpload.splice(nIndex, 1);
+              }
+              if (this.sameContacts[dupIndex].length) {
+                let isDuplicatedKey = false;
+                for (let i = 0; i < this.sameContacts[dupIndex].length; i++) {
+                  for (let j = i; j < this.sameContacts[dupIndex].length; j++) {
+                    if (i === j) {
+                      continue;
+                    } else {
+                      if (
+                        this.sameContacts[dupIndex][i].primary_email ===
+                        this.sameContacts[dupIndex][j].primary_email
+                      ) {
+                        isDuplicatedKey = true;
+                        break;
+                      }
+                    }
+                  }
+                }
+                if (!isDuplicatedKey) {
+                  if (this.duplicateItems.length) {
+                    this.duplicateItems[dupIndex] = false;
+                  }
+                }
+              }
+
+              if (this.selectedMergeContacts[dupIndex].isSelected(id)) {
+                this.selectedMergeContacts[dupIndex].deselect(id);
+              }
+            }
+          }
+        }
+        if (contacts.length > 0) {
+          this.bulkDeleting[dupIndex] = true;
+          this.contactService.bulkDelete(contacts).subscribe((status) => {
+            this.bulkDeleting[dupIndex] = false;
+            if (status) {
+              for (const id of contacts) {
+                const contactIndex = this.contacts.findIndex(
+                  (contact) => contact.id === id
+                );
+                if (contactIndex >= 0) {
+                  this.contacts.splice(contactIndex, 1);
+                  this.sameContacts.some((e, index) => {
+                    e.some((contact, idx) => {
+                      if (contact.id === id) {
+                        e.splice(idx, 1);
+                      }
+                    });
+                  });
+                  const nIndex = this.contactsToUpload.findIndex(
+                    (item) => item.id === id
+                  );
+                  if (nIndex >= 0) {
+                    this.contactsToUpload.splice(nIndex, 1);
+                  }
+                  if (this.sameContacts[dupIndex].length) {
+                    let isDuplicatedKey = false;
+                    for (
+                      let i = 0;
+                      i < this.sameContacts[dupIndex].length;
+                      i++
+                    ) {
+                      for (
+                        let j = i;
+                        j < this.sameContacts[dupIndex].length;
+                        j++
+                      ) {
+                        if (i === j) {
+                          continue;
+                        } else {
+                          if (
+                            this.sameContacts[dupIndex][i].primary_email ===
+                            this.sameContacts[dupIndex][j].primary_email
+                          ) {
+                            isDuplicatedKey = true;
+                            break;
+                          }
+                        }
+                      }
+                    }
+                    if (!isDuplicatedKey) {
+                      if (this.duplicateItems.length) {
+                        this.duplicateItems[dupIndex] = false;
+                      }
+                    }
+                  }
+
+                  if (this.selectedMergeContacts[dupIndex].isSelected(id)) {
+                    this.selectedMergeContacts[dupIndex].deselect(id);
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+
+  exceed(): void {
+    this.step = 5;
+    this.confirmDuplicates();
+  }
+
+  downloadExceed(): void {
+    const headers = [];
+    for (const key in this.updateColumn) {
+      if (this.updateColumn[key]) {
+        headers.push(this.updateColumn[key]);
+      }
+    }
+    const downloadContacts = [];
+    for (const contact of this.exceedContacts) {
+      console.log('download contacts =============>', contact);
+      if (Array.isArray(contact['notes'])) {
+        contact['notes'] = contact['notes'].join('     ');
+      }
+      if (Array.isArray(contact['tags'])) {
+        contact['tags'] = contact['tags'].join(', ');
+      }
+      downloadContacts.push(contact);
+    }
+    if (downloadContacts.length) {
+      const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
+      const csv = downloadContacts.map((row) =>
+        headers
+          .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+          .join(',')
+      );
+      csv.unshift(headers.join(','));
+      const csvArray = csv.join('\r\n');
+
+      const blob = new Blob([csvArray], { type: 'text/csv' });
+      saveAs(blob, 'myFile.csv');
+    }
   }
 
   fields = [
