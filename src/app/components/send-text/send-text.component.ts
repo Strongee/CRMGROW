@@ -1,12 +1,14 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { FileSelectDirective } from 'ng2-file-upload';
+import { interval, Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { Template } from 'src/app/models/template.model';
+import { ContactService } from 'src/app/services/contact.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { SmsService } from 'src/app/services/sms.service';
 import { TemplatesService } from 'src/app/services/templates.service';
@@ -30,11 +32,15 @@ export class SendTextComponent implements OnInit, OnDestroy {
   loadSubscription: Subscription;
   sending = false;
   sendSubscription: Subscription;
+  updateTimer: Subscription;
+
+  @ViewChild('messageText') messageText: ElementRef;
   constructor(
     private dialogRef: MatDialogRef<SendTextComponent>,
     private dialog: MatDialog,
     public templateService: TemplatesService,
     private materialService: MaterialService,
+    private contactService: ContactService,
     public userService: UserService,
     public smsService: SmsService,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -52,9 +58,16 @@ export class SendTextComponent implements OnInit, OnDestroy {
       this.message = defaultSms.content;
     }
     this.load();
+    this.updateTimer = interval(3 * 1000).subscribe(() => {
+      console.log('update the conversations');
+      this.update();
+    });
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.updateTimer && this.updateTimer.unsubscribe();
+  }
 
   load(): void {
     this.loading = true;
@@ -62,8 +75,16 @@ export class SendTextComponent implements OnInit, OnDestroy {
     this.loadSubscription = this.smsService
       .getMessage(this.contact)
       .subscribe((messages) => {
-        console.log('messages', messages);
         this.loading = false;
+        this.messages = messages;
+      });
+  }
+
+  update(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.smsService
+      .getMessage(this.contact)
+      .subscribe((messages) => {
         this.messages = messages;
       });
   }
@@ -203,15 +224,33 @@ export class SendTextComponent implements OnInit, OnDestroy {
       })
       .subscribe((res) => {
         this.sending = false;
-        this.dialogRef.close({
-          status: true,
-          count: videoIds.length + pdfIds.length + imageIds.length + 1
-        });
+        this.message = '';
+        this.update();
+        const count = videoIds.length + pdfIds.length + imageIds.length + 1;
+        this.contactService.addLatestActivity(count + 2);
+        // this.dialogRef.close({
+        //   status: true,
+        //   count: videoIds.length + pdfIds.length + imageIds.length + 1
+        // });
       });
   }
 
   selectTemplate(template: Template): void {
-    this.message = template.content;
+    this.messageText.nativeElement.focus();
+    const field = this.messageText.nativeElement;
+    if (field.selectionEnd || field.selectionEnd === 0) {
+      if (this.message[field.selectionEnd - 1] === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    } else {
+      if (this.message.slice(-1) === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    }
   }
 
   keyTrigger(event): void {
