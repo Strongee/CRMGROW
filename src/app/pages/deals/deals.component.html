@@ -4,7 +4,7 @@
             <h1 class="page-title mb-0">
                 Deals
             </h1>
-            <button class="btn text-primary border border-primary bg-white font-weight-bold ml-auto" (click)="addNewDeal()">Add new deal</button>
+            <button class="btn btn-primary font-weight-bold ml-auto" (click)="addNewDeal()">Create New Deal</button>
             <a class="btn text-primary border border-primary bg-white font-weight-bold ml-2" [routerLink]="['/settings/deals-setting']">Edit stages</a>
         </div>
     </div>
@@ -25,18 +25,6 @@
                     <div class="title-triangle">
                         <i class="d-block i-icon i-triangle-right bgc-dark"></i>
                     </div>
-                    <!-- <div ngbDropdown class="action-more c-pointer">
-                        <i ngbDropdownToggle class="d-block i-icon i-menu-more bgc-dark"></i>
-                        <div ngbDropdownMenu class="light action-menu">
-                            <button class="border-0 c-dark dropdown-item">
-                                <span class="ml-1 f-3 font-weight-bold">Edit stage</span>
-                            </button>
-                            <hr class="my-1">
-                            <button class="border-0 c-dark dropdown-item">
-                                <span class="ml-1 f-3 font-weight-bold c-red">Delete stage</span>
-                            </button>
-                        </div>
-                    </div> -->
                 </div>
                 <div
                     class="deals-container pt-1 pr-1"
@@ -54,21 +42,6 @@
                                 <div class="f-6 font-weight-bold">
                                     {{ deal.title }}
                                 </div>
-                                <!-- <div *ngIf="deal.title == 'Real Estate 1'">
-                                    <img src="/assets/img/status_green.svg" alt="">
-                                </div>
-                                <div *ngIf="deal.title == 'Real Estate 2'">
-                                    <img src="/assets/img/status_red.svg" alt="">
-                                </div>
-                                <div *ngIf="deal.title == 'Real Estate 3'">
-                                    <img src="/assets/img/status_yellow.svg" alt="">
-                                </div>
-                                <div *ngIf="deal.title == 'Real Estate 4'">
-                                    <img src="/assets/img/status_gray.svg" alt="">
-                                </div>
-                                <div *ngIf="deal.title != 'Real Estate 1' && deal.title != 'Real Estate 2' && deal.title != 'Real Estate 3' && deal.title != 'Real Estate 4'">
-                                    <img src="/assets/img/status_gray.svg" alt="">
-                                </div> -->
                             </div>
                             <div class="v-center justify-content-between mt-2 contacts-info">
                                 <div class="v-center">
@@ -86,14 +59,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="v-center justify-content-center add-deal mt-3 mr-3">
+                    <!-- <div class="v-center justify-content-center add-deal mt-3 mr-3">
                         <i class="i-icon i-plus d-block bgc-blue c-pointer" (click)="addDeals(dealStage)"></i>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-            <!-- <div class="v-center justify-content-center c-pointer add-stage p-3" (click)="addStages()">
-                <i class="i-icon i-plus d-block bgc-blue"></i>
-            </div> -->
         </div>
     </ng-container>
     <ng-template #emptyListStage>
