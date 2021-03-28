@@ -276,7 +276,7 @@ export class MaterialsComponent implements OnInit {
       ...this.captureImages
     ]);
     const bulkSetCapture = this.ACTIONS.filter(
-      (action) => action.label == 'Lead Capture'
+      (action) => action.label == 'Capture'
     );
     if (_intersection.length === selectedMaterials.length) {
       // Enable the Lead Capture Status

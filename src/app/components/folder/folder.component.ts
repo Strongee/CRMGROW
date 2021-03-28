@@ -54,7 +54,7 @@ export class FolderComponent implements OnInit {
             const _createdFolder = new Material().deserialize(data);
             _createdFolder.material_type = 'folder';
             this.materialService.create$(_createdFolder);
-            this.dialogRef.close();
+            this.dialogRef.close(_createdFolder);
           }
         });
     }

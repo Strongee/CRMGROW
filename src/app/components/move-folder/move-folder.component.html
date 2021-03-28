@@ -13,8 +13,17 @@
       </span>
     </div>
     <div class="border rounded py-2 px-2 mt-1">
-      <mat-select [(ngModel)]="selectedFolder" name="fullname" id="target_folder" name="folder" #folder="ngModel" required placecholder="Select Folder">
+      <mat-select [(ngModel)]="selectedFolder"
+        name="fullname"
+        id="target_folder"
+        name="folder"
+        #folder="ngModel"
+        required
+        placecholder="Select Folder"
+        (ngModelChange)="folderAction($event)"
+      >
         <mat-option disabled>Please select folder</mat-option>
+        <mat-option [value]="newFolder">+ New Folder</mat-option>
         <ng-container *ngIf="!isRoot">
           <mat-option [value]="rootFolder">
             <div class="f-3 c-black">
