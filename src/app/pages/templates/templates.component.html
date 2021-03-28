@@ -20,127 +20,108 @@
     </div>
   </div>
   <div class="my-3 position-relative">
-    <div class="mat-table-wrapper mode-2">
+    <ng-container *ngIf="templates.length">
       <div class="updating-status" *ngIf="templates.length && (templatesService.loading$ | async) === STATUS.REQUEST">
         LOADING
       </div>
-      <table class="table template-table page-table">
-        <thead>
-          <tr>
-            <th class="template-title">
-              <div class="v-center c-pointer head-sort" (click)="sort('title')">
-                <span [class]="selectedSort == 'title' ? 'font-weight-bold c-dark' : ''">Title</span>
-                <i class="i-icon d-block bgc-black ml-2"
-                  [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
-              </div>
-            </th>
-            <th class="template-auth">
-              <div class="v-center c-pointer head-sort" (click)="sort('role')">
-                <span [class]="selectedSort == 'role' ? 'font-weight-bold c-dark' : ''">Owner</span>
-                <i class="i-icon d-block bgc-black ml-2"
-                  [class]="searchCondition.role ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'role'"></i>
-              </div>
-            </th>
-            <th class="template-content">Template</th>
-            <th class="template-type">
-              <div class="v-center c-pointer head-sort" (click)="sort('type')">
-                <span [class]="selectedSort == 'type' ? 'font-weight-bold c-dark' : ''">Type</span>
-                <i class="i-icon d-block bgc-black ml-2"
-                  [class]="searchCondition.type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'type'"></i>
-              </div>
-            </th>
-            <th class="template-action">Default</th>
-          </tr>
-        </thead>
-        <tbody class="position-relative">
-          <tr
-            *ngFor="let template of filteredResult
-            | paginate : {id: 'templateTable', itemsPerPage: pageSize.id, currentPage: page, totalItems: filteredResult?.length}
-          ">
-            <td class="template-title">
-              <a [routerLink]="['/templates/edit/' + template._id]"
-                 class="hover-bottom font-weight-bold f-4">{{template.title}}</a>
-            </td>
-            <td class="template-auth">
-              <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
-            </td>
-            <td class="template-content">
-              <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripTags | shorten: 40: '...'}}</h5>
-              <span [innerHTML]="template.content | stripTags | shorten: 80: '...'"></span>
-            </td>
-            <td class="template-type">
-              <div class="v-center">
-                <ng-container *ngIf="template.type=='text'; else emailType">
-                  <i class="i-icon bgc-dark i-phone mr-2"></i>
-                  <span class="f-4 menu-label font-weight-bold ml-1">{{template.type}}</span>
-                </ng-container>
-                <ng-template #emailType>
-                  <i class="i-icon bgc-dark i-message mr-2"></i>
-                  <span class="f-4 menu-label font-weight-bold ml-1">Email</span>
-                </ng-template>
-              </div>
-            </td>
-            <td class="template-action">
-              <div class="v-center">
-                <label class="custom-toggle mb-0" placement="top" ngbTooltip="Set as {{template.type == 'email' ? 'Default Email' : 'Default Text'}}">
-                  <input type="checkbox" [checked]="template._id == emailDefault || template._id == smsDefault" (change)="setDefault(template)">
-                  <span class="custom-toggle-slider rounded-circle"></span>
-                </label>
-                <div class="v-center ml-4">
-                  <ng-container *ngIf="template.role != 'admin' && template.user == userId">
-                    <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)">
-                      <i class="i-icon bgc-dark i-edit"></i>
-                    </div>
-                    <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)">
-                      <i class="i-icon bgc-dark i-trash ml-2"></i>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngIf="template.role == 'team' && template.user != userId">
-                    <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
-                      <i class="i-icon bgc-dark i-duplicate"></i>
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <ng-container *ngIf="filteredResult?.length">
-      <div class="my-2 table-control mode-1">
-        <div class="m-auto pagination-wrapper">
-          <pagination-controls
-            (pageChange)="page = $event"
-            id="templateTable"
-            maxSize="5"
-            previousLabel=""
-            nextLabel="">
-          </pagination-controls>
-        </div>
-        <div class="shadow-dropdown ml-auto page-size-control"
-          ngbDropdown
-          placement="top-right">
-          <div class="v-center c-pointer f-3 p-3 font-weight-bold"
-            ngbDropdownToggle>
-            <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
-          </div>
-          <div ngbDropdownMenu
-            aria-labelledby="contactPageSize">
-            <div class="py-2"
-              ngbDropdownItem
-              *ngFor="let type of PAGE_COUNTS"
-              (click)="changePageSize(type)">
-              <span class="f-3 v-center"
-                [class.font-weight-bold]="type.id === pageSize.id">
-                Show {{type.label}} rows per page
-                <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
-                  *ngIf="type.id === pageSize.id"></i>
-              </span>
+      <table class="w-100 template-table page-table"
+         mat-table
+         multiTemplateDataRows
+         [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"
+      >
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef class="title">
+            <div class="v-center c-pointer head-sort" (click)="sort('title')">
+              <span [class]="selectedSort == 'title' ? 'fw-600 c-dark' : ''">Title</span>
+              <i class="i-icon d-block bgc-black ml-2"
+                [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
             </div>
+          </th>
+          <td mat-cell *matCellDef="let template" class="title">
+            <a [routerLink]="['/templates/edit/' + template._id]" class="td-none">
+              <span class="f-3 font-weight-bold">{{template.title}}</span>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="owner">
+          <th mat-header-cell *matHeaderCellDef class="auth">
+            <div class="v-center c-pointer head-sort" (click)="sort('role')">
+              <span [class]="selectedSort == 'role' ? 'fw-600 c-dark' : ''">Owner</span>
+              <i class="i-icon d-block bgc-black ml-2"
+                [class]="searchCondition.role ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'role'"></i>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let template" class="auth">
+            <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="template-content">
+          <th mat-header-cell *matHeaderCellDef class="template-content">Template</th>
+          <td mat-cell *matCellDef="let template" class="template-content">
+            <h5 class="font-weight-bold f-5 c-black mb-1">{{template.subject | stripTags | shorten: 40: '...'}}</h5>
+            <span [innerHTML]="template.content | stripTags | shorten: 80: '...'"></span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="template-type">
+          <th mat-header-cell *matHeaderCellDef class="template-type">
+            <div class="v-center c-pointer head-sort" (click)="sort('type')">
+              <span [class]="selectedSort == 'type' ? 'fw-600 c-dark' : ''">Type</span>
+              <i class="i-icon d-block bgc-black ml-2"
+                [class]="searchCondition.type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'type'"></i>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let template" class="template-type">
+            <div class="v-center">
+              <ng-container *ngIf="template.type=='text'; else emailType">
+                <i class="i-icon bgc-dark i-phone mr-1"></i>
+                <span class="f-4 menu-label font-weight-bold ml-1">{{template.type}}</span>
+              </ng-container>
+              <ng-template #emailType>
+                <i class="i-icon bgc-dark i-message mr-1"></i>
+                <span class="f-4 menu-label font-weight-bold ml-1">Email</span>
+              </ng-template>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="template-action">
+          <th mat-header-cell *matHeaderCellDef class="template-action">
+            Default
+          </th>
+          <td mat-cell *matCellDef="let template" class="template-action">
+            <div class="v-center">
+              <label class="custom-toggle mb-0" placement="top" ngbTooltip="Set as {{template.type == 'email' ? 'Default Email' : 'Default Text'}}">
+                <input type="checkbox" [checked]="template._id == emailDefault || template._id == smsDefault" (change)="setDefault(template)">
+                <span class="custom-toggle-slider rounded-circle"></span>
+              </label>
+              <div class="v-center ml-4">
+                <ng-container *ngIf="template.role != 'admin' && template.user == userId">
+                  <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)">
+                    <i class="i-icon bgc-dark i-edit"></i>
+                  </div>
+                  <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)">
+                    <i class="i-icon bgc-dark i-trash ml-2"></i>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="template.role == 'team' && template.user != userId">
+                  <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
+                    <i class="i-icon bgc-dark i-duplicate"></i>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
+        <tr mat-row *matRowDef="let element; columns: DISPLAY_COLUMNS;"></tr>
+      </table>
+      <ng-container *ngIf="filteredResult?.length">
+        <div class="d-flex justify-content-center align-items-center my-2 py-3 table-control mode-1">
+          <div class="ml-3 pagination-wrapper">
+            <pagination-controls (pageChange)="page = $event" id="templateTable" maxSize="5" previousLabel=""
+                                 nextLabel=""></pagination-controls>
           </div>
         </div>
-      </div>
+      </ng-container>
     </ng-container>
     <ng-container *ngIf="!(templatesService.templates$ | async).length; else showingStatusTemplate">
       <ng-container [ngSwitch]="(templatesService.loading$ | async)">

@@ -112,7 +112,7 @@
             <th mat-header-cell
             *ngIf="!selection.length; else toolHeader" class="name-col">
               <div class="v-center c-pointer head-sort" (click)="sort('title')">
-                <span [class]="selectedSort == 'title' ? 'font-weight-bold c-dark' : ''">Name</span>
+                <span [class]="selectedSort == 'title' ? 'fw-600 c-dark' : ''">Name</span>
                 <i class="i-icon d-block bgc-black ml-2"
                    [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
               </div>
@@ -212,7 +212,7 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="owner-col">
               <div class="v-center c-pointer head-sort" (click)="sort('owner')">
-                <span [class]="selectedSort == 'owner' ? 'font-weight-bold c-dark' : ''">Owner</span>
+                <span [class]="selectedSort == 'owner' ? 'fw-600 c-dark' : ''">Owner</span>
                 <i class="i-icon d-block bgc-black ml-2"
                    [class]="searchCondition.owner ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'owner'"></i>
               </div>
@@ -243,7 +243,7 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="type-col">
               <div class="v-center c-pointer head-sort" (click)="sort('material_type')">
-                <span [class]="selectedSort == 'material_type' ? 'font-weight-bold c-dark' : ''">Type</span>
+                <span [class]="selectedSort == 'material_type' ? 'fw-600 c-dark' : ''">Type</span>
                 <i class="i-icon d-block bgc-black ml-2"
                    [class]="searchCondition.material_type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'material_type'"></i>
               </div>
@@ -261,7 +261,7 @@
             <th mat-header-cell class="time-col"
             *ngIf="!selection.length">
               <div class="v-center c-pointer head-sort" (click)="sort('created_at')">
-                <span [class]="selectedSort == 'created_at' ? 'font-weight-bold c-dark' : ''">Added</span>
+                <span [class]="selectedSort == 'created_at' ? 'fw-600 c-dark' : ''">Added</span>
                 <i class="i-icon d-block bgc-black ml-2"
                    [class]="searchCondition.created_at ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'created_at'"></i>
               </div>
@@ -279,7 +279,7 @@
             <th mat-header-cell
             *ngIf="!selection.length" class="analytics-col">
               <div class="v-center c-pointer head-sort" (click)="sort('views')">
-                <span [class]="selectedSort == 'views' ? 'font-weight-bold c-dark' : ''">Views</span>
+                <span [class]="selectedSort == 'views' ? 'fw-600 c-dark' : ''">Views</span>
                 <i class="i-icon d-block bgc-black ml-2"
                    [class]="searchCondition.views ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'views'"></i>
               </div>
