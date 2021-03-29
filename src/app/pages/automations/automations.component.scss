@@ -98,3 +98,26 @@ input.disabled {
   pointer-events: none;
   background-color: #f8f8f8;
 }
+
+:host ::ng-deep {
+  .assign-action {
+    min-width: 60px;
+    max-width: 60px;
+
+    button {
+      opacity: 0;
+      margin-left: auto;
+    }
+  }
+
+  tr:hover {
+    .assign-action button {
+      opacity: 1;
+    }
+  }
+
+  .actions {
+    min-width: 40px;
+    max-width: 40px;
+  }
+}

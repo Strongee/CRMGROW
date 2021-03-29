@@ -776,8 +776,13 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   }
 
   isStopSharable(material): any {
-    if (material && material.user && material.user._id === this.user_id) {
-      return true;
+    if (material && material.user) {
+      if (
+        material.user === this.user_id ||
+        material.user._id === this.user_id
+      ) {
+        return true;
+      }
     }
     return false;
     // if (this.role === 'owner') {

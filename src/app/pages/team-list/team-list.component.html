@@ -1,6 +1,5 @@
 <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
-  <button type="button" class="v-center btn btn-primary py-2 shadow" *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS" (click)="openForm()">
-    <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
+  <button type="button" class="btn btn-primary shadow" *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS" (click)="openForm()">
     <span class="fw-600 f-3">Create new team</span>
   </button>
   <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold" (click)="joinForm()">Join team</button>
@@ -124,7 +123,7 @@
     <ng-container [ngSwitch]="(teamService.loading$ | async)">
       <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
         <div class="object-icon v-center">
-          <i class="i-icon i-template d-block bgc-dark"></i>
+          <i class="i-icon i-teams d-block bgc-dark"></i>
         </div>
         <h4 class="font-weight-bold mt-4 mb-3">
           There are no teams that related with you..

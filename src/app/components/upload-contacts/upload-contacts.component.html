@@ -400,18 +400,22 @@
         </button>
         <div class="d-flex">
           <button class="btn btn-white c-blue font-weight-bold" type="button" (click)="close()">Cancel</button>
-          <button class="btn btn-primary" (click)="upload()" [class.loading]="uploading">Import {{selectedImportContactsCount()}} contact(s)</button>
+          <button class="btn btn-white v-center f-6 border-0 c-blue font-weight-bold" (click)="downloadReview()">
+            <i class="i-icon sm d-block i-download bgc-blue" aria-hidden="true"></i>
+            <span class="ml-2">Download CSV</span>
+          </button>
+          <button class="btn btn-primary ml-2" (click)="upload()" [class.loading]="uploading">Import {{selectedImportContactsCount()}} contact(s)</button>
         </div>
       </div>
     </ng-container>
     <ng-container *ngIf="step == 6">
       <div class="d-flex justify-content-end w-100">
         <div class="v-center">
-          <button class="btn btn-white v-center f-3 border-0 c-blue font-weight-bold" (click)="downloadExceed()">
+          <button class="btn btn-white v-center f-6 border-0 c-blue font-weight-bold" (click)="downloadExceed()">
             <i class="i-icon sm d-block i-download bgc-blue" aria-hidden="true"></i>
-            <span class="ml-2">Download Template</span>
+            <span class="ml-2">Download CSV</span>
           </button>
-          <button class="btn btn-primary" (click)="exceed()">Next</button>
+          <button class="btn btn-primary ml-2" (click)="exceed()">Next</button>
         </div>
       </div>
     </ng-container>
