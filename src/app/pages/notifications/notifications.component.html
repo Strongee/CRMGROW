@@ -82,9 +82,8 @@
             </select>
         </div>
     </div>
-    <div>
-        <button class="btn btn-white font-weight-bold mr-2 mt-4">Cancel</button>
-        <button class="btn btn-blue font-weight-bold mr-2 mt-4" (click)="saveReminder()" [class.loading]="saving">Save
+    <div class="d-flex">
+        <button class="btn btn-blue font-weight-bold mr-2 mt-4 ml-auto" (click)="saveReminder()" [class.loading]="saving">Save
             changes</button>
     </div>
 </div>

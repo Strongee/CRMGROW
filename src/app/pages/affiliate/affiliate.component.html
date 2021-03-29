@@ -10,9 +10,9 @@
         <div class="form-group mb-0 flex-grow-1">
           <input class="form-control bg-white border-primary c-blue" type="text" [(ngModel)]="affiliate.share_link" disabled>
         </div>
-        <button type="button" class="btn btn-primary font-weight-bold f-6 ml-2" [disabled]="loadingMain || creating"
+        <button type="button" class="btn btn-primary font-weight-bold f-6 ml-2" [class.disabled]="loadingMain || creating"
           (click)="openShare()">Share</button>
-        <button type="button" class="btn btn-primary font-weight-bold f-6 ml-1" [disabled]="loadingMain || creating"
+        <button type="button" class="btn btn-primary font-weight-bold f-6 ml-1" [class.disabled]="loadingMain || creating"
           (click)="copyLink()">Copy</button>
       </div>
     </div>
@@ -22,7 +22,7 @@
     <div class="v-center">
       <img class="paypal-logo" src="../../../assets/img/paypal.svg" alt="PayPal">
       <input class="paypal-address form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
-      <button class="btn btn-blue text-white font-weight-bold ml-2" (click)="update()" [disabled]="loadingMain || creating" [class.loading]="updating">Update</button>
+      <button class="btn btn-blue text-white font-weight-bold ml-2" (click)="update()" [class.disabled]="loadingMain || creating" [class.loading]="updating">Update</button>
     </div>
     <ng-container *ngIf="loadingMain || creating">
         <ngx-spinner name="sp5" bdColor="rgba(50,50,50,0)" size="medium" color="#888" type="square-jelly-box"
