@@ -339,21 +339,23 @@ export class UploadContactsComponent implements OnInit {
         this.contacts.push({ ...contact, id: this.contacts.length });
       });
       this.duplicateLoading = true;
-      const _SELF = this;
-      // setTimeout(function () {
-        const dupTest = this.checkDuplicate();
-      this.rebuildColumns();
-      this.rebuildContacts();
-      this.isDuplicatedEmail();
-      this.duplicateLoading = false;
-        if (dupTest) {
-          this.step = 3;
-        } else {
-          this.step = 4;
-          this.contactsToUpload = this.contacts;
-          this.selectAllContacts();
-        }
-      // }, 100);
+      this.checkDuplicate()
+        .then((res) => {
+          this.duplicateLoading = false;
+          this.rebuildColumns();
+          this.rebuildContacts();
+          this.isDuplicatedEmail();
+          if (res) {
+            this.step = 3;
+          } else {
+            this.step = 4;
+            this.contactsToUpload = this.contacts;
+            this.selectAllContacts();
+          }
+        })
+        .finally(() => {
+          this.duplicateLoading = false;
+        });
     } else {
       this.importError = true;
     }
@@ -442,17 +444,26 @@ export class UploadContactsComponent implements OnInit {
   }
 
   isDuplicatedEmail(): any {
-    const key = 'primary_email';
+    const emailKey = 'primary_email';
+    const phoneKey = 'primary_phone';
     for (let i = 0; i < this.contacts.length; i++) {
       for (let j = i; j < this.contacts.length; j++) {
         if (j === i) {
           continue;
         } else {
           if (
-            this.contacts[i][key] &&
-            this.contacts[j][key] &&
-            this.contacts[i][key].toLowerCase() ===
-              this.contacts[j][key].toLowerCase()
+            this.contacts[i][emailKey] &&
+            this.contacts[j][emailKey] &&
+            this.contacts[i][emailKey].toLowerCase() ===
+              this.contacts[j][emailKey].toLowerCase()
+          ) {
+            return true;
+          }
+          if (
+            this.contacts[i][phoneKey] &&
+            this.contacts[j][phoneKey] &&
+            this.contacts[i][phoneKey].toLowerCase() ===
+              this.contacts[j][phoneKey].toLowerCase()
           ) {
             return true;
           }
@@ -461,134 +472,135 @@ export class UploadContactsComponent implements OnInit {
     }
     return false;
   }
-
-  checkDuplicate(): any {
-    let emailKey = '';
-    let phoneKey = '';
-    let firstNameKey = '';
-    let lastNameKey = '';
-    for (const key in this.updateColumn) {
-      if (this.updateColumn[key] === 'primary_email') {
-        emailKey = key;
-      }
-      if (this.updateColumn[key] === 'primary_phone') {
-        phoneKey = key;
-      }
-      if (this.updateColumn[key] === 'first_name') {
-        firstNameKey = key;
-      }
-      if (this.updateColumn[key] === 'last_name') {
-        lastNameKey = key;
-      }
-    }
-
-    const mergeList = [];
-
-    for (let i = 0; i < this.contacts.length; i++) {
-      const firstContact = this.contacts[i];
-      let isNewList = true;
-      let merge = [];
-      let selectedListIndex = -1;
-      for (let k = 0; k < mergeList.length; k++) {
-        if (mergeList[k].length) {
-          for (let l = 0; l < mergeList[k].length; l++) {
-            if (firstContact.id === mergeList[k][l].id) {
-              isNewList = false;
-              merge = mergeList[k];
-              selectedListIndex = k;
-              break;
-            }
-          }
+  checkDuplicate(): Promise<any> {
+    return new Promise<any>((resolve) => {
+      let emailKey = '';
+      let phoneKey = '';
+      let firstNameKey = '';
+      let lastNameKey = '';
+      for (const key in this.updateColumn) {
+        if (this.updateColumn[key] === 'primary_email') {
+          emailKey = key;
+        }
+        if (this.updateColumn[key] === 'primary_phone') {
+          phoneKey = key;
+        }
+        if (this.updateColumn[key] === 'first_name') {
+          firstNameKey = key;
+        }
+        if (this.updateColumn[key] === 'last_name') {
+          lastNameKey = key;
         }
       }
 
-      if (isNewList) {
-        merge.push(firstContact);
-      }
+      const mergeList = [];
 
-      for (let j = i; j < this.contacts.length; j++) {
-        if (j === i) {
-          continue;
-        }
-        const secondContact = this.contacts[j];
-
-        let isExistSecond = false;
+      for (let i = 0; i < this.contacts.length; i++) {
+        const firstContact = this.contacts[i];
+        let isNewList = true;
+        let merge = [];
+        let selectedListIndex = -1;
         for (let k = 0; k < mergeList.length; k++) {
           if (mergeList[k].length) {
             for (let l = 0; l < mergeList[k].length; l++) {
-              if (secondContact.id === mergeList[k][l].id) {
-                isExistSecond = true;
+              if (firstContact.id === mergeList[k][l].id) {
+                isNewList = false;
+                merge = mergeList[k];
+                selectedListIndex = k;
                 break;
               }
             }
           }
         }
 
-        if (!isExistSecond) {
-          if (firstNameKey && lastNameKey) {
-            if (
-              !!firstContact.first_name &&
-              !!firstContact.last_name &&
-              !!secondContact.first_name &&
-              !!secondContact.last_name &&
-              firstContact.first_name.toLowerCase() ===
-                secondContact.first_name.toLowerCase() &&
-              firstContact.last_name.toLowerCase() ===
-                secondContact.last_name.toLowerCase()
-            ) {
-              merge.push(secondContact);
-              continue;
+        if (isNewList) {
+          merge.push(firstContact);
+        }
+
+        for (let j = i; j < this.contacts.length; j++) {
+          if (j === i) {
+            continue;
+          }
+          const secondContact = this.contacts[j];
+
+          let isExistSecond = false;
+          for (let k = 0; k < mergeList.length; k++) {
+            if (mergeList[k].length) {
+              for (let l = 0; l < mergeList[k].length; l++) {
+                if (secondContact.id === mergeList[k][l].id) {
+                  isExistSecond = true;
+                  break;
+                }
+              }
             }
           }
 
-          if (emailKey) {
-            if (
-              !!firstContact.primary_email &&
-              !!secondContact.primary_email &&
-              firstContact.primary_email.toLowerCase() ===
-                secondContact.primary_email.toLowerCase()
-            ) {
-              merge.push(secondContact);
-              continue;
+          if (!isExistSecond) {
+            if (firstNameKey && lastNameKey) {
+              if (
+                !!firstContact.first_name &&
+                !!firstContact.last_name &&
+                !!secondContact.first_name &&
+                !!secondContact.last_name &&
+                firstContact.first_name.toLowerCase() ===
+                  secondContact.first_name.toLowerCase() &&
+                firstContact.last_name.toLowerCase() ===
+                  secondContact.last_name.toLowerCase()
+              ) {
+                merge.push(secondContact);
+                continue;
+              }
             }
-          }
 
-          if (phoneKey) {
-            if (
-              !!firstContact.primary_phone &&
-              !!secondContact.primary_phone &&
-              firstContact.primary_phone.toLowerCase() ===
-                secondContact.primary_phone.toLowerCase()
-            ) {
-              merge.push(secondContact);
-              continue;
+            if (emailKey) {
+              if (
+                !!firstContact.primary_email &&
+                !!secondContact.primary_email &&
+                firstContact.primary_email.toLowerCase() ===
+                  secondContact.primary_email.toLowerCase()
+              ) {
+                merge.push(secondContact);
+                continue;
+              }
+            }
+
+            if (phoneKey) {
+              if (
+                !!firstContact.primary_phone &&
+                !!secondContact.primary_phone &&
+                firstContact.primary_phone.toLowerCase() ===
+                  secondContact.primary_phone.toLowerCase()
+              ) {
+                merge.push(secondContact);
+                continue;
+              }
             }
           }
         }
+        if (isNewList) {
+          mergeList.push(merge);
+        } else {
+          mergeList[selectedListIndex] = merge;
+        }
       }
-      if (isNewList) {
-        mergeList.push(merge);
-      } else {
-        mergeList[selectedListIndex] = merge;
-      }
-    }
 
-    this.bulkDeleting = [];
-    mergeList.forEach((e, index) => {
-      if (e.length > 1) {
-        this.sameContacts.push(e);
-        this.bulkDeleting.push(false);
-        this.selectedMergeContacts.push(new SelectionModel<any>(true, []));
-      } else if (e.length === 1) {
-        this.contactsToUpload.push(e[0]);
+      this.bulkDeleting = [];
+      mergeList.forEach((e, index) => {
+        if (e.length > 1) {
+          this.sameContacts.push(e);
+          this.bulkDeleting.push(false);
+          this.selectedMergeContacts.push(new SelectionModel<any>(true, []));
+        } else if (e.length === 1) {
+          this.contactsToUpload.push(e[0]);
+        }
+      });
+
+      if (this.sameContacts.length > 0) {
+        resolve(true);
+      } else {
+        resolve(false);
       }
     });
-
-    if (this.sameContacts.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   checkDuplicateColumn(dupIndex, contact, column): any {
@@ -634,7 +646,7 @@ export class UploadContactsComponent implements OnInit {
         ...DialogSettings.UPLOAD,
         data: {
           contacts: mergeContacts,
-          updateColumn: this.updateColumn
+          updateColumn: { ...this.updateColumn }
         }
       })
       .afterClosed()
@@ -652,6 +664,23 @@ export class UploadContactsComponent implements OnInit {
               (item) => item.id === id
             );
             this.contacts.splice(contactIndex, 1);
+          }
+
+          if (merged['secondary_email']) {
+            let secondaryEmailKey = '';
+            for (const key in this.updateColumn) {
+              if (this.updateColumn[key] === 'secondary_email') {
+                secondaryEmailKey = key;
+              }
+            }
+            if (secondaryEmailKey !== '') {
+              if (this.columns.indexOf(secondaryEmailKey) < 0) {
+                this.columns.push(secondaryEmailKey);
+              }
+            } else {
+              this.updateColumn['secondary_email'] = 'secondary_email';
+              this.columns.push('secondary_email');
+            }
           }
 
           if (merged['secondary_phone']) {
@@ -782,12 +811,16 @@ export class UploadContactsComponent implements OnInit {
     this.isDuplicatedExist = this.isDuplicatedEmail();
     this.sameContacts.forEach((dupItem, index) => {
       let emailKey = '';
+      let phoneKey = '';
       for (const key in this.updateColumn) {
         if (this.updateColumn[key] === 'primary_email') {
           emailKey = key;
         }
+        if (this.updateColumn[key] === 'primary_phone') {
+          phoneKey = key;
+        }
       }
-      if (emailKey) {
+      if (emailKey || phoneKey) {
         this.duplicateItems.push(false);
         for (let i = 0; i < dupItem.length; i++) {
           for (let j = i; j < dupItem.length; j++) {
@@ -797,9 +830,22 @@ export class UploadContactsComponent implements OnInit {
             if (
               dupItem[i]['primary_email'] !== '' &&
               dupItem[j]['primary_email'] !== '' &&
-              dupItem[i]['primary_email'] !== null &&
-              dupItem[j]['primary_email'] !== null &&
-              dupItem[i]['primary_email'] === dupItem[j]['primary_email']
+              dupItem[i]['primary_email'] !== undefined &&
+              dupItem[j]['primary_email'] !== undefined &&
+              dupItem[i]['primary_email'].toLowerCase() ===
+                dupItem[j]['primary_email'].toLowerCase()
+            ) {
+              isDuplicateKey = true;
+              this.duplicateItems[index] = true;
+              return;
+            }
+            if (
+              dupItem[i]['primary_phone'] !== '' &&
+              dupItem[j]['primary_phone'] !== '' &&
+              dupItem[i]['primary_phone'] !== undefined &&
+              dupItem[j]['primary_phone'] !== undefined &&
+              dupItem[i]['primary_phone'].toLowerCase() ===
+                dupItem[j]['primary_phone'].toLowerCase()
             ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
@@ -810,7 +856,9 @@ export class UploadContactsComponent implements OnInit {
       }
       if (!isDuplicateKey) {
         for (const item of dupItem) {
-          const contactIdx = this.contactsToUpload.findIndex((contact) => contact.id === item.id);
+          const contactIdx = this.contactsToUpload.findIndex(
+            (contact) => contact.id === item.id
+          );
           if (contactIdx < 0) {
             this.contactsToUpload.push(item);
           }
@@ -962,18 +1010,15 @@ export class UploadContactsComponent implements OnInit {
         this.overallContacts + ' / ' + this.overallContacts + ' contacts';
 
       this.checkingDuplicate = true;
-      const _SELF = this;
-      setTimeout(() => {
-        const dupTest = _SELF.checkDuplicate();
-        if (dupTest) {
-          _SELF.step = 3;
-          _SELF.checkingDuplicate = false;
-        } else {
-          _SELF.step = 4;
-          _SELF.checkingDuplicate = false;
-          _SELF.contactsToUpload = _SELF.contacts;
-        }
-      }, 2000);
+      const dupTest = this.checkDuplicate();
+      if (dupTest) {
+        this.step = 3;
+        this.checkingDuplicate = false;
+      } else {
+        this.step = 4;
+        this.checkingDuplicate = false;
+        this.contactsToUpload = this.contacts;
+      }
     } else {
       this.toastr.success('Contacts successfully imported.');
       this.dialogRef.close({});
@@ -1681,13 +1726,14 @@ export class UploadContactsComponent implements OnInit {
     }
     const downloadContacts = [];
     for (const contact of this.exceedContacts) {
-      if (Array.isArray(contact['notes'])) {
-        contact['notes'] = contact['notes'].join('     ');
+      const duplicate = Object.assign({}, contact);
+      if (Array.isArray(duplicate['notes'])) {
+        duplicate['notes'] = duplicate['notes'].join('     ');
       }
-      if (Array.isArray(contact['tags'])) {
-        contact['tags'] = contact['tags'].join(', ');
+      if (Array.isArray(duplicate['tags'])) {
+        duplicate['tags'] = duplicate['tags'].join(', ');
       }
-      downloadContacts.push(contact);
+      downloadContacts.push(duplicate);
     }
     if (downloadContacts.length) {
       const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
@@ -1713,13 +1759,14 @@ export class UploadContactsComponent implements OnInit {
     }
     const downloadContacts = [];
     for (const contact of this.contactsToUpload) {
-      if (Array.isArray(contact['notes'])) {
-        contact['notes'] = contact['notes'].join('     ');
+      const duplicate = Object.assign({}, contact);
+      if (Array.isArray(duplicate['notes'])) {
+        duplicate['notes'] = duplicate['notes'].join('     ');
       }
-      if (Array.isArray(contact['tags'])) {
-        contact['tags'] = contact['tags'].join(', ');
+      if (Array.isArray(duplicate['tags'])) {
+        duplicate['tags'] = duplicate['tags'].join(', ');
       }
-      downloadContacts.push(contact);
+      downloadContacts.push(duplicate);
     }
     if (downloadContacts.length) {
       const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
