@@ -61,15 +61,13 @@
           </div>
           <div class="col-md-3 col-sm-6 col-6" *ngIf="automation && editMode == 'edit'">
             <div class="v-center justify-content-end">
-              <button type="button" class="v-center btn btn-primary py-2 shadow"
+              <button type="button" class="btn btn-primary shadow"
                 (click)="assignContacts()">
-                <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
                 <span class="font-weight-bold f-3">Assign</span>
               </button>
               <div ngbDropdown class="d-flex p-2 button-more py-2 rounded">
                 <button type="button" class="v-center btn btn-white-blue py-2" ngbDropdownToggle>
                   <span class="font-weight-bold f-3 c-blue">More</span>
-                  <i class="i-icon i-plus bg-white d-block sm mr-2"></i>
                 </button>
                 <div ngbDropdownMenu class="light">
                   <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">

@@ -340,20 +340,20 @@ export class UploadContactsComponent implements OnInit {
       });
       this.duplicateLoading = true;
       const _SELF = this;
-      setTimeout(function () {
-        const dupTest = _SELF.checkDuplicate();
-        _SELF.rebuildColumns();
-        _SELF.rebuildContacts();
-        _SELF.isDuplicatedEmail();
-        _SELF.duplicateLoading = false;
+      // setTimeout(function () {
+        const dupTest = this.checkDuplicate();
+      this.rebuildColumns();
+      this.rebuildContacts();
+      this.isDuplicatedEmail();
+      this.duplicateLoading = false;
         if (dupTest) {
-          _SELF.step = 3;
+          this.step = 3;
         } else {
-          _SELF.step = 4;
-          _SELF.contactsToUpload = _SELF.contacts;
-          _SELF.selectAllContacts();
+          this.step = 4;
+          this.contactsToUpload = this.contacts;
+          this.selectAllContacts();
         }
-      }, 100);
+      // }, 100);
     } else {
       this.importError = true;
     }
@@ -809,7 +809,12 @@ export class UploadContactsComponent implements OnInit {
         }
       }
       if (!isDuplicateKey) {
-        this.contactsToUpload = this.contactsToUpload.concat(dupItem);
+        for (const item of dupItem) {
+          const contactIdx = this.contactsToUpload.findIndex((contact) => contact.id === item.id);
+          if (contactIdx < 0) {
+            this.contactsToUpload.push(item);
+          }
+        }
       }
       for (let i = 0; i < dupItem.length; i++) {
         if (!dupItem[i]._id) {
@@ -875,6 +880,7 @@ export class UploadContactsComponent implements OnInit {
 
   confirmDuplicates(): void {
     this.firstImport = false;
+    this.selectedImportContacts.clear();
     if (this.failedData.length) {
       this.contacts = [];
       this.sameContacts = [];
@@ -991,6 +997,7 @@ export class UploadContactsComponent implements OnInit {
         headers.push(this.updateColumn[key]);
       }
     }
+    // headers.push('id');
     const uploadContacts = this.contactsToUpload;
 
     if (uploadContacts.length < 0) {
@@ -1674,7 +1681,6 @@ export class UploadContactsComponent implements OnInit {
     }
     const downloadContacts = [];
     for (const contact of this.exceedContacts) {
-      console.log('download contacts =============>', contact);
       if (Array.isArray(contact['notes'])) {
         contact['notes'] = contact['notes'].join('     ');
       }
@@ -1694,7 +1700,39 @@ export class UploadContactsComponent implements OnInit {
       const csvArray = csv.join('\r\n');
 
       const blob = new Blob([csvArray], { type: 'text/csv' });
-      saveAs(blob, 'myFile.csv');
+      saveAs(blob, 'exceed.csv');
+    }
+  }
+
+  downloadReview(): void {
+    const headers = [];
+    for (const key in this.updateColumn) {
+      if (this.updateColumn[key]) {
+        headers.push(this.updateColumn[key]);
+      }
+    }
+    const downloadContacts = [];
+    for (const contact of this.contactsToUpload) {
+      if (Array.isArray(contact['notes'])) {
+        contact['notes'] = contact['notes'].join('     ');
+      }
+      if (Array.isArray(contact['tags'])) {
+        contact['tags'] = contact['tags'].join(', ');
+      }
+      downloadContacts.push(contact);
+    }
+    if (downloadContacts.length) {
+      const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
+      const csv = downloadContacts.map((row) =>
+        headers
+          .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+          .join(',')
+      );
+      csv.unshift(headers.join(','));
+      const csvArray = csv.join('\r\n');
+
+      const blob = new Blob([csvArray], { type: 'text/csv' });
+      saveAs(blob, 'review.csv');
     }
   }
 
