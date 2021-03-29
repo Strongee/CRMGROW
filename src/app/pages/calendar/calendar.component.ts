@@ -23,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import * as moment from 'moment';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -56,6 +56,8 @@ export class CalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
   dayEvents: any = {};
   showingEvents: CalendarEvent[] = [];
+  supplementEvents = {};
+  supplementDays: any[] = [];
 
   // Event id from router
   eventId: string = '';
@@ -240,6 +242,17 @@ export class CalendarComponent implements OnInit {
   }
 
   loadEvent(end_date: string, mode: string): void {
+    console.log(this.supplementEvents);
+    const supplementEvents = Object.values(this.supplementEvents);
+    let events = [];
+    supplementEvents.forEach((e) => {
+      if (e instanceof Array) {
+        events = [...events, ...e];
+      }
+    });
+    this.events = [...this.events, ...events];
+    this.events = _.uniqBy(this.events, (e) => e.meta.event_id);
+    this.filterEvents();
     this.isLoading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.appointmentService
@@ -247,8 +260,7 @@ export class CalendarComponent implements OnInit {
       .subscribe((res) => {
         this.isLoading = false;
         if (res) {
-          this.events = [];
-          this.dayEvents = {};
+          const _events = [];
           res.forEach((calendar) => {
             if (calendar['status']) {
               const subCalendars =
@@ -274,21 +286,22 @@ export class CalendarComponent implements OnInit {
                       organizer: event.organizer
                     }
                   };
-                  if (event.due_start === event.due_end) {
-                    if (this.dayEvents[event.due_start]) {
-                      this.dayEvents[event.due_start].push(_formattedEvent);
-                    } else {
-                      this.dayEvents[event.due_start] = [_formattedEvent];
-                    }
-                  }
-                  this.events.push(_formattedEvent);
+                  _events.push(_formattedEvent);
                 });
               });
             }
           });
+          this.events = _events;
+          if (mode === 'month') {
+            const end_date_string = moment(end_date)
+              .startOf('month')
+              .toISOString();
+            this.supplementEvents[end_date_string] = _events;
+          }
           this.filterEvents();
         }
       });
+    this.anotherLoad(end_date, mode);
   }
 
   anotherLoad(date, mode): void {
@@ -298,35 +311,106 @@ export class CalendarComponent implements OnInit {
     let prev2DurationStart;
     switch (mode) {
       case 'month':
-        nextDurationStart = moment(date).add(1, 'months');
-        next2DurationStart = moment(date).add(2, 'months');
-        prevDurationStart = moment(date).subtract(1, 'months');
-        prev2DurationStart = moment(date).subtract(2, 'months');
+        nextDurationStart = moment(date).startOf('month').add(1, 'months');
+        next2DurationStart = moment(date).startOf('month').add(2, 'months');
+        prevDurationStart = moment(date).startOf('month').subtract(1, 'months');
+        prev2DurationStart = moment(date)
+          .startOf('month')
+          .subtract(2, 'months');
         break;
       case 'week':
-        nextDurationStart = moment(date).add(1, 'weeks');
-        next2DurationStart = moment(date).add(5, 'weeks');
-        prevDurationStart = moment(date).subtract(1, 'months');
-        prev2DurationStart = moment(date).subtract(2, 'months');
+        nextDurationStart = moment(date).startOf('month');
+        next2DurationStart = moment(date).startOf('month').add(1, 'months');
+        prevDurationStart = moment(date).startOf('month').subtract(1, 'months');
+        prev2DurationStart = moment(date)
+          .startOf('month')
+          .subtract(2, 'months');
         break;
       case 'day':
-        nextDurationStart = moment(date).add(1, 'days');
-        next2DurationStart = moment(date).add(31, 'days');
-        prevDurationStart = moment(date).subtract(1, 'months');
-        prev2DurationStart = moment(date).subtract(2, 'months');
+        nextDurationStart = moment(date).startOf('month');
+        next2DurationStart = moment(date).startOf('month').add(1, 'months');
+        prevDurationStart = moment(date).startOf('month').subtract(1, 'months');
+        prev2DurationStart = moment(date)
+          .startOf('month')
+          .subtract(2, 'months');
         break;
     }
-    // next duration events
-    this.anotherLoadSubscriptions[0] &&
-      this.anotherLoadSubscriptions[0].unsubscribe();
-    this.anotherLoadSubscriptions[0] = this.appointmentService
-      .getEvents(nextDurationStart, mode)
-      .subscribe((events) => {});
-    // prev duration events
+    const newDurationDates = [
+      prev2DurationStart,
+      prevDurationStart,
+      nextDurationStart,
+      next2DurationStart
+    ];
+    if (mode === 'month' && this.supplementDays.length) {
+      newDurationDates.push(moment(date).startOf('month'));
+    }
+    const durationsToLoad = _.differenceBy(
+      newDurationDates,
+      this.supplementDays,
+      (e) => e.toISOString()
+    );
+    const durationsToRemove = _.differenceBy(
+      this.supplementDays,
+      newDurationDates,
+      (e) => e.toISOString()
+    );
+    this.supplementDays = [...newDurationDates];
+    if (mode === 'month') {
+      this.supplementDays.push(moment(date).startOf('month'));
+    }
+    durationsToRemove.forEach((duration) => {
+      delete this.supplementEvents[duration.toISOString()];
+    });
+    durationsToLoad.forEach((duration) => {
+      this.appointmentService
+        .getEvents(duration.toISOString(), 'month')
+        .subscribe((_events) => {
+          if (_events) {
+            this.mergeEvents(_events, duration);
+          }
+        });
+    });
+  }
 
-    // second next duration events
+  mergeEvents(_events, duration): void {
+    const _results = [];
+    _events.forEach((calendar) => {
+      if (calendar['status']) {
+        const subCalendars =
+          calendar['calendar'] && calendar['calendar']['data'];
+        subCalendars.forEach((subCalendar) => {
+          const events = subCalendar.items;
+          events.forEach((event) => {
+            const _formattedEvent = {
+              title: event.title,
+              start: new Date(event.due_start),
+              end: new Date(event.due_end),
+              meta: {
+                contacts: event.contacts,
+                calendar_id: event.calendar_id,
+                description: event.description,
+                location: event.location,
+                type: event.type,
+                guests: event.guests,
+                event_id: event.event_id,
+                recurrence: event.recurrence,
+                recurrence_id: event.recurrence_id,
+                is_organizer: event.is_organizer,
+                organizer: event.organizer
+              }
+            };
+            _results.push(_formattedEvent);
+          });
+        });
+      }
+    });
+    this.supplementEvents[duration.toISOString()] = _results;
 
-    // before prev duration events
+    // this.supplementEvents = [...this.supplementEvents, ..._results];
+    // this.supplementEvents = _.uniqBy(
+    //   this.supplementEvents,
+    //   (e) => e.meta.event_id
+    // );
   }
 
   getDayEvent(date: any): any {
@@ -460,7 +544,7 @@ export class CalendarComponent implements OnInit {
     this.loadEvent(date, this.selectedTab.id);
   }
 
-  calendarDateChange(): void {
+  calendarDateChange(mode = ''): void {
     switch (this.view) {
       case 'month':
         this.location.replaceState(

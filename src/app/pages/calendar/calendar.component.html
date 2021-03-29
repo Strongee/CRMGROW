@@ -23,7 +23,7 @@
                     mwlCalendarPreviousView
                     [view]="view"
                     [(viewDate)]="viewDate"
-                    (viewDateChange)="calendarDateChange()"
+                    (viewDateChange)="calendarDateChange('prev')"
                     placement="bottom"
                     [ngbTooltip]="prevContent"
                 >
@@ -33,7 +33,7 @@
                     mwlCalendarNextView
                     [view]="view"
                     [(viewDate)]="viewDate"
-                    (viewDateChange)="calendarDateChange()"
+                    (viewDateChange)="calendarDateChange('next')"
                     placement="bottom"
                     [ngbTooltip]="nextContent"
                 >
@@ -83,7 +83,6 @@
             <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
             </app-slide-tab>    
             <button class="v-center btn btn-blue f-6 font-weight-bold text-white ml-4 mr-3 new-event" (click)="newEvent()">
-                <i class="i-icon i-plus bg-white d-block mr-2"></i>
                 <span>New meeting</span>
             </button>
             <div class="p-2 m-0 calendar-list">
@@ -112,7 +111,7 @@
         </div>
     </div>
     <div class="calendar-wrapper">
-        <ng-container *ngIf="isLoading">
+        <ng-container *ngIf="isLoading && !events.length">
             <div class="list-loading text-center">
                 <div class="loader"></div>
             </div>
