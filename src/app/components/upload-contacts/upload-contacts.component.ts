@@ -157,6 +157,19 @@ export class UploadContactsComponent implements OnInit {
             this.uploadedCount += uploads.length;
           }
           this.uploadRecursive(uploads);
+        } else {
+          if (this.exceedContacts.length > 0) {
+            for (const contact of this.exceedContacts) {
+              if (!Array.isArray(contact['tags'])) {
+                if (!!contact['tags']) {
+                  contact['tags'] = contact['tags'].split(',');
+                }
+              }
+            }
+            this.step = 6;
+          } else {
+            this.confirmDuplicates();
+          }
         }
         // this.confirmDuplicates();
       } else {
@@ -166,24 +179,24 @@ export class UploadContactsComponent implements OnInit {
         const from = this.uploadedCount - this.lastUploadCount;
         const exceed = this.contactsToUpload.slice(from);
         this.exceedContacts = [...this.exceedContacts, ...exceed];
-      }
 
-      if (this.exceedContacts.length > 0) {
-        for (const contact of this.exceedContacts) {
-          if (!Array.isArray(contact['tags'])) {
-            if (!!contact['tags']) {
-              contact['tags'] = contact['tags'].split(',');
+        if (this.exceedContacts.length > 0) {
+          for (const contact of this.exceedContacts) {
+            if (!Array.isArray(contact['tags'])) {
+              if (!!contact['tags']) {
+                contact['tags'] = contact['tags'].split(',');
+              }
             }
+            // if (!Array.isArray(contact['note'])) {
+            //   if (!!contact['note']) {
+            //     contact['note'] = contact['note'].split()
+            //   }
+            // }
           }
-          // if (!Array.isArray(contact['note'])) {
-          //   if (!!contact['note']) {
-          //     contact['note'] = contact['note'].split()
-          //   }
-          // }
+          this.step = 6;
+        } else {
+          this.confirmDuplicates();
         }
-        this.step = 6;
-      } else {
-        this.confirmDuplicates();
       }
     };
   }
