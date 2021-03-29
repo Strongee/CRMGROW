@@ -28,6 +28,7 @@ export class Contact implements Deserializable {
   website: string;
   secondary_email: string;
   secondary_phone: string;
+  response: string;
 
   deserialize(input: any): this {
     return Object.assign(this, input);

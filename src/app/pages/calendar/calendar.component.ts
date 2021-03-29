@@ -18,10 +18,11 @@ import { Location } from '@angular/common';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { UserService } from 'src/app/services/user.service';
 import { TabItem } from 'src/app/utils/data.types';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-calendar',
@@ -41,6 +42,8 @@ export class CalendarComponent implements OnInit {
 
   isLoading = true;
   loadSubscription: Subscription;
+
+  anotherLoadSubscriptions: Subscription[] = [];
 
   tabs: TabItem[] = [
     { icon: '', label: 'DAY', id: 'day' },
@@ -71,6 +74,8 @@ export class CalendarComponent implements OnInit {
   selectedDate: any;
 
   isShowCalendarList = false;
+  refresh: Subject<any> = new Subject();
+  overlayCloseSubscription: Subscription;
   constructor(
     private dialog: MatDialog,
     private appointmentService: AppointmentService,
@@ -122,19 +127,21 @@ export class CalendarComponent implements OnInit {
       this.accounts = [];
       this.calendars = {};
       this.selectedCalendars = [];
-      data.forEach((account) => {
-        const acc = { email: account.email };
-        if (account.data) {
-          const calendars = [];
-          account.data.forEach((e) => {
-            calendars.push({ ...e, account: account.email });
-            this.selectedCalendars.push(e.id);
-            this.calendars[e.id] = e;
-          });
-          acc['calendars'] = calendars;
-          this.accounts.push(acc);
-        }
-      });
+      if (data) {
+        data.forEach((account) => {
+          const acc = { email: account.email };
+          if (account.data) {
+            const calendars = [];
+            account.data.forEach((e) => {
+              calendars.push({ ...e, account: account.email });
+              this.selectedCalendars.push(e.id);
+              this.calendars[e.id] = e;
+            });
+            acc['calendars'] = calendars;
+            this.accounts.push(acc);
+          }
+        });
+      }
     });
     this.userService.profile$.subscribe((profile) => {
       this.user = profile;
@@ -279,10 +286,47 @@ export class CalendarComponent implements OnInit {
               });
             }
           });
-
           this.filterEvents();
         }
       });
+  }
+
+  anotherLoad(date, mode): void {
+    let nextDurationStart;
+    let next2DurationStart;
+    let prevDurationStart;
+    let prev2DurationStart;
+    switch (mode) {
+      case 'month':
+        nextDurationStart = moment(date).add(1, 'months');
+        next2DurationStart = moment(date).add(2, 'months');
+        prevDurationStart = moment(date).subtract(1, 'months');
+        prev2DurationStart = moment(date).subtract(2, 'months');
+        break;
+      case 'week':
+        nextDurationStart = moment(date).add(1, 'weeks');
+        next2DurationStart = moment(date).add(5, 'weeks');
+        prevDurationStart = moment(date).subtract(1, 'months');
+        prev2DurationStart = moment(date).subtract(2, 'months');
+        break;
+      case 'day':
+        nextDurationStart = moment(date).add(1, 'days');
+        next2DurationStart = moment(date).add(31, 'days');
+        prevDurationStart = moment(date).subtract(1, 'months');
+        prev2DurationStart = moment(date).subtract(2, 'months');
+        break;
+    }
+    // next duration events
+    this.anotherLoadSubscriptions[0] &&
+      this.anotherLoadSubscriptions[0].unsubscribe();
+    this.anotherLoadSubscriptions[0] = this.appointmentService
+      .getEvents(nextDurationStart, mode)
+      .subscribe((events) => {});
+    // prev duration events
+
+    // second next duration events
+
+    // before prev duration events
   }
 
   getDayEvent(date: any): any {
@@ -365,30 +409,21 @@ export class CalendarComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          const event = this._convertStandard2Mine(res);
+          const newEvent = this._convertStandard2Original(res);
+          const event = this._convertStandard2Mine(newEvent);
           this.events.push(event);
-          // const eventDate = this.viewDate.toISOString();
-          // this.loadEvent(eventDate, this.selectedTab.id);
+          this.filterEvents();
           this.changeDetectorRef.detectChanges();
         }
       });
   }
 
-  createEvent(event: any, origin: any, content: any, $event: MouseEvent): void {
-    this.overlayService
-      .open(origin, content, this.viewContainerRef, 'create', {
-        data: {
-          start_date: event.date,
-          type: 'month'
-        }
-      })
-      .subscribe((res) => {
-        if (res) {
-          const eventDate = this.viewDate.toISOString();
-          this.loadEvent(eventDate, this.selectedTab.id);
-          this.changeDetectorRef.detectChanges();
-        }
-      });
+  createEvent($event): void {
+    const newEvent = this._convertStandard2Original($event);
+    const event = this._convertStandard2Mine(newEvent);
+    this.events.push(event);
+    this.filterEvents();
+    this.changeDetectorRef.detectChanges();
   }
 
   changeTab(tab: TabItem): void {
@@ -529,27 +564,43 @@ export class CalendarComponent implements OnInit {
         positionStrategy,
         ...size
       });
-      this.overlayRef.outsidePointerEvents().subscribe((event) => {
-        const targetEl = <HTMLElement>event.target;
-        if (targetEl.closest('.cal-event')) {
-          return;
-        }
-        if (targetEl.closest('.cal-month-cell')) {
-          return;
-        }
-        if (targetEl.closest('.event-backdrop')) {
-          return;
-        }
-        if (targetEl.closest('.event-panel')) {
-          return;
-        }
-        if (targetEl.closest('.calendar-contact')) {
-          return;
-        }
-        this.overlayRef.detach();
-        return;
-      });
       this.overlayRef.attach(this.templatePortal);
+    }
+
+    if (this.overlayRef) {
+      this.overlayCloseSubscription &&
+        this.overlayCloseSubscription.unsubscribe();
+      this.overlayCloseSubscription = this.overlayRef
+        .outsidePointerEvents()
+        .subscribe((event) => {
+          const targetEl = <HTMLElement>event.target;
+          console.log(
+            'calendar contact select trigger',
+            targetEl,
+            targetEl.closest('.cal-event'),
+            targetEl.closest('.cal-month-cell'),
+            targetEl.closest('.event-backdrop'),
+            targetEl.closest('.event-panel'),
+            targetEl.closest('.calendar-contact')
+          );
+          if (targetEl.closest('.cal-event')) {
+            return;
+          }
+          if (targetEl.closest('.cal-month-cell')) {
+            return;
+          }
+          if (targetEl.closest('.event-backdrop')) {
+            return;
+          }
+          if (targetEl.closest('.event-panel')) {
+            return;
+          }
+          if (targetEl.closest('.calendar-contact')) {
+            return;
+          }
+          this.overlayRef.detach();
+          return;
+        });
     }
   }
 
@@ -660,11 +711,6 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  addEvent(event): void {
-    const _formatted = this._convertStandard2Mine(event);
-    this.events.push(_formatted);
-  }
-
   _convertMine2Standard(event: any) {
     const res = {};
   }
@@ -690,6 +736,25 @@ export class CalendarComponent implements OnInit {
     };
     return res;
   }
+  _convertStandard2Original(event: any) {
+    if (event.guests && event.guests.length) {
+      const guests = [];
+      event.guests.forEach((e) => {
+        let guest;
+        if (typeof e === 'string') {
+          guest = {
+            response: 'needsAction',
+            email: e
+          };
+        } else {
+          guest = e;
+        }
+        guests.push(guest);
+      });
+      event.guests = guests;
+    }
+    return event;
+  }
 
   getDurationOption(start, end): boolean {
     let startDate, endDate;
@@ -710,71 +775,4 @@ export class CalendarComponent implements OnInit {
       (startHour >= 12 && endHour >= 12) || (startHour <= 12 && endHour <= 12)
     );
   }
-
-  // hourClicked(date: any, origin: any, content: any): void {
-  //   this.overlayService
-  //     .open(origin, content, this.viewContainerRef, 'create', {
-  //       data: {
-  //         start_date: date,
-  //         type: 'week'
-  //       }
-  //     })
-  //     .subscribe((res) => {
-  //       if (res) {
-  //         const eventDate = this.viewDate.toISOString();
-  //         this.loadEvent(eventDate, this.selectedTab.id);
-  //         this.changeDetectorRef.detectChanges();
-  //       }
-  //     });
-  // }
-
-  // handleEvent(event: any, origin: any, content: any, $event: MouseEvent): void {
-  //   this.overlayService
-  //     .open(origin, content, this.viewContainerRef, 'edit', {
-  //       data: {
-  //         event: event
-  //       }
-  //     })
-  //     .subscribe((res) => {
-  //       if (res) {
-  //         if (res.id) {
-  //           const events = this.events.filter(
-  //             (item) => item.meta.event_id != res.id
-  //           );
-  //           this.events = [];
-  //           this.events = events;
-  //         } else {
-  //           this.isLoading = true;
-  //           const eventDate = this.viewDate.toISOString();
-  //           this.appointmentService
-  //             .getEvents(eventDate, this.view)
-  //             .subscribe((res) => {
-  //               if (res['status'] == true) {
-  //                 this.events = res['data'].map((item) => {
-  //                   return {
-  //                     title: item.title,
-  //                     start: new Date(item.due_start),
-  //                     end: new Date(item.due_end),
-  //                     meta: {
-  //                       contacts: item.contacts,
-  //                       calendar_id: item.calendar_id,
-  //                       description: item.description,
-  //                       location: item.location,
-  //                       type: item.type,
-  //                       guests: item.guests,
-  //                       event_id: item.event_id,
-  //                       recurrence: item.recurrence,
-  //                       recurrence_id: item.recurrence_id,
-  //                       is_organizer: item.is_organizer
-  //                     }
-  //                   };
-  //                 });
-  //                 this.isLoading = false;
-  //               }
-  //             });
-  //         }
-  //       }
-  //       this.changeDetectorRef.detectChanges();
-  //     });
-  // }
 }

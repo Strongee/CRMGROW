@@ -127,7 +127,9 @@ export class CalendarOverlayComponent implements OnInit {
           this.toast.success('New Event is created successfully');
           this.onCreate.emit({
             ...data,
-            event_id: res['event_id']
+            event_id: res['event_id'],
+            organizer: connected_email,
+            is_organizer: true
           });
           this.close();
         }

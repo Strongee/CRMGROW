@@ -745,7 +745,7 @@
                             <img src="{{details[activity.videos]?.preview}}"/>
                             <div class="video-duration">{{details[activity.videos]?.duration | timeDuration}}</div>
                           </a>
-                          <div class="recent-activity v-center f-3 border-bottom mb-1">
+                          <div class="recent-activity v-center f-1 border-bottom mb-1">
                             <div class="content label">SESSION</div>
                             <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration ml-auto label">
@@ -859,7 +859,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/pdf?pdf={{details[activity.pdfs]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.pdfs]?.preview}}"/>
                           </a>
-                          <div class="recent-activity v-center f-3 border-bottom mb-1">
+                          <div class="recent-activity v-center f-1 border-bottom mb-1">
                             <div class="content label">SESSION</div>
                             <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration ml-auto label">
@@ -930,7 +930,7 @@
                           <a class="material-thumbnail" href="{{SITE}}/image?image={{details[activity.images]?._id}}&user={{userId}}" target="_blank">
                             <img src="{{details[activity.images]?.preview}}"/>
                           </a>
-                          <div class="recent-activity v-center f-3 border-bottom mb-1">
+                          <div class="recent-activity v-center f-1 border-bottom mb-1">
                             <div class="content label">SESSION</div>
                             <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration ml-auto label">

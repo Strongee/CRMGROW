@@ -16,6 +16,9 @@ import * as moment from 'moment';
 import { CalendarRecurringDialogComponent } from '../calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { Contact } from 'src/app/models/contact.model';
 import { DealsService } from '../../services/deals.service';
+import { numPad } from 'src/app/helper';
+import { Subscription } from 'rxjs';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',
@@ -58,6 +61,9 @@ export class CalendarDialogComponent implements OnInit {
   isDeal = false;
   deal;
 
+  contactLoadSubscription: Subscription;
+  contactLoading = false;
+
   constructor(
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarDialogComponent>,
@@ -84,100 +90,79 @@ export class CalendarDialogComponent implements OnInit {
       this.isDeal = true;
       this.deal = this.data.deal;
     }
-
-    if (this.data && this.data.event) {
-      this.type = 'update';
-    }
   }
 
   ngOnInit(): void {
     if (this.data && this.data.event) {
-      this.type = 'update';
-      this.event.title = this.data.event.title;
-      this.selectedDateTime.year = this.data.event.start
-        .getFullYear()
-        .toString();
-      this.selectedDateTime.month = (
-        this.data.event.start.getMonth() + 1
-      ).toString();
-      this.selectedDateTime.day = this.data.event.start.getDate().toString();
-      const date = moment(
-        this.selectedDateTime.year +
-          '-' +
-          this.selectedDateTime.month +
-          '-' +
-          this.selectedDateTime.day +
-          ' ' +
-          this.due_time
-      ).format();
-      const duration = moment(date)
-        .add(this.duration * 60, 'minutes')
-        .format();
-      this.event.due_start = date;
-      this.event.due_end = duration;
-      let hour, minute;
-      if (this.data.event.start.getHours().toString().length == 1) {
-        hour = `0${this.data.event.start.getHours()}`;
-      } else {
-        hour = this.data.event.start.getHours();
-      }
-      if (this.data.event.start.getMinutes().toString().length == 1) {
-        minute = `0${this.data.event.start.getMinutes()}`;
-      } else {
-        minute = this.data.event.start.getMinutes();
-      }
-      this.due_time = `${hour}:${minute}:00.000`;
-      const start_hour = this.data.event.start.getHours();
-      const end_hour = this.data.event.end.getHours();
-      const start_minute = this.data.event.start.getMinutes();
-      const end_minute = this.data.event.end.getMinutes();
-      this.duration = end_hour - start_hour + (end_minute - start_minute) / 60;
-      this.event.is_organizer = this.data.event.meta.is_organizer;
-      this.event.contacts = this.data.event.meta.contacts;
-      this.event.guests = this.data.event.meta.guests;
-      if (
-        this.data.event.meta.contacts &&
-        this.data.event.meta.contacts.length &&
-        typeof this.data.event.meta.contacts[0] === 'string'
-      ) {
-        this.contactService
-          .getContactsByIds(this.data.event.meta.contacts)
-          .subscribe((contacts) => {
-            this.contacts = [...this.contacts, ...contacts];
+      this.formatEvent();
+    }
+  }
+
+  formatEvent(): void {
+    this.type = 'update';
+    this.event.title = this.data.event.title;
+    const startYear = this.data.event.start.getFullYear().toString();
+    const startMonth = this.data.event.start.getMonth() + 1;
+    const startDay = this.data.event.start.getDate();
+    const startHour = this.data.event.start.getHours();
+    const startMin = this.data.event.start.getMinutes();
+    this.due_time = `${numPad(startHour)}:${numPad(startMin)}:00.000`;
+    this.duration =
+      (this.data.event.end.getTime() - this.data.event.start.getTime()) /
+      (60 * 60 * 1000);
+    this.selectedDateTime = {
+      year: startYear,
+      month: startMonth,
+      day: startDay
+    };
+    this.event.description = this.data.event.meta.description;
+    this.event.location = this.data.event.meta.location;
+    this.event.recurrence = this.data.event.meta.recurrence;
+    if (this.event.recurrence) {
+      this.isRepeat = true;
+    }
+    // store the non-ui variables
+    this.event.is_organizer = this.data.event.meta.is_organizer;
+    this.event.recurrence_id = this.data.event.meta.recurrence_id;
+    this.event.calendar_id = this.data.event.meta.calendar_id;
+    this.event.event_id = this.data.event.meta.event_id;
+    this.event.appointment = this.data.event.appointment;
+    this.event.contacts = this.data.event.meta.contacts;
+    if (
+      this.data.event.meta &&
+      this.data.event.meta.guests &&
+      this.data.event.meta.guests.length
+    ) {
+      const emails = [];
+      const guestStatus = {};
+      this.data.event.meta.guests.forEach((e) => {
+        emails.push(e.email);
+        guestStatus[e.email] = e.response;
+      });
+      this.contactLoadSubscription = this.contactService
+        .loadByEmails(emails)
+        .subscribe((contacts) => {
+          const contactEmails = [];
+          contacts.forEach((contact) => {
+            contact.response = guestStatus[contact.email];
+            contactEmails.push(contact.email);
           });
-      }
-      if (this.data.event.meta.guests.length > 0) {
-        this.data.event.meta.guests.forEach(
-          (guest: { email: any; response: any }) => {
-            this.contactService
-              .getNormalSearch(guest.email)
-              .subscribe((res) => {
-                if (res['status'] == true) {
-                  if (res['data'].contacts.length > 0) {
-                    res['data'].contacts[0].email_status = guest.response;
-                    let contacts = new Contact();
-                    contacts = res['data'].contacts[0];
-                    this.contacts = [...this.contacts, contacts];
-                  } else {
-                    const firstname = res['data'].search.split('@')[0];
-                    const guests = new Contact().deserialize({
-                      first_name: firstname,
-                      email: res['data'].search
-                    });
-                    this.contacts = [...this.contacts, guests];
-                  }
-                }
+          this.contacts = contacts;
+          if (contacts.length != emails.length) {
+            emails.forEach((email) => {
+              if (contactEmails.indexOf(email) !== -1) {
+                return;
+              }
+              const first_name = email.split('@')[0];
+              const newContact = new Contact().deserialize({
+                first_name,
+                email,
+                response: guestStatus[email]
               });
+              this.contacts.push(newContact);
+            });
           }
-        );
-      }
-      this.event.location = this.data.event.meta.location;
-      this.event.description = this.data.event.meta.description;
-      this.event.recurrence = this.data.event.meta.recurrence;
-      this.event.recurrence_id = this.data.event.meta.recurrence_id;
-      this.event.calendar_id = this.data.event.meta.calendar_id;
-      this.event.event_id = this.data.event.meta.event_id;
-      this.event.appointment = this.data.event.appointment;
+        });
     }
   }
 
@@ -199,7 +184,6 @@ export class CalendarDialogComponent implements OnInit {
     }
     const connected_email = currentCalendar.account;
 
-    this.isLoading = true;
     const date = moment(
       this.selectedDateTime.year +
         '-' +
@@ -214,14 +198,22 @@ export class CalendarDialogComponent implements OnInit {
       .format();
     this.event.due_start = date;
     this.event.due_end = duration;
+
     if (this.contacts.length > 0) {
-      this.event.contacts.forEach((eventContact) => {
-        this.contacts.forEach((selectContact) => {
-          if (Object.values(selectContact).indexOf(eventContact._id) == -1) {
-            this.event.remove_contacts.push(eventContact._id);
-          }
-        });
+      const existContacts = [];
+      this.event.contacts.forEach((e) => {
+        if (e && e._id) {
+          existContacts.push(e._id);
+        }
       });
+      const currentContacts = [];
+      this.contacts.forEach((e) => {
+        if (e && e._id) {
+          currentContacts.push(e._id);
+        }
+      });
+      const removeContacts = _.difference(existContacts, currentContacts);
+      const newContacts = _.difference(currentContacts, existContacts);
       this.event.contacts = [];
       this.event.guests = [];
       this.contacts.forEach((contact) => {
@@ -230,11 +222,15 @@ export class CalendarDialogComponent implements OnInit {
             email: contact.email,
             _id: contact._id
           };
-          this.event.contacts.push(data);
+          this.event.contacts.push(contact._id);
         }
         this.event.guests.push(contact.email);
       });
+    } else {
+      this.event.contacts = [];
+      this.event.guests = [];
     }
+    this.isLoading = true;
     if (this.event.recurrence_id) {
       this.dialog
         .open(CalendarRecurringDialogComponent, {
@@ -265,7 +261,10 @@ export class CalendarDialogComponent implements OnInit {
                 });
             } else {
               this.appointmentService
-                .updateEvents(this.event, this.event.event_id)
+                .updateEvents(
+                  { ...this.event, connected_email },
+                  this.event.event_id
+                )
                 .subscribe(
                   (res) => {
                     if (res['status'] == true) {
@@ -319,7 +318,6 @@ export class CalendarDialogComponent implements OnInit {
             },
             (err) => {
               this.isLoading = false;
-              this.dialogRef.close();
             }
           );
       }
@@ -393,7 +391,12 @@ export class CalendarDialogComponent implements OnInit {
           this.isLoading = false;
           if (res['status'] == true) {
             this.toast.success('New Event is created successfully');
-            this.dialogRef.close({ ...data, event_id: res['event_id'] });
+            this.dialogRef.close({
+              ...data,
+              event_id: res['event_id'],
+              organizer: connected_email,
+              is_organizer: true
+            });
           }
         },
         () => {

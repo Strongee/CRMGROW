@@ -104,18 +104,43 @@ export class AppointmentService extends HttpService {
     event_id: string,
     recurrence_id: string,
     calendar_id: string,
-    connected_email: string
+    connected_email: string,
+    organizer: string
   ): Observable<boolean> {
     const event = {
       event_id,
       recurrence_id,
       calendar_id,
-      connected_email
+      connected_email,
+      organizer
     };
 
     return this.httpClient.post(this.server + APPOINTMENT.ACCEPT, event).pipe(
       map((res) => res['status']),
       catchError(this.handleError('ACCEPT EVENT', false))
+    );
+  }
+
+  public declineEvent(
+    event_id: string,
+    recurrence_id: string,
+    calendar_id: string,
+    connected_email: string,
+    organizer: string,
+    message: string
+  ): Observable<boolean> {
+    const event = {
+      event_id,
+      recurrence_id,
+      calendar_id,
+      connected_email,
+      organizer,
+      message
+    };
+
+    return this.httpClient.post(this.server + APPOINTMENT.DECLINE, event).pipe(
+      map((res) => res['status']),
+      catchError(this.handleError('DECLINE EVENT', false))
     );
   }
 }

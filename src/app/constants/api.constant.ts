@@ -86,6 +86,7 @@ export const CONTACT = {
   ADVANCE_SERACH: 'contact/advance-search',
   NORMAL_SEARCH: 'contact/search',
   QUICK_SEARCH: 'contact/search-easy',
+  LOAD_BY_EMAIL: 'contact/load-by-emails',
   SELECT_ALL: 'contact/get-all',
   LOAD_BY_IDS: 'contact/get',
   FILTER: 'contact/filter',
@@ -206,7 +207,8 @@ export const APPOINTMENT = {
   GET_EVENT: 'appointment',
   UPDATE_EVENT: 'appointment/',
   DELETE_EVENT: 'appointment/delete',
-  ACCEPT: 'appointment/accept'
+  ACCEPT: 'appointment/accept',
+  DECLINE: 'appointment/decline'
 };
 export const THEME = {
   GET_THEME: 'theme/',

@@ -388,6 +388,18 @@ export class ContactService extends HttpService {
         catchError(this.handleError('FILTER', null))
       );
   }
+
+  loadByEmails(emails: string[]): Observable<Contact[]> {
+    return this.httpClient
+      .post(this.server + CONTACT.LOAD_BY_EMAIL, { emails })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new Contact().deserialize(e))
+        ),
+        catchError(this.handleError('LOAD BY EMAILS', []))
+      );
+  }
+
   filter(query): Observable<Contact[]> {
     return this.httpClient.post(this.server + CONTACT.FILTER, query).pipe(
       map((res) => res['data'] || []),

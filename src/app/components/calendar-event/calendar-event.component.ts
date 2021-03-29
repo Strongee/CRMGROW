@@ -38,6 +38,10 @@ export class CalendarEventComponent implements OnInit {
     'https://us02web.zoom.us/j/85352609457?pwd=ZVh1Q3JtL3hja2lCamZiMG5Sbld5dz09';
   accepting = false;
   acceptSubscription: Subscription;
+  declining = false;
+  declineSubscription: Subscription;
+
+  responseStatus: string = 'needsAction';
 
   constructor(
     private dialog: MatDialog,
@@ -47,6 +51,23 @@ export class CalendarEventComponent implements OnInit {
 
   ngOnInit(): void {
     this.event = this.viewEvent;
+    // calendar
+    if (this.viewEvent.meta) {
+      const calendars = this.appointmentService.subCalendars.getValue();
+      const currentCalendar = calendars[this.viewEvent.meta.calendar_id];
+      if (!currentCalendar) {
+        return;
+      }
+      const calendarEmail = currentCalendar.account;
+      if (this.viewEvent.meta.guests && this.viewEvent.meta.guests.length) {
+        this.viewEvent.meta.guests.some((guest) => {
+          if (guest.email === calendarEmail) {
+            this.responseStatus = guest.response;
+            return true;
+          }
+        });
+      }
+    }
   }
 
   update(): void {
@@ -190,7 +211,13 @@ export class CalendarEventComponent implements OnInit {
     this.accepting = true;
     this.acceptSubscription && this.acceptSubscription.unsubscribe();
     this.acceptSubscription = this.appointmentService
-      .acceptEvent(event_id, recurrence_id, calendar_id, connected_email)
+      .acceptEvent(
+        event_id,
+        recurrence_id,
+        calendar_id,
+        connected_email,
+        this.event.meta.organizer
+      )
       .subscribe((status) => {
         this.accepting = false;
         if (status) {
@@ -200,13 +227,94 @@ export class CalendarEventComponent implements OnInit {
   }
 
   decline(): void {
-    this.dialog.open(CalendarDeclineComponent, {
-      position: { top: '40vh' },
-      width: '100vw',
-      maxWidth: '300px',
-      panelClass: 'decline-panel',
-      backdropClass: 'decline-backdrop'
-    });
+    if (!this.event || !this.event.meta) {
+      return;
+    }
+    if (!this.event.meta.calendar_id || !this.event.meta.event_id) {
+      return;
+    }
+    const calendars = this.appointmentService.subCalendars.getValue();
+    const calendar_id = this.event.meta.calendar_id;
+    const calendar = calendars[calendar_id];
+    const event_id = this.event.meta.event_id;
+    if (!calendar) {
+      return;
+    }
+    if (this.event.meta.recurrence_id) {
+      const recurrence_id = this.event.meta.recurrence_id;
+      this.dialog
+        .open(CalendarRecurringDialogComponent, {
+          position: { top: '40vh' },
+          width: '100vw',
+          maxWidth: '320px',
+          disableClose: true,
+          backdropClass: 'event-backdrop',
+          panelClass: 'event-panel',
+          data: {
+            title: 'Decline recurring event'
+          }
+        })
+        .afterClosed()
+        .subscribe((answer) => {
+          if (!answer) {
+            return;
+          }
+          if (answer.type === 'own') {
+            this.declineEventImpl(
+              calendar.account,
+              calendar_id,
+              event_id,
+              null
+            );
+          } else {
+            this.declineEventImpl(
+              calendar.account,
+              calendar_id,
+              null,
+              recurrence_id
+            );
+          }
+        });
+      return;
+    }
+    this.declineEventImpl(calendar.account, calendar_id, event_id, null);
+  }
+
+  declineEventImpl(
+    connected_email: string,
+    calendar_id: string,
+    event_id: string,
+    recurrence_id: string
+  ): void {
+    this.dialog
+      .open(CalendarDeclineComponent, {
+        width: '96vw',
+        maxWidth: '320px',
+        backdropClass: 'event-backdrop',
+        panelClass: 'event-panel'
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.declining = true;
+          this.declineSubscription && this.declineSubscription.unsubscribe();
+          this.declineSubscription = this.appointmentService
+            .declineEvent(
+              event_id,
+              recurrence_id,
+              calendar_id,
+              connected_email,
+              this.event.meta.organizer,
+              res.message
+            )
+            .subscribe((status) => {
+              this.declining = false;
+              if (status) {
+                // Update the event
+              }
+            });
+        }
+      });
   }
 
   closeWithData(data: any): void {

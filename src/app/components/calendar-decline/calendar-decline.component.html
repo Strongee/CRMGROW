@@ -19,7 +19,7 @@
         </textarea>
     </div>
     <div class="v-center justify-content-end">
-        <button class="btn btn-white f-1 font-weight-bold" mat-dialog-close>Skip</button>
-        <button class="btn btn-blue f-1 font-weight-bold">Send</button>
+        <button class="btn btn-white f-1 font-weight-bold" (click)="skipMessage()">Skip</button>
+        <button class="btn btn-blue f-1 font-weight-bold" (click)="submitMessage()">Send</button>
     </div>
 </div>

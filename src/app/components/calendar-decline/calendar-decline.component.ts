@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-calendar-decline',
@@ -7,7 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarDeclineComponent implements OnInit {
   decline_message = '';
-  constructor() {}
+  constructor(private dialogRef: MatDialogRef<CalendarDeclineComponent>) {}
 
   ngOnInit(): void {}
+
+  submitMessage(): void {
+    this.dialogRef.close({ message: this.decline_message });
+  }
+  skipMessage(): void {
+    this.dialogRef.close({ message: '' });
+  }
 }

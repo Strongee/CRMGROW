@@ -111,13 +111,12 @@
             </div>
         </div>
     </div>
-    <ng-container *ngIf="isLoading; else calendar">
-        <div class="list-loading text-center">
-            <div class="loader mt-5 lg"></div>
-            <h4 class="fw-600 mt-2">Loading calendar...</h4>
-        </div>
-    </ng-container>
-    <ng-template #calendar>
+    <div class="calendar-wrapper">
+        <ng-container *ngIf="isLoading">
+            <div class="list-loading text-center">
+                <div class="loader"></div>
+            </div>
+        </ng-container>
         <div [ngSwitch]="view">
             <div *ngSwitchCase="'month'">
                 <mwl-calendar-month-view
@@ -125,6 +124,7 @@
                     [events]="showingEvents"
                     [cellTemplate]="monthCellTemplate"
                     [headerTemplate]="monthHeaderTemplate"
+                    [refresh]="refresh"
                 >
                 </mwl-calendar-month-view>
                 <ng-template #monthCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked">
@@ -278,7 +278,7 @@
                 </ng-template>
             </div>
         </div>
-    </ng-template>
+    </div>
 
     <ng-template #creatPortalContent>
         <app-calendar-overlay (onClose)="closeOverlay()" (onCreate)="createEvent($event)" [start_date]="selectedDate">
