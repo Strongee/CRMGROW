@@ -1,11 +1,16 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Material } from 'src/app/models/material.model';
 import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { UserService } from 'src/app/services/user.service';
 import * as _ from 'lodash';
+import { FolderComponent } from '../folder/folder.component';
 @Component({
   selector: 'app-move-folder',
   templateUrl: './move-folder.component.html',
@@ -15,6 +20,7 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
   folders: Material[] = [];
   isRoot: boolean = true;
   rootFolder: Material = new Material().deserialize({ _id: 'root' });
+  newFolder: Material = new Material().deserialize({ _id: 'new' });
   materials: Material[] = [];
   userId = '';
   selectedFolder: Material = new Material();
@@ -25,6 +31,7 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
   folderLoadSubscription: Subscription;
   moveSubscription: Subscription;
   constructor(
+    private dialog: MatDialog,
     private storeService: StoreService,
     private materialService: MaterialService,
     private userService: UserService,
@@ -58,6 +65,24 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.folderLoadSubscription && this.folderLoadSubscription.unsubscribe();
+  }
+
+  folderAction(evt: any): void {
+    if (evt._id == 'new') {
+      this.dialog
+        .open(FolderComponent, {
+          width: '96vw',
+          maxWidth: '400px'
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            this.selectedFolder = res;
+          } else {
+            this.selectedFolder = new Material();
+          }
+        });
+    }
   }
 
   move(): void {

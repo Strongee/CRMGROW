@@ -101,6 +101,10 @@
 
   .duplicate-check-table {
 
+    thead .sticky-action-col {
+      opacity: 1;
+    }
+
     tbody {
       border-bottom: 2px solid #e9ecef;
     }
