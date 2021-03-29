@@ -389,6 +389,10 @@
                         <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Social share</span>
                       </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)">
+                        <i class="i-icon i-share-material bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Share team</span>
+                      </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item"
                         *ngIf="element.material_type === 'video' && checkType(element.url) &&
                         (element.user?._id === user_id || element.user === user_id)"
@@ -418,6 +422,10 @@
                       <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareMaterial(element)">
                         <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Social share</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)">
+                        <i class="i-icon i-share-material bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Share team</span>
                       </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item"
                         *ngIf="element.material_type === 'video' && checkType(element.url) &&

@@ -29,6 +29,7 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { isObject } from 'ngx-pipes/src/ng-pipes/pipes/helpers/helpers';
+import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -721,6 +722,16 @@ export class MaterialsComponent implements OnInit {
       maxWidth: '600px',
       data: {
         url: url
+      }
+    });
+  }
+
+  shareTeam(material: any): void {
+    this.dialog.open(TeamMaterialShareComponent, {
+      width: '98vw',
+      maxWidth: '450px',
+      data: {
+        material: material
       }
     });
   }

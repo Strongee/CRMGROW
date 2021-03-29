@@ -1,0 +1,38 @@
+<h1 mat-dialog-title class="v-center d-flex">
+    <span>Material share</span>
+    <button class="border-0 bgc-trans ml-auto" mat-dialog-close>
+      <i class="d-block i-icon i-close bgc-dark"></i>
+    </button>
+</h1>
+<mat-dialog-content>
+    <div class="form-group">
+        <div class="v-center">
+            <label for="target_team" class="mb-0">select team</label>
+            <span class="error ml-auto" *ngIf="team.errors">
+              <ng-container *ngIf="team.errors.required">Required!</ng-container>
+            </span>
+        </div>
+        <div class="border rounded py-2 px-2 mt-1">
+            <mat-select [(ngModel)]="selectedTeam"
+                name="fullname"
+                id="target_team"
+                name="team"
+                #team="ngModel"
+                required
+                placecholder="Select Team"
+            >
+                <mat-option disabled>Please select team</mat-option>
+                <mat-option *ngFor="let team of teams" [value]="team">
+                    <div class="v-center chip py-3">
+                        <img class="team-avatar md rounded mr-2" [src]="team.picture" onerror="(this.src = './assets/img/team_placeholder.png')" />
+                        <div class="font-weight-bold f-5">{{team.name}}</div>
+                    </div>
+                  </mat-option>
+            </mat-select>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button class="btn c-blue" mat-dialog-close>Cancel</button>
+    <button class="btn btn-primary" [class.loading]="sharing" (click)="share()">Share</button>
+</mat-dialog-actions>
