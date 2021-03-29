@@ -997,7 +997,7 @@ export class UploadContactsComponent implements OnInit {
         headers.push(this.updateColumn[key]);
       }
     }
-    headers.push('id');
+    // headers.push('id');
     const uploadContacts = this.contactsToUpload;
 
     if (uploadContacts.length < 0) {
@@ -1026,8 +1026,6 @@ export class UploadContactsComponent implements OnInit {
             } else {
               record.push([]);
             }
-          } else if (key === 'id') {
-            record.push(contact['id']);
           } else {
             record.push(contact[key] || '');
           }
