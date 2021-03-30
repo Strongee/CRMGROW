@@ -328,6 +328,7 @@ export const FILTER = {
 export const SMS = {
   GET: 'sms/',
   GET_MESSAGE: 'sms/get-messages',
+  MARK_READ: 'sms/mark-read/',
   SEARCH_NUMBER: 'sms/search-numbers'
 };
 
