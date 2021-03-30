@@ -66,7 +66,7 @@ export class AutoflowComponent
   _id;
   automation;
   automation_id;
-  automation_title;
+  automation_title = '';
   isSaving = false;
   user_id;
   auth;
@@ -1348,6 +1348,12 @@ export class AutoflowComponent
   }
 
   storeData(): void {
+    if (this.automation_title === '') {
+      this.toastr.error(
+        `You've made edits to an automation provided to you, please add a title for this new automation`
+      );
+      return;
+    }
     const parentsObj = {}; // Parent Ids of each node
     const caseActions = {}; // Case actions Object
     const nodesObj = {};
@@ -1515,7 +1521,17 @@ export class AutoflowComponent
   }
 
   goToBack(): void {
-    this.router.navigate(['automations']);
+    if (this.automation.title !== this.automation_title) {
+      if (this.auth === 'admin' || this.auth === 'shared') {
+        this.toastr.error(
+          'Automation title has been changed. Please clone this automation and save it as new title.'
+        );
+      } else {
+        this.toastr.error('Automation title has been changed. Please save it.');
+      }
+    } else {
+      this.router.navigate(['automations']);
+    }
   }
 
   changeTab(tab: TabItem): void {
