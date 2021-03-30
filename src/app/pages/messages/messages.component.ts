@@ -52,7 +52,6 @@ export class MessagesComponent implements OnInit {
   ) {
     this.templateService.loadAll(false);
     this.loadMessage();
-    this.smsService.loadAll(true);
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user_id = profile._id;
@@ -63,7 +62,7 @@ export class MessagesComponent implements OnInit {
   ngOnInit(): void {
     this.messageLoadTimer = setInterval(() => {
       this.loadMessage();
-    }, 5000);
+    }, 2000);
   }
 
   ngOnDestroy(): void {
@@ -74,6 +73,7 @@ export class MessagesComponent implements OnInit {
   scrollToBottom(): void {}
 
   loadMessage(): void {
+    this.smsService.loadAll(true);
     this.smsService.messages$.subscribe((res) => {
       const messages = this.smsService.messages.getValue();
       this.contacts = [];
