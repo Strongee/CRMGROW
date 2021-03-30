@@ -24,7 +24,6 @@ import { environment } from 'src/environments/environment';
 export class LeadCaptureComponent implements OnInit {
   times = DELAY;
   garbage: Garbage = new Garbage();
-  saving = false;
   defaultField = [
     {
       id: '',
@@ -143,6 +142,7 @@ export class LeadCaptureComponent implements OnInit {
             };
             this.garbage.additional_fields.push(data);
           }
+          this.save();
         }
       });
   }
@@ -162,6 +162,7 @@ export class LeadCaptureComponent implements OnInit {
         if (res && res.mode == 'text') {
           editData.name = res.field;
           editData.placeholder = res.placeholder;
+          this.save();
         }
       });
   }
@@ -184,6 +185,7 @@ export class LeadCaptureComponent implements OnInit {
           );
           this.garbage.additional_fields = [];
           this.garbage.additional_fields = required_fields;
+          this.save();
         }
       });
   }
@@ -197,10 +199,12 @@ export class LeadCaptureComponent implements OnInit {
           this.toast.error('At least Email or Phone should be checked.');
         } else {
           this.garbage.capture_field.email = evt;
+          this.save();
         }
         break;
       case 'name':
         this.garbage.capture_field.first_name = evt.target.checked;
+        this.save();
         break;
       case 'phone':
         if (!this.garbage.capture_field.email) {
@@ -209,9 +213,14 @@ export class LeadCaptureComponent implements OnInit {
           this.toast.error('At least Email or Phone should be checked.');
         } else {
           this.garbage.capture_field.cell_phone = evt;
+          this.save();
         }
         break;
     }
+  }
+
+  chanageDelayTime(): void {
+    this.save();
   }
 
   browseVideo(): void {
@@ -277,9 +286,7 @@ export class LeadCaptureComponent implements OnInit {
 
   removeVideo(): void {
     this.garbage.intro_video = '';
-    this.userService.updateGarbage(this.garbage).subscribe(() => {
-      this.userService.updateGarbageImpl(this.garbage);
-    });
+    this.save();
   }
 
   replaceVideo(): void {
@@ -289,17 +296,10 @@ export class LeadCaptureComponent implements OnInit {
     }, 200);
   }
 
-  saveDelay(): void {
-    this.saving = true;
-    this.userService.updateGarbage(this.garbage).subscribe(
-      () => {
-        this.saving = false;
-        this.toast.success('Lead Capture successfully updated.');
-        this.userService.updateGarbageImpl(this.garbage);
-      },
-      () => {
-        this.saving = false;
-      }
-    );
+  save(): void {
+    this.userService.updateGarbage(this.garbage).subscribe(() => {
+      this.toast.success('Lead Capture successfully updated.');
+      this.userService.updateGarbageImpl(this.garbage);
+    });
   }
 }
