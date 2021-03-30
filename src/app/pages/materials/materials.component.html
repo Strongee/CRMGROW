@@ -51,7 +51,29 @@
         </div>
       </ng-container>
     </div>
-    <div class="pl-3 pr-0 py-1 text-center ml-auto mr-2">
+    <div class="ml-auto"
+      ngbDropdown
+      placement="bottom-right">
+      <div class="v-center c-pointer f-3 p-3 mr-2 font-weight-bold"
+        ngbDropdownToggle>
+        <span class="pr-2">Sort by</span>
+      </div>
+      <div ngbDropdownMenu
+        aria-labelledby="taskSortTypes">
+        <div class="py-2"
+          ngbDropdownItem
+          *ngFor="let type of SORT_TYPES"
+          (click)="changeSort(type)">
+          <span class="f-3 v-center"
+            [class.font-weight-bold]="type.id === sortType.id">
+            {{type.label}}
+            <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+              *ngIf="type.id === sortType.id"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="border-left pl-3 pr-0 py-1 text-center ml-3 mr-2">
       <a class="ml-3 f-3 font-weight-bold c-dark td-none c-pointer v-center" (click)="drawer.toggle()">
         <span>Filter</span>
         <img class="ml-1" src="../../../assets/img/filter.svg" alt="filter-icon" style="width: 23px;"/>
@@ -389,6 +411,10 @@
                         <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Social share</span>
                       </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)">
+                        <i class="i-icon i-share-material bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Share team</span>
+                      </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item"
                         *ngIf="element.material_type === 'video' && checkType(element.url) &&
                         (element.user?._id === user_id || element.user === user_id)"
@@ -418,6 +444,10 @@
                       <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareMaterial(element)">
                         <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Social share</span>
+                      </button>
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)">
+                        <i class="i-icon i-share-material bgc-dark ml-1" aria-hidden="true"></i>
+                        <span class="ml-3 f-3 font-weight-bold">Share team</span>
                       </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item"
                         *ngIf="element.material_type === 'video' && checkType(element.url) &&

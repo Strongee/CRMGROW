@@ -259,6 +259,12 @@ td.type-col {
     color: $color-dark!important;
 }
 
+.form-group {
+    .custom-control-label {
+        text-transform: none;
+    }
+}
+
 :host ::ng-deep {
     .show.dropdown {
         position: unset;
