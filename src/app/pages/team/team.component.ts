@@ -474,6 +474,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
           const pos = editors.indexOf(member._id);
           if (pos !== -1) {
             editors.splice(pos, 1);
+            this.team.editors.splice(pos, 1);
           }
           const newMembers = [];
           this.team.members.forEach((e) => {
@@ -481,6 +482,18 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
               newMembers.push(e._id);
             }
           });
+          const editorIndex = this.editors.findIndex(
+            (item) => item._id === member._id
+          );
+          if (editorIndex >= 0) {
+            this.editors.splice(editorIndex, 1);
+          }
+          const viewerIndex = this.viewers.findIndex(
+            (item) => item._id === member._id
+          );
+          if (viewerIndex >= 0) {
+            this.viewers.splice(viewerIndex, 1);
+          }
           this.teamService
             .updateTeam(this.teamId, { members: newMembers, editors })
             .subscribe(
@@ -497,6 +510,64 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
   }
+
+  leaveTeam(member): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        maxWidth: '360px',
+        width: '96vw',
+        data: {
+          title: 'Leave Team',
+          message: 'Are you sure you want to leave this team?',
+          cancelLabel: 'No',
+          confirmLabel: 'Leave'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const editors = [...this.team.editors];
+          const pos = editors.indexOf(member._id);
+          if (pos !== -1) {
+            editors.splice(pos, 1);
+            this.team.editors.splice(pos, 1);
+          }
+          const newMembers = [];
+          this.team.members.forEach((e) => {
+            if (e._id !== member._id) {
+              newMembers.push(e._id);
+            }
+          });
+          const editorIndex = this.editors.findIndex(
+            (item) => item._id === member._id
+          );
+          if (editorIndex >= 0) {
+            this.editors.splice(editorIndex, 1);
+          }
+          const viewerIndex = this.viewers.findIndex(
+            (item) => item._id === member._id
+          );
+          if (viewerIndex >= 0) {
+            this.viewers.splice(viewerIndex, 1);
+          }
+          this.teamService
+            .updateTeam(this.teamId, { members: newMembers, editors })
+            .subscribe(
+              (response) => {
+                this.team.members.some((e, index) => {
+                  if (e._id === member._id) {
+                    this.team.members.splice(index, 1);
+                  }
+                });
+                this.goToBack();
+                this.toast.success('You leaved this team successfully.');
+              },
+              (err) => {}
+            );
+        }
+      });
+  }
+
   acceptRequest(user): void {
     this.acceptJoinRequest = true;
     this.teamService.acceptRequest(this.teamId, user._id).subscribe(

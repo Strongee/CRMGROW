@@ -224,10 +224,10 @@ td.type-col {
 }
 
 .sub-item-action {
-  width: 112px;
-  max-width: 112px;
+  width: 164px;
   .items {
-    display: none;
+    display: flex;
+    opacity: 0;
   }
 }
 
@@ -289,7 +289,7 @@ td.type-col {
     tr:hover {
       .sub-item-action {
         .items {
-          display: flex;
+          opacity: 1;
         }
       }
     }

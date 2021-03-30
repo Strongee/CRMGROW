@@ -38,6 +38,15 @@
             &.selected {
                 background-color: #F3F3F3;
             }
+            .message-status {
+                width: 8px;
+                height: 8px;
+                min-width: 8px;
+                border-radius: 50%;
+                &.unread {
+                    background-color: #ff0000;
+                }
+            }
         }
         @media screen and (max-width: 1100px) {
             min-width: unset;

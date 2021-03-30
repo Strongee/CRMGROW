@@ -58,6 +58,16 @@
       }
     }
   }
+
+  .template-action {
+    opacity: 0;
+  }
+
+  tr:hover {
+    .template-action {
+      opacity: 1;
+    }
+  }
 }
 
 

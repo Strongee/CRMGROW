@@ -145,6 +145,7 @@ import { InputEmailChipComponent } from './input-email-chip/input-email-chip.com
 import { TemplateCreateComponent } from './template-create/template-create.component';
 import { SendBulkTextComponent } from './send-bulk-text/send-bulk-text.component';
 import { SocialShareComponent } from './social-share/social-share.component';
+import { TeamMaterialShareComponent } from './team-material-share/team-material-share.component';
 
 @NgModule({
   declarations: [
@@ -288,7 +289,8 @@ import { SocialShareComponent } from './social-share/social-share.component';
     InputEmailChipComponent,
     TemplateCreateComponent,
     SendBulkTextComponent,
-    SocialShareComponent
+    SocialShareComponent,
+    TeamMaterialShareComponent
   ],
   imports: [
     CommonModule,
@@ -384,7 +386,8 @@ import { SocialShareComponent } from './social-share/social-share.component';
     CalendlyListComponent,
     InputEmailChipComponent,
     TemplateCreateComponent,
-    SocialShareComponent
+    SocialShareComponent,
+    TeamMaterialShareComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -165,6 +165,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((res) => {
         if (res) {
           this.loadPageCalls('sent', this.page['sent']);
+          this.changeTab(this.TABS[1]);
         }
       });
   }

@@ -58,6 +58,7 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     'action-count',
     'contacts',
     'created',
+    'assign-action',
     'actions'
   ];
   STATUS = STATUS;
@@ -119,6 +120,7 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
             this.loading = false;
             this.automations = res;
             this.filteredResult = this.automations;
+            this.sort('role', true);
           }
         },
         (error) => {
@@ -320,27 +322,71 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
       this.selectedSort = field;
       return;
     } else {
-      if (field === 'created_at') {
-        this.filteredResult = sortDateArray(
-          this.filteredResult,
-          field,
-          this.searchCondition[field]
-        );
-      } else if (field === 'role') {
+      if (field === 'role') {
         const admins = this.filteredResult.filter(
           (item) => item.role === 'admin'
+        );
+        const owns = this.filteredResult.filter(
+          (item) => item.role === undefined
         );
         const teams = this.filteredResult.filter(
           (item) => item.role === 'team' && item.user === this.userId
         );
-        const shares = this.filteredResult.filter(
+        const shared = this.filteredResult.filter(
           (item) => item.role === 'team' && item.user !== this.userId
         );
-        const owns = this.filteredResult.filter((item) => !item.role);
-        if (this.searchCondition[field]) {
-          this.filteredResult = [...admins, ...teams, ...owns, ...shares];
+        let sortedAdmins, sortedOwns, sortedTeams, sortedShared;
+        if (keep) {
+          sortedAdmins = sortStringArray(admins, 'title', true);
+          sortedOwns = sortStringArray(owns, 'title', true);
+          sortedTeams = sortStringArray(teams, 'title', true);
+          sortedShared = sortStringArray(shared, 'title', true);
         } else {
-          this.filteredResult = [...owns, ...teams, ...shares, ...admins];
+          sortedAdmins = sortStringArray(
+            admins,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedOwns = sortStringArray(
+            owns,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedTeams = sortStringArray(
+            teams,
+            'title',
+            this.searchCondition[field]
+          );
+          sortedShared = sortStringArray(
+            shared,
+            'title',
+            this.searchCondition[field]
+          );
+        }
+        this.filteredResult = [];
+        if (keep) {
+          this.filteredResult = [
+            ...sortedAdmins,
+            ...sortedOwns,
+            ...sortedTeams,
+            ...sortedShared
+          ];
+        } else {
+          if (this.searchCondition[field]) {
+            this.filteredResult = [
+              ...sortedAdmins,
+              ...sortedOwns,
+              ...sortedTeams,
+              ...sortedShared
+            ];
+          } else {
+            this.filteredResult = [
+              ...sortedOwns,
+              ...sortedTeams,
+              ...sortedShared,
+              ...sortedAdmins
+            ];
+          }
         }
       } else {
         this.filteredResult = sortStringArray(
@@ -349,11 +395,10 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
           this.searchCondition[field]
         );
       }
+      this.page = 1;
+      if (!keep) {
+        this.searchCondition[field] = !this.searchCondition[field];
+      }
     }
-    if (!keep) {
-      this.searchCondition[field] = !this.searchCondition[field];
-    }
-
-    this.page = 1;
   }
 }

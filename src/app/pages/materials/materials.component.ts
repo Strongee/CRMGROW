@@ -29,6 +29,7 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { isObject } from 'ngx-pipes/src/ng-pipes/pipes/helpers/helpers';
+import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -47,12 +48,20 @@ export class MaterialsComponent implements OnInit {
     'lead_capture',
     'actions'
   ];
+  SORT_TYPES = [
+    { id: '', label: 'All types' },
+    { id: 'folder', label: 'Folder' },
+    { id: 'video', label: 'Video' },
+    { id: 'pdf', label: 'Pdf' },
+    { id: 'image', label: 'Image' }
+  ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },
     { id: 10, label: '10' },
     { id: 25, label: '25' },
     { id: 50, label: '50' }
   ];
+  sortType = this.SORT_TYPES[0];
   ACTIONS = BulkActions.Materials;
   STATUS = STATUS;
   siteUrl = environment.website;
@@ -725,6 +734,16 @@ export class MaterialsComponent implements OnInit {
     });
   }
 
+  shareTeam(material: any): void {
+    this.dialog.open(TeamMaterialShareComponent, {
+      width: '98vw',
+      maxWidth: '450px',
+      data: {
+        material: material
+      }
+    });
+  }
+
   deleteMaterial(material: any): void {
     switch (material.material_type) {
       case 'video':
@@ -1346,6 +1365,12 @@ export class MaterialsComponent implements OnInit {
       this.teamOptions.length ||
       this.folderOptions.length
     );
+  }
+
+  changeSort(type: any): void {
+    this.matType = type.id;
+    this.sortType = type;
+    this.filter();
   }
 
   filter(): void {

@@ -2,7 +2,6 @@
     <div class="v-center justify-content-between border-bottom page-header">
         <h4 class="page-title m-0">Messages</h4>
         <button class="v-center btn btn-blue f-6 font-weight-bold text-white" (click)="newMessage()">
-            <i class="d-block i-icon i-plus bgc-white mr-2 sm"></i>
             New message
         </button>
     </div>
@@ -16,12 +15,13 @@
                 <h3 class="f-8 font-weight-bold m-0" *ngIf="!isNew">Contacts</h3>
                 <h3 class="f-8 font-weight-bold m-0" *ngIf="isNew">New message</h3>
             </div>
-            <ng-container *ngIf="contacts.length; else noContacts">
+            <ng-container *ngIf="(smsService.messages$ | async).length; else noContacts">
                 <div class="d-flex p-2 c-pointer contact"
                     [class]="{'selected': contact._id == selectedContact._id}"
                     *ngFor="let contact of contacts" ngbDropdown
                     (click)="selectContact(contact)"
                 >
+                    <div class="message-status my-auto mr-1" [ngClass]="{'unread': contact.unread, 'read': !contact.unread}"></div>
                     <div class="contact-avatar f-3 font-weight-bold mr-2">
                         {{contact.avatarName}}
                     </div>
@@ -38,7 +38,7 @@
                                     {{contact.lastest_at | date:'EEE'}}
                                 </span>
                             </ng-container>
-                            <ng-container *ngIf="calcDate(contact.lastest_at) > 8">
+                            <ng-container *ngIf="calcDate(contact.lastest_at) >= 8">
                                 <span class="f-1 op-56">
                                     {{contact.lastest_at | date:'EEE dd, yyyy'}}
                                 </span>
@@ -51,19 +51,17 @@
                 </div>
             </ng-container>
             <ng-template #noContacts>
-                <ng-container *ngIf="loadingContact; else emptyResult">
-                    <div class="list-loading text-center">
-                        <div class="loader mt-5 lg"></div>
-                        <h4 class="fw-600 mt-2">Loading contacts...</h4>
-                    </div>
-                </ng-container>
-                <ng-template #emptyResult>
-                    <div class="empty-list py-5">
+                <ng-container [ngSwitch]="(smsService.loading$ | async)">
+                    <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
                         <h4 class="font-weight-bold mt-4 mb-3">
-                        There is no contacts.
+                            There is no contacts.
                         </h4>
                     </div>
-                </ng-template>
+                    <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+                      <div class="loader mt-5 lg"></div>
+                      <h4 class="fw-600 mt-2">Loading contacts...</h4>
+                    </div>
+                </ng-container>
             </ng-template>
         </div>
         <div class="message-box" [class.show]="showMessage">
@@ -132,7 +130,7 @@
                                     <ng-container *ngIf="calcDate(message.updated_at) > 0 && calcDate(message.updated_at) < 8">
                                         {{message.updated_at | date:'EEE h:mm a'}}
                                     </ng-container>
-                                    <ng-container *ngIf="calcDate(message.updated_at) > 8">
+                                    <ng-container *ngIf="calcDate(message.updated_at) >= 8">
                                         {{message.updated_at | date:'EEE dd, yyyy'}}
                                     </ng-container>
                                 </div>
