@@ -48,7 +48,7 @@ export class DealStageDeleteComponent implements OnInit {
           this.toastr.success(
             'Deal Stage has been deleted and associated contacts has been moved to a different stage.'
           );
-          this.dialogRef.close(true);
+          this.dialogRef.close(this.targetStage);
         }
       });
   }
