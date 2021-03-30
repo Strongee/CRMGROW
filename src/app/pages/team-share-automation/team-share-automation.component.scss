@@ -104,4 +104,24 @@ input.disabled {
   th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 0;
   }
+
+  .assign-action {
+    min-width: 60px;
+    max-width: 60px;
+
+    button {
+      opacity: 0;
+      margin-left: auto;
+    }
+  }
+
+  .actions {
+    max-width: 30px;
+  }
+
+  tr:hover {
+    .assign-action button {
+      opacity: 1;
+    }
+  }
 }

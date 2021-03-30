@@ -131,9 +131,7 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         [{ _id: this.userId }],
         '_id'
       );
-      if (this.leader) {
-        this.filteredResults.next(this.teamLeaders);
-      }
+      this.filteredResults.next(this.teamLeaders);
     });
   }
 }

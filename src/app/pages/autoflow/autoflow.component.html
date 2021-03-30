@@ -11,27 +11,37 @@
           <div class="col-md-6 col-sm-12 col-12">
             <div class="form-group d-flex align-items-end">
               <div class="title w-100">
-                <label for="automation-title">Title</label>
+                <div class="v-center justify-content-between">
+                  <label for="automation-title">Title</label>
+                  <span class="error f-3 font-weight-bold"
+                        *ngIf="automation_title == '' && submitted">
+                  Required!
+                </span>
+                </div>
                 <input class="form-control"
                    id="automation-title"
                    [(ngModel)]="automation_title" type="text"
                    name="automationTitle"
                    #automationTitle="ngModel"
                    placeholder="Type in new automation title"
-                   [disabled]="editMode == 'edit' && automation && automation.role == 'admin'"
                    required
                 >
-<!--                <span class="invalid-feedback"-->
-<!--                      *ngIf="automationTitle.errors&&(automationTitle.touched||automationTitle.dirty||submitted)&&submitted">Automation-->
-<!--                      name is required.</span>-->
+
               </div>
-              <ng-container *ngIf="!(editMode == 'edit' && automation && automation.role == 'admin')">
+              <ng-container *ngIf="editMode == 'edit' && (auth == 'admin' || auth == 'shared'); else editableTemplate">
+                <div class="btn-wrapper ml-2">
+                  <button type="button" class="btn btn-white-blue" (click)="duplicate($event, automation)">
+                    <span class="f-3 font-weight-bold">Clone</span>
+                  </button>
+                </div>
+              </ng-container>
+              <ng-template #editableTemplate>
                 <div class="btn-wrapper ml-2">
                   <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
                     {{editMode == 'edit' ? 'Save' : 'Create'}}
                   </button>
                 </div>
-              </ng-container>
+              </ng-template>
             </div>
           </div>
           <div class="col-md-3 col-sm-6 col-6">
@@ -65,20 +75,24 @@
                 (click)="assignContacts()">
                 <span class="font-weight-bold f-3">Assign</span>
               </button>
-              <div ngbDropdown class="d-flex p-2 button-more py-2 rounded">
-                <button type="button" class="v-center btn btn-white-blue py-2" ngbDropdownToggle>
-                  <span class="font-weight-bold f-3 c-blue">More</span>
-                </button>
-                <div ngbDropdownMenu class="light">
-                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
-                    <span class="f-3 font-weight-bold">Clone</span>
+              <ng-container *ngIf="(auth == 'admin' || auth == 'shared'); else moreTemplate">
+              </ng-container>
+              <ng-template #moreTemplate>
+                <div ngbDropdown class="d-flex p-2 button-more py-2 rounded">
+                  <button type="button" class="v-center btn btn-white-blue py-2" ngbDropdownToggle>
+                    <span class="font-weight-bold f-3 c-blue">More</span>
                   </button>
-                  <hr class="my-1">
-                  <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete()">
-                    <span class="c-red f-3 font-weight-bold">Delete automation</span>
-                  </button>
+                  <div ngbDropdownMenu class="light">
+                    <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
+                      <span class="f-3 font-weight-bold">Clone</span>
+                    </button>
+                    <hr class="my-1">
+                    <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete()">
+                      <span class="c-red f-3 font-weight-bold">Delete automation</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </ng-template>
             </div>
           </div>
         </div>

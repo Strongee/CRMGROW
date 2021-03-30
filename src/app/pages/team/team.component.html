@@ -223,9 +223,17 @@
                   {{member.created_at | date: 'MM.dd.yyyy'}}
                 </td>
                 <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
-                  <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="removeMember(member)">
-                    <i class="bgc-black i-icon i-trash"></i>
-                  </button>
+                  <ng-container *ngIf="member._id === userId; else removeTemplate">
+                    <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="leaveTeam(member)" placement="bottom" ngbTooltip="Leave team" ngbButtonLabel>
+                      <i class="bgc-black i-icon i-trash"></i>
+                    </button>
+                  </ng-container>
+                  <ng-template #removeTemplate>
+                    <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="removeMember(member)" placement="bottom" ngbTooltip="Remove member" ngbButtonLabel>
+                      <i class="bgc-black i-icon i-trash"></i>
+                    </button>
+                  </ng-template>
+
                 </td>
               </tr>
               <tr *ngFor="let member of viewers">
@@ -269,7 +277,7 @@
                   {{member.created_at | date: 'MM.dd.yyyy'}}
                 </td>
                 <td class="action-cell d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
-                  <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="removeMember(member)">
+                  <button class="v-center btn bgc-white c-black f-3 justify-content-end mt-1" (click)="removeMember(member)" placement="bottom" ngbTooltip="Remove member" ngbButtonLabel>
                     <i class="bgc-black i-icon i-trash"></i>
                   </button>
                 </td>
@@ -298,7 +306,7 @@
                   {{invite.created_at | date: 'MM.dd.yyyy'}}
                 </td>
                 <td class="action-cell value d-flex justify-content-end" *ngIf="role=='editor' || role == 'owner'">
-                  <button class="v-center btn bgc-white c-dark f-3 mt-1" (click)="cancelInvite(invite)">
+                  <button class="v-center btn bgc-white c-dark f-3 mt-1" (click)="cancelInvite(invite)" placement="bottom" ngbTooltip="Cancel Invite" ngbButtonLabel>
                     <i class="i-icon i-trash bgc-black d-block mr-2"></i>
                     <span class="button-label">Cancel invitation</span>
                   </button>
