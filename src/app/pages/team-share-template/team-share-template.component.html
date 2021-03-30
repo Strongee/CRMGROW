@@ -86,17 +86,17 @@
             <td mat-cell *matCellDef="let template" class="template-action">
               <div class="v-center justify-content-end">
                 <ng-container *ngIf="isDuplicatable(template)">
-                  <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
+                  <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)" placement="bottom" ngbTooltip="Duplicate template" ngbButtonLabel>
                     <i class="i-icon bgc-dark i-duplicate"></i>
                   </div>
                 </ng-container>
                 <ng-container *ngIf="template.role != 'admin' && template.user == userId">
-                  <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" [class.disabled]="template.role == 'admin'">
+                  <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" [class.disabled]="template.role == 'admin'" placement="bottom" ngbTooltip="Edit template" ngbButtonLabel>
                     <i class="i-icon bgc-dark i-edit"></i>
                   </div>
                 </ng-container>
                 <ng-container *ngIf="isStopSharable(template)">
-                  <div class="icon-button v-center justify-content-center" (click)="stopShareTemplate(template)" [class.disabled]="template.role == 'admin'">
+                  <div class="icon-button v-center justify-content-center" (click)="stopShareTemplate(template)" [class.disabled]="template.role == 'admin'" placement="bottom" ngbTooltip="Stop Share" ngbButtonLabel>
                     <i class="i-icon bgc-dark i-block"></i>
                   </div>
                 </ng-container>
