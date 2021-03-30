@@ -132,9 +132,9 @@ export class ImportContactMergeComponent implements OnInit {
               for (const contact of this.contacts) {
                 if (
                   contact[this.updateColumn[name]] &&
-                  this.emails.indexOf(contact[this.updateColumn[name]]) < 0
+                  this.emails.indexOf(contact[this.updateColumn[name]].toLowerCase()) < 0
                 ) {
-                  this.emails.push(contact[this.updateColumn[name]]);
+                  this.emails.push(contact[this.updateColumn[name]].toLowerCase());
                 }
               }
             }
@@ -425,8 +425,7 @@ export class ImportContactMergeComponent implements OnInit {
       (res) => {
         this.updating = false;
         if (res) {
-          let merged;
-          merged = {
+          const merged = {
             ...this.previewContact
           };
           this.dialogRef.close({ type: 'contact-csv', merged });
