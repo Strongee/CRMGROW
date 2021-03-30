@@ -16,15 +16,12 @@
                 <h3 class="f-8 font-weight-bold m-0" *ngIf="isNew">New message</h3>
             </div>
             <ng-container *ngIf="(smsService.messages$ | async).length; else noContacts">
-                <div class="updating-status" *ngIf="(smsService.loading$ | async) === STATUS.REQUEST">
-                    LOADING
-                </div>
                 <div class="d-flex p-2 c-pointer contact"
                     [class]="{'selected': contact._id == selectedContact._id}"
                     *ngFor="let contact of contacts" ngbDropdown
                     (click)="selectContact(contact)"
                 >
-                    <div class="unread my-auto mr-1" *ngIf="contact.unread"></div>
+                    <div class="message-status my-auto mr-1" [ngClass]="{'unread': contact.unread, 'read': !contact.unread}"></div>
                     <div class="contact-avatar f-3 font-weight-bold mr-2">
                         {{contact.avatarName}}
                     </div>
