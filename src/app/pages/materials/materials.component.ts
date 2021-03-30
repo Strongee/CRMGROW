@@ -48,12 +48,20 @@ export class MaterialsComponent implements OnInit {
     'lead_capture',
     'actions'
   ];
+  SORT_TYPES = [
+    { id: '', label: 'All types' },
+    { id: 'folder', label: 'Folder' },
+    { id: 'video', label: 'Video' },
+    { id: 'pdf', label: 'Pdf' },
+    { id: 'image', label: 'Image' }
+  ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },
     { id: 10, label: '10' },
     { id: 25, label: '25' },
     { id: 50, label: '50' }
   ];
+  sortType = this.SORT_TYPES[0];
   ACTIONS = BulkActions.Materials;
   STATUS = STATUS;
   siteUrl = environment.website;
@@ -1357,6 +1365,12 @@ export class MaterialsComponent implements OnInit {
       this.teamOptions.length ||
       this.folderOptions.length
     );
+  }
+
+  changeSort(type: any): void {
+    this.matType = type.id;
+    this.sortType = type;
+    this.filter();
   }
 
   filter(): void {
