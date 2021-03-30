@@ -10,8 +10,8 @@ import * as _ from 'lodash';
 import { Contact } from 'src/app/models/contact.model';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
-import * as moment from 'moment';
 import { sortDateArray } from 'src/app/utils/functions';
+import { STATUS } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-messages',
@@ -19,7 +19,8 @@ import { sortDateArray } from 'src/app/utils/functions';
   styleUrls: ['./messages.component.scss']
 })
 export class MessagesComponent implements OnInit {
-  loadingContact = false;
+  STATUS = STATUS;
+
   loadingMessage = false;
   contacts = [];
   selectedContact: Contact = new Contact();
@@ -38,7 +39,6 @@ export class MessagesComponent implements OnInit {
   siteUrl = environment.website;
   user_id = '';
   messageLoadTimer;
-  messageLoadSubscription: Subscription;
   profileSubscription: Subscription;
 
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
@@ -48,10 +48,11 @@ export class MessagesComponent implements OnInit {
     public templateService: TemplatesService,
     private userService: UserService,
     private materialService: MaterialService,
-    private smsService: SmsService
+    public smsService: SmsService
   ) {
     this.templateService.loadAll(false);
     this.loadMessage();
+    this.smsService.loadAll(true);
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user_id = profile._id;
@@ -60,7 +61,6 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadingContact = true;
     this.messageLoadTimer = setInterval(() => {
       this.loadMessage();
     }, 5000);
@@ -74,37 +74,44 @@ export class MessagesComponent implements OnInit {
   scrollToBottom(): void {}
 
   loadMessage(): void {
-    this.messageLoadSubscription && this.messageLoadSubscription.unsubscribe();
-    this.messageLoadSubscription = this.smsService
-      .getAllMessage()
-      .subscribe((res) => {
-        this.loadingContact = false;
-        this.contacts = [];
-        for (let index = 0; index < res.length; index++) {
-          if (res[index].contacts.length > 0) {
-            for (let i = 0; i < res[index].contacts.length; i++) {
-              const contact_item = {
-                lastest_message: res[index].content,
-                lastest_at: res[index].updated_at
-              };
-              this.contacts.push(
-                Object.assign(
-                  new Contact().deserialize(res[index].contacts[0]),
-                  contact_item
-                )
-              );
-            }
+    this.smsService.messages$.subscribe((res) => {
+      const messages = this.smsService.messages.getValue();
+      this.contacts = [];
+      for (let index = 0; index < messages.length; index++) {
+        if (messages[index].contacts.length > 0) {
+          let contact_item;
+          if (messages[index].type == 1 && messages[index].status == 0) {
+            contact_item = {
+              unread: true,
+              lastest_message: messages[index].content,
+              lastest_at: messages[index].updated_at
+            };
+          } else {
+            contact_item = {
+              unread: false,
+              lastest_message: messages[index].content,
+              lastest_at: messages[index].updated_at
+            };
           }
+
+          this.contacts.push(
+            Object.assign(
+              new Contact().deserialize(messages[index].contacts[0]),
+              contact_item
+            )
+          );
         }
-        this.contacts = sortDateArray(this.contacts, 'lastest_at', false);
-        if (
-          this.contacts.length &&
-          this.selectedContact &&
-          Object.keys(this.selectedContact).length == 0
-        ) {
-          this.selectContact(this.contacts[0]);
-        }
-      });
+      }
+      this.contacts = sortDateArray(this.contacts, 'lastest_at', false);
+
+      if (
+        this.contacts.length &&
+        this.selectedContact &&
+        Object.keys(this.selectedContact).length == 0
+      ) {
+        this.defaultSelectContact(this.contacts[0]);
+      }
+    });
   }
 
   keyTrigger(evt: any): void {
@@ -143,11 +150,36 @@ export class MessagesComponent implements OnInit {
     });
   }
 
+  defaultSelectContact(contact: any): void {
+    this.loadingMessage = true;
+    this.selectedContact = contact;
+    this.smsService.getMessage(this.selectedContact).subscribe((res) => {
+      if (res) {
+        this.loadingMessage = false;
+        this.messages = [];
+        const message = {
+          id: contact._id,
+          messages: res
+        };
+        this.messages.push(message);
+      }
+    });
+    this.isNew = false;
+    this.showMessage = true;
+  }
+
   selectContact(contact: any): void {
     this.loadingMessage = true;
     this.selectedContact = contact;
     this.smsService.getMessage(this.selectedContact).subscribe((res) => {
       if (res) {
+        if (res[res.length - 1].type == 1 && res[res.length - 1].status == 0) {
+          this.smsService.markRead(res[res.length - 1]._id).subscribe((res) => {
+            if (res && res['status']) {
+              this.selectedContact.unread = false;
+            }
+          });
+        }
         this.loadingMessage = false;
         this.messages = [];
         const message = {

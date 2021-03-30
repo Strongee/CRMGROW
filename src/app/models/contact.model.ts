@@ -12,6 +12,7 @@ export class Contact implements Deserializable {
   last_activity: string;
   lastest_message: string;
   lastest_at: Date;
+  unread: boolean;
   address: string;
   city: string;
   state: string;
