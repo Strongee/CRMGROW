@@ -93,4 +93,13 @@ export class TagManagerComponent implements OnInit {
         this.tags = tags;
       });
   }
+
+  deleteContactTag(tag: any, contact: any): void {
+    const index = tag.contacts.findIndex((item) => item._id === contact._id);
+    if (index != -1) {
+      tag.contacts.splice(index, 1);
+      tag.count -= 1;
+    }
+    console.log('###', this.tags);
+  }
 }
