@@ -86,7 +86,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   selectSource = '';
   selection: Contact[] = [];
   pageSelection: Contact[] = [];
-  pageContacts: any[] = [];
+  pageContacts: ContactActivity[] = [];
 
   // Variables for Label Update
   isUpdating = false;
@@ -100,6 +100,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   contactCount = 0;
   userId = '';
   userOptions = [];
+  paginationLoading = false;
 
   constructor(
     public router: Router,
@@ -127,7 +128,6 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
 
     this.pageSelection = [];
     this.selection = [];
-
   }
 
   loadContact(page: number): void {
@@ -137,17 +137,20 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
       .loadSharedContacts(this.team._id, this.pageSize.id, page)
       .subscribe((res) => {
         this.loading = false;
-        if (res && res.contacts && res.contacts.length > 0) {
-          this.contactCount = this.contacts.length;
-          this.pageContacts = res.contacts;
+        if (res && res.contacts) {
+          this.pageContacts = [];
+          for (const contact of res.contacts) {
+            this.pageContacts.push(new ContactActivity().deserialize(contact));
+          }
         }
+        this.contactCount = res.count;
       });
   }
 
   ngOnChanges(changes): void {
-    if (changes.contacts && changes.contacts.currentValue) {
-      this.pageContacts = [...changes.contacts.currentValue];
-    }
+    // if (changes.contacts && changes.contacts.currentValue) {
+    //   this.pageContacts = [...changes.contacts.currentValue];
+    // }
   }
   /**
    * Load the contacts: Advanced Search, Normal Search, API Call
@@ -165,7 +168,27 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     let skip = (page - 1) * 8;
     skip = skip < 0 ? 0 : skip;
     if (this.searchStr === '') {
-      this.loadContact(skip);
+      this.paginationLoading = true;
+      this.loadSubscription && this.loadSubscription.unsubscribe();
+      this.loadSubscription = this.teamService
+        .loadSharedContacts(this.team._id, this.pageSize.id, skip)
+        .subscribe((res) => {
+          this.paginationLoading = false;
+          if (res && res.contacts) {
+            this.pageContacts = [];
+            for (const contact of res.contacts) {
+              this.pageContacts.push(
+                new ContactActivity().deserialize(contact)
+              );
+            }
+          }
+          this.contactCount = res.count;
+          this.pageSelection = _.intersectionBy(
+            this.selection,
+            this.pageContacts,
+            '_id'
+          );
+        });
     }
   }
   /**
@@ -211,7 +234,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
       .subscribe((res) => {
         if (res) {
           this.pageContacts = res['contacts'];
-          this.contactCount = this.pageContacts.length;
+          this.contactCount = res['total'];
         }
       });
     this.page = 1;
@@ -280,7 +303,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    * Check all contacts in page are selected.
    */
   isAllSelected(): boolean {
-    if (this.selection.length === this.pageContacts.length) {
+    if (this.selection.length === this.contactCount) {
       this.updateSelectActionStatus(false);
     } else {
       this.updateSelectActionStatus(true);
@@ -450,14 +473,21 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    * Select All Contacts
    */
   selectAll(source = false): void {
-    for (const contact of this.pageContacts) {
-      if (!this.isSelected(contact)) {
-        this.pageSelection.push(new Contact().deserialize(contact));
-        this.selection.push(new Contact().deserialize(contact));
-      }
-    }
-    this.updateActionsStatus('select', false);
-    this.updateSelectActionStatus(false);
+    this.selecting = true;
+    this.selectSubscription && this.selectSubscription.unsubscribe();
+    this.selectSubscription = this.teamService
+      .selectAllSharedContacts(this.team._id)
+      .subscribe((contacts) => {
+        this.selecting = false;
+        this.selection = _.unionBy(this.selection, contacts, '_id');
+        this.pageSelection = _.intersectionBy(
+          this.selection,
+          this.pageContacts,
+          '_id'
+        );
+        this.updateActionsStatus('select', false);
+        this.updateSelectActionStatus(false);
+      });
   }
 
   deselectAll(): void {

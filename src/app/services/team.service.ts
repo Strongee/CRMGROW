@@ -482,6 +482,17 @@ export class TeamService extends HttpService {
       );
   }
 
+  selectAllSharedContacts(id): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.ALL_SHARED_CONTACT, { team: id })
+      .pipe(
+        map((res) =>
+          (res['data'] || []).map((e) => new Contact().deserialize(e))
+        ),
+        catchError(this.handleError('GET ALL SHARED CONTACT', []))
+      );
+  }
+
   clear$(): void {
     this.teams.next([]);
     this.invites.next([]);

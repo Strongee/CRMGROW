@@ -9,6 +9,7 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
+const phone = require('phone');
 
 @Component({
   selector: 'app-import-contact-edit',
@@ -52,7 +53,9 @@ export class ImportContactEditComponent implements OnInit, OnDestroy {
   edit(): void {
     const contact = {
       ...this.contact,
-      primary_phone: this.cell_phone ? this.cell_phone.internationalNumber : ''
+      primary_phone: this.cell_phone
+        ? phone(this.cell_phone.internationalNumber)[0]
+        : ''
     };
     this.dialogRef.close({ contact });
   }

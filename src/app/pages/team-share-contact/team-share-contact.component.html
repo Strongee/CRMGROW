@@ -54,7 +54,17 @@
     <div class="mat-table-wrapper mode-2">
       <table class="w-100 page-table"
              mat-table
-             [dataSource]="pageContacts | paginate: {itemsPerPage: 8, currentPage: page, id: 'contactTable', total: pageContacts.length}">
+             [dataSource]="pageContacts | paginate: {itemsPerPage: 8, currentPage: page, id: 'contactTable', totalItems: contactCount}">
+
+        <ng-container matColumnDef="loader-cell">
+          <th mat-header-cell
+              *matHeaderCellDef colspan="12" class="loader-cell">
+            <div class="updating-status"
+                 *ngIf="paginationLoading">
+              LOADING
+            </div>
+          </th>
+        </ng-container>
 
         <ng-container matColumnDef="select">
           <th mat-header-cell
@@ -104,8 +114,8 @@
               *matCellDef="let element"
               (click)="openContact(element)">
             <div class="v-center c-pointer">
-              <div class="contact-avatar f-3 mr-2">{{avatarName(element)}}</div>
-              <span class="fw-600">{{element.first_name + ' ' + element.last_name}}</span>
+              <div class="contact-avatar f-3 mr-2">{{element.avatarName}}</div>
+              <span class="fw-600">{{element.fullName}}</span>
             </div>
           </td>
         </ng-container>
@@ -212,22 +222,24 @@
 
         <ng-container matColumnDef="selection_info">
           <th mat-header-cell *matHeaderCellDef colspan="9" class="text-center">
-            <span *ngIf="!isAllSelected(); else deselectTemplate">
+            <span *ngIf="selection.length !== contactCount; else deselectTemplate">
               {{selection.length}} contacts are selected.
-              <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
+              <span  class="c-blue font-weight-bold" *ngIf="selecting">
                 <i class="small-spinner"></i>
                 <span class="ml-1">Selecting all. . .</span>
               </span>
               <span class="c-blue font-weight-bold c-pointer" *ngIf="!selecting" (click)="selectAll()">
-                Select all {{pageContacts.length}} contacts
+                Select all {{contactCount}} contacts
               </span>
             </span>
             <ng-template #deselectTemplate>
-              All {{pageContacts.length}} contacts are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>
+              All {{contactCount}} contacts are selected. <span class="c-blue c-pointer font-weight-bold" (click)="deselectAll()">Clear selection</span>
             </ng-template>
           </th>
         </ng-container>
 
+        <tr mat-header-row
+            *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
             *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length" class='selection-info'></tr>

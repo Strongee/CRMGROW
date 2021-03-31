@@ -957,6 +957,10 @@ export class ActionDialogComponent implements OnInit {
     });
   }
 
+  onChangeTemplate(template: Template): void {
+    this.action['subject'] = template.subject;
+  }
+
   minDate;
   days = Array(29).fill(0);
   hours = Array(23).fill(0);

@@ -222,7 +222,7 @@ button:disabled {
   &.send_text_pdf,
   &.send_email_image,
   &.send_text_image {
-    width: 90vw;
+    width: 80vw;
     max-width: calc(900px + 5.5rem);
 
     @media screen and (max-width: 575px) {
@@ -330,8 +330,8 @@ button:disabled {
 }
 
 .empty-material-container {
-  min-height: 320px;
-  max-height: 320px;
+  min-height: 260px;
+  max-height: 260px;
   width: 450px;
   padding-right: 20px;
 
@@ -355,8 +355,8 @@ button:disabled {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   grid-row-gap: 20px;
-  min-height: 320px;
-  max-height: 320px;
+  min-height: 260px;
+  max-height: 260px;
   overflow: auto;
   width: 450px;
   padding-right: 20px;

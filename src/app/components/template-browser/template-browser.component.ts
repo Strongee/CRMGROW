@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TemplatesService } from '../../services/templates.service';
 import { UserService } from '../../services/user.service';
@@ -7,21 +7,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
-import { TeamService } from '../../services/team.service';
-import { filter } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { Team } from '../../models/team.model';
-import {TemplateShareComponent} from "../../components/template-share/template-share.component";
-import {sortStringArray} from "../../utils/functions";
-import {TemplateBrowserComponent} from "../../components/template-browser/template-browser.component";
+import { sortStringArray } from '../../utils/functions';
+import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
-  selector: 'app-team-share-template',
-  templateUrl: './team-share-template.component.html',
-  styleUrls: ['./team-share-template.component.scss']
+  selector: 'app-template-browser',
+  templateUrl: './template-browser.component.html',
+  styleUrls: ['./template-browser.component.scss']
 })
-export class TeamShareTemplateComponent implements OnInit, OnChanges {
-  STATUS = STATUS;
+export class TemplateBrowserComponent implements OnInit {
+
+  PAGE_COUNTS = [
+    { id: 8, label: '8' },
+    { id: 10, label: '10' },
+    { id: 25, label: '25' },
+    { id: 50, label: '50' }
+  ];
   DISPLAY_COLUMNS = [
     'title',
     'owner',
@@ -29,7 +32,10 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
     'template-type',
     'template-action'
   ];
-  selectedTemplate: string = '';
+  STATUS = STATUS;
+
+  pageSize = this.PAGE_COUNTS[1];
+
   page = 1;
   userId = '';
   emailDefault = '';
@@ -41,29 +47,24 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   templates: Template[] = [];
   filteredResult: Template[] = [];
   searchStr = '';
+  selectedSort = 'role';
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
-  loading = false;
 
-  selectedSort = 'role';
   searchCondition = {
     title: false,
     role: false,
     type: false
   };
 
-  @Input('team') team: Team;
-  @Input('role') role: string;
-
   constructor(
     public templatesService: TemplatesService,
     private userService: UserService,
+    private toast: ToastrService,
     private dialog: MatDialog,
-    private router: Router,
-    private teamService: TeamService,
-    private toast: ToastrService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -82,30 +83,18 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
         this.userId = profile._id;
       }
     );
-
-    this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.teamService
-      .loadSharedTemplates(this.team._id)
-      .subscribe(
-        (res) => {
-          if (res) {
-            this.loading = false;
-            this.templates = res;
-            this.filteredResult = this.templates;
-          }
-        },
-        (error) => {
-          this.loading = false;
+    this.loadSubscription = this.templatesService.templates$.subscribe(
+      (templates) => {
+        this.templates = templates;
+        this.templates = _.uniqBy(this.templates, '_id');
+        this.filteredResult = this.templates;
+        if (this.templates.length) {
+          this.sort('role', true);
         }
-      );
-  }
-
-  ngOnChanges(changes): void {
-    if (changes.templates && changes.templates.currentValue) {
-      this.templates = [...changes.templates.currentValue];
-      this.changeSearchStr();
-    }
+      }
+    );
+    this.templatesService.loadAll(true);
   }
 
   ngOnDestroy(): void {
@@ -145,19 +134,20 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
         this.isSetting = false;
         this.userService.updateGarbageImpl({ canned_message: cannedMessage });
         if (template.type === 'email') {
-          if (cannedMessage['email']) {
+          if (cannedMessage.email) {
             this.userService.email.next(template);
           } else {
             this.userService.email.next(null);
           }
         }
         if (template.type === 'sms') {
-          if (cannedMessage['sms']) {
+          if (cannedMessage.sms) {
             this.userService.sms.next(template);
           } else {
             this.userService.sms.next(null);
           }
         }
+        this.toast.success(`Template's default has been successfully changed.`);
       },
       () => {
         this.isSetting = false;
@@ -167,6 +157,10 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
 
   openTemplate(template: Template): void {
     this.router.navigate(['/templates/edit/' + template._id]);
+  }
+
+  duplicateTemplate(template: Template): void {
+    this.router.navigate(['/templates/duplicate/' + template._id]);
   }
 
   deleteTemplate(template: Template): void {
@@ -187,127 +181,31 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   }
 
   changeSearchStr(): void {
-    const reg = new RegExp(this.searchStr, 'gi');
     const filtered = this.templates.filter((template) => {
-      if (
-        reg.test(template.title) ||
-        reg.test(template.content) ||
-        reg.test(template.subject)
-      ) {
-        return true;
-      }
+      const str =
+        template.title + ' ' + template.content + ' ' + template.subject;
+      return searchReg(str, this.searchStr);
     });
     this.filteredResult = filtered;
+    this.sort(this.selectedSort, true);
+    this.page = 1;
   }
 
   clearSearchStr(): void {
     this.searchStr = '';
-    this.filteredResult = this.templates;
+    this.changeSearchStr();
   }
 
-  isStopSharable(template): any {
-    if (template.user && template.user === this.userId) {
-      return true;
-    }
-    return false;
-  }
-
-  isDuplicatable(template): any {
-    if (template.user && template.user !== this.userId) {
-      return true;
-    }
-    return false;
-  }
-
-  stopShareTemplate(template): any {
-    this.dialog
-      .open(ConfirmComponent, {
-        data: {
-          title: 'Stop Sharing',
-          message: 'Are you sure to remove this template?',
-          cancelLabel: 'No',
-          confirmLabel: 'Remove'
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          this.teamService.removeTemplate(template._id).subscribe(
-            (res) => {
-              const index = this.templates.findIndex(
-                (item) => item._id === template._id
-              );
-              if (index >= 0) {
-                this.templates.splice(index, 1);
-              }
-              const filterIndex = this.filteredResult.findIndex(
-                (item) => item._id === template._id
-              );
-              if (filterIndex >= 0) {
-                this.filteredResult.splice(filterIndex, 1);
-              }
-              this.toast.success('You removed the template successfully.');
-            },
-            (err) => {}
-          );
-        }
-      });
-  }
-
-  shareEmailTemplate(): void {
-    const hideTemplates = [];
-    for (const template of this.templates) {
-      hideTemplates.push(template._id);
-    }
-    // this.dialog
-    //   .open(TemplateBrowserComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     maxHeight: '60vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.team._id,
-    //       hideTemplates
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //
-    //     }
-    //   });
-    this.dialog
-      .open(TemplateShareComponent, {
-        width: '96vw',
-        maxWidth: '500px',
-        maxHeight: '60vh',
-        disableClose: true,
-        data: {
-          team_id: this.team._id,
-          hideTemplates
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          if (res.templates) {
-            this.templates = [...this.templates, ...res.templates];
-            this.changeSearchStr();
-          }
-        }
-      });
-  }
-
-  duplicateTemplate(template: Template): void {
-    this.router.navigate(['/templates/duplicate/' + template._id]);
+  changePageSize(type: any): void {
+    this.pageSize = type;
   }
 
   sort(field: string, keep: boolean = false): void {
-    if (this.selectedSort != field) {
+    if (this.selectedSort !== field) {
       this.selectedSort = field;
       return;
     } else {
-      if (field == 'role') {
+      if (field === 'role') {
         const admins = this.filteredResult.filter(
           (item) => item.role === 'admin'
         );
@@ -373,7 +271,7 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
             ];
           }
         }
-      } else if (field == 'type') {
+      } else if (field === 'type') {
         const text = this.filteredResult.filter((item) => item.type === 'text');
         const email = this.filteredResult.filter(
           (item) => item.type === 'email'
