@@ -1446,22 +1446,56 @@ export class AutoflowComponent
     });
 
     if (this.automation_id) {
-      this.isSaving = true;
-      this.automationService
-        .update(this.automation_id, {
-          title: this.automation_title,
-          automations: actions
-        })
-        .subscribe(
-          (res) => {
-            this.isSaving = false;
-            this.saved = true;
-            this.toastr.success('Automation saved successfully');
-          },
-          (err) => {
-            this.isSaving = false;
-          }
-        );
+      if (this.auth === 'admin' || this.auth === 'shared') {
+        if (this.automation.title === this.automation_title) {
+          this.toastr.error(
+            `Please input another title and save it as new automation`
+          );
+          return;
+        } else {
+          this.isSaving = true;
+          this.automationService
+            .create({
+              title: this.automation_title,
+              automations: actions
+            })
+            .subscribe(
+              (res) => {
+                if (res) {
+                  this.isSaving = false;
+                  this.saved = true;
+                  this.toastr.success('Automation created successfully');
+                  const path = '/autoflow/edit/' + res['_id'];
+                  this.router.navigate([path]);
+                  this.editMode = 'edit';
+                  this._id = res['_id'];
+                  this.loadAutomation(res['_id'], this.pageSize.id, 0);
+                  this.pageContacts = [];
+                }
+              },
+              (err) => {
+                this.isSaving = false;
+              }
+            );
+        }
+      } else {
+        this.isSaving = true;
+        this.automationService
+          .update(this.automation_id, {
+            title: this.automation_title,
+            automations: actions
+          })
+          .subscribe(
+            (res) => {
+              this.isSaving = false;
+              this.saved = true;
+              this.toastr.success('Automation saved successfully');
+            },
+            (err) => {
+              this.isSaving = false;
+            }
+          );
+      }
     } else {
       this.isSaving = true;
       this.automationService
@@ -1521,17 +1555,17 @@ export class AutoflowComponent
   }
 
   goToBack(): void {
-    if (this.automation.title !== this.automation_title) {
-      if (this.auth === 'admin' || this.auth === 'shared') {
-        this.toastr.error(
-          'Automation title has been changed. Please clone this automation and save it as new title.'
-        );
-      } else {
-        this.toastr.error('Automation title has been changed. Please save it.');
-      }
-    } else {
+    // if (this.automation.title !== this.automation_title) {
+    //   if (this.auth === 'admin' || this.auth === 'shared') {
+    //     this.toastr.error(
+    //       'Automation title has been changed. Please save automation as new title.'
+    //     );
+    //   } else {
+    //     this.toastr.error('Automation title has been changed. Please save it.');
+    //   }
+    // } else {
       this.router.navigate(['automations']);
-    }
+    // }
   }
 
   changeTab(tab: TabItem): void {
