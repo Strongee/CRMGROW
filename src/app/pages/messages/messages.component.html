@@ -51,15 +51,34 @@
                 </div>
             </ng-container>
             <ng-template #noContacts>
-                <ng-container [ngSwitch]="(smsService.loading$ | async)">
-                    <div class="empty-list" *ngSwitchCase="STATUS.SUCCESS">
-                        <h4 class="font-weight-bold mt-4 mb-3">
+                <ng-container *ngIf="loadingContact">
+                    <div class="list-loading text-center">
+                        <div class="loader mt-5 lg"></div>
+                        <h4 class="fw-600 mt-2">Loading contacts...</h4>
+                    </div>
+                    <!-- <ng-container [ngSwitch]="(smsService.loading$ | async)">
+                        <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
+                            <div class="object-icon v-center">
+                                <i class="i-icon i-lunch d-block bgc-dark"></i>
+                            </div>
+                            <h4 class="text-center font-weight-bold mt-4 mb-3">
+                                There is no contacts.
+                            </h4>
+                        </div>
+                        <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+                            <div class="loader mt-5 lg"></div>
+                            <h4 class="fw-600 mt-2">Loading contacts...</h4>
+                        </div>
+                    </ng-container> -->
+                </ng-container>
+                <ng-container *ngIf="!loadingContact">
+                    <div class="empty-list py-5">
+                        <div class="object-icon v-center">
+                            <i class="i-icon i-lunch d-block bgc-dark"></i>
+                        </div>
+                        <h4 class="text-center font-weight-bold mt-4 mb-3">
                             There is no contacts.
                         </h4>
-                    </div>
-                    <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
-                      <div class="loader mt-5 lg"></div>
-                      <h4 class="fw-600 mt-2">Loading contacts...</h4>
                     </div>
                 </ng-container>
             </ng-template>
@@ -147,8 +166,11 @@
                     </ng-container>
                     <ng-template #emptyResult>
                         <div class="empty-list py-5">
+                            <div class="object-icon v-center">
+                                <i class="i-icon i-message d-block bgc-dark"></i>
+                            </div>
                             <h4 class="font-weight-bold mt-4 mb-3">
-                            There is no messages.
+                                There is no messages.
                             </h4>
                         </div>
                     </ng-template>

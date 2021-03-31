@@ -331,7 +331,7 @@
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="sub-item-action">
-            <div class="v-center items px-3">
+            <div class="v-center items pr-3">
               <ng-container *ngIf="element.material_type !== 'folder'">
                 <button class="v-center btn py-1 c-dark" (click)="sendMaterial(element, 'email')" placement="bottom" ngbTooltip="Send via Email">
                   <i class="i-icon i-message bgc-dark" aria-hidden="true"></i>
