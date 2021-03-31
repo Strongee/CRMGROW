@@ -40,6 +40,10 @@ export class AppointmentService extends HttpService {
   updateCommand = new Subject<any>();
   updateCommand$ = this.updateCommand.asObservable();
 
+  currentDay: BehaviorSubject<Date> = new BehaviorSubject(null);
+  currentMethod: BehaviorSubject<string> = new BehaviorSubject('month');
+  currentEvents: BehaviorSubject<any[]> = new BehaviorSubject([]);
+
   public loadCalendars(force = false): void {
     if (!force) {
       const loadStatus = this.loadCalendarsStatus.getValue();
