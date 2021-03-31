@@ -39,6 +39,12 @@
   .template-type {
     min-width: 100px
   }
+  .template-sub-action {
+    width: 110px;
+    .sub-item-action {
+      display: none;
+    }
+  }
   .auth {
     min-width: 60px;
   }
@@ -97,4 +103,14 @@ input.disabled {
   td.mat-cell, td.mat-footer-cell {
     padding: 10px 0px;
   }
+
+  tbody {
+    tr:hover {
+      .template-sub-action {
+        .sub-item-action {
+          display: flex !important;
+        }
+      }
+    }
+}
 }
