@@ -2,7 +2,12 @@
     <div class="form-group mb-4">
         <h6 class="f-3 font-weight-bold mb-1">Delay time</h6>
         <label class="f-1 mb-3">Delay time till when the dialog will be shown</label>
-        <select class="form-control c-blue f-5" [(ngModel)]="garbage.capture_delay" name="delay" id="delay" required #delay="ngModel">
+        <select class="form-control c-blue f-5"
+                [(ngModel)]="garbage.capture_delay"
+                name="delay" id="delay"
+                required #delay="ngModel"
+                (ngModelChange)="chanageDelayTime()"
+        >
             <option *ngFor="let time of times" value="{{time.id}}">
               {{time.text}}
             </option>
@@ -14,14 +19,6 @@
         <div class="v-center required-field mb-2" *ngFor="let field of defaultField">
             <div class="f-3 field-name">{{field.name}}</div>
             <div class="custom-control custom-checkbox">
-                <!-- <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="{{field.name}}"
-                    [checked]="garbage.capture_field.email"
-                    (change)="statusChange($event, 'email')"
-                    *ngIf="field.name == 'Email'"
-                /> -->
                 <input
                     type="checkbox"
                     class="custom-control-input"
@@ -104,8 +101,5 @@
                 </ng-template>
             </div>
         </div>
-    </div>
-    <div class="d-flex">
-        <button class="btn btn-blue font-weight-bold mr-2 mt-4 ml-auto" (click)="saveDelay()" [class.loading]="saving">Save changes</button>
     </div>
 </div>

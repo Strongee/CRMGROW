@@ -1,11 +1,11 @@
-<div class="page-content">
-  <div class="v-center justify-content-between mb-3">
-    <h1 class="page-title">Templates</h1>
-    <a class="btn btn-primary shadow v-center mb-0 border-0" [routerLink]="['/templates/new']">
-      <span class="f-6 font-weight-bold">New Template</span>
-    </a>
-  </div>
-  <div class="v-center">
+<h1 mat-dialog-title class="v-center d-flex">
+  <span>Share templates</span>
+  <button class="v-center border-0 bgc-trans ml-auto" mat-dialog-close>
+    <i class="d-block i-icon i-close bgc-dark"></i>
+  </button>
+</h1>
+<mat-dialog-content>
+  <div class="contact-list-controls pt-0 pb-1">
     <div class="form-group mb-0 search-form">
       <div class="input-group-prepend">
         <i class="i-icon i-search d-block bgc-dark"></i>
@@ -24,16 +24,16 @@
         LOADING
       </div>
       <table class="w-100 template-table page-table"
-         mat-table
-         multiTemplateDataRows
-         [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"
+             mat-table
+             multiTemplateDataRows
+             [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"
       >
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">
             <div class="v-center c-pointer head-sort" (click)="sort('title')">
               <span [class]="selectedSort == 'title' ? 'fw-600 c-dark' : ''">Title</span>
               <i class="i-icon d-block bgc-black ml-2"
-                [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
+                 [class]="searchCondition.title ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'title'"></i>
             </div>
           </th>
           <td mat-cell *matCellDef="let template" class="title">
@@ -47,7 +47,7 @@
             <div class="v-center c-pointer head-sort" (click)="sort('role')">
               <span [class]="selectedSort == 'role' ? 'fw-600 c-dark' : ''">Owner</span>
               <i class="i-icon d-block bgc-black ml-2"
-                [class]="searchCondition.role ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'role'"></i>
+                 [class]="searchCondition.role ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'role'"></i>
             </div>
           </th>
           <td mat-cell *matCellDef="let template" class="auth">
@@ -66,7 +66,7 @@
             <div class="v-center c-pointer head-sort" (click)="sort('type')">
               <span [class]="selectedSort == 'type' ? 'fw-600 c-dark' : ''">Type</span>
               <i class="i-icon d-block bgc-black ml-2"
-                [class]="searchCondition.type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'type'"></i>
+                 [class]="searchCondition.type ? 'i-sort-down' : 'i-sort-up'" *ngIf="selectedSort == 'type'"></i>
             </div>
           </th>
           <td mat-cell *matCellDef="let template" class="template-type">
@@ -92,27 +92,21 @@
                 <input type="checkbox" [checked]="template._id == emailDefault || template._id == smsDefault" (change)="setDefault(template)">
                 <span class="custom-toggle-slider rounded-circle"></span>
               </label>
-            </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="template-sub-action">
-          <th mat-header-cell *matHeaderCellDef class="template-sub-action">
-          </th>
-          <td mat-cell *matCellDef="let template" class="template-sub-action">
-            <div class="v-center sub-item-action ml-4">
-              <ng-container *ngIf="template.role != 'admin' && template.user == userId">
-                <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)">
-                  <i class="i-icon bgc-dark i-edit"></i>
-                </div>
-                <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)">
-                  <i class="i-icon bgc-dark i-trash ml-2"></i>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="template.role == 'team' && template.user != userId">
-                <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
-                  <i class="i-icon bgc-dark i-duplicate"></i>
-                </div>
-              </ng-container>
+              <div class="v-center ml-4">
+                <ng-container *ngIf="template.role != 'admin' && template.user == userId">
+                  <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)">
+                    <i class="i-icon bgc-dark i-edit"></i>
+                  </div>
+                  <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)">
+                    <i class="i-icon bgc-dark i-trash ml-2"></i>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="template.role == 'team' && template.user != userId">
+                  <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
+                    <i class="i-icon bgc-dark i-duplicate"></i>
+                  </div>
+                </ng-container>
+              </div>
             </div>
           </td>
         </ng-container>
@@ -161,4 +155,4 @@
       </ng-container>
     </ng-template>
   </div>
-</div>
+</mat-dialog-content>

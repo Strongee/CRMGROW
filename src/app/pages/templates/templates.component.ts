@@ -29,7 +29,8 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     'owner',
     'template-content',
     'template-type',
-    'template-action'
+    'template-action',
+    'template-sub-action'
   ];
   STATUS = STATUS;
 

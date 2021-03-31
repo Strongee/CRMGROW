@@ -13,7 +13,6 @@ import { ToastrService } from 'ngx-toastr';
 export class AutoResendVideoComponent implements OnInit {
   delays;
   garbage: Garbage = new Garbage();
-  saving = false;
   constructor(
     public userService: UserService,
     private location: Location,
@@ -30,20 +29,14 @@ export class AutoResendVideoComponent implements OnInit {
 
   changeToggle(evt: any, resend_data: any): void {
     resend_data.enabled = evt.target.checked;
+    this.save();
   }
 
   save(): void {
-    this.saving = true;
-    this.userService.updateGarbage(this.garbage).subscribe(
-      () => {
-        this.saving = false;
-        this.toast.success('Auto Resend Video successfully updated.');
-        this.userService.updateGarbageImpl(this.garbage);
-      },
-      () => {
-        this.saving = false;
-      }
-    );
+    this.userService.updateGarbage(this.garbage).subscribe(() => {
+      this.toast.success('Auto Resend Video successfully updated.');
+      this.userService.updateGarbageImpl(this.garbage);
+    });
   }
 
   cancel(): void {

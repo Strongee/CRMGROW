@@ -434,7 +434,8 @@
                 hasTemplates="true"
                 [templateSelectMethod]="'replace'"
                 [subject]="action['subject']"
-                [style]="{height: '240px'}"
+                [style]="{height: '220px'}"
+                (onChangeTemplate)="onChangeTemplate($event)"
                 #editor
               >
               </app-html-editor>

@@ -47,13 +47,6 @@ export class SmsService extends HttpService {
     );
   }
 
-  getAllMessage(): any {
-    return this.httpClient.get(this.server + SMS.GET).pipe(
-      map((res) => res['data']),
-      catchError(this.handleError('SMS GET ALL', null))
-    );
-  }
-
   getMessage(contact: Contact): any {
     return this.httpClient
       .post(this.server + SMS.GET_MESSAGE, { contact: contact._id })
@@ -64,7 +57,7 @@ export class SmsService extends HttpService {
   }
 
   markRead(id: string): any {
-    return this.httpClient.put(this.server + SMS.MARK_READ + id, {});
+    return this.httpClient.put(this.server + SMS.MARK_READ + '/' + id, {});
   }
 
   searchNumbers(data: any): Observable<any> {

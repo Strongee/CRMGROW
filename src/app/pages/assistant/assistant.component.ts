@@ -121,6 +121,11 @@ export class AssistantComponent implements OnInit, OnDestroy {
     this.guestService.update(guest._id, guest).subscribe(
       () => {
         this.toggling = false;
+        if (!guest.disabled) {
+          this.toast.success('Assistant successfully enabled.');
+        } else {
+          this.toast.success('Assistant successfully disabled.');
+        }
       },
       () => {
         this.toggling = false;

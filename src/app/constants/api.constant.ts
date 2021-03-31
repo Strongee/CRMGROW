@@ -183,7 +183,8 @@ export const TEAM = {
   UPDATE_CALL: '/team/call/',
   DELETE_CALL: '/team/call/',
   TEAM_CALL_LOAD: '/team/load-call',
-  SEARCH_CONTACT: '/team/search-contact'
+  SEARCH_CONTACT: '/team/search-contact',
+  ALL_SHARED_CONTACT: 'team/get-all/'
 };
 export const AUTOMATION = {
   SEARCH: 'automation/search',
@@ -328,7 +329,7 @@ export const FILTER = {
 export const SMS = {
   GET: 'sms/',
   GET_MESSAGE: 'sms/get-messages',
-  MARK_READ: 'sms/mark-read/',
+  MARK_READ: 'sms/mark-read',
   SEARCH_NUMBER: 'sms/search-numbers'
 };
 

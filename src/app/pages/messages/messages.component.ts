@@ -20,7 +20,7 @@ import { STATUS } from 'src/app/constants/variable.constants';
 })
 export class MessagesComponent implements OnInit {
   STATUS = STATUS;
-
+  loadingContact = false;
   loadingMessage = false;
   contacts = [];
   selectedContact: Contact = new Contact();
@@ -60,6 +60,7 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadingContact = true;
     this.messageLoadTimer = setInterval(() => {
       this.loadMessage();
     }, 2000);
@@ -76,6 +77,7 @@ export class MessagesComponent implements OnInit {
     this.smsService.loadAll(true);
     this.smsService.messages$.subscribe((res) => {
       const messages = this.smsService.messages.getValue();
+      this.loadingContact = false;
       this.contacts = [];
       for (let index = 0; index < messages.length; index++) {
         if (messages[index].contacts.length > 0) {

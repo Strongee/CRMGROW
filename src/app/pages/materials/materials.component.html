@@ -331,7 +331,7 @@
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="sub-item-action">
-            <div class="v-center items px-3">
+            <div class="v-center items pr-3">
               <ng-container *ngIf="element.material_type !== 'folder'">
                 <button class="v-center btn py-1 c-dark" (click)="sendMaterial(element, 'email')" placement="bottom" ngbTooltip="Send via Email">
                   <i class="i-icon i-message bgc-dark" aria-hidden="true"></i>
@@ -411,7 +411,7 @@
                         <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Social share</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)" *ngIf="element.user._id == user_id || element.user == user_id">
                         <i class="i-icon i-share-material bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Share team</span>
                       </button>
@@ -444,10 +444,6 @@
                       <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareMaterial(element)">
                         <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Social share</span>
-                      </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)">
-                        <i class="i-icon i-share-material bgc-dark ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-3 font-weight-bold">Share team</span>
                       </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item"
                         *ngIf="element.material_type === 'video' && checkType(element.url) &&

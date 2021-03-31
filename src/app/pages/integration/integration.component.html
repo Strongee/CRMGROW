@@ -164,7 +164,8 @@
     <ng-container *ngIf="garbage?.calendly && garbage.calendly?.email != '' && garbage.calendly?.token != ''; else connectEvent">
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="selectCalendly()">
         <img src="../../../assets/img/warning_yellow.png" *ngIf="calendlyLength > 1 && (!garbage.calendly?.link || !garbage.calendly?.id)">
-        <span>Select Event</span>
+        <span *ngIf="!garbage.calendly?.link || !garbage.calendly?.id">Select Event</span>
+        <span *ngIf="garbage.calendly?.link && garbage.calendly?.id">Change Event</span>
       </button>
     </ng-container>
     <ng-template #connectEvent>

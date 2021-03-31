@@ -66,6 +66,12 @@ export class DealsSettingComponent implements OnInit {
             .afterClosed()
             .subscribe((res) => {
               if (res) {
+                const deleted = this.stages.filter((stage) => stage._id == id);
+                this.stages.forEach((stage) => {
+                  if (stage._id == res) {
+                    stage.deals = [...stage.deals, ...deleted[0].deals];
+                  }
+                });
                 this.stages.some((e, index) => {
                   if (e._id === id) {
                     this.stages.splice(index, 1);
