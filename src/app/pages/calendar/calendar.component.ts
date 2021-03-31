@@ -41,9 +41,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
   weekStart;
   weekEnd;
 
-  isLoading = true;
+  isLoading = false;
   loadSubscription: Subscription;
   anotherLoadSubscriptions = {};
+  isUpdating = false;
 
   tabs: TabItem[] = [
     { icon: '', label: 'DAY', id: 'day' },
@@ -118,8 +119,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.updateCommandSubscription.unsubscribe();
     this.calendarLoadSubscription &&
       this.calendarLoadSubscription.unsubscribe();
+    // Unsubscribe the supplement events load
     // Set the current Day & mode & events
     this.appointmentService.currentDay.next(this.viewDate);
+    this.appointmentService.currentMethod.next(this.view);
+    this.appointmentService.currentEvents.next(this.events);
   }
 
   initModeAndDate(): void {
@@ -166,6 +170,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.location.replaceState(
       `/calendar/${mode}/${date.year()}/${date.month() + 1}/${date.date()}`
     );
+
+    this.events = this.appointmentService.currentEvents.getValue() || [];
+    this.filterEvents();
 
     const isoDate = date.toISOString();
     this.viewDate = new Date(isoDate);
@@ -257,6 +264,90 @@ export class CalendarComponent implements OnInit, OnDestroy {
               this.accounts.push(acc);
             }
           });
+        }
+      }
+    );
+
+    this.updateCommandSubscription &&
+      this.updateCommandSubscription.unsubscribe();
+    this.updateCommandSubscription = this.appointmentService.updateCommand$.subscribe(
+      (data) => {
+        if (data) {
+          if (data.command === 'delete') {
+            if (data.data.recurrence_id) {
+              const events = this.events.filter((e) => {
+                if (e.meta.recurrence_id !== data.data.recurrence_id) {
+                  return true;
+                }
+              });
+              this.events = events;
+            } else {
+              this.events.some((e, index) => {
+                if (e.meta.event_id === data.data.event_id) {
+                  this.events.splice(index, 1);
+                  return true;
+                }
+              });
+            }
+            this.filterEvents();
+          } else if (data.command === 'update') {
+            const event = data.data;
+            const _formattedEvent = this._convertStandard2Mine(event);
+            if (event.recurrence_id) {
+              this.events.forEach((e) => {
+                if (e.meta.recurrence_id === event.recurrence_id) {
+                  for (const key in _formattedEvent) {
+                    e[key] = _formattedEvent[key];
+                  }
+                }
+              });
+              this.reload();
+            } else {
+              // update only this event
+              const originalEventIndex = _.findIndex(
+                this.events,
+                (e) => e.meta.event_id === event.event_id
+              );
+              const originalEvent = this.events[originalEventIndex];
+              for (const key in _formattedEvent) {
+                originalEvent[key] = _formattedEvent[key];
+              }
+            }
+          } else if (data.command === 'accept') {
+            const acceptData = data.data;
+            if (acceptData.recurrence_id) {
+              this.events.forEach((e) => {
+                if (e.meta.recurrence_id === acceptData.recurrence_id) {
+                  this.acceptEvent(e, acceptData.connected_email);
+                }
+              });
+            } else {
+              const originalEventIndex = _.findIndex(
+                this.events,
+                (e) => e.meta.event_id === acceptData.event_id
+              );
+              const originalEvent = this.events[originalEventIndex];
+              this.acceptEvent(originalEvent, acceptData.connected_email);
+            }
+          } else if (data.command === 'decline') {
+            const declineData = data.data;
+            if (declineData.recurrence_id) {
+              this.events.forEach((e) => {
+                if (e.meta.recurrence_id === declineData.recurrence_id) {
+                  this.declineEvent(e, declineData.connected_email);
+                }
+              });
+            } else {
+              const originalEventIndex = _.findIndex(
+                this.events,
+                (e) => e.meta.event_id === declineData.event_id
+              );
+              const originalEvent = this.events[originalEventIndex];
+              this.declineEvent(originalEvent, declineData.connected_email);
+            }
+          } else if (data.command === 'recurrence') {
+            this.reload();
+          }
         }
       }
     );
@@ -463,6 +554,66 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.events = _.uniqBy(this.events, (e) => e.meta.event_id);
   }
 
+  reload(): any {
+    const date = this.viewDate.toISOString();
+    const mode = this.view;
+    this.isUpdating = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.appointmentService
+      .getEvents(date, mode)
+      .subscribe((res) => {
+        this.isUpdating = false;
+        if (res) {
+          const _events = [];
+          res.forEach((calendar) => {
+            if (calendar['status']) {
+              const subCalendars =
+                calendar['calendar'] && calendar['calendar']['data'];
+              subCalendars.forEach((subCalendar) => {
+                const events = subCalendar.items;
+                events.forEach((event) => {
+                  const _formattedEvent = {
+                    title: event.title,
+                    start: new Date(event.due_start),
+                    end: new Date(event.due_end),
+                    meta: {
+                      contacts: event.contacts,
+                      calendar_id: event.calendar_id,
+                      description: event.description,
+                      location: event.location,
+                      type: event.type,
+                      guests: event.guests,
+                      event_id: event.event_id,
+                      recurrence: event.recurrence,
+                      recurrence_id: event.recurrence_id,
+                      is_organizer: event.is_organizer,
+                      organizer: event.organizer
+                    }
+                  };
+                  _events.push(_formattedEvent);
+                });
+              });
+            }
+          });
+          this.events = _events;
+          const supplementEvents = Object.values(this.supplementEvents);
+          let _supplementEvents = [];
+          supplementEvents.forEach((e) => {
+            if (e instanceof Array) {
+              _supplementEvents = [..._supplementEvents, ...e];
+            }
+          });
+          this.events = [...this.events, ..._supplementEvents];
+          this.events = _.uniqBy(this.events, (e) => e.meta.event_id);
+          if (mode === 'month') {
+            const end_date_string = moment(date).startOf('month').toISOString();
+            this.supplementEvents[end_date_string] = _events;
+          }
+          this.filterEvents();
+        }
+      });
+  }
+
   getDayEvent(date: any): any {
     if (date) {
       try {
@@ -547,9 +698,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
         if (res) {
           const newEvent = this._convertStandard2Original(res);
           const event = this._convertStandard2Mine(newEvent);
-          this.events.push(event);
-          this.filterEvents();
-          this.changeDetectorRef.detectChanges();
+
+          if (event.meta.recurrence) {
+            this.reload();
+          } else {
+            this.events.push(event);
+            this.filterEvents();
+          }
         }
       });
   }
@@ -557,9 +712,31 @@ export class CalendarComponent implements OnInit, OnDestroy {
   createEvent($event): void {
     const newEvent = this._convertStandard2Original($event);
     const event = this._convertStandard2Mine(newEvent);
-    this.events.push(event);
-    this.filterEvents();
-    this.changeDetectorRef.detectChanges();
+
+    if (event.meta.recurrence) {
+      this.reload();
+    } else {
+      this.events.push(event);
+      this.filterEvents();
+    }
+  }
+
+  acceptEvent(event, user_email): void {
+    event.meta.guests.some((guest) => {
+      if (guest.email === user_email) {
+        guest.response = 'accepted';
+        return true;
+      }
+    });
+  }
+
+  declineEvent(event, user_email): void {
+    event.meta.guests.some((guest) => {
+      if (guest.email === user_email) {
+        guest.response = 'declined';
+        return true;
+      }
+    });
   }
 
   changeTab(tab: TabItem): void {

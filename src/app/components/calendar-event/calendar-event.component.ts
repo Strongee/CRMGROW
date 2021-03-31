@@ -221,7 +221,18 @@ export class CalendarEventComponent implements OnInit {
       .subscribe((status) => {
         this.accepting = false;
         if (status) {
+          this.responseStatus = 'accepted';
           // Update the event
+          this.appointmentService.updateCommand.next({
+            command: 'accept',
+            data: {
+              event_id,
+              recurrence_id,
+              calendar_id,
+              connected_email,
+              organizer: this.event.meta.organizer
+            }
+          });
         }
       });
   }
@@ -311,6 +322,17 @@ export class CalendarEventComponent implements OnInit {
               this.declining = false;
               if (status) {
                 // Update the event
+                this.responseStatus = 'declined';
+                this.appointmentService.updateCommand.next({
+                  command: 'decline',
+                  data: {
+                    event_id,
+                    recurrence_id,
+                    calendar_id,
+                    connected_email,
+                    organizer: this.event.meta.organizer
+                  }
+                });
               }
             });
         }

@@ -64,6 +64,8 @@ export class CalendarDialogComponent implements OnInit {
   contactLoadSubscription: Subscription;
   contactLoading = false;
 
+  originalRecurrence: string = '';
+
   constructor(
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CalendarDialogComponent>,
@@ -118,6 +120,7 @@ export class CalendarDialogComponent implements OnInit {
     this.event.description = this.data.event.meta.description;
     this.event.location = this.data.event.meta.location;
     this.event.recurrence = this.data.event.meta.recurrence;
+    this.originalRecurrence = this.data.event.meta.recurrence;
     if (this.event.recurrence) {
       this.isRepeat = true;
     }
@@ -231,67 +234,71 @@ export class CalendarDialogComponent implements OnInit {
       this.event.guests = [];
     }
     this.isLoading = true;
+
+    const event = { ...this.event };
     if (this.event.recurrence_id) {
-      this.dialog
-        .open(CalendarRecurringDialogComponent, {
-          position: { top: '40vh' },
-          width: '100vw',
-          maxWidth: '320px',
-          disableClose: true
-        })
-        .afterClosed()
-        .subscribe((res) => {
-          if (res) {
-            if (res.type == 'own') {
-              delete this.event['recurrence_id'];
-            }
-            if (this.isDeal) {
-              this.dealsService
-                .updateAppointment({
-                  ...this.event,
-                  connected_email,
-                  contacts: this.event.contacts,
-                  deal: this.deal
-                })
-                .subscribe((status) => {
-                  this.isLoading = false;
-                  if (status) {
-                    this.dialogRef.close(true);
-                  }
-                });
-            } else {
-              this.appointmentService
-                .updateEvents(
-                  { ...this.event, connected_email },
-                  this.event.event_id
-                )
-                .subscribe(
-                  (res) => {
-                    if (res['status'] == true) {
-                      this.isLoading = false;
-                      const data = {
-                        recurrence_id: this.event.recurrence_id
-                      };
-                      this.toast.success('Event is updated successfully');
-                      this.dialogRef.close(data);
-                    }
-                  },
-                  () => {
+      if (this.originalRecurrence !== this.event.recurrence) {
+        // api call & update command call
+      } else {
+        this.dialog
+          .open(CalendarRecurringDialogComponent, {
+            position: { top: '40vh' },
+            width: '100vw',
+            maxWidth: '320px',
+            disableClose: true
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              if (res.type == 'own') {
+                delete event['recurrence_id'];
+              }
+              if (this.isDeal) {
+                this.dealsService
+                  .updateAppointment({
+                    ...event,
+                    connected_email,
+                    deal: this.deal
+                  })
+                  .subscribe((status) => {
                     this.isLoading = false;
-                    this.dialogRef.close();
-                  }
-                );
+                    if (status) {
+                      this.dialogRef.close(true);
+                    }
+                  });
+              } else {
+                this.appointmentService
+                  .updateEvents(
+                    { ...event, connected_email },
+                    this.event.event_id
+                  )
+                  .subscribe(
+                    (res) => {
+                      if (res['status'] == true) {
+                        this.toast.success('Event is updated successfully');
+                        this.isLoading = false;
+                        this.appointmentService.updateCommand.next({
+                          command: 'update',
+                          data: { ...event }
+                        });
+                      }
+                    },
+                    () => {
+                      this.isLoading = false;
+                    }
+                  );
+              }
+            } else {
+              this.isLoading = false;
             }
-          } else {
-            this.isLoading = false;
-          }
-        });
+          });
+      }
     } else {
-      delete this.event['recurrence_id'];
+      delete event['recurrence_id'];
       if (this.isDeal) {
         this.dealsService
           .updateAppointment({
-            ...this.event,
+            ...event,
             connected_email,
             contacts: this.event.contacts,
             deal: this.deal
@@ -304,19 +311,19 @@ export class CalendarDialogComponent implements OnInit {
           });
       } else {
         this.appointmentService
-          .updateEvents({ ...this.event, connected_email }, this.event.event_id)
+          .updateEvents({ ...event, connected_email }, this.event.event_id)
           .subscribe(
             (res) => {
               if (res['status'] == true) {
-                this.isLoading = false;
-                const data = {
-                  recurrence_id: this.event.recurrence_id
-                };
                 this.toast.success('Event is updated successfully');
-                this.dialogRef.close(data);
+                this.isLoading = false;
+                this.appointmentService.updateCommand.next({
+                  command: 'update',
+                  data: { ...event }
+                });
               }
             },
-            (err) => {
+            () => {
               this.isLoading = false;
             }
           );
