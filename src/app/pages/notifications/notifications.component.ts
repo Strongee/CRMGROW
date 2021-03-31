@@ -37,7 +37,6 @@ export class NotificationsComponent implements OnInit {
   ];
   reminders = REMINDER;
   garbage: Garbage = new Garbage();
-  saving = false;
 
   pushInited = false;
   pushSubscription;
@@ -81,6 +80,7 @@ export class NotificationsComponent implements OnInit {
         });
       }
     }
+    this.saveReminder();
   }
 
   toggleDesktopNotification(event: Event, trigger = ''): void {
@@ -93,6 +93,7 @@ export class NotificationsComponent implements OnInit {
           this.subscribeToPushNotification()
             .then(() => {
               this.garbage.desktop_notification[trigger] = true;
+              this.saveReminder();
             })
             .catch(() => {
               const target = <HTMLInputElement>event.target;
@@ -100,6 +101,7 @@ export class NotificationsComponent implements OnInit {
             });
         } else {
           this.garbage.desktop_notification[trigger] = true;
+          this.saveReminder();
         }
       }
     } else {
@@ -108,6 +110,7 @@ export class NotificationsComponent implements OnInit {
         this.garbage.notification_fields.forEach((e) => {
           this.garbage.desktop_notification[e] = false;
         });
+        this.saveReminder();
       } else {
         if (!this.pushInited) {
           this.subscribeToPushNotification()
@@ -115,6 +118,7 @@ export class NotificationsComponent implements OnInit {
               this.garbage.notification_fields.forEach((e) => {
                 this.garbage.desktop_notification[e] = true;
               });
+              this.saveReminder();
             })
             .catch(() => {
               const target = <HTMLInputElement>event.target;
@@ -124,13 +128,13 @@ export class NotificationsComponent implements OnInit {
           this.garbage.notification_fields.forEach((e) => {
             this.garbage.desktop_notification[e] = true;
           });
+          this.saveReminder();
         }
       }
     }
   }
 
   saveReminder(): void {
-    this.saving = true;
     if (this.pushInited) {
       this.savePushSubscription()
         .then(() => {
@@ -189,15 +193,9 @@ export class NotificationsComponent implements OnInit {
   }
 
   saveAnotherNotifications(): void {
-    this.userService.updateGarbage(this.garbage).subscribe(
-      () => {
-        this.saving = false;
-        this.toast.success('Notifications successfully updated.');
-        this.userService.updateGarbageImpl(this.garbage);
-      },
-      () => {
-        this.saving = false;
-      }
-    );
+    this.userService.updateGarbage(this.garbage).subscribe(() => {
+      this.toast.success('Notifications successfully updated.');
+      this.userService.updateGarbageImpl(this.garbage);
+    });
   }
 }

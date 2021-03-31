@@ -12,7 +12,7 @@
         </div>
         <button type="button" class="btn btn-primary font-weight-bold f-6 ml-2" [class.disabled]="loadingMain || creating"
           (click)="openShare()">Share</button>
-        <button type="button" class="btn btn-primary font-weight-bold f-6 ml-1" [class.disabled]="loadingMain || creating"
+        <button type="button" class="btn text-primary border border-primary bg-white font-weight-bold f-6 ml-1" [class.disabled]="loadingMain || creating"
           (click)="copyLink()">Copy</button>
       </div>
     </div>
@@ -22,7 +22,7 @@
     <div class="v-center">
       <img class="paypal-logo" src="../../../assets/img/paypal.svg" alt="PayPal">
       <input class="paypal-address form-control ml-3" type="email" [(ngModel)]="affiliate['paypal_email']">
-      <button class="btn btn-blue text-white font-weight-bold ml-2" (click)="update()" [class.disabled]="loadingMain || creating" [class.loading]="updating">Update</button>
+      <button class="btn text-primary border border-primary bg-white f-3 font-weight-bold ml-2" (click)="update()" [class.disabled]="loadingMain || creating" [class.loading]="updating">Update</button>
     </div>
     <ng-container *ngIf="loadingMain || creating">
         <ngx-spinner name="sp5" bdColor="rgba(50,50,50,0)" size="medium" color="#888" type="square-jelly-box"
@@ -88,7 +88,7 @@
       </div>
       <div class="empty-list" *ngIf="!loadingUsers && !users.length && !loadingMain">
         <div class="object-icon v-center">
-          <i class="i-icon i-template d-block bgc-dark"></i>
+          <i class="i-icon i-lunch d-block bgc-dark"></i>
         </div>
         <h5 class="font-weight-bold mt-4 mb-3">
           There is no active referred subscribers.
