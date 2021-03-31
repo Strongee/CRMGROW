@@ -281,8 +281,8 @@ button:disabled {
 }
 
 .empty-material-container {
-  min-height: 340px;
-  max-height: 340px;
+  min-height: 300px;
+  max-height: 300px;
   width: 450px;
   padding-right: 20px;
 
@@ -306,8 +306,8 @@ button:disabled {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   grid-row-gap: 20px;
-  min-height: 340px;
-  max-height: 340px;
+  min-height: 300px;
+  max-height: 300px;
   overflow: auto;
   width: 450px;
   padding-right: 20px;

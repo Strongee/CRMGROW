@@ -729,6 +729,10 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     return 'video';
   }
 
+  onChangeTemplate(template: Template): void {
+    this.action['subject'] = template.subject;
+  }
+
   ActionName = ActionName;
 
   minDate;

@@ -183,7 +183,8 @@ export const TEAM = {
   UPDATE_CALL: '/team/call/',
   DELETE_CALL: '/team/call/',
   TEAM_CALL_LOAD: '/team/load-call',
-  SEARCH_CONTACT: '/team/search-contact'
+  SEARCH_CONTACT: '/team/search-contact',
+  ALL_SHARED_CONTACT: 'team/get-all/'
 };
 export const AUTOMATION = {
   SEARCH: 'automation/search',

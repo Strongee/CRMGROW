@@ -1,0 +1,15 @@
+@import  "src/variables.scss";
+
+.mat-table-wrapper {
+  min-height: unset;
+}
+.mat-table-wrapper table {
+  min-width: unset;
+}
+
+.contact-list-controls {
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  background: white;
+}
