@@ -19,6 +19,7 @@ import { NotifyComponent } from '../notify/notify.component';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
 import { ContactEditComponent } from '../contact-edit/contact-edit.component';
+import { validateEmail } from '../../helper';
 const phone = require('phone');
 
 @Component({
@@ -98,6 +99,9 @@ export class UploadContactsComponent implements OnInit {
   duplicateLoading = false;
   lastUploadCount = 0;
   bulkDeleting = [];
+  invalidContacts = [];
+  invalidEmailContacts = [];
+  invalidPhoneContacts = [];
 
   constructor(
     private dialogRef: MatDialogRef<UploadContactsComponent>,
@@ -306,6 +310,9 @@ export class UploadContactsComponent implements OnInit {
     this.previewEmails = [];
     this.previewPhones = [];
     this.sameContacts = [];
+    this.invalidContacts = [];
+    this.invalidEmailContacts = [];
+    this.invalidPhoneContacts = [];
     this.failedData = [];
     let importField = false;
     this.initPropertyColumn = { ...this.updateColumn };
@@ -319,11 +326,36 @@ export class UploadContactsComponent implements OnInit {
     if (importField) {
       this.lines.map((record) => {
         const contact = {};
+        let isInvalidEmail = false;
+        let isInvalidPhone = false;
         record.map((e, index) => {
           const originColumn = this.columns[index];
           const newColumn = this.updateColumn[originColumn];
           if (newColumn) {
-            if (newColumn === 'notes') {
+            if (
+              newColumn === 'primary_email' ||
+              newColumn === 'secondary_email'
+            ) {
+              contact[newColumn] = e;
+              if (!validateEmail(e)) {
+                if (e !== '') {
+                  isInvalidEmail = true;
+                }
+              }
+            }
+            if (
+              newColumn === 'primary_phone' ||
+              newColumn === 'secondary_phone'
+            ) {
+              contact[newColumn] = e;
+              if (e !== '') {
+                if (this.isValidPhone(e)) {
+                  contact[newColumn] = phone(e)[0];
+                } else {
+                  isInvalidPhone = true;
+                }
+              }
+            } else if (newColumn === 'notes') {
               if (!!e) {
                 if (Array.isArray(contact[newColumn])) {
                   contact[newColumn].push(e);
@@ -331,36 +363,67 @@ export class UploadContactsComponent implements OnInit {
                   contact[newColumn] = [e];
                 }
               }
-            } else if (
-              newColumn === 'primary_phone' ||
-              newColumn === 'secondary_phone'
-            ) {
-              contact[newColumn] = phone(e)[0];
             } else {
               contact[newColumn] = e ? e.trim() : e;
             }
           }
         });
-        this.contacts.push({ ...contact, id: this.contacts.length });
-      });
-      this.duplicateLoading = true;
-      this.checkDuplicate()
-        .then((res) => {
-          this.duplicateLoading = false;
-          this.rebuildColumns();
-          this.rebuildContacts();
-          this.isDuplicatedEmail();
-          if (res) {
-            this.step = 3;
+        if (isInvalidEmail || isInvalidPhone) {
+          if (isInvalidEmail && isInvalidPhone) {
+            this.invalidContacts.push({
+              ...contact,
+              id: 'ep-' + this.contacts.length
+            });
           } else {
-            this.step = 4;
-            this.contactsToUpload = this.contacts;
-            this.selectAllContacts();
+            if (isInvalidEmail) {
+              this.invalidEmailContacts.push({
+                ...contact,
+                id: 'e-' + this.contacts.length
+              });
+            } else if (isInvalidPhone) {
+              this.invalidPhoneContacts.push({
+                ...contact,
+                id: 'p-' + this.contacts.length
+              });
+            }
           }
-        })
-        .finally(() => {
-          this.duplicateLoading = false;
-        });
+        } else {
+          this.contacts.push({ ...contact, id: this.contacts.length });
+        }
+      });
+
+      if (
+        this.invalidEmailContacts.length > 0 ||
+        this.invalidPhoneContacts.length > 0
+      ) {
+        this.rebuildColumns();
+        this.rebuildContacts();
+
+        this.step = 7;
+      } else {
+        this.duplicateLoading = true;
+        const _SELF = this;
+        setTimeout(function () {
+          _SELF
+            .checkDuplicate()
+            .then((res) => {
+              _SELF.duplicateLoading = false;
+              _SELF.rebuildColumns();
+              _SELF.rebuildContacts();
+              _SELF.isDuplicatedEmail();
+              if (res) {
+                _SELF.step = 3;
+              } else {
+                _SELF.step = 4;
+                _SELF.contactsToUpload = _SELF.contacts;
+                _SELF.selectAllContacts();
+              }
+            })
+            .finally(() => {
+              _SELF.duplicateLoading = false;
+            });
+        }, 100);
+      }
     } else {
       this.importError = true;
     }
@@ -1253,6 +1316,100 @@ export class UploadContactsComponent implements OnInit {
     return result;
   }
 
+  editInvalidContact(id): void {
+    let editContact;
+    const invalidContacts = this.getInvalidContacts();
+    invalidContacts.forEach((contact) => {
+      if (contact.id === id) {
+        editContact = contact;
+      }
+    });
+
+    if (editContact) {
+      this.dialog
+        .open(ImportContactEditComponent, {
+          data: {
+            ...editContact
+          }
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            const updated = res.contact;
+            console.log('updated ========>', id, updated);
+            if (updated) {
+              const contactIndex = this.invalidContacts.findIndex(
+                (contact) => contact.id === id
+              );
+              if (contactIndex >= 0) {
+                this.invalidContacts.splice(contactIndex, 1, updated);
+              }
+
+              const emailIndex = this.invalidEmailContacts.findIndex(
+                (contact) => contact.id === id
+              );
+              if (emailIndex >= 0) {
+                this.invalidEmailContacts.splice(emailIndex, 1, updated);
+              }
+
+              const phoneIndex = this.invalidPhoneContacts.findIndex(
+                (contact) => contact.id === id
+              );
+              if (phoneIndex >= 0) {
+                this.invalidPhoneContacts.splice(phoneIndex, 1, updated);
+              }
+            }
+          }
+        });
+    }
+  }
+
+  backVaildation(): void {
+    this.invalidContacts = [];
+    this.invalidEmailContacts = [];
+    this.invalidPhoneContacts = [];
+    this.step = 2;
+  }
+
+  reviewValidation(): void {
+    let isInvalidExist = false;
+    for (const contact of this.getInvalidContacts()) {
+      if (this.isInvalidContact(contact)) {
+        isInvalidExist = true;
+        break;
+      }
+    }
+    if (isInvalidExist) {
+      const id = 'invalid-' + this.getInvalidContacts()[0].id;
+      const el = document.getElementById(id);
+      el.scrollIntoView();
+    } else {
+      this.contacts = [...this.contacts, ...this.getInvalidContacts()];
+      this.duplicateLoading = true;
+      const _SELF = this;
+      setTimeout(function () {
+        _SELF
+          .checkDuplicate()
+          .then((res) => {
+            _SELF.duplicateLoading = false;
+            _SELF.rebuildColumns();
+            _SELF.rebuildContacts();
+            _SELF.isDuplicatedEmail();
+            if (res) {
+              _SELF.step = 3;
+            } else {
+              _SELF.step = 4;
+              _SELF.contactsToUpload = _SELF.contacts;
+              _SELF.selectAllContacts();
+            }
+          })
+          .finally(() => {
+            this.duplicateLoading = false;
+          });
+      }, 100);
+    }
+  }
+
   editContact(id): void {
     let editContact;
     this.contacts.forEach((contact) => {
@@ -1854,6 +2011,60 @@ export class UploadContactsComponent implements OnInit {
       const blob = new Blob([csvArray], { type: 'text/csv' });
       saveAs(blob, 'review.csv');
     }
+  }
+
+  getInvalidContacts(): any {
+    let invalidContacts = [];
+    invalidContacts = [
+      ...this.invalidContacts,
+      ...this.invalidEmailContacts,
+      ...this.invalidPhoneContacts
+    ];
+    console.log(
+      'invalid contacts ===========>',
+      this.invalidContacts,
+      this.invalidEmailContacts,
+      this.invalidPhoneContacts
+    );
+    return invalidContacts;
+  }
+
+  isValidPhone(val): any {
+    if (val !== '' && phone(val)[0]) {
+      return true;
+    }
+    return false;
+  }
+
+  isValidEmail(val): any {
+    if (val !== '' && validateEmail(val)) {
+      return true;
+    }
+    return false;
+  }
+
+  isInvalidContact(contact): any {
+    for (const key in this.updateColumn) {
+      if (contact[this.updateColumn[key]] !== '') {
+        if (
+          this.updateColumn[key] === 'primary_email' ||
+          this.updateColumn[key] === 'secondary_email'
+        ) {
+          if (!this.isValidEmail(contact[this.updateColumn[key]])) {
+            return true;
+          }
+        }
+        if (
+          this.updateColumn[key] === 'primary_phone' ||
+          this.updateColumn[key] === 'secondary_phone'
+        ) {
+          if (!this.isValidPhone(contact[this.updateColumn[key]])) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   fields = [
