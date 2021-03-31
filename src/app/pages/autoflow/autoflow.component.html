@@ -28,20 +28,21 @@
                 >
 
               </div>
-              <ng-container *ngIf="editMode == 'edit' && (auth == 'admin' || auth == 'shared'); else editableTemplate">
-                <div class="btn-wrapper ml-2">
-                  <button type="button" class="btn btn-white-blue" (click)="duplicate($event, automation)">
-                    <span class="f-3 font-weight-bold">Clone</span>
-                  </button>
-                </div>
-              </ng-container>
-              <ng-template #editableTemplate>
-                <div class="btn-wrapper ml-2">
-                  <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
-                    {{editMode == 'edit' ? 'Save' : 'Create'}}
-                  </button>
-                </div>
-              </ng-template>
+              <div class="btn-wrapper ml-2">
+                <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
+                  {{editMode == 'edit' ? 'Save' : 'Create'}}
+                </button>
+              </div>
+<!--              <ng-container *ngIf="editMode == 'edit' && (auth == 'admin' || auth == 'shared'); else editableTemplate">-->
+<!--                <div class="btn-wrapper ml-2">-->
+<!--                  <button type="button" class="btn btn-white-blue" (click)="duplicate($event, automation)">-->
+<!--                    <span class="f-3 font-weight-bold">Clone</span>-->
+<!--                  </button>-->
+<!--                </div>-->
+<!--              </ng-container>-->
+<!--              <ng-template #editableTemplate>-->
+<!--                -->
+<!--              </ng-template>-->
             </div>
           </div>
           <div class="col-md-3 col-sm-6 col-6">

@@ -8,7 +8,7 @@
     </ng-container>
     <ng-container *ngIf="step == 3">
       <div class="f-22 font-weight-bold c-black">
-        {{this.failedData.length > 0 ? 'Duplicates with Contacts' : 'Duplicates'}}
+        {{this.failedData.length > 0 ? 'Duplicates found between your file and existing account contacts' : 'Duplicates found in your contact upload file'}}
 <!--        <span class="dup-notification-text f-6 ml-md-5 ml-sm-3 ml-3 c-red" *ngIf="isDuplicatedExist">-->
 <!--          Contact is duplicated. Please merge duplicated contacts.-->
 <!--        </span>-->
@@ -158,7 +158,7 @@
                     <th>Type</th>
                     <ng-container *ngFor="let column of columns">
                       <th [class]="column" *ngIf="updateColumn[column]">
-                        {{column}}
+                        {{updateColumn[column]}}
                       </th>
                     </ng-container>
                     <th class="actions sticky-action-col">
@@ -387,7 +387,7 @@
                   (click)="goToReview()"
                   [class.loading]="uploading"
           >
-            {{firstImport ? 'Review' : 'Import'}}
+            Review
           </button>
         </div>
       </div>
