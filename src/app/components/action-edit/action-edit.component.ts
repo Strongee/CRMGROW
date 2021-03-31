@@ -383,12 +383,6 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       } else {
         this.action[this.materialType] = this.material;
       }
-      console.log(
-        'update ============>',
-        this.material,
-        this.materialType,
-        this.action
-      );
     }
     if (this.type === 'follow_up') {
       if (this.followDueOption === 'date') {

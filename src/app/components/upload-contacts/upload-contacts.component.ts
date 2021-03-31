@@ -1336,7 +1336,6 @@ export class UploadContactsComponent implements OnInit {
         .subscribe((res) => {
           if (res) {
             const updated = res.contact;
-            console.log('updated ========>', id, updated);
             if (updated) {
               const contactIndex = this.invalidContacts.findIndex(
                 (contact) => contact.id === id
@@ -1406,7 +1405,7 @@ export class UploadContactsComponent implements OnInit {
           .finally(() => {
             this.duplicateLoading = false;
           });
-      }, 100);
+      }, 200);
     }
   }
 
@@ -2021,7 +2020,6 @@ export class UploadContactsComponent implements OnInit {
       ...this.invalidPhoneContacts
     ];
     console.log(
-      'invalid contacts ===========>',
       this.invalidContacts,
       this.invalidEmailContacts,
       this.invalidPhoneContacts
