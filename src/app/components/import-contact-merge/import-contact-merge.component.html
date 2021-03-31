@@ -6,7 +6,7 @@
         <ng-container *ngIf="isCheckable(updateColumn[column]) else selectableColumn">
           <ng-container *ngIf="!isEmailPhoneColumn(updateColumn[column]) else emailPhoneColumn">
             <div class="v-center contact-row w-100 my-2" *ngIf="collection[updateColumn[column]]">
-              <div class="contact-header f-3 text-uppercase">{{column}}</div>
+              <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
               <div class="contact-field">
                 <mat-select [(ngModel)]="previewContact[updateColumn[column]]"
                             [disabled]="collection[updateColumn[column]] && collection[updateColumn[column]].length < 2"
@@ -63,7 +63,7 @@
         </ng-container>
         <ng-template #selectableColumn>
           <div class="v-center contact-row w-100 my-2" *ngIf="collection[updateColumn[column]] && collection[updateColumn[column]].length">
-            <div class="contact-header f-3 text-uppercase">{{column}}</div>
+            <div class="contact-header f-3 text-uppercase">{{updateColumn[column]}}</div>
             <div class="contact-field">
               <mat-select [(ngModel)]="previewContact[updateColumn[column]]" multiple>
                 <mat-option *ngFor="let value of collection[updateColumn[column]]" value="{{value}}">
