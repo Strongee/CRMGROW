@@ -125,7 +125,8 @@ export const ROUTE_PAGE = {
   '/activities': 'Dashboard',
   '/contacts': 'Contacts',
   '/deals': 'Deals',
-  '/autoflow': 'Automations'
+  '/autoflow': 'Automations',
+  '/settings/tag-manager': 'Tag manager'
 };
 
 export const COUNTRIES = [
