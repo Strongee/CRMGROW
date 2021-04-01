@@ -458,8 +458,6 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   removeMember(member): void {
     this.dialog
       .open(ConfirmComponent, {
-        maxWidth: '360px',
-        width: '96vw',
         data: {
           title: 'Remove Member',
           message: 'Are you sure you want to remove this member?',

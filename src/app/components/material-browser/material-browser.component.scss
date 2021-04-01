@@ -1,5 +1,9 @@
 @import  "src/variables.scss";
 
+.search-form {
+  max-width: 250px;
+}
+
 .mat-table-wrapper {
   min-height: unset;
 }

@@ -94,7 +94,7 @@ export class UploadContactsComponent implements OnInit {
   checkingDuplicate = false;
   isDuplicatedExist = false;
   initPropertyColumn = {};
-  initColumns;
+  initColumns = [];
   exceedContacts = [];
 
   duplicateLoading = false;
@@ -207,11 +207,12 @@ export class UploadContactsComponent implements OnInit {
   }
 
   readFile(evt): any {
+    this.initImport();
     const file = evt.target.files[0];
     if (!file) {
       return false;
     }
-    if (!file.name.toLowerCase().endsWith('.csv')) {
+    if (!file.name?.toLowerCase().endsWith('.csv')) {
       this.isCSVFile = false;
       this.filePlaceholder =
         'File is not matched. \n Drag your csv files here or click in this area.';
@@ -219,7 +220,7 @@ export class UploadContactsComponent implements OnInit {
     }
 
     this.isCSVFile = true;
-    this.filePlaceholder = 'File uploaded "' + file.name.toLowerCase() + '".';
+    this.filePlaceholder = 'File uploaded "' + file.name?.toLowerCase() + '".';
     this.fileName = file.name;
     this.fileSize = this.humanFileSize(file.size);
     const fileReader = new FileReader();
@@ -395,7 +396,8 @@ export class UploadContactsComponent implements OnInit {
 
       if (
         this.invalidEmailContacts.length > 0 ||
-        this.invalidPhoneContacts.length > 0
+        this.invalidPhoneContacts.length > 0 ||
+        this.invalidContacts.length > 0
       ) {
         this.rebuildColumns();
         this.rebuildInvalidContacts(this.invalidContacts);
@@ -455,6 +457,7 @@ export class UploadContactsComponent implements OnInit {
         rebuildColumns.push(this.columns[i]);
       }
     }
+    this.columns = rebuildColumns;
     const newUpdateColumn = {};
     const newColumns = [];
     for (const key in this.updateColumn) {
@@ -983,8 +986,10 @@ export class UploadContactsComponent implements OnInit {
               dupItem[j]['primary_email'] !== '' &&
               dupItem[i]['primary_email'] !== undefined &&
               dupItem[j]['primary_email'] !== undefined &&
-              dupItem[i]['primary_email'].toLowerCase() ===
-                dupItem[j]['primary_email'].toLowerCase()
+              dupItem[i]['primary_email'] !== null &&
+              dupItem[j]['primary_email'] !== null &&
+              dupItem[i]['primary_email']?.toLowerCase() ===
+                dupItem[j]['primary_email']?.toLowerCase()
             ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
@@ -1006,8 +1011,10 @@ export class UploadContactsComponent implements OnInit {
               dupItem[j]['primary_phone'] !== '' &&
               dupItem[i]['primary_phone'] !== undefined &&
               dupItem[j]['primary_phone'] !== undefined &&
-              dupItem[i]['primary_phone'].toLowerCase() ===
-                dupItem[j]['primary_phone'].toLowerCase()
+              dupItem[i]['primary_phone'] !== null &&
+              dupItem[j]['primary_phone'] !== null &&
+              dupItem[i]['primary_phone']?.toLowerCase() ===
+                dupItem[j]['primary_phone']?.toLowerCase()
             ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
@@ -1393,6 +1400,8 @@ export class UploadContactsComponent implements OnInit {
     this.invalidEmailContacts = [];
     this.invalidPhoneContacts = [];
     this.step = 2;
+    this.updateColumn = { ...this.initPropertyColumn };
+    this.columns = [...this.initColumns];
   }
 
   reviewValidation(): void {
@@ -1409,6 +1418,7 @@ export class UploadContactsComponent implements OnInit {
       el.scrollIntoView();
     } else {
       this.rebuildColumns();
+      this.rebuildContacts();
       this.contacts = [...this.contacts, ...this.getInvalidContacts()];
       this.duplicateLoading = true;
       const _SELF = this;

@@ -32,9 +32,12 @@ export class ImportContactEditComponent implements OnInit, OnDestroy {
   checkingPhone = false;
   creating = false;
   cell_phone: any = {};
+  secondary_cell_phone: any = {};
   contact;
   invalidEmail = false;
   invalidPhone = false;
+  invalidSecondaryEmail = false;
+  invalidSecondaryPhone = false;
 
   @ViewChild('cityplacesRef') cityPlaceRef: GooglePlaceDirective;
   @ViewChild('addressplacesRef') addressPlacesRef: GooglePlaceDirective;
@@ -51,11 +54,11 @@ export class ImportContactEditComponent implements OnInit, OnDestroy {
     };
 
     this.cell_phone = this.contact['primary_phone'];
+    this.secondary_cell_phone = this.contact['secondary_phone'];
   }
   ngOnDestroy(): void {}
 
   edit(): void {
-
     if (
       this.contact['primary_email'] !== '' &&
       !validateEmail(this.contact['primary_email'])
@@ -74,14 +77,40 @@ export class ImportContactEditComponent implements OnInit, OnDestroy {
       this.invalidPhone = false;
     }
 
-    if (this.invalidPhone || this.invalidEmail) {
+    if (
+      this.contact['secondary_email'] &&
+      !validateEmail(this.contact['secondary_email'])
+    ) {
+      this.invalidSecondaryEmail = true;
+    } else {
+      this.invalidSecondaryEmail = false;
+    }
+    if (this.secondary_cell_phone) {
+      if (!this.isValidPhone(this.secondary_cell_phone.internationalNumber)) {
+        this.invalidSecondaryPhone = true;
+      } else {
+        this.invalidSecondaryPhone = false;
+      }
+    } else {
+      this.invalidSecondaryPhone = false;
+    }
+
+    if (
+      this.invalidPhone ||
+      this.invalidEmail ||
+      this.invalidSecondaryEmail ||
+      this.invalidSecondaryPhone
+    ) {
       return;
     }
 
     const contact = {
       ...this.contact,
       primary_phone: this.cell_phone
-        ? phone(this.cell_phone.internationalNumber)[0]
+        ? phone(this.cell_phone.internationalNumber)[0] || ''
+        : '',
+      secondary_phone: this.secondary_cell_phone
+        ? phone(this.secondary_cell_phone.internationalNumber)[0] || ''
         : ''
     };
     this.dialogRef.close({ contact });
