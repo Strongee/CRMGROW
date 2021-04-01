@@ -21,6 +21,7 @@ import { saveAs } from 'file-saver';
 import { ContactEditComponent } from '../contact-edit/contact-edit.component';
 import { validateEmail } from '../../helper';
 const phone = require('phone');
+const PhoneNumber = require('awesome-phonenumber');
 
 @Component({
   selector: 'app-upload-contacts',
@@ -397,8 +398,9 @@ export class UploadContactsComponent implements OnInit {
         this.invalidPhoneContacts.length > 0
       ) {
         this.rebuildColumns();
-        this.rebuildContacts();
-
+        this.rebuildInvalidContacts(this.invalidContacts);
+        this.rebuildInvalidContacts(this.invalidPhoneContacts);
+        this.rebuildInvalidContacts(this.invalidEmailContacts);
         this.step = 7;
       } else {
         this.duplicateLoading = true;
@@ -512,6 +514,29 @@ export class UploadContactsComponent implements OnInit {
     this.columns = newColumns;
   }
 
+  rebuildInvalidContacts(contacts): void {
+    if (contacts.length > 0) {
+      contacts.forEach((contact) => {
+        for (let i = 0; i < ImportSelectableColumn.length; i++) {
+          if (ImportSelectableColumn[i] === 'tags') {
+            const val = contact[ImportSelectableColumn[i]];
+            if (val) {
+              const tags = [];
+              const tagArray = val.split(',');
+              for (let j = 0; j < tagArray.length; j++) {
+                if (tags.indexOf(tagArray[j]) < 0) {
+                  if (tagArray[j] !== '') {
+                    tags.push(tagArray[j]);
+                  }
+                }
+              }
+              contact[ImportSelectableColumn[i]] = tags;
+            }
+          }
+        }
+      });
+    }
+  }
   rebuildContacts(): void {
     if (this.contacts.length) {
       this.contacts.forEach((contact) => {
@@ -1383,6 +1408,7 @@ export class UploadContactsComponent implements OnInit {
       const el = document.getElementById(id);
       el.scrollIntoView();
     } else {
+      this.rebuildColumns();
       this.contacts = [...this.contacts, ...this.getInvalidContacts()];
       this.duplicateLoading = true;
       const _SELF = this;
@@ -1391,8 +1417,6 @@ export class UploadContactsComponent implements OnInit {
           .checkDuplicate()
           .then((res) => {
             _SELF.duplicateLoading = false;
-            _SELF.rebuildColumns();
-            _SELF.rebuildContacts();
             _SELF.isDuplicatedEmail();
             if (res) {
               _SELF.step = 3;
@@ -2019,19 +2043,28 @@ export class UploadContactsComponent implements OnInit {
       ...this.invalidEmailContacts,
       ...this.invalidPhoneContacts
     ];
-    console.log(
-      this.invalidContacts,
-      this.invalidEmailContacts,
-      this.invalidPhoneContacts
-    );
     return invalidContacts;
   }
 
   isValidPhone(val): any {
-    if (val !== '' && phone(val)[0]) {
+    if (val === '') {
       return true;
+    } else {
+      if (PhoneNumber(val).isValid() || this.matchUSPhoneNumber(val)) {
+        return true;
+      }
     }
     return false;
+  }
+
+  matchUSPhoneNumber(phoneNumberString): any {
+    const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+    let phoneNumber;
+    if (match) {
+      phoneNumber = '(' + match[2] + ') ' + match[3] + '-' + match[4];
+    }
+    return phoneNumber;
   }
 
   isValidEmail(val): any {
