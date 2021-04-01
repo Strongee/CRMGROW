@@ -8,12 +8,11 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { TeamService } from '../../services/team.service';
-import { filter } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Team } from '../../models/team.model';
-import {TemplateShareComponent} from "../../components/template-share/template-share.component";
-import {sortStringArray} from "../../utils/functions";
-import {TemplateBrowserComponent} from "../../components/template-browser/template-browser.component";
+import { TemplateShareComponent } from '../../components/template-share/template-share.component';
+import { sortStringArray } from '../../utils/functions';
+import { TemplateBrowserComponent } from "../../components/template-browser/template-browser.component";
 
 @Component({
   selector: 'app-team-share-template',
@@ -259,8 +258,24 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
     for (const template of this.templates) {
       hideTemplates.push(template._id);
     }
+    this.dialog
+      .open(TemplateBrowserComponent, {
+        width: '96vw',
+        maxWidth: '940px',
+        disableClose: true,
+        data: {
+          team_id: this.team._id,
+          hideTemplates
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+
+        }
+      });
     // this.dialog
-    //   .open(TemplateBrowserComponent, {
+    //   .open(TemplateShareComponent, {
     //     width: '96vw',
     //     maxWidth: '500px',
     //     maxHeight: '60vh',
@@ -273,29 +288,12 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
     //   .afterClosed()
     //   .subscribe((res) => {
     //     if (res) {
-    //
+    //       if (res.templates) {
+    //         this.templates = [...this.templates, ...res.templates];
+    //         this.changeSearchStr();
+    //       }
     //     }
     //   });
-    this.dialog
-      .open(TemplateShareComponent, {
-        width: '96vw',
-        maxWidth: '500px',
-        maxHeight: '60vh',
-        disableClose: true,
-        data: {
-          team_id: this.team._id,
-          hideTemplates
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          if (res.templates) {
-            this.templates = [...this.templates, ...res.templates];
-            this.changeSearchStr();
-          }
-        }
-      });
   }
 
   duplicateTemplate(template: Template): void {

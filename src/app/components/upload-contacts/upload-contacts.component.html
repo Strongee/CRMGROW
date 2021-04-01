@@ -344,7 +344,7 @@
       </div>
     </ng-container>
     <ng-container *ngIf="step == 7">
-      <div class="invalid-wrapper">
+      <div class="duplicate-wrapper invalid-wrapper pr-2">
         <div class="table-wrapper">
           <table class="table duplicate-check-table mb-0">
             <thead>
@@ -402,7 +402,7 @@
                   </ng-template>
                 </td>
               </ng-container>
-              <td>
+              <td class="actions sticky-action-col">
                 <div class="v-center justify-content-end">
                   <button type="button" class="edit-contact-button v-center border-0 p-0 bgc-trans" (click)="editInvalidContact(contact.id)">
                     <i class="i-icon i-edit d-block bgc-black" aria-hidden="true"></i>

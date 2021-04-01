@@ -5,7 +5,7 @@
   </button>
 </h1>
 <mat-dialog-content>
-  <div class="contact-list-controls pt-0 pb-1">
+  <div class="contact-list-controls mt-3 pt-0 pb-1">
     <div class="form-group mb-0 search-form">
       <div class="input-group-prepend">
         <i class="i-icon i-search d-block bgc-dark"></i>
@@ -20,14 +20,21 @@
   </div>
   <div class="my-3 position-relative">
     <ng-container *ngIf="templates.length">
-      <div class="updating-status" *ngIf="templates.length && (templatesService.loading$ | async) === STATUS.REQUEST">
-        LOADING
-      </div>
       <table class="w-100 template-table page-table"
              mat-table
              multiTemplateDataRows
              [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"
       >
+        <ng-container matColumnDef="loader-cell">
+          <th mat-header-cell
+              *matHeaderCellDef colspan="12" class="loader-cell">
+            <div class="updating-status"
+                 *ngIf="templates.length && (templatesService.loading$ | async) === STATUS.REQUEST">
+              LOADING
+            </div>
+          </th>
+        </ng-container>
+
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">
             <div class="v-center c-pointer head-sort" (click)="sort('title')">
@@ -110,6 +117,8 @@
             </div>
           </td>
         </ng-container>
+        <tr mat-header-row
+            *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
         <tr mat-row *matRowDef="let element; columns: DISPLAY_COLUMNS;"></tr>
       </table>
