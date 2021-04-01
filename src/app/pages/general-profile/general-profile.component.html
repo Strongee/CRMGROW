@@ -97,7 +97,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-6 col-12">
+    <!-- <div class="col-sm-6 col-12">
       <div class="form-group" [ngClass]="{invalid: profileForm.submitted && learn_more.invalid && (learn_more.dirty || learn_more.touched || profileForm.submitted)}">
         <div class="d-flex">
           <label for="learn_more" class="mr-auto">landing page learn more redirect link</label>
@@ -107,7 +107,7 @@
         </div>
         <input type="text" class="form-control" [(ngModel)]="website" id="learn_more" name="learn_more" #learn_more="ngModel" required>
       </div>
-    </div>
+    </div> -->
     <div class="col-sm-6 col-12">
       <div class="form-group" [ngClass]="{invalid: profileForm.submitted && time_zone_info.invalid && (time_zone_info.dirty || time_zone_info.touched || profileForm.submitted)}">
         <div class="d-flex">
@@ -125,8 +125,6 @@
         </select>
       </div>
     </div>
-  </div>
-  <div class="row">
     <div class="col-sm-6 col-12">
       <div class="form-group" [ngClass]="{invalid: profileForm.submitted && location.invalid && (location.dirty || location.touched || profileForm.submitted)}">
         <div class="d-flex">
@@ -143,6 +141,23 @@
       </div>
     </div>
   </div>
+  <!-- <div class="row">
+    <div class="col-sm-6 col-12">
+      <div class="form-group" [ngClass]="{invalid: profileForm.submitted && location.invalid && (location.dirty || location.touched || profileForm.submitted)}">
+        <div class="d-flex">
+          <label for="location" class="mr-auto">location</label>
+          <span class="error" *ngIf="location.errors">
+            <ng-container *ngIf="location.errors.required">Required!</ng-container>
+          </span>
+        </div>
+        <input class="form-control" placeholder="Add location" [(ngModel)]="address" name="location"
+            #location="ngModel" ngx-google-places-autocomplete #addressplacesRef="ngx-places" [options]="{
+              types: [],
+              componentRestrictions: { country: 'US' }
+            }" (onAddressChange)="handleAddressChange($event)" />
+      </div>
+    </div>
+  </div> -->
   <div class="row">
     <a class="btn c-blue font-weight-bold ml-auto mr-4 mt-4">Cancel</a>
     <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" [class.loading]="saving" [disabled]="!profileForm.dirty">Save changes</button>
