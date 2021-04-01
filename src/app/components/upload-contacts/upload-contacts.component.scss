@@ -163,6 +163,21 @@
   }
 }
 
+.invalid-wrapper {
+  .table-wrapper {
+    overflow: auto;
+    .edit-contact-button {
+      opacity: 0;
+    }
+    tr:hover {
+      .edit-contact-button {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+
 .template-screenshot {
   width: 100%;
 }

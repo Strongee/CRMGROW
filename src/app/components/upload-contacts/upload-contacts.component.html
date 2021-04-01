@@ -344,21 +344,22 @@
       </div>
     </ng-container>
     <ng-container *ngIf="step == 7">
-      <div class="table-wrapper">
-        <table class="table duplicate-check-table mb-0">
-          <thead>
-          <tr>
-            <ng-container *ngFor="let column of columns">
-              <th [class]="column" *ngIf="updateColumn[column]">
-                {{updateColumn[column]}}
-              </th>
-            </ng-container>
-            <th class="actions sticky-action-col">
+      <div class="invalid-wrapper">
+        <div class="table-wrapper">
+          <table class="table duplicate-check-table mb-0">
+            <thead>
+            <tr>
+              <ng-container *ngFor="let column of columns">
+                <th [class]="column" *ngIf="updateColumn[column]">
+                  {{updateColumn[column]}}
+                </th>
+              </ng-container>
+              <th class="actions sticky-action-col">
 
-            </th>
-          </tr>
-          </thead>
-          <tbody>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
             <tr class="duplicate-row"
                 id = 'invalid-{{contact.id}}'
                 *ngFor="let contact of getInvalidContacts(); let row = index;"
@@ -369,11 +370,11 @@
                 >
                   <ng-container
                     *ngIf="
-                    updateColumn[column] == 'primary_email' ||
-                    updateColumn[column] == 'secondary_email' ||
-                    updateColumn[column] == 'primary_phone' ||
-                    updateColumn[column] == 'secondary_phone';
-                    else normalColumn"
+                  updateColumn[column] == 'primary_email' ||
+                  updateColumn[column] == 'secondary_email' ||
+                  updateColumn[column] == 'primary_phone' ||
+                  updateColumn[column] == 'secondary_phone';
+                  else normalColumn"
                   >
                     <div *ngIf="updateColumn[column] == 'primary_email' || updateColumn[column] == 'secondary_email'">
                       <div [class.c-red]="!isValidEmail(contact[updateColumn[column]])">
@@ -403,14 +404,15 @@
               </ng-container>
               <td>
                 <div class="v-center justify-content-end">
-                  <button type="button" class="v-center border-0 p-0 bgc-trans" (click)="editInvalidContact(contact.id)">
+                  <button type="button" class="edit-contact-button v-center border-0 p-0 bgc-trans" (click)="editInvalidContact(contact.id)">
                     <i class="i-icon i-edit d-block bgc-black" aria-hidden="true"></i>
                   </button>
                 </div>
               </td>
             </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </ng-container>
   </mat-dialog-content>
