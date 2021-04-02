@@ -42,6 +42,7 @@ export class MaterialSendComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.templateService.loadAll(false);
     if (this.data.material.length) {
       if (this.data.material_type) {
         switch (this.data.material_type) {
@@ -95,7 +96,6 @@ export class MaterialSendComponent implements OnInit {
     this.selectedTab = event;
   }
   selectTextTemplate(template: Template): void {
-    console.log('select text template', template);
     this.messageEl.nativeElement.focus();
     const field = this.messageEl.nativeElement;
     if (!this.textContent.replace(/(\r\n|\n|\r|\s)/gm, '')) {
