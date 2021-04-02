@@ -133,7 +133,7 @@
                     
                 </div>
             </mat-tab>
-            <mat-tab label="Send via Email">
+            <mat-tab label="Send via Email" *ngIf="data?.type == 'email'">
                 <div class="form-group mt-2">
                     <div class="v-center">
                         <span class="f-1 fw-600 op-40 text-uppercase mb-1">
