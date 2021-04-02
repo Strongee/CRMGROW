@@ -29,6 +29,7 @@ import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
 import { Template } from 'src/app/models/template.model';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-action-edit',
@@ -253,7 +254,6 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       if (_SELF.searchField) {
         _SELF.searchField.nativeElement.blur();
       }
-
     }, 300);
 
     if (
@@ -491,6 +491,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
               ...this.action,
               type: this.type,
               task_type: this.task.type,
+              due_duration: undefined,
               due_date: due_date,
               period,
               command: 'update_follow_up',
@@ -502,6 +503,7 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
             ...this.action,
             type: this.type,
             task_type: this.task.type,
+            due_date: undefined,
             due_duration: this.update_due_duration || 0,
             period,
             command: 'update_follow_up',
@@ -688,12 +690,8 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   }
 
   filter(): void {
-    const reg = new RegExp(this.searchStr, 'gi');
-    this.filterMaterials = this.materials.filter((material) => {
-      if (!reg.test(material.title)) {
-        return false;
-      }
-      return true;
+    this.filterMaterials = this.materials.filter((item) => {
+      return searchReg(item.title, this.searchStr);
     });
   }
 
