@@ -297,7 +297,7 @@ export class MessagesComponent implements OnInit {
         });
         data.contacts.forEach((contact) => {
           if (this.conversationDetails[contact]) {
-            this.conversationDetails[contact].messages.push(this.message);
+            this.conversationDetails[contact].messages.push(message);
           }
         });
         if (newContacts.length) {
@@ -313,7 +313,7 @@ export class MessagesComponent implements OnInit {
             this.contacts.unshift(conversationContact);
             this.conversationDetails[e._id] = {
               id: e._id,
-              messages: [this.message]
+              messages: [message]
             };
           });
         }
@@ -497,7 +497,7 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  parseContent(content: string): any {
+  parseContent(content: string = ''): any {
     return content.replace(/(https?:\/\/[^\s]+)/g, function (url) {
       return '<a href="' + url + '" target="_blank">' + url + '</a>';
     });
