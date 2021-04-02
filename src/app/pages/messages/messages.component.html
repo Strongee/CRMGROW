@@ -69,8 +69,9 @@
             </ng-template>
         </div>
 
-        <div class="message-box" [class.active]="panel === PanelView.Messages">
+        <div class="message-box" [class.active]="panel === PanelView.Messages" [class.with-files]="panel === PanelView.Files">
             <div class="v-center justify-content-between border-bottom px-3 message-box-header" *ngIf="!isNew; else newMessageHeader">
+                <i class="i-icon i-back d-block d-sm-none bgc-dark mr-2 c-pointer" (click)="goToBack()"></i>
                 <a class="v-center c-pointer" [routerLink]="['/contacts/' + selectedContact?._id]" target="_blank" *ngIf="selectedContact?._id">
                     <div class="contact-avatar f-3 font-weight-bold c-white mr-2">
                         {{selectedContact.avatarName}}
@@ -179,15 +180,26 @@
                 </div>
                 <div class="v-center justify-content-between button-groups">
                     <div class="v-center insert-button">
-                        <button type="button" class="v-center btn border-primary f-3 font-weight-bold c-blue px-3 py-2 mr-2 material-button" (click)="openMaterialsDlg()">
-                            <i class="d-block i-icon i-material bgc-blue"></i>
-                            <span class="f-3 font-weight-bold c-blue ml-1 mr-3">Material</span>
-                            <i class="d-block i-icon i-plus bgc-blue ml-auto"></i>
+                        <button type="button" class="btn border-primary material-button py-2 mr-2" (click)="openMaterialsDlg()">
+                            <div class="for-desktop v-center f-3 font-weight-bold c-blue px-3">
+                                <i class="d-block i-icon i-material bgc-blue"></i>
+                                <span class="font-weight-bold c-blue ml-1 mr-3">Material</span>
+                                <i class="d-block i-icon i-plus bgc-blue ml-auto"></i>
+                            </div>
+
+                            <div class="for-mobile">
+                                <i class="d-block i-icon i-material bgc-blue"></i>
+                            </div>
                         </button>
                         <div ngbDropdown class="px-3 py-2 border-primary select-template">
-                            <div ngbDropdownToggle class="v-center f-3 font-weight-bold c-blue c-pointer">
-                                Insert template
-                                <i class="d-block i-icon i-triangle-down bgc-blue ml-2"></i>
+                            <div ngbDropdownToggle class="f-3 font-weight-bold c-blue c-pointer template-button">
+                                <div class="for-desktop v-center">
+                                    <span>Insert template</span>
+                                    <i class="d-block i-icon i-triangle-down bgc-blue ml-2"></i>
+                                </div>
+                                <div class="for-mobile">
+                                    <i class="d-block i-icon i-texts bgc-blue"></i>
+                                </div>
                             </div>
                             <div ngbDropdownMenu class="light">
                                 <ng-container *ngFor="let template of (templateService.templates$ | async)">
@@ -203,8 +215,11 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-blue f-6 font-weight-bold" [class.loading]="isSend" (click)="sendMessage()">
+                    <button class="btn btn-blue f-6 font-weight-bold send-button for-desktop" [class.loading]="isSend" (click)="sendMessage()">
                         Send
+                    </button>
+                    <button class="for-mobile send-button btn p-2 rounded-circle" [class.loading]="isSend" (click)="sendMessage()">
+                        <i class="i-icon i-text-send d-block bgc-blue"></i>
                     </button>
                 </div>
             </div>

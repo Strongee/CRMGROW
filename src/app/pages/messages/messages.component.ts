@@ -63,7 +63,7 @@ export class MessagesComponent implements OnInit {
     this.smsService.loadAll(true);
     this.initSubscription();
     this.messageLoadTimer = setInterval(() => {
-      this.smsService.loadAll(true);
+      // this.smsService.loadAll(true);
     }, 2000);
   }
 

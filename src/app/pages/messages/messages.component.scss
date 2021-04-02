@@ -4,8 +4,10 @@
     padding-right: 0px;
     padding-bottom: 0px;
     height: calc(100vh - 64px);
+    overflow: hidden;
     @media screen and (max-width: 680px) {
         padding: 0!important;
+        height: calc(100vh - 62px);
     }
 }
 .page-header {
@@ -19,11 +21,15 @@
 }
 
 .message-container {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 142px);
+
+    @media screen and (max-width: 680px) {
+        padding: 0!important;
+        height: calc(100vh - 120px);
+    }
     .contact-list {
         min-width: 250px;
         max-width: 250px;
-
         .contact-list-header {
             height: 65px;
             background-color: #F6F6F7;
@@ -42,18 +48,12 @@
                 }
             }
         }
-        @media screen and (max-width: 1100px) {
-            min-width: unset;
-            max-width: unset;
-            .contact-name {
-                display: none;
-            }
+        @media screen and (max-width: 740px) {
+            min-width: 230px;
+            max-width: 230px;
         }
         @media screen and (max-width: 576px) {
             min-width: 100%;
-            &.hide {
-                display: none;
-            }
             .contact-name {
                 display: block;
                 width: 100%;
@@ -98,11 +98,12 @@
             }
         }
         .message-list {
-            height: 620px;
+            flex: 1;
             overflow-y: auto;
             .message {
                 padding: 0.5rem 1rem;
                 max-width: 350px;
+                width: 80%;
                 word-break: break-all;
                 white-space: break-spaces;
 
@@ -205,20 +206,10 @@
                 }
             }
         }
-        @media screen and (max-width: 576px) {
-            display: none;
-            &.show {
-                display: block;
-            }
-        }
     }
     .file-list {
-        display: none;
-        min-width: 350px;
-        max-width: 350px;
-        &.show {
-            display: block;
-        }
+        min-width: 300px;
+        max-width: 300px;
         &::before {
             width: 1px;
             height: 100%;
@@ -243,14 +234,6 @@
                     }
                 }
             }
-        }
-        @media screen and (max-width: 1200px) {
-            min-width: 250px;
-            max-width: 250px;
-        }
-        @media screen and (max-width: 576px) {
-            min-width: 100%;
-            max-width: unset;
         }
     }
     @media screen and (max-width: 576px) {
@@ -282,6 +265,10 @@
                     border: 1px solid #ddd;
                     padding: 10px 20px;
                     border-radius: 24px;
+
+                    @media screen and (max-width: 740px) {
+                        border-color: transparent;
+                    }
                 }
                 .mat-form-field-underline {
                     display: none !important;
@@ -299,6 +286,110 @@
             a {
                 color: $color-dark;
             }
+        }
+    }
+}
+
+
+
+.for-desktop {
+    display: flex;
+}
+.for-mobile {
+    display: none;
+}
+@media screen and (max-width: 740px) {
+    .for-desktop {
+        display: none!important;
+    }
+    .for-mobile {
+        display: block;
+    }
+}
+.message-action {
+    position: relative;
+    @media screen and (max-width: 740px) {
+        padding: 0px!important;
+        .form-group {
+            margin-bottom: 0px;
+            padding-left: 46px;
+            padding-right: 15px;
+        }
+        .material-button {
+            border: none;
+            position: absolute;
+            top: 50%;
+            left: 4px;
+            transform: translateY(-50%);
+            padding: 0.35rem;
+        }
+        .select-template {
+            border: none!important;
+            position: absolute;
+            top: 50%;
+            left: 24px;
+            transform: translateY(-50%);
+            padding: 0.35rem;
+
+            .i-icon {
+                width: 16px!important;
+                height: 16px!important;
+            }
+        }
+        .send-button {
+            position: absolute;
+            top: 50%;
+            right: 4px;
+            transform: translateY(-50%);
+
+            &.for-mobile:hover {
+                background-color: gainsboro;
+            }
+        }
+    }
+}
+
+
+.message-box {
+    min-width: calc(100% - 250px);
+    transition: all .3s;
+    &.with-files {
+        min-width: calc(100% - 550px);
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .message-box {
+        min-width: unset!important;
+    }
+    .file-list {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        height: 100%;
+        transform: translateX(100%);
+        transition: all .3s;
+        background: white;
+
+        &.active {
+            transform: translateX(0px);
+            box-shadow: -4px 4px 10px -8px #0004;
+        }
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .message-box {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        height: 100%;
+        transform: translateX(100%);
+        transition: all .3s;
+        background: white;
+
+        &.active, &.with-files {
+            transform: translateX(0px);
         }
     }
 }
