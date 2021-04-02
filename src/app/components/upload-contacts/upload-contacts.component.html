@@ -450,7 +450,9 @@
       </div>
     </ng-container>
     <ng-container *ngIf="step == 3">
-      <div class="d-flex justify-content-between w-100">
+      <div class="d-flex w-100"
+        [class]="failedData.length > 0 ? 'justify-content-end' : 'justify-content-between'"
+      >
         <button type="button" class="v-center btn btn-white-blue"
             *ngIf="failedData.length <= 0"
             (click)="back()"

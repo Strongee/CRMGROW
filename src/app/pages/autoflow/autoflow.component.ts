@@ -5,7 +5,8 @@ import {
   HostListener,
   ViewChild,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  ViewContainerRef
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { DagreNodesOnlyLayout } from '../../variables/customDagreNodesOnly';
@@ -42,6 +43,7 @@ import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bulk.component';
 import { Automation } from '../../models/automation.model';
+import { OverlayService } from 'src/app/services/overlay.service';
 
 @Component({
   selector: 'app-autoflow',
@@ -140,7 +142,9 @@ export class AutoflowComponent
     private toastr: ToastrService,
     private userService: UserService,
     public contactService: ContactService,
-    private handlerService: HandlerService
+    private overlayService: OverlayService,
+    private handlerService: HandlerService,
+    private viewContainerRef: ViewContainerRef
   ) {
     super();
   }
@@ -1554,6 +1558,20 @@ export class AutoflowComponent
     }
   }
 
+  easyView(event: any, node: any, origin: any, content: any): void {
+    this.overlayService
+      .open(origin, content, this.viewContainerRef, 'automation', {
+        data: node
+      })
+      .subscribe((res) => {
+        if (res == 'edit') {
+          this.editAction(event, node);
+        } else if (res == 'remove') {
+          this.removeAction(node);
+        }
+      });
+  }
+
   goToBack(): void {
     // if (this.automation.title !== this.automation_title) {
     //   if (this.auth === 'admin' || this.auth === 'shared') {
@@ -1564,7 +1582,7 @@ export class AutoflowComponent
     //     this.toastr.error('Automation title has been changed. Please save it.');
     //   }
     // } else {
-      this.router.navigate(['automations']);
+    this.router.navigate(['automations']);
     // }
   }
 

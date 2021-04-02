@@ -59,11 +59,10 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadingContact = true;
     this.smsService.loadAll(true);
     this.initSubscription();
     this.messageLoadTimer = setInterval(() => {
-      this.smsService.loadAll(true);
+      this.smsService.updateConversations();
     }, 2000);
   }
 
@@ -77,7 +76,6 @@ export class MessagesComponent implements OnInit {
     this.messageLoadSubscription = this.smsService.messages$.subscribe(
       (_messages) => {
         const messages = _messages;
-        this.loadingContact = false;
         this.contacts = [];
         for (let index = 0; index < messages.length; index++) {
           if (messages[index].contacts.length > 0) {

@@ -184,15 +184,14 @@
                 <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.leaf ? 200 : 110"
                           fill="transparent" />
                 <svg:foreignObject width="200" [attr.height]="node.leaf ? 200 : 110">
-                  <xhtml:div class="cardContainer"
-                             (click)="editAction($event, node)"
+                  <xhtml:div class="cardContainer c-pointer"
+                             #treeNode
+                             (click)="easyView($event, node, treeNode, treeOverlay)"
                              style="text-align: center;"
                              xmlns="http://www.w3.org/1999/xhtml">
                     <img [attr.src]="ICONS[node.type]" x="75" y="0" height="50px" width="50px" />
-                    <label class="remove-action" (click)="removeAction(node)">&times;</label>
                   </xhtml:div>
                   <xhtml:div class="cardContainer"
-                             (click)="editAction($event, node)"
                              style="background-color: transparent; padding: 5px 8px 20px 8px; margin-bottom: 15px; text-align: center;"
                              xmlns="http://www.w3.org/1999/xhtml">
                     <label class="name" style="margin: 0; font-size: 14px; font-weight: bold;">{{node.label}}</label>
@@ -265,7 +264,12 @@
             </ng-template>
           </ngx-graph>
         </ng-template>
-
+        <ng-template #treeOverlay let-close="close" let-data>
+          <app-automation-detail-overlay
+              [dataSource]="data.data"
+          >
+          </app-automation-detail-overlay>
+        </ng-template>
         <!--  -->
       </div>
     </div>
