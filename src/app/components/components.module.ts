@@ -147,6 +147,7 @@ import { SendBulkTextComponent } from './send-bulk-text/send-bulk-text.component
 import { SocialShareComponent } from './social-share/social-share.component';
 import { TeamMaterialShareComponent } from './team-material-share/team-material-share.component';
 import { TemplateBrowserComponent } from './template-browser/template-browser.component';
+import { AutomationBrowserComponent } from './automation-browser/automation-browser.component';
 import { AutomationDetailOverlayComponent } from './automation-detail-overlay/automation-detail-overlay.component';
 
 @NgModule({
@@ -294,6 +295,7 @@ import { AutomationDetailOverlayComponent } from './automation-detail-overlay/au
     SocialShareComponent,
     TeamMaterialShareComponent,
     TemplateBrowserComponent,
+    AutomationBrowserComponent,
     AutomationDetailOverlayComponent
   ],
   imports: [

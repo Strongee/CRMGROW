@@ -270,30 +270,11 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
-
+        if (res && res.templates) {
+          this.templates = [...this.templates, ...res.templates];
+          this.changeSearchStr();
         }
       });
-    // this.dialog
-    //   .open(TemplateShareComponent, {
-    //     width: '96vw',
-    //     maxWidth: '500px',
-    //     maxHeight: '60vh',
-    //     disableClose: true,
-    //     data: {
-    //       team_id: this.team._id,
-    //       hideTemplates
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       if (res.templates) {
-    //         this.templates = [...this.templates, ...res.templates];
-    //         this.changeSearchStr();
-    //       }
-    //     }
-    //   });
   }
 
   duplicateTemplate(template: Template): void {
