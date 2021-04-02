@@ -30,21 +30,40 @@
     .contact-list {
         min-width: 250px;
         max-width: 250px;
+        display: flex;
+        flex-direction: column;
         .contact-list-header {
             height: 65px;
             background-color: #F6F6F7;
         }
+        .contact-list-wrapper {
+            flex: 1;
+            overflow-y: auto;
+        }
         .contact {
+            &:hover {
+                background-color: #F8F8F8;
+            }
             &.selected {
                 background-color: #F3F3F3;
             }
-            .message-status {
-                width: 8px;
-                height: 8px;
-                min-width: 8px;
-                border-radius: 50%;
-                &.unread {
-                    background-color: #ff0000;
+            .latest-message {
+                opacity: 0.7;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                width: 100%;
+            }
+            .contact-name {
+                width: calc(100% - 60px)!important;
+            }
+            &.unread {
+                .contact-fullname {
+                    font-weight: bold;
+                }
+                .latest-message {
+                    font-weight: bold;
+                    opacity: 1;
                 }
             }
         }
@@ -56,7 +75,6 @@
             min-width: 100%;
             .contact-name {
                 display: block;
-                width: 100%;
             }
         }
     }
@@ -65,15 +83,6 @@
         flex-direction: column;
         flex-grow: 1;
         width: 100%;
-        &::before {
-            width: 1px;
-            height: 100%;
-            background: $color-dark;
-            content: "";
-            position: absolute;
-            top: 0px;
-            opacity: 0.2;
-        }
         .message-box-header {
             min-height: 65px;
             background-color: #F6F6F7;
@@ -104,8 +113,7 @@
                 padding: 0.5rem 1rem;
                 max-width: 350px;
                 width: 80%;
-                word-break: break-all;
-                white-space: break-spaces;
+                overflow-wrap: anywhere;
 
                 &:first-child {
                     margin-top: 0 !important;
@@ -210,6 +218,8 @@
     .file-list {
         min-width: 300px;
         max-width: 300px;
+        display: flex;
+        flex-direction: column;
         &::before {
             width: 1px;
             height: 100%;
@@ -224,6 +234,8 @@
             background-color: #F6F6F7;
         }
         .files {
+            flex: 1;
+            overflow-y: auto;
             .file {
                 border: 1px solid #D9D9DF;
                 .thumbnail {
@@ -236,12 +248,11 @@
             }
         }
     }
-    @media screen and (max-width: 576px) {
-        display: block !important;
-    }
 }
 .contact-avatar {
-    min-width: 32px;
+    min-width: 36px;
+    height: 36px;
+    line-height: 36px;
 }
 
 :host ::ng-deep {
@@ -359,11 +370,24 @@
 }
 
 @media screen and (max-width: 1200px) {
+    .page-content {
+        overflow: unset;
+    }
     .message-box {
         min-width: unset!important;
     }
+    .file-list-wrapper {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        height: 100%;
+        overflow: hidden;
+        width: 300px;
+        pointer-events: none;
+    }
     .file-list {
         position: absolute;
+        pointer-events: all;
         right: 0px;
         top: 0px;
         height: 100%;
@@ -376,9 +400,17 @@
             box-shadow: -4px 4px 10px -8px #0004;
         }
     }
+    .message-action {
+        position: sticky;
+        bottom: 0px;
+        background-color: white;
+    }
 }
 
 @media screen and (max-width: 576px) {
+    .page-content.with-contacts {
+        overflow: hidden;
+    }
     .message-box {
         position: absolute;
         right: 0px;

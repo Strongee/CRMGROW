@@ -38,6 +38,12 @@ export class SmsService extends HttpService {
     });
   }
 
+  updateConversations(): void {
+    this.loadAllImpl().subscribe((messages) => {
+      this.messages.next(messages || []);
+    });
+  }
+
   loadAllImpl(): Observable<Message[]> {
     return this.httpClient.get(this.server + SMS.GET).pipe(
       map((res) =>
