@@ -4,32 +4,26 @@
     padding-right: 0px;
     padding-bottom: 0px;
     height: calc(100vh - 64px);
+    @media screen and (max-width: 680px) {
+        padding: 0!important;
+    }
+}
+.page-header {
+    padding: 0rem 0.5rem 0.5rem 0;
+    @media screen and (max-width: 680px) {
+        padding: 0.75rem 0.5rem 0.5rem 1rem;
+    }
     @media screen and (max-width: 576px) {
-        padding: 0 !important;
+        padding: 0.75rem 0.5rem 0.5rem 0.5rem;
     }
 }
 
-.page-header {
-    padding: 0rem 1rem 1rem 0;
-}
-.back-contacts {
-    display: none;
-    @media screen and (max-width: 576px) {
-        &.show {
-            display: flex;
-            i {
-                width: 12px;
-                height: 12px;
-                min-width: 12px;
-            }
-        }
-    }
-}
 .message-container {
     height: calc(100vh - 150px);
     .contact-list {
         min-width: 250px;
         max-width: 250px;
+
         .contact-list-header {
             height: 65px;
             background-color: #F6F6F7;

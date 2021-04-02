@@ -281,6 +281,7 @@ export class CalendarDialogComponent implements OnInit {
                           command: 'update',
                           data: { ...event }
                         });
+                        this.dialogRef.close();
                       }
                     },
                     () => {
@@ -321,6 +322,7 @@ export class CalendarDialogComponent implements OnInit {
                   command: 'update',
                   data: { ...event }
                 });
+                this.dialogRef.close();
               }
             },
             () => {

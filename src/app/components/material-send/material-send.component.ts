@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
 import { FormControl } from '@angular/forms';
@@ -8,6 +8,7 @@ import { MaterialService } from 'src/app/services/material.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
+import { TemplatesService } from 'src/app/services/templates.service';
 
 @Component({
   selector: 'app-material-send',
@@ -28,10 +29,13 @@ export class MaterialSendComponent implements OnInit {
   sending = false;
   firstMaterialType = '';
 
+  @ViewChild('messageText') messageEl: ElementRef;
+
   constructor(
     private userService: UserService,
     private contactService: ContactService,
     private materialService: MaterialService,
+    public templateService: TemplatesService,
     private toast: ToastrService,
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -90,14 +94,48 @@ export class MaterialSendComponent implements OnInit {
   changeTab(event: number): void {
     this.selectedTab = event;
   }
-  selectTextTemplate(event: Template): void {
-    if (event.title && event.content) {
-      this.textTemplate = event;
-      this.textContent = this.textTemplate.content;
+  selectTextTemplate(template: Template): void {
+    console.log('select text template', template);
+    this.messageEl.nativeElement.focus();
+    const field = this.messageEl.nativeElement;
+    if (!this.textContent.replace(/(\r\n|\n|\r|\s)/gm, '')) {
+      field.select();
+      document.execCommand('insertText', false, template.content);
+      return;
+    }
+    if (field.selectionEnd || field.selectionEnd === 0) {
+      if (this.textContent[field.selectionEnd - 1] === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    } else {
+      if (this.textContent.slice(-1) === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
     }
   }
   onChangeTemplate(event: Template): void {
     this.subject = event.subject;
+  }
+  insertTextContentValue(value: string): void {
+    const field = this.messageEl.nativeElement;
+    field.focus();
+    let cursorStart = this.textContent.length;
+    let cursorEnd = this.textContent.length;
+    if (field.selectionStart || field.selectionStart === '0') {
+      cursorStart = field.selectionStart;
+    }
+    if (field.selectionEnd || field.selectionEnd === '0') {
+      cursorEnd = field.selectionEnd;
+    }
+    field.setSelectionRange(cursorStart, cursorEnd);
+    document.execCommand('insertText', false, value);
+    cursorStart += value.length;
+    cursorEnd = cursorStart;
+    field.setSelectionRange(cursorStart, cursorEnd);
   }
   send(): void {
     if (this.contacts.length == 0) {

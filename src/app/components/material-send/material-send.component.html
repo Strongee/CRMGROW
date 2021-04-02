@@ -75,16 +75,7 @@
         </div>
         <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="changeTab($event)">
             <mat-tab label="Send via Text">
-                <div class="mt-2">
-                    <app-input-template
-                        [placeholder]="'Search for Template to use'"
-                        [(template)]="textTemplate"
-                        [type]="'text'"
-                        [hasNewLink]="false"
-                        (templateChange)="selectTextTemplate($event)"
-                    ></app-input-template>
-                </div>
-                <div class="mt-2">
+                <div class="mt-2 form-group">
                     <div class="v-center">
                         <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                             message
@@ -96,14 +87,49 @@
                             Required!
                         </span>
                     </div>
-                    <textarea
-                        rows="10"
-                        class="form-control"
-                        [(ngModel)]="textContent"
-                        name="content"
-                        #content="ngModel"
-                        [required]="selectedTab === 0"
-                    ></textarea>
+                    <div class="position-relative">
+                        <div class="text-toolbar v-center">
+                            <div ngbDropdown class="insert-template">
+                                <div class="v-center no-carot c-pointer" ngbDropdownToggle>
+                                  <i class="d-block i-icon i-texts bgc-dark"></i>
+                                </div>
+                                <div ngbDropdownMenu class="light py-1">
+                                    <ng-container *ngFor="let template of (templateService.templates$ | async)">
+                                        <div class="template dropdown-item border-top px-2" *ngIf="template.type === 'text'">
+                                          <div class="v-center h-100">
+                                            <div class="f-3 font-weight-bold flex-grow-1 mr-1 h-100 v-center" (click)="selectTextTemplate(template)">{{(template.title || '') | shorten: 45: '...'}}</div>
+                                            <a class="ml-auto" [routerLink]="['/templates/edit/' + template._id]" target="_blank">
+                                              <i class="d-block i-icon i-expand bgc-dark sm"></i>
+                                            </a>
+                                          </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div ngbDropdown class="insert-token bottom-right ml-auto">
+                                <div class="v-center no-carot" ngbDropdownToggle>
+                                  <span class="f-1 font-weight-bold mr-1">Insert Token</span>
+                                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+                                  <i class="d-block i-icon i-triangle-up bgc-dark"></i>
+                                </div>
+                                <div ngbDropdownMenu class="light py-1">
+                                  <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{contact_first_name}')">Contact Firstname</div>
+                                  <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{user_name}')">Your name</div>
+                                  <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{user_email}')">Your email</div>
+                                  <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{user_phone}')">Your phone</div>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea
+                            rows="10"
+                            class="form-control text-content"
+                            [(ngModel)]="textContent"
+                            name="content"
+                            #content="ngModel"
+                            [required]="selectedTab === 0"
+                            #messageText
+                        ></textarea>
+                    </div>
                     
                 </div>
             </mat-tab>
@@ -139,6 +165,7 @@
                         required="true"
                         [style]="{height: '200px'}"
                         [hasTemplates]="true"
+                        [hasToken]="true"
                         [subject]="subject"
                         (onChangeTemplate)="onChangeTemplate($event)"
                         #emailEditor

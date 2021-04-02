@@ -386,6 +386,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.detailData[text_group_id] = activity.activity_detail;
         this.detailData[text_group_id]['data_type'] = activity.type;
         this.detailData[text_group_id]['group_id'] = text_group_id;
+        this.detailData[text_group_id]['emails'] = activity.emails;
         this.detailData[text_group_id]['texts'] = activity.texts;
         if (activity.content.indexOf('sent') !== -1) {
           this.detailData[text_group_id]['sent'] = true;

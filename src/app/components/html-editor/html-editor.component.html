@@ -48,17 +48,17 @@
     Required!
     </span>
     <ng-container *ngIf="hasToken">
-      <div ngbDropdown class="insert-token">
+      <div ngbDropdown class="insert-token bottom-right">
         <div class="v-center no-carot" ngbDropdownToggle>
-          <span class="f-1 font-weight-bold mr-2">Insert Token</span>
+          <span class="f-1 font-weight-bold mr-1">Insert Token</span>
           <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-          <i class="d-block i-icon i-triangle-up bgc-blue"></i>
+          <i class="d-block i-icon i-triangle-up bgc-dark"></i>
         </div>
-        <div ngbDropdownMenu class="light p-2">
-          <div class="f-3 p-1 c-pointer" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</div>
-          <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_name}')">Your name</div>
-          <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_email}')">Your email</div>
-          <div class="f-3 p-1 mt-1 c-pointer" (click)="insertEmailContentValue('{user_phone}')">Your phone</div>
+        <div ngbDropdownMenu class="light py-1">
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertEmailContentValue('{contact_first_name}')">Contact Firstname</div>
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertEmailContentValue('{user_name}')">Your name</div>
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertEmailContentValue('{user_email}')">Your email</div>
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertEmailContentValue('{user_phone}')">Your phone</div>
         </div>
       </div>
     </ng-container>

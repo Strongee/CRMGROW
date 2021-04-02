@@ -5,13 +5,13 @@ import { UserService } from 'src/app/services/user.service';
 import { SmsService } from 'src/app/services/sms.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { Template } from 'src/app/models/template.model';
-import { MaterialAddComponent } from 'src/app/components/material-add/material-add.component';
 import * as _ from 'lodash';
 import { Contact } from 'src/app/models/contact.model';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { sortDateArray } from 'src/app/utils/functions';
 import { STATUS } from 'src/app/constants/variable.constants';
+import { MaterialBrowserComponent } from 'src/app/components/material-browser/material-browser.component';
 
 @Component({
   selector: 'app-messages',
@@ -20,136 +20,101 @@ import { STATUS } from 'src/app/constants/variable.constants';
 })
 export class MessagesComponent implements OnInit {
   STATUS = STATUS;
+  PanelView = {
+    Contacts: 'contacts',
+    Messages: 'messages',
+    Files: 'files'
+  };
+  // Loading Contacts
   loadingContact = false;
-  loadingMessage = false;
   contacts = [];
   selectedContact: Contact = new Contact();
+  // Loading Individual Contact messages
+  loadingMessage = false;
   messages = [];
-  messageText = '';
-  showFileList = false;
-  showMessage = false;
+  // Message
+  message = '';
+  // Panel View for Mobile
+  panel = this.PanelView.Contacts;
+  // Message Loader and Updater Timer
+  messageLoadSubscription: Subscription;
+  messageLoadTimer;
+  // Materials of selected contact
+  materials = [];
+  // contacts and sending status
   isNew = false;
   isSend = false;
   newContacts = [];
-  materials = [];
-  materialType = '';
-  selectedTemplate: Template = new Template();
-  emailSubject = '';
-  emailContent = '';
-  siteUrl = environment.website;
-  user_id = '';
-  messageLoadTimer;
-  profileSubscription: Subscription;
 
+  // UI Elements
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
-
+  @ViewChild('messageText') messageText: ElementRef;
   constructor(
     private dialog: MatDialog,
     public templateService: TemplatesService,
-    private userService: UserService,
     private materialService: MaterialService,
     public smsService: SmsService
   ) {
     this.templateService.loadAll(false);
-    this.loadMessage();
-    this.profileSubscription = this.userService.profile$.subscribe(
-      (profile) => {
-        this.user_id = profile._id;
-      }
-    );
   }
 
   ngOnInit(): void {
     this.loadingContact = true;
+    this.smsService.loadAll(true);
+    this.initSubscription();
     this.messageLoadTimer = setInterval(() => {
-      this.loadMessage();
+      this.smsService.loadAll(true);
     }, 2000);
   }
 
   ngOnDestroy(): void {
-    this.profileSubscription && this.profileSubscription.unsubscribe();
     clearInterval(this.messageLoadTimer);
   }
 
   scrollToBottom(): void {}
 
-  loadMessage(): void {
-    this.smsService.loadAll(true);
-    this.smsService.messages$.subscribe((res) => {
-      const messages = this.smsService.messages.getValue();
-      this.loadingContact = false;
-      this.contacts = [];
-      for (let index = 0; index < messages.length; index++) {
-        if (messages[index].contacts.length > 0) {
-          let contact_item;
-          if (messages[index].type == 1 && messages[index].status == 0) {
-            contact_item = {
-              unread: true,
-              lastest_message: messages[index].content,
-              lastest_at: messages[index].updated_at
-            };
-          } else {
-            contact_item = {
-              unread: false,
-              lastest_message: messages[index].content,
-              lastest_at: messages[index].updated_at
-            };
-          }
+  initSubscription(): void {
+    this.messageLoadSubscription = this.smsService.messages$.subscribe(
+      (_messages) => {
+        const messages = _messages;
+        this.loadingContact = false;
+        this.contacts = [];
+        for (let index = 0; index < messages.length; index++) {
+          if (messages[index].contacts.length > 0) {
+            let contact_item;
+            if (messages[index].type == 1 && messages[index].status == 0) {
+              contact_item = {
+                unread: true,
+                lastest_message: messages[index].content,
+                lastest_at: messages[index].updated_at
+              };
+            } else {
+              contact_item = {
+                unread: false,
+                lastest_message: messages[index].content,
+                lastest_at: messages[index].updated_at
+              };
+            }
 
-          this.contacts.push(
-            Object.assign(
-              new Contact().deserialize(messages[index].contacts[0]),
-              contact_item
-            )
-          );
+            this.contacts.push(
+              Object.assign(
+                new Contact().deserialize(messages[index].contacts[0]),
+                contact_item
+              )
+            );
+          }
+        }
+        this.contacts = sortDateArray(this.contacts, 'lastest_at', false);
+
+        if (
+          this.contacts.length &&
+          this.selectedContact &&
+          Object.keys(this.selectedContact).length == 0
+        ) {
+          this.defaultSelectContact(this.contacts[0]);
         }
       }
-      this.contacts = sortDateArray(this.contacts, 'lastest_at', false);
-
-      if (
-        this.contacts.length &&
-        this.selectedContact &&
-        Object.keys(this.selectedContact).length == 0
-      ) {
-        this.defaultSelectContact(this.contacts[0]);
-      }
-    });
-  }
-
-  keyTrigger(evt: any): void {
-    if (evt.key === 'Enter') {
-      if (evt.ctrlKey || evt.altKey) {
-        return;
-      }
-      if (!evt.shiftKey) {
-        evt.preventDefault();
-        this.sendMessage();
-      }
-    }
-  }
-
-  calcDate(date: any): number {
-    const currentDate = new Date();
-    const dateSent = new Date(date);
-    return Math.floor(
-      (Date.UTC(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate()
-      ) -
-        Date.UTC(
-          dateSent.getFullYear(),
-          dateSent.getMonth(),
-          dateSent.getDate()
-        )) /
-        (1000 * 60 * 60 * 24)
     );
-  }
-
-  parseContent(content: string): any {
-    return content.replace(/(https?:\/\/[^\s]+)/g, function (url) {
-      return '<a href="' + url + '">' + url + '</a>';
-    });
   }
 
   defaultSelectContact(contact: any): void {
@@ -167,7 +132,6 @@ export class MessagesComponent implements OnInit {
       }
     });
     this.isNew = false;
-    this.showMessage = true;
   }
 
   selectContact(contact: any): void {
@@ -192,44 +156,19 @@ export class MessagesComponent implements OnInit {
       }
     });
     this.isNew = false;
-    this.showMessage = true;
-  }
-
-  openMaterialsDlg(): void {
-    this.dialog
-      .open(MaterialAddComponent, {
-        width: '98vw',
-        maxWidth: '500px'
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && res.materials) {
-          this.materials = [];
-          this.materials = [...this.materials, ...res.materials];
-          for (let i = 0; i < this.materials.length; i++) {
-            let url = '';
-            if (this.materials[i].hasOwnProperty('default_video')) {
-              url = `${this.siteUrl}/video?video=${this.materials[i]._id}&user=${this.user_id}`;
-            } else if (this.materials[i].hasOwnProperty('default_pdf')) {
-              url = `${this.siteUrl}/pdf?pdf=${this.materials[i]._id}&user=${this.user_id}`;
-            } else {
-              url = `${this.siteUrl}/image?image=${this.materials[i]._id}&user=${this.user_id}`;
-            }
-            this.messageText += '\n' + url;
-          }
-        }
-      });
-  }
-
-  selectTemplate(template: Template): void {
-    this.selectedTemplate = template;
-    this.emailSubject = this.selectedTemplate.subject;
-    this.emailContent = this.selectedTemplate.content;
-    this.messageText += '\n' + this.emailContent;
+    this.panel = this.PanelView.Messages;
   }
 
   goToBack(): void {
-    this.showMessage = false;
+    this.panel = this.PanelView.Contacts;
+  }
+
+  toggleFileList(): void {
+    if (this.panel != this.PanelView.Files) {
+      this.panel = this.PanelView.Files;
+    } else {
+      this.panel = this.PanelView.Contacts;
+    }
   }
 
   newMessage(): void {
@@ -238,33 +177,39 @@ export class MessagesComponent implements OnInit {
   }
 
   sendMessage(): void {
-    this.isSend = true;
     if (
-      this.messageText == '' ||
-      this.messageText.replace(/\s/g, '').length == 0
+      this.message == '' ||
+      this.message.replace(/(\r\n|\n|\r|\s)/gm, '').length == 0
     ) {
-      this.isSend = false;
       return;
     }
     if (
       (this.isNew && this.newContacts.length == 0) ||
       (!this.isNew && !this.selectedContact._id)
     ) {
-      this.isSend = false;
       return;
     }
-    const videoIds = [];
-    const pdfIds = [];
-    const imageIds = [];
-    for (let i = 0; i < this.materials.length; i++) {
-      if (this.materials[i].hasOwnProperty('default_video')) {
-        videoIds.push(this.materials[i]._id);
-      } else if (this.materials[i].hasOwnProperty('default_pdf')) {
-        pdfIds.push(this.materials[i]._id);
-      } else {
-        imageIds.push(this.materials[i]._id);
-      }
-    }
+    const { videoIds, imageIds, pdfIds } = this.getMaterials();
+    let contentToSend = this.message;
+    videoIds.forEach((video) => {
+      contentToSend = contentToSend.replace(
+        environment.website + '/video?video=' + video,
+        '{{' + video + '}}'
+      );
+    });
+    pdfIds.forEach((pdf) => {
+      contentToSend = contentToSend.replace(
+        environment.website + '/pdf?pdf=' + pdf,
+        '{{' + pdf + '}}'
+      );
+    });
+    imageIds.forEach((image) => {
+      contentToSend = contentToSend.replace(
+        environment.website + '/image?image=' + image,
+        '{{' + image + '}}'
+      );
+    });
+
     const newContactIds = [];
     if (this.newContacts.length > 0) {
       for (let i = 0; i < this.newContacts.length; i++) {
@@ -282,7 +227,7 @@ export class MessagesComponent implements OnInit {
         video_ids: videoIds,
         pdf_ids: pdfIds,
         image_ids: imageIds,
-        content: this.messageText,
+        content: contentToSend,
         contacts: newContactIds
       };
     } else {
@@ -290,7 +235,7 @@ export class MessagesComponent implements OnInit {
         video_ids: videoIds,
         pdf_ids: pdfIds,
         image_ids: imageIds,
-        content: this.messageText,
+        content: contentToSend,
         contacts: [this.selectedContact._id]
       };
     }
@@ -305,9 +250,9 @@ export class MessagesComponent implements OnInit {
               updated_at: new Date()
             };
             messageList.messages.push(message);
-            this.selectedContact.lastest_message = this.messageText;
+            this.selectedContact.lastest_message = this.message;
             this.selectedContact.lastest_at = new Date();
-            this.messageText = '';
+            this.message = '';
             const pos = this.contacts.findIndex(
               (contact) => contact._id === this.selectedContact._id
             );
@@ -341,11 +286,167 @@ export class MessagesComponent implements OnInit {
             }
             this.isNew = false;
             this.selectedContact = this.contacts[0];
-            this.messageText = '';
+            this.message = '';
           }
           this.scrollToBottom();
         });
       }
     });
+  }
+
+  openMaterialsDlg(): void {
+    const { videoIds, imageIds, pdfIds } = this.getMaterials();
+    const selectedMaterials = [...videoIds, ...imageIds, ...pdfIds].map((e) => {
+      return { _id: e };
+    });
+    this.dialog
+      .open(MaterialBrowserComponent, {
+        width: '98vw',
+        maxWidth: '940px',
+        data: {
+          multiple: true,
+          hideMaterials: selectedMaterials
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.materials && res.materials.length) {
+          res.materials.forEach((e, index) => {
+            let url;
+            switch (e.material_type) {
+              case 'video':
+                url = `${environment.website}/video?video=${e._id}`;
+                break;
+              case 'pdf':
+                url = `${environment.website}/pdf?pdf=${e._id}`;
+                break;
+              case 'image':
+                url = `${environment.website}/image?image=${e._id}`;
+                break;
+            }
+            // first element insert
+            if (
+              index === 0 &&
+              (!this.message || this.message.slice(-1) === '\n')
+            ) {
+              this.message = this.message + '\n' + url;
+              return;
+            }
+            if (index === 0) {
+              this.message = this.message + '\n\n' + url;
+              return;
+            }
+            // middle element insert
+            this.message = this.message + '\n' + url;
+
+            if (index === res.materials.length - 1) {
+              this.message += '\n';
+            }
+          });
+        }
+      });
+  }
+
+  selectTemplate(template: Template): void {
+    this.messageText.nativeElement.focus();
+    const field = this.messageText.nativeElement;
+    if (!this.message.replace(/(\r\n|\n|\r|\s)/g, '').length) {
+      field.select();
+      document.execCommand('insertText', false, template.content);
+      return;
+    }
+    if (field.selectionEnd || field.selectionEnd === 0) {
+      if (this.message[field.selectionEnd - 1] === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    } else {
+      if (this.message.slice(-1) === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    }
+  }
+
+  getMaterials(): any {
+    const videoIds = [];
+    const pdfIds = [];
+    const imageIds = [];
+
+    const videoReg = new RegExp(
+      environment.website + '/video[?]video=\\w+',
+      'g'
+    );
+    const pdfReg = new RegExp(environment.website + '/pdf[?]pdf=\\w+', 'g');
+    const imageReg = new RegExp(
+      environment.website + '/image[?]image=\\w+',
+      'g'
+    );
+
+    let matches = this.message.match(videoReg);
+    if (matches && matches.length) {
+      matches.forEach((e) => {
+        const videoId = e.replace(environment.website + '/video?video=', '');
+        videoIds.push(videoId);
+      });
+    }
+    matches = this.message.match(pdfReg);
+    if (matches && matches.length) {
+      matches.forEach((e) => {
+        const pdfId = e.replace(environment.website + '/pdf?pdf=', '');
+        pdfIds.push(pdfId);
+      });
+    }
+    matches = this.message.match(imageReg);
+    if (matches && matches.length) {
+      matches.forEach((e) => {
+        const imageId = e.replace(environment.website + '/image?image=', '');
+        imageIds.push(imageId);
+      });
+    }
+
+    return {
+      videoIds,
+      imageIds,
+      pdfIds
+    };
+  }
+
+  keyTrigger(evt: any): void {
+    if (evt.key === 'Enter') {
+      if (evt.ctrlKey || evt.altKey) {
+        return;
+      }
+      if (!evt.shiftKey) {
+        evt.preventDefault();
+        this.sendMessage();
+      }
+    }
+  }
+
+  parseContent(content: string): any {
+    return content.replace(/(https?:\/\/[^\s]+)/g, function (url) {
+      return '<a href="' + url + '" target="_blank">' + url + '</a>';
+    });
+  }
+
+  calcDate(date: any): number {
+    const currentDate = new Date();
+    const dateSent = new Date(date);
+    return Math.floor(
+      (Date.UTC(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate()
+      ) -
+        Date.UTC(
+          dateSent.getFullYear(),
+          dateSent.getMonth(),
+          dateSent.getDate()
+        )) /
+        (1000 * 60 * 60 * 24)
+    );
   }
 }

@@ -10,10 +10,14 @@
       .i-triangle-up {
         display: none !important;
       }
+      .i-icon {
+        width: 8px;
+        height: 8px;
+        min-width: 8px;
+      }
     }
     &.show {
       .dropdown-toggle {
-        color: $color-blue;
         .i-triangle-down {
           display: none !important;
         }
@@ -21,6 +25,14 @@
           display: block !important;
         }
       }
+    }
+
+    .menu-item:hover {
+      background-color: gainsboro;
+    }
+    .menu-item:active {
+      background-color: blue;
+      color: white;
     }
   }
 
@@ -73,10 +85,10 @@
     width: 24px;
     mask-image: url(../../../assets/img/sms_sent.svg);
     mask-position: center;
-    mask-size: 18px;
+    mask-size: 15px;
     mask-repeat: no-repeat;
     margin-left: 4px;
-    background-color: blue;
+    background-color: black;
   }
   // button.ql-template::before {
   //   content: "Insert template";

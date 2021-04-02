@@ -1,4 +1,11 @@
-import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -238,6 +245,11 @@ export class SendTextComponent implements OnInit, OnDestroy {
   selectTemplate(template: Template): void {
     this.messageText.nativeElement.focus();
     const field = this.messageText.nativeElement;
+    if (!this.message.replace(/(\r\n|\n|\r|\s)/gm, '')) {
+      field.select();
+      document.execCommand('insertText', false, template.content);
+      return;
+    }
     if (field.selectionEnd || field.selectionEnd === 0) {
       if (this.message[field.selectionEnd - 1] === '\n') {
         document.execCommand('insertText', false, template.content);
@@ -287,7 +299,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
 
   parseContent(content: string): any {
     return content.replace(/(https?:\/\/[^\s]+)/g, function (url) {
-      return '<a href="' + url + '">' + url + '</a>';
+      return '<a href="' + url + '" target="_blank">' + url + '</a>';
     });
   }
 }
