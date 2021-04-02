@@ -30,6 +30,7 @@ import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
 import { Template } from 'src/app/models/template.model';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-action-dialog',
@@ -180,7 +181,6 @@ export class ActionDialogComponent implements OnInit {
         _SELF.searchField.nativeElement.blur();
       }
     }, 300);
-
   }
 
   removeError(): void {
@@ -936,24 +936,14 @@ export class ActionDialogComponent implements OnInit {
   }
 
   filter(): void {
-    const reg = new RegExp(this.searchStr, 'gi');
     this.filterVideos = this.videos.filter((video) => {
-      if (!reg.test(video.title)) {
-        return false;
-      }
-      return true;
+      return searchReg(video.title, this.searchStr);
     });
     this.filterPdfs = this.pdfs.filter((pdf) => {
-      if (!reg.test(pdf.title)) {
-        return false;
-      }
-      return true;
+      return searchReg(pdf.title, this.searchStr);
     });
     this.filterImages = this.images.filter((image) => {
-      if (!reg.test(image.title)) {
-        return false;
-      }
-      return true;
+      return searchReg(image.title, this.searchStr);
     });
   }
 
