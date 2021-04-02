@@ -988,8 +988,8 @@ export class UploadContactsComponent implements OnInit {
               dupItem[j]['primary_email'] !== undefined &&
               dupItem[i]['primary_email'] !== null &&
               dupItem[j]['primary_email'] !== null &&
-              dupItem[i]['primary_email']?.toLowerCase() ===
-                dupItem[j]['primary_email']?.toLowerCase()
+              dupItem[i]['primary_email'].toLowerCase() ===
+                dupItem[j]['primary_email'].toLowerCase()
             ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
@@ -1013,8 +1013,8 @@ export class UploadContactsComponent implements OnInit {
               dupItem[j]['primary_phone'] !== undefined &&
               dupItem[i]['primary_phone'] !== null &&
               dupItem[j]['primary_phone'] !== null &&
-              dupItem[i]['primary_phone']?.toLowerCase() ===
-                dupItem[j]['primary_phone']?.toLowerCase()
+              dupItem[i]['primary_phone'].toLowerCase() ===
+                dupItem[j]['primary_phone'].toLowerCase()
             ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
@@ -1036,9 +1036,27 @@ export class UploadContactsComponent implements OnInit {
       }
       if (!isDuplicateKey) {
         for (const item of dupItem) {
-          const contactIdx = this.contactsToUpload.findIndex(
-            (contact) => contact.id === item.id
-          );
+          const contactIdx = this.contactsToUpload.findIndex((contact) => {
+            return (
+              contact.id === item.id ||
+              (contact['primary_email'] !== '' &&
+                item['primary_email'] !== '' &&
+                contact['primary_email'] !== undefined &&
+                item['primary_email'] !== undefined &&
+                contact['primary_email'] !== null &&
+                item['primary_email'] !== null &&
+                contact['primary_email'].toLowerCase() ===
+                  item['primary_email'].toLowerCase()) ||
+              (contact['primary_phone'] !== '' &&
+                item['primary_phone'] !== '' &&
+                contact['primary_phone'] !== undefined &&
+                item['primary_phone'] !== undefined &&
+                contact['primary_phone'] !== null &&
+                item['primary_phone'] !== null &&
+                contact['primary_phone'].toLowerCase() ===
+                  item['primary_phone'].toLowerCase())
+            );
+          });
           if (contactIdx < 0) {
             this.contactsToUpload.push(item);
           }
