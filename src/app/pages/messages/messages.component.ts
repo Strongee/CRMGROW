@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { sortDateArray } from 'src/app/utils/functions';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { MaterialBrowserComponent } from 'src/app/components/material-browser/material-browser.component';
+import { ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-messages',
@@ -32,6 +33,7 @@ export class MessagesComponent implements OnInit {
   // Loading Individual Contact messages
   loadingMessage = false;
   messages = [];
+  conversationDetails = {};
   // Message
   message = '';
   // Panel View for Mobile
@@ -45,6 +47,8 @@ export class MessagesComponent implements OnInit {
   isNew = false;
   isSend = false;
   newContacts = [];
+  // Space Reg
+  spaceReg = /(\r\n|\n|\r|\s)/g;
 
   // UI Elements
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
@@ -53,7 +57,9 @@ export class MessagesComponent implements OnInit {
     private dialog: MatDialog,
     public templateService: TemplatesService,
     private materialService: MaterialService,
-    public smsService: SmsService
+    public smsService: SmsService,
+    public userService: UserService,
+    private contactService: ContactService
   ) {
     this.templateService.loadAll(false);
   }
@@ -103,14 +109,6 @@ export class MessagesComponent implements OnInit {
           }
         }
         this.contacts = sortDateArray(this.contacts, 'lastest_at', false);
-
-        if (
-          this.contacts.length &&
-          this.selectedContact &&
-          Object.keys(this.selectedContact).length == 0
-        ) {
-          this.defaultSelectContact(this.contacts[0]);
-        }
       }
     );
   }
@@ -121,20 +119,23 @@ export class MessagesComponent implements OnInit {
     this.smsService.getMessage(this.selectedContact).subscribe((res) => {
       if (res) {
         this.loadingMessage = false;
-        this.messages = [];
         const message = {
           id: contact._id,
           messages: res
         };
-        this.messages.push(message);
+        this.conversationDetails[contact._id] = message;
       }
     });
     this.isNew = false;
   }
 
   selectContact(contact: any): void {
-    this.loadingMessage = true;
+    // Conversation Data Resetting
     this.selectedContact = contact;
+    this.isNew = false;
+    this.newContacts = [];
+    this.panel = this.PanelView.Messages;
+    this.loadingMessage = true;
     this.smsService.getMessage(this.selectedContact).subscribe((res) => {
       if (res) {
         if (res[res.length - 1].type == 1 && res[res.length - 1].status == 0) {
@@ -145,19 +146,52 @@ export class MessagesComponent implements OnInit {
           });
         }
         this.loadingMessage = false;
-        this.messages = [];
         const message = {
           id: contact._id,
           messages: res
         };
-        this.messages.push(message);
+        this.conversationDetails[contact._id] = message;
       }
     });
-    this.isNew = false;
-    this.panel = this.PanelView.Messages;
+  }
+
+  selectNewContacts() {
+    if (this.newContacts.length === 1) {
+      const firstNewContact = this.newContacts[0];
+      const conversationIndex = _.findIndex(
+        this.contacts,
+        (e) => e._id === firstNewContact._id
+      );
+      if (conversationIndex !== -1) {
+        this.smsService.getMessage(firstNewContact).subscribe((res) => {
+          if (res) {
+            if (
+              res[res.length - 1].type == 1 &&
+              res[res.length - 1].status == 0
+            ) {
+              this.smsService
+                .markRead(res[res.length - 1]._id)
+                .subscribe((res) => {
+                  if (res && res['status']) {
+                    this.selectedContact.unread = false;
+                  }
+                });
+            }
+            this.loadingMessage = false;
+            const message = {
+              id: firstNewContact._id,
+              messages: res
+            };
+            this.conversationDetails[firstNewContact._id] = message;
+          }
+        });
+      }
+    }
   }
 
   goToBack(): void {
+    this.isNew = false;
+    this.newContacts = [];
     this.panel = this.PanelView.Contacts;
   }
 
@@ -172,6 +206,7 @@ export class MessagesComponent implements OnInit {
   newMessage(): void {
     this.isNew = true;
     this.newContacts = [];
+    this.panel = this.PanelView.Messages;
   }
 
   sendMessage(): void {
@@ -182,8 +217,8 @@ export class MessagesComponent implements OnInit {
       return;
     }
     if (
-      (this.isNew && this.newContacts.length == 0) ||
-      (!this.isNew && !this.selectedContact._id)
+      (!this.isNew && !this.selectedContact._id) ||
+      (this.isNew && !this.newContacts.length)
     ) {
       return;
     }
@@ -208,86 +243,124 @@ export class MessagesComponent implements OnInit {
       );
     });
 
-    const newContactIds = [];
-    if (this.newContacts.length > 0) {
-      for (let i = 0; i < this.newContacts.length; i++) {
-        newContactIds.push(this.newContacts[i]._id);
-        const newData = {
-          id: this.newContacts[i]._id,
-          messages: []
-        };
-        this.messages.push(newData);
-      }
-    }
-    let data;
+    const data = {
+      video_ids: videoIds,
+      pdf_ids: pdfIds,
+      image_ids: imageIds,
+      content: contentToSend
+    };
+    this.isSend = true;
     if (this.isNew) {
-      data = {
-        video_ids: videoIds,
-        pdf_ids: pdfIds,
-        image_ids: imageIds,
-        content: contentToSend,
-        contacts: newContactIds
-      };
+      const contactsToRegister = [];
+      const existContacts = [];
+      const contactIds = [];
+      this.newContacts.forEach((contact) => {
+        if (!contact._id) {
+          contactsToRegister.push(contact);
+        } else {
+          existContacts.push(contact);
+          contactIds.push(contact._id);
+        }
+      });
+
+      if (!contactsToRegister.length) {
+        data['contacts'] = contactIds;
+        this.sendMessageImpl(data);
+      } else {
+        this.contactService.bulkCreate(contactsToRegister).subscribe((res) => {
+          const newContactIds = [];
+          if (res) {
+            const addedContacts = res['succeed'];
+            addedContacts.forEach((e) => contactIds.push(e._id));
+            data['contacts'] = contactIds;
+            this.sendMessageImpl(data, addedContacts);
+          }
+        });
+      }
     } else {
-      data = {
-        video_ids: videoIds,
-        pdf_ids: pdfIds,
-        image_ids: imageIds,
-        content: contentToSend,
-        contacts: [this.selectedContact._id]
-      };
+      data['contacts'] = [this.selectedContact._id];
+      this.sendMessageImpl(data);
     }
+  }
+
+  sendMessageImpl(data, newContacts = []): void {
     this.materialService.sendMessage(data).subscribe((res) => {
       this.isSend = false;
       if (res) {
-        this.messages.forEach((messageList) => {
-          if (!this.isNew && messageList.id == this.selectedContact._id) {
-            const message = {
-              type: 0,
-              content: this.messageText,
-              updated_at: new Date()
-            };
-            messageList.messages.push(message);
-            this.selectedContact.lastest_message = this.message;
-            this.selectedContact.lastest_at = new Date();
-            this.message = '';
-            const pos = this.contacts.findIndex(
-              (contact) => contact._id === this.selectedContact._id
-            );
-            if (pos != 0) {
-              this.contacts.splice(pos, 1);
-              this.contacts.unshift(this.selectedContact);
-            }
-          }
-          if (this.isNew) {
-            for (let i = 0; i < this.newContacts.length; i++) {
-              if (
-                messageList.id ==
-                this.newContacts[this.newContacts.length - 1 - i]._id
-              ) {
-                const message = {
-                  type: 0,
-                  content: this.messageText,
-                  updated_at: new Date()
-                };
-                messageList.messages.push(message);
-              }
-              this.newContacts[
-                this.newContacts.length - 1 - i
-              ].lastest_message = this.messageText;
-              this.newContacts[
-                this.newContacts.length - 1 - i
-              ].lastest_at = new Date();
-              this.contacts.unshift(
-                this.newContacts[this.newContacts.length - 1 - i]
-              );
-            }
-            this.isNew = false;
-            this.selectedContact = this.contacts[0];
-            this.message = '';
-          }
-          this.scrollToBottom();
+        const message = {
+          type: 0,
+          content: this.message,
+          updated_at: new Date()
+        };
+        this.contacts.forEach((e) => {
+          e.lastest_message = this.message;
         });
+        data.contacts.forEach((contact) => {
+          if (this.conversationDetails[contact]) {
+            this.conversationDetails[contact].messages.push(this.message);
+          }
+        });
+        if (newContacts.length) {
+          newContacts.forEach((e) => {
+            const conversationContact = Object.assign(
+              new Contact().deserialize(e),
+              {
+                unread: false,
+                latest_message: this.message,
+                latest_at: new Date()
+              }
+            );
+            this.contacts.unshift(conversationContact);
+            this.conversationDetails[e._id] = {
+              id: e._id,
+              messages: [this.message]
+            };
+          });
+        }
+        this.message = '';
+        // this.messages.forEach((messageList) => {
+        //   if (!this.isNew && messageList.id == this.selectedContact._id) {
+        //     messageList.messages.push(message);
+        //     this.selectedContact.lastest_message = this.message;
+        //     this.selectedContact.lastest_at = new Date();
+        //     this.message = '';
+        //     const pos = this.contacts.findIndex(
+        //       (contact) => contact._id === this.selectedContact._id
+        //     );
+        //     if (pos != 0) {
+        //       this.contacts.splice(pos, 1);
+        //       this.contacts.unshift(this.selectedContact);
+        //     }
+        //   }
+        //   if (this.isNew) {
+        //     for (let i = 0; i < this.newContacts.length; i++) {
+        //       if (
+        //         messageList.id ==
+        //         this.newContacts[this.newContacts.length - 1 - i]._id
+        //       ) {
+        //         const message = {
+        //           type: 0,
+        //           content: this.messageText,
+        //           updated_at: new Date()
+        //         };
+        //         messageList.messages.push(message);
+        //       }
+        //       this.newContacts[
+        //         this.newContacts.length - 1 - i
+        //       ].lastest_message = this.messageText;
+        //       this.newContacts[
+        //         this.newContacts.length - 1 - i
+        //       ].lastest_at = new Date();
+        //       this.contacts.unshift(
+        //         this.newContacts[this.newContacts.length - 1 - i]
+        //       );
+        //     }
+        //     this.isNew = false;
+        //     this.selectedContact = this.contacts[0];
+        //     this.message = '';
+        //   }
+        //   this.scrollToBottom();
+        // });
       }
     });
   }

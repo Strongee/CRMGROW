@@ -71,7 +71,14 @@
         </div>
 
         <div class="message-box border-left" [class.active]="panel === PanelView.Messages" [class.with-files]="panel === PanelView.Files">
-            <div class="v-center justify-content-between border-bottom px-3 message-box-header" *ngIf="!isNew; else newMessageHeader">
+            <ng-container *ngIf="!isNew && !selectedContact._id">
+                <div class="message-cover v-center">
+                    <ng-container *ngIf="(userService.profile$ | async)._id">
+                        <h3 class="font-weight-bold w-100 text-center">Hi {{(userService.profile$ | async).user_name}}!</h3>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <div class="v-center justify-content-between border-bottom px-3 py-2 message-box-header" *ngIf="!isNew; else newMessageHeader">
                 <i class="i-icon i-back d-block d-sm-none bgc-dark mr-2 c-pointer" (click)="goToBack()"></i>
                 <a class="v-center c-pointer" [routerLink]="['/contacts/' + selectedContact?._id]" target="_blank" *ngIf="selectedContact?._id">
                     <div class="contact-avatar f-3 font-weight-bold c-white mr-2">
@@ -89,63 +96,61 @@
                 </div>
             </div>
             <ng-template #newMessageHeader>
-                <div class="v-center border-bottom p-3 message-box-header">
+                <div class="v-center border-bottom px-3 py-2 message-box-header">
+                    <i class="i-icon i-back d-block d-sm-none bgc-dark mr-2 c-pointer" (click)="goToBack()"></i>
                     <label class="f-6 op-56 m-0">To:</label>
                     <app-input-contacts
                         class="w-100"
                         [placeholder]="'Search for Contact'"
                         [display]="'cell_phone'"
                         [selectedContacts]="newContacts"
+                        (onSelect)="selectNewContacts()"
                         [focus]="true"
                     ></app-input-contacts>
                 </div>
             </ng-template>
             <div #scrollMe class="p-3 message-list" [scrollTop]="scrollMe.scrollHeight">
-                <ng-container *ngIf="messages.length; else noMessages">
-                    <ng-container *ngFor="let messageList of messages">
-                        <ng-container *ngFor="let newContact of newContacts">
-                            <ng-container *ngIf="isNew && messageList.id === newContact._id">
-                                <ng-container *ngFor="let message of messageList.messages">
-                                    <div class="message mt-3"
-                                    [innerHTML]="parseContent(message.content)"
-                                        [ngClass]="{send: message.type == 0, receive: message.type == 1}"
-                                    ></div>
-                                    <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
-                                        <ng-container *ngIf="calcDate(message.updated_at) == 0">
-                                            {{message.updated_at | date:'h:mm a'}}
-                                        </ng-container>
-                                        <ng-container *ngIf="calcDate(message.updated_at) > 0 && calcDate(message.updated_at) < 8">
-                                            {{message.updated_at | date:'EEE h:mm a'}}
-                                        </ng-container>
-                                        <ng-container *ngIf="calcDate(message.updated_at) > 8">
-                                            {{message.updated_at | date:'EEE dd, yyyy'}}
-                                        </ng-container>
-                                    </div>
+                <ng-container *ngIf="selectedContact._id || newContacts.length">
+                    <ng-container *ngIf="isNew && newContacts.length === 1 && conversationDetails[newContacts[0]._id]">
+                        <ng-container *ngFor="let message of conversationDetails[newContacts[0]._id].messages">
+                            <div class="message mt-3"
+                                [innerHTML]="parseContent(message.content)"
+                                [ngClass]="{send: message.type == 0, receive: message.type == 1}"
+                            ></div>
+                            <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
+                                <ng-container *ngIf="calcDate(message.updated_at) == 0">
+                                    {{message.updated_at | date:'h:mm a'}}
                                 </ng-container>
-                            </ng-container>
+                                <ng-container *ngIf="calcDate(message.updated_at) > 0 && calcDate(message.updated_at) < 8">
+                                    {{message.updated_at | date:'EEE h:mm a'}}
+                                </ng-container>
+                                <ng-container *ngIf="calcDate(message.updated_at) > 8">
+                                    {{message.updated_at | date:'EEE dd, yyyy'}}
+                                </ng-container>
+                            </div>
                         </ng-container>
-                        <ng-container *ngIf="!isNew && messageList.id === selectedContact?._id">
-                            <ng-container *ngFor="let message of messageList.messages">
-                                <div class="message mt-3"
-                                    [innerHTML]="parseContent(message.content)"
-                                    [ngClass]="{send: message.type == 0, receive: message.type == 1}"
-                                ></div>
-                                <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
-                                    <ng-container *ngIf="calcDate(message.updated_at) == 0">
-                                        {{message.updated_at | date:'h:mm a'}}
-                                    </ng-container>
-                                    <ng-container *ngIf="calcDate(message.updated_at) > 0 && calcDate(message.updated_at) < 8">
-                                        {{message.updated_at | date:'EEE h:mm a'}}
-                                    </ng-container>
-                                    <ng-container *ngIf="calcDate(message.updated_at) >= 8">
-                                        {{message.updated_at | date:'EEE dd, yyyy'}}
-                                    </ng-container>
-                                </div>
-                            </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!isNew && selectedContact._id && conversationDetails[selectedContact._id]">
+                        <ng-container *ngFor="let message of conversationDetails[selectedContact._id].messages">
+                            <div class="message mt-3"
+                                [innerHTML]="parseContent(message.content)"
+                                [ngClass]="{send: message.type == 0, receive: message.type == 1}"
+                            ></div>
+                            <div class="f-2 message-date mt-1 mx-1" [ngClass]="{send: message.type == 0, receive: message.type == 1}">
+                                <ng-container *ngIf="calcDate(message.updated_at) == 0">
+                                    {{message.updated_at | date:'h:mm a'}}
+                                </ng-container>
+                                <ng-container *ngIf="calcDate(message.updated_at) > 0 && calcDate(message.updated_at) < 8">
+                                    {{message.updated_at | date:'EEE h:mm a'}}
+                                </ng-container>
+                                <ng-container *ngIf="calcDate(message.updated_at) > 8">
+                                    {{message.updated_at | date:'EEE dd, yyyy'}}
+                                </ng-container>
+                            </div>
                         </ng-container>
                     </ng-container>
                 </ng-container>
-                <ng-template #noMessages>
+                <!-- <ng-template #noMessages>
                     <ng-container *ngIf="loadingMessage; else emptyResult">
                         <div class="list-loading text-center">
                             <div class="loader mt-5 lg"></div>
@@ -162,10 +167,10 @@
                             </h4>
                         </div>
                     </ng-template>
-                </ng-template>
+                </ng-template> -->
             </div>
             
-            <div class="p-3 message-action border-top">
+            <div class="p-3 message-action border-top" [class.disable]="!message.replace(spaceReg, '') || (isNew && !newContacts.length)">
                 <div class="form-group">
                     <mat-form-field class="w-100">
                         <textarea

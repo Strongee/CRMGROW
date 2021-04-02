@@ -113,7 +113,7 @@
                 padding: 0.5rem 1rem;
                 max-width: 350px;
                 width: 80%;
-                overflow-wrap: anywhere;
+                overflow-wrap: break-word;
 
                 &:first-child {
                     margin-top: 0 !important;
@@ -267,6 +267,12 @@
                 padding: 0;
             }
         }
+        .custom-mat-field {
+            max-height: 70px;
+            overflow: auto;
+            padding-top: 4px;
+            min-height: 36px;
+        }
     }
     .message-action {
         mat-form-field {
@@ -319,6 +325,13 @@
 }
 .message-action {
     position: relative;
+
+    &.disable {
+        .send-button{
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    }
     @media screen and (max-width: 740px) {
         padding: 0px!important;
         .form-group {
@@ -362,6 +375,7 @@
 
 
 .message-box {
+    position: relative;
     min-width: calc(100% - 250px);
     transition: all .3s;
     &.with-files {
@@ -424,4 +438,15 @@
             transform: translateX(0px);
         }
     }
+}
+
+
+.message-cover {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    left: 1px;
+    background-color: white;
+    z-index: 4;
 }
