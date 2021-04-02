@@ -50,18 +50,16 @@
       padding-bottom: 10px;
     }
 
-  }
+    .automation-table {
+      .action-count, .contacts {
+        width: 100px;
 
-  .template-table {
-    .template-type {
-      width: 100px;
-    }
-
-    @media screen and (max-width: 576px) {
-      .template-content {
-        display: none;
+        @media screen and (max-width: 576px) {
+          display: none;
+        }
       }
     }
+
   }
 
   .selected-templates-wrapper {
@@ -73,8 +71,12 @@
       height: auto;
     }
 
-    .template-type {
+    .actions, .contacts {
       width: 100px;
+
+      @media screen and (max-width: 576px) {
+        display: none;
+      }
     }
   }
 }

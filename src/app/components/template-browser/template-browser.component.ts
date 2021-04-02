@@ -1,71 +1,62 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TemplatesService } from '../../services/templates.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef
+} from '@angular/material/dialog';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
-import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-template-browser',
   templateUrl: './template-browser.component.html',
   styleUrls: ['./template-browser.component.scss']
 })
-export class TemplateBrowserComponent implements OnInit {
+export class TemplateBrowserComponent implements OnInit, OnDestroy {
 
-  PAGE_COUNTS = [
-    { id: 8, label: '8' },
-    { id: 10, label: '10' },
-    { id: 25, label: '25' },
-    { id: 50, label: '50' }
-  ];
-  DISPLAY_COLUMNS = [
-    'title',
-    'owner',
-    'template-content',
-    'template-type',
-    'template-action'
-  ];
+  DISPLAY_COLUMNS = ['select', 'title', 'template-content', 'template-type'];
   STATUS = STATUS;
 
-  pageSize = this.PAGE_COUNTS[1];
-
-  page = 1;
   userId = '';
   emailDefault = '';
   smsDefault = '';
-  isSetting = false;
   deleting = false;
-  currentUser: any;
 
   templates: Template[] = [];
   filteredResult: Template[] = [];
   searchStr = '';
-  selectedSort = 'role';
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
   loadSubscription: Subscription;
 
-  searchCondition = {
-    title: false,
-    role: false,
-    type: false
-  };
+  selection: any[] = [];
+  sharing = false;
+  shareSubscription: Subscription;
+  hideTemplates: any[] = [];
+  teamId = '';
 
   constructor(
+    private dialogRef: MatDialogRef<TemplateBrowserComponent>,
     public templatesService: TemplatesService,
     private userService: UserService,
+    private teamService: TeamService,
     private toast: ToastrService,
     private dialog: MatDialog,
-    private router: Router
-  ) {}
+    private router: Router,
+    @Inject(MAT_DIALOG_DATA) private data: any
+  ) {
+    this.teamId = this.data.team_id;
+    this.hideTemplates = this.data.hideTemplates;
+  }
 
   ngOnInit(): void {
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
@@ -86,98 +77,28 @@ export class TemplateBrowserComponent implements OnInit {
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.templatesService.templates$.subscribe(
       (templates) => {
-        this.templates = templates;
+        // this.templates = templates;
+        this.templates = templates.filter((item) => item.role === undefined);
+        if (this.hideTemplates.length > 0) {
+          this.templates = this.templates.filter((e) => {
+            if (this.hideTemplates.indexOf(e._id) >= 0) {
+              return false;
+            }
+            return true;
+          });
+        }
         this.templates = _.uniqBy(this.templates, '_id');
         this.filteredResult = this.templates;
-        if (this.templates.length) {
-          this.sort('role', true);
-        }
       }
     );
     this.templatesService.loadAll(true);
   }
 
   ngOnDestroy(): void {
+    this.teamId = this.data.team_id;
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
-  }
-
-  setDefault(template: Template): void {
-    const cannedMessage = {
-      email: this.emailDefault,
-      sms: this.smsDefault
-    };
-    if (template._id === this.emailDefault) {
-      // Disable the Default Email Template
-      delete cannedMessage.email;
-    } else if (template._id === this.smsDefault) {
-      // Disable the Default Sms Template
-      delete cannedMessage.sms;
-    } else if (template.type === 'email') {
-      // Enable the Default Email Template
-      cannedMessage.email = template._id;
-    } else {
-      // Enable the Default Sms Template
-      cannedMessage.sms = template._id;
-    }
-    if (!cannedMessage.email) {
-      delete cannedMessage.email;
-    }
-    if (!cannedMessage.sms) {
-      delete cannedMessage.sms;
-    }
-
-    this.isSetting = true;
-    this.userService.updateGarbage({ canned_message: cannedMessage }).subscribe(
-      () => {
-        this.isSetting = false;
-        this.userService.updateGarbageImpl({ canned_message: cannedMessage });
-        if (template.type === 'email') {
-          if (cannedMessage.email) {
-            this.userService.email.next(template);
-          } else {
-            this.userService.email.next(null);
-          }
-        }
-        if (template.type === 'sms') {
-          if (cannedMessage.sms) {
-            this.userService.sms.next(template);
-          } else {
-            this.userService.sms.next(null);
-          }
-        }
-        this.toast.success(`Template's default has been successfully changed.`);
-      },
-      () => {
-        this.isSetting = false;
-      }
-    );
-  }
-
-  openTemplate(template: Template): void {
-    this.router.navigate(['/templates/edit/' + template._id]);
-  }
-
-  duplicateTemplate(template: Template): void {
-    this.router.navigate(['/templates/duplicate/' + template._id]);
-  }
-
-  deleteTemplate(template: Template): void {
-    const dialog = this.dialog.open(ConfirmComponent, {
-      data: {
-        title: 'Delete template',
-        message: 'Are you sure to delete this template?',
-        confirmLabel: 'Delete'
-      }
-    });
-
-    dialog.afterClosed().subscribe((res) => {
-      console.log(res);
-      if (res) {
-        this.templatesService.delete(template._id);
-      }
-    });
   }
 
   changeSearchStr(): void {
@@ -187,8 +108,6 @@ export class TemplateBrowserComponent implements OnInit {
       return searchReg(str, this.searchStr);
     });
     this.filteredResult = filtered;
-    this.sort(this.selectedSort, true);
-    this.page = 1;
   }
 
   clearSearchStr(): void {
@@ -196,113 +115,84 @@ export class TemplateBrowserComponent implements OnInit {
     this.changeSearchStr();
   }
 
-  changePageSize(type: any): void {
-    this.pageSize = type;
+  isAllSelected(): boolean {
+    const filteredTemplateIds = [];
+    this.filteredResult.forEach((e) => {
+      filteredTemplateIds.push(e._id);
+    });
+    const selectedTemplates = _.intersection(
+      this.selection,
+      filteredTemplateIds
+    );
+    return (
+      this.filteredResult.length &&
+      selectedTemplates.length === this.filteredResult.length
+    );
   }
 
-  sort(field: string, keep: boolean = false): void {
-    if (this.selectedSort !== field) {
-      this.selectedSort = field;
-      return;
+  masterToggle(): void {
+    if (this.isAllSelected()) {
+      this.filteredResult.forEach((e) => {
+        const pos = this.selection.indexOf(e._id);
+        if (pos !== -1) {
+          this.selection.splice(pos, 1);
+        }
+      });
     } else {
-      if (field === 'role') {
-        const admins = this.filteredResult.filter(
-          (item) => item.role === 'admin'
-        );
-        const owns = this.filteredResult.filter(
-          (item) => item.role === undefined
-        );
-        const teams = this.filteredResult.filter(
-          (item) => item.role === 'team' && item.user === this.userId
-        );
-        const shared = this.filteredResult.filter(
-          (item) => item.role === 'team' && item.user !== this.userId
-        );
-        let sortedAdmins, sortedOwns, sortedTeams, sortedShared;
-        if (keep) {
-          sortedAdmins = sortStringArray(admins, 'title', true);
-          sortedOwns = sortStringArray(owns, 'title', true);
-          sortedTeams = sortStringArray(teams, 'title', true);
-          sortedShared = sortStringArray(shared, 'title', true);
-        } else {
-          sortedAdmins = sortStringArray(
-            admins,
-            'title',
-            this.searchCondition[field]
-          );
-          sortedOwns = sortStringArray(
-            owns,
-            'title',
-            this.searchCondition[field]
-          );
-          sortedTeams = sortStringArray(
-            teams,
-            'title',
-            this.searchCondition[field]
-          );
-          sortedShared = sortStringArray(
-            shared,
-            'title',
-            this.searchCondition[field]
-          );
+      this.filteredResult.forEach((e) => {
+        const pos = this.selection.indexOf(e._id);
+        if (pos === -1) {
+          this.selection.push(e._id);
         }
-        this.filteredResult = [];
-        if (keep) {
-          this.filteredResult = [
-            ...sortedAdmins,
-            ...sortedOwns,
-            ...sortedTeams,
-            ...sortedShared
-          ];
-        } else {
-          if (this.searchCondition[field]) {
-            this.filteredResult = [
-              ...sortedAdmins,
-              ...sortedOwns,
-              ...sortedTeams,
-              ...sortedShared
-            ];
-          } else {
-            this.filteredResult = [
-              ...sortedOwns,
-              ...sortedTeams,
-              ...sortedShared,
-              ...sortedAdmins
-            ];
-          }
-        }
-      } else if (field === 'type') {
-        const text = this.filteredResult.filter((item) => item.type === 'text');
-        const email = this.filteredResult.filter(
-          (item) => item.type === 'email'
-        );
-        const sortedText = sortStringArray(
-          text,
-          'title',
-          this.searchCondition[field]
-        );
-        const sortedEmail = sortStringArray(
-          email,
-          'title',
-          this.searchCondition[field]
-        );
-        this.filteredResult = [];
-        if (this.searchCondition[field]) {
-          this.filteredResult = [...sortedEmail, ...sortedText];
-        } else {
-          this.filteredResult = [...sortedText, ...sortedEmail];
-        }
-      } else {
-        this.filteredResult = sortStringArray(
-          this.filteredResult,
-          field,
-          this.searchCondition[field]
-        );
-      }
-      this.page = 1;
-      if (!keep) {
-        this.searchCondition[field] = !this.searchCondition[field];
-      }
+      });
     }
+  }
+
+  toggleElement(element: Template): void {
+    const pos = this.selection.indexOf(element._id);
+    if (pos !== -1) {
+      this.selection.splice(pos, 1);
+    } else {
+      this.selection.push(element._id);
+    }
+  }
+
+  isSelected(element: Template): boolean {
+    const pos = this.selection.indexOf(element._id);
+    if (pos !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  clearSelection(): void {
+    this.selection = [];
+  }
+
+  getTemplateById(id): any {
+    const index = this.filteredResult.findIndex((item) => item._id === id);
+    if (index >= 0) {
+      return this.filteredResult[index];
+    }
+    return null;
+  }
+
+  share(): void {
+    this.sharing = true;
+    this.shareSubscription && this.shareSubscription.unsubscribe();
+    this.shareSubscription = this.teamService
+      .shareTemplates(this.teamId, this.selection)
+      .subscribe(
+        (res) => {
+          this.sharing = false;
+          this.dialogRef.close({
+            templates: res
+          });
+        },
+        (err) => {
+          this.sharing = false;
+        }
+      );
   }
 }

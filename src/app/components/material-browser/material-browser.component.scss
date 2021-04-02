@@ -80,7 +80,8 @@
   }
 
   .custom-mat-table {
-    height: calc(65vh - 150px);
+    max-height: calc(65vh - 180px);
+    min-height: calc(65vh - 180px);
     overflow: auto;
 
     &.no-selected {
@@ -90,7 +91,7 @@
 }
 
 .selected-materials-wrapper {
-  max-height: 150px;
+  max-height: 180px;
   min-height: 80px;
   overflow: auto;
 

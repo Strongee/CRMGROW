@@ -32,6 +32,7 @@ import { TeamService } from '../../services/team.service';
 import { Team } from '../../models/team.model';
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
+import {AutomationBrowserComponent} from "../../components/automation-browser/automation-browser.component";
 
 @Component({
   selector: 'app-team-share-automation',
@@ -297,9 +298,9 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
       hideAutomations.push(automation._id);
     }
     this.dialog
-      .open(AutomationShareComponent, {
+      .open(AutomationBrowserComponent, {
         width: '96vw',
-        maxWidth: '500px',
+        maxWidth: '940px',
         disableClose: true,
         data: {
           team_id: this.team._id,

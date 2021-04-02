@@ -147,6 +147,7 @@ import { SendBulkTextComponent } from './send-bulk-text/send-bulk-text.component
 import { SocialShareComponent } from './social-share/social-share.component';
 import { TeamMaterialShareComponent } from './team-material-share/team-material-share.component';
 import { TemplateBrowserComponent } from './template-browser/template-browser.component';
+import { AutomationBrowserComponent } from './automation-browser/automation-browser.component';
 
 @NgModule({
   declarations: [
@@ -292,7 +293,8 @@ import { TemplateBrowserComponent } from './template-browser/template-browser.co
     SendBulkTextComponent,
     SocialShareComponent,
     TeamMaterialShareComponent,
-    TemplateBrowserComponent
+    TemplateBrowserComponent,
+    AutomationBrowserComponent
   ],
   imports: [
     CommonModule,

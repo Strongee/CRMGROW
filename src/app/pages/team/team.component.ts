@@ -31,6 +31,8 @@ import { TeamShareTemplateComponent } from '../team-share-template/team-share-te
 import { TeamShareContactComponent } from '../team-share-contact/team-share-contact.component';
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
 import { share } from 'rxjs/operators';
+import { TemplateBrowserComponent } from '../../components/template-browser/template-browser.component';
+import {AutomationBrowserComponent} from "../../components/automation-browser/automation-browser.component";
 
 @Component({
   selector: 'app-team',
@@ -315,9 +317,9 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
       this.shareAutomationComponent.shareAutomation();
     } else {
       this.dialog
-        .open(AutomationShareComponent, {
+        .open(AutomationBrowserComponent, {
           width: '96vw',
-          maxWidth: '500px',
+          maxWidth: '940px',
           disableClose: true,
           data: {
             team_id: this.team._id,
@@ -360,10 +362,9 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
       this.shareTemplateComponent.shareEmailTemplate();
     } else {
       this.dialog
-        .open(TemplateShareComponent, {
+        .open(TemplateBrowserComponent, {
           width: '96vw',
-          maxWidth: '500px',
-          maxHeight: '60vh',
+          maxWidth: '940px',
           disableClose: true,
           data: {
             team_id: this.team._id,
