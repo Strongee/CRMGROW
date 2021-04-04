@@ -32,7 +32,7 @@ export class DealStageDeleteComponent implements OnInit {
       }
       this.stages.forEach((stage) => {
         if (stage._id == this.data.deleteId) {
-          this.selectedstage = new DealStage().deserialize(stage);
+          this.selectedstage = stage;
         }
       });
     });

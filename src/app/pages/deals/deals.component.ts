@@ -42,6 +42,7 @@ export class DealsComponent implements OnInit {
       position: event.currentIndex,
       deal_stage_id: id
     };
+    const deal = event.previousContainer.data[event.previousIndex];
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -56,7 +57,17 @@ export class DealsComponent implements OnInit {
         event.currentIndex
       );
     }
-    this.dealsService.moveDeal(data).subscribe(() => {});
+    this.dealsService.moveDeal(data).subscribe(() => {
+      if (deal['deal_stage'] !== id) {
+        const stages = this.dealsService.stages.getValue();
+        const sourceStage = stages.filter(
+          (stage) => stage._id === deal['deal_stage']
+        )[0];
+        const targetStage = stages.filter((stage) => stage._id === id)[0];
+        sourceStage.deals_count = sourceStage.deals.length;
+        targetStage.deals_count = targetStage.deals.length;
+      }
+    });
   }
 
   dealDetail(id: string): void {

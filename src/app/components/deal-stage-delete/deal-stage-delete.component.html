@@ -1,6 +1,6 @@
 <div class="v-center justify-content-between">
     <h1 mat-dialog-title class="m-0">
-        Move {{selectedstage.deals?.length}} deal to delete this stage.
+        Move {{selectedstage.deals_count}} deal to delete this stage.
     </h1>
     <button class="v-center border-0 bgc-trans" mat-dialog-close>
         <i class="d-block i-icon i-close bgc-dark"></i>
@@ -8,7 +8,7 @@
 </div>
 <mat-dialog-content>
     <div class="f-3 fw-600 mt-4">
-        There is {{selectedstage.deals?.length}} deal in "{{selectedstage?.title}}" that must be moved in order to delete this stage or you can go to deals and move them individually.
+        There are {{selectedstage.deals_count}} deals in "{{selectedstage?.title}}" that must be moved in order to delete this stage or you can go to deals and move them individually.
     </div>
     <div class="form-group mt-4">
         <label class="f-1 font-weight-bold op-40">move deal to</label>

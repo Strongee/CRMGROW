@@ -8,6 +8,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { ToastrService } from 'ngx-toastr';
+import { NotifyComponent } from 'src/app/components/notify/notify.component';
 
 @Component({
   selector: 'app-deals-setting',
@@ -25,7 +26,8 @@ export class DealsSettingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dealsService.stages$.subscribe((res) => {
+    this.dealsService.easyLoad(true);
+    this.dealsService.stageSummaries$.subscribe((res) => {
       this.stages = res;
     });
   }
@@ -50,7 +52,10 @@ export class DealsSettingComponent implements OnInit {
   moveDelete(id: string): void {
     const idx = this.stages.findIndex((item) => item._id === id);
     if (idx >= 0) {
-      if (this.stages[idx].deals && this.stages[idx].deals.length > 0) {
+      if (
+        (this.stages[idx].deals && this.stages[idx].deals.length > 0) ||
+        this.stages[idx].deals_count > 0
+      ) {
         if (this.stages.length > 1) {
           // move deals and delete stage
           this.dialog
@@ -70,6 +75,7 @@ export class DealsSettingComponent implements OnInit {
                 this.stages.forEach((stage) => {
                   if (stage._id == res) {
                     stage.deals = [...stage.deals, ...deleted[0].deals];
+                    stage.deals_count += this.stages[idx].deals_count;
                   }
                 });
                 this.stages.some((e, index) => {
@@ -80,24 +86,30 @@ export class DealsSettingComponent implements OnInit {
               }
             });
         } else {
-          // confirm delete deals and then delete stage
-          const dialog = this.dialog.open(ConfirmComponent, {
+          this.dialog.open(NotifyComponent, {
             data: {
-              title: 'Delete deal(s)',
-              message: 'Are you sure to delete the deals in this stage?',
-              confirmLabel: 'Delete'
+              message:
+                'You can not remove this deal stage as this stage is the last stage.'
             }
           });
-          dialog.afterClosed().subscribe((res) => {
-            if (res) {
-              this.toastr.success('Deal Stage successfully deleted.');
-              this.dealsService.deleteStage(id, null).subscribe((response) => {
-                if (response) {
-                  this.stages.splice(idx, 1);
-                }
-              });
-            }
-          });
+          // confirm delete deals and then delete stage
+          // const dialog = this.dialog.open(ConfirmComponent, {
+          //   data: {
+          //     title: 'Delete deal(s)',
+          //     message: 'Are you sure to delete the deals in this stage?',
+          //     confirmLabel: 'Delete'
+          //   }
+          // });
+          // dialog.afterClosed().subscribe((res) => {
+          //   if (res) {
+          //     this.toastr.success('Deal Stage successfully deleted.');
+          //     this.dealsService.deleteStage(id, null).subscribe((response) => {
+          //       if (response) {
+          //         this.stages.splice(idx, 1);
+          //       }
+          //     });
+          //   }
+          // });
         }
       } else {
         this.dealsService.deleteStage(id, null).subscribe((res) => {

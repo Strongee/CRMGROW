@@ -23,6 +23,8 @@ export class DealsService extends HttpService {
 
   stages: BehaviorSubject<DealStage[]> = new BehaviorSubject([]);
   stages$ = this.stages.asObservable();
+  stageSummaries: BehaviorSubject<DealStage[]> = new BehaviorSubject([]);
+  stageSummaries$ = this.stageSummaries.asObservable();
   deals: BehaviorSubject<Deal[]> = new BehaviorSubject([]);
   deals$ = this.deals.asObservable();
   loadStageStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
@@ -45,7 +47,12 @@ export class DealsService extends HttpService {
       dealStages.forEach((e) => {
         e.deals = [];
       });
-      this.stages.next(dealStages || []);
+      if (!this.stages.getValue() || !this.stages.getValue().length) {
+        this.stages.next(dealStages || []);
+        this.stageSummaries.next(dealStages || []);
+      } else {
+        this.stageSummaries.next(dealStages || []);
+      }
     });
   }
 
