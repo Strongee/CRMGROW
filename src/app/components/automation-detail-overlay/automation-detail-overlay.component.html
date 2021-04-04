@@ -1,15 +1,20 @@
 <div class="tree-overlay">
     <div class="v-center justify-content-between">
         <h1 mat-dialog-title class="f-6 font-weight-bold m-0">{{node.label}}</h1>
-        <span class="mr-2 c-pointer ml-auto" (click)="update()"><i class="i-icon i-edit d-block bgc-blue"></i></span>
-        <span class="c-pointer" (click)="remove()"><i class="i-icon i-trash d-block bgc-red"></i></span>
+        <span class="mr-2 c-pointer ml-auto" (click)="update()" *ngIf="type != 'view'"><i class="i-icon i-edit d-block bgc-blue"></i></span>
+        <span class="c-pointer" (click)="remove()" *ngIf="type != 'view'"><i class="i-icon i-trash d-block bgc-red"></i></span>
     </div>
     <div class="automation-detail mt-2">
         <ng-container [ngSwitch]="node.type">
             <div *ngSwitchCase="'send_email_video'">
-                <div class="v-center justify-content-center thumb-prev-wrapper">
-                    <img [src]="node.video.thumbnail" class="thumbnail"/>
-                    <img [src]="node.video.preview" class="preview"/>
+                <div class="v-center thumb-prev-wrapper">
+                    <a href="{{siteUrl}}/video?video={{node.video._id}}&user={{user_id}}" target="_blank">
+                        <img [src]="node.video.thumbnail" class="thumbnail"/>
+                        <img [src]="node.video.preview" class="preview"/>    
+                    </a>
+                    <span class="f-3 font-weight-bold ml-2">
+                        {{node.video.title}}
+                    </span>
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">subject</div>
@@ -17,30 +22,50 @@
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'send_text_video'">
-                <div class="v-center justify-content-center thumb-prev-wrapper">
-                    <img [src]="node.video.thumbnail" class="thumbnail"/>
-                    <img [src]="node.video.preview" class="preview"/>
+                <div class="v-center thumb-prev-wrapper">
+                    <a href="{{siteUrl}}/video?video={{node.video._id}}&user={{user_id}}" target="_blank">
+                        <img [src]="node.video.thumbnail" class="thumbnail"/>
+                        <img [src]="node.video.preview" class="preview"/>    
+                    </a>
+                    <span class="f-3 font-weight-bold ml-2">
+                        {{node.video.title}}
+                    </span>
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'send_email_pdf'">
-                <div class="v-center justify-content-center thumb-prev-wrapper">
-                    <img [src]="node.pdf.preview" class="thumbnail"/>
+                <div class="v-center thumb-prev-wrapper">
+                    <a href="{{siteUrl}}/pdf?pdf={{node.video._id}}&user={{user_id}}" target="_blank">
+                        <img [src]="node.pdf.preview" class="thumbnail"/>
+                    </a>
+                    <span class="f-3 font-weight-bold ml-2">
+                        {{node.pdf.title}}
+                    </span>
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">subject</div>
@@ -48,29 +73,50 @@
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'send_text_pdf'">
-                <div class="v-center justify-content-center thumb-prev-wrapper">
-                    <img [src]="node.pdf.preview" class="thumbnail"/>
+                <div class="v-center thumb-prev-wrapper">
+                    <a href="{{siteUrl}}/pdf?pdf={{node.video._id}}&user={{user_id}}" target="_blank">
+                        <img [src]="node.pdf.preview" class="thumbnail"/>
+                    </a>
+                    <span class="f-3 font-weight-bold ml-2">
+                        {{node.pdf.title}}
+                    </span>
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'send_email_image'">
-                <div class="v-center justify-content-center thumb-prev-wrapper">
+                <div class="v-center thumb-prev-wrapper">
+                    <a href="{{siteUrl}}/image?image={{node.video._id}}&user={{user_id}}" target="_blank">
+                        <img [src]="node.pdf.preview" class="thumbnail"/>
+                    </a>
                     <img [src]="node.image.preview" class="thumbnail"/>
+                    <span class="f-3 font-weight-bold ml-2">
+                        {{node.image.title}}
+                    </span>
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">subject</div>
@@ -78,24 +124,39 @@
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'send_text_image'">
-                <div class="v-center justify-content-center thumb-prev-wrapper">
-                    <img [src]="node.image.preview" class="thumbnail"/>
+                <div class="v-center thumb-prev-wrapper">
+                    <a href="{{siteUrl}}/image?image={{node.video._id}}&user={{user_id}}" target="_blank">
+                        <img [src]="node.pdf.preview" class="thumbnail"/>
+                    </a>
+                    <span class="f-3 font-weight-bold ml-2">
+                        {{node.image.title}}
+                    </span>
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'email'">
@@ -105,17 +166,31 @@
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'follow_up'">
                 <div>
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
+                </div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
                 <div class="mt-2" *ngIf="node.due_date">
                     <div class="f-1 font-weight-bold text-uppercase op-56">date</div>
@@ -124,10 +199,6 @@
                 <div class="mt-2" *ngIf="node.due_duration">
                     <div class="f-1 font-weight-bold text-uppercase op-56">duration</div>
                     <div class="f-3 mt-1">{{node.due_duration + ' HOURS'}}</div>
-                </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
                 </div>
             </div>
             <div *ngSwitchCase="'update_follow_up'">
@@ -141,7 +212,16 @@
                 </div>
                 <div class="mt-2">
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
+                </div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
                 <div class="mt-2" *ngIf="node.task_type">
                     <div class="f-1 font-weight-bold text-uppercase op-56">task type</div>
@@ -157,19 +237,20 @@
                         <div class="f-3 mt-1">{{node.due_duration + ' HOURS'}}</div>
                     </div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
-                </div>
             </div>
             <div *ngSwitchCase="'note'">
                 <div>
                     <div class="f-1 font-weight-bold text-uppercase op-56">content</div>
-                    <div class="f-3 mt-1">{{node.content | stripTags}}</div>
+                    <div class="f-3 mt-1" *ngIf="!isShow">{{node.content | stripTags | shorten: 170: '...'}}</div>
+                    <div class="f-3 mt-1" *ngIf="isShow">{{node.content | stripTags}}</div>
                 </div>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
+                <div class="read-more text-right mt-1" *ngIf="(node.content | stripTags).length > 170">
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="!isShow" (click)="seeMore()">
+                        See more
+                    </span>
+                    <span class="f-1 font-weight-bold c-blue c-pointer" [class.show]="isShow" (click)="seeMore()">
+                        See less
+                    </span>
                 </div>
             </div>
             <div *ngSwitchCase="'update_contact'">
@@ -216,10 +297,10 @@
                         </div>
                     </div>
                 </ng-container>
-                <div class="mt-2">
-                    <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
-                    <div class="f-3 mt-1">{{node.period | duration}}</div>
-                </div>
+            </div>
+            <div class="mt-2">
+                <div class="f-1 font-weight-bold text-uppercase op-56">time delay</div>
+                <div class="f-3 mt-1">{{node.period | duration}}</div>
             </div>
         </ng-container>
     </div>

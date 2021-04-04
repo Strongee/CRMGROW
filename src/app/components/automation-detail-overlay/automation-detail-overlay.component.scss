@@ -45,4 +45,12 @@
         font-weight: 600;
         display: inline-block;
     }
+    .read-more {
+        span {
+            display: none;
+            &.show {
+                display: block;
+            }
+        }
+    }
 }
