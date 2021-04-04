@@ -293,7 +293,9 @@ export class MessagesComponent implements OnInit {
           updated_at: new Date()
         };
         this.contacts.forEach((e) => {
-          e.lastest_message = this.message;
+          if (data['contacts'] && data['contacts'].indexOf(e._id) !== -1) {
+            e.lastest_message = this.message;
+          }
         });
         data.contacts.forEach((contact) => {
           if (this.conversationDetails[contact]) {
@@ -306,8 +308,8 @@ export class MessagesComponent implements OnInit {
               new Contact().deserialize(e),
               {
                 unread: false,
-                latest_message: this.message,
-                latest_at: new Date()
+                lastest_message: this.message,
+                lastest_at: new Date()
               }
             );
             this.contacts.unshift(conversationContact);
