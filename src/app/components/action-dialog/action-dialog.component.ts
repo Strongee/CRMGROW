@@ -15,7 +15,8 @@ import {
   TIMES,
   QuillEditor,
   DefaultMessage,
-  AUTOMATION_ICONS
+  AUTOMATION_ICONS,
+  STATUS
 } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { Subscription } from 'rxjs';
@@ -31,6 +32,7 @@ import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.
 import * as moment from 'moment';
 import { Template } from 'src/app/models/template.model';
 import { searchReg } from 'src/app/helper';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-action-dialog',
@@ -45,18 +47,16 @@ export class ActionDialogComponent implements OnInit {
   submitted = false; // SUBMITTING FALSE
   conditionAction; // Condition Case Action corresponds the prev action
   material_type = '';
+  STATUS = STATUS;
 
   videos = [];
   videosLoading = false;
-  videosLoadError = '';
 
   pdfs = [];
   pdfsLoading = false;
-  pdfsLoadError = '';
 
   images = [];
   imagesLoading = false;
-  imagesLoadError = '';
 
   materialError = '';
 
@@ -122,12 +122,15 @@ export class ActionDialogComponent implements OnInit {
   filterPdfs = [];
   filterImages = [];
 
+  loadSubscription: Subscription;
+
   constructor(
     private dialogRef: MatDialogRef<ActionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private materialService: MaterialService,
+    public materialService: MaterialService,
     private userService: UserService,
-    private fileService: FileService
+    private fileService: FileService,
+    public storeService: StoreService
   ) {
     this.userService.garbage$.subscribe((res) => {
       const garbage = res;
@@ -150,6 +153,10 @@ export class ActionDialogComponent implements OnInit {
 
   ngOnInit(): void {
     // Enable the corresponding the condition option
+    this.materialService.loadMaterial(false);
+    this.videosLoading = true;
+    this.pdfsLoading = true;
+    this.imagesLoading = true;
     if (
       this.data.currentAction === 'send_text_video' ||
       this.data.currentAction === 'send_email_video'
@@ -226,63 +233,34 @@ export class ActionDialogComponent implements OnInit {
         this.type = 'send_email_video';
         this.material_type = 'email';
       }
-      this.loadVideos();
-      this.loadPdfs();
-      this.loadImages();
     }
 
+    this.loadSubscription = this.storeService.materials$.subscribe(
+      (materials) => {
+        if (materials.length > 0) {
+          this.videosLoading = false;
+          this.pdfsLoading = false;
+          this.imagesLoading = false;
+
+          const video = materials.filter(
+            (item) => item.material_type == 'video'
+          );
+          this.videos = video;
+          this.filterVideos = video;
+
+          const pdf = materials.filter((item) => item.material_type == 'pdf');
+          this.pdfs = pdf;
+          this.filterPdfs = pdf;
+
+          const image = materials.filter(
+            (item) => item.material_type == 'image'
+          );
+          this.images = image;
+          this.filterImages = image;
+        }
+      }
+    );
     this.loadTemplates();
-  }
-
-  loadVideos(): void {
-    this.videosLoading = true;
-    this.videosLoadError = '';
-    this.materialService.loadVideosImpl().subscribe(
-      (res) => {
-        this.videosLoading = false;
-        this.videos = res;
-        this.filterVideos = res;
-      },
-      (err) => {
-        this.videosLoading = false;
-      }
-    );
-  }
-
-  loadPdfs(): void {
-    this.pdfsLoading = true;
-    this.pdfsLoadError = '';
-    this.materialService.loadPdfsImpl().subscribe(
-      (res) => {
-        this.pdfsLoading = false;
-        this.pdfs = res;
-        this.filterPdfs = res;
-      },
-      (err) => {
-        this.pdfsLoading = false;
-      }
-    );
-  }
-
-  loadImages(): void {
-    this.imagesLoading = true;
-    this.imagesLoadError = '';
-    this.materialService.loadImagesImpl().subscribe(
-      (res) => {
-        this.imagesLoading = false;
-        this.images = res;
-        this.filterImages = res;
-      },
-      (err) => {
-        this.imagesLoading = false;
-        if (err.status === 400) {
-          this.imagesLoadError = 'Error is occured in image loading.';
-        }
-        if (err.status === 500) {
-          this.imagesLoadError = 'Server Error is occured in image Loading.';
-        }
-      }
-    );
   }
 
   toggleVideo(video): void {
