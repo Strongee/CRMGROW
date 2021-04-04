@@ -1,4 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  OnDestroy
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { UserService } from 'src/app/services/user.service';
@@ -19,7 +25,7 @@ import { ContactService } from 'src/app/services/contact.service';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit {
+export class MessagesComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
   PanelView = {
     Contacts: 'contacts',
@@ -74,6 +80,7 @@ export class MessagesComponent implements OnInit {
 
   ngOnDestroy(): void {
     clearInterval(this.messageLoadTimer);
+    this.smsService.conversations.next(this.contacts.slice(0, 20));
   }
 
   scrollToBottom(): void {}

@@ -21,6 +21,8 @@ export class SmsService extends HttpService {
   messages$ = this.messages.asObservable();
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
   loading$ = this.loadStatus.asObservable();
+  conversations: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  conversations$ = this.conversations.asObservable();
 
   loadAll(force = false): void {
     if (!force) {
