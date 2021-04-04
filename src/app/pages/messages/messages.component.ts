@@ -71,6 +71,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const conversations = this.smsService.conversations.getValue():
+    this.contacts = [...conversations]
+
     this.smsService.loadAll(true);
     this.initSubscription();
     this.messageLoadTimer = setInterval(() => {
