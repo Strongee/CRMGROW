@@ -104,11 +104,11 @@
             </ngx-graph>
           </ng-template>
           <ng-template #treeOverlay let-close="close" let-data>
-            <app-automation-tree-overlay
+            <app-automation-detail-overlay
                 [dataSource]="data.data"
-                [type]="'full'"
+                [type]="'view'"
             >
-            </app-automation-tree-overlay>
+            </app-automation-detail-overlay>
           </ng-template>
           <!--  -->
         </div>

@@ -30,6 +30,7 @@ import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.
 import * as moment from 'moment';
 import { Template } from 'src/app/models/template.model';
 import { searchReg } from 'src/app/helper';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-action-edit',
@@ -109,6 +110,8 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   searchStr = '';
   filterMaterials = [];
 
+  loadSubscription: Subscription;
+
   constructor(
     private dialogRef: MatDialogRef<ActionEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -116,7 +119,8 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     private userService: UserService,
     private fileService: FileService,
     private dialog: MatDialog,
-    private labelService: LabelService
+    private labelService: LabelService,
+    public storeService: StoreService
   ) {
     this.userService.garbage$.subscribe((res) => {
       const garbage = res;
@@ -138,6 +142,8 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit(): void {
+    this.materialService.loadMaterial(false);
+    this.materialsLoading = true;
     if (this.data.action.type.indexOf('email') !== -1) {
       this.mediaType = 'email';
     } else {
@@ -281,68 +287,26 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
     }
 
     if (this.materialType) {
-      this.loadMaterials();
+      this.loadSubscription = this.storeService.materials$.subscribe(
+        (materials) => {
+          if (materials.length > 0) {
+            this.materialsLoading = false;
+            const material = materials.filter(
+              (item) => item.material_type == this.materialType
+            );
+            this.materials = material;
+            this.filterMaterials = material;
+          }
+        }
+      );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
   }
 
   ngAfterContentChecked(): void {}
-
-  loadMaterials(): void {
-    if (this.materialType === 'video') {
-      this.loadVideos();
-    }
-    if (this.materialType === 'pdf') {
-      this.loadPdfs();
-    }
-    if (this.materialType === 'image') {
-      this.loadImages();
-    }
-  }
-
-  loadVideos(): void {
-    this.materialsLoading = true;
-    this.materialsError = '';
-    this.materialService.loadVideosImpl().subscribe(
-      (res) => {
-        this.materials = res;
-        this.filterMaterials = res;
-        this.materialsLoading = false;
-      },
-      (err) => {
-        this.materialsLoading = false;
-      }
-    );
-  }
-
-  loadPdfs(): void {
-    this.materialsLoading = true;
-    this.materialsError = '';
-    this.materialService.loadPdfsImpl().subscribe(
-      (res) => {
-        this.materialsLoading = false;
-        this.materials = res;
-        this.filterMaterials = res;
-      },
-      (err) => {
-        this.materialsLoading = false;
-      }
-    );
-  }
-
-  loadImages(): void {
-    this.materialsLoading = true;
-    this.materialsError = '';
-    this.materialService.loadImagesImpl().subscribe(
-      (res) => {
-        this.materialsLoading = false;
-        this.materials = res;
-        this.filterMaterials = res;
-      },
-      (err) => {
-        this.materialsLoading = false;
-      }
-    );
-  }
 
   removeError(): void {
     this.error = '';
