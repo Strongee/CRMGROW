@@ -330,7 +330,8 @@ export const SMS = {
   GET: 'sms/',
   GET_MESSAGE: 'sms/get-messages',
   MARK_READ: 'sms/mark-read',
-  SEARCH_NUMBER: 'sms/search-numbers'
+  SEARCH_NUMBER: 'sms/search-numbers',
+  LOAD_FILES: 'sms/load-files'
 };
 
 export const INTEGRATION = {

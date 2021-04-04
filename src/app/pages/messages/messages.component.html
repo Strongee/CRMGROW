@@ -240,19 +240,19 @@
                     </button>
                 </div>
                 <div class="p-3 files">
-                    <div class="file rounded mb-3" *ngFor="let material of materials">
+                    <div class="file rounded mb-3" *ngFor="let tracker of fileDetails[selectedContact._id]">
                         <div class="thumbnail">
-                            <img [src]="material.thumbnail">
+                            <img [src]="tracker.material?.thumbnail">
                         </div>
                         <div class="p-2">
                             <div class="f-1 font-weight-bold">
-                                {{material.title}}
+                                {{tracker.material?.title}}
                             </div>
                             <div class="f-1 font-weight-bold op-40 mt-2">
-                                02:08PM 12.09
+                                {{tracker.updated_at | date : 'yyyy MMM dd HH:MM a'}}
                             </div>
                             <div class="d-inline-block f-1 font-weight-bold bgc-blue c-white rounded px-1 mt-3">
-                                WATCHED 80%
+                                WATCHED {{(tracker.duration || 0) | timeDuration}}
                             </div>
                         </div>
                     </div>

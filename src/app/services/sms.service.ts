@@ -74,4 +74,13 @@ export class SmsService extends HttpService {
       catchError(this.handleError('SMS SEARCH NUMBER', null))
     );
   }
+
+  loadFiles(contact_id: string, activities: any[]): Observable<any> {
+    return this.httpClient
+      .post(this.server + SMS.LOAD_FILES, { contact: contact_id, activities })
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('LOAD FILE ACTIVITY', null))
+      );
+  }
 }

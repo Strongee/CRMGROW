@@ -40,6 +40,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
   loadingMessage = false;
   messages = [];
   conversationDetails = {};
+  loadingFiles = false;
+  fileDetails = {};
   // Message
   message = '';
   // Panel View for Mobile
@@ -208,9 +210,25 @@ export class MessagesComponent implements OnInit, OnDestroy {
   toggleFileList(): void {
     if (this.panel != this.PanelView.Files) {
       this.panel = this.PanelView.Files;
+      // Load Files
+      this.loadFiles();
     } else {
       this.panel = this.PanelView.Contacts;
     }
+  }
+
+  loadFiles(): void {
+    this.loadingFiles = true;
+    const sentActivities = this.getActivities() || [];
+    this.smsService
+      .loadFiles(this.selectedContact._id, sentActivities)
+      .subscribe((files) => {
+        this.loadingFiles = false;
+        files.forEach((e) => {
+          e.material = e.video || e.pdf || e.image;
+        });
+        this.fileDetails[this.selectedContact._id] = files;
+      });
   }
 
   newMessage(): void {
@@ -451,6 +469,45 @@ export class MessagesComponent implements OnInit, OnDestroy {
         document.execCommand('insertText', false, '\n' + template.content);
       }
     }
+  }
+
+  getActivities(): any {
+    const videoActivities = [];
+    const pdfActivities = [];
+    const imageActivities = [];
+
+    const videoReg = new RegExp(environment.website + '/video1/\\w+', 'g');
+    const pdfReg = new RegExp(environment.website + '/pdf1/\\w+', 'g');
+    const imageReg = new RegExp(environment.website + '/image1/\\w+', 'g');
+
+    let allMessage = '';
+    this.conversationDetails[this.selectedContact._id].messages.forEach((e) => {
+      allMessage += e.content + '\n';
+    });
+
+    let matches = allMessage.match(videoReg);
+    if (matches && matches.length) {
+      matches.forEach((e) => {
+        const videoId = e.replace(environment.website + '/video1/', '');
+        videoActivities.push(videoId);
+      });
+    }
+    matches = allMessage.match(pdfReg);
+    if (matches && matches.length) {
+      matches.forEach((e) => {
+        const videoId = e.replace(environment.website + '/pdf1/', '');
+        pdfActivities.push(videoId);
+      });
+    }
+    matches = allMessage.match(imageReg);
+    if (matches && matches.length) {
+      matches.forEach((e) => {
+        const videoId = e.replace(environment.website + '/image1/', '');
+        imageActivities.push(videoId);
+      });
+    }
+
+    return [...videoActivities, ...pdfActivities, ...imageActivities];
   }
 
   getMaterials(): any {
