@@ -2077,3 +2077,8 @@
     RECEIVING LATEST ACTIVITIES
   </div>
 </div>
+
+
+<div class="reload c-pointer" (click)="reloadLatest()">
+  <i class="i-icon i-refresh d-block bgc-white" [class.progressing]="(contactService.latestUpdating$ | async) === STATUS.REQUEST"></i>
+</div>

@@ -6,7 +6,6 @@ import { DealStageCreateComponent } from 'src/app/components/deal-stage-create/d
 import { DealStageDeleteComponent } from 'src/app/components/deal-stage-delete/deal-stage-delete.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
-import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 

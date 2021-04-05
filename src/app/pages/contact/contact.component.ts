@@ -1482,6 +1482,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
   }
 
+  reloadLatest(): void {
+    this.contactService.addLatestActivity(24);
+  }
+
   openDetailEvent(detail): void {
     if (detail && detail.due_start) {
       let due_date;
