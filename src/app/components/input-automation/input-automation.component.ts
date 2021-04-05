@@ -24,6 +24,7 @@ import {
 import { AutomationService } from 'src/app/services/automation.service';
 import { Automation } from 'src/app/models/automation.model';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-input-automation',
@@ -74,8 +75,7 @@ export class InputAutomationComponent
         (data) => {
           data.subscribe((automations) => {
             const res = _.filter(automations, (e) => {
-              const searchReg = new RegExp(this.search, 'gi');
-              return searchReg.test(e.title);
+              return searchReg(e.title, this.search);
             });
             this.searching = false;
             this.filteredResults.next(res);

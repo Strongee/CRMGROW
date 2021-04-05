@@ -23,6 +23,7 @@ import {
 } from 'rxjs/operators';
 import { FilterService } from 'src/app/services/filter.service';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-filter-input',
@@ -76,8 +77,7 @@ export class FilterInputComponent implements OnInit, OnDestroy, AfterViewInit {
           data.subscribe((filters) => {
             if (this.search) {
               const res = _.filter(filters, (e) => {
-                const searchReg = new RegExp(this.search, 'gi');
-                return searchReg.test(e.title);
+                return searchReg(e.title, this.search);
               });
               this.filteredResults.next(res);
             } else {
