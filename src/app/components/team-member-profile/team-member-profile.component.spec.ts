@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { AutomationShareComponent } from './automation-share.component';
+import { TeamMemberProfileComponent } from './team-member-profile.component';
 
-describe('AutomationShareComponent', () => {
-  let component: AutomationShareComponent;
-  let fixture: ComponentFixture<AutomationShareComponent>;
+describe('TeamMemberProfileComponent', () => {
+  let component: TeamMemberProfileComponent;
+  let fixture: ComponentFixture<TeamMemberProfileComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AutomationShareComponent ]
+      declarations: [ TeamMemberProfileComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AutomationShareComponent);
+    fixture = TestBed.createComponent(TeamMemberProfileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

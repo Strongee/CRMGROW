@@ -10,9 +10,8 @@ import { STATUS } from 'src/app/constants/variable.constants';
 import { TeamService } from '../../services/team.service';
 import { ToastrService } from 'ngx-toastr';
 import { Team } from '../../models/team.model';
-import { TemplateShareComponent } from '../../components/template-share/template-share.component';
 import { sortStringArray } from '../../utils/functions';
-import { TemplateBrowserComponent } from "../../components/template-browser/template-browser.component";
+import { TemplateBrowserComponent } from '../../components/template-browser/template-browser.component';
 
 @Component({
   selector: 'app-team-share-template',

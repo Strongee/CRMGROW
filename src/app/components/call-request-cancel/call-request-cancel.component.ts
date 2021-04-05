@@ -28,7 +28,6 @@ export class CallRequestCancelComponent implements OnInit {
     if (this.data) {
       this.call = this.data.call;
       this.type = this.data.type;
-      console.log('call data', this.data.call);
     }
   }
 

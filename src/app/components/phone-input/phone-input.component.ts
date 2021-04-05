@@ -62,7 +62,7 @@ export class PhoneInputComponent
   phoneNumber: any;
   value: string;
   phoneUtil = PhoneNumberUtil.getInstance();
-  disabled = false;
+  @Input() disabled: boolean = false;
   valid = true;
 
   @ViewChild('control') control: ElementRef;

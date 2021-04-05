@@ -60,8 +60,6 @@ import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { TagDeleteComponent } from './tag-delete/tag-delete.component';
 import { MaterialEditTemplateComponent } from './material-edit-template/material-edit-template.component';
 import { MaterialShareComponent } from './material-share/material-share.component';
-import { TemplateShareComponent } from './template-share/template-share.component';
-import { AutomationShareComponent } from './automation-share/automation-share.component';
 import { VideoEditComponent } from './video-edit/video-edit.component';
 import { PdfEditComponent } from './pdf-edit/pdf-edit.component';
 import { ImageEditComponent } from './image-edit/image-edit.component';
@@ -149,6 +147,7 @@ import { TeamMaterialShareComponent } from './team-material-share/team-material-
 import { TemplateBrowserComponent } from './template-browser/template-browser.component';
 import { AutomationBrowserComponent } from './automation-browser/automation-browser.component';
 import { AutomationDetailOverlayComponent } from './automation-detail-overlay/automation-detail-overlay.component';
+import { TeamMemberProfileComponent } from './team-member-profile/team-member-profile.component';
 
 @NgModule({
   declarations: [
@@ -210,8 +209,6 @@ import { AutomationDetailOverlayComponent } from './automation-detail-overlay/au
     TagDeleteComponent,
     MaterialEditTemplateComponent,
     MaterialShareComponent,
-    TemplateShareComponent,
-    AutomationShareComponent,
     VideoEditComponent,
     PdfEditComponent,
     ImageEditComponent,
@@ -296,7 +293,8 @@ import { AutomationDetailOverlayComponent } from './automation-detail-overlay/au
     TeamMaterialShareComponent,
     TemplateBrowserComponent,
     AutomationBrowserComponent,
-    AutomationDetailOverlayComponent
+    AutomationDetailOverlayComponent,
+    TeamMemberProfileComponent
   ],
   imports: [
     CommonModule,

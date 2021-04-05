@@ -1,5 +1,5 @@
 <div class="position-relative">
-  <div class="flag-container" ngbDropdown>
+  <div class="flag-container" [class.prevent-event]="disabled" ngbDropdown>
     <div ngbDropdownToggle class="v-center c-pointer no-carot">
       <div class="iti__flag" [ngClass]="selectedCountry?.flagClass"></div>
 			<div class="selected-dial-code f-3 mx-1">+{{selectedCountry?.dialCode}}</div>
@@ -25,5 +25,6 @@
     [placeholder]="selectedCountry?.placeHolder"
     [attr.validation]="true"
     #control
+    [disabled]="disabled"
   >
 </div>
