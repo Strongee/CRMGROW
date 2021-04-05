@@ -1,6 +1,8 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { STATISTICS_DURATION } from 'src/app/constants/variable.constants';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
+import { DialogSettings, STATISTICS_DURATION } from 'src/app/constants/variable.constants';
 import { HandlerService } from 'src/app/services/handler.service';
 import { TabItem } from 'src/app/utils/data.types';
 
@@ -21,7 +23,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private location: Location,
-    private handlerService: HandlerService
+    private handlerService: HandlerService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -53,5 +56,12 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   changeDuration(value: string): void {
     this.duration = value;
+  }
+
+  /**
+   * Open the create task dialog
+   */
+  createTask(): void {
+    this.dialog.open(TaskCreateComponent, DialogSettings.TASK);
   }
 }

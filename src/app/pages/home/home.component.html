@@ -1,6 +1,13 @@
 <div class="page-content bg-white">
+  <div class="v-center mb-3">
+    <h1 class="page-title">Dashboard</h1>
+    <div class="ml-auto" [class.d-none]="selectedTab.id !== 'tasks'">
+      <button class="v-center btn btn-blue f-6 font-weight-bold text-white rounded shadow px-3" (click)="createTask()">
+        Create new Task
+      </button>
+    </div>
+  </div>
   <div class="page-header mb-2">
-    <h1 class="page-title mb-3">Dashboard</h1>
     <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
     </app-slide-tab>
   </div>
