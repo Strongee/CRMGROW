@@ -13,7 +13,6 @@ import { TemplatesComponent } from 'src/app/pages/templates/templates.component'
 import { CalendarComponent } from 'src/app/pages/calendar/calendar.component';
 import { DealsDetailComponent } from 'src/app/pages/deals-detail/deals-detail.component';
 import { VideoCreateComponent } from 'src/app/pages/video-create/video-create.component';
-import { CampaignComponent } from 'src/app/pages/campaign/campaign.component';
 import { AutoflowComponent } from 'src/app/pages/autoflow/autoflow.component';
 import { TeamComponent } from 'src/app/pages/team/team.component';
 import { TemplateComponent } from 'src/app/pages/template/template.component';
@@ -22,12 +21,8 @@ import { ForgotPasswordComponent } from '../../pages/forgot-password/forgot-pass
 import { ResetPasswordComponent } from '../../pages/reset-password/reset-password.component';
 import { ThemesComponent } from 'src/app/pages/themes/themes.component';
 import { ThemeComponent } from 'src/app/pages/theme/theme.component';
-import { CampaignListItemComponent } from 'src/app/pages/campaign-list-item/campaign-list-item.component';
-import { CampaignBulkMailingItemComponent } from 'src/app/pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component';
-import { CampaignSmtpComponent } from 'src/app/pages/campaign-smtp/campaign-smtp.component';
 import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
 import { NotificationsListComponent } from 'src/app/pages/notifications-list/notifications-list.component';
-import { MaterialComponent } from 'src/app/pages/material/material.component';
 import { MessagesComponent } from 'src/app/pages/messages/messages.component';
 import { TestComponent } from 'src/app/pages/test/test.component';
 
@@ -121,34 +116,6 @@ export const AdminLayoutRoutes: Routes = [
     component: AnalyticsMaterialComponent,
     data: {
       title: 'Materials'
-    }
-  },
-  {
-    path: 'campaign',
-    component: CampaignComponent,
-    data: {
-      title: 'Campaign'
-    }
-  },
-  {
-    path: 'campaign/:page',
-    component: CampaignComponent,
-    data: {
-      title: 'Campaign'
-    }
-  },
-  {
-    path: 'campaign/list/:id',
-    component: CampaignListItemComponent,
-    data: {
-      title: 'Campaign'
-    }
-  },
-  {
-    path: 'campaign/bulk/:id',
-    component: CampaignBulkMailingItemComponent,
-    data: {
-      title: 'Campaign'
     }
   },
   {

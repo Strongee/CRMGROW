@@ -32,9 +32,6 @@ import { TemplatesComponent } from '../../pages/templates/templates.component';
 import { TemplateComponent } from '../../pages/template/template.component';
 import { TeamComponent } from '../../pages/team/team.component';
 import { CalendarComponent } from '../../pages/calendar/calendar.component';
-import { CampaignComponent } from '../../pages/campaign/campaign.component';
-import { CampaignListComponent } from '../../pages/campaign-list/campaign-list.component';
-import { CampaignBulkMailingComponent } from '../../pages/campaign-bulk-mailing/campaign-bulk-mailing.component';
 import { NotificationsComponent } from '../../pages/notifications/notifications.component';
 import { AssistantComponent } from '../../pages/assistant/assistant.component';
 import { LeadCaptureComponent } from '../../pages/lead-capture/lead-capture.component';
@@ -46,14 +43,11 @@ import { DealsDetailComponent } from '../../pages/deals-detail/deals-detail.comp
 import { AutoflowComponent } from '../../pages/autoflow/autoflow.component';
 import { VideoCreateComponent } from '../../pages/video-create/video-create.component';
 import { MoneyPipe } from '../../pipes/money.pipe';
-import { CampaignListItemComponent } from '../../pages/campaign-list-item/campaign-list-item.component';
-import { CampaignBulkMailingItemComponent } from '../../pages/campaign-bulk-mailing-item/campaign-bulk-mailing-item.component';
 import { AutoResendVideoComponent } from '../../pages/auto-resend-video/auto-resend-video.component';
 import { AutoFollowUpComponent } from '../../pages/auto-follow-up/auto-follow-up.component';
 import { ContactComponent } from '../../pages/contact/contact.component';
 import { TeamListComponent } from '../../pages/team-list/team-list.component';
 import { TeamCallComponent } from '../../pages/team-call/team-call.component';
-import { CampaignSmtpComponent } from '../../pages/campaign-smtp/campaign-smtp.component';
 import { AnalyticsVideoSentComponent } from '../../pages/analytics-video-sent/analytics-video-sent.component';
 import { AnalyticsVideoWatchedComponent } from '../../pages/analytics-video-watched/analytics-video-watched.component';
 import { AnalyticsContactsAddedComponent } from '../../pages/analytics-contacts-added/analytics-contacts-added.component';
@@ -95,9 +89,6 @@ import { TestComponent } from '../../pages/test/test.component';
     SocialProfileComponent,
     TeamComponent,
     CalendarComponent,
-    CampaignComponent,
-    CampaignListComponent,
-    CampaignBulkMailingComponent,
     NotificationsComponent,
     AssistantComponent,
     LeadCaptureComponent,
@@ -110,12 +101,9 @@ import { TestComponent } from '../../pages/test/test.component';
     AutoflowComponent,
     VideoCreateComponent,
     MoneyPipe,
-    CampaignListItemComponent,
-    CampaignBulkMailingItemComponent,
     ContactComponent,
     TeamListComponent,
     TeamCallComponent,
-    CampaignSmtpComponent,
     AnalyticsVideoSentComponent,
     AnalyticsVideoWatchedComponent,
     AnalyticsContactsAddedComponent,
