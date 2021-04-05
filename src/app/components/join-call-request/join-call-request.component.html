@@ -47,7 +47,7 @@
             </div>
             <div class="col-6 v-center pr-0">
               <div class="form-group mb-0 flex-grow-1">
-                <select class="form-control" [(ngModel)]="dateTime.time" [name]="dateTime.id + '-time'">
+                <select class="form-control" [(ngModel)]="dateTime.time" [name]="dateTime.id + row + '-time'">
                   <option value="" disabled>From Time</option>
                   <option *ngFor="let time of times" value="{{time.id}}">{{time.text}}</option>
                 </select>

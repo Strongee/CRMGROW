@@ -19,10 +19,10 @@
         <i class="d-block i-icon i-triangle-left bgc-dark mr-2 sm"></i>
         <span class="f-5 font-weight-bold">Back to teams</span>
       </div>
-      <div class="v-center">
+      <div class="team-title-wrapper">
         <h5 class="font-weight-bold mb-0">{{team.name}}</h5>
         <div class="button-group v-center justify-content-lg-end justify-content-md-start ml-auto">
-          <button class="v-center btn btn-primary f-3 font-weight-bold shadow text-white ml-2 p-2" (click)="inviteMember()">
+          <button class="v-center btn btn-primary f-3 font-weight-bold shadow text-white p-2" (click)="inviteMember()">
             <i class="bgc-white i-icon i-invite-member sm mr-2"></i>
             Invite member
           </button>
@@ -158,7 +158,7 @@
             <tbody>
             <ng-container *ngIf="team.members.length + team.owner.length + team.invites.length">
               <tr *ngFor="let own of team.owner">
-                <td class="name-cell">
+                <td class="name-cell c-pointer" (click)="showProfile(own)">
                   <div class="v-center">
                     <ng-container *ngIf="own.picture_profile; else ownNamePlaceholder">
                       <img [src]="own.picture_profile" class="avatar mr-3" />
@@ -183,7 +183,7 @@
                 </td>
               </tr>
               <tr *ngFor="let member of editors">
-                <td class="name-cell">
+                <td class="name-cell c-pointer" (click)="showProfile(member)">
                   <div class="v-center">
                     <ng-container *ngIf="member.picture_profile; else memberNamePlaceholder">
                       <img [src]="member.picture_profile" class="avatar mr-3" />
@@ -237,7 +237,7 @@
                 </td>
               </tr>
               <tr *ngFor="let member of viewers">
-                <td class="name-cell">
+                <td class="name-cell c-pointer" (click)="showProfile(member)">
                   <div class="v-center">
                     <ng-container *ngIf="member.picture_profile; else memberNamePlaceholder">
                       <img [src]="member.picture_profile" class="avatar mr-3" />
@@ -283,7 +283,7 @@
                 </td>
               </tr>
               <tr *ngFor="let invite of team.invites">
-                <td class="name-cell">
+                <td class="name-cell c-pointer" (click)="showProfile(invite)">
                   <div class="v-center">
                     <ng-container *ngIf="invite.picture_profile; else inviteNamePlaceholder">
                       <img [src]="invite.picture_profile" class="avatar mr-3" />

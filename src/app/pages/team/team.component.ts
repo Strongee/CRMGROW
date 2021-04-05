@@ -21,8 +21,6 @@ import { TabItem } from '../../utils/data.types';
 import { TeamEditComponent } from '../../components/team-edit/team-edit.component';
 import { InviteTeamComponent } from 'src/app/components/invite-team/invite-team.component';
 import { DialogSettings } from 'src/app/constants/variable.constants';
-import { TemplateShareComponent } from '../../components/template-share/template-share.component';
-import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { NotifyComponent } from '../../components/notify/notify.component';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 import { TeamShareMaterialComponent } from '../team-share-material/team-share-material.component';
@@ -32,7 +30,8 @@ import { TeamShareContactComponent } from '../team-share-contact/team-share-cont
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
 import { share } from 'rxjs/operators';
 import { TemplateBrowserComponent } from '../../components/template-browser/template-browser.component';
-import {AutomationBrowserComponent} from "../../components/automation-browser/automation-browser.component";
+import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
+import {TeamMemberProfileComponent} from "../../components/team-member-profile/team-member-profile.component";
 
 @Component({
   selector: 'app-team',
@@ -797,6 +796,16 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       });
+  }
+
+  showProfile(member): void {
+    if (member && member._id === this.userId) {
+      this.router.navigate(['/profile/general']);
+    } else {
+      this.dialog.open(TeamMemberProfileComponent, {
+        data: { ...member }
+      });
+    }
   }
 
   getAvatarName(contact): any {
