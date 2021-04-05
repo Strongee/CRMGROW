@@ -36,6 +36,7 @@ import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { Team } from '../../models/team.model';
 import { TeamService } from '../../services/team.service';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-team-share-contact',
@@ -101,6 +102,10 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   userId = '';
   userOptions = [];
   paginationLoading = false;
+  loadingContact = false;
+  loadContactSubscription: Subscription;
+  detailContacts = [];
+  siteUrl = environment.website;
 
   constructor(
     public router: Router,
@@ -670,6 +675,10 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
       }
     }
     return false;
+  }
+
+  getSharedMembers(contact): any {
+    return _.uniqBy(contact.shared_members, '_id');
   }
 
   userAvatarName(user_name): string {

@@ -30,9 +30,8 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 import { TeamService } from '../../services/team.service';
 import { Team } from '../../models/team.model';
-import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
-import {AutomationBrowserComponent} from "../../components/automation-browser/automation-browser.component";
+import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
 
 @Component({
   selector: 'app-team-share-automation',

@@ -16,6 +16,19 @@
   }
 }
 
+.team-title-wrapper {
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: 576px) {
+    display: block;
+
+    .button-group {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
 .material-header {
   @media screen and (max-width: 360px) {
     flex-direction: column-reverse;
@@ -231,6 +244,10 @@ select.status {
 .members-table {
   .action-cell {
     opacity: 0;
+
+    @media screen and (max-width: 768px) {
+      opacity: 1;
+    }
   }
 
   tr:hover {

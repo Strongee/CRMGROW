@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subscription, Observable } from 'rxjs';
-import { numPad, getCurrentTimezone, convertTimetoTz } from '../../helper';
+import { Subscription } from 'rxjs';
+import { getCurrentTimezone, convertTimetoTz } from '../../helper';
 import {
   TIMES,
   CALL_REQUEST_DURATION
@@ -250,6 +250,7 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
       status,
       proposed_at: dueDateTimes
     };
+
     if (this.isDeal) {
       data['deal'] = this.dealId;
       this.dealService.addGroupCall(data).subscribe((response) => {

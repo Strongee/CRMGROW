@@ -1,5 +1,9 @@
 @import  "src/variables.scss";
 
+.page-content {
+  padding: 0;
+}
+
 .page-title span {
   letter-spacing: 0px;
 }
@@ -225,9 +229,22 @@ td.type-col {
 
 .sub-item-action {
   width: 164px;
+
+  @media screen and (max-width: 576px) {
+    width: 0px;
+  }
+
   .items {
     display: flex;
     opacity: 0;
+
+    @media screen and (max-width: 768px) {
+      opacity: 1;
+    }
+
+    @media screen and (max-width: 576px) {
+      display: none;
+    }
   }
 }
 
