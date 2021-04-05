@@ -50,6 +50,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/user.model';
+import { AdditionalFieldsComponent } from 'src/app/components/additional-fields/additional-fields.component';
 
 @Component({
   selector: 'app-contact',
@@ -1344,6 +1345,31 @@ export class ContactComponent implements OnInit, OnDestroy {
             });
         }
       });
+  }
+  addAdditionalFields(): void {
+    this.dialog
+      .open(AdditionalFieldsComponent, {
+        maxWidth: '480px',
+        width: '96vw',
+        data: {}
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          // Save the additional fields
+        }
+      });
+  }
+
+  getSessionIndex(i: number, activities: any[]): string {
+    const notTrackers = activities.filter((e) => {
+      if (e.activity_detail && e.activity_detail.type === 'watch') {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    return `#${activities.length - notTrackers.length - i}`;
   }
 
   convertContent(content = ''): any {

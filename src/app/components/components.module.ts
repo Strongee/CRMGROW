@@ -148,6 +148,7 @@ import { TemplateBrowserComponent } from './template-browser/template-browser.co
 import { AutomationBrowserComponent } from './automation-browser/automation-browser.component';
 import { AutomationDetailOverlayComponent } from './automation-detail-overlay/automation-detail-overlay.component';
 import { TeamMemberProfileComponent } from './team-member-profile/team-member-profile.component';
+import { AdditionalFieldsComponent } from './additional-fields/additional-fields.component';
 
 @NgModule({
   declarations: [
@@ -294,7 +295,8 @@ import { TeamMemberProfileComponent } from './team-member-profile/team-member-pr
     TemplateBrowserComponent,
     AutomationBrowserComponent,
     AutomationDetailOverlayComponent,
-    TeamMemberProfileComponent
+    TeamMemberProfileComponent,
+    AdditionalFieldsComponent
   ],
   imports: [
     CommonModule,
@@ -392,7 +394,8 @@ import { TeamMemberProfileComponent } from './team-member-profile/team-member-pr
     TemplateCreateComponent,
     SocialShareComponent,
     TeamMaterialShareComponent,
-    AutomationDetailOverlayComponent
+    AutomationDetailOverlayComponent,
+    AdditionalFieldsComponent
   ],
   bootstrap: [
     ContactCreateComponent,

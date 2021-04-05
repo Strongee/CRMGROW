@@ -153,6 +153,9 @@
                 </span>
               </div>
             </div>
+            <div class="mt-2">
+              <a class="c-blue fw-600 td-none c-pointer" (click)="addAdditionalFields()">Add additional fields</a>
+            </div>
           </div>
         </mat-expansion-panel>
         <!-- End Contact Additional Information -->
@@ -635,8 +638,10 @@
                             <tbody>
                               <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                                 <td class="session-col">
-                                  <span class="font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
-                                  <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                  <span class="font-weight-bold mr-2">
+                                    {{detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch' ? getSessionIndex(i, groupActions[activity.group_id]) : ''}}
+                                  </span>
+                                  <span class="font-weight-bold">{{detailActivity.content}}</span>
                                 </td>
                                 <td class="duration-col">{{details[activity.emails]?.duration || '' | timeDuration}}</td>
                                 <td class="date-col">
@@ -795,10 +800,10 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
+                              <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index; let c = count;">
                                 <td class="session-col">
-                                  <span class="font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
-                                  <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                  <span class="font-weight-bold mr-2">{{detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch' ? getSessionIndex(i, groupActions[activity.group_id]) : ''}}</span>
+                                  <span class="font-weight-bold">{{detailActivity.content}}</span>
                                 </td>
                                 <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
                                   <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
@@ -1480,8 +1485,8 @@
                             <tbody>
                               <tr *ngFor="let detailActivity of (detail.data_type === 'emails' ? sendActions[detail._id] : sendActions[detail.group_id]); let i = index;">
                                 <td class="session-col">
-                                  <span class="font-weight-bold">#{{(detail.data_type === 'emails' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
-                                  <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                  <span class="font-weight-bold mr-2">{{detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch' ? getSessionIndex(i, detail.data_type === 'emails' ? sendActions[detail._id] : sendActions[detail.group_id]) : ''}}</span>
+                                  <span class="font-weight-bold">{{detailActivity.content}}</span>
                                 </td>
                                 <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
                                   <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
@@ -1575,8 +1580,8 @@
                                 <tbody>
                                   <tr *ngFor="let detailActivity of (detail.data_type === 'texts' ? sendActions[detail._id] : sendActions[detail.group_id]); let i = index;">
                                     <td class="session-col">
-                                      <span class="font-weight-bold">#{{(detail.data_type === 'texts' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
-                                      <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                      <span class="font-weight-bold mr-2">{{detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch' ? getSessionIndex(i, detail.data_type === 'texts' ? sendActions[detail._id].length : sendActions[detail.group_id].length) : ''}}</span>
+                                      <span class="font-weight-bold">{{detailActivity.content}}</span>
                                     </td>
                                     <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
                                       <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>

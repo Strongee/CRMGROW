@@ -17,8 +17,6 @@ import { AutoflowComponent } from 'src/app/pages/autoflow/autoflow.component';
 import { TeamComponent } from 'src/app/pages/team/team.component';
 import { TemplateComponent } from 'src/app/pages/template/template.component';
 import { ContactComponent } from 'src/app/pages/contact/contact.component';
-import { ForgotPasswordComponent } from '../../pages/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from '../../pages/reset-password/reset-password.component';
 import { ThemesComponent } from 'src/app/pages/themes/themes.component';
 import { ThemeComponent } from 'src/app/pages/theme/theme.component';
 import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analytics-material.component';
@@ -230,14 +228,6 @@ export const AdminLayoutRoutes: Routes = [
     data: {
       title: 'Template'
     }
-  },
-  {
-    path: 'templates/:mode/:id',
-    component: TemplateComponent,
-    data: {
-      title: 'Template'
-    },
-    canDeactivate: [PageExitGuard]
   },
   {
     path: 'templates/:mode/:id',
