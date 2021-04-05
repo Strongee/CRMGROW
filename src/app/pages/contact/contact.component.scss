@@ -347,6 +347,9 @@
                   }
                 }
               }
+              td {
+                font-weight: bold;
+              }
             }
           }
           .summary {
@@ -687,6 +690,8 @@ table.table {
     padding: 4px 2px;
     height: unset!important;
     text-align: right;
+    font-weight: bold;
+    font-size: 14px;
 
     &.session-col {
       text-align: left;

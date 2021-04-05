@@ -635,8 +635,8 @@
                             <tbody>
                               <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                                 <td class="session-col">
-                                  <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
-                                  <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                  <span class="font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
+                                  <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
                                 </td>
                                 <td class="duration-col">{{details[activity.emails]?.duration || '' | timeDuration}}</td>
                                 <td class="date-col">
@@ -797,8 +797,8 @@
                             <tbody>
                               <tr *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                                 <td class="session-col">
-                                  <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
-                                  <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                  <span class="font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
+                                  <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
                                 </td>
                                 <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
                                   <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
@@ -1480,8 +1480,8 @@
                             <tbody>
                               <tr *ngFor="let detailActivity of (detail.data_type === 'emails' ? sendActions[detail._id] : sendActions[detail.group_id]); let i = index;">
                                 <td class="session-col">
-                                  <span class="f-3 font-weight-bold">#{{(detail.data_type === 'emails' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
-                                  <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                  <span class="font-weight-bold">#{{(detail.data_type === 'emails' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
+                                  <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
                                 </td>
                                 <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
                                   <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
@@ -1575,8 +1575,8 @@
                                 <tbody>
                                   <tr *ngFor="let detailActivity of (detail.data_type === 'texts' ? sendActions[detail._id] : sendActions[detail.group_id]); let i = index;">
                                     <td class="session-col">
-                                      <span class="f-3 font-weight-bold">#{{(detail.data_type === 'texts' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
-                                      <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
+                                      <span class="font-weight-bold">#{{(detail.data_type === 'texts' ? sendActions[detail._id].length : sendActions[detail.group_id].length) - i}}</span>
+                                      <span class="font-weight-bold ml-2">{{detailActivity.content}}</span>
                                     </td>
                                     <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">
                                       <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>

@@ -348,49 +348,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
           });
         }
         this.message = '';
-        // this.messages.forEach((messageList) => {
-        //   if (!this.isNew && messageList.id == this.selectedContact._id) {
-        //     messageList.messages.push(message);
-        //     this.selectedContact.lastest_message = this.message;
-        //     this.selectedContact.lastest_at = new Date();
-        //     this.message = '';
-        //     const pos = this.contacts.findIndex(
-        //       (contact) => contact._id === this.selectedContact._id
-        //     );
-        //     if (pos != 0) {
-        //       this.contacts.splice(pos, 1);
-        //       this.contacts.unshift(this.selectedContact);
-        //     }
-        //   }
-        //   if (this.isNew) {
-        //     for (let i = 0; i < this.newContacts.length; i++) {
-        //       if (
-        //         messageList.id ==
-        //         this.newContacts[this.newContacts.length - 1 - i]._id
-        //       ) {
-        //         const message = {
-        //           type: 0,
-        //           content: this.messageText,
-        //           updated_at: new Date()
-        //         };
-        //         messageList.messages.push(message);
-        //       }
-        //       this.newContacts[
-        //         this.newContacts.length - 1 - i
-        //       ].lastest_message = this.messageText;
-        //       this.newContacts[
-        //         this.newContacts.length - 1 - i
-        //       ].lastest_at = new Date();
-        //       this.contacts.unshift(
-        //         this.newContacts[this.newContacts.length - 1 - i]
-        //       );
-        //     }
-        //     this.isNew = false;
-        //     this.selectedContact = this.contacts[0];
-        //     this.message = '';
-        //   }
-        //   this.scrollToBottom();
-        // });
       }
     });
   }
@@ -428,8 +385,13 @@ export class MessagesComponent implements OnInit, OnDestroy {
             // first element insert
             if (
               index === 0 &&
-              (!this.message || this.message.slice(-1) === '\n')
+              (!this.message ||
+                this.message.replace(/(\r\n|\n|\r|\s)/gm, '').length == 0)
             ) {
+              this.message = this.message + url;
+              return;
+            }
+            if (index === 0 && this.message.slice(-1) === '\n') {
               this.message = this.message + '\n' + url;
               return;
             }
@@ -444,6 +406,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
               this.message += '\n';
             }
           });
+          this.messageText.nativeElement.focus();
         }
       });
   }
