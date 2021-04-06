@@ -25,7 +25,7 @@ import { DeleteFolderComponent } from '../../components/delete-folder/delete-fol
 import { HandlerService } from 'src/app/services/handler.service';
 import { Team } from '../../models/team.model';
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
-import {sortDateArray, sortStringArray} from "../../utils/functions";
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 @Component({
   selector: 'app-team-share-material',
   templateUrl: './team-share-material.component.html',
@@ -277,7 +277,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
       ...this.captureImages
     ]);
     const bulkSetCapture = this.ACTIONS.filter(
-      (action) => action.label == 'Lead Capture'
+      (action) => action.label === 'Capture'
     );
     if (_intersection.length === selectedMaterials.length) {
       // Enable the Lead Capture Status
@@ -585,7 +585,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
         break;
       case 'lead_capture':
         const bulkSetCapture = this.ACTIONS.filter(
-          (action) => action.label == 'Lead Capture'
+          (action) => action.label === 'Capture'
         );
         if (bulkSetCapture[0].status) {
           _.pullAll(this.captureVideos, this.selection);

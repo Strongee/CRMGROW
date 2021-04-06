@@ -84,9 +84,20 @@ export class ContactDetailComponent implements OnInit {
   }
 
   loadContact(_id: string): void {
-    this.contactService.read(_id);
+    this.contactService.getSharedContact(_id).subscribe((res) => {
+      if (res) {
+        this.contact = res;
+        this.selectedContact = res;
+        this.groupActivities();
+        this.getActivityCount();
+        this.timeLineArrangement();
+      }
+    });
   }
 
+  /**
+   * Group Activities
+   */
   groupActivities(): void {
     this.groupActions = {};
     this.mainTimelines = [];
@@ -100,13 +111,6 @@ export class ContactDetailComponent implements OnInit {
         e.group_id = group;
         this.groupActions[group] = [e];
         this.mainTimelines.push(e);
-      }
-    }
-    for (const timeLine of this.mainTimelines) {
-      if (timeLine.type === 'notes') {
-        this.noteTimeLines.push(timeLine);
-      } else {
-        this.otherTimeLines.push(timeLine);
       }
     }
   }
@@ -146,6 +150,7 @@ export class ContactDetailComponent implements OnInit {
         if (activity.type !== 'emails') {
           activity.activity_detail['content'] = activity.content;
           activity.activity_detail['subject'] = activity.subject;
+          activity.activity_detail['updated_at'] = activity.updated_at;
         }
         this.details[material_id] = activity.activity_detail;
         const group_id = `${material_id}_${activity._id}`;
@@ -153,9 +158,21 @@ export class ContactDetailComponent implements OnInit {
         this.detailData[group_id]['data_type'] = activity.type;
         this.detailData[group_id]['group_id'] = group_id;
         this.detailData[group_id]['emails'] = activity.emails;
+        this.detailData[group_id]['texts'] = activity.texts;
         return group_id;
       case 'texts':
-        return activity._id;
+        material_id = activity.activity_detail['_id'];
+        this.details[material_id] = activity.activity_detail;
+        const text_group_id = `${material_id}_${activity._id}`;
+        this.detailData[text_group_id] = activity.activity_detail;
+        this.detailData[text_group_id]['data_type'] = activity.type;
+        this.detailData[text_group_id]['group_id'] = text_group_id;
+        this.detailData[text_group_id]['emails'] = activity.emails;
+        this.detailData[text_group_id]['texts'] = activity.texts;
+        if (activity.content.indexOf('sent') !== -1) {
+          this.detailData[text_group_id]['sent'] = true;
+        }
+        return text_group_id;
       default:
         const detailKey = activity.activity_detail['_id'];
         this.detailData[detailKey] = activity.activity_detail;

@@ -100,7 +100,8 @@ export const CONTACT = {
   BULK_CREATE: 'contact/bulk-create',
   CHECK_EMAIL: 'contact/check-email',
   CHECK_PHONE: 'contact/check-phone',
-  SHARE_CONTACT: 'contact/share-contact'
+  SHARE_CONTACT: 'contact/share-contact',
+  TEAM_SHARED: 'contact/team-shared/'
 };
 export const VIDEO = {
   CREATE: 'video/create',

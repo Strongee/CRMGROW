@@ -24,6 +24,7 @@ import { AutomationCreateComponent } from '../../components/automation-create/au
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
+import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 
 @Component({
   selector: 'app-automations',
@@ -50,7 +51,6 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     'action-count',
     'contacts',
     'created',
-    'assign',
     'actions'
   ];
   PAGE_COUNTS = [
@@ -109,7 +109,8 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     this.loadSubscription = this.automationService.automations$.subscribe(
       (automations) => {
         this.automations = automations;
-        this.filteredResult = automations;
+        this.automations = _.uniqBy(this.automations, '_id');
+        this.filteredResult = this.automations;
         this.sort('role', true);
       }
     );
@@ -146,6 +147,23 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   openAutomation(event: Event, automation: Automation): void {
     event.stopPropagation();
     this.router.navigate(['/autoflow/edit/' + automation._id]);
+  }
+
+  shareAutomation(event: Event, automation: Automation): void {
+    this.dialog
+      .open(AutomationShareComponent, {
+        width: '500px',
+        maxWidth: '90vw',
+        data: {
+          automation
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.status) {
+          this.automationService.reload();
+        }
+      });
   }
 
   /**

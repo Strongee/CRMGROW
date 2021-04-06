@@ -1191,7 +1191,7 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Lead Capture',
+      label: 'Capture',
       type: 'toggle',
       status: false,
       command: 'lead_capture',
