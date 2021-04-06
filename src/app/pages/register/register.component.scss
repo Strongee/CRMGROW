@@ -1,3 +1,14 @@
+.card {
+  box-shadow: -8px 0 24px -5px rgba(16,19,54,0.24);
+  .password-type {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  .card-detail {
+    line-height: 14px;
+  }
+}
 .check-spinner {
   position: absolute;
   width: 20px;
