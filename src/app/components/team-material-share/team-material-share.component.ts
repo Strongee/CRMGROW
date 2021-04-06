@@ -7,6 +7,7 @@ import { TeamService } from '../../services/team.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Material } from 'src/app/models/material.model';
 import { ToastrService } from 'ngx-toastr';
+import { Template } from 'src/app/models/template.model';
 
 @Component({
   selector: 'app-team-material-share',
@@ -15,11 +16,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TeamMaterialShareComponent implements OnInit {
   sharing = false;
+  shareType = '';
   selectedTeam: Team = null;
   userId = '';
   currentUser: User;
   teams = [];
   material: Material = new Material();
+  template: Template = new Template();
 
   profileSubscription: Subscription;
   constructor(
@@ -38,8 +41,16 @@ export class TeamMaterialShareComponent implements OnInit {
       this.currentUser = res;
     });
 
-    if (this.data && this.data.material) {
-      this.material = this.data.material;
+    if (this.data) {
+      if (this.data.material) {
+        this.material = this.data.material;
+      }
+      if (this.data.type) {
+        this.shareType = this.data.type;
+      }
+      if (this.data.template) {
+        this.template = this.data.template;
+      }
     }
 
     this.load();
@@ -52,30 +63,56 @@ export class TeamMaterialShareComponent implements OnInit {
       const ownerTeams = [];
       const editorTeams = [];
 
-      for (const team of teams) {
-        const video = team.videos.findIndex(
-          (item) => item == this.material._id
-        );
-        const pdf = team.pdfs.findIndex((item) => item == this.material._id);
-        const image = team.images.findIndex(
-          (item) => item == this.material._id
-        );
-        if (team.owner && team.owner.length > 0) {
-          const index = team.owner.findIndex(
-            (item) => item._id === this.userId
+      if (this.shareType == 'material') {
+        for (const team of teams) {
+          const video = team.videos.findIndex(
+            (item) => item == this.material._id
           );
-          if (index >= 0 && video < 0 && pdf < 0 && image < 0) {
-            ownerTeams.push(team);
-            continue;
+          const pdf = team.pdfs.findIndex((item) => item == this.material._id);
+          const image = team.images.findIndex(
+            (item) => item == this.material._id
+          );
+          if (team.owner && team.owner.length > 0) {
+            const index = team.owner.findIndex(
+              (item) => item._id === this.userId
+            );
+            if (index >= 0 && video < 0 && pdf < 0 && image < 0) {
+              ownerTeams.push(team);
+              continue;
+            }
+          }
+          if (team.editors && team.editors.length > 0) {
+            const index = team.editors.findIndex(
+              (item) => item._id === this.userId
+            );
+            if (index >= 0 && video < 0 && pdf < 0 && image < 0) {
+              editorTeams.push(team);
+              continue;
+            }
           }
         }
-        if (team.editors && team.editors.length > 0) {
-          const index = team.editors.findIndex(
-            (item) => item._id === this.userId
+      } else if (this.shareType == 'template') {
+        for (const team of teams) {
+          const shared = team.email_templates.findIndex(
+            (item) => item == this.template._id
           );
-          if (index >= 0 && video < 0 && pdf < 0 && image < 0) {
-            editorTeams.push(team);
-            continue;
+          if (team.owner && team.owner.length > 0) {
+            const index = team.owner.findIndex(
+              (item) => item._id === this.userId
+            );
+            if (index >= 0 && shared < 0) {
+              ownerTeams.push(team);
+              continue;
+            }
+          }
+          if (team.editors && team.editors.length > 0) {
+            const index = team.editors.findIndex(
+              (item) => item._id === this.userId
+            );
+            if (index >= 0 && shared < 0) {
+              editorTeams.push(team);
+              continue;
+            }
           }
         }
       }
@@ -85,33 +122,45 @@ export class TeamMaterialShareComponent implements OnInit {
 
   share(): void {
     this.sharing = true;
-    if (this.material.material_type == 'video') {
+    if (this.shareType == 'material') {
+      if (this.material.material_type == 'video') {
+        this.teamService
+          .shareVideos(this.selectedTeam._id, [this.material._id])
+          .subscribe((res) => {
+            if (res && res.length > 0) {
+              this.sharing = false;
+              this.toast.success('Video has been shared successfully.');
+              this.dialogRef.close();
+            }
+          });
+      } else if (this.material.material_type == 'pdf') {
+        this.teamService
+          .sharePdfs(this.selectedTeam._id, [this.material._id])
+          .subscribe((res) => {
+            if (res && res.length > 0) {
+              this.sharing = false;
+              this.toast.success('Pdf has been shared successfully.');
+              this.dialogRef.close();
+            }
+          });
+      } else if (this.material.material_type == 'image') {
+        this.teamService
+          .shareImages(this.selectedTeam._id, [this.material._id])
+          .subscribe((res) => {
+            if (res && res.length > 0) {
+              this.sharing = false;
+              this.toast.success('Image has been shared successfully.');
+              this.dialogRef.close();
+            }
+          });
+      }
+    } else if (this.shareType == 'template') {
       this.teamService
-        .shareVideos(this.selectedTeam._id, [this.material._id])
+        .shareTemplates(this.selectedTeam._id, [this.template._id])
         .subscribe((res) => {
           if (res && res.length > 0) {
             this.sharing = false;
-            this.toast.success('Video has been shared successfully.');
-            this.dialogRef.close();
-          }
-        });
-    } else if (this.material.material_type == 'pdf') {
-      this.teamService
-        .sharePdfs(this.selectedTeam._id, [this.material._id])
-        .subscribe((res) => {
-          if (res && res.length > 0) {
-            this.sharing = false;
-            this.toast.success('Pdf has been shared successfully.');
-            this.dialogRef.close();
-          }
-        });
-    } else if (this.material.material_type == 'image') {
-      this.teamService
-        .shareImages(this.selectedTeam._id, [this.material._id])
-        .subscribe((res) => {
-          if (res && res.length > 0) {
-            this.sharing = false;
-            this.toast.success('Image has been shared successfully.');
+            this.toast.success('Template has been shared successfully.');
             this.dialogRef.close();
           }
         });

@@ -107,6 +107,9 @@
                 <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)">
                   <i class="i-icon bgc-dark i-trash ml-2"></i>
                 </div>
+                <div class="icon-button v-center justify-content-center" (click)="shareTemplate(template)">
+                  <i class="i-icon bgc-dark i-share-team ml-2"></i>
+                </div>
               </ng-container>
               <ng-container *ngIf="template.role == 'team' && template.user != userId">
                 <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">

@@ -739,7 +739,8 @@ export class MaterialsComponent implements OnInit {
       width: '98vw',
       maxWidth: '450px',
       data: {
-        material: material
+        material: material,
+        type: 'material'
       }
     });
   }
@@ -982,7 +983,7 @@ export class MaterialsComponent implements OnInit {
         break;
       case 'lead_capture':
         const bulkSetCapture = this.ACTIONS.filter(
-          (action) => action.label == 'Lead Capture'
+          (action) => action.label == 'Capture'
         );
         if (bulkSetCapture[0].status) {
           _.pullAll(this.captureVideos, this.selection);
