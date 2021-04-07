@@ -188,7 +188,6 @@ export class MaterialSendComponent implements OnInit {
 
   sendText(newContacts: string[]): void {
     const contacts = [...newContacts];
-    let materialType = '';
     const video_ids = [];
     const pdf_ids = [];
     const image_ids = [];
@@ -202,13 +201,12 @@ export class MaterialSendComponent implements OnInit {
     this.pdfs.forEach((e) => pdf_ids.push(e._id));
     this.images.forEach((e) => image_ids.push(e._id));
     if (video_ids.length) {
-      materialType = 'video';
       data['video_ids'] = video_ids;
-    } else if (pdf_ids.length) {
-      materialType = 'pdf';
+    }
+    if (pdf_ids.length) {
       data['pdf_ids'] = pdf_ids;
-    } else if (image_ids.length) {
-      materialType = 'image';
+    }
+    if (image_ids.length) {
       data['image_ids'] = image_ids;
     }
     let message = this.textContent;
