@@ -426,8 +426,16 @@ export class ContactService extends HttpService {
     const contacts = this.storeService.pageContacts.getValue();
     if (sortField == 'name') {
       contacts.sort((a, b) => {
-        const aName = ((a['first_name'] || '') + ' ' + (a['last_name'] || '')).trim();
-        const bName = ((b['first_name'] || '') + ' ' + (b['last_name'] || '')).trim();
+        const aName = (
+          (a['first_name'] || '') +
+          ' ' +
+          (a['last_name'] || '')
+        ).trim();
+        const bName = (
+          (b['first_name'] || '') +
+          ' ' +
+          (b['last_name'] || '')
+        ).trim();
         if (aName > bName) {
           return 1 * sortGrav;
         } else if (aName == bName) {
@@ -571,6 +579,14 @@ export class ContactService extends HttpService {
         catchError(this.handleError('BULK CREATE CONTACTS', []))
       );
   }
+
+  getSharedContact(_id: string): Observable<any> {
+    return this.httpClient.get(this.server + CONTACT.TEAM_SHARED + _id).pipe(
+      map((res) => res['data'] || []),
+      catchError(this.handleError('GET SHARED CONTACT', []))
+    );
+  }
+
   delete$(contacts: Contact[]): any {
     const pageContacts = this.storeService.pageContacts.getValue();
     const remainedContacts = _.differenceBy(pageContacts, contacts, '_id');

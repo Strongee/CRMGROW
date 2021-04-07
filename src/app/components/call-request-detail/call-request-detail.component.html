@@ -36,16 +36,31 @@
             <span class="ml-2 f-4 c-dark fw-600">Set new date and time</span>
           </div>
         </div>
-        <div class="custom-date v-center" [class.d-none]="!isSelectedTime('custom')">
-          <label class="mb-0 mr-2">Starts</label>
-          <div class="form-group mb-0">
-            <app-date-input [(value)]="customDate" [minDate]="MIN_DATE"></app-date-input>
-          </div>
-          <div class="form-group mb-0 flex-grow-1 ml-2">
-            <select class="form-control" [(ngModel)]="customTime" name="custom-time">
-              <option *ngFor="let time of TIMES" value="{{time.id}}">{{time.text}}</option>
-            </select>
-          </div>
+        <div class="custom-date" [class.d-none]="!isSelectedTime('custom')">
+          <ng-container *ngFor="let dateTime of customDateTimes; let row = index">
+            <div class="v-center my-1">
+              <label class="mb-0">Starts</label>
+              <div class="v-center ml-2">
+                <div class="form-group mb-0">
+                  <app-date-input [(value)]="dateTime.date" [minDate]="MIN_DATE"></app-date-input>
+                </div>
+                <div class="form-group mb-0 v-center flex-grow-1 ml-2">
+                  <select class="form-control" [(ngModel)]="dateTime.time" [name]="dateTime.id + row + '-time'">
+                    <option *ngFor="let time of TIMES" value="{{time.id}}">{{time.text}}</option>
+                  </select>
+                  <button type="button" class="v-center border-0 bgc-white ml-auto py-2" (click)="removeCustomDateTime(dateTime)" *ngIf="customDateTimes.length > 1">
+                    <i class="i-icon i-close bgc-dark" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+<!--          <div class="d-flex justify-content-end mt-2 mr-4">-->
+<!--            <button type="button" class="v-center border-0 bgc-trans" (click)="addCustomDateTime()">-->
+<!--              <i class="i-icon i-plus bgc-blue sm" aria-hidden="true"></i>-->
+<!--              <span class="ml-2 f-3 c-blue font-weight-bold">Add another suiting date & time</span>-->
+<!--            </button>-->
+<!--          </div>-->
         </div>
       </div>
     </div>

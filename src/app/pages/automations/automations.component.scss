@@ -100,9 +100,9 @@ input.disabled {
 }
 
 :host ::ng-deep {
-  .assign-action {
-    min-width: 60px;
-    max-width: 60px;
+  .actions {
+    min-width: 120px;
+    max-width: 120px;
 
     button {
       opacity: 0;
@@ -111,13 +111,9 @@ input.disabled {
   }
 
   tr:hover {
-    .assign-action button {
+    .actions button {
       opacity: 1;
     }
   }
 
-  .actions {
-    min-width: 40px;
-    max-width: 40px;
-  }
 }
