@@ -136,15 +136,20 @@ export class ContactDetailComponent implements OnInit {
     this.groupActions = {};
     this.mainTimelines = [];
     this.details = {};
-    for (let i = this.contactActivity.activity.length - 1; i >= 0; i--) {
-      const e = this.contactActivity.activity[i];
-      const group = this.generateUniqueId(e);
-      if (this.groupActions[group]) {
-        this.groupActions[group].push(e);
-      } else {
-        e.group_id = group;
-        this.groupActions[group] = [e];
-        this.mainTimelines.push(e);
+    if (
+      this.contactActivity.activity &&
+      this.contactActivity.activity.length > 0
+    ) {
+      for (let i = this.contactActivity.activity.length - 1; i >= 0; i--) {
+        const e = this.contactActivity.activity[i];
+        const group = this.generateUniqueId(e);
+        if (this.groupActions[group]) {
+          this.groupActions[group].push(e);
+        } else {
+          e.group_id = group;
+          this.groupActions[group] = [e];
+          this.mainTimelines.push(e);
+        }
       }
     }
   }
