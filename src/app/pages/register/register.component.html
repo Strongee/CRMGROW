@@ -76,8 +76,8 @@
       <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
       <h4 class="text-center font-weight-bold mb-4">Create your account</h4>
       <p class="f-3 text-center">Please complete basic information for your account.mat-dialog-actions</p>
-      <form #profileForm="ngForm" (ngSubmit)="profileForm.form.valid ? fillProfile() : false" class="mt-4">
-        <div class="form-group" [ngClass]="{invalid: profileForm.submitted && learnMore.invalid && (learnMore.dirty || learnMore.touched || profileForm.submitted)}">
+      <form #profileForm="ngForm" (ngSubmit)="submitted = true; profileForm.form.valid ? fillProfile() : false" class="mt-4">
+        <div class="form-group" [ngClass]="{invalid: submitted && learnMore.invalid && (learnMore.dirty || learnMore.touched || submitted)}">
           <div class="d-flex">
             <label for="learnMore" class="mr-auto">exp realty career website</label>
             <span class="error" *ngIf="learnMore.errors">
@@ -89,7 +89,7 @@
         <div class="form-group phone-form">
           <div class="d-flex">
             <label for="phone" class="mr-auto">cell number</label>
-            <span class="error" [class.d-block]="profileForm.submitted">
+            <span class="error" [class.d-block]="submitted">
               <ng-container *ngIf="checkPhoneRequired(); else wrongTemplate;">Required!</ng-container>
               <ng-template #wrongTemplate>
                 <ng-container *ngIf="!checkPhoneValid()">
@@ -111,7 +111,7 @@
           </app-phone-input>
           <img class="check-spinner" src="../../../assets/img/spinner.gif" alt="" *ngIf="checkingPhone">
         </div>
-        <div class="form-group" [ngClass]="{invalid: profileForm.submitted && timezone.invalid && (timezone.dirty || timezone.touched || profileForm.submitted)}">
+        <div class="form-group" [ngClass]="{invalid: submitted && timezone.invalid && (timezone.dirty || timezone.touched || submitted)}">
           <div class="d-flex">
             <label for="timezone" class="mr-auto">time zone</label>
             <span class="error" *ngIf="timezone.errors">
@@ -126,29 +126,24 @@
             </optgroup>
           </select>
         </div>
-        <div class="form-group mt-4" [ngClass]="{invalid: profileForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || profileForm.submitted)}">
+        <div class="form-group mt-4" [ngClass]="{invalid: submitted && invalidError != ''}">
           <div class="d-flex justify-content-between">
-              <label for="card_number">card number</label>
-              <span class="error" *ngIf="cardnumber.errors">
-                  <ng-container *ngIf="cardnumber.errors.required">Required!</ng-container>
-                  <ng-container *ngIf="cardnumber.errors.minlength">Invalid!</ng-container>
+            <div class="v-center">
+              <label for="card_number">card</label>
+              <span class="f-3 card-detail">You won't be charged until after your trial</span>
+            </div>
+              <span class="error" *ngIf="submitted && invalidError != ''">
+                  <ng-container *ngIf="submitted && invalidError == 'require'">Required!</ng-container>
+                  <ng-container *ngIf="submitted && invalidError == 'invalid'">Invalid!</ng-container>
               </span>
           </div>
-          <input
-              type="text"
-              placeholder="eg. 1234 5678 9012 3456"
-              class="form-control"
-              [(ngModel)]="payment.number"
-              id="cardnumber"
-              name="cardnumber"
-              #cardnumber="ngModel"
-              required
-              minlength="{{cardNumberLen}}"
-              [cleave]="creditCardInput"
-              (ngModelChange)="changeLast4Code()"
-          >
+          <stripe-card #stripeCard
+            [options]="stripeOptions"
+            (invalidChange)="cardInvalid($event)"
+            (completeChange)="cardComplete($event)"
+          ></stripe-card>
         </div>
-        <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Sign up</button>
+        <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4" [class.loading]="saving">Sign up</button>
         <p class="f-3 text-center mt-4">By clicking "Sign up" I agree to the <a class="c-blue td-underline font-weight-bold">Terms</a> and <a class="c-blue td-underline font-weight-bold">Privacy</a></p>
       </form>
     </div>

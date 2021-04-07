@@ -10,6 +10,7 @@ import { ResetPasswordComponent } from '../../pages/reset-password/reset-passwor
 import { SharedModule } from '../shared/shared.module';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { environment } from 'src/environments/environment';
+import { StripeModule } from 'stripe-angular';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { environment } from 'src/environments/environment';
   imports: [
     CommonModule,
     SharedModule,
+    StripeModule.forRoot('pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2'),
     RouterModule.forChild(AuthLayoutRoutes)
   ],
   providers: [

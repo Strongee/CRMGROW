@@ -1,4 +1,10 @@
-import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  NgZone,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import {
   PHONE_COUNTRIES,
   TIMEZONE
@@ -15,6 +21,7 @@ import { Strings } from '../../constants/strings.constant';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { PhoneInputComponent } from 'src/app/components/phone-input/phone-input.component';
+import { StripeScriptTag, StripeCard } from 'stripe-angular';
 
 @Component({
   selector: 'app-register',
@@ -35,22 +42,13 @@ export class RegisterComponent implements OnInit {
     learn_more: '',
     cell_phone: '',
     phone: {},
-    picture_profile: '',
     time_zone_info: ''
   };
   password_type = false;
-  confirm_password = '';
-  payment = {
-    name: '',
-    number: '',
-    cvc: '',
-    exp_year: '',
-    exp_month: '',
-    last4: ''
-  };
-  cardNumberLen = 16;
   termsChecked = false;
 
+  submitted = false;
+  saving = false;
   existing = false;
   checkingUser = false;
   checkUserSubscription: Subscription;
@@ -63,33 +61,31 @@ export class RegisterComponent implements OnInit {
   isSocialUser = false;
   fullNameRequire = false;
 
-  creditCardInput = {
-    creditCard: true,
-    onCreditCardTypeChanged: (type) => {
-      switch (type) {
-        case 'amex':
-          this.cardNumberLen = 15;
-          break;
-        case 'visa':
-        case 'mastercard':
-        case 'jcb':
-        case 'discover':
-          this.cardNumberLen = 16;
-          break;
-        case 'diners':
-          this.cardNumberLen = 14;
-          break;
-        default:
-          this.cardNumberLen = 16;
-      }
-    }
+  token = '';
+  currentUser = null;
+
+  stripeOptions = {
+    classes: {
+      base: 'stripe-card form-control',
+      complete: '',
+      empty: '',
+      focus: '',
+      invalid: '',
+      webkitAutofill: ''
+    },
+    hidePostalCode: true,
+    hideIcon: false,
+    iconStyle: 'solid',
+    style: {},
+    value: {
+      postalCode: ''
+    },
+    disabled: false
   };
-  credCvcInput = {
-    numeral: true,
-    numeralThousandsGroupStyle: 'wan'
-  };
+  invalidError = 'require';
 
   @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
+  @ViewChild('stripeCard') card: StripeCard;
 
   constructor(
     private dialog: MatDialog,
@@ -98,8 +94,15 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private stripeScriptTag: StripeScriptTag
+  ) {
+    if (!this.stripeScriptTag.StripeInstance) {
+      this.stripeScriptTag.setPublishableKey(
+        'pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2'
+      );
+    }
+  }
 
   ngOnInit(): void {
     this.socialHandle();
@@ -188,17 +191,71 @@ export class RegisterComponent implements OnInit {
   }
 
   fillProfile(): void {
+    if (
+      this.user.learn_more == '' ||
+      this.user.phone == '' ||
+      this.user.time_zone_info == ''
+    ) {
+      return;
+    }
     if (!this.checkingPhone && this.phoneExisting) {
       return;
     }
     if (this.checkPhoneRequired() || !this.checkPhoneValid()) {
       return;
     }
+    if (this.invalidError != '') {
+      return;
+    } else {
+      this.card.createToken({}).then((res) => {
+        if (res) {
+          this.user['token'] = {
+            ...res,
+            card_name: res.card.brand
+          };
+          this.saving = true;
+          this.signUp();
+        } else {
+          this.invalidError = 'require';
+          return;
+        }
+      });
+    }
   }
 
-  changeLast4Code(): void {
-    const number = this.payment.number.replace(' ', '');
-    this.payment.last4 = number.substr(number.length - 4, 4);
+  cardInvalid(evt: any): void {
+    if (evt && evt?.type == 'validation_error') {
+      this.invalidError = 'invalid';
+    } else {
+      this.invalidError = '';
+    }
+  }
+
+  cardComplete(evt: any): void {
+    if (evt) {
+      this.invalidError = '';
+    } else {
+      this.invalidError = 'invalid';
+    }
+  }
+
+  signUp(): void {
+    if (this.isSocialUser) {
+    } else {
+      this.userService.signup(this.user).subscribe((res) => {
+        this.token = res['data']['token'];
+        this.currentUser = res['data']['user'];
+        if (this.token) {
+          this.saving = false;
+          this.toast.success('Sign Up has been successfully!');
+          this.userService.setToken(this.token);
+          this.userService.setUser(this.currentUser);
+          this.router.navigate(['/home']);
+        } else {
+          this.saving = false;
+        }
+      });
+    }
   }
 
   confirmEmail(): void {
@@ -237,6 +294,7 @@ export class RegisterComponent implements OnInit {
             this.checkingPhone = false;
             if (res['status']) {
               this.phoneExisting = false;
+              this.user.cell_phone = cell_phone;
             } else {
               this.phoneExisting = true;
             }
@@ -246,41 +304,6 @@ export class RegisterComponent implements OnInit {
           }
         );
     }
-  }
-
-  openProfilePhoto(): void {
-    this.helperService
-      .promptForFiles('image/jpg, image/png, image/jpeg, image/webp, image/bmp')
-      .then((files) => {
-        const file: File = files[0];
-        const type = file.type;
-        const validTypes = [
-          'image/jpg',
-          'image/png',
-          'image/jpeg',
-          'image/webp',
-          'image/bmp'
-        ];
-        if (validTypes.indexOf(type) === -1) {
-          this.toast.warning('Unsupported File Selected.');
-          return;
-        }
-        const imageEditor = this.dialog.open(AvatarEditorComponent, {
-          width: '98vw',
-          maxWidth: '400px',
-          data: {
-            fileInput: file
-          }
-        });
-        imageEditor.afterClosed().subscribe((res) => {
-          if (res) {
-            this.user.picture_profile = res;
-          }
-        });
-      })
-      .catch((err) => {
-        this.toast.error('File Select', err);
-      });
   }
 
   connectService(type): void {
