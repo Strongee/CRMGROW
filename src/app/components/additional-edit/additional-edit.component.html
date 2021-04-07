@@ -22,6 +22,22 @@
                 <app-input-tag [selectedTags]="contact.tags"></app-input-tag>
             </div>
         </div>
+        <div class="additional-fields">
+            <ng-container *ngFor="let field of additional_fields; let i = index;">
+                <div class="form-group">
+                    <label>{{field.name}}</label>
+                    <ng-container *ngIf="field.type === 'text'; else dropdownTemplate">
+                        <input type="text" class="form-control" [(ngModel)]="contact.additional_field[field.name]" name="{{'additionalField' + i}}" />
+                    </ng-container>
+                    <ng-template #dropdownTemplate>
+                        <select class="form-control" [(ngModel)]="contact.additional_field[field.name]" name="{{'additionalField' + i}}">
+                            <option value=""></option>
+                            <option *ngFor="let option of field.options" value="{{option.value}}">{{option.label}}</option>
+                        </select>
+                    </ng-template>
+                </div>
+            </ng-container>
+        </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button type="button" mat-dialog-close class="btn c-blue">Cancel</button>

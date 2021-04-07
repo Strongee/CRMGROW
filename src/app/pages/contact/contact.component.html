@@ -153,8 +153,20 @@
                 </span>
               </div>
             </div>
+            <ng-container *ngFor="let item of lead_fields">
+              <div class="d-flex py-2">
+                <span class="f-6 fw-600 op-40 info-title">{{item}}</span>
+                <span class="f-6">{{contact.additional_field ? contact.additional_field[item] : ''}}</span>
+              </div>
+            </ng-container>
+            <ng-container *ngFor="let item of contact.additional_field | keyvalue">
+              <div class="d-flex py-2" *ngIf="lead_fields.indexOf(item.key) === -1">
+                <span class="f-6 fw-600 op-40 info-title">{{item.key}}</span>
+                <span class="f-6">{{item.value}}</span>
+              </div>
+            </ng-container>
             <div class="mt-2">
-              <a class="c-blue fw-600 td-none c-pointer" (click)="addAdditionalFields()">Add additional fields</a>
+              <a class="c-blue fw-600 td-none c-pointer" (click)="addAdditionalFields()">Edit additional fields</a>
             </div>
           </div>
         </mat-expansion-panel>

@@ -30,6 +30,7 @@ export class Contact implements Deserializable {
   secondary_email: string;
   secondary_phone: string;
   response: string;
+  additional_field: any;
 
   deserialize(input: any): this {
     return Object.assign(this, input);

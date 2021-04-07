@@ -146,6 +146,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   loadContactSubscription: Subscription;
 
   routeChangeSubscription: Subscription;
+  garbageSubscription: Subscription;
+
+  lead_fields: any[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -219,6 +222,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
 
     this.handlerService.pageName.next('detail');
+    this.garbageSubscription = this.userService.garbage$.subscribe(
+      (_garbage) => {
+        this.lead_fields = _garbage.additional_fields.map((e) => e.name);
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -229,6 +237,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.teamSubscription && this.teamSubscription.unsubscribe();
     this.routeChangeSubscription && this.routeChangeSubscription.unsubscribe();
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
   }
 
   /**
@@ -1351,12 +1360,29 @@ export class ContactComponent implements OnInit, OnDestroy {
       .open(AdditionalFieldsComponent, {
         maxWidth: '480px',
         width: '96vw',
-        data: {}
+        disableClose: true,
+        data: {
+          additional_field: { ...this.contact.additional_field },
+          lead_fields: this.lead_fields
+        }
       })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
           // Save the additional fields
+          const original_additional_field = {
+            ...this.contact.additional_field
+          };
+          this.contact.additional_field = { ...res };
+          this.updateSubscription = this.contactService
+            .updateContact(this.contact._id, { additional_field: { ...res } })
+            .subscribe((res) => {
+              if (res) {
+                // Keep the value
+              } else {
+                this.contact.additional_field = original_additional_field;
+              }
+            });
         }
       });
   }
