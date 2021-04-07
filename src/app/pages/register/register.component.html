@@ -3,9 +3,8 @@
     <!-- Basic Profile Information Step -->
     <div class="mx-3 my-2" *ngSwitchCase="1">
       <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
-      <h4 class="text-center font-weight-bold mb-4">Sign Up!</h4>
-      <p class="f-3 text-center">Please complete your basic information <br/> for your account</p>
-      <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
+      <h4 class="text-center font-weight-bold mb-4">Welcome</h4>
+      <p class="f-3 text-center">Some text about the benefit you're about to receive.</p>
       <button type="button"
         class="v-center social-btn btn border-primary w-100 mt-4 font-weight-bold"
         (click)="connectService('gmail')"
@@ -25,6 +24,17 @@
         <span class="mx-3">or</span>
         <hr class="flex-grow-1"/>
       </div>
+      <form #registerForm="ngForm" (ngSubmit)="registerForm.form.valid ? gotoBasic() : false">
+        <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Sign up with email</button>
+      </form>
+    </div>
+    <!-- End Basic Profile Information Step -->
+
+    <!-- Main Profile Information Step -->
+    <div class="mx-3 my-2" *ngSwitchCase="2">
+      <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
+      <h4 class="text-center font-weight-bold mb-4">Create your account</h4>
+      <p class="f-3 text-center">Please complete basic information for your account.</p>
       <form #basicForm="ngForm" (ngSubmit)="basicForm.form.valid ? fillBasic() : false">
         <div class="form-group" [ngClass]="{invalid: basicForm.submitted && username.invalid && (username.dirty || username.touched || basicForm.submitted)}">
           <div class="d-flex">
@@ -33,21 +43,21 @@
               <ng-container *ngIf="username.errors.required">Required!</ng-container>
             </span>
           </div>
-          <input type="text" class="form-control" [(ngModel)]="user.user_name" name="username" id="username" required #username="ngModel"/>
+          <input type="text" placeholder="John Doe" class="form-control" [(ngModel)]="user.user_name" name="username" id="username" required #username="ngModel"/>
         </div>
         <div class="form-group email-form" [ngClass]="{invalid: basicForm.submitted && email.invalid && (email.dirty || email.touched || basicForm.submitted)}">
           <div class="d-flex">
-            <label for="email" class="mr-auto">Email</label>
+            <label for="email" class="mr-auto">E-mail</label>
             <span class="error" *ngIf="email.errors">
               <ng-container *ngIf="email.errors.required">Required!</ng-container>
               <ng-container *ngIf="email.errors.pattern">Wrong email format!</ng-container>
             </span>
             <span class="error d-inline-block" *ngIf="!checkingUser && existing">Email is already taken</span>
           </div>
-          <input type="email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" (ngModelChange)="confirmEmail()"/>
+          <input type="email" placeholder="Enter your email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" (ngModelChange)="confirmEmail()"/>
           <img class="check-spinner" src="../../../assets/img/spinner.gif" alt="" *ngIf="checkingUser">
         </div>
-        <div class="form-group" [ngClass]="{invalid: basicForm.submitted && password.invalid && (password.dirty || password.touched || basicForm.submitted)}">
+        <div class="position-relative form-group" [ngClass]="{invalid: basicForm.submitted && password.invalid && (password.dirty || password.touched || basicForm.submitted)}">
           <div class="d-flex">
             <label for="password" class="mr-auto">Password</label>
             <span class="error" *ngIf="password.errors">
@@ -55,34 +65,17 @@
               <ng-container *ngIf="password.errors.minlength">At least 6 characters!</ng-container>
             </span>
           </div>
-          <input type="password" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="6" #password="ngModel"/>
-        </div>
-        <div class="form-group" [ngClass]="{invalid: basicForm.submitted && ((confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched || basicForm.submitted)) || confirm_password != user.password)}">
-          <div class="d-flex">
-            <label for="confirmPassword" class="mr-auto">Confirm Password</label>
-            <span class="error" *ngIf="confirmPassword.errors; else misMatch">
-              <ng-container *ngIf="confirmPassword.errors.required">Confirm!</ng-container>
-              <ng-container *ngIf="confirmPassword.errors.minlength">At least 8 characters!</ng-container>
-            </span>
-            <ng-template #misMatch>
-              <span class="error" *ngIf="confirm_password != user.password">
-                No match!
-              </span>
-            </ng-template>
-          </div>
-          <input type="password" class="form-control" [(ngModel)]="confirm_password" name="confirmPassword" id="confirmPassword" required minlength="8" #confirmPassword="ngModel"/>
+          <input [type]="password_type ? 'text' : 'password'" placeholder="At least 6 characters" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="6" #password="ngModel"/>
+          <span class="f-3 c-blue password-type c-pointer" *ngIf="!password_type" (click)="password_type = !password_type">Show</span>
+          <span class="f-3 c-blue password-type c-pointer" *ngIf="password_type" (click)="password_type = !password_type">Hide</span>
         </div>
         <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Continue</button>
       </form>
     </div>
-    <!-- End Basic Profile Information Step -->
-
-    <!-- Main Profile Information Step -->
-    <div class="mx-3 my-2" *ngSwitchCase="2">
+    <div class="mx-3 my-2" *ngSwitchCase="3">
       <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
-      <h4 class="text-center font-weight-bold mb-4">Complete Profile</h4>
-      <p class="f-3 text-center">Please fill out the appropriate information <br/> for your account</p>
-      <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
+      <h4 class="text-center font-weight-bold mb-4">Create your account</h4>
+      <p class="f-3 text-center">Please complete basic information for your account.mat-dialog-actions</p>
       <form #profileForm="ngForm" (ngSubmit)="profileForm.form.valid ? fillProfile() : false" class="mt-4">
         <div class="form-group" [ngClass]="{invalid: profileForm.submitted && learnMore.invalid && (learnMore.dirty || learnMore.touched || profileForm.submitted)}">
           <div class="d-flex">
@@ -91,11 +84,11 @@
               <ng-container *ngIf="learnMore.errors.required">Required!</ng-container>
             </span>
           </div>
-          <input type="url" class="form-control" [(ngModel)]="user.learn_more" name="learnMore" id="learnMore" required #learnMore="ngModel"/>
+          <input type="url" placeholder="https://your-website.com" class="form-control" [(ngModel)]="user.learn_more" name="learnMore" id="learnMore" required #learnMore="ngModel"/>
         </div>
         <div class="form-group phone-form">
           <div class="d-flex">
-            <label for="phone" class="mr-auto">your cell number</label>
+            <label for="phone" class="mr-auto">cell number</label>
             <span class="error" [class.d-block]="profileForm.submitted">
               <ng-container *ngIf="checkPhoneRequired(); else wrongTemplate;">Required!</ng-container>
               <ng-template #wrongTemplate>
@@ -120,7 +113,7 @@
         </div>
         <div class="form-group" [ngClass]="{invalid: profileForm.submitted && timezone.invalid && (timezone.dirty || timezone.touched || profileForm.submitted)}">
           <div class="d-flex">
-            <label for="timezone" class="mr-auto">your time zone</label>
+            <label for="timezone" class="mr-auto">time zone</label>
             <span class="error" *ngIf="timezone.errors">
               <ng-container *ngIf="timezone.errors.required">Required!</ng-container>
             </span>
@@ -133,124 +126,33 @@
             </optgroup>
           </select>
         </div>
-        <div class="form-group">
-          <label>profile photo</label>
-          <div class="avatar-wrapper mx-auto">
-            <img [src]="user.picture_profile || '../../../assets/img/user_avatar.svg'" class="avatar"/>
-            <button type="button" class="bgc-blue btn rounded-circle btn-icon" (click)="openProfilePhoto()">
-              <i class="i-icon i-plus bg-white d-block"></i>
-            </button>
+        <div class="form-group mt-4" [ngClass]="{invalid: profileForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || profileForm.submitted)}">
+          <div class="d-flex justify-content-between">
+              <label for="card_number">card number</label>
+              <span class="error" *ngIf="cardnumber.errors">
+                  <ng-container *ngIf="cardnumber.errors.required">Required!</ng-container>
+                  <ng-container *ngIf="cardnumber.errors.minlength">Invalid!</ng-container>
+              </span>
           </div>
+          <input
+              type="text"
+              placeholder="eg. 1234 5678 9012 3456"
+              class="form-control"
+              [(ngModel)]="payment.number"
+              id="cardnumber"
+              name="cardnumber"
+              #cardnumber="ngModel"
+              required
+              minlength="{{cardNumberLen}}"
+              [cleave]="creditCardInput"
+              (ngModelChange)="changeLast4Code()"
+          >
         </div>
-        <div class="row mt-4">
-          <div class="col-6">
-            <button type="button" class="btn border-primary c-blue d-block font-weight-bold w-100" (click)="step = 1">Back</button>
-          </div>
-          <div class="col-6">
-            <button type="submit" class="btn btn-primary d-block flex-grow-1 font-weight-bold w-100">Next</button>
-          </div>
-        </div>
+        <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4">Sign up</button>
+        <p class="f-3 text-center mt-4">By clicking "Sign up" I agree to the <a class="c-blue td-underline font-weight-bold">Terms</a> and <a class="c-blue td-underline font-weight-bold">Privacy</a></p>
       </form>
     </div>
     <!-- End main Profile Information Step -->
-
-    <!-- Billing Information Step -->
-    <div class="mx-3 my-2" *ngSwitchCase="3">
-      <img class="logo" src="../../../assets/img/crmgrow-logo.svg">
-      <h4 class="text-center font-weight-bold mb-4">Billing Information</h4>
-      <p class="f-3 text-center">Please fill out the appropriate information <br/> for billing</p>
-      <p class="f-3 text-center">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>
-      <form #billForm="ngForm" (ngSubmit)="billForm.form.valid ? fillBilling() : false" class="mt-4">
-        <div class="form-group" [ngClass]="{invalid: billForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || billForm.submitted)}">
-          <label for="cardname">name on card</label>
-          <input type="text" class="form-control" [(ngModel)]="payment.name" name="cardname" id="cardname" required #cardname="ngModel"/>
-          <span class="error" *ngIf="cardname.errors">
-            <ng-container *ngIf="cardname.errors.required">Required!</ng-container>
-          </span>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="form-group" [ngClass]="{invalid: billForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || billForm.submitted)}">
-              <label for="cardnumber">card number</label>
-              <input type="text" class="form-control" [(ngModel)]="payment.number" name="cardnumber" id="cardnumber" required #cardnumber="ngModel" minlength="{{cardNumberLen}}" [cleave]="creditCardInput"/>
-              <span class="error" *ngIf="cardnumber.errors">
-                <ng-container *ngIf="cardnumber.errors.required">Required!</ng-container>
-                <ng-container *ngIf="cardnumber.errors.minlength">Invalid!</ng-container>
-              </span>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="form-group" [ngClass]="{invalid: billForm.submitted && cardcvc.invalid && (cardcvc.dirty || cardcvc.touched || billForm.submitted)}">
-              <label for="cardcvc">card cvc</label>
-              <input type="text" class="form-control" [(ngModel)]="payment.cvc" name="cardcvc" id="cardcvc" required #cardcvc="ngModel" minlength="3" maxlength="5" [cleave]="credCvcInput"/>
-              <span class="error" *ngIf="cardcvc.errors">
-                <ng-container *ngIf="cardcvc.errors.required">Required!</ng-container>
-                <ng-container *ngIf="cardcvc.errors.minlength || cardcvc.errors.maxlength">Invalid!</ng-container>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <div class="form-group" [ngClass]="{invalid: billForm.submitted && expmonth.invalid && (expmonth.dirty || expmonth.touched || billForm.submitted)}">
-              <label for="expmonth">exp month</label>
-              <select class="form-control f-5" [(ngModel)]="payment.exp_month" name="expmonth" id="expmonth" required #expmonth="ngModel">
-                <option value="" selected disabled>Select Month</option>
-                <option value="1">Jan</option>
-                <option value="2">Feb</option>
-                <option value="3">Mar</option>
-                <option value="4">Apr</option>
-                <option value="5">May</option>
-                <option value="6">Jun</option>
-                <option value="7">Jul</option>
-                <option value="8">Aug</option>
-                <option value="9">Sep</option>
-                <option value="10">Oct</option>
-                <option value="11">Nov</option>
-                <option value="12">Dec</option>
-              </select>
-              <span class="error" *ngIf="expmonth.errors">
-                <ng-container *ngIf="expmonth.errors.required">Required!</ng-container>
-              </span>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group" [ngClass]="{invalid: billForm.submitted && expyear.invalid && (expyear.dirty || expyear.touched || billForm.submitted)}">
-              <label for="expyear">exp year</label>
-              <select class="form-control f-5" [(ngModel)]="payment.exp_year" name="expyear" id="expyear" required #expyear="ngModel">
-                <option value="" selected disabled>Select Year</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
-              </select>
-              <span class="error" *ngIf="expyear.errors">
-                <ng-container *ngIf="expyear.errors.required">Required!</ng-container>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="terms" name="termsCheck" #termsCheck="ngModel" [(ngModel)]="termsChecked" required [ngClass]="{invalid: billForm.submitted && termsCheck.invalid && (termsCheck.dirty || termsCheck.touched || billForm.submitted)}">
-          <label class="custom-control-label f-3" for="terms">Please accept to our <a class="c-blue td-underline font-weight-bold">Terms of Service</a> and <a class="c-blue td-underline font-weight-bold">Privacy Policy</a></label>
-        </div>
-        <div class="row mt-4">
-          <div class="col-6">
-            <button type="button" class="btn border-primary c-blue d-block font-weight-bold w-100" (click)="step = 2">Back</button>
-          </div>
-          <div class="col-6">
-            <button type="submit" class="btn btn-primary d-block font-weight-bold w-100">Sign Up</button>
-          </div>
-        </div>
-      </form>
-    </div>
-    <!-- End Billing Information Step -->
   </ng-container>
 </div>
+<p class="f-3 text-center mt-4">Already have an account? <a class="font-weight-bold td-underline c-pointer" [routerLink]="['/login']">Sign In</a></p>

@@ -1,5 +1,8 @@
 import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
-import { PHONE_COUNTRIES, TIMEZONE } from 'src/app/constants/variable.constants';
+import {
+  PHONE_COUNTRIES,
+  TIMEZONE
+} from 'src/app/constants/variable.constants';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { MatDialog } from '@angular/material/dialog';
 import { HelperService } from '../../services/helper.service';
@@ -35,13 +38,15 @@ export class RegisterComponent implements OnInit {
     picture_profile: '',
     time_zone_info: ''
   };
+  password_type = false;
   confirm_password = '';
   payment = {
     name: '',
     number: '',
     cvc: '',
     exp_year: '',
-    exp_month: ''
+    exp_month: '',
+    last4: ''
   };
   cardNumberLen = 16;
   termsChecked = false;
@@ -170,12 +175,16 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  gotoBasic(): void {
+    this.step = 2;
+  }
+
   fillBasic(): any {
     if (!this.checkingUser && this.existing) {
       return;
     }
 
-    this.step = 2;
+    this.step = 3;
   }
 
   fillProfile(): void {
@@ -185,12 +194,11 @@ export class RegisterComponent implements OnInit {
     if (this.checkPhoneRequired() || !this.checkPhoneValid()) {
       return;
     }
-
-    this.step = 3;
   }
 
-  fillBilling(): void {
-    // Billing Information confirm and Register
+  changeLast4Code(): void {
+    const number = this.payment.number.replace(' ', '');
+    this.payment.last4 = number.substr(number.length - 4, 4);
   }
 
   confirmEmail(): void {
