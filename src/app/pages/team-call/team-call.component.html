@@ -32,402 +32,479 @@
         </ng-container>
       </ul>
     </div>
-    <div class="sub-container">
+    <div class="sub-container position-relative">
       <ng-container *ngIf="total[selectedTab.id]; else emptyTable">
         <div class="updating-status"
-          *ngIf="loading[selectedTab.id]; else listTemplate">
+          *ngIf="loading[selectedTab.id]">
           LOADING
         </div>
-        <ng-template #listTemplate>
-          <table class="table has-sticky-header">
-            <thead>
-              <ng-container [ngSwitch]="selectedTab.id">
-                <tr *ngSwitchCase="'inquiry'">
-                  <th class="subject">subject</th>
-                  <th class="organizer">organizer</th>
-                  <th class="date-time">proposed times</th>
-                  <th class="call-status">status</th>
-                  <th class="team-actions"></th>
-                </tr>
-                <tr *ngSwitchCase="'sent'">
-                  <th class="subject">subject</th>
-                  <th class="organizer">leader</th>
-                  <th class="date-time">proposed times</th>
-                  <th class="call-status">status</th>
-                  <th class="team-actions"></th>
-                </tr>
-                <tr *ngSwitchCase="'scheduled'">
-                  <th class="subject">subject</th>
-                  <th class="organizer">organizer</th>
-                  <th class="leader">leader</th>
-                  <th class="date-time">date & time</th>
-                  <th class="call-status">status</th>
-                  <th class="team-actions"></th>
-                </tr>
-                <tr *ngSwitchCase="'completed'">
-                  <th class="subject">subject</th>
-                  <th class="organizer">organizer</th>
-                  <th class="leader">leader</th>
-                  <th class="date-time">date & time</th>
-                  <th class="call-status">status</th>
-                  <th class="team-actions"></th>
-                </tr>
-                <tr *ngSwitchCase="'canceled'">
-                  <th class="subject">subject</th>
-                  <th class="organizer">organizer</th>
-                  <th class="leader">leader</th>
-                  <th class="date-time">date & time</th>
-                  <th class="call-status">status</th>
-                  <th class="team-actions"></th>
-                </tr>
-                <tr *ngSwitchCase="'denied'">
-                  <th class="subject">subject</th>
-                  <th class="organizer">organizer</th>
-                  <th class="leader">leader</th>
-                  <th class="date-time">date & time</th>
-                  <th class="call-status">status</th>
-                  <th class="team-actions"></th>
-                </tr>
-              </ng-container>
-            </thead>
-            <tbody>
-              <tr *ngFor="let call of pageData[selectedTab.id] | paginate: {id: selectedTab.id + 'CallPages', itemsPerPage: pageSize.id, currentPage: page[selectedTab.id], totalItems: total[selectedTab.id]}">
-                <ng-container [ngSwitch]="selectedTab.id">
-                  <ng-container *ngSwitchCase="'inquiry'">
-                    <td class="subject" (click)="openCall(call)">
-                      <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
-                      <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
-                    </td>
-                    <td class="organizer" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.user.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.user.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="date-time" (click)="openCall(call)">
-                      <div class="" *ngFor="let time of (call.proposed_at | slice:0:2)">
-                        {{time | date: 'MMM dd yyyy, hh:mm a'}}
-                      </div>
-                      <div class="op-75" *ngIf="call.proposed_at.length > 2">
-                        + {{call.proposed_at.length - 2}} more options
-                      </div>
-                    </td>
-                    <td class="call-status">
-                      Needs review
-                    </td>
-                    <td class="team-actions">
-                      <div class="v-center">
-                        <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold ml-auto" (click)="openCall(call)">Review</button>
-                        <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                          <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                            <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                          </a>
-                          <div ngbDropdownMenu class="light py-1">
-                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="addToCalendar(call)">
-                              <i class="i-icon i-calendar bg-dark sm ml-1" aria-hidden="true"></i>
-                              <span class="ml-3 f-3 font-weight-bold">Add to calendar</span>
-                            </button>
-                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="decline(call)">
-                              <i class="i-icon i-trash bg-dark ml-1 sm" aria-hidden="true"></i>
-                              <span class="ml-3 f-3 font-weight-bold">Decline</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'sent'">
-                    <td class="subject" (click)="openCall(call)">
-                      <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
-                      <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
-                    </td>
-                    <td class="organizer" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.leader.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.leader.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="date-time" (click)="openCall(call)">
-                      <div class="" *ngFor="let time of (call.proposed_at | slice:0:2)">
-                        {{time | date: 'MMM dd yyyy, hh:mm a'}}
-                      </div>
-                      <div class="op-75" *ngIf="call.proposed_at.length > 2">
-                        + {{call.proposed_at.length - 2}} more options
-                      </div>
-                    </td>
-                    <td class="call-status" (click)="openCall(call)">
-                      Pending review
-                    </td>
-                    <td class="team-actions">
-                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                        </a>
-                        <div ngbDropdownMenu class="light py-1">
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="edit(call)">
-                            <i class="i-icon i-edit bg-dark sm ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-3 font-weight-bold">Edit</span>
-                          </button>
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                            <i class="i-icon i-trash sm bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-3 font-weight-bold">Delete</span>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'scheduled'">
-                    <td class="subject" (click)="openCall(call)">
-                      <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
-                      <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
-                    </td>
-                    <td class="organizer" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.user.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.user.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="leader" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.leader.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.leader.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="date-time" (click)="openCall(call)">
-                      <div class="">
-                        {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
-                      </div>
-                    </td>
-                    <td class="call-status" (click)="openCall(call)">
-                      Scheduled
-                    </td>
-                    <td class="team-actions">
-                      <div class="v-center">
-                        <button type="button" class="btn bgc-green text-white ml-auto f-3 py-2 font-weight-bold" (click)="openCall(call)">Complete</button>
-                        <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                          <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                            <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                          </a>
-                          <div ngbDropdownMenu class="light py-1">
-                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="complete(call)">
-                              <i class="i-icon i-check bg-dark sm ml-1" aria-hidden="true"></i>
-                              <span class="ml-3 f-3 font-weight-bold">Complete</span>
-                            </button>
-                            <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="cancel(call)">
-                              <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                              <span class="ml-3 f-3 font-weight-bold">Cancel</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'completed'">
-                    <td class="subject" (click)="openCall(call)">
-                      <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
-                      <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
-                    </td>
-                    <td class="organizer" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.user.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.user.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="leader" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.leader.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.leader.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="date-time" (click)="openCall(call)">
-                      {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
-                    </td>
-                    <td class="call-status" (click)="openCall(call)">
-                      Completed
-                    </td>
-                    <td class="team-actions">
-                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                        </a>
-                        <div ngbDropdownMenu class="light py-1">
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                            <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4 font-weight-bold">Delete</span>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'canceled'">
-                    <td class="subject" (click)="openCall(call)">
-                      <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
-                      <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
-                    </td>
-                    <td class="organizer" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.user.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.user.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="leader" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.leader.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.leader.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="date-time" (click)="openCall(call)">
-                      {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
-                    </td>
-                    <td class="call-status" (click)="openCall(call)">
-                      Canceled
-                    </td>
-                    <td class="team-actions">
-                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                        </a>
-                        <div ngbDropdownMenu class="light py-1">
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                            <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4 font-weight-bold">Delete</span>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'denied'">
-                    <td class="subject" (click)="openCall(call)">
-                      <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
-                      <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
-                    </td>
-                    <td class="organizer" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.user.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.user.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="leader" (click)="openCall(call)">
-                      <div class="v-center">
-                        <div class="member-avatar">
-                          <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
-                            <img [src]="call.leader.picture_profile" class="avatar" />
-                          </ng-container>
-                          <ng-template #userProfilePlaceholder>
-                            <div class="name-avatar">
-                              {{call.leader.user_name[0]}}
-                            </div>
-                          </ng-template>
-                        </div>
-                        <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
-                      </div>
-                    </td>
-                    <td class="date-time" (click)="openCall(call)">
-                      {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
-                    </td>
-                    <td class="call-status" (click)="openCall(call)">
-                      Declined
-                    </td>
-                    <td class="team-actions">
-                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                        </a>
-                        <div ngbDropdownMenu class="light py-1">
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                            <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-4 font-weight-bold">Delete</span>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                  </ng-container>
-                </ng-container>
+<!--          <ng-container [ngSwitch]="selectedTab.id">-->
+<!--            <ng-container *ngSwitchCase="'inquiry'">-->
+<!--              <table-->
+<!--                mat-table-->
+<!--                class="table call-table page-table" multiTemplateDataRows-->
+<!--                [dataSource]="pageData[selectedTab.id] | paginate: {id: selectedTab.id + 'CallPages', itemsPerPage: pageSize.id, currentPage: page[selectedTab.id], totalItems: total[selectedTab.id]}">-->
+<!--                <ng-container matColumnDef="subject">-->
+<!--                  <th mat-header-cell *matHeaderCellDef class="subject">Subject</th>-->
+<!--                  <td mat-cell *matCellDef="let inquiry" class="subject" (click)="openCall(inquiry)">-->
+<!--                    <div class="c-blue f-3 font-weight-bold">{{inquiry.subject}}</div>-->
+<!--                    <div class="c-dark opacity-6 f-3">{{inquiry.description || '' | stripTags | shorten: 40: '...'}}</div>-->
+<!--                  </td>-->
+<!--                </ng-container>-->
+<!--                <ng-container matColumnDef="organizer">-->
+<!--                  <th mat-header-cell *matHeaderCellDef class="organizer">organizer</th>-->
+<!--                  <td mat-cell *matCellDef="let inquiry" class="organizer" (click)="openCall(inquiry)">-->
+<!--                    <div class="v-center">-->
+<!--                      <div class="member-avatar">-->
+<!--                        <ng-container *ngIf="inquiry.user.picture_profile; else userProfilePlaceholder">-->
+<!--                          <img [src]="inquiry.user.picture_profile" class="avatar" />-->
+<!--                        </ng-container>-->
+<!--                        <ng-template #userProfilePlaceholder>-->
+<!--                          <div class="name-avatar">-->
+<!--                            {{inquiry.user.user_name[0]}}-->
+<!--                          </div>-->
+<!--                        </ng-template>-->
+<!--                      </div>-->
+<!--                      <div class="f-3 ml-2 member-name">{{inquiry.user.user_name}}</div>-->
+<!--                    </div>-->
+<!--                  </td>-->
+<!--                </ng-container>-->
+<!--                <ng-container matColumnDef="date-time">-->
+<!--                  <th mat-header-cell *matHeaderCellDef class="date-time">proposed times</th>-->
+<!--                  <td mat-cell *matCellDef="let inquiry" class="date-time" (click)="openCall(inquiry)">-->
+<!--                    <div class="" *ngFor="let time of (inquiry.proposed_at | slice:0:2)">-->
+<!--                      {{time | date: 'MMM dd yyyy, hh:mm a'}}-->
+<!--                    </div>-->
+<!--                    <div class="op-75" *ngIf="inquiry.proposed_at.length > 2">-->
+<!--                      + {{inquiry.proposed_at.length - 2}} more options-->
+<!--                    </div>-->
+<!--                  </td>-->
+<!--                </ng-container>-->
+<!--                <ng-container matColumnDef="call-status">-->
+<!--                  <th mat-header-cell *matHeaderCellDef class="call-status">status</th>-->
+<!--                  <td mat-cell *matCellDef="let inquiry" class="call-status">-->
+<!--                    Needs review-->
+<!--                  </td>-->
+<!--                </ng-container>-->
+<!--                <ng-container matColumnDef="team-actions">-->
+<!--                  <th mat-header-cell *matHeaderCellDef class="team-actions"></th>-->
+<!--                  <td mat-cell *matCellDef="let inquiry" class="team-actions">-->
+<!--                    <div class="v-center">-->
+<!--                      <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold ml-auto" (click)="openCall(inquiry)">Review</button>-->
+<!--                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">-->
+<!--                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>-->
+<!--                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>-->
+<!--                        </a>-->
+<!--                        <div ngbDropdownMenu class="light py-1">-->
+<!--                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="addToCalendar(inquiry)">-->
+<!--                            <i class="i-icon i-calendar bg-dark sm ml-1" aria-hidden="true"></i>-->
+<!--                            <span class="ml-3 f-3 font-weight-bold">Add to calendar</span>-->
+<!--                          </button>-->
+<!--                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="decline(inquiry)">-->
+<!--                            <i class="i-icon i-trash bg-dark ml-1 sm" aria-hidden="true"></i>-->
+<!--                            <span class="ml-3 f-3 font-weight-bold">Decline</span>-->
+<!--                          </button>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </td>-->
+<!--                </ng-container>-->
+<!--                <tr mat-header-row *matHeaderRowDef="DISPLAY_INQUIRY_COLUMNS"></tr>-->
+<!--                <tr mat-row *matRowDef="let element; columns: DISPLAY_INQUIRY_COLUMNS;"-->
+<!--                    class="example-element-row"-->
+<!--                >-->
+<!--                </tr>-->
+<!--              </table>-->
+<!--            </ng-container>-->
+<!--          </ng-container>-->
+        <table class="table has-sticky-header">
+          <thead>
+            <ng-container [ngSwitch]="selectedTab.id">
+              <tr *ngSwitchCase="'inquiry'">
+                <th class="subject">subject</th>
+                <th class="organizer">organizer</th>
+                <th class="date-time">proposed times</th>
+                <th class="call-status">status</th>
+                <th class="team-actions"></th>
               </tr>
-            </tbody>
-          </table>
-        </ng-template>
+              <tr *ngSwitchCase="'sent'">
+                <th class="subject">subject</th>
+                <th class="organizer">leader</th>
+                <th class="date-time">proposed times</th>
+                <th class="call-status">status</th>
+                <th class="team-actions"></th>
+              </tr>
+              <tr *ngSwitchCase="'scheduled'">
+                <th class="subject">subject</th>
+                <th class="organizer">organizer</th>
+                <th class="leader">leader</th>
+                <th class="date-time">date & time</th>
+                <th class="call-status">status</th>
+                <th class="team-actions"></th>
+              </tr>
+              <tr *ngSwitchCase="'completed'">
+                <th class="subject">subject</th>
+                <th class="organizer">organizer</th>
+                <th class="leader">leader</th>
+                <th class="date-time">date & time</th>
+                <th class="call-status">status</th>
+                <th class="team-actions"></th>
+              </tr>
+              <tr *ngSwitchCase="'canceled'">
+                <th class="subject">subject</th>
+                <th class="organizer">organizer</th>
+                <th class="leader">leader</th>
+                <th class="date-time">date & time</th>
+                <th class="call-status">status</th>
+                <th class="team-actions"></th>
+              </tr>
+              <tr *ngSwitchCase="'denied'">
+                <th class="subject">subject</th>
+                <th class="organizer">organizer</th>
+                <th class="leader">leader</th>
+                <th class="date-time">date & time</th>
+                <th class="call-status">status</th>
+                <th class="team-actions"></th>
+              </tr>
+            </ng-container>
+          </thead>
+          <tbody>
+            <tr *ngFor="let call of pageData[selectedTab.id] | paginate: {id: selectedTab.id + 'CallPages', itemsPerPage: pageSize.id, currentPage: page[selectedTab.id], totalItems: total[selectedTab.id]}">
+              <ng-container [ngSwitch]="selectedTab.id">
+                <ng-container *ngSwitchCase="'inquiry'">
+                  <td class="subject c-pointer" (click)="openCall(call)">
+                    <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
+                    <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.user.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.user.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="date-time c-pointer" (click)="openCall(call)">
+                    <div class="" *ngFor="let time of (call.proposed_at | slice:0:2)">
+                      {{time | date: 'MMM dd yyyy, hh:mm a'}}
+                    </div>
+                    <div class="op-75" *ngIf="call.proposed_at.length > 2">
+                      + {{call.proposed_at.length - 2}} more options
+                    </div>
+                  </td>
+                  <td class="call-status c-pointer">
+                    Needs review
+                  </td>
+                  <td class="team-actions">
+                    <div class="v-center">
+                      <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold ml-auto" (click)="openCall(call)">Review</button>
+                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
+                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                        </a>
+                        <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="addToCalendar(call)">
+                            <i class="i-icon i-calendar bg-dark sm ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-3 font-weight-bold">Add to calendar</span>
+                          </button>
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="decline(call)">
+                            <i class="i-icon i-trash bg-dark ml-1 sm" aria-hidden="true"></i>
+                            <span class="ml-3 f-3 font-weight-bold">Decline</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container *ngSwitchCase="'sent'">
+                  <td class="subject c-pointer" (click)="openCall(call)">
+                    <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
+                    <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.leader.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.leader.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="date-time c-pointer" (click)="openCall(call)">
+                    <div class="" *ngFor="let time of (call.proposed_at | slice:0:2)">
+                      {{time | date: 'MMM dd yyyy, hh:mm a'}}
+                    </div>
+                    <div class="op-75" *ngIf="call.proposed_at.length > 2">
+                      + {{call.proposed_at.length - 2}} more options
+                    </div>
+                  </td>
+                  <td class="call-status c-pointer" (click)="openCall(call)">
+                    Pending review
+                  </td>
+                  <td class="team-actions">
+                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
+                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="edit(call)">
+                          <i class="i-icon i-edit bg-dark sm ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                        </button>
+                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
+                          <i class="i-icon i-trash sm bg-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-3 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container *ngSwitchCase="'scheduled'">
+                  <td class="subject c-pointer" (click)="openCall(call)">
+                    <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
+                    <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.user.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.user.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="leader c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.leader.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.leader.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="date-time c-pointer" (click)="openCall(call)">
+                    <div class="">
+                      {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
+                    </div>
+                  </td>
+                  <td class="call-status c-pointer" (click)="openCall(call)">
+                    Scheduled
+                  </td>
+                  <td class="team-actions">
+                    <div class="v-center">
+                      <button type="button" class="btn bgc-green text-white ml-auto f-3 py-2 font-weight-bold" (click)="openCall(call)">Complete</button>
+                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
+                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                        </a>
+                        <div ngbDropdownMenu class="light py-1">
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="complete(call)">
+                            <i class="i-icon i-check bg-dark sm ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-3 font-weight-bold">Complete</span>
+                          </button>
+                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="cancel(call)">
+                            <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                            <span class="ml-3 f-3 font-weight-bold">Cancel</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container *ngSwitchCase="'completed'">
+                  <td class="subject c-pointer" (click)="openCall(call)">
+                    <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
+                    <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.user.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.user.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="leader c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.leader.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.leader.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="date-time c-pointer" (click)="openCall(call)">
+                    {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
+                  </td>
+                  <td class="call-status c-pointer" (click)="openCall(call)">
+                    Completed
+                  </td>
+                  <td class="team-actions">
+                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
+                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
+                          <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-4 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container *ngSwitchCase="'canceled'">
+                  <td class="subject c-pointer" (click)="openCall(call)">
+                    <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
+                    <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.user.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.user.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="leader c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.leader.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.leader.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="date-time c-pointer" (click)="openCall(call)">
+                    {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
+                  </td>
+                  <td class="call-status" (click)="openCall(call)">
+                    Canceled
+                  </td>
+                  <td class="team-actions">
+                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
+                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
+                          <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-4 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container *ngSwitchCase="'denied'">
+                  <td class="subject c-pointer" (click)="openCall(call)">
+                    <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
+                    <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.user.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.user.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="leader c-pointer" (click)="openCall(call)">
+                    <div class="v-center">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
+                          <img [src]="call.leader.picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #userProfilePlaceholder>
+                          <div class="name-avatar">
+                            {{call.leader.user_name[0]}}
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="date-time c-pointer" (click)="openCall(call)">
+                    {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
+                  </td>
+                  <td class="call-status" (click)="openCall(call)">
+                    Declined
+                  </td>
+                  <td class="team-actions">
+                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
+                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
+                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
+                      </a>
+                      <div ngbDropdownMenu class="light py-1">
+                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
+                          <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-4 font-weight-bold">Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
         <div class="my-2 table-control mode-1 py-3">
           <div class="pagination-wrapper m-auto">
             <pagination-controls

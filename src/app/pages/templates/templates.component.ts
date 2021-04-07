@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
+import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 
 @Component({
   selector: 'app-templates',
@@ -176,6 +177,17 @@ export class TemplatesComponent implements OnInit, OnDestroy {
       console.log(res);
       if (res) {
         this.templatesService.delete(template._id);
+      }
+    });
+  }
+
+  shareTemplate(template: Template): void {
+    this.dialog.open(TeamMaterialShareComponent, {
+      width: '98vw',
+      maxWidth: '450px',
+      data: {
+        template: template,
+        type: 'template'
       }
     });
   }

@@ -37,7 +37,6 @@
   }
 
   .custom-mat-table {
-    max-height: calc(65vh - 200px);
     min-height: calc(65vh - 200px);
     overflow: auto;
 
@@ -64,7 +63,7 @@
 
   .selected-templates-wrapper {
     max-height: 200px;
-    min-height: 80px;
+    min-height: 110px;
     overflow: auto;
 
     .table td {

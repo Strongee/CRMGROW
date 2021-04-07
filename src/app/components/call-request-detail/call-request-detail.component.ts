@@ -42,6 +42,8 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   declining = false;
   completing = false;
 
+  customDateTimes = [];
+
   profileSubscription: Subscription;
 
   constructor(
@@ -75,6 +77,12 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       month: current.getMonth() + 1,
       day: current.getDate()
     };
+
+    this.customDateTimes.push({
+      id: Date.now(),
+      date: this.MIN_DATE,
+      time: '15:00:00.000'
+    });
   }
 
   ngOnInit(): void {
@@ -216,11 +224,12 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   accept(): void {
     let callTime;
     if (this.selectedTime === 'custom') {
-      callTime = this.customDate + this.customTime;
       if (this.userTimezone.tz_name) {
-        const dateStr = `${this.customDate.year}-${numPad(
-          this.customDate.month
-        )}-${numPad(this.customDate.day)} ${this.customTime}`;
+        const dateStr = `${this.customDateTimes[0].date.year}-${numPad(
+          this.customDateTimes[0].date.month
+        )}-${numPad(this.customDateTimes[0].date.day)} ${
+          this.customDateTimes[0].time
+        }`;
         callTime = moment.tz(dateStr, this.userTimezone.tz_name).format();
       } else {
         callTime = `${this.customDate.year}-${numPad(
@@ -294,7 +303,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       maxWidth: '600px',
       maxHeight: '700px',
       data: {
-        contacts: contacts
+        contacts
       }
     });
   }
@@ -359,5 +368,23 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  removeCustomDateTime(dateTime): void {
+    if (this.customDateTimes.length < 2) {
+      return;
+    }
+    const index = this.customDateTimes.findIndex(
+      (item) => item.id === dateTime.id
+    );
+    this.customDateTimes.splice(index, 1);
+  }
+
+  addCustomDateTime(): void {
+    this.customDateTimes.push({
+      id: Date.now(),
+      date: this.MIN_DATE,
+      time: '15:00:00.000'
+    });
   }
 }

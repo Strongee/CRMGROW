@@ -48,13 +48,13 @@
       <label>Address</label>
       <div class="v-center">
         <i class="i-icon i-contact-location bgc-dark mr-2"></i>
-        <span class="f-6">{{contact.fullAddress}}</span>
+        <span class="f-3">{{contact.fullAddress}}</span>
       </div>
     </div>
     <div class="mt-1">
       <div class="v-center py-1">
         <i class="i-icon i-webpage bgc-dark mr-2"></i>
-        <span class="f-6">{{contact.website}}</span>
+        <span class="f-3">{{contact.website}}</span>
       </div>
     </div>
     <mat-accordion multi class="general-panels">
@@ -63,25 +63,25 @@
           <mat-panel-title>
             <div class="v-center w-100">
               <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
-              <span class="f-6 font-weight-bold ml-2">Additional information</span>
+              <span class="f-5 font-weight-bold ml-2">Additional information</span>
             </div>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div class="row">
+        <div class="row form-group">
           <div class="col-md-6 col-sm-12">
-            <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40 info-title">Source</span>
-              <span class="f-6">{{contact.source}}</span>
+            <div class="v-center py-1">
+              <label class="mb-0">Source</label>
+              <span class="f-3 ml-2">{{contact.source}}</span>
             </div>
-            <div class="v-center py-2">
-              <span class="f-6 fw-600 op-40 info-title">Current Company</span>
-              <span class="f-6">{{contact.brokerage}}</span>
+            <div class="v-center py-1">
+              <label class="mb-0">Current Company</label>
+              <span class="f-3 ml-2">{{contact.brokerage}}</span>
             </div>
           </div>
           <div class="col-md-6 col-sm-12">
-            <div class="d-flex py-2">
-              <span class="f-6 fw-600 op-40 info-title">Tags</span>
-              <div class="f-3 tags-wrapper flex-grow-1">
+            <div class="d-flex py-1">
+              <label>Tags</label>
+              <div class="f-3 tags-wrapper ml-2 flex-grow-1">
                 <!-- <app-input-tag [selectedTags]="contact.tags"></app-input-tag> -->
                 <span *ngFor="let tag of contact.tags" class="tag-el">
                   {{tag}}
@@ -97,7 +97,7 @@
             <mat-panel-title>
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
-                <span class="f-6 font-weight-bold ml-2">Notes ({{noteTimeLines.length}})</span>
+                <span class="f-5 font-weight-bold ml-2">Notes ({{noteTimeLines.length}})</span>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -108,7 +108,7 @@
                     <div class="v-center justify-content-between mb-3">
                       <div class="v-center">
                         <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                        <div class="f-6">
+                        <div class="f-5">
                           <span>{{activity.content}}</span>
                         </div>
                       </div>
@@ -120,7 +120,7 @@
                       <div class="main-history-item">
                         <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail.content">
                           <ng-template #show>
-                            <div class="content f-6 position-relative">
+                            <div class="content f-5 position-relative">
                               <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
                               <div class="gradient-bottom"></div>
                               <div class="f-3 fw-600 c-blue mt-1">
@@ -130,7 +130,7 @@
                           </ng-template>
                           <ng-template #hide>
                             <div class="content">
-                              <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
+                              <div class="f-5 note-content opened">{{activity.activity_detail.content}}</div>
                               <div class="f-3 fw-600 c-blue mt-1">
                                 Collapse
                               </div>
@@ -161,7 +161,7 @@
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
                       <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                      <div class="f-6">
+                      <div class="f-5">
                         <span>{{activity.content}}</span>
                       </div>
                     </div>
@@ -173,7 +173,7 @@
                     <div class="main-history-item">
                       <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail.content">
                         <ng-template #show>
-                          <div class="content f-6 position-relative">
+                          <div class="content f-5 position-relative">
                             <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
@@ -183,7 +183,7 @@
                         </ng-template>
                         <ng-template #hide>
                           <div class="content">
-                            <div class="f-6 note-content opened">{{activity.activity_detail.content}}</div>
+                            <div class="f-5 note-content opened">{{activity.activity_detail.content}}</div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
@@ -214,7 +214,7 @@
             <mat-panel-title>
               <div class="v-center w-100">
                 <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
-                <span class="f-6 font-weight-bold ml-2">TimeLines</span>
+                <span class="f-5 font-weight-bold ml-2">TimeLines</span>
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -225,7 +225,7 @@
                 <div class="v-center justify-content-between">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -240,7 +240,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -260,7 +260,7 @@
                           <i class="i-icon i-check bgc-white"></i>
                         </div>
                       </ng-template>
-                      <div class="f-6 font-weight-bold ml-3 content">
+                      <div class="f-5 font-weight-bold ml-3 content">
                         {{activity.activity_detail.content}}
                       </div>
                     </div>
@@ -330,7 +330,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -342,35 +342,35 @@
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.emails]?.subject}}
                         </div>
-                        <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
+                        <div class="f-5 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.emails]?.subject}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                        <div class="f-5" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                       </div>
                     </ng-container>
                     <ng-template #multiEmailHistory>
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.emails]?.subject}}
                         </div>
-                        <div class="f-6 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
+                        <div class="f-5 detail-content" [innerHTML]="convertContent(details[activity.emails]?.content)"></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.emails]?.subject}}
                         </div>
-                        <div class="f-6 mb-2" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
+                        <div class="f-5 mb-2" [innerHTML]="details[activity.emails]?.content || 'No Content'"></div>
                         <table class="table">
                           <thead>
                           <tr>
@@ -406,7 +406,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -415,35 +415,35 @@
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiVideoHistory">
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.videos]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                        <div class="f-5" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.videos]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.videos]?.description || ''"></div>
+                        <div class="f-5" [innerHTML]="details[activity.videos]?.description || ''"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                       </div>
                     </ng-container>
                     <ng-template #multiVideoHistory>
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.videos]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                        <div class="f-5" [innerHTML]="details[activity.videos]?.description || '' | stripTags | shorten: 300: '...' "></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.videos]?.title}}
                         </div>
-                        <div class="f-6 mb-2" [innerHTML]="details[activity.videos]?.description || ''"></div>
+                        <div class="f-5 mb-2" [innerHTML]="details[activity.videos]?.description || ''"></div>
                         <table class="table">
                           <thead>
                           <tr>
@@ -479,7 +479,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -488,35 +488,35 @@
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiPdfHistory">
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.pdfs]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                        <div class="f-5" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.pdfs]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || ''"></div>
+                        <div class="f-5" [innerHTML]="details[activity.pdfs]?.description || ''"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                       </div>
                     </ng-container>
                     <ng-template #multiPdfHistory>
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.pdfs]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                        <div class="f-5" [innerHTML]="details[activity.pdfs]?.description || '' | stripTags | shorten: 300: '...' "></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.pdfs]?.title}}
                         </div>
-                        <div class="f-6 mb-2" [innerHTML]="details[activity.pdfs]?.description || ''"></div>
+                        <div class="f-5 mb-2" [innerHTML]="details[activity.pdfs]?.description || ''"></div>
                         <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                           <div class="d-flex mb-1">
                             <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
@@ -536,7 +536,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -546,35 +546,35 @@
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiImageHistory">
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.images]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
+                        <div class="f-5" [innerHTML]="details[activity.images]?.description || 'No Content' | stripTags | shorten: 300: '...' "></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.images]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
+                        <div class="f-5" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="hideDetail($event)">Collapse</div>
                       </div>
                     </ng-container>
                     <ng-template #multiImageHistory>
                       <div class="summary position-relative">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.images]?.title}}
                         </div>
-                        <div class="f-6" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
+                        <div class="f-5" [innerHTML]="details[activity.images]?.description || '' | stripTags | shorten: 300: '...' "></div>
                         <div class="gradient-bottom"></div>
                         <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
                       </div>
                       <div class="detail">
-                        <div class="title f-6 font-weight-bold">
+                        <div class="title f-5 font-weight-bold">
                           {{details[activity.images]?.title}}
                         </div>
-                        <div class="f-6 mb-2" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
+                        <div class="f-5 mb-2" [innerHTML]="details[activity.images]?.description || 'No Content'"></div>
                         <ng-container *ngFor="let detailActivity of groupActions[activity.group_id]; let i = index;">
                           <div class="d-flex mb-1">
                             <div class="mr-2 font-weight-bold"># {{groupActions[activity.group_id].length - i}}</div>
@@ -594,7 +594,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -617,11 +617,11 @@
                   <div class="main-history-item">
                     <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                       <ng-template #show>
-                        <div class="content f-6 position-relative">
+                        <div class="content f-5 position-relative">
                           <div class="font-weight-bold">
                             {{activity.activity_detail.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
                           <div class="gradient-bottom"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Expand
@@ -630,10 +630,10 @@
                       </ng-template>
                       <ng-template #hide>
                         <div class="content">
-                          <div class="f-6 font-weight-bold">
+                          <div class="f-5 font-weight-bold">
                             {{activity.activity_detail.title}}
                           </div>
-                          <div class="f-6" [innerHTML]="activity.activity_detail.description || ''"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail.description || ''"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Collapse
                           </div>
@@ -692,7 +692,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -715,7 +715,7 @@
                   <div class="main-history-item">
                     <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                       <ng-template #show>
-                        <div class="content f-6 position-relative">
+                        <div class="content f-5 position-relative">
                           <div class="font-weight-bold">
                             {{activity.activity_detail.subject}}
                           </div>
@@ -725,7 +725,7 @@
                               <span class="f-3"> on </span><span class="time f-3 font-weight-bold">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
                             </ng-container>
                           </div>
-                          <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
                           <div class="gradient-bottom"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Expand
@@ -734,7 +734,7 @@
                       </ng-template>
                       <ng-template #hide>
                         <div class="content">
-                          <div class="f-6 font-weight-bold">
+                          <div class="f-5 font-weight-bold">
                             {{activity.activity_detail.subject}}
                           </div>
                           <div class="call-status mb-3">
@@ -743,7 +743,7 @@
                               on <span class="time">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
                             </ng-container>
                           </div>
-                          <div class="f-6" [innerHTML]="activity.activity_detail.description || ''"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail.description || ''"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Collapse
                           </div>
@@ -809,7 +809,7 @@
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
                     <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
-                    <div class="f-6">
+                    <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
@@ -830,7 +830,7 @@
                 </div>
                 <ng-container *ngIf="activity.activity_detail; else removedDealTemplate">
                   <div class="main-history-item">
-                    <div class="f-6 font-weight-bold">
+                    <div class="f-5 font-weight-bold">
                       {{activity.activity_detail.title}}
                     </div>
                     <div class="v-center mt-3">
