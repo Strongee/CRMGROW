@@ -72,7 +72,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   // Search Option
   selectedFolder: Material;
   searchStr = '';
-  matType = '';
   teamOptions = [];
   userOptions = [];
   folderOptions = [];
@@ -732,7 +731,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   openFolder(element: Material): void {
     this.selectedFolder = element;
     this.searchStr = '';
-    this.matType = '';
     this.isAdmin = false;
     this.userOptions = [];
     this.teamOptions = [];
@@ -753,7 +751,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   isEnableSearchOptions(): boolean {
     return !!(
       this.searchStr ||
-      this.matType ||
       this.isAdmin ||
       this.userOptions.length ||
       this.teamOptions.length ||
@@ -762,17 +759,19 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   }
 
   filter(): void {
-    this.selection = [];
-    const reg = new RegExp(this.searchStr, 'gi');
+    // this.selection = [];
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
-      if (this.matType && material.material_type != this.matType) {
-        return false;
-      }
       if (!reg.test(material.title)) {
         return false;
       }
       return true;
     });
+    this.page = 1;
   }
 
   isStopSharable(material): any {

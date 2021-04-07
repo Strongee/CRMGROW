@@ -84,9 +84,9 @@
           <ng-container matColumnDef="template-action">
             <th mat-header-cell *matHeaderCellDef class="template-action"></th>
             <td mat-cell *matCellDef="let template" class="template-action">
-              <div class="v-center justify-content-end">
+              <div class="v-center justify-content-between">
                 <ng-container *ngIf="isDuplicatable(template)">
-                  <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)" placement="bottom" ngbTooltip="Duplicate template" ngbButtonLabel>
+                  <div class="icon-button v-center ml-auto" (click)="duplicateTemplate(template)" placement="bottom" ngbTooltip="Duplicate template" ngbButtonLabel>
                     <i class="i-icon bgc-dark i-duplicate"></i>
                   </div>
                 </ng-container>
