@@ -140,7 +140,11 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
 
   filter(): void {
     // this.selection = [];
-    const reg = new RegExp(this.searchStr, 'gi');
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
       if (this.selectedFolder) {
         if (this.selectedFolder._id !== material.folder) {
@@ -215,9 +219,9 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
   }
 
   getMaterialById(id): any {
-    const index = this.filteredMaterials.findIndex((item) => item._id === id);
+    const index = this.materials.findIndex((item) => item._id === id);
     if (index >= 0) {
-      return this.filteredMaterials[index];
+      return this.materials[index];
     }
     return null;
   }

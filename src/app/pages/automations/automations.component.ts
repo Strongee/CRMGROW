@@ -51,6 +51,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     'action-count',
     'contacts',
     'created',
+    'assign',
     'actions'
   ];
   PAGE_COUNTS = [

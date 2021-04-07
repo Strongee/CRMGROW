@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { ToastrService } from 'ngx-toastr';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-invite-team',
@@ -37,7 +38,8 @@ export class InviteTeamComponent implements OnInit {
     private dialogRef: MatDialogRef<InviteTeamComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private teamService: TeamService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private clipboard: Clipboard
   ) {
     if (this.data._id) {
       this.teamId = this.data._id;
@@ -262,5 +264,10 @@ export class InviteTeamComponent implements OnInit {
           }
         );
     }
+  }
+
+  copyLink(): void {
+    this.clipboard.copy(this.joinLink);
+    this.toast.success('Copied the link to clipboard');
   }
 }

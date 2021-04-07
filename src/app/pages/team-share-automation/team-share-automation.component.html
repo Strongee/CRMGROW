@@ -93,24 +93,26 @@
                 <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
               </a>
               <div ngbDropdownMenu class="light">
-                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="assignAutomation($event, automation)">
-                  <span class="f-3 font-weight-bold">Assign</span>
-                </button>
-                <ng-container *ngIf="automation.role != 'admin' && automation.user == userId">
+                <ng-container *ngIf="automation.user == userId; else otherRoleTemplate">
                   <button class="v-center border-0 py-2 c-dark dropdown-item"
                           (click)="openAutomation($event, automation)"
                   >
-                    <span class="f-3 font-weight-bold">Edit</span>
+                    <i class="i-icon i-edit d-block bgc-dark" aria-hidden="true"></i>
+                    <span class="f-3 font-weight-bold ml-3">Edit</span>
                   </button>
                 </ng-container>
-                <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
-                  <span class="f-3 font-weight-bold">Clone</span>
-                </button>
+                <ng-template #otherRoleTemplate>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
+                    <i class="i-icon i-duplicate d-block bgc-dark" aria-hidden="true"></i>
+                    <span class="f-3 font-weight-bold ml-3">Clone</span>
+                  </button>
+                </ng-template>
                 <ng-container *ngIf="isStopSharable(automation)">
                   <button class="v-center border-0 py-2 c-dark dropdown-item"
                           (click)="stopShareAutomation(automation)"
                   >
-                    <span class="f-3 font-weight-bold">Stop Share</span>
+                    <i class="i-icon i-block d-block bgc-dark" aria-hidden="true"></i>
+                    <span class="f-3 font-weight-bold ml-3">Stop Share</span>
                   </button>
                 </ng-container>
               </div>
