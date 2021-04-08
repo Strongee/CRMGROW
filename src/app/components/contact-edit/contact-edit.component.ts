@@ -7,11 +7,11 @@ import {
   STAGES
 } from 'src/app/constants/variable.constants';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ContactDetail } from 'src/app/models/contact.model';
+import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 import { Subscription } from 'rxjs';
-import { TelFormat, adjustPhoneNumber } from 'src/app/helper';
+import { adjustPhoneNumber } from 'src/app/helper';
 import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { PhoneInputComponent } from '../phone-input/phone-input.component';
@@ -33,7 +33,7 @@ export class ContactEditComponent implements OnInit {
   // Variables for the processs
   contact_phone: any = {};
   second_contact_phone: any = {};
-  contact: ContactDetail = new ContactDetail();
+  contact: Contact = new Contact();
   panelOpenState = false;
 
   // Variables for the checking duplicate
@@ -60,7 +60,7 @@ export class ContactEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
-      this.contact = { ...this.contact, ...this.data.contact };
+      this.contact = new Contact().deserialize(this.data.contact);
       if (this.contact['cell_phone']) {
         this.contact_phone = this.contact['cell_phone'];
       }

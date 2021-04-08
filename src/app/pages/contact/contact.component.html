@@ -1592,7 +1592,7 @@
                                 <tbody>
                                   <tr *ngFor="let detailActivity of (detail.data_type === 'texts' ? sendActions[detail._id] : sendActions[detail.group_id]); let i = index;">
                                     <td class="session-col">
-                                      <span class="font-weight-bold mr-2">{{detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch' ? getSessionIndex(i, detail.data_type === 'texts' ? sendActions[detail._id].length : sendActions[detail.group_id].length) : ''}}</span>
+                                      <span class="font-weight-bold mr-2">{{detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch' ? getSessionIndex(i, detail.data_type === 'texts' ? sendActions[detail._id] : sendActions[detail.group_id]) : ''}}</span>
                                       <span class="font-weight-bold">{{detailActivity.content}}</span>
                                     </td>
                                     <ng-container *ngIf="detailActivity.activity_detail && detailActivity.activity_detail.type === 'watch'; else normalTracker">

@@ -6,9 +6,9 @@ export class Garbage implements Deserializable {
     sms: string;
     email: string;
   };
-  edited_video: string;
-  edited_pdf: string;
-  edited_image: string;
+  edited_video: string[];
+  edited_pdf: string[];
+  edited_image: string[];
   edited_automation: string[];
   edited_label: string[];
   desktop_notification = {

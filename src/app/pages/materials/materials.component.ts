@@ -544,21 +544,22 @@ export class MaterialsComponent implements OnInit {
     });
   }
 
-  deleteMaterial(material: any): void {
-    switch (material.material_type) {
-      case 'video':
-        const videoConfirmDialog = this.dialog.open(ConfirmComponent, {
-          position: { top: '100px' },
-          data: {
-            title: 'Delete Video',
-            message: 'Are you sure to delete this video?',
-            confirmLabel: 'Delete',
-            cancelLabel: 'Cancel'
-          }
-        });
-        if (material.role == 'admin') {
-          videoConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
+  hideMaterial(material: any): void {
+    if (material.role === 'admin') {
+      switch (material.material_type) {
+        case 'video':
+          this.dialog
+            .open(ConfirmComponent, {
+              position: { top: '100px' },
+              data: {
+                title: 'Hide Video',
+                message: 'Are you sure you want to hide this video?',
+                confirmLabel: 'Hide',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe(() => {
               const pos = this.editedVideos.indexOf(material._id);
               if (pos != -1) {
                 return;
@@ -576,12 +577,98 @@ export class MaterialsComponent implements OnInit {
                       this.toggleElement(material);
                     }
                     this.materialService.delete$([material._id]);
-                    this.toast.success('Video has been deleted successfully.');
+                    this.toast.success('Video has been hide successfully.');
                   });
               }
-            }
-          });
-        } else {
+            });
+          break;
+        case 'image':
+          this.dialog
+            .open(ConfirmComponent, {
+              position: { top: '100px' },
+              data: {
+                title: 'Hide Image',
+                message: 'Are you sure you want to hide this image?',
+                confirmLabel: 'Hide',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe(() => {
+              const pos = this.editedImages.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_image: [...this.editedImages, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedImages.push(material._id);
+                    this.userService.updateGarbageImpl({
+                      edited_image: this.editedImages
+                    });
+                    if (this.isSelected(material)) {
+                      this.toggleElement(material);
+                    }
+                    this.materialService.delete$([material._id]);
+                    this.toast.success('Image has been hide successfully.');
+                  });
+              }
+            });
+          break;
+        case 'pdf':
+          this.dialog
+            .open(ConfirmComponent, {
+              position: { top: '100px' },
+              data: {
+                title: 'Hide Pdf',
+                message: 'Are you sure you want to delete this pdf?',
+                confirmLabel: 'Hide',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe(() => {
+              const pos = this.editedPdfs.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_pdf: [...this.editedPdfs, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedPdfs.push(material._id);
+                    this.userService.updateGarbageImpl({
+                      edited_pdf: this.editedPdfs
+                    });
+                    if (this.isSelected(material)) {
+                      this.toggleElement(material);
+                    }
+                    this.materialService.delete$([material._id]);
+                    this.toast.success('Pdf has been hide successfully.');
+                  });
+              }
+            });
+          break;
+      }
+    }
+  }
+
+  deleteMaterial(material: any): void {
+    switch (material.material_type) {
+      case 'video':
+        const videoConfirmDialog = this.dialog.open(ConfirmComponent, {
+          position: { top: '100px' },
+          data: {
+            title: 'Delete Video',
+            message: 'Are you sure to delete this video?',
+            confirmLabel: 'Delete',
+            cancelLabel: 'Cancel'
+          }
+        });
+        if (material.role !== 'admin') {
           videoConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               this.materialDeleteSubscription &&
@@ -604,37 +691,12 @@ export class MaterialsComponent implements OnInit {
           position: { top: '100px' },
           data: {
             title: 'Delete Image',
-            message: 'Are you sure to delete this Image?',
+            message: 'Are you sure you want to delete this Image?',
             confirmLabel: 'Delete',
             cancelLabel: 'Cancel'
           }
         });
-        if (material.role == 'admin') {
-          imageConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
-              const pos = this.editedImages.indexOf(material._id);
-              if (pos != -1) {
-                return;
-              } else {
-                this.userService
-                  .updateGarbage({
-                    edited_image: [...this.editedImages, material._id]
-                  })
-                  .subscribe(() => {
-                    this.editedImages.push(material._id);
-                    this.userService.updateGarbageImpl({
-                      edited_image: this.editedImages
-                    });
-                    if (this.isSelected(material)) {
-                      this.toggleElement(material);
-                    }
-                    this.materialService.delete$([material._id]);
-                    this.toast.success('Image has been deleted successfully.');
-                  });
-              }
-            }
-          });
-        } else {
+        if (material.role !== 'admin') {
           imageConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               this.materialDeleteSubscription &&
@@ -662,32 +724,7 @@ export class MaterialsComponent implements OnInit {
             cancelLabel: 'Cancel'
           }
         });
-        if (material.role == 'admin') {
-          pdfConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
-              const pos = this.editedPdfs.indexOf(material._id);
-              if (pos != -1) {
-                return;
-              } else {
-                this.userService
-                  .updateGarbage({
-                    edited_pdf: [...this.editedPdfs, material._id]
-                  })
-                  .subscribe(() => {
-                    this.editedPdfs.push(material._id);
-                    this.userService.updateGarbageImpl({
-                      edited_pdf: this.editedPdfs
-                    });
-                    if (this.isSelected(material)) {
-                      this.toggleElement(material);
-                    }
-                    this.materialService.delete$([material._id]);
-                    this.toast.success('Pdf has been deleted successfully.');
-                  });
-              }
-            }
-          });
-        } else {
+        if (material.role !== 'admin') {
           pdfConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               this.materialDeleteSubscription &&
@@ -825,14 +862,14 @@ export class MaterialsComponent implements OnInit {
         this.moveToFolder();
         break;
       case 'delete':
-        if (!this.selection.length) {
+        if (!selectedMaterials.length) {
           return;
         } else {
           const confirmDialog = this.dialog.open(ConfirmComponent, {
             position: { top: '100px' },
             data: {
               title: 'Delete Materials',
-              message: 'Are you sure to delete these materials?',
+              message: 'Are you sure to delete these selected materials?',
               confirmLabel: 'Delete',
               cancelLabel: 'Cancel'
             }
@@ -900,6 +937,11 @@ export class MaterialsComponent implements OnInit {
                   .subscribe((status) => {
                     if (status) {
                       this.userService.updateGarbageImpl(updateData);
+                      this.materialService.delete$([
+                        ...updateData['edited_video'],
+                        ...updateData['edited_image'],
+                        ...updateData['edited_pdf']
+                      ]);
                     }
                   });
               }
@@ -918,6 +960,11 @@ export class MaterialsComponent implements OnInit {
                   .bulkRemove(removeData)
                   .subscribe((status) => {
                     if (status) {
+                      this.materialService.delete$([
+                        ...selectedVideos,
+                        ...selectedImages,
+                        ...selectedPdfs
+                      ]);
                       this.toast.success(
                         'Selected materials have been deleted successfully.'
                       );
