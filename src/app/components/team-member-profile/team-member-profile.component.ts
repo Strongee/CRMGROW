@@ -30,6 +30,7 @@ export class TeamMemberProfileComponent implements OnInit {
   countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
   saving = false;
+  title = ''
 
   profileSubscription: Subscription;
   @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
@@ -42,7 +43,8 @@ export class TeamMemberProfileComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
-      this.user = new User().deserialize(this.data);
+      this.user = new User().deserialize(this.data.member);
+      this.title = this.data.title;
     }
   }
 

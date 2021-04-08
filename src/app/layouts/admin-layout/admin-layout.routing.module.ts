@@ -167,24 +167,31 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'teams/:id',
-    component: TeamComponent,
-    data: {
-      title: 'Team Detail'
-    }
-  },
-  {
-    path: 'teams/:id/:tab',
-    component: TeamComponent,
-    data: {
-      title: 'Team Detail'
-    }
-  },
-  {
-    path: 'teams/call/:id',
+    path: 'teams/:tab',
     component: TeamsComponent,
     data: {
       title: 'Group Call'
+    }
+  },
+  {
+    path: 'teams/:tab/:id',
+    component: TeamsComponent,
+    data: {
+      title: 'Group Call'
+    }
+  },
+  {
+    path: 'team/:id',
+    component: TeamComponent,
+    data: {
+      title: 'Team Detail'
+    }
+  },
+  {
+    path: 'team/:id/:tab',
+    component: TeamComponent,
+    data: {
+      title: 'Team Detail'
     }
   },
   {

@@ -26,7 +26,7 @@
           | paginate : {id: 'teamTable', itemsPerPage: 10, currentPage: page, totalItems: (teamService.teams$ | async).length}
         ">
         <td class="team-name">
-          <a class="v-center item-detail-link mr-2" [routerLink]="['/teams/' + team._id]">
+          <a class="v-center item-detail-link mr-2" [routerLink]="['/team/' + team._id]">
             <div class="f-6 font-weight-bold">{{team.name}}</div>
             <div class="invite-count ml-3 c-white f-1 font-weight-bold" *ngIf="team.invites.length">{{team.invites.length}} Invite waiting</div>
           </a>

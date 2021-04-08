@@ -460,6 +460,17 @@ export class ActionDialogComponent implements OnInit {
         });
       }
       return;
+    } else if (this.type === 'note') {
+      if (this.action['content'] === '') {
+        return;
+      } else {
+        this.dialogRef.close({
+          ...this.action,
+          type: this.type,
+          category: this.category,
+          period
+        });
+      }
     } else {
       this.dialogRef.close({
         ...this.action,

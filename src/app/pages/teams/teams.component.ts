@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TabItem } from '../../utils/data.types';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-teams',
@@ -14,11 +15,24 @@ export class TeamsComponent implements OnInit {
 
   selectedTab: TabItem = this.tabs[0];
 
-  constructor() {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const selectedTab = this.route.snapshot.params['tab'];
+    if (selectedTab === 'call') {
+      this.selectedTab = this.tabs[1];
+    }
+  }
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
+    if (this.selectedTab.id === 'teams') {
+      this.router.navigate(['/teams']);
+    } else {
+      this.router.navigate(['/teams/call']);
+    }
   }
 }

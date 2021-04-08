@@ -1,3 +1,4 @@
+<script src="../action-edit/action-edit.component.ts"></script>
 <div mat-dialog-title class="title mx-0">
   <span *ngIf="stepIndex === 1">Select the action</span>
 <!--  <span *ngIf="stepIndex === 2">Setting the {{ActivityName[type]}}</span>-->
@@ -409,14 +410,20 @@
         </ng-container>
         <ng-container *ngIf="type==='note'">
           <div class="action-form">
-            <div class="form-group has-feedback mt-2"
-                 [class.has-error]="note.errors && (note.touched || note.dirty|| submitted) && submitted">
-              <label class="theme-label">NOTE CONTENT</label>
-              <textarea [(ngModel)]="action.content" class="form-control" placeholder="Please type content for note." name="note"
-                        #note="ngModel" rows="6" required></textarea>
-              <span class="invalid-feedback"
-                    *ngIf="note.errors && (note.dirty || note.touched || submitted) && submitted">Note
-              content is required.</span>
+            <div class="form-group has-feedback mt-2">
+              <div class="v-center justify-content-between">
+                <label class="theme-label">NOTE CONTENT</label>
+                <span class="error f-3 font-weight-bold d-block"
+                      *ngIf="action.content == '' && submitted">Required</span>
+              </div>
+
+              <app-html-editor
+                [(value)]="action.content"
+                placeholder="Please type content for note."
+                [noImage]="true"
+                [style]="{height: '200px'}"
+              >
+              </app-html-editor>
             </div>
           </div>
         </ng-container>
