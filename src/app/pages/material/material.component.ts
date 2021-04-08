@@ -1001,7 +1001,6 @@ export class MaterialComponent implements OnInit {
       position: { top: '10vh' },
       width: '100vw',
       maxWidth: '600px',
-      height: '550px',
       disableClose: true,
       data: {
         id: material_id

@@ -21,17 +21,7 @@ export class MaterialEditTemplateComponent implements OnInit {
   saving = false;
   themes = [
     {
-      name: 'Default Theme',
-      thumbnail: environment.server + '/assets/images/theme/default.jpg',
-      id: 'default'
-    },
-    {
       name: 'Theme 1',
-      thumbnail: environment.server + '/assets/images/theme/theme1.jpg',
-      id: 'theme1'
-    },
-    {
-      name: 'Theme 2',
       thumbnail: environment.server + '/assets/images/theme/theme2.jpg',
       id: 'theme2'
     },
@@ -56,20 +46,21 @@ export class MaterialEditTemplateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.material_id = this.data.id;
-    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
-      const garbage = new Garbage().deserialize(res);
-      let theme;
-      if (
-        garbage.material_themes &&
-        garbage.material_themes[this.material_id]
-      ) {
-        this.theme_setting = garbage.material_themes;
-        theme = garbage.material_themes[this.material_id];
-      } else {
-        theme = garbage.material_theme;
+    this.garbageSubscription = this.userService.garbage$.subscribe(
+      (garbage) => {
+        let theme;
+        this.theme_setting = garbage.material_themes || {};
+        if (
+          garbage.material_themes &&
+          garbage.material_themes[this.material_id]
+        ) {
+          theme = garbage.material_themes[this.material_id];
+        } else {
+          theme = garbage.material_theme;
+        }
+        this.selectedTheme = this.themes.filter((e) => e.id == theme)[0];
       }
-      this.selectedTheme = this.themes.filter((e) => e.id == theme)[0];
-    });
+    );
   }
 
   ngOnInit(): void {}
@@ -84,18 +75,22 @@ export class MaterialEditTemplateComponent implements OnInit {
   }
 
   save(): void {
-    this.saving = true;
-    this.theme_setting[this.material_id] = this.selectedTheme.id;
-    this.updateSubscription = this.userService
-      .updateGarbage({ material_themes: this.theme_setting })
-      .subscribe((status) => {
-        this.saving = false;
-        if (status) {
-          this.userService.updateGarbageImpl({
-            material_themes: this.theme_setting
-          });
-          this.dialogRef.close();
-        }
-      });
+    if (this.theme_setting[this.material_id] !== this.selectedTheme.id) {
+      this.saving = true;
+      this.theme_setting[this.material_id] = this.selectedTheme.id;
+      this.updateSubscription = this.userService
+        .updateGarbage({ material_themes: this.theme_setting })
+        .subscribe((status) => {
+          this.saving = false;
+          if (status) {
+            this.userService.updateGarbageImpl({
+              material_themes: this.theme_setting
+            });
+            this.dialogRef.close();
+          }
+        });
+    } else {
+      this.dialogRef.close();
+    }
   }
 }

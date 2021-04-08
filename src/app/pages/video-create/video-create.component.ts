@@ -50,12 +50,7 @@ export class VideoCreateComponent implements OnInit {
 
   themes = [
     {
-      name: 'Default Theme',
-      thumbnail: environment.server + '/assets/images/theme/default.jpg',
-      id: 'default'
-    },
-    {
-      name: 'Theme 2',
+      name: 'Theme 1',
       thumbnail: environment.server + '/assets/images/theme/theme2.jpg',
       id: 'theme2'
     },

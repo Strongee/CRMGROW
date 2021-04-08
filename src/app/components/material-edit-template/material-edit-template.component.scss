@@ -1,6 +1,9 @@
 .themes {
     .theme {
         border-radius: 5px;
+        img {
+            min-height: 120px;
+        }
         .theme-name {
             font-size: 13px;
             font-weight: 600;
