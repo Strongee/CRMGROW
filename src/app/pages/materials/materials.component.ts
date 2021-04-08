@@ -1238,7 +1238,7 @@ export class MaterialsComponent implements OnInit {
       if (
         this.searchStr &&
         words.length &&
-        _.uniqBy(material.title.match(reg), (e) => (e || '').toLowerCase())
+        _.uniqBy((material.title || '').match(reg), (e) => e.toLowerCase())
           .length !== words.length
       ) {
         return false;

@@ -8,6 +8,7 @@ import { StoreService } from 'src/app/services/store.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-material-browser',
@@ -108,12 +109,20 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
         this.folders.forEach((folder) => {
           this.foldersKeyValue[folder._id] = { ...folder };
         });
+
         const materialFolderMatch = {};
-        // folders.forEach((folder) => {
-        //   folder.shared_materials.forEach((e) => {
-        //     materialFolderMatch[e] = folder._id;
-        //   });
-        // });
+        folders.forEach((folder) => {
+          folder.videos.forEach((e) => {
+            materialFolderMatch[e] = folder._id;
+          });
+          folder.pdfs.forEach((e) => {
+            materialFolderMatch[e] = folder._id;
+          });
+          folder.images.forEach((e) => {
+            materialFolderMatch[e] = folder._id;
+          });
+        });
+
         materials.forEach((e) => {
           if (materialFolderMatch[e._id]) {
             e.folder = materialFolderMatch[e._id];
@@ -156,7 +165,7 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
       if (this.matType && material.material_type != this.matType) {
         return false;
       }
-      if (!reg.test(material.title)) {
+      if (!searchReg(material.title || '', this.searchStr)) {
         return false;
       }
       return true;
