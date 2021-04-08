@@ -3,35 +3,35 @@
         <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
         </app-slide-tab>
     </div>
-    <ng-container *ngIf="selectedTab.label == 'VIDEO'">
+    <ng-container *ngIf="selectedTab.id === 'video'">
         <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">upload new video</h6>
         <div class="d-sm-flex d-block mt-4 upload-step">
             <div class="d-sm-block d-flex step-bar mr-sm-4 mb-sm-0 mb-3">
                 <span class="f-1 font-weight-bold text-uppercase small-label mr-sm-0 mr-2">steps</span>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 1"
+                    [class.active]="isStep >= 1"
                 >
                     1
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-2" [class.active]="isActive >= 2"></div>
+                <div class="line ml-sm-3 ml-0" for="step-2" [class.active]="isStep >= 2"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 2"
+                    [class.active]="isStep >= 2"
                 >
                     2
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-3" [class.active]="isActive >= 3"></div>
+                <div class="line ml-sm-3 ml-0" for="step-3" [class.active]="isStep >= 3"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 3"
+                    [class.active]="isStep >= 3"
                 >
                     3
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-4" [class.active]="isActive == 4"></div>
+                <div class="line ml-sm-3 ml-0" for="step-4" [class.active]="isStep == 4"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive == 4"
+                    [class.active]="isStep == 4"
                 >
                     4
                 </label>
@@ -53,8 +53,13 @@
                 </div>
                 <span class="font-weight-bold text-c-dark large-text">or</span>
                 <div class="local-video text-center mt-4"
-                    [ngClass]="{'file-over': fileOver}"
+                    [ngClass]="{'file-over': overFile}"
                     ng2FileDrop [uploader]="videoUploader"
+                    (dragover)="activeFileZone($event)"
+                    (dragenter)="activeFileZone($event)"
+                    (dragend)="disableFileZone($event)"
+                    (dragleave)="disableFileZone($event)"
+                    (drop)="disableFileZone($event)"
                     (click)="openFileDialog('video')"
                     (fileOver)="fileDrop($event, 'video')"
                 >
@@ -92,7 +97,7 @@
                         <label class="f-1 font-weight-bold text-uppercase small-label" for="title">custom title</label>
                         <input class="f-2 form-control" type="text" id="title" name="video_title"
                             placeholder="Type a title for this video"
-                            [(ngModel)]="customTitle" #video_title="ngModel"
+                            [(ngModel)]="video.title" #video_title="ngModel"
                             [required]="videoType != 'web'"
                         >
                     </div>
@@ -103,7 +108,6 @@
                             placeholder="Enter Text"
                             required="true"
                             [style]="{height: '150px'}"
-                            (onFocus)="focusEditor()"
                             #emailEditor
                             >
                         </app-html-editor>
@@ -129,9 +133,6 @@
                         <div class="col-sm-4 col-6 py-3 theme" *ngFor="let theme of themes" (click)="setTheme(theme)" [class.selected]="selectedTheme.id == theme.id">
                           <img src="{{theme.thumbnail}}" class="w-100 theme-thumb" />
                           <div class="f-1 text-center text-c-dark pt-3 theme-name">{{theme.name}}</div>
-                          <div class="v-center justify-content-center c-white setting-spinner" *ngIf="selectedTheme.id == theme.id && themeSaving">
-                            Applying
-                          </div>
                         </div>
                     </div>
                     <div class="v-center justify-content-end mt-4">
@@ -180,7 +181,7 @@
                     </div>
                     <div class="mt-3">
                         <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
-                        <span class="v-center f-3 font-weight-bold text-c-dark">{{video.description | stripTags | shorten: 80: '...'}}</span>
+                        <span class="v-center f-3 font-weight-bold text-c-dark">{{(video.description || '') | stripTags | shorten: 80: '...'}}</span>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-6">
@@ -201,75 +202,51 @@
                             Finish
                         </button>
                     </div>
-                    <!-- <ng-container *ngIf="uploading">
-                        <div class="progress-wrapper">
-                          <div class="progress-info">
-                            <div class="progress-label">
-                              <span>Video uploading...</span>
-                            </div>
-                            <div class="progress-percentage">
-                            <span
-                            >{{
-                              videoUploader.progress != 0
-                                ? videoUploader.progress.toFixed(0)
-                                : uploaded_time.toFixed(0)
-                              }}%</span
-                            >
-                            </div>
-                          </div>
-                          <div class="progress">
-                            <div
-                              class="progress-bar bg-primary"
-                              role="progressbar"
-                              [style.width]="
-                              videoUploader.progress != 0
-                                ? videoUploader.progress + '%'
-                                : uploaded_time + '%'
-                            "
-                            ></div>
-                          </div>
-                        </div>
-                    </ng-container> -->
                 </form>
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="selectedTab.label == 'PDF'">
+    <ng-container *ngIf="selectedTab.id === 'pdf'">
         <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">upload new pdf</h6>
         <div class="d-sm-flex d-block mt-4 upload-step">
             <div class="d-sm-block d-flex step-bar mr-sm-4 mb-sm-0 mb-3">
                 <span class="f-1 font-weight-bold text-uppercase small-label mr-sm-0 mr-2">steps</span>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 1"
+                    [class.active]="isStep >= 1"
                 >
                     1
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-2" [class.active]="isActive >= 2"></div>
+                <div class="line ml-sm-3 ml-0" for="step-2" [class.active]="isStep >= 2"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 2"
+                    [class.active]="isStep >= 2"
                 >
                     2
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-3" [class.active]="isActive >= 3"></div>
+                <div class="line ml-sm-3 ml-0" for="step-3" [class.active]="isStep >= 3"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 3"
+                    [class.active]="isStep >= 3"
                 >
                     3
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-4" [class.active]="isActive == 4"></div>
+                <div class="line ml-sm-3 ml-0" for="step-4" [class.active]="isStep == 4"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive == 4"
+                    [class.active]="isStep == 4"
                 >
                     4
                 </label>
             </div>
             <div class="step-body-1 ml-sm-5" [class.active]="isStep == 1">
                 <div class="local-video text-center mt-4"
-                    [ngClass]="{'file-over': fileOver}"
+                    [ngClass]="{'file-over': overFile}"
+                    (dragover)="activeFileZone($event)"
+                    (dragenter)="activeFileZone($event)"
+                    (dragend)="disableFileZone($event)"
+                    (dragleave)="disableFileZone($event)"
+                    (drop)="disableFileZone($event)"
                     ng2FileDrop [uploader]="pdfUploader"
                     (click)="openFileDialog('pdf')"
                     (fileOver)="fileDrop($event, 'pdf')"
@@ -300,8 +277,8 @@
                                 [hidden]="!thumbnail_loading"
                             >
                             </pdf-viewer>
-                            <img class="image" src="{{upload_thumbnail}}">
-                            <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog('pdf')" *ngIf="upload_thumbnail">
+                            <img class="image" src="{{pdf.preview}}">
+                            <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog('pdf')" *ngIf="pdf.preview">
                                 <i class="d-block i-icon i-edit bgc-white"></i>
                             </a>
                         </div>
@@ -321,7 +298,6 @@
                             placeholder="Enter Text"
                             required="true"
                             [style]="{height: '150px'}"
-                            (onFocus)="focusEditor()"
                             #emailEditor
                             >
                         </app-html-editor>
@@ -347,9 +323,6 @@
                         <div class="col-sm-4 col-6 py-3 theme" *ngFor="let theme of themes" (click)="setTheme(theme)" [class.selected]="selectedTheme.id == theme.id">
                           <img src="{{theme.thumbnail}}" class="w-100 theme-thumb" />
                           <div class="f-1 text-center text-c-dark pt-3 theme-name">{{theme.name}}</div>
-                          <div class="v-center justify-content-center c-white setting-spinner" *ngIf="selectedTheme.id == theme.id && themeSaving">
-                            Applying
-                          </div>
                         </div>
                     </div>
                     <div class="v-center justify-content-end mt-4">
@@ -362,7 +335,7 @@
                     </div>
                 </form>
             </div>
-            <div class="step-body-4 ml-sm-5" [class.active]="isStep == 4">
+            <div class="step-body-4 ml-sm-5 position-relative" [class.active]="isStep == 4">
                 <form
                     #finishUploadForm="ngForm" 
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('pdf') : false"
@@ -377,7 +350,7 @@
                         </span>
                     </div>
                     <div class="my-4">
-                        <img class="w-100" src="{{upload_thumbnail}}">
+                        <img class="w-100" src="{{pdf.preview}}">
                     </div>
                     <div class="progress-wrapper" *ngIf="uploading">
                         <div class="progress">
@@ -398,7 +371,7 @@
                     </div>
                     <div class="mt-3">
                         <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
-                        <span class="v-center f-3 font-weight-bold text-c-dark">{{pdf.description | stripTags | shorten: 80: '...'}}</span>
+                        <span class="v-center f-3 font-weight-bold text-c-dark">{{(pdf.description || '') | stripTags | shorten: 80: '...'}}</span>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-6">
@@ -419,42 +392,47 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="selectedTab.label == 'IMAGE'">
+    <ng-container *ngIf="selectedTab.id === 'image'">
         <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">upload new image</h6>
         <div class="d-sm-flex d-block mt-4 upload-step">
             <div class="d-sm-block d-flex step-bar mr-sm-4 mb-sm-0 mb-3">
                 <span class="f-1 font-weight-bold text-uppercase small-label mr-sm-0 mr-2">steps</span>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 1"
+                    [class.active]="isStep >= 1"
                 >
                     1
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-2" [class.active]="isActive >= 2"></div>
+                <div class="line ml-sm-3 ml-0" for="step-2" [class.active]="isStep >= 2"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 2"
+                    [class.active]="isStep >= 2"
                 >
                     2
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-3" [class.active]="isActive >= 3"></div>
+                <div class="line ml-sm-3 ml-0" for="step-3" [class.active]="isStep >= 3"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive >= 3"
+                    [class.active]="isStep >= 3"
                 >
                     3
                 </label>
-                <div class="line ml-sm-3 ml-0" for="step-4" [class.active]="isActive == 4"></div>
+                <div class="line ml-sm-3 ml-0" for="step-4" [class.active]="isStep == 4"></div>
                 <label
                     class="v-center justify-content-center f-3 font-weight-bold ml-sm-1 ml-0 mb-0"
-                    [class.active]="isActive == 4"
+                    [class.active]="isStep == 4"
                 >
                     4
                 </label>
             </div>
             <div class="step-body-1 ml-sm-5" [class.active]="isStep == 1">
                 <div class="local-video text-center mt-4"
-                    [ngClass]="{'file-over': fileOver}"
+                    [ngClass]="{'file-over': overFile}"
+                    (dragover)="activeFileZone($event)"
+                    (dragenter)="activeFileZone($event)"
+                    (dragend)="disableFileZone($event)"
+                    (dragleave)="disableFileZone($event)"
+                    (drop)="disableFileZone($event)"
                     ng2FileDrop [uploader]="imageUploader"
                     (click)="openFileDialog('image')"
                     (fileOver)="fileDrop($event, 'image')"
@@ -477,7 +455,7 @@
                 >
                     <div class="video-default mb-4">
                         <div class="thumbnail" id="image-selector">
-                            <img class="image" src="{{upload_thumbnail}}">
+                            <img class="image" src="{{image.preview}}">
                             <a class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog('image')"><i class="d-block i-icon i-edit bgc-white"></i></a>
                         </div>
                     </div>
@@ -496,7 +474,6 @@
                             placeholder="Enter Text"
                             required="true"
                             [style]="{height: '150px'}"
-                            (onFocus)="focusEditor()"
                             #emailEditor
                             >
                         </app-html-editor>
@@ -522,9 +499,6 @@
                         <div class="col-sm-4 col-6 py-3 theme" *ngFor="let theme of themes" (click)="setTheme(theme)" [class.selected]="selectedTheme.id == theme.id">
                           <img src="{{theme.thumbnail}}" class="w-100 theme-thumb" />
                           <div class="f-1 text-center text-c-dark pt-3 theme-name">{{theme.name}}</div>
-                          <div class="v-center justify-content-center c-white setting-spinner" *ngIf="selectedTheme.id == theme.id && themeSaving">
-                            Applying
-                          </div>
                         </div>
                     </div>
                     <div class="v-center justify-content-end mt-4">
@@ -537,7 +511,7 @@
                     </div>
                 </form>
             </div>
-            <div class="step-body-4 ml-sm-5" [class.active]="isStep == 4">
+            <div class="step-body-4 ml-sm-5 position-relative" [class.active]="isStep == 4">
                 <form
                     #finishUploadForm="ngForm" 
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('image') : false"
@@ -552,7 +526,7 @@
                         </span>
                     </div>
                     <div class="my-4">
-                        <img class="w-100" src="{{upload_thumbnail}}">
+                        <img class="w-100" src="{{image.preview}}">
                     </div>
                     <div class="progress-wrapper" *ngIf="uploading">
                         <div class="progress">
@@ -573,7 +547,7 @@
                     </div>
                     <div class="mt-3">
                         <label class="f-1 font-weight-bold text-uppercase small-label">DESCRIPTION</label>
-                        <span class="v-center f-3 font-weight-bold text-c-dark">{{image.description | stripTags | shorten: 80: '...'}}</span>
+                        <span class="v-center f-3 font-weight-bold text-c-dark">{{(image.description || '') | stripTags | shorten: 80: '...'}}</span>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-6">

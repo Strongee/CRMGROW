@@ -69,6 +69,14 @@
                 width: 200px;
                 opacity: 0.56;
             }
+            &.file-over {
+                background-color: #e7e7ff;
+                border: 2px dashed blue;
+            }
+
+            * {
+                pointer-events: none;
+            }
         }
         .video-default {
             .thumbnail {
@@ -142,7 +150,6 @@
     top: 50px;
     padding: 5px 10px;
 }
-
 
 :host ::ng-deep {
     .ng2-pdf-viewer-container .page {

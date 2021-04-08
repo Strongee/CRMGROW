@@ -96,7 +96,7 @@
                 left: 3px;
             }
         }
-        &.tentative {
+        &.needsAction {
             background-color: #797b8e;
             &::after {
                 content: "?";
@@ -107,7 +107,7 @@
                 line-height: 16px;
             }
         }
-        &.needsAction {
+        &.tentative {
             background-color: #f7b500;
             &::after {
                 position: absolute;

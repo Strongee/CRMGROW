@@ -5,14 +5,12 @@ import { FileService } from '../../services/file.service';
 import { MaterialService } from '../../services/material.service';
 import { HelperService } from '../../services/helper.service';
 import { ToastrService } from 'ngx-toastr';
-import { ThemeService } from '../../services/theme.service';
 import canvas from 'html2canvas';
 import { environment } from 'src/environments/environment';
-import { Garbage } from 'src/app/models/garbage.model';
 import { TabItem } from 'src/app/utils/data.types';
 import { Subscription, timer } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
+import { Material } from 'src/app/models/material.model';
 
 @Component({
   selector: 'app-video-create',
@@ -20,38 +18,19 @@ import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.
   styleUrls: ['./video-create.component.scss']
 })
 export class VideoCreateComponent implements OnInit {
-  garbage: Garbage = new Garbage();
   submitted = false;
   isStep = 1;
-  isActive = 1;
   selectedTheme = {
     name: '',
     thumbnail: '',
     id: ''
   };
-  video = {
-    url: '',
-    title: '',
-    duration: 0,
-    thumbnail: '',
-    description: ''
-  };
-  pdf = {
-    title: '',
-    description: '',
-    thumbnail: ''
-  };
-  image = {
-    _id: '',
-    title: '',
-    description: '',
-    preview: ''
-  };
+  video: Material = new Material();
+  pdf: Material = new Material();
+  image: Material = new Material();
+  // PDF FILE & Thumbnail Loading
   file;
   thumbnail_loading = false;
-  upload_thumbnail;
-  customTitle: '';
-  mode = '';
 
   tabs: TabItem[] = [
     { icon: 'i-icon i-video', label: 'VIDEO', id: 'video' },
@@ -62,18 +41,11 @@ export class VideoCreateComponent implements OnInit {
 
   vimeoVideoMetaSubscription: Subscription;
   youtubeVideoMetaSubscription: Subscription;
-  urlChecked = false;
-  videoId = '';
-  loadedData = false;
-  videoType = '';
-  fileOver = false;
 
   uploading = false;
   uploadTimer: any;
   uploadTimeSubscriber: any;
   uploaded_time = 0;
-  themeSaving = false;
-  focusedField = '';
   currentFolder = '';
 
   themes = [
@@ -81,11 +53,6 @@ export class VideoCreateComponent implements OnInit {
       name: 'Default Theme',
       thumbnail: environment.server + '/assets/images/theme/default.jpg',
       id: 'default'
-    },
-    {
-      name: 'Theme 1',
-      thumbnail: environment.server + '/assets/images/theme/theme1.jpg',
-      id: 'theme1'
     },
     {
       name: 'Theme 2',
@@ -104,7 +71,6 @@ export class VideoCreateComponent implements OnInit {
     }
   ];
 
-  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
   @ViewChild('videoFile') videoFileInput;
   @ViewChild('pdfFile') pdfFileInput;
   @ViewChild('imageFile') imageFileInput;
@@ -124,32 +90,31 @@ export class VideoCreateComponent implements OnInit {
     itemAlias: 'image'
   });
 
+  overFile = false;
+
   constructor(
-    private fileService: FileService,
     private materialService: MaterialService,
     private userService: UserService,
     private toast: ToastrService,
     private helperService: HelperService,
-    private themeService: ThemeService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.userService.garbage$.subscribe((res) => {
-      this.garbage = new Garbage().deserialize(res);
+    this.userService.garbage$.subscribe((_garbage) => {
       this.selectedTheme = this.themes.filter(
-        (theme) => theme.id == this.garbage.material_theme
+        (theme) => theme.id == _garbage.material_theme
       )[0];
     });
   }
 
   ngOnInit(): void {
-    this.mode = this.route.snapshot.params['mode'];
-    this.currentFolder = this.route.snapshot.params['folder'];
+    const mode = this.route.snapshot.params['mode'];
     this.tabs.forEach((tab) => {
-      if (tab.id == this.mode) {
+      if (tab.id == mode) {
         this.changeTab(tab);
       }
     });
+    this.currentFolder = this.route.snapshot.params['folder'];
     this.videoUploader.onAfterAddingFile = (file) => {
       file.withCredentials = false;
       if (this.videoUploader.queue.length > 1) {
@@ -171,12 +136,14 @@ export class VideoCreateComponent implements OnInit {
     ) => {
       window['confirmReload'] = false;
       try {
-        response = JSON.parse(response);
-        if (response['status']) {
-          const video = { ...response['data'] };
-          this.updateVideo(video);
-        } else {
-          this.toast.error('Video uploading is failed.');
+        if (status === 200) {
+          response = JSON.parse(response);
+          if (response['status']) {
+            const video = { ...response['data'] };
+            this.updateVideo(video);
+          } else {
+            this.toast.error('Video uploading is failed.');
+          }
         }
       } catch (e) {
         console.log('Error', e);
@@ -189,14 +156,17 @@ export class VideoCreateComponent implements OnInit {
       status: any,
       headers: any
     ) => {
+      window['confirmReload'] = false;
       try {
-        response = JSON.parse(response);
-        if (response['status']) {
-          const pdf = { ...response['data'] };
-          this.updatePdf(pdf);
-        } else {
-          this.uploading = false;
-          this.toast.error('Pdf uploading is failed.');
+        if (status === 200) {
+          response = JSON.parse(response);
+          if (response['status']) {
+            const pdf = { ...response['data'] };
+            this.updatePdf(pdf);
+          } else {
+            this.uploading = false;
+            this.toast.error('Pdf uploading is failed.');
+          }
         }
       } catch (e) {
         console.log('Error', e);
@@ -209,51 +179,17 @@ export class VideoCreateComponent implements OnInit {
       status: any,
       headers: any
     ) => {
+      window['confirmReload'] = false;
       try {
         if (status == 200) {
-          this.image.preview = this.upload_thumbnail;
-          if (this.currentFolder !== '') {
-            this.image['folder'] = this.currentFolder;
-          }
           response = JSON.parse(response);
-          this.image._id = response['data']._id;
-          this.materialService
-            .updateImage(this.image._id, this.image)
-            .subscribe(
-              (res) => {
-                if (res['status']) {
-                  this.toast.success('Image is uploaded successfully.');
-                  if (this.currentFolder) {
-                    this.router.navigate([`/materials/${this.currentFolder}`]);
-                  } else {
-                    this.router.navigate(['/materials']);
-                  }
-                } else {
-                  this.toast.success(
-                    'Image is uploaded. But the Image information is not saved.'
-                  );
-                  if (this.currentFolder) {
-                    this.router.navigate([`/materials/${this.currentFolder}`]);
-                  } else {
-                    this.router.navigate(['/materials']);
-                  }
-                }
-              },
-              (err) => {
-                this.toast.success(
-                  'Image is uploaded. But the Image information is not saved.'
-                );
-                if (this.currentFolder) {
-                  this.router.navigate([`/materials/${this.currentFolder}`]);
-                } else {
-                  this.router.navigate(['/materials']);
-                }
-              }
-            );
-        } else {
-          this.toast.error(
-            'Image is uploaded. But the Image information is not saved.'
-          );
+          if (response['status']) {
+            const image = { ...response['data'] };
+            this.updateImage(image);
+          } else {
+            this.uploading = false;
+            this.toast.error('Image uploading is failed.');
+          }
         }
       } catch (e) {
         this.toast.error("Image is uploaded. But the Image could't saved.");
@@ -271,42 +207,27 @@ export class VideoCreateComponent implements OnInit {
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
     this.isStep = 1;
-    this.isActive = 1;
     this.videoUploader.cancelAll();
     this.videoUploader.clearQueue();
     this.pdfUploader.cancelAll();
     this.pdfUploader.clearQueue();
     this.imageUploader.cancelAll();
     this.imageUploader.clearQueue();
-    this.upload_thumbnail = '';
   }
 
   uploadVideo(): void {
     this.isStep++;
-    this.isActive++;
   }
 
   saveDetail(): void {
     this.isStep++;
-    this.isActive++;
-    if (this.customTitle) {
-      this.video.title = this.customTitle;
-    }
   }
 
   backUpload(): void {
     this.isStep--;
-    this.isActive--;
-    this.videoType = '';
-    this.video = {
-      url: '',
-      title: 'Introduction to eXp Realty',
-      duration: 0,
-      thumbnail: '',
-      description: ''
-    };
-    this.urlChecked = false;
-    this.loadedData = false;
+    this.video = new Material();
+    this.image = new Material();
+    this.pdf = new Material();
     this.videoUploader.cancelAll();
     this.videoUploader.clearQueue();
     this.pdfUploader.cancelAll();
@@ -317,109 +238,78 @@ export class VideoCreateComponent implements OnInit {
 
   selectTheme(): void {
     this.isStep++;
-    this.isActive++;
   }
 
   setTheme(theme: any): void {
-    // this.themeSaving = true;
     this.selectedTheme = theme;
-    // this.garbage.material_theme = this.selectedTheme.id;
-    // this.userService.updateGarbage(this.garbage).subscribe(
-    //   () => {
-    //     this.themeSaving = false;
-    //     this.userService.updateGarbageImpl(this.garbage);
-    //   },
-    //   () => {
-    //     this.themeSaving = false;
-    //   }
-    // );
   }
 
   backDetail(): void {
     this.isStep--;
-    this.isActive--;
   }
 
   backSelectTheme(): void {
     this.isStep--;
-    this.isActive--;
   }
 
   finishUpload(type: string): void {
+    if (
+      type === 'video' &&
+      (this.video.type == 'youtube' || this.video.type === 'vimeo')
+    ) {
+      this.uploading = true;
+      if (!this.video.duration) {
+        this.toast.error("Can't read video's detail information.");
+        return;
+      }
+      if (this.currentFolder !== '') {
+        this.video['folder'] = this.currentFolder;
+      }
+      this.materialService
+        .createVideo({
+          ...this.video,
+          duration: this.video.duration
+        })
+        .subscribe((res) => {
+          if (res) {
+            this.uploading = false;
+            this.toast.success('Video is uploaded successfully.');
+            if (this.currentFolder) {
+              this.router.navigate([`/materials/${this.currentFolder}`]);
+            } else {
+              this.router.navigate(['/materials']);
+            }
+          }
+        });
+      return;
+    }
+    this.uploading = true;
     switch (type) {
       case 'video':
-        if (this.videoType == 'web') {
-          this.uploading = true;
-          if (!this.video.duration) {
-            this.toast.error("Can't read video's detail information.");
-            return;
-          }
-          if (this.currentFolder !== '') {
-            this.video['folder'] = this.currentFolder;
-          }
-          this.materialService
-            .createVideo({
-              ...this.video,
-              duration: this.video.duration
-            })
-            .subscribe((res) => {
-              this.uploading = false;
-              this.toast.success('Video is uploaded successfully.');
-              if (this.currentFolder) {
-                this.router.navigate([`/materials/${this.currentFolder}`]);
-              } else {
-                this.router.navigate(['/materials']);
-              }
-            });
-        } else {
-          this.uploading = true;
-          this.videoUploader.uploadAll();
-          // Window Reload Confirm
-          window['confirmReload'] = true;
-          this.uploadTimer = timer(0, 500);
-          this.uploadTimeSubscriber = this.uploadTimer.subscribe((timer) => {
-            if (this.uploaded_time < 60) {
-              this.uploaded_time += 0.2;
-            } else if (this.uploaded_time >= 60 && this.uploaded_time <= 80) {
-              this.uploaded_time += 0.1;
-            } else if (this.uploaded_time > 80 && this.uploaded_time <= 95) {
-              this.uploaded_time += 0.05;
-            }
-          });
-        }
+        this.videoUploader.uploadAll();
         break;
       case 'pdf':
-        this.uploading = true;
         this.pdfUploader.uploadAll();
-        this.uploadTimer = timer(0, 500);
-        this.uploadTimeSubscriber = this.uploadTimer.subscribe((timer) => {
-          if (this.uploaded_time < 60) {
-            this.uploaded_time += 0.5;
-          } else if (this.uploaded_time >= 60 && this.uploaded_time <= 80) {
-            this.uploaded_time += 0.2;
-          } else if (this.uploaded_time > 80 && this.uploaded_time <= 95) {
-            this.uploaded_time += 0.075;
-          }
-        });
         break;
       case 'image':
-        this.uploading = true;
         this.imageUploader.uploadAllFiles();
-        this.uploadTimer = timer(0, 500);
-        this.uploadTimeSubscriber = this.uploadTimer.subscribe((timer) => {
-          if (this.uploaded_time < 60) {
-            this.uploaded_time += 0.5;
-          } else if (this.uploaded_time >= 60 && this.uploaded_time <= 80) {
-            this.uploaded_time += 0.2;
-          } else if (this.uploaded_time > 80 && this.uploaded_time <= 95) {
-            this.uploaded_time += 0.075;
-          }
-        });
         break;
     }
+    window['confirmReload'] = true;
+    this.uploadTimer = timer(0, 500);
+    this.uploadTimeSubscriber = this.uploadTimer.subscribe((timer) => {
+      if (this.uploaded_time < 60) {
+        this.uploaded_time += 0.2;
+      } else if (this.uploaded_time >= 60 && this.uploaded_time <= 80) {
+        this.uploaded_time += 0.1;
+      } else if (this.uploaded_time > 80 && this.uploaded_time <= 95) {
+        this.uploaded_time += 0.05;
+      }
+    });
   }
 
   updateVideo(video): void {
+    console.log('update video', video);
     const videoId = video._id;
     const newVideo = { ...video };
     delete newVideo.created_at;
@@ -462,6 +352,7 @@ export class VideoCreateComponent implements OnInit {
   }
 
   updatePdf(pdf): void {
+    console.log('update pdf', pdf);
     const pdfId = pdf._id;
     const newPdf = { ...pdf };
     delete newPdf.created_at;
@@ -470,7 +361,7 @@ export class VideoCreateComponent implements OnInit {
     delete newPdf._id;
     newPdf.title = this.pdf.title;
     newPdf.description = this.pdf.description;
-    newPdf.preview = this.upload_thumbnail;
+    newPdf.preview = this.pdf.preview;
     this.pdf['url'] = pdf.url;
     if (this.currentFolder !== '') {
       newPdf['folder'] = this.currentFolder;
@@ -499,6 +390,45 @@ export class VideoCreateComponent implements OnInit {
     );
   }
 
+  updateImage(image): void {
+    console.log('update pdf', image);
+    const imageId = image._id;
+    const newImage = { ...image };
+    delete newImage.created_at;
+    delete newImage._v;
+    delete newImage.user;
+    delete newImage._id;
+    newImage.title = this.image.title;
+    newImage.description = this.image.description;
+    newImage.preview = this.image.preview;
+    this.image['url'] = image.url;
+    if (this.currentFolder !== '') {
+      newImage['folder'] = this.currentFolder;
+    }
+    this.materialService.updateImage(imageId, newImage).subscribe(
+      (res) => {
+        this.uploading = false;
+        this.toast.success('Image is uploaded successfully.');
+        if (this.currentFolder) {
+          this.router.navigate([`/materials/${this.currentFolder}`]);
+        } else {
+          this.router.navigate(['/materials']);
+        }
+      },
+      (err) => {
+        this.uploading = false;
+        this.toast.success(
+          'Image is uploaded. But the Image information is not saved.'
+        );
+        if (this.currentFolder) {
+          this.router.navigate([`/materials/${this.currentFolder}`]);
+        } else {
+          this.router.navigate(['/materials']);
+        }
+      }
+    );
+  }
+
   openFileDialog(type: string): void {
     switch (type) {
       case 'video':
@@ -516,8 +446,7 @@ export class VideoCreateComponent implements OnInit {
   fileDrop(evt: any, type: string): any {
     switch (type) {
       case 'video':
-        this.fileOver = evt;
-        if (this.fileOver == false) {
+        if (!evt && this.videoUploader.queue[0]) {
           const file = this.videoUploader.queue[0]._file;
           if (!file) {
             return false;
@@ -545,7 +474,7 @@ export class VideoCreateComponent implements OnInit {
                   this.video['site_image'] = image;
                 })
                 .catch((err) => {});
-              this.videoType = 'local';
+              this.video.type = 'video/';
               this.uploadVideo();
             })
             .catch((err) => {
@@ -556,8 +485,7 @@ export class VideoCreateComponent implements OnInit {
         }
         break;
       case 'pdf':
-        this.fileOver = evt;
-        if (this.fileOver == false) {
+        if (!evt && this.pdfUploader.queue[0]) {
           const file = this.pdfUploader.queue[0]._file;
           if (!file) {
             return false;
@@ -578,8 +506,7 @@ export class VideoCreateComponent implements OnInit {
         }
         break;
       case 'image':
-        this.fileOver = evt;
-        if (this.fileOver == false) {
+        if (!evt && this.imageUploader.queue[0]) {
           this.imageUploader.queue.forEach((queue) => {
             const file = queue.file;
             if (!file) {
@@ -597,16 +524,13 @@ export class VideoCreateComponent implements OnInit {
               .rawFile as any;
             const file: Blob = rawfile as Blob;
             if (file) {
-              this.thumbnail_loading = true;
               this.helperService
                 .generateImageThumbnail(file, 'image')
                 .then((thumbnail) => {
-                  this.thumbnail_loading = false;
-                  this.upload_thumbnail = thumbnail;
+                  this.image.preview = thumbnail;
                   this.uploadVideo();
                 })
                 .catch(() => {
-                  this.thumbnail_loading = false;
                   this.toast.warning('Cannot load the image file.');
                 });
             }
@@ -641,12 +565,12 @@ export class VideoCreateComponent implements OnInit {
             this.helperService
               .generateImageThumbnail(imageBlob, 'video_play')
               .then((image) => {
-                this.video['site_image'] = image;
+                this.video.site_image = image;
               })
               .catch((err) => {
                 console.log('Video Meta Image Load', err);
               });
-            this.videoType = 'local';
+            this.video.type = 'video/';
             this.uploadVideo();
           })
           .catch((err) => {
@@ -676,16 +600,13 @@ export class VideoCreateComponent implements OnInit {
         try {
           const rawfile: Blob = this.imageUploader.queue[0].file.rawFile as any;
           const file: Blob = rawfile as Blob;
-          this.thumbnail_loading = true;
           this.helperService
             .generateImageThumbnail(file, 'image')
             .then((thumbnail) => {
-              this.thumbnail_loading = false;
-              this.upload_thumbnail = thumbnail;
+              this.image.preview = thumbnail;
               this.uploadVideo();
             })
             .catch(() => {
-              this.thumbnail_loading = false;
               this.toast.warning('Cannot load the image file.');
             });
         } catch (e) {
@@ -707,11 +628,14 @@ export class VideoCreateComponent implements OnInit {
               .generateImageThumbnail(imageFile)
               .then((thumbnail) => {
                 this.video.thumbnail = thumbnail;
-                this.video['custom_thumbnail'] = true;
+                this.video.custom_thumbnail = true;
                 this.helperService
                   .generateImageThumbnail(imageFile, 'video_play')
                   .then((image) => {
-                    this.video['site_image'] = image;
+                    this.video.site_image = image;
+                  })
+                  .catch(() => {
+                    this.video.site_image = thumbnail;
                   });
               })
               .catch(() => {
@@ -726,15 +650,12 @@ export class VideoCreateComponent implements OnInit {
         this.helperService
           .promptForImage()
           .then((imageFile) => {
-            this.thumbnail_loading = true;
             this.helperService
               .generateImageThumbnail(imageFile, 'pdf')
               .then((thumbnail) => {
-                this.thumbnail_loading = false;
-                this.upload_thumbnail = thumbnail;
+                this.pdf.preview = thumbnail;
               })
               .catch(() => {
-                this.thumbnail_loading = false;
                 this.toast.warning('Cannot load the image file.');
               });
           })
@@ -746,15 +667,12 @@ export class VideoCreateComponent implements OnInit {
         this.helperService
           .promptForImage()
           .then((imageFile) => {
-            this.thumbnail_loading = true;
             this.helperService
               .generateImageThumbnail(imageFile, 'image')
               .then((thumbnail) => {
-                this.thumbnail_loading = false;
-                this.upload_thumbnail = thumbnail;
+                this.image.preview = thumbnail;
               })
               .catch(() => {
-                this.thumbnail_loading = false;
                 this.toast.warning('Cannot load the image file.');
               });
           })
@@ -774,10 +692,10 @@ export class VideoCreateComponent implements OnInit {
             '#pdf-selector .image'
           ) as HTMLElement;
           img.setAttribute('src', data);
-          this.upload_thumbnail = data;
+          this.pdf.preview = data;
           this.thumbnail_loading = false;
         })
-        .catch((err) => {
+        .catch(() => {
           this.toast.error('Loading the PDF file is failed. Please try agian');
         });
     });
@@ -796,9 +714,8 @@ export class VideoCreateComponent implements OnInit {
     if (this.video.url.toLowerCase().indexOf('youtube.com/watch') !== -1) {
       const matches = this.video.url.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
       if (matches) {
-        this.urlChecked = true;
-        this.videoId = matches[1];
-        this.getMetaFromYoutube();
+        const videoId = matches[1];
+        this.getMetaFromYoutube(videoId);
         return;
       }
     } else if (
@@ -806,21 +723,18 @@ export class VideoCreateComponent implements OnInit {
     ) {
       const matches = this.video.url.match(/embed\/([a-zA-Z0-9\-_]+)/);
       if (matches) {
-        this.urlChecked = true;
-        this.videoId = matches[1];
-        this.getMetaFromYoutube();
+        const videoId = matches[1];
+        this.getMetaFromYoutube(videoId);
         return;
       }
     } else if (this.video.url.toLowerCase().indexOf('youtu.be/') !== -1) {
       const matches = this.video.url.match(/youtu.be\/([a-zA-Z0-9\-_]+)/);
       if (matches) {
-        this.urlChecked = true;
-        this.videoId = matches[1];
-        this.getMetaFromYoutube();
+        const videoId = matches[1];
+        this.getMetaFromYoutube(videoId);
         return;
       }
     }
-    this.urlChecked = false;
     return;
   }
 
@@ -828,27 +742,25 @@ export class VideoCreateComponent implements OnInit {
     if (this.video.url.toLowerCase().indexOf('vimeo.com/video') !== -1) {
       const matches = this.video.url.match(/video\/([0-9]+)/);
       if (matches) {
-        this.urlChecked = true;
-        this.videoId = matches[1];
-        this.getThumbnailFromVimeo();
+        const videoId = matches[1];
+        this.getThumbnailFromVimeo(videoId);
         return;
       }
     } else if (this.video.url.toLowerCase().indexOf('vimeo.com/') !== -1) {
       const matches = this.video.url.match(/vimeo.com\/([0-9]+)/);
       if (matches) {
-        this.urlChecked = true;
-        this.videoId = matches[1];
-        this.getThumbnailFromVimeo();
+        const videoId = matches[1];
+        this.getThumbnailFromVimeo(videoId);
         return;
       }
     }
   }
 
-  getMetaFromYoutube(): any {
+  getMetaFromYoutube(id: string): any {
     this.youtubeVideoMetaSubscription &&
       this.youtubeVideoMetaSubscription.unsubscribe();
     this.youtubeVideoMetaSubscription = this.materialService
-      .getYoutubeMeta(this.videoId)
+      .getYoutubeMeta(id)
       .subscribe(
         (res) => {
           if (
@@ -866,35 +778,34 @@ export class VideoCreateComponent implements OnInit {
               this.video.thumbnail = thumbnail;
             } else {
               this.video.thumbnail =
-                'https://img.youtube.com/vi/' + this.videoId + '/0.jpg';
+                'https://img.youtube.com/vi/' + id + '/0.jpg';
             }
 
             const title = res['items'][0]['snippet']['title'];
             this.video.title = title;
           }
           if (res['items']) {
-            this.loadedData = true;
-            this.videoType = 'web';
+            this.video.type = 'youtube';
             this.uploadVideo();
           }
         },
         (err) => {
-          this.video.thumbnail =
-            'https://img.youtube.com/vi/' + this.videoId + '/0.jpg';
+          this.video.thumbnail = 'https://img.youtube.com/vi/' + id + '/0.jpg';
         }
       );
   }
 
-  getThumbnailFromVimeo(): any {
+  getThumbnailFromVimeo(id): any {
+    this.vimeoVideoMetaSubscription &&
+      this.vimeoVideoMetaSubscription.unsubscribe();
     this.vimeoVideoMetaSubscription = this.materialService
-      .getVimeoMeta(this.videoId)
+      .getVimeoMeta(id)
       .subscribe((res) => {
         if (res) {
           this.video.thumbnail = res[0]['thumbnail_large'];
           this.video.duration = res[0]['duration'] * 1000;
           this.video.title = res[0]['title'];
-          this.loadedData = true;
-          this.videoType = 'web';
+          this.video.type = 'vimeo';
           this.uploadVideo();
         }
       });
@@ -941,8 +852,13 @@ export class VideoCreateComponent implements OnInit {
     return duration;
   }
 
-  focusEditor(): void {
-    this.focusedField = 'editor';
+  activeFileZone(evt = null): void {
+    evt && evt.preventDefault();
+    this.overFile = true;
+  }
+  disableFileZone(evt = null): void {
+    evt && evt.preventDefault();
+    this.overFile = false;
   }
 }
 
