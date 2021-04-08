@@ -21,7 +21,6 @@ import { TeamService } from '../../services/team.service';
   styleUrls: ['./template-browser.component.scss']
 })
 export class TemplateBrowserComponent implements OnInit, OnDestroy {
-
   DISPLAY_COLUMNS = ['select', 'title', 'template-content', 'template-type'];
   STATUS = STATUS;
 
@@ -78,7 +77,11 @@ export class TemplateBrowserComponent implements OnInit, OnDestroy {
     this.loadSubscription = this.templatesService.templates$.subscribe(
       (templates) => {
         // this.templates = templates;
-        this.templates = templates.filter((item) => item.role === undefined);
+        this.templates = templates.filter(
+          (item) =>
+            item.role === undefined ||
+            (item.role === 'team' && item.user === this.userId)
+        );
         if (this.hideTemplates.length > 0) {
           this.templates = this.templates.filter((e) => {
             if (this.hideTemplates.indexOf(e._id) >= 0) {

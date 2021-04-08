@@ -54,7 +54,9 @@ export class AutomationBrowserComponent implements OnInit, OnDestroy {
     this.loadSubscription = this.automationService.automations$.subscribe(
       (automations) => {
         this.automations = automations.filter(
-          (item) => item.role === undefined
+          (item) =>
+            item.role === undefined ||
+            (item.role === 'team' && item.user === this.userId)
         );
         if (this.hideAutomations.length > 0) {
           this.automations = this.automations.filter((e) => {
