@@ -118,13 +118,42 @@
               <ng-container *ngIf="timezone.errors.required">Required!</ng-container>
             </span>
           </div>
-          <select class="form-control" [(ngModel)]="user.time_zone_info" name="timezone" id="timezone" required #timezone="ngModel">
-            <optgroup *ngFor="let timezone_group of timezones" label="{{timezone_group.country}}">
-              <option *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
-                {{timezone.name}}
-              </option>
-            </optgroup>
-          </select>
+          <mat-form-field class="timezone-select">
+            <mat-select class="form-control" [(ngModel)]="user.time_zone_info" name="timezone" id="timezone" required #timezone="ngModel">
+              <ng-container *ngIf="defaultTimeZone; else otherTimeZone">
+                <ng-container *ngFor="let timezone_group of timezones">
+                  <mat-optgroup *ngIf="timezone_group.country == 'US' || timezone_group.country == 'CA'" label="{{timezone_group.country}}">
+                    <mat-option class="timezone" *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
+                      {{timezone.name}}
+                    </mat-option>
+                  </mat-optgroup>
+                </ng-container>
+                <mat-option class="p-0">
+                  <div class="v-center justify-content-center other-timezone c-pointer" (click)="defaultTimeZone = !defaultTimeZone">
+                    <span class="f-3 font-weight-bold c-blue text-uppercase mr-2">
+                      other timezones
+                    </span>
+                    <i class="d-block i-icon i-plus bgc-blue"></i>
+                  </div>
+                </mat-option>
+              </ng-container>
+              <ng-template #otherTimeZone>
+                <mat-optgroup *ngFor="let timezone_group of timezones" label="{{timezone_group.country}}">
+                  <mat-option class="timezone" *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
+                    {{timezone.name}}
+                  </mat-option>
+                </mat-optgroup>
+                <mat-option class="p-0">
+                  <div class="v-center justify-content-center other-timezone c-pointer" (click)="defaultTimeZone = !defaultTimeZone">
+                    <span class="f-3 font-weight-bold c-blue text-uppercase mr-2">
+                      other timezones
+                    </span>
+                    <i class="d-block i-icon i-minus bgc-blue"></i>
+                  </div>
+                </mat-option>
+              </ng-template>
+            </mat-select>
+          </mat-form-field>
         </div>
         <div class="form-group mt-4" [ngClass]="{invalid: submitted && invalidError != ''}">
           <div class="d-flex justify-content-between">
@@ -144,7 +173,7 @@
           ></stripe-card>
         </div>
         <button type="submit" class="btn btn-primary d-block w-100 font-weight-bold mt-4" [class.loading]="saving">Sign up</button>
-        <p class="f-3 text-center mt-4">By clicking "Sign up" I agree to the <a class="c-blue td-underline font-weight-bold">Terms</a> and <a class="c-blue td-underline font-weight-bold">Privacy</a></p>
+        <p class="f-3 text-center mt-4">By clicking "Sign up" I agree to the <a target="_blank" href="https://crmgrow.com/terms_of_service.html" class="c-blue td-none font-weight-bold c-pointer">Terms</a> and <a target="_blank" href="https://crmgrow.com/privacy.html" class="c-blue td-none font-weight-bold c-pointer">Privacy</a></p>
       </form>
     </div>
     <!-- End main Profile Information Step -->

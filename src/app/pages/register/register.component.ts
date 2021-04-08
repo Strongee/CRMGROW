@@ -30,6 +30,7 @@ import { StripeScriptTag, StripeCard } from 'stripe-angular';
 })
 export class RegisterComponent implements OnInit {
   // Constant Variables
+  defaultTimeZone = true;
   timezones = TIMEZONE;
   countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;

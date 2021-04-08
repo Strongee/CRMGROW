@@ -239,7 +239,6 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
     return type.charAt(0).toUpperCase() + type.slice(1);
   }
 
-
   openFolder(element: Material): void {
     this.selectedFolder = element;
     this.filter();
