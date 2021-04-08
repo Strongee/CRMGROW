@@ -42,7 +42,7 @@
             </ng-container>
 
             <ng-container *ngSwitchCase="'teams'">
-              <a class="v-center result-item" [routerLink]="['/teams/' + item._id]">
+              <a class="v-center result-item" [routerLink]="['/team/' + item._id]">
                 <i class="i-icon i-teams d-block bgc-dark mr-2"></i>
                 <div class="f-3" [innerHTML]="item.name | highlight: (handlerService.searchStr$ | async)"></div>
               </a>
@@ -106,7 +106,7 @@
             <a *ngIf="searchedResults['contacts'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('contacts')">See all</a>
           </div>
         </ng-container>
-    
+
         <ng-container *ngIf="searchedResults['automations'].length">
           <h4 class="data-title">Automations</h4>
           <div class="data-result">
@@ -117,7 +117,7 @@
             <a *ngIf="searchedResults['automations'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('automations')">See all</a>
           </div>
         </ng-container>
-    
+
         <ng-container *ngIf="searchedResults['templates'].length">
           <h4 class="data-title">Templates</h4>
           <div class="data-result">
@@ -132,7 +132,7 @@
         <ng-container *ngIf="searchedResults['teams'].length">
           <h4 class="data-title">Teams</h4>
           <div class="data-result">
-            <a class="v-center result-item" *ngFor="let team of searchedResults['teams'] | slice: 0:3" [routerLink]="['/teams/' + team._id]">
+            <a class="v-center result-item" *ngFor="let team of searchedResults['teams'] | slice: 0:3" [routerLink]="['/team/' + team._id]">
               <i class="i-icon i-teams d-block bgc-dark mr-2"></i>
               <div class="f-3" [innerHTML]="team.name | highlight: (handlerService.searchStr$ | async)"></div>
             </a>
@@ -150,7 +150,7 @@
             <a *ngIf="searchedResults['deals'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('deals')">See all</a>
           </div>
         </ng-container>
-    
+
         <ng-container *ngIf="searchedResults['videos'].length">
           <h4 class="data-title">Videos</h4>
           <div class="data-result">
@@ -161,7 +161,7 @@
             <a *ngIf="searchedResults['videos'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('videos')">See all</a>
           </div>
         </ng-container>
-    
+
         <ng-container *ngIf="searchedResults['pdfs'].length">
           <h4 class="data-title">PDFs</h4>
           <div class="data-result">
@@ -172,7 +172,7 @@
             <a *ngIf="searchedResults['pdfs'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('pdfs')">See all</a>
           </div>
         </ng-container>
-    
+
         <ng-container *ngIf="searchedResults['images'].length">
           <h4 class="data-title">Images</h4>
           <div class="data-result">
@@ -183,7 +183,7 @@
             <a *ngIf="searchedResults['images'].length > 3" class="c-blue td-none c-pointer f-3 font-weight-bold" (click)="seeAll('images')">See all</a>
           </div>
         </ng-container>
-    
+
       </ng-template>
     </ng-template>
   </div>

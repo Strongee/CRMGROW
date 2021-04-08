@@ -157,7 +157,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(
         () => {
           this.accepting = false;
-          this.location.replaceState('/teams/' + this.teamId);
+          this.location.replaceState('/team/' + this.teamId);
           this.loadTeam();
         },
         (err) => {
@@ -591,7 +591,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
     this.teamService.acceptRequest(teamId, memberId).subscribe(
       (res) => {
         this.accepting = false;
-        this.location.replaceState('/teams/' + this.teamId);
+        this.location.replaceState('/team/' + this.teamId);
         this.loadTeam();
       },
       (err) => {
@@ -627,7 +627,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
     this.location.replaceState(
-      `/teams/${this.team._id}/${this.selectedTab.id}`
+      `/team/${this.team._id}/${this.selectedTab.id}`
     );
   }
 
@@ -799,13 +799,12 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showProfile(member): void {
-    if (member && member._id === this.userId) {
-      this.router.navigate(['/profile/general']);
-    } else {
-      this.dialog.open(TeamMemberProfileComponent, {
-        data: { ...member }
-      });
-    }
+    this.dialog.open(TeamMemberProfileComponent, {
+      data: {
+        title: 'Shared member',
+        member
+      }
+    });
   }
 
   getAvatarName(contact): any {

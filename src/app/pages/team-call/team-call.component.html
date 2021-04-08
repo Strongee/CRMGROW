@@ -124,7 +124,7 @@
                 <th class="subject">subject</th>
                 <th class="organizer">organizer</th>
                 <th class="date-time">proposed times</th>
-                <th class="call-status">status</th>
+                <th class="call-status">inquired</th>
                 <th class="team-actions"></th>
               </tr>
               <tr *ngSwitchCase="'sent'">
@@ -200,7 +200,7 @@
                     </div>
                   </td>
                   <td class="call-status c-pointer">
-                    Needs review
+                    {{call.created_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
                   <td class="team-actions">
                     <div class="v-center">

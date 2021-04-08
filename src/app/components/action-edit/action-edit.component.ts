@@ -486,6 +486,11 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       }
       return;
     }
+    if (this.type === 'note') {
+      if (!this.action['content']) {
+        return;
+      }
+    }
 
     this.dialogRef.close({ ...this.action, period });
   }

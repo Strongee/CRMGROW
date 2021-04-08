@@ -277,18 +277,20 @@
         </ng-container>
         <ng-container *ngIf="type=='note'">
           <div class="action-form">
-            <div class="form-group has-feedback"
-                 [class.has-error]="note.errors && (note.touched || note.dirty|| submitted) && submitted">
-<!--              <label class="theme-label mt-3">Title</label>-->
-<!--              <input type="text" class="form-control" [(ngModel)]="action['title']" name="title" #title="ngModel" required>-->
-<!--              <span class="invalid-feedback"-->
-<!--                    *ngIf="title.errors && (title.dirty || title.touched || submitted) && submitted">Title is required.</span>-->
-              <label class="theme-label mt-3">NOTE CONTENT</label>
-              <textarea [(ngModel)]="action['content']" class="form-control" placeholder="Please type in note."
-                        name="note" #note="ngModel" rows="6" required></textarea>
-              <span class="invalid-feedback"
-                    *ngIf="note.errors && (note.dirty || note.touched || submitted) && submitted">Note
-              content is required.</span>
+            <div class="form-group has-feedback mt-2">
+              <div class="v-center justify-content-between">
+                <label class="theme-label">NOTE CONTENT</label>
+                <span class="error f-3 font-weight-bold d-block"
+                      *ngIf="!action.content && submitted">Required</span>
+              </div>
+
+              <app-html-editor
+                [(value)]="action.content"
+                placeholder="Please type content for note."
+                [noImage]="true"
+                [style]="{height: '200px'}"
+              >
+              </app-html-editor>
             </div>
           </div>
         </ng-container>
