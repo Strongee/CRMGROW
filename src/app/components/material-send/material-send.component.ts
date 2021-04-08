@@ -1,4 +1,10 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
 import { FormControl } from '@angular/forms';

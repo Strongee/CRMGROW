@@ -141,7 +141,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
             this.userService.email.next(null);
           }
         }
-        if (template.type === 'sms') {
+        if (template.type === 'text') {
           if (cannedMessage.sms) {
             this.userService.sms.next(template);
           } else {
@@ -193,10 +193,15 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
     const filtered = this.templates.filter((template) => {
       const str =
         template.title + ' ' + template.content + ' ' + template.subject;
-      return searchReg(str, this.searchStr);
+      return reg.test(str);
     });
     this.filteredResult = filtered;
     this.sort(this.selectedSort, true);
