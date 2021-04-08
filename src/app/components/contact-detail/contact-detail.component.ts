@@ -13,6 +13,10 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { listToTree } from '../../helper';
 import { DealsService } from '../../services/deals.service';
 import { CALENDAR_DURATION } from '../../constants/variable.constants';
+import { User } from '../../models/user.model';
+import { Subscription } from 'rxjs';
+import { TeamService } from '../../services/team.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-contact-detail',
@@ -21,7 +25,6 @@ import { CALENDAR_DURATION } from '../../constants/variable.constants';
 })
 export class ContactDetailComponent implements OnInit {
   contact;
-  selectedContact: Contact = new Contact();
   label;
   additionalPanel = true;
   notesPanel = true;
@@ -45,6 +48,10 @@ export class ContactDetailComponent implements OnInit {
   noteTimeLines: DetailActivity[] = [];
   otherTimeLines: DetailActivity[] = [];
   durations = CALENDAR_DURATION;
+  editors = {};
+  contactActivity;
+  teamSubscription: Subscription;
+  sharable: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -53,11 +60,26 @@ export class ContactDetailComponent implements OnInit {
     private storeService: StoreService,
     public contactService: ContactService,
     private dealsService: DealsService,
+    private teamService: TeamService,
+    public userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.contact) {
       this.contact = new Contact().deserialize(this.data.contact);
     }
+
+    this.teamSubscription && this.teamSubscription.unsubscribe();
+    this.teamSubscription = this.teamService.teams$.subscribe((teams) => {
+      this.checkSharable();
+
+      teams.forEach((team) => {
+        if (team.editors && team.editors.length) {
+          team.editors.forEach((e) => {
+            this.editors[e._id] = new User().deserialize(e);
+          });
+        }
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -67,32 +89,44 @@ export class ContactDetailComponent implements OnInit {
       this.label = labels[index];
     }
     this.loadContact(this.contact._id);
-    this.storeService.selectedContact$.subscribe(
-      (res) => {
-        if (res && res._id) {
-          this.contact = res;
-          this.selectedContact = res;
-          this.groupActivities();
-          this.getActivityCount();
-          this.timeLineArrangement();
-        }
-      },
-      () => {
-        this.dialogRef.close();
-      }
-    );
   }
 
   loadContact(_id: string): void {
     this.contactService.getSharedContact(_id).subscribe((res) => {
       if (res) {
-        this.contact = res;
-        this.selectedContact = res;
+        this.contactActivity = res;
         this.groupActivities();
         this.getActivityCount();
-        this.timeLineArrangement();
+        if (this.mainTimelines.length > 0) {
+          this.noteTimeLines = this.mainTimelines.filter(
+            (item) => item.type === 'notes'
+          );
+          this.otherTimeLines = this.mainTimelines.filter(
+            (item) => item.type !== 'notes'
+          );
+        }
       }
     });
+  }
+
+  checkSharable(): void {
+    const userId = this.userService.profile.getValue()._id;
+    const teams = this.teamService.teams.getValue();
+    if (!teams || !teams.length) {
+      this.sharable = false;
+      return;
+    }
+    let isValid = false;
+    teams.some((e) => {
+      if (e.isActive(userId)) {
+        isValid = true;
+        return true;
+      }
+    });
+    if (isValid) {
+      this.sharable = true;
+      return;
+    }
   }
 
   /**
@@ -102,15 +136,20 @@ export class ContactDetailComponent implements OnInit {
     this.groupActions = {};
     this.mainTimelines = [];
     this.details = {};
-    for (let i = this.contact.activity.length - 1; i >= 0; i--) {
-      const e = this.contact.activity[i];
-      const group = this.generateUniqueId(e);
-      if (this.groupActions[group]) {
-        this.groupActions[group].push(e);
-      } else {
-        e.group_id = group;
-        this.groupActions[group] = [e];
-        this.mainTimelines.push(e);
+    if (
+      this.contactActivity.activity &&
+      this.contactActivity.activity.length > 0
+    ) {
+      for (let i = this.contactActivity.activity.length - 1; i >= 0; i--) {
+        const e = this.contactActivity.activity[i];
+        const group = this.generateUniqueId(e);
+        if (this.groupActions[group]) {
+          this.groupActions[group].push(e);
+        } else {
+          e.group_id = group;
+          this.groupActions[group] = [e];
+          this.mainTimelines.push(e);
+        }
       }
     }
   }
@@ -120,7 +159,7 @@ export class ContactDetailComponent implements OnInit {
    * @param activity : Activity Detail Information
    */
   generateUniqueId(activity: DetailActivity): string {
-    if (!activity.activity_detail) {
+    if (activity.activity_detail && !activity.activity_detail.length) {
       if (activity.type === 'follow_ups' && activity.follow_ups) {
         return activity.follow_ups;
       }
@@ -133,11 +172,11 @@ export class ContactDetailComponent implements OnInit {
       case 'image_trackers':
       case 'email_trackers':
         const material_type = activity.type.split('_')[0];
-        material_id = activity.activity_detail[material_type];
+        material_id = activity.activity_detail[0][material_type];
         if (material_id instanceof Array) {
           material_id = material_id[0];
         }
-        let activity_id = activity.activity_detail['activity'];
+        let activity_id = activity.activity_detail[0]['activity'];
         if (activity_id instanceof Array) {
           activity_id = activity_id[0];
         }
@@ -146,25 +185,25 @@ export class ContactDetailComponent implements OnInit {
       case 'pdfs':
       case 'images':
       case 'emails':
-        material_id = activity.activity_detail['_id'];
+        material_id = activity.activity_detail[0]['_id'];
         if (activity.type !== 'emails') {
-          activity.activity_detail['content'] = activity.content;
-          activity.activity_detail['subject'] = activity.subject;
-          activity.activity_detail['updated_at'] = activity.updated_at;
+          activity.activity_detail[0]['content'] = activity.content;
+          activity.activity_detail[0]['subject'] = activity.subject;
+          activity.activity_detail[0]['updated_at'] = activity.updated_at;
         }
-        this.details[material_id] = activity.activity_detail;
+        this.details[material_id] = activity.activity_detail[0];
         const group_id = `${material_id}_${activity._id}`;
-        this.detailData[group_id] = activity.activity_detail;
+        this.detailData[group_id] = activity.activity_detail[0];
         this.detailData[group_id]['data_type'] = activity.type;
         this.detailData[group_id]['group_id'] = group_id;
         this.detailData[group_id]['emails'] = activity.emails;
         this.detailData[group_id]['texts'] = activity.texts;
         return group_id;
       case 'texts':
-        material_id = activity.activity_detail['_id'];
-        this.details[material_id] = activity.activity_detail;
+        material_id = activity.activity_detail[0]['_id'];
+        this.details[material_id] = activity.activity_detail[0];
         const text_group_id = `${material_id}_${activity._id}`;
-        this.detailData[text_group_id] = activity.activity_detail;
+        this.detailData[text_group_id] = activity.activity_detail[0];
         this.detailData[text_group_id]['data_type'] = activity.type;
         this.detailData[text_group_id]['group_id'] = text_group_id;
         this.detailData[text_group_id]['emails'] = activity.emails;
@@ -174,8 +213,8 @@ export class ContactDetailComponent implements OnInit {
         }
         return text_group_id;
       default:
-        const detailKey = activity.activity_detail['_id'];
-        this.detailData[detailKey] = activity.activity_detail;
+        const detailKey = activity.activity_detail[0]['_id'];
+        this.detailData[detailKey] = activity.activity_detail[0];
         this.detailData[detailKey]['data_type'] = activity.type;
         return detailKey;
     }
@@ -225,36 +264,6 @@ export class ContactDetailComponent implements OnInit {
         }
       });
     }
-  }
-
-  timeLineArrangement(): any {
-    this.allDataSource = new MatTreeNestedDataSource<any>();
-    if (!this.contact['time_lines'] || this.contact['time_lines'].length == 0) {
-      return;
-    }
-    this.allDataSource.data = listToTree(this.contact['time_lines']);
-    let root = null;
-    if (this.allDataSource.data?.length == 0) {
-      return;
-    }
-    if (this.allDataSource.data[0]?.status == 'completed') {
-      root = JSON.parse(JSON.stringify(this.allDataSource.data[0]));
-    } else {
-      return;
-    }
-    while (true) {
-      if (root.children[0]?.status == 'completed') {
-        root = root.children[0];
-      } else if (root.children[1]?.status == 'completed') {
-        root = root.children[1];
-      } else break;
-    }
-
-    for (const firstChild of root.children)
-      for (const secondChild of firstChild.children) secondChild.children = [];
-
-    this.dataSource = new MatTreeNestedDataSource<any>();
-    this.dataSource.data.push(root);
   }
 
   setOlderNotes(older): void {

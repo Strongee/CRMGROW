@@ -126,7 +126,9 @@ export const ROUTE_PAGE = {
   '/contacts': 'Contacts',
   '/deals': 'Deals',
   '/autoflow': 'Automations',
-  '/settings/tag-manager': 'Tag manager'
+  '/settings/tag-manager': 'Tag manager',
+  '/team': 'Teams',
+  '/automations': 'Automations'
 };
 
 export const COUNTRIES = [

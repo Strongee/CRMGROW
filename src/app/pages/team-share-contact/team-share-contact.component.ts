@@ -238,8 +238,13 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
       .searchContact(this.team._id, this.searchStr)
       .subscribe((res) => {
         if (res) {
-          this.pageContacts = res['contacts'];
-          this.contactCount = res['total'];
+          this.pageContacts = [];
+          for (const contact of res['contacts']) {
+            this.pageContacts.push(
+              new ContactActivity().deserialize(contact)
+            );
+          }
+          this.contactCount = res['contacts'].length;
         }
       });
     this.page = 1;
@@ -478,6 +483,16 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    * Select All Contacts
    */
   selectAll(source = false): void {
+    if (this.searchStr) {
+      this.pageContacts.forEach((e) => {
+        if (!this.isSelected(e)) {
+          const contact = new Contact().deserialize(e);
+          this.pageSelection.push(contact);
+          this.selection.push(contact);
+        }
+      });
+      return;
+    }
     this.selecting = true;
     this.selectSubscription && this.selectSubscription.unsubscribe();
     this.selectSubscription = this.teamService
@@ -679,6 +694,10 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
 
   getSharedMembers(contact): any {
     return _.uniqBy(contact.shared_members, '_id');
+  }
+
+  getSharedUsers(contact): any {
+    return _.uniqBy(contact.user, '_id');
   }
 
   userAvatarName(user_name): string {

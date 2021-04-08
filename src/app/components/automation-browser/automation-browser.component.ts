@@ -78,11 +78,14 @@ export class AutomationBrowserComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const filtered = this.automations.filter((automation) => {
-      const str = automation.title;
-      return searchReg(str, this.searchStr);
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
+    this.filteredResult = this.automations.filter((automation) => {
+      return reg.test(automation.title);
     });
-    this.filteredResult = filtered;
   }
 
   clearSearchStr(): void {
@@ -146,9 +149,9 @@ export class AutomationBrowserComponent implements OnInit, OnDestroy {
   }
 
   getAutomationById(id): any {
-    const index = this.filteredResult.findIndex((item) => item._id === id);
+    const index = this.automations.findIndex((item) => item._id === id);
     if (index >= 0) {
-      return this.filteredResult[index];
+      return this.automations[index];
     }
     return null;
   }

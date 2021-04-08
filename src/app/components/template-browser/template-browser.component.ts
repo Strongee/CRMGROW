@@ -102,12 +102,16 @@ export class TemplateBrowserComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const filtered = this.templates.filter((template) => {
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
+    this.filteredResult = this.templates.filter((template) => {
       const str =
         template.title + ' ' + template.content + ' ' + template.subject;
-      return searchReg(str, this.searchStr);
+      return reg.test(str);
     });
-    this.filteredResult = filtered;
   }
 
   clearSearchStr(): void {
@@ -171,9 +175,9 @@ export class TemplateBrowserComponent implements OnInit, OnDestroy {
   }
 
   getTemplateById(id): any {
-    const index = this.filteredResult.findIndex((item) => item._id === id);
+    const index = this.templates.findIndex((item) => item._id === id);
     if (index >= 0) {
-      return this.filteredResult[index];
+      return this.templates[index];
     }
     return null;
   }

@@ -18,7 +18,7 @@ import {
   ACTION_CAT,
   AUTOMATION_ICONS,
   BulkActions,
-  DialogSettings
+  DialogSettings, ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
@@ -1564,26 +1564,16 @@ export class AutoflowComponent
         data: node
       })
       .subscribe((res) => {
-        if (res == 'edit') {
+        if (res === 'edit') {
           this.editAction(event, node);
-        } else if (res == 'remove') {
+        } else if (res === 'remove') {
           this.removeAction(node);
         }
       });
   }
 
   goToBack(): void {
-    // if (this.automation.title !== this.automation_title) {
-    //   if (this.auth === 'admin' || this.auth === 'shared') {
-    //     this.toastr.error(
-    //       'Automation title has been changed. Please save automation as new title.'
-    //     );
-    //   } else {
-    //     this.toastr.error('Automation title has been changed. Please save it.');
-    //   }
-    // } else {
-    this.router.navigate(['automations']);
-    // }
+    this.handlerService.goBack('/automations');
   }
 
   changeTab(tab: TabItem): void {
@@ -2025,6 +2015,18 @@ export class AutoflowComponent
     } else {
       this.editPanel.clearForm();
     }
+  }
+
+  getPrevPage(): string {
+    if (!this.handlerService.previousUrl) {
+      return 'to Automations';
+    }
+    for (const route in ROUTE_PAGE) {
+      if (this.handlerService.previousUrl.includes(route)) {
+        return 'to ' + ROUTE_PAGE[route];
+      }
+    }
+    return '';
   }
 
   ICONS = {

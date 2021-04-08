@@ -19,6 +19,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Contact } from 'src/app/models/contact.model';
 import { User } from 'src/app/models/user.model';
 import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
+import { TeamMemberProfileComponent } from '../team-member-profile/team-member-profile.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-call-request-detail',
@@ -53,6 +55,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<CallRequestDetailComponent>,
     private dialog: MatDialog,
     private toast: ToastrService,
+    private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.call) {
@@ -386,5 +389,15 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       date: this.MIN_DATE,
       time: '15:00:00.000'
     });
+  }
+
+  showProfile(contact): void {
+    if (contact && contact._id === this.userId) {
+      this.router.navigate(['/profile/general']);
+    } else {
+      this.dialog.open(TeamMemberProfileComponent, {
+        data: { ...contact }
+      });
+    }
   }
 }

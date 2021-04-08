@@ -51,6 +51,19 @@ export class UserService extends HttpService {
       })
       .pipe(catchError(this.handleError('SOCIAL SIGNIN REQUEST')));
   }
+
+  public signup(user: any): any {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(this.server + AUTH.SIGNUP, JSON.stringify(user), {
+        headers: reqHeader
+      })
+      .pipe(catchError(this.handleError('SIGNUP REQUEST')));
+  }
+
   /**
    * LOG OUT -> CALL API
    */
@@ -369,5 +382,8 @@ export class UserService extends HttpService {
     } else {
       return {};
     }
+  }
+  public setUser(user: User): any {
+    localStorage.setItem('user', JSON.stringify(user));
   }
 }

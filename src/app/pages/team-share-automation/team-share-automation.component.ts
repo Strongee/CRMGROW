@@ -32,6 +32,7 @@ import { TeamService } from '../../services/team.service';
 import { Team } from '../../models/team.model';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-team-share-automation',
@@ -144,11 +145,14 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   }
 
   changeSearchStr(): void {
-    const reg = new RegExp(this.searchStr, 'gi');
-    const filtered = this.automations.filter((item) => {
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
+    this.filteredResult = this.automations.filter((item) => {
       return reg.test(item.title);
     });
-    this.filteredResult = filtered;
     this.page = 1;
   }
 
@@ -176,34 +180,6 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     this.router.navigate(['/autoflow/new/' + automation._id]);
   }
 
-  /**
-   * Open the delete confirm dlg to delete the automation
-   * @param event HTML Expansion click event
-   * @param automation Automation to delete
-   */
-  deleteAutomation(event: Event, automation: Automation): void {
-    event.stopPropagation();
-    const dialog = this.dialog.open(ConfirmComponent, {
-      data: {
-        title: 'Delete Automation',
-        message: 'Are you sure you want to delete the automation?',
-        confirmLabel: 'Delete'
-      }
-    });
-
-    dialog.afterClosed().subscribe((res) => {
-      if (res) {
-        this.deleting = true;
-        this.automationService.delete(automation._id).subscribe((status) => {
-          this.deleting = false;
-          if (status) {
-            this.toastr.success('Automation is deleted successfully.');
-            this.automationService.reload();
-          }
-        });
-      }
-    });
-  }
 
   /**
    * Open the dialog to assing the automation

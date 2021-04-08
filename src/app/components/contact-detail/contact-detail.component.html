@@ -44,19 +44,23 @@
 </div>
 <mat-dialog-content>
   <div class="form-group">
-    <div>
-      <label>Address</label>
-      <div class="v-center">
-        <i class="i-icon i-contact-location bgc-dark mr-2"></i>
-        <span class="f-3">{{contact.fullAddress}}</span>
-      </div>
+    <div class="v-center">
+      <i class="i-icon i-message bgc-dark"></i>
+      <span class="f-3 ml-2">{{contact.email}}</span>
     </div>
-    <div class="mt-1">
-      <div class="v-center py-1">
-        <i class="i-icon i-webpage bgc-dark mr-2"></i>
-        <span class="f-3">{{contact.website}}</span>
-      </div>
+    <div class="v-center mt-2">
+      <i class="i-icon i-phone bgc-dark"></i>
+      <span class="f-3 ml-2">{{contact.cell_phone}}</span>
     </div>
+    <div class="v-center mt-2">
+      <i class="i-icon i-contact-location bgc-dark"></i>
+      <span class="f-3 ml-2">{{contact.fullAddress}}</span>
+    </div>
+    <div class="v-center my-2">
+      <i class="i-icon i-webpage bgc-dark"></i>
+      <span class="f-3 ml-2">{{contact.website}}</span>
+    </div>
+
     <mat-accordion multi class="general-panels">
       <mat-expansion-panel class="mat-elevation-z mt-3" hideToggle [expanded]="additionalPanel">
         <mat-expansion-panel-header (click)="additionalPanel = !additionalPanel">
@@ -107,7 +111,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                     <div class="v-center justify-content-between mb-3">
                       <div class="v-center">
-                        <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                        <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                         <div class="f-5">
                           <span>{{activity.content}}</span>
                         </div>
@@ -116,12 +120,12 @@
                         <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                       </div>
                     </div>
-                    <ng-container *ngIf="activity.activity_detail; else removedNoteTemplate">
+                    <ng-container *ngIf="activity.activity_detail.length; else removedNoteTemplate">
                       <div class="main-history-item">
-                        <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail.content">
+                        <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail[0].content">
                           <ng-template #show>
                             <div class="content f-5 position-relative">
-                              <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
+                              <div class="note-content">{{activity.activity_detail[0].content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
                               <div class="gradient-bottom"></div>
                               <div class="f-3 fw-600 c-blue mt-1">
                                 Expand
@@ -130,7 +134,7 @@
                           </ng-template>
                           <ng-template #hide>
                             <div class="content">
-                              <div class="f-5 note-content opened">{{activity.activity_detail.content}}</div>
+                              <div class="f-5 note-content opened">{{activity.activity_detail[0].content}}</div>
                               <div class="f-3 fw-600 c-blue mt-1">
                                 Collapse
                               </div>
@@ -160,7 +164,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                       <div class="f-5">
                         <span>{{activity.content}}</span>
                       </div>
@@ -169,12 +173,12 @@
                       <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
-                  <ng-container *ngIf="activity.activity_detail; else removedNoteTemplate">
+                  <ng-container *ngIf="activity.activity_detail[0]; else removedNoteTemplate">
                     <div class="main-history-item">
-                      <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail.content">
+                      <app-accordion [showIndicator]="show" [hideIndicator]="hide" *ngIf="activity.activity_detail[0].content">
                         <ng-template #show>
                           <div class="content f-5 position-relative">
-                            <div class="note-content">{{activity.activity_detail.content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
+                            <div class="note-content">{{activity.activity_detail[0].content || 'No Content Note' | stripTags | shorten: 300: '...' }}</div>
                             <div class="gradient-bottom"></div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Expand
@@ -183,7 +187,7 @@
                         </ng-template>
                         <ng-template #hide>
                           <div class="content">
-                            <div class="f-5 note-content opened">{{activity.activity_detail.content}}</div>
+                            <div class="f-5 note-content opened">{{activity.activity_detail[0].content}}</div>
                             <div class="f-3 fw-600 c-blue mt-1">
                               Collapse
                             </div>
@@ -224,7 +228,7 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
@@ -239,7 +243,7 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
@@ -248,7 +252,7 @@
                     <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                <ng-container *ngIf="activity.activity_detail[0]; else removedTaskTemplate">
                   <div class="main-history-item" [class.completed]="activity.content.indexOf('completed') !== -1">
                     <div class="v-center">
                       <div class="v-center justify-content-center c-pointer task-status"
@@ -261,7 +265,7 @@
                         </div>
                       </ng-template>
                       <div class="f-5 font-weight-bold ml-3 content">
-                        {{activity.activity_detail.content}}
+                        {{activity.activity_detail[0].content}}
                       </div>
                     </div>
                     <div class="v-center mt-3" *ngIf="activity.content.indexOf('completed') === -1">
@@ -271,7 +275,7 @@
                         </div>
                         <div class="v-center mt-1">
                           <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.due_date | date: 'MM/dd/yyyy'}} at {{activity.activity_detail.due_date | date: 'shortTime'}}</span>
+                          <span class="f-4">{{activity.activity_detail[0].due_date | date: 'MM/dd/yyyy'}} at {{activity.activity_detail[0].due_date | date: 'shortTime'}}</span>
                         </div>
                       </div>
                       <div class="type ml-5">
@@ -279,14 +283,14 @@
                           Type
                         </div>
                         <div class="v-center mt-1">
-                          <ng-container [ngSwitch]="activity.activity_detail.type">
+                          <ng-container [ngSwitch]="activity.activity_detail[0].type">
                             <i class="d-block i-icon i-task bgc-dark mr-2" *ngSwitchCase="'task'"></i>
                             <i class="d-block i-icon i-phone bgc-dark mr-2" *ngSwitchCase="'call'"></i>
                             <i class="d-block i-icon i-lunch bgc-dark mr-2" *ngSwitchCase="'meeting'"></i>
                             <i class="d-block i-icon i-message bgc-dark mr-2" *ngSwitchCase="'email'"></i>
                             <i class="d-block i-icon i-video bgc-dark mr-2" *ngSwitchCase="'material'"></i>
                           </ng-container>
-                          <span class="f-4 text-capitalize">{{activity.activity_detail.type}}</span>
+                          <span class="f-4 text-capitalize">{{activity.activity_detail[0].type}}</span>
                         </div>
                       </div>
                     </div>
@@ -329,7 +333,7 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
@@ -338,7 +342,7 @@
                     <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail;">
+                <ng-container *ngIf="activity.activity_detail[0];">
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiEmailHistory">
                       <div class="summary position-relative">
@@ -405,13 +409,13 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail;">
+                <ng-container *ngIf="activity.activity_detail[0];">
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiVideoHistory">
                       <div class="summary position-relative">
@@ -458,7 +462,7 @@
                               <span class="f-3 font-weight-bold">#{{groupActions[activity.group_id].length - i}}</span>
                               <span class="f-3 font-weight-bold ml-2">{{detailActivity.content}}</span>
                             </td>
-                            <td class="duration-col">{{(detailActivity.activity_detail.type ? (detailActivity.activity_detail.duration || '--') + 's' : '') | timeDuration}}</td>
+                            <td class="duration-col">{{(detailActivity.activity_detail[0].type ? (detailActivity.activity_detail[0].duration || '--') + 's' : '') | timeDuration}}</td>
                             <td class="date-col">
                               <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMMM dd yyyy, hh:mm a'}}">
                                 {{detailActivity.created_at | date: 'MMMM dd'}}
@@ -478,13 +482,13 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                <ng-container *ngIf="activity.activity_detail[0]; else removedTaskTemplate">
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiPdfHistory">
                       <div class="summary position-relative">
@@ -535,14 +539,14 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
                   </div>
 
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedTaskTemplate">
+                <ng-container *ngIf="activity.activity_detail[0]; else removedTaskTemplate">
                   <div class="main-history-item">
                     <ng-container *ngIf="groupActions[activity.group_id].length === 1; else multiImageHistory">
                       <div class="summary position-relative">
@@ -593,7 +597,7 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
@@ -613,15 +617,15 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedAppointmentTemplate">
+                <ng-container *ngIf="activity.activity_detail[0]; else removedAppointmentTemplate">
                   <div class="main-history-item">
                     <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                       <ng-template #show>
                         <div class="content f-5 position-relative">
                           <div class="font-weight-bold">
-                            {{activity.activity_detail.title}}
+                            {{activity.activity_detail[0].title}}
                           </div>
-                          <div class="f-5" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail[0].description || '' | stripTags | shorten: 300: '...'"></div>
                           <div class="gradient-bottom"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Expand
@@ -631,9 +635,9 @@
                       <ng-template #hide>
                         <div class="content">
                           <div class="f-5 font-weight-bold">
-                            {{activity.activity_detail.title}}
+                            {{activity.activity_detail[0].title}}
                           </div>
-                          <div class="f-5" [innerHTML]="activity.activity_detail.description || ''"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail[0].description || ''"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Collapse
                           </div>
@@ -647,7 +651,7 @@
                         </div>
                         <div class="v-center mt-1">
                           <i class="d-block i-icon i-calendar bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.due_start | date: 'MM/dd/yyyy'}}</span>
+                          <span class="f-4">{{activity.activity_detail[0].due_start | date: 'MM/dd/yyyy'}}</span>
                         </div>
                       </div>
                       <div class="time ml-5">
@@ -656,7 +660,7 @@
                         </div>
                         <div class="v-center mt-1">
                           <i class="d-block i-icon i-timer bgc-dark mr-2"></i>
-                          <span class="f-4">{{getTime(activity.activity_detail.due_start, activity.activity_detail.due_end)}}</span>
+                          <span class="f-4">{{getTime(activity.activity_detail[0].due_start, activity.activity_detail[0].due_end)}}</span>
                         </div>
                       </div>
                       <div class="location ml-5">
@@ -665,16 +669,16 @@
                         </div>
                         <div class="v-center mt-1">
                           <i class="d-block i-icon i-location bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.location}}</span>
+                          <span class="f-4">{{activity.activity_detail[0].location}}</span>
                         </div>
                       </div>
                     </div>
-                    <div class="mt-4" *ngIf="activity.activity_detail.zoom_link">
+                    <div class="mt-4" *ngIf="activity.activity_detail[0].zoom_link">
                       <div class="f-4 fw-600 op-40">
                         Zoom meeting
                       </div>
                       <div class="f-4 c-blue mt-1">
-                        {{activity.activity_detail.zoom_link}}
+                        {{activity.activity_detail[0].zoom_link}}
                       </div>
                     </div>
                   </div>
@@ -691,7 +695,7 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
@@ -711,21 +715,21 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedGroupCallTemplate">
+                <ng-container *ngIf="activity.activity_detail[0]; else removedGroupCallTemplate">
                   <div class="main-history-item">
                     <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                       <ng-template #show>
                         <div class="content f-5 position-relative">
                           <div class="font-weight-bold">
-                            {{activity.activity_detail.subject}}
+                            {{activity.activity_detail[0].subject}}
                           </div>
                           <div class="call-status mb-3">
-                            <div class="tag {{activity.activity_detail.status}}">{{activity.activity_detail.status}}</div>
-                            <ng-container *ngIf="activity.activity_detail.status === 'planned'">
-                              <span class="f-3"> on </span><span class="time f-3 font-weight-bold">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
+                            <div class="tag {{activity.activity_detail[0].status}}">{{activity.activity_detail[0].status}}</div>
+                            <ng-container *ngIf="activity.activity_detail[0].status === 'planned'">
+                              <span class="f-3"> on </span><span class="time f-3 font-weight-bold">{{activity.activity_detail[0].confirmed_at | date :'MMM d, hh:mm a'}}</span>
                             </ng-container>
                           </div>
-                          <div class="f-5" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...'"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail[0].description || '' | stripTags | shorten: 300: '...'"></div>
                           <div class="gradient-bottom"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Expand
@@ -735,29 +739,46 @@
                       <ng-template #hide>
                         <div class="content">
                           <div class="f-5 font-weight-bold">
-                            {{activity.activity_detail.subject}}
+                            {{activity.activity_detail[0].subject}}
                           </div>
                           <div class="call-status mb-3">
-                            <div class="tag {{activity.activity_detail.status}}">{{activity.activity_detail.status}}</div>
-                            <ng-container *ngIf="activity.activity_detail.status === 'planned'">
-                              on <span class="time">{{activity.activity_detail.confirmed_at | date :'MMM d, hh:mm a'}}</span>
+                            <div class="tag {{activity.activity_detail[0].status}}">{{activity.activity_detail[0].status}}</div>
+                            <ng-container *ngIf="activity.activity_detail[0].status === 'planned'">
+                              on <span class="time">{{activity.activity_detail[0].confirmed_at | date :'MMM d, hh:mm a'}}</span>
                             </ng-container>
                           </div>
-                          <div class="f-5" [innerHTML]="activity.activity_detail.description || ''"></div>
+                          <div class="f-5" [innerHTML]="activity.activity_detail[0].description || ''"></div>
                           <div class="f-3 fw-600 c-blue mt-1">
                             Collapse
                           </div>
                         </div>
                       </ng-template>
                     </app-accordion>
-                    <div class="v-center mt-3">
-                      <div class="contacts">
+                    <div class="v-center mt-3 partner-info">
+                      <div class="leader">
+                        <div class="f-4 fw-600 op-40">
+                          Leader
+                        </div>
+                        <div class="v-center mt-1">
+                          <ng-container *ngIf="editors[activity.activity_detail.leader]; else unknownLeader">
+                            <img *ngIf="editors[activity.activity_detail.leader].picture_profile; else avatarNameTemplate" [src]="editors[activity.activity_detail.leader].picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+                            <ng-template #avatarNameTemplate>
+                              <div class="form-avatar rounded-circle bg-dark mr-1">{{editors[activity.activity_detail.leader].avatarName}}</div>
+                            </ng-template>
+                            <div class="f-3 mr-2">{{editors[activity.activity_detail.leader].user_name}}</div>
+                          </ng-container>
+                          <ng-template #unknownLeader>
+                            --
+                          </ng-template>
+                        </div>
+                      </div>
+                      <div class="contacts mr-4">
                         <div class="f-4 fw-600 op-40">
                           Contacts
                         </div>
                         <div class="v-center mt-1">
                           <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.contacts?.length || 0}}</span>
+                          <span class="f-4">{{activity.activity_detail[0].contacts?.length || 0}}</span>
                         </div>
                       </div>
                       <div class="time ml-5">
@@ -766,32 +787,32 @@
                         </div>
                         <div class="v-center mt-1">
                           <i class="d-block i-icon i-timer bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.duration}}mins</span>
+                          <span class="f-4">{{activity.activity_detail[0].duration}}mins</span>
                         </div>
                       </div>
                     </div>
-                    <div class="mt-4" *ngIf="activity.activity_detail.desired_at">
+                    <div class="mt-4" *ngIf="activity.activity_detail[0].desired_at">
                       <div class="f-4 fw-600 op-40">
                         Desired time
                       </div>
                       <div class="f-3 mt-1 fw-600">
-                        {{activity.activity_detail.desired_at | date :'MMM d, hh:mm a'}}
+                        {{activity.activity_detail[0].desired_at | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
-                    <div class="mt-4" *ngIf="activity.activity_detail.proposed_at && activity.activity_detail.proposed_at.length">
+                    <div class="mt-4" *ngIf="activity.activity_detail[0].proposed_at && activity.activity_detail[0].proposed_at.length">
                       <div class="f-4 fw-600 op-40">
                         Proposed times
                       </div>
-                      <div class="f-3 mt-1 fw-600" *ngFor="let time of activity.activity_detail.proposed_at">
+                      <div class="f-3 mt-1 fw-600" *ngFor="let time of activity.activity_detail[0].proposed_at">
                         {{time | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
-                    <div class="mt-4" *ngIf="activity.activity_detail.schedule_link">
+                    <div class="mt-4" *ngIf="activity.activity_detail[0].schedule_link">
                       <div class="f-4 fw-600 op-40">
                         Calendar Link
                       </div>
                       <div class="f-3 mt-1 c-blue">
-                        {{activity.activity_detail.schedule_link}}
+                        {{activity.activity_detail[0].schedule_link}}
                       </div>
                     </div>
                   </div>
@@ -808,7 +829,7 @@
               <div class="history-detail {{activity.type}}-detail p-3 mb-2">
                 <div class="v-center justify-content-between mb-3">
                   <div class="v-center">
-                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                    <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail.length ? activity.activity_detail[0].type : ''}}" ></i></div>
                     <div class="f-5">
                       <span>{{activity.content}}</span>
                     </div>
@@ -828,29 +849,19 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="activity.activity_detail; else removedDealTemplate">
+                <ng-container *ngIf="activity.activity_detail[0]; else removedDealTemplate">
                   <div class="main-history-item">
                     <div class="f-5 font-weight-bold">
-                      {{activity.activity_detail.title}}
+                      {{activity.activity_detail[0].title}}
                     </div>
                     <div class="v-center mt-3">
-                      <div class="stage">
-                        <div class="f-4 fw-600 op-40">
-                          Stage
-                        </div>
-                        <ng-container *ngFor="let dealStage of dealsService.stages$ | async">
-                          <div class="f-4 mt-1" *ngIf="dealStage._id == activity.activity_detail.deal_stage">
-                            {{dealStage.title}}
-                          </div>
-                        </ng-container>
-                      </div>
-                      <div class="contacts ml-5">
+                      <div class="contacts">
                         <div class="f-4 fw-600 op-40">
                           Contacts
                         </div>
                         <div class="v-center mt-1">
                           <i class="d-block i-icon i-lunch bgc-dark mr-2"></i>
-                          <span class="f-4">{{activity.activity_detail.contacts?.length || 0}}</span>
+                          <span class="f-4">{{activity.activity_detail[0].contacts?.length || 0}}</span>
                         </div>
                       </div>
                       <div class="value ml-5">
@@ -858,7 +869,7 @@
                           Value
                         </div>
                         <div class="f-4 mt-1">
-                          $ {{activity.activity_detail.value}}
+                          $ {{activity.activity_detail[0].value}}
                         </div>
                       </div>
                     </div>
