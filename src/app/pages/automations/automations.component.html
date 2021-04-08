@@ -93,7 +93,7 @@
                 <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
               </a>
               <div ngbDropdownMenu class="light">
-                <ng-container *ngIf="automation.role !== 'team' && automation.user == userId; else otherRoleTemplate">
+                <ng-container *ngIf="automation.role !== 'admin' && automation.user == userId; else otherRoleTemplate">
                   <button class="v-center border-0 py-2 c-dark dropdown-item"
                           (click)="openAutomation($event, automation)"
                   >
@@ -115,7 +115,7 @@
                     <span class="f-3 font-weight-bold ml-3">Share team</span>
                   </button>
                 </ng-container>
-                <ng-container *ngIf="automation.role !== 'team' && automation.user == userId">
+                <ng-container *ngIf="automation.role !== 'admin' && automation.user == userId">
                   <hr class="my-0">
                   <button class="v-center border-0 py-2 c-dark dropdown-item"
                           (click)="deleteAutomation($event, automation)"
