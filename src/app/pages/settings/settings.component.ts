@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { PageMenuItem } from 'src/app/utils/data.types';
 
 @Component({
@@ -8,7 +9,7 @@ import { PageMenuItem } from 'src/app/utils/data.types';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   menuItems: PageMenuItem[] = [
     { id: 'notifications', icon: 'i-notification', label: 'Notifications' },
     { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
@@ -35,19 +36,32 @@ export class SettingsComponent implements OnInit {
   currentPage: string;
   currentPageItem: PageMenuItem[];
 
-  constructor(private location: Location, private route: ActivatedRoute) {}
+  routeChangeSubscription: Subscription;
+
+  constructor(
+    private location: Location,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.currentPage = this.route.snapshot.params['page'] || this.defaultPage;
-    this.currentPageItem = this.menuItems.filter(
-      (item) => item.id == this.currentPage
-    );
+    this.routeChangeSubscription = this.route.params.subscribe((params) => {
+      this.currentPage = params['page'] || this.defaultPage;
+      this.currentPageItem = this.menuItems.filter(
+        (item) => item.id == this.currentPage
+      );
+    });
   }
+
+  ngOnDestroy(): void {
+    this.routeChangeSubscription && this.routeChangeSubscription.unsubscribe();
+  }
+
   changeMenu(menu: PageMenuItem): void {
-    this.currentPage = menu.id;
-    this.currentPageItem = this.menuItems.filter(
-      (item) => item.id == this.currentPage
-    );
-    this.location.replaceState(`settings/${menu.id}`);
+    // this.currentPage = menu.id;
+    // this.currentPageItem = this.menuItems.filter(
+    //   (item) => item.id == this.currentPage
+    // );
+    this.router.navigate([`settings/${menu.id}`]);
   }
 }

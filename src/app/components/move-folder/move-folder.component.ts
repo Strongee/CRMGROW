@@ -86,41 +86,20 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
   }
 
   move(): void {
-    const shared_materials = [];
     const videos = [];
     const images = [];
     const pdfs = [];
     this.materials.forEach((e) => {
-      if (e.role === 'admin') {
-        shared_materials.push(e._id);
-      } else {
-        if (e.user && e.user._id && e.user._id === this.userId) {
-          switch (e.material_type) {
-            case 'video':
-              videos.push(e._id);
-              break;
-            case 'pdf':
-              pdfs.push(e._id);
-              break;
-            case 'image':
-              images.push(e._id);
-              break;
-          }
-        } else if (e.user === this.userId) {
-          switch (e.material_type) {
-            case 'video':
-              videos.push(e._id);
-              break;
-            case 'pdf':
-              pdfs.push(e._id);
-              break;
-            case 'image':
-              images.push(e._id);
-              break;
-          }
-        } else {
-          shared_materials.push(e._id);
-        }
+      switch (e.material_type) {
+        case 'video':
+          videos.push(e._id);
+          break;
+        case 'pdf':
+          pdfs.push(e._id);
+          break;
+        case 'image':
+          images.push(e._id);
+          break;
       }
     });
 
@@ -132,64 +111,68 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
     if (this.selectedFolder._id !== 'root') {
       this.moving = true;
       this.moveSubscription = this.materialService
-        .moveFiles(
-          { videos, images, pdfs, shared_materials },
-          this.selectedFolder._id,
-          source
-        )
+        .moveFiles({ videos, images, pdfs }, this.selectedFolder._id, source)
         .subscribe((status) => {
+          this.moving = false;
           if (status) {
-            // if (shared_materials.length) {
-            //   if (source) {
-            //     // remove shared materials
-            //     const _currentSharedMaterials = this.currentFolder
-            //       .shared_materials;
-            //     _.pullAll(_currentSharedMaterials, shared_materials);
-            //     this.materialService.update$(source, {
-            //       shared_materials: _currentSharedMaterials
-            //     });
-            //   }
-            //   // add shared materials
-            //   const _sharedMaterials = this.selectedFolder.shared_materials;
-            //   const _newSharedMaterials = _.union(
-            //     _sharedMaterials,
-            //     shared_materials
-            //   );
-            //   this.materialService.update$(this.selectedFolder._id, {
-            //     shared_materials: _newSharedMaterials
-            //   });
-            // }
-            this.materialService.bulkUpdate$(
-              [...videos, ...images, ...pdfs, ...shared_materials],
-              { folder: this.selectedFolder._id }
+            this.closeDlg(
+              source,
+              this.selectedFolder._id,
+              videos,
+              images,
+              pdfs
             );
-            this.dialogRef.close(true);
           }
         });
     } else {
       this.moving = true;
       this.moveSubscription = this.materialService
-        .moveFiles({ videos, images, pdfs, shared_materials }, '', source)
+        .moveFiles({ videos, images, pdfs }, '', source)
         .subscribe((status) => {
+          this.moving = false;
           if (status) {
-            if (shared_materials.length) {
-              // if (source) {
-              //   // remove shared material
-              //   const _currentSharedMaterials = this.currentFolder
-              //     .shared_materials;
-              //   _.pullAll(_currentSharedMaterials, shared_materials);
-              //   this.materialService.update$(source, {
-              //     shared_materials: _currentSharedMaterials
-              //   });
-              // }
-            }
-            this.materialService.bulkUpdate$(
-              [...videos, ...images, ...pdfs, ...shared_materials],
-              { folder: '' }
-            );
-            this.dialogRef.close(true);
+            this.closeDlg(source, '', videos, images, pdfs);
           }
         });
     }
+  }
+
+  closeDlg(
+    source: string,
+    target: string,
+    videos: string[],
+    images: string[],
+    pdfs: string[]
+  ): void {
+    if (source) {
+      const _currentVideos = this.currentFolder.videos;
+      const _currentImages = this.currentFolder.images;
+      const _currentPdfs = this.currentFolder.pdfs;
+      _.pullAll(_currentVideos, videos);
+      _.pullAll(_currentImages, images);
+      _.pullAll(_currentPdfs, pdfs);
+      this.materialService.update$(source, {
+        videos: _currentVideos,
+        pdfs: _currentPdfs,
+        images: _currentImages
+      });
+    }
+    if (target) {
+      const _targetVideos = this.selectedFolder.videos;
+      const _targetImages = this.selectedFolder.images;
+      const _targetPdfs = this.selectedFolder.pdfs;
+      const _newVideos = _.union(_targetVideos, videos);
+      const _newImages = _.union(_targetImages, images);
+      const _newpdfs = _.union(_targetPdfs, pdfs);
+      this.materialService.update$(this.selectedFolder._id, {
+        videos: _newVideos,
+        images: _newImages,
+        pdfs: _newpdfs
+      });
+    }
+    this.materialService.bulkUpdate$([...videos, ...images, ...pdfs], {
+      folder: this.selectedFolder._id
+    });
+    this.dialogRef.close();
   }
 }

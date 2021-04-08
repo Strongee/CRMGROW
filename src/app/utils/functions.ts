@@ -18,7 +18,7 @@ export function sortStringArray(
     if (field == 'title') {
       array = _.orderBy(
         array,
-        [(array) => array?.title.toLowerCase()],
+        [(e) => (e?.title || '').toLowerCase()],
         [searchDirection]
       );
     } else {

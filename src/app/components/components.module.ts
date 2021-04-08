@@ -114,7 +114,6 @@ import { DealEditComponent } from './deal-edit/deal-edit.component';
 import { DateInputComponent } from './date-input/date-input.component';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { AutomationStatusComponent } from './automation-status/automation-status.component';
-import { AutomationCreateComponent } from './automation-create/automation-create.component';
 import { ContactMergeLabelComponent } from './contact-merge-label/contact-merge-label.component';
 import { InputCountryComponent } from './input-country/input-country.component';
 import { InputStateComponent } from './input-state/input-state.component';
@@ -265,7 +264,6 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
     ContactMergeLabelComponent,
     InputCountryComponent,
     InputStateComponent,
-    AutomationCreateComponent,
     ContactMergeLabelComponent,
     DealContactComponent,
     SelectTeamComponent,

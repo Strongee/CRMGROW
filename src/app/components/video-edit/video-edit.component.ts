@@ -1,16 +1,18 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { MaterialService } from 'src/app/services/material.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { HtmlEditorComponent } from '../html-editor/html-editor.component';
+import { Material } from 'src/app/models/material.model';
+import { UserService } from 'src/app/services/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-video-edit',
   templateUrl: './video-edit.component.html',
   styleUrls: ['./video-edit.component.scss']
 })
-export class VideoEditComponent implements OnInit {
+export class VideoEditComponent implements OnInit, OnDestroy {
   submitted = false;
   video = {
     _id: '',
@@ -23,20 +25,30 @@ export class VideoEditComponent implements OnInit {
   };
   saving = false;
   thumbnailLoading = false;
-  focusedField = '';
 
-  @ViewChild('emailEditor') htmlEditor: HtmlEditorComponent;
+  editedVideos = [];
+  garbageSubscription: Subscription;
 
   constructor(
     private dialogRef: MatDialogRef<VideoEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private toast: ToastrService,
     private materialService: MaterialService,
+    private userService: UserService,
     private helperService: HelperService
   ) {}
 
   ngOnInit(): void {
     this.video = { ...this.data.material };
+    this.garbageSubscription = this.userService.garbage$.subscribe(
+      (_garbage) => {
+        this.editedVideos = _garbage.edited_video || [];
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
   }
 
   update(): void {
@@ -49,44 +61,65 @@ export class VideoEditComponent implements OnInit {
       }
     });
     if (this.video['role'] === 'admin') {
-      this.materialService.updateAdminVideo(this.video['_id'], video).subscribe(
-        (res) => {
+      this.materialService
+        .updateAdminVideo(this.video['_id'], video)
+        .subscribe((res) => {
           this.saving = false;
-          this.dialogRef.close(res);
-        },
-        (err) => {
-          this.saving = false;
-        }
-      );
-    } else {
-      this.materialService.updateVideo(this.video['_id'], video).subscribe(
-        (res) => {
           if (res && res['status']) {
-            this.saving = false;
-            this.toast.success('Video material successfully edited.');
-            this.dialogRef.close(res);
+            const newMaterial = new Material().deserialize(res['data']);
+            newMaterial.material_type = 'video';
+            this.materialService.create$(newMaterial);
+            this.editedVideos.push(this.video._id);
+            this.userService.updateGarbageImpl({
+              edited_video: this.editedVideos
+            });
+            this.materialService.delete$([this.video._id]);
+            this.toast.success('Video material successfully duplicated.');
+            this.dialogRef.close();
           }
-        },
-        (err) => {
+        });
+    } else {
+      this.materialService
+        .updateVideo(this.video['_id'], video)
+        .subscribe((res) => {
           this.saving = false;
-        }
-      );
+          if (res && res['status']) {
+            this.toast.success('Video material successfully edited.');
+            this.materialService.update$(this.video['_id'], this.video);
+            this.dialogRef.close();
+          }
+        });
     }
   }
 
   duplicate(): void {
-    this.saving = true;
     let video;
     if (this.video.role == 'admin') {
-      video = {
-        url: this.video.url,
-        title: this.video.title,
-        duration: this.video.duration,
-        thumbnail: this.video.thumbnail,
-        description: this.video.description,
-        default_edited: true,
-        default_video: this.video._id
-      };
+      this.saving = true;
+      const video = {};
+      const keys = ['title', 'thumbnail', 'description', 'site_image'];
+      keys.forEach((e) => {
+        if (this.video[e] != this.data.material[e]) {
+          video[e] = this.video[e];
+        }
+      });
+      this.materialService
+        .updateAdminVideo(this.video['_id'], video)
+        .subscribe((res) => {
+          this.saving = false;
+          if (res && res['status']) {
+            const newMaterial = new Material().deserialize(res['data']);
+            newMaterial.material_type = 'video';
+            this.materialService.create$(newMaterial);
+            this.editedVideos.push(this.video._id);
+            this.userService.updateGarbageImpl({
+              edited_video: this.editedVideos
+            });
+            this.materialService.delete$([this.video._id]);
+            this.toast.success('Video material successfully duplicated.');
+            this.dialogRef.close();
+          }
+        });
     } else {
       video = {
         url: this.video.url,
@@ -97,14 +130,18 @@ export class VideoEditComponent implements OnInit {
         has_shared: true,
         shared_video: this.video._id
       };
-    }
-    this.materialService.createVideo(video).subscribe((res) => {
-      if (res['data']) {
+      this.saving = true;
+      this.materialService.createVideo(video).subscribe((res) => {
         this.saving = false;
-        this.toast.success('Video material successfully duplicated.');
-        this.dialogRef.close(res['data']);
-      }
-    });
+        if (res['data']) {
+          this.toast.success('Video material successfully duplicated.');
+          const newMaterial = new Material().deserialize(res['data']);
+          newMaterial.material_type = 'video';
+          this.materialService.create$(newMaterial);
+          this.dialogRef.close();
+        }
+      });
+    }
   }
 
   openPreviewDialog(): void {
@@ -135,9 +172,5 @@ export class VideoEditComponent implements OnInit {
       .catch(() => {
         this.toast.error("Can't read this image");
       });
-  }
-
-  focusEditor(): void {
-    this.focusedField = 'editor';
   }
 }

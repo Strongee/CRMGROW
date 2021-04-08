@@ -117,18 +117,10 @@ input.disabled {
     button {
       opacity: 0;
       margin-left: auto;
-
-      @media screen and (max-width: 1024px) {
-        margin-left: 3rem;
-      }
+      margin-right: auto;
 
       @media screen and (max-width: 768px) {
         opacity: 1;
-        margin-left: 2rem;
-      }
-
-      @media screen and (max-width: 576px) {
-        margin-left: 1rem;
       }
     }
   }

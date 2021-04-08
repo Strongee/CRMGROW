@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { StoreService } from '../../services/store.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialService } from '../../services/material.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-delete-folder',
@@ -71,12 +72,35 @@ export class DeleteFolderComponent implements OnInit {
           ? this.selectedFolder._id
           : null
     };
+    if (data.target === 'root') {
+      data.target = '';
+    }
     this.materialService
       .removeFolder(data) // answer
       .subscribe((res) => {
         if (res['status']) {
+          if (this.currentOption === 'move-other' && data.target) {
+            const _targetVideos = this.selectedFolder.videos;
+            const _targetImages = this.selectedFolder.images;
+            const _targetPdfs = this.selectedFolder.pdfs;
+            const _newVideos = _.union(
+              _targetVideos,
+              this.currentFolder.videos
+            );
+            const _newImages = _.union(
+              _targetImages,
+              this.currentFolder.images
+            );
+            const _newpdfs = _.union(_targetPdfs, this.currentFolder.pdfs);
+            this.materialService.update$(this.selectedFolder._id, {
+              videos: _newVideos,
+              images: _newImages,
+              pdfs: _newpdfs
+            });
+          }
           this.materialService.delete$([this.currentFolder._id]);
           this.materialService.removeFolder$(this.currentFolder._id);
+          this.dialogRef.close();
         }
       });
   }

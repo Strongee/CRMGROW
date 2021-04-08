@@ -498,7 +498,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         maxWidth: '600px',
         disableClose: true,
         data: {
-          contact: this.contact,
+          contact: {
+            ...this.contact,
+            activity: undefined,
+            time_lines: undefined,
+            automation: undefined,
+            next: undefined,
+            prev: undefined
+          },
           type: type
         }
       })
@@ -526,7 +533,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         width: '98vw',
         maxWidth: '600px',
         data: {
-          contact: this.contact
+          contact: {
+            ...this.contact,
+            activity: undefined,
+            time_lines: undefined,
+            automation: undefined,
+            next: undefined,
+            prev: undefined
+          }
         }
       })
       .afterClosed()

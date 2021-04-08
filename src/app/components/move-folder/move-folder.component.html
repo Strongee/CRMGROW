@@ -8,8 +8,8 @@
   <div class="form-group">
     <div class="v-center">
       <label for="target_folder" class="mb-0">select folder</label>
-      <span class="error ml-auto" *ngIf="folder.errors">
-        <ng-container *ngIf="folder.errors.required">Required!</ng-container>
+      <span class="error ml-auto" *ngIf="selectedFolder._id">
+        Required!
       </span>
     </div>
     <div class="border rounded py-2 px-2 mt-1">

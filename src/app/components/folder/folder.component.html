@@ -1,6 +1,6 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? save() : false" [class.was-validated]="form.submitted" class="general">
   <h1 mat-dialog-title class="v-center d-flex">
-    <span>Edit folder</span>
+    <span>{{folder._id ? 'Edit folder' : 'Create folder'}}</span>
     <button class="border-0 bgc-trans ml-auto" mat-dialog-close>
       <i class="d-block i-icon i-close bgc-dark"></i>
     </button>

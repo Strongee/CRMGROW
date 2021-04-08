@@ -20,11 +20,11 @@ import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
+import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
 
 @Component({
   selector: 'app-automations',
@@ -152,11 +152,12 @@ export class AutomationsComponent implements OnInit, OnDestroy {
 
   shareAutomation(event: Event, automation: Automation): void {
     this.dialog
-      .open(AutomationShareComponent, {
-        width: '500px',
-        maxWidth: '90vw',
+      .open(TeamMaterialShareComponent, {
+        width: '98vw',
+        maxWidth: '450px',
         data: {
-          automation
+          automation,
+          type: 'automation'
         }
       })
       .afterClosed()
@@ -230,16 +231,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   }
 
   create(): void {
-    this.dialog
-      .open(AutomationCreateComponent, {
-        width: '360px',
-        maxWidth: '90vw'
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-        }
-      });
+    this.router.navigate([`/autoflow/new`]);
   }
 
   sort(field: string, keep: boolean = false): void {

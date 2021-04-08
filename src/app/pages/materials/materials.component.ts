@@ -170,6 +170,7 @@ export class MaterialsComponent implements OnInit {
               materialFolderMatch[e] = folder._id;
             });
           });
+
           materials.forEach((e) => {
             if (materialFolderMatch[e._id]) {
               e.folder = materialFolderMatch[e._id];
@@ -441,290 +442,81 @@ export class MaterialsComponent implements OnInit {
   }
 
   editVideo(video: any): void {
-    this.dialog
-      .open(VideoEditComponent, {
-        position: { top: '5vh' },
-        width: '100vw',
-        maxWidth: '500px',
-        disableClose: true,
-        data: {
-          material: {
-            _id: video._id,
-            title: video.title,
-            description: video.description,
-            thumbnail: video.thumbnail,
-            role: video.role
-          },
-          type: 'edit'
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && res['status']) {
-          if (video.role === 'admin') {
-            // this.materials.some((e, index) => {
-            //   if (e._id === video._id) {
-            //     this.materials.splice(index, 1);
-            //     return true;
-            //   }
-            // });
-            this.materialService.delete$([video._id]);
-            this.editedVideos.push(video._id);
-            this.userService
-              .updateGarbage({
-                edited_video: this.editedVideos
-              })
-              .subscribe(() => {
-                this.userService.updateGarbageImpl({
-                  edited_video: this.editedVideos
-                });
-              });
-            const newVideo = {
-              ...video,
-              _id: res['data']['_id'],
-              title: res['data']['title'],
-              description: res['data']['description'],
-              thumbnail: res['data']['thumbnail'],
-              default_edited: true
-            };
-            this.materialService.create$(newVideo);
-          } else {
-            video.title = res['data']['title'];
-            video.description = res['data']['description'];
-            video.thumbnail = res['data']['thumbnail'];
-            this.materialService.update$(video._id, res['data']);
-          }
-        }
-      });
+    this.dialog.open(VideoEditComponent, {
+      position: { top: '5vh' },
+      width: '100vw',
+      maxWidth: '500px',
+      disableClose: true,
+      data: {
+        material: { ...video },
+        type: 'edit'
+      }
+    });
   }
 
   editPdf(pdf: any): void {
-    this.dialog
-      .open(PdfEditComponent, {
-        position: { top: '5vh' },
-        width: '100vw',
-        maxWidth: '500px',
-        disableClose: true,
-        data: {
-          material: {
-            _id: pdf._id,
-            title: pdf.title,
-            description: pdf.description,
-            preview: pdf.preview,
-            role: pdf.role
-          },
-          type: 'edit'
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && res['status']) {
-          if (pdf.role === 'admin') {
-            // this.materials.some((e, index) => {
-            //   if (e._id === pdf._id) {
-            //     this.materials.splice(index, 1);
-            //     return true;
-            //   }
-            // });
-            this.materialService.delete$([pdf._id]);
-            this.editedPdfs.push(pdf._id);
-            this.userService
-              .updateGarbage({
-                edited_pdf: this.editedPdfs
-              })
-              .subscribe(() => {
-                this.userService.updateGarbageImpl({
-                  edited_pdf: this.editedPdfs
-                });
-              });
-            const newPdf = {
-              ...pdf,
-              _id: res['data']['_id'],
-              title: res['data']['title'],
-              description: res['data']['description'],
-              thumbnail: res['data']['preview'],
-              default_edited: true
-            };
-            // this.materials.push(newPdf);
-            this.materialService.create$(newPdf);
-          } else {
-            pdf.title = res['data']['title'];
-            pdf.description = res['data']['description'];
-            pdf.preview = res['data']['preview'];
-            this.materialService.update$(pdf._id, res['data']);
-          }
-        }
-      });
+    this.dialog.open(PdfEditComponent, {
+      position: { top: '5vh' },
+      width: '100vw',
+      maxWidth: '500px',
+      disableClose: true,
+      data: {
+        material: { ...pdf },
+        type: 'edit'
+      }
+    });
   }
 
   editImage(image: any): void {
-    this.dialog
-      .open(ImageEditComponent, {
-        position: { top: '5vh' },
-        width: '100vw',
-        maxWidth: '500px',
-        disableClose: true,
-        data: {
-          material: {
-            _id: image._id,
-            title: image.title,
-            description: image.description,
-            preview: image.preview
-          },
-          type: 'edit'
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && res['status']) {
-          if (image.role === 'admin') {
-            // this.materials.some((e, index) => {
-            //   if (e._id === image._id) {
-            //     this.materials.splice(index, 1);
-            //     return true;
-            //   }
-            // });
-            this.materialService.delete$([image._id]);
-            this.editedImages.push(image._id);
-            this.userService
-              .updateGarbage({
-                edited_image: this.editedImages
-              })
-              .subscribe(() => {
-                this.userService.updateGarbageImpl({
-                  edited_image: this.editedImages
-                });
-              });
-            const newImage = {
-              ...image,
-              _id: res['data']['_id'],
-              title: res['data']['title'],
-              description: res['data']['description'],
-              thumbnail: res['data']['preview'],
-              default_edited: true
-            };
-            // this.materials.push(newImage);
-            this.materialService.create$(newImage);
-          } else {
-            image.title = res['data']['title'];
-            image.description = res['data']['description'];
-            image.preview = res['data']['preview'];
-            this.materialService.update$(image._id, res['data']);
-          }
-        }
-      });
+    this.dialog.open(ImageEditComponent, {
+      position: { top: '5vh' },
+      width: '100vw',
+      maxWidth: '500px',
+      disableClose: true,
+      data: {
+        material: { ...image },
+        type: 'edit'
+      }
+    });
   }
 
   duplicateMaterial(material: any): void {
     switch (material.material_type) {
       case 'video':
-        this.dialog
-          .open(VideoEditComponent, {
-            position: { top: '5vh' },
-            width: '100vw',
-            maxWidth: '500px',
-            disableClose: true,
-            data: {
-              material: {
-                _id: material._id,
-                url: material.url,
-                title: material.title,
-                duration: material.duration,
-                description: material.description,
-                thumbnail: material.thumbnail,
-                role: material.role
-              },
-              type: 'duplicate'
-            }
-          })
-          .afterClosed()
-          .subscribe((res) => {
-            if (res) {
-              const newVideo = {
-                ...material,
-                _id: res._id,
-                title: res.title,
-                description: res.description,
-                thumbnail: res.thumbnail,
-                role: 'user',
-                default_edited: true
-              };
-              // this.materials.push(newVideo);
-              this.materialService.create$(newVideo);
-            }
-          });
+        this.dialog.open(VideoEditComponent, {
+          position: { top: '5vh' },
+          width: '100vw',
+          maxWidth: '500px',
+          disableClose: true,
+          data: {
+            material: { ...material },
+            type: 'duplicate'
+          }
+        });
         break;
       case 'pdf':
-        this.dialog
-          .open(PdfEditComponent, {
-            position: { top: '5vh' },
-            width: '100vw',
-            maxWidth: '500px',
-            disableClose: true,
-            data: {
-              material: {
-                _id: material._id,
-                url: material.url,
-                title: material.title,
-                description: material.description,
-                preview: material.preview,
-                role: material.role
-              },
-              type: 'duplicate'
-            }
-          })
-          .afterClosed()
-          .subscribe((res) => {
-            if (res) {
-              const newPdf = {
-                ...material,
-                _id: res._id,
-                title: res.title,
-                description: res.description,
-                preview: res.preview,
-                role: 'user',
-                default_edited: true
-              };
-              // this.materials.push(newPdf);
-              this.materialService.create$(newPdf);
-            }
-          });
+        this.dialog.open(PdfEditComponent, {
+          position: { top: '5vh' },
+          width: '100vw',
+          maxWidth: '500px',
+          disableClose: true,
+          data: {
+            material: { ...material },
+            type: 'duplicate'
+          }
+        });
         break;
       case 'image':
-        this.dialog
-          .open(ImageEditComponent, {
-            position: { top: '5vh' },
-            width: '100vw',
-            maxWidth: '500px',
-            disableClose: true,
-            data: {
-              material: {
-                _id: material._id,
-                title: material.title,
-                description: material.description,
-                preview: material.preview,
-                role: material.role,
-                url: material.url
-              },
-              type: 'duplicate'
-            }
-          })
-          .afterClosed()
-          .subscribe((res) => {
-            if (res) {
-              const newImage = {
-                ...material,
-                _id: res._id,
-                title: res.title,
-                description: res.description,
-                preview: res.preview,
-                role: 'user',
-                default_edited: true
-              };
-              // this.materials.push(newImage);
-              this.materialService.create$(newImage);
-            }
-          });
+        this.dialog.open(ImageEditComponent, {
+          position: { top: '5vh' },
+          width: '100vw',
+          maxWidth: '500px',
+          disableClose: true,
+          data: {
+            material: { ...material },
+            type: 'duplicate'
+          }
+        });
         break;
     }
   }
@@ -752,21 +544,22 @@ export class MaterialsComponent implements OnInit {
     });
   }
 
-  deleteMaterial(material: any): void {
-    switch (material.material_type) {
-      case 'video':
-        const videoConfirmDialog = this.dialog.open(ConfirmComponent, {
-          position: { top: '100px' },
-          data: {
-            title: 'Delete Video',
-            message: 'Are you sure to delete this video?',
-            confirmLabel: 'Delete',
-            cancelLabel: 'Cancel'
-          }
-        });
-        if (material.role == 'admin') {
-          videoConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
+  hideMaterial(material: any): void {
+    if (material.role === 'admin') {
+      switch (material.material_type) {
+        case 'video':
+          this.dialog
+            .open(ConfirmComponent, {
+              position: { top: '100px' },
+              data: {
+                title: 'Hide Video',
+                message: 'Are you sure you want to hide this video?',
+                confirmLabel: 'Hide',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe(() => {
               const pos = this.editedVideos.indexOf(material._id);
               if (pos != -1) {
                 return;
@@ -784,12 +577,98 @@ export class MaterialsComponent implements OnInit {
                       this.toggleElement(material);
                     }
                     this.materialService.delete$([material._id]);
-                    this.toast.success('Video has been deleted successfully.');
+                    this.toast.success('Video has been hide successfully.');
                   });
               }
-            }
-          });
-        } else {
+            });
+          break;
+        case 'image':
+          this.dialog
+            .open(ConfirmComponent, {
+              position: { top: '100px' },
+              data: {
+                title: 'Hide Image',
+                message: 'Are you sure you want to hide this image?',
+                confirmLabel: 'Hide',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe(() => {
+              const pos = this.editedImages.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_image: [...this.editedImages, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedImages.push(material._id);
+                    this.userService.updateGarbageImpl({
+                      edited_image: this.editedImages
+                    });
+                    if (this.isSelected(material)) {
+                      this.toggleElement(material);
+                    }
+                    this.materialService.delete$([material._id]);
+                    this.toast.success('Image has been hide successfully.');
+                  });
+              }
+            });
+          break;
+        case 'pdf':
+          this.dialog
+            .open(ConfirmComponent, {
+              position: { top: '100px' },
+              data: {
+                title: 'Hide Pdf',
+                message: 'Are you sure you want to delete this pdf?',
+                confirmLabel: 'Hide',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe(() => {
+              const pos = this.editedPdfs.indexOf(material._id);
+              if (pos != -1) {
+                return;
+              } else {
+                this.userService
+                  .updateGarbage({
+                    edited_pdf: [...this.editedPdfs, material._id]
+                  })
+                  .subscribe(() => {
+                    this.editedPdfs.push(material._id);
+                    this.userService.updateGarbageImpl({
+                      edited_pdf: this.editedPdfs
+                    });
+                    if (this.isSelected(material)) {
+                      this.toggleElement(material);
+                    }
+                    this.materialService.delete$([material._id]);
+                    this.toast.success('Pdf has been hide successfully.');
+                  });
+              }
+            });
+          break;
+      }
+    }
+  }
+
+  deleteMaterial(material: any): void {
+    switch (material.material_type) {
+      case 'video':
+        const videoConfirmDialog = this.dialog.open(ConfirmComponent, {
+          position: { top: '100px' },
+          data: {
+            title: 'Delete Video',
+            message: 'Are you sure to delete this video?',
+            confirmLabel: 'Delete',
+            cancelLabel: 'Cancel'
+          }
+        });
+        if (material.role !== 'admin') {
           videoConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               this.materialDeleteSubscription &&
@@ -812,37 +691,12 @@ export class MaterialsComponent implements OnInit {
           position: { top: '100px' },
           data: {
             title: 'Delete Image',
-            message: 'Are you sure to delete this Image?',
+            message: 'Are you sure you want to delete this Image?',
             confirmLabel: 'Delete',
             cancelLabel: 'Cancel'
           }
         });
-        if (material.role == 'admin') {
-          imageConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
-              const pos = this.editedImages.indexOf(material._id);
-              if (pos != -1) {
-                return;
-              } else {
-                this.userService
-                  .updateGarbage({
-                    edited_image: [...this.editedImages, material._id]
-                  })
-                  .subscribe(() => {
-                    this.editedImages.push(material._id);
-                    this.userService.updateGarbageImpl({
-                      edited_image: this.editedImages
-                    });
-                    if (this.isSelected(material)) {
-                      this.toggleElement(material);
-                    }
-                    this.materialService.delete$([material._id]);
-                    this.toast.success('Image has been deleted successfully.');
-                  });
-              }
-            }
-          });
-        } else {
+        if (material.role !== 'admin') {
           imageConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               this.materialDeleteSubscription &&
@@ -870,32 +724,7 @@ export class MaterialsComponent implements OnInit {
             cancelLabel: 'Cancel'
           }
         });
-        if (material.role == 'admin') {
-          pdfConfirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
-              const pos = this.editedPdfs.indexOf(material._id);
-              if (pos != -1) {
-                return;
-              } else {
-                this.userService
-                  .updateGarbage({
-                    edited_pdf: [...this.editedPdfs, material._id]
-                  })
-                  .subscribe(() => {
-                    this.editedPdfs.push(material._id);
-                    this.userService.updateGarbageImpl({
-                      edited_pdf: this.editedPdfs
-                    });
-                    if (this.isSelected(material)) {
-                      this.toggleElement(material);
-                    }
-                    this.materialService.delete$([material._id]);
-                    this.toast.success('Pdf has been deleted successfully.');
-                  });
-              }
-            }
-          });
-        } else {
+        if (material.role !== 'admin') {
           pdfConfirmDialog.afterClosed().subscribe((res) => {
             if (res) {
               this.materialDeleteSubscription &&
@@ -1033,14 +862,14 @@ export class MaterialsComponent implements OnInit {
         this.moveToFolder();
         break;
       case 'delete':
-        if (!this.selection.length) {
+        if (!selectedMaterials.length) {
           return;
         } else {
           const confirmDialog = this.dialog.open(ConfirmComponent, {
             position: { top: '100px' },
             data: {
               title: 'Delete Materials',
-              message: 'Are you sure to delete these materials?',
+              message: 'Are you sure to delete these selected materials?',
               confirmLabel: 'Delete',
               cancelLabel: 'Cancel'
             }
@@ -1108,6 +937,11 @@ export class MaterialsComponent implements OnInit {
                   .subscribe((status) => {
                     if (status) {
                       this.userService.updateGarbageImpl(updateData);
+                      this.materialService.delete$([
+                        ...updateData['edited_video'],
+                        ...updateData['edited_image'],
+                        ...updateData['edited_pdf']
+                      ]);
                     }
                   });
               }
@@ -1126,6 +960,11 @@ export class MaterialsComponent implements OnInit {
                   .bulkRemove(removeData)
                   .subscribe((status) => {
                     if (status) {
+                      this.materialService.delete$([
+                        ...selectedVideos,
+                        ...selectedImages,
+                        ...selectedPdfs
+                      ]);
                       this.toast.success(
                         'Selected materials have been deleted successfully.'
                       );
@@ -1399,8 +1238,8 @@ export class MaterialsComponent implements OnInit {
       if (
         this.searchStr &&
         words.length &&
-        _.uniqBy(material.title.match(reg), (e) => e.toLowerCase()).length !==
-          words.length
+        _.uniqBy((material.title || '').match(reg), (e) => e.toLowerCase())
+          .length !== words.length
       ) {
         return false;
       }

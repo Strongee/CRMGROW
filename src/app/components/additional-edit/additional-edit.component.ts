@@ -2,7 +2,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { ContactDetail } from 'src/app/models/contact.model';
+import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -12,7 +12,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./additional-edit.component.scss']
 })
 export class AdditionalEditComponent implements OnInit, OnDestroy {
-  contact: ContactDetail = new ContactDetail();
+  contact: Contact = new Contact();
   isUpdating = false;
   updateSubscription: Subscription;
   garbageSubscription: Subscription;
@@ -25,7 +25,7 @@ export class AdditionalEditComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data && this.data.contact) {
-      this.contact = { ...this.contact, ...this.data.contact };
+      this.contact = new Contact().deserialize(this.data.contact);
       this.contact.tags = [...this.contact.tags];
       if (!this.contact.additional_field) {
         this.contact.additional_field = {};
