@@ -100,12 +100,6 @@
                     <i class="i-icon i-edit d-block bgc-dark" aria-hidden="true"></i>
                     <span class="f-3 font-weight-bold ml-3">Edit</span>
                   </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item"
-                          (click)="shareAutomation($event, automation)"
-                  >
-                    <i class="i-icon i-share-team d-block bgc-dark" aria-hidden="true"></i>
-                    <span class="f-3 font-weight-bold ml-3">Share team</span>
-                  </button>
                 </ng-container>
                 <ng-template #otherRoleTemplate>
                   <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
@@ -113,6 +107,14 @@
                     <span class="f-3 font-weight-bold ml-3">Clone</span>
                   </button>
                 </ng-template>
+                <ng-container *ngIf="automation.user == userId">
+                  <button class="v-center border-0 py-2 c-dark dropdown-item"
+                          (click)="shareAutomation($event, automation)"
+                  >
+                    <i class="i-icon i-share-team d-block bgc-dark" aria-hidden="true"></i>
+                    <span class="f-3 font-weight-bold ml-3">Share team</span>
+                  </button>
+                </ng-container>
                 <ng-container *ngIf="automation.role !== 'team' && automation.user == userId">
                   <hr class="my-0">
                   <button class="v-center border-0 py-2 c-dark dropdown-item"

@@ -59,6 +59,7 @@
           <div class="v-center justify-content-center more-button-container p-2"
              (click)="loadMore()"
              [class.c-pointer]="!loadingMore"
+             *ngIf="showMore()"
           >
             <div class="v-center">
               <i class="small-spinner" *ngIf="loadingMore"></i>

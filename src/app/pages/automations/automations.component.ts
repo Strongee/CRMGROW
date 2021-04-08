@@ -25,6 +25,7 @@ import { sortDateArray, sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
 import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
+import {TeamMaterialShareComponent} from "../../components/team-material-share/team-material-share.component";
 
 @Component({
   selector: 'app-automations',
@@ -152,11 +153,12 @@ export class AutomationsComponent implements OnInit, OnDestroy {
 
   shareAutomation(event: Event, automation: Automation): void {
     this.dialog
-      .open(AutomationShareComponent, {
-        width: '500px',
-        maxWidth: '90vw',
+      .open(TeamMaterialShareComponent, {
+        width: '98vw',
+        maxWidth: '450px',
         data: {
-          automation
+          automation,
+          type: 'automation'
         }
       })
       .afterClosed()
