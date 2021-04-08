@@ -10,7 +10,6 @@ export class Material implements Deserializable {
   type: string;
   material_type: string;
   folder: string;
-  shared_materials: string[];
   role: string;
   company: string;
   preview: string;
@@ -26,6 +25,9 @@ export class Material implements Deserializable {
   duration: number;
   default_edited: boolean;
   default_video: string;
+  videos: any[] = [];
+  pdfs: any[] = [];
+  images: any[] = [];
   del: boolean;
   created_at: Date;
   updated_at: Date;

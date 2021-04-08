@@ -139,26 +139,26 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
         )
         .subscribe((status) => {
           if (status) {
-            if (shared_materials.length) {
-              if (source) {
-                // remove shared materials
-                const _currentSharedMaterials = this.currentFolder
-                  .shared_materials;
-                _.pullAll(_currentSharedMaterials, shared_materials);
-                this.materialService.update$(source, {
-                  shared_materials: _currentSharedMaterials
-                });
-              }
-              // add shared materials
-              const _sharedMaterials = this.selectedFolder.shared_materials;
-              const _newSharedMaterials = _.union(
-                _sharedMaterials,
-                shared_materials
-              );
-              this.materialService.update$(this.selectedFolder._id, {
-                shared_materials: _newSharedMaterials
-              });
-            }
+            // if (shared_materials.length) {
+            //   if (source) {
+            //     // remove shared materials
+            //     const _currentSharedMaterials = this.currentFolder
+            //       .shared_materials;
+            //     _.pullAll(_currentSharedMaterials, shared_materials);
+            //     this.materialService.update$(source, {
+            //       shared_materials: _currentSharedMaterials
+            //     });
+            //   }
+            //   // add shared materials
+            //   const _sharedMaterials = this.selectedFolder.shared_materials;
+            //   const _newSharedMaterials = _.union(
+            //     _sharedMaterials,
+            //     shared_materials
+            //   );
+            //   this.materialService.update$(this.selectedFolder._id, {
+            //     shared_materials: _newSharedMaterials
+            //   });
+            // }
             this.materialService.bulkUpdate$(
               [...videos, ...images, ...pdfs, ...shared_materials],
               { folder: this.selectedFolder._id }
@@ -173,15 +173,15 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
         .subscribe((status) => {
           if (status) {
             if (shared_materials.length) {
-              if (source) {
-                // remove shared material
-                const _currentSharedMaterials = this.currentFolder
-                  .shared_materials;
-                _.pullAll(_currentSharedMaterials, shared_materials);
-                this.materialService.update$(source, {
-                  shared_materials: _currentSharedMaterials
-                });
-              }
+              // if (source) {
+              //   // remove shared material
+              //   const _currentSharedMaterials = this.currentFolder
+              //     .shared_materials;
+              //   _.pullAll(_currentSharedMaterials, shared_materials);
+              //   this.materialService.update$(source, {
+              //     shared_materials: _currentSharedMaterials
+              //   });
+              // }
             }
             this.materialService.bulkUpdate$(
               [...videos, ...images, ...pdfs, ...shared_materials],

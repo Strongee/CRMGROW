@@ -28,7 +28,6 @@ import { DeleteFolderComponent } from '../../components/delete-folder/delete-fol
 import { HandlerService } from 'src/app/services/handler.service';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
-import { isObject } from 'ngx-pipes/src/ng-pipes/pipes/helpers/helpers';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 @Component({
   selector: 'app-materials',
@@ -150,6 +149,7 @@ export class MaterialsComponent implements OnInit {
           materials.sort((a, b) => (a.folder ? -1 : 1));
           this.materials = materials;
           this.materials = _.uniqBy(this.materials, '_id');
+
           const folders = materials.filter((e) => {
             return e.material_type === 'folder';
           });
@@ -157,9 +157,16 @@ export class MaterialsComponent implements OnInit {
           this.folders.forEach((folder) => {
             this.foldersKeyValue[folder._id] = { ...folder };
           });
+
           const materialFolderMatch = {};
           folders.forEach((folder) => {
-            folder.shared_materials.forEach((e) => {
+            folder.videos.forEach((e) => {
+              materialFolderMatch[e] = folder._id;
+            });
+            folder.pdfs.forEach((e) => {
+              materialFolderMatch[e] = folder._id;
+            });
+            folder.images.forEach((e) => {
               materialFolderMatch[e] = folder._id;
             });
           });
@@ -1234,48 +1241,46 @@ export class MaterialsComponent implements OnInit {
   }
 
   removeFolder(material: Material): void {
-    this.dialog.open(DeleteFolderComponent, {
-      width: '96vw',
-      maxWidth: '500px',
-      data: {
-        material
-      }
-    });
-    // this.dialog
-    //   .open(ConfirmComponent, {
-    //     width: '96vw',
-    //     maxWidth: '400px',
-    //     data: {
-    //       title: 'Delete folder',
-    //       message:
-    //         'This folder will be removed and sub materials will be moved to root directory. Are you sure to delete this folder?',
-    //       confirmLabel: 'Delete'
-    //       // case: true,
-    //       // answers: [
-    //       //   {
-    //       //     label: 'Remove with sub-materials',
-    //       //     value: 'with-materials'
-    //       //   },
-    //       //   {
-    //       //     label: 'Remove only folder',
-    //       //     value: 'only-folder'
-    //       //   }
-    //       // ]
-    //     }
-    //   })
-    //   .afterClosed()
-    //   .subscribe((answer) => {
-    //     if (answer) {
-    //       this.materialService
-    //         .removeFolder(material._id, 'only-folder') // answer
-    //         .subscribe((res) => {
-    //           if (res['status']) {
-    //             this.materialService.delete$([material._id]);
-    //             this.materialService.removeFolder$(material._id);
-    //           }
-    //         });
-    //     }
-    //   });
+    if (
+      material.videos.length +
+      material.pdfs.length +
+      material.images.length
+    ) {
+      this.dialog.open(DeleteFolderComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        data: {
+          material
+        }
+      });
+    } else {
+      this.dialog
+        .open(ConfirmComponent, {
+          width: '96vw',
+          maxWidth: '400px',
+          data: {
+            title: 'Delete folder',
+            message: 'Are you sure you want to remove the folder?',
+            confirmLabel: 'Delete'
+          }
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            const data = {
+              _id: material._id,
+              mode: 'only-folder'
+            };
+            this.materialService
+              .removeFolder(data) // answer
+              .subscribe((res) => {
+                if (res['status']) {
+                  this.materialService.delete$([material._id]);
+                }
+              });
+          }
+        });
+    }
   }
 
   editFolder(material: Material): void {
