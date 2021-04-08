@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Material } from 'src/app/models/material.model';
 import { ToastrService } from 'ngx-toastr';
 import { Template } from 'src/app/models/template.model';
+import {Automation} from "../../models/automation.model";
 
 @Component({
   selector: 'app-team-material-share',
@@ -23,6 +24,7 @@ export class TeamMaterialShareComponent implements OnInit {
   teams = [];
   material: Material = new Material();
   template: Template = new Template();
+  automation: Automation;
 
   profileSubscription: Subscription;
   constructor(
@@ -50,6 +52,9 @@ export class TeamMaterialShareComponent implements OnInit {
       }
       if (this.data.template) {
         this.template = this.data.template;
+      }
+      if (this.data.automation) {
+        this.automation = this.data.automation;
       }
     }
 
@@ -115,6 +120,29 @@ export class TeamMaterialShareComponent implements OnInit {
             }
           }
         }
+      } else if (this.shareType === 'automation') {
+        for (const team of teams) {
+          const shared = team.automations.findIndex(
+            (item) => item == this.automation._id
+          );
+          if (team.owner && team.owner.length > 0) {
+            const index = team.owner.findIndex(
+              (item) => item._id === this.userId
+            );
+            if (index >= 0 && shared < 0) {
+              ownerTeams.push(team);
+              continue;
+            }
+          }
+          if (team.editors && team.editors.length > 0) {
+            const index = team.editors.findIndex(
+              (item) => item._id === this.userId
+            );
+            if (index >= 0 && shared < 0) {
+              editorTeams.push(team);
+            }
+          }
+        }
       }
       this.teams = [...ownerTeams, ...editorTeams];
     });
@@ -161,6 +189,16 @@ export class TeamMaterialShareComponent implements OnInit {
           if (res && res.length > 0) {
             this.sharing = false;
             this.toast.success('Template has been shared successfully.');
+            this.dialogRef.close();
+          }
+        });
+    } else if (this.shareType === 'automation') {
+      this.teamService
+        .shareAutomations(this.selectedTeam._id, [this.automation._id])
+        .subscribe((res) => {
+          if (res) {
+            this.sharing = false;
+            this.toast.success('Automation has been shared successfully.');
             this.dialogRef.close();
           }
         });

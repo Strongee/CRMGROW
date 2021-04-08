@@ -229,4 +229,21 @@ export class JoinTeamComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  showMore(): boolean {
+    if (this.loadingMore) {
+      return true;
+    }
+
+    if (this.isToggleTeam) {
+      if (this.users.length >= this.skip + this.pageCount) {
+        return true;
+      }
+    } else {
+      if (this.teams.length >= this.skip + this.pageCount) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

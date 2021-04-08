@@ -27,7 +27,6 @@ import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { AutomationCreateComponent } from '../../components/automation-create/automation-create.component';
 import { TeamService } from '../../services/team.service';
 import { Team } from '../../models/team.model';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
@@ -205,16 +204,7 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   }
 
   create(): void {
-    this.dialog
-      .open(AutomationCreateComponent, {
-        width: '360px',
-        maxWidth: '90vw'
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-        }
-      });
+    this.router.navigate([`/autoflow/new`]);
   }
 
   isStopSharable(automation): any {
