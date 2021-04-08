@@ -18,7 +18,8 @@ import {
   ACTION_CAT,
   AUTOMATION_ICONS,
   BulkActions,
-  DialogSettings, ROUTE_PAGE
+  DialogSettings,
+  ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
@@ -155,7 +156,7 @@ export class AutoflowComponent
       this.arrangeAutomationData();
     });
 
-    this._id = this.route.snapshot.params['id'];
+    this.automation_id = this.route.snapshot.params['id'];
     const title = this.route.snapshot.params['title'];
     const mode = this.route.snapshot.params['mode'];
     this.editMode = mode;
@@ -171,12 +172,12 @@ export class AutoflowComponent
     if (title) {
       this.automation_title = title;
     }
-    if (this._id) {
+    if (this.automation_id) {
       if (page !== 'contacts') {
-        this.loadAutomation(this._id, this.pageSize.id, 0);
+        this.loadAutomation(this.automation_id, this.pageSize.id, 0);
       } else {
         if (this.editMode !== 'new') {
-          this.loadContacts(this._id, this.pageSize.id, 0);
+          this.loadContacts(this.automation_id, this.pageSize.id, 0);
         }
       }
     } else {
@@ -1449,7 +1450,7 @@ export class AutoflowComponent
       }
     });
 
-    if (this.automation_id) {
+    if (this.editMode === 'edit') {
       if (this.auth === 'admin' || this.auth === 'shared') {
         if (this.automation.title === this.automation_title) {
           this.toastr.error(
@@ -1472,8 +1473,9 @@ export class AutoflowComponent
                   const path = '/autoflow/edit/' + res['_id'];
                   this.router.navigate([path]);
                   this.editMode = 'edit';
-                  this._id = res['_id'];
-                  this.loadAutomation(res['_id'], this.pageSize.id, 0);
+                  this.auth = 'owner';
+                  this.automation = res;
+                  this.automation_id = res['_id'];
                   this.pageContacts = [];
                 }
               },
@@ -1494,6 +1496,18 @@ export class AutoflowComponent
               this.isSaving = false;
               this.saved = true;
               this.toastr.success('Automation saved successfully');
+              this.dialog
+                .open(ConfirmComponent, {
+                  data: {
+                    title: 'Apply Changes',
+                    message:
+                      'Are you sure to apply changes to assigned contacts?',
+                    cancelLabel: 'No',
+                    confirmLabel: 'Apply'
+                  }
+                })
+                .afterClosed()
+                .subscribe((result) => {});
             },
             (err) => {
               this.isSaving = false;
@@ -1516,8 +1530,9 @@ export class AutoflowComponent
               const path = '/autoflow/edit/' + res['_id'];
               this.router.navigate([path]);
               this.editMode = 'edit';
-              this._id = res['_id'];
-              this.loadAutomation(res['_id'], this.pageSize.id, 0);
+              this.auth = 'owner';
+              this.automation = res;
+              this.automation_id = res['_id'];
               this.pageContacts = [];
             }
           },
@@ -1573,13 +1588,20 @@ export class AutoflowComponent
   }
 
   goToBack(): void {
-    this.handlerService.goBack('/automations');
+    if (
+      this.handlerService.previousUrl &&
+      this.handlerService.previousUrl.includes('/autoflow')
+    ) {
+      this.router.navigate(['/automations']);
+    } else {
+      this.handlerService.goBack('/automations');
+    }
   }
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
     if (this.selectedTab !== this.tabs[1] && this.nodes.length < 1) {
-      this.loadAutomation(this._id, this.pageSize.id, 0);
+      this.loadAutomation(this.automation_id, this.pageSize.id, 0);
     }
     localStorage.setItem('automation', tab.id);
   }
@@ -1597,7 +1619,7 @@ export class AutoflowComponent
       .subscribe((res) => {
         if (res && res.data && res.data.length) {
           // this.contacts = [...this.contacts, ...res.data];
-          this.loadAutomation(this._id, this.pageSize.id, 0);
+          this.loadAutomation(this.automation_id, this.pageSize.id, 0);
         }
       });
   }
@@ -1694,7 +1716,7 @@ export class AutoflowComponent
     let skip = (page - 1) * this.pageSize.id;
     skip = skip < 0 ? 0 : skip;
     if (this.searchStr === '') {
-      this.loadAutomation(this._id, this.pageSize.id, skip);
+      this.loadAutomation(this.automation_id, this.pageSize.id, skip);
     }
   }
   /**

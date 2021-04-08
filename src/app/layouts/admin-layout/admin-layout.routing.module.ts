@@ -131,7 +131,7 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'autoflow/create/:title',
+    path: 'autoflow/create/',
     component: AutoflowComponent,
     data: {
       title: 'Automations'

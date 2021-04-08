@@ -38,7 +38,7 @@
             </div>
           </th>
           <td mat-cell *matCellDef="let automation" class="title">
-            <a  [routerLink]="['/autoflow/edit/' + automation._id]" class="td-none"><span class="f-3 font-weight-bold">{{automation.title}}</span></a>
+            <a  [routerLink]="['/autoflow/edit/' + automation._id]" class="td-none" target="_blank"><span class="f-3 font-weight-bold">{{automation.title}}</span></a>
           </td>
         </ng-container>
         <ng-container matColumnDef="owner">
