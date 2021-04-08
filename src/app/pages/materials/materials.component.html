@@ -140,7 +140,7 @@
               </div>
             </th>
               <ng-template #toolHeader>
-                <th mat-header-cell colspan="8">
+                <th mat-header-cell colspan="10">
                   <div class="v-center">
                     <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
                     <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
@@ -470,7 +470,7 @@
         </ng-container>
 
         <ng-container matColumnDef="selection_info">
-          <th mat-header-cell *matHeaderCellDef colspan="9" class="text-center">
+          <th mat-header-cell *matHeaderCellDef colspan="10" class="text-center">
             <span *ngIf="selection.length !== filteredMaterials.length; else deselectTemplate">
               {{selection.length}} materials are selected.
               <span  class="c-blue font-weight-bold" *ngIf="selecting">

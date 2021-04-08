@@ -114,7 +114,6 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
         //     materialFolderMatch[e] = folder._id;
         //   });
         // });
-        
         materials.forEach((e) => {
           if (materialFolderMatch[e._id]) {
             e.folder = materialFolderMatch[e._id];

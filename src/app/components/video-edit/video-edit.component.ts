@@ -49,28 +49,25 @@ export class VideoEditComponent implements OnInit {
       }
     });
     if (this.video['role'] === 'admin') {
-      this.materialService.updateAdminVideo(this.video['_id'], video).subscribe(
-        (res) => {
+      this.materialService
+        .updateAdminVideo(this.video['_id'], video)
+        .subscribe((res) => {
           this.saving = false;
-          this.dialogRef.close(res);
-        },
-        (err) => {
-          this.saving = false;
-        }
-      );
-    } else {
-      this.materialService.updateVideo(this.video['_id'], video).subscribe(
-        (res) => {
           if (res && res['status']) {
-            this.saving = false;
-            this.toast.success('Video material successfully edited.');
             this.dialogRef.close(res);
           }
-        },
-        (err) => {
+        });
+    } else {
+      this.materialService
+        .updateVideo(this.video['_id'], video)
+        .subscribe((res) => {
           this.saving = false;
-        }
-      );
+          if (res && res['status']) {
+            this.toast.success('Video material successfully edited.');
+            this.materialService.update$(this.video['_id'], this.video);
+            this.dialogRef.close();
+          }
+        });
     }
   }
 
