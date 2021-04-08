@@ -109,11 +109,11 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
           this.foldersKeyValue[folder._id] = { ...folder };
         });
         const materialFolderMatch = {};
-        folders.forEach((folder) => {
-          folder.shared_materials.forEach((e) => {
-            materialFolderMatch[e] = folder._id;
-          });
-        });
+        // folders.forEach((folder) => {
+        //   folder.shared_materials.forEach((e) => {
+        //     materialFolderMatch[e] = folder._id;
+        //   });
+        // });
         materials.forEach((e) => {
           if (materialFolderMatch[e._id]) {
             e.folder = materialFolderMatch[e._id];
