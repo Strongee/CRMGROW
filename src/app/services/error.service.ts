@@ -94,7 +94,7 @@ export class ErrorService {
         this.dialog.closeAll();
         this.dialog.open(DetailErrorComponent, {
           width: '98vw',
-          maxWidth: '390px',
+          maxWidth: '420px',
           disableClose: true,
           data: {
             errorCode: 402
@@ -105,7 +105,7 @@ export class ErrorService {
         this.dialog.closeAll();
         this.dialog.open(DetailErrorComponent, {
           width: '98vw',
-          maxWidth: '390px',
+          maxWidth: '420px',
           data: {
             errorCode: 403
           }
@@ -116,7 +116,7 @@ export class ErrorService {
         console.log('error happened', error);
         this.dialog.open(DetailErrorComponent, {
           width: '98vw',
-          maxWidth: '390px',
+          maxWidth: '420px',
           data: {
             errorCode: 405,
             operation: operation,
@@ -128,7 +128,7 @@ export class ErrorService {
         this.dialog.closeAll();
         this.dialog.open(DetailErrorComponent, {
           width: '98vw',
-          maxWidth: '390px',
+          maxWidth: '420px',
           data: {
             errorCode: 406
           }

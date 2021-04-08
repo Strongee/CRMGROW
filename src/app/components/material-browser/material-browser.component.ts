@@ -114,7 +114,7 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
         //     materialFolderMatch[e] = folder._id;
         //   });
         // });
-        
+
         materials.forEach((e) => {
           if (materialFolderMatch[e._id]) {
             e.folder = materialFolderMatch[e._id];
@@ -230,7 +230,6 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
   capitalizeFirstLetter(type: string): any {
     return type.charAt(0).toUpperCase() + type.slice(1);
   }
-
 
   openFolder(element: Material): void {
     this.selectedFolder = element;

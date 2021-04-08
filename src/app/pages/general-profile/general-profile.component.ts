@@ -36,6 +36,7 @@ export class GeneralProfileComponent implements OnInit, OnDestroy {
   countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
   saving = false;
+  defaultTimeZone = true;
   public uploader: FileUploader = new FileUploader({
     url: environment.api + 'file',
     authToken: this.userService.getToken(),
@@ -185,6 +186,7 @@ export class GeneralProfileComponent implements OnInit, OnDestroy {
     this.userService.updateProfile(form).subscribe((data) => {
       this.userService.updateProfileImpl(data);
       this.saving = false;
+      this.toast.success('Profile has been updated successfully.');
     });
   }
 

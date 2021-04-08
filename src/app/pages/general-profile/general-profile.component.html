@@ -116,13 +116,42 @@
             <ng-container *ngIf="time_zone_info.errors.required">Required!</ng-container>
           </span>
         </div>
-        <select class="form-control c-blue f-5" [(ngModel)]="timezone" name="time_zone_info" id="time_zone_info" required #time_zone_info="ngModel">
-          <optgroup *ngFor="let timezone_group of timezones" label="{{timezone_group.country}}">
-            <option *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
-              {{timezone.name}}
-            </option>
-          </optgroup>
-        </select>
+        <mat-form-field class="timezone-select">
+          <mat-select class="form-control c-blue f-5" [(ngModel)]="timezone" name="time_zone_info" id="time_zone_info" required #time_zone_info="ngModel">
+            <ng-container *ngIf="defaultTimeZone; else otherTimeZone">
+              <ng-container *ngFor="let timezone_group of timezones">
+                <mat-optgroup *ngIf="timezone_group.country == 'US' || timezone_group.country == 'CA'" label="{{timezone_group.country}}">
+                  <mat-option class="timezone" *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
+                    {{timezone.name}}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <mat-option class="p-0">
+                <div class="v-center justify-content-center other-timezone c-pointer" (click)="defaultTimeZone = !defaultTimeZone">
+                  <span class="f-3 font-weight-bold c-blue text-uppercase mr-2">
+                    other timezones
+                  </span>
+                  <i class="d-block i-icon i-plus bgc-blue"></i>
+                </div>
+              </mat-option>
+            </ng-container>
+            <ng-template #otherTimeZone>
+              <mat-optgroup *ngFor="let timezone_group of timezones" label="{{timezone_group.country}}">
+                <mat-option class="timezone" *ngFor="let timezone of timezone_group.timezones" value="{{timezone | json}}">
+                  {{timezone.name}}
+                </mat-option>
+              </mat-optgroup>
+              <mat-option class="p-0">
+                <div class="v-center justify-content-center other-timezone c-pointer" (click)="defaultTimeZone = !defaultTimeZone">
+                  <span class="f-3 font-weight-bold c-blue text-uppercase mr-2">
+                    other timezones
+                  </span>
+                  <i class="d-block i-icon i-minus bgc-blue"></i>
+                </div>
+              </mat-option>
+            </ng-template>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
     <div class="col-sm-6 col-12">
