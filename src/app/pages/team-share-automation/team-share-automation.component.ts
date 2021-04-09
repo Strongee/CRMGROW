@@ -283,6 +283,17 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
       });
   }
 
+  getOwner(automation): any {
+    if (automation && automation.user) {
+      if (automation.user._id === this.userId) {
+        return 'Me';
+      } else {
+        return automation.user.user_name;
+      }
+    }
+    return '--';
+  }
+
   sort(field: string, keep: boolean = false): void {
     if (this.selectedSort !== field) {
       this.selectedSort = field;

@@ -60,5 +60,9 @@ export class TeamMemberProfileComponent implements OnInit {
         }
       }
     }
+    if (this.data.member.time_zone_info) {
+      const time_zone = JSON.parse(this.data.member.time_zone_info);
+      this.timezone = time_zone['name'];
+    }
   }
 }

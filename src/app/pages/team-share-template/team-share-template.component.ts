@@ -280,6 +280,17 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
     this.router.navigate(['/templates/duplicate/' + template._id]);
   }
 
+  getOwner(template): any {
+    if (template && template.user) {
+      if (template.user._id === this.userId) {
+        return 'Me';
+      } else {
+        return template.user.user_name;
+      }
+    }
+    return '--';
+  }
+
   sort(field: string, keep: boolean = false): void {
     if (this.selectedSort != field) {
       this.selectedSort = field;

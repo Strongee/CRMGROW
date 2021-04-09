@@ -19,6 +19,7 @@ import { DealsService } from '../../services/deals.service';
 import { numPad } from 'src/app/helper';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
+
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',
@@ -86,6 +87,26 @@ export class CalendarDialogComponent implements OnInit {
     if (this.data && this.data.contacts) {
       this.keepContacts = this.data.contacts;
       this.contacts = [...this.data.contacts];
+    }
+
+    if (this.data && this.data.call) {
+      const call = this.data.call;
+      const selectedTime = moment(call.proposed_at[0]);
+      this.selectedDateTime = {
+        year: selectedTime.year(),
+        month: selectedTime.month() + 1,
+        day: selectedTime.date()
+      };
+      this.due_time = selectedTime.format('hh:mm:ss') + '.000';
+      if (call.duration == 15) {
+        this.duration = CALENDAR_DURATION[0].value;
+      } else if (call.duration == 30) {
+        this.duration = CALENDAR_DURATION[1].value;
+      } else if (call.duration == 45) {
+        this.duration = CALENDAR_DURATION[2].value;
+      } else if (call.duration == 60) {
+        this.duration = CALENDAR_DURATION[3].value;
+      }
     }
 
     if (this.data && this.data.deal) {

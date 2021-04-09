@@ -50,7 +50,8 @@
               </div>
             </th>
             <td mat-cell *matCellDef="let template" class="auth">
-              <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>
+<!--              <div class="role" [class.admin]="template.role == 'admin'" [class.team]="template.role === 'team' && template.user === userId" [class.shared]="template.role === 'team' && template.user !== userId"></div>-->
+              <div class="f-3">{{getOwner(template)}}</div>
             </td>
           </ng-container>
           <ng-container matColumnDef="template-content">
