@@ -22,8 +22,8 @@ import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
-import * as _ from 'lodash';
 import { Template } from 'src/app/models/template.model';
+import { searchReg } from 'src/app/helper';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -917,19 +917,14 @@ export class ActionDialogComponent implements OnInit {
   }
 
   filter(): void {
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filterVideos = this.videos.filter((video) => {
-      return reg.test(video.title);
+      return searchReg(video.title, this.searchStr);
     });
     this.filterPdfs = this.pdfs.filter((pdf) => {
-      return reg.test(pdf.title);
+      return searchReg(pdf.title, this.searchStr);
     });
     this.filterImages = this.images.filter((image) => {
-      return reg.test(image.title);
+      return searchReg(image.title, this.searchStr);
     });
   }
 
