@@ -24,6 +24,7 @@ import {
 import { TemplatesService } from 'src/app/services/templates.service';
 import { Template } from 'src/app/models/template.model';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-input-template',
@@ -73,29 +74,22 @@ export class InputTemplateComponent
       )
       .subscribe(
         (data) => {
-          const words = _.uniqBy(
-            this.search
-              .split(' ')
-              .sort((a, b) => (a.length > b.length ? -1 : 1)),
-            (e) => e.toLowerCase()
-          );
-          const reg = new RegExp(words.join('|'), 'gi');
           data.subscribe((templates) => {
             const res = _.filter(templates, (e) => {
               if (this.type) {
                 if (
                   e.type === this.type &&
-                  (reg.test(e.title) ||
-                    reg.test(e.subject) ||
-                    reg.test(e.content))
+                  (searchReg(e.title, this.search) ||
+                    searchReg(e.subject, this.search) ||
+                    searchReg(e.content, this.search))
                 ) {
                   return true;
                 }
               } else {
                 if (
-                  reg.test(e.title) ||
-                  reg.test(e.subject) ||
-                  reg.test(e.content)
+                  searchReg(e.title, this.search) ||
+                  searchReg(e.subject, this.search) ||
+                  searchReg(e.content, this.search)
                 ) {
                   return true;
                 }

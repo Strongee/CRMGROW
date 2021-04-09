@@ -8,6 +8,7 @@ import { StoreService } from 'src/app/services/store.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-material-browser',
@@ -148,11 +149,6 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
 
   filter(): void {
     // this.selection = [];
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
       if (this.selectedFolder) {
         if (this.selectedFolder._id !== material.folder) {
@@ -164,7 +160,7 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
       if (this.matType && material.material_type != this.matType) {
         return false;
       }
-      if (!reg.test(material.title || '')) {
+      if (!searchReg(material.title || '', this.searchStr)) {
         return false;
       }
       return true;

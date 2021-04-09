@@ -10,6 +10,7 @@ import { StoreService } from 'src/app/services/store.service';
 import { TeamService } from 'src/app/services/team.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-global-search',
@@ -77,28 +78,22 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.teamService.loadAll(false);
         this.dealsService.getStage(false);
 
-        const words = _.uniqBy(
-          str.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-          (e) => e.toLowerCase()
-        );
-        const reg = new RegExp(words.join('|'), 'gi');
-
         this.materialLoadSubscription &&
           this.materialLoadSubscription.unsubscribe();
         this.materialLoadSubscription = this.storeService.materials$.subscribe(
           (materials) => {
             this.searchedResults['videos'] = materials.filter((e) => {
-              if (e.material_type === 'video' && reg.test(e.title)) {
+              if (e.material_type === 'video' && searchReg(e.title, str)) {
                 return true;
               }
             });
             this.searchedResults['pdfs'] = materials.filter((e) => {
-              if (e.material_type === 'pdf' && reg.test(e.title)) {
+              if (e.material_type === 'pdf' && searchReg(e.title, str)) {
                 return true;
               }
             });
             this.searchedResults['images'] = materials.filter((e) => {
-              if (e.material_type === 'image' && reg.test(e.title)) {
+              if (e.material_type === 'image' && searchReg(e.title, str)) {
                 return true;
               }
             });
@@ -110,7 +105,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.templateLoadSubscription = this.templateService.templates$.subscribe(
           (templates) => {
             this.searchedResults['templates'] = templates.filter((e) => {
-              return reg.test(e.title);
+              return searchReg(e.title, str);
             });
           }
         );
@@ -119,7 +114,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.automationLoadSubscription = this.automationService.automations$.subscribe(
           (automations) => {
             this.searchedResults['automations'] = automations.filter((e) => {
-              return reg.test(e.title);
+              return searchReg(e.title, str);
             });
           }
         );
@@ -127,7 +122,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.teamLoadSubscription = this.teamService.teams$.subscribe(
           (teams) => {
             this.searchedResults['teams'] = teams.filter((e) => {
-              return reg.test(e.name);
+              return searchReg(e.name, str);
             });
           }
         );
@@ -140,7 +135,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
               deals = [...deals, ...e.deals];
             });
             this.searchedResults['deals'] = deals.filter((e) => {
-              return reg.test(e.title);
+              return searchReg(e.title, str);
             });
           }
         );

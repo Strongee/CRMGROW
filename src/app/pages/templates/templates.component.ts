@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-templates',
@@ -192,15 +193,10 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     const filtered = this.templates.filter((template) => {
       const str =
         template.title + ' ' + template.content + ' ' + template.subject;
-      return reg.test(str);
+      return searchReg(str, this.searchStr);
     });
     this.filteredResult = filtered;
     this.sort(this.selectedSort, true);

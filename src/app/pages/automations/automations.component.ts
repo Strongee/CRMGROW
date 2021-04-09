@@ -23,6 +23,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-automations',
@@ -122,13 +123,8 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     const filtered = this.automations.filter((item) => {
-      return reg.test(item.title);
+      return searchReg(item.title, this.searchStr);
     });
     this.filteredResult = filtered;
     this.sort(this.selectedSort, true);

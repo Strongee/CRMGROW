@@ -24,6 +24,7 @@ import {
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import * as _ from 'lodash';
 import { TagService } from 'src/app/services/tag.service';
+import { searchReg } from 'src/app/helper';
 
 interface Tag {
   _id: string;
@@ -81,15 +82,8 @@ export class InputSourceComponent implements OnInit {
               selectedTags.push({ _id: e });
             });
             const remained = _.difference(tags, this.selectedTags);
-            const words = _.uniqBy(
-              this.keyword
-                .split(' ')
-                .sort((a, b) => (a.length > b.length ? -1 : 1)),
-              (e) => e.toLowerCase()
-            );
-            const reg = new RegExp(words.join('|'), 'gi');
             const res = _.filter(remained, (e) => {
-              return reg.test(e._id);
+              return searchReg(e._id, this.keyword);
             });
             this.searching = false;
             if (res.length) {

@@ -23,6 +23,7 @@ import {
 } from 'rxjs/operators';
 import { FilterService } from 'src/app/services/filter.service';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-filter-input',
@@ -75,15 +76,8 @@ export class FilterInputComponent implements OnInit, OnDestroy, AfterViewInit {
         (data) => {
           data.subscribe((filters) => {
             if (this.search) {
-              const words = _.uniqBy(
-                this.search
-                  .split(' ')
-                  .sort((a, b) => (a.length > b.length ? -1 : 1)),
-                (e) => e.toLowerCase()
-              );
-              const reg = new RegExp(words.join('|'), 'gi');
               const res = _.filter(filters, (e) => {
-                return reg.test(e.title);
+                return searchReg(e.title, this.search);
               });
               this.filteredResults.next(res);
             } else {
