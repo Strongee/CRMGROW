@@ -14,6 +14,24 @@
   }
 }
 
+th {
+  height: 45px;
+  color: rgba(0, 0, 0, .54);
+  padding-left: 10px;
+
+  .head-sort {
+    span {
+      line-height: 1;
+    }
+
+    i {
+      width: 8px;
+      height: 12px;
+      min-width: 8px;
+    }
+  }
+}
+
 .group-call-container {
   .table {
 
@@ -28,6 +46,8 @@
 
 .team-actions {
   text-align: right;
+  width: 100px;
+  opacity: 0;
 
   .button-more {
     a {
@@ -35,6 +55,12 @@
         content: none;
       }
     }
+  }
+}
+
+tr:hover {
+  .team-actions {
+    opacity: 1;
   }
 }
 
