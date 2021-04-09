@@ -8,7 +8,6 @@ import { StoreService } from 'src/app/services/store.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-material-browser',
@@ -165,7 +164,7 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
       if (this.matType && material.material_type != this.matType) {
         return false;
       }
-      if (!searchReg(material.title || '', this.searchStr)) {
+      if (!reg.test(material.title || '')) {
         return false;
       }
       return true;

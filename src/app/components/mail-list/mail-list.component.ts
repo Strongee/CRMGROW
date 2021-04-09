@@ -70,11 +70,17 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe(
         (api) => {
+          const words = _.uniqBy(
+            this.search
+              .split(' ')
+              .sort((a, b) => (a.length > b.length ? -1 : 1)),
+            (e) => e.toLowerCase()
+          );
+          const reg = new RegExp(words.join('|'), 'gi');
           this.apiSubscription && this.apiSubscription.unsubscribe();
           this.apiSubscription = api.subscribe((mailLists) => {
             const res = _.filter(mailLists, (e) => {
-              const searchReg = new RegExp(this.search, 'gi');
-              if (searchReg.test(e.title)) {
+              if (reg.test(e.title)) {
                 return true;
               }
             });

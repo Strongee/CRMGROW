@@ -20,10 +20,8 @@ import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { sortDateArray, sortStringArray } from '../../utils/functions';
+import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
-import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
 
 @Component({
@@ -124,8 +122,13 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
     const filtered = this.automations.filter((item) => {
-      return searchReg(item.title, this.searchStr);
+      return reg.test(item.title);
     });
     this.filteredResult = filtered;
     this.sort(this.selectedSort, true);

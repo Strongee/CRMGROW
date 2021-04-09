@@ -5,33 +5,25 @@ import {
   ViewChild,
   ElementRef
 } from '@angular/core';
-import {
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-  MatDialog
-} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   ACTION_CAT,
   TIMES,
-  QuillEditor,
   DefaultMessage,
   AUTOMATION_ICONS,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { Subscription } from 'rxjs';
-import { TemplatesService } from '../../services/templates.service';
 import { FormControl } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { FileService } from 'src/app/services/file.service';
-import { QuillEditorComponent } from 'ngx-quill';
-import { LabelService } from 'src/app/services/label.service';
 import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 import { Template } from 'src/app/models/template.model';
-import { searchReg } from 'src/app/helper';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -925,14 +917,19 @@ export class ActionDialogComponent implements OnInit {
   }
 
   filter(): void {
+    const words = _.uniqBy(
+      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+      (e) => e.toLowerCase()
+    );
+    const reg = new RegExp(words.join('|'), 'gi');
     this.filterVideos = this.videos.filter((video) => {
-      return searchReg(video.title, this.searchStr);
+      return reg.test(video.title);
     });
     this.filterPdfs = this.pdfs.filter((pdf) => {
-      return searchReg(pdf.title, this.searchStr);
+      return reg.test(pdf.title);
     });
     this.filterImages = this.images.filter((image) => {
-      return searchReg(image.title, this.searchStr);
+      return reg.test(image.title);
     });
   }
 

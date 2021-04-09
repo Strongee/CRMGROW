@@ -6,7 +6,6 @@ import { TeamService } from '../../services/team.service';
 import { UserService } from '../../services/user.service';
 import { Automation } from '../../models/automation.model';
 import * as _ from 'lodash';
-import { searchReg } from '../../helper';
 import { STATUS } from '../../constants/variable.constants';
 
 @Component({

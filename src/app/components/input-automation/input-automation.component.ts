@@ -24,7 +24,6 @@ import {
 import { AutomationService } from 'src/app/services/automation.service';
 import { Automation } from 'src/app/models/automation.model';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-input-automation',
@@ -73,9 +72,16 @@ export class InputAutomationComponent
       )
       .subscribe(
         (data) => {
+          const words = _.uniqBy(
+            this.search
+              .split(' ')
+              .sort((a, b) => (a.length > b.length ? -1 : 1)),
+            (e) => e.toLowerCase()
+          );
+          const reg = new RegExp(words.join('|'), 'gi');
           data.subscribe((automations) => {
             const res = _.filter(automations, (e) => {
-              return searchReg(e.title, this.search);
+              return reg.test(e.title);
             });
             this.searching = false;
             this.filteredResults.next(res);
