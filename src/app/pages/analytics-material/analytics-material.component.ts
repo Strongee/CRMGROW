@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { MaterialService } from '../../services/material.service';
 import { LabelService } from '../../services/label.service';
 import { HandlerService } from 'src/app/services/handler.service';
+import { ROUTE_PAGE } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-analytics-material',
@@ -109,5 +110,23 @@ export class AnalyticsMaterialComponent implements OnInit {
 
   goToBack(): void {
     this.handlerService.goBack('/materials');
+  }
+
+  getPrevPage(): string {
+    if (!this.handlerService.previousUrl) {
+      return 'to Materials';
+    }
+    if (
+      this.handlerService.previousUrl.includes('/team/') &&
+      this.handlerService.previousUrl.includes('/materials')
+    ) {
+      return 'to Team Materials';
+    }
+    for (const route in ROUTE_PAGE) {
+      if (this.handlerService.previousUrl === route) {
+        return 'to ' + ROUTE_PAGE[route];
+      }
+    }
+    return '';
   }
 }

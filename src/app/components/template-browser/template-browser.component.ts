@@ -12,7 +12,6 @@ import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
 import { TeamService } from '../../services/team.service';
 
 @Component({

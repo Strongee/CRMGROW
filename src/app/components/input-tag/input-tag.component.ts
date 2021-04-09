@@ -86,9 +86,15 @@ export class InputTagComponent implements OnInit {
               selectedTags.push({ _id: e });
             });
             const remained = _.difference(tags, this.selectedTags);
+            const words = _.uniqBy(
+              this.keyword
+                .split(' ')
+                .sort((a, b) => (a.length > b.length ? -1 : 1)),
+              (e) => e.toLowerCase()
+            );
+            const reg = new RegExp(words.join('|'), 'gi');
             const res = _.filter(remained, (e) => {
-              const searchReg = new RegExp(this.keyword, 'gi');
-              return searchReg.test(e._id);
+              return reg.test(e._id);
             });
             this.searching = false;
             if (res.length) {

@@ -10,7 +10,6 @@ import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
 import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 
 @Component({

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
-import { searchReg } from 'src/app/helper';
 import { AutomationService } from 'src/app/services/automation.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { DealsService } from 'src/app/services/deals.service';
@@ -10,6 +9,7 @@ import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TeamService } from 'src/app/services/team.service';
 import { TemplatesService } from 'src/app/services/templates.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-global-search',
@@ -77,22 +77,28 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.teamService.loadAll(false);
         this.dealsService.getStage(false);
 
+        const words = _.uniqBy(
+          str.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
+          (e) => e.toLowerCase()
+        );
+        const reg = new RegExp(words.join('|'), 'gi');
+
         this.materialLoadSubscription &&
           this.materialLoadSubscription.unsubscribe();
         this.materialLoadSubscription = this.storeService.materials$.subscribe(
           (materials) => {
             this.searchedResults['videos'] = materials.filter((e) => {
-              if (e.material_type === 'video' && searchReg(e.title, str)) {
+              if (e.material_type === 'video' && reg.test(e.title)) {
                 return true;
               }
             });
             this.searchedResults['pdfs'] = materials.filter((e) => {
-              if (e.material_type === 'pdf' && searchReg(e.title, str)) {
+              if (e.material_type === 'pdf' && reg.test(e.title)) {
                 return true;
               }
             });
             this.searchedResults['images'] = materials.filter((e) => {
-              if (e.material_type === 'image' && searchReg(e.title, str)) {
+              if (e.material_type === 'image' && reg.test(e.title)) {
                 return true;
               }
             });
@@ -104,7 +110,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.templateLoadSubscription = this.templateService.templates$.subscribe(
           (templates) => {
             this.searchedResults['templates'] = templates.filter((e) => {
-              return searchReg(e.title, str);
+              return reg.test(e.title);
             });
           }
         );
@@ -113,7 +119,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.automationLoadSubscription = this.automationService.automations$.subscribe(
           (automations) => {
             this.searchedResults['automations'] = automations.filter((e) => {
-              return searchReg(e.title, str);
+              return reg.test(e.title);
             });
           }
         );
@@ -121,7 +127,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
         this.teamLoadSubscription = this.teamService.teams$.subscribe(
           (teams) => {
             this.searchedResults['teams'] = teams.filter((e) => {
-              return searchReg(e.name, str);
+              return reg.test(e.name);
             });
           }
         );
@@ -134,7 +140,7 @@ export class GlobalSearchComponent implements OnInit, OnDestroy {
               deals = [...deals, ...e.deals];
             });
             this.searchedResults['deals'] = deals.filter((e) => {
-              return searchReg(e.title, str);
+              return reg.test(e.title);
             });
           }
         );

@@ -64,6 +64,12 @@
         padding: 4px 8px;
         cursor: pointer;
 
+        i {
+          width: 14px;
+          height: 14px;
+          min-width: 14px;
+        }
+
         .c-badge {
           font-size: 10px;
           padding: 1px 3px;

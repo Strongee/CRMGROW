@@ -43,7 +43,7 @@
                                     {{ deal.title }}
                                 </div>
                             </div>
-                            <div class="v-center justify-content-between mt-2 contacts-info">
+                            <div class="v-center justify-content-between mt-2 contacts-info" *ngIf="deal.contacts.length > 0">
                                 <div class="v-center">
                                     <div class="v-center justify-content-center avatar fw-600 c-white">{{getAvatarName(deal.contacts[0])}}</div>
                                     <div class="ml-2 f-3 fw-600">

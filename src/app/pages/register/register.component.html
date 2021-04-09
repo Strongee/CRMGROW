@@ -77,15 +77,6 @@
       <h4 class="text-center font-weight-bold mb-4">Create your account</h4>
       <p class="f-3 text-center">Please complete basic information for your account.mat-dialog-actions</p>
       <form #profileForm="ngForm" (ngSubmit)="submitted = true; profileForm.form.valid ? fillProfile() : false" class="mt-4">
-        <div class="form-group" [ngClass]="{invalid: submitted && learnMore.invalid && (learnMore.dirty || learnMore.touched || submitted)}">
-          <div class="d-flex">
-            <label for="learnMore" class="mr-auto">exp realty career website</label>
-            <span class="error" *ngIf="learnMore.errors">
-              <ng-container *ngIf="learnMore.errors.required">Required!</ng-container>
-            </span>
-          </div>
-          <input type="url" placeholder="https://your-website.com" class="form-control" [(ngModel)]="user.learn_more" name="learnMore" id="learnMore" required #learnMore="ngModel"/>
-        </div>
         <div class="form-group phone-form">
           <div class="d-flex">
             <label for="phone" class="mr-auto">cell number</label>

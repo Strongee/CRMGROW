@@ -210,7 +210,7 @@ export class TemplateComponent
   }
 
   goToBack(): void {
-    this.handlerService.goBack('/contacts');
+    this.handlerService.goBack('/templates');
   }
 
   getPrevPage(): string {
@@ -218,7 +218,7 @@ export class TemplateComponent
       return 'to Templates';
     }
     if (
-      this.handlerService.previousUrl.includes('/teams/') &&
+      this.handlerService.previousUrl.includes('/team/') &&
       this.handlerService.previousUrl.includes('/templates')
     ) {
       return 'to Team Templates';

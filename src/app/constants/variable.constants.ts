@@ -125,6 +125,7 @@ export const ROUTE_PAGE = {
   '/activities': 'Dashboard',
   '/contacts': 'Contacts',
   '/deals': 'Deals',
+  '/materials': 'Materials',
   '/autoflow': 'Automations',
   '/settings/tag-manager': 'Tag manager',
   '/teams': 'Teams',
