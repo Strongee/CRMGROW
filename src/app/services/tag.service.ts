@@ -118,6 +118,14 @@ export class TagService extends HttpService {
     return this.httpClient.post(this.server + TAG.DELETE, data);
   }
 
+  public tagContactDelete(tagName: string, contactId: string): any {
+    const data = {
+      tag: tagName,
+      contact: contactId
+    };
+    return this.httpClient.post(this.server + TAG.DELETE, data);
+  }
+
   clear$(): void {
     this.tags.next([]);
     this.sources.next([]);
