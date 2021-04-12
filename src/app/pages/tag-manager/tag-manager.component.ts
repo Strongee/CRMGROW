@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { TagDeleteComponent } from 'src/app/components/tag-delete/tag-delete.component';
 import { TagEditComponent } from 'src/app/components/tag-edit/tag-edit.component';
+import { Contact } from 'src/app/models/contact.model';
 import { TagService } from '../../services/tag.service';
 
 @Component({
@@ -23,35 +24,10 @@ export class TagManagerComponent implements OnInit {
       this.loading = false;
       if (res['status'] == true) {
         this.tags = res['data'];
-        let data;
         for (let i = 0; i < this.tags.length; i++) {
           for (let j = 0; j < this.tags[i].contacts.length; j++) {
-            if (this.tags[i].contacts[j].first_name == '') {
-              data = {
-                shortName: this.tags[i].contacts[j].last_name
-                  .substring(0, 2)
-                  .toUpperCase()
-              };
-            }
-            if (this.tags[i].contacts[j].last_name == '') {
-              data = {
-                shortName: this.tags[i].contacts[j].first_name
-                  .substring(0, 2)
-                  .toUpperCase()
-              };
-            }
-            if (
-              this.tags[i].contacts[j].first_name != '' &&
-              this.tags[i].contacts[j].last_name != ''
-            ) {
-              data = {
-                shortName: (
-                  this.tags[i].contacts[j].first_name.charAt(0) +
-                  this.tags[i].contacts[j].last_name.charAt(0)
-                ).toUpperCase()
-              };
-            }
-            this.tags[i].contacts[j] = { ...this.tags[i].contacts[j], ...data };
+            const contact = new Contact().deserialize(this.tags[i].contacts[j]);
+            this.tags[i].contacts[j] = contact;
           }
         }
       }
@@ -83,7 +59,8 @@ export class TagManagerComponent implements OnInit {
         width: '100vw',
         maxWidth: '400px',
         data: {
-          tagName: deleteTag._id
+          tagName: deleteTag._id,
+          type: 'all'
         }
       })
       .afterClosed()
@@ -95,11 +72,28 @@ export class TagManagerComponent implements OnInit {
   }
 
   deleteContactTag(tag: any, contact: any): void {
-    const index = tag.contacts.findIndex((item) => item._id === contact._id);
-    if (index != -1) {
-      tag.contacts.splice(index, 1);
-      tag.count -= 1;
-    }
-    console.log('###', this.tags);
+    this.dialog
+      .open(TagDeleteComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          tagName: tag._id,
+          contact: contact._id,
+          type: 'only'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const index = tag.contacts.findIndex(
+            (item) => item._id === contact._id
+          );
+          if (index != -1) {
+            tag.contacts.splice(index, 1);
+            tag.count -= 1;
+          }
+        }
+      });
   }
 }

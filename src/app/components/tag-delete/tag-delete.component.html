@@ -6,7 +6,12 @@
 </div>
 <mat-dialog-content>
     <div class="text-center f-3 c-dark mt-3">
-        Do you want to delete <span class="c-blue font-weight-bold">{{tagName}}</span> tag?
+        <ng-container *ngIf="data.type == 'all'; else tagContact">
+            Do you want to delete <span class="c-blue font-weight-bold">{{tagName}}</span> tag?
+        </ng-container>
+        <ng-template #tagContact>
+            Do you want to delete <span class="c-blue font-weight-bold">{{tagName}}</span> tag from this contact?
+        </ng-template>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
