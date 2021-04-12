@@ -24,6 +24,7 @@ import {
   sortObjectArray,
   sortStringArray
 } from '../../utils/functions';
+import { HandlerService } from '../../services/handler.service';
 @Component({
   selector: 'app-team-call',
   templateUrl: './team-call.component.html',
@@ -91,30 +92,35 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     sent: {
       subject: false,
       leader: false,
+      contacts: false,
       proposed: false
     },
     scheduled: {
       subject: false,
       organizer: false,
       leader: false,
+      contacts: false,
       schedule: false
     },
     completed: {
       subject: false,
       organizer: false,
       leader: false,
+      contacts: false,
       schedule: false
     },
     canceled: {
       subject: false,
       organizer: false,
       leader: false,
+      contacts: false,
       schedule: false
     },
     denied: {
       subject: false,
       organizer: false,
       leader: false,
+      contacts: false,
       schedule: false
     }
   };
@@ -128,6 +134,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     denied: 'schedule'
   };
 
+  isShowDialog = false;
+
   constructor(
     private teamService: TeamService,
     private dialog: MatDialog,
@@ -136,7 +144,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     private location: Location,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {
@@ -159,17 +168,18 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      const callId = this.route.snapshot.params.id;
-      if (callId) {
-        this.teamService.getInquiry(callId).subscribe((res) => {
-          const inquiry = res;
-          if (inquiry) {
-            this.confirmRequest(inquiry);
+    const callId = this.route.snapshot.params.id;
+    const previousUrl = this.handlerService.previousUrl;
+    if (callId) {
+      this.teamService.getCallById(callId).subscribe((res) => {
+        const call = res;
+        if (call) {
+          if (!previousUrl || !previousUrl.includes('teams/call')) {
+            this.openCall(call);
           }
-        });
-      }
-    }, 2000);
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -203,6 +213,11 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
           this.total[type] = res['total'];
           this.pageData[type] = res['data'];
         }
+        if (type === this.TABS[0].id || type === this.TABS[1].id) {
+          this.sort(type, 'proposed', true);
+        } else {
+          this.sort(type, 'schedule', true);
+        }
       });
   }
 
@@ -231,6 +246,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openCall(call): void {
+    this.router.navigate([`/teams/call/${call._id}`]);
     this.dialog
       .open(CallRequestDetailComponent, {
         width: '98vw',
@@ -242,6 +258,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       })
       .afterClosed()
       .subscribe((data) => {
+        this.isShowDialog = false;
         if (data) {
           const currentTab = this.selectedTab.id;
           let newTab;
@@ -526,50 +543,6 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     return `${duration} mins`;
   }
 
-  confirmRequest(inquiry): void {
-    this.location.replaceState('/teams/call/' + inquiry._id);
-    const status = inquiry.status;
-    this.dialog
-      .open(CallRequestConfirmComponent, {
-        width: '96vw',
-        maxWidth: '600px',
-        height: 'auto',
-        disableClose: true,
-        data: {
-          inquiry
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          if (res.data.status === 'planned') {
-            // this.loadInquiriesPage(this.currentInquiriesPage);
-            // this.loadPlannedPage(this.currentPlannedPage);
-          } else if (res.data.status === 'canceled') {
-            if (status === 'pending') {
-              this.dialog
-                .open(CallRequestCancelComponent, {
-                  width: '96vw',
-                  maxWidth: '600px',
-                  height: 'auto',
-                  disableClose: true,
-                  data: {
-                    data: inquiry
-                  }
-                })
-                .afterClosed()
-                .subscribe((response) => {
-                  // this.loadInquiriesPage(this.currentInquiriesPage);
-                  // this.loadFinishedPage(this.currentFinishedPage);
-                });
-            }
-            // this.loadInquiriesPage(this.currentInquiriesPage);
-            // this.loadFinishedPage(this.currentFinishedPage);
-          }
-        }
-        this.location.replaceState('/teams');
-      });
-  }
   scheduleCall(plan): void {
     this.location.replaceState('/teams/call/' + plan._id);
     const status = plan.status;
@@ -642,6 +615,29 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getSearchCondition(group, type): boolean {
     return this.searchCondition[group][type];
+  }
+
+  getAvatarName(contact): any {
+    if (contact.first_name && contact.last_name) {
+      return contact.first_name[0] + contact.last_name[0];
+    } else if (contact.first_name && !contact.last_name) {
+      return contact.first_name[0];
+    } else if (!contact.first_name && contact.last_name) {
+      return contact.last_name[0];
+    }
+    return 'UC';
+  }
+
+  getContactName(contact): any {
+    if (contact.first_name && contact.last_name) {
+      return contact.first_name + ' ' + contact.last_name;
+    } else if (contact.first_name) {
+      return contact.first_name;
+    } else if (contact.last_name) {
+      return contact.last_name;
+    } else {
+      return 'Unnamed Contact';
+    }
   }
 
   sort(group, type, keep: boolean = false): void {
