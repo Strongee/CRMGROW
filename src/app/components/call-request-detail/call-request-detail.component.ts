@@ -396,7 +396,6 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   }
 
   showProfile(contact): void {
-    console.log("show profile =========>", contact);
     this.dialog.open(TeamMemberProfileComponent, {
       data: {
         title: 'Team member',

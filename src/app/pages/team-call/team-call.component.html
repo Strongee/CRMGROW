@@ -166,9 +166,16 @@
                        [class]="getSearchCondition('sent', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('sent', 'leader')"></i>
                   </div>
                 </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('sent', 'contacts')">
+                    <span [class]="isSelectedSort('sent', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('sent', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('sent', 'contacts')"></i>
+                  </div>
+                </th>
                 <th class="date-time">
                   <div class="v-center c-pointer head-sort" (click)="sort('sent', 'proposed')">
-                    <span [class]="isSelectedSort('sent', 'proposed') ? 'font-weight-bold c-dark' : ''">leader</span>
+                    <span [class]="isSelectedSort('sent', 'proposed') ? 'font-weight-bold c-dark' : ''">proposed times</span>
                     <i class="i-icon d-block bgc-black ml-2"
                        [class]="getSearchCondition('sent', 'proposed') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('sent', 'proposed')"></i>
                   </div>
@@ -195,6 +202,13 @@
                     <span [class]="isSelectedSort('scheduled', 'leader') ? 'font-weight-bold c-dark' : ''">leader</span>
                     <i class="i-icon d-block bgc-black ml-2"
                        [class]="getSearchCondition('scheduled', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('scheduled', 'leader')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('scheduled', 'contacts')">
+                    <span [class]="isSelectedSort('scheduled', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('scheduled', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('scheduled', 'contacts')"></i>
                   </div>
                 </th>
                 <th class="date-time">
@@ -228,6 +242,13 @@
                        [class]="getSearchCondition('completed', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('completed', 'leader')"></i>
                   </div>
                 </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('completed', 'contacts')">
+                    <span [class]="isSelectedSort('completed', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('completed', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('completed', 'contacts')"></i>
+                  </div>
+                </th>
                 <th class="date-time">
                   <div class="v-center c-pointer head-sort" (click)="sort('completed', 'schedule')">
                     <span [class]="isSelectedSort('completed', 'schedule') ? 'font-weight-bold c-dark' : ''">date & time</span>
@@ -257,6 +278,13 @@
                     <span [class]="isSelectedSort('canceled', 'leader') ? 'font-weight-bold c-dark' : ''">leader</span>
                     <i class="i-icon d-block bgc-black ml-2"
                        [class]="getSearchCondition('canceled', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('canceled', 'leader')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('canceled', 'contacts')">
+                    <span [class]="isSelectedSort('canceled', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('canceled', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('canceled', 'contacts')"></i>
                   </div>
                 </th>
                 <th class="date-time">
@@ -373,6 +401,22 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     <div class="" *ngFor="let time of (call.proposed_at | slice:0:2)">
                       {{time | date: 'MMM dd yyyy, hh:mm a'}}
@@ -432,6 +476,22 @@
                         </ng-template>
                       </div>
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
                     </div>
                   </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
@@ -495,6 +555,22 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
@@ -547,6 +623,22 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
@@ -597,6 +689,22 @@
                         </ng-template>
                       </div>
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
+                    </div>
+                  </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
                     </div>
                   </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">

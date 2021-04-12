@@ -27,6 +27,21 @@ export function sortStringArray(
         [(e) => (e?.subject || '').toLowerCase()],
         [searchDirection]
       );
+    } else if (field === 'contacts') {
+      array = _.orderBy(
+        array,
+        [
+          (e) =>
+            e.contacts && e.contacts.length > 0
+              ? (e.contacts[0].first_name === '' &&
+                e.contacts[0].last_name === ''
+                  ? 'Unnamed Contact'
+                  : e.contacts[0].first_name + ' ' + e.contacts[0].last_name
+                ).toLowerCase()
+              : ''
+        ],
+        [searchDirection]
+      );
     } else {
       array = _.orderBy(array, [field], [searchDirection]);
     }

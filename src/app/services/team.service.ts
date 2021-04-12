@@ -406,10 +406,10 @@ export class TeamService extends HttpService {
     );
   }
 
-  getInquiry(id): Observable<any> {
+  getCallById(id): Observable<any> {
     return this.httpClient.get(this.server + TEAM.CALL + id).pipe(
       map((res) => res['data'] || []),
-      catchError(this.handleError('LOAD INQUIRY CALL', []))
+      catchError(this.handleError('LOAD CALL BY ID', []))
     );
   }
   loadTeamCalls(type: string, skip: number, count: number): Observable<any> {
