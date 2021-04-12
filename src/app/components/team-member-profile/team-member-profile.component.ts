@@ -30,6 +30,7 @@ export class TeamMemberProfileComponent implements OnInit {
   countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
   saving = false;
+  title = ''
 
   profileSubscription: Subscription;
   @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
@@ -42,7 +43,8 @@ export class TeamMemberProfileComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
-      this.user = new User().deserialize(this.data);
+      this.user = new User().deserialize(this.data.member);
+      this.title = this.data.title;
     }
   }
 
@@ -57,6 +59,10 @@ export class TeamMemberProfileComponent implements OnInit {
           return;
         }
       }
+    }
+    if (this.data.member.time_zone_info) {
+      const time_zone = JSON.parse(this.data.member.time_zone_info);
+      this.timezone = time_zone['name'];
     }
   }
 }

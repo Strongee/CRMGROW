@@ -1509,6 +1509,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     if (!this.handlerService.previousUrl) {
       return 'to Contacts';
     }
+    if (this.handlerService.previousUrl.includes('/materials/analytics/')) {
+      return 'to Material Analytics';
+    }
     for (const route in ROUTE_PAGE) {
       if (this.handlerService.previousUrl === route) {
         return 'to ' + ROUTE_PAGE[route];

@@ -6,7 +6,7 @@ import { TeamService } from '../../services/team.service';
 import { UserService } from '../../services/user.service';
 import { Automation } from '../../models/automation.model';
 import * as _ from 'lodash';
-import { searchReg } from '../../helper';
+import { searchReg } from 'src/app/helper';
 import { STATUS } from '../../constants/variable.constants';
 
 @Component({
@@ -80,13 +80,8 @@ export class AutomationBrowserComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredResult = this.automations.filter((automation) => {
-      return reg.test(automation.title);
+      return searchReg(automation.title, this.searchStr);
     });
   }
 

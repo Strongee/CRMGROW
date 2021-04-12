@@ -121,49 +121,210 @@
           <thead>
             <ng-container [ngSwitch]="selectedTab.id">
               <tr *ngSwitchCase="'inquiry'">
-                <th class="subject">subject</th>
-                <th class="organizer">organizer</th>
-                <th class="date-time">proposed times</th>
-                <th class="call-status">status</th>
+                <th class="subject">
+                  <div class="v-center c-pointer head-sort" (click)="sort('inquiry', 'subject')">
+                    <span [class]="isSelectedSort('inquiry', 'subject') ? 'font-weight-bold c-dark' : ''">Subject</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('inquiry', 'subject') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('inquiry', 'subject')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('inquiry', 'organizer')">
+                    <span [class]="isSelectedSort('inquiry', 'organizer') ? 'font-weight-bold c-dark' : ''">Organizer</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('inquiry', 'organizer') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('inquiry', 'organizer')"></i>
+                  </div>
+                </th>
+                <th class="date-time">
+                  <div class="v-center c-pointer head-sort" (click)="sort('inquiry', 'proposed')">
+                    <span [class]="isSelectedSort('inquiry', 'proposed') ? 'font-weight-bold c-dark' : ''">proposed times</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('inquiry', 'proposed') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('inquiry', 'proposed')"></i>
+                  </div>
+                </th>
+                <th class="call-status">
+                  <div class="v-center c-pointer head-sort" (click)="sort('inquiry', 'inquired')">
+                    <span [class]="isSelectedSort('inquiry', 'inquired') ? 'font-weight-bold c-dark' : ''">inquired</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('inquiry', 'inquired') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('inquiry', 'inquired')"></i>
+                  </div>
+                </th>
                 <th class="team-actions"></th>
               </tr>
               <tr *ngSwitchCase="'sent'">
-                <th class="subject">subject</th>
-                <th class="organizer">leader</th>
-                <th class="date-time">proposed times</th>
-                <th class="call-status">status</th>
+                <th class="subject">
+                  <div class="v-center c-pointer head-sort" (click)="sort('sent', 'subject')">
+                    <span [class]="isSelectedSort('sent', 'subject') ? 'font-weight-bold c-dark' : ''">Subject</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('sent', 'subject') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('sent', 'subject')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('sent', 'leader')">
+                    <span [class]="isSelectedSort('sent', 'leader') ? 'font-weight-bold c-dark' : ''">leader</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('sent', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('sent', 'leader')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('sent', 'contacts')">
+                    <span [class]="isSelectedSort('sent', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('sent', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('sent', 'contacts')"></i>
+                  </div>
+                </th>
+                <th class="date-time">
+                  <div class="v-center c-pointer head-sort" (click)="sort('sent', 'proposed')">
+                    <span [class]="isSelectedSort('sent', 'proposed') ? 'font-weight-bold c-dark' : ''">proposed times</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('sent', 'proposed') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('sent', 'proposed')"></i>
+                  </div>
+                </th>
                 <th class="team-actions"></th>
               </tr>
               <tr *ngSwitchCase="'scheduled'">
-                <th class="subject">subject</th>
-                <th class="organizer">organizer</th>
-                <th class="leader">leader</th>
-                <th class="date-time">date & time</th>
-                <th class="call-status">status</th>
+                <th class="subject">
+                  <div class="v-center c-pointer head-sort" (click)="sort('scheduled', 'subject')">
+                    <span [class]="isSelectedSort('scheduled', 'subject') ? 'font-weight-bold c-dark' : ''">Subject</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('scheduled', 'subject') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('scheduled', 'subject')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('scheduled', 'organizer')">
+                    <span [class]="isSelectedSort('scheduled', 'organizer') ? 'font-weight-bold c-dark' : ''">organizer</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('scheduled', 'organizer') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('scheduled', 'organizer')"></i>
+                  </div>
+                </th>
+                <th class="leader">
+                  <div class="v-center c-pointer head-sort" (click)="sort('scheduled', 'leader')">
+                    <span [class]="isSelectedSort('scheduled', 'leader') ? 'font-weight-bold c-dark' : ''">leader</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('scheduled', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('scheduled', 'leader')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('scheduled', 'contacts')">
+                    <span [class]="isSelectedSort('scheduled', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('scheduled', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('scheduled', 'contacts')"></i>
+                  </div>
+                </th>
+                <th class="date-time">
+                  <div class="v-center c-pointer head-sort" (click)="sort('scheduled', 'schedule')">
+                    <span [class]="isSelectedSort('scheduled', 'schedule') ? 'font-weight-bold c-dark' : ''">date & time</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('scheduled', 'schedule') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('scheduled', 'schedule')"></i>
+                  </div>
+                </th>
                 <th class="team-actions"></th>
               </tr>
               <tr *ngSwitchCase="'completed'">
-                <th class="subject">subject</th>
-                <th class="organizer">organizer</th>
-                <th class="leader">leader</th>
-                <th class="date-time">date & time</th>
-                <th class="call-status">status</th>
+                <th class="subject">
+                  <div class="v-center c-pointer head-sort" (click)="sort('completed', 'subject')">
+                    <span [class]="isSelectedSort('completed', 'subject') ? 'font-weight-bold c-dark' : ''">Subject</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('completed', 'subject') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('completed', 'subject')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('completed', 'organizer')">
+                    <span [class]="isSelectedSort('completed', 'organizer') ? 'font-weight-bold c-dark' : ''">organizer</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('completed', 'organizer') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('completed', 'organizer')"></i>
+                  </div>
+                </th>
+                <th class="leader">
+                  <div class="v-center c-pointer head-sort" (click)="sort('completed', 'leader')">
+                    <span [class]="isSelectedSort('completed', 'leader') ? 'font-weight-bold c-dark' : ''">leader</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('completed', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('completed', 'leader')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('completed', 'contacts')">
+                    <span [class]="isSelectedSort('completed', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('completed', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('completed', 'contacts')"></i>
+                  </div>
+                </th>
+                <th class="date-time">
+                  <div class="v-center c-pointer head-sort" (click)="sort('completed', 'schedule')">
+                    <span [class]="isSelectedSort('completed', 'schedule') ? 'font-weight-bold c-dark' : ''">date & time</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('completed', 'schedule') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('completed', 'schedule')"></i>
+                  </div>
+                </th>
                 <th class="team-actions"></th>
               </tr>
               <tr *ngSwitchCase="'canceled'">
-                <th class="subject">subject</th>
-                <th class="organizer">organizer</th>
-                <th class="leader">leader</th>
-                <th class="date-time">date & time</th>
-                <th class="call-status">status</th>
+                <th class="subject">
+                  <div class="v-center c-pointer head-sort" (click)="sort('canceled', 'subject')">
+                    <span [class]="isSelectedSort('canceled', 'subject') ? 'font-weight-bold c-dark' : ''">Subject</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('canceled', 'subject') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('canceled', 'subject')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('canceled', 'organizer')">
+                    <span [class]="isSelectedSort('canceled', 'organizer') ? 'font-weight-bold c-dark' : ''">organizer</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('canceled', 'organizer') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('canceled', 'organizer')"></i>
+                  </div>
+                </th>
+                <th class="leader">
+                  <div class="v-center c-pointer head-sort" (click)="sort('canceled', 'leader')">
+                    <span [class]="isSelectedSort('canceled', 'leader') ? 'font-weight-bold c-dark' : ''">leader</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('canceled', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('canceled', 'leader')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('canceled', 'contacts')">
+                    <span [class]="isSelectedSort('canceled', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('canceled', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('canceled', 'contacts')"></i>
+                  </div>
+                </th>
+                <th class="date-time">
+                  <div class="v-center c-pointer head-sort" (click)="sort('canceled', 'schedule')">
+                    <span [class]="isSelectedSort('canceled', 'schedule') ? 'font-weight-bold c-dark' : ''">date & time</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('canceled', 'schedule') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('canceled', 'schedule')"></i>
+                  </div>
+                </th>
                 <th class="team-actions"></th>
               </tr>
               <tr *ngSwitchCase="'denied'">
-                <th class="subject">subject</th>
-                <th class="organizer">organizer</th>
-                <th class="leader">leader</th>
-                <th class="date-time">date & time</th>
-                <th class="call-status">status</th>
+                <th class="subject">
+                  <div class="v-center c-pointer head-sort" (click)="sort('denied', 'subject')">
+                    <span [class]="isSelectedSort('denied', 'subject') ? 'font-weight-bold c-dark' : ''">Subject</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('denied', 'subject') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('denied', 'subject')"></i>
+                  </div>
+                </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('denied', 'organizer')">
+                    <span [class]="isSelectedSort('denied', 'organizer') ? 'font-weight-bold c-dark' : ''">organizer</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('denied', 'organizer') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('denied', 'organizer')"></i>
+                  </div>
+                </th>
+                <th class="leader">
+                  <div class="v-center c-pointer head-sort" (click)="sort('denied', 'leader')">
+                    <span [class]="isSelectedSort('denied', 'leader') ? 'font-weight-bold c-dark' : ''">leader</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('denied', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('denied', 'leader')"></i>
+                  </div>
+                </th>
+                <th class="date-time">
+                  <div class="v-center c-pointer head-sort" (click)="sort('denied', 'schedule')">
+                    <span [class]="isSelectedSort('denied', 'schedule') ? 'font-weight-bold c-dark' : ''">date & time</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('denied', 'schedule') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('denied', 'schedule')"></i>
+                  </div>
+                </th>
                 <th class="team-actions"></th>
               </tr>
             </ng-container>
@@ -176,7 +337,7 @@
                     <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
                     <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
                   </td>
-                  <td class="organizer c-pointer" (click)="openCall(call)">
+                  <td class="organizer c-pointer" (click)="showProfile(call)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
@@ -200,26 +361,23 @@
                     </div>
                   </td>
                   <td class="call-status c-pointer">
-                    Needs review
+                    {{call.created_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
                   <td class="team-actions">
-                    <div class="v-center">
-                      <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold ml-auto" (click)="openCall(call)">Review</button>
-                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                        </a>
-                        <div ngbDropdownMenu class="light py-1">
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="addToCalendar(call)">
-                            <i class="i-icon i-calendar bg-dark sm ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-3 font-weight-bold">Add to calendar</span>
-                          </button>
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="decline(call)">
-                            <i class="i-icon i-trash bg-dark ml-1 sm" aria-hidden="true"></i>
-                            <span class="ml-3 f-3 font-weight-bold">Decline</span>
-                          </button>
-                        </div>
-                      </div>
+                    <div class="v-center justify-content-end">
+                      <ng-container *ngIf="isOrganizer(call); else noneOrganizerTemplate">
+                        <button class="btn delete-btn v-center" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                          <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+                        </button>
+                      </ng-container>
+                      <ng-template #noneOrganizerTemplate>
+                        <button class="btn" (click)="decline(call)" placement="bottom" ngbTooltip="Decline" ngbButtonLabel>
+                          <i class="i-icon i-block bgc-dark d-block" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn ml-2" (click)="accept(call)" placement="bottom" ngbTooltip="Accept" ngbButtonLabel>
+                          <i class="i-icon i-check bgc-dark d-block" aria-hidden="true"></i>
+                        </button>
+                      </ng-template>
                     </div>
                   </td>
                 </ng-container>
@@ -243,6 +401,22 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     <div class="" *ngFor="let time of (call.proposed_at | slice:0:2)">
                       {{time | date: 'MMM dd yyyy, hh:mm a'}}
@@ -250,9 +424,6 @@
                     <div class="op-75" *ngIf="call.proposed_at.length > 2">
                       + {{call.proposed_at.length - 2}} more options
                     </div>
-                  </td>
-                  <td class="call-status c-pointer" (click)="openCall(call)">
-                    Pending review
                   </td>
                   <td class="team-actions">
                     <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
@@ -307,13 +478,26 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     <div class="">
                       {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
                     </div>
-                  </td>
-                  <td class="call-status c-pointer" (click)="openCall(call)">
-                    Scheduled
                   </td>
                   <td class="team-actions">
                     <div class="v-center">
@@ -371,11 +555,24 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
-                  </td>
-                  <td class="call-status c-pointer" (click)="openCall(call)">
-                    Completed
                   </td>
                   <td class="team-actions">
                     <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
@@ -426,11 +623,24 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
-                  </td>
-                  <td class="call-status" (click)="openCall(call)">
-                    Canceled
                   </td>
                   <td class="team-actions">
                     <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
@@ -481,11 +691,24 @@
                       <div class="f-3 ml-2 member-name">{{call.leader.user_name}}</div>
                     </div>
                   </td>
+                  <td class="organizer c-pointer" (click)="openCall(call)">
+                    <div class="v-center" *ngIf="call.contacts && call.contacts.length">
+                      <div class="member-avatar">
+                        <ng-container *ngIf="call.contacts[0].picture_profile; else prospectNamePlaceholder">
+                          <img [src]="call.contacts[0].picture_profile" class="avatar" />
+                        </ng-container>
+                        <ng-template #prospectNamePlaceholder>
+                          <div class="name-avatar">{{getAvatarName(call.contacts[0])}}</div>
+                        </ng-template>
+                      </div>
+                      <div>
+                        <div class="f-3 ml-2 member-name">{{getContactName(call.contacts[0])}}</div>
+                        <div class="f-3 ml-2 op-75" *ngIf="call.contacts.length > 1">+ {{call.contacts.length - 1}} more contacts</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="date-time c-pointer" (click)="openCall(call)">
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
-                  </td>
-                  <td class="call-status" (click)="openCall(call)">
-                    Declined
                   </td>
                   <td class="team-actions">
                     <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">

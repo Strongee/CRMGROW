@@ -1,6 +1,10 @@
 <div class="page-content">
   <div class="template-container d-flex w-100">
     <div class="template-content my-2">
+      <div class="v-center op-56 c-pointer mb-2 back-menu" (click)="goToBack()">
+        <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
+        <span class="f-5 font-weight-bold">Back {{getPrevPage()}}</span>
+      </div>
       <div class="v-center justify-content-between">
         <ng-container *ngIf="!!id && mode == 'edit'">
           <h6 class="f-8 ls-2 font-weight-bold text-uppercase my-2">Edit template</h6>

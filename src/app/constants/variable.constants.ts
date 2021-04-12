@@ -125,10 +125,12 @@ export const ROUTE_PAGE = {
   '/activities': 'Dashboard',
   '/contacts': 'Contacts',
   '/deals': 'Deals',
+  '/materials': 'Materials',
   '/autoflow': 'Automations',
   '/settings/tag-manager': 'Tag manager',
-  '/team': 'Teams',
-  '/automations': 'Automations'
+  '/teams': 'Teams',
+  '/automations': 'Automations',
+  '/templates': 'Templates'
 };
 
 export const COUNTRIES = [
@@ -674,8 +676,256 @@ export const TIMEZONE = [
         daylight: '-02:30'
       }
     ]
+  },
+  {
+    country: 'UK',
+    timezones: [
+      {
+        country: 'UK',
+        name: 'London Time',
+        zone: '+00:00',
+        tz_name: 'Europe/London',
+        standard: '+00:00',
+        daylight: '+01:00'
+      },
+      {
+        country: 'UK',
+        name: 'Gibraltar Time',
+        zone: '+01:00',
+        tz_name: 'Europe/Gibraltar',
+        standard: '+01:00',
+        daylight: '+02:00'
+      },
+      {
+        country: 'UK',
+        name: 'Anguilla Time',
+        zone: '-04:00',
+        tz_name: 'America/Anguilla',
+        standard: '-04:00',
+        daylight: '-04:00'
+      },
+      {
+        country: 'UK',
+        name: 'Grand Turk Time',
+        zone: '-05:00',
+        tz_name: 'America/Grand_Turk',
+        standard: '-05:00',
+        daylight: '-04:00'
+      },
+      {
+        country: 'UK',
+        name: 'Falkland Islands Time',
+        zone: '-03:00',
+        tz_name: 'Antarctica/Rothera',
+        standard: '-03:00',
+        daylight: '-03:00'
+      },
+      {
+        country: 'UK',
+        name: 'Bermuda Time',
+        zone: '-04:00',
+        tz_name: 'Atlantic/Bermuda',
+        standard: '-04:00',
+        daylight: '-03:00'
+      },
+      {
+        country: 'UK',
+        name: 'South Georgia Time',
+        zone: '-02:00',
+        tz_name: 'Atlantic/South_Georgia',
+        standard: '-02:00',
+        daylight: '-02:00'
+      },
+      {
+        country: 'UK',
+        name: 'Saint Helena Time',
+        zone: '+00:00',
+        tz_name: 'Atlantic/St_Helena',
+        standard: '+00:00',
+        daylight: '+00:00'
+      },
+      {
+        country: 'UK',
+        name: 'British Indian Ocean Territory Time',
+        zone: '+06:00',
+        tz_name: 'Indian/Chagos',
+        standard: '+06:00',
+        daylight: '+06:00'
+      },
+      {
+        country: 'UK',
+        name: 'Pitcairn Islands Time',
+        zone: '-08:00',
+        tz_name: 'Pacific/Pitcairn',
+        standard: '-08:00',
+        daylight: '-08:00'
+      }
+    ]
+  },
+  {
+    country: 'AU',
+    timezones: [
+      {
+        country: 'AU',
+        name: 'Australian Western Standard Time',
+        zone: '+08:00',
+        tz_name: 'Australia/Perth',
+        standard: '+08:00',
+        daylight: '+08:00'
+      },
+      {
+        country: 'AU',
+        name: 'Australian Central Standard Time',
+        zone: '+09:30',
+        tz_name: 'Australia/Darwin',
+        standard: '+09:30',
+        daylight: '+09:30'
+      },
+      {
+        country: 'AU',
+        name: 'Australian Eastern Standard Time',
+        zone: '+10:00',
+        tz_name: 'Australia/Sydney',
+        standard: '+10:00',
+        daylight: '+10:00'
+      },
+      {
+        country: 'AU',
+        name: 'Australian Central Time',
+        zone: '+09:30',
+        tz_name: 'Australia/Broken_Hill',
+        standard: '+09:30',
+        daylight: '+10:30'
+      },
+      {
+        country: 'AU',
+        name: 'Australian Eastern Time',
+        zone: '+10:00',
+        tz_name: 'Australia/Hobart',
+        standard: '+10:00',
+        daylight: '+11:00'
+      }
+    ]
+  },
+  {
+    country: 'HK',
+    timezones: [
+      {
+        country: 'HK',
+        name: 'Hong Kong Time',
+        zone: '+08:00',
+        tz_name: 'Asia/Hong_Kong',
+        standard: '+08:00',
+        daylight: '+08:00'
+      }
+    ]
+  },
+  {
+    country: 'DE',
+    timezones: [
+      {
+        country: 'DE',
+        name: 'Germany Time',
+        zone: '+01:00',
+        tz_name: 'Europe/Berlin',
+        standard: '+01:00',
+        daylight: '+02:00'
+      }
+    ]
+  },
+  {
+    country: 'IN',
+    timezones: [
+      {
+        country: 'IN',
+        name: 'India Standard Time',
+        zone: '+05:30',
+        tz_name: 'Asia/Kolkata',
+        standard: '+05:30',
+        daylight: '+05:30'
+      }
+    ]
+  },
+  {
+    country: 'IT',
+    timezones: [
+      {
+        country: 'IT',
+        name: 'Central European Summer Time',
+        zone: '+01:00',
+        tz_name: 'Europe/Rome',
+        standard: '+01:00',
+        daylight: '+01:00'
+      }
+    ]
+  },
+  {
+    country: 'PT',
+    timezones: [
+      {
+        country: 'PT',
+        name: 'Western European Summer Time',
+        zone: '+00:00',
+        tz_name: 'Europe/Lisbon',
+        standard: '+00:00',
+        daylight: '+01:00'
+      }
+    ]
+  },
+  {
+    country: 'PR',
+    timezones: [
+      {
+        country: 'PR',
+        name: 'Atlantic Standard Time',
+        zone: '-04:00',
+        tz_name: 'America/Puerto_Rico',
+        standard: '-04:00',
+        daylight: '-04:00'
+      }
+    ]
+  },
+  {
+    country: 'ES',
+    timezones: [
+      {
+        country: 'ES',
+        name: 'Spain Time',
+        zone: '+01:00',
+        tz_name: 'Europe/Madrid',
+        standard: '+01:00',
+        daylight: '+02:00'
+      }
+    ]
+  },
+  {
+    country: 'CH',
+    timezones: [
+      {
+        country: 'CH',
+        name: 'Switzerland Time',
+        zone: '+01:00',
+        tz_name: 'Europe/Zurich',
+        standard: '+01:00',
+        daylight: '+02:00'
+      }
+    ]
+  },
+  {
+    country: 'ZA',
+    timezones: [
+      {
+        country: 'ZA',
+        name: 'South African Standard Time',
+        zone: '+02:00',
+        tz_name: 'Africa/Johannesburg',
+        standard: '+02:00',
+        daylight: '+02:00'
+      }
+    ]
   }
 ];
+
 export const CALENDAR_DURATION = [
   {
     value: 0.25,

@@ -50,7 +50,8 @@
             </div>
           </th>
           <td mat-cell *matCellDef="let automation" class="auth">
-            <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === userId" [class.shared]="automation.role === 'team' && automation.user !== userId"></div>
+<!--            <div class="role" [class.admin]="automation.role == 'admin'" [class.team]="automation.role === 'team' && automation.user === userId" [class.shared]="automation.role === 'team' && automation.user !== userId"></div>-->
+            <div class="f-3">{{getOwner(automation)}}</div>
           </td>
         </ng-container>
         <ng-container matColumnDef="action-count">

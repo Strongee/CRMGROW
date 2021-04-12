@@ -24,6 +24,7 @@ import {
 import { MailList } from '../../models/maillist.model';
 import { MailListService } from '../../services/maillist.service';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-mail-list',
@@ -73,8 +74,7 @@ export class MailListComponent implements OnInit, OnDestroy, AfterViewInit {
           this.apiSubscription && this.apiSubscription.unsubscribe();
           this.apiSubscription = api.subscribe((mailLists) => {
             const res = _.filter(mailLists, (e) => {
-              const searchReg = new RegExp(this.search, 'gi');
-              if (searchReg.test(e.title)) {
+              if (searchReg(e.title, this.search)) {
                 return true;
               }
             });

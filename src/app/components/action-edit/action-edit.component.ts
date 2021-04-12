@@ -11,25 +11,19 @@ import {
   MAT_DIALOG_DATA,
   MatDialog
 } from '@angular/material/dialog';
-import {
-  ACTION_CAT,
-  TIMES,
-  QuillEditor,
-  DefaultMessage,
-  ActionName
-} from 'src/app/constants/variable.constants';
+import { TIMES, ActionName } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { FileService } from 'src/app/services/file.service';
-import { QuillEditorComponent } from 'ngx-quill';
 import { LabelService } from 'src/app/services/label.service';
 import { UserService } from '../../services/user.service';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
 import * as moment from 'moment';
-import { Template } from 'src/app/models/template.model';
+import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
+import { Template } from 'src/app/models/template.model';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -485,6 +479,11 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
         });
       }
       return;
+    }
+    if (this.type === 'note') {
+      if (!this.action['content']) {
+        return;
+      }
     }
 
     this.dialogRef.close({ ...this.action, period });

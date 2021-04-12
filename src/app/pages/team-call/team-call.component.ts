@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { TeamService } from '../../services/team.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,14 @@ import { DialogSettings } from 'src/app/constants/variable.constants';
 import { CallRequestDetailComponent } from 'src/app/components/call-request-detail/call-request-detail.component';
 import * as _ from 'lodash';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { getCurrentTimezone, numPad } from '../../helper';
+import { TeamMemberProfileComponent } from '../../components/team-member-profile/team-member-profile.component';
+import {
+  sortDateArray,
+  sortObjectArray,
+  sortStringArray
+} from '../../utils/functions';
+import { HandlerService } from '../../services/handler.service';
 @Component({
   selector: 'app-team-call',
   templateUrl: './team-call.component.html',
@@ -36,6 +44,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
 
   currentUser: any;
   userId = '';
+  userTimezone;
   teams: any[] = [];
 
   pageData: any = {
@@ -73,6 +82,59 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   subscriptions: any = {};
 
   profileSubscription: Subscription;
+  searchCondition = {
+    inquiry: {
+      subject: false,
+      organizer: false,
+      proposed: false,
+      inquired: false
+    },
+    sent: {
+      subject: false,
+      leader: false,
+      contacts: false,
+      proposed: false
+    },
+    scheduled: {
+      subject: false,
+      organizer: false,
+      leader: false,
+      contacts: false,
+      schedule: false
+    },
+    completed: {
+      subject: false,
+      organizer: false,
+      leader: false,
+      contacts: false,
+      schedule: false
+    },
+    canceled: {
+      subject: false,
+      organizer: false,
+      leader: false,
+      contacts: false,
+      schedule: false
+    },
+    denied: {
+      subject: false,
+      organizer: false,
+      leader: false,
+      contacts: false,
+      schedule: false
+    }
+  };
+
+  selectedSort = {
+    inquiry: 'subject',
+    sent: 'proposed',
+    scheduled: 'schedule',
+    complete: 'schedule',
+    canceled: 'schedule',
+    denied: 'schedule'
+  };
+
+  isShowDialog = false;
 
   constructor(
     private teamService: TeamService,
@@ -82,7 +144,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     private location: Location,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +155,12 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
+      try {
+        this.userTimezone = JSON.parse(res.time_zone_info);
+      } catch (err) {
+        const timezone = getCurrentTimezone();
+        this.userTimezone = { zone: res.time_zone || timezone };
+      }
     });
     this.TABS.forEach((e) => {
       this.loadPageCalls(e.id, 0);
@@ -99,17 +168,18 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      const callId = this.route.snapshot.params.id;
-      if (callId) {
-        this.teamService.getInquiry(callId).subscribe((res) => {
-          const inquiry = res;
-          if (inquiry) {
-            this.confirmRequest(inquiry);
+    const callId = this.route.snapshot.params.id;
+    const previousUrl = this.handlerService.previousUrl;
+    if (callId) {
+      this.teamService.getCallById(callId).subscribe((res) => {
+        const call = res;
+        if (call) {
+          if (!previousUrl || !previousUrl.includes('teams/call')) {
+            this.openCall(call);
           }
-        });
-      }
-    }, 2000);
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -143,6 +213,11 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
           this.total[type] = res['total'];
           this.pageData[type] = res['data'];
         }
+        if (type === this.TABS[0].id || type === this.TABS[1].id) {
+          this.sort(type, 'proposed', true);
+        } else {
+          this.sort(type, 'schedule', true);
+        }
       });
   }
 
@@ -171,6 +246,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openCall(call): void {
+    this.router.navigate([`/teams/call/${call._id}`]);
     this.dialog
       .open(CallRequestDetailComponent, {
         width: '98vw',
@@ -182,6 +258,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       })
       .afterClosed()
       .subscribe((data) => {
+        this.isShowDialog = false;
         if (data) {
           const currentTab = this.selectedTab.id;
           let newTab;
@@ -320,6 +397,71 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  accept(call): void {
+    const selectedTime = call.proposed_at[0];
+    this.teamService
+      .updateCall(call._id, {
+        status: 'planned',
+        confirmed_at: selectedTime
+      })
+      .subscribe((status) => {
+        if (status) {
+          const currentTab = this.selectedTab.id;
+          _.remove(this.pageData[currentTab], (e) => {
+            return e._id === call._id;
+          });
+          this.total[currentTab]--;
+          if (
+            this.pageData[currentTab].length < 5 &&
+            this.total[currentTab] > 8
+          ) {
+            this.loadPageCalls(currentTab, this.page[currentTab]);
+          }
+          // Check the Calendar Connection
+          const calendars = this.appointmentService.calendars.getValue();
+          this.dialog
+            .open(ConfirmComponent, {
+              ...DialogSettings.CONFIRM,
+              data: {
+                title: 'Add the call to Calendar',
+                message: 'Are you going to add this call to your calendar?',
+                confirmLabel: 'Add to calendar',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe((answer) => {
+              if (answer) {
+                this.addToCalendar(call);
+              }
+            });
+        }
+      });
+  }
+
+  addToCalendar(call): void {
+    const contacts = [];
+    if (call && call.leader) {
+      contacts.push(call.leader);
+    }
+
+    if (call && call.user) {
+      if (call.leader && call.leader._id !== call.user._id) {
+        contacts.push(call.user);
+      }
+    }
+
+    this.dialog.open(CalendarDialogComponent, {
+      width: '100vw',
+      maxWidth: '600px',
+      maxHeight: '700px',
+      data: {
+        call,
+        contacts
+      }
+    });
+  }
+
   cancel(call): void {
     this.dialog
       .open(ConfirmComponent, {
@@ -401,50 +543,6 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     return `${duration} mins`;
   }
 
-  confirmRequest(inquiry): void {
-    this.location.replaceState('/teams/call/' + inquiry._id);
-    const status = inquiry.status;
-    this.dialog
-      .open(CallRequestConfirmComponent, {
-        width: '96vw',
-        maxWidth: '600px',
-        height: 'auto',
-        disableClose: true,
-        data: {
-          inquiry
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          if (res.data.status === 'planned') {
-            // this.loadInquiriesPage(this.currentInquiriesPage);
-            // this.loadPlannedPage(this.currentPlannedPage);
-          } else if (res.data.status === 'canceled') {
-            if (status === 'pending') {
-              this.dialog
-                .open(CallRequestCancelComponent, {
-                  width: '96vw',
-                  maxWidth: '600px',
-                  height: 'auto',
-                  disableClose: true,
-                  data: {
-                    data: inquiry
-                  }
-                })
-                .afterClosed()
-                .subscribe((response) => {
-                  // this.loadInquiriesPage(this.currentInquiriesPage);
-                  // this.loadFinishedPage(this.currentFinishedPage);
-                });
-            }
-            // this.loadInquiriesPage(this.currentInquiriesPage);
-            // this.loadFinishedPage(this.currentFinishedPage);
-          }
-        }
-        this.location.replaceState('/teams');
-      });
-  }
   scheduleCall(plan): void {
     this.location.replaceState('/teams/call/' + plan._id);
     const status = plan.status;
@@ -487,32 +585,93 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
   editGroupCall(plan): void {}
-  addToCalendar(plan): void {
-    this.router.navigate(['/calendar']);
-    const startDate = new Date(plan.confirmed_at);
-    const endDate = moment(startDate).add(plan.duration, 'm').toISOString();
-    const calendarData = {
-      title: plan.subject,
-      start: startDate,
-      end: new Date(endDate),
-      meta: {
-        contacts: plan.contacts,
-        description: plan.description,
-        guests: plan.guests,
-        is_organizer: plan.user._id === this.userId
-      }
-    };
-    this.dialog.open(CalendarDialogComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '600px',
-      data: {
-        event: calendarData
-      }
-    });
-  }
+
   changePageSize(type: any): void {
     this.pageSize = type;
     this.changePage(this.page);
+  }
+
+  isOrganizer(call): any {
+    if (call && call.user) {
+      return call.user._id === this.userId;
+    }
+    return false;
+  }
+
+  showProfile(call): void {
+    if (call && call.user) {
+      this.dialog.open(TeamMemberProfileComponent, {
+        data: {
+          title: 'Team member',
+          member: call.user
+        }
+      });
+    }
+  }
+
+  isSelectedSort(group, type): boolean {
+    return this.selectedSort[group] === type;
+  }
+
+  getSearchCondition(group, type): boolean {
+    return this.searchCondition[group][type];
+  }
+
+  getAvatarName(contact): any {
+    if (contact.first_name && contact.last_name) {
+      return contact.first_name[0] + contact.last_name[0];
+    } else if (contact.first_name && !contact.last_name) {
+      return contact.first_name[0];
+    } else if (!contact.first_name && contact.last_name) {
+      return contact.last_name[0];
+    }
+    return 'UC';
+  }
+
+  getContactName(contact): any {
+    if (contact.first_name && contact.last_name) {
+      return contact.first_name + ' ' + contact.last_name;
+    } else if (contact.first_name) {
+      return contact.first_name;
+    } else if (contact.last_name) {
+      return contact.last_name;
+    } else {
+      return 'Unnamed Contact';
+    }
+  }
+
+  sort(group, type, keep: boolean = false): void {
+    if (this.selectedSort[group] !== type) {
+      this.selectedSort[group] = type;
+      return;
+    } else {
+      if (type === 'organizer' || type === 'leader') {
+        this.pageData[group] = sortObjectArray(
+          this.pageData[group],
+          type,
+          this.getSearchCondition(group, type)
+        );
+      } else if (
+        type === 'inquired' ||
+        type === 'proposed' ||
+        type === 'schedule'
+      ) {
+        this.pageData[group] = sortDateArray(
+          this.pageData[group],
+          type,
+          this.getSearchCondition(group, type)
+        );
+      } else {
+        this.pageData[group] = sortStringArray(
+          this.pageData[group],
+          type,
+          this.getSearchCondition(group, type)
+        );
+      }
+      this.page[group] = 0;
+      if (!keep) {
+        this.searchCondition[group][type] = !this.searchCondition[group][type];
+      }
+    }
   }
 }

@@ -30,6 +30,7 @@ import { StripeScriptTag, StripeCard } from 'stripe-angular';
 })
 export class RegisterComponent implements OnInit {
   // Constant Variables
+  defaultTimeZone = true;
   timezones = TIMEZONE;
   countries: CountryISO[] = PHONE_COUNTRIES;
   CountryISO = CountryISO;
@@ -39,7 +40,6 @@ export class RegisterComponent implements OnInit {
     user_name: '',
     email: '',
     password: '',
-    learn_more: '',
     cell_phone: '',
     phone: {},
     time_zone_info: ''
@@ -191,11 +191,7 @@ export class RegisterComponent implements OnInit {
   }
 
   fillProfile(): void {
-    if (
-      this.user.learn_more == '' ||
-      this.user.phone == '' ||
-      this.user.time_zone_info == ''
-    ) {
+    if (this.user.phone == '' || this.user.time_zone_info == '') {
       return;
     }
     if (!this.checkingPhone && this.phoneExisting) {

@@ -26,6 +26,7 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { Team } from '../../models/team.model';
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
+import { searchReg } from 'src/app/helper';
 @Component({
   selector: 'app-team-share-material',
   templateUrl: './team-share-material.component.html',
@@ -759,13 +760,8 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
 
   filter(): void {
     // this.selection = [];
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
-      if (!reg.test(material.title)) {
+      if (!searchReg(material.title, this.searchStr)) {
         return false;
       }
       return true;

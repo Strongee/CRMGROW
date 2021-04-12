@@ -32,6 +32,7 @@ import { Team } from '../../models/team.model';
 import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-team-share-automation',
@@ -144,13 +145,8 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   }
 
   changeSearchStr(): void {
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredResult = this.automations.filter((item) => {
-      return reg.test(item.title);
+      return searchReg(item.title, this.searchStr);
     });
     this.page = 1;
   }
@@ -178,7 +174,6 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     event.stopPropagation();
     this.router.navigate(['/autoflow/new/' + automation._id]);
   }
-
 
   /**
    * Open the dialog to assing the automation
@@ -281,6 +276,17 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
           }
         }
       });
+  }
+
+  getOwner(automation): any {
+    if (automation && automation.user) {
+      if (automation.user._id === this.userId) {
+        return 'Me';
+      } else {
+        return automation.user.user_name;
+      }
+    }
+    return '--';
   }
 
   sort(field: string, keep: boolean = false): void {

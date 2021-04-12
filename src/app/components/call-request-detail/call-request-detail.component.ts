@@ -139,6 +139,10 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  goToCalendly(): void {
+    window.open(this.calendaryLink);
+  }
+
   delete(): void {
     this.dialog
       .open(ConfirmComponent, {
@@ -392,12 +396,11 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
   }
 
   showProfile(contact): void {
-    if (contact && contact._id === this.userId) {
-      this.router.navigate(['/profile/general']);
-    } else {
-      this.dialog.open(TeamMemberProfileComponent, {
-        data: { ...contact }
-      });
-    }
+    this.dialog.open(TeamMemberProfileComponent, {
+      data: {
+        title: 'Team member',
+        member: contact
+      }
+    });
   }
 }

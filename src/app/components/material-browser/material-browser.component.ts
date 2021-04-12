@@ -149,11 +149,6 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
 
   filter(): void {
     // this.selection = [];
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredMaterials = this.materials.filter((material) => {
       if (this.selectedFolder) {
         if (this.selectedFolder._id !== material.folder) {
@@ -238,7 +233,6 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
   capitalizeFirstLetter(type: string): any {
     return type.charAt(0).toUpperCase() + type.slice(1);
   }
-
 
   openFolder(element: Material): void {
     this.selectedFolder = element;

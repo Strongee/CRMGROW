@@ -27,6 +27,7 @@ import { Subject, ReplaySubject, Observable } from 'rxjs';
 import * as _ from 'lodash';
 import { TagService } from 'src/app/services/tag.service';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { searchReg } from 'src/app/helper';
 
 interface Tag {
   _id: string;
@@ -87,8 +88,7 @@ export class InputTagComponent implements OnInit {
             });
             const remained = _.difference(tags, this.selectedTags);
             const res = _.filter(remained, (e) => {
-              const searchReg = new RegExp(this.keyword, 'gi');
-              return searchReg.test(e._id);
+              return searchReg(e._id, this.keyword);
             });
             this.searching = false;
             if (res.length) {

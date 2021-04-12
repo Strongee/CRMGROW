@@ -12,8 +12,8 @@ import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
 import { TeamService } from '../../services/team.service';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-template-browser',
@@ -105,15 +105,10 @@ export class TemplateBrowserComponent implements OnInit, OnDestroy {
   }
 
   changeSearchStr(): void {
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredResult = this.templates.filter((template) => {
       const str =
         template.title + ' ' + template.content + ' ' + template.subject;
-      return reg.test(str);
+      return searchReg(str, this.searchStr);
     });
   }
 

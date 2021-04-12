@@ -10,8 +10,8 @@ import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
 import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-templates',
@@ -141,7 +141,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
             this.userService.email.next(null);
           }
         }
-        if (template.type === 'sms') {
+        if (template.type === 'text') {
           if (cannedMessage.sms) {
             this.userService.sms.next(template);
           } else {

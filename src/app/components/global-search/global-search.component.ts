@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { STATUS } from 'src/app/constants/variable.constants';
-import { searchReg } from 'src/app/helper';
 import { AutomationService } from 'src/app/services/automation.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { DealsService } from 'src/app/services/deals.service';
@@ -10,6 +9,8 @@ import { MaterialService } from 'src/app/services/material.service';
 import { StoreService } from 'src/app/services/store.service';
 import { TeamService } from 'src/app/services/team.service';
 import { TemplatesService } from 'src/app/services/templates.service';
+import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-global-search',

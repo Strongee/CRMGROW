@@ -26,9 +26,9 @@
           | paginate : {id: 'teamTable', itemsPerPage: 10, currentPage: page, totalItems: (teamService.teams$ | async).length}
         ">
         <td class="team-name">
-          <a class="v-center item-detail-link mr-2" [routerLink]="['/teams/' + team._id]">
+          <a class="v-center item-detail-link mr-2" [routerLink]="['/team/' + team._id]">
             <div class="f-6 font-weight-bold">{{team.name}}</div>
-            <div class="invite-count ml-3 c-white f-1 font-weight-bold" *ngIf="team.invites.length">{{team.invites.length}} Invite waiting</div>
+            <div class="invite-count ml-3 c-white f-1 font-weight-bold" *ngIf="team.requests.length && isEditableUser(team)">{{team.requests.length}} invite waiting</div>
           </a>
         </td>
         <td class="team-members text-right">
@@ -140,7 +140,7 @@
   <!-- INVITES that user received -->
   <ng-container *ngIf="(teamService.invites$ | async).length">
     <div classs="f-6 font-weight-bold">
-      YOU ARE INVITED FROM FOLLOWING TEAMS
+      You are invited from following teams
     </div>
     <table class="table teams-table mt-3">
       <thead>

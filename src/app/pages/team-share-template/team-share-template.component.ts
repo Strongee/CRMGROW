@@ -13,6 +13,7 @@ import { Team } from '../../models/team.model';
 import { sortStringArray } from '../../utils/functions';
 import { TemplateBrowserComponent } from '../../components/template-browser/template-browser.component';
 import * as _ from 'lodash';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-team-share-template',
@@ -186,15 +187,10 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
   }
 
   changeSearchStr(): void {
-    const words = _.uniqBy(
-      this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
-      (e) => e.toLowerCase()
-    );
-    const reg = new RegExp(words.join('|'), 'gi');
     this.filteredResult = this.templates.filter((template) => {
       const str =
         template.title + ' ' + template.content + ' ' + template.subject;
-      return reg.test(str);
+      return searchReg(str, this.searchStr);
     });
   }
 
@@ -278,6 +274,17 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
 
   duplicateTemplate(template: Template): void {
     this.router.navigate(['/templates/duplicate/' + template._id]);
+  }
+
+  getOwner(template): any {
+    if (template && template.user) {
+      if (template.user._id === this.userId) {
+        return 'Me';
+      } else {
+        return template.user.user_name;
+      }
+    }
+    return '--';
   }
 
   sort(field: string, keep: boolean = false): void {

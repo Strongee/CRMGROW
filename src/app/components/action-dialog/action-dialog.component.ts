@@ -5,27 +5,19 @@ import {
   ViewChild,
   ElementRef
 } from '@angular/core';
-import {
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-  MatDialog
-} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   ACTION_CAT,
   TIMES,
-  QuillEditor,
   DefaultMessage,
   AUTOMATION_ICONS,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { MaterialService } from 'src/app/services/material.service';
 import { Subscription } from 'rxjs';
-import { TemplatesService } from '../../services/templates.service';
 import { FormControl } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { FileService } from 'src/app/services/file.service';
-import { QuillEditorComponent } from 'ngx-quill';
-import { LabelService } from 'src/app/services/label.service';
 import { TabItem } from '../../utils/data.types';
 import { Task } from '../../models/task.model';
 import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.component';
@@ -460,6 +452,17 @@ export class ActionDialogComponent implements OnInit {
         });
       }
       return;
+    } else if (this.type === 'note') {
+      if (this.action['content'] === '') {
+        return;
+      } else {
+        this.dialogRef.close({
+          ...this.action,
+          type: this.type,
+          category: this.category,
+          period
+        });
+      }
     } else {
       this.dialogRef.close({
         ...this.action,

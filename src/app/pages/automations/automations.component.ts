@@ -20,11 +20,10 @@ import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { sortDateArray, sortStringArray } from '../../utils/functions';
+import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
-import { searchReg } from 'src/app/helper';
-import { AutomationShareComponent } from '../../components/automation-share/automation-share.component';
 import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
+import { searchReg } from 'src/app/helper';
 
 @Component({
   selector: 'app-automations',

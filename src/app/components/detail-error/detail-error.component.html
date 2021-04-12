@@ -1,18 +1,18 @@
 <div class="position-relative">
   <ng-container [ngSwitch]="errorCode">
-    <button class="v-center justify-content-center btn rounded-circle close-button" (click)="logout()">
+    <button class="v-center justify-content-center btn rounded-circle close-button"  mat-dialog-close>
       &times;
     </button>
     <ng-container *ngSwitchCase="402">
       <h5 class="text-center">Connect your email account</h5>
       <p class="text-center f-4">To ensure you’re doing your best to avoid the spam filter when emailing contacts within your account, please connect your desired email.</p>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-1 fw-600 w-100" (click)="connectMail('gmail')">
+      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-2 fw-600 w-100" (click)="connectMail('gmail')">
         <img src="../../../assets/img/google.svg">
         <div class="social-text">
           Connect with Google
         </div>
       </button>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-1 fw-600 w-100" (click)="connectMail('outlook')">
+      <button type="button" class="v-center btn bgc-white border-primary c-blue fw-600 w-100" (click)="connectMail('outlook')">
         <img src="../../../assets/img/outlook.svg">
         <div class="social-text">
           Connect with Microsoft
@@ -76,10 +76,10 @@
     <ng-container *ngSwitchCase="406">
       <h5 class="text-center">Reconnect your email account or Please check your social email account</h5>
       <p class="text-center f-4">You have connected with your social email account already. But there are some problem in processing your request with that account. To fix this problem, please check your current social account or connect with another email account.</p>
-      <button type="button" class="btn bgc-white border-primary c-blue mb-1 fw-600 d-block w-100" (click)="connectMail('gmail')">
+      <button type="button" class="btn bgc-white border-primary c-blue mb-2 fw-600 d-block w-100" (click)="connectMail('gmail')">
         Connect with Google
       </button>
-      <button type="button" class="btn bgc-white border-primary c-blue mb-1 fw-600 d-block w-100" (click)="connectMail('outlook')">
+      <button type="button" class="btn bgc-white border-primary c-blue mb-2 fw-600 d-block w-100" (click)="connectMail('outlook')">
         Connect with Microsoft
       </button>
       <p class="bottom-guide f-3 text-center mt-3">

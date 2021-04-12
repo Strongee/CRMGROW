@@ -2127,3 +2127,25 @@ body {
     background-color: $color-dark;
   }
 }
+
+#timezone-panel, #time_zone_info-panel {
+  margin-left: 19px;
+  margin-top: 85px;
+  .other-timezone {
+    height: 3em;
+    i {
+      width: 12px;
+      height: 12px;
+      min-width: 12px;
+    }
+  }
+  .mat-option {
+    &.mat-selected {
+      color: $color-blue;
+    }
+  }
+}
+
+#time_zone_info-panel {
+  margin-top: 125px;
+}

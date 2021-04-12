@@ -26,7 +26,7 @@
       <table class="w-100 template-table page-table"
          mat-table
          multiTemplateDataRows
-         [dataSource]="filteredResult | paginate: {itemsPerPage: 8, currentPage: page, id: 'templateTable', total: filteredResult.length}"
+         [dataSource]="filteredResult | paginate: {itemsPerPage: pageSize.id, currentPage: page, id: 'templateTable', total: filteredResult.length}"
       >
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">
@@ -122,11 +122,39 @@
         <tr mat-header-row *matHeaderRowDef="DISPLAY_COLUMNS"></tr>
         <tr mat-row *matRowDef="let element; columns: DISPLAY_COLUMNS;"></tr>
       </table>
-      <ng-container *ngIf="filteredResult?.length">
-        <div class="d-flex justify-content-center align-items-center my-2 py-3 table-control mode-1">
-          <div class="ml-3 pagination-wrapper">
-            <pagination-controls (pageChange)="page = $event" id="templateTable" maxSize="5" previousLabel=""
-                                 nextLabel=""></pagination-controls>
+      <ng-container *ngIf="filteredResult.length">
+        <div class="my-2 table-control mode-1">
+          <div class="pagination-wrapper m-auto">
+            <pagination-controls
+              (pageChange)="page = $event"
+              (pageBoundsCorrection)="page = $event"
+              id="templateTable"
+              maxSize="5"
+              previousLabel=""
+              nextLabel="">
+            </pagination-controls>
+          </div>
+          <div class="shadow-dropdown ml-auto page-size-control"
+            ngbDropdown
+            placement="top-right">
+            <div class="v-center c-pointer f-3 p-3 font-weight-bold"
+              ngbDropdownToggle>
+              <span class="pr-2 c-blue">Show {{pageSize.id}} rows per page</span>
+            </div>
+            <div ngbDropdownMenu
+              aria-labelledby="contactPageSize">
+              <div class="py-2"
+                ngbDropdownItem
+                *ngFor="let type of PAGE_COUNTS"
+                (click)="changePageSize(type)">
+                <span class="f-3 v-center"
+                  [class.font-weight-bold]="type.id === pageSize.id">
+                  Show {{type.label}} rows per page
+                  <i class="i-icon i-check d-block bgc-blue sm ml-1 mb-1"
+                    *ngIf="type.id === pageSize.id"></i>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </ng-container>

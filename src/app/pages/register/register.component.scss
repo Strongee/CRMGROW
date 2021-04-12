@@ -25,3 +25,26 @@
 .phone-form, .email-form {
   position: relative;
 }
+
+:host ::ng-deep {
+  mat-form-field {
+    width: 100%;
+    .mat-form-field-wrapper {
+      padding: 0;
+      .mat-form-field-infix {
+        width: 100%;
+        padding: 0;
+        border: none;
+        .mat-select-trigger {
+          padding-top: 4px;
+        }
+      }
+      .mat-form-field-underline {
+        height: 0;
+        span {
+          height: 0 !important;
+        }
+      }
+    }
+  }
+}

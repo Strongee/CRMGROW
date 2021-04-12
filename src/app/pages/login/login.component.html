@@ -34,7 +34,7 @@
       <div class="form-group" [ngClass]="{invalid: signForm.submitted && password.invalid && (password.dirty || password.touched || signForm.submitted)}">
         <div class="d-flex">
           <label for="password">Password</label>
-          <a class="f-3 ml-auto font-weight-bold" [routerLink]="['/forgot-password']">Forgot Password?</a>
+          <a class="f-3 ml-auto font-weight-bold td-none" [routerLink]="['/forgot-password']">Forgot Password?</a>
         </div>
         <input type="password"  tabindex="2" class="form-control" [(ngModel)]="user.password" name="password" id="password" required minlength="6" #password="ngModel"/>
         <span class="error" *ngIf="password.errors">

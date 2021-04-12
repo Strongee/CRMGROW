@@ -84,23 +84,67 @@
   &.zapier {
     display: block;
     .integration-header {
-      input {
-        border: 1px dashed #d0d0d0;
-        border-radius: 3px;
-        background-color: #e9ecef;
-        &:focus {
-          outline: none;
-          box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .key-container {
+        width: calc(100% - 225px);
+        .key-label {
+          min-width: 80px;
+        }
+        input {
+          border: 1px dashed #d0d0d0;
+          border-radius: 3px;
+          background-color: #e9ecef;
+          &:focus {
+            outline: none;
+            box-shadow: none;
+          }
+        }
+        @media screen and (max-width: 768px) {
+          width: calc(100% - 125px);
+        }
+        @media screen and (max-width: 425px) {
+          width: 100%;
         }
       }
       .header-button {
-        .key-regenerate {
-          img {
-            &.spinner {
-              animation: rotation 1s infinite linear;
+        display: flex;
+        justify-content: end;
+        width: 225px;
+        margin-left: 8px;
+        button {
+          text-align: left;
+          &.key-copy {
+            min-width: 95px;
+            padding: 0;
+          }
+          &.key-regenerate {
+            padding: 0;
+            img {
+              &.spinner {
+                animation: rotation 1s infinite linear;
+              }
             }
           }
         }
+        @media screen and (max-width: 768px) {
+          display: block;
+          width: 125px;
+          button {
+            width: 100%;
+          }
+        }
+        @media screen and (max-width: 425px) {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          margin-top: 12px;
+          margin-left: 0;
+        }
+      }
+      @media screen and (max-width: 425px) {
+        display: block;
       }
     }
     .integration-body {

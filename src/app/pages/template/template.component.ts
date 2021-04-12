@@ -12,6 +12,8 @@ import { HtmlEditorComponent } from 'src/app/components/html-editor/html-editor.
 import { Template } from 'src/app/models/template.model';
 import { PageCanDeactivate } from '../../variables/abstractors';
 import { ToastrService } from 'ngx-toastr';
+import { HandlerService } from 'src/app/services/handler.service';
+import { ROUTE_PAGE } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-template',
@@ -45,7 +47,8 @@ export class TemplateComponent
     private route: ActivatedRoute,
     private templatesService: TemplatesService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private handlerService: HandlerService
   ) {
     super();
   }
@@ -204,5 +207,27 @@ export class TemplateComponent
 
   stateChanged(): void {
     this.saved = false;
+  }
+
+  goToBack(): void {
+    this.handlerService.goBack('/templates');
+  }
+
+  getPrevPage(): string {
+    if (!this.handlerService.previousUrl) {
+      return 'to Templates';
+    }
+    if (
+      this.handlerService.previousUrl.includes('/team/') &&
+      this.handlerService.previousUrl.includes('/templates')
+    ) {
+      return 'to Team Templates';
+    }
+    for (const route in ROUTE_PAGE) {
+      if (this.handlerService.previousUrl === route) {
+        return 'to ' + ROUTE_PAGE[route];
+      }
+    }
+    return '';
   }
 }

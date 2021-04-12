@@ -284,4 +284,20 @@ export class TeamListComponent implements OnInit, OnDestroy {
       this.teamService.loadAll(true);
     });
   }
+
+  isEditableUser(team): boolean {
+    if (team.owner && team.owner.length > 0) {
+      const index = team.owner.findIndex((item) => item._id === this.userId);
+      if (index >= 0) {
+        return true;
+      }
+    }
+    if (team.editors && team.editors.length > 0) {
+      const index = team.editors.findIndex((item) => item._id === this.userId);
+      if (index >= 0) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

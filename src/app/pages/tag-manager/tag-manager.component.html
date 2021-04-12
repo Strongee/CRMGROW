@@ -50,10 +50,10 @@
                             <div class="v-center justify-content-between contact" *ngFor="let contact of tag.contacts">
                                 <a class="v-center py-2 avatar-wrapper" [routerLink]="['/contacts/' + contact._id]">
                                     <div class="v-center justify-content-center f-0 text-white avatar">
-                                        {{contact.shortName}}
+                                        {{contact.avatarName}}
                                     </div>
                                     <div class="f-3 text-primary name">
-                                        {{contact.first_name}} {{contact.last_name}}
+                                        {{contact.fullName}}
                                     </div>
                                 </a>
                                 <i class="d-block i-icon i-close bgc-dark c-pointer" (click)="deleteContactTag(tag, contact)"></i>
@@ -72,7 +72,7 @@
                 <ng-template #emptyResult>
                     <div class="empty-list py-5">
                         <h4 class="font-weight-bold mt-4 mb-3">
-                        There is no tags.
+                            There is no tags.
                         </h4>
                     </div>
                 </ng-template>
