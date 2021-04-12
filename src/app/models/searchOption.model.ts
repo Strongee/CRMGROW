@@ -127,6 +127,7 @@ export class SearchOption implements Deserializable {
   includeFollowUps: boolean = true;
   activityStart: Date;
   activityEnd: Date;
+  teamOptions: any = {};
 
   deserialize(input: any): this {
     return Object.assign(this, input);
@@ -152,7 +153,8 @@ export class SearchOption implements Deserializable {
       !this.lastMaterial.watched_image.flag &&
       !this.activityStart &&
       !this.activityEnd &&
-      !this.materialCondition.isSet()
+      !this.materialCondition.isSet() &&
+      !Object.keys(this.teamOptions).length
     );
   }
 }

@@ -149,6 +149,7 @@ import { AutomationDetailOverlayComponent } from './automation-detail-overlay/au
 import { TeamMemberProfileComponent } from './team-member-profile/team-member-profile.component';
 import { AdditionalFieldsComponent } from './additional-fields/additional-fields.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
+import { MemberSelectorComponent } from './member-selector/member-selector.component';
 
 @NgModule({
   declarations: [
@@ -296,7 +297,8 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
     AutomationDetailOverlayComponent,
     TeamMemberProfileComponent,
     AdditionalFieldsComponent,
-    AutomationShareComponent
+    AutomationShareComponent,
+    MemberSelectorComponent
   ],
   imports: [
     CommonModule,

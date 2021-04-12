@@ -1,6 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { LabelService } from '../../services/label.service';
-import { SelectionModel } from '@angular/cdk/collections';
 import { COUNTRIES, DialogSettings } from '../../constants/variable.constants';
 import {
   SearchOption,
@@ -10,20 +15,20 @@ import { UserService } from '../../services/user.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterAddComponent } from '../filter-add/filter-add.component';
-import { MaterialAddComponent } from '../material-add/material-add.component';
-import { MaterialShareComponent } from '../material-share/material-share.component';
 import { NotifyComponent } from '../notify/notify.component';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { FilterService } from 'src/app/services/filter.service';
 import { Subscription } from 'rxjs';
 import { MaterialBrowserComponent } from '../material-browser/material-browser.component';
+import { TeamService } from 'src/app/services/team.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-advanced-filter',
   templateUrl: './advanced-filter.component.html',
   styleUrls: ['./advanced-filter.component.scss']
 })
-export class AdvancedFilterComponent implements OnInit {
+export class AdvancedFilterComponent implements OnInit, OnDestroy {
   loading = false;
   submitted = false;
   selectedSavedFilter;
@@ -45,6 +50,13 @@ export class AdvancedFilterComponent implements OnInit {
   removing = false;
   removeSubscription: Subscription;
 
+  teamSubscription: Subscription;
+  teams = [];
+  teamMembers = {};
+  profileSubscription: Subscription;
+
+  teamOptions = {}; // {team_id: {flag: 1|0|-1, share_with: {flag: 1|0|-1, members: []}, share_by: {flag: 1|0|-1, members: []}}}
+
   currentFilterId = '';
 
   @Output() onClose = new EventEmitter();
@@ -54,9 +66,11 @@ export class AdvancedFilterComponent implements OnInit {
     public labelService: LabelService,
     public contactService: ContactService,
     public userService: UserService,
+    private teamService: TeamService,
     private filterService: FilterService
   ) {
     this.searchOption = this.contactService.searchOption.getValue();
+    this.teamService.loadAll(false);
   }
 
   ngOnInit(): void {
@@ -141,6 +155,26 @@ export class AdvancedFilterComponent implements OnInit {
     this.contactService.searchStr$.subscribe((searchStr) => {
       this.searchOption.str = searchStr;
     });
+
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
+      if (user._id) {
+        this.teamSubscription = this.teamService.teams$.subscribe((teams) => {
+          this.teams = teams.filter((e) => e.members.length);
+          this.teams.forEach((e) => {
+            const members = [...e.owner, ...e.members];
+            const anotherMembers = members.filter((e) => e._id !== user._id);
+            if (anotherMembers.length) {
+              this.teamMembers[e._id] = [...anotherMembers];
+            }
+          });
+        });
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.teamSubscription && this.teamSubscription.unsubscribe();
   }
 
   /**
@@ -433,6 +467,140 @@ export class AdvancedFilterComponent implements OnInit {
         }
         break;
     }
+  }
+
+  toggleTeam(team_id: string): void {
+    const teamOption = this.teamOptions[team_id];
+    if (teamOption) {
+      if (teamOption.flag === -1) {
+        teamOption.flag = 1;
+        teamOption.share_with.flag = 1;
+        teamOption.share_by.flag = 1;
+        teamOption.share_with.members = [];
+        teamOption.share_by.members = [];
+      } else if (teamOption.flag === 0) {
+        teamOption.flag = 1;
+        teamOption.share_with.flag = 1;
+        teamOption.share_by.flag = 1;
+        teamOption.share_with.members = [];
+        teamOption.share_by.members = [];
+      } else if (teamOption.flag === 1) {
+        teamOption.flag = -1;
+        teamOption.share_with.flag = -1;
+        teamOption.share_by.flag = -1;
+        teamOption.share_with.members = [];
+        teamOption.share_by.members = [];
+      }
+    } else {
+      this.teamOptions[team_id] = {
+        flag: 1,
+        share_by: { flag: 1, members: [] },
+        share_with: { flag: 1, members: [] }
+      };
+    }
+    this.changeTeamSearch();
+  }
+
+  toggleTeamSubOption(team_id: string, option: string): void {
+    let teamOption = this.teamOptions[team_id];
+    if (teamOption) {
+      if (teamOption[option].flag === -1) {
+        teamOption[option].flag = 1;
+        teamOption[option].members = [];
+      } else if (teamOption[option].flag === 0) {
+        teamOption[option].flag = 1;
+        teamOption[option].members = [];
+      } else if (teamOption[option].flag === 1) {
+        teamOption[option].flag = -1;
+        teamOption[option].members = [];
+      }
+    } else {
+      this.teamOptions[team_id] = {
+        flag: 0,
+        share_by: { flag: -1, members: [] },
+        share_with: { flag: -1, members: [] }
+      };
+      this.teamOptions[team_id][option].flag = 1;
+    }
+    teamOption = this.teamOptions[team_id];
+    if (teamOption.share_with.flag === 1 && teamOption.share_by.flag === 1) {
+      teamOption.flag = 1;
+    } else if (
+      teamOption.share_with.flag === -1 &&
+      teamOption.share_by.flag === -1
+    ) {
+      teamOption.flag = -1;
+    } else {
+      teamOption.flag = 0;
+    }
+    this.changeTeamSearch();
+  }
+
+  changeTeamMemberOptions(
+    team_id: string,
+    option: string,
+    event: User[]
+  ): void {
+    let teamOption = this.teamOptions[team_id];
+    if (teamOption) {
+      if (event.length) {
+        if (event.length === this.teamMembers[team_id].length) {
+          this.teamOptions[team_id][option].flag = 1;
+        } else {
+          this.teamOptions[team_id][option].flag = 0;
+        }
+      } else {
+        this.teamOptions[team_id][option].flag = -1;
+      }
+    } else {
+      this.teamOptions[team_id] = {
+        flag: 0,
+        share_by: { flag: -1, members: [] },
+        share_with: { flag: -1, members: [] }
+      };
+      this.teamOptions[team_id][option].members = event;
+      if (event.length) {
+        if (event.length === this.teamMembers[team_id].length) {
+          this.teamOptions[team_id][option].flag = 1;
+        } else {
+          this.teamOptions[team_id][option].flag = 0;
+        }
+      } else {
+        this.teamOptions[team_id][option].flag = -1;
+      }
+    }
+    teamOption = this.teamOptions[team_id];
+    if (teamOption.share_with.flag === 1 && teamOption.share_by.flag === 1) {
+      teamOption.flag = 1;
+    } else if (
+      teamOption.share_with.flag === -1 &&
+      teamOption.share_by.flag === -1
+    ) {
+      teamOption.flag = -1;
+    } else {
+      teamOption.flag = 0;
+    }
+    this.changeTeamSearch();
+  }
+
+  changeTeamSearch(): void {
+    const teamOptions = { ...this.teamOptions };
+    for (const key in teamOptions) {
+      if (teamOptions[key].flag === -1) {
+        delete teamOptions[key];
+      } else {
+        teamOptions[key].share_with.members = teamOptions[
+          key
+        ].share_with.members.map((e) => e._id);
+        teamOptions[key].share_by.members = teamOptions[
+          key
+        ].share_by.members.map((e) => e._id);
+      }
+    }
+    this.searchOption.teamOptions = teamOptions;
+    this.contactService.searchOption.next(
+      new SearchOption().deserialize(this.searchOption)
+    );
   }
 
   close(): void {

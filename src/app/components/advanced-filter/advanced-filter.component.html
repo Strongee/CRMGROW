@@ -193,6 +193,44 @@
         </div>
       </div>
     </div>
+    <div class="my-3" *ngIf="teams.length">
+      <div class="form-group mb-0">
+        <label>Team</label>
+      </div>
+      <div class="">
+        <ng-container *ngFor="let team of teams">
+          <mat-expansion-panel class="no-shadow">
+            <mat-expansion-panel-header class="pl-0 pr-3 team-header">
+              <div class="custom-checkbox my-2 mr-2 team-checkbox">
+                <input type="checkbox" class="custom-control-input" id="team-{{team._id}}" name="team-{{team._id}}"
+                  (change)="toggleTeam(team._id)" [checked]="teamOptions[team._id]?.flag === 1">
+                <label class="custom-control-label" for="team-{{team._id}}">{{team.name}}</label>
+              </div>
+            </mat-expansion-panel-header>
+            <div>
+              <div class="team-option-item">
+                <div class="custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="team-with-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_with')" [checked]="teamOptions[team._id]?.share_with?.flag === 1">
+                  <label class="custom-control-label" for="team-with-option-{{team._id}}">Share With</label>
+                </div>
+                <div class="mb-3 mt-2">
+                  <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.share_with?.members || []" (onSelect)="changeTeamMemberOptions(team._id, 'share_with', $event)"></app-member-selector>
+                </div>
+              </div>
+              <div class="team-option-item">
+                <div class="custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="team-by-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_by')"  [checked]="teamOptions[team._id]?.share_by?.flag === 1">
+                  <label class="custom-control-label" for="team-by-option-{{team._id}}">Share By</label>
+                </div>
+                <div class="mb-3 mt-2">
+                  <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.share_by?.members || []" (onSelect)="changeTeamMemberOptions(team._id, 'share_by', $event)"></app-member-selector>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </ng-container>
+      </div>
+    </div>
     <div class="form-group my-3 pb-2">
       <label>Select Date</label>
       <div class="v-center">

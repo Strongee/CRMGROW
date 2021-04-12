@@ -62,7 +62,7 @@
   position: fixed;
   bottom: 0;
   right: 0;
-  width: 480px;
+  width: 470px;
   background: white;
   padding: 20px 20px 20px 0px;
 }
@@ -91,5 +91,45 @@
     top: 50%;
     right: 8px;
     transform: translateY(-50%);
+  }
+}
+
+.team-checkbox {
+  margin-left: 2rem;
+
+  label {
+    padding-top: 2px;
+  }
+}
+
+.team-option-item {
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  .custom-checkbox {
+    label {
+      padding-top: 2px;
+    }
+  }
+}
+
+.team-header {
+  height: 36px!important;
+}
+
+:host ::ng-deep {
+  .mat-expansion-indicator {
+    position: absolute;
+    right: 10px;
+    width: 12px;
+    height: 12px;
+    transform-origin: center center;
+
+    &::after {
+      position: absolute;
+      top: 0px;
+      left: 2px;
+    }
   }
 }

@@ -114,6 +114,10 @@ export class ContactEditComponent implements OnInit {
       this.contact.secondary_phone = '';
     }
 
+    if (this.contact.email) {
+      this.contact.email = this.contact.email.replace(/\s/g, '');
+    }
+
     this.isUpdating = true;
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService

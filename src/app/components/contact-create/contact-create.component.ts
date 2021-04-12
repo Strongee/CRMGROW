@@ -132,6 +132,9 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
 
     const contactData = this.contact;
     contactData.cell_phone = cell_phone;
+    if (contactData.email) {
+      contactData.email = contactData.email.replace(/\s/g, '');
+    }
     this.isCreating = true;
     this.createSubscription && this.createSubscription.unsubscribe();
     this.createSubscription = this.contactService

@@ -295,6 +295,10 @@ export class MaterialsComponent implements OnInit {
     const bulkSetCapture = this.ACTIONS.filter(
       (action) => action.label == 'Capture'
     );
+    if (!selectedMaterials.length) {
+      bulkSetCapture[0].status = false;
+      return;
+    }
     if (_intersection.length === selectedMaterials.length) {
       // Enable the Lead Capture Status
       bulkSetCapture[0].status = true;
@@ -788,6 +792,15 @@ export class MaterialsComponent implements OnInit {
       }
       return false;
     });
+    const folderMaterials = this.materials.filter((e) => {
+      if (
+        e.material_type !== 'folder' &&
+        this.selection.indexOf(e.folder) !== -1
+      ) {
+        return true;
+      }
+      return false;
+    });
     switch (evt.command) {
       case 'email':
         this.dialog.open(MaterialSendComponent, {
@@ -796,7 +809,7 @@ export class MaterialsComponent implements OnInit {
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: selectedMaterials,
+            material: [...folderMaterials, ...selectedMaterials],
             type: 'email'
           }
         });
@@ -808,7 +821,7 @@ export class MaterialsComponent implements OnInit {
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: selectedMaterials,
+            material: [...folderMaterials, ...selectedMaterials],
             type: 'text'
           }
         });
@@ -821,14 +834,18 @@ export class MaterialsComponent implements OnInit {
           (action) => action.label == 'Capture'
         );
         if (bulkSetCapture[0].status) {
-          _.pullAll(this.captureVideos, this.selection);
-          _.pullAll(this.capturePdfs, this.selection);
-          _.pullAll(this.captureImages, this.selection);
+          const selectedMaterialIds = [
+            ...folderMaterials,
+            ...selectedMaterials
+          ].map((e) => e._id);
+          _.pullAll(this.captureVideos, selectedMaterialIds);
+          _.pullAll(this.capturePdfs, selectedMaterialIds);
+          _.pullAll(this.captureImages, selectedMaterialIds);
         } else {
           const selectedVideos = [];
           const selectedPdfs = [];
           const selectedImages = [];
-          selectedMaterials.forEach((e) => {
+          [...folderMaterials, ...selectedMaterials].forEach((e) => {
             if (e.material_type === 'video') {
               selectedVideos.push(e._id);
             } else if (e.material_type === 'pdf') {
