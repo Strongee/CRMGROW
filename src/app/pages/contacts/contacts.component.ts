@@ -461,7 +461,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
         const csvArray = csv.join('\r\n');
 
         const blob = new Blob([csvArray], { type: 'text/csv' });
-        saveAs(blob, 'myFile.csv');
+        const date = new Date();
+        const fileName = `CRMGrow Contacts(${date.getDate()}-${
+          date.getMonth() + 1
+        }-${date.getFullYear()} ${date.getHours()}-${date.getMinutes()})`;
+        saveAs(blob, fileName + '.csv');
       }
       this.updateActionsStatus('download', false);
     });

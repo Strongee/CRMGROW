@@ -169,10 +169,14 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
         images: _newImages,
         pdfs: _newpdfs
       });
+      this.materialService.bulkUpdate$([...videos, ...images, ...pdfs], {
+        folder: this.selectedFolder._id
+      });
+    } else {
+      this.materialService.bulkUpdate$([...videos, ...images, ...pdfs], {
+        folder: ''
+      });
     }
-    this.materialService.bulkUpdate$([...videos, ...images, ...pdfs], {
-      folder: this.selectedFolder._id
-    });
     this.dialogRef.close();
   }
 }

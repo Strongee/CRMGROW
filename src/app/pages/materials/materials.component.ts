@@ -1000,6 +1000,28 @@ export class MaterialsComponent implements OnInit {
                         ...selectedImages,
                         ...selectedPdfs
                       ]);
+                      // Shared Materials Reset
+                      const shared_materials = [];
+                      selectedMaterials.forEach((e) => {
+                        if (e.shared_video) {
+                          shared_materials.push(e.shared_video);
+                          return;
+                        }
+                        if (e.shared_pdf) {
+                          shared_materials.push(e.shared_pdf);
+                          return;
+                        }
+                        if (e.shared_image) {
+                          shared_materials.push(e.shared_image);
+                          return;
+                        }
+                      });
+                      this.materialService.bulkUpdate$([...shared_materials], {
+                        has_shared: false,
+                        shared_video: '',
+                        shared_pdf: '',
+                        shared_image: ''
+                      });
                       this.toast.success(
                         'Selected materials have been deleted successfully.'
                       );
@@ -1286,7 +1308,7 @@ export class MaterialsComponent implements OnInit {
       }
       if (
         this.teamOptions.length &&
-        (!material.team || this.userOptions.indexOf(material.team._id) === -1)
+        (!material.team || this.teamOptions.indexOf(material.team._id) === -1)
       ) {
         return false;
       }

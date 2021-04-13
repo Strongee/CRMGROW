@@ -98,6 +98,13 @@ export class DeleteFolderComponent implements OnInit {
               pdfs: _newpdfs
             });
           }
+          if (this.currentOption === 'remove-all') {
+            this.materialService.delete$([
+              ...this.currentFolder.videos,
+              ...this.currentFolder.images,
+              ...this.currentFolder.pdfs
+            ]);
+          }
           this.materialService.delete$([this.currentFolder._id]);
           this.materialService.removeFolder$(this.currentFolder._id);
           this.dialogRef.close();
