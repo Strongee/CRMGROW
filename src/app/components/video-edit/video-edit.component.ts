@@ -127,7 +127,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         duration: this.video.duration,
         thumbnail: this.video.thumbnail,
         description: this.video.description,
-        has_shared: true,
         shared_video: this.video._id
       };
       this.saving = true;
@@ -138,6 +137,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
           const newMaterial = new Material().deserialize(res['data']);
           newMaterial.material_type = 'video';
           this.materialService.create$(newMaterial);
+          this.materialService.update$(this.video._id, {
+            has_shared: true,
+            shared_video: newMaterial._id
+          });
           this.dialogRef.close();
         }
       });

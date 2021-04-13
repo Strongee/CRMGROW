@@ -684,6 +684,12 @@ export class MaterialsComponent implements OnInit {
                     this.toggleElement(material);
                   }
                   this.materialService.delete$([material._id]);
+                  if (material.shared_video) {
+                    // this.materialService.update$(material.shared_video, {
+                    //   has_shared: false,
+                    //   shared_video: ''
+                    // });
+                  }
                   this.toast.success('Video has been deleted successfully.');
                 });
             }
@@ -712,6 +718,12 @@ export class MaterialsComponent implements OnInit {
                     this.toggleElement(material);
                   }
                   this.materialService.delete$([material._id]);
+                  if (material.shared_image) {
+                    // this.materialService.update$(material.shared_image, {
+                    //   has_shared: false,
+                    //   shared_image: ''
+                    // });
+                  }
                   this.toast.success('Image has been deleted successfully.');
                 });
             }
@@ -740,6 +752,12 @@ export class MaterialsComponent implements OnInit {
                     this.toggleElement(material);
                   }
                   this.materialService.delete$([material._id]);
+                  if (material.shared_pdf) {
+                    // this.materialService.update$(material.shared_pdf, {
+                    //   has_shared: false,
+                    //   shared_pdf: ''
+                    // });
+                  }
                   this.toast.success('Pdf has been deleted successfully.');
                 });
             }

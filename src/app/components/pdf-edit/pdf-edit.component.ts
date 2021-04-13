@@ -124,7 +124,6 @@ export class PdfEditComponent implements OnInit, OnDestroy {
         title: this.pdf.title,
         preview: this.pdf.preview,
         description: this.pdf.description,
-        has_shared: true,
         shared_pdf: this.pdf._id
       };
     }
@@ -135,6 +134,10 @@ export class PdfEditComponent implements OnInit, OnDestroy {
         const newMaterial = new Material().deserialize(res['data']);
         newMaterial.material_type = 'pdf';
         this.materialService.create$(newMaterial);
+        this.materialService.update$(this.pdf._id, {
+          has_shared: true,
+          shared_pdf: newMaterial._id
+        });
         this.dialogRef.close();
       }
     });

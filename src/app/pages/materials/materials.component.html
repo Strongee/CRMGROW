@@ -395,7 +395,7 @@
                   </ng-container>
                   <ng-template #materialActionsTemplate>
                     <ng-container *ngIf="element.user; else adminMaterialActions">
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(element)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editMaterial(element)" *ngIf="element.user._id == user_id || element.user == user_id">
                         <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit</span>
                       </button>
@@ -403,7 +403,7 @@
                         <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(element)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(element)" *ngIf="(element.user._id == user_id || element.user == user_id) && !(element.shared_video || element.shared_pdf || element.shared_image || element.default_video || element.default_pdf || element.default_image)">
                         <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
                       </button>
@@ -417,13 +417,13 @@
                       </button>
                       <button class="v-center border-0 py-2 c-dark dropdown-item"
                         *ngIf="element.material_type === 'video' && checkType(element.url) &&
-                        (element.user?._id === user_id || element.user === user_id)"
+                        (element.user?._id === user_id || element.user === user_id) && !element.default_edited"
                         (click)="download(element)"
                       >
                         <i class="i-icon i-download bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Download</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(element)">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="deleteMaterial(element)" *ngIf="(element.user._id == user_id || element.user == user_id)">
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>

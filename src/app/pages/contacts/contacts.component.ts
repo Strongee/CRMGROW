@@ -430,7 +430,9 @@ export class ContactsComponent implements OnInit, OnDestroy {
           city: e.contact.city,
           state: e.contact.state,
           zip: e.contact.zip,
-          address: e.contact.address
+          address: e.contact.address,
+          secondary_email: e.contact.secondary_email,
+          secondary_phone: e.contact.secondary_phone
         };
         const notes = [];
         if (e.note && e.note.length) {

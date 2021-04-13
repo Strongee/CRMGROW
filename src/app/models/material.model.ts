@@ -25,6 +25,12 @@ export class Material implements Deserializable {
   duration: number;
   default_edited: boolean;
   default_video: string;
+  default_pdf: string;
+  default_image: string;
+  has_shared: boolean;
+  shared_video: string;
+  shared_pdf: string;
+  shared_image: string;
   videos: any[] = [];
   pdfs: any[] = [];
   images: any[] = [];

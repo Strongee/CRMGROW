@@ -122,8 +122,7 @@ export class ImageEditComponent implements OnInit {
         title: this.image.title,
         preview: this.image.preview,
         description: this.image.description,
-        has_shared: true,
-        shared_pdf: this.image._id
+        shared_image: this.image._id
       };
       this.saving = true;
       this.materialService.createImage(image).subscribe((res) => {
@@ -133,6 +132,10 @@ export class ImageEditComponent implements OnInit {
           const newMaterial = new Material().deserialize(res['data']);
           newMaterial.material_type = 'image';
           this.materialService.create$(newMaterial);
+          this.materialService.update$(this.image._id, {
+            has_shared: true,
+            shared_image: newMaterial._id
+          });
           this.dialogRef.close();
         }
       });
