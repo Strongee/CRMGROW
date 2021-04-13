@@ -167,6 +167,25 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
               this.teamMembers[e._id] = [...anotherMembers];
             }
           });
+
+          this.teamOptions = this.searchOption.teamOptions;
+          if (Object.keys(this.teamOptions).length) {
+            for (const team_id in this.teamOptions) {
+              const teamOption = this.teamOptions[team_id];
+              if (teamOption.share_with && teamOption.share_with.members) {
+                const members = this.teamMembers[team_id].filter(
+                  (e) => teamOption.share_with.members.indexOf(e._id) !== -1
+                );
+                teamOption.share_with.members = members;
+              }
+              if (teamOption.share_by && teamOption.share_by.members) {
+                const members = this.teamMembers[team_id].filter(
+                  (e) => teamOption.share_by.members.indexOf(e._id) !== -1
+                );
+                teamOption.share_by.members = members;
+              }
+            }
+          }
         });
       }
     });
@@ -584,7 +603,7 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
   }
 
   changeTeamSearch(): void {
-    const teamOptions = { ...this.teamOptions };
+    const teamOptions = JSON.parse(JSON.stringify(this.teamOptions));
     for (const key in teamOptions) {
       if (teamOptions[key].flag === -1) {
         delete teamOptions[key];

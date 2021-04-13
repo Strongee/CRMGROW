@@ -201,7 +201,7 @@
         <ng-container *ngFor="let team of teams">
           <mat-expansion-panel class="no-shadow">
             <mat-expansion-panel-header class="pl-0 pr-3 team-header">
-              <div class="custom-checkbox my-2 mr-2 team-checkbox">
+              <div class="custom-checkbox my-2 mr-2 team-checkbox" [class.indeterminate]="teamOptions[team._id]?.flag === 0">
                 <input type="checkbox" class="custom-control-input" id="team-{{team._id}}" name="team-{{team._id}}"
                   (change)="toggleTeam(team._id)" [checked]="teamOptions[team._id]?.flag === 1">
                 <label class="custom-control-label" for="team-{{team._id}}">{{team.name}}</label>
@@ -209,7 +209,7 @@
             </mat-expansion-panel-header>
             <div>
               <div class="team-option-item">
-                <div class="custom-checkbox">
+                <div class="custom-checkbox" [class.indeterminate]="teamOptions[team._id]?.share_with?.flag === 0">
                   <input type="checkbox" class="custom-control-input" id="team-with-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_with')" [checked]="teamOptions[team._id]?.share_with?.flag === 1">
                   <label class="custom-control-label" for="team-with-option-{{team._id}}">Share With</label>
                 </div>
@@ -218,7 +218,7 @@
                 </div>
               </div>
               <div class="team-option-item">
-                <div class="custom-checkbox">
+                <div class="custom-checkbox" [class.indeterminate]="teamOptions[team._id]?.share_by?.flag === 0">
                   <input type="checkbox" class="custom-control-input" id="team-by-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_by')"  [checked]="teamOptions[team._id]?.share_by?.flag === 1">
                   <label class="custom-control-label" for="team-by-option-{{team._id}}">Share By</label>
                 </div>

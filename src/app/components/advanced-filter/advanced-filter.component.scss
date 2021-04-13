@@ -133,3 +133,14 @@
     }
   }
 }
+
+.custom-checkbox.indeterminate {
+  .custom-control-label::before {
+    background: blue;
+    border: blue;
+  }
+  .custom-control-label::after {
+    background-image: url(../../../assets/img/remove-white.svg);
+    background-size: 70%;
+  }
+}

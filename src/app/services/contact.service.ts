@@ -332,8 +332,9 @@ export class ContactService extends HttpService {
         contacts
           ? this.loadStatus.next(STATUS.SUCCESS)
           : this.loadStatus.next(STATUS.FAILURE);
-        this.storeService.pageContacts.next(contacts || []);
-        this.total.next((contacts || []).length);
+        const uniqContacts = _.uniqBy(contacts, (e) => e._id);
+        this.storeService.pageContacts.next(uniqContacts || []);
+        this.total.next((uniqContacts || []).length);
         this.sortContacts();
       }
     );
