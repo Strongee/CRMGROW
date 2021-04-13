@@ -51,7 +51,7 @@
         </label>
       </div>
     </div>
-    <div class="v-center justify-content-between">
+    <div class="v-center justify-content-between" [class.disable-form]="enableTeamSearchOption()">
       <div class="v-center form-group mb-0">
         <div class="v-center">
           <label class="mb-0">Material Activity</label>
@@ -66,7 +66,7 @@
         <div class="f-3 fw-600 c-dark">Exclude</div>
       </div>
     </div>
-    <div class="checkbox-wrapper materials w-100 my-3">
+    <div class="checkbox-wrapper materials w-100 my-3" [class.disable-form]="enableTeamSearchOption()">
       <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
         style="height: unset; line-height: unset;">
         <input type="checkbox" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
@@ -104,7 +104,7 @@
         #zipcode="ngModel" />
     </div>
 
-    <div class="my-3">
+    <div class="my-3" [class.disable-form]="enableTeamSearchOption()">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
           <label for="city">Source</label>
@@ -121,7 +121,7 @@
       </div>
       <app-input-source [selectedTags]="searchOption.sourceCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-source>
     </div>
-    <div class="my-3">
+    <div class="my-3" [class.disable-form]="enableTeamSearchOption()">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
           <label for="city">Company</label>
@@ -139,7 +139,7 @@
       <app-input-company [selectedTags]="searchOption.brokerageCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-company>
     </div>
 
-    <div class="my-3">
+    <div class="my-3" [class.disable-form]="enableTeamSearchOption()">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
           <label for="tag_check">Tag</label>
@@ -193,6 +193,14 @@
         </div>
       </div>
     </div>
+    <div class="form-group my-3 pb-2" [class.disable-form]="enableTeamSearchOption()">
+      <label>Select Date</label>
+      <div class="v-center">
+        <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityStart" (valueChange)="updateFilter()"></app-date-input>
+        <div class="mx-2">-</div>
+        <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityEnd" (valueChange)="updateFilter()"></app-date-input>
+      </div>
+    </div>
     <div class="my-3" *ngIf="teams.length">
       <div class="form-group mb-0">
         <label>Team</label>
@@ -204,14 +212,14 @@
               <div class="custom-checkbox my-2 mr-2 team-checkbox" [class.indeterminate]="teamOptions[team._id]?.flag === 0">
                 <input type="checkbox" class="custom-control-input" id="team-{{team._id}}" name="team-{{team._id}}"
                   (change)="toggleTeam(team._id)" [checked]="teamOptions[team._id]?.flag === 1">
-                <label class="custom-control-label" for="team-{{team._id}}">{{team.name}}</label>
+                <label class="custom-control-label f-3 pt-1" for="team-{{team._id}}">{{team.name}}</label>
               </div>
             </mat-expansion-panel-header>
             <div>
               <div class="team-option-item">
                 <div class="custom-checkbox" [class.indeterminate]="teamOptions[team._id]?.share_with?.flag === 0">
                   <input type="checkbox" class="custom-control-input" id="team-with-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_with')" [checked]="teamOptions[team._id]?.share_with?.flag === 1">
-                  <label class="custom-control-label" for="team-with-option-{{team._id}}">Share With</label>
+                  <label class="custom-control-label f-2" for="team-with-option-{{team._id}}">Share With</label>
                 </div>
                 <div class="mb-3 mt-2">
                   <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.share_with?.members || []" (onSelect)="changeTeamMemberOptions(team._id, 'share_with', $event)"></app-member-selector>
@@ -220,7 +228,7 @@
               <div class="team-option-item">
                 <div class="custom-checkbox" [class.indeterminate]="teamOptions[team._id]?.share_by?.flag === 0">
                   <input type="checkbox" class="custom-control-input" id="team-by-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_by')"  [checked]="teamOptions[team._id]?.share_by?.flag === 1">
-                  <label class="custom-control-label" for="team-by-option-{{team._id}}">Share By</label>
+                  <label class="custom-control-label f-2" for="team-by-option-{{team._id}}">Share By</label>
                 </div>
                 <div class="mb-3 mt-2">
                   <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.share_by?.members || []" (onSelect)="changeTeamMemberOptions(team._id, 'share_by', $event)"></app-member-selector>
@@ -229,14 +237,6 @@
             </div>
           </mat-expansion-panel>
         </ng-container>
-      </div>
-    </div>
-    <div class="form-group my-3 pb-2">
-      <label>Select Date</label>
-      <div class="v-center">
-        <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityStart" (valueChange)="updateFilter()"></app-date-input>
-        <div class="mx-2">-</div>
-        <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityEnd" (valueChange)="updateFilter()"></app-date-input>
       </div>
     </div>
     <div class="fixed-action-group mt-4 d-flex">

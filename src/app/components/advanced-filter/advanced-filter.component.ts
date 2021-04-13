@@ -622,6 +622,14 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
     );
   }
 
+  enableTeamSearchOption(): boolean {
+    if (Object.keys(this.searchOption.teamOptions).length) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   close(): void {
     this.onClose.emit();
   }
