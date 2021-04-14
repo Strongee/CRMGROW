@@ -665,7 +665,6 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
   }
 
   changeShareOption(option: string): void {
-    console.log('change share option', option);
     if (option === 'share_with') {
       this.isShareWith = !this.isShareWith;
     } else {
