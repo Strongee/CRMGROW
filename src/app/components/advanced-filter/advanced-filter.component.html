@@ -1,7 +1,9 @@
 <div class="p-4c panel">
-  <div class="v-center mb-3">
-    <h4 class="font-weight-bold mb-0 title">Advanced Filter</h4>
-    <button class="v-center border-0 bgc-trans ml-auto" type="button" (click)="close()">
+  <div class="v-center mb-3 panel-header">
+    <h4 class="font-weight-bold mb-0 title mr-auto">Advanced Filter</h4>
+    <app-slide-tab *ngIf="teams.length" [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)" class="view-tabs" type="same">
+    </app-slide-tab>
+    <button class="v-center border-0 bgc-trans" type="button" (click)="close()">
       <i class="d-block i-icon i-close bgc-dark"></i>
     </button>
   </div>
@@ -17,6 +19,42 @@
           <button type="button" class="btn btn-primary ml-2" (click)="removeFilters()">Remove</button>
         </ng-container>
       </div>
+
+      <div class="my-3" *ngIf="teams.length" [class.d-none]="selectedTab.id === 'normal'">
+        <div class="form-group mb-0">
+          <label>Team</label>
+        </div>
+        <div class="">
+          <ng-container *ngFor="let team of teams">
+            <mat-expansion-panel class="no-shadow">
+              <mat-expansion-panel-header class="pl-0 pr-3 team-header">
+                <div class="custom-checkbox my-2 mr-2 team-checkbox" [class.indeterminate]="teamOptions[team._id]?.flag === 0">
+                  <input type="checkbox" class="custom-control-input" id="team-{{team._id}}" name="team-{{team._id}}"
+                    (change)="toggleTeam(team._id)" [checked]="teamOptions[team._id]?.flag === 1">
+                  <label class="custom-control-label f-3 pt-1" for="team-{{team._id}}">{{team.name}}</label>
+                </div>
+              </mat-expansion-panel-header>
+              <div>
+                <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.members || []" (onSelect)="changeTeamMemberOptions(team._id, $event)"></app-member-selector>
+              </div>
+            </mat-expansion-panel>
+          </ng-container>
+          <div class="form-group form-group mb-1 mt-2">
+            <label class="label mb-1">Share Option</label>
+          </div>
+          <div class="custom-checkbox my-2 mr-2 team-checkbox">
+            <input type="checkbox" class="custom-control-input" id="team-share-with" name="team-share-with"
+              (change)="changeShareOption('share_with')" [checked]="isShareWith">
+            <label class="custom-control-label f-3 pt-1" for="team-share-with">Share With</label>
+          </div>
+          <div class="custom-checkbox my-2 mr-2 team-checkbox">
+            <input type="checkbox" class="custom-control-input" id="team-share-by" name="team-share-by"
+              (change)="changeShareOption('share_by')" [checked]="isShareBy">
+            <label class="custom-control-label f-3 pt-1" for="team-share-by">Share By</label>
+          </div>
+        </div>
+      </div>
+
       <div class="my-3">
         <label>Keyword Search</label>
         <div class="form-group mb-0 search-string">
@@ -51,7 +89,7 @@
         </label>
       </div>
     </div>
-    <div class="v-center justify-content-between" [class.disable-form]="enableTeamSearchOption()">
+    <div class="v-center justify-content-between" [class.disable-form]="enableTeamSearchOption()" [class.d-none]="selectedTab.id === 'team'">
       <div class="v-center form-group mb-0">
         <div class="v-center">
           <label class="mb-0">Material Activity</label>
@@ -66,7 +104,7 @@
         <div class="f-3 fw-600 c-dark">Exclude</div>
       </div>
     </div>
-    <div class="checkbox-wrapper materials w-100 my-3" [class.disable-form]="enableTeamSearchOption()">
+    <div class="checkbox-wrapper materials w-100 my-3" [class.disable-form]="enableTeamSearchOption()" [class.d-none]="selectedTab.id === 'team'">
       <div class="custom-checkbox material-action" *ngFor="let item of materialActions"
         style="height: unset; line-height: unset;">
         <input type="checkbox" class="custom-control-input" id="material-{{item._id}}" name="material-actions"
@@ -104,7 +142,7 @@
         #zipcode="ngModel" />
     </div>
 
-    <div class="my-3" [class.disable-form]="enableTeamSearchOption()">
+    <div class="my-3" [class.disable-form]="enableTeamSearchOption()" [class.d-none]="selectedTab.id === 'team'">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
           <label for="city">Source</label>
@@ -121,7 +159,7 @@
       </div>
       <app-input-source [selectedTags]="searchOption.sourceCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-source>
     </div>
-    <div class="my-3" [class.disable-form]="enableTeamSearchOption()">
+    <div class="my-3" [class.disable-form]="enableTeamSearchOption()" [class.d-none]="selectedTab.id === 'team'">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
           <label for="city">Company</label>
@@ -139,7 +177,7 @@
       <app-input-company [selectedTags]="searchOption.brokerageCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-company>
     </div>
 
-    <div class="my-3" [class.disable-form]="enableTeamSearchOption()">
+    <div class="my-3" [class.disable-form]="enableTeamSearchOption()" [class.d-none]="selectedTab.id === 'team'">
       <div class="d-flex align-items-end justify-content-between">
         <div class="form-group mb-0">
           <label for="tag_check">Tag</label>
@@ -193,46 +231,12 @@
         </div>
       </div>
     </div>
-    <div class="form-group my-3 pb-2" [class.disable-form]="enableTeamSearchOption()">
+    <div class="form-group my-3 pb-2" [class.disable-form]="enableTeamSearchOption()" [class.d-none]="selectedTab.id === 'team'">
       <label>Select Date</label>
       <div class="v-center">
         <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityStart" (valueChange)="updateFilter()"></app-date-input>
         <div class="mx-2">-</div>
         <app-date-input type="prepend" [clearable]="true" [(value)]="searchOption.activityEnd" (valueChange)="updateFilter()"></app-date-input>
-      </div>
-    </div>
-    <div class="my-3" *ngIf="teams.length">
-      <div class="form-group mb-0">
-        <label>Team</label>
-      </div>
-      <div class="">
-        <ng-container *ngFor="let team of teams">
-          <mat-expansion-panel class="no-shadow">
-            <mat-expansion-panel-header class="pl-0 pr-3 team-header">
-              <div class="custom-checkbox my-2 mr-2 team-checkbox" [class.indeterminate]="teamOptions[team._id]?.flag === 0">
-                <input type="checkbox" class="custom-control-input" id="team-{{team._id}}" name="team-{{team._id}}"
-                  (change)="toggleTeam(team._id)" [checked]="teamOptions[team._id]?.flag === 1">
-                <label class="custom-control-label f-3 pt-1" for="team-{{team._id}}">{{team.name}}</label>
-              </div>
-            </mat-expansion-panel-header>
-            <div>
-              <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.members || []" (onSelect)="changeTeamMemberOptions(team._id, $event)"></app-member-selector>
-            </div>
-          </mat-expansion-panel>
-        </ng-container>
-        <div class="form-group form-group mb-1 mt-2">
-          <label class="label mb-1">Share Option</label>
-        </div>
-        <div class="custom-checkbox my-2 mr-2 team-checkbox">
-          <input type="checkbox" class="custom-control-input" id="team-share-with" name="team-share-with"
-            (change)="changeShareOption('share_with')" [checked]="isShareWith">
-          <label class="custom-control-label f-3 pt-1" for="team-share-with">Share With</label>
-        </div>
-        <div class="custom-checkbox my-2 mr-2 team-checkbox">
-          <input type="checkbox" class="custom-control-input" id="team-share-by" name="team-share-by"
-            (change)="changeShareOption('share_by')" [checked]="isShareBy">
-          <label class="custom-control-label f-3 pt-1" for="team-share-by">Share By</label>
-        </div>
       </div>
     </div>
     <div class="fixed-action-group mt-4 d-flex">

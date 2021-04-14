@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
 import { MaterialBrowserComponent } from '../material-browser/material-browser.component';
 import { TeamService } from 'src/app/services/team.service';
 import { User } from 'src/app/models/user.model';
+import { TabItem } from 'src/app/utils/data.types';
 
 @Component({
   selector: 'app-advanced-filter',
@@ -29,6 +30,12 @@ import { User } from 'src/app/models/user.model';
   styleUrls: ['./advanced-filter.component.scss']
 })
 export class AdvancedFilterComponent implements OnInit, OnDestroy {
+  tabs: TabItem[] = [
+    { label: 'Normal', id: 'normal', icon: '' },
+    { label: 'Team', id: 'team', icon: '' }
+  ];
+  selectedTab: TabItem = this.tabs[0];
+
   loading = false;
   submitted = false;
   selectedSavedFilter;
@@ -734,6 +741,10 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
           }
         });
     }
+  }
+
+  changeTab(tab: TabItem): void {
+    this.selectedTab = tab;
   }
 
   activityDefine = {

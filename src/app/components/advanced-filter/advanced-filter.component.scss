@@ -1,6 +1,7 @@
 .panel {
   max-width: 480px;
   padding-bottom: 80px !important;
+  width: 100vw;
 }
 
 .checkbox-wrapper {
@@ -136,6 +137,24 @@
     padding-bottom: 4px;
     padding-right: 8px;
   }
+
+  .view-tabs {
+    .tab-container {
+      height: 36px;
+      padding: 4px;
+  
+      .tab {
+        padding-left: 4px;
+        padding-right: 4px;
+        font-size: 13px;
+        height: 24px;
+        letter-spacing: 1px;
+      }
+      .tab-indicator {
+        height: 30px!important;
+      }
+    }
+  }
 }
 
 .custom-checkbox.indeterminate {
@@ -152,4 +171,24 @@
 .disable-form {
   opacity: 0.7;
   pointer-events: none;
+}
+
+
+.panel-header {
+  @media screen and (max-width: 380px) {
+    display: grid;
+    grid-template-columns: auto 30px;
+    grid-row-gap: 10px;
+
+    button {
+      grid-column: 2/3;
+      grid-row: 1/2;
+      margin-left: 0px;
+    }
+
+    .view-tabs {
+      margin-left: 0px!important;
+      grid-column: 1/3;
+    }
+  }
 }

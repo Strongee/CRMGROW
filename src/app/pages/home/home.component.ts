@@ -2,7 +2,10 @@ import { Location } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
-import { DialogSettings, STATISTICS_DURATION } from 'src/app/constants/variable.constants';
+import {
+  DialogSettings,
+  STATISTICS_DURATION
+} from 'src/app/constants/variable.constants';
 import { HandlerService } from 'src/app/services/handler.service';
 import { TabItem } from 'src/app/utils/data.types';
 
