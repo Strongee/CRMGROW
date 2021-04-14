@@ -318,6 +318,13 @@
                        [class]="getSearchCondition('denied', 'leader') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('denied', 'leader')"></i>
                   </div>
                 </th>
+                <th class="organizer">
+                  <div class="v-center c-pointer head-sort" (click)="sort('denied', 'contacts')">
+                    <span [class]="isSelectedSort('denied', 'contacts') ? 'font-weight-bold c-dark' : ''">contacts</span>
+                    <i class="i-icon d-block bgc-black ml-2"
+                       [class]="getSearchCondition('denied', 'contacts') ? 'i-sort-down' : 'i-sort-up'" *ngIf="isSelectedSort('denied', 'contacts')"></i>
+                  </div>
+                </th>
                 <th class="date-time">
                   <div class="v-center c-pointer head-sort" (click)="sort('denied', 'schedule')">
                     <span [class]="isSelectedSort('denied', 'schedule') ? 'font-weight-bold c-dark' : ''">date & time</span>
@@ -337,7 +344,7 @@
                     <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
                     <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
                   </td>
-                  <td class="organizer c-pointer" (click)="showProfile(call)">
+                  <td class="organizer c-pointer" (click)="showProfile(call.user)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
@@ -386,7 +393,7 @@
                     <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
                     <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
                   </td>
-                  <td class="organizer c-pointer" (click)="openCall(call)">
+                  <td class="organizer c-pointer" (click)="showProfile(call.leader)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
@@ -426,20 +433,13 @@
                     </div>
                   </td>
                   <td class="team-actions">
-                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="edit(call)">
-                          <i class="i-icon i-edit bg-dark sm ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-3 font-weight-bold">Edit</span>
-                        </button>
-                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                          <i class="i-icon i-trash sm bg-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-3 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
+                    <div class="v-center justify-content-end">
+                      <button class="btn" (click)="edit(call)" placement="bottom" ngbTooltip="Edit" ngbButtonLabel>
+                        <i class="i-icon i-edit bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn ml-2" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                        <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
                     </div>
                   </td>
                 </ng-container>
@@ -448,7 +448,7 @@
                     <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
                     <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
                   </td>
-                  <td class="organizer c-pointer" (click)="openCall(call)">
+                  <td class="organizer c-pointer" (click)="showProfile(call.user)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
@@ -463,7 +463,7 @@
                       <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                     </div>
                   </td>
-                  <td class="leader c-pointer" (click)="openCall(call)">
+                  <td class="leader c-pointer" (click)="showProfile(call.leader)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
@@ -500,23 +500,13 @@
                     </div>
                   </td>
                   <td class="team-actions">
-                    <div class="v-center">
-                      <button type="button" class="btn bgc-green text-white ml-auto f-3 py-2 font-weight-bold" (click)="openCall(call)">Complete</button>
-                      <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                        <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                          <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                        </a>
-                        <div ngbDropdownMenu class="light py-1">
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="complete(call)">
-                            <i class="i-icon i-check bg-dark sm ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-3 font-weight-bold">Complete</span>
-                          </button>
-                          <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="cancel(call)">
-                            <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                            <span class="ml-3 f-3 font-weight-bold">Cancel</span>
-                          </button>
-                        </div>
-                      </div>
+                    <div class="v-center justify-content-end">
+                      <button class="btn" (click)="complete(call)" placement="bottom" ngbTooltip="Complete" ngbButtonLabel>
+                        <i class="i-icon i-check bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn ml-2" (click)="cancel(call)" placement="bottom" ngbTooltip="Cancel" ngbButtonLabel>
+                        <i class="i-icon i-block bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
                     </div>
                   </td>
                 </ng-container>
@@ -525,7 +515,7 @@
                     <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
                     <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
                   </td>
-                  <td class="organizer c-pointer" (click)="openCall(call)">
+                  <td class="organizer c-pointer" (click)="showProfile(call.user)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
@@ -540,7 +530,7 @@
                       <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                     </div>
                   </td>
-                  <td class="leader c-pointer" (click)="openCall(call)">
+                  <td class="leader c-pointer" (click)="showProfile(call.leader)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
@@ -575,16 +565,10 @@
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
                   <td class="team-actions">
-                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                          <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-4 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
+                    <div class="v-center justify-content-end">
+                      <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                        <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
                     </div>
                   </td>
                 </ng-container>
@@ -593,7 +577,7 @@
                     <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
                     <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
                   </td>
-                  <td class="organizer c-pointer" (click)="openCall(call)">
+                  <td class="organizer c-pointer" (click)="showProfile(call.user)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
@@ -608,7 +592,7 @@
                       <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                     </div>
                   </td>
-                  <td class="leader c-pointer" (click)="openCall(call)">
+                  <td class="leader c-pointer" (click)="showProfile(call.leader)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
@@ -643,16 +627,10 @@
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
                   <td class="team-actions">
-                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                          <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-4 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
+                    <div class="v-center justify-content-end">
+                      <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                        <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
                     </div>
                   </td>
                 </ng-container>
@@ -661,7 +639,7 @@
                     <div class="c-blue f-3 font-weight-bold">{{call.subject}}</div>
                     <div class="c-dark opacity-6 f-3">{{call.description || '' | stripTags | shorten: 40: '...'}}</div>
                   </td>
-                  <td class="organizer c-pointer" (click)="openCall(call)">
+                  <td class="organizer c-pointer" (click)="showProfile(call.user)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.user.picture_profile; else userProfilePlaceholder">
@@ -676,7 +654,7 @@
                       <div class="f-3 ml-2 member-name">{{call.user.user_name}}</div>
                     </div>
                   </td>
-                  <td class="leader c-pointer" (click)="openCall(call)">
+                  <td class="leader c-pointer" (click)="showProfile(call.leader)">
                     <div class="v-center">
                       <div class="member-avatar">
                         <ng-container *ngIf="call.leader.picture_profile; else userProfilePlaceholder">
@@ -711,16 +689,10 @@
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
                   <td class="team-actions">
-                    <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-                      <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="delete(call)">
-                          <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-4 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
+                    <div class="v-center justify-content-end">
+                      <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                        <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
                     </div>
                   </td>
                 </ng-container>
