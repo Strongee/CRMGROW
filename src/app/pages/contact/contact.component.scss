@@ -877,14 +877,17 @@ table.table {
     padding: 0px 8px;
     margin: 0px 6px;
   }
+  * {
+    font-weight: bold;
+  }
   .duration {
-    width: 84px;
+    width: 94px;
   }
   .from {
-    width: 70px;
+    width: 80px;
   }
   .to {
-    width: 70px;
+    width: 80px;
   }
   .date {
     width: 164px;

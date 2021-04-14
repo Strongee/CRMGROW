@@ -55,7 +55,9 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
   teamMembers = {};
   profileSubscription: Subscription;
 
-  teamOptions = {}; // {team_id: {flag: 1|0|-1, share_with: {flag: 1|0|-1, members: []}, share_by: {flag: 1|0|-1, members: []}}}
+  teamOptions = {}; // {team_id: {flag: 1|0|-1, members: User[]}
+  isShareWith = false;
+  isShareBy = false;
 
   currentFilterId = '';
 
@@ -165,27 +167,28 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
             const anotherMembers = members.filter((e) => e._id !== user._id);
             if (anotherMembers.length) {
               this.teamMembers[e._id] = [...anotherMembers];
+              this.teamOptions[e._id] = {
+                flag: -1,
+                members: []
+              };
             }
           });
 
-          this.teamOptions = this.searchOption.teamOptions;
-          if (Object.keys(this.teamOptions).length) {
-            for (const team_id in this.teamOptions) {
-              const teamOption = this.teamOptions[team_id];
-              if (teamOption.share_with && teamOption.share_with.members) {
-                const members = this.teamMembers[team_id].filter(
-                  (e) => teamOption.share_with.members.indexOf(e._id) !== -1
-                );
-                teamOption.share_with.members = members;
-              }
-              if (teamOption.share_by && teamOption.share_by.members) {
-                const members = this.teamMembers[team_id].filter(
-                  (e) => teamOption.share_by.members.indexOf(e._id) !== -1
-                );
-                teamOption.share_by.members = members;
-              }
-            }
-          }
+          // this.teamOptions = this.searchOption.teamOptions;
+          // if (Object.keys(this.teamOptions).length) {
+          //   for (const team_id in this.teamOptions) {
+          //     const teamOption = this.teamOptions[team_id];
+          //     if (teamOption.members && teamOption.members.length) {
+          //       const members = this.teamMembers[team_id].filter(
+          //         (e) => teamOption.members.indexOf(e._id) !== -1
+          //       );
+          //       teamOption.members = members;
+          //       if (members.length === this.teamMembers[team_id].length) {
+          //         teamOption.flag = 1;
+          //       }
+          //     }
+          //   }
+          // }
         });
       }
     });
@@ -493,127 +496,158 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
     if (teamOption) {
       if (teamOption.flag === -1) {
         teamOption.flag = 1;
-        teamOption.share_with.flag = 1;
-        teamOption.share_by.flag = 1;
-        teamOption.share_with.members = [];
-        teamOption.share_by.members = [];
+        teamOption.members = [];
       } else if (teamOption.flag === 0) {
         teamOption.flag = 1;
-        teamOption.share_with.flag = 1;
-        teamOption.share_by.flag = 1;
-        teamOption.share_with.members = [];
-        teamOption.share_by.members = [];
+        teamOption.members = [];
       } else if (teamOption.flag === 1) {
         teamOption.flag = -1;
-        teamOption.share_with.flag = -1;
-        teamOption.share_by.flag = -1;
-        teamOption.share_with.members = [];
-        teamOption.share_by.members = [];
+        teamOption.members = [];
       }
     } else {
       this.teamOptions[team_id] = {
         flag: 1,
-        share_by: { flag: 1, members: [] },
-        share_with: { flag: 1, members: [] }
+        members: []
       };
     }
     this.changeTeamSearch();
   }
 
-  toggleTeamSubOption(team_id: string, option: string): void {
-    let teamOption = this.teamOptions[team_id];
-    if (teamOption) {
-      if (teamOption[option].flag === -1) {
-        teamOption[option].flag = 1;
-        teamOption[option].members = [];
-      } else if (teamOption[option].flag === 0) {
-        teamOption[option].flag = 1;
-        teamOption[option].members = [];
-      } else if (teamOption[option].flag === 1) {
-        teamOption[option].flag = -1;
-        teamOption[option].members = [];
-      }
-    } else {
-      this.teamOptions[team_id] = {
-        flag: 0,
-        share_by: { flag: -1, members: [] },
-        share_with: { flag: -1, members: [] }
-      };
-      this.teamOptions[team_id][option].flag = 1;
-    }
-    teamOption = this.teamOptions[team_id];
-    if (teamOption.share_with.flag === 1 && teamOption.share_by.flag === 1) {
-      teamOption.flag = 1;
-    } else if (
-      teamOption.share_with.flag === -1 &&
-      teamOption.share_by.flag === -1
-    ) {
-      teamOption.flag = -1;
-    } else {
-      teamOption.flag = 0;
-    }
-    this.changeTeamSearch();
-  }
-
-  changeTeamMemberOptions(
-    team_id: string,
-    option: string,
-    event: User[]
-  ): void {
+  changeTeamMemberOptions(team_id: string, event: User[]): void {
     let teamOption = this.teamOptions[team_id];
     if (teamOption) {
       if (event.length) {
         if (event.length === this.teamMembers[team_id].length) {
-          this.teamOptions[team_id][option].flag = 1;
+          this.teamOptions[team_id].flag = 1;
         } else {
-          this.teamOptions[team_id][option].flag = 0;
+          this.teamOptions[team_id].flag = 0;
         }
       } else {
-        this.teamOptions[team_id][option].flag = -1;
+        this.teamOptions[team_id].flag = -1;
       }
     } else {
       this.teamOptions[team_id] = {
         flag: 0,
-        share_by: { flag: -1, members: [] },
-        share_with: { flag: -1, members: [] }
+        members: []
       };
-      this.teamOptions[team_id][option].members = event;
+      this.teamOptions[team_id].members = event;
       if (event.length) {
         if (event.length === this.teamMembers[team_id].length) {
-          this.teamOptions[team_id][option].flag = 1;
+          this.teamOptions[team_id].flag = 1;
         } else {
-          this.teamOptions[team_id][option].flag = 0;
+          this.teamOptions[team_id].flag = 0;
         }
       } else {
-        this.teamOptions[team_id][option].flag = -1;
+        this.teamOptions[team_id].flag = -1;
       }
     }
     teamOption = this.teamOptions[team_id];
-    if (teamOption.share_with.flag === 1 && teamOption.share_by.flag === 1) {
-      teamOption.flag = 1;
-    } else if (
-      teamOption.share_with.flag === -1 &&
-      teamOption.share_by.flag === -1
-    ) {
-      teamOption.flag = -1;
-    } else {
-      teamOption.flag = 0;
-    }
     this.changeTeamSearch();
   }
 
   changeTeamSearch(): void {
-    const teamOptions = JSON.parse(JSON.stringify(this.teamOptions));
+    let teamOptions = JSON.parse(JSON.stringify(this.teamOptions));
     for (const key in teamOptions) {
       if (teamOptions[key].flag === -1) {
         delete teamOptions[key];
       } else {
-        teamOptions[key].share_with.members = teamOptions[
-          key
-        ].share_with.members.map((e) => e._id);
-        teamOptions[key].share_by.members = teamOptions[
-          key
-        ].share_by.members.map((e) => e._id);
+        const members = teamOptions[key].members.map((e) => e._id);
+        teamOptions[key].members = members;
+      }
+    }
+    let isShareBy = this.isShareBy;
+    let isShareWith = this.isShareWith;
+    if (!(this.isShareBy || this.isShareWith)) {
+      isShareBy = true;
+      isShareWith = true;
+    }
+    if (Object.keys(teamOptions).length) {
+      for (const key in teamOptions) {
+        if (isShareBy) {
+          if (
+            !teamOptions[key].members.length || teamOptions[key].members.length === this.teamMembers[key].length
+          ) {
+            teamOptions[key]['share_by'] = {
+              flag: 1
+            };
+          } else {
+            teamOptions[key]['share_by'] = {
+              flag: 0,
+              members: teamOptions[key].members
+            };
+          }
+        } else {
+          teamOptions[key]['share_by'] = {
+            flag: -1,
+            members: []
+          };
+        }
+        if (isShareWith) {
+          if (
+            !teamOptions[key].members.length || teamOptions[key].members.length === this.teamMembers[key].length
+          ) {
+            teamOptions[key]['share_with'] = {
+              flag: 1
+            };
+          } else {
+            teamOptions[key]['share_with'] = {
+              flag: -1,
+              members: teamOptions[key].members
+            };
+          }
+        } else {
+          teamOptions[key]['share_with'] = {
+            flag: -1,
+            members: []
+          };
+        }
+        if (isShareWith && isShareBy) {
+          teamOptions[key].flag = 1;
+        } else if (isShareWith || isShareBy) {
+          teamOptions[key].flag = 0;
+        } else {
+          teamOptions[key].flag = -1;
+        }
+        delete teamOptions[key].members;
+      }
+    } else {
+      isShareBy = this.isShareBy;
+      isShareWith = this.isShareWith;
+      if (isShareBy || isShareWith) {
+        teamOptions = JSON.parse(JSON.stringify(this.teamOptions));
+        for (const key in this.teamOptions) {
+          if (isShareBy) {
+            teamOptions[key]['share_by'] = {
+              flag: 1,
+              members: []
+            };
+          } else {
+            teamOptions[key]['share_by'] = {
+              flag: -1,
+              members: []
+            };
+          }
+          if (isShareWith) {
+            teamOptions[key]['share_with'] = {
+              flag: 1,
+              members: []
+            };
+          } else {
+            teamOptions[key]['share_with'] = {
+              flag: -1,
+              members: []
+            };
+          }
+          if (isShareBy && isShareWith) {
+            teamOptions[key]['flag'] = 1;
+          } else if (isShareBy || isShareWith) {
+            teamOptions[key]['flag'] = 0;
+          } else {
+            teamOptions[key]['flag'] = -1;
+          }
+        }
+      } else {
+        teamOptions = {};
       }
     }
     this.searchOption.teamOptions = teamOptions;
@@ -628,6 +662,16 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
     } else {
       return false;
     }
+  }
+
+  changeShareOption(option: string): void {
+    console.log('change share option', option);
+    if (option === 'share_with') {
+      this.isShareWith = !this.isShareWith;
+    } else {
+      this.isShareBy = !this.isShareBy;
+    }
+    this.changeTeamSearch();
   }
 
   close(): void {

@@ -216,27 +216,20 @@
               </div>
             </mat-expansion-panel-header>
             <div>
-              <div class="team-option-item">
-                <div class="custom-checkbox" [class.indeterminate]="teamOptions[team._id]?.share_with?.flag === 0">
-                  <input type="checkbox" class="custom-control-input" id="team-with-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_with')" [checked]="teamOptions[team._id]?.share_with?.flag === 1">
-                  <label class="custom-control-label f-2" for="team-with-option-{{team._id}}">Share With</label>
-                </div>
-                <div class="mb-3 mt-2">
-                  <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.share_with?.members || []" (onSelect)="changeTeamMemberOptions(team._id, 'share_with', $event)"></app-member-selector>
-                </div>
-              </div>
-              <div class="team-option-item">
-                <div class="custom-checkbox" [class.indeterminate]="teamOptions[team._id]?.share_by?.flag === 0">
-                  <input type="checkbox" class="custom-control-input" id="team-by-option-{{team._id}}" (change)="toggleTeamSubOption(team._id, 'share_by')"  [checked]="teamOptions[team._id]?.share_by?.flag === 1">
-                  <label class="custom-control-label f-2" for="team-by-option-{{team._id}}">Share By</label>
-                </div>
-                <div class="mb-3 mt-2">
-                  <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.share_by?.members || []" (onSelect)="changeTeamMemberOptions(team._id, 'share_by', $event)"></app-member-selector>
-                </div>
-              </div>
+              <app-member-selector [dataSource]="teamMembers[team._id]" [selected]="teamOptions[team._id]?.members || []" (onSelect)="changeTeamMemberOptions(team._id, $event)"></app-member-selector>
             </div>
           </mat-expansion-panel>
         </ng-container>
+        <div class="custom-checkbox my-2 mr-2 team-checkbox">
+          <input type="checkbox" class="custom-control-input" id="team-share-with" name="team-share-with"
+            (change)="changeShareOption('share_with')" [checked]="isShareWith">
+          <label class="custom-control-label f-3 pt-1" for="team-share-with">Share With</label>
+        </div>
+        <div class="custom-checkbox my-2 mr-2 team-checkbox">
+          <input type="checkbox" class="custom-control-input" id="team-share-by" name="team-share-by"
+            (change)="changeShareOption('share_by')" [checked]="isShareBy">
+          <label class="custom-control-label f-3 pt-1" for="team-share-by">Share By</label>
+        </div>
       </div>
     </div>
     <div class="fixed-action-group mt-4 d-flex">

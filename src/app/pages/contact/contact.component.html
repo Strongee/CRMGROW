@@ -777,7 +777,7 @@
                             </ng-container>
                             <div class="label date text-right">DATE</div>
                           </div>
-                          <div class="recent-activity v-center mb-4 f-3">
+                          <div class="recent-activity v-center mb-4 f-4">
                             <div class="content font-weight-bold">{{activity.content}}</div>
                             <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration ml-auto">
@@ -790,7 +790,7 @@
                                 {{(activity.activity_detail.to *1000 || activity.activity_detail.material_last*1000) | timeDuration}}
                               </div>
                             </ng-container>
-                            <div class="date border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
+                            <div class="date border border-primary rounded-pill c-blue font-weight-bold f-2">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
                           </div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
@@ -885,12 +885,12 @@
                             </ng-container>
                             <div class="label date text-right">DATE</div>
                           </div>
-                          <div class="recent-activity v-center mb-4">
+                          <div class="recent-activity v-center mb-4 f-4">
                             <div class="content font-weight-bold">{{activity.content}}</div>
                             <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration"></div>
                             </ng-container>
-                            <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
+                            <div class="date ml-auto f-2 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
                           </div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
@@ -956,12 +956,12 @@
                             </ng-container>
                             <div class="label date text-right">DATE</div>
                           </div>
-                          <div class="recent-activity v-center mb-4">
+                          <div class="recent-activity v-center mb-4 f-4">
                             <div class="content font-weight-bold">{{activity.content}}</div>
                             <ng-container *ngIf="activity.activity_detail && activity.activity_detail?.type === 'watch'">
                               <div class="duration"></div>
                             </ng-container>
-                            <div class="date ml-auto f-3 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
+                            <div class="date ml-auto f-2 border border-primary rounded-pill c-blue font-weight-bold">{{activity.created_at | date: 'MMM dd yyyy, hh:mm a'}}</div>
                           </div>
                           <div class="gradient-bottom"></div>
                           <div class="c-blue mt-1 f-3 fw-600 c-pointer" (click)="showDetail($event)">Expand</div>
