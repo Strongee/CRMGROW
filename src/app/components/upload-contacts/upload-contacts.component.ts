@@ -122,6 +122,7 @@ export class UploadContactsComponent implements OnInit {
         this.uploader.queue.splice(0, 1);
       }
     };
+
     this.uploader.onCompleteItem = (
       item: any,
       response: any,
@@ -616,8 +617,8 @@ export class UploadContactsComponent implements OnInit {
           if (
             this.contacts[i][phoneKey] &&
             this.contacts[j][phoneKey] &&
-            this.contacts[i][phoneKey].toLowerCase() ===
-              this.contacts[j][phoneKey].toLowerCase()
+            this.getInternationalPhone(this.contacts[i][phoneKey]) ===
+              this.getInternationalPhone(this.contacts[j][phoneKey])
           ) {
             return true;
           }
@@ -722,8 +723,8 @@ export class UploadContactsComponent implements OnInit {
               if (
                 !!firstContact.primary_phone &&
                 !!secondContact.primary_phone &&
-                firstContact.primary_phone.toLowerCase() ===
-                  secondContact.primary_phone.toLowerCase()
+                this.getInternationalPhone(firstContact.primary_phone) ===
+                  this.getInternationalPhone(secondContact.primary_phone)
               ) {
                 merge.push(secondContact);
                 continue;
@@ -766,13 +767,24 @@ export class UploadContactsComponent implements OnInit {
       key === 'last_name'
     ) {
       for (const contactItem of this.sameContacts[dupIndex]) {
-        if (
-          !!contactItem[key] &&
-          !!contact[key] &&
-          contactItem[key].toLowerCase() === contact[key].toLowerCase() &&
-          contactItem.id !== contact.id
-        ) {
-          return true;
+        if (key === 'primary_phone') {
+          if (
+            !!contactItem[key] &&
+            !!contact[key] &&
+            this.getInternationalPhone(contactItem[key]) === this.getInternationalPhone(contact[key]) &&
+            contactItem.id !== contact.id
+          ) {
+            return true;
+          }
+        } else {
+          if (
+            !!contactItem[key] &&
+            !!contact[key] &&
+            contactItem[key].toLowerCase() === contact[key].toLowerCase() &&
+            contactItem.id !== contact.id
+          ) {
+            return true;
+          }
         }
       }
     }
@@ -902,8 +914,8 @@ export class UploadContactsComponent implements OnInit {
             if (
               this.sameContacts[dupIndex][i][phoneKey] &&
               this.sameContacts[dupIndex][j][phoneKey] &&
-              this.sameContacts[dupIndex][i][phoneKey].toLowerCase() ===
-                this.sameContacts[dupIndex][j][phoneKey].toLowerCase()
+              this.getInternationalPhone(this.sameContacts[dupIndex][i][phoneKey]) ===
+                this.getInternationalPhone(this.sameContacts[dupIndex][j][phoneKey])
             ) {
               isPhoneDuplicate = true;
             }
@@ -1013,8 +1025,8 @@ export class UploadContactsComponent implements OnInit {
               dupItem[j]['primary_phone'] !== undefined &&
               dupItem[i]['primary_phone'] !== null &&
               dupItem[j]['primary_phone'] !== null &&
-              dupItem[i]['primary_phone'].toLowerCase() ===
-                dupItem[j]['primary_phone'].toLowerCase()
+              this.getInternationalPhone(dupItem[i]['primary_phone']) ===
+                this.getInternationalPhone(dupItem[j]['primary_phone'])
             ) {
               isDuplicateKey = true;
               this.duplicateItems[index] = true;
@@ -1053,8 +1065,8 @@ export class UploadContactsComponent implements OnInit {
                 item['primary_phone'] !== undefined &&
                 contact['primary_phone'] !== null &&
                 item['primary_phone'] !== null &&
-                contact['primary_phone'].toLowerCase() ===
-                  item['primary_phone'].toLowerCase())
+                this.getInternationalPhone(contact['primary_phone']) ===
+                  this.getInternationalPhone(item['primary_phone']))
             );
           });
           if (contactIdx < 0) {
@@ -2124,6 +2136,17 @@ export class UploadContactsComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  getInternationalPhone(phoneNumber): any {
+    if (phoneNumber) {
+      if (phoneNumber.indexOf('(') === 0) {
+        phoneNumber = '+1 ' + phoneNumber;
+      }
+      const phoneObj = new PhoneNumber(phoneNumber);
+      return phoneObj.getNumber('international');
+    }
+    return phoneNumber;
   }
 
   fields = [
