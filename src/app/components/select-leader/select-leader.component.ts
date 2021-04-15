@@ -40,7 +40,6 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (val) {
       this.filteredResults.next([val]);
       this.formControl.setValue(val, { emitEvent: false });
-      console.log('value from init', val);
       // this.onSelect.emit(val);
     }
   }
