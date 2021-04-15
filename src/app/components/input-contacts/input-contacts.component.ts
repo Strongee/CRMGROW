@@ -69,6 +69,7 @@ export class InputContactsComponent implements OnInit {
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
   filteredContacts: Contact[] = [];
 
+  loadedCount = 0;
   loadingMore = false;
   searchSubscription: Subscription;
   loadMoreSubscription: Subscription;
@@ -117,6 +118,7 @@ export class InputContactsComponent implements OnInit {
         this.searchSubscription = request.subscribe(
           (res: any) => {
             this.searching = false;
+            this.loadedCount = res.length;
             if (res && res.length) {
               if (res.length == 8) {
                 this.hasMore = true;
@@ -335,9 +337,10 @@ export class InputContactsComponent implements OnInit {
       (currentResults) => {
         this.loadingMore = true;
         this.loadMoreSubscription = this.contactService
-          .easySearch(this.keyword, currentResults.length)
+          .easySearch(this.keyword, this.loadedCount)
           .subscribe((contacts) => {
             this.loadingMore = false;
+            this.loadedCount += contacts.length;
             if (contacts && contacts?.length) {
               if (contacts?.length == 8) {
                 this.hasMore = true;
