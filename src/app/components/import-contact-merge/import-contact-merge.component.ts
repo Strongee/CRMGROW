@@ -132,9 +132,13 @@ export class ImportContactMergeComponent implements OnInit {
               for (const contact of this.contacts) {
                 if (
                   contact[this.updateColumn[name]] &&
-                  this.emails.indexOf(contact[this.updateColumn[name]].toLowerCase()) < 0
+                  this.emails.indexOf(
+                    contact[this.updateColumn[name]].toLowerCase()
+                  ) < 0
                 ) {
-                  this.emails.push(contact[this.updateColumn[name]].toLowerCase());
+                  this.emails.push(
+                    contact[this.updateColumn[name]].toLowerCase()
+                  );
                 }
               }
             }
@@ -417,10 +421,40 @@ export class ImportContactMergeComponent implements OnInit {
     this.dialogRef.close({ type: 'csv-csv', merged });
   }
 
+  formatContact(data): any {
+    for (const key in data) {
+      if (key === 'id') {
+
+      } else if (key === 'notes' || key === 'tags') {
+        if (data[key] == undefined) {
+          delete data[key];
+        }
+      } else if (key === 'label_id') {
+        data['label'] = data['label_id'];
+        delete data['label_id'];
+      } else {
+        if (key == undefined) {
+          delete data[key];
+        } else {
+          if (Array.isArray(data[key])) {
+            if (data[key].length < 1) {
+              delete data[key];
+            }
+          } else {
+            if (data[key] == '' || data[key] == null) {
+              delete data[key];
+            }
+          }
+        }
+      }
+    }
+    return data;
+  }
+
   update(): void {
     this.updating = true;
-    const data = Object.assign({}, this.previewContact);
-
+    let data = Object.assign({}, this.previewContact);
+    data = this.formatContact(data);
     this.contactService.update(data).subscribe(
       (res) => {
         this.updating = false;

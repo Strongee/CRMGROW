@@ -36,7 +36,7 @@ import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { Team } from '../../models/team.model';
 import { TeamService } from '../../services/team.service';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
-import {environment} from "../../../environments/environment";
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-team-share-contact',
@@ -240,9 +240,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
         if (res) {
           this.pageContacts = [];
           for (const contact of res['contacts']) {
-            this.pageContacts.push(
-              new ContactActivity().deserialize(contact)
-            );
+            this.pageContacts.push(new ContactActivity().deserialize(contact));
           }
           this.contactCount = res['contacts'].length;
         }
@@ -679,7 +677,16 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
         }
       })
       .afterClosed()
-      .subscribe((res) => {});
+      .subscribe((res) => {
+        if (res.data && res.data.length > 0) {
+          for (const contact of res.data) {
+            this.pageContacts.push(
+              new ContactActivity().deserialize(contact)
+            );
+            this.contactCount++;
+          }
+        }
+      });
   }
 
   isSharedByMe(contact): any {

@@ -246,7 +246,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openCall(call): void {
-    this.router.navigate([`/teams/call/${call._id}`]);
+    this.location.replaceState(`/teams/call/${call._id}`);
     this.dialog
       .open(CallRequestDetailComponent, {
         width: '98vw',
@@ -259,6 +259,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       .afterClosed()
       .subscribe((data) => {
         this.isShowDialog = false;
+        this.location.replaceState('/teams/call');
         if (data) {
           const currentTab = this.selectedTab.id;
           let newTab;
@@ -325,7 +326,19 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  complete(call): void {}
+  complete(call): void {
+    this.teamService
+      .updateCall(call._id, {
+        status: 'finished',
+      })
+      .subscribe((status) => {
+        if (status) {
+          const currentTab = this.selectedTab.id;
+          this.loadPageCalls(currentTab, this.page[currentTab]);
+          this.loadPageCalls('completed', this.page['completed']);
+        }
+      });
+  }
 
   delete(call): void {
     this.dialog
@@ -416,6 +429,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
             this.total[currentTab] > 8
           ) {
             this.loadPageCalls(currentTab, this.page[currentTab]);
+            this.loadPageCalls('scheduled', this.page['scheduled']);
           }
           // Check the Calendar Connection
           const calendars = this.appointmentService.calendars.getValue();
@@ -598,12 +612,12 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     return false;
   }
 
-  showProfile(call): void {
-    if (call && call.user) {
+  showProfile(contact): void {
+    if (contact) {
       this.dialog.open(TeamMemberProfileComponent, {
         data: {
           title: 'Team member',
-          member: call.user
+          member: contact
         }
       });
     }
