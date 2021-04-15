@@ -58,6 +58,7 @@ export class SelectContactComponent
 
   loadingMore = false;
   loadMoreSubscription: Subscription;
+  loadedCount = 0;
   searchSubscription: Subscription;
   getCurrentSubscription: Subscription;
   hasMore = true;
@@ -84,6 +85,7 @@ export class SelectContactComponent
           this.searchSubscription && this.searchSubscription.unsubscribe();
           this.searchSubscription = api.subscribe((res) => {
             this.searching = false;
+            this.loadedCount = res.length;
             if (res && res.length) {
               if (res.length == 8) {
                 this.hasMore = true;
@@ -119,6 +121,8 @@ export class SelectContactComponent
                   });
                   this.filteredResults.next([newContact]);
                 }
+              } else {
+                this.filteredResults.next([]);
               }
             }
           });
@@ -156,9 +160,10 @@ export class SelectContactComponent
       (currentResults) => {
         this.loadingMore = true;
         this.loadMoreSubscription = this.contactService
-          .easySearch(this.keyword, currentResults.length)
+          .easySearch(this.keyword, this.loadedCount)
           .subscribe((contacts) => {
             this.loadingMore = false;
+            this.loadedCount += contacts.length;
             if (contacts && contacts.length) {
               if (contacts.length == 8) {
                 this.hasMore = true;

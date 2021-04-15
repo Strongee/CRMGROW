@@ -47,6 +47,8 @@ export class ContactService extends HttpService {
     CONTACT_SORT_OPTIONS['alpha_down']
   );
   sort$ = this.sort.asObservable();
+  contactConversation: BehaviorSubject<any> = new BehaviorSubject(null);
+  contactConversation$ = this.contactConversation.asObservable();
 
   loadSubscription: Subscription;
 

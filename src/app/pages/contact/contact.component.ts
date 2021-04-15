@@ -238,6 +238,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.teamSubscription && this.teamSubscription.unsubscribe();
     this.routeChangeSubscription && this.routeChangeSubscription.unsubscribe();
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
+
+    this.contactService.contactConversation.next(null);
   }
 
   /**
@@ -1576,21 +1578,24 @@ export class ContactComponent implements OnInit, OnDestroy {
     let hasThumbed = false;
     let finishedCount = 0;
     const material = this.details[activity.videos];
-    this.groupActions[activity.group_id].forEach((e) => {
-      if (!e.activity_detail) {
-        return;
-      }
-      if (e.activity_detail.type === 'thumbs up') {
-        hasThumbed = true;
-        return;
-      }
-      if (
-        e.activity_detail.type === 'watch' &&
-        e.activity_detail.duration / material.duration > 0.97
-      ) {
-        finishedCount++;
-      }
-    });
+    if (material) {
+      this.groupActions[activity.group_id].forEach((e) => {
+        if (!e.activity_detail) {
+          return;
+        }
+        if (e.activity_detail.type === 'thumbs up') {
+          hasThumbed = true;
+          return;
+        }
+        if (
+          e.activity_detail.type === 'watch' &&
+          e.activity_detail.duration &&
+          e.activity_detail.duration / material.duration > 0.97
+        ) {
+          finishedCount++;
+        }
+      });
+    }
     if (hasThumbed || finishedCount) {
       let html = `<div class="c-blue font-weight-bold">${material?.title}</div>`;
       if (hasThumbed) {

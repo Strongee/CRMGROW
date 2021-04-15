@@ -40,6 +40,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
   sending = false;
   sendSubscription: Subscription;
   updateTimer: Subscription;
+  conversationLoadSubscription: Subscription;
 
   @ViewChild('messageText') messageText: ElementRef;
   constructor(
@@ -54,6 +55,19 @@ export class SendTextComponent implements OnInit, OnDestroy {
   ) {
     if (this.data && this.data.contact) {
       this.contact = new Contact().deserialize(this.data.contact);
+      this.conversationLoadSubscription = this.contactService.contactConversation$.subscribe(
+        (conversation) => {
+          if (conversation && conversation.contact === this.contact._id) {
+            this.messages = conversation.messages;
+            if (this.messages.length) {
+              this.loading = false;
+            }
+          }
+          if (!this.messages || !this.messages.length) {
+            this.load();
+          }
+        }
+      );
     }
     this.userId = this.userService.profile.getValue()._id;
     this.templateService.loadAll(false);
@@ -64,9 +78,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
     if (defaultSms) {
       this.message = defaultSms.content;
     }
-    this.load();
     this.updateTimer = interval(3 * 1000).subscribe(() => {
-      console.log('update the conversations');
       this.update();
     });
   }
@@ -74,6 +86,12 @@ export class SendTextComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.updateTimer && this.updateTimer.unsubscribe();
+    this.conversationLoadSubscription &&
+      this.conversationLoadSubscription.unsubscribe();
+    this.contactService.contactConversation.next({
+      contact: this.contact._id,
+      messages: this.messages || []
+    });
   }
 
   load(): void {
@@ -235,6 +253,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
         this.update();
         const count = videoIds.length + pdfIds.length + imageIds.length + 1;
         this.contactService.addLatestActivity(count + 2);
+        this.dialogRef.close();
         // this.dialogRef.close({
         //   status: true,
         //   count: videoIds.length + pdfIds.length + imageIds.length + 1
