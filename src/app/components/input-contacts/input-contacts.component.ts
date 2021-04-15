@@ -149,6 +149,9 @@ export class InputContactsComponent implements OnInit {
                       this.filteredResults.next([newContact]);
                     }
                   }
+                } else {
+                  this.filteredResults.next([]);
+                  this.filteredContacts = [];
                 }
               }
             } else {
@@ -261,7 +264,7 @@ export class InputContactsComponent implements OnInit {
   }
 
   onAdd(event: MatChipInputEvent): void {
-    if (this.optionsFocused || !event.value) {
+    if (this.optionsFocused || !event.value || this.searching) {
       return;
     }
     const newContact = new Contact();
@@ -280,8 +283,8 @@ export class InputContactsComponent implements OnInit {
         return;
       }
       newContact.deserialize({
-        first_name: event.value,
-        cell_phone: event.value
+        first_name: cell_phone,
+        cell_phone: cell_phone
       });
     }
     let existContact;

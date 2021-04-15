@@ -92,3 +92,19 @@
     }
   }
 }
+
+.searching-status {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  
+  .keyword {
+    font-weight: bold;
+  }
+
+  .loader {
+    width: 30px;
+    height: 30px;
+    margin-right: 0px;
+  }
+}

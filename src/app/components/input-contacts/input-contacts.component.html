@@ -46,6 +46,13 @@
       (optionActivated)="onActiveOption($event)"
       [autoActiveFirstOption]="onlyFromSearch"
     >
+      <mat-option *ngIf="searching" [disabled]="true">
+        <div class="searching-status">
+          Searching for <span class="keyword">&nbsp;"{{keyword}}"</span>
+
+          <div class="loader"></div>
+        </div>
+      </mat-option>
       <mat-option *ngFor="let item of filteredResults | async" [value]="item" class="{{optionClass}}">
         <div class="d-flex chip py-2">
           <div class="form-avatar rounded-circle bg-dark mr-3 mt-1">{{item.avatarName}}</div>
