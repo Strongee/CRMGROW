@@ -258,6 +258,10 @@ export class SignatureComponent implements OnInit, OnDestroy {
         );
       }
     });
+
+    const tooltip = this.emailEditor.quillEditor.theme.tooltip;
+    const input = tooltip.root.querySelector('input[data-link]');
+    input.dataset.link = 'www.crmgrow.com';
   }
 
   initImageHandler = (): void => {
