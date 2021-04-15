@@ -79,9 +79,8 @@ export class InputContactsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isFocus) {
-      const _SELF = this;
       setTimeout(() => {
-        _SELF.inputField.nativeElement.focus();
+        this.inputField.nativeElement.focus();
       }, 300);
     }
     this.formControl.valueChanges

@@ -25,7 +25,6 @@ import { JoinCallRequestComponent } from './join-call-request/join-call-request.
 import { CallRequestConfirmComponent } from './call-request-confirm/call-request-confirm.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog.component';
-import { CalendarContactsComponent } from './calendar-contacts/calendar-contacts.component';
 import { CalendarEventComponent } from './calendar-event/calendar-event.component';
 import { CalendarRecurringDialogComponent } from './calendar-recurring-dialog/calendar-recurring-dialog.component';
 import { CallRequestCancelComponent } from './call-request-cancel/call-request-cancel.component';
@@ -178,7 +177,6 @@ import { MemberSelectorComponent } from './member-selector/member-selector.compo
     ConfirmComponent,
     SelectLeaderComponent,
     CalendarDialogComponent,
-    CalendarContactsComponent,
     CalendarEventComponent,
     CalendarRecurringDialogComponent,
     CampaignAddListComponent,
