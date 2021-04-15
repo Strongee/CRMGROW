@@ -168,6 +168,7 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
   }
   changeLeader(leader: User): void {
+    console.log('change leader', leader);
     this.leader = leader;
   }
 

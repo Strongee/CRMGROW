@@ -22,7 +22,6 @@ import { InputTemplateComponent } from './input-template/input-template.componen
 import { InputTeamComponent } from './input-team/input-team.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { JoinCallRequestComponent } from './join-call-request/join-call-request.component';
-import { CallRequestConfirmComponent } from './call-request-confirm/call-request-confirm.component';
 import { SelectLeaderComponent } from './select-leader/select-leader.component';
 import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog.component';
 import { CalendarEventComponent } from './calendar-event/calendar-event.component';
@@ -170,7 +169,6 @@ import { MemberSelectorComponent } from './member-selector/member-selector.compo
     InputTeamComponent,
     SelectUserComponent,
     JoinCallRequestComponent,
-    CallRequestConfirmComponent,
     SelectLeaderComponent,
     CallRequestCancelComponent,
     DataEmptyComponent,
@@ -402,7 +400,6 @@ import { MemberSelectorComponent } from './member-selector/member-selector.compo
     AvatarEditorComponent,
     VideoShareComponent,
     JoinCallRequestComponent,
-    CallRequestConfirmComponent,
     CallRequestCancelComponent,
     CallRequestDetailComponent,
     VideoShareComponent,

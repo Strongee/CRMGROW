@@ -40,7 +40,8 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (val) {
       this.filteredResults.next([val]);
       this.formControl.setValue(val, { emitEvent: false });
-      this.onSelect.emit(val);
+      console.log('value from init', val);
+      // this.onSelect.emit(val);
     }
   }
   formControl: FormControl = new FormControl();
@@ -131,7 +132,14 @@ export class SelectLeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         [{ _id: this.userId }],
         '_id'
       );
-      this.filteredResults.next(this.teamLeaders);
+      if (this.formControl.value) {
+        const val = { ...this.formControl.value };
+        this.filteredResults.next(this.teamLeaders);
+        const selectedValue = this.teamLeaders.filter(
+          (e) => e._id === val._id
+        )[0];
+        this.formControl.setValue(selectedValue, { emitEvent: false });
+      }
     });
   }
 }

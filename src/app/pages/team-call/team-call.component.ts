@@ -1,12 +1,11 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { TeamService } from '../../services/team.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CallRequestCancelComponent } from '../../components/call-request-cancel/call-request-cancel.component';
-import { CallRequestConfirmComponent } from '../../components/call-request-confirm/call-request-confirm.component';
 import { CallRequestScheduledComponent } from '../../components/call-request-scheduled/call-request-scheduled.component';
 import { JoinCallRequestComponent } from '../../components/join-call-request/join-call-request.component';
 import * as moment from 'moment';
@@ -313,7 +312,6 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
         height: 'auto',
         disableClose: true,
         data: {
-          teams: this.teams,
           type: 'edit',
           callData: call
         }
