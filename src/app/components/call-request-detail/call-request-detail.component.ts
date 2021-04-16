@@ -403,4 +403,8 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  openNoteDlg(): void {
+
+  }
 }

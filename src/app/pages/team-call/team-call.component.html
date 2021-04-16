@@ -1,5 +1,18 @@
 <div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3 sub-page-header position-relative">
-  <h5 class="font-weight-bold mb-0">Group calls</h5>
+  <div class="v-center">
+    <h5 class="sub-sidebar font-weight-bold mb-0">Group calls</h5>
+    <div class="form-group mb-0 search-form">
+      <div class="input-group-prepend">
+        <i class="i-icon i-search d-block bgc-dark"></i>
+      </div>
+      <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="changeSearchStr()" [class.disabled]="loading[selectedTab.id]">
+      <ng-container *ngIf="searchStr">
+        <div class="cancel-action c-pointer" (click)="clearSearchStr()">
+          <i class="i-icon i-close d-block bgc-dark"></i>
+        </div>
+      </ng-container>
+    </div>
+  </div>
   <button class="btn btn-primary shadow ml-auto" (click)="joinCallRequest()">
     <span class="fw-600 f-3">New group call inquiry</span>
   </button>
@@ -373,7 +386,7 @@
                   <td class="team-actions">
                     <div class="v-center justify-content-end">
                       <ng-container *ngIf="isOrganizer(call); else noneOrganizerTemplate">
-                        <button class="btn delete-btn v-center" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                        <button class="btn delete-btn v-center" (click)="delete(call)" placement="bottom" ngbTooltip="Delete" ngbButtonLabel>
                           <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
                         </button>
                       </ng-container>
@@ -437,7 +450,7 @@
                       <button class="btn" (click)="edit(call)" placement="bottom" ngbTooltip="Edit" ngbButtonLabel>
                         <i class="i-icon i-edit bgc-dark d-block" aria-hidden="true"></i>
                       </button>
-                      <button class="btn ml-2" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                      <button class="btn ml-2" (click)="delete(call)" placement="bottom" ngbTooltip="Delete" ngbButtonLabel>
                         <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
                       </button>
                     </div>
@@ -566,7 +579,7 @@
                   </td>
                   <td class="team-actions">
                     <div class="v-center justify-content-end">
-                      <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                      <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Delete" ngbButtonLabel>
                         <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
                       </button>
                     </div>
@@ -628,7 +641,10 @@
                   </td>
                   <td class="team-actions">
                     <div class="v-center justify-content-end">
-                      <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
+                      <button class="btn" (click)="reschedule(call)" placement="bottom" ngbTooltip="Reschedule" ngbButtonLabel>
+                        <i class="i-icon i-timer bgc-dark d-block" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn ml-2" (click)="delete(call)" placement="bottom" ngbTooltip="Delete" ngbButtonLabel>
                         <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
                       </button>
                     </div>
@@ -689,11 +705,23 @@
                     {{call.confirmed_at | date: 'MMM dd yyyy, hh:mm a'}}
                   </td>
                   <td class="team-actions">
-                    <div class="v-center justify-content-end">
-                      <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Remove" ngbButtonLabel>
-                        <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
-                      </button>
-                    </div>
+                    <ng-container *ngIf="isOrganizer(call); else noneOrganizerActionTemplate">
+                      <div class="v-center justify-content-end">
+                        <button class="btn mr-2" (click)="reschedule(call)" placement="bottom" ngbTooltip="Reschedule" ngbButtonLabel>
+                          <i class="i-icon i-timer bgc-dark d-block" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Delete" ngbButtonLabel>
+                          <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </ng-container>
+                    <ng-template #noneOrganizerActionTemplate>
+                      <div class="v-center justify-content-end">
+                        <button class="btn" (click)="delete(call)" placement="bottom" ngbTooltip="Delete" ngbButtonLabel>
+                          <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </ng-template>
                   </td>
                 </ng-container>
               </ng-container>
