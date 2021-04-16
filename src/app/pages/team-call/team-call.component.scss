@@ -208,6 +208,15 @@ tr:hover {
   }
 }
 
+.search-form {
+  margin-left: 36px;
+
+  input.disabled {
+    pointer-events: none;
+    background-color: #f8f8f8;
+  }
+}
+
 .sub-sidebar-mobile {
   display: none;
   .sidebar-menu {

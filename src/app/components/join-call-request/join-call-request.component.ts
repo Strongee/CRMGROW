@@ -259,16 +259,27 @@ export class JoinCallRequestComponent implements OnInit, OnDestroy {
         this.dialogRef.close(response);
       });
     } else {
-      if (this.type !== 'edit') {
-        this.teamService.requestCall(data).subscribe((response) => {
-          this.isLoading = false;
-          this.dialogRef.close({ data: response });
-        });
-      } else {
+      if (this.type === 'edit') {
         this.teamService.updateCall(this.callId, data).subscribe((response) => {
           this.isLoading = false;
           this.dialogRef.close({ data: response });
         });
+      } else {
+        if (this.type === 'reschedule') {
+          this.teamService.deleteCall(this.callId).subscribe((res) => {
+            if (res) {
+              this.teamService.requestCall(data).subscribe((response) => {
+                this.isLoading = false;
+                this.dialogRef.close({ data: response });
+              });
+            }
+          });
+        } else {
+          this.teamService.requestCall(data).subscribe((response) => {
+            this.isLoading = false;
+            this.dialogRef.close({ data: response });
+          });
+        }
       }
     }
   }

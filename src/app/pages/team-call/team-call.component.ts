@@ -16,7 +16,7 @@ import { DialogSettings } from 'src/app/constants/variable.constants';
 import { CallRequestDetailComponent } from 'src/app/components/call-request-detail/call-request-detail.component';
 import * as _ from 'lodash';
 import { AppointmentService } from 'src/app/services/appointment.service';
-import { getCurrentTimezone, numPad } from '../../helper';
+import { getCurrentTimezone, numPad, searchReg } from '../../helper';
 import { TeamMemberProfileComponent } from '../../components/team-member-profile/team-member-profile.component';
 import {
   sortDateArray,
@@ -135,6 +135,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isShowDialog = false;
 
+  searchStr = '';
+
   constructor(
     private teamService: TeamService,
     private dialog: MatDialog,
@@ -174,6 +176,23 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
         const call = res;
         if (call) {
           if (!previousUrl || !previousUrl.includes('teams/call')) {
+            if (call && call.status) {
+              if (call.status === 'pending') {
+                if (call.leader && call.leader._id === this.userId) {
+                  this.changeTab(this.TABS[0]);
+                } else {
+                  this.changeTab(this.TABS[1]);
+                }
+              } else if (call.status === 'planned') {
+                this.changeTab(this.TABS[2]);
+              } else if (call.status === 'finished') {
+                this.changeTab(this.TABS[3]);
+              } else if (call.status === 'canceled') {
+                this.changeTab(this.TABS[4]);
+              } else if (call.status === 'declined') {
+                this.changeTab(this.TABS[5]);
+              }
+            }
             this.openCall(call);
           }
         }
@@ -213,9 +232,9 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
           this.pageData[type] = res['data'];
         }
         if (type === this.TABS[0].id || type === this.TABS[1].id) {
-          this.sort(type, 'proposed', true);
+          this.sort(type, 'proposed', false, true);
         } else {
-          this.sort(type, 'schedule', true);
+          this.sort(type, 'schedule', false, true);
         }
       });
   }
@@ -324,10 +343,32 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  reschedule(call): void {
+    this.dialog
+      .open(JoinCallRequestComponent, {
+        width: '96vw',
+        maxWidth: '500px',
+        height: 'auto',
+        disableClose: true,
+        data: {
+          type: 'reschedule',
+          callData: call
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const currentTab = this.selectedTab.id;
+          this.loadPageCalls(currentTab, this.page[currentTab]);
+          this.loadPageCalls('sent', this.page['sent']);
+        }
+      });
+  }
+
   complete(call): void {
     this.teamService
       .updateCall(call._id, {
-        status: 'finished',
+        status: 'finished'
       })
       .subscribe((status) => {
         if (status) {
@@ -400,7 +441,9 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.pageData['inquiry'].length < 5 &&
                   this.total['inquiry'] > 8
                 ) {
-                  this.loadPageCalls('inquiry', this.page['inquiry']);
+                  const currentTab = this.selectedTab.id;
+                  this.loadPageCalls(currentTab, this.page[currentTab]);
+                  this.loadPageCalls('denied', this.page['denied']);
                 }
               }
             });
@@ -652,7 +695,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  sort(group, type, keep: boolean = false): void {
+  sort(group, type, goFirstPage: boolean = false, keep: boolean = false): void {
     if (this.selectedSort[group] !== type) {
       this.selectedSort[group] = type;
       return;
@@ -680,10 +723,21 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
           this.getSearchCondition(group, type)
         );
       }
-      this.page[group] = 0;
+
+      if (goFirstPage) {
+        this.page[group] = 0;
+      }
+
       if (!keep) {
         this.searchCondition[group][type] = !this.searchCondition[group][type];
       }
     }
+  }
+
+  changeSearchStr(): void {}
+
+  clearSearchStr(): void {
+    this.searchStr = '';
+    this.changeSearchStr();
   }
 }

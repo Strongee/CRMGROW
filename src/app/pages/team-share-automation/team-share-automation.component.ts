@@ -33,6 +33,7 @@ import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
+import { StoreService } from '../../services/store.service';
 
 @Component({
   selector: 'app-team-share-automation',
@@ -102,7 +103,8 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     private location: Location,
     private userService: UserService,
     private toastr: ToastrService,
-    private teamService: TeamService
+    private teamService: TeamService,
+    public storeService: StoreService
   ) {}
 
   ngOnInit(): void {
@@ -113,23 +115,18 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
 
     this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.teamService
-      .loadSharedAutomations(this.team._id)
-      .subscribe(
-        (res) => {
-          if (res) {
-            this.loading = false;
-            this.automations = res;
-            this.filteredResult = this.automations;
-            this.sort('role', true);
-          }
-        },
-        (error) => {
-          this.loading = false;
-        }
-      );
-
-    this.filteredResult = this.automations;
+    this.teamService.loadSharedAutomations(this.team._id);
+    this.storeService.sharedAutomations$.subscribe(
+      (res) => {
+        this.loading = false;
+        this.automations = res;
+        this.filteredResult = this.automations;
+        this.sort('role', true);
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
   }
 
   ngOnChanges(changes): void {
