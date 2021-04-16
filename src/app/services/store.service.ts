@@ -13,6 +13,7 @@ import {
 } from '../models/contact.model';
 import { DetailActivity, PureActivity } from '../models/activityDetail.model';
 import { Material } from '../models/material.model';
+import { Automation } from '../models/automation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,14 @@ export class StoreService {
   materials$ = this.materials.asObservable();
   templates$ = this.templates.asObservable();
 
+  sharedMaterials: BehaviorSubject<Material[]> = new BehaviorSubject([]);
+  sharedMaterials$ = this.sharedMaterials.asObservable();
+  sharedAutomations: BehaviorSubject<Automation[]> = new BehaviorSubject([]);
+  sharedAutomations$ = this.sharedAutomations.asObservable();
+  sharedTemplates: BehaviorSubject<Template[]> = new BehaviorSubject([]);
+  sharedTemplates$ = this.sharedTemplates.asObservable();
+  sharedContacts: BehaviorSubject<ContactActivity[]> = new BehaviorSubject([]);
+  sharedContacts$ = this.sharedContacts.asObservable();
   /**
    * Clear All Data
    */
@@ -60,6 +69,10 @@ export class StoreService {
     this.templates.next([]);
     this.pageContacts.next([]);
     this.selectedContact.next(new ContactDetail());
+    this.sharedMaterials.next([]);
+    this.sharedAutomations.next([]);
+    this.sharedTemplates.next([]);
+    this.sharedContacts.next([]);
   }
 
   constructor() {}

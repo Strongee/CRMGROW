@@ -14,6 +14,7 @@ import { sortStringArray } from '../../utils/functions';
 import { TemplateBrowserComponent } from '../../components/template-browser/template-browser.component';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
+import { StoreService } from '../../services/store.service';
 
 @Component({
   selector: 'app-team-share-template',
@@ -63,6 +64,7 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private router: Router,
     private teamService: TeamService,
+    public storeService: StoreService,
     private toast: ToastrService
   ) {}
 
@@ -85,20 +87,19 @@ export class TeamShareTemplateComponent implements OnInit, OnChanges {
 
     this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.teamService
-      .loadSharedTemplates(this.team._id)
-      .subscribe(
-        (res) => {
-          if (res) {
-            this.loading = false;
-            this.templates = res;
-            this.filteredResult = this.templates;
-          }
-        },
-        (error) => {
+    this.teamService.loadSharedTemplates(this.team._id);
+    this.storeService.sharedTemplates$.subscribe(
+      (res) => {
+        if (res) {
           this.loading = false;
+          this.templates = res;
+          this.filteredResult = this.templates;
         }
-      );
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
   }
 
   ngOnChanges(changes): void {

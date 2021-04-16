@@ -284,7 +284,7 @@
         <tr mat-row
             *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
-      <ng-container *ngIf="pageContacts.length; else emptyListTemplate">
+      <ng-container *ngIf="pageContacts.length">
         <div class="d-flex justify-content-center align-items-center mt-4">
           <div class="ml-3 pagination-wrapper">
             <pagination-controls (pageChange)="changePage($event)" id="contactTable" maxSize="5" previousLabel=""
@@ -292,19 +292,31 @@
           </div>
         </div>
       </ng-container>
-      <ng-template #emptyListTemplate>
-        <ng-container>
-          <div class="empty-list py-5" *ngIf="!loading">
+      <ng-container *ngIf="!(storeService.sharedContacts$ | async).length; else showingStatusContacts">
+        <ng-container [ngSwitch]="(teamService.sharedContactsLoadStatus | async)">
+          <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
             <div class="object-icon v-center">
               <i class="i-icon i-lunch d-block bgc-dark"></i>
             </div>
             <h4 class="font-weight-bold mt-4 mb-3">
-              There is no contacts.
+              There is no contacts for shared yet.
             </h4>
           </div>
-          <div class="list-loading text-center" *ngIf="loading">
+          <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
             <div class="loader mt-5 lg"></div>
             <h4 class="fw-600 mt-2">Loading contacts...</h4>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-template #showingStatusContacts>
+        <ng-container *ngIf="!pageContacts.length">
+          <div class="empty-list py-5">
+            <div class="object-icon v-center">
+              <i class="i-icon i-lunch d-block bgc-dark"></i>
+            </div>
+            <h4 class="font-weight-bold mt-4 mb-3">
+              There is no contacts to match your filter conditions.
+            </h4>
           </div>
         </ng-container>
       </ng-template>

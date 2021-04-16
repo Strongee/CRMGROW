@@ -138,18 +138,14 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   loadContact(page: number): void {
     this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.teamService
-      .loadSharedContacts(this.team._id, this.pageSize.id, page)
-      .subscribe((res) => {
+    this.teamService.loadSharedContacts(this.team._id, this.pageSize.id, page);
+    this.storeService.sharedContacts$.subscribe((res) => {
+      if (res) {
         this.loading = false;
-        if (res && res.contacts) {
-          this.pageContacts = [];
-          for (const contact of res.contacts) {
-            this.pageContacts.push(new ContactActivity().deserialize(contact));
-          }
-        }
-        this.contactCount = res.count;
-      });
+        this.pageContacts = res;
+        this.contactCount = this.teamService.sharedContactsTotal.getValue();
+      }
+    });
   }
 
   ngOnChanges(changes): void {
@@ -175,25 +171,23 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     if (this.searchStr === '') {
       this.paginationLoading = true;
       this.loadSubscription && this.loadSubscription.unsubscribe();
-      this.loadSubscription = this.teamService
-        .loadSharedContacts(this.team._id, this.pageSize.id, skip)
-        .subscribe((res) => {
-          this.paginationLoading = false;
-          if (res && res.contacts) {
-            this.pageContacts = [];
-            for (const contact of res.contacts) {
-              this.pageContacts.push(
-                new ContactActivity().deserialize(contact)
-              );
-            }
-          }
-          this.contactCount = res.count;
+      this.teamService.loadSharedContacts(
+        this.team._id,
+        this.pageSize.id,
+        skip
+      );
+      this.storeService.sharedContacts$.subscribe((res) => {
+        this.paginationLoading = false;
+        if (res) {
+          this.pageContacts = res;
+          this.contactCount = this.teamService.sharedContactsTotal.getValue();
           this.pageSelection = _.intersectionBy(
             this.selection,
             this.pageContacts,
             '_id'
           );
-        });
+        }
+      });
     }
   }
   /**
@@ -680,9 +674,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
       .subscribe((res) => {
         if (res.data && res.data.length > 0) {
           for (const contact of res.data) {
-            this.pageContacts.push(
-              new ContactActivity().deserialize(contact)
-            );
+            this.pageContacts.push(new ContactActivity().deserialize(contact));
             this.contactCount++;
           }
         }

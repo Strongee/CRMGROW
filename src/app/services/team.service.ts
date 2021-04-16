@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { TEAM } from '../constants/api.constant';
+import { TEAM, VIDEO } from '../constants/api.constant';
 import { Team } from '../models/team.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
@@ -14,12 +14,17 @@ import * as _ from 'lodash';
 import { Material } from '../models/material.model';
 import { Automation } from '../models/automation.model';
 import { Template } from '../models/template.model';
-import { Contact } from '../models/contact.model';
+import { Contact, ContactActivity } from '../models/contact.model';
+import { StoreService } from './store.service';
 @Injectable({
   providedIn: 'root'
 })
 export class TeamService extends HttpService {
-  constructor(errorService: ErrorService, private httpClient: HttpClient) {
+  constructor(
+    errorService: ErrorService,
+    private httpClient: HttpClient,
+    private storeService: StoreService
+  ) {
     super(errorService);
   }
 
@@ -31,7 +36,41 @@ export class TeamService extends HttpService {
   invites: BehaviorSubject<Team[]> = new BehaviorSubject([]);
   invites$ = this.invites.asObservable();
   invitesLoadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
-  invitesLoading$ = this.loadStatus.asObservable();
+  invitesLoading$ = this.invitesLoadStatus.asObservable();
+
+  sharedMaterials: BehaviorSubject<Material[]> = new BehaviorSubject([]);
+  sharedMaterials$ = this.sharedMaterials.asObservable();
+  sharedMaterialsLoadStatus: BehaviorSubject<string> = new BehaviorSubject(
+    STATUS.NONE
+  );
+  sharedMaterialsLoading$ = this.sharedMaterialsLoadStatus.asObservable();
+  loadSharedMaterialsSubscription: Subscription;
+
+  sharedAutomations: BehaviorSubject<Automation[]> = new BehaviorSubject([]);
+  sharedAutomations$ = this.sharedAutomations.asObservable();
+  sharedAutomationsLoadStatus: BehaviorSubject<string> = new BehaviorSubject(
+    STATUS.NONE
+  );
+  sharedAutomationsLoading$ = this.sharedAutomationsLoadStatus.asObservable();
+  loadSharedAutomationsSubscription: Subscription;
+
+  sharedTemplates: BehaviorSubject<Template[]> = new BehaviorSubject([]);
+  sharedTemplates$ = this.sharedTemplates.asObservable();
+  sharedTemplatesLoadStatus: BehaviorSubject<string> = new BehaviorSubject(
+    STATUS.NONE
+  );
+  sharedTemplatesLoading$ = this.sharedTemplatesLoadStatus.asObservable();
+  loadSharedTemplatesSubscription: Subscription;
+
+  sharedContacts: BehaviorSubject<ContactActivity[]> = new BehaviorSubject([]);
+  sharedContacts$ = this.sharedContacts.asObservable();
+  sharedContactsLoadStatus: BehaviorSubject<string> = new BehaviorSubject(
+    STATUS.NONE
+  );
+  sharedContactsLoading$ = this.sharedContactsLoadStatus.asObservable();
+  loadSharedContactsSubscription: Subscription;
+  sharedContactsTotal: BehaviorSubject<number> = new BehaviorSubject(0);
+  sharedContactsTotal$ = this.sharedContactsTotal.asObservable();
 
   /**
    * LOAD ALL TEMPLATES
@@ -145,6 +184,125 @@ export class TeamService extends HttpService {
       map((res) => (res['data'] || []).map((e) => new Team().deserialize(e))),
       catchError(this.handleError('LOAD INVITED TEAM', []))
     );
+  }
+
+  loadSharedMaterials(teamId: string): void {
+    this.sharedMaterialsLoadStatus.next(STATUS.REQUEST);
+    this.loadSharedMaterialsSubscription &&
+      this.loadSharedMaterialsSubscription.unsubscribe();
+    this.loadSharedMaterialsSubscription = this.loadSharedMaterialsImpl(
+      teamId
+    ).subscribe((res) => {
+      res
+        ? this.sharedMaterialsLoadStatus.next(STATUS.SUCCESS)
+        : this.sharedMaterialsLoadStatus.next(STATUS.FAILURE);
+      if (res) {
+        this.storeService.sharedMaterials.next([
+          ...res['video_data'],
+          ...res['pdf_data'],
+          ...res['image_data']
+        ]);
+      }
+    });
+  }
+
+  loadSharedMaterialsImpl(teamId: string): Observable<any[]> {
+    return this.httpClient
+      .get(this.server + TEAM.LOAD_SHARE_MATERIALS + teamId)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED MATERIALS', []))
+      );
+  }
+
+  loadSharedAutomations(teamId: string): void {
+    this.sharedAutomationsLoadStatus.next(STATUS.REQUEST);
+    this.loadSharedAutomationsSubscription &&
+      this.loadSharedAutomationsSubscription.unsubscribe();
+    this.loadSharedAutomationsSubscription = this.loadSharedAutomationsImpl(
+      teamId
+    ).subscribe((res) => {
+      res
+        ? this.sharedAutomationsLoadStatus.next(STATUS.SUCCESS)
+        : this.sharedAutomationsLoadStatus.next(STATUS.FAILURE);
+      if (res) {
+        this.storeService.sharedAutomations.next(res);
+      }
+    });
+  }
+
+  loadSharedAutomationsImpl(teamId: string): Observable<any[]> {
+    return this.httpClient
+      .get(this.server + TEAM.LOAD_SHARE_AUTOMATIONS + teamId)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED AUTOMATIONS', []))
+      );
+  }
+
+  loadSharedTemplates(teamId: string): void {
+    this.sharedTemplatesLoadStatus.next(STATUS.REQUEST);
+    this.loadSharedTemplatesSubscription &&
+      this.loadSharedTemplatesSubscription.unsubscribe();
+    this.loadSharedTemplatesSubscription = this.loadSharedTemplatesImpl(
+      teamId
+    ).subscribe((res) => {
+      res
+        ? this.sharedTemplatesLoadStatus.next(STATUS.SUCCESS)
+        : this.sharedTemplatesLoadStatus.next(STATUS.FAILURE);
+      if (res) {
+        this.storeService.sharedTemplates.next(res);
+      }
+    });
+  }
+
+  loadSharedTemplatesImpl(teamId: string): Observable<any[]> {
+    return this.httpClient
+      .get(this.server + TEAM.LOAD_SHARE_TEMPLATES + teamId)
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED TEMPLATES', []))
+      );
+  }
+
+  loadSharedContacts(id: string, count: number, page: number): void {
+    this.sharedContactsLoadStatus.next(STATUS.REQUEST);
+    this.loadSharedContactsSubscription &&
+      this.loadSharedContactsSubscription.unsubscribe();
+    this.loadSharedContactsSubscription = this.loadSharedContactsImpl(
+      id,
+      count,
+      page
+    ).subscribe((res) => {
+      res
+        ? this.sharedContactsLoadStatus.next(STATUS.SUCCESS)
+        : this.sharedContactsLoadStatus.next(STATUS.FAILURE);
+      if (res && res.contacts) {
+        const pageContacts = [];
+        for (const contact of res.contacts) {
+          pageContacts.push(new ContactActivity().deserialize(contact));
+        }
+        this.storeService.sharedContacts.next(pageContacts);
+        this.sharedContactsTotal.next(res['count']);
+      }
+    });
+  }
+
+  loadSharedContactsImpl(
+    id: string,
+    count: number,
+    page: number
+  ): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.LOAD_SHARE_CONTACTS, {
+        team: id,
+        count,
+        skip: page
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM LOAD SHARED CONTACTS', []))
+      );
   }
 
   /**
@@ -283,42 +441,7 @@ export class TeamService extends HttpService {
         catchError(this.handleError('TEAM SHARE IMAGES', []))
       );
   }
-  loadSharedContacts(id: string, count: number, page: number): Observable<any> {
-    return this.httpClient
-      .post(this.server + TEAM.LOAD_SHARE_CONTACTS, {
-        team: id,
-        count,
-        skip: page
-      })
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('TEAM LOAD SHARED CONTACTS', []))
-      );
-  }
-  loadSharedMaterials(teamId: string): Observable<any[]> {
-    return this.httpClient
-      .get(this.server + TEAM.LOAD_SHARE_MATERIALS + teamId)
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('TEAM LOAD SHARED MATERIALS', []))
-      );
-  }
-  loadSharedAutomations(teamId: string): Observable<any[]> {
-    return this.httpClient
-      .get(this.server + TEAM.LOAD_SHARE_AUTOMATIONS + teamId)
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('TEAM LOAD SHARED AUTOMATIONS', []))
-      );
-  }
-  loadSharedTemplates(teamId: string): Observable<any[]> {
-    return this.httpClient
-      .get(this.server + TEAM.LOAD_SHARE_TEMPLATES + teamId)
-      .pipe(
-        map((res) => res['data'] || []),
-        catchError(this.handleError('TEAM LOAD SHARED TEMPLATES', []))
-      );
-  }
+
   removeVideo(id): Observable<any> {
     return this.httpClient.post(this.server + TEAM.REMOVE_VIDEO + id, {}).pipe(
       map((res) => res['data'] || []),

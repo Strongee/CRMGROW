@@ -121,24 +121,18 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     this.selectedFolder = null;
     this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.teamService
-      .loadSharedMaterials(this.team._id)
-      .subscribe(
-        (res) => {
-          if (res) {
-            this.loading = false;
-            this.materials = [
-              ...res['video_data'],
-              ...res['pdf_data'],
-              ...res['image_data']
-            ];
-            this.filteredMaterials = this.materials;
-          }
-        },
-        (error) => {
-          this.loading = false;
-        }
-      );
+    this.teamService.loadSharedMaterials(this.team._id);
+    this.storeService.sharedMaterials$.subscribe(
+      (res) => {
+        this.loading = false;
+        this.materials = res;
+        this.filteredMaterials = this.materials;
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
+
     this.filter();
   }
 
