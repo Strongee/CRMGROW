@@ -8,13 +8,12 @@ import { Automation } from '../models/automation.model';
 import { Contact } from '../models/contact.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
-import {SearchOption} from "../models/searchOption.model";
+import { SearchOption } from '../models/searchOption.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutomationService extends HttpService {
-
   automations: BehaviorSubject<Automation[]> = new BehaviorSubject([]);
   automations$ = this.automations.asObservable();
   loadStatus: BehaviorSubject<string> = new BehaviorSubject(STATUS.NONE);
@@ -179,7 +178,10 @@ export class AutomationService extends HttpService {
 
   searchContact(id: string, keyword: string): Observable<Contact[]> {
     return this.httpClient
-      .post(this.server + AUTOMATION.SEARCH_CONTACT, { automation: id, search: keyword })
+      .post(this.server + AUTOMATION.SEARCH_CONTACT, {
+        automation: id,
+        search: keyword
+      })
       .pipe(
         map((res) =>
           (res['data'] || []).map((e) => new Contact().deserialize(e))
