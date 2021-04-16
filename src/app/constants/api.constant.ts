@@ -332,6 +332,8 @@ export const SMS = {
   GET_MESSAGE: 'sms/get-messages',
   MARK_READ: 'sms/mark-read',
   SEARCH_NUMBER: 'sms/search-numbers',
+  BUY_NUMBER: 'sms/buy-numbers',
+  BUY_CREDIT: 'sms/buy-credit',
   LOAD_FILES: 'sms/load-files'
 };
 

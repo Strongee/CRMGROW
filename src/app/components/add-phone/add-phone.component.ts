@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SmsService } from '../../services/sms.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-phone',
@@ -7,8 +8,11 @@ import { SmsService } from '../../services/sms.service';
   styleUrls: ['./add-phone.component.scss']
 })
 export class AddPhoneComponent implements OnInit {
+  loading = false;
+  saving = false;
   searchCode = '';
-  selectedPhone = {};
+  phoneNumbers = [];
+  selectedPhone = '';
   suggestPhones = [
     {
       phone: '(303) 431-3301',
@@ -48,33 +52,66 @@ export class AddPhoneComponent implements OnInit {
     }
   ];
   constructor(
-    private smsService: SmsService
+    private smsService: SmsService,
+    private dialogRef: MatDialogRef<AddPhoneComponent>
   ) {}
 
   ngOnInit(): void {
     this.searchPhone();
   }
 
-  selectPhone(phone): void {
+  selectPhone(phone: string): void {
     this.selectedPhone = phone;
   }
 
-  isSelected(phone): any {
+  isSelected(phone: string): any {
     return this.selectedPhone === phone;
   }
 
   searchPhone(): void {
-    const data = {
-      // tslint:disable-next-line:radix
-      searchCode: parseInt(this.searchCode)
-    };
+    this.loading = true;
+    let data;
+    if (this.searchCode == '') {
+      data = {
+        searchCode: ''
+      };
+    } else {
+      data = {
+        searchCode: parseInt(this.searchCode).toString()
+      };
+    }
+
     this.smsService.searchNumbers(data).subscribe((res) => {
-      if (res) {
+      if (res['status']) {
+        this.loading = false;
+        this.phoneNumbers = res.data;
       }
     });
   }
 
-  save(): void {}
+  save(): void {
+    if (this.selectedPhone == '') {
+      return;
+    } else {
+      this.saving = true;
+      const data = {
+        number: this.selectedPhone
+      };
+      this.smsService.buyNumbers(data).subscribe(
+        (res) => {
+          if (res['status']) {
+            this.saving = false;
+            this.dialogRef.close(this.selectedPhone);
+          } else {
+            this.saving = false;
+          }
+        },
+        (err) => {
+          this.saving = false;
+        }
+      );
+    }
+  }
 
   cancel(): void {}
 }

@@ -27,6 +27,6 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button class="btn btn-primary f-6 font-weight-bold px-3 mx-auto mt-4" (click)="purchase()">Complete purchase</button>
+  <button class="btn btn-primary f-6 font-weight-bold px-3 mx-auto mt-4" [class.loading]="saving" (click)="purchase()">Complete purchase</button>
 </mat-dialog-actions>
 
