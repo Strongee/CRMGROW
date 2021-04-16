@@ -925,3 +925,10 @@ table.table {
     }
   }
 }
+
+.name-editor {
+  display: flex;
+  input{
+    height: 38px;
+  }
+}

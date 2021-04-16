@@ -5,12 +5,44 @@
         <i class="d-block i-icon i-triangle-left bgc-dark mr-2"></i>
         <span class="f-5 font-weight-bold">Back {{getPrevPage()}}</span>
       </div>
-      <div class="contact-main v-center">
+      <div class="contact-main d-flex">
         <div class="contact-avatar lg font-weight-bold">
           {{contact.avatarName}}
         </div>
         <div class="contact-main-info ml-3">
-          <div class="f-20 font-weight-bold text-overflow-wrap">{{contact.fullName}}</div>
+          <!-- <div class="f-20 font-weight-bold text-overflow-wrap">{{contact.fullName}}</div> -->
+          <div>
+            <form
+              #nameForm="ngForm"
+              class="form-group mb-0 flex-grow-1 mr-3 name-editor"
+              (keyup)="checkBlurName($event)"
+              [class.d-none]="!nameEditable"
+              [class.loading]="saving"
+            >
+              <input
+                class="form-control first-name-input mr-1"
+                [(ngModel)]="contactFirstName"
+                (focus)="focusNameField('firstName')"
+                name="firstname"
+                (blur)="checkNameFields('firstName')"
+                #firstname="ngModel"
+                required
+                [disabled]="saving"
+              />
+              <input
+                class="form-control last-name-input"
+                [(ngModel)]="contactLastName"
+                (focus)="focusNameField('lastName')"
+                (blur)="checkNameFields('lastName')"
+                name="lastname"
+                #lastname="ngModel"
+                [disabled]="saving"
+              />
+            </form>
+            <div class="f-20 font-weight-bold text-overflow-wrap" (click)="focusName()" [class.d-none]="nameEditable">
+              {{contact.fullName}}
+            </div>
+          </div>
           <div class="f-3 op-40">{{contact.last_activity_time | date :'MM/dd/yyyy'}}</div>
         </div>
         <div ngbDropdown class="ml-auto button-more p-0">

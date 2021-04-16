@@ -1,5 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewContainerRef,
+  OnDestroy,
+  ElementRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -51,6 +57,7 @@ import { SendTextComponent } from 'src/app/components/send-text/send-text.compon
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/user.model';
 import { AdditionalFieldsComponent } from 'src/app/components/additional-fields/additional-fields.component';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-contact',
@@ -150,6 +157,13 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   lead_fields: any[] = [];
 
+  nameEditable = false;
+  contactFirstName = '';
+  contactLastName = '';
+  activeFieldName = '';
+  saving = false;
+  saveSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -167,7 +181,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private appointmentService: AppointmentService,
     private teamService: TeamService,
     private viewContainerRef: ViewContainerRef,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private element: ElementRef
   ) {
     this.teamService.loadAll(false);
     this.appointmentService.loadCalendars(false);
@@ -1533,6 +1548,59 @@ export class ContactComponent implements OnInit, OnDestroy {
             { label: event },
             {}
           );
+        }
+      });
+  }
+
+  focusName(): void {
+    this.nameEditable = true;
+    this.contactFirstName = this.contact.first_name;
+    this.contactLastName = this.contact.last_name;
+    setTimeout(() => {
+      if (this.element.nativeElement.querySelector('.first-name-input')) {
+        this.element.nativeElement.querySelector('.first-name-input').focus();
+      }
+    }, 200);
+  }
+  checkBlurName(event): void {
+    if (event.keyCode === 13) {
+      this.checkAndSave();
+    }
+  }
+  focusNameField(field: string): void {
+    this.activeFieldName = field;
+  }
+  checkNameFields(field): void {
+    setTimeout(() => {
+      if (this.activeFieldName != field) {
+        return;
+      } else {
+        this.activeFieldName = '';
+        this.checkAndSave();
+      }
+    }, 200);
+  }
+  checkAndSave(): void {
+    if (
+      this.contact.first_name === this.contactFirstName &&
+      this.contact.last_name === this.contactLastName
+    ) {
+      this.nameEditable = false;
+      return;
+    }
+    this.saving = true;
+    this.saveSubscription && this.saveSubscription.unsubscribe();
+    this.saveSubscription = this.contactService
+      .updateContact(this.contact._id, {
+        first_name: this.contactFirstName,
+        last_name: this.contactLastName
+      })
+      .subscribe((res) => {
+        this.saving = false;
+        if (res) {
+          this.contact.first_name = this.contactFirstName;
+          this.contact.last_name = this.contactLastName;
+          this.nameEditable = false;
         }
       });
   }
