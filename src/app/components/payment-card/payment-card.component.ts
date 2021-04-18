@@ -76,13 +76,19 @@ export class PaymentCardComponent implements OnInit {
   editPayment(): void {
     this.saving = true;
     (<any>window).Stripe.card.createToken(
-      {},
+      {
+        name: this.card.card_name,
+        number: this.card.number,
+        cvc: this.card.cvc,
+        exp_year: this.card.exp_year,
+        exp_month: this.card.exp_month
+      },
       (status: number, response: any) => {
         if (status === 200) {
           this.ngZone.run(() => {
             this.userService
               .updatePayment({
-                token: { ...response, card_name: this.card.card_brand },
+                token: { ...response, card_name: this.card.card_name },
                 plan_id: this.card.plan_id
               })
               .subscribe(

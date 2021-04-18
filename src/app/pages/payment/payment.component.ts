@@ -25,26 +25,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     plan_id: ''
   };
 
-  invoices = [
-    {
-      number: 'CRMgrow #124577',
-      payment_date: '16.06.2020',
-      issue_date: '02.06.2020',
-      gross: '$ 5000'
-    },
-    {
-      number: 'CRMgrow #163346',
-      payment_date: '08.07.2020',
-      issue_date: '22.06.2020',
-      gross: '$ 6000'
-    },
-    {
-      number: 'CRMgrow 02/06/2020',
-      payment_date: '16.06.2020',
-      issue_date: '22.06.2020',
-      gross: '$ 6000'
-    }
-  ];
+  invoices = [];
   saving = false;
 
   profileSubscription: Subscription;
@@ -57,6 +38,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if (profile.payment) {
           this.userService.getPayment(profile.payment).subscribe(
             (res) => {
+              console.log('###', res);
               this.loading = false;
               this.card = {
                 ...res,
@@ -83,17 +65,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   getInvoice(): void {
     this.userService.getInvoice().subscribe((res) => {
-      console.log('###', res);
+      if (res && res['status']) {
+        this.invoices = res['data'];
+      }
     });
   }
-
-  // cancelBill(): void {
-  //   this.card.number = this.payment.last4;
-  //   this.card.card_brand = this.payment.card_brand;
-  //   this.card.exp_month = this.card.exp_month;
-  //   this.card.exp_year = this.card.exp_year;
-  //   this.card.cvc = '';
-  // }
 
   editCard(): void {
     this.dialog

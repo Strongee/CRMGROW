@@ -103,16 +103,16 @@
                     </div>
                 </td>
                 <td class="number-col f-3 font-weight-bold text-primary pt-3 pb-0">
-                    {{invoice.number}}
+                    {{invoice.description}}
                 </td>
                 <td class="paymeny-col f-3 font-weight-bold pt-3 pb-0">
-                    {{invoice.payment_date}}
+                    {{invoice.date | date: 'dd.MM.yyyy'}}
                 </td>
                 <td class="issue-col f-3 font-weight-bold pt-3 pb-0">
-                    {{invoice.issue_date}}
+                    {{invoice.date | date: 'dd.MM.yyyy'}}
                 </td>
                 <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">
-                    {{invoice.gross}}
+                    $ {{invoice.amount}}
                 </td>
             </tr>
         </tbody>
