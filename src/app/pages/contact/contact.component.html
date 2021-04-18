@@ -1046,7 +1046,7 @@
                     <div class="main-history-item">
                       <div class="summary">
                         <div class="content f-6 position-relative">
-                          <a class="font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(activity.activity_detail)">
+                          <a class="font-weight-bold c-pointer ci-dark td-none appt-title" (click)="openDetailEvent(activity.activity_detail, $event)">
                             {{activity.activity_detail.title}}
                           </a>
                           <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
@@ -1058,7 +1058,7 @@
                       </div>
                       <div class="detail">
                         <div class="content">
-                          <a class="f-6 font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(activity.activity_detail)">
+                          <a class="f-6 font-weight-bold c-pointer ci-dark td-none appt-title" (click)="openDetailEvent(activity.activity_detail, $event)">
                             {{activity.activity_detail.title}}
                           </a>
                           <div class="f-6" [innerHTML]="activity.activity_detail.description || '' | makeRedirect"></div>
@@ -1693,7 +1693,7 @@
                     <div class="main-history-item">
                       <div class="summary">
                         <div class="content f-6 position-relative">
-                          <a class="font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(detail)">
+                          <a class="font-weight-bold c-pointer ci-dark td-none appt-title" (click)="openDetailEvent(detail, $event)">
                             {{detail.title}}
                           </a>
                           <div class="f-6" [innerHTML]="detail.description || '' | stripTags | shorten: 300: '...' | makeRedirect"></div>
@@ -1705,7 +1705,7 @@
                       </div>
                       <div class="detail">
                         <div class="content">
-                          <a class="f-6 font-weight-bold c-pointer ci-dark td-none" (click)="openDetailEvent(detail)">
+                          <a class="f-6 font-weight-bold c-pointer ci-dark td-none appt-title" (click)="openDetailEvent(detail, $event)">
                             {{detail.title}}
                           </a>
                           <div class="f-6" [innerHTML]="detail.description || '' | makeRedirect"></div>
@@ -1794,12 +1794,12 @@
                     </div>
 
                     <div class="main-history-item">
+                      <div class="font-weight-bold" (click)="openGroupCall(detail, $event)">
+                        {{detail.subject}}
+                      </div>
                       <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                         <ng-template #show>
                           <div class="content f-6 position-relative">
-                            <div class="font-weight-bold">
-                              {{detail.subject}}
-                            </div>
                             <div class="call-status mb-3">
                               <div class="tag {{detail.status}}">{{detail.status}}</div>
                               <ng-container *ngIf="detail.status === 'planned'">
@@ -1815,9 +1815,6 @@
                         </ng-template>
                         <ng-template #hide>
                           <div class="content">
-                            <div class="f-6 font-weight-bold">
-                              {{detail.subject}}
-                            </div>
                             <div class="call-status mb-3">
                               <div class="tag {{detail.status}}">{{detail.status}}</div>
                               <ng-container *ngIf="detail.status === 'planned'">
@@ -2127,7 +2124,16 @@
   </div>
 </div>
 
-
 <div class="reload c-pointer" (click)="reloadLatest()">
   <i class="i-icon i-refresh d-block bgc-white" [class.progressing]="(contactService.latestUpdating$ | async) === STATUS.REQUEST"></i>
 </div>
+
+<ng-template #appointmentPortalContent>
+  <app-calendar-event [event]="selectedAppointment" (onClose)="closeOverlay($event)" >
+  </app-calendar-event>
+</ng-template>
+
+<ng-template #groupCallPortalContent>
+  <app-call-overlay [call]="selectedGroupCall" (onClose)="closeOverlay($event)" >
+  </app-call-overlay>
+</ng-template>

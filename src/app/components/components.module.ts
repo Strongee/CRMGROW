@@ -148,6 +148,7 @@ import { TeamMemberProfileComponent } from './team-member-profile/team-member-pr
 import { AdditionalFieldsComponent } from './additional-fields/additional-fields.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
 import { MemberSelectorComponent } from './member-selector/member-selector.component';
+import { CallOverlayComponent } from './call-overlay/call-overlay.component';
 
 @NgModule({
   declarations: [
@@ -294,7 +295,8 @@ import { MemberSelectorComponent } from './member-selector/member-selector.compo
     TeamMemberProfileComponent,
     AdditionalFieldsComponent,
     AutomationShareComponent,
-    MemberSelectorComponent
+    MemberSelectorComponent,
+    CallOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -393,7 +395,8 @@ import { MemberSelectorComponent } from './member-selector/member-selector.compo
     SocialShareComponent,
     TeamMaterialShareComponent,
     AutomationDetailOverlayComponent,
-    AdditionalFieldsComponent
+    AdditionalFieldsComponent,
+    CallOverlayComponent
   ],
   bootstrap: [
     ContactCreateComponent,

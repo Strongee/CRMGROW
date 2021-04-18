@@ -4,7 +4,10 @@ import {
   OnInit,
   ViewContainerRef,
   OnDestroy,
-  ElementRef
+  ElementRef,
+  ViewChild,
+  TemplateRef,
+  HostListener
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact, ContactDetail } from 'src/app/models/contact.model';
@@ -53,11 +56,12 @@ import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { ToastrService } from 'ngx-toastr';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/user.model';
 import { AdditionalFieldsComponent } from 'src/app/components/additional-fields/additional-fields.component';
-import { FormControl, FormGroup, NgForm } from '@angular/forms';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-contact',
@@ -164,6 +168,19 @@ export class ContactComponent implements OnInit, OnDestroy {
   saving = false;
   saveSubscription: Subscription;
 
+  @ViewChild('appointmentPortalContent') appointmentPortalContent: TemplateRef<
+    unknown
+  >;
+  @ViewChild('groupCallPortalContent') groupCallPortalContent: TemplateRef<
+    unknown
+  >;
+  overlayRef: OverlayRef;
+  templatePortal: TemplatePortal;
+  event: any;
+  overlayCloseSubscription: Subscription;
+  selectedAppointment;
+  selectedGroupCall;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -182,7 +199,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private teamService: TeamService,
     private viewContainerRef: ViewContainerRef,
     private toastr: ToastrService,
-    private element: ElementRef
+    private element: ElementRef,
+    private overlay: Overlay
   ) {
     this.teamService.loadAll(false);
     this.appointmentService.loadCalendars(false);
@@ -1625,21 +1643,212 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.contactService.addLatestActivity(24);
   }
 
-  openDetailEvent(detail): void {
-    if (detail && detail.due_start) {
-      let due_date;
-      if (detail.due_start instanceof Date) {
-        due_date = detail.due_start;
-      } else {
-        due_date = new Date(detail.due_start + '');
+  initOverlay(): void {}
+
+  openAppointmentEasyView(event: any, origin: any, content: any): void {
+    const _formattedEvent = {
+      title: event.title,
+      start: new Date(event.due_start),
+      end: new Date(event.due_end),
+      meta: {
+        contacts: event.contacts,
+        calendar_id: event.calendar_id,
+        description: event.description,
+        location: event.location,
+        type: event.type,
+        guests: event.guests,
+        event_id: event.event_id,
+        recurrence: event.recurrence,
+        recurrence_id: event.recurrence_id,
+        is_organizer: event.is_organizer,
+        organizer: event.organizer
       }
-      const month = due_date.getMonth() + 1;
-      const year = due_date.getFullYear();
-      const route = `/calendar/month/${year}/${month}/1`;
-      this.router.navigate([route], {
-        queryParams: { event: detail.event_id }
-      });
+    };
+    console.log('formatted event', _formattedEvent);
+    this.overlayService.open(
+      origin,
+      content,
+      this.viewContainerRef,
+      'automation',
+      {
+        data: _formattedEvent
+      }
+    );
+  }
+
+  openDetailEvent(detail, event): void {
+    const _formattedEvent = {
+      title: detail.title,
+      start: new Date(detail.due_start),
+      end: new Date(detail.due_end),
+      meta: {
+        contacts: detail.contacts,
+        calendar_id: detail.calendar_id,
+        description: detail.description,
+        location: detail.location,
+        type: detail.type,
+        guests: detail.guests,
+        event_id: detail.event_id,
+        recurrence: detail.recurrence,
+        recurrence_id: detail.recurrence_id,
+        is_organizer: detail.is_organizer,
+        organizer: detail.organizer
+      }
+    };
+    const oldAppointmentId = this.selectedAppointment
+      ? this.selectedAppointment['meta']['event_id']
+      : '';
+    this.selectedAppointment = _formattedEvent;
+    const newAppointmentId = this.selectedAppointment
+      ? this.selectedAppointment['meta']['event_id']
+      : '';
+    const originX = event.clientX;
+    const originY = event.clientY;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    const size = {
+      maxWidth: '360px',
+      minWidth: '300px',
+      maxHeight: 410,
+      minHeight: 320
+    };
+    const positionStrategy = this.overlay.position().global();
+    if (screenW - originX > 380) {
+      positionStrategy.left(originX + 'px');
+    } else if (originX > 380) {
+      positionStrategy.left(originX - 380 + 'px');
+    } else if (screenW - originX > 320) {
+      positionStrategy.left(originX + 'px');
+    } else {
+      positionStrategy.centerHorizontally();
     }
+
+    if (screenH < 440) {
+      positionStrategy.centerVertically();
+    } else if (originY < 220) {
+      positionStrategy.top('10px');
+    } else if (screenH - originY < 220) {
+      positionStrategy.top(screenH - 430 + 'px');
+    } else {
+      positionStrategy.top(originY - 220 + 'px');
+    }
+    size['height'] = 'unset';
+    this.templatePortal = new TemplatePortal(
+      this.appointmentPortalContent,
+      this.viewContainerRef
+    );
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+      }
+      if (oldAppointmentId !== newAppointmentId) {
+        this.overlayRef.updatePositionStrategy(positionStrategy);
+        this.overlayRef.updateSize(size);
+        this.overlayRef.attach(this.templatePortal);
+      } else {
+        this.selectedAppointment = null;
+      }
+    } else {
+      this.overlayRef = this.overlay.create({
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        positionStrategy,
+        ...size
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((evt) => {
+        this.selectedAppointment = null;
+        this.selectedGroupCall = null;
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
+    }
+    // if (detail && detail.due_start) {
+    //   let due_date;
+    //   if (detail.due_start instanceof Date) {
+    //     due_date = detail.due_start;
+    //   } else {
+    //     due_date = new Date(detail.due_start + '');
+    //   }
+    //   const month = due_date.getMonth() + 1;
+    //   const year = due_date.getFullYear();
+    //   const route = `/calendar/month/${year}/${month}/1`;
+    //   this.router.navigate([route], {
+    //     queryParams: { event: detail.event_id }
+    //   });
+    // }
+  }
+
+  openGroupCall(detail, event): void {
+    const oldCallId = this.selectedGroupCall
+      ? this.selectedGroupCall['_id']
+      : '';
+    this.selectedGroupCall = detail;
+    const newCallId = this.selectedAppointment
+      ? this.selectedAppointment['_id']
+      : '';
+    const originX = event.clientX;
+    const originY = event.clientY;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    const size = {
+      maxWidth: '360px',
+      minWidth: '300px',
+      maxHeight: 410,
+      minHeight: 320
+    };
+    const positionStrategy = this.overlay.position().global();
+    if (screenW - originX > 380) {
+      positionStrategy.left(originX + 'px');
+    } else if (originX > 380) {
+      positionStrategy.left(originX - 380 + 'px');
+    } else if (screenW - originX > 320) {
+      positionStrategy.left(originX + 'px');
+    } else {
+      positionStrategy.centerHorizontally();
+    }
+
+    if (screenH < 440) {
+      positionStrategy.centerVertically();
+    } else if (originY < 220) {
+      positionStrategy.top('10px');
+    } else if (screenH - originY < 220) {
+      positionStrategy.top(screenH - 430 + 'px');
+    } else {
+      positionStrategy.top(originY - 220 + 'px');
+    }
+    size['height'] = 'unset';
+    this.templatePortal = new TemplatePortal(
+      this.groupCallPortalContent,
+      this.viewContainerRef
+    );
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+      }
+      if (oldCallId !== newCallId) {
+        this.overlayRef.updatePositionStrategy(positionStrategy);
+        this.overlayRef.updateSize(size);
+        this.overlayRef.attach(this.templatePortal);
+      } else {
+        this.selectedAppointment = null;
+      }
+    } else {
+      this.overlayRef = this.overlay.create({
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        positionStrategy,
+        ...size
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((evt) => {
+        this.selectedAppointment = null;
+        this.selectedGroupCall = null;
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
+    }
+    return;
   }
 
   getVideoBadge(activity): string {
