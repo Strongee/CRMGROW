@@ -22,24 +22,44 @@
         </div>
       </div>
       <div class="phones-container mt-2">
-        <div class="phone-wrapper v-center mb-1" *ngFor="let phone of suggestPhones; let i = index">
-          <div class="custom-radio-container mr-3" (click)="selectPhone(phone)">
-            <input class="custom-radio" type="radio" [id]="'select-phone-' + i" [name]="'select-phone-' + i" [checked]="isSelected(phone)">
-            <label class="f-6 font-weight-bold"></label>
+        <ng-container *ngIf="loading; else phones">
+          <div class="list-loading text-center">
+              <div class="loader mt-5 lg"></div>
+              <h4 class="fw-600 mt-2">Loading ...</h4>
           </div>
-          <div class="v-center ml-4 mt-3 c-pointer" (click)="selectPhone(phone)">
-            <i class="i-icon i-phone d-block bgc-dark"></i>
-            <div class="ml-2">
-              <div class="f-3 font-weight-bold">{{phone.phone}}</div>
-              <div class="f-3">{{phone.location}}</div>
+        </ng-container>
+        <ng-template #phones>
+          <ng-container *ngIf="phoneNumbers.length > 0; else empty">
+            <div class="phone-wrapper v-center mb-1" *ngFor="let phone of phoneNumbers; let i = index">
+              <div class="custom-radio-container mr-3" (click)="selectPhone(phone.number)">
+                <input class="custom-radio" type="radio" [id]="'select-phone-' + i" [name]="'select-phone-' + i" [checked]="isSelected(phone.number)">
+                <label class="f-6 font-weight-bold"></label>
+              </div>
+              <div class="v-center ml-4 mt-3 c-pointer" (click)="selectPhone(phone.number)">
+                <i class="i-icon i-phone d-block bgc-dark"></i>
+                <div class="ml-2">
+                  <div class="f-3 font-weight-bold">{{phone.number}}</div>
+                  <div class="f-3">{{phone.locality}}, {{phone.region}}</div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </ng-container>
+          <ng-template #empty>
+            <div class="empty-list py-5">
+              <div class="object-icon v-center">
+                  <i class="i-icon i-phone d-block bgc-dark"></i>
+              </div>
+              <h4 class="text-center font-weight-bold mt-4 mb-3">
+                  There is no phone numbers.
+              </h4>
+            </div>
+          </ng-template>
+        </ng-template>
       </div>
     </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="btn btn-white c-blue font-weight-bold" mat-dialog-close>Cancel</button>
-  <button class="btn btn-primary f-6 font-weight-bold px-3 ml-2" (click)="save()">Save</button>
+  <button class="btn btn-primary f-6 font-weight-bold px-3 ml-2" [class.loading]="saving" (click)="save()">Save</button>
 </mat-dialog-actions>

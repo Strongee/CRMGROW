@@ -10,8 +10,28 @@
   <div class="f-3 font-weight-bold">
     Phone number
   </div>
-  <button class="btn btn-white border-dark v-center mt-2" (click)="addPhone()">
-    <i class="i-icon add-phone i-plus bgc-black d-block mr-2" aria-hidden="true"></i>
-    <span class="c-black font-weight-bold f-2">Add a phone number</span>
-  </button>
+  <ng-container *ngIf="smsType != 'no'; else noNumber">
+    <div class="f-3 mt-2">
+      <ng-container *ngIf="smsType == 'signal'; else twilio">
+        {{user.proxy_number}}
+      </ng-container>
+      <ng-template #twilio>
+        {{user.twilio_number}}
+      </ng-template>
+    </div>
+    <div class="v-center mt-2">
+      <button class="v-center btn btn-white border-dark py-1 mr-2" (click)="changePhone()" *ngIf="smsType == 'no'">
+        <span class="c-black font-weight-bold f-2">Change</span>
+      </button>
+      <button class="v-center btn btn-white border-dark py-1" (click)="deletePhone()">
+        <span class="c-black font-weight-bold f-2">Delete</span>
+      </button>
+    </div>
+  </ng-container>
+  <ng-template #noNumber>
+    <button class="btn btn-white border-dark v-center mt-2" (click)="addPhone()">
+      <i class="i-icon add-phone i-plus bgc-black d-block mr-2" aria-hidden="true"></i>
+      <span class="c-black font-weight-bold f-2">Add a phone number</span>
+    </button>
+  </ng-template>
 </div>

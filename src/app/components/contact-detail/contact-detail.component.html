@@ -604,17 +604,6 @@
                   </div>
                   <div class="v-center">
                     <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
-                    <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
-                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item">
-                          <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-2 font-weight-bold">Delete activity</span>
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <ng-container *ngIf="activity.activity_detail[0]; else removedAppointmentTemplate">
@@ -702,17 +691,6 @@
                   </div>
                   <div class="v-center">
                     <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
-                    <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
-                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item">
-                          <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-2 font-weight-bold">Delete activity</span>
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <ng-container *ngIf="activity.activity_detail[0]; else removedGroupCallTemplate">
@@ -836,17 +814,6 @@
                   </div>
                   <div class="v-center">
                     <span class="f-3 op-56 ml-auto">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
-                    <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
-                      <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
-                        <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-                      </a>
-                      <div ngbDropdownMenu class="light py-1">
-                        <button class="v-center border-0 py-1 c-dark dropdown-item">
-                          <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
-                          <span class="ml-3 f-2 font-weight-bold">Delete</span>
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <ng-container *ngIf="activity.activity_detail[0]; else removedDealTemplate">

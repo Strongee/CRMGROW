@@ -338,7 +338,7 @@
         <tr mat-row
             *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
-      <ng-container *ngIf="filteredMaterials.length > 0 && !loading">
+      <ng-container *ngIf="filteredMaterials.length > 0">
         <div class="d-flex justify-content-center align-items-center mt-4">
           <div class="ml-3 pagination-wrapper">
             <pagination-controls (pageChange)="page = $event" id="materialTable" maxSize="5" previousLabel=""
@@ -347,21 +347,33 @@
         </div>
       </ng-container>
     </div>
-    <ng-container *ngIf="!materials.length && loading">
-      <div class="list-loading text-center">
-        <div class="loader mt-5 lg"></div>
-        <h4 class="fw-600 mt-2">Loading materials...</h4>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="!filteredMaterials.length && !loading">
-      <div class="empty-list py-5">
-        <div class="object-icon v-center">
-          <i class="i-icon i-material d-block bgc-dark"></i>
+    <ng-container *ngIf="!(storeService.sharedMaterials$ | async).length; else showingStatusMaterials">
+      <ng-container [ngSwitch]="(teamService.sharedMaterialsLoadStatus | async)">
+        <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
+          <div class="object-icon v-center">
+            <i class="i-icon i-material d-block bgc-dark"></i>
+          </div>
+          <h4 class="font-weight-bold mt-4 mb-3">
+            There is no materials for shared yet.
+          </h4>
         </div>
-        <h4 class="font-weight-bold mt-4 mb-3">
-          There is no materials.
-        </h4>
-      </div>
+        <div class="list-loading text-center" *ngSwitchCase="STATUS.REQUEST">
+          <div class="loader mt-5 lg"></div>
+          <h4 class="fw-600 mt-2">Loading materials...</h4>
+        </div>
+      </ng-container>
     </ng-container>
+    <ng-template #showingStatusMaterials>
+      <ng-container *ngIf="!filteredMaterials.length">
+        <div class="empty-list py-5">
+          <div class="object-icon v-center">
+            <i class="i-icon i-material d-block bgc-dark"></i>
+          </div>
+          <h4 class="font-weight-bold mt-4 mb-3">
+            There is no materials to match your filter conditions.
+          </h4>
+        </div>
+      </ng-container>
+    </ng-template>
   </div>
 </div>

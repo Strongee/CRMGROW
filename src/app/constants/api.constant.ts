@@ -174,18 +174,18 @@ export const TEAM = {
   REMOVE_IMAGE: 'team/remove-images/',
   REMOVE_TEMPLATE: 'team/remove-templates/',
   REMOVE_AUTOMATION: 'team/remove-automations/',
-  REQUEST_CALL: 'team/request-call/',
-  INQUIRY: 'team/nth-call/',
-  CALL: 'team/call/',
-  PLANNED: 'team/call-planned/',
-  FINISHED: 'team/call-finished/',
-  REJECT_CALL: '/team/reject-call/',
-  ACCEPT_CALL: '/team/accept-call/',
-  UPDATE_CALL: '/team/call/',
-  DELETE_CALL: '/team/call/',
-  TEAM_CALL_LOAD: '/team/load-call',
-  SEARCH_CONTACT: '/team/search-contact',
-  ALL_SHARED_CONTACT: 'team/get-all/'
+  SEARCH_CONTACT: 'team/search-contact',
+  ALL_SHARED_CONTACT: 'team/get-all/',
+  REQUEST_CALL: 'team-call/request-call/',
+  INQUIRY: 'team-call/nth-call/',
+  CALL: 'team-call/call/',
+  PLANNED: 'team-call/call-planned/',
+  FINISHED: 'team-call/call-finished/',
+  REJECT_CALL: 'team-call/reject-call/',
+  ACCEPT_CALL: 'team-call/accept-call/',
+  UPDATE_CALL: 'team-call/call/',
+  DELETE_CALL: 'team-call/call/',
+  TEAM_CALL_LOAD: 'team-call/load-call'
 };
 export const AUTOMATION = {
   SEARCH: 'automation/search',
@@ -332,6 +332,8 @@ export const SMS = {
   GET_MESSAGE: 'sms/get-messages',
   MARK_READ: 'sms/mark-read',
   SEARCH_NUMBER: 'sms/search-numbers',
+  BUY_NUMBER: 'sms/buy-numbers',
+  BUY_CREDIT: 'sms/buy-credit',
   LOAD_FILES: 'sms/load-files'
 };
 
