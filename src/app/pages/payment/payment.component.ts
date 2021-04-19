@@ -38,7 +38,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if (profile.payment) {
           this.userService.getPayment(profile.payment).subscribe(
             (res) => {
-              console.log('###', res);
               this.loading = false;
               this.card = {
                 ...res,
