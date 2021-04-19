@@ -397,7 +397,7 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     SocialShareComponent,
     TeamMaterialShareComponent,
     AutomationDetailOverlayComponent,
-    AdditionalFieldsComponent
+    AdditionalFieldsComponent,
     PaymentCardComponent,
     CallOverlayComponent
   ],
