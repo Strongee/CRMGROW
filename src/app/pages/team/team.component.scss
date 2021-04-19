@@ -56,10 +56,20 @@
     width: 100px;
   }
 }
+
 .i-small-icon {
   width: 10px;
   height: 10px;
 }
+
+.btn-decline.loading {
+  background-color: #E02020;
+}
+
+.btn-accept-outline.loading {
+  background-color: #04B800;
+}
+
 .owners {
 
   .owner {

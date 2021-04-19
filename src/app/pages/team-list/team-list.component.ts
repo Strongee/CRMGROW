@@ -151,6 +151,11 @@ export class TeamListComponent implements OnInit, OnDestroy {
             team._id,
             new Team().deserialize({ name: res.name })
           );
+          const index = this.teams.findIndex((item) => item._id === team._id);
+          if (index >= 0) {
+            this.teams[index].name = res.name;
+            this.teams[index].picture = res.picture;
+          }
         }
       });
   }

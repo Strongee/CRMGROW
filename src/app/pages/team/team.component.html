@@ -127,15 +127,13 @@
                 <td class="invite-received">{{user.updated_at | date : 'hh:mm a, dd MMM yyyy'}}</td>
                 <td class="team_actions d-flex justify-content-end">
                   <button class="btn btn-accept-outline f-1 mr-2 font-weight-bold"
-                          [class.loading]="acceptJoinRequest"
-                          [class.accepting]="acceptJoinRequest"
+                          [class.loading]="acceptJoinRequest && this.acceptUserId == user._id"
                           (click)="acceptRequest(user)"
                   >
                     <span class="button-label">Accept</span>
                   </button>
                   <button class="btn btn-decline f-1 font-weight-bold"
-                          [class.loading]="declineJoinRequest"
-                          [class.declining]="declineJoinRequest"
+                          [class.loading]="declineJoinRequest && this.declineUserId == user._id"
                           (click)="declineRequest(user)"
                   >
                     <span class="button-label">Decline</span>
