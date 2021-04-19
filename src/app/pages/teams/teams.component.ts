@@ -32,7 +32,7 @@ export class TeamsComponent implements OnInit {
     if (this.selectedTab.id === 'teams') {
       this.router.navigate(['/teams']);
     } else {
-      this.router.navigate(['/teams/call']);
+      this.router.navigate(['/teams/call/inquiry']);
     }
   }
 }

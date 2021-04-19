@@ -42,7 +42,8 @@ export class TeamListComponent implements OnInit, OnDestroy {
     public teamService: TeamService,
     private dialog: MatDialog,
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +53,6 @@ export class TeamListComponent implements OnInit, OnDestroy {
       this.userId = profile._id;
       this.currentUser = res;
     });
-
     this.load();
   }
 
