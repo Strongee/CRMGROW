@@ -149,6 +149,7 @@ import { AdditionalFieldsComponent } from './additional-fields/additional-fields
 import { AutomationShareComponent } from './automation-share/automation-share.component';
 import { MemberSelectorComponent } from './member-selector/member-selector.component';
 import { PaymentCardComponent } from './payment-card/payment-card.component';
+import { CallOverlayComponent } from './call-overlay/call-overlay.component';
 
 @NgModule({
   declarations: [
@@ -296,7 +297,8 @@ import { PaymentCardComponent } from './payment-card/payment-card.component';
     AdditionalFieldsComponent,
     AutomationShareComponent,
     MemberSelectorComponent,
-    PaymentCardComponent
+    PaymentCardComponent,
+    CallOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -395,8 +397,9 @@ import { PaymentCardComponent } from './payment-card/payment-card.component';
     SocialShareComponent,
     TeamMaterialShareComponent,
     AutomationDetailOverlayComponent,
-    AdditionalFieldsComponent,
-    PaymentCardComponent
+    AdditionalFieldsComponent
+    PaymentCardComponent,
+    CallOverlayComponent
   ],
   bootstrap: [
     ContactCreateComponent,

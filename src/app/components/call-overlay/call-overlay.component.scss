@@ -1,0 +1,34 @@
+.call-detail-container {
+  padding-top: 50px;
+  padding-bottom: 60px;
+  
+  .header {
+    position: absolute;
+    background: white;
+    width: 100%;
+    padding: 12px 12px 8px 12px;
+    top: 0px;
+
+    h4 {
+      font-size: 20px;
+    }
+  }
+
+  .content {
+    overflow: auto;
+    height: 100%;
+    padding: 0px 12px;
+  }
+
+  .actions {
+    position: absolute;
+    background: white;
+    width: 100%;
+    padding: 4px 12px 8px 12px;
+    bottom: 0px;
+
+    button {
+      font-size: 12px;
+    }
+  }
+}
