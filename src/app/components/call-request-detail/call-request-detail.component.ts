@@ -283,7 +283,7 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
             .afterClosed()
             .subscribe((answer) => {
               if (answer) {
-                this.addToCalendar();
+                this.addToCalendar(callTime);
               }
               this.dialogRef.close({
                 action: 'update',
@@ -298,18 +298,23 @@ export class CallRequestDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  addToCalendar(): void {
+  addToCalendar(callTime): void {
     const contacts = [];
-    // if (this.isOrganizer) {
-    //   contacts.push();
-    // } else {
-    //   contacts.push()
-    // }
+    if (this.call && this.call.leader) {
+      contacts.push(this.call.leader);
+    }
+    if (this.call && this.call.user) {
+      if (this.call.leader && this.call.leader._id !== this.call.user._id) {
+        contacts.push(this.call.user);
+      }
+    }
+
     this.dialog.open(CalendarDialogComponent, {
       width: '100vw',
       maxWidth: '600px',
-      maxHeight: '700px',
       data: {
+        call: this.call,
+        confirmed_at: callTime,
         contacts
       }
     });

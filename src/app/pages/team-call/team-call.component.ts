@@ -509,7 +509,6 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dialog.open(CalendarDialogComponent, {
       width: '100vw',
       maxWidth: '600px',
-      maxHeight: '700px',
       data: {
         call,
         contacts
