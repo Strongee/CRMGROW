@@ -175,7 +175,6 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     const callId = this.route.snapshot.params.id;
     const previousUrl = this.handlerService.previousUrl;
     const tabIndex = this.TABS.findIndex((item) => item.id === groupId);
-    console.log("after view init =========>", groupId, callId, previousUrl);
     if (tabIndex >= 0) {
       this.changeTab(this.TABS[tabIndex]);
     }
