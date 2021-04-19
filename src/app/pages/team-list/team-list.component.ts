@@ -32,6 +32,8 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   isAcceptInviting = false;
   isDeclineInviting = false;
+  acceptTeamId = '';
+  declineTeamId = '';
 
   teams = [];
 
@@ -259,8 +261,10 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   acceptInvitation(team: Team): void {
     this.isAcceptInviting = true;
+    this.acceptTeamId = team._id;
     this.teamService.acceptInvitation(team._id).subscribe((res) => {
       this.isAcceptInviting = false;
+      this.acceptTeamId = '';
       team.invites.some((e, index) => {
         if (e._id === this.userId) {
           team.invites.splice(index, 1);
@@ -276,8 +280,10 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   declineInvitation(team): void {
     this.isDeclineInviting = true;
+    this.declineTeamId = team._id;
     this.teamService.declineInvitation(team._id).subscribe((res) => {
       this.isDeclineInviting = false;
+      this.declineTeamId = '';
       team.invites.some((e, index) => {
         if (e === this.userId) {
           team.invites.splice(index, 1);

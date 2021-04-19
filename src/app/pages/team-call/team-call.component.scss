@@ -217,6 +217,14 @@ tr:hover {
   }
 }
 
+.btn-decline.loading {
+  background-color: #E02020;
+}
+
+.btn-accept-outline.loading {
+  background-color: #04B800;
+}
+
 .sub-sidebar-mobile {
   display: none;
   .sidebar-menu {
