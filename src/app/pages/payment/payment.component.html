@@ -67,20 +67,7 @@
     <table class="table mt-2">
         <thead>
             <tr>
-                <th class="checkbox-col border-top-0 pl-0">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="selectAllInvoices"
-                        />
-                        <label
-                        class="custom-control-label"
-                        for="selectAllInvoices"
-                        ></label>
-                    </div>
-                </th>
-                <th class="number-col border-top-0">
+                <th class="number-col border-top-0 pl-0">
                     <span class="f-1 c-dark">number</span>
                 </th>
                 <th class="paymeny-col border-top-0">
@@ -96,13 +83,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let invoice of invoices; let index=index;">
-                <td class="checkbox-col pl-0 pb-0">
-                    <div class="custom-control custom-checkbox mt-2">
-                      <input type="checkbox" class="custom-control-input" id="invoice-{{index}}">
-                      <label class="custom-control-label" for="invoice-{{index}}"></label>
-                    </div>
-                </td>
-                <td class="number-col f-3 font-weight-bold text-primary pt-3 pb-0">
+                <td class="number-col f-3 font-weight-bold text-primary pt-3 pb-0 pl-0">
                     {{invoice.id}}
                 </td>
                 <td class="paymeny-col f-3 font-weight-bold pt-3 pb-0">
