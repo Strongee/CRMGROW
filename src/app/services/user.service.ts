@@ -268,6 +268,10 @@ export class UserService extends HttpService {
   public updatePayment(payment: any): any {
     return this.httpClient.post(this.server + USER.UPDATE_PAYMENT, payment);
   }
+  public getInvoice(): any {
+    return this.httpClient.get(this.server + USER.GET_INVOICE);
+  }
+
   public setToken(token: string): void {
     localStorage.setItem('token', token);
   }

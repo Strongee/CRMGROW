@@ -148,6 +148,7 @@ import { TeamMemberProfileComponent } from './team-member-profile/team-member-pr
 import { AdditionalFieldsComponent } from './additional-fields/additional-fields.component';
 import { AutomationShareComponent } from './automation-share/automation-share.component';
 import { MemberSelectorComponent } from './member-selector/member-selector.component';
+import { PaymentCardComponent } from './payment-card/payment-card.component';
 import { CallOverlayComponent } from './call-overlay/call-overlay.component';
 
 @NgModule({
@@ -296,6 +297,7 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     AdditionalFieldsComponent,
     AutomationShareComponent,
     MemberSelectorComponent,
+    PaymentCardComponent,
     CallOverlayComponent
   ],
   imports: [
@@ -395,7 +397,8 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     SocialShareComponent,
     TeamMaterialShareComponent,
     AutomationDetailOverlayComponent,
-    AdditionalFieldsComponent,
+    AdditionalFieldsComponent
+    PaymentCardComponent,
     CallOverlayComponent
   ],
   bootstrap: [
