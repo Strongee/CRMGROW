@@ -167,7 +167,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectNewContacts() {
+  selectNewContacts(event) {
+    this.newContacts = [event];
     if (this.newContacts.length === 1) {
       const firstNewContact = this.newContacts[0];
       const conversationIndex = _.findIndex(

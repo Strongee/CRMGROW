@@ -99,14 +99,32 @@
                 <div class="v-center border-bottom px-3 py-2 message-box-header">
                     <i class="i-icon i-back d-block d-sm-none bgc-dark mr-2 c-pointer" (click)="goToBack()"></i>
                     <label class="f-6 op-56 m-0">To:</label>
-                    <app-input-contacts
+                    <!-- <app-select-contact></app-select-contact> -->
+                    <app-select-contact
+                        [fromSearch]="false"
+                        [mustField]="'cell_phone'"
+                        (onSelect)="selectNewContacts($event)"
+                        [resultItem]="result"
+                        class="w-100"
+                    >
+                        <ng-template #result let-data>
+                            <div class="chip d-flex align-items-center">
+                                <div class="contact-avatar rounded-circle bg-dark mr-1">{{data.avatarName}}</div>
+                                <div class="info">
+                                    <div class="f-3 font-weight-bold">{{data.fullName}}</div>
+                                    <div class="f-1 font-weight-bold c-blue">{{data.cell_phone | phone_format}}</div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </app-select-contact>
+                    <!-- <app-input-contacts
                         class="w-100"
                         [placeholder]="'Search for Contact'"
                         [display]="'cell_phone'"
                         [selectedContacts]="newContacts"
                         (onSelect)="selectNewContacts()"
                         [focus]="true"
-                    ></app-input-contacts>
+                    ></app-input-contacts> -->
                 </div>
             </ng-template>
             <div #scrollMe class="p-3 message-list" [scrollTop]="scrollMe.scrollHeight">

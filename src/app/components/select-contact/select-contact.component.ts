@@ -25,6 +25,7 @@ import {
 } from 'rxjs/operators';
 import { validateEmail } from 'src/app/utils/functions';
 import * as _ from 'lodash';
+const phone = require('phone');
 @Component({
   selector: 'app-select-contact',
   templateUrl: './select-contact.component.html',
@@ -92,6 +93,8 @@ export class SelectContactComponent
               } else {
                 this.hasMore = false;
               }
+            } else {
+              this.hasMore = false;
             }
             let result;
             if (this.mustField) {
@@ -112,14 +115,25 @@ export class SelectContactComponent
               this.filteredResults.next(result);
             } else {
               if (!this.fromSearch) {
-                if (validateEmail(this.keyword)) {
-                  const first_name = this.keyword.split('@')[0];
-                  const email = this.keyword;
-                  const newContact = new Contact().deserialize({
-                    first_name,
-                    email
-                  });
-                  this.filteredResults.next([newContact]);
+                if (this.mustField === 'email') {
+                  if (validateEmail(this.keyword)) {
+                    const first_name = this.keyword.split('@')[0];
+                    const email = this.keyword;
+                    const newContact = new Contact().deserialize({
+                      first_name,
+                      email
+                    });
+                    this.filteredResults.next([newContact]);
+                  }
+                } else if (this.mustField === 'cell_phone') {
+                  const cell_phone = phone(this.keyword)[0];
+                  if (cell_phone) {
+                    const newContact = new Contact().deserialize({
+                      first_name: cell_phone,
+                      cell_phone
+                    });
+                    this.filteredResults.next([newContact]);
+                  }
                 }
               } else {
                 this.filteredResults.next([]);

@@ -125,6 +125,8 @@ export class InputContactsComponent implements OnInit {
               } else {
                 this.hasMore = false;
               }
+            } else {
+              this.hasMore = false;
             }
             if (this.keyword) {
               if (res.length) {
