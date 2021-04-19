@@ -91,7 +91,12 @@ export class CalendarDialogComponent implements OnInit {
 
     if (this.data && this.data.call) {
       const call = this.data.call;
-      const selectedTime = moment(call.proposed_at[0]);
+      let selectedTime;
+      if (this.data.confirmed_at) {
+        selectedTime = moment(this.data.confirmed_at);
+      } else {
+        selectedTime = moment(call.proposed_at[0]);
+      }
       this.selectedDateTime = {
         year: selectedTime.year(),
         month: selectedTime.month() + 1,
@@ -107,6 +112,8 @@ export class CalendarDialogComponent implements OnInit {
       } else if (call.duration == 60) {
         this.duration = CALENDAR_DURATION[3].value;
       }
+      this.event.title = call.subject;
+      this.event.description = call.description;
     }
 
     if (this.data && this.data.deal) {

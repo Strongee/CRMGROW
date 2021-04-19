@@ -163,14 +163,22 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
         this.userTimezone = { zone: res.time_zone || timezone };
       }
     });
+
     this.TABS.forEach((e) => {
       this.loadPageCalls(e.id, 0);
     });
+    // this.changeTab(this.TABS[0]);
   }
 
   ngAfterViewInit(): void {
+    const groupId = this.route.snapshot.params.group;
     const callId = this.route.snapshot.params.id;
     const previousUrl = this.handlerService.previousUrl;
+    const tabIndex = this.TABS.findIndex((item) => item.id === groupId);
+    if (tabIndex >= 0) {
+      this.changeTab(this.TABS[tabIndex]);
+    }
+
     if (callId) {
       this.teamService.getCallById(callId).subscribe((res) => {
         const call = res;
@@ -209,6 +217,8 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
 
   changeTab(tab: any): void {
     this.selectedTab = tab;
+    this.location.replaceState(`/teams/call/${tab.id}`);
+    this.loadPageCalls(tab.id, 0);
   }
 
   loadPageCalls(type: string, page: number): void {
@@ -263,8 +273,29 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  getGroup(call): any {
+    let group;
+    if (call.status === 'pending') {
+      if (call.leader && call.leader._id === this.userId) {
+        group = this.TABS[0];
+      } else {
+        group = this.TABS[1];
+      }
+    } else if (call.status === 'planned') {
+      group = this.TABS[2];
+    } else if (call.status === 'finished') {
+      group = this.TABS[3];
+    } else if (call.status === 'canceled') {
+      group = this.TABS[4];
+    } else if (call.status === 'declined') {
+      group = this.TABS[5];
+    }
+    return group;
+  }
+
   openCall(call): void {
-    this.location.replaceState(`/teams/call/${call._id}`);
+    const groupId = this.getGroup(call).id;
+    this.location.replaceState(`/teams/call/${groupId}/${call._id}`);
     this.dialog
       .open(CallRequestDetailComponent, {
         width: '98vw',
@@ -277,7 +308,7 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
       .afterClosed()
       .subscribe((data) => {
         this.isShowDialog = false;
-        this.location.replaceState('/teams/call');
+        this.location.replaceState(`/teams/call/${groupId}`);
         if (data) {
           const currentTab = this.selectedTab.id;
           let newTab;
@@ -509,7 +540,6 @@ export class TeamCallComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dialog.open(CalendarDialogComponent, {
       width: '100vw',
       maxWidth: '600px',
-      maxHeight: '700px',
       data: {
         call,
         contacts

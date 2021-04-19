@@ -169,6 +169,7 @@ export const TEAM = {
   SEARCH_TEAM_BY_USER: 'team/user/',
   JOIN_REQUEST: 'team/request',
   ACCEPT_REQUEST: 'team/admin-accept',
+  DECLINE_REQUEST: 'team/admin-decline',
   UPDATE_TEAM: 'team/update',
   REMOVE_VIDEO: 'team/remove-videos/',
   REMOVE_PDF: 'team/remove-pdfs/',

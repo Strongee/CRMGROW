@@ -55,6 +55,8 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   accepting = false;
   acceptJoinRequest = false;
   declineJoinRequest = false;
+  acceptUserId = '';
+  declineUserId = '';
   acceptSubscription: Subscription;
   selectedVideos = new SelectionModel<any>(true, []);
   selectedPdfs = new SelectionModel<any>(true, []);
@@ -568,10 +570,13 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
 
   acceptRequest(user): void {
     this.acceptJoinRequest = true;
+    this.acceptUserId = user._id;
     this.teamService.acceptRequest(this.teamId, user._id).subscribe(
       (res) => {
         this.acceptJoinRequest = false;
+        this.acceptUserId = '';
         this.team.members.push(user);
+        this.team.viewers.push(user);
         this.team.requests.some((e, index) => {
           if (e._id === user._id) {
             this.team.requests.splice(index, 1);
@@ -584,7 +589,26 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     );
   }
-  declineRequest(user): void {}
+
+  declineRequest(user): void {
+    this.declineJoinRequest = true;
+    this.declineUserId = user._id;
+    this.teamService.declineRequest(this.teamId, user._id).subscribe(
+      (res) => {
+        this.declineJoinRequest = false;
+        this.declineUserId = '';
+        this.team.requests.some((e, index) => {
+          if (e._id === user._id) {
+            this.team.requests.splice(index, 1);
+            return true;
+          }
+        });
+      },
+      (err) => {
+        this.declineJoinRequest = false;
+      }
+    );
+  }
 
   acceptOutRequest(teamId, memberId): void {
     this.accepting = true;

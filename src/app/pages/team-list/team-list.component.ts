@@ -32,6 +32,8 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   isAcceptInviting = false;
   isDeclineInviting = false;
+  acceptTeamId = '';
+  declineTeamId = '';
 
   teams = [];
 
@@ -40,7 +42,8 @@ export class TeamListComponent implements OnInit, OnDestroy {
     public teamService: TeamService,
     private dialog: MatDialog,
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +53,6 @@ export class TeamListComponent implements OnInit, OnDestroy {
       this.userId = profile._id;
       this.currentUser = res;
     });
-
     this.load();
   }
 
@@ -151,6 +153,11 @@ export class TeamListComponent implements OnInit, OnDestroy {
             team._id,
             new Team().deserialize({ name: res.name })
           );
+          const index = this.teams.findIndex((item) => item._id === team._id);
+          if (index >= 0) {
+            this.teams[index].name = res.name;
+            this.teams[index].picture = res.picture;
+          }
         }
       });
   }
@@ -254,8 +261,10 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   acceptInvitation(team: Team): void {
     this.isAcceptInviting = true;
+    this.acceptTeamId = team._id;
     this.teamService.acceptInvitation(team._id).subscribe((res) => {
       this.isAcceptInviting = false;
+      this.acceptTeamId = '';
       team.invites.some((e, index) => {
         if (e._id === this.userId) {
           team.invites.splice(index, 1);
@@ -271,8 +280,10 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   declineInvitation(team): void {
     this.isDeclineInviting = true;
+    this.declineTeamId = team._id;
     this.teamService.declineInvitation(team._id).subscribe((res) => {
       this.isDeclineInviting = false;
+      this.declineTeamId = '';
       team.invites.some((e, index) => {
         if (e === this.userId) {
           team.invites.splice(index, 1);

@@ -495,9 +495,22 @@ export class TeamService extends HttpService {
       })
       .pipe(
         map((res) => res['data'] || []),
-        catchError(this.handleError('UPDATE TEAM', []))
+        catchError(this.handleError('ACCEPT TEAM REQUEST', []))
       );
   }
+
+  declineRequest(teamId, memberId): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.DECLINE_REQUEST, {
+        team_id: teamId,
+        request_id: memberId
+      })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('DECLINE TEAM REQUEST', []))
+      );
+  }
+
   shareTemplates(teamId, templateIds): Observable<any> {
     return this.httpClient
       .post(this.server + TEAM.SHARE_TEMPLATES, {
