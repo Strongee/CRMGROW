@@ -19,8 +19,8 @@
         {{user.twilio_number}}
       </ng-template>
     </div>
-    <div class="v-center mt-2">
-      <button class="v-center btn btn-white border-dark py-1 mr-2" (click)="changePhone()" *ngIf="smsType == 'no'">
+    <div class="v-center mt-2" *ngIf="smsType == 'no'">
+      <button class="v-center btn btn-white border-dark py-1 mr-2" (click)="changePhone()">
         <span class="c-black font-weight-bold f-2">Change</span>
       </button>
       <button class="v-center btn btn-white border-dark py-1" (click)="deletePhone()">
