@@ -609,9 +609,9 @@ export class TeamService extends HttpService {
     );
   }
 
-  searchContact(id: string, keyword: string): Observable<Contact[]> {
+  searchContact(searchStr): Observable<Contact[]> {
     return this.httpClient
-      .post(this.server + TEAM.SEARCH_CONTACT, { team: id, search: keyword })
+      .post(this.server + TEAM.SEARCH_CONTACT, searchStr)
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('SEARCH TEAM CONTACT', []))

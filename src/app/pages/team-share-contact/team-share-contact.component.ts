@@ -37,6 +37,7 @@ import { Team } from '../../models/team.model';
 import { TeamService } from '../../services/team.service';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 import { environment } from '../../../environments/environment';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-team-share-contact',
@@ -107,6 +108,11 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   detailContacts = [];
   siteUrl = environment.website;
 
+  isShareWith = false;
+  isShareBy = false;
+  teamMembers: User[] = [];
+  selectedMembers: User[] = [];
+
   constructor(
     public router: Router,
     private route: ActivatedRoute,
@@ -133,6 +139,13 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
 
     this.pageSelection = [];
     this.selection = [];
+
+    for (const owner of this.team.owner) {
+      this.teamMembers.push(new User().deserialize(owner));
+    }
+    for (const member of this.team.members) {
+      this.teamMembers.push(new User().deserialize(member));
+    }
   }
 
   loadContact(page: number): void {
@@ -227,9 +240,13 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    * Change the search str
    */
   changeSearchStr(): void {
+    const searchStr = {
+      search: this.searchStr,
+      team: this.team._id
+    };
     this.searchSubscription && this.searchSubscription.unsubscribe();
     this.searchSubscription = this.teamService
-      .searchContact(this.team._id, this.searchStr)
+      .searchContact(searchStr)
       .subscribe((res) => {
         if (res) {
           this.pageContacts = [];
@@ -708,22 +725,98 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     }
   }
 
-  toggleUserOption(id: string): void {
-    this.userOptions = _.xor(this.userOptions, [id]);
-  }
-
   clearAllFilters(): void {
     this.searchStr = '';
     this.userOptions = [];
   }
 
-  getEditorUserName(id): any {
-    if (this.team.members && this.team.members.length > 0) {
-      const index = this.team.members.findIndex((item) => item._id === id);
-      if (index >= 0) {
-        return this.team.members[index].user_name;
+  toggleShareOption(option: string): void {
+    if (option === 'share_with') {
+      this.isShareWith = !this.isShareWith;
+    } else {
+      this.isShareBy = !this.isShareBy;
+    }
+    this.advancedFilter();
+  }
+
+  changeTeamMemberOptions(members): void {
+    if (members && members.length > 0) {
+      this.selectedMembers = members.map((member) => member._id);
+    } else {
+      this.selectedMembers = [];
+    }
+    this.advancedFilter();
+  }
+
+  advancedFilter(): void {
+    const searchStr = {
+      search: '',
+      team: this.team._id,
+      share_by: {
+        flag: 1,
+        members: []
+      },
+      share_with: {
+        flag: 1,
+        members: []
+      }
+    };
+
+    if (this.searchStr !== '') {
+      searchStr.search = this.searchStr;
+    }
+
+    if (!this.isShareWith && !this.isShareBy) {
+      if (this.selectedMembers.length > 0) {
+        if (this.selectedMembers.length === this.teamMembers.length) {
+          searchStr.share_with.flag = 1;
+          searchStr.share_by.flag = 1;
+        } else {
+          searchStr.share_with.flag = 0;
+          searchStr.share_by.flag = 0;
+        }
+        searchStr.share_with.members = this.selectedMembers;
+        searchStr.share_by.members = this.selectedMembers;
+      }
+    } else {
+      if (this.isShareWith) {
+        searchStr.share_with.members = this.selectedMembers;
+        if (this.selectedMembers.length > 0) {
+          if (this.selectedMembers.length !== this.teamMembers.length) {
+            searchStr.share_with.flag = 0;
+          }
+        }
+      } else {
+        if (this.isShareBy) {
+          searchStr.share_with.flag = -1;
+        }
+      }
+      if (this.isShareBy) {
+        searchStr.share_by.members = this.selectedMembers;
+        if (this.selectedMembers.length > 0) {
+          if (this.selectedMembers.length !== this.teamMembers.length) {
+            searchStr.share_by.flag = 0;
+          }
+        }
+      } else {
+        if (this.isShareWith) {
+          searchStr.share_by.flag = -1;
+        }
       }
     }
-    return '';
+
+    this.searchSubscription && this.searchSubscription.unsubscribe();
+    this.searchSubscription = this.teamService
+      .searchContact(searchStr)
+      .subscribe((res) => {
+        if (res) {
+          this.pageContacts = [];
+          for (const contact of res['contacts']) {
+            this.pageContacts.push(new ContactActivity().deserialize(contact));
+          }
+          this.contactCount = res['contacts'].length;
+        }
+      });
+    this.page = 1;
   }
 }
