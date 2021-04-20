@@ -932,3 +932,14 @@ table.table {
     height: 38px;
   }
 }
+
+.loading-panel {
+  background: white;
+  box-shadow: -8px 0 24px -5px #1013363d;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

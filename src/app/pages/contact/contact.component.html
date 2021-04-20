@@ -1141,12 +1141,12 @@
                   </div>
                   <ng-container *ngIf="activity.activity_detail; else removedGroupCallTemplate">
                     <div class="main-history-item">
+                      <div class="font-weight-bold c-pointer" (click)="openGroupCall(activity.activity_detail, $event)">
+                        {{activity.activity_detail.subject}}
+                      </div>
                       <app-accordion [showIndicator]="show" [hideIndicator]="hide">
                         <ng-template #show>
                           <div class="content f-6 position-relative">
-                            <div class="font-weight-bold">
-                              {{activity.activity_detail.subject}}
-                            </div>
                             <div class="call-status mb-3">
                               <div class="tag {{activity.activity_detail.status}}">{{activity.activity_detail.status}}</div>
                               <ng-container *ngIf="activity.activity_detail.status === 'planned'">
@@ -1162,9 +1162,6 @@
                         </ng-template>
                         <ng-template #hide>
                           <div class="content">
-                            <div class="f-6 font-weight-bold">
-                              {{activity.activity_detail.subject}}
-                            </div>
                             <div class="call-status mb-3">
                               <div class="tag {{activity.activity_detail.status}}">{{activity.activity_detail.status}}</div>
                               <ng-container *ngIf="activity.activity_detail.status === 'planned'">
@@ -1794,7 +1791,7 @@
                     </div>
 
                     <div class="main-history-item">
-                      <div class="font-weight-bold" (click)="openGroupCall(detail, $event)">
+                      <div class="font-weight-bold overlay-action c-pointer" (click)="openGroupCall(detail, $event)">
                         {{detail.subject}}
                       </div>
                       <app-accordion [showIndicator]="show" [hideIndicator]="hide">
@@ -2129,11 +2126,17 @@
 </div>
 
 <ng-template #appointmentPortalContent>
-  <app-calendar-event [event]="selectedAppointment" (onClose)="closeOverlay($event)" >
+  <app-calendar-event [event]="selectedAppointment" (onClose)="closeOverlay($event)" class="w-100">
   </app-calendar-event>
 </ng-template>
 
 <ng-template #groupCallPortalContent>
-  <app-call-overlay [call]="selectedGroupCall" (onClose)="closeOverlay($event)" >
-  </app-call-overlay>
+  <div [class.d-none]="loadingGroupCall" class="w-100">
+    <app-call-overlay [call]="selectedGroupCall" (onClose)="closeOverlay($event)" class="w-100">
+    </app-call-overlay>
+  </div>
+  <div *ngIf="loadingGroupCall" class="loading-panel">
+    <div class="loader my-0"></div>
+    <div class="status-text">Loading Group Call...</div>
+  </div>
 </ng-template>

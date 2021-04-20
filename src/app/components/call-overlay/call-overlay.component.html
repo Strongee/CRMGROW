@@ -121,12 +121,7 @@
       <label>guests</label>
       <div>
         <div class="v-center mb-2 c-pointer" *ngFor="let contact of call.contacts" (click)="contactDetail(contact)">
-          <ng-container *ngIf="contact.picture_profile; else prospectNamePlaceholder">
-            <img [src]="contact.picture_profile" class="avatar" />
-          </ng-container>
-          <ng-template #prospectNamePlaceholder>
-            <div class="name-avatar">{{contact.avatarName}}</div>
-          </ng-template>
+          <div class="name-avatar">{{contact.avatarName}}</div>
           <div class="f-3 c-blue ml-2">
             {{contact.fullName}}
           </div>

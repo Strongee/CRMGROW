@@ -212,7 +212,8 @@ export const APPOINTMENT = {
   UPDATE_EVENT: 'appointment/',
   DELETE_EVENT: 'appointment/delete',
   ACCEPT: 'appointment/accept',
-  DECLINE: 'appointment/decline'
+  DECLINE: 'appointment/decline',
+  DETAIL: 'appointment/detail'
 };
 export const THEME = {
   GET_THEME: 'theme/',

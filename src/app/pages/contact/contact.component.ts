@@ -180,6 +180,12 @@ export class ContactComponent implements OnInit, OnDestroy {
   overlayCloseSubscription: Subscription;
   selectedAppointment;
   selectedGroupCall;
+  loadedAppointments = {};
+  loadedGroupCalls = {};
+  loadingAppointment = false;
+  loadingGroupCall = false;
+  appointmentLoadSubscription: Subscription;
+  groupCallLoadSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -1664,7 +1670,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         organizer: event.organizer
       }
     };
-    console.log('formatted event', _formattedEvent);
     this.overlayService.open(
       origin,
       content,
@@ -1674,6 +1679,51 @@ export class ContactComponent implements OnInit, OnDestroy {
         data: _formattedEvent
       }
     );
+  }
+
+  loadDetailAppointment(event): void {
+    const calendars = this.appointmentService.subCalendars.getValue();
+    const currentCalendar = calendars[event.meta.calendar_id];
+    if (!currentCalendar) {
+      return;
+    }
+    const connected_email = currentCalendar.account;
+    this.loadingAppointment = true;
+    this.appointmentLoadSubscription &&
+      this.appointmentLoadSubscription.unsubscribe();
+    this.appointmentLoadSubscription = this.appointmentService
+      .getEvent({
+        connected_email,
+        event_id: event.meta.event_id,
+        calendar_id: event.meta.calendar_id
+      })
+      .subscribe((res) => {
+        this.loadingAppointment = false;
+        console.log('res', res);
+      });
+  }
+
+  loadDetailGroupCall(id: string): void {
+    this.loadingGroupCall = true;
+    this.groupCallLoadSubscription &&
+      this.groupCallLoadSubscription.unsubscribe();
+    this.groupCallLoadSubscription = this.teamService
+      .getCallById(id)
+      .subscribe((call) => {
+        this.loadingGroupCall = false;
+        if (call.contacts && call.contacts.length) {
+          const contacts = [];
+          call.contacts.forEach((e) => {
+            contacts.push(new Contact().deserialize(e));
+          });
+          call.contacts = contacts;
+        }
+        if (call.leader) {
+          call.leader = new User().deserialize(call.leader);
+        }
+        this.loadedGroupCalls[id] = call;
+        this.selectedGroupCall = call;
+      });
   }
 
   openDetailEvent(detail, event): void {
@@ -1738,17 +1788,25 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.appointmentPortalContent,
       this.viewContainerRef
     );
+
+    if (
+      !this.loadedAppointments[newAppointmentId] &&
+      newAppointmentId != oldAppointmentId
+    ) {
+      this.loadDetailAppointment(this.selectedAppointment);
+    } else {
+      if (this.loadedAppointments[newAppointmentId]) {
+        this.selectedAppointment = this.loadedAppointments[newAppointmentId];
+      }
+    }
+
     if (this.overlayRef) {
       if (this.overlayRef.hasAttached()) {
         this.overlayRef.detach();
       }
-      if (oldAppointmentId !== newAppointmentId) {
-        this.overlayRef.updatePositionStrategy(positionStrategy);
-        this.overlayRef.updateSize(size);
-        this.overlayRef.attach(this.templatePortal);
-      } else {
-        this.selectedAppointment = null;
-      }
+      this.overlayRef.updatePositionStrategy(positionStrategy);
+      this.overlayRef.updateSize(size);
+      this.overlayRef.attach(this.templatePortal);
     } else {
       this.overlayRef = this.overlay.create({
         scrollStrategy: this.overlay.scrollStrategies.block(),
@@ -1784,8 +1842,8 @@ export class ContactComponent implements OnInit, OnDestroy {
       ? this.selectedGroupCall['_id']
       : '';
     this.selectedGroupCall = detail;
-    const newCallId = this.selectedAppointment
-      ? this.selectedAppointment['_id']
+    const newCallId = this.selectedGroupCall
+      ? this.selectedGroupCall['_id']
       : '';
     const originX = event.clientX;
     const originY = event.clientY;
@@ -1823,17 +1881,22 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.groupCallPortalContent,
       this.viewContainerRef
     );
+
+    if (!this.loadedGroupCalls[newCallId] && newCallId != oldCallId) {
+      this.loadDetailGroupCall(newCallId);
+    } else {
+      if (this.loadedGroupCalls[newCallId]) {
+        this.selectedGroupCall = this.loadedGroupCalls[newCallId];
+      }
+    }
+
     if (this.overlayRef) {
       if (this.overlayRef.hasAttached()) {
         this.overlayRef.detach();
       }
-      if (oldCallId !== newCallId) {
-        this.overlayRef.updatePositionStrategy(positionStrategy);
-        this.overlayRef.updateSize(size);
-        this.overlayRef.attach(this.templatePortal);
-      } else {
-        this.selectedAppointment = null;
-      }
+      this.overlayRef.updatePositionStrategy(positionStrategy);
+      this.overlayRef.updateSize(size);
+      this.overlayRef.attach(this.templatePortal);
     } else {
       this.overlayRef = this.overlay.create({
         scrollStrategy: this.overlay.scrollStrategies.block(),
@@ -1841,8 +1904,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         ...size
       });
       this.overlayRef.outsidePointerEvents().subscribe((evt) => {
-        this.selectedAppointment = null;
-        this.selectedGroupCall = null;
         this.overlayRef.detach();
         return;
       });

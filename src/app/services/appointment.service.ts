@@ -147,4 +147,11 @@ export class AppointmentService extends HttpService {
       catchError(this.handleError('DECLINE EVENT', false))
     );
   }
+
+  public getEvent(data): Observable<any> {
+    return this.httpClient.post(this.server + APPOINTMENT.DETAIL, data).pipe(
+      map((res) => res['data']),
+      catchError(this.handleError('GET DETAIL EVENT', null))
+    );
+  }
 }
