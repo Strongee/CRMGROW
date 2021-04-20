@@ -88,7 +88,7 @@
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="actions"></th>
-          <td mat-cell *matCellDef="let automation" class="actions">
+          <td mat-cell *matCellDef="let automation" class="actions p-0">
             <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded">
               <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
                 <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
@@ -190,21 +190,5 @@
         </div>
       </ng-container>
     </ng-template>
-<!--    <ng-container *ngIf="!automations.length && loading">-->
-<!--      <div class="list-loading text-center">-->
-<!--        <div class="loader mt-5 lg"></div>-->
-<!--        <h4 class="fw-600 mt-2">Loading automations...</h4>-->
-<!--      </div>-->
-<!--    </ng-container>-->
-<!--    <ng-container *ngIf="!filteredResult.length && !loading">-->
-<!--      <div class="empty-list py-5">-->
-<!--        <div class="object-icon v-center">-->
-<!--          <i class="i-icon i-automation d-block bgc-dark"></i>-->
-<!--        </div>-->
-<!--        <h4 class="font-weight-bold text-center mt-4 mb-3">-->
-<!--          There is no automations.-->
-<!--        </h4>-->
-<!--      </div>-->
-<!--    </ng-container>-->
   </div>
 </div>

@@ -73,6 +73,8 @@
 
 .team-actions {
   text-align: right;
+  width: 100px;
+  opacity: 0;
 
   .button-more {
     a {
@@ -80,6 +82,12 @@
         content: none;
       }
     }
+  }
+}
+
+tr:hover {
+  .team-actions {
+    opacity: 1;
   }
 }
 
@@ -94,6 +102,14 @@
       display: none;
     }
   }
+}
+
+.btn-decline.loading {
+  background-color: #E02020;
+}
+
+.btn-accept-outline.loading {
+  background-color: #04B800;
 }
 
 @media screen and (max-width: 480px) {
