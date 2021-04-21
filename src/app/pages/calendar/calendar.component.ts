@@ -168,7 +168,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
 
     this.location.replaceState(
-      `/calendar/${mode}/${date.year()}/${date.month() + 1}/${date.date()}`
+      `/calendar/${mode}/${date.year()}/${date.month() + 1}/${date.date()}${
+        this.eventId ? '?event=' + this.eventId : ''
+      }`
     );
 
     this.events = this.appointmentService.currentEvents.getValue() || [];
@@ -670,16 +672,18 @@ export class CalendarComponent implements OnInit, OnDestroy {
     // Open the popup if the router has event id
     if (this.eventId) {
       setTimeout(() => {
-        const dom = document.querySelector(`[event='${this.eventId}']`);
+        const dom = document.querySelector(`[event^='${this.eventId}']`);
         this.events.some((e) => {
-          if (this.eventId === e.meta.event_id) {
+          if (
+            this.eventId === e.meta.event_id ||
+            e.meta.event_id.indexOf(this.eventId) !== -1
+          ) {
             if (dom) {
               this.openDetail(e, dom);
             }
             return true;
           }
         });
-        this.eventId = '';
       }, 1000);
     }
 
@@ -864,6 +868,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     if (this.overlayRef) {
       if (this.overlayRef.hasAttached()) {
         this.overlayRef.detach();
+        this.eventId = '';
         return;
       } else {
         this.overlayRef.updatePositionStrategy(positionStrategy);
@@ -912,6 +917,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             return;
           }
           this.overlayRef.detach();
+          this.eventId = '';
           return;
         });
     }
@@ -975,6 +981,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     if (this.overlayRef) {
       if (this.overlayRef.hasAttached()) {
         this.overlayRef.detach();
+        this.eventId = '';
       }
       this.overlayRef.updatePositionStrategy(positionStrategy);
       this.overlayRef.updateSize(size);
@@ -1001,6 +1008,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
           return;
         }
         this.overlayRef.detach();
+        this.eventId = '';
         return;
       });
       this.overlayRef.attach(this.templatePortal);

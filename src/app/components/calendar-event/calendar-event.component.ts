@@ -5,8 +5,9 @@ import { AppointmentService } from 'src/app/services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
 import { CalendarDeclineComponent } from '../calendar-decline/calendar-decline.component';
-import { ConfirmComponent } from '../confirm/confirm.component';
 import { Subscription } from 'rxjs';
+import { ConfirmComponent } from '../confirm/confirm.component';
+import { DialogSettings } from 'src/app/constants/variable.constants';
 
 @Component({
   selector: 'app-calendar-event',
@@ -15,6 +16,7 @@ import { Subscription } from 'rxjs';
 })
 export class CalendarEventComponent implements OnInit {
   @Input('event') viewEvent;
+  @Input('hasLink') hasLink = false;
   @Output() onClose: EventEmitter<any> = new EventEmitter(null);
   event = {
     title: '',
@@ -131,23 +133,41 @@ export class CalendarEventComponent implements OnInit {
         });
     } else {
       delete this.event['recurrence_id'];
-      this.appointmentService
-        .removeEvents(
-          this.event.meta.event_id,
-          this.event.meta.recurrence_id,
-          this.event.meta.calendar_id,
-          connected_email
-        )
-        .subscribe((res) => {
-          if (res['status']) {
-            const data = {
-              event_id: this.event.meta.event_id,
-              recurrence_id: this.event.meta.recurrence_id,
-              calendar_id: this.event.meta.calendar_id,
-              connected_email: connected_email
-            };
-            this.onClose.emit({ command: 'delete', data: data });
-            this.toast.success('Event is removed successfully');
+      this.dialog
+        .open(ConfirmComponent, {
+          ...DialogSettings.CONFIRM,
+          data: {
+            title: 'Delete Appointment',
+            message: 'Are you sure to remove this appointment?',
+            label: 'Delete'
+          }
+        })
+        .afterClosed()
+        .subscribe((answer) => {
+          if (answer) {
+            this.appointmentService
+              .removeEvents(
+                this.event.meta.event_id,
+                this.event.meta.recurrence_id,
+                this.event.meta.calendar_id,
+                connected_email
+              )
+              .subscribe((res) => {
+                if (res['status']) {
+                  const data = {
+                    event_id: this.event.meta.event_id,
+                    recurrence_id: this.event.meta.recurrence_id,
+                    calendar_id: this.event.meta.calendar_id,
+                    connected_email: connected_email
+                  };
+                  this.appointmentService.updateCommand.next({
+                    command: 'delete',
+                    data: data
+                  });
+                  this.onClose.emit({ command: 'delete', data: data });
+                  this.toast.success('Event is removed successfully');
+                }
+              });
           }
         });
     }
@@ -337,6 +357,17 @@ export class CalendarEventComponent implements OnInit {
             });
         }
       });
+  }
+
+  getCalendarLink(): string[] {
+    if (this.event && this.event.start) {
+      const due_date = new Date(this.event.start + '');
+      const month = due_date.getMonth() + 1;
+      const year = due_date.getFullYear();
+      const route = `/calendar/month/${year}/${month}/1`;
+      return [route];
+    }
+    return [];
   }
 
   closeWithData(data: any): void {

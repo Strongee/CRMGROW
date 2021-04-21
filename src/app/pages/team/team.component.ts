@@ -28,10 +28,9 @@ import { TeamShareAutomationComponent } from '../team-share-automation/team-shar
 import { TeamShareTemplateComponent } from '../team-share-template/team-share-template.component';
 import { TeamShareContactComponent } from '../team-share-contact/team-share-contact.component';
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
-import { share } from 'rxjs/operators';
 import { TemplateBrowserComponent } from '../../components/template-browser/template-browser.component';
 import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
-import {TeamMemberProfileComponent} from "../../components/team-member-profile/team-member-profile.component";
+import { TeamMemberProfileComponent } from '../../components/team-member-profile/team-member-profile.component';
 
 @Component({
   selector: 'app-team',

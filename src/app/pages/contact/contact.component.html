@@ -2127,7 +2127,7 @@
 
 <ng-template #appointmentPortalContent>
   <div [class.d-none]="loadingAppointment" class="w-100">
-    <app-calendar-event [event]="selectedAppointment" (onClose)="closeOverlay($event)" class="w-100">
+    <app-calendar-event [event]="selectedAppointment" (onClose)="closeOverlay($event)" class="w-100" [hasLink]="true">
     </app-calendar-event>
   </div>
   <div *ngIf="loadingAppointment" class="loading-panel">

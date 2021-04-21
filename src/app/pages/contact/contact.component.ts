@@ -192,6 +192,8 @@ export class ContactComponent implements OnInit, OnDestroy {
   notesLoadSubscription: Subscription;
   notesLoading = false;
 
+  appointmentUpdateSubscription: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -250,6 +252,55 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.loadContact(this._id);
       }
     });
+
+    this.appointmentUpdateSubscription &&
+      this.appointmentUpdateSubscription.unsubscribe();
+    this.appointmentUpdateSubscription = this.appointmentService.updateCommand$.subscribe(
+      (data) => {
+        if (data) {
+          if (data.command === 'delete') {
+            const deleteEventId = data.data.recurrence_id || data.data.event_id;
+            // remove from activity list && detail data
+            for (const key in this.detailData) {
+              if (this.detailData[key].event_id == deleteEventId) {
+                delete this.detailData[key];
+              }
+            }
+            _.remove(this.showingDetails, (e) => e.event_id === deleteEventId);
+            const deleteActivityIds = [];
+            this.mainTimelines.some((e) => {
+              if (
+                e.activity_detail &&
+                e.activity_detail.event_id === deleteEventId
+              ) {
+                deleteActivityIds.push(e._id);
+                return true;
+              }
+              return false;
+            });
+            console.log('deleteactivityid', deleteActivityIds);
+            if (deleteActivityIds.length) {
+              this.contactService.deleteContactActivity(deleteActivityIds);
+            }
+          } else if (data.command === 'update') {
+            const event = data.data;
+            const eventId = event.recurrence_id || event.event_id;
+            delete this.loadedAppointments[eventId];
+            this.contactService.addLatestActivity(3);
+          } else if (data.command === 'accept') {
+            const acceptData = data.data;
+            const acceptEventId =
+              acceptData.recurrence_id || acceptData.event_id;
+            delete this.loadedAppointments[acceptEventId];
+          } else if (data.command === 'decline') {
+            const declineData = data.data;
+            const declineEventId =
+              declineData.recurrence_id || declineData.event_id;
+            delete this.loadedAppointments[declineEventId];
+          }
+        }
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -1687,8 +1738,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.contactService.addLatestActivity(24);
   }
 
-  initOverlay(): void {}
-
   openAppointmentEasyView(event: any, origin: any, content: any): void {
     const _formattedEvent = {
       title: event.title,
@@ -1720,6 +1769,11 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   loadDetailAppointment(event): void {
+    if (!event.meta.event_id) {
+      const loadedEvent = { ...event };
+      this.selectedAppointment = loadedEvent;
+      return;
+    }
     const calendars = this.appointmentService.subCalendars.getValue();
     const currentCalendar = calendars[event.meta.calendar_id];
     if (!currentCalendar) {
@@ -1867,20 +1921,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
       this.overlayRef.attach(this.templatePortal);
     }
-    // if (detail && detail.due_start) {
-    //   let due_date;
-    //   if (detail.due_start instanceof Date) {
-    //     due_date = detail.due_start;
-    //   } else {
-    //     due_date = new Date(detail.due_start + '');
-    //   }
-    //   const month = due_date.getMonth() + 1;
-    //   const year = due_date.getFullYear();
-    //   const route = `/calendar/month/${year}/${month}/1`;
-    //   this.router.navigate([route], {
-    //     queryParams: { event: detail.event_id }
-    //   });
-    // }
   }
 
   openGroupCall(detail, event): void {
@@ -1956,6 +1996,10 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.overlayRef.attach(this.templatePortal);
     }
     return;
+  }
+
+  closeOverlay(event): void {
+    this.overlayRef.detach();
   }
 
   getVideoBadge(activity): string {

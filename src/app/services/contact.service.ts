@@ -158,6 +158,16 @@ export class ContactService extends HttpService {
         catchError(this.handleError('CONTACT DETAIL', null))
       );
   }
+  deleteContactActivity(ids: string[]): void {
+    const currentContact = this.storeService.selectedContact.getValue();
+    _.remove(currentContact.activity, (e) => {
+      if (ids.indexOf(e._id) !== -1) {
+        return true;
+      }
+      return false;
+    });
+    this.storeService.selectedContact.next(currentContact);
+  }
 
   /**
    * Create Contact
