@@ -1,8 +1,8 @@
+<form
+  #eventForm="ngForm"
+  (ngSubmit)="submit()"
+>
 <mat-dialog-content>
-  <form
-    #eventForm="ngForm"
-    (ngSubmit)="submit()"
-  >
     <ng-container *ngIf="type !== 'update'">
       <div class="form-group">
         <label class="calendar-label mb-0">Choose calendar</label>
@@ -172,7 +172,6 @@
         </div>
       </div>
     </div>
-  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button
@@ -200,3 +199,4 @@
     </button>
   </ng-template>
 </mat-dialog-actions>
+</form>
