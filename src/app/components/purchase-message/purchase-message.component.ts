@@ -9,11 +9,11 @@ import { SmsService } from 'src/app/services/sms.service';
 })
 export class PurchaseMessageComponent implements OnInit {
   saving = false;
-  currentType = '';
+  currentType = 2;
   plans = [
-    { type: '1', sms: '250', price: '6' },
-    { type: '2', sms: '500', price: '10' },
-    { type: '3', sms: '1000', price: '15' }
+    { type: 1, sms: '250', price: '6' },
+    { type: 2, sms: '500', price: '10' },
+    { type: 3, sms: '1000', price: '15' }
   ];
 
   constructor(

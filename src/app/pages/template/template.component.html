@@ -58,7 +58,7 @@
 
         <!-- Token List for Mobile Devices -->
         <div class="mobile-variables-group">
-          <h5 class="f-4 font-weight-bold upper-text mb-1">Insert Variables for {{template.type === 'text' ? 'text subject.' : 'email subject and content'}}</h5>
+          <h5 class="f-4 font-weight-bold upper-text mb-1">Token for {{template.type === 'text' ? 'text subject.' : 'email subject and content'}}</h5>
           <button type="button"
             class="btn btn-sm btn-blue text-white"
             (click)="insertValue('{user_name}')">
@@ -180,7 +180,7 @@
       </form>
     </div>
     <div class="variable-button-group shadow-2">
-      <h5 class="f-4 font-weight-bold upper-text mb-3">Insert Variables</h5>
+      <h5 class="f-4 font-weight-bold upper-text mb-3">Token</h5>
       <button type="button"
         class="btn btn-sm btn-blue my-3 text-white"
         (click)="insertValue('{user_name}')">
