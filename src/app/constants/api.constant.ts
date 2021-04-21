@@ -102,7 +102,8 @@ export const CONTACT = {
   CHECK_EMAIL: 'contact/check-email',
   CHECK_PHONE: 'contact/check-phone',
   SHARE_CONTACT: 'contact/share-contact',
-  TEAM_SHARED: 'contact/team-shared/'
+  TEAM_SHARED: 'contact/team-shared/',
+  LOAD_NOTES: 'contact/load-notes/'
 };
 export const VIDEO = {
   CREATE: 'video/create',

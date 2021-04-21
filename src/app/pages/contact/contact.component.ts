@@ -62,6 +62,7 @@ import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/user.model';
 import { AdditionalFieldsComponent } from 'src/app/components/additional-fields/additional-fields.component';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { Note } from 'src/app/models/note.model';
 
 @Component({
   selector: 'app-contact',
@@ -187,6 +188,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   appointmentLoadSubscription: Subscription;
   groupCallLoadSubscription: Subscription;
 
+  notes: Note[] = [];
+  notesLoadSubscription: Subscription;
+  notesLoading = false;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -287,6 +292,15 @@ export class ContactComponent implements OnInit, OnDestroy {
    */
   loadContact(_id: string): void {
     this.contactService.read(_id);
+    this.notesLoading = true;
+    this.notesLoadSubscription && this.notesLoadSubscription.unsubscribe();
+    this.notesLoadSubscription = this.contactService
+      .loadNotes(_id)
+      .subscribe((res) => {
+        this.notesLoading = false;
+        this.notes = res;
+        console.log('notes', this.notes);
+      });
   }
 
   clearContact(): void {

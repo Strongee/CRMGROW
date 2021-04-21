@@ -15,6 +15,7 @@ import { map, catchError } from 'rxjs/operators';
 import { CONTACT_SORT_OPTIONS, STATUS } from '../constants/variable.constants';
 import { SearchOption } from '../models/searchOption.model';
 import * as _ from 'lodash';
+import { Note } from '../models/note.model';
 interface LoadResponse {
   contacts: ContactActivity[];
 }
@@ -587,6 +588,12 @@ export class ContactService extends HttpService {
     return this.httpClient.get(this.server + CONTACT.TEAM_SHARED + _id).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('GET SHARED CONTACT', []))
+    );
+  }
+  loadNotes(_id: string): Observable<Note[]> {
+    return this.httpClient.get(this.server + CONTACT.LOAD_NOTES + _id).pipe(
+      map((res) => res['data'] || [].map((e) => new Note().deserialize(e))),
+      catchError(this.handleError('LOAD NOTES', []))
     );
   }
 
