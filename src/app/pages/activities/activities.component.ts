@@ -104,24 +104,33 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
       const last_activity = this.storeService.activities
         .getValue()
         .slice(-1)[0];
-      let id;
-      if (last_activity.additional_field) {
-        id = last_activity.additional_field.slice(-1)[0];
+      let ids;
+      if (
+        last_activity.additional_field &&
+        last_activity.additional_field.length
+      ) {
+        ids = [...last_activity.additional_field, last_activity._id];
       } else {
-        id = last_activity._id;
+        ids = [last_activity._id];
       }
-      this.activityService.load({ starting_after: id });
+      ids.sort((a, b) => (a < b ? -1 : 1));
+      this.activityService.load({ starting_after: ids[0] });
       return;
     }
     if (param === 'prev') {
       // this.activityService.load(0);
       const first_activity = this.storeService.activities.getValue()[0];
-      const first_id =
+      let ids = [];
+      if (
         first_activity.additional_field &&
         first_activity.additional_field.length
-          ? first_activity.additional_field.slice(-1)[0]
-          : first_activity._id;
-      this.activityService.load({ ending_before: first_id });
+      ) {
+        ids = [...first_activity.additional_field, first_activity._id];
+      } else {
+        ids = [first_activity._id];
+      }
+      ids.sort((a, b) => (a > b ? -1 : 1));
+      this.activityService.load({ ending_before: ids[0] });
       return;
     }
   }
