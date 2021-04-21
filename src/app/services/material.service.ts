@@ -1,5 +1,5 @@
 import { V } from '@angular/cdk/keycodes';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { interval, Observable, BehaviorSubject } from 'rxjs';
 import {
@@ -242,7 +242,11 @@ export class MaterialService extends HttpService {
   }
 
   getVimeoMeta(id: string): any {
-    return this.httpClient.get(`https://vimeo.com/api/v2/video/${id}.json`);
+    return this.httpClient.get(`https://api.vimeo.com/videos/${id}`, {
+      headers: new HttpHeaders({
+        Authorization: `basic ${environment.API_KEY.Vimeo}`
+      })
+    });
   }
 
   getYoutubeMeta(id: string): any {

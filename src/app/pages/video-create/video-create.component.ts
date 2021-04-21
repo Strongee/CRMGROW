@@ -737,14 +737,34 @@ export class VideoCreateComponent implements OnInit {
     if (this.video.url.toLowerCase().indexOf('vimeo.com/video') !== -1) {
       const matches = this.video.url.match(/video\/([0-9]+)/);
       if (matches) {
-        const videoId = matches[1];
+        let videoId = matches[1];
+
+        const hashReg = new RegExp(
+          'vimeo.com/video/' + videoId + '/([0-9a-z]+)'
+        );
+        const hashMatches = this.video.url.match(hashReg);
+        let hash = '';
+        if (hashMatches && hashMatches.length) {
+          hash = hashMatches[1];
+          videoId = videoId + ':' + hash;
+        }
+
         this.getThumbnailFromVimeo(videoId);
         return;
       }
     } else if (this.video.url.toLowerCase().indexOf('vimeo.com/') !== -1) {
       const matches = this.video.url.match(/vimeo.com\/([0-9]+)/);
       if (matches) {
-        const videoId = matches[1];
+        let videoId = matches[1];
+
+        const hashReg = new RegExp('vimeo.com/' + videoId + '/([0-9a-z]+)');
+        const hashMatches = this.video.url.match(hashReg);
+        let hash = '';
+        if (hashMatches && hashMatches.length) {
+          hash = hashMatches[1];
+          videoId = videoId + ':' + hash;
+        }
+
         this.getThumbnailFromVimeo(videoId);
         return;
       }
@@ -797,9 +817,17 @@ export class VideoCreateComponent implements OnInit {
       .getVimeoMeta(id)
       .subscribe((res) => {
         if (res) {
-          this.video.thumbnail = res[0]['thumbnail_large'];
-          this.video.duration = res[0]['duration'] * 1000;
-          this.video.title = res[0]['title'];
+          const pictures = res.pictures.sizes;
+          if (pictures && pictures.length) {
+            pictures.some((e) => {
+              if (e.width === 640) {
+                this.video.thumbnail = e.link;
+                return true;
+              }
+            });
+          }
+          this.video.duration = res['duration'] * 1000;
+          this.video.title = res['name'];
           this.video.type = 'vimeo';
           this.uploadVideo();
         }

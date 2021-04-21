@@ -24,7 +24,7 @@ export class ApiInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     if (
-      req.url.indexOf('https://vimeo.com/api/v2/video') !== -1 ||
+      req.url.indexOf('https://api.vimeo.com/videos') !== -1 ||
       req.url.indexOf('https://www.googleapis.com/youtube') !== -1
     ) {
       return next.handle(req);
