@@ -132,13 +132,13 @@
                                (dragover)="allowStartDrop($event, node)" (dragleave)="disableStartArea($event, node)"
                                (dragenter)="enableStartArea($event, node)" [class.droppable]="node.droppable"
                                class="drop-target">
-                      <xhtml:div class="cardContainer" style="position: fixed; width: 100%; margin-bottom: 5px; margin-top: 10px; text-align: center;"
+                      <xhtml:div class="cardContainer" style="margin-bottom: 5px; margin-top: 10px; text-align: center;"
                                  xmlns="http://www.w3.org/1999/xhtml">
                         <img [attr.src]="'./assets/img/automations/automation_start.svg'" x="75" y="0" height="50px"
                              width="50px" />
                       </xhtml:div>
                       <xhtml:div class="cardContainer"
-                                 style="background-color: transparent; padding: 55px 8px; text-align: center; width: 150px; margin-left: 25px; margin-right: 25px;"
+                                 style="background-color: transparent; padding: 5px 8px; text-align: center; width: 150px; margin-left: 25px; margin-right: 25px;"
                                  xmlns="http://www.w3.org/1999/xhtml">
                         <label class="name" style="margin: 0; font-size: 13px;">Start</label>
                         <label class="name" style="margin: 0; font-size: 10px; color: #aaa;">
@@ -156,7 +156,7 @@
         <ng-template #flowTemplate>
           <ngx-graph class="chart-container" [links]="edges" [nodes]="nodes" [layoutSettings]="layoutSettings"
                      [autoCenter]="true" [layout]="layout" [curve]="curve" [center$]="center$" [draggingEnabled]="false"
-                     [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" [showMiniMap]="true" #graphWrapper>
+                     [autoZoom]="autoZoom" [zoomLevel]="zoomLevel" [enableZoom]="true" #graphWrapper>
             <ng-template #defsTemplate>
               <svg:marker id="arrow" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="8" markerHeight="8"
                           orient="auto">
@@ -177,12 +177,12 @@
                   <xhtml:div class="cardContainer c-pointer"
                              #treeNode
                              (click)="easyView($event, node, treeNode, treeOverlay)"
-                             style="position: fixed; width: 100%; text-align: center;"
+                             style="text-align: center;"
                              xmlns="http://www.w3.org/1999/xhtml">
                     <img [attr.src]="ICONS[node.type]" x="75" y="0" height="50px" width="50px" />
                   </xhtml:div>
                   <xhtml:div class="cardContainer"
-                             style="background-color: transparent; padding: 55px 8px 20px 8px; margin-bottom: 15px; text-align: center;"
+                             style="background-color: transparent; padding: 5px 8px 20px 8px; margin-bottom: 15px; text-align: center;"
                              xmlns="http://www.w3.org/1999/xhtml">
                     <label class="name" style="margin: 0; font-size: 14px; font-weight: bold;">{{node.label}}</label>
                     <label class="name" style="margin: 0; font-size: 11px; color: #f28422; display: block;">{{node.period | duration}}</label>
@@ -244,7 +244,7 @@
                           fill="transparent" />
                 <svg:foreignObject width="90" [attr.height]="60">
                   <xhtml:div class="caseLabel"
-                             style="position: fixed; background-color: transparent; text-align: center;"
+                             style="position: initial; background-color: transparent; text-align: center;"
                              xmlns="http://www.w3.org/1999/xhtml">
                     <label class="name" style="margin-top: 20px; margin-bottom: 0px; font-size: 14px;">{{CASE_ACTIONS[link.type]}}</label>
                     <label class="remove-link" (click)="removeCase(link)">&times;</label>
