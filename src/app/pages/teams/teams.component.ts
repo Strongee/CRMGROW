@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TabItem } from '../../utils/data.types';
-import {ActivatedRoute, Router} from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-teams',
@@ -15,10 +15,7 @@ export class TeamsComponent implements OnInit {
 
   selectedTab: TabItem = this.tabs[0];
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-  ) {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     const selectedTab = this.route.snapshot.params['tab'];

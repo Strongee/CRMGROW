@@ -9,6 +9,11 @@
     color: $color-blue;
     transition: all .2s;
     cursor: pointer;
+    border-right: 1px solid $color-blue;
+
+    &:last-child {
+      border-right: none;
+    }
 
     &.active {
       background-color: $color-blue;

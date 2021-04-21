@@ -151,7 +151,13 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   loadContact(page: number): void {
     this.loading = true;
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.teamService.loadSharedContacts(this.team._id, this.pageSize.id, page);
+    const data = {
+      team: this.team._id,
+      count: this.pageSize.id,
+      skip: page
+    };
+
+    this.teamService.loadSharedContacts(data);
     this.storeService.sharedContacts$.subscribe((res) => {
       if (res) {
         this.loading = false;
@@ -181,14 +187,29 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     // Normal Load by Page
     let skip = (page - 1) * 8;
     skip = skip < 0 ? 0 : skip;
+
+    let sort;
+
+    if (this.sortType.id === this.SORT_TYPES[0].id) {
+      sort = { first_name: -1 };
+    } else if (this.sortType.id === this.SORT_TYPES[1].id) {
+      sort = { first_name: 1 };
+    } else if (this.sortType.id === this.SORT_TYPES[2].id) {
+      sort = { created_at: -1 };
+    } else if (this.sortType.id === this.SORT_TYPES[3].id) {
+      sort = { updated_at: -1 };
+    }
+
     if (this.searchStr === '') {
       this.paginationLoading = true;
+      const data = {
+        team: this.team._id,
+        count: this.pageSize.id,
+        skip,
+        sort
+      };
       this.loadSubscription && this.loadSubscription.unsubscribe();
-      this.teamService.loadSharedContacts(
-        this.team._id,
-        this.pageSize.id,
-        skip
-      );
+      this.teamService.loadSharedContacts(data);
       this.storeService.sharedContacts$.subscribe((res) => {
         this.paginationLoading = false;
         if (res) {
@@ -230,9 +251,37 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
    */
   changeSort(type: any): void {
     this.sortType = type;
-    this.contactService.sort.next({
-      ...CONTACT_SORT_OPTIONS[type.id],
-      page: this.page
+
+    let sort;
+
+    if (this.sortType.id === this.SORT_TYPES[0].id) {
+      sort = { first_name: -1 };
+    } else if (this.sortType.id === this.SORT_TYPES[1].id) {
+      sort = { first_name: 1 };
+    } else if (this.sortType.id === this.SORT_TYPES[2].id) {
+      sort = { created_at: -1 };
+    } else if (this.sortType.id === this.SORT_TYPES[3].id) {
+      sort = { updated_at: -1 };
+    }
+
+    const data = {
+      team: this.team._id,
+      count: this.pageSize.id,
+      skip: 0,
+      sort
+    };
+    this.teamService.loadSharedContacts(data);
+    this.storeService.sharedContacts$.subscribe((res) => {
+      this.paginationLoading = false;
+      if (res) {
+        this.pageContacts = res;
+        this.contactCount = this.teamService.sharedContactsTotal.getValue();
+        this.pageSelection = _.intersectionBy(
+          this.selection,
+          this.pageContacts,
+          '_id'
+        );
+      }
     });
   }
 
