@@ -1527,11 +1527,11 @@ export class ContactComponent implements OnInit, OnDestroy {
       if (material) {
         let prefix = 'video?video=';
         let activityPrefix = 'video1';
-        if (material.type.indexOf('pdf') !== -1) {
+        if (material.type && material.type.indexOf('pdf') !== -1) {
           prefix = 'pdf?pdf=';
           activityPrefix = 'pdf1';
         }
-        if (material.type.indexOf('image') !== -1) {
+        if (material.type && material.type.indexOf('image') !== -1) {
           prefix = 'image?image=';
           activityPrefix = 'image1';
         }
@@ -1699,7 +1699,15 @@ export class ContactComponent implements OnInit, OnDestroy {
       })
       .subscribe((res) => {
         this.loadingAppointment = false;
-        console.log('res', res);
+        const loadedEvent = { ...event };
+        loadedEvent.meta.is_organizer = res.organizer.self;
+        loadedEvent.meta.organizer = res.organizer.email;
+        loadedEvent.meta.guests = res.attendees || [];
+        loadedEvent.meta.guests.forEach((e) => {
+          e.response = e.responseStatus;
+        });
+        this.loadedAppointments[event.meta.event_id] = loadedEvent;
+        this.selectedAppointment = loadedEvent;
       });
   }
 

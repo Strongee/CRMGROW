@@ -2126,8 +2126,14 @@
 </div>
 
 <ng-template #appointmentPortalContent>
-  <app-calendar-event [event]="selectedAppointment" (onClose)="closeOverlay($event)" class="w-100">
-  </app-calendar-event>
+  <div [class.d-none]="loadingAppointment" class="w-100">
+    <app-calendar-event [event]="selectedAppointment" (onClose)="closeOverlay($event)" class="w-100">
+    </app-calendar-event>
+  </div>
+  <div *ngIf="loadingAppointment" class="loading-panel">
+    <div class="loader my-0"></div>
+    <div class="status-text">Loading Appointment...</div>
+  </div>
 </ng-template>
 
 <ng-template #groupCallPortalContent>

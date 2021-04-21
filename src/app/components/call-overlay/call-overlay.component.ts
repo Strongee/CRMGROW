@@ -2,13 +2,17 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { TIMES } from 'src/app/constants/variable.constants';
+import { DialogSettings, TIMES } from 'src/app/constants/variable.constants';
 import { getCurrentTimezone, numPad } from 'src/app/helper';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmComponent } from '../confirm/confirm.component';
+import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
+import { CallRequestCancelComponent } from '../call-request-cancel/call-request-cancel.component';
+import { TeamMemberProfileComponent } from '../team-member-profile/team-member-profile.component';
 
 @Component({
   selector: 'app-call-overlay',
@@ -115,7 +119,25 @@ export class CallOverlayComponent implements OnInit {
   }
 
   delete(): void {
-    
+    this.dialog
+      .open(ConfirmComponent, {
+        ...DialogSettings.CONFIRM,
+        data: {
+          title: 'Delete group call',
+          message: 'Are you sure to remove this group call?',
+          label: 'Delete'
+        }
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.teamService.deleteCall(this.call._id).subscribe((status) => {
+            if (status) {
+              // this.dialogRef.close({ action: 'delete', id: this.call._id });
+            }
+          });
+        }
+      });
   }
 
   complete(): void {
@@ -128,7 +150,14 @@ export class CallOverlayComponent implements OnInit {
       .subscribe((status) => {
         this.completing = false;
         if (status) {
-          
+          // this.dialogRef.close({
+          //   action: 'update',
+          //   data: {
+          //     status: 'finished',
+          //     note: this.call.note
+          //   },
+          //   id: this.call._id
+          // });
         }
       });
   }
@@ -142,7 +171,34 @@ export class CallOverlayComponent implements OnInit {
       .subscribe((status) => {
         this.declining = false;
         if (status) {
-          
+          this.dialog
+            .open(ConfirmComponent, {
+              ...DialogSettings.CONFIRM,
+              data: {
+                title: 'Explain the decline reason',
+                message:
+                  'Are you going to message to explain the error of this declining?',
+                confirmLabel: 'Message',
+                cancelLabel: 'Skip'
+              }
+            })
+            .afterClosed()
+            .subscribe((answer) => {
+              if (answer) {
+                if (this.isOrganizer) {
+                  this.messageLeader();
+                } else {
+                  this.messageOrganizer();
+                }
+              }
+              // this.dialogRef.close({
+              //   action: 'update',
+              //   data: {
+              //     status: 'declined'
+              //   },
+              //   id: this.call._id
+              // });
+            });
         }
       });
   }
@@ -178,81 +234,91 @@ export class CallOverlayComponent implements OnInit {
         if (status) {
           // Check the Calendar Connection
           const calendars = this.appointmentService.calendars.getValue();
-          // if (!calendars || !calendars.length) {
-          //   this.dialogRef.close({
-          //     action: 'update',
-          //     data: {
-          //       status: 'planned',
-          //       confirmed_at: callTime
-          //     },
-          //     id: this.call._id
-          //   });
-          //   return;
-          // }
-          // this.dialog
-          //   .open(ConfirmComponent, {
-          //     ...DialogSettings.CONFIRM,
-          //     data: {
-          //       title: 'Add the call to Calendar',
-          //       message: 'Are you going to add this call to your calendar?',
-          //       confirmLabel: 'Add to calendar',
-          //       cancelLabel: 'Cancel'
-          //     }
-          //   })
-          //   .afterClosed()
-          //   .subscribe((answer) => {
-          //     if (answer) {
-          //       this.addToCalendar();
-          //     }
-          //     this.dialogRef.close({
-          //       action: 'update',
-          //       data: {
-          //         status: 'planned',
-          //         confirmed_at: callTime
-          //       },
-          //       id: this.call._id
-          //     });
-          //   });
+          if (!calendars || !calendars.length) {
+            // this.dialogRef.close({
+            //   action: 'update',
+            //   data: {
+            //     status: 'planned',
+            //     confirmed_at: callTime
+            //   },
+            //   id: this.call._id
+            // });
+            return;
+          }
+          this.dialog
+            .open(ConfirmComponent, {
+              ...DialogSettings.CONFIRM,
+              data: {
+                title: 'Add the call to Calendar',
+                message: 'Are you going to add this call to your calendar?',
+                confirmLabel: 'Add to calendar',
+                cancelLabel: 'Cancel'
+              }
+            })
+            .afterClosed()
+            .subscribe((answer) => {
+              if (answer) {
+                this.addToCalendar(callTime);
+              }
+              // this.dialogRef.close({
+              //   action: 'update',
+              //   data: {
+              //     status: 'planned',
+              //     confirmed_at: callTime
+              //   },
+              //   id: this.call._id
+              // });
+            });
         }
       });
   }
 
-  addToCalendar(): void {
+  addToCalendar(callTime): void {
     const contacts = [];
-    // this.dialog.open(CalendarDialogComponent, {
-    //   width: '100vw',
-    //   maxWidth: '600px',
-    //   maxHeight: '700px',
-    //   data: {
-    //     contacts
-    //   }
-    // });
+    if (this.call && this.call.leader) {
+      contacts.push(this.call.leader);
+    }
+    if (this.call && this.call.user) {
+      if (this.call.leader && this.call.leader._id !== this.call.user._id) {
+        contacts.push(this.call.user);
+      }
+    }
+
+    this.dialog.open(CalendarDialogComponent, {
+      width: '100vw',
+      maxWidth: '600px',
+      data: {
+        call: this.call,
+        confirmed_at: callTime,
+        contacts
+      }
+    });
   }
 
   messageLeader(): void {
-    // this.dialog.open(CallRequestCancelComponent, {
-    //   width: '98vw',
-    //   maxWidth: '480px',
-    //   data: {
-    //     call: this.call,
-    //     title: 'Message Leader',
-    //     message: '',
-    //     type: 'leader'
-    //   }
-    // });
+    this.dialog.open(CallRequestCancelComponent, {
+      width: '98vw',
+      maxWidth: '480px',
+      data: {
+        call: this.call,
+        title: 'Message Leader',
+        message: '',
+        type: 'leader'
+      }
+    });
   }
 
   messageOrganizer(): void {
-    // this.dialog.open(CallRequestCancelComponent, {
-    //   width: '98vw',
-    //   maxWidth: '480px',
-    //   data: {
-    //     call: this.call,
-    //     title: 'Message Organizer',
-    //     message: '',
-    //     type: 'organizer'
-    //   }
-    // });
+    this.dialog.open(CallRequestCancelComponent, {
+      width: '98vw',
+      maxWidth: '480px',
+      data: {
+        call: this.call,
+        title: 'Message Organizer',
+        message: '',
+        type: 'organizer'
+      }
+    });
   }
 
   contactDetail(contact): void {
@@ -289,11 +355,11 @@ export class CallOverlayComponent implements OnInit {
   }
 
   showProfile(contact): void {
-    // this.dialog.open(TeamMemberProfileComponent, {
-    //   data: {
-    //     title: 'Team member',
-    //     member: contact
-    //   }
-    // });
+    this.dialog.open(TeamMemberProfileComponent, {
+      data: {
+        title: 'Team member',
+        member: contact
+      }
+    });
   }
 }
