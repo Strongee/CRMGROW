@@ -521,6 +521,7 @@ export class ContactComponent implements OnInit, OnDestroy {
    */
   goToBack(): void {
     // this.location.back();
+    this.checkAndSave();
     this.handlerService.goBack('/contacts');
   }
 
@@ -1699,6 +1700,9 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.contact.last_name === this.contactLastName
     ) {
       this.nameEditable = false;
+      return;
+    }
+    if (!this.contact._id) {
       return;
     }
     this.saving = true;
