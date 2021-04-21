@@ -22,7 +22,7 @@ import { TaskService } from 'src/app/services/task.service';
 })
 export class TaskFilterComponent implements OnInit {
   STATUS_OPTIONS: TabOption[] = [
-    { label: 'TODO', value: TaskStatus.TODO },
+    { label: 'TO DO', value: TaskStatus.TODO },
     { label: 'ALL', value: TaskStatus.ALL },
     { label: 'COMPLETED', value: TaskStatus.COMPLETED }
   ];
