@@ -299,7 +299,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.notesLoading = false;
         this.notes = res;
-        console.log('notes', this.notes);
+        this.notes.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
       });
   }
 
@@ -803,6 +803,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.tab = tab;
 
     if (this.tab.id !== 'all') {
+      if (tab.id === 'note') {
+        this.showingDetails = [...this.notes];
+        return;
+      }
+
       this.showingDetails = [];
       this.sendActions = {};
       let dataType = '';
@@ -1154,6 +1159,8 @@ export class ContactComponent implements OnInit, OnDestroy {
           if (this.detailData && this.detailData[note._id]) {
             this.detailData[note._id].content = note.content;
           }
+          // Update the Notes Array with new content
+          this.updateNotesArray(note._id, note.content);
           this.changeTab(this.tab);
         }
       });
@@ -1193,6 +1200,8 @@ export class ContactComponent implements OnInit, OnDestroy {
           if (this.detailData && this.detailData[note._id]) {
             this.detailData[note._id].content = note.content;
           }
+          // Update the Notes Array with new content
+          this.updateNotesArray(detail._id, note.content);
           this.changeTab(this.tab);
         }
       });
@@ -1228,6 +1237,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                     return true;
                   }
                 });
+                // Remove the note from notes array
+                this.deleteNoteFromNotesArray(activity.activity_detail._id);
               }
             });
         }
@@ -1258,12 +1269,25 @@ export class ContactComponent implements OnInit, OnDestroy {
                   return true;
                 }
               });
+              // Remove the note from notes array
+              this.deleteNoteFromNotesArray(detail._id);
               delete this.detailData[detail._id];
               this.changeTab(this.tab);
             }
           });
         }
       });
+  }
+
+  updateNotesArray(_id: string, content: string): void {
+    this.notes.some((e) => {
+      if (e._id === _id) {
+        e.content = content;
+      }
+    });
+  }
+  deleteNoteFromNotesArray(_id: string): void {
+    _.remove(this.notes, (e) => e._id === _id);
   }
 
   /**************************************
