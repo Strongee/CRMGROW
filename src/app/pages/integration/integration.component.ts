@@ -222,6 +222,14 @@ export class IntegrationComponent implements OnInit {
     });
   }
 
+  connectZoom(): void {
+    this.userService.requestZoomSyncUrl().subscribe((res) => {
+      if (res && res['status']) {
+        location.href = res['data'];
+      }
+    });
+  }
+
   showError(msg: string): void {
     this.toast.error(msg);
   }
