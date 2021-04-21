@@ -85,28 +85,20 @@
           </div>
         </td>
         <td class="team-actions">
-          <div ngbDropdown class="d-flex justify-content-end button-more p-2 rounded bottom-right">
-            <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-              <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-            </a>
-            <div ngbDropdownMenu class="light py-1">
-              <div class="actions ml-auto" *ngIf="status(team) == 'Owner'; else leaveActions">
-                <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="editTeam(team)">
-                  <i class="i-icon i-edit bg-dark ml-1" aria-hidden="true"></i>
-                  <span class="ml-3 f-3 font-weight-bold">Edit</span>
-                </button>
-                <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="deleteTeam(team)">
-                  <i class="i-icon i-trash bg-dark ml-1" aria-hidden="true"></i>
-                  <span class="ml-3 f-3 font-weight-bold">Delete</span>
-                </button>
-              </div>
-              <ng-template #leaveActions>
-                <button class="v-center border-0 py-1 c-dark dropdown-item" (click)="leaveTeam(team)">
-                  <i class="i-icon i-block bg-dark ml-1" aria-hidden="true"></i>
-                  <span class="ml-3 f-3 font-weight-bold">Leave Team</span>
-                </button>
-              </ng-template>
-            </div>
+          <div class="v-center justify-content-end">
+            <ng-container *ngIf="status(team) == 'Owner'; else leaveActions">
+              <button class="btn" (click)="editTeam(team)" placement="bottom" ngbTooltip="Edit" ngbButtonLabel>
+                <i class="i-icon i-edit bgc-dark d-block" aria-hidden="true"></i>
+              </button>
+              <button class="btn ml-2" (click)="deleteTeam(team)" placement="bottom" ngbTooltip="Delete" ngbButtonLabel>
+                <i class="i-icon i-trash bgc-dark d-block" aria-hidden="true"></i>
+              </button>
+            </ng-container>
+            <ng-template #leaveActions>
+              <button class="btn ml-2" (click)="leaveTeam(team)" placement="bottom" ngbTooltip="Leave Team" ngbButtonLabel>
+                <i class="i-icon i-block bgc-dark d-block" aria-hidden="true"></i>
+              </button>
+            </ng-template>
           </div>
         </td>
         </tr>

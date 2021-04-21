@@ -336,38 +336,26 @@
         </button>
       </div>
       <form #actionForm="ngForm" [class.was-validated]="actionForm.submitted">
-        <div class="form-group">
-          <label class="mb-2">Members</label>
-          <div class="filter-check-item">
-            <div class="custom-checkbox mb-1">
-              <input type="checkbox" class="custom-control-input" id="mfu-me" name="mfu-me"
-                     (change)="toggleUserOption(userId)" [checked]="userOptions.indexOf(userId) !== -1">
-              <label class="custom-control-label" for="mfu-me">
-                <div class="f-3 mt-1">Me</div>
-              </label>
-            </div>
-            <ng-container *ngFor="let user of team.owner">
-              <div class="custom-checkbox mb-1" *ngIf="user._id != userId">
-                <input type="checkbox" class="custom-control-input" id="mfu-{{user._id}}" name="mfu-{{user._id}}"
-                       (change)="toggleUserOption(user._id)" [checked]="userOptions.indexOf(user._id) !== -1">
-                <label class="custom-control-label" for="mfu-{{user._id}}">
-                  <div class="f-3 mt-1">{{user.user_name}}</div>
-                </label>
-              </div>
-            <ng-container *ngFor="let editorId of team.editors">
-              <div class="custom-checkbox mb-1" *ngIf="editorId != userId">
-                <input type="checkbox" class="custom-control-input" id="mfu-{{editorId}}" name="mfu-{{editorId}}"
-                       (change)="toggleUserOption(editorId)" [checked]="userOptions.indexOf(editorId) !== -1">
-                <label class="custom-control-label" for="mfu-{{editorId}}">
-                  <div class="f-3 mt-1">{{getEditorUserName(editorId)}}</div>
-                </label>
-              </div>
-            </ng-container>
-            </ng-container>
+        <div class="form-group mb-1 mt-5">
+          <label class="label mb-1">Share Option</label>
+        </div>
+        <div class="filter-check-item">
+          <div class="custom-checkbox my-2 mr-2 team-checkbox">
+            <input type="checkbox" class="custom-control-input" id="team-share-with" name="team-share-with"
+                   (change)="toggleShareOption('share_with')" [checked]="isShareWith">
+            <label class="custom-control-label f-3 pt-1" for="team-share-with">Share With</label>
+          </div>
+          <div class="custom-checkbox my-2 mr-2 team-checkbox">
+            <input type="checkbox" class="custom-control-input" id="team-share-by" name="team-share-by"
+                   (change)="toggleShareOption('share_by')" [checked]="isShareBy">
+            <label class="custom-control-label f-3 pt-1" for="team-share-by">Share By</label>
           </div>
         </div>
-
-        <div class="mt-4 d-flex">
+        <div class="form-group mt-3">
+          <label class="label mb-1">Members</label>
+          <app-member-selector [dataSource]="teamMembers" (onSelect)="changeTeamMemberOptions($event)"></app-member-selector>
+        </div>
+        <div class="mt-5 d-flex">
           <button type="button" class="btn btn-white font-weight-bold ml-auto" type="button" (click)="drawer.toggle()">Close</button>
         </div>
       </form>

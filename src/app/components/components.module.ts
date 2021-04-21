@@ -399,7 +399,8 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     AutomationDetailOverlayComponent,
     AdditionalFieldsComponent,
     PaymentCardComponent,
-    CallOverlayComponent
+    CallOverlayComponent,
+    MemberSelectorComponent
   ],
   bootstrap: [
     ContactCreateComponent,
@@ -410,7 +411,7 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     CallRequestDetailComponent,
     VideoShareComponent,
     SelectTeamComponent,
-    DeleteFolderComponent
+    DeleteFolderComponent,
   ]
 })
 export class ComponentsModule {}
