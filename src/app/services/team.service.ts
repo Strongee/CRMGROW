@@ -265,14 +265,12 @@ export class TeamService extends HttpService {
       );
   }
 
-  loadSharedContacts(id: string, count: number, page: number): void {
+  loadSharedContacts(data): void {
     this.sharedContactsLoadStatus.next(STATUS.REQUEST);
     this.loadSharedContactsSubscription &&
       this.loadSharedContactsSubscription.unsubscribe();
     this.loadSharedContactsSubscription = this.loadSharedContactsImpl(
-      id,
-      count,
-      page
+      data
     ).subscribe((res) => {
       res
         ? this.sharedContactsLoadStatus.next(STATUS.SUCCESS)
@@ -288,17 +286,9 @@ export class TeamService extends HttpService {
     });
   }
 
-  loadSharedContactsImpl(
-    id: string,
-    count: number,
-    page: number
-  ): Observable<any> {
+  loadSharedContactsImpl(data): Observable<any> {
     return this.httpClient
-      .post(this.server + TEAM.LOAD_SHARE_CONTACTS, {
-        team: id,
-        count,
-        skip: page
-      })
+      .post(this.server + TEAM.LOAD_SHARE_CONTACTS, data)
       .pipe(
         map((res) => res['data'] || []),
         catchError(this.handleError('TEAM LOAD SHARED CONTACTS', []))
