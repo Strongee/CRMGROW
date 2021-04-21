@@ -343,6 +343,9 @@ export class UserService extends HttpService {
     };
     return this.httpClient.post(this.server + USER.DISCONNECT_CALENDAR, data);
   }
+  public requestZoomSyncUrl(): Observable<any> {
+    return this.httpClient.get(this.server + USER.SYNC_ZOOM);
+  }
   public loadAffiliate(): Observable<any> {
     return this.httpClient.get(this.server + USER.LOAD_AFFILIATE).pipe(
       map((res) => res),

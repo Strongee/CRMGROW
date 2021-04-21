@@ -23,6 +23,7 @@ export const USER = {
   CREATE_PASSWORD: 'user/create-password',
   SYNC_GMAIL: 'user/sync-gmail',
   SYNC_OUTLOOK: 'user/sync-outlook',
+  SYNC_ZOOM: 'user/sync-zoom',
   CALENDAR_SYNC_GMAIL: 'user/sync-google-calendar',
   CALENDAR_SYNC_OUTLOOK: 'user/sync-outlook-calendar',
   AUTH_GOOGLE: 'user/authorize-gmail',

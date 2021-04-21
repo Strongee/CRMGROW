@@ -84,6 +84,9 @@ export class SmsLimitsComponent implements OnInit {
             case 'twilio':
               this.user.twilio_number = res;
               break;
+            case 'no':
+              this.user.twilio_number = res;
+              break;
           }
         }
       });
