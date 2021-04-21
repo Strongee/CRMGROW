@@ -8,6 +8,13 @@ td .c-blue {
   color: $color-blue!important;
 }
 
+.pagination-wrapper.disabled {
+  pointer-events: none;
+  .i-icon {
+    background-color: #cacaca;
+  }
+}
+
 .pagination-wrapper .i-icon{
   background-color: black;
   width: 20px;
