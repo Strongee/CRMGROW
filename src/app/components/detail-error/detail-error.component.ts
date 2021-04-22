@@ -16,12 +16,12 @@ export class DetailErrorComponent implements OnInit {
   searchCode = '';
   phoneNumbers = [];
   selectedPhone = '';
-  currentType = 2;
   plans = [
     { type: 1, sms: '250', price: '6' },
     { type: 2, sms: '500', price: '10' },
     { type: 3, sms: '1000', price: '15' }
   ];
+  currentType = this.plans[1];
 
   constructor(
     public dialogRef: MatDialogRef<DetailErrorComponent>,
@@ -140,13 +140,13 @@ export class DetailErrorComponent implements OnInit {
   }
 
   selectPlan(plan: any): void {
-    this.currentType = plan.type;
+    this.currentType = plan;
   }
 
   purchase(): void {
     this.saving = true;
     const data = {
-      option: this.currentType
+      option: this.currentType.type
     };
     this.connectService.buyCredit(data).subscribe(
       (res) => {
