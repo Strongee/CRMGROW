@@ -63,6 +63,7 @@ import { User } from 'src/app/models/user.model';
 import { AdditionalFieldsComponent } from 'src/app/components/additional-fields/additional-fields.component';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Note } from 'src/app/models/note.model';
+import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 
 @Component({
   selector: 'app-contact',
@@ -705,12 +706,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     // Check Calendars
     const calendars = this.appointmentService.calendars.getValue();
     if (!calendars || !calendars.length) {
-      this.dialog.open(NotifyComponent, {
-        ...DialogSettings.ALERT,
+      this.dialog.open(DetailErrorComponent, {
+        width: '98vw',
+        maxWidth: '420px',
         data: {
-          title: 'Calendar',
-          message:
-            'You did not connected with your calendars. Please connect with your calendar.'
+          errorCode: 407
         }
       });
       return;
@@ -2065,6 +2065,25 @@ export class ContactComponent implements OnInit, OnDestroy {
     } else {
       return `<div class="font-weight-bold">${material?.title}</div>`;
     }
+  }
+
+  isUrl(str): boolean {
+    let url = '';
+    if (str && str.startsWith('http')) {
+      url = str;
+    } else {
+      url = 'http://' + str;
+    }
+    const pattern = new RegExp(
+      '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$',
+      'i'
+    ); // fragment locator
+    return !!pattern.test(url);
   }
 
   ICONS = {

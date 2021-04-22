@@ -17,6 +17,7 @@ export class AdditionalEditComponent implements OnInit, OnDestroy {
   updateSubscription: Subscription;
   garbageSubscription: Subscription;
   additional_fields: any[] = [];
+  submitted = false;
 
   constructor(
     private dialogRef: MatDialogRef<AdditionalEditComponent>,
@@ -30,26 +31,49 @@ export class AdditionalEditComponent implements OnInit, OnDestroy {
       if (!this.contact.additional_field) {
         this.contact.additional_field = {};
       } else {
-        this.contact.additional_field = { ...this.contact.additional_field };
+        for (const key in this.contact.additional_field) {
+          const item = {
+            name: key,
+            value: this.contact.additional_field[key]
+          };
+          this.additional_fields.push(item);
+        }
       }
     }
   }
 
   ngOnInit(): void {
-    this.garbageSubscription = this.userService.garbage$.subscribe(
-      (_garbage) => {
-        this.additional_fields = _garbage.additional_fields;
-      }
-    );
+    // this.garbageSubscription = this.userService.garbage$.subscribe(
+    //   (_garbage) => {
+    //     this.additional_fields = _garbage.additional_fields;
+    //   }
+    // );
   }
 
   ngOnDestroy(): void {
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
   }
 
+  addField(): void {
+    this.additional_fields.push({
+      name: '',
+      value: ''
+    });
+  }
+
+  removeField(index): void {
+    this.additional_fields.splice(index, 1);
+  }
+
   update(): void {
     this.isUpdating = true;
     const contactId = this.contact._id;
+    this.contact.additional_field = {};
+    if (this.additional_fields.length > 0) {
+      for (const field of this.additional_fields) {
+        this.contact.additional_field[field.name] = field.value;
+      }
+    }
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService
       .updateContact(contactId, this.contact)

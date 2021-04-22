@@ -3,7 +3,7 @@
     Current SMS limit details
   </div>
   <div class="f-5 mt-3">
-    You have <span class="font-weight-bold">0 SMS messages</span> remaining.
+    You have <span class="font-weight-bold">{{user.text_info.additional_credit?.amount || 0}} SMS messages</span> remaining.
   </div>
   <button class="btn btn-primary f-6 mt-3" (click)="purchase()">Purchase messages</button>
   <hr class="my-4"/>

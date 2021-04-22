@@ -51,7 +51,8 @@ export class ImportContactMergeComponent implements OnInit {
     'primary_email',
     'primary_phone',
     'secondary_email',
-    'secondary_phone'
+    'secondary_phone',
+    'website'
   ];
 
   emailPhoneColumn = [

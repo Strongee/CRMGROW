@@ -1092,9 +1092,9 @@ export class UploadContactsComponent implements OnInit {
         }
       }
       if (this.firstImport) {
-        this.firstImport = false;
+        // this.firstImport = false;
         this.step = 4;
-        this.selectAllContacts();
+        this.selectAllForce();
       } else {
         if (csvContacts.length) {
           this.uploading = true;
@@ -1351,6 +1351,14 @@ export class UploadContactsComponent implements OnInit {
         this.selectedImportContacts.select(e.id);
       });
     }
+  }
+
+  selectAllForce(): void {
+    this.contactsToUpload.forEach((e) => {
+      if (!this.selectedImportContacts.isSelected(e.id)) {
+        this.selectedImportContacts.select(e.id);
+      }
+    });
   }
 
   isSelectedContacts(): any {
@@ -2177,6 +2185,10 @@ export class UploadContactsComponent implements OnInit {
     {
       value: 'brokerage',
       label: 'Company'
+    },
+    {
+      value: 'website',
+      label: 'Website'
     },
     {
       value: 'address',

@@ -1,9 +1,10 @@
 import {
+  ApplicationRef, ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
-  OnInit,
-  ViewChild
+  OnInit, TemplateRef,
+  ViewChild, ViewContainerRef
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
@@ -15,6 +16,8 @@ import { ContactService } from 'src/app/services/contact.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { TemplatesService } from 'src/app/services/templates.service';
+import {TemplatePortal} from "@angular/cdk/portal";
+import {Overlay, OverlayRef} from "@angular/cdk/overlay";
 
 @Component({
   selector: 'app-material-send',
@@ -36,6 +39,11 @@ export class MaterialSendComponent implements OnInit {
   firstMaterialType = '';
 
   @ViewChild('messageText') messageEl: ElementRef;
+  overlayRef: OverlayRef;
+  templatePortal: TemplatePortal;
+  @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
+  templateSubject = '';
+  templateValue = '';
 
   constructor(
     private userService: UserService,
@@ -43,6 +51,10 @@ export class MaterialSendComponent implements OnInit {
     private materialService: MaterialService,
     public templateService: TemplatesService,
     private toast: ToastrService,
+    private _viewContainerRef: ViewContainerRef,
+    private overlay: Overlay,
+    private cdr: ChangeDetectorRef,
+    private appRef: ApplicationRef,
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -295,5 +307,50 @@ export class MaterialSendComponent implements OnInit {
           this.dialogRef.close();
         }
       });
+  }
+
+  createNew(): void {
+    this.templatePortal = new TemplatePortal(
+      this.createNewContent,
+      this._viewContainerRef
+    );
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+        return;
+      } else {
+        this.overlayRef.attach(this.templatePortal);
+        return;
+      }
+    } else {
+      this.overlayRef = this.overlay.create({
+        hasBackdrop: true,
+        backdropClass: 'template-backdrop',
+        panelClass: 'template-panel',
+        width: '96vw',
+        maxWidth: '480px'
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((event) => {
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
+    }
+  }
+
+  closeOverlay(flag: boolean): void {
+    if (this.overlayRef) {
+      this.overlayRef.detach();
+      this.overlayRef.detachBackdrop();
+    }
+    if (flag) {
+      this.toast.success('', 'New template is created successfully.', {
+        closeButton: true
+      });
+      setTimeout(() => {
+        this.appRef.tick();
+      }, 1);
+    }
+    this.cdr.detectChanges();
   }
 }

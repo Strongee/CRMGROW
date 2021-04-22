@@ -15,7 +15,7 @@
           </div>
           <div class="col-7 v-center pl-1">
             <div class="form-group flex-grow-1 mb-0">
-              <input class="form-control field-value" [(ngModel)]="field.value" name="{{'fieldValue' + i}}" placeholder="Field Value" (ngModelChange)="checkFieldValue($event, i)"/>
+              <input class="form-control field-value" [(ngModel)]="field.value" name="{{'fieldValue' + i}}" placeholder="" (ngModelChange)="checkFieldValue($event, i)"/>
             </div>
             <div class="remove ml-1" [class.d-none]="fields.length === 1">
               <a class="c-pointer" (click)="removeField(i)">
