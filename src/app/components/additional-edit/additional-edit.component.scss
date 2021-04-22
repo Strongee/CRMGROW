@@ -1,9 +1,17 @@
-.additional-fields {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 16px;
+.remove a {
+  display: block;
+  background: blue;
+  border-radius: 50%;
+  padding: 2px;
 
-  @media screen and (max-width: 576px) {
-    display: block;
+  .i-remove {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
   }
+}
+
+.additional-fields {
+  max-height: 400px;
+  overflow: auto;
 }

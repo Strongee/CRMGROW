@@ -107,7 +107,11 @@
           <div class="contact-detail">
             <div class="v-center py-1">
               <i class="i-icon i-contact-phone bgc-dark mr-2"></i>
-              <span class="f-6">{{contact.cell_phone}}</span>
+              <span class="f-6">
+                <a class="f-6 text-decoration-none c-blue" [href]="'tel:' + contact['cell_phone']" *ngIf="contact['cell_phone']">
+                  {{contact['cell_phone']}}
+                </a>
+              </span>
             </div>
             <div class="v-center py-1">
               <i class="i-icon i-message bgc-dark mr-2"></i>
@@ -119,7 +123,11 @@
             </div>
             <div class="v-center py-1">
               <i class="i-icon i-webpage bgc-dark mr-2"></i>
-              <span class="f-6">{{contact.website}}</span>
+              <span class="f-6">
+                <a class="f-6 text-decoration-none c-blue" [href]="contact['website'] && contact['website'].startsWith('http') ? contact['website'] : 'http://' + contact['website']" target='_blank'>
+                  {{ contact["website"] }}
+                </a>
+              </span>
             </div>
           </div>
         </mat-expansion-panel>
@@ -170,7 +178,19 @@
           <div class="contact-additional">
             <div class="v-center py-2">
               <span class="f-6 fw-600 op-40 info-title">Source</span>
-              <span class="f-6">{{contact.source}}</span>
+              <span class="f-6">
+                <ng-container *ngIf="isUrl(contact['source']); else normalTextTemplate">
+                  <a class="f-6 text-decoration-none c-blue"
+                     [href]="contact['source'] && contact['source'].startsWith('http') ? contact['source'] : 'http://' + contact['source']"
+                     target='_blank'
+                  >
+                  {{ contact["source"] }}
+                </a>
+                </ng-container>
+                <ng-template #normalTextTemplate>
+                  {{contact.source}}
+                </ng-template>
+              </span>
             </div>
             <div class="v-center py-2">
               <span class="f-6 fw-600 op-40 info-title">Current Company</span>
@@ -198,7 +218,7 @@
               </div>
             </ng-container>
             <div class="mt-2">
-              <a class="c-blue fw-600 td-none c-pointer" (click)="addAdditionalFields()">Edit additional fields</a>
+              <a class="c-blue fw-600 td-none c-pointer" (click)="addAdditionalFields()">Add additional fields</a>
             </div>
           </div>
         </mat-expansion-panel>
@@ -859,7 +879,7 @@
                                   <td class="start-col"></td>
                                   <td class="end-col"></td>
                                 </ng-template>
-                                
+
                                 <td class="date-col">
                                   <div class="f-3 font-weight-bold text-uppercase px-2 py-1 c-pointer" ngbTooltip="{{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}">
                                     {{detailActivity.created_at | date: 'MMM dd yyyy, hh:mm a'}}
