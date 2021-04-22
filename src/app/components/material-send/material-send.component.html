@@ -14,7 +14,7 @@
                 <img [src]="data.material[0].preview" *ngSwitchCase="'pdf'" onerror="( this.src = './assets/img/video_thumb.jpg' );">
                 <img [src]="data.material[0].preview" *ngSwitchCase="'image'" onerror="( this.src = './assets/img/video_thumb.jpg' );">
             </ng-container>
-            
+
             <div class="ml-4">
                 <div class="f-6 font-weight-bold material-title">
                     {{data.material[0].title}}
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="d-flex">
             <div class="v-center mt-3 material-more px-1 py-0 mx-auto" *ngIf="data.material.length > 1">
                 <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'video' && videos.length > 1; else normalVideoTemplate">
@@ -59,7 +59,7 @@
                 </ng-template>
             </div>
         </div>
-        
+
         <div class="form-group mt-3">
             <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                 select contact to who you want to send material
@@ -93,6 +93,11 @@
                                 <i class="d-block i-icon i-texts bgc-dark"></i>
                             </div>
                             <div ngbDropdownMenu class="light py-1">
+                                <div class="template dropdown-item border-top px-2">
+                                  <div class="v-center h-100">
+                                    <div class="f-3 font-weight-bold flex-grow-1 mr-1 h-100 v-center" (click)="createNew()">Create New Template ...</div>
+                                  </div>
+                                </div>
                                 <ng-container *ngFor="let template of (templateService.templates$ | async)">
                                     <div class="template dropdown-item border-top px-2" *ngIf="template.type === 'text'">
                                         <div class="v-center h-100">
@@ -129,7 +134,7 @@
                         #messageText
                     ></textarea>
                 </div>
-                
+
             </div>
         </ng-container>
         <ng-container label="Send via Email" *ngIf="data?.type == 'email'">
@@ -178,3 +183,8 @@
         <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="sending">Send</button>
     </mat-dialog-actions>
 </form>
+
+<ng-template #createNewContent>
+  <app-template-create class="w-100" [value]="templateValue" [subject]="templateSubject" [type]="'text'" (onClose)="closeOverlay($event)">
+  </app-template-create>
+</ng-template>
