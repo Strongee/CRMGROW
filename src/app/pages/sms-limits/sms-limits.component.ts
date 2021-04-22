@@ -22,6 +22,14 @@ export class SmsLimitsComponent implements OnInit {
   profileSubscription: Subscription;
 
   constructor(private userService: UserService, private dialog: MatDialog) {
+    this.init();
+  }
+
+  ngOnInit(): void {
+    this.smsPercent = (this.leftSms / this.totalSms) * 100;
+  }
+
+  init(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -40,30 +48,24 @@ export class SmsLimitsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.smsPercent = (this.leftSms / this.totalSms) * 100;
-  }
-
   changeType(type: string): void {
     this.smsType = type;
   }
 
-  buyMore(): void {
-    this.dialog.open(PlanSelectComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '650px',
-      disableClose: true
-    });
-  }
-
   purchase(): void {
-    this.dialog.open(PurchaseMessageComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '650px',
-      disableClose: true
-    });
+    this.dialog
+      .open(PurchaseMessageComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '650px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.init();
+        }
+      });
   }
 
   addPhone(): void {

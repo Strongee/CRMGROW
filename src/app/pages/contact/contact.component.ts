@@ -63,6 +63,7 @@ import { User } from 'src/app/models/user.model';
 import { AdditionalFieldsComponent } from 'src/app/components/additional-fields/additional-fields.component';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Note } from 'src/app/models/note.model';
+import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 
 @Component({
   selector: 'app-contact',
@@ -705,12 +706,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     // Check Calendars
     const calendars = this.appointmentService.calendars.getValue();
     if (!calendars || !calendars.length) {
-      this.dialog.open(NotifyComponent, {
-        ...DialogSettings.ALERT,
+      this.dialog.open(DetailErrorComponent, {
+        width: '98vw',
+        maxWidth: '420px',
         data: {
-          title: 'Calendar',
-          message:
-            'You did not connected with your calendars. Please connect with your calendar.'
+          errorCode: 407
         }
       });
       return;

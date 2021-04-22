@@ -134,6 +134,40 @@ export class ErrorService {
           }
         });
         break;
+      case 407:
+        this.dialog.closeAll();
+        this.dialog.open(DetailErrorComponent, {
+          width: '98vw',
+          maxWidth: '420px',
+          data: {
+            errorCode: 407
+          }
+        });
+        break;
+      case 408:
+        this.dialog.closeAll();
+        this.dialog.open(DetailErrorComponent, {
+          position: { top: '100px' },
+          width: '100vw',
+          maxWidth: '650px',
+          disableClose: true,
+          data: {
+            errorCode: 408
+          }
+        });
+        break;
+      case 409:
+        this.dialog.closeAll();
+        this.dialog.open(DetailErrorComponent, {
+          position: { top: '100px' },
+          width: '100vw',
+          maxWidth: '650px',
+          disableClose: true,
+          data: {
+            errorCode: 409
+          }
+        });
+        break;
       default:
         this.toast.error(errorObj.message, errorObj.operation, {
           closeButton: true
