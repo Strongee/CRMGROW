@@ -927,7 +927,8 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
           buttonLabel: 'Share',
           multiple: true,
           onlyMine: true,
-          hideMaterials: this.materials
+          hideMaterials: this.materials,
+          resultMatType: 'with-folder'
         }
       })
       .afterClosed()
@@ -936,6 +937,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
           const videoIds = [];
           const pdfIds = [];
           const imageIds = [];
+          const folderIds = [];
           for (const material of res.materials) {
             if (material.material_type === 'video') {
               videoIds.push(material._id);
@@ -943,8 +945,23 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
               pdfIds.push(material._id);
             } else if (material.material_type === 'image') {
               imageIds.push(material._id);
+            } else {
+              folderIds.push(material._id);
             }
           }
+
+          this.teamService
+            .shareMaterials(this.team._id, {
+              videos: videoIds,
+              images: imageIds,
+              pdfs: pdfIds,
+              folders: folderIds
+            })
+            .subscribe((_materials) => {
+              // Insert show
+            });
+
+          return;
 
           if (videoIds.length > 0) {
             this.teamService

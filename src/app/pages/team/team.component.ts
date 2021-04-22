@@ -250,7 +250,8 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
             buttonLabel: 'Share',
             multiple: true,
             onlyMine: true,
-            hideMaterials
+            hideMaterials,
+            resultMatType: 'with-folder'
           }
         })
         .afterClosed()
@@ -259,6 +260,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
             const videoIds = [];
             const pdfIds = [];
             const imageIds = [];
+            const folderIds = [];
             for (const material of res.materials) {
               if (material.material_type === 'video') {
                 videoIds.push(material._id);
@@ -266,6 +268,8 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
                 pdfIds.push(material._id);
               } else if (material.material_type === 'image') {
                 imageIds.push(material._id);
+              } else {
+                folderIds.push(material._id);
               }
             }
 
@@ -649,9 +653,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
 
   changeTab(tab: TabItem): void {
     this.selectedTab = tab;
-    this.location.replaceState(
-      `/team/${this.team._id}/${this.selectedTab.id}`
-    );
+    this.location.replaceState(`/team/${this.team._id}/${this.selectedTab.id}`);
   }
 
   isSelectedPage(): any {

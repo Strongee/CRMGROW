@@ -79,7 +79,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     { icon: '', label: 'Emails', id: 'email' },
     { icon: '', label: 'Texts', id: 'text' },
     { icon: '', label: 'Appointments', id: 'appointment' },
-    { icon: '', label: 'Group Calls', id: 'group_call' },
+    // { icon: '', label: 'Group Calls', id: 'group_call' },
     { icon: '', label: 'Tasks', id: 'follow_up' },
     { icon: '', label: 'Deals', id: 'deal' }
   ];
@@ -521,7 +521,9 @@ export class ContactComponent implements OnInit, OnDestroy {
    */
   goToBack(): void {
     // this.location.back();
-    this.checkAndSave();
+    if (this.contact._id && this.nameEditable) {
+      this.checkAndSave();
+    }
     this.handlerService.goBack('/contacts');
   }
 
@@ -1007,9 +1009,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.tabs[2]['badge'] = this.detailCounts['emails'];
     this.tabs[3]['badge'] = this.detailCounts['texts'];
     this.tabs[4]['badge'] = this.detailCounts['appointments'];
-    this.tabs[5]['badge'] = this.detailCounts['team_calls'];
-    this.tabs[6]['badge'] = this.detailCounts['follow_ups'];
-    this.tabs[7]['badge'] = this.detailCounts['deals'];
+    // this.tabs[5]['badge'] = this.detailCounts['team_calls'];
+    this.tabs[5]['badge'] = this.detailCounts['follow_ups'];
+    this.tabs[6]['badge'] = this.detailCounts['deals'];
   }
 
   changeActivityTypes(type: TabItem): void {

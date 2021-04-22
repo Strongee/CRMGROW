@@ -571,7 +571,7 @@
 
                     </div>
 
-                    <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'team_calls'">
+                    <div class="history-detail {{activity.type}}-detail p-3 mt-3 d-none" *ngSwitchCase="'team_calls'">
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">
                           <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
@@ -1051,7 +1051,7 @@
                         </div>
                       </div>
 
-                      <div class="history-detail group_calls-detail p-3 mt-3" *ngSwitchCase="'team_calls'">
+                      <div class="history-detail group_calls-detail p-3 mt-3 d-none" *ngSwitchCase="'team_calls'">
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-team_calls"></i></div>
                           <div class="">group call</div>

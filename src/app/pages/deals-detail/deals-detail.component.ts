@@ -61,7 +61,7 @@ export class DealsDetailComponent implements OnInit {
     { icon: '', label: 'Emails', id: 'emails' },
     { icon: '', label: 'Texts', id: 'texts' },
     { icon: '', label: 'Appointments', id: 'appointments' },
-    { icon: '', label: 'Group Calls', id: 'team_calls' },
+    // { icon: '', label: 'Group Calls', id: 'team_calls' },
     { icon: '', label: 'Tasks', id: 'follow_ups' }
   ];
   tab: TabItem = this.tabs[0];

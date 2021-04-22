@@ -38,6 +38,7 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
 
   multiple = true;
   onlyMine = false;
+  resultMatType = 'material';
 
   hideMaterials = [];
   constructor(
@@ -50,6 +51,10 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
     if (this.data) {
       this.multiple = this.data.multiple;
       this.onlyMine = this.data.onlyMine;
+
+      if (this.data.resultMatType) {
+        this.resultMatType = this.data.resultMatType;
+      }
 
       if (this.data.material_type) {
         this.material_type = this.data.material_type;
@@ -259,21 +264,34 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
       }
       return false;
     });
-    const filteredFolders = this.folders
-      .filter((e) => {
-        if (this.selection.indexOf(e._id) !== -1) {
-          return true;
-        }
-      })
-      .map((e) => e._id);
-    const folderMaterials = this.materials.filter((e) => {
-      if (filteredFolders.indexOf(e.folder) !== -1) {
+    const filteredFolders = this.folders.filter((e) => {
+      if (this.selection.indexOf(e._id) !== -1) {
         return true;
       }
     });
-    this.dialogRef.close({
-      materials: [...folderMaterials, ...selectedMaterials]
+    const filteredFolderIds = filteredFolders.map((e) => e._id);
+    const folderMaterials = this.materials.filter((e) => {
+      if (filteredFolderIds.indexOf(e.folder) !== -1) {
+        return true;
+      }
     });
+
+    console.log(
+      'filteredFolders',
+      this.folders,
+      filteredFolders,
+      folderMaterials
+    );
+
+    if (this.resultMatType === 'material') {
+      this.dialogRef.close({
+        materials: [...folderMaterials, ...selectedMaterials]
+      });
+    } else {
+      this.dialogRef.close({
+        materials: [...filteredFolders, ...selectedMaterials]
+      });
+    }
   }
 
   selectMaterial(element: Material): void {

@@ -1115,7 +1115,7 @@
                 </div>
               </div>
 
-              <div *ngIf="(activityType.id == 'all' || activityType.id == 'group_call') && activity.type == 'team_calls'">
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'group_call') && activity.type == 'team_calls'" class="d-none">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
@@ -1751,7 +1751,7 @@
                     </div>
                   </div>
 
-                  <div class="history-detail group_calls-detail p-3 mt-3" *ngSwitchCase="'group_call'">
+                  <div class="history-detail group_calls-detail p-3 mt-3 d-none" *ngSwitchCase="'group_call'">
                     <div class="v-center justify-content-between mb-3">
                       <div class="history-icon mr-3"><i class="act-icon act-team_calls"></i></div>
                       <div class="">group call</div>
