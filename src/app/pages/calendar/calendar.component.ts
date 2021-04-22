@@ -25,6 +25,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -805,6 +806,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
     const isoDate = this.viewDate.toISOString();
     this.load(isoDate, this.selectedTab.id);
+  }
+
+  addCalendar(): void {
+    this.dialog.open(DetailErrorComponent, {
+      width: '98vw',
+      maxWidth: '420px',
+      data: {
+        errorCode: 407
+      }
+    });
   }
 
   openOverlay(day: any, trigger: any): void {

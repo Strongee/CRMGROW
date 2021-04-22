@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { INTEGRATION, USER } from '../constants/api.constant';
+import { INTEGRATION, SMS, USER } from '../constants/api.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,17 @@ export class ConnectService {
     return this.httpClient.get(environment.api + USER.SET_ANOTHER_MAIL);
   }
 
+  public requestCalendarSyncUrl(type: string): Observable<any> {
+    switch (type) {
+      case 'gmail':
+        return this.httpClient.get(environment.api + USER.CALENDAR_SYNC_GMAIL);
+      case 'outlook':
+        return this.httpClient.get(
+          environment.api + USER.CALENDAR_SYNC_OUTLOOK
+        );
+    }
+  }
+
   public connectCalendly(apiKey: any): any {
     return this.httpClient.post(
       environment.api + INTEGRATION.CHECK_CALENDLY,
@@ -37,6 +48,17 @@ export class ConnectService {
     );
   }
 
+  public searchNumbers(data: any): Observable<any> {
+    return this.httpClient.post(environment.api + SMS.SEARCH_NUMBER, data);
+  }
+
+  public buyNumbers(data: any): Observable<any> {
+    return this.httpClient.post(environment.api + SMS.BUY_NUMBER, data);
+  }
+
+  public buyCredit(data: any): Observable<any> {
+    return this.httpClient.post(environment.api + SMS.BUY_CREDIT, data);
+  }
   public getToken(): any {
     return this.httpClient.get(environment.api + INTEGRATION.GET_TOKEN);
   }

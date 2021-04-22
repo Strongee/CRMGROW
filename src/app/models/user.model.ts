@@ -48,6 +48,10 @@ export class User implements Deserializable {
     max_count: 3000
   };
   text_info = {
+    additional_credit: {
+      amount: 0,
+      updated_at: Date
+    },
     is_limit: true,
     max_count: 3000,
     count: 0

@@ -39,6 +39,7 @@ import { FormControl } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { SendBulkTextComponent } from 'src/app/components/send-bulk-text/send-bulk-text.component';
 import { ToastrService } from 'ngx-toastr';
+import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -350,12 +351,11 @@ export class DealsDetailComponent implements OnInit {
   openAppointmentDlg(): void {
     const calendars = this.appointmentService.calendars.getValue();
     if (!calendars || !calendars.length) {
-      this.dialog.open(NotifyComponent, {
-        ...DialogSettings.ALERT,
+      this.dialog.open(DetailErrorComponent, {
+        width: '98vw',
+        maxWidth: '420px',
         data: {
-          title: 'Calendar',
-          message:
-            'You did not connected with your calendars. Please connect with your calendar.'
+          errorCode: 407
         }
       });
       return;

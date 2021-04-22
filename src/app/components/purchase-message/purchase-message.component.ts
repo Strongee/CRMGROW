@@ -37,6 +37,7 @@ export class PurchaseMessageComponent implements OnInit {
       (res) => {
         if (res && res['status']) {
           this.saving = false;
+          this.dialogRef.close(true);
         }
       },
       (err) => {
