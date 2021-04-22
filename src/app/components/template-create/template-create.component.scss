@@ -82,3 +82,11 @@
 .insert-token.for-subject {
   top: 42px
 }
+
+.text-template-contents {
+  position: relative;
+
+  .insert-token {
+    top: 0;
+  }
+}

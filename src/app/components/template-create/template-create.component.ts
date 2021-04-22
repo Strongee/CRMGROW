@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild,
   EventEmitter,
-  ChangeDetectorRef
+  ChangeDetectorRef, ElementRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -37,6 +37,7 @@ export class TemplateCreateComponent implements OnInit {
   required: boolean = false;
 
   cursor: number = 0;
+  submitted = false;
 
   @Input()
   public set subject(value: string) {
@@ -44,8 +45,12 @@ export class TemplateCreateComponent implements OnInit {
     this.cursor = value.length;
   }
   @Input() value: string = '';
+  @Input() type: string = 'email';
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
   @Output() onClose: EventEmitter<boolean> = new EventEmitter();
+  @ViewChild('messageText') textAreaEl: ElementRef;
+  cursorStart = 0;
+  cursorEnd = 0;
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
@@ -126,8 +131,10 @@ export class TemplateCreateComponent implements OnInit {
 
   saveTemplate(): void {
     this.template.content = this.value;
+    this.template.type = this.type;
     this.isSaving = true;
     this.cdr.detectChanges();
+    console.log("save template =============>", this.template);
     this.saveSubscription && this.saveSubscription.unsubscribe();
     this.saveSubscription = this.templateService
       .create(this.template)
@@ -142,23 +149,38 @@ export class TemplateCreateComponent implements OnInit {
   }
 
   insertEmailContentValue(value: string): void {
-    if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
-      this.emailEditor.quillEditor.focus();
-      const range = this.emailEditor.quillEditor.getSelection();
-      let index = 0;
-      if (range) {
-        index = range.index;
+    if (this.type === 'email') {
+      if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
+        this.emailEditor.quillEditor.focus();
+        const range = this.emailEditor.quillEditor.getSelection();
+        let index = 0;
+        if (range) {
+          index = range.index;
+        }
+        const delta = this.quillEditorRef.clipboard.convert({
+          html: value
+        });
+        this.emailEditor.quillEditor.updateContents(
+          new Delta().retain(index).concat(delta),
+          'user'
+        );
+        const length = this.emailEditor.quillEditor.getLength();
+        this.emailEditor.quillEditor.setSelection(length, 0, 'user');
+        // this.emailEditor.quillEditor.setContents(delta, 'user');
       }
-      const delta = this.quillEditorRef.clipboard.convert({
-        html: value
-      });
-      this.emailEditor.quillEditor.updateContents(
-        new Delta().retain(index).concat(delta),
-        'user'
+    } else {
+      this.textAreaEl.nativeElement.focus();
+      this.textAreaEl.nativeElement.setSelectionRange(
+        this.cursorStart,
+        this.cursorEnd
       );
-      const length = this.emailEditor.quillEditor.getLength();
-      this.emailEditor.quillEditor.setSelection(length, 0, 'user');
-      // this.emailEditor.quillEditor.setContents(delta, 'user');
+      document.execCommand('insertText', false, value);
+      this.cursorStart += value.length;
+      this.cursorEnd = this.cursorStart;
+      this.textAreaEl.nativeElement.setSelectionRange(
+        this.cursorStart,
+        this.cursorEnd
+      );
     }
   }
 
@@ -175,5 +197,14 @@ export class TemplateCreateComponent implements OnInit {
       value +
       text.substr(this.cursor, text.length - this.cursor);
     this.template.subject = text;
+  }
+
+  setCursorPos(field): void {
+    if (field.selectionStart || field.selectionStart === '0') {
+      this.cursorStart = field.selectionStart;
+    }
+    if (field.selectionEnd || field.selectionEnd === '0') {
+      this.cursorEnd = field.selectionEnd;
+    }
   }
 }
