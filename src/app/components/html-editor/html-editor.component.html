@@ -29,6 +29,32 @@
         </ng-container>
       </div>
     </ng-template>
+    <button
+      class="calendly-action"
+      cdkOverlayOrigin
+      #calendlyOverlay="cdkOverlayOrigin"
+      (click)="showCalendly = true">
+      OPEN
+    </button>
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="calendlyOverlay"
+      [cdkConnectedOverlayOpen]="showCalendly"
+      (overlayOutsideClick)="closeCalendly($event)"
+    >
+      <div class="templates-container">
+        <ng-container *ngFor="let calendly of calendlyList">
+          <div class="template">
+            <div class="v-center">
+              <div class="f-3 font-weight-bold w-100" (click)="selectCalendly(calendly.attributes.url)">{{calendly.attributes.name}}</div>
+              <a class="ml-auto" [href]="calendly.attributes.url" target="blank">
+                <i class="d-block i-icon i-expand bgc-dark"></i>
+              </a>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-template>
     <quill-editor
       [placeholder]="placeholder"
       [ngModel]="value"
