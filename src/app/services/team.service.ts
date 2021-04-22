@@ -200,7 +200,8 @@ export class TeamService extends HttpService {
         this.storeService.sharedMaterials.next([
           ...res['video_data'],
           ...res['pdf_data'],
-          ...res['image_data']
+          ...res['image_data'],
+          ...res['folder_data']
         ]);
       }
     });

@@ -107,7 +107,7 @@
           <div class="contact-detail">
             <div class="v-center py-1">
               <i class="i-icon i-contact-phone bgc-dark mr-2"></i>
-              <span class="f-6">{{contact.cell_phone}}</span>
+              <a href="tel:{{contact.cell_phone}}" class="c-pointer c-dark td-none"><span class="f-6">{{contact.cell_phone | phone_format }}</span></a>
             </div>
             <div class="v-center py-1">
               <i class="i-icon i-message bgc-dark mr-2"></i>
@@ -142,7 +142,7 @@
           <div class="contact-detail">
             <div class="v-center py-1">
               <i class="i-icon i-contact-phone bgc-dark mr-2"></i>
-              <span class="f-6">{{contact.secondary_phone}}</span>
+              <a href="tel:{{contact.secondary_phone}}" class="c-pointer c-dark td-none"><span class="f-6">{{contact.secondary_phone | phone_format }}</span></a>
             </div>
             <div class="v-center py-1">
               <i class="i-icon i-message bgc-dark mr-2"></i>

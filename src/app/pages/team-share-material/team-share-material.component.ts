@@ -21,7 +21,6 @@ import { Material } from 'src/app/models/material.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import * as _ from 'lodash';
 import { FolderComponent } from 'src/app/components/folder/folder.component';
-import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
 import { Team } from '../../models/team.model';
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
@@ -54,14 +53,9 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   filteredMaterials: any[] = [];
   selection: any[] = [];
 
-  convertLoaderTimer;
-
   captureVideos = [];
-  editedVideos;
   capturePdfs = [];
-  editedPdfs;
   captureImages = [];
-  editedImages;
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
@@ -80,7 +74,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   page = 1;
   perPageCount = 8;
   pageMaterials: any = [];
-  loading = false;
 
   selectedSort = 'title';
 
@@ -103,37 +96,34 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     private router: Router,
     private clipboard: Clipboard,
     private route: ActivatedRoute
-  ) {
-    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
-      const garbage = new Garbage().deserialize(res);
-      this.captureVideos = garbage['capture_videos'] || [];
-      this.editedVideos = garbage['edited_video'] || [];
-      this.capturePdfs = garbage['capture_pdfs'] || [];
-      this.editedPdfs = garbage['edited_pdf'] || [];
-      this.captureImages = garbage['capture_images'] || [];
-      this.editedImages = garbage['edited_image'] || [];
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
-    const profile = this.userService.profile.getValue();
-    this.user_id = profile._id;
-    this.selectedFolder = null;
-    this.loading = true;
-    this.loadSubscription && this.loadSubscription.unsubscribe();
     this.teamService.loadSharedMaterials(this.team._id);
-    this.storeService.sharedMaterials$.subscribe(
-      (res) => {
-        this.loading = false;
-        this.materials = res;
-        this.filteredMaterials = this.materials;
-      },
-      (error) => {
-        this.loading = false;
+    this.selectedFolder = null;
+
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        this.user_id = profile._id;
       }
     );
 
-    this.filter();
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      const garbage = new Garbage().deserialize(res);
+      this.captureVideos = garbage['capture_videos'] || [];
+      this.capturePdfs = garbage['capture_pdfs'] || [];
+      this.captureImages = garbage['capture_images'] || [];
+    });
+
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.storeService.sharedMaterials$.subscribe(
+      (_materials) => {
+        this.materials = _materials;
+        this.filter();
+      }
+    );
   }
 
   ngOnChanges(changes): void {
@@ -146,7 +136,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    clearInterval(this.convertLoaderTimer);
   }
 
   isAllSelected(): boolean {
@@ -618,107 +607,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
           });
         this.changeCaptureAction();
         break;
-      case 'delete':
-        if (!this.selection.length) {
-          return;
-        } else {
-          const confirmDialog = this.dialog.open(ConfirmComponent, {
-            position: { top: '100px' },
-            data: {
-              title: 'Delete Materials',
-              message: 'Are you sure to delete these materials?',
-              confirmLabel: 'Delete',
-              cancelLabel: 'Cancel'
-            }
-          });
-          confirmDialog.afterClosed().subscribe((res) => {
-            if (res) {
-              const selectedAdminVideos = [];
-              const selectedAdminPdfs = [];
-              const selectedAdminImages = [];
-              const selectedVideos = [];
-              const selectedPdfs = [];
-              const selectedImages = [];
-              selectedMaterials.forEach((e) => {
-                if (e.material_type === 'video') {
-                  if (e.role === 'admin') {
-                    selectedAdminVideos.push(e._id);
-                  } else {
-                    selectedVideos.push(e._id);
-                  }
-                } else if (e.material_type === 'pdf') {
-                  if (e.role === 'admin') {
-                    selectedAdminPdfs.push(e._id);
-                  } else {
-                    selectedPdfs.push(e._id);
-                  }
-                } else if (e.material_type === 'image') {
-                  if (e.role === 'admin') {
-                    selectedAdminImages.push(e._id);
-                  } else {
-                    selectedImages.push(e._id);
-                  }
-                }
-              });
-              if (
-                selectedAdminVideos.length ||
-                selectedAdminPdfs.length ||
-                selectedAdminImages.length
-              ) {
-                const updateData = {};
-                if (selectedAdminVideos.length) {
-                  const editedVideos = _.union(
-                    this.editedVideos,
-                    selectedAdminVideos
-                  );
-                  updateData['edited_video'] = editedVideos;
-                }
-                if (selectedAdminPdfs.length) {
-                  const editedPdfs = _.union(
-                    this.editedPdfs,
-                    selectedAdminPdfs
-                  );
-                  updateData['edited_pdf'] = editedPdfs;
-                }
-                if (selectedAdminImages.length) {
-                  const editedImages = _.union(
-                    this.editedImages,
-                    selectedAdminImages
-                  );
-                  updateData['edited_image'] = editedImages;
-                }
-
-                // Call the Garbage Update
-                this.userService
-                  .updateGarbage(updateData)
-                  .subscribe((status) => {
-                    if (status) {
-                      this.userService.updateGarbageImpl(updateData);
-                    }
-                  });
-              }
-
-              if (
-                selectedVideos.length ||
-                selectedImages.length ||
-                selectedPdfs.length
-              ) {
-                const removeData = {
-                  videos: selectedVideos,
-                  pdfs: selectedPdfs,
-                  images: selectedImages
-                };
-                this.materialService
-                  .bulkRemove(removeData)
-                  .subscribe((status) => {
-                    if (status) {
-                    }
-                  });
-              }
-            }
-          });
-        }
-        break;
     }
   }
 
@@ -959,46 +847,15 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
             })
             .subscribe((_materials) => {
               // Insert show
+              if (_materials && _materials.length) {
+                this.toast.success(
+                  'Selected materials has been shared successfully'
+                );
+                this.materials = [...this.materials, ..._materials];
+                this.filter();
+              }
             });
-
           return;
-
-          if (videoIds.length > 0) {
-            this.teamService
-              .shareVideos(this.team._id, videoIds)
-              .subscribe((materials) => {
-                if (materials && materials.length > 0) {
-                  for (const material of materials) {
-                    material.material_type = 'video';
-                  }
-                  this.materials = [...this.materials, ...materials];
-                  this.filter();
-                }
-              });
-          }
-
-          if (pdfIds.length > 0) {
-            this.teamService
-              .sharePdfs(this.team._id, pdfIds)
-              .subscribe((materials) => {
-                if (materials && materials.length > 0) {
-                  this.materials = [...this.materials, ...materials];
-                  this.filter();
-                }
-              });
-          }
-
-          if (imageIds.length > 0) {
-            this.teamService
-              .shareImages(this.team._id, imageIds)
-              .subscribe((material) => {
-                if (material && material.length > 0) {
-                  this.materials = [...this.materials, ...material];
-                  this.filter();
-                }
-              });
-          }
-          this.toast.success('Selected materials has been shared successfully');
         }
       });
   }
