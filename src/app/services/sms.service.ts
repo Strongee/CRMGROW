@@ -69,11 +69,17 @@ export class SmsService extends HttpService {
   }
 
   searchNumbers(data: any): Observable<any> {
-    return this.httpClient.post(this.server + SMS.SEARCH_NUMBER, data);
+    return this.httpClient.post(this.server + SMS.SEARCH_NUMBER, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('SEARCH NUMBER', null))
+    );
   }
 
   buyNumbers(data: any): Observable<any> {
-    return this.httpClient.post(this.server + SMS.BUY_NUMBER, data);
+    return this.httpClient.post(this.server + SMS.BUY_NUMBER, data).pipe(
+      map((res) => res),
+      catchError(this.handleError('BUY NUMBER', null))
+    );
   }
 
   buyCredit(data: any): Observable<any> {

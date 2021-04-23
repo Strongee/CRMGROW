@@ -29,7 +29,7 @@
           </div>
         </ng-container>
         <ng-template #phones>
-          <ng-container *ngIf="phoneNumbers.length > 0; else empty">
+          <ng-container *ngIf="phoneNumbers?.length > 0; else empty">
             <div class="phone-wrapper v-center mb-1" *ngFor="let phone of phoneNumbers; let i = index">
               <div class="custom-radio-container mr-3" (click)="selectPhone(phone.number)">
                 <input class="custom-radio" type="radio" [id]="'select-phone-' + i" [name]="'select-phone-' + i" [checked]="isSelected(phone.number)">
