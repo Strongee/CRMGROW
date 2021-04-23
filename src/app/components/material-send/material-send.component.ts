@@ -16,8 +16,8 @@ import { ContactService } from 'src/app/services/contact.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { TemplatesService } from 'src/app/services/templates.service';
-import {TemplatePortal} from "@angular/cdk/portal";
-import {Overlay, OverlayRef} from "@angular/cdk/overlay";
+import { TemplatePortal } from '@angular/cdk/portal';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-material-send',
@@ -108,6 +108,10 @@ export class MaterialSendComponent implements OnInit {
     if (defaultSms) {
       this.textContent = defaultSms.content;
     }
+  }
+
+  selectNewContacts(event): void {
+    this.contacts = [event];
   }
 
   changeTab(event: number): void {

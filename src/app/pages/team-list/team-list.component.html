@@ -1,10 +1,10 @@
-<div class="v-center justify-content-end mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
-  <button type="button" class="btn btn-primary shadow" *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS" (click)="openForm()">
-    <span class="fw-600 f-3">Create new team</span>
+<div class="v-center justify-content-end mt-xl-0 mt-0 team-list-actions">
+  <button type="button" class="btn btn-primary shadow f-6" *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS" (click)="openForm()">
+    <span class="font-weight-bold f-6">Create new Team</span>
   </button>
-  <button type="button" class="btn btn-white-blue ml-2 c-blue f-3 py-2 font-weight-bold" (click)="joinForm()">Join team</button>
+  <button type="button" class="btn btn-white-blue ml-2 c-blue f-6 font-weight-bold" (click)="joinForm()">Join team</button>
 </div>
-<div class="my-3 position-relative">
+<div class="my-3 position-relative team-list-container">
   <ng-container *ngIf="(teamService.teams$ | async).length; else emptyListTemplate">
     <div class="updating-status" *ngIf="(teamService.loading$ | async) === STATUS.REQUEST">
       LOADING

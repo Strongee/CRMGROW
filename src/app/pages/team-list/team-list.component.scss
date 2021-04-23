@@ -133,3 +133,12 @@ tr:hover {
     height: 45px;
   }
 }
+
+.team-list-actions {
+  position: relative;
+  z-index: 2;
+}
+.team-list-container {
+  position: relative;
+  z-index: 1;
+}

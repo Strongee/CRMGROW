@@ -64,14 +64,38 @@
             <span class="f-1 fw-600 op-40 text-uppercase mb-1">
                 select contact to who you want to send material
             </span>
-            <app-input-contacts
-                [placeholder]="'Search for Contact'"
-                [display]="selectedTab === 0 ? 'cell_phone' : 'email'"
-                [selectedContacts]="contacts"
-            ></app-input-contacts>
-            <span class="d-block f-2 c-red pl-2" *ngIf="sendForm.submitted && !contacts.length">
-                Please select contacts
-            </span>
+            <ng-container *ngIf="selectedTab === 0; else emailContactTemplate;">
+                <app-select-contact
+                    [fromSearch]="false"
+                    [mustField]="'cell_phone'"
+                    (onSelect)="selectNewContacts($event)"
+                    [resultItem]="result"
+                    class="w-100"
+                >
+                    <ng-template #result let-data>
+                        <div class="chip d-flex align-items-center">
+                            <div class="form-avatar rounded-circle bg-dark mr-1">{{data.avatarName}}</div>
+                            <div class="info">
+                                <div class="f-2 font-weight-bold">{{data.fullName}}</div>
+                                <div class="f-0 font-weight-bold c-blue">{{data.cell_phone | phone_format}}</div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </app-select-contact>
+                <span class="d-block f-2 c-red pl-2" *ngIf="sendForm.submitted && !contacts.length">
+                    Please select contacts
+                </span>
+            </ng-container>
+            <ng-template #emailContactTemplate>
+                <app-input-contacts
+                    [placeholder]="'Search for Contact'"
+                    [display]="'email'"
+                    [selectedContacts]="contacts"
+                ></app-input-contacts>
+                <span class="d-block f-2 c-red pl-2" *ngIf="sendForm.submitted && !contacts.length">
+                    Please select contacts
+                </span>
+            </ng-template>
         </div>
         <ng-container *ngIf="data?.type == 'text'">
             <div class="form-group mb-0">
