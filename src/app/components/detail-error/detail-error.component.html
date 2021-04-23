@@ -178,8 +178,8 @@
         <div class="f-3 font-weight-bold text-center w-75 mt-3 c-red mx-auto">Your account is out of SMS credits, please purchase more message credits to send out additional SMS messages.</div>
         <div class="row my-4">
           <div class="col-md-4 col-sm-12 mb-md-0 mb-sm-2 p-1" *ngFor="let plan of plans" (click)="selectPlan(plan)">
-            <div class="text-center p-2 plan position-relative" [class.selected]="currentType == plan.type">
-              <i class="i-icon i-check bgc-blue sm d-block check-icon" *ngIf="currentType == plan.type"></i>
+            <div class="text-center p-2 plan position-relative" [class.selected]="currentType.type == plan.type">
+              <i class="i-icon i-check bgc-blue sm d-block check-icon" *ngIf="currentType.type == plan.type"></i>
               <div class="mt-3 text-center">
                 <span class="f-3 font-weight-bold">{{plan.sms}}</span> messages
               </div>
@@ -190,7 +190,7 @@
           </div>
         </div>
         <div class="f-3 description text-center">
-          You will be charged $6.00. You can add more credits at any time.<br/>
+          You will be charged ${{currentType.price}}.00. You can add more credits at any time.<br/>
           This is a one time purchase, you're not opting into this for a monthly reoccuring fee
         </div>
       </mat-dialog-content>

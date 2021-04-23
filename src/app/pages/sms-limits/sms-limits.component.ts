@@ -15,27 +15,19 @@ import { AddPhoneComponent } from '../../components/add-phone/add-phone.componen
 export class SmsLimitsComponent implements OnInit {
   user: User = new User();
   smsType = '';
-  smsPercent = 0;
-  subTitle = '';
-  totalSms = 200;
-  leftSms = 150;
+  leftSms = 0;
   profileSubscription: Subscription;
 
   constructor(private userService: UserService, private dialog: MatDialog) {
-    this.init();
-  }
-
-  ngOnInit(): void {
-    this.smsPercent = (this.leftSms / this.totalSms) * 100;
-  }
-
-  init(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile) {
-          console.log('###', profile);
           this.user = profile;
+          this.leftSms =
+            this.user?.text_info?.max_count -
+            this.user?.text_info?.count +
+            this.user?.text_info?.additional_credit?.amount;
           if (this.user.proxy_number != '') {
             this.smsType = 'signal';
           } else if (this.user.twilio_number != '') {
@@ -47,6 +39,8 @@ export class SmsLimitsComponent implements OnInit {
       }
     );
   }
+
+  ngOnInit(): void {}
 
   changeType(type: string): void {
     this.smsType = type;
@@ -63,7 +57,15 @@ export class SmsLimitsComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.init();
+          this.userService.loadProfile().subscribe((profile) => {
+            if (profile) {
+              this.user = profile;
+              this.leftSms =
+                this.user?.text_info?.max_count -
+                this.user?.text_info?.count +
+                this.user?.text_info?.additional_credit?.amount;
+            }
+          });
         }
       });
   }

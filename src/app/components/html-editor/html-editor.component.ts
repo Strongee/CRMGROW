@@ -24,6 +24,10 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
+import { UserService } from 'src/app/services/user.service';
+import { Subscription } from 'rxjs';
+import { Garbage } from 'src/app/models/garbage.model';
+import { ConnectService } from 'src/app/services/connect.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -56,6 +60,12 @@ export class HtmlEditorComponent implements OnInit {
     }
   }
   @Input()
+  public set hasCalendly(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.push(['calendly']);
+    }
+  }
+  @Input()
   public set noImage(val: boolean) {
     if (val) {
       this.config.toolbar.container.forEach((e) => {
@@ -82,6 +92,7 @@ export class HtmlEditorComponent implements OnInit {
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
   showTemplates: boolean = false;
+  showCalendly: boolean = false;
   quillEditorRef;
   attachments = [];
   config = {
@@ -112,6 +123,10 @@ export class HtmlEditorComponent implements OnInit {
         template: () => {
           this.showTemplates = !this.showTemplates;
           this.cdr.detectChanges();
+        },
+        calendly: () => {
+          this.showCalendly = !this.showCalendly;
+          this.cdr.detectChanges();
         }
       }
     },
@@ -132,6 +147,10 @@ export class HtmlEditorComponent implements OnInit {
     blotFormatter: {}
   };
 
+  calendlyList = [];
+  garbage: Garbage = new Garbage();
+  garbageSubscription: Subscription;
+
   @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
   overlayRef: OverlayRef;
   templatePortal: TemplatePortal;
@@ -140,6 +159,8 @@ export class HtmlEditorComponent implements OnInit {
     private fileService: FileService,
     public templateService: TemplatesService,
     private handlerService: HandlerService,
+    private connectService: ConnectService,
+    private userService: UserService,
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef,
     private overlay: Overlay,
@@ -148,6 +169,17 @@ export class HtmlEditorComponent implements OnInit {
     private appRef: ApplicationRef
   ) {
     this.templateService.loadAll(false);
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      this.garbage = res;
+      if (this.garbage.calendly) {
+        this.connectService.getEvent().subscribe((res) => {
+          if (res && res['status']) {
+            this.calendlyList = [...this.calendlyList, ...res['data']];
+          }
+        });
+      }
+    });
   }
 
   ngOnInit(): void {}
@@ -367,6 +399,14 @@ export class HtmlEditorComponent implements OnInit {
     this.showTemplates = false;
   }
 
+  closeCalendly(event: MouseEvent): void {
+    const target = <HTMLElement>event.target;
+    if (target.classList.contains('ql-calendly')) {
+      return;
+    }
+    this.showCalendly = false;
+  }
+
   selectTemplate(template: Template): void {
     this.onChangeTemplate.emit(template);
     if (this.templateSelectMethod === 'insert') {
@@ -375,6 +415,12 @@ export class HtmlEditorComponent implements OnInit {
       this.setValue(template.content + '<br>');
     }
     this.showTemplates = false;
+  }
+
+  selectCalendly(url: string): void {
+    const data = '<a href="url">' + url + '</a>';
+    this.insertValue(data + '<br>');
+    this.showCalendly = false;
   }
 
   createNew(): void {

@@ -52,6 +52,11 @@ export class SearchUserComponent implements OnInit, OnDestroy {
   addOnBlur = false;
 
   apiSubscription: Subscription;
+  hasMore = true;
+  loadingMore = false;
+  skip = 0;
+  loadMoreSubscription: Subscription;
+  users: User[] = [];
 
   constructor(private teamService: TeamService) {}
 
@@ -81,8 +86,17 @@ export class SearchUserComponent implements OnInit, OnDestroy {
         this.apiSubscription = api.subscribe(
           (res) => {
             this.searching = false;
+            this.skip += res.length;
+
             if (this.isNewAvailable) {
-              if (res.length) {
+              if (res && res.length == 8) {
+                this.hasMore = true;
+              } else {
+                this.hasMore = false;
+              }
+
+              if (res && res.length > 0) {
+                this.users = res;
                 this.filteredUsers.next(res);
               } else {
                 // Email primary field
@@ -123,5 +137,23 @@ export class SearchUserComponent implements OnInit, OnDestroy {
     const value = event.option.value;
     this.onSelect.emit(value);
     this.inputField.nativeElement.value = '';
+  }
+
+  loadMore(): void {
+    this.loadingMore = true;
+    this.loadMoreSubscription && this.loadMoreSubscription.unsubscribe();
+    this.loadMoreSubscription = this.teamService
+      .searchUser(this.keyword, this.skip)
+      .subscribe((res) => {
+        this.loadingMore = false;
+        this.skip += res.length;
+        if (res && res.length === 8) {
+          this.hasMore = true;
+        } else {
+          this.hasMore = false;
+        }
+        this.users = [...this.users, ...res];
+        this.filteredUsers.next(this.users);
+      });
   }
 }

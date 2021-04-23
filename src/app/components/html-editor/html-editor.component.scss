@@ -90,6 +90,16 @@
     margin-left: 4px;
     background-color: black;
   }
+  button.ql-calendly {
+    position: relative;
+    width: 24px;
+    mask-image: url(../../../assets/img/calendly.svg);
+    mask-position: center;
+    mask-size: 15px;
+    mask-repeat: no-repeat;
+    margin-left: 4px;
+    background-color: black;
+  }
   // button.ql-template::before {
   //   content: "Insert template";
   //   font-size: 12px;
@@ -161,7 +171,7 @@
   }
 }
 
-.templates-action {
+.templates-action, .calendly-action {
   position: absolute;
   top: 5px;
   left: 185px;

@@ -82,10 +82,8 @@ export class AddPhoneComponent implements OnInit {
     }
 
     this.smsService.searchNumbers(data).subscribe((res) => {
-      if (res['status']) {
-        this.loading = false;
-        this.phoneNumbers = res.data;
-      }
+      this.loading = false;
+      this.phoneNumbers = res?.data;
     });
   }
 
@@ -97,19 +95,14 @@ export class AddPhoneComponent implements OnInit {
       const data = {
         number: this.selectedPhone
       };
-      this.smsService.buyNumbers(data).subscribe(
-        (res) => {
-          if (res['status']) {
-            this.saving = false;
-            this.dialogRef.close(this.selectedPhone);
-          } else {
-            this.saving = false;
-          }
-        },
-        (err) => {
+      this.smsService.buyNumbers(data).subscribe((res) => {
+        if (res?.status) {
+          this.saving = false;
+          this.dialogRef.close(this.selectedPhone);
+        } else {
           this.saving = false;
         }
-      );
+      });
     }
   }
 
