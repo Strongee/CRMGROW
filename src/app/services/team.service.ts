@@ -146,9 +146,9 @@ export class TeamService extends HttpService {
    * Search user -> This is part of the team and user search
    * @param keyword: string to search users
    */
-  searchUser(keyword: string): Observable<User[]> {
+  searchUser(keyword: string, skip = 0): Observable<User[]> {
     return this.httpClient
-      .post(this.server + TEAM.SEARCH_TEAM_USER, { search: keyword })
+      .post(this.server + TEAM.SEARCH_TEAM_USER, { search: keyword, skip })
       .pipe(
         map((res) =>
           (res['user_array'] || []).map((e) => new User().deserialize(e))
