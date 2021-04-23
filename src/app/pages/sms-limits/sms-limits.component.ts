@@ -60,6 +60,10 @@ export class SmsLimitsComponent implements OnInit {
           this.userService.loadProfile().subscribe((profile) => {
             if (profile) {
               this.user = profile;
+              this.leftSms =
+                this.user?.text_info?.max_count -
+                this.user?.text_info?.count +
+                this.user?.text_info?.additional_credit?.amount;
             }
           });
         }
