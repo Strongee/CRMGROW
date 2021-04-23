@@ -48,16 +48,13 @@ export class PurchaseMessageComponent implements OnInit {
     const data = {
       option: this.currentType.type
     };
-    this.smsService.buyCredit(data).subscribe(
-      (res) => {
-        if (res && res['status']) {
-          this.saving = false;
-          this.dialogRef.close(true);
-        }
-      },
-      (err) => {
+    this.smsService.buyCredit(data).subscribe((res) => {
+      if (res && res['status']) {
+        this.saving = false;
+        this.dialogRef.close(true);
+      } else {
         this.saving = false;
       }
-    );
+    });
   }
 }
