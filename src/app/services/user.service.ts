@@ -256,7 +256,7 @@ export class UserService extends HttpService {
       );
   }
   /**
-   * Load the User Payment Informationi
+   * Load the User Payment Information
    * @param id : Payment Information Id
    */
   public getPayment(id: string): Observable<any> {

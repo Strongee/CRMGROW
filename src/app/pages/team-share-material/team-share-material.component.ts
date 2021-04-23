@@ -524,7 +524,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   }
 
   doAction(evt: any): void {
-    const selectedMaterials = this.filteredMaterials.filter((e) => {
+    const selectedMaterials = this.materials.filter((e) => {
       if (
         e.material_type !== 'folder' &&
         this.selection.indexOf(e._id) !== -1
@@ -533,6 +533,37 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
       }
       return false;
     });
+    const selectedFolders = this.materials.filter((e) => {
+      if (
+        e.material_type === 'folder' &&
+        this.selection.indexOf(e._id) !== -1
+      ) {
+        return true;
+      }
+      return false;
+    });
+    let folderMaterialIds = [];
+    selectedFolders.forEach((folder) => {
+      folderMaterialIds = [
+        ...folderMaterialIds,
+        ...folder.images,
+        ...folder.videos,
+        ...folder.pdfs
+      ];
+    });
+    const selectedFolderMaterials = this.materials.filter((e) => {
+      if (
+        e.material_type !== 'folder' &&
+        folderMaterialIds.indexOf(e._id) !== -1
+      ) {
+        return true;
+      }
+      return false;
+    });
+    const materialsToSend = _.uniqBy(
+      [...selectedMaterials, ...selectedFolderMaterials],
+      '_id'
+    );
     switch (evt.command) {
       case 'email':
         this.dialog.open(MaterialSendComponent, {
@@ -541,7 +572,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: selectedMaterials,
+            material: materialsToSend,
             type: 'email'
           }
         });
@@ -553,7 +584,7 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: selectedMaterials,
+            material: materialsToSend,
             type: 'text'
           }
         });
@@ -613,10 +644,12 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   openFolder(element: Material): void {
     this.selectedFolder = element;
     this.searchStr = '';
-    this.isAdmin = false;
-    this.userOptions = [];
-    this.teamOptions = [];
-    this.folderOptions = [];
+    this.filter();
+  }
+
+  goToRoot(): void {
+    this.selectedFolder = null;
+    this.searchStr = '';
     this.filter();
   }
 
@@ -643,8 +676,30 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
   filter(): void {
     // this.selection = [];
     this.filteredMaterials = this.materials.filter((material) => {
-      if (!searchReg(material.title, this.searchStr)) {
+      if (this.searchStr && !searchReg(material.title, this.searchStr)) {
         return false;
+      }
+      if (this.selectedFolder) {
+        if (
+          [
+            ...this.selectedFolder.videos,
+            ...this.selectedFolder.images,
+            ...this.selectedFolder.pdfs
+          ].indexOf(material._id) === -1
+        ) {
+          return false;
+        }
+      } else {
+        if (
+          [
+            ...this.team.videos,
+            ...this.team.images,
+            ...this.team.pdfs,
+            ...this.team.folders
+          ].indexOf(material._id) === -1
+        ) {
+          return false;
+        }
       }
       return true;
     });
@@ -698,6 +753,8 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
       this.removeTeamPdf(material);
     } else if (material.material_type === 'image') {
       this.removeTeamImage(material);
+    } else if (material.material_type === 'folder') {
+      this.removeTeamFolder(material);
     }
   }
 
@@ -797,6 +854,40 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
                 this.filteredMaterials.splice(filterIndex, 1);
               }
               this.toast.success('You removed the image successfully.');
+            },
+            (err) => {}
+          );
+        }
+      });
+  }
+  removeTeamFolder(material): void {
+    this.dialog
+      .open(ConfirmComponent, {
+        data: {
+          title: 'Stop Sharing',
+          message: 'Are you sure to remove this folder?',
+          cancelLabel: 'No',
+          confirmLabel: 'Remove'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.teamService.removeFolder(this.team._id, material._id).subscribe(
+            (res) => {
+              const index = this.materials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (index >= 0) {
+                this.materials.splice(index, 1);
+              }
+              const filterIndex = this.filteredMaterials.findIndex(
+                (item) => item._id === material._id
+              );
+              if (filterIndex >= 0) {
+                this.filteredMaterials.splice(filterIndex, 1);
+              }
+              this.toast.success('You removed the folder successfully.');
             },
             (err) => {}
           );

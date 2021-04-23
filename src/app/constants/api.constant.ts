@@ -176,6 +176,7 @@ export const TEAM = {
   REMOVE_VIDEO: 'team/remove-videos/',
   REMOVE_PDF: 'team/remove-pdfs/',
   REMOVE_IMAGE: 'team/remove-images/',
+  REMOVE_FOLDER: 'team/remove-folders/',
   REMOVE_TEMPLATE: 'team/remove-templates/',
   REMOVE_AUTOMATION: 'team/remove-automations/',
   SEARCH_CONTACT: 'team/search-contact',

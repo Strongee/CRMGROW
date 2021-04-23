@@ -456,11 +456,19 @@ export class TeamService extends HttpService {
       catchError(this.handleError('TEAM REMOVE PDF', []))
     );
   }
-  removeImage(id): Observable<any> {
+  removeImage(id: string): Observable<any> {
     return this.httpClient.post(this.server + TEAM.REMOVE_IMAGE + id, {}).pipe(
       map((res) => res['data'] || []),
       catchError(this.handleError('TEAM REMOVE IMAGE', []))
     );
+  }
+  removeFolder(team_id: string, folder_id: string): Observable<any> {
+    return this.httpClient
+      .post(this.server + TEAM.REMOVE_FOLDER + team_id, { folder_id })
+      .pipe(
+        map((res) => res['data'] || []),
+        catchError(this.handleError('TEAM REMOVE FOLDER', []))
+      );
   }
   removeTemplate(id): Observable<any> {
     return this.httpClient

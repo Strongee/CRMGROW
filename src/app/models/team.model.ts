@@ -18,6 +18,7 @@ export class Team implements Deserializable {
   videos: string[];
   pdfs: string[];
   images: string[];
+  folders: string[];
   automations: string[];
   email_templates: string[];
   contacts: any[];

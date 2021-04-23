@@ -124,6 +124,8 @@ export class SelectContactComponent
                       email
                     });
                     this.filteredResults.next([newContact]);
+                  } else {
+                    this.filteredResults.next([]);
                   }
                 } else if (this.mustField === 'cell_phone') {
                   const cell_phone = phone(this.keyword)[0];
@@ -133,6 +135,8 @@ export class SelectContactComponent
                       cell_phone
                     });
                     this.filteredResults.next([newContact]);
+                  } else {
+                    this.filteredResults.next([]);
                   }
                 }
               } else {

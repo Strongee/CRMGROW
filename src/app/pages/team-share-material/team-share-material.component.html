@@ -1,8 +1,14 @@
 <div class="page-content">
   <div class="d-flex justify-content-between with-tab panel-header contact-header">
-    <div class="f-6 font-weight-bold">Materials</div>
+    <ng-container *ngIf="!selectedFolder; else folderTemplate">
+      <div class="f-6 font-weight-bold v-center">Materials</div>
+    </ng-container>
+    <ng-template #folderTemplate>
+      <a class="f-6 font-weight-bold c-pointer c-dark to-root v-center" (click)="goToRoot()">Materials</a>
+      <span class="f-2 v-center mr-auto"><i class="i-icon i-chev-right d-block bgc-dark mx-1"></i>{{selectedFolder.title}}</span>
+    </ng-template>
     <button type="button" class="btn btn-white-blue v-center"
-            (click)="shareMaterial()" *ngIf="role=='editor' || role == 'owner'"
+      (click)="shareMaterial()" *ngIf="role=='editor' || role == 'owner'"
     >
       <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
       <span class="f-3 font-weight-bold c-blue">Share material</span>
@@ -79,10 +85,11 @@
               </th>
             </ng-template>
           </ng-container>
+
           <td mat-cell
               *matCellDef="let element" class="name-col">
             <ng-container *ngIf="element.material_type === 'folder'; else materialInfoTemplate">
-              <a class="v-center c-pointer material-main-info td-none" [routerLink]="['/materials/' + element._id]">
+              <a class="v-center c-pointer material-main-info td-none" (click)="openFolder(element)">
                 <div class="thumbnail">
                   <a>
                     <div class="folder-thumb">
@@ -210,7 +217,7 @@
           <td mat-cell
               *matCellDef="let element" class="analytics-col">
             <ng-container *ngIf="element.material_type === 'folder'; else materialViewTemplate">
-              <div class="text-right pr-3">--</div>
+              <div class="text-right pr-3"></div>
             </ng-container>
             <ng-template #materialViewTemplate>
               <a [routerLink]="['/materials/analytics/' + element._id]" class="text-decoration-none">
@@ -283,9 +290,16 @@
               </a>
               <div ngbDropdownMenu class="light">
                 <ng-container *ngIf="element.material_type === 'folder'; else materialActionsTemplate">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editFolder(element)">
-                    <i class="i-icon i-edit bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Edit</span>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="sendFolder(element)" >
+                    <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Send</span>
+                  </button>
+                  <button class="v-center border-0 py-2 c-dark dropdown-item"
+                    (click)="stopShareMaterial(element)"
+                    *ngIf="isStopSharable(element)"
+                  >
+                    <i class="i-icon i-block bgc-dark ml-1" aria-hidden="true"></i>
+                    <span class="ml-3 f-3 font-weight-bold">Stop Share</span>
                   </button>
                 </ng-container>
                 <ng-template #materialActionsTemplate>
@@ -301,13 +315,9 @@
                     <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-3 f-3 font-weight-bold">Edit template</span>
                   </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicateMaterial(element)">
-                    <i class="i-icon i-duplicate bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Duplicate</span>
-                  </button>
                   <button class="v-center border-0 py-2 c-dark dropdown-item"
                     (click)="stopShareMaterial(element)"
-                    *ngIf="isStopSharable(element)"
+                    *ngIf="isStopSharable(element) && !selectedFolder"
                   >
                     <i class="i-icon i-block bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-3 f-3 font-weight-bold">Stop Share</span>
@@ -319,7 +329,7 @@
         </ng-container>
 
         <ng-container matColumnDef="selection_info">
-          <th mat-header-cell *matHeaderCellDef colspan="7" class="text-center">
+          <th mat-header-cell *matHeaderCellDef colspan="10" class="text-center">
             <span *ngIf="selection.length !== filteredMaterials.length; else deselectTemplate">
               {{selection.length}} materials are selected.
               <span class="c-blue font-weight-bold c-pointer" (click)="masterToggle()">
@@ -338,6 +348,8 @@
         <tr mat-row
             *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
       </table>
+
+
       <ng-container *ngIf="filteredMaterials.length > 0">
         <div class="d-flex justify-content-center align-items-center mt-4">
           <div class="ml-3 pagination-wrapper">
@@ -347,6 +359,7 @@
         </div>
       </ng-container>
     </div>
+
     <ng-container *ngIf="!(storeService.sharedMaterials$ | async).length; else showingStatusMaterials">
       <ng-container [ngSwitch]="(teamService.sharedMaterialsLoadStatus | async)">
         <div class="empty-list py-5" *ngSwitchCase="STATUS.SUCCESS">
