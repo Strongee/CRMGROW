@@ -1,6 +1,6 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? create() : false;">
   <div mat-dialog-title class="title">
-    <h1 class="mb-0">Add new contact</h1>
+    <h1 class="mb-0">New Contact</h1>
     <span class="error mb-1" *ngIf="form.submitted && (sameEmailContacts.length || sameCellPhoneContacts.length)">
       Please input another contact information or edit the existing contact.
     </span>

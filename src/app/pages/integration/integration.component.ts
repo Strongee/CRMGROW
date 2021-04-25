@@ -102,6 +102,8 @@ export class IntegrationComponent implements OnInit {
     }
   }
 
+  disconnectMail(type: string): void {}
+
   connectCalendar(type: string): void {
     if (type == 'gmail' || type == 'outlook') {
       this.connectingCalendar = type;

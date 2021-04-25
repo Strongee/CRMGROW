@@ -37,7 +37,7 @@
     </ng-template>
     
     <div class="form-group">
-      <label class="mb-0">type of the task</label>
+      <label class="mb-0">task type</label>
       <div>
         <app-task-type [(value)]="task.type"></app-task-type>
       </div>
@@ -45,7 +45,7 @@
     
     <div class="form-group">
       <div class="v-center">
-        <label for="content_tc" class="mb-0">task regarding</label>
+        <label for="content_tc" class="mb-0">task description</label>
         <span class="error ml-auto" *ngIf="content.errors">
           <ng-container *ngIf="content.errors.required">Required!</ng-container>
         </span>
