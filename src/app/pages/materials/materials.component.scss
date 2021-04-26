@@ -299,4 +299,8 @@ td.type-col {
             }
         }
     }
+    .dropdown-toggle.disable {
+        pointer-events: none;
+        opacity: 0.4;
+    }
 }

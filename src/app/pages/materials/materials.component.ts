@@ -563,26 +563,28 @@ export class MaterialsComponent implements OnInit {
               }
             })
             .afterClosed()
-            .subscribe(() => {
-              const pos = this.editedVideos.indexOf(material._id);
-              if (pos != -1) {
-                return;
-              } else {
-                this.userService
-                  .updateGarbage({
-                    edited_video: [...this.editedVideos, material._id]
-                  })
-                  .subscribe(() => {
-                    this.editedVideos.push(material._id);
-                    this.userService.updateGarbageImpl({
-                      edited_video: this.editedVideos
+            .subscribe((answer) => {
+              if (answer) {
+                const pos = this.editedVideos.indexOf(material._id);
+                if (pos != -1) {
+                  return;
+                } else {
+                  this.userService
+                    .updateGarbage({
+                      edited_video: [...this.editedVideos, material._id]
+                    })
+                    .subscribe(() => {
+                      this.editedVideos.push(material._id);
+                      this.userService.updateGarbageImpl({
+                        edited_video: this.editedVideos
+                      });
+                      if (this.isSelected(material)) {
+                        this.toggleElement(material);
+                      }
+                      this.materialService.delete$([material._id]);
+                      this.toast.success('Video has been hide successfully.');
                     });
-                    if (this.isSelected(material)) {
-                      this.toggleElement(material);
-                    }
-                    this.materialService.delete$([material._id]);
-                    this.toast.success('Video has been hide successfully.');
-                  });
+                }
               }
             });
           break;
@@ -598,7 +600,10 @@ export class MaterialsComponent implements OnInit {
               }
             })
             .afterClosed()
-            .subscribe(() => {
+            .subscribe((answer) => {
+              if (!answer) {
+                return;
+              }
               const pos = this.editedImages.indexOf(material._id);
               if (pos != -1) {
                 return;
@@ -633,7 +638,10 @@ export class MaterialsComponent implements OnInit {
               }
             })
             .afterClosed()
-            .subscribe(() => {
+            .subscribe((answer) => {
+              if (!answer) {
+                return;
+              }
               const pos = this.editedPdfs.indexOf(material._id);
               if (pos != -1) {
                 return;

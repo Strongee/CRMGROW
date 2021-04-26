@@ -379,7 +379,7 @@
             *matCellDef="let element" class="item-action">
             <div class="v-center">
               <div ngbDropdown placement="bottom-right" class="ml-auto">
-                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 no-carot px-0">
+                <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 no-carot px-0" [class.disable]="element.material_type === 'folder' && element.user?._id !== user_id && element.user !== user_id">
                   <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
                 </a>
                 <div ngbDropdownMenu class="light">
@@ -427,10 +427,15 @@
                         <i class="i-icon i-trash bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Delete</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="moveToFolder(element)">
-                        <i class="i-icon i-folder bgc-dark ml-1" aria-hidden="true"></i>
-                        <span class="ml-3 f-3 font-weight-bold">Move To</span>
-                      </button>
+                      <ng-container *ngIf="selectedFolder && selectedFolder.user && (selectedFolder.user !== user_id && selectedFolder.user?._id !== user_id); else moveToAction">
+
+                      </ng-container>
+                      <ng-template #moveToAction>
+                        <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="moveToFolder(element)">
+                          <i class="i-icon i-folder bgc-dark ml-1" aria-hidden="true"></i>
+                          <span class="ml-3 f-3 font-weight-bold">Move To</span>
+                        </button>
+                      </ng-template>
                     </ng-container>
                     <ng-template #adminMaterialActions>
                       <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(element)">

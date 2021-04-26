@@ -40,10 +40,15 @@ export class MoveFolderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    const user_id = this.userService.profile.getValue()._id;
     this.folderLoadSubscription = this.storeService.materials$.subscribe(
       (materials) => {
         this.folders = materials.filter((e) => {
-          return e.material_type === 'folder';
+          return (
+            e.material_type === 'folder' &&
+            e.user &&
+            (e.user === user_id || e.user._id === user_id)
+          );
         });
       }
     );
