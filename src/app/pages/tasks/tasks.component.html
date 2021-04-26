@@ -1,10 +1,10 @@
 <div class="custom-mat-table">
   <div class="d-flex table-control-header v-center">
     <div class="shadow-dropdown ml-auto" ngbDropdown>
-      <div class="v-center c-pointer f-3 px-3 py-2" ngbDropdownToggle>
+      <div class="v-center c-pointer f-3 px-3 py-2 justify-content-end" ngbDropdownToggle>
         <span class="pr-2">
           <ng-container *ngIf="!deadline || deadline.id === 'all'; else deadlineTemplate">
-            Sort by <span class="font-weight-bold">deadline</span>
+            Sort by
           </ng-container>
           <ng-template #deadlineTemplate>
             <span class="font-weight-bold">{{deadline.label + ' tasks'}}</span>
