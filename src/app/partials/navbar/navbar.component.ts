@@ -20,15 +20,15 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
 })
 export class NavbarComponent implements OnInit {
   actions: any[] = [
-    { icon: 'i-contact bg-white', label: 'Add new Contact', id: 'contact' },
-    { icon: 'i-task bg-white', label: 'Add new Task', id: 'task' },
-    { icon: 'i-deals bg-white', label: 'Add new Deal', id: 'deal' },
+    { icon: 'i-contact bg-white', label: 'Add New Contact', id: 'contact' },
+    { icon: 'i-task bg-white', label: 'Add New Task', id: 'task' },
+    { icon: 'i-deals bg-white', label: 'Add New Deal', id: 'deal' },
     {
       icon: 'i-calendar bg-white',
-      label: 'Add new Meeting',
+      label: 'Add New Meeting',
       id: 'appointment'
     },
-    { icon: 'i-template bg-white', label: 'Add new Note', id: 'note' },
+    { icon: 'i-template bg-white', label: 'Add New Note', id: 'note' },
     { icon: 'i-message bg-white', label: 'Send Email', id: 'message' },
     { icon: 'i-record bg-white', label: 'Record Video', id: 'record' },
     { icon: 'i-upload bg-white', label: 'Upload Video', id: 'video' }

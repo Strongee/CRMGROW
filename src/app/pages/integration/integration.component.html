@@ -5,12 +5,17 @@
       <img src="../../../assets/img/google_email.png">
     </div>
     <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">Google mail</div>
+      <div class="title f-3 font-weight-bold mb-1">Google Mail</div>
       <div class="desc f-2 op-75">
-        Our Platform can deliver the emails through your gmail. Email Deliverity will be upgraded.
+        Connect to deliver emails through your Gmail or Workspace solution.  This will increase the deliverability rate.
       </div>
     </div>
-    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('gmail')">Connect account</button>
+    <ng-container *ngIf="(user.connected_email_type=='gmail' || user.connected_email_type=='gsuit') && user.primary_connected; else disconnectGoogle">
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="disconnectMail('gmail')">Disconnect</button>
+    </ng-container>
+    <ng-template #disconnectGoogle>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('gmail')">Connect Account</button>
+    </ng-template>
     <div class="accounts">
       <ng-container *ngIf="(user.connected_email_type=='gmail' || user.connected_email_type=='gsuit') && user.primary_connected">
         <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
@@ -26,12 +31,17 @@
       <img src="../../../assets/img/outlook_email.png">
     </div>
     <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">Outlook mail</div>
+      <div class="title f-3 font-weight-bold mb-1">365 Mail</div>
       <div class="desc f-2 op-75">
-        Our Platform can deliver the emails through your outlook mail. Email Deliverity will be upgraded.
+        Connect to deliver emails through your 365 solution.  This will increase the deliverability rate.
       </div>
     </div>
-    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('outlook')">Connect account</button>
+    <ng-container *ngIf="(user.connected_email_type=='outlook' || user.connected_email_type=='microsoft') && user.primary_connected; else disconnectOutlook">
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="disconnectMail('outlook')">Disconnect</button>
+    </ng-container>
+    <ng-template #disconnectOutlook>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('outlook')">Connect Account</button>
+    </ng-template>
     <div class="accounts">
       <ng-container *ngIf="(user.connected_email_type=='outlook' || user.connected_email_type=='microsoft') && user.primary_connected">
         <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
@@ -56,12 +66,12 @@
     </div>
     <ng-container *ngIf="googleCalendars.length; else connectGoogleCalendar">
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('gmail')">
-        Add calendar
+        Add Calendar
       </button>
     </ng-container>
     <ng-template #connectGoogleCalendar>
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('gmail')">
-        Connect calendar
+        Connect Calendar
       </button>
     </ng-template>
     <div class="accounts">
@@ -92,12 +102,12 @@
     </div>
     <ng-container *ngIf="outlookCalendars.length; else connectOutlookCalendar">
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">
-        Add calendar
+        Add Calendar
       </button>
     </ng-container>
     <ng-template #connectOutlookCalendar>
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">
-        Connect calendar
+        Connect Calendar
       </button>
     </ng-template>
     <div class="accounts">
@@ -160,7 +170,7 @@
     <div class="content">
       <div class="title f-3 font-weight-bold mb-1">Calendly</div>
       <div class="desc f-2 op-75">
-        Connect your calendly account so your prospects can schedule a meeting with you.
+        Connect calandly to seamlessly create and schedule meetings.
       </div>
     </div>
     <ng-container *ngIf="garbage?.calendly && garbage.calendly?.email != '' && garbage.calendly?.token != ''; else connectEvent">
@@ -172,7 +182,7 @@
     </ng-container>
     <ng-template #connectEvent>
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendly()">
-        Connect account
+        Connect Account
       </button>
     </ng-template>
     <div class="accounts">
@@ -199,7 +209,7 @@
       </div>
     </div>
     <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectZoom()">
-      Connect account
+      Connect Account
     </button>
     <div class="accounts">
         

@@ -13,7 +13,7 @@
         name="taskSearch" #taskSearch="ngModel" id="task-search" (ngModelChange)="applyFilters()" />
     </div>
     <div class="form-group">
-      <label>type of task</label>
+      <label>task type</label>
       <div>
         <div class="task-types btn-group btn-group-toggle rounded">
           <label class="btn px-2 rounded no-shadow" ngbButtonLabel>
@@ -62,7 +62,7 @@
       </div>
     </div>
     <div class="form-group mt-3">
-      <label>TASK REGARDING CONTACT</label>
+      <label>TASK DESCRIPTION CONTACT</label>
       <app-select-contact [contact]="contact" (onSelect)="selectContact($event)"></app-select-contact>
     </div>
     <div class="row">

@@ -1,6 +1,6 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? create() : false;">
   <div mat-dialog-title class="title">
-    <h1 class="mb-0">Add new contact</h1>
+    <h1 class="mb-0">New Contact</h1>
     <span class="error mb-1" *ngIf="form.submitted && (sameEmailContacts.length || sameCellPhoneContacts.length)">
       Please input another contact information or edit the existing contact.
     </span>
@@ -183,14 +183,13 @@
       <button type="button" mat-dialog-close class="btn c-blue">Cancel</button>
       <button type="submit" class="btn btn-primary" [class.loading]="isCreating">Add</button>
     </div>
-    <div class="v-center mt-2">
-      <i class="i-icon i-lunch d-block bgc-blue"></i>
-      <div class="ml-2">
-        <span class="f-5 font-weight-bold">Bulk Imports</span>
-        <span class="f-3 ml-2">Upload your contact list with a .csv file by clicking</span>
-        <span class="f-3 font-weight-bold c-blue ml-1 c-pointer" (click)="importCSV()">here</span>
-      </div>
-    </div>
-
   </mat-dialog-actions>
+  <div class="v-center mt-2">
+    <i class="i-icon i-lunch d-block bgc-blue"></i>
+    <div class="ml-2">
+      <span class="f-5 font-weight-bold">Bulk Import</span>
+      <span class="f-3 ml-2">your contact list by uploading a .csv file</span>
+      <span class="f-3 font-weight-bold c-blue ml-1 c-pointer" (click)="importCSV()">here</span>
+    </div>
+  </div>
 </form>
