@@ -329,7 +329,7 @@
         <ng-container *ngIf="type==='follow_up'">
           <div class="action-form">
             <div class="form-group">
-              <label>type of the task</label>
+              <label>task type</label>
               <div>
                 <app-task-type [(value)]="task.type"></app-task-type>
               </div>
@@ -640,7 +640,7 @@
           <div class="c-red f-3 error" *ngIf="!selectedFollow && submitted">Task is required!</div>
           <ng-container *ngIf="selectedFollow">
             <div class="form-group">
-              <label>type of the task</label>
+              <label>task type</label>
               <div>
                 <app-task-type [(value)]="task.type"></app-task-type>
               </div>
