@@ -1,22 +1,42 @@
-<div class="task-types btn-group btn-group-toggle rounded" ngbRadioGroup name="type" #type="ngModel" [(ngModel)]="value" (ngModelChange)="updateValue($event)">
-  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="General" ngbButtonLabel>
-    <input type="radio" name="options" value="task" ngbButton>
+<div class="task-types btn-group btn-group-toggle rounded">
+  <div class="btn btn-type px-2 rounded no-shadow"
+         placement="bottom"
+         ngbTooltip="General"
+         (click)="updateValue('task')"
+         [class.active]="value == 'task'"
+  >
     <i class="i-icon i-task d-block bgc-dark"></i>
-  </label>
-  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Call" ngbButtonLabel>
-    <input type="radio" name="options" value="call" ngbButton>
+  </div>
+  <div class="btn btn-type px-2 rounded no-shadow"
+       placement="bottom"
+       ngbTooltip="Call"
+       (click)="updateValue('call')"
+       [class.active]="value == 'call'"
+  >
     <i class="i-icon i-phone d-block bgc-dark"></i>
-  </label>
-  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Meeting" ngbButtonLabel>
-    <input type="radio" name="options" value="meeting" ngbButton>
+  </div>
+  <div class="btn btn-type px-2 rounded no-shadow"
+       placement="bottom"
+       ngbTooltip="Meeting"
+       (click)="updateValue('meeting')"
+       [class.active]="value == 'meeting'"
+  >
     <i class="i-icon i-lunch d-block bgc-dark"></i>
-  </label>
-  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Email" ngbButtonLabel>
-    <input type="radio" name="options" value="email" ngbButton>
+  </div>
+  <div class="btn btn-type px-2 rounded no-shadow"
+       placement="bottom"
+       ngbTooltip="Email"
+       (click)="updateValue('email')"
+       [class.active]="value == 'email'"
+  >
     <i class="i-icon i-message d-block bgc-dark"></i>
-  </label>
-  <label class="btn px-2 rounded no-shadow" placement="bottom" ngbTooltip="Media" ngbButtonLabel>
-    <input type="radio" name="options" value="material" ngbButton>
+  </div>
+  <div class="btn btn-type px-2 rounded no-shadow"
+       placement="bottom"
+       ngbTooltip="Media"
+       (click)="updateValue('material')"
+       [class.active]="value == 'material'"
+  >
     <i class="i-icon i-video d-block bgc-dark"></i>
-  </label>
+  </div>
 </div>

@@ -1,7 +1,7 @@
 @import 'src/variables.scss';
 .task-types {
   border: 1px solid $color-trans28;
-  label {
+  .btn-type {
     opacity: 1;
     margin: -1px;
     &.active {
