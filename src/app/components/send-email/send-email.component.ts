@@ -23,6 +23,8 @@ import { UserService } from 'src/app/services/user.service';
 import { DealsService } from '../../services/deals.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { MaterialBrowserComponent } from '../material-browser/material-browser.component';
+import { Subscription } from 'rxjs';
+import { Garbage } from 'src/app/models/garbage.model';
 
 @Component({
   selector: 'app-send-email',
@@ -57,6 +59,9 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   dealId;
   mainContact;
   toFocus = false;
+  isCalendly = false;
+  garbage: Garbage = new Garbage();
+  garbageSubscription: Subscription;
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
@@ -87,11 +92,23 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      this.garbage = res;
+      if (this.garbage?.calendly) {
+        this.isCalendly = true;
+      } else {
+        this.isCalendly = false;
+      }
+    });
     const defaultEmail = this.userService.email.getValue();
     if (defaultEmail) {
       this.emailSubject = defaultEmail.subject;
       this.emailContent = defaultEmail.content;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {}

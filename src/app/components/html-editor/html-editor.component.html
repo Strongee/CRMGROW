@@ -55,6 +55,12 @@
         </ng-container>
       </div>
     </ng-template>
+    <button
+      class="record-action"
+      cdkOverlayOrigin
+      #recordOverlay="cdkOverlayOrigin">
+      OPEN
+    </button>
     <quill-editor
       [placeholder]="placeholder"
       [ngModel]="value"

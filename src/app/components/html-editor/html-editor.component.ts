@@ -28,6 +28,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { Garbage } from 'src/app/models/garbage.model';
 import { ConnectService } from 'src/app/services/connect.service';
+import { NotifyComponent } from '../notify/notify.component';
+import { MatDialog } from '@angular/material/dialog';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -63,6 +65,12 @@ export class HtmlEditorComponent implements OnInit {
   public set hasCalendly(val: boolean) {
     if (val) {
       this.config.toolbar.container.push(['calendly']);
+    }
+  }
+  @Input()
+  public set hasRecord(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.push(['record']);
     }
   }
   @Input()
@@ -127,6 +135,9 @@ export class HtmlEditorComponent implements OnInit {
         calendly: () => {
           this.showCalendly = !this.showCalendly;
           this.cdr.detectChanges();
+        },
+        record: () => {
+          this.record();
         }
       }
     },
@@ -147,6 +158,7 @@ export class HtmlEditorComponent implements OnInit {
     blotFormatter: {}
   };
 
+  hasCamera = false;
   calendlyList = [];
   garbage: Garbage = new Garbage();
   garbageSubscription: Subscription;
@@ -166,7 +178,8 @@ export class HtmlEditorComponent implements OnInit {
     private overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
     private toast: ToastrService,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private dialog: MatDialog
   ) {
     this.templateService.loadAll(false);
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
@@ -182,7 +195,15 @@ export class HtmlEditorComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      navigator['enumerateDevices'] = function (callback) {
+        navigator.mediaDevices.enumerateDevices().then(callback);
+      };
+
+      this.checkDeviceSupport();
+    }
+  }
 
   insertValue(value: string): void {
     if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
@@ -203,6 +224,99 @@ export class HtmlEditorComponent implements OnInit {
       this.emailEditor.quillEditor.setSelection(length, 0, 'user');
       // this.emailEditor.quillEditor.setContents(delta, 'user');
     }
+  }
+
+  record(): void {
+    if (this.hasCamera) {
+    } else {
+      this.dialog.open(NotifyComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          message: 'Camera is not connected. Please connect the camera.'
+        }
+      });
+    }
+  }
+
+  checkDeviceSupport(): void {
+    let canEnumerate = false;
+    if (
+      typeof MediaStreamTrack !== 'undefined' &&
+      'getSources' in MediaStreamTrack
+    ) {
+      canEnumerate = true;
+    } else if (
+      navigator.mediaDevices &&
+      !!navigator.mediaDevices.enumerateDevices
+    ) {
+      canEnumerate = true;
+    }
+    if (!canEnumerate) {
+      return;
+    }
+
+    if (!navigator['enumerateDevices'] && navigator['enumerateDevices']) {
+      navigator['enumerateDevices'] = navigator['enumerateDevices'].bind(
+        navigator
+      );
+    }
+
+    const MediaDevices = [];
+    navigator['enumerateDevices']((devices) => {
+      devices.forEach((_device) => {
+        const device = {};
+        for (const d in _device) {
+          device[d] = _device[d];
+        }
+
+        if (device['kind'] === 'audio') {
+          device['kind'] = 'audioinput';
+        }
+
+        if (device['kind'] === 'video') {
+          device['kind'] = 'videoinput';
+        }
+
+        let skip;
+        MediaDevices.forEach((d) => {
+          if (d.id === device['id'] && d.kind === device['kind']) {
+            skip = true;
+          }
+        });
+
+        if (skip) {
+          return;
+        }
+
+        if (!device['deviceId']) {
+          device['deviceId'] = device['id'];
+        }
+
+        if (!device['id']) {
+          device['id'] = device['deviceId'];
+        }
+
+        const isHTTPs = location.protocol === 'https:';
+        if (!device['label']) {
+          device['label'] = 'Please invoke getUserMedia once.';
+          if (!isHTTPs) {
+            device['label'] =
+              'HTTPs is required to get label of this ' +
+              device['kind'] +
+              ' device.';
+          }
+        }
+
+        if (device['kind'] === 'videoinput') {
+          this.hasCamera = true;
+        }
+
+        // there is no 'videoouput' in the spec.
+        MediaDevices.push(device);
+      });
+    });
   }
 
   setValue(value: string): void {
