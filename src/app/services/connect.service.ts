@@ -1,14 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { INTEGRATION, SMS, USER } from '../constants/api.constant';
+import { STATUS } from '../constants/variable.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConnectService {
   logoutSignal = new Subject<any>();
+  calendlyAll: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  calendlyAll$ = this.calendlyAll.asObservable();
+  loadCalendlyAllStatus: BehaviorSubject<string> = new BehaviorSubject(
+    STATUS.NONE
+  );
+  loadingCalendlyAll$ = this.loadCalendlyAllStatus.asObservable();
+
   constructor(private httpClient: HttpClient) {}
 
   public requestSyncUrl(type: string): Observable<any> {
@@ -63,7 +71,23 @@ export class ConnectService {
     return this.httpClient.get(environment.api + INTEGRATION.GET_TOKEN);
   }
 
-  public getEvent(): any {
+  public loadCalendlyAll(force = false): void {
+    if (!force) {
+      const loadStatus = this.loadCalendlyAllStatus.getValue();
+      if (loadStatus != STATUS.NONE && loadStatus != STATUS.FAILURE) {
+        return;
+      }
+    }
+    this.loadCalendlyAllStatus.next(STATUS.REQUEST);
+    this.getEvent().subscribe((calendlyList) => {
+      calendlyList.data
+        ? this.loadCalendlyAllStatus.next(STATUS.SUCCESS)
+        : this.loadCalendlyAllStatus.next(STATUS.FAILURE);
+      this.calendlyAll.next(calendlyList.data || []);
+    });
+  }
+
+  public getEvent(): Observable<any> {
     return this.httpClient.get(environment.api + INTEGRATION.GET_CALENDLY);
   }
 

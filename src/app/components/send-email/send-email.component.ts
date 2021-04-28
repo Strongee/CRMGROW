@@ -23,6 +23,9 @@ import { UserService } from 'src/app/services/user.service';
 import { DealsService } from '../../services/deals.service';
 import { HandlerService } from 'src/app/services/handler.service';
 import { MaterialBrowserComponent } from '../material-browser/material-browser.component';
+import { Subscription } from 'rxjs';
+import { Garbage } from 'src/app/models/garbage.model';
+import { ConnectService } from 'src/app/services/connect.service';
 
 @Component({
   selector: 'app-send-email',
@@ -58,6 +61,10 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   mainContact;
   toFocus = false;
 
+  isCalendly = false;
+  garbage: Garbage = new Garbage();
+  garbageSubscription: Subscription;
+
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
     private dialog: MatDialog,
@@ -67,6 +74,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private handlerService: HandlerService,
     private dealService: DealsService,
+    private connectService: ConnectService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     if (this.data && this.data.deal) {
@@ -84,6 +92,15 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         this.emailContacts = [...this.data.contacts];
       }
     }
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      this.garbage = res;
+      if (this.garbage?.calendly) {
+        this.isCalendly = true;
+      } else {
+        this.isCalendly = false;
+      }
+    });
   }
 
   ngOnInit(): void {

@@ -3,6 +3,7 @@ import {
   ApplicationRef,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Inject,
   Input,
@@ -24,9 +25,9 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
-import { UserService } from 'src/app/services/user.service';
-import { Subscription } from 'rxjs';
-import { Garbage } from 'src/app/models/garbage.model';
+import { NotifyComponent } from '../notify/notify.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import * as RecordRTC from 'recordrtc';
 import { ConnectService } from 'src/app/services/connect.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
@@ -66,6 +67,12 @@ export class HtmlEditorComponent implements OnInit {
     }
   }
   @Input()
+  public set hasRecord(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.push(['record']);
+    }
+  }
+  @Input()
   public set noImage(val: boolean) {
     if (val) {
       this.config.toolbar.container.forEach((e) => {
@@ -91,8 +98,10 @@ export class HtmlEditorComponent implements OnInit {
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+  @ViewChild('video') video: ElementRef;
   showTemplates: boolean = false;
   showCalendly: boolean = false;
+  showRecord: boolean = false;
   quillEditorRef;
   attachments = [];
   config = {
@@ -127,6 +136,23 @@ export class HtmlEditorComponent implements OnInit {
         calendly: () => {
           this.showCalendly = !this.showCalendly;
           this.cdr.detectChanges();
+        },
+        record: () => {
+          this.showRecord = !this.showRecord;
+          this.cdr.detectChanges();
+
+          // if (this.hasCamera) {
+          //   this.showCamera();
+          // } else {
+          //   this.dialog.open(NotifyComponent, {
+          //     position: { top: '100px' },
+          //     width: '100vw',
+          //     maxWidth: '400px',
+          //     data: {
+          //       message: 'Camera is not connected. Please connect the camera.'
+          //     }
+          //   });
+          // }
         }
       }
     },
@@ -147,10 +173,6 @@ export class HtmlEditorComponent implements OnInit {
     blotFormatter: {}
   };
 
-  calendlyList = [];
-  garbage: Garbage = new Garbage();
-  garbageSubscription: Subscription;
-
   @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
   overlayRef: OverlayRef;
   templatePortal: TemplatePortal;
@@ -159,27 +181,18 @@ export class HtmlEditorComponent implements OnInit {
     private fileService: FileService,
     public templateService: TemplatesService,
     private handlerService: HandlerService,
-    private connectService: ConnectService,
-    private userService: UserService,
+    public connectService: ConnectService,
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef,
     private overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
     private toast: ToastrService,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private dialogRef: MatDialogRef<HtmlEditorComponent>,
+    private dialog: MatDialog
   ) {
     this.templateService.loadAll(false);
-    this.garbageSubscription && this.garbageSubscription.unsubscribe();
-    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
-      this.garbage = res;
-      if (this.garbage.calendly) {
-        this.connectService.getEvent().subscribe((res) => {
-          if (res && res['status']) {
-            this.calendlyList = [...this.calendlyList, ...res['data']];
-          }
-        });
-      }
-    });
+    this.connectService.loadCalendlyAll(false);
   }
 
   ngOnInit(): void {}
@@ -466,6 +479,18 @@ export class HtmlEditorComponent implements OnInit {
       }, 1);
     }
     this.cdr.detectChanges();
+  }
+
+  showAlert(msg: string): MatDialogRef<NotifyComponent> {
+    const dialogRef = this.dialog.open(NotifyComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '400px',
+      data: {
+        message: msg
+      }
+    });
+    return dialogRef;
   }
 }
 // [{ font: [] }],

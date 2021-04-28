@@ -43,7 +43,7 @@
       (overlayOutsideClick)="closeCalendly($event)"
     >
       <div class="templates-container">
-        <ng-container *ngFor="let calendly of calendlyList">
+        <ng-container *ngFor="let calendly of (connectService.calendlyAll$ | async)">
           <div class="template">
             <div class="v-center">
               <div class="f-3 font-weight-bold w-100" (click)="selectCalendly(calendly.attributes.url)">{{calendly.attributes.name}}</div>
@@ -55,6 +55,13 @@
         </ng-container>
       </div>
     </ng-template>
+    <button
+      class="record-action"
+      cdkOverlayOrigin
+      #recordOverlay="cdkOverlayOrigin"
+      (click)="showRecord = true">
+      OPEN
+    </button>
     <quill-editor
       [placeholder]="placeholder"
       [ngModel]="value"
