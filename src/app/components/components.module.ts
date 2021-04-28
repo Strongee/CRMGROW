@@ -411,7 +411,7 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     CallRequestDetailComponent,
     VideoShareComponent,
     SelectTeamComponent,
-    DeleteFolderComponent,
+    DeleteFolderComponent
   ]
 })
 export class ComponentsModule {}

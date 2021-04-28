@@ -43,7 +43,7 @@
       (overlayOutsideClick)="closeCalendly($event)"
     >
       <div class="templates-container">
-        <ng-container *ngFor="let calendly of calendlyList">
+        <ng-container *ngFor="let calendly of (connectService.calendlyAll$ | async)">
           <div class="template">
             <div class="v-center">
               <div class="f-3 font-weight-bold w-100" (click)="selectCalendly(calendly.attributes.url)">{{calendly.attributes.name}}</div>
@@ -58,7 +58,8 @@
     <button
       class="record-action"
       cdkOverlayOrigin
-      #recordOverlay="cdkOverlayOrigin">
+      #recordOverlay="cdkOverlayOrigin"
+      (click)="showRecord = true">
       OPEN
     </button>
     <quill-editor
@@ -115,3 +116,109 @@
   <app-template-create class="w-100" [value]="value" (onClose)="closeOverlay($event)" [subject]="subject">
   </app-template-create>
 </ng-template>
+
+<ng-container *ngIf="showRecord">
+  <div class="setting-screen">
+    <video id="video" #video></video>
+    <button type="button" class="v-center justify-content-center btn btn-primary f-6 font-weight-bold record-button w-100" (click)="record()">
+      <i class="bgc-white i-icon i-record mr-2"></i>
+      <div class="f-3">Start Recording</div>
+    </button>
+    <!-- <div class="form-group mb-0">
+      <div class="type-item v-center">
+        <i class="i-icon i-camera bgc-record" aria-hidden="true"></i>
+        <select class="form-control theme-control ml-2" [(ngModel)]="selectedCamera" name="camera_type" #camera_type="ngModel">
+          <option value="" disabled *ngIf="!cameraList.length">Camera not found</option>
+          <option *ngFor="let camera of cameraList; let i = index;" [value]="camera.deviceId">{{camera.label ? camera.label : 'Camera Input ' + (i + 1)}}</option>
+        </select>
+      </div>
+      <div class="type-item v-center mt-2">
+        <i class="i-icon i-mic bgc-record" aria-hidden="true"></i>
+        <select class="form-control theme-control ml-2" [(ngModel)]="selectedMic" name="mic_type" #mic_type="ngModel">
+          <option value="" disabled *ngIf="!micList.length">Mic not found</option>
+          <option *ngFor="let mic of micList; let i = index;" [value]="mic.deviceId">{{mic.label ? mic.label : 'Microphone Input ' + (i + 1)}}</option>
+        </select>
+      </div>
+    </div> -->
+  </div>
+  <div class="counting-screen" *ngIf="recordStep == 2">
+    <span class="record-ready count-number">{{ countNum }}</span>
+  </div>
+  <div
+    class="record-screen"
+    [hidden]="recordStep !== 3"
+  >
+    <div class="action-container">
+      <div class="recording-mark" [class.recording]="!pauseFlag"></div>
+      <div class="v-center mb-1">
+        <div class="tooltip-box" *ngIf="hovered == 'stop'">
+          <span class="tip tip-right"></span>
+          <div class="f-1 font-weight-bold c-white">
+            Stop recording
+          </div>
+        </div>
+        <button class="v-center justify-content-center"
+          (click)="stopRecording()"
+          (mouseenter)="hoverButton('stop')"
+          (mouseleave)="blurButton()"
+          [class.disable]="!recording">
+          <i class="i-icon i-record-check complete"></i>
+        </button>
+      </div>
+      <div class="v-center mb-1">
+        <div class="tooltip-box" *ngIf="hovered == 'toggle_record'">
+          <span class="tip tip-right"></span>
+          <div class="f-1 font-weight-bold c-white">
+            {{pauseFlag == true ? 'Resume' : 'Pause'}} recording
+          </div>
+        </div>
+        <button class="v-center justify-content-center"
+            (click)="toggleRecording()"
+            (mouseenter)="hoverButton('toggle_record')"
+            (mouseleave)="blurButton()"
+            [class.disable]="!recording"
+            *ngIf="!pauseFlag">
+          <i class="i-icon i-record-pause"></i>
+        </button>
+        <button class="v-center justify-content-center"
+            (click)="toggleRecording()"
+            (mouseenter)="hoverButton('toggle_record')"
+            (mouseleave)="blurButton()"
+            [class.disable]="!recording"
+            *ngIf="pauseFlag">
+          <i class="i-icon i-record-play"></i>
+        </button>
+      </div>
+      <div class="v-center mb-1">
+        <div class="tooltip-box" *ngIf="hovered == 'toggle_mic'">
+          <span class="tip tip-right"></span>
+          <div class="f-1 font-weight-bold c-white">
+            {{micRecording == true ? 'Disable' : 'Enable'}} microphone
+          </div>
+        </div>
+        <button class="v-center justify-content-center"
+                (click)="toggleMic()"
+                (mouseenter)="hoverButton('toggle_mic')"
+                (mouseleave)="blurButton()"
+                [class.disable]="!micFlag">
+          <i class="i-icon i-record-mic"></i>
+        </button>
+      </div>
+      <div class="v-center mb-1">
+        <div class="tooltip-box" *ngIf="hovered == 'cancel'">
+          <span class="tip tip-right"></span>
+          <div class="f-1 font-weight-bold c-white">
+            Cancel recording
+          </div>
+        </div>
+        <button class="v-center justify-content-center"
+                (click)="cancelRecording()"
+                (mouseenter)="hoverButton('cancel')"
+                (mouseleave)="blurButton()"
+                [class.disable]="!recording">
+          <i class="i-icon i-record-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -3,6 +3,7 @@ import {
   ApplicationRef,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Inject,
   Input,
@@ -24,12 +25,10 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
-import { UserService } from 'src/app/services/user.service';
-import { Subscription } from 'rxjs';
-import { Garbage } from 'src/app/models/garbage.model';
-import { ConnectService } from 'src/app/services/connect.service';
 import { NotifyComponent } from '../notify/notify.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import * as RecordRTC from 'recordrtc';
+import { ConnectService } from 'src/app/services/connect.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -99,8 +98,10 @@ export class HtmlEditorComponent implements OnInit {
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
+  @ViewChild('video') video: ElementRef;
   showTemplates: boolean = false;
   showCalendly: boolean = false;
+  showRecord: boolean = false;
   quillEditorRef;
   attachments = [];
   config = {
@@ -137,7 +138,21 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          this.record();
+          this.showRecord = !this.showRecord;
+          this.cdr.detectChanges();
+
+          // if (this.hasCamera) {
+          //   this.showCamera();
+          // } else {
+          //   this.dialog.open(NotifyComponent, {
+          //     position: { top: '100px' },
+          //     width: '100vw',
+          //     maxWidth: '400px',
+          //     data: {
+          //       message: 'Camera is not connected. Please connect the camera.'
+          //     }
+          //   });
+          // }
         }
       }
     },
@@ -159,10 +174,23 @@ export class HtmlEditorComponent implements OnInit {
   };
 
   hasCamera = false;
-  calendlyList = [];
-  garbage: Garbage = new Garbage();
-  garbageSubscription: Subscription;
-
+  hasMic = false;
+  recording = false;
+  pauseFlag = false;
+  micRecording = false;
+  micFlag = false;
+  hovered = '';
+  cameraList = [];
+  micList = [];
+  selectedCamera = '';
+  selectedMic = '';
+  deviceConstraint = {};
+  screenStream;
+  cameraStream;
+  recorder;
+  countNum = 3;
+  recordStep = 1;
+  externalWindow = null;
   @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
   overlayRef: OverlayRef;
   templatePortal: TemplatePortal;
@@ -171,28 +199,18 @@ export class HtmlEditorComponent implements OnInit {
     private fileService: FileService,
     public templateService: TemplatesService,
     private handlerService: HandlerService,
-    private connectService: ConnectService,
-    private userService: UserService,
+    public connectService: ConnectService,
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef,
     private overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
     private toast: ToastrService,
     private appRef: ApplicationRef,
+    private dialogRef: MatDialogRef<HtmlEditorComponent>,
     private dialog: MatDialog
   ) {
     this.templateService.loadAll(false);
-    this.garbageSubscription && this.garbageSubscription.unsubscribe();
-    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
-      this.garbage = res;
-      if (this.garbage.calendly) {
-        this.connectService.getEvent().subscribe((res) => {
-          if (res && res['status']) {
-            this.calendlyList = [...this.calendlyList, ...res['data']];
-          }
-        });
-      }
-    });
+    this.connectService.loadCalendlyAll();
   }
 
   ngOnInit(): void {
@@ -201,7 +219,16 @@ export class HtmlEditorComponent implements OnInit {
         navigator.mediaDevices.enumerateDevices().then(callback);
       };
 
-      this.checkDeviceSupport();
+      this.checkDeviceSupport(() => {
+        if (this.hasCamera) {
+          this.deviceConstraint['video'] = {};
+        }
+        if (this.hasMic) {
+          this.deviceConstraint['audio'] = {};
+        }
+      });
+
+      this.initDeviceList();
     }
   }
 
@@ -226,21 +253,138 @@ export class HtmlEditorComponent implements OnInit {
     }
   }
 
+  showCamera(): void {
+    const constraint = { ...this.deviceConstraint };
+    if (this.selectedCamera) {
+      constraint['video']['deviceId'] = { exact: this.selectedCamera };
+    }
+    if (this.selectedMic) {
+      constraint['audio']['deviceId'] = { exact: this.selectedMic };
+    }
+    navigator.mediaDevices
+      .getUserMedia(constraint)
+      .then((stream) => {
+        this.cameraStream = stream;
+        const video: HTMLVideoElement = this.video.nativeElement;
+        video.muted = true;
+        video.srcObject = this.cameraStream;
+        video.play();
+      })
+      .catch((err) => {
+        console.log('camera stream error', err, err.message);
+        this.showAlert(`Couldn't get the video from this camera`);
+      });
+  }
+
   record(): void {
-    if (this.hasCamera) {
+    this.recordStep = 2;
+    this.count();
+  }
+
+  count(): void {
+    this.countNum = 3;
+    const counter = setInterval(() => {
+      this.countNum--;
+      if (this.countNum === 0) {
+        this.recordStep = 3;
+        setTimeout(() => {
+          this.recordImpl();
+        }, 500);
+        clearInterval(counter);
+      }
+      this.cdr.detectChanges();
+    }, 1000);
+  }
+
+  recordImpl(): void {
+    const videoSize = {
+      height: window.screen.height,
+      width: window.screen.width
+    };
+    const { width, height } = this.cameraStream.getTracks()[0].getSettings();
+    this.cameraStream.width = width;
+    this.cameraStream.height = height;
+    this.cameraStream.fullcanvas = true;
+
+    this.recorder = RecordRTC(this.cameraStream, {
+      type: 'video',
+      mimeType: 'video/webm',
+      video: videoSize
+    });
+    if (this.recorder) {
+      this.recording = true;
+      this.recorder.startRecording();
+    }
+  }
+
+  stopRecording(): void {}
+
+  hoverButton(type: string): void {
+    this.hovered = type;
+  }
+
+  blurButton(): void {
+    this.hovered = '';
+  }
+
+  toggleRecording(): void {
+    this.pauseFlag = !this.pauseFlag;
+    if (this.pauseFlag) {
+      this.recorder.pauseRecording();
     } else {
-      this.dialog.open(NotifyComponent, {
-        position: { top: '100px' },
-        width: '100vw',
-        maxWidth: '400px',
-        data: {
-          message: 'Camera is not connected. Please connect the camera.'
-        }
+      this.recorder.resumeRecording();
+    }
+  }
+
+  toggleMic(): void {
+    if (this.cameraStream) {
+      [this.cameraStream].forEach((stream) => {
+        stream.getTracks().forEach((t) => {
+          if (t.kind === 'audio') {
+            t.enabled = !t.enabled;
+            this.micRecording = !this.micRecording;
+          }
+        });
       });
     }
   }
 
-  checkDeviceSupport(): void {
+  cancelRecording(): void {}
+
+  addStreamStopListener(stream, callback): void {
+    stream.addEventListener(
+      'ended',
+      () => {
+        this.stopRecording();
+      },
+      false
+    );
+    stream.addEventListener(
+      'inactive',
+      () => {
+        this.stopRecording();
+      },
+      false
+    );
+    stream.getTracks().forEach((track) => {
+      track.addEventListener(
+        'ended',
+        () => {
+          this.stopRecording();
+        },
+        false
+      );
+      track.addEventListener(
+        'inactive',
+        () => {
+          this.stopRecording();
+        },
+        false
+      );
+    });
+  }
+
+  checkDeviceSupport(callback): void {
     let canEnumerate = false;
     if (
       typeof MediaStreamTrack !== 'undefined' &&
@@ -261,6 +405,13 @@ export class HtmlEditorComponent implements OnInit {
       navigator['enumerateDevices'] = navigator['enumerateDevices'].bind(
         navigator
       );
+    }
+
+    if (!navigator['enumerateDevices']) {
+      if (callback) {
+        callback();
+      }
+      return;
     }
 
     const MediaDevices = [];
@@ -313,10 +464,51 @@ export class HtmlEditorComponent implements OnInit {
           this.hasCamera = true;
         }
 
+        if (device['kind'] === 'audioinput') {
+          this.hasMic = true;
+        }
+
         // there is no 'videoouput' in the spec.
         MediaDevices.push(device);
       });
+      if (callback) {
+        callback();
+      }
     });
+  }
+
+  initDeviceList(): void {
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) => {
+        devices.forEach((device) => {
+          if (
+            device.kind === 'audioinput' &&
+            device.deviceId !== 'default' &&
+            device.deviceId !== 'communications'
+          ) {
+            this.micList.push(device);
+          }
+
+          if (
+            device.kind === 'videoinput' &&
+            device.deviceId !== 'default' &&
+            device.deviceId !== 'communications'
+          ) {
+            this.cameraList.push(device);
+          }
+        });
+        if (this.cameraList && this.cameraList.length) {
+          this.selectedCamera = this.cameraList[0]['deviceId'];
+        }
+        if (this.micList && this.micList.length) {
+          this.selectedMic = this.micList[0]['deviceId'];
+        }
+      })
+      .catch((err) => {
+        this.cameraList = [];
+        this.micList = [];
+      });
   }
 
   setValue(value: string): void {
@@ -580,6 +772,18 @@ export class HtmlEditorComponent implements OnInit {
       }, 1);
     }
     this.cdr.detectChanges();
+  }
+
+  showAlert(msg: string): MatDialogRef<NotifyComponent> {
+    const dialogRef = this.dialog.open(NotifyComponent, {
+      position: { top: '100px' },
+      width: '100vw',
+      maxWidth: '400px',
+      data: {
+        message: msg
+      }
+    });
+    return dialogRef;
   }
 }
 // [{ font: [] }],
