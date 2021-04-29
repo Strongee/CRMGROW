@@ -3,7 +3,6 @@ import {
   ApplicationRef,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Inject,
   Input,
@@ -25,9 +24,6 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
-import { NotifyComponent } from '../notify/notify.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import * as RecordRTC from 'recordrtc';
 import { ConnectService } from 'src/app/services/connect.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
@@ -98,7 +94,6 @@ export class HtmlEditorComponent implements OnInit {
 
   editorForm: FormControl = new FormControl();
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
-  @ViewChild('video') video: ElementRef;
   showTemplates: boolean = false;
   showCalendly: boolean = false;
   showRecord: boolean = false;
@@ -187,9 +182,7 @@ export class HtmlEditorComponent implements OnInit {
     private overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
     private toast: ToastrService,
-    private appRef: ApplicationRef,
-    private dialogRef: MatDialogRef<HtmlEditorComponent>,
-    private dialog: MatDialog
+    private appRef: ApplicationRef
   ) {
     this.templateService.loadAll(false);
     this.connectService.loadCalendlyAll(false);
@@ -247,6 +240,16 @@ export class HtmlEditorComponent implements OnInit {
 
     const tooltip = this.emailEditor.quillEditor.theme.tooltip;
     const input = tooltip.root.querySelector('input[data-link]');
+    const link_button = toolbar.container.querySelector('.ql-link');
+    const image_button = toolbar.container.querySelector('.ql-image');
+    const template_button = toolbar.container.querySelector('.ql-template');
+    const calendly_button = toolbar.container.querySelector('.ql-calendly');
+    const record_button = toolbar.container.querySelector('.ql-record');
+    link_button.setAttribute('title', 'Link');
+    image_button.setAttribute('title', 'Image');
+    template_button.setAttribute('title', 'Template');
+    calendly_button.setAttribute('title', 'Calendly');
+    record_button.setAttribute('title', 'Record');
     input.dataset.link = 'www.crmgrow.com';
   }
 
@@ -431,7 +434,7 @@ export class HtmlEditorComponent implements OnInit {
   }
 
   selectCalendly(url: string): void {
-    const data = '<a href="url">' + url + '</a>';
+    const data = '<a href="' + url + '">' + url + '</a>';
     this.insertValue(data + '<br>');
     this.showCalendly = false;
   }
@@ -479,18 +482,6 @@ export class HtmlEditorComponent implements OnInit {
       }, 1);
     }
     this.cdr.detectChanges();
-  }
-
-  showAlert(msg: string): MatDialogRef<NotifyComponent> {
-    const dialogRef = this.dialog.open(NotifyComponent, {
-      position: { top: '100px' },
-      width: '100vw',
-      maxWidth: '400px',
-      data: {
-        message: msg
-      }
-    });
-    return dialogRef;
   }
 }
 // [{ font: [] }],
