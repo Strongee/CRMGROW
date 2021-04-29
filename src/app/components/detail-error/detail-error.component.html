@@ -5,17 +5,17 @@
     </button>
     <ng-container *ngSwitchCase="402">
       <h5 class="text-center">Connect your email account</h5>
-      <p class="text-center f-4">To ensure you’re doing your best to avoid the spam filter when emailing contacts within your account, please connect your desired email.</p>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-2 fw-600 w-100" (click)="connectMail('gmail')">
+      <p class="summary text-center f-4">To ensure you’re doing your best to avoid the spam filter when emailing contacts within your account, please connect your desired email.</p>
+      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-2 mx-auto fw-600 connect-button" (click)="connectMail('gmail')">
         <img src="../../../assets/img/google.svg">
         <div class="social-text">
           Connect with Google
         </div>
       </button>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue fw-600 w-100" (click)="connectMail('outlook')">
+      <button type="button" class="v-center btn bgc-white border-primary c-blue mx-auto fw-600 connect-button" (click)="connectMail('outlook')">
         <img src="../../../assets/img/outlook.svg">
         <div class="social-text">
-          Connect with Microsoft
+          Connect with 365
         </div>
       </button>
     </ng-container>
@@ -75,34 +75,34 @@
   
     <ng-container *ngSwitchCase="406">
       <h5 class="text-center">Connect your email account</h5>
-      <p class="text-center f-4">To ensure you’re doing your best to avoid the spam filter when emailing contacts within your account, please connect your desired email.</p>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-2 fw-600 w-100" (click)="connectMail('gmail')">
+      <p class="summary text-center f-4">To ensure you’re doing your best to avoid the spam filter when emailing contacts within your account, please connect your desired email.</p>
+      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-2 mx-auto fw-600 connect-button" (click)="connectMail('gmail')">
         <img src="../../../assets/img/google.svg">
         <div class="social-text">
           Connect with Google
         </div>
       </button>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue fw-600 w-100" (click)="connectMail('outlook')">
+      <button type="button" class="v-center btn bgc-white border-primary c-blue mx-auto fw-600 connect-button" (click)="connectMail('outlook')">
         <img src="../../../assets/img/outlook.svg">
         <div class="social-text">
-          Connect with Microsoft
+          Connect with 365
         </div>
       </button>
     </ng-container>
 
     <ng-container *ngSwitchCase="407">
       <h5 class="text-center">Connect your calendar</h5>
-      <p class="text-center f-4">To utilize your calendar within CRMGrow, please reconnect your email.</p>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-2 fw-600 w-100" (click)="connectCalendar('gmail')">
+      <p class="summary text-center f-4">To utilize your calendar within CRMGrow, please reconnect your email.</p>
+      <button type="button" class="v-center btn bgc-white border-primary c-blue mb-2 mx-auto fw-600 connect-button" (click)="connectCalendar('gmail')">
         <img src="../../../assets/img/google_calendar.png">
         <div class="social-text">
-          Connect with Google Calendar
+          Connect with Google
         </div>
       </button>
-      <button type="button" class="v-center btn bgc-white border-primary c-blue fw-600 w-100" (click)="connectCalendar('outlook')">
+      <button type="button" class="v-center btn bgc-white border-primary c-blue mx-auto fw-600 connect-button" (click)="connectCalendar('outlook')">
         <img src="../../../assets/img/outlook_calendar.png">
         <div class="social-text">
-          Connect with Microsoft Calendar
+          Connect with Microsoft
         </div>
       </button>
     </ng-container>

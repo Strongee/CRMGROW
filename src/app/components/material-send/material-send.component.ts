@@ -1,10 +1,13 @@
 import {
-  ApplicationRef, ChangeDetectorRef,
+  ApplicationRef,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
-  OnInit, TemplateRef,
-  ViewChild, ViewContainerRef
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Contact } from 'src/app/models/contact.model';
@@ -18,6 +21,7 @@ import { environment } from 'src/environments/environment';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ConnectService } from 'src/app/services/connect.service';
 
 @Component({
   selector: 'app-material-send',
@@ -48,6 +52,7 @@ export class MaterialSendComponent implements OnInit {
   constructor(
     private userService: UserService,
     private contactService: ContactService,
+    public connectService: ConnectService,
     private materialService: MaterialService,
     public templateService: TemplatesService,
     private toast: ToastrService,
@@ -57,7 +62,9 @@ export class MaterialSendComponent implements OnInit {
     private appRef: ApplicationRef,
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.connectService.loadCalendlyAll(false);
+  }
 
   ngOnInit(): void {
     this.templateService.loadAll(false);
@@ -121,17 +128,20 @@ export class MaterialSendComponent implements OnInit {
     this.messageEl.nativeElement.focus();
     const field = this.messageEl.nativeElement;
     if (!this.textContent.replace(/(\r\n|\n|\r|\s)/gm, '')) {
+      console.log('111');
       field.select();
       document.execCommand('insertText', false, template.content);
       return;
     }
     if (field.selectionEnd || field.selectionEnd === 0) {
+      console.log('222');
       if (this.textContent[field.selectionEnd - 1] === '\n') {
         document.execCommand('insertText', false, template.content);
       } else {
         document.execCommand('insertText', false, '\n' + template.content);
       }
     } else {
+      console.log('333');
       if (this.textContent.slice(-1) === '\n') {
         document.execCommand('insertText', false, template.content);
       } else {
@@ -139,6 +149,30 @@ export class MaterialSendComponent implements OnInit {
       }
     }
   }
+
+  selectCalendly(url: string): void {
+    this.messageEl.nativeElement.focus();
+    const field = this.messageEl.nativeElement;
+    if (!this.textContent.replace(/(\r\n|\n|\r|\s)/gm, '')) {
+      field.select();
+      document.execCommand('insertText', false, url);
+      return;
+    }
+    if (field.selectionEnd || field.selectionEnd === 0) {
+      if (this.textContent[field.selectionEnd - 1] === '\n') {
+        document.execCommand('insertText', false, url);
+      } else {
+        document.execCommand('insertText', false, '\n' + url);
+      }
+    } else {
+      if (this.textContent.slice(-1) === '\n') {
+        document.execCommand('insertText', false, url);
+      } else {
+        document.execCommand('insertText', false, '\n' + url);
+      }
+    }
+  }
+
   onChangeTemplate(event: Template): void {
     this.subject = event.subject;
   }
