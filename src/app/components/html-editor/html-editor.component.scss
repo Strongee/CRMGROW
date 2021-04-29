@@ -75,7 +75,6 @@
   }
 }
 
-
 :host ::ng-deep {
   .ql-toolbar.ql-snow .ql-formats {
     margin-right: 0px;
@@ -89,6 +88,11 @@
     mask-repeat: no-repeat;
     margin-left: 4px;
     background-color: black;
+    &:hover::after {
+      content: 'Template';
+      position: absolute;
+      top: 10px;
+    }
   }
   button.ql-calendly {
     position: relative;
@@ -100,6 +104,17 @@
     margin-left: 4px;
     background-color: black;
   }
+  button.ql-record {
+    position: relative;
+    width: 24px;
+    mask-image: url(../../../assets/img/record.svg);
+    mask-position: center;
+    mask-size: 15px;
+    mask-repeat: no-repeat;
+    margin-left: 4px;
+    background-color: black;
+  }
+
   // button.ql-template::before {
   //   content: "Insert template";
   //   font-size: 12px;
@@ -171,7 +186,7 @@
   }
 }
 
-.templates-action, .calendly-action {
+.templates-action, .calendly-action, .record-action {
   position: absolute;
   top: 5px;
   left: 185px;

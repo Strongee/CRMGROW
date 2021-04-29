@@ -24,9 +24,6 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
-import { UserService } from 'src/app/services/user.service';
-import { Subscription } from 'rxjs';
-import { Garbage } from 'src/app/models/garbage.model';
 import { ConnectService } from 'src/app/services/connect.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
@@ -66,6 +63,12 @@ export class HtmlEditorComponent implements OnInit {
     }
   }
   @Input()
+  public set hasRecord(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.push(['record']);
+    }
+  }
+  @Input()
   public set noImage(val: boolean) {
     if (val) {
       this.config.toolbar.container.forEach((e) => {
@@ -93,6 +96,7 @@ export class HtmlEditorComponent implements OnInit {
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
   showTemplates: boolean = false;
   showCalendly: boolean = false;
+  showRecord: boolean = false;
   quillEditorRef;
   attachments = [];
   config = {
@@ -127,6 +131,23 @@ export class HtmlEditorComponent implements OnInit {
         calendly: () => {
           this.showCalendly = !this.showCalendly;
           this.cdr.detectChanges();
+        },
+        record: () => {
+          this.showRecord = !this.showRecord;
+          this.cdr.detectChanges();
+
+          // if (this.hasCamera) {
+          //   this.showCamera();
+          // } else {
+          //   this.dialog.open(NotifyComponent, {
+          //     position: { top: '100px' },
+          //     width: '100vw',
+          //     maxWidth: '400px',
+          //     data: {
+          //       message: 'Camera is not connected. Please connect the camera.'
+          //     }
+          //   });
+          // }
         }
       }
     },
@@ -147,10 +168,6 @@ export class HtmlEditorComponent implements OnInit {
     blotFormatter: {}
   };
 
-  calendlyList = [];
-  garbage: Garbage = new Garbage();
-  garbageSubscription: Subscription;
-
   @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
   overlayRef: OverlayRef;
   templatePortal: TemplatePortal;
@@ -159,8 +176,7 @@ export class HtmlEditorComponent implements OnInit {
     private fileService: FileService,
     public templateService: TemplatesService,
     private handlerService: HandlerService,
-    private connectService: ConnectService,
-    private userService: UserService,
+    public connectService: ConnectService,
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef,
     private overlay: Overlay,
@@ -169,17 +185,7 @@ export class HtmlEditorComponent implements OnInit {
     private appRef: ApplicationRef
   ) {
     this.templateService.loadAll(false);
-    this.garbageSubscription && this.garbageSubscription.unsubscribe();
-    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
-      this.garbage = res;
-      if (this.garbage.calendly) {
-        this.connectService.getEvent().subscribe((res) => {
-          if (res && res['status']) {
-            this.calendlyList = [...this.calendlyList, ...res['data']];
-          }
-        });
-      }
-    });
+    this.connectService.loadCalendlyAll(false);
   }
 
   ngOnInit(): void {}
@@ -234,6 +240,16 @@ export class HtmlEditorComponent implements OnInit {
 
     const tooltip = this.emailEditor.quillEditor.theme.tooltip;
     const input = tooltip.root.querySelector('input[data-link]');
+    const link_button = toolbar.container.querySelector('.ql-link');
+    const image_button = toolbar.container.querySelector('.ql-image');
+    const template_button = toolbar.container.querySelector('.ql-template');
+    const calendly_button = toolbar.container.querySelector('.ql-calendly');
+    const record_button = toolbar.container.querySelector('.ql-record');
+    link_button.setAttribute('title', 'Link');
+    image_button.setAttribute('title', 'Image');
+    template_button.setAttribute('title', 'Template');
+    calendly_button.setAttribute('title', 'Calendly');
+    record_button.setAttribute('title', 'Record');
     input.dataset.link = 'www.crmgrow.com';
   }
 
@@ -418,7 +434,7 @@ export class HtmlEditorComponent implements OnInit {
   }
 
   selectCalendly(url: string): void {
-    const data = '<a href="url">' + url + '</a>';
+    const data = '<a href="' + url + '">' + url + '</a>';
     this.insertValue(data + '<br>');
     this.showCalendly = false;
   }
