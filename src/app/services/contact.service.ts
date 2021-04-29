@@ -144,6 +144,13 @@ export class ContactService extends HttpService {
               newActivities,
               '_id'
             );
+            for (const key in currentContact.details) {
+              currentContact.details[key] = _.unionBy(
+                res.details[key],
+                currentContact.details[key],
+                '_id'
+              );
+            }
             this.storeService.selectedContact.next(currentContact);
           }
         }

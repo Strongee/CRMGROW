@@ -33,7 +33,13 @@
     }
     mwl-calendar-week-view-header{
         .cal-day-headers {
+            position: sticky;
+            top: 158px;
+            z-index: 2;
+            background: white;
             border: unset;
+            border-bottom: 1px solid gainsboro;
+
             .cal-header {
                 &:last-child {
                     border-right: 1px solid #e1e1e1;
@@ -93,6 +99,8 @@
             .cal-time-events {
                 border-left: unset;
                 .cal-time-label-column {
+                    margin-top: 6px;
+                    
                     mwl-calendar-week-view-hour-segment {
                         border: none;
                     }
@@ -265,6 +273,12 @@
 }
 
 .calendar-time {
+    position: sticky;
+    top: 63px;
+    padding-top: 32px;
+    z-index: 3;
+    background: white;
+
     .btn {
         i {
             width: 12px;
@@ -367,16 +381,23 @@
 }
 
 .global-events {
+    
+    &.week-events {
+        margin-left: -4px;
+        margin-right: -4px;
+    }
+
     .event {
-        border-radius: 4px;
+        border-radius: 2px;
         overflow: hidden;
         margin-bottom: 2px;
 
         .event-cell {
             color: white;
-            font-size: 12px;
-            padding: 2px 4px;
             font-weight: bold;
+            font-size: 10px;
+            padding: 0px 4px;
+            text-align: left;
         }
     }
 
@@ -396,6 +417,7 @@
 
     i {
         display: block;
+        min-width: 15px;
     }
 }
 .unchecked-calendar {

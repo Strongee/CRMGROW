@@ -136,11 +136,11 @@
                                     {{contact.fullName}}
                                 </div>
                             </div>
-                            <div class="v-center mt-2">
+                            <div class="v-center mt-2" *ngIf="contact.cell_phone">
                                 <i class="d-block i-icon i-contact-phone bgc-dark mx-2"></i>
                                 <span class="f-6">{{contact.cell_phone}}</span>
                             </div>
-                            <div class="v-center mt-2">
+                            <div class="v-center mt-2" *ngIf="contact.email">
                                 <i class="d-block i-icon i-message bgc-dark mx-2"></i>
                                 <span class="f-6">{{contact.email}}</span>
                             </div>
@@ -227,10 +227,10 @@
                   <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
-                <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'team_calls' || (tab.id === 'all' && activityType.id === 'team_calls')">
+                <!-- <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'team_calls' || (tab.id === 'all' && activityType.id === 'team_calls')">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>
-                </div>
+                </div> -->
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openTaskDlg()" *ngIf="tab.id === 'follow_ups' || (tab.id === 'all' && activityType.id === 'follow_ups')">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create task</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>

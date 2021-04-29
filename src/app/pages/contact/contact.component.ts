@@ -32,7 +32,7 @@ import { AutomationShowFullComponent } from 'src/app/components/automation-show-
 import { CalendarDialogComponent } from 'src/app/components/calendar-dialog/calendar-dialog.component';
 import { JoinCallRequestComponent } from 'src/app/components/join-call-request/join-call-request.component';
 import { TabItem } from 'src/app/utils/data.types';
-import { TaskDetail } from 'src/app/models/task.model';
+import { Task, TaskDetail } from 'src/app/models/task.model';
 import { NoteService } from 'src/app/services/note.service';
 import { DealsService } from 'src/app/services/deals.service';
 import { TaskService } from 'src/app/services/task.service';
@@ -64,6 +64,7 @@ import { AdditionalFieldsComponent } from 'src/app/components/additional-fields/
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Note } from 'src/app/models/note.model';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
+import { Deal } from 'src/app/models/deal.model';
 
 @Component({
   selector: 'app-contact',
@@ -72,7 +73,6 @@ import { DetailErrorComponent } from 'src/app/components/detail-error/detail-err
 })
 export class ContactComponent implements OnInit, OnDestroy {
   SITE = environment.website;
-  userId = '';
   STATUS = STATUS;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
@@ -97,22 +97,14 @@ export class ContactComponent implements OnInit, OnDestroy {
   ];
   selectedTimeSort = this.timeSorts[0];
 
+  userId = '';
+  _id = '';
   contact: ContactDetail = new ContactDetail();
   selectedContact: Contact = new Contact();
   groupActions = {};
   mainTimelines: DetailActivity[] = [];
-  sentHistory = {}; // {send activity id: material id}
-  details: any = {};
-  detailData: any = {};
-  sendActions = {};
   showingDetails = [];
-  editors = {};
-  _id = '';
-  next: string = null;
-  prev: string = null;
-  mainPanel = true;
-  secondPanel = true;
-  additionalPanel = true;
+
   activityCounts = {
     note: 0,
     email: 0,
@@ -122,17 +114,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     follow_up: 0,
     deal: 0
   };
-  detailCounts = {
-    notes: 0,
-    emails: 0,
-    texts: 0,
-    appointments: 0,
-    team_calls: 0,
-    follow_ups: 0,
-    deals: 0
-  };
+  editors = {};
   timezone;
 
+  // Automation
   selectedAutomation: Automation;
   ActionName = ActionName;
   treeControl = new NestedTreeControl<any>((node) => node.children);
@@ -141,28 +126,29 @@ export class ContactComponent implements OnInit, OnDestroy {
   hasChild = (_: number, node: any) =>
     !!node.children && node.children.length > 0;
   durations = CALENDAR_DURATION;
-
   canceling = false;
   assigning = false;
   cancelSubscription: Subscription;
   assignSubscription: Subscription;
 
+  // Share Calendar
   sharable: boolean = false;
   hasCalendar: false;
 
+  // Subscriptions & Related Contacts Load
   profileSubscription: Subscription;
   teamSubscription: Subscription;
   updateSubscription: Subscription;
   loadingContact = false;
   detailContacts = [];
-  siteUrl = environment.website;
   loadContactSubscription: Subscription;
 
+  // Contact Id Route & Additional Field
   routeChangeSubscription: Subscription;
   garbageSubscription: Subscription;
-
   lead_fields: any[] = [];
 
+  // Name Update
   nameEditable = false;
   contactFirstName = '';
   contactLastName = '';
@@ -170,6 +156,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   saving = false;
   saveSubscription: Subscription;
 
+  // Overlay for Appointment & Group Call
   @ViewChild('appointmentPortalContent') appointmentPortalContent: TemplateRef<
     unknown
   >;
@@ -187,13 +174,32 @@ export class ContactComponent implements OnInit, OnDestroy {
   loadingAppointment = false;
   loadingGroupCall = false;
   appointmentLoadSubscription: Subscription;
+  appointmentUpdateSubscription: Subscription;
   groupCallLoadSubscription: Subscription;
 
-  notes: Note[] = [];
-  notesLoadSubscription: Subscription;
-  notesLoading = false;
-
-  appointmentUpdateSubscription: Subscription;
+  data = {
+    materials: [],
+    notes: [],
+    emails: [],
+    texts: [],
+    appointments: [],
+    tasks: [],
+    deals: []
+  };
+  dataObj = {
+    materials: {},
+    notes: {},
+    emails: {},
+    texts: {},
+    appointments: {},
+    tasks: {},
+    deals: {}
+  };
+  materialMediaSending = {}; // video_send_activity: email_id || text_id
+  materialSendingType = {}; // material_send_activity: media_type
+  groups = []; // detail information about group
+  dGroups = []; // group ID Array to display detail data
+  showingMax = 4; // Max Limit to show the detail data
 
   constructor(
     private dialog: MatDialog,
@@ -248,6 +254,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       if (this._id !== params['id']) {
         this.contact = new ContactDetail();
         this.selectedContact = new ContactDetail();
+
         this.clearContact();
         this._id = params['id'];
         this.loadContact(this._id);
@@ -262,24 +269,23 @@ export class ContactComponent implements OnInit, OnDestroy {
           if (data.command === 'delete') {
             const deleteEventId = data.data.recurrence_id || data.data.event_id;
             // remove from activity list && detail data
-            for (const key in this.detailData) {
-              if (this.detailData[key].event_id == deleteEventId) {
-                delete this.detailData[key];
+            let idToDelete;
+            for (const key in this.dataObj.appointments) {
+              if (this.dataObj.appointments[key].event_id == deleteEventId) {
+                idToDelete = key;
+                delete this.dataObj.appointments[key];
               }
             }
-            _.remove(this.showingDetails, (e) => e.event_id === deleteEventId);
+            this.data.appointments = Object.values(this.dataObj.appointments);
+            this.changeTab(this.tab);
             const deleteActivityIds = [];
             this.mainTimelines.some((e) => {
-              if (
-                e.activity_detail &&
-                e.activity_detail.event_id === deleteEventId
-              ) {
+              if (e.appointments === idToDelete) {
                 deleteActivityIds.push(e._id);
                 return true;
               }
               return false;
             });
-            console.log('deleteactivityid', deleteActivityIds);
             if (deleteActivityIds.length) {
               this.contactService.deleteContactActivity(deleteActivityIds);
             }
@@ -305,16 +311,89 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.storeService.selectedContact$.subscribe((res) => {
-      this.contact = res;
-      this.selectedContact = res;
-      this.groupActivities();
-      this.getActivityCount();
-      this.timeLineArrangement();
+    this.storeService.selectedContact$.subscribe((contact) => {
+      this.contact = contact;
+      this.selectedContact = new Contact().deserialize({ ...contact });
+
+      delete this.selectedContact['activity'];
+      delete this.selectedContact['automation'];
+      delete this.selectedContact['time_lines'];
+      delete this.selectedContact['next'];
+      delete this.selectedContact['prev'];
+      delete this.selectedContact['details'];
+
+      this.data.materials = [];
+      this.data.notes = [];
+      this.data.emails = [];
+      this.data.texts = [];
+      this.data.appointments = [];
+      this.data.tasks = [];
+      this.data.deals = [];
+      this.dataObj.materials = {};
+      this.dataObj.notes = {};
+      this.dataObj.emails = {};
+      this.dataObj.texts = {};
+      this.dataObj.appointments = {};
+      this.dataObj.tasks = {};
+      this.dataObj.deals = {};
+
+      if (contact._id && contact.details) {
+        this.data.materials = contact.details.materials || [];
+        this.data.notes = contact.details.notes || [];
+        this.data.emails = contact.details.emails || [];
+        this.data.texts = contact.details.texts || [];
+        this.data.appointments = contact.details.appointments || [];
+        this.data.tasks = contact.details.tasks || [];
+        this.data.deals = contact.details.deals || [];
+
+        this.materialMediaSending = {};
+        this.materialSendingType = {};
+        contact.activity.forEach((e) => {
+          if (e.emails && e.emails.length) {
+            this.materialMediaSending[e._id] = { type: 'emails', id: e.emails };
+            return;
+          }
+          if (e.texts && e.texts.length) {
+            this.materialMediaSending[e._id] = { type: 'texts', id: e.texts };
+            return;
+          }
+          if (e.type === 'videos' || e.type === 'images' || e.type === 'pdfs') {
+            if (e.content.indexOf('email') !== -1) {
+              this.materialSendingType[e._id] = 'emails';
+            } else {
+              this.materialSendingType[e._id] = 'texts';
+            }
+            return;
+          }
+        });
+
+        this.groupActivities();
+        this.getActivityCount();
+        this.timeLineArrangement();
+      }
+      for (const key in this.data) {
+        if (key !== 'materials') {
+          this.data[key].forEach((e) => {
+            this.dataObj[key][e._id] = e;
+          });
+        } else {
+          this.data[key].forEach((e) => {
+            e.material_type = 'video';
+            if (e.type) {
+              if (e.type.indexOf('pdf') !== -1) {
+                e.material_type = 'pdf';
+              } else if (e.type.indexOf('image') !== -1) {
+                e.material_type = 'image';
+              }
+            }
+            this.dataObj[key][e._id] = e;
+          });
+        }
+      }
+
       if (this.tab.id !== 'all') {
         this.changeTab(this.tab);
       }
-      this.getDetailCounts();
     });
 
     this.handlerService.pageName.next('detail');
@@ -344,24 +423,11 @@ export class ContactComponent implements OnInit, OnDestroy {
    */
   loadContact(_id: string): void {
     this.contactService.read(_id);
-    this.notesLoading = true;
-    this.notesLoadSubscription && this.notesLoadSubscription.unsubscribe();
-    this.notesLoadSubscription = this.contactService
-      .loadNotes(_id)
-      .subscribe((res) => {
-        this.notesLoading = false;
-        this.notes = res;
-        this.notes.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
-      });
   }
 
   clearContact(): void {
     this.groupActions = {};
     this.mainTimelines = [];
-    this.sentHistory = {}; // {send activity id: material id}
-    this.details = {};
-    this.detailData = {};
-    this.sendActions = {};
     this.showingDetails = [];
     this.activityCounts = {
       note: 0,
@@ -372,15 +438,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       follow_up: 0,
       deal: 0
     };
-    this.detailCounts = {
-      notes: 0,
-      emails: 0,
-      texts: 0,
-      appointments: 0,
-      team_calls: 0,
-      follow_ups: 0,
-      deals: 0
-    };
   }
 
   /**
@@ -389,17 +446,42 @@ export class ContactComponent implements OnInit, OnDestroy {
   groupActivities(): void {
     this.groupActions = {};
     this.mainTimelines = [];
-    this.details = {};
-    this.sentHistory = {};
+    this.groups = [];
     for (let i = this.contact.activity.length - 1; i >= 0; i--) {
       const e = this.contact.activity[i];
-      const group = this.generateUniqueId(e);
+      if (e.type.indexOf('tracker') !== -1) {
+        e.activity = e[e.type].activity;
+      }
+      const groupData = this.generateUniqueId(e);
+      if (!groupData) {
+        continue;
+      }
+      const { type, group, media, material } = groupData;
       if (this.groupActions[group]) {
         this.groupActions[group].push(e);
       } else {
         e.group_id = group;
         this.groupActions[group] = [e];
-        this.mainTimelines.push(e);
+        this.groups.push({ type, group, media, material });
+      }
+    }
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].type === 'emails' || this.groups[i].type === 'texts') {
+        const latest = this.groupActions[this.groups[i]['group']][0];
+        if (
+          latest.type === 'videos' ||
+          latest.type === 'pdfs' ||
+          latest.type === 'images'
+        ) {
+          const activity = this.groupActions[this.groups[i]['group']].filter(
+            (e) => e.type === 'emails' || e.type === 'texts'
+          )[0];
+          this.mainTimelines.push(activity);
+        } else {
+          this.mainTimelines.push(latest);
+        }
+      } else {
+        this.mainTimelines.push(this.groupActions[this.groups[i]['group']][0]);
       }
     }
   }
@@ -454,67 +536,130 @@ export class ContactComponent implements OnInit, OnDestroy {
    * Generate the unique group id that the activity would be included
    * @param activity : Activity Detail Information
    */
-  generateUniqueId(activity: DetailActivity): string {
-    if (!activity.activity_detail) {
-      if (activity.type === 'follow_ups' && activity.follow_ups) {
-        return activity.follow_ups;
-      }
-      return activity._id;
-    }
-    let material_id;
+  generateUniqueId(activity: DetailActivity): any {
+    const trackerActivityTypes = {
+      video_trackers: 'videos',
+      pdf_trackers: 'pdfs',
+      image_trackers: 'images'
+    };
     switch (activity.type) {
+      case 'emails':
+      case 'texts':
+      case 'notes':
+      case 'appointments':
+      case 'follow_ups':
+      case 'deals':
+        return {
+          type: activity.type,
+          group: activity[activity.type]
+        };
       case 'video_trackers':
       case 'pdf_trackers':
       case 'image_trackers':
+        if (this.materialMediaSending[activity.activity]) {
+          return {
+            type: this.materialMediaSending[activity.activity].type,
+            group: this.materialMediaSending[activity.activity].id
+          };
+        } else {
+          return {
+            type: trackerActivityTypes[activity.type],
+            group: activity.activity,
+            material: activity[trackerActivityTypes[activity.type]],
+            media: this.materialSendingType[activity.activity]
+          };
+        }
       case 'email_trackers':
-        const material_type = activity.type.split('_')[0];
-        material_id = activity.activity_detail[material_type];
-        if (material_id instanceof Array) {
-          material_id = material_id[0];
-        }
-        let activity_id = activity.activity_detail['activity'];
-        if (activity_id instanceof Array) {
-          activity_id = activity_id[0];
-        }
-        return `${material_id}_${activity_id}`;
+        return {
+          type: 'emails',
+          group: activity.emails
+        };
+      case 'text_trackers':
+        return {
+          type: 'texts',
+          group: activity.texts
+        };
       case 'videos':
       case 'pdfs':
       case 'images':
-      case 'emails':
-        material_id = activity.activity_detail['_id'];
-        if (activity.type !== 'emails') {
-          activity.activity_detail['content'] = activity.content;
-          activity.activity_detail['subject'] = activity.subject;
-          activity.activity_detail['updated_at'] = activity.updated_at;
-          this.sentHistory[activity._id] = material_id;
+        if (activity.emails && activity.emails.length) {
+          return {
+            type: 'emails',
+            group: activity.emails
+          };
         }
-        this.details[material_id] = activity.activity_detail;
-        const group_id = `${material_id}_${activity._id}`;
-        this.detailData[group_id] = activity.activity_detail;
-        this.detailData[group_id]['data_type'] = activity.type;
-        this.detailData[group_id]['group_id'] = group_id;
-        this.detailData[group_id]['emails'] = activity.emails;
-        this.detailData[group_id]['texts'] = activity.texts;
-        return group_id;
-      case 'texts':
-        material_id = activity.activity_detail['_id'];
-        this.details[material_id] = activity.activity_detail;
-        const text_group_id = `${material_id}_${activity._id}`;
-        this.detailData[text_group_id] = activity.activity_detail;
-        this.detailData[text_group_id]['data_type'] = activity.type;
-        this.detailData[text_group_id]['group_id'] = text_group_id;
-        this.detailData[text_group_id]['emails'] = activity.emails;
-        this.detailData[text_group_id]['texts'] = activity.texts;
-        if (activity.content.indexOf('sent') !== -1) {
-          this.detailData[text_group_id]['sent'] = true;
+        if (activity.texts && activity.texts.length) {
+          return {
+            type: 'texts',
+            group: activity.texts
+          };
         }
-        return text_group_id;
-      default:
-        const detailKey = activity.activity_detail['_id'];
-        this.detailData[detailKey] = activity.activity_detail;
-        this.detailData[detailKey]['data_type'] = activity.type;
-        return detailKey;
+        const media = activity.content.indexOf('email') ? 'emails' : 'texts';
+        return {
+          type: activity.type,
+          group: activity._id,
+          media,
+          material: activity[activity.type]
+        };
     }
+    // if (!activity.activity_detail) {
+    //   if (activity.type === 'follow_ups' && activity.follow_ups) {
+    //     return activity.follow_ups;
+    //   }
+    //   return activity._id;
+    // }
+    // let material_id;
+    // switch (activity.type) {
+    //   case 'video_trackers':
+    //   case 'pdf_trackers':
+    //   case 'image_trackers':
+    //   case 'email_trackers':
+    //     const material_type = activity.type.split('_')[0];
+    //     material_id = activity.activity_detail[material_type];
+    //     if (material_id instanceof Array) {
+    //       material_id = material_id[0];
+    //     }
+    //     let activity_id = activity.activity_detail['activity'];
+    //     if (activity_id instanceof Array) {
+    //       activity_id = activity_id[0];
+    //     }
+    //     return `${material_id}_${activity_id}`;
+    //   case 'videos':
+    //   case 'pdfs':
+    //   case 'images':
+    //   case 'emails':
+    //     material_id = activity.activity_detail['_id'];
+    //     if (activity.type !== 'emails') {
+    //       activity.activity_detail['content'] = activity.content;
+    //       activity.activity_detail['subject'] = activity.subject;
+    //       activity.activity_detail['updated_at'] = activity.updated_at;
+    //       this.sentHistory[activity._id] = material_id;
+    //     }
+    //     const group_id = `${material_id}_${activity._id}`;
+    //     this.detailData[group_id] = activity.activity_detail;
+    //     this.detailData[group_id]['data_type'] = activity.type;
+    //     this.detailData[group_id]['group_id'] = group_id;
+    //     this.detailData[group_id]['emails'] = activity.emails;
+    //     this.detailData[group_id]['texts'] = activity.texts;
+    //     return group_id;
+    //   case 'texts':
+    //     material_id = activity.activity_detail['_id'];
+    //     const text_group_id = `${material_id}_${activity._id}`;
+    //     this.detailData[text_group_id] = activity.activity_detail;
+    //     this.detailData[text_group_id]['data_type'] = activity.type;
+    //     this.detailData[text_group_id]['group_id'] = text_group_id;
+    //     this.detailData[text_group_id]['emails'] = activity.emails;
+    //     this.detailData[text_group_id]['texts'] = activity.texts;
+    //     if (activity.content.indexOf('sent') !== -1) {
+    //       this.detailData[text_group_id]['sent'] = true;
+    //     }
+    //     return text_group_id;
+    //   default:
+    //     const detailKey = activity.activity_detail['_id'];
+    //     this.detailData[detailKey] = activity.activity_detail;
+    //     this.detailData[detailKey]['data_type'] = activity.type;
+    //     return detailKey;
+    // }
   }
 
   /**
@@ -596,11 +741,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   /**
    * Open the Contact Edit Dialog
    */
-  editContacts(type: string): void {
-    if (type == 'main') {
-      this.mainPanel = !this.mainPanel;
-    } else {
-      this.secondPanel = !this.secondPanel;
+  editContacts(type: string, evt: any): void {
+    if (evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
     }
     this.dialog
       .open(ContactEditComponent, {
@@ -609,12 +753,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         disableClose: true,
         data: {
           contact: {
-            ...this.contact,
-            activity: undefined,
-            time_lines: undefined,
-            automation: undefined,
-            next: undefined,
-            prev: undefined
+            ...this.selectedContact
           },
           type: type
         }
@@ -636,20 +775,18 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
-  editAdditional(): void {
-    this.additionalPanel = !this.additionalPanel;
+  editAdditional(event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     this.dialog
       .open(AdditionalEditComponent, {
         width: '98vw',
         maxWidth: '600px',
         data: {
           contact: {
-            ...this.contact,
-            activity: undefined,
-            time_lines: undefined,
-            automation: undefined,
-            next: undefined,
-            prev: undefined
+            ...this.selectedContact
           }
         }
       })
@@ -857,161 +994,85 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.tab = tab;
 
     if (this.tab.id !== 'all') {
+      this.showingDetails = [];
       if (tab.id === 'note') {
-        this.showingDetails = [...this.notes];
+        this.showingDetails = [...this.data.notes];
         return;
       }
-
-      this.showingDetails = [];
-      this.sendActions = {};
-      let dataType = '';
-      switch (tab.id) {
-        case 'note':
-          dataType = 'notes';
-          break;
-        case 'email':
-          dataType = 'emails';
-          break;
-        case 'text':
-          dataType = 'texts';
-          break;
-        case 'appointment':
-          dataType = 'appointments';
-          break;
-        case 'group_call':
-          dataType = 'team_calls';
-          break;
-        case 'follow_up':
-          this.selectedTimeSort = this.timeSorts[0];
-          dataType = 'follow_ups';
-          break;
-        case 'deal':
-          dataType = 'deals';
-          break;
+      if (tab.id === 'appointment') {
+        this.showingDetails = [...this.data.appointments];
+        return;
       }
-      const details = Object.values(this.detailData);
-      details.forEach((e) => {
-        if (dataType === 'emails') {
-          if (e['data_type'] === 'emails') {
-            this.showingDetails.push(e);
-            if (this.sendActions[e['_id']]) {
-              this.sendActions[e['_id']] = [
-                ...this.sendActions[e['_id']],
-                ...this.groupActions[e['group_id']]
-              ];
-            } else {
-              this.sendActions[e['_id']] = this.groupActions[e['group_id']];
-            }
-          }
+      if (tab.id === 'follow_up') {
+        this.showingDetails = [...this.data.tasks];
+        return;
+      }
+      if (tab.id === 'deal') {
+        this.showingDetails = [...this.data.deals];
+        return;
+      }
+      if (tab.id === 'email') {
+        this.contact.activity.forEach((e) => {
           if (
-            e['data_type'] === 'videos' ||
-            e['data_type'] === 'pdfs' ||
-            e['data_type'] === 'images'
+            (e.type === 'videos' || e.type === 'pdfs' || e.type === 'images') &&
+            (!e.emails || !e.emails.length) &&
+            (!e.texts || !e.texts.length)
           ) {
-            if (e['emails']) {
-              if (this.sendActions[e['emails']]) {
-                this.sendActions[e['emails']] = [
-                  ...this.sendActions[e['emails']],
-                  ...this.groupActions[e['group_id']]
-                ];
-              } else {
-                this.sendActions[e['emails']] = this.groupActions[
-                  e['group_id']
-                ];
-              }
-            } else if (!e['texts']) {
-              if (e['content'].indexOf('email') !== -1) {
-                this.showingDetails.push(e);
-                this.sendActions[e['group_id']] = this.groupActions[
-                  e['group_id']
-                ];
-              }
+            if (e.content.indexOf('email') !== -1) {
+              this.showingDetails.push({
+                ...this.dataObj.materials[e[e.type]],
+                activity_id: e._id,
+                data_type: e.type,
+                send_time: e.updated_at
+              });
             }
           }
-        } else if (dataType === 'texts') {
-          if (e['data_type'] === 'texts') {
-            this.showingDetails.push(e);
-            if (this.sendActions[e['_id']]) {
-              this.sendActions[e['_id']] = [
-                ...this.sendActions[e['_id']],
-                ...this.groupActions[e['group_id']]
-              ];
-            } else {
-              this.sendActions[e['_id']] = this.groupActions[e['group_id']];
-            }
-          }
+        });
+        this.data.emails.forEach((e) => {
+          this.showingDetails.push({
+            ...e,
+            data_type: 'emails',
+            send_time: e.updated_at
+          });
+        });
+        this.showingDetails.sort((a, b) =>
+          a.send_time > b.send_time ? -1 : 1
+        );
+        return;
+      }
+      if (tab.id === 'text') {
+        this.contact.activity.forEach((e) => {
           if (
-            e['data_type'] === 'videos' ||
-            e['data_type'] === 'pdfs' ||
-            e['data_type'] === 'images'
+            (e.type === 'videos' || e.type === 'pdfs' || e.type === 'images') &&
+            (!e.emails || !e.emails.length) &&
+            (!e.texts || !e.texts.length)
           ) {
-            if (e['texts']) {
-              if (this.sendActions[e['texts']]) {
-                this.sendActions[e['texts']] = [
-                  ...this.sendActions[e['texts']],
-                  ...this.groupActions[e['group_id']]
-                ];
-              } else {
-                this.sendActions[e['texts']] = this.groupActions[e['group_id']];
-              }
-            } else if (!e['emails']) {
-              if (e['content'].indexOf('sms') !== -1) {
-                this.showingDetails.push(e);
-                this.sendActions[e['group_id']] = this.groupActions[
-                  e['group_id']
-                ];
-              }
+            if (
+              e.content.indexOf('sms') !== -1 ||
+              e.content.indexOf('text') !== -1
+            ) {
+              this.showingDetails.push({
+                ...this.dataObj.materials[e[e.type]],
+                activity_id: e._id,
+                data_type: e.type,
+                send_time: e.updated_at
+              });
             }
           }
-        } else if (dataType === 'deals' && e['data_type'] === 'deals') {
-          if (e['contacts'] && e['contacts'].indexOf(this.contact._id) !== -1) {
-            this.showingDetails.push(e);
-          }
-        } else if (e['data_type'] === dataType) {
-          this.showingDetails.push(e);
-        }
-      });
-      this.showingDetails = this.showingDetails.sort(
-        (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-      );
+        });
+        this.data.texts.forEach((e) => {
+          this.showingDetails.push({
+            ...e,
+            data_type: 'texts',
+            send_time: e.updated_at
+          });
+        });
+        this.showingDetails.sort((a, b) =>
+          a.send_time > b.send_time ? -1 : 1
+        );
+        return;
+      }
     }
-  }
-
-  getDetailCounts(): void {
-    this.detailCounts = {
-      notes: 0,
-      emails: 0,
-      texts: 0,
-      appointments: 0,
-      team_calls: 0,
-      follow_ups: 0,
-      deals: 0
-    };
-    const details = Object.values(this.detailData);
-    details.forEach((e) => {
-      switch (e['data_type']) {
-        case 'emails':
-          this.detailCounts['emails']++;
-          break;
-        case 'videos':
-        case 'pdfs':
-        case 'images':
-          if (!e['emails']) {
-            this.detailCounts['emails']++;
-          }
-          break;
-        default:
-          this.detailCounts[e['data_type']]++;
-      }
-    });
-    this.tabs[1]['badge'] = this.detailCounts['notes'];
-    this.tabs[2]['badge'] = this.detailCounts['emails'];
-    this.tabs[3]['badge'] = this.detailCounts['texts'];
-    this.tabs[4]['badge'] = this.detailCounts['appointments'];
-    // this.tabs[5]['badge'] = this.detailCounts['team_calls'];
-    this.tabs[5]['badge'] = this.detailCounts['follow_ups'];
-    this.tabs[6]['badge'] = this.detailCounts['deals'];
   }
 
   changeActivityTypes(type: TabItem): void {
@@ -1070,6 +1131,19 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
   }
 
+  showMoreDetail(group_id): void {
+    if (this.dGroups.length >= this.showingMax) {
+      this.dGroups.shift();
+    }
+    this.dGroups.push(group_id);
+  }
+  hideMoreDetail(group_id): void {
+    const pos = this.dGroups.indexOf(group_id);
+    if (pos !== -1) {
+      this.dGroups.splice(pos, 1);
+    }
+  }
+
   showDetail(event: any): void {
     const target: HTMLElement = <HTMLElement>event.target;
     const parent: HTMLElement = <HTMLElement>(
@@ -1089,22 +1163,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
   }
 
-  editTask(activity: any, isReal: boolean = false): void {
-    let data;
-    if (isReal) {
-      data = {
-        ...activity,
-        contact: { _id: this.contact._id }
-      };
-    } else {
-      if (!activity || !activity.activity_detail) {
-        return;
-      }
-      data = {
-        ...activity.activity_detail,
-        contact: { _id: this.contact._id }
-      };
-    }
+  editTask(activity: any): void {
+    const data = {
+      ...activity,
+      contact: { _id: this.contact._id }
+    };
 
     this.dialog.open(TaskEditComponent, {
       width: '98vw',
@@ -1115,13 +1178,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
-  completeTask(activity: any, isReal: boolean = false): void {
-    let taskId;
-    if (isReal) {
-      taskId = activity._id;
-    } else {
-      taskId = activity.activity_detail._id;
-    }
+  completeTask(activity: any): void {
+    const taskId = activity._id;
     this.dialog
       .open(ConfirmComponent, {
         position: { top: '100px' },
@@ -1145,13 +1203,8 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
-  archiveTask(activity: any, isReal: boolean = false): void {
-    let taskId;
-    if (isReal) {
-      taskId = activity._id;
-    } else {
-      taskId = activity.activity_detail._id;
-    }
+  archiveTask(activity: any): void {
+    const taskId = activity._id;
     this.dialog
       .open(ConfirmComponent, {
         ...DialogSettings.CONFIRM,
@@ -1167,13 +1220,17 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (confirm) {
           this.taskService.archive([taskId]).subscribe((status) => {
             if (status) {
-              delete this.detailData[taskId];
-              _.pullAllBy(this.showingDetails, { _id: taskId }, '_id');
-              this.handlerService.archiveTask$(taskId);
+              this.deleteTaskFromTasksArray(taskId);
+              this.changeTab(this.tab);
             }
           });
         }
       });
+  }
+  deleteTaskFromTasksArray(_id: string): void {
+    _.remove(this.data.tasks, (e) => e._id === _id);
+    delete this.dataObj.tasks[_id];
+    this.handlerService.updateContactRelated$('tasks', this.data.notes);
   }
 
   /**
@@ -1186,38 +1243,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         contacts: [this.selectedContact]
       }
     });
-  }
-  /**
-   * Edit the Note from Activity
-   * @param activity : Note Activity
-   */
-  updateNote(activity: any): void {
-    if (!activity || !activity.activity_detail) {
-      return;
-    }
-    const data = {
-      note: activity.activity_detail,
-      contact: { _id: this.contact._id },
-      contact_name: this.contact.fullName
-    };
-    this.dialog
-      .open(NoteEditComponent, {
-        width: '98vw',
-        maxWidth: '394px',
-        data
-      })
-      .afterClosed()
-      .subscribe((note) => {
-        if (note) {
-          activity.activity_detail = note;
-          if (this.detailData && this.detailData[note._id]) {
-            this.detailData[note._id].content = note.content;
-          }
-          // Update the Notes Array with new content
-          this.updateNotesArray(note._id, note.content);
-          this.changeTab(this.tab);
-        }
-      });
   }
   /**
    * Edit the Note Content
@@ -1251,9 +1276,6 @@ export class ContactComponent implements OnInit, OnDestroy {
               return true;
             }
           });
-          if (this.detailData && this.detailData[note._id]) {
-            this.detailData[note._id].content = note.content;
-          }
           // Update the Notes Array with new content
           this.updateNotesArray(detail._id, note.content);
           this.changeTab(this.tab);
@@ -1261,43 +1283,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteNote(activity: any): void {
-    this.dialog
-      .open(ConfirmComponent, {
-        position: { top: '100px' },
-        data: {
-          title: 'Delete Note',
-          message: 'Are you sure to delete the note?',
-          cancelLabel: 'Cancel',
-          confirmLabel: 'Confirm'
-        }
-      })
-      .afterClosed()
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.noteService
-            .delete(activity.activity_detail._id)
-            .subscribe((res) => {
-              if (res) {
-                delete this.detailData[activity.activity_detail._id];
-                _.pullAllBy(
-                  this.showingDetails,
-                  { _id: activity.activity_detail._id },
-                  '_id'
-                );
-                this.mainTimelines.some((e, index) => {
-                  if (e._id === activity._id) {
-                    e.activity_detail = null;
-                    return true;
-                  }
-                });
-                // Remove the note from notes array
-                this.deleteNoteFromNotesArray(activity.activity_detail._id);
-              }
-            });
-        }
-      });
-  }
   deleteNoteDetail(detail: any): void {
     this.dialog
       .open(ConfirmComponent, {
@@ -1325,7 +1310,6 @@ export class ContactComponent implements OnInit, OnDestroy {
               });
               // Remove the note from notes array
               this.deleteNoteFromNotesArray(detail._id);
-              delete this.detailData[detail._id];
               this.changeTab(this.tab);
             }
           });
@@ -1334,14 +1318,16 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   updateNotesArray(_id: string, content: string): void {
-    this.notes.some((e) => {
+    this.data.notes.some((e) => {
       if (e._id === _id) {
         e.content = content;
       }
     });
   }
   deleteNoteFromNotesArray(_id: string): void {
-    _.remove(this.notes, (e) => e._id === _id);
+    _.remove(this.data.notes, (e) => e._id === _id);
+    delete this.dataObj.notes[_id];
+    this.handlerService.updateContactRelated$('notes', this.data.notes);
   }
 
   /**************************************
@@ -1534,110 +1520,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
-  getSessionIndex(i: number, activities: any[]): string {
-    const notTrackers = activities.filter((e) => {
-      if (e.activity_detail && e.activity_detail.type === 'watch') {
-        return false;
-      } else {
-        return true;
-      }
-    });
-    return `#${activities.length - notTrackers.length - i}`;
-  }
-
-  convertContent(content = ''): any {
-    const dom = document.createElement('div');
-    dom.innerHTML = content;
-    const materials = dom.querySelectorAll('.material-object');
-    let convertString = '';
-    const activityIds = [];
-    materials.forEach((material) => {
-      const url = material.getAttribute('href');
-      const id = url.replace(
-        new RegExp(
-          environment.website +
-            '/video1/|' +
-            environment.website +
-            '/pdf1/|' +
-            environment.website +
-            '/image1/',
-          'gi'
-        ),
-        ''
-      );
-      activityIds.push(id);
-      convertString += material.outerHTML;
-    });
-    if (materials.length === 1) {
-      const material = this.details[this.sentHistory[activityIds[0]]];
-      convertString += `<div class="title">${
-        material ? material.title : ''
-      }</div><div class="description">${
-        material ? material.description : ''
-      }</div>`;
-      convertString = `<div class="single-material-send">${convertString}</div>`;
-    }
-    return convertString;
-  }
-
-  convertTextContent(content = ''): string {
-    const videoReg = new RegExp(
-      environment.website + '/video1/' + '([0-9a-zA-Z]{24})',
-      'gi'
-    );
-    const imageReg = new RegExp(
-      environment.website + '/image1/' + '([0-9a-zA-Z]{24})',
-      'gi'
-    );
-    const pdfReg = new RegExp(
-      environment.website + '/pdf1/' + '([0-9a-zA-Z]{24})',
-      'gi'
-    );
-    const videoLinks = content.match(videoReg) || [];
-    const imageLinks = content.match(imageReg) || [];
-    const pdfLinks = content.match(pdfReg) || [];
-    const activityIds = [];
-    const materials = [...videoLinks, ...imageLinks, ...pdfLinks];
-    materials.forEach((material) => {
-      const id = material.replace(
-        new RegExp(
-          environment.website +
-            '/video1/|' +
-            environment.website +
-            '/pdf1/|' +
-            environment.website +
-            '/image1/',
-          'gi'
-        ),
-        ''
-      );
-      activityIds.push(id);
-    });
-    let resultHTML = content;
-    activityIds.forEach((activity) => {
-      const material = this.details[this.sentHistory[activity]];
-      if (material) {
-        let prefix = 'video?video=';
-        let activityPrefix = 'video1';
-        if (material.type && material.type.indexOf('pdf') !== -1) {
-          prefix = 'pdf?pdf=';
-          activityPrefix = 'pdf1';
-        }
-        if (material.type && material.type.indexOf('image') !== -1) {
-          prefix = 'image?image=';
-          activityPrefix = 'image1';
-        }
-        const link = `<a target="_blank" href="${environment.website}/${prefix}${material._id}&user=${this.userId}" class="material-thumbnail"><img src="${material.preview}"></a>`;
-        const originalLink = `${environment.website}/${activityPrefix}/${activity}`;
-        resultHTML = resultHTML.replace(originalLink, link);
-      }
-    });
-    if (activityIds.length) {
-      return resultHTML;
-    }
-    return resultHTML;
-  }
-
   getPrevPage(): string {
     if (!this.handlerService.previousUrl) {
       return 'to Contacts';
@@ -1668,6 +1550,11 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
+  /******************************************************
+   * ****************************************************
+   * Name Change Function
+   * ****************************************************
+   ******************************************************/
   focusName(): void {
     this.nameEditable = true;
     this.contactFirstName = this.contact.first_name;
@@ -1724,7 +1611,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadContacts(ids): void {
+  loadContacts(ids: string[]): void {
     if (ids && ids.length >= 0) {
       this.loadingContact = true;
       this.loadContactSubscription &&
@@ -1742,36 +1629,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   reloadLatest(): void {
     this.contactService.addLatestActivity(24);
-  }
-
-  openAppointmentEasyView(event: any, origin: any, content: any): void {
-    const _formattedEvent = {
-      title: event.title,
-      start: new Date(event.due_start),
-      end: new Date(event.due_end),
-      meta: {
-        contacts: event.contacts,
-        calendar_id: event.calendar_id,
-        description: event.description,
-        location: event.location,
-        type: event.type,
-        guests: event.guests,
-        event_id: event.event_id,
-        recurrence: event.recurrence,
-        recurrence_id: event.recurrence_id,
-        is_organizer: event.is_organizer,
-        organizer: event.organizer
-      }
-    };
-    this.overlayService.open(
-      origin,
-      content,
-      this.viewContainerRef,
-      'automation',
-      {
-        data: _formattedEvent
-      }
-    );
   }
 
   loadDetailAppointment(event): void {
@@ -1806,29 +1663,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
         this.loadedAppointments[event.meta.event_id] = loadedEvent;
         this.selectedAppointment = loadedEvent;
-      });
-  }
-
-  loadDetailGroupCall(id: string): void {
-    this.loadingGroupCall = true;
-    this.groupCallLoadSubscription &&
-      this.groupCallLoadSubscription.unsubscribe();
-    this.groupCallLoadSubscription = this.teamService
-      .getCallById(id)
-      .subscribe((call) => {
-        this.loadingGroupCall = false;
-        if (call.contacts && call.contacts.length) {
-          const contacts = [];
-          call.contacts.forEach((e) => {
-            contacts.push(new Contact().deserialize(e));
-          });
-          call.contacts = contacts;
-        }
-        if (call.leader) {
-          call.leader = new User().deserialize(call.leader);
-        }
-        this.loadedGroupCalls[id] = call;
-        this.selectedGroupCall = call;
       });
   }
 
@@ -1929,6 +1763,256 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
   }
 
+  closeOverlay(event): void {
+    this.overlayRef.detach();
+  }
+
+  isUrl(str): boolean {
+    let url = '';
+    if (str && str.startsWith('http')) {
+      url = str;
+    } else {
+      url = 'http://' + str;
+    }
+    const pattern = new RegExp(
+      '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$',
+      'i'
+    ); // fragment locator
+    return !!pattern.test(url);
+  }
+
+  ICONS = {
+    follow_up: '../../assets/img/automations/follow_up.svg',
+    update_follow_up:
+      'https://app.crmgrow.com/assets/img/icons/follow-step.png',
+    note: '../../assets/img/automations/create_note.svg',
+    email: '../../assets/img/automations/send_email.svg',
+    send_email_video: '../../assets/img/automations/send_video_email.svg',
+    send_text_video: '../../assets/img/automations/send_video_text.svg',
+    send_email_pdf: '../../assets/img/automations/send_pdf_email.svg',
+    send_text_pdf: '../../assets/img/automations/send_pdf_text.svg',
+    send_email_image: '../../assets/img/automations/send_image_email.svg',
+    send_text_image: 'https://app.crmgrow.com/assets/img/icons/image_sms.png',
+    update_contact:
+      'https://app.crmgrow.com/assets/img/icons/update_contact.png'
+  };
+
+  /** =================== OLD FUNCTIONS ===============
+  getSessionIndex(i: number, activities: any[]): string {
+    const notTrackers = activities.filter((e) => {
+      if (e.activity_detail && e.activity_detail.type === 'watch') {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    return `#${activities.length - notTrackers.length - i}`;
+  }
+
+  convertContent(content = ''): any {
+    const dom = document.createElement('div');
+    dom.innerHTML = content;
+    const materials = dom.querySelectorAll('.material-object');
+    let convertString = '';
+    materials.forEach((material) => {
+      const url = material.getAttribute('href');
+      const id = url.replace(
+        new RegExp(
+          environment.website +
+            '/video1/|' +
+            environment.website +
+            '/pdf1/|' +
+            environment.website +
+            '/image1/',
+          'gi'
+        ),
+        ''
+      );
+      convertString += material.outerHTML;
+    });
+    if (materials.length === 1) {
+      const material = this.details[this.sentHistory[activityIds[0]]];
+      convertString += `<div class="title">${
+        material ? material.title : ''
+      }</div><div class="description">${
+        material ? material.description : ''
+      }</div>`;
+      convertString = `<div class="single-material-send">${convertString}</div>`;
+    }
+    return convertString;
+  }
+
+  convertTextContent(content = ''): string {
+    const videoReg = new RegExp(
+      environment.website + '/video1/' + '([0-9a-zA-Z]{24})',
+      'gi'
+    );
+    const imageReg = new RegExp(
+      environment.website + '/image1/' + '([0-9a-zA-Z]{24})',
+      'gi'
+    );
+    const pdfReg = new RegExp(
+      environment.website + '/pdf1/' + '([0-9a-zA-Z]{24})',
+      'gi'
+    );
+    const videoLinks = content.match(videoReg) || [];
+    const imageLinks = content.match(imageReg) || [];
+    const pdfLinks = content.match(pdfReg) || [];
+    const activityIds = [];
+    const materials = [...videoLinks, ...imageLinks, ...pdfLinks];
+    materials.forEach((material) => {
+      const id = material.replace(
+        new RegExp(
+          environment.website +
+            '/video1/|' +
+            environment.website +
+            '/pdf1/|' +
+            environment.website +
+            '/image1/',
+          'gi'
+        ),
+        ''
+      );
+      activityIds.push(id);
+    });
+    let resultHTML = content;
+    activityIds.forEach((activity) => {
+      const material = this.details[this.sentHistory[activity]];
+      if (material) {
+        let prefix = 'video?video=';
+        let activityPrefix = 'video1';
+        if (material.type && material.type.indexOf('pdf') !== -1) {
+          prefix = 'pdf?pdf=';
+          activityPrefix = 'pdf1';
+        }
+        if (material.type && material.type.indexOf('image') !== -1) {
+          prefix = 'image?image=';
+          activityPrefix = 'image1';
+        }
+        const link = `<a target="_blank" href="${environment.website}/${prefix}${material._id}&user=${this.userId}" class="material-thumbnail"><img src="${material.preview}"></a>`;
+        const originalLink = `${environment.website}/${activityPrefix}/${activity}`;
+        resultHTML = resultHTML.replace(originalLink, link);
+      }
+    });
+    if (activityIds.length) {
+      return resultHTML;
+    }
+    return resultHTML;
+  }
+
+  getVideoBadge(activity): string {
+    let hasThumbed = false;
+    let finishedCount = 0;
+    const material = this.dataObj.materials[activity.videos];
+    if (material) {
+      this.groupActions[activity.group_id].forEach((e) => {
+        if (!e.activity_detail) {
+          return;
+        }
+        if (e.activity_detail.type === 'thumbs up') {
+          hasThumbed = true;
+          return;
+        }
+        if (
+          e.activity_detail.type === 'watch' &&
+          e.activity_detail.duration &&
+          e.activity_detail.duration / material.duration > 0.97
+        ) {
+          finishedCount++;
+        }
+      });
+    }
+    if (hasThumbed || finishedCount) {
+      let html = `<div class="c-blue font-weight-bold">${material?.title}</div>`;
+      if (hasThumbed) {
+        html += '<div class="i-icon i-like bgc-blue thumb-icon mx-1"></div>';
+      }
+      if (finishedCount) {
+        html += `<div class="full-badge text-center f-3 font-weight-bold ml-auto">${finishedCount}</div><div class="c-blue font-weight-bold f-5">Video finished!</div>`;
+      }
+      return html;
+    } else {
+      return `<div class="font-weight-bold">${material?.title}</div>`;
+    }
+  }
+
+  getPdfImageBadge(activity): string {
+    let hasThumbed = false;
+    const material = this.dataObj.materials[activity.videos];
+    this.groupActions[activity.group_id].some((e) => {
+      if (!e.activity_detail) {
+        return;
+      }
+      if (e.activity_detail.type === 'thumbs up') {
+        hasThumbed = true;
+        return true;
+      }
+    });
+    if (hasThumbed) {
+      let html = `<div class="c-blue font-weight-bold">${material?.title}</div>`;
+      if (hasThumbed) {
+        html += '<div class="i-icon i-like bgc-blue thumb-icon mx-1"></div>';
+      }
+      return html;
+    } else {
+      return `<div class="font-weight-bold">${material?.title}</div>`;
+    }
+  }
+  */
+
+  /** =================== Get Detail Data Count Function ===============
+  detailCounts = {
+    notes: 0,
+    emails: 0,
+    texts: 0,
+    appointments: 0,
+    team_calls: 0,
+    follow_ups: 0,
+    deals: 0
+  };
+
+  getDetailCounts(): void {
+    this.detailCounts = {
+      notes: 0,
+      emails: 0,
+      texts: 0,
+      appointments: 0,
+      team_calls: 0,
+      follow_ups: 0,
+      deals: 0
+    };
+    const details = Object.values(this.detailData);
+    details.forEach((e) => {
+      switch (e['data_type']) {
+        case 'emails':
+          this.detailCounts['emails']++;
+          break;
+        case 'videos':
+        case 'pdfs':
+        case 'images':
+          if (!e['emails']) {
+            this.detailCounts['emails']++;
+          }
+          break;
+        default:
+          this.detailCounts[e['data_type']]++;
+      }
+    });
+    this.tabs[1]['badge'] = this.detailCounts['notes'];
+    this.tabs[2]['badge'] = this.detailCounts['emails'];
+    this.tabs[3]['badge'] = this.detailCounts['texts'];
+    this.tabs[4]['badge'] = this.detailCounts['appointments'];
+    // this.tabs[5]['badge'] = this.detailCounts['team_calls'];
+    this.tabs[5]['badge'] = this.detailCounts['follow_ups'];
+    this.tabs[6]['badge'] = this.detailCounts['deals'];
+  } */
+
+  /** ============================= Group Call Open Overlay Function ========================
   openGroupCall(detail, event): void {
     const oldCallId = this.selectedGroupCall
       ? this.selectedGroupCall['_id']
@@ -2002,103 +2086,29 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.overlayRef.attach(this.templatePortal);
     }
     return;
-  }
+  } 
 
-  closeOverlay(event): void {
-    this.overlayRef.detach();
-  }
-
-  getVideoBadge(activity): string {
-    let hasThumbed = false;
-    let finishedCount = 0;
-    const material = this.details[activity.videos];
-    if (material) {
-      this.groupActions[activity.group_id].forEach((e) => {
-        if (!e.activity_detail) {
-          return;
+  loadDetailGroupCall(id: string): void {
+    this.loadingGroupCall = true;
+    this.groupCallLoadSubscription &&
+      this.groupCallLoadSubscription.unsubscribe();
+    this.groupCallLoadSubscription = this.teamService
+      .getCallById(id)
+      .subscribe((call) => {
+        this.loadingGroupCall = false;
+        if (call.contacts && call.contacts.length) {
+          const contacts = [];
+          call.contacts.forEach((e) => {
+            contacts.push(new Contact().deserialize(e));
+          });
+          call.contacts = contacts;
         }
-        if (e.activity_detail.type === 'thumbs up') {
-          hasThumbed = true;
-          return;
+        if (call.leader) {
+          call.leader = new User().deserialize(call.leader);
         }
-        if (
-          e.activity_detail.type === 'watch' &&
-          e.activity_detail.duration &&
-          e.activity_detail.duration / material.duration > 0.97
-        ) {
-          finishedCount++;
-        }
+        this.loadedGroupCalls[id] = call;
+        this.selectedGroupCall = call;
       });
-    }
-    if (hasThumbed || finishedCount) {
-      let html = `<div class="c-blue font-weight-bold">${material?.title}</div>`;
-      if (hasThumbed) {
-        html += '<div class="i-icon i-like bgc-blue thumb-icon mx-1"></div>';
-      }
-      if (finishedCount) {
-        html += `<div class="full-badge text-center f-3 font-weight-bold ml-auto">${finishedCount}</div><div class="c-blue font-weight-bold f-5">Video finished!</div>`;
-      }
-      return html;
-    } else {
-      return `<div class="font-weight-bold">${material?.title}</div>`;
-    }
   }
-
-  getPdfImageBadge(activity): string {
-    let hasThumbed = false;
-    const material = this.details[activity.videos];
-    this.groupActions[activity.group_id].some((e) => {
-      if (!e.activity_detail) {
-        return;
-      }
-      if (e.activity_detail.type === 'thumbs up') {
-        hasThumbed = true;
-        return true;
-      }
-    });
-    if (hasThumbed) {
-      let html = `<div class="c-blue font-weight-bold">${material?.title}</div>`;
-      if (hasThumbed) {
-        html += '<div class="i-icon i-like bgc-blue thumb-icon mx-1"></div>';
-      }
-      return html;
-    } else {
-      return `<div class="font-weight-bold">${material?.title}</div>`;
-    }
-  }
-
-  isUrl(str): boolean {
-    let url = '';
-    if (str && str.startsWith('http')) {
-      url = str;
-    } else {
-      url = 'http://' + str;
-    }
-    const pattern = new RegExp(
-      '^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$',
-      'i'
-    ); // fragment locator
-    return !!pattern.test(url);
-  }
-
-  ICONS = {
-    follow_up: '../../assets/img/automations/follow_up.svg',
-    update_follow_up:
-      'https://app.crmgrow.com/assets/img/icons/follow-step.png',
-    note: '../../assets/img/automations/create_note.svg',
-    email: '../../assets/img/automations/send_email.svg',
-    send_email_video: '../../assets/img/automations/send_video_email.svg',
-    send_text_video: '../../assets/img/automations/send_video_text.svg',
-    send_email_pdf: '../../assets/img/automations/send_pdf_email.svg',
-    send_text_pdf: '../../assets/img/automations/send_pdf_text.svg',
-    send_email_image: '../../assets/img/automations/send_image_email.svg',
-    send_text_image: 'https://app.crmgrow.com/assets/img/icons/image_sms.png',
-    update_contact:
-      'https://app.crmgrow.com/assets/img/icons/update_contact.png'
-  };
+   */
 }

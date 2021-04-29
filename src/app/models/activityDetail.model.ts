@@ -8,11 +8,11 @@ export class PureActivity implements Deserializable {
   follow_ups: string;
   notes: string;
   phone_logs: string;
-  videos: string;
+  videos: any;
   video_trackers: string;
-  pdfs: string;
+  pdfs: any;
   pdf_trackers: string;
-  images: string;
+  images: any;
   image_trackers: string;
   emails: string;
   email_trackers: string;
@@ -68,6 +68,13 @@ export class DetailActivity extends PureActivity {
   group_id: string;
   activity_detail: any; // VIDEO_Tracker, PDF_Tracker, IMAGE_tracker, VIDEO, PDF, IMAGE, TASK, NOTE, PHONE_LOG
   contact_details: any[];
+
+  video_trackers: any;
+  image_trackers: any;
+  pdf_trackers: any;
+  email_trackers: any;
+  text_trackers: any;
+  activity: string;
 
   deserialize(input: any): this {
     Object.assign(this, input);

@@ -3,6 +3,8 @@ import { Deserializable } from './deserialize.model';
 import { Task } from './task.model';
 import { Timeline } from './timeline.model';
 import * as _ from 'lodash';
+import { Material } from './material.model';
+import { Note } from './note.model';
 export class Contact implements Deserializable {
   _id: string;
   first_name: string;
@@ -202,13 +204,14 @@ export class ContactDetail extends Contact {
     _id: string;
     title: string;
   };
-  follow_up: Task[];
   time_lines: Timeline[];
   next: string;
   prev: string;
 
   created_at: Date;
   updated_at: Date;
+
+  details: any = {};
 
   deserialize(input: any): this {
     Object.assign(this, input);

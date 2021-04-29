@@ -1,0 +1,11 @@
+<div class="watch-tracker">
+  <div class="from-to">
+    From {{start * 1000 | timeDuration}} to {{end * 1000 | timeDuration}}
+  </div>
+  <div class="tracker-timeline">
+    <canvas width="300" height="4" #canvas></canvas>
+  </div>
+  <div class="completion">
+    {{completion}}% completion
+  </div>
+</div>

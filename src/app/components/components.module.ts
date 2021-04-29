@@ -150,6 +150,10 @@ import { AutomationShareComponent } from './automation-share/automation-share.co
 import { MemberSelectorComponent } from './member-selector/member-selector.component';
 import { PaymentCardComponent } from './payment-card/payment-card.component';
 import { CallOverlayComponent } from './call-overlay/call-overlay.component';
+import { MaterialTimelinesComponent } from './material-timelines/material-timelines.component';
+import { EmailTimelinesComponent } from './email-timelines/email-timelines.component';
+import { TextTimelinesComponent } from './text-timelines/text-timelines.component';
+import { PlayTimelinesComponent } from './play-timelines/play-timelines.component';
 
 @NgModule({
   declarations: [
@@ -298,7 +302,11 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     AutomationShareComponent,
     MemberSelectorComponent,
     PaymentCardComponent,
-    CallOverlayComponent
+    CallOverlayComponent,
+    MaterialTimelinesComponent,
+    EmailTimelinesComponent,
+    TextTimelinesComponent,
+    PlayTimelinesComponent
   ],
   imports: [
     CommonModule,
@@ -400,7 +408,11 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     AdditionalFieldsComponent,
     PaymentCardComponent,
     CallOverlayComponent,
-    MemberSelectorComponent
+    MemberSelectorComponent,
+    MaterialTimelinesComponent,
+    EmailTimelinesComponent,
+    TextTimelinesComponent,
+    PlayTimelinesComponent
   ],
   bootstrap: [
     ContactCreateComponent,
@@ -411,7 +423,7 @@ import { CallOverlayComponent } from './call-overlay/call-overlay.component';
     CallRequestDetailComponent,
     VideoShareComponent,
     SelectTeamComponent,
-    DeleteFolderComponent,
+    DeleteFolderComponent
   ]
 })
 export class ComponentsModule {}

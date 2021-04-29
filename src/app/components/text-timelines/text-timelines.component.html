@@ -1,0 +1,123 @@
+<ng-container *ngIf="!_includedMaterials?.length; else withMaterials">
+  <ng-container *ngIf="_timelines.length > 1; else onlySent">
+    <div class="collapsed" *ngIf="!expanded">
+      <span class="text-content" [innerHTML]="text?.content || '' | shorten: 200: '...'"></span>
+      <a class="more ml-2 f-3 c-pointer" (click)="expand()">Expand</a>
+    </div>
+    <div class="expanded" *ngIf="expanded">
+      <div class="text-content-wrapper">
+        <ng-container *ngIf="!more; else fullDesc">
+          <span class="text-content" [innerHTML]="text?.content || '' | shorten: 200: '...'"></span>
+          <a class="more ml-2 f-3 c-pointer" (click)="more = true" *ngIf="text?.content.length > 200">More</a>
+        </ng-container>
+        <ng-template #fullDesc>
+          <div class="text-content" [innerHTML]="(text?.content || '') | makeRedirect"></div>
+          <a class="more f-3 mt-3 c-pointer fw-600 d-block w-fit" (click)="more = false">Less</a>
+        </ng-template>
+      </div>
+      <label>Sessions</label>
+      <div class="timelines">
+        <div class="timeline" *ngFor="let activity of _timelines">
+          <div class="header v-center">
+            <i class="act-icon act-{{activity.type}} {{activity[activity.type]?.type}} d-block mr-2"></i>
+            {{activity.content}}
+            <span class="time">
+              {{activity.created_at | date: 'shortTime'}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <a class="more mt-3 f-3 c-pointer fw-600 d-block w-fit" (click)="collapse()">Collapse</a>
+    </div>
+  </ng-container>
+  <ng-template #onlySent>
+    <div class="collapsed" *ngIf="!expanded">
+      <span class="text-content" [innerHTML]="text?.content || '' | shorten: 200: '...'"></span>
+      <a class="more ml-2 f-3 c-pointer" (click)="expand()" *ngIf="text?.content.length > 200">More</a>
+    </div>
+    <div class="expanded" *ngIf="expanded">
+      <div class="text-content" [innerHTML]="(text?.content || '') | makeRedirect"></div>
+      <a class="more mt-3 f-3 c-pointer fw-600 d-block w-fit" (click)="collapse()">Less</a>
+    </div>
+  </ng-template>
+</ng-container>
+<ng-template #withMaterials>
+  <div class="collapsed" *ngIf="!expanded">
+    <div class="included-materials d-flex flex-wrap" *ngIf="_includedMaterials?.length > 1; else oneMaterial">
+      <ng-container *ngFor="let material of _includedMaterials">
+        <ng-container *ngIf="_materials[material]">
+          <ng-container [ngSwitch]="_materials[material].material_type">
+            <a *ngSwitchCase="'video'" class="material-thumbnail" href="{{SITE}}/video?video={{_materials[material]._id}}&user={{userId}}" target="_blank">
+              <img src="{{_materials[material].preview}}"/>
+            </a>
+            <a *ngSwitchCase="'pdf'" class="material-thumbnail" href="{{SITE}}/pdf?pdf={{_materials[material]._id}}&user={{userId}}" target="_blank">
+              <img src="{{_materials[material].preview}}"/>
+            </a>
+            <a *ngSwitchCase="'image'" class="material-thumbnail" href="{{SITE}}/image?image={{_materials[material]._id}}&user={{userId}}" target="_blank">
+              <img src="{{_materials[material].preview}}"/>
+            </a>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+    <ng-template #oneMaterial>
+      <div class="material d-flex" *ngIf="_materials[_firstM]">
+        <ng-container [ngSwitch]="_materials[_firstM].material_type">
+          <a *ngSwitchCase="'video'" class="material-thumbnail" href="{{SITE}}/video?video={{_materials[_firstM]._id}}&user={{userId}}" target="_blank">
+            <img src="{{_materials[_firstM].preview}}"/>
+          </a>
+          <a *ngSwitchCase="'pdf'" class="material-thumbnail" href="{{SITE}}/pdf?pdf={{_materials[_firstM]._id}}&user={{userId}}" target="_blank">
+            <img src="{{_materials[_firstM].preview}}"/>
+          </a>
+          <a *ngSwitchCase="'image'" class="material-thumbnail" href="{{SITE}}/image?image={{_materials[_firstM]._id}}&user={{userId}}" target="_blank">
+            <img src="{{_materials[_firstM].preview}}"/>
+          </a>
+        </ng-container>
+        <div class="material-content ml-2">
+          <div class="title font-weight-bold">
+            {{_materials[_firstM].title}}
+          </div>
+          <div class="time" *ngIf="_materials[_firstM].material_type === 'video'">
+            {{_materials[_firstM].duration | timeDuration}}
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="main.type === 'video_trackers' && main[main.type]?.type === 'watch'">
+      <app-play-timelines [data]="main[main.type]" [duration]="_materials[main.video_trackers?.video]?.duration || _materials[main.video_trackers?.video[0]]?.duration"></app-play-timelines>
+    </ng-container>
+
+    <a class="more f-3 mt-3 c-pointer fw-600 d-block w-fit" (click)="expand()">Expand</a>
+  </div>
+  <div class="expanded" *ngIf="expanded">
+    <div class="text-content-wrapper">
+      <ng-container *ngIf="!more; else fullDesc">
+        <span class="text-content" [innerHTML]="text?.content || '' | shorten: 200: '...'"></span>
+        <a class="more ml-2 f-3 c-pointer" (click)="more = true"  *ngIf="text?.content.length > 200">More</a>
+      </ng-container>
+      <ng-template #fullDesc>
+        <div class="text-content" [innerHTML]="(text?.content || '') | makeRedirect"></div>
+        <a class="more mt-3 f-3 c-pointer fw-600 d-block w-fit" (click)="more = false">Less</a>
+      </ng-template>
+    </div>
+    <label class="session">Sessions</label>
+    <div class="timelines">
+      <div class="timeline" *ngFor="let activity of _timelines">
+        <div class="header v-center">
+          <i class="act-icon act-{{activity.type}} {{activity[activity.type]?.type}} d-block mr-2"></i>
+          {{activity.content}}
+          <span class="time f-3 ml-auto op-56">
+            {{activity.created_at | date: 'shortTime'}}
+          </span>
+        </div>
+        <div class="content ml-4">
+          <ng-container *ngIf="activity.type === 'video_trackers' && activity[activity.type]?.type === 'watch'">
+            <app-play-timelines [data]="activity[activity.type]" [duration]="_materials[activity.video_trackers?.video]?.duration || _materials[activity.video_trackers?.video[0]]?.duration"></app-play-timelines>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <a class="more f-3 mt-3 c-pointer fw-600 d-block w-fit" (click)="collapse()">Collapse</a>
+  </div>
+</ng-template>

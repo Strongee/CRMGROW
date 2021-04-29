@@ -40,9 +40,9 @@ export class AppointmentService extends HttpService {
   updateCommand = new Subject<any>();
   updateCommand$ = this.updateCommand.asObservable();
 
-  currentDay: BehaviorSubject<Date> = new BehaviorSubject(null);
-  currentMethod: BehaviorSubject<string> = new BehaviorSubject('month');
+  currentMethod: BehaviorSubject<string> = new BehaviorSubject('week');
   currentEvents: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  selectedCalendars: BehaviorSubject<string[]> = new BehaviorSubject([]);
 
   public loadCalendars(force = false): void {
     if (!force) {

@@ -1,12 +1,16 @@
-<div class="page-content">
-    <div class="v-center justify-content-between mb-3 calendar-time">
+<div class="page-content pt-0">
+    <div class="v-center justify-content-between pb-3 calendar-time">
         <div class="v-center justify-content-center">
             <div class="v-center justify-content-center text-center c-dark date">
                 <span *ngIf="view == 'month'">
                     {{viewDate | date:'MMMM y'}}
                 </span>
                 <span *ngIf="view == 'week'">
-                    {{weekStart}} - {{weekEnd}} {{viewDate | date:'MMM y'}}
+                    <ng-container [ngSwitch]="getWeekStringMode()">
+                        <ng-container *ngSwitchCase="'day'">{{viewDate | date:'MMM y'}}</ng-container>
+                        <ng-container *ngSwitchCase="'month'">{{weekStart | date:'MMM'}} - {{weekEnd | date:'MMM y'}}</ng-container>
+                        <ng-container *ngSwitchCase="'year'">{{weekStart | date:'MMM y'}} - {{weekEnd | date:'MMM y'}}</ng-container>
+                    </ng-container>
                 </span>
                 <span *ngIf="view == 'day'">
                     {{viewDate | date:'EEE, MMM d y'}}
@@ -215,7 +219,7 @@
                             <span class="mobile f-1 font-weight-bold text-uppercase">
                                 {{ day.date | date:'EEE' }}
                             </span>
-                            <div class="global-events">
+                            <div class="global-events week-events">
                                 <div class="event" *ngFor="let event of getDayEvent(day.date)">
                                     <div class="event-cell" [ngStyle]="{'background-color': calendars[event.meta.calendar_id]?.color}">
                                         {{(event.title || '') | shorten: 20: '...'}}
@@ -228,7 +232,7 @@
             </div>
             <div *ngSwitchCase="'day'">
                 <div class="global-events day-events">
-                    <div class="event" *ngFor="let event of getDayEvent(null)">
+                    <div class="event" *ngFor="let event of getDayEvent(viewDate)">
                         <div class="event-cell" [ngStyle]="{'background-color': calendars[event.meta.calendar_id]?.color}">
                             {{(event.title || '') | shorten: 40: '...'}}
                         </div>

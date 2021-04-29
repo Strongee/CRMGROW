@@ -92,7 +92,7 @@ export const CONTACT = {
   SELECT_ALL: 'contact/get-all',
   LOAD_BY_IDS: 'contact/get',
   FILTER: 'contact/filter',
-  READ: 'contact/',
+  READ: 'contact/get-detail/',
   EXPORT: 'contact/export-csv',
   BULK_DELETE: 'contact/remove',
   BULK_UPDATE: 'contact/bulk-update',

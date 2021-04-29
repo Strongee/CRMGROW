@@ -292,161 +292,18 @@
     &.emails-detail, &.email_trackers-detail {
       br {display: none;}
 
-      .main-history-item {
-        .detail {
-          visibility: hidden;
-          height: 0px;
-          transition: height .3s;
-          .detail-content {
-            div {
-              display: none;
-              &:has(a) {
-                display: block;
-              }
-            }
-          }
-        }
-        .summary {
-          display: block;
-          .gradient-bottom {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
-          }
-        }
-
-        &.expanded {
-          .detail {
-            height: unset;
-            visibility: visible;
-            table {
-              th, td {
-                height: 40px;
-                &.session-col {
-                }
-                &.date-col {
-                  div {
-                    display: inline-block;
-                    color: $color-blue;
-                    border: 1px solid $color-blue;
-                    border-radius: 20px;
-                    &:hover {
-                      background-color: $color-blue;
-                      color: $color-white;
-                    }
-                    @media screen and (max-width: 375px) {
-                      display: block;
-                    }
-                  }
-                }
-              }
-              td {
-                font-weight: bold;
-              }
-            }
-          }
-          .summary {
-            display: none;
-          }
-        }
-      }
+      
     }
     &.videos-detail, &.video_trackers-detail  {
       br {display: none;}
-
-      .main-history-item {
-        .detail {
-          visibility: hidden;
-          height: 0px;
-          transition: height .3s;
-        }
-        .summary {
-          display: block;
-          .gradient-bottom {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
-          }
-        }
-
-        &.expanded {
-          .detail {
-            height: unset;
-            visibility: visible;
-          }
-          .summary {
-            display: none;
-          }
-        }
-      }
     }
 
     &.pdfs-detail, &.pdf_trackers-detail  {
       br {display: none;}
-
-      .main-history-item {
-        .detail {
-          visibility: hidden;
-          height: 0px;
-          transition: height .3s;
-        }
-        .summary {
-          display: block;
-          .gradient-bottom {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
-          }
-        }
-
-        &.expanded {
-          .detail {
-            height: unset;
-            visibility: visible;
-          }
-          .summary {
-            display: none;
-          }
-        }
-      }
     }
 
     &.images-detail, &.image_trackers-detail  {
       br {display: none;}
-
-      .main-history-item {
-        .detail {
-          visibility: hidden;
-          height: 0px;
-          transition: height .3s;
-        }
-        .summary {
-          display: block;
-          .gradient-bottom {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
-          }
-        }
-
-        &.expanded {
-          .detail {
-            height: unset;
-            visibility: visible;
-          }
-          .summary {
-            display: none;
-          }
-        }
-      }
     }
 
     &.notes-detail {
@@ -461,55 +318,10 @@
               max-height: unset;
             }
           }
-          .gradient-bottom {
-            position: absolute;
-            bottom: 25px;
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(0deg, #FFF7D1 0%, rgba(255,247,209,0) 100%);
-          }
         }
       }
     }
-    &.appointments-detail {
-      .main-history-item {
-        .content {
-          .gradient-bottom {
-            position: absolute;
-            bottom: 25px;
-            width: 100%;
-            height: 25px;
-            background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
-          }
-        }
-
-        .detail {
-          visibility: hidden;
-          height: 0px;
-          transition: height .3s;
-        }
-        .summary {
-          display: block;
-          .gradient-bottom {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
-          }
-        }
-
-        &.expanded {
-          .detail {
-            height: unset;
-            visibility: visible;
-          }
-          .summary {
-            display: none;
-          }
-        }
-      }
-    }
+    &.appointments-detail {}
     &.deals-detail {
       .main-history-item {
         .contacts {
@@ -525,56 +337,9 @@
             height: 18px;
           }
         }
-
-        .detail {
-          visibility: hidden;
-          height: 0px;
-          transition: height .3s;
-        }
-        .summary {
-          display: block;
-          .gradient-bottom {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
-          }
-        }
-
-        &.expanded {
-          .detail {
-            height: unset;
-            visibility: visible;
-          }
-          .summary {
-            display: none;
-          }
-        }
       }
     }
-    &.texts-detail {
-      .main-history-item {
-        .detail {
-          visibility: hidden;
-          height: 0px;
-          transition: height .3s;
-        }
-        .summary {
-          display: block;
-        }
-
-        &.expanded {
-          .detail {
-            height: unset;
-            visibility: visible;
-          }
-          .summary {
-            display: none;
-          }
-        }
-      }
-    }
+    &.texts-detail {}
     .history-icon {
       width: 20px;
       height: 20px;
@@ -612,6 +377,9 @@
         height: 70px;
         margin-right: 10px;
         margin-top: 10px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px -4px #bcbdc7;
+        border: 1px solid gainsboro;
       }
     }
   }
@@ -733,6 +501,9 @@ table.table {
 
   img {
     width: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px -4px #bcbdc7;
+    border: 1px solid gainsboro;
   }
 }
 
@@ -891,6 +662,73 @@ table.table {
   }
   .date {
     width: 164px;
+  }
+}
+
+
+.main-history-item {
+  .detail {
+    visibility: hidden;
+    height: 0px;
+    transition: height .3s;
+    .detail-content {
+      div {
+        display: none;
+        &:has(a) {
+          display: block;
+        }
+      }
+    }
+  }
+  .summary {
+    display: block;
+    position: relative;
+    .gradient-bottom {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      height: 30px;
+      background: linear-gradient(0deg, #FFFFFF 0%, rgba(255,255,255,0.37) 100%);
+
+      &.note-gradient {
+        background: linear-gradient(0deg, #fff7d1 0%, rgb(255,247,209,0.4) 100%);
+      }
+    }
+  }
+
+  &.expanded {
+    .detail {
+      height: unset;
+      visibility: visible;
+      table {
+        th, td {
+          height: 40px;
+          &.session-col {
+          }
+          &.date-col {
+            div {
+              display: inline-block;
+              color: $color-blue;
+              border: 1px solid $color-blue;
+              border-radius: 20px;
+              &:hover {
+                background-color: $color-blue;
+                color: $color-white;
+              }
+              @media screen and (max-width: 375px) {
+                display: block;
+              }
+            }
+          }
+        }
+        td {
+          font-weight: bold;
+        }
+      }
+    }
+    .summary {
+      display: none;
+    }
   }
 }
 

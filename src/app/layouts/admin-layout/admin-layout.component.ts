@@ -53,6 +53,30 @@ export class AdminLayoutComponent implements OnInit {
           this.userService.sms.next(res['sms']);
         }
       });
+
+      // UserSnap Init
+      if (window['UserSnapLoaded']) {
+        try {
+          window['UserSnapAPI'].init({
+            user: {
+              userId: res['_id'],
+              email: res['email']
+            }
+          });
+        } catch (e) {
+          console.log('User Snap Account Register Failed');
+        }
+      } else {
+        window['onUsersnapCXLoad'] = (api) => {
+          api.init({
+            user: {
+              userId: res['_id'],
+              email: res['email']
+            }
+          });
+          window['UserSnapLoaded'] = true;
+        };
+      }
     });
     this.labelService.loadLabels();
     this.tagService.getAllTags();

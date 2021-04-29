@@ -122,21 +122,19 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.calendarLoadSubscription.unsubscribe();
     // Unsubscribe the supplement events load
     // Set the current Day & mode & events
-    this.appointmentService.currentDay.next(this.viewDate);
-    this.appointmentService.currentMethod.next(this.view);
-    this.appointmentService.currentEvents.next(this.events);
+    // this.appointmentService.currentMethod.next(this.view);
+    this.appointmentService.selectedCalendars.next(this.selectedCalendars);
   }
 
   initModeAndDate(): void {
-    const currentDay =
-      this.appointmentService.currentDay.getValue() || new Date();
-    const currentMethod = this.appointmentService.currentMethod.getValue();
+    const currentDay = new Date();
+    const currentMethod = localStorage.getItem('calendarTab');
     let date;
     let mode =
       this.route.snapshot.params['mode'] ||
       this.route.snapshot.params['action'] ||
       currentMethod ||
-      'month';
+      'week';
     const year = this.route.snapshot.params['year'];
     const month = this.route.snapshot.params['month'];
     const day = this.route.snapshot.params['day'];
@@ -164,8 +162,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
         this.view = CalendarView.Day;
         break;
       default:
-        mode = 'month';
-        date = date.startOf('month');
+        mode = 'week';
+        date = date.startOf('week');
+        this.selectedTab = this.tabs[1];
+        this.view = CalendarView.Week;
     }
 
     this.location.replaceState(
@@ -180,10 +180,23 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const isoDate = date.toISOString();
     this.viewDate = new Date(isoDate);
     if (mode === 'week') {
-      this.weekStart = startOfWeek(this.viewDate).getDate();
-      this.weekEnd = endOfWeek(this.viewDate).getDate();
+      this.weekStart = startOfWeek(this.viewDate);
+      this.weekEnd = endOfWeek(this.viewDate);
     }
     this.load(isoDate, mode);
+
+    if (this.view === CalendarView.Day || this.view === CalendarView.Week) {
+      const index = this.view === CalendarView.Day ? 9 : 7;
+      setTimeout(() => {
+        const dom = <HTMLElement>(
+          document.querySelector(`.cal-hour:nth-child(${index})`)
+        );
+        if (dom) {
+          const offsetTop = dom.offsetTop;
+          window.scrollTo({ top: offsetTop });
+        }
+      }, 300);
+    }
   }
 
   initSubscriptions(): void {
@@ -252,7 +265,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
       (data) => {
         this.accounts = [];
         this.calendars = {};
-        this.selectedCalendars = [];
+        this.selectedCalendars = this.appointmentService.selectedCalendars.getValue();
+        const selectedCalendars = [];
         if (data) {
           data.forEach((account) => {
             const acc = { email: account.email };
@@ -260,13 +274,31 @@ export class CalendarComponent implements OnInit, OnDestroy {
               const calendars = [];
               account.data.forEach((e) => {
                 calendars.push({ ...e, account: account.email });
-                this.selectedCalendars.push(e.id);
+                selectedCalendars.push(e.id);
                 this.calendars[e.id] = e;
               });
               acc['calendars'] = calendars;
               this.accounts.push(acc);
             }
           });
+          const allCalendarIds = Object.keys(this.calendars);
+          if (this.selectedCalendars.length) {
+            for (let i = this.selectedCalendars.length - 1; i >= 0; i--) {
+              const e = this.selectedCalendars[i];
+              if (allCalendarIds.indexOf(e) === -1) {
+                this.selectedCalendars.splice(i, 1);
+              }
+            }
+          }
+
+          if (!this.selectedCalendars.length) {
+            this.selectedCalendars = [...selectedCalendars];
+          }
+          if (
+            Object.keys(this.calendars).length > this.selectedCalendars.length
+          ) {
+            this.isShowCalendarList = true;
+          }
         }
       }
     );
@@ -496,6 +528,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
             const end_date_string = moment(date).startOf('month').toISOString();
             this.supplementEvents[end_date_string] = _events;
           }
+
+          const loadedDate = new Date(date);
+          const currentDate = new Date();
+          if (
+            loadedDate.getMonth() === currentDate.getMonth() &&
+            loadedDate.getFullYear() === currentDate.getFullYear()
+          ) {
+            this.appointmentService.currentEvents.next([..._events]);
+          }
+
           this.filterEvents();
         }
       });
@@ -555,6 +597,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.supplementEvents[duration.toISOString()] = _results;
     this.events = [...this.events, ..._results];
     this.events = _.uniqBy(this.events, (e) => e.meta.event_id);
+
+    const loadedDate = new Date(duration.toISOString());
+    const currentDate = new Date();
+    if (
+      loadedDate.getMonth() === currentDate.getMonth() &&
+      loadedDate.getFullYear() === currentDate.getFullYear()
+    ) {
+      this.appointmentService.currentEvents.next([..._results]);
+    }
   }
 
   reload(): any {
@@ -659,13 +710,17 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.events.forEach((e) => {
       if (this.selectedCalendars.indexOf(e.meta.calendar_id) !== -1) {
         this.showingEvents.push(e);
-        if (e.start === e.end) {
-          const key = e.start.toISOString();
-          if (this.dayEvents[key]) {
-            this.dayEvents[key].push(e);
-          } else {
-            this.dayEvents[key] = [e];
+        try {
+          if (e.start.getTime() === e.end.getTime()) {
+            const key = e.start.toISOString().split('T')[0];
+            if (this.dayEvents[key]) {
+              this.dayEvents[key].push(e);
+            } else {
+              this.dayEvents[key] = [e];
+            }
           }
+        } catch (e) {
+          console.log('date compare error');
         }
       }
     });
@@ -762,8 +817,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
           }/${startOfWeek(this.viewDate).getDate()}`
         );
         this.view = CalendarView.Week;
-        this.weekStart = startOfWeek(this.viewDate).getDate();
-        this.weekEnd = endOfWeek(this.viewDate).getDate();
+        this.weekStart = startOfWeek(this.viewDate);
+        this.weekEnd = endOfWeek(this.viewDate);
         break;
       case 'day':
         this.location.replaceState(
@@ -776,6 +831,21 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
     const isoDate = this.viewDate.toISOString();
     this.load(isoDate, this.selectedTab.id);
+
+    if (this.view === CalendarView.Day || this.view === CalendarView.Week) {
+      const index = this.view === CalendarView.Day ? 9 : 7;
+      setTimeout(() => {
+        const dom = <HTMLElement>(
+          document.querySelector(`.cal-hour:nth-child(${index})`)
+        );
+        if (dom) {
+          const offsetTop = dom.offsetTop;
+          window.scrollTo({ top: offsetTop });
+        }
+      }, 300);
+    }
+
+    localStorage.setItem('calendarTab', this.selectedTab.id);
   }
 
   calendarDateChange(mode = ''): void {
@@ -793,8 +863,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
             startOfWeek(this.viewDate).getMonth() + 1
           }/${startOfWeek(this.viewDate).getDate()}`
         );
-        this.weekStart = startOfWeek(this.viewDate).getDate();
-        this.weekEnd = endOfWeek(this.viewDate).getDate();
+        this.weekStart = startOfWeek(this.viewDate);
+        this.weekEnd = endOfWeek(this.viewDate);
         break;
       case 'day':
         this.location.replaceState(
@@ -912,6 +982,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
             targetEl.closest('.event-panel'),
             targetEl.closest('.calendar-contact')
           );
+          if (targetEl.closest('.cal-hour')) {
+            return;
+          }
           if (targetEl.closest('.cal-event')) {
             return;
           }
@@ -1040,6 +1113,27 @@ export class CalendarComponent implements OnInit, OnDestroy {
         });
         this.filterEvents();
       }
+    }
+  }
+
+  getWeekStringMode(): string {
+    try {
+      if (this.weekStart && this.weekEnd) {
+        const startYear = this.weekStart.getFullYear();
+        const endYear = this.weekEnd.getFullYear();
+        const startMonth = this.weekStart.getMonth();
+        const endMonth = this.weekEnd.getMonth();
+        if (startYear !== endYear) {
+          return 'year';
+        } else if (startMonth !== endMonth) {
+          return 'month';
+        }
+        return 'day';
+      } else {
+        return 'day';
+      }
+    } catch (e) {
+      return 'day';
     }
   }
 

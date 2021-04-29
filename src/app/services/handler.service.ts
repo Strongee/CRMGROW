@@ -205,23 +205,8 @@ export class HandlerService {
       contact = data.contact;
     }
     if (currentContact._id === contact) {
-      currentContact.activity.push(activity);
-      this.storeService.selectedContact.next(currentContact);
+      this.contactService.addLatestActivity(3);
     }
-  }
-  /**
-   * Update the Contact Detail Page after archive task in Contact Detail Page
-   * @param task_id : Remove Task from Contact detail page
-   */
-  archiveTask$(task_id: string): void {
-    const currentContact = this.storeService.selectedContact.getValue();
-    currentContact.activity.forEach((e) => {
-      const detail = e.activity_detail;
-      if (detail && detail._id === task_id) {
-        delete e.activity_detail;
-      }
-    });
-    this.storeService.selectedContact.next(currentContact);
   }
 
   /**
@@ -272,23 +257,7 @@ export class HandlerService {
       return;
     }
     if (data && data.activity) {
-      const activity = new DetailActivity().deserialize({ ...data.activity });
-      activity.activity_detail = { ...data, activity: undefined };
-      const currentContact = this.storeService.selectedContact.getValue();
-      currentContact.activity.push(activity);
-      currentContact.activity.forEach((e) => {
-        if (e.type !== 'follow_ups') {
-          return;
-        }
-        if (
-          e &&
-          e.activity_detail &&
-          e.activity_detail._id === activity.activity_detail._id
-        ) {
-          e.activity_detail = activity.activity_detail;
-        }
-      });
-      this.storeService.selectedContact.next(currentContact);
+      this.contactService.addLatestActivity(3);
     }
   }
   createTaskInDetail$(data: any): void {
@@ -297,11 +266,13 @@ export class HandlerService {
       return;
     }
     if (data && data.activity) {
-      const activity = new DetailActivity().deserialize({ ...data.activity });
-      activity.activity_detail = { ...data, activity: undefined };
-      const currentContact = this.storeService.selectedContact.getValue();
-      currentContact.activity.push(activity);
-      this.storeService.selectedContact.next(currentContact);
+      this.contactService.addLatestActivity(3);
+    }
+  }
+  updateContactRelated$(field, data): void {
+    const selectedContact = this.storeService.selectedContact.getValue();
+    if (selectedContact && selectedContact.details) {
+      selectedContact.details[field] = [...data];
     }
   }
 

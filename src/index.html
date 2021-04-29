@@ -38,13 +38,14 @@
 <body class="">
   <app-root></app-root>
   <script>
-    window.Userback = window.Userback || {};
-    Userback.access_token = '29755|43463|XrrCdyhoMt93lr0gzh9dUTRDu';
-    (function(d) {
-        var s = d.createElement('script');s.async = true;
-        s.src = 'https://static.userback.io/widget/v1.js';
-        (d.head || d.body).appendChild(s);
-    })(document);
+    window.onUsersnapCXLoad = function(api) {
+      window.UserSnapAPI = api;
+      window.UserSnapLoaded = true;
+    }
+    var script = document.createElement("script");
+    script.defer = 1;
+    script.src = "https://widget.usersnap.com/global/load/d470f663-3eb3-466d-b179-a5afe57ac276?onload=onUsersnapCXLoad";
+    document.getElementsByTagName("head")[0].appendChild(script);
   </script>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>

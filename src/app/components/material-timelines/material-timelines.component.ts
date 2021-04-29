@@ -1,0 +1,38 @@
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { DetailActivity } from 'src/app/models/activityDetail.model';
+import { Material } from 'src/app/models/material.model';
+
+@Component({
+  selector: 'app-material-timelines',
+  templateUrl: './material-timelines.component.html',
+  styleUrls: ['./material-timelines.component.scss']
+})
+export class MaterialTimelinesComponent implements OnInit {
+  @Input('material') material: Material = new Material();
+  @Input('timelines')
+  public set timelines(val: DetailActivity[]) {
+    this._timelines = val;
+    this._timelines.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
+    if (this._timelines && this._timelines.length) {
+      this.main = this._timelines[0];
+    }
+  }
+  @Input('expanded') expanded: boolean = false;
+  @Input('type') type: string = 'videos';
+  @Output() onExpand = new EventEmitter();
+  @Output() onCollapse = new EventEmitter();
+  user_id: string = '';
+  main: DetailActivity;
+  _timelines: DetailActivity[] = [];
+
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  expand(): void {
+    this.onExpand.emit();
+  }
+  collapse(): void {
+    this.onCollapse.emit();
+  }
+}
