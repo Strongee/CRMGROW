@@ -40,6 +40,7 @@ export class MaterialsComponent implements OnInit {
     'material_name',
     'creator',
     'share',
+    'theme',
     'type',
     'created_at',
     'analytics',
@@ -69,6 +70,7 @@ export class MaterialsComponent implements OnInit {
   pageSize = this.PAGE_COUNTS[2];
   page = 1;
 
+  garbage: Garbage = new Garbage();
   materials: any[] = [];
   filteredMaterials: any[] = [];
   selection: any[] = [];
@@ -131,13 +133,13 @@ export class MaterialsComponent implements OnInit {
       }
     );
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
-      const garbage = new Garbage().deserialize(res);
-      this.captureVideos = garbage['capture_videos'] || [];
-      this.editedVideos = garbage['edited_video'] || [];
-      this.capturePdfs = garbage['capture_pdfs'] || [];
-      this.editedPdfs = garbage['edited_pdf'] || [];
-      this.captureImages = garbage['capture_images'] || [];
-      this.editedImages = garbage['edited_image'] || [];
+      this.garbage = new Garbage().deserialize(res);
+      this.captureVideos = this.garbage['capture_videos'] || [];
+      this.editedVideos = this.garbage['edited_video'] || [];
+      this.capturePdfs = this.garbage['capture_pdfs'] || [];
+      this.editedPdfs = this.garbage['edited_pdf'] || [];
+      this.captureImages = this.garbage['capture_images'] || [];
+      this.editedImages = this.garbage['edited_image'] || [];
     });
 
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
@@ -200,6 +202,15 @@ export class MaterialsComponent implements OnInit {
                 }
               } else {
                 material.owner = 'Admin';
+              }
+
+              if (
+                this.garbage.material_themes &&
+                this.garbage.material_themes[material._id]
+              ) {
+                material.theme = this.garbage.material_themes[material._id];
+              } else {
+                material.theme = this.garbage.material_theme;
               }
             }
             this.sort('owner', true);
@@ -775,17 +786,22 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-  editTemplate(material: Material): void {
-    this.dialog.open(MaterialEditTemplateComponent, {
-      position: { top: '10vh' },
-      width: '100vw',
-      maxWidth: '600px',
-      disableClose: true,
-      data: {
-        id: material._id,
-        type: material.material_type
-      }
-    });
+  editTemplate(material: any): void {
+    this.dialog
+      .open(MaterialEditTemplateComponent, {
+        position: { top: '10vh' },
+        width: '100vw',
+        maxWidth: '600px',
+        disableClose: true,
+        data: {
+          id: material._id,
+          type: material.material_type
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        material.theme = res;
+      });
   }
 
   recordSetting(): void {
@@ -1039,6 +1055,26 @@ export class MaterialsComponent implements OnInit {
             }
           });
         }
+        break;
+      case 'template':
+        this.dialog
+          .open(MaterialEditTemplateComponent, {
+            position: { top: '10vh' },
+            width: '100vw',
+            maxWidth: '600px',
+            disableClose: true,
+            data: {
+              type: 'all'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              this.filteredMaterials.forEach((material) => {
+                material.theme = res;
+              });
+            }
+          });
         break;
     }
   }

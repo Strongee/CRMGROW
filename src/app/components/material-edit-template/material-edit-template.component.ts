@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { Garbage } from 'src/app/models/garbage.model';
@@ -11,8 +12,10 @@ import { Garbage } from 'src/app/models/garbage.model';
   styleUrls: ['./material-edit-template.component.scss']
 })
 export class MaterialEditTemplateComponent implements OnInit {
+  garbage: Garbage = new Garbage();
   theme_setting = {};
   material_id = '';
+  type = '';
   selectedTheme = {
     name: '',
     thumbnail: '',
@@ -43,20 +46,27 @@ export class MaterialEditTemplateComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<MaterialEditTemplateComponent>,
     private userService: UserService,
+    private toast: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.material_id = this.data.id;
+    this.type = this.data.type;
     this.garbageSubscription = this.userService.garbage$.subscribe(
       (garbage) => {
         let theme;
-        this.theme_setting = garbage.material_themes || {};
-        if (
-          garbage.material_themes &&
-          garbage.material_themes[this.material_id]
-        ) {
-          theme = garbage.material_themes[this.material_id];
-        } else {
+        this.garbage = new Garbage().deserialize(garbage);
+        if (this.type == 'all') {
           theme = garbage.material_theme;
+        } else {
+          this.theme_setting = garbage.material_themes || {};
+          if (
+            garbage.material_themes &&
+            garbage.material_themes[this.material_id]
+          ) {
+            theme = garbage.material_themes[this.material_id];
+          } else {
+            theme = garbage.material_theme;
+          }
         }
         this.selectedTheme = this.themes.filter((e) => e.id == theme)[0];
       }
@@ -75,22 +85,50 @@ export class MaterialEditTemplateComponent implements OnInit {
   }
 
   save(): void {
-    if (this.theme_setting[this.material_id] !== this.selectedTheme.id) {
-      this.saving = true;
-      this.theme_setting[this.material_id] = this.selectedTheme.id;
-      this.updateSubscription = this.userService
-        .updateGarbage({ material_themes: this.theme_setting })
-        .subscribe((status) => {
-          this.saving = false;
-          if (status) {
-            this.userService.updateGarbageImpl({
-              material_themes: this.theme_setting
-            });
-            this.dialogRef.close();
-          }
-        });
+    this.saving = true;
+    if (this.type == 'all') {
+      if (this.garbage.material_theme !== this.selectedTheme.id) {
+        this.updateSubscription = this.userService
+          .updateGarbage({
+            material_theme: this.selectedTheme.id,
+            material_themes: {}
+          })
+          .subscribe((status) => {
+            this.saving = false;
+            if (status) {
+              this.userService.updateGarbageImpl({
+                material_theme: this.selectedTheme.id,
+                material_themes: {}
+              });
+              this.dialogRef.close(this.selectedTheme.id);
+              this.toast.success(
+                'Material template has been changed successfully.'
+              );
+            }
+          });
+      } else {
+        this.dialogRef.close();
+      }
     } else {
-      this.dialogRef.close();
+      if (this.theme_setting[this.material_id] !== this.selectedTheme.id) {
+        this.theme_setting[this.material_id] = this.selectedTheme.id;
+        this.updateSubscription = this.userService
+          .updateGarbage({ material_themes: this.theme_setting })
+          .subscribe((status) => {
+            this.saving = false;
+            if (status) {
+              this.userService.updateGarbageImpl({
+                material_themes: this.theme_setting
+              });
+              this.dialogRef.close(this.selectedTheme.id);
+              this.toast.success(
+                'Material template has been changed successfully.'
+              );
+            }
+          });
+      } else {
+        this.dialogRef.close();
+      }
     }
   }
 }
