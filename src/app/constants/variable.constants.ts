@@ -1407,6 +1407,19 @@ export const BulkActions = {
       loading: false
     },
     {
+      label: 'Edit Template',
+      type: 'button',
+      icon: 'i-template',
+      command: 'template',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
+    },
+    {
       label: 'Move To',
       type: 'button',
       icon: 'i-folder',
@@ -1418,12 +1431,6 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-trash',
       command: 'delete',
-      loading: false
-    },
-    {
-      label: 'Deselect',
-      type: 'button',
-      command: 'deselect',
       loading: false
     }
   ],
