@@ -1,8 +1,3 @@
-canvas {
-  border: none;
-  background-color: gainsboro;
-}
-
 .watch-tracker {
   display: flex;
   font-size: 13px;
@@ -21,9 +16,27 @@ canvas {
   margin-left: 12px;
   margin-right: 12px;
   height: 18px;
+  position: relative;
 
   canvas {
     width: 100%;
     height: 4px;
+    border: none;
+    background-color: gainsboro;
+  }
+
+  .start {
+    position: absolute;
+    top: 0px;
+    width: 1px;
+    height: 100%;
+    background-color: blue;
+  }
+  .end {
+    position: absolute;
+    top: 0px;
+    width: 1px;
+    height: 100%;
+    background-color: blue;
   }
 }

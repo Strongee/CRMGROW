@@ -10,6 +10,8 @@ export class PlayTimelinesComponent implements OnInit, AfterViewInit {
   @Input('duration') duration: number = 0;
   gaps: any[] = [];
   @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('startBar') startEl: ElementRef;
+  @ViewChild('endBar') endEl: ElementRef;
   completion = 0;
   start = 0;
   end = 0;
@@ -37,9 +39,11 @@ export class PlayTimelinesComponent implements OnInit, AfterViewInit {
     }
     this.start = start;
     this.end = end;
+    this.start = start < 0 ? 0 : start;
+    this.end = end < 0 ? duration : end;
 
-    if (this.data.gaps && this.data.gaps.length) {
-      this.gaps = this.data.gaps;
+    if (this.data.gap && this.data.gap.length) {
+      this.gaps = this.data.gap;
     } else {
       if (this.data.start || this.data.end) {
         if (start > end) {
@@ -64,7 +68,7 @@ export class PlayTimelinesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.canvas) {
+    if (this.canvas && this.duration) {
       const duration = Math.ceil(this.duration / 1000);
       const canvas = <HTMLCanvasElement>this.canvas.nativeElement;
       const ctx = canvas.getContext('2d');
@@ -80,6 +84,14 @@ export class PlayTimelinesComponent implements OnInit, AfterViewInit {
         }
       });
       ctx.stroke();
+      const startBar = <HTMLElement>this.startEl.nativeElement;
+      const endBar = <HTMLElement>this.endEl.nativeElement;
+      let start = this.start || 0;
+      let end = this.data.material_last || this.end || duration;
+      end = end < 0 ? duration : end;
+      endBar.style.left = ((end / duration) * 100).toFixed(2) + '%';
+      start = start < 0 ? 0 : start;
+      startBar.style.left = ((start / duration) * 100).toFixed(2) + '%';
     }
   }
 }
