@@ -800,7 +800,9 @@ export class MaterialsComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        material.theme = res;
+        if (res) {
+          material.theme = res;
+        }
       });
   }
 
