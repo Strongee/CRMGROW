@@ -206,10 +206,12 @@ export class ContactService extends HttpService {
    * @param contact : data to update
    */
   updateContact(id: string, contact: any): Observable<any> {
-    return this.httpClient.put(this.server + CONTACT.READ + id, contact).pipe(
-      map((res) => res['data']),
-      catchError(this.handleError('UPDATE CONTACT', null))
-    );
+    return this.httpClient
+      .put(this.server + CONTACT.UPDATE_DETAIL + id, contact)
+      .pipe(
+        map((res) => res['data']),
+        catchError(this.handleError('UPDATE CONTACT', null))
+      );
   }
 
   /**

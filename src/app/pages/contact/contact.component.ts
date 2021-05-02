@@ -770,6 +770,7 @@ export class ContactComponent implements OnInit, OnDestroy {
           }
           for (const key in res) {
             this.contact[key] = res[key];
+            this.selectedContact[key] = res[key];
           }
         }
       });
@@ -796,6 +797,7 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.toastr.success('Successfully updated additional information.');
           for (const key in res) {
             this.contact[key] = res[key];
+            this.selectedContact[key] = res[key];
           }
         }
       });

@@ -76,7 +76,12 @@ export class AdditionalEditComponent implements OnInit, OnDestroy {
     }
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService
-      .updateContact(contactId, this.contact)
+      .updateContact(contactId, {
+        source: this.contact.source,
+        brokerage: this.contact.brokerage,
+        tags: this.contact.tags,
+        additional_field: this.contact.additional_field
+      })
       .subscribe((res) => {
         this.isUpdating = false;
         if (res) {
