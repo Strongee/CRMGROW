@@ -85,7 +85,12 @@
                 <span>New Meeting</span>
             </button>
             <div class="p-2 m-0 calendar-list">
-                <button class="btn btn-tras" (click)="isShowCalendarList = !isShowCalendarList"><i class="d-block i-icon i-calendar bgc-blue"></i></button>
+                <button class="btn btn-tras" (click)="isShowCalendarList = !isShowCalendarList" *ngIf="accounts.length">
+                    <i class="d-block i-icon i-calendar bgc-blue"></i>
+                </button>
+                <button class="btn btn-tras" (click)="addCalendar()" *ngIf="!accounts.length">
+                    <i class="d-block i-icon i-calendar bgc-blue"></i>
+                </button>
                 <div class="light px-3 calendar-list-content py-2" *ngIf="accounts.length" [class.d-none]="!isShowCalendarList">
                     <button class="btn btn-white f-3 font-weight-bold p-0" (click)="isShowCalendarList = false;">Hide</button>
                     <div class="first-calendar" *ngFor="let account of accounts">
