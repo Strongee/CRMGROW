@@ -202,6 +202,7 @@ export class MaterialsComponent implements OnInit {
             this.filter();
           }
           if (this.filteredMaterials.length) {
+            console.log('###', this.filteredMaterials);
             for (const material of this.filteredMaterials) {
               if (material.user) {
                 if (material.user._id) {
@@ -221,17 +222,19 @@ export class MaterialsComponent implements OnInit {
                 material.owner = 'Admin';
               }
 
-              if (
-                this.garbage.material_themes &&
-                this.garbage.material_themes[material._id]
-              ) {
-                material.theme = this.themes.filter(
-                  (e) => e.id == this.garbage.material_themes[material._id]
-                )[0].name;
-              } else {
-                material.theme = this.themes.filter(
-                  (e) => e.id == this.garbage.material_theme
-                )[0].name;
+              if (material.material_type != 'folder') {
+                if (
+                  this.garbage.material_themes &&
+                  this.garbage.material_themes[material._id]
+                ) {
+                  material.theme = this.themes.filter(
+                    (e) => e.id == this.garbage.material_themes[material._id]
+                  )[0].name;
+                } else {
+                  material.theme = this.themes.filter(
+                    (e) => e.id == this.garbage.material_theme
+                  )[0].name;
+                }
               }
             }
             this.sort('owner', true);

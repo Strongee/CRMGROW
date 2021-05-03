@@ -266,7 +266,7 @@
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="theme-col">
-            {{element.theme | shorten: 8: '...'}}
+            {{element.theme ? element.theme : '---' | shorten: 8: '...'}}
           </td>
         </ng-container>
 
