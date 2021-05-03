@@ -111,6 +111,8 @@ export class TeamListComponent implements OnInit, OnDestroy {
       }
 
       this.teams = [...ownerTeams, ...editorTeams, ...viewerTeams];
+
+      console.log("teams =========>", this.teams);
     });
   }
 

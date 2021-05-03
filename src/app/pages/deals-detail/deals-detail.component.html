@@ -21,30 +21,36 @@
                       <span class="f-6 font-weight-bold text-white c-pointer px-2">
                         Actions
                       </span>
-                      <i class="d-block i-icon i-triangle-down bgc-white ml-2"></i>
+                      <i class="d-block i-icon more-icon i-triangle-down bgc-white ml-2"></i>
                     </div>
                     <div ngbDropdownMenu class="light action-menu">
-                      <button class="border-0 c-dark dropdown-item" (click)="openAppointmentDlg()">
-                        <span class="ml-1 f-3 font-weight-bold">Create appointment</span>
+                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openAppointmentDlg()">
+                        <i class="i-icon i-appointments bgc-dark"></i>
+                        <span class="ml-2 f-3 font-weight-bold">New Appointment</span>
                       </button>
-                      <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">
-                        <span class="ml-1 f-3 font-weight-bold">Create group call</span>
+<!--                      <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">-->
+<!--                        <span class="ml-1 f-3 font-weight-bold">Create group call</span>-->
+<!--                      </button>-->
+                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendEmail()">
+                        <i class="i-icon i-message bgc-dark"></i>
+                        <span class="ml-2 f-3 font-weight-bold">New Email</span>
                       </button>
-                      <button class="border-0 c-dark dropdown-item" (click)="openSendEmail()">
-                        <span class="ml-1 f-3 font-weight-bold">Send email</span>
+                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendText()">
+                        <i class="i-icon i-sms-sent bgc-dark"></i>
+                        <span class="ml-2 f-3 font-weight-bold">New Text</span>
                       </button>
-                      <button class="border-0 c-dark dropdown-item" (click)="openSendText()">
-                        <span class="ml-1 f-3 font-weight-bold">Send text</span>
+                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openTaskDlg()">
+                        <i class="i-icon i-task bgc-dark"></i>
+                        <span class="ml-2 f-3 font-weight-bold">New Task</span>
                       </button>
-                      <button class="border-0 c-dark dropdown-item" (click)="openTaskDlg()">
-                        <span class="ml-1 f-3 font-weight-bold">Add task</span>
-                      </button>
-                      <button class="border-0 c-dark dropdown-item" (click)="openNoteDlg()">
-                        <span class="ml-1 f-3 font-weight-bold">Add note</span>
+                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openNoteDlg()">
+                        <i class="i-icon i-notes bgc-dark"></i>
+                        <span class="ml-2 f-3 font-weight-bold">New Note</span>
                       </button>
                       <hr class="my-1">
-                      <button class="border-0 dropdown-item" (click)="removeDeal()">
-                        <span class="ml-1 f-3 font-weight-bold c-red">Delete</span>
+                      <button class="v-center border-0 dropdown-item my-1" (click)="removeDeal()">
+                        <i class="i-icon i-trash bgc-red"></i>
+                        <span class="ml-2 f-3 font-weight-bold c-red">Delete</span>
                       </button>
                     </div>
                 </div>
@@ -78,39 +84,55 @@
             </div>
             <mat-accordion multi class="general-panels">
                 <!-- Begin Deal Detail -->
-                <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="dealPanel">
-                    <mat-expansion-panel-header (click)="dealPanel = !dealPanel">
-                        <mat-panel-title>
-                            <div class="v-center w-100">
-                                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
-                                <span class="f-6 font-weight-bold ml-2">About this deal</span>
-                                <button class="btn border-0 border-primary f-2 op-28 font-weight-bold c-dark ml-auto btn-sm v-center" (click)="editDeal()">
-                                    <i class="i-icon i-edit d-block bgc-dark sm mr-1"></i>
-                                    <span>Edit</span>
-                                </button>
-                            </div>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="deal-detail">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <span class="f-6 fw-600 op-40">Value</span>
-                            </div>
-                            <div class="col-sm-6">
-                                <span class="f-6">{{deal.main.value ? '$' + deal.main.value : ''}}</span>
-                            </div>
-                        </div>
-                        <div class="row mt-1">
-                            <div class="col-sm-6">
-                                <span class="f-6 fw-600 op-40">Stage</span>
-                            </div>
-                            <div class="col-sm-6">
-                                <span class="f-6">{{selectedStage?.title}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </mat-expansion-panel>
+<!--                <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="dealPanel">-->
+<!--                    <mat-expansion-panel-header (click)="dealPanel = !dealPanel">-->
+<!--                        <mat-panel-title>-->
+<!--                            <div class="v-center w-100">-->
+<!--                                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>-->
+<!--                                <span class="f-6 font-weight-bold ml-2">About this deal</span>-->
+<!--                                <button class="btn border-0 border-primary f-2 op-28 font-weight-bold c-dark ml-auto btn-sm v-center" (click)="editDeal()">-->
+<!--                                    <i class="i-icon i-edit d-block bgc-dark sm mr-1"></i>-->
+<!--                                    <span>Edit</span>-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </mat-panel-title>-->
+<!--                    </mat-expansion-panel-header>-->
+<!--                    <div class="deal-detail">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-sm-6">-->
+<!--                                <span class="f-6 fw-600 op-40">Value</span>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-6">-->
+<!--                                <span class="f-6">{{deal.main.value ? '$' + deal.main.value : ''}}</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row mt-1">-->
+<!--                            <div class="col-sm-6">-->
+<!--                                <span class="f-6 fw-600 op-40">Stage</span>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-6">-->
+<!--                                <span class="f-6">{{selectedStage?.title}}</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </mat-expansion-panel>-->
                 <!-- End Deal Detail -->
+
+              <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div class="v-center w-100">
+                      <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
+                      <span class="f-6 font-weight-bold ml-2">Additional information</span>
+                      <button class="btn border-0 border-primary f-2 font-weight-bold c-dark op-28 ml-auto btn-sm v-center" (click)="editAdditional($event)">
+                        <i class="i-icon i-edit d-block bgc-dark sm mr-1"></i>
+                        <span>Edit</span>
+                      </button>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+              </mat-expansion-panel>
 
                 <!-- Begin Contacts Detail -->
                 <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="contactsPanel">
@@ -212,19 +234,19 @@
                   </div>
                 </ng-container>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openNoteDlg()" *ngIf="tab.id === 'notes' || (tab.id !== 'all' && activityType.id === 'notes')">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Add new note</span>
+                  <span class="f-3 font-weight-bold c-blue mr-2">New Note</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendEmail()" *ngIf="tab.id === 'emails' || (tab.id === 'all' && activityType.id === 'emails')">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Send email</span>
+                  <span class="f-3 font-weight-bold c-blue mr-2">New Email</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'texts' || (tab.id === 'all' && activityType.id === 'texts')">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
+                  <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openAppointmentDlg()" *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
+                  <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <!-- <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'team_calls' || (tab.id === 'all' && activityType.id === 'team_calls')">
@@ -232,14 +254,14 @@
                   <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div> -->
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openTaskDlg()" *ngIf="tab.id === 'follow_ups' || (tab.id === 'all' && activityType.id === 'follow_ups')">
-                  <span class="f-3 font-weight-bold c-blue mr-2">Create task</span>
+                  <span class="f-3 font-weight-bold c-blue mr-2">New Task</span>
                   <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
               </div>
               <ng-container *ngIf="tab.id === 'all'; else detailsTemplate">
                 <ng-container *ngFor="let activity of showingTimelines">
                   <ng-container [ngSwitch]="activity.type">
-                    
+
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'deals'">
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">
@@ -255,7 +277,7 @@
                       <ng-container>
                         <div class="main-history-item">
                           <div class="summary-description mb-3">
-                            <span>{{activity.contact_details?.length}} contact(s) were 
+                            <span>{{activity.contact_details?.length}} contact(s) were
                               <ng-container *ngIf="activity.content.indexOf('added') !== -1; else removedDescription">
                                 added to this deal.
                               </ng-container>
@@ -294,7 +316,7 @@
                         </div>
                       </ng-container>
                     </div>
-                    
+
 
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'follow_ups'">
                       <div class="v-center justify-content-between mb-3">

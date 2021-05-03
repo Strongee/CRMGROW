@@ -74,11 +74,11 @@
             </div>
           </td>
         </ng-container>
-  
+
         <!-- Complete Status Column -->
         <ng-container matColumnDef="status">
           <ng-container *matHeaderCellDef>
-            <th mat-header-cell
+            <th mat-header-cell class="pl-3 pr-4"
                 *ngIf="!selection.length; else toolHeader">DONE</th>
             <ng-template #toolHeader>
               <th mat-header-cell colspan="7">
@@ -89,12 +89,12 @@
               </th>
             </ng-template>
           </ng-container>
-          <th mat-header-cell *matHeaderCellDef class="done-cell">DONE</th>
-          <td mat-cell *matCellDef="let element" class="done-cell">
+          <th mat-header-cell *matHeaderCellDef class="done-cell pl-3 pr-4">DONE</th>
+          <td mat-cell *matCellDef="let element" class="done-cell pl-3 pr-4">
             <i class="i-icon d-block {{element.status === 1 ? 'i-round-check bgc-accept' : 'i-round bgc-dark op-40 c-pointer'}} done-status" (click)="taskComplete(element)"></i>
           </td>
         </ng-container>
-  
+
         <!-- Name Column -->
         <ng-container matColumnDef="contact_name">
           <ng-container *matHeaderCellDef>
@@ -121,7 +121,7 @@
             </a>
           </td>
         </ng-container>
-  
+
         <!-- Position Column -->
         <ng-container matColumnDef="contact_label">
           <ng-container *matHeaderCellDef>
@@ -133,7 +133,7 @@
             <span class="d-none">{{element.contact.label}}</span>
           </td>
         </ng-container>
-  
+
         <!-- Weight Column -->
         <ng-container matColumnDef="subject">
           <ng-container *matHeaderCellDef>
@@ -149,7 +149,7 @@
             </a>
           </td>
         </ng-container>
-  
+
         <!-- Symbol Column -->
         <ng-container matColumnDef="contact_phone">
           <ng-container *matHeaderCellDef>
@@ -162,7 +162,7 @@
             </a>
           </td>
         </ng-container>
-  
+
         <!-- Star Column -->
         <ng-container matColumnDef="deadline">
           <ng-container *matHeaderCellDef>
@@ -180,7 +180,7 @@
             </a>
           </td>
         </ng-container>
-  
+
         <!-- ActioN Column -->
         <ng-container matColumnDef="action">
           <ng-container *matHeaderCellDef>
@@ -191,11 +191,11 @@
             <div class="c-pointer" *ngIf="element.status !== 1"><i class="i-icon i-edit op-28 d-block bgc-dark ml-auto" (click)="openEdit(element)"></i></div>
           </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="selection_info">
           <th mat-header-cell *matHeaderCellDef colspan="8" class="text-center">
             <span *ngIf="selection.length !== (taskService.total$ | async); else deselectTemplate" class="">
-              {{selection.length}} tasks are selected. 
+              {{selection.length}} tasks are selected.
               <span  class="c-blue font-weight-bold" *ngIf="selecting && selectSource === 'page'">
                 <i class="small-spinner"></i>
                 <span>Selecting all. . .</span>
@@ -215,7 +215,7 @@
             <div class="completed-mark"></div>
           </td>
         </ng-container> -->
-  
+
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
@@ -287,7 +287,7 @@
               </ng-container>
             </ng-container>
             <ng-template #anotherResult>
-              There are no {{(taskService.searchOption$ | async).status === TASK_STATUS.TODO ? 'todo' : (taskService.searchOption$ | async).status === TASK_STATUS.COMPLETED ? 'completed' : ''}} 
+              There are no {{(taskService.searchOption$ | async).status === TASK_STATUS.TODO ? 'todo' : (taskService.searchOption$ | async).status === TASK_STATUS.COMPLETED ? 'completed' : ''}}
               {{(taskService.searchOption$ | async).types ? (taskService.searchOption$ | async).types.join(', ') : '' }} tasks {{(taskService.searchOption$ | async).isActive ? ' that fit your filter conditions ' : ''}}
               {{((taskService.durationOption$ | async).name || 'all') !== 'all' ? ' for ' + (taskService.durationOption$ | async).name : 'in your account'}}.
             </ng-template>

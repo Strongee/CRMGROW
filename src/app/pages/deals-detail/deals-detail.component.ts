@@ -1230,4 +1230,8 @@ export class DealsDetailComponent implements OnInit {
     });
     return convertString;
   }
+
+  editAdditional($event): void {
+
+  }
 }

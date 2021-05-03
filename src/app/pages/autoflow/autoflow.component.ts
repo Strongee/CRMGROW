@@ -45,6 +45,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bulk.component';
 import { Automation } from '../../models/automation.model';
 import { OverlayService } from 'src/app/services/overlay.service';
+import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
 
 @Component({
   selector: 'app-autoflow',
@@ -1839,6 +1840,24 @@ export class AutoflowComponent
     setTimeout(function () {
       _SELF.router.navigate(['/autoflow/new/' + automation._id]);
     }, 30);
+  }
+
+  shareAutomation($event, automation): void {
+    this.dialog
+      .open(TeamMaterialShareComponent, {
+        width: '98vw',
+        maxWidth: '450px',
+        data: {
+          automation,
+          type: 'automation'
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.status) {
+          // this.automationService.reload();
+        }
+      });
   }
 
   deselectAll(): void {

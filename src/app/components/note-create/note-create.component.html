@@ -1,5 +1,5 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid? submit() : false;" [class.was-validated]="form.submitted">
-  <h1 mat-dialog-title>Add new note</h1>
+  <h1 mat-dialog-title>New Note</h1>
   <mat-dialog-content>
     <ng-container *ngIf="type != 'deal' else dealContacts">
       <ng-container *ngIf="isSelected; else selectContactTemplate">
@@ -61,6 +61,6 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button class="btn c-blue" mat-dialog-close>Cancel</button>
-    <button class="btn btn-primary" type="submit" [class.loading]="saving">Add note</button>
+    <button class="btn btn-primary" type="submit" [class.loading]="saving">Create</button>
   </mat-dialog-actions>
 </form>
