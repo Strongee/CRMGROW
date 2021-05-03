@@ -14,6 +14,8 @@ import { PageCanDeactivate } from '../../variables/abstractors';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
 import { ROUTE_PAGE } from 'src/app/constants/variable.constants';
+import { Garbage } from 'src/app/models/garbage.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-template',
@@ -40,6 +42,10 @@ export class TemplateComponent
   cursorEnd = 0;
   focusedField = '';
 
+  isCalendly = false;
+  garbage: Garbage = new Garbage();
+  garbageSubscription: Subscription;
+
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   @ViewChild('subjectField') subjectEl: ElementRef;
   @ViewChild('smsContentField') textAreaEl: ElementRef;
@@ -48,9 +54,19 @@ export class TemplateComponent
     private templatesService: TemplatesService,
     private router: Router,
     private toastr: ToastrService,
+    private userService: UserService,
     private handlerService: HandlerService
   ) {
     super();
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      this.garbage = res;
+      if (this.garbage?.calendly) {
+        this.isCalendly = true;
+      } else {
+        this.isCalendly = false;
+      }
+    });
   }
 
   ngOnInit(): void {

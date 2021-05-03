@@ -245,11 +245,21 @@ export class HtmlEditorComponent implements OnInit {
     const template_button = toolbar.container.querySelector('.ql-template');
     const calendly_button = toolbar.container.querySelector('.ql-calendly');
     const record_button = toolbar.container.querySelector('.ql-record');
-    link_button.setAttribute('title', 'Link');
-    image_button.setAttribute('title', 'Image');
-    template_button.setAttribute('title', 'Template');
-    calendly_button.setAttribute('title', 'Calendly');
-    record_button.setAttribute('title', 'Record');
+    if (link_button) {
+      link_button.setAttribute('title', 'Link');
+    }
+    if (image_button) {
+      image_button.setAttribute('title', 'Image');
+    }
+    if (template_button) {
+      template_button.setAttribute('title', 'Template');
+    }
+    if (calendly_button) {
+      calendly_button.setAttribute('title', 'Calendly');
+    }
+    if (record_button) {
+      record_button.setAttribute('title', 'Record');
+    }
     input.dataset.link = 'www.crmgrow.com';
   }
 

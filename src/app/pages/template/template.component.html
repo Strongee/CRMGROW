@@ -124,6 +124,7 @@
             <app-html-editor
               [(value)]="template.content"
               placeholder="Enter email content..."
+              [hasCalendly]="isCalendly"
               required="true"
               [style]="{height: '320px'}"
               (onFocus)="focusEditor()"
