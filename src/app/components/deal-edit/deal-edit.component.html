@@ -52,33 +52,6 @@
                 </option>
             </select>
         </div>
-        <div class="form-group">
-            <div class="v-center">
-                <label class="mb-0">value</label>
-            </div>
-            <input
-                class="form-control"
-                type="number"
-                name="dealValue"
-                #dealValue="ngModel"
-                [(ngModel)]="deal.value"
-                (ngModelChange)="changeValue()"
-                min="0"
-                max="9999999"
-            >
-            <div
-                class="invalid-error f-3 c-red"
-                *ngIf="maxValueFlag"
-            >
-                ※ Max value is 10000000.
-            </div>
-            <div
-                class="invalid-error f-3 c-red"
-                *ngIf="decimalPointFlag"
-            >
-                ※ Allow up to two decimal places.
-            </div>
-        </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button class="btn btn-white f-6 font-weight-bold mr-2" type="button" mat-dialog-close>Cancel</button>

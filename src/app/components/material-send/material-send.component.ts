@@ -128,20 +128,17 @@ export class MaterialSendComponent implements OnInit {
     this.messageEl.nativeElement.focus();
     const field = this.messageEl.nativeElement;
     if (!this.textContent.replace(/(\r\n|\n|\r|\s)/gm, '')) {
-      console.log('111');
       field.select();
       document.execCommand('insertText', false, template.content);
       return;
     }
     if (field.selectionEnd || field.selectionEnd === 0) {
-      console.log('222');
       if (this.textContent[field.selectionEnd - 1] === '\n') {
         document.execCommand('insertText', false, template.content);
       } else {
         document.execCommand('insertText', false, '\n' + template.content);
       }
     } else {
-      console.log('333');
       if (this.textContent.slice(-1) === '\n') {
         document.execCommand('insertText', false, template.content);
       } else {

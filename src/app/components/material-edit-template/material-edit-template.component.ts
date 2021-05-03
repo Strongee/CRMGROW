@@ -15,6 +15,7 @@ export class MaterialEditTemplateComponent implements OnInit {
   garbage: Garbage = new Garbage();
   theme_setting = {};
   material_id = '';
+  materials = [];
   type = '';
   selectedTheme = {
     name: '',
@@ -49,14 +50,24 @@ export class MaterialEditTemplateComponent implements OnInit {
     private toast: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.material_id = this.data.id;
+    if (this.data.id) {
+      this.material_id = this.data.id;
+    }
+    if (this.data.materials) {
+      this.materials = [...this.data.materials];
+    }
     this.type = this.data.type;
     this.garbageSubscription = this.userService.garbage$.subscribe(
       (garbage) => {
         let theme;
         this.garbage = new Garbage().deserialize(garbage);
         if (this.type == 'all') {
-          theme = garbage.material_theme;
+          if (!this.materials.length) {
+            theme = garbage.material_theme;
+            this.selectedTheme = this.themes.filter((e) => e.id == theme)[0];
+          } else {
+            this.theme_setting = garbage.material_themes || {};
+          }
         } else {
           this.theme_setting = garbage.material_themes || {};
           if (
@@ -67,8 +78,8 @@ export class MaterialEditTemplateComponent implements OnInit {
           } else {
             theme = garbage.material_theme;
           }
+          this.selectedTheme = this.themes.filter((e) => e.id == theme)[0];
         }
-        this.selectedTheme = this.themes.filter((e) => e.id == theme)[0];
       }
     );
   }
@@ -87,27 +98,47 @@ export class MaterialEditTemplateComponent implements OnInit {
   save(): void {
     this.saving = true;
     if (this.type == 'all') {
-      if (this.garbage.material_theme !== this.selectedTheme.id) {
+      if (this.materials.length == 0) {
+        if (this.garbage.material_theme !== this.selectedTheme.id) {
+          this.updateSubscription = this.userService
+            .updateGarbage({
+              material_theme: this.selectedTheme.id,
+              material_themes: {}
+            })
+            .subscribe((status) => {
+              this.saving = false;
+              if (status) {
+                this.userService.updateGarbageImpl({
+                  material_theme: this.selectedTheme.id,
+                  material_themes: {}
+                });
+                this.dialogRef.close(this.selectedTheme.name);
+                this.toast.success(
+                  'Material template has been changed successfully.'
+                );
+              }
+            });
+        } else {
+          this.dialogRef.close();
+        }
+      } else {
+        for (let i = 0; i < this.materials.length; i++) {
+          this.theme_setting[this.materials[i]._id] = this.selectedTheme.id;
+        }
         this.updateSubscription = this.userService
-          .updateGarbage({
-            material_theme: this.selectedTheme.id,
-            material_themes: {}
-          })
+          .updateGarbage({ material_themes: this.theme_setting })
           .subscribe((status) => {
             this.saving = false;
             if (status) {
               this.userService.updateGarbageImpl({
-                material_theme: this.selectedTheme.id,
-                material_themes: {}
+                material_themes: this.theme_setting
               });
-              this.dialogRef.close(this.selectedTheme.id);
+              this.dialogRef.close(this.selectedTheme.name);
               this.toast.success(
                 'Material template has been changed successfully.'
               );
             }
           });
-      } else {
-        this.dialogRef.close();
       }
     } else {
       if (this.theme_setting[this.material_id] !== this.selectedTheme.id) {
@@ -120,7 +151,7 @@ export class MaterialEditTemplateComponent implements OnInit {
               this.userService.updateGarbageImpl({
                 material_themes: this.theme_setting
               });
-              this.dialogRef.close(this.selectedTheme.id);
+              this.dialogRef.close(this.selectedTheme.name);
               this.toast.success(
                 'Material template has been changed successfully.'
               );

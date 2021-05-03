@@ -51,21 +51,6 @@ export class DealCreateComponent implements OnInit {
     });
   }
 
-  changeValue(): void {
-    if (this.value > 10000000) {
-      this.maxValueFlag = true;
-    } else {
-      this.maxValueFlag = false;
-    }
-    const values = this.value.toString().split('.');
-
-    if (values && values[1]?.length > 2) {
-      this.maxValueFlag = true;
-    } else {
-      this.decimalPointFlag = false;
-    }
-  }
-
   createDeals(): void {
     if (this.contacts.length == 0 || this.maxValueFlag || this.maxValueFlag) {
       return;

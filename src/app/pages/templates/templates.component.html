@@ -72,7 +72,7 @@
           <td mat-cell *matCellDef="let template" class="template-type">
             <div class="v-center">
               <ng-container *ngIf="template.type=='text'; else emailType">
-                <i class="i-icon bgc-dark i-phone mr-1"></i>
+                <i class="i-icon bgc-dark i-sms-sent mr-1"></i>
                 <span class="f-4 menu-label font-weight-bold ml-1">Text</span>
               </ng-container>
               <ng-template #emailType>

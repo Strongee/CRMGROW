@@ -29,29 +29,13 @@ export class DealEditComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  changeValue(): void {
-    if (this.deal.value > 10000000) {
-      this.maxValueFlag = true;
-    } else {
-      this.maxValueFlag = false;
-    }
-    const values = this.deal.value.toString().split('.');
-
-    if (values && values[1]?.length > 2) {
-      this.maxValueFlag = true;
-    } else {
-      this.decimalPointFlag = false;
-    }
-  }
-
   editDeals(): void {
     if (this.maxValueFlag || this.maxValueFlag) {
       return;
     }
     const data = {
       title: this.deal.title,
-      deal_stage: this.deal.deal_stage,
-      value: this.deal.value
+      deal_stage: this.deal.deal_stage
     };
     this.saveSubscription && this.saveSubscription.unsubscribe();
     this.saving = true;

@@ -20,6 +20,9 @@ import { AutomationService } from 'src/app/services/automation.service';
 import { DealsService } from '../../services/deals.service';
 import { PhoneInputComponent } from '../phone-input/phone-input.component';
 import { UploadContactsComponent } from '../upload-contacts/upload-contacts.component';
+import { User } from '../../models/user.model';
+import { Team } from '../../models/team.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-contact-create',
@@ -75,11 +78,17 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   automation: Automation = new Automation();
   stages = [];
 
+  userId;
+  teamMembers: User[] = [];
+  selectedMember: User;
+  selectedTeam: Team;
+
   constructor(
     private dialogRef: MatDialogRef<ContactCreateComponent>,
     private contactService: ContactService,
     private handlerService: HandlerService,
     private dealsService: DealsService,
+    private userService: UserService,
     private automationService: AutomationService,
     private router: Router,
     private dialog: MatDialog
@@ -87,6 +96,12 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contact.tags = [];
+
+    const profile = this.userService.profile.getValue();
+    if (profile) {
+      this.userId = profile._id;
+    }
+
     this.dealsService.stages$.subscribe((res) => {
       const index = res.findIndex((item) => item._id === null);
       const nullStage = [
@@ -119,6 +134,12 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.selectedTeam) {
+      if (!this.selectedMember) {
+        return;
+      }
+    }
+
     let cell_phone;
     if (this.phoneControl.valid && this.cell_phone) {
       if (
@@ -143,6 +164,15 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
         this.isCreating = false;
         if (contact) {
           this.handlerService.addContact$(contact);
+
+          if (this.selectedMember && this.selectedTeam) {
+            this.contactService
+              .shareContacts(this.selectedTeam._id, this.selectedMember._id, [
+                contact
+              ])
+              .subscribe((res) => {});
+          }
+
           // If automation is enabled please assign the automation.
           if (this.automation && this.automation._id) {
             this.isCreating = true;
@@ -280,5 +310,38 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
   importCSV(): void {
     this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
     this.dialogRef.close();
+  }
+
+  selectTeam(team): void {
+    if (team) {
+      this.selectedTeam = team;
+      this.teamMembers = [];
+
+      for (const owner of this.selectedTeam.owner) {
+        this.teamMembers.push(owner);
+      }
+      for (const member of this.selectedTeam.members) {
+        this.teamMembers.push(member);
+      }
+
+      // remove yourself from members.
+      const index = this.teamMembers.findIndex(
+        (item) => item._id === this.userId
+      );
+      if (index >= 0) {
+        this.teamMembers.splice(index, 1);
+      }
+    } else {
+      this.selectedTeam = null;
+      this.teamMembers = [];
+    }
+  }
+
+  selectMember(member): void {
+    if (member) {
+      this.selectedMember = member;
+    } else {
+      this.selectedMember = null;
+    }
   }
 }

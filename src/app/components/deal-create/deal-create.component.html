@@ -43,33 +43,6 @@
                 </option>
             </select>
         </div>
-        <div class="form-group">
-            <div class="v-center">
-                <label class="d-block mb-0">value</label>
-            </div>
-            <input
-                class="form-control"
-                type="number"
-                name="dealValue"
-                #dealValue="ngModel"
-                [(ngModel)]="value"
-                (ngModelChange)="changeValue()"
-                min="0"
-                max="9999999"
-            >
-            <div
-                class="invalid-error f-3 c-red"
-                *ngIf="maxValueFlag"
-            >
-                ※ Max value is 10000000.
-            </div>
-            <div
-                class="invalid-error f-3 c-red"
-                *ngIf="decimalPointFlag"
-            >
-                ※ Allow up to two decimal places.
-            </div>
-        </div>
         <div class="f-6 font-weight-bold mb-3">
             Associate deal with
         </div>

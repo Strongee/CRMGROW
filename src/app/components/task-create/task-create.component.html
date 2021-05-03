@@ -1,5 +1,5 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? submit() : false" [class.was-validated]="form.submitted" class="general">
-  <h1 mat-dialog-title>Add new task</h1>
+  <h1 mat-dialog-title>New task</h1>
   <mat-dialog-content>
     <ng-container *ngIf="type === 'deal'; else normalTaskContacts">
       <div class="f-6 mb-2">
@@ -27,7 +27,7 @@
     <ng-template #normalTaskContacts>
       <ng-container *ngIf="isSelected">
         <div class="f-6 mb-2">
-          adding to 
+          adding to
           <span class="f-6 c-blue font-weight-bold">{{contacts[0].fullName}}</span>
           <ng-container *ngIf="contacts.length > 1">
             and <span class="f-6 c-blue font-weight-bold">{{contacts.length - 1}} contact(s)</span>
@@ -35,14 +35,14 @@
         </div>
       </ng-container>
     </ng-template>
-    
+
     <div class="form-group">
       <label class="mb-0">task type</label>
       <div>
         <app-task-type [(value)]="task.type"></app-task-type>
       </div>
     </div>
-    
+
     <div class="form-group">
       <div class="v-center">
         <label for="content_tc" class="mb-0">task description</label>
@@ -62,7 +62,7 @@
           </span>
         </div>
         <app-select-contact (onSelect)="selectContact($event)"></app-select-contact>
-      </div>  
+      </div>
     </ng-container>
     <div class="row">
       <div class="col-sm-6 col-12">

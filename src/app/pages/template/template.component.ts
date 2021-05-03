@@ -3,7 +3,11 @@ import {
   OnInit,
   ViewChild,
   OnDestroy,
-  ElementRef
+  ElementRef,
+  TemplateRef,
+  ChangeDetectorRef,
+  ApplicationRef,
+  ViewContainerRef
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +18,11 @@ import { PageCanDeactivate } from '../../variables/abstractors';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
 import { ROUTE_PAGE } from 'src/app/constants/variable.constants';
+import { Garbage } from 'src/app/models/garbage.model';
+import { UserService } from 'src/app/services/user.service';
+import { ConnectService } from 'src/app/services/connect.service';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-template',
@@ -40,17 +49,46 @@ export class TemplateComponent
   cursorEnd = 0;
   focusedField = '';
 
+  isCalendly = false;
+  garbage: Garbage = new Garbage();
+  garbageSubscription: Subscription;
+
+  overlayRef: OverlayRef;
+  templatePortal: TemplatePortal;
+  @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
+  templateSubject = '';
+  templateValue = '';
+
+  set = 'twitter';
+
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   @ViewChild('subjectField') subjectEl: ElementRef;
   @ViewChild('smsContentField') textAreaEl: ElementRef;
   constructor(
     private route: ActivatedRoute,
-    private templatesService: TemplatesService,
+    public templatesService: TemplatesService,
+    public connectService: ConnectService,
     private router: Router,
     private toastr: ToastrService,
-    private handlerService: HandlerService
+    private userService: UserService,
+    private handlerService: HandlerService,
+    private _viewContainerRef: ViewContainerRef,
+    private overlay: Overlay,
+    private cdr: ChangeDetectorRef,
+    private appRef: ApplicationRef
   ) {
     super();
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      this.garbage = res;
+      if (this.garbage?.calendly) {
+        this.isCalendly = true;
+      } else {
+        this.isCalendly = false;
+      }
+    });
+    this.templatesService.loadAll(false);
+    this.connectService.loadCalendlyAll(false);
   }
 
   ngOnInit(): void {
@@ -229,5 +267,96 @@ export class TemplateComponent
       }
     }
     return '';
+  }
+
+  createNew(): void {
+    this.templatePortal = new TemplatePortal(
+      this.createNewContent,
+      this._viewContainerRef
+    );
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+        return;
+      } else {
+        this.overlayRef.attach(this.templatePortal);
+        return;
+      }
+    } else {
+      this.overlayRef = this.overlay.create({
+        hasBackdrop: true,
+        backdropClass: 'template-backdrop',
+        panelClass: 'template-panel',
+        width: '96vw',
+        maxWidth: '480px'
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((event) => {
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
+    }
+  }
+
+  selectTextTemplate(template: Template): void {
+    this.textAreaEl.nativeElement.focus();
+    const field = this.textAreaEl.nativeElement;
+    if (!this.template.content.replace(/(\r\n|\n|\r|\s)/gm, '')) {
+      field.select();
+      document.execCommand('insertText', false, template.content);
+      return;
+    }
+    if (field.selectionEnd || field.selectionEnd === 0) {
+      if (this.template.content[field.selectionEnd - 1] === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    } else {
+      if (this.template.content.slice(-1) === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    }
+  }
+
+  selectCalendly(url: string): void {
+    this.textAreaEl.nativeElement.focus();
+    const field = this.textAreaEl.nativeElement;
+    if (!this.template.content.replace(/(\r\n|\n|\r|\s)/gm, '')) {
+      field.select();
+      document.execCommand('insertText', false, url);
+      return;
+    }
+    if (field.selectionEnd || field.selectionEnd === 0) {
+      if (this.template.content[field.selectionEnd - 1] === '\n') {
+        document.execCommand('insertText', false, url);
+      } else {
+        document.execCommand('insertText', false, '\n' + url);
+      }
+    } else {
+      if (this.template.content.slice(-1) === '\n') {
+        document.execCommand('insertText', false, url);
+      } else {
+        document.execCommand('insertText', false, '\n' + url);
+      }
+    }
+  }
+
+  closeOverlay(flag: boolean): void {
+    if (this.overlayRef) {
+      this.overlayRef.detach();
+      this.overlayRef.detachBackdrop();
+    }
+    if (flag) {
+      this.toastr.success('', 'New template is created successfully.', {
+        closeButton: true
+      });
+      setTimeout(() => {
+        this.appRef.tick();
+      }, 1);
+    }
+    this.cdr.detectChanges();
   }
 }

@@ -50,38 +50,46 @@
             <span class="f-6 font-weight-bold text-white c-pointer px-2">
               Actions
             </span>
-            <i class="d-block i-icon i-triangle-down bgc-white ml-2"></i>
+            <i class="d-block i-icon i-triangle-down more-icon bgc-white ml-2"></i>
           </div>
           <div ngbDropdownMenu class="light action-menu">
             <!-- <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">
               <span class="ml-1 f-3 font-weight-bold">Create group call</span>
             </button> -->
-            <button class="border-0 c-dark dropdown-item"(click)="openAppointmentDlg()">
-              <span class="ml-1 f-3 font-weight-bold">Create appointment</span>
+            <button class="v-center border-0 c-dark dropdown-item my-1"(click)="openAppointmentDlg()">
+              <i class="i-icon i-appointments bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">New Appointment</span>
             </button>
             <hr class="my-1">
-            <button class="border-0 c-dark dropdown-item" (click)="openSendEmail()">
-              <span class="ml-1 f-3 font-weight-bold">Send email</span>
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendEmail()">
+              <i class="i-icon i-message bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">New Email</span>
             </button>
-            <button class="border-0 c-dark dropdown-item" (click)="openSendText()">
-              <span class="ml-1 f-3 font-weight-bold">Send text</span>
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendText()">
+              <i class="i-icon i-sms-sent bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">New Text</span>
             </button>
-            <button class="border-0 c-dark dropdown-item" (click)="openTaskDlg()">
-              <span class="ml-1 f-3 font-weight-bold">Add task</span>
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openTaskDlg()">
+              <i class="i-icon i-task bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">New Task</span>
             </button>
-            <button class="border-0 c-dark dropdown-item" (click)="openNoteDlg()">
-              <span class="ml-1 f-3 font-weight-bold">Add note</span>
-            </button>
-            <hr class="my-1">
-            <button class="border-0 c-dark dropdown-item" (click)="openMergeContactDlg()">
-              <span class="ml-1 f-3 font-weight-bold">Merge</span>
-            </button>
-            <button class="border-0 c-dark dropdown-item" (click)="openShareContactDlg()">
-              <span class="ml-1 f-3 font-weight-bold">Share contact</span>
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openNoteDlg()">
+              <i class="i-icon i-notes bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">New Note</span>
             </button>
             <hr class="my-1">
-            <button class="border-0 c-dark dropdown-item" (click)="deleteContact()">
-              <span class="ml-1 f-3 font-weight-bold c-red">Delete</span>
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openMergeContactDlg()">
+              <i class="i-icon i-contact-merge bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">Merge</span>
+            </button>
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openShareContactDlg()">
+              <i class="i-icon i-share bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">Share contact</span>
+            </button>
+            <hr class="my-1">
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="deleteContact()">
+              <i class="i-icon i-trash bgc-red"></i>
+              <span class="ml-2 f-3 font-weight-bold c-red">Delete</span>
             </button>
           </div>
         </div>
@@ -201,12 +209,12 @@
                 </span>
               </div>
             </div>
-            <ng-container *ngFor="let item of lead_fields">
-              <div class="d-flex py-2">
-                <span class="f-6 fw-600 op-40 info-title">{{item}}</span>
-                <span class="f-6">{{contact.additional_field ? contact.additional_field[item] : ''}}</span>
-              </div>
-            </ng-container>
+<!--            <ng-container *ngFor="let item of lead_fields">-->
+<!--              <div class="d-flex py-2">-->
+<!--                <span class="f-6 fw-600 op-40 info-title">{{item}}</span>-->
+<!--                <span class="f-6">{{contact.additional_field ? contact.additional_field[item] : ''}}</span>-->
+<!--              </div>-->
+<!--            </ng-container>-->
             <ng-container *ngFor="let item of contact.additional_field | keyvalue">
               <div class="d-flex py-2" *ngIf="lead_fields.indexOf(item.key) === -1">
                 <span class="f-6 fw-600 op-40 info-title">{{item.key}}</span>
@@ -214,7 +222,9 @@
               </div>
             </ng-container>
             <div class="mt-2">
-              <a class="c-blue fw-600 td-none c-pointer" (click)="addAdditionalFields()">Add additional fields</a>
+              <a class="c-blue font-weight-bold td-none c-pointer" (click)="addAdditionalFields()">
+                New Field
+              </a>
             </div>
           </div>
         </mat-expansion-panel>
@@ -385,31 +395,31 @@
               </div>
             </ng-container>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openNoteDlg()" *ngIf="tab.id === 'note' || (tab.id !== 'all' && activityType.id === 'note')">
-              <span class="f-3 font-weight-bold c-blue mr-2">Add new note</span>
+              <span class="f-3 font-weight-bold c-blue mr-2">New Note</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendEmail()" *ngIf="tab.id === 'email' || (tab.id === 'all' && activityType.id === 'email')">
-              <span class="f-3 font-weight-bold c-blue mr-2">Send email</span>
+              <span class="f-3 font-weight-bold c-blue mr-2">New Email</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'text' || (tab.id === 'all' && activityType.id === 'text')">
-              <span class="f-3 font-weight-bold c-blue mr-2">Send text</span>
+              <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openAppointmentDlg()" *ngIf="tab.id === 'appointment' || (tab.id === 'all' && activityType.id === 'appointment')">
-              <span class="f-3 font-weight-bold c-blue mr-2">Create appointment</span>
+              <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
-            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'group_call' || (tab.id === 'all' && activityType.id === 'group_call')">
-              <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>
-              <i class="d-block i-icon i-plus bgc-blue"></i>
-            </div>
+<!--            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'group_call' || (tab.id === 'all' && activityType.id === 'group_call')">-->
+<!--              <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>-->
+<!--              <i class="d-block i-icon i-plus bgc-blue"></i>-->
+<!--            </div>-->
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openTaskDlg()" *ngIf="tab.id === 'follow_up' || (tab.id === 'all' && activityType.id === 'follow_up')">
-              <span class="f-3 font-weight-bold c-blue mr-2">Create task</span>
+              <span class="f-3 font-weight-bold c-blue mr-2">New Task</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openDealDlg()" *ngIf="tab.id === 'deal' || (tab.id === 'all' && activityType.id === 'deal')">
-              <span class="f-3 font-weight-bold c-blue mr-2">Create deal</span>
+              <span class="f-3 font-weight-bold c-blue mr-2">New Deal</span>
               <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
           </div>
@@ -425,7 +435,7 @@
               </div>
             </ng-container>
             <ng-container *ngFor="let activity of mainTimelines; let i = index;">
-              
+
               <div *ngIf="activityType.id == 'all' && activity.type == 'contacts'">
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between">
@@ -669,7 +679,7 @@
                     </app-email-timelines>
                   </ng-container>
                 </div>
-              
+
               </div>
 
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'text') && (groups[i].type == 'texts' || groups[i].media == 'texts')">
@@ -998,7 +1008,7 @@
                         {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
-                    
+
                     <ng-container *ngIf="detail.data_type ==='emails'">
                       <app-email-timelines
                         [email]="detail"
@@ -1038,7 +1048,7 @@
                         {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
-                    
+
                     <ng-container *ngIf="detail.data_type ==='texts'">
                       <div class="text-direction mb-3">
                         <ng-container *ngIf="detail['sent']; else receivedDir">
@@ -1540,7 +1550,7 @@
 
 -->
 
-<!-- 
+<!--
   Detail Group Call Activity Panel
   <div class="history-detail group_calls-detail p-3 mt-3 d-none" *ngSwitchCase="'group_call'">
     <div class="v-center justify-content-between mb-3">
