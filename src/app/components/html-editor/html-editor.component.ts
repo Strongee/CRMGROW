@@ -60,6 +60,7 @@ export class HtmlEditorComponent implements OnInit {
   public set hasCalendly(val: boolean) {
     if (val) {
       this.config.toolbar.container.push(['calendly']);
+      this.connectService.loadCalendlyAll(false);
     }
   }
   @Input()
@@ -96,7 +97,8 @@ export class HtmlEditorComponent implements OnInit {
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
   showTemplates: boolean = false;
   showCalendly: boolean = false;
-  showRecord: boolean = false;
+  authToken = '';
+  recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
   quillEditorRef;
   attachments = [];
   config = {
@@ -133,7 +135,11 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          this.showRecord = !this.showRecord;
+          let popup;
+          if (!popup || popup.closed) {
+            popup = window.open(this.recordUrl, 'new window');
+          }
+          popup.focus();
           this.cdr.detectChanges();
 
           // if (this.hasCamera) {
@@ -185,7 +191,6 @@ export class HtmlEditorComponent implements OnInit {
     private appRef: ApplicationRef
   ) {
     this.templateService.loadAll(false);
-    this.connectService.loadCalendlyAll(false);
   }
 
   ngOnInit(): void {}
