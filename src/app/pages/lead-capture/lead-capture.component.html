@@ -56,7 +56,7 @@
                     class="custom-control-input"
                     id="{{field.name}}" 
                     [checked]="field.status"
-                    (change)="statusChange($event, field)"
+                    (change)="statusChange($event, field.name)"
                 />
                 <label class="custom-control-label" for="{{field.name}}"></label>
             </div>

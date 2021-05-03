@@ -216,6 +216,14 @@ export class LeadCaptureComponent implements OnInit {
           this.save();
         }
         break;
+      default:
+        const selectedField = this.garbage.additional_fields.filter(
+          (field) => field.name == type
+        )[0];
+        if (selectedField) {
+          selectedField.status = !selectedField.status;
+          this.save();
+        }
     }
   }
 
