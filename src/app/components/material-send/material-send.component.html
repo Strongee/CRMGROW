@@ -27,36 +27,18 @@
 
         <div class="d-flex">
             <div class="v-center mt-3 material-more px-1 py-0 mx-auto" *ngIf="data.material.length > 1">
-                <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'video' && videos.length > 1; else normalVideoTemplate">
+                <div class="v-center mx-1 my-1" *ngIf="videos.length > 1">
                     <i class="d-block i-icon act-videos mr-1"></i>
-                    + {{videos.length - 1}} Videos
+                    + {{videos.length}} Videos
                 </div>
-                <ng-template #normalVideoTemplate>
-                    <div class="v-center mx-1 my-1" *ngIf="videos.length">
-                        <i class="d-block i-icon act-videos mr-1"></i>
-                        + {{videos.length}} Videos
-                    </div>
-                </ng-template>
-                <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'pdf' && pdfs.length > 1; else normalPdfTemplate">
+                <div class="v-center mx-1 my-1" *ngIf="pdfs.length > 1">
                     <i class="d-block i-icon act-pdfs mr-1"></i>
-                    + {{pdfs.length - 1}} Pdfs
+                    + {{pdfs.length}} Pdfs
                 </div>
-                <ng-template #normalPdfTemplate>
-                    <div class="v-center mx-1 my-1" *ngIf="pdfs.length">
-                        <i class="d-block i-icon act-pdfs mr-1"></i>
-                        + {{pdfs.length}} Pdfs
-                    </div>
-                </ng-template>
-                <div class="v-center mx-1 my-1" *ngIf="firstMaterialType === 'image' && images.length > 1; else normalImageTemplate">
+                <div class="v-center mx-1 my-1" *ngIf="images.length > 1">
                     <i class="d-block i-icon act-images mr-1"></i>
-                    + {{images.length - 1}} Images
+                    + {{images.length}} Images
                 </div>
-                <ng-template #normalImageTemplate>
-                    <div class="v-center mx-1 my-1" *ngIf="images.length">
-                        <i class="d-block i-icon act-images mr-1"></i>
-                        + {{images.length}} Images
-                    </div>
-                </ng-template>
             </div>
         </div>
 
@@ -134,7 +116,7 @@
                                 </ng-container>
                             </div>
                         </div>
-                        <div ngbDropdown class="insert-template ml-2">
+                        <div ngbDropdown class="insert-template ml-2" *ngIf="(connectService.calendlyAll$ | async).length">
                             <div class="v-center no-carot c-pointer" ngbDropdownToggle>
                                 <i class="d-block i-icon i-calendly bgc-dark"></i>
                             </div>
