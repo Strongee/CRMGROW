@@ -61,6 +61,23 @@ export class MaterialsComponent implements OnInit {
     { id: 25, label: '25' },
     { id: 50, label: '50' }
   ];
+  themes = [
+    {
+      name: 'Theme 1',
+      thumbnail: environment.server + '/assets/images/theme/theme2.jpg',
+      id: 'theme2'
+    },
+    {
+      name: 'Simple Theme',
+      thumbnail: environment.server + '/assets/images/theme/theme4.jpg',
+      id: 'theme3'
+    },
+    {
+      name: 'Lead Theme',
+      thumbnail: environment.server + '/assets/images/theme/theme4.png',
+      id: 'theme4'
+    }
+  ];
   sortType = this.SORT_TYPES[0];
   ACTIONS = BulkActions.Materials;
   STATUS = STATUS;
@@ -208,9 +225,13 @@ export class MaterialsComponent implements OnInit {
                 this.garbage.material_themes &&
                 this.garbage.material_themes[material._id]
               ) {
-                material.theme = this.garbage.material_themes[material._id];
+                material.theme = this.themes.filter(
+                  (e) => e.id == this.garbage.material_themes[material._id]
+                )[0].name;
               } else {
-                material.theme = this.garbage.material_theme;
+                material.theme = this.themes.filter(
+                  (e) => e.id == this.garbage.material_theme
+                )[0].name;
               }
             }
             this.sort('owner', true);
@@ -1059,24 +1080,46 @@ export class MaterialsComponent implements OnInit {
         }
         break;
       case 'template':
-        this.dialog
-          .open(MaterialEditTemplateComponent, {
-            position: { top: '10vh' },
-            width: '100vw',
-            maxWidth: '600px',
-            disableClose: true,
-            data: {
-              type: 'all'
-            }
-          })
-          .afterClosed()
-          .subscribe((res) => {
-            if (res) {
-              this.filteredMaterials.forEach((material) => {
-                material.theme = res;
-              });
-            }
-          });
+        if (this.isAllSelected()) {
+          this.dialog
+            .open(MaterialEditTemplateComponent, {
+              position: { top: '10vh' },
+              width: '100vw',
+              maxWidth: '600px',
+              disableClose: true,
+              data: {
+                type: 'all'
+              }
+            })
+            .afterClosed()
+            .subscribe((res) => {
+              if (res) {
+                selectedMaterials.forEach((material) => {
+                  material.theme = res;
+                });
+              }
+            });
+        } else {
+          this.dialog
+            .open(MaterialEditTemplateComponent, {
+              position: { top: '10vh' },
+              width: '100vw',
+              maxWidth: '600px',
+              disableClose: true,
+              data: {
+                type: 'all',
+                materials: selectedMaterials
+              }
+            })
+            .afterClosed()
+            .subscribe((res) => {
+              if (res) {
+                selectedMaterials.forEach((material) => {
+                  material.theme = res;
+                });
+              }
+            });
+        }
         break;
     }
   }

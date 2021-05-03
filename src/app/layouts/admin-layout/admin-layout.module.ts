@@ -11,6 +11,7 @@ import { ComponentsModule } from '../../components/components.module';
 import { AdminLayoutRoutes } from './admin-layout.routing.module';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 import { HomeComponent } from '../../pages/home/home.component';
 import { TasksComponent } from 'src/app/pages/tasks/tasks.component';
@@ -132,6 +133,7 @@ import { TestComponent } from '../../pages/test/test.component';
     PdfViewerModule,
     OverlayModule,
     EmailEditorModule,
+    PickerModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 100,

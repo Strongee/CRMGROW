@@ -1,7 +1,9 @@
 <div class="page-content p-0">
     <div class="form-group mb-4">
         <h6 class="f-3 font-weight-bold mb-1">Delay time</h6>
-        <label class="f-1 mb-3">Delay time till when the dialog will be shown</label>
+        <label class="f-1 mb-3">
+            How much time do you want to pass before lead capture pops up?
+        </label>
         <select class="form-control c-blue f-5"
                 [(ngModel)]="garbage.capture_delay"
                 name="delay" id="delay"
@@ -15,7 +17,7 @@
     </div>
     <div class="form-group">
         <h6 class="f-3 font-weight-bold mb-1">Required fields</h6>
-        <label class="f-1 mb-3">Informations required from your visitors</label>
+        <label class="f-1 mb-3">Informations required from your visitor</label>
         <div class="v-center required-field mb-2" *ngFor="let field of defaultField">
             <div class="f-3 field-name">{{field.name}}</div>
             <div class="custom-control custom-checkbox">
@@ -67,17 +69,18 @@
         </div>
         <button class="v-center btn btn-blue f-3 font-weight-bold text-white mt-3 add-button" (click)="addField()">
             <i class="i-icon i-plus bg-white d-block mr-2"></i>
-            Add custom field
+            New custom field
         </button>
     </div>
     <div class="form-group m-0">
         <div class="f-3 font-weight-bold">Lead capture video</div>
         <div class="f-1 op-64 mt-2">
-            Now you can also add lead capture video for your contacts to see
+            Add a quick video to entice people to fill out their lead capture information.<br>
+            This will show above the lead capture fields.
         </div>
         <div class="v-center mt-3">
             <button class="btn border border-primary f-6 font-weight-bold c-blue btn-sm py-2" *ngIf="!garbage.intro_video" (click)="browseVideo()" [class.loading]="videoUploader.isUploading">
-                Upload video
+                Upload Video
             </button>
         </div>
         <div class="v-center" *ngIf="garbage.intro_video">

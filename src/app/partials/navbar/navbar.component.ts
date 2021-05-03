@@ -29,9 +29,9 @@ export class NavbarComponent implements OnInit {
       id: 'appointment'
     },
     { icon: 'i-template bg-white', label: 'New Note', id: 'note' },
-    { icon: 'i-message bg-white', label: 'Send Email', id: 'message' },
+    { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
     { icon: 'i-record bg-white', label: 'Record Video', id: 'record' },
-    { icon: 'i-upload bg-white', label: 'Upload Video', id: 'video' }
+    { icon: 'i-upload bg-white', label: 'Upload Material', id: 'video' }
   ];
 
   searchDataTypes: any[] = [
