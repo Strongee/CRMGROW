@@ -13,8 +13,11 @@
       <thead>
         <tr>
           <th class="team-name">Team Name</th>
-          <th class="team-members">Members</th>
-          <th class="team-materials">Materials</th>
+          <th class="team-members count-col">Members</th>
+          <th class="team-materials count-col">Materials</th>
+          <th class="team-contacts count-col">Contacts</th>
+          <th class="team-automations count-col">Automations</th>
+          <th class="team-templates count-col">Templates</th>
           <th class="team-owner">Owner</th>
           <th class="team-status">Role</th>
           <th class="team-actions"></th>
@@ -31,11 +34,20 @@
             <div class="invite-count ml-3 c-white f-1 font-weight-bold" *ngIf="team.requests.length && isEditableUser(team)">{{team.requests.length}} invite waiting</div>
           </a>
         </td>
-        <td class="team-members text-right">
+        <td class="team-members text-right count-col">
           <div class="f-6 font-weight-bold">{{team.owner.length + team.members.length}}</div>
         </td>
-        <td class="team-materials text-right">
+        <td class="team-materials text-right count-col">
           <div class="f-6 font-weight-bold">{{team.materialCount}}</div>
+        </td>
+        <td class="team-contacts text-right count-col">
+          <div class="f-6 font-weight-bold">{{team.contacts.length}}</div>
+        </td>
+        <td class="team-automations text-right count-col">
+          <div class="f-6 font-weight-bold">{{team.automations.length}}</div>
+        </td>
+        <td class="team-templates text-right count-col">
+          <div class="f-6 font-weight-bold">{{team.email_templates.length}}</div>
         </td>
         <td class="team-owner">
           <div class="v-center">
@@ -137,8 +149,11 @@
     <table class="table teams-table mt-3">
       <thead>
       <th class="team-name">Team Name</th>
-      <th class="team-members">Members</th>
-      <th class="team-materials">Materials</th>
+      <th class="team-members count-col">Members</th>
+      <th class="team-materials count-col">Materials</th>
+      <th class="team-contacts count-col">Contacts</th>
+      <th class="team-automations count-col">Automations</th>
+      <th class="team-templates count-col">Templates</th>
       <th class="team-owner">Owner</th>
       <th class="received_date">Invite Received</th>
       <th class="team-actions">Actions</th>
@@ -148,11 +163,20 @@
         <td class="team-name">
           <div class="f-6 font-weight-bold c-blue">{{team.name}}</div>
         </td>
-        <td class="team-members text-right">
+        <td class="team-members text-right count-col">
           <div class="f-6 font-weight-bold">{{team.owner.length + team.members.length}}</div>
         </td>
-        <td class="team-materials text-right">
+        <td class="team-materials text-right count-col">
           <div class="f-6 font-weight-bold">{{team.materialCount}}</div>
+        </td>
+        <td class="team-contacts text-right count-col">
+          <div class="f-6 font-weight-bold">{{team.contacts.length}}</div>
+        </td>
+        <td class="team-automations text-right count-col">
+          <div class="f-6 font-weight-bold">{{team.automations.length}}</div>
+        </td>
+        <td class="team-templates text-right count-col">
+          <div class="f-6 font-weight-bold">{{team.email_templates.length}}</div>
         </td>
         <td class="team-owner">
           <div class="v-center">

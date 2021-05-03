@@ -9,7 +9,7 @@ export class Deal implements Deserializable {
   contacts: Contact[];
   deal_stage: string;
   title: string;
-  value: number;
+  additional_field: any;
   created_at: Date;
   updated_at: Date;
 

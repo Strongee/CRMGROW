@@ -32,8 +32,7 @@
   margin-bottom: 50px;
 
   th, td {
-    &.team-members,
-    &.team-materials {
+    &.count-col {
       width: 90px;
       padding-right: 30px;
     }
@@ -91,6 +90,14 @@ tr:hover {
   }
 }
 
+@media screen and (max-width: 1024px) {
+  .teams-table {
+    .team-materials, .team-contacts, .team-automations, .team-templates {
+      display: none;
+    }
+  }
+}
+
 @media screen and (max-width: 576px) {
   .teams-table {
 
@@ -98,7 +105,7 @@ tr:hover {
       font-size: 14px;
     }
 
-    .team-owner, .team-members, .team-materials {
+    .team-owner, .team-members, .team-materials, .team-contacts, .team-automations, .team-templates {
       display: none;
     }
   }

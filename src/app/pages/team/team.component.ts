@@ -246,7 +246,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
           maxWidth: '940px',
           disableClose: true,
           data: {
-            title: 'Share material',
+            title: 'Share Material',
             buttonLabel: 'Share',
             multiple: true,
             onlyMine: true,
