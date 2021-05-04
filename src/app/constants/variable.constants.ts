@@ -189,6 +189,10 @@ export const COUNTRIES = [
   {
     code: 'UK',
     name: 'United Kingdom'
+  },
+  {
+    code: 'HK',
+    name: 'Hong Kong'
   }
 ];
 export const REGIONS = {
@@ -554,7 +558,8 @@ export const REGIONS = {
     'La Rioja'
   ],
   CH: [],
-  UK: ['England', 'Northern Ireland', 'Scotland', 'Wales']
+  UK: ['England', 'Northern Ireland', 'Scotland', 'Wales'],
+  HK: []
 };
 
 export const STAGES = [

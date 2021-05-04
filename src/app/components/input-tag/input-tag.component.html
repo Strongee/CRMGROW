@@ -8,7 +8,7 @@
         (removed)="remove(tag)">
         <div class="v-center chip p-1 rounded-pill mr-1">
           <div class="info c-dark font-weight-bold ml-1">
-            {{tag}}
+            {{ tag === -1 ? "No tags" : tag}}
           </div>
           <div class="close-icon-wrapper rounded-circle bg-white ml-1">
             <div class="i-icon i-close bgc-dark" matChipRemove></div>
@@ -36,7 +36,7 @@
         <div class="d-flex chip py-2" *ngIf="item._id">
           <div class="info">
             <div class="f-3" *ngIf="item.isNew">Create new tag:</div>
-            <div class="f-4 fw-600">{{item._id}}</div>
+            <div class="f-4 fw-600">{{item._id === -1 ? "No tags" : item._id}}</div>
           </div>
         </div>
       </mat-option>

@@ -1293,7 +1293,6 @@ export class UploadContactsComponent implements OnInit {
     this.uploadHeaders = headers;
     this.overallContacts = lines.length;
     this.isCompleteUpload = false;
-
     if (this.uploadLines.length) {
       let uploads;
       if (this.uploadLines.length >= this.UPLOAD_ONCE) {
