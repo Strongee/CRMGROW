@@ -25,6 +25,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
 import { ConnectService } from 'src/app/services/connect.service';
+import { UserService } from 'src/app/services/user.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -137,23 +138,15 @@ export class HtmlEditorComponent implements OnInit {
         record: () => {
           let popup;
           if (!popup || popup.closed) {
-            popup = window.open(this.recordUrl, 'new window');
+            popup = window.open(
+              this.recordUrl,
+              'record',
+              'width=530,height=305'
+            );
+            popup.token = this.authToken;
           }
           popup.focus();
           this.cdr.detectChanges();
-
-          // if (this.hasCamera) {
-          //   this.showCamera();
-          // } else {
-          //   this.dialog.open(NotifyComponent, {
-          //     position: { top: '100px' },
-          //     width: '100vw',
-          //     maxWidth: '400px',
-          //     data: {
-          //       message: 'Camera is not connected. Please connect the camera.'
-          //     }
-          //   });
-          // }
         }
       }
     },
@@ -179,6 +172,7 @@ export class HtmlEditorComponent implements OnInit {
   templatePortal: TemplatePortal;
 
   constructor(
+    private userService: UserService,
     private fileService: FileService,
     public templateService: TemplatesService,
     private handlerService: HandlerService,
@@ -191,6 +185,7 @@ export class HtmlEditorComponent implements OnInit {
     private appRef: ApplicationRef
   ) {
     this.templateService.loadAll(false);
+    this.authToken = this.userService.getToken();
   }
 
   ngOnInit(): void {}
