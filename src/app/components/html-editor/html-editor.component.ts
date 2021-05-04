@@ -136,16 +136,21 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          let popup;
+          let popup, option;
+          option =
+            'toolbar=no, location=no, directories=no, status=no, location=no';
+          option +=
+            ',menubar=no, scrollbars=no, resizable=no, titlebar=no, addressbar=no';
+          option += ',width=530, height=305';
           if (!popup || popup.closed) {
             popup = window.open(
-              this.recordUrl,
+              this.recordUrl + '?' + this.authToken,
               'record',
-              'width=530,height=305'
+              option
             );
-            popup.token = this.authToken;
+          } else {
+            popup.focus();
           }
-          popup.focus();
           this.cdr.detectChanges();
         }
       }
