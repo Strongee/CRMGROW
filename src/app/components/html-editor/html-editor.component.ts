@@ -25,6 +25,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
 import { ConnectService } from 'src/app/services/connect.service';
+import { UserService } from 'src/app/services/user.service';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -60,6 +61,7 @@ export class HtmlEditorComponent implements OnInit {
   public set hasCalendly(val: boolean) {
     if (val) {
       this.config.toolbar.container.push(['calendly']);
+      this.connectService.loadCalendlyAll(false);
     }
   }
   @Input()
@@ -96,7 +98,8 @@ export class HtmlEditorComponent implements OnInit {
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
   showTemplates: boolean = false;
   showCalendly: boolean = false;
-  showRecord: boolean = false;
+  authToken = '';
+  recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
   quillEditorRef;
   attachments = [];
   config = {
@@ -133,21 +136,18 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          this.showRecord = !this.showRecord;
+          let popup;
+          const option = 'width=530, height=305';
+          if (!popup || popup.closed) {
+            popup = window.open(
+              this.recordUrl + '?' + this.authToken,
+              '',
+              option
+            );
+          } else {
+            popup.focus();
+          }
           this.cdr.detectChanges();
-
-          // if (this.hasCamera) {
-          //   this.showCamera();
-          // } else {
-          //   this.dialog.open(NotifyComponent, {
-          //     position: { top: '100px' },
-          //     width: '100vw',
-          //     maxWidth: '400px',
-          //     data: {
-          //       message: 'Camera is not connected. Please connect the camera.'
-          //     }
-          //   });
-          // }
         }
       }
     },
@@ -173,6 +173,7 @@ export class HtmlEditorComponent implements OnInit {
   templatePortal: TemplatePortal;
 
   constructor(
+    private userService: UserService,
     private fileService: FileService,
     public templateService: TemplatesService,
     private handlerService: HandlerService,
@@ -185,7 +186,7 @@ export class HtmlEditorComponent implements OnInit {
     private appRef: ApplicationRef
   ) {
     this.templateService.loadAll(false);
-    this.connectService.loadCalendlyAll(false);
+    this.authToken = this.userService.getToken();
   }
 
   ngOnInit(): void {}

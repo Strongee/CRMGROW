@@ -83,12 +83,12 @@ export class TemplateComponent
       this.garbage = res;
       if (this.garbage?.calendly) {
         this.isCalendly = true;
+        this.connectService.loadCalendlyAll(false);
       } else {
         this.isCalendly = false;
       }
     });
     this.templatesService.loadAll(false);
-    this.connectService.loadCalendlyAll(false);
   }
 
   ngOnInit(): void {

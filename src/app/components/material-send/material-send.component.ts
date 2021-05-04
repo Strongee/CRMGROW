@@ -22,6 +22,8 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ConnectService } from 'src/app/services/connect.service';
+import { Garbage } from 'src/app/models/garbage.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-material-send',
@@ -41,6 +43,9 @@ export class MaterialSendComponent implements OnInit {
   textContent = '';
   sending = false;
   firstMaterialType = '';
+  isCalendly = false;
+  garbage: Garbage = new Garbage();
+  garbageSubscription: Subscription;
 
   @ViewChild('messageText') messageEl: ElementRef;
   overlayRef: OverlayRef;
@@ -63,7 +68,16 @@ export class MaterialSendComponent implements OnInit {
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.connectService.loadCalendlyAll(false);
+    this.garbageSubscription && this.garbageSubscription.unsubscribe();
+    this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
+      this.garbage = res;
+      if (this.garbage?.calendly) {
+        this.isCalendly = true;
+        this.connectService.loadCalendlyAll(false);
+      } else {
+        this.isCalendly = false;
+      }
+    });
   }
 
   ngOnInit(): void {

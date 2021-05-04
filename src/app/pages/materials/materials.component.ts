@@ -202,7 +202,6 @@ export class MaterialsComponent implements OnInit {
             this.filter();
           }
           if (this.filteredMaterials.length) {
-            console.log('###', this.filteredMaterials);
             for (const material of this.filteredMaterials) {
               if (material.user) {
                 if (material.user._id) {
