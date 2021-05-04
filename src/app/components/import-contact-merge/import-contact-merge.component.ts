@@ -78,7 +78,6 @@ export class ImportContactMergeComponent implements OnInit {
     source: 'source',
     brokerage: 'brokerage',
     tags: 'tags',
-    recruiting_stage: 'recruiting_stage',
     website: 'website',
     notes: 'notes'
   };
