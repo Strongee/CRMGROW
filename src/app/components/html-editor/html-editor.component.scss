@@ -79,6 +79,19 @@
   .ql-toolbar.ql-snow .ql-formats {
     margin-right: 0px;
   }
+  button.ql-link {
+    position: relative;
+    width: 24px;
+    mask-image: url(../../../assets/img/link.svg);
+    mask-position: center;
+    mask-size: 15px;
+    mask-repeat: no-repeat;
+    margin-left: 4px;
+    background-color: black;
+    svg {
+      display: none;
+    }
+  }
   button.ql-template{
     position: relative;
     width: 24px;
@@ -191,10 +204,41 @@
   }
 }
 
-.templates-action, .calendly-action, .record-action, .emoji-action {
+.link-container {
+  background: white;
+  border: 1px solid gainsboro;
+  padding: 0px 0px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 6px #bbb8;
+  width: 300px;
+  max-height: 250px;
+  overflow: auto;
+  label {
+    width: 90px;
+    margin: 0;
+  }
+  input {
+    width: calc(100% - 95px);
+    height: 26px;
+    font-size: 13px;
+    padding: 3px 5px;
+    border: 1px solid #ccc;
+    &:active, &:focus {
+      outline: none;
+      border-color: #0000FF;
+    }
+  }
+}
+
+.actions {
   position: absolute;
   top: 5px;
-  left: 185px;
   visibility: hidden;
   pointer-events: none;
+  &.templates-action, &.emoji-action, &.calendly-action {
+    left: 185px;
+  }
+  &.link-action {
+    left: 10px;
+  }
 }
