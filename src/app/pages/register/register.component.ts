@@ -106,6 +106,16 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.socialHandle();
+    this.route.queryParams.subscribe((params) => {
+      if (params) {
+        if (params.email) {
+          this.user.email = params.email;
+          this.step = 2;
+        }
+        if (params.membership) {
+        }
+      }
+    });
   }
 
   socialHandle(): void {

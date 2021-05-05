@@ -230,8 +230,42 @@ export class UploadContactsComponent implements OnInit {
       this.papa.parse(text, {
         skipEmptyLines: true,
         complete: (results, file) => {
+
           this.columns = results.data[0];
           this.lines = results.data.slice(1);
+
+          // remove blank header
+          const blankIndexes = [];
+          for (let i = 0; i < results.data[0].length; i++) {
+            if (results.data[0][i] === '') {
+              blankIndexes.push(i);
+            }
+          }
+
+          for (let i = blankIndexes.length - 1; i >= 0; i--) {
+            this.columns.splice(blankIndexes[i], 1);
+            for (const line of this.lines) {
+              line.splice(blankIndexes[i], 1);
+            }
+          }
+
+          const blankRows = [];
+          for (let i = 0; i < this.lines.length; i++) {
+            let isBlank = true;
+            for (const value of this.lines[i]) {
+              if (value !== '') {
+                isBlank = false;
+              }
+            }
+            if (isBlank) {
+              blankRows.push(i);
+            }
+          }
+
+          for (let i = blankRows.length - 1; i >= 0; i--) {
+            this.lines.splice(blankRows[i], 1);
+          }
+
           this.dataText = this.papa.unparse(this.lines);
 
           const sameColumns = {};
