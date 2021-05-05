@@ -40,6 +40,8 @@ import { User } from 'src/app/models/user.model';
 import { SendBulkTextComponent } from 'src/app/components/send-bulk-text/send-bulk-text.component';
 import { ToastrService } from 'ngx-toastr';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
+import { AdditionalFieldsComponent } from '../../components/additional-fields/additional-fields.component';
+import {AdditionalEditComponent} from "../../components/additional-edit/additional-edit.component";
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -118,6 +120,7 @@ export class DealsDetailComponent implements OnInit {
   taskSubscription: Subscription;
   dealSubscription: Subscription;
   teamsLoadSubscription: Subscription;
+  updateSubscription: Subscription;
 
   titleEditable = false;
   dealTitle = '';
@@ -644,11 +647,15 @@ export class DealsDetailComponent implements OnInit {
                   ...this.groupActions[e['group_id']]
                 ];
               } else {
-                this.sendActions[e['emails']] = this.groupActions[e['group_id']];
+                this.sendActions[e['emails']] = this.groupActions[
+                  e['group_id']
+                ];
               }
             } else {
               this.showingDetails.push(e);
-              this.sendActions[e['group_id']] = this.groupActions[e['group_id']];
+              this.sendActions[e['group_id']] = this.groupActions[
+                e['group_id']
+              ];
             }
           }
         } else if (e['data_type'] === dataType) {
@@ -992,7 +999,7 @@ export class DealsDetailComponent implements OnInit {
                 });
                 this.arrangeActivity();
               }
-           });
+            });
         }
       });
   }
@@ -1232,6 +1239,61 @@ export class DealsDetailComponent implements OnInit {
   }
 
   editAdditional($event): void {
+    if ($event) {
+      $event.stopPropagation();
+      $event.preventDefault();
+    }
+    this.dialog
+      .open(AdditionalEditComponent, {
+        width: '98vw',
+        maxWidth: '600px',
+        data: {
+          type: 'deal',
+          deal: {
+            ...this.deal.main
+          }
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.toast.success('Successfully updated additional information.');
+          this.deal.main.additional_field = {};
+          for (const field of res) {
+            this.deal.main.additional_field[field.name] = field.value;
+          }
+        }
+      });
+  }
 
+  addAdditionalFields(): void {
+    this.dialog
+      .open(AdditionalFieldsComponent, {
+        maxWidth: '480px',
+        width: '96vw',
+        disableClose: true,
+        data: {
+          additional_field: { ...this.deal.main.additional_field }
+        }
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        const init_additional_field = {
+          ...this.deal.main.additional_field
+        };
+
+        if (res) {
+          this.deal.main.additional_field = { ...res };
+          this.updateSubscription = this.dealsService
+            .editDeal(this.deal.main._id, this.deal.main)
+            .subscribe((deal) => {
+              if (deal) {
+                console.log('update deal ========>', deal);
+              }
+            });
+        } else {
+          this.deal.main.additional_field = {...init_additional_field};
+        }
+      });
   }
 }
