@@ -34,6 +34,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
   conversation: any;
   userId: string = '';
   messages: any[] = [];
+  set = 'twitter';
 
   loading = false;
   loadSubscription: Subscription;
@@ -282,6 +283,24 @@ export class SendTextComponent implements OnInit, OnDestroy {
         document.execCommand('insertText', false, '\n' + template.content);
       }
     }
+  }
+
+  insertTextContentValue(value: string): void {
+    const field = this.messageText.nativeElement;
+    field.focus();
+    let cursorStart = this.message.length;
+    let cursorEnd = this.message.length;
+    if (field.selectionStart || field.selectionStart === '0') {
+      cursorStart = field.selectionStart;
+    }
+    if (field.selectionEnd || field.selectionEnd === '0') {
+      cursorEnd = field.selectionEnd;
+    }
+    field.setSelectionRange(cursorStart, cursorEnd);
+    document.execCommand('insertText', false, value);
+    cursorStart += value.length;
+    cursorEnd = cursorStart;
+    field.setSelectionRange(cursorStart, cursorEnd);
   }
 
   keyTrigger(event): void {

@@ -61,6 +61,7 @@ export class InputTagComponent implements OnInit {
   filteredResults: ReplaySubject<Tag[]> = new ReplaySubject<Tag[]>(1);
 
   constructor(private tagService: TagService) {
+    this.tagService.getAllTags();
     this.tagService.tags$.subscribe((tags) => {
       this.filteredResults.next(tags);
     });
@@ -88,7 +89,9 @@ export class InputTagComponent implements OnInit {
             });
             const remained = _.difference(tags, this.selectedTags);
             const res = _.filter(remained, (e) => {
-              return searchReg(e._id, this.keyword);
+              if (e._id != -1) {
+                return searchReg(e._id, this.keyword);
+              }
             });
             this.searching = false;
             if (res.length) {

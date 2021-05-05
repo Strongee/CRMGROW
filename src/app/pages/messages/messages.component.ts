@@ -57,6 +57,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   newContacts = [];
   // Space Reg
   spaceReg = /(\r\n|\n|\r|\s)/g;
+  set = 'twitter';
 
   // UI Elements
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
@@ -104,6 +105,34 @@ export class MessagesComponent implements OnInit, OnDestroy {
                 lastest_message: messages[index].content,
                 lastest_at: messages[index].updated_at
               };
+              const currentMessageList = this.conversationDetails[
+                new Contact().deserialize(messages[index].contacts[0])._id
+              ];
+              if (
+                currentMessageList &&
+                currentMessageList.messages.slice(-1)[0].content !=
+                  messages[index].content
+              ) {
+                this.smsService
+                  .getMessage(
+                    new Contact().deserialize(messages[index].contacts[0])
+                  )
+                  .subscribe((res) => {
+                    if (res) {
+                      const message = {
+                        id: new Contact().deserialize(
+                          messages[index].contacts[0]
+                        )._id,
+                        messages: res
+                      };
+                      this.conversationDetails[
+                        new Contact().deserialize(
+                          messages[index].contacts[0]
+                        )._id
+                      ] = message;
+                    }
+                  });
+              }
             } else {
               contact_item = {
                 unread: false,
@@ -167,7 +196,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectNewContacts(event) {
+  selectNewContacts(event: any): void {
     this.newContacts = [event];
     if (this.newContacts.length === 1) {
       const firstNewContact = this.newContacts[0];
@@ -200,6 +229,24 @@ export class MessagesComponent implements OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  insertValue(value: string): void {
+    const field = this.messageText.nativeElement;
+    field.focus();
+    let cursorStart = this.message.length;
+    let cursorEnd = this.message.length;
+    if (field.selectionStart || field.selectionStart === '0') {
+      cursorStart = field.selectionStart;
+    }
+    if (field.selectionEnd || field.selectionEnd === '0') {
+      cursorEnd = field.selectionEnd;
+    }
+    field.setSelectionRange(cursorStart, cursorEnd);
+    document.execCommand('insertText', false, value);
+    cursorStart += value.length;
+    cursorEnd = cursorStart;
+    field.setSelectionRange(cursorStart, cursorEnd);
   }
 
   goToBack(): void {

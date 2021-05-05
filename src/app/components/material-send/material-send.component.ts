@@ -53,6 +53,7 @@ export class MaterialSendComponent implements OnInit {
   @ViewChild('createNewContent') createNewContent: TemplateRef<unknown>;
   templateSubject = '';
   templateValue = '';
+  set = 'twitter';
 
   constructor(
     private userService: UserService,

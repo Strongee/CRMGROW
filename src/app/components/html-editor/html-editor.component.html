@@ -1,5 +1,14 @@
 <div class="html-editor position-relative">
   <div class="position-relative">
+    <!-- <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOpen]="showLink"
+      (overlayOutsideClick)="closeLink($event)"
+    >
+    <emoji-mart class="emoji-mart" [set]="set" [darkMode]="false" (emojiSelect)="insertValue($event.emoji.native)" title="Pick your emoji…">
+    </emoji-mart>
+    </ng-template> -->
     <button
       class="templates-action"
       cdkOverlayOrigin
@@ -30,6 +39,22 @@
           </div>
         </ng-container>
       </div>
+    </ng-template>
+    <button
+      class="emoji-action"
+      cdkOverlayOrigin
+      #emojiOverlay="cdkOverlayOrigin"
+      (click)="showEmoji = true">
+      OPEN
+    </button>
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="emojiOverlay"
+      [cdkConnectedOverlayOpen]="showEmoji"
+      (overlayOutsideClick)="closeEmoji($event)"
+    >
+      <emoji-mart class="emoji-mart" [set]="set" [darkMode]="false" (emojiSelect)="insertValue($event.emoji.native)" title="Pick your emoji…">
+      </emoji-mart>
     </ng-template>
     <button
       class="calendly-action"
