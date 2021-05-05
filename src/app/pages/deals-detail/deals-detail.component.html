@@ -1,3 +1,4 @@
+<script src="deals-detail.component.ts"></script>
 <div class="page-content pt-0">
     <div class="d-flex deal-panel">
         <div class="deal-info-panel pr-3">
@@ -83,56 +84,35 @@
                 </div>
             </div>
             <mat-accordion multi class="general-panels">
-                <!-- Begin Deal Detail -->
-<!--                <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="dealPanel">-->
-<!--                    <mat-expansion-panel-header (click)="dealPanel = !dealPanel">-->
-<!--                        <mat-panel-title>-->
-<!--                            <div class="v-center w-100">-->
-<!--                                <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>-->
-<!--                                <span class="f-6 font-weight-bold ml-2">About this deal</span>-->
-<!--                                <button class="btn border-0 border-primary f-2 op-28 font-weight-bold c-dark ml-auto btn-sm v-center" (click)="editDeal()">-->
-<!--                                    <i class="i-icon i-edit d-block bgc-dark sm mr-1"></i>-->
-<!--                                    <span>Edit</span>-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                        </mat-panel-title>-->
-<!--                    </mat-expansion-panel-header>-->
-<!--                    <div class="deal-detail">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-sm-6">-->
-<!--                                <span class="f-6 fw-600 op-40">Value</span>-->
-<!--                            </div>-->
-<!--                            <div class="col-sm-6">-->
-<!--                                <span class="f-6">{{deal.main.value ? '$' + deal.main.value : ''}}</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="row mt-1">-->
-<!--                            <div class="col-sm-6">-->
-<!--                                <span class="f-6 fw-600 op-40">Stage</span>-->
-<!--                            </div>-->
-<!--                            <div class="col-sm-6">-->
-<!--                                <span class="f-6">{{selectedStage?.title}}</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </mat-expansion-panel>-->
-                <!-- End Deal Detail -->
-
-              <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="true">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <div class="v-center w-100">
-                      <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
-                      <span class="f-6 font-weight-bold ml-2">Additional information</span>
-                      <button class="btn border-0 border-primary f-2 font-weight-bold c-dark op-28 ml-auto btn-sm v-center" (click)="editAdditional($event)">
-                        <i class="i-icon i-edit d-block bgc-dark sm mr-1"></i>
-                        <span>Edit</span>
-                      </button>
+              <!-- Begin Additional Field -->
+              <ng-container *ngIf="deal.main && deal.main.additional_field">
+                <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <div class="v-center w-100">
+                        <i class="i-icon i-triangle-right bgc-dark sm toggle-icon op-40"></i>
+                        <span class="f-6 font-weight-bold ml-2">Additional information</span>
+                        <button class="btn border-0 border-primary f-2 font-weight-bold c-dark op-28 ml-auto btn-sm v-center" (click)="editAdditional($event)">
+                          <i class="i-icon i-edit d-block bgc-dark sm mr-1"></i>
+                          <span>Edit</span>
+                        </button>
+                      </div>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <ng-container *ngFor="let item of deal.main.additional_field | keyvalue">
+                    <div class="d-flex py-2">
+                      <span class="f-6 fw-600 op-40 info-title">{{item.key}}</span>
+                      <span class="f-6">{{item.value}}</span>
                     </div>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-
-              </mat-expansion-panel>
+                  </ng-container>
+                </mat-expansion-panel>
+              </ng-container>
+              <div class="mt-3">
+                <a class="f-3 c-blue font-weight-bold td-none c-pointer" (click)="addAdditionalFields()">
+                  New Field
+                </a>
+              </div>
+              <!-- End Additional Field -->
 
                 <!-- Begin Contacts Detail -->
                 <mat-expansion-panel class="mat-elevation-z" hideToggle [expanded]="contactsPanel">
