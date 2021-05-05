@@ -23,7 +23,7 @@
          placement="bottom-right">
       <div class="v-center c-pointer f-3 p-3 mr-2 font-weight-bold"
            ngbDropdownToggle>
-        <span class="pr-2">Sort by</span>
+        <span class="pr-2">{{sortType.label == 'Alphabetical A-Z' ? 'Sort by' : sortType.label}}</span>
       </div>
       <div ngbDropdownMenu
            aria-labelledby="taskSortTypes">
