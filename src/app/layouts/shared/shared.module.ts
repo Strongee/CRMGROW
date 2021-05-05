@@ -54,6 +54,7 @@ import { TimezonePipe } from '../../pipes/timezone.pipe';
 import { PhoneInputComponent } from '../../components/phone-input/phone-input.component';
 import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
     MatProgressBarModule,
     NgxMaskModule.forRoot(),
     ShareButtonsModule,
-    ShareIconsModule
+    ShareIconsModule,
+    PickerModule
   ],
   exports: [
     FormsModule,
@@ -160,7 +162,8 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
     NgxMaskModule,
     PhoneInputComponent,
     ShareButtonsModule,
-    ShareIconsModule
+    ShareIconsModule,
+    PickerModule
   ]
 })
 export class SharedModule {}

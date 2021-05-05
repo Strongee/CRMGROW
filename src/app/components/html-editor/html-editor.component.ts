@@ -58,6 +58,12 @@ export class HtmlEditorComponent implements OnInit {
     }
   }
   @Input()
+  public set hasEmoji(val: boolean) {
+    if (val) {
+      this.config.toolbar.container.push(['emoji']);
+    }
+  }
+  @Input()
   public set hasCalendly(val: boolean) {
     if (val) {
       this.config.toolbar.container.push(['calendly']);
@@ -98,6 +104,9 @@ export class HtmlEditorComponent implements OnInit {
   @ViewChild('emailEditor') emailEditor: QuillEditorComponent;
   showTemplates: boolean = false;
   showCalendly: boolean = false;
+  showEmoji: boolean = false;
+  showLink: boolean = false;
+  set = 'twitter';
   authToken = '';
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
   quillEditorRef;
@@ -127,8 +136,16 @@ export class HtmlEditorComponent implements OnInit {
             });
           });
         },
+        link: () => {
+          this.showLink = !this.showLink;
+          this.cdr.detectChanges();
+        },
         template: () => {
           this.showTemplates = !this.showTemplates;
+          this.cdr.detectChanges();
+        },
+        emoji: () => {
+          this.showEmoji = !this.showEmoji;
           this.cdr.detectChanges();
         },
         calendly: () => {
@@ -432,6 +449,22 @@ export class HtmlEditorComponent implements OnInit {
       return;
     }
     this.showCalendly = false;
+  }
+
+  closeEmoji(event: MouseEvent): void {
+    const target = <HTMLElement>event.target;
+    if (target.classList.contains('ql-emoji')) {
+      return;
+    }
+    this.showEmoji = false;
+  }
+
+  closeLink(event: MouseEvent): void {
+    const target = <HTMLElement>event.target;
+    if (target.classList.contains('ql-link')) {
+      return;
+    }
+    this.showLink = false;
   }
 
   selectTemplate(template: Template): void {

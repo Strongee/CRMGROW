@@ -80,6 +80,7 @@
             <app-html-editor
               [(value)]="template.content"
               placeholder="Enter email content..."
+              [hasEmoji]="true"
               [hasCalendly]="isCalendly"
               [hasToken]="true"
               required="true"
@@ -117,6 +118,15 @@
                     </ng-container>
                   </div>
                 </div>
+                <div ngbDropdown class="insert-template ml-2">
+                  <div class="v-center no-carot c-pointer" ngbDropdownToggle>
+                    <img class="emoji-icon" src="../../../assets/img/emoji.png">
+                  </div>
+                  <div ngbDropdownMenu class="light py-1">
+                    <emoji-mart class="emoji-mart" [set]="set" [darkMode]="false" (emojiSelect)="insertValue($event.emoji.native)" title="Pick your emoji…">
+                    </emoji-mart>
+                  </div>
+                </div>
                 <div ngbDropdown class="insert-template ml-2" *ngIf="(connectService.calendlyAll$ | async).length">
                   <div class="v-center no-carot c-pointer" ngbDropdownToggle>
                     <i class="d-block i-icon i-calendly bgc-dark"></i>
@@ -132,15 +142,6 @@
                         </div>
                       </div>
                     </ng-container>
-                  </div>
-                </div>
-                <div ngbDropdown class="insert-template ml-2">
-                  <div class="v-center no-carot c-pointer" ngbDropdownToggle>
-                    😀
-                  </div>
-                  <div ngbDropdownMenu class="light py-1">
-                    <emoji-mart class="emoji-mart" [set]="set" [darkMode]="false" (emojiSelect)="insertValue($event.emoji.native)" title="Pick your emoji…">
-                    </emoji-mart>
                   </div>
                 </div>
                 <div ngbDropdown class="insert-token bottom-right ml-auto">

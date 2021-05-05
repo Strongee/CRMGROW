@@ -427,7 +427,7 @@ export function convertTimetoObj(dateTime: string, timezone: any): any {
   }
 }
 
-export function searchReg(content, target): boolean {
+export function searchReg(content: string, target: string): boolean {
   const words = _.uniqBy(
     target.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
     (e) => e.toLowerCase()

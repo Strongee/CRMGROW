@@ -88,11 +88,16 @@
     mask-repeat: no-repeat;
     margin-left: 4px;
     background-color: black;
-    &:hover::after {
-      content: 'Template';
-      position: absolute;
-      top: 10px;
-    }
+  }
+  button.ql-emoji {
+    position: relative;
+    width: 24px;
+    background-image: url(../../../assets/img/emoji.png);
+    background-position: center;
+    background-size: 24px;
+    background-repeat: no-repeat;
+    margin-left: 4px;
+    padding: 0;
   }
   button.ql-calendly {
     position: relative;
@@ -186,7 +191,7 @@
   }
 }
 
-.templates-action, .calendly-action, .record-action {
+.templates-action, .calendly-action, .record-action, .emoji-action {
   position: absolute;
   top: 5px;
   left: 185px;

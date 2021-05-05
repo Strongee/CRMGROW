@@ -205,7 +205,7 @@
                 <div class="v-center justify-content-between button-groups">
                     <div class="v-center insert-button">
                         <button type="button" class="btn border-primary material-button py-2 mr-2" (click)="openMaterialsDlg()">
-                            <div class="for-desktop v-center f-3 font-weight-bold c-blue px-3">
+                            <div class="for-desktop v-center f-3 font-weight-bold c-blue">
                                 <i class="d-block i-icon i-material bgc-blue"></i>
                                 <span class="font-weight-bold c-blue ml-1 mr-3">Material</span>
                                 <i class="d-block i-icon i-plus bgc-blue ml-auto"></i>
@@ -215,29 +215,45 @@
                                 <i class="d-block i-icon i-material bgc-blue"></i>
                             </div>
                         </button>
-                        <div ngbDropdown class="px-3 py-2 border-primary select-template">
+                        <div ngbDropdown class="px-1 py-2 select-template mr-2">
                             <div ngbDropdownToggle class="f-3 font-weight-bold c-blue c-pointer template-button">
-                                <div class="for-desktop v-center">
-                                    <span>Insert template</span>
-                                    <i class="d-block i-icon i-triangle-down bgc-blue ml-2"></i>
-                                </div>
-                                <div class="for-mobile">
-                                    <i class="d-block i-icon i-texts bgc-blue"></i>
-                                </div>
+                                <i class="d-block i-icon i-sms-sent bgc-dark"></i>
                             </div>
                             <div ngbDropdownMenu class="light">
                                 <ng-container *ngFor="let template of (templateService.templates$ | async)">
-                                    <div class="dropdown-item template" *ngIf="template.type === 'text'" (click)="selectTemplate(template)">
-                                      <div class="v-center">
-                                        <div class="f-3 font-weight-bold">{{template.title}}</div>
-                                        <div class="c-badge rect ml-auto text-uppercase" [class]="template.role || 'own'">{{template.role || 'own'}}</div>
-                                      </div>
-                                      <div class="f-2 font-weight-bold">{{template.subject}}</div>
-                                      <div class="f-1">{{template.content | stripTags | shorten: 40: '...'}}</div>
+                                    <div class="dropdown-item px-2 border-top template" *ngIf="template.type === 'text'">
+                                        <div class="v-center h-100">
+                                            <div class="f-3 font-weight-bold flex-grow-1 mr-1 h-100 v-center" (click)="selectTemplate(template)">{{(template.title || '') | shorten: 45: '...'}}</div>
+                                            <a class="ml-auto" [routerLink]="['/templates/edit/' + template._id]" target="_blank">
+                                                <i class="d-block i-icon i-expand bgc-dark sm"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </ng-container>
                             </div>
                         </div>
+                        <div ngbDropdown class="py-2 select-template mr-2">
+                            <div class="v-center no-carot c-pointer" ngbDropdownToggle>
+                              <img class="emoji-icon" src="../../../assets/img/emoji.png">
+                            </div>
+                            <div ngbDropdownMenu class="light py-1">
+                              <emoji-mart class="emoji-mart" [set]="set" [darkMode]="false" (emojiSelect)="insertValue($event.emoji.native)" title="Pick your emoji…">
+                              </emoji-mart>
+                            </div>
+                        </div>
+                        <div ngbDropdown class="px-1 py-2 select-template">
+                            <div class="v-center no-carot c-pointer" ngbDropdownToggle>
+                              <span class="f-1 font-weight-bold mr-1">Token</span>
+                              <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+                              <i class="d-block i-icon i-triangle-up bgc-dark"></i>
+                            </div>
+                            <div ngbDropdownMenu class="light py-1">
+                              <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertValue('{contact_first_name}')">Contact Firstname</div>
+                              <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertValue('{user_name}')">Your name</div>
+                              <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertValue('{user_email}')">Your email</div>
+                              <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertValue('{user_phone}')">Your phone</div>
+                            </div>
+                         </div>
                     </div>
                     <button class="btn btn-blue f-6 font-weight-bold send-button for-desktop" [class.loading]="isSend" (click)="sendMessage()">
                         Send

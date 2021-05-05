@@ -85,6 +85,9 @@
                 height: 48px;
             }
         }
+        .emoji-icon {
+            width: 24px;
+        }
     }
 
     .insert-token {
@@ -111,11 +114,11 @@
         }
         .menu-item:hover {
             background-color: gainsboro;
-          }
-          .menu-item:active {
+        }
+        .menu-item:active {
             background-color: blue;
             color: white;
-          }
+        }
     }
 }
 
