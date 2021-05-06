@@ -396,19 +396,15 @@
             </ng-container>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openNoteDlg()" *ngIf="tab.id === 'note' || (tab.id !== 'all' && activityType.id === 'note')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Note</span>
-              <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendEmail()" *ngIf="tab.id === 'email' || (tab.id === 'all' && activityType.id === 'email')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Email</span>
-              <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'text' || (tab.id === 'all' && activityType.id === 'text')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
-              <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openAppointmentDlg()" *ngIf="tab.id === 'appointment' || (tab.id === 'all' && activityType.id === 'appointment')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
-              <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
 <!--            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'group_call' || (tab.id === 'all' && activityType.id === 'group_call')">-->
 <!--              <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>-->
@@ -416,11 +412,9 @@
 <!--            </div>-->
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openTaskDlg()" *ngIf="tab.id === 'follow_up' || (tab.id === 'all' && activityType.id === 'follow_up')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Task</span>
-              <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openDealDlg()" *ngIf="tab.id === 'deal' || (tab.id === 'all' && activityType.id === 'deal')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Deal</span>
-              <i class="d-block i-icon i-plus bgc-blue"></i>
             </div>
           </div>
           <ng-container *ngIf="tab.id === 'all'; else detailsTemplate">
