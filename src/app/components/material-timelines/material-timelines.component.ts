@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { Material } from 'src/app/models/material.model';
+import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-material-timelines',
@@ -24,8 +26,12 @@ export class MaterialTimelinesComponent implements OnInit {
   user_id: string = '';
   main: DetailActivity;
   _timelines: DetailActivity[] = [];
+  SITE = environment.website;
 
-  constructor() {}
+  constructor(private userService: UserService) {
+    const profile = this.userService.profile.getValue();
+    this.user_id = profile._id;
+  }
 
   ngOnInit(): void {}
 

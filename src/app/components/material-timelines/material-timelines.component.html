@@ -7,13 +7,13 @@
 <ng-template #template>
   <div class="material d-flex">
     <ng-container [ngSwitch]="type">
-      <a *ngSwitchCase="'videos'" class="material-thumbnail" href="{{SITE}}/video?video={{material._id}}&user={{userId}}" target="_blank">
+      <a *ngSwitchCase="'videos'" class="material-thumbnail" href="{{SITE}}/video?video={{material._id}}&user={{user_id}}" target="_blank">
         <img src="{{material.preview}}"/>
       </a>
-      <a *ngSwitchCase="'pdfs'" class="material-thumbnail" href="{{SITE}}/pdf?pdf={{material._id}}&user={{userId}}" target="_blank">
+      <a *ngSwitchCase="'pdfs'" class="material-thumbnail" href="{{SITE}}/pdf?pdf={{material._id}}&user={{user_id}}" target="_blank">
         <img src="{{material.preview}}"/>
       </a>
-      <a *ngSwitchCase="'images'" class="material-thumbnail" href="{{SITE}}/image?image={{material._id}}&user={{userId}}" target="_blank">
+      <a *ngSwitchCase="'images'" class="material-thumbnail" href="{{SITE}}/image?image={{material._id}}&user={{user_id}}" target="_blank">
         <img src="{{material.preview}}"/>
       </a>
     </ng-container>

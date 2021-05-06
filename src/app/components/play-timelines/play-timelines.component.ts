@@ -20,7 +20,7 @@ export class PlayTimelinesComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     const duration = Math.ceil(this.duration / 1000);
     const watched = Math.ceil(this.data.duration / 1000);
-    this.completion = parseFloat(((watched / duration) * 100).toFixed(2));
+    this.completion = parseFloat(((watched / duration) * 100).toFixed(0));
     if (watched / duration > 0.98) {
       this.gaps = [[0, duration]];
       this.start = 0;
