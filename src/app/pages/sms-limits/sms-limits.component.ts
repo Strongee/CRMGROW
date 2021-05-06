@@ -24,10 +24,16 @@ export class SmsLimitsComponent implements OnInit {
       (profile) => {
         if (profile) {
           this.user = profile;
-          this.leftSms =
-            this.user?.text_info?.max_count -
-            this.user?.text_info?.count +
-            this.user?.text_info?.additional_credit?.amount;
+          console.log('###', this.user);
+          if (this.user?.text_info.is_limit) {
+            this.leftSms =
+              this.user?.text_info?.max_count -
+              this.user?.text_info?.count +
+              this.user?.text_info?.additional_credit?.amount;
+          } else {
+            this.leftSms = 0;
+          }
+
           if (this.user.proxy_number != '') {
             this.smsType = 'signal';
           } else if (this.user.twilio_number != '') {

@@ -1,21 +1,38 @@
 <div class="html-editor position-relative">
   <div class="position-relative">
-    <!-- <ng-template
+    <button
+      class="link-action actions"
+      cdkOverlayOrigin
+      #linkOverlay="cdkOverlayOrigin"
+      (click)="showLink = true">
+      OPEN
+    </button>
+    <ng-template
       cdkConnectedOverlay
-      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOrigin]="linkOverlay"
       [cdkConnectedOverlayOpen]="showLink"
       (overlayOutsideClick)="closeLink($event)"
     >
-    <emoji-mart class="emoji-mart" [set]="set" [darkMode]="false" (emojiSelect)="insertValue($event.emoji.native)" title="Pick your emoji…">
-    </emoji-mart>
-    </ng-template> -->
+      <div class="link-container p-2">
+        <p class="f-6 c-dark m-0">Edit link</p>
+        <div class="v-center mt-2">
+          <label class="f-3 mr-2">Text to display:</label>
+          <input type="text" [(ngModel)]="displayText">
+        </div>
+        <div class="v-center mt-2">
+          <label class="f-3 mr-2">Link to:</label>
+          <input type="text" [(ngModel)]="displayLink">
+        </div>
+        <div class="v-center justify-content-end mt-2">
+          <button class="btn btn-primary f-3 font-weight-bold" [disabled]="displayLink == ''" (click)="insertLink()">Save</button>
+        </div>
+      </div>
+    </ng-template>
     <button
-      class="templates-action"
+      class="templates-action actions"
       cdkOverlayOrigin
       #trigger="cdkOverlayOrigin"
-      (click)="showTemplates = true"
-      placement="bottom"
-      ngbTooltip="Template">
+      (click)="showTemplates = true">
       OPEN
     </button>
     <ng-template
@@ -41,7 +58,7 @@
       </div>
     </ng-template>
     <button
-      class="emoji-action"
+      class="emoji-action actions"
       cdkOverlayOrigin
       #emojiOverlay="cdkOverlayOrigin"
       (click)="showEmoji = true">
@@ -57,7 +74,7 @@
       </emoji-mart>
     </ng-template>
     <button
-      class="calendly-action"
+      class="calendly-action actions"
       cdkOverlayOrigin
       #calendlyOverlay="cdkOverlayOrigin"
       (click)="showCalendly = true">
@@ -83,7 +100,7 @@
       </div>
     </ng-template>
     <button
-      class="record-action"
+      class="record-action actions"
       cdkOverlayOrigin
       #recordOverlay="cdkOverlayOrigin"
     >

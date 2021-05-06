@@ -106,6 +106,8 @@ export class HtmlEditorComponent implements OnInit {
   showCalendly: boolean = false;
   showEmoji: boolean = false;
   showLink: boolean = false;
+  displayText = '';
+  displayLink = '';
   set = 'twitter';
   authToken = '';
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
@@ -137,6 +139,17 @@ export class HtmlEditorComponent implements OnInit {
           });
         },
         link: () => {
+          if (this.emailEditor.quillEditor.getSelection().length !== 0) {
+            const range = this.emailEditor.quillEditor.getSelection();
+            const delta = this.emailEditor.quillEditor.getContents(
+              range.index,
+              range.length
+            );
+            this.displayText = delta.ops[0].insert;
+          } else {
+            this.displayText = '';
+          }
+          this.displayLink = '';
           this.showLink = !this.showLink;
           this.cdr.detectChanges();
         },
@@ -227,6 +240,17 @@ export class HtmlEditorComponent implements OnInit {
       this.emailEditor.quillEditor.setSelection(length, 0, 'user');
       // this.emailEditor.quillEditor.setContents(delta, 'user');
     }
+  }
+
+  insertLink(): void {
+    let url;
+    if (this.displayText != '') {
+      url = `<a href="${this.displayLink}" target="_blank">${this.displayText}</a>`;
+    } else {
+      url = `<a href="${this.displayLink}" target="_blank">${this.displayLink}</a>`;
+    }
+    this.insertValue(url);
+    this.showLink = false;
   }
 
   setValue(value: string): void {
