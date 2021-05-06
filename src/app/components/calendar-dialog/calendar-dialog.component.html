@@ -91,21 +91,32 @@
           <div class="v-center">
             <label class="calendar-label mb-0">ASSIGN GUESTS</label>
           </div>
-          <app-input-contacts [selectedContacts]="contacts" [keepContacts]="keepContacts">
+          <app-input-contacts
+            [selectedContacts]="contacts"
+            [keepContacts]="keepContacts"
+            *ngIf="!isDeal"
+          >
           </app-input-contacts>
+          <app-input-contact-deal
+            [selectedContacts]="contacts"
+            [onlyFromSearch]="true"
+            [onlySubscriber]="true"
+            class="w-100"
+            *ngIf="isDeal"
+          ></app-input-contact-deal>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-12 col-sm-4 form-group">
+      <!-- <div class="col-12 col-sm-4 form-group">
         <label class="calendar-label  d-block mb-0">video conference</label>
         <div class="form-group mb-0">
           <button class="btn btn-blue text-white f-6 font-weight-bold w-100" type="button">
             Add Zoom Link
           </button>
         </div>
-      </div>
-      <div class="col-12 col-sm-8 form-group">
+      </div> -->
+      <div class="col-12 col-sm-12 form-group">
         <label class="calendar-label d-block mb-0">location</label>
         <div class="form-group mb-0">
           <input

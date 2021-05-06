@@ -7,32 +7,52 @@
   </button>
 </div>
 <div class="text-panel">
-  <div class="contact-info py-2 px-3">
-    <div class="contact v-center c-pointer" *ngFor="let contact of contacts">
-      <div class="avatar bgc-dark text-white text-center mr-2">
-        {{contact.avatarName}}
-      </div>
-      <div class="info">
-        <span class="f-3 font-weight-bold" title="{{contact.fullName}}">{{(contact.fullName || '') | shorten: 20: '...'}}</span>
-        <div class="c-blue font-weight-bold f-3">{{contact.cell_phone}}</div>
-      </div>
-    </div>
+  <div class="contact-info py-2 px-2">
+    <app-input-contact-deal
+      [selectedContacts]="contacts"
+      [onlyFromSearch]="true"
+      [onlySubscriber]="true"
+      class="w-100"
+    ></app-input-contact-deal>
   </div>
-  <div class="template-info px-3 py-2 border-top border-bottom">
+  <div class="v-center template-info px-3 py-2 border-top border-bottom">
     <div ngbDropdown class="insert-token">
       <div class="v-center no-carot c-pointer" ngbDropdownToggle style="width: fit-content;">
-        <span class="f-2 font-weight-bold mr-2 c-blue">Insert template</span>
-        <i class="d-block i-icon i-triangle-down bgc-blue sm"></i>
+        <i class="d-block i-icon i-sms-sent bgc-dark"></i>
       </div>
       <div ngbDropdownMenu class="light p-2 templates">
         <ng-container *ngFor="let template of (templateService.templates$ | async)">
-          <div class="template" *ngIf="template.type !== 'email'" (click)="selectTemplate(template)">
+          <div class="template dropdown-item" *ngIf="template.type !== 'email'">
             <div class="v-center">
-              <div class="f-3 font-weight-bold">{{template.title}}</div>
-              <div class="c-badge rect ml-auto text-uppercase" [class]="template.role || 'own'">{{template.role || 'own'}}</div>
+              <div class="f-3 font-weight-bold w-100" (click)="selectTemplate(template)">{{template.title}}</div>
+              <a class="ml-auto" [routerLink]="['/templates/edit/' + template._id]" target="blank">
+                <i class="d-block i-icon i-expand bgc-dark"></i>
+              </a>
             </div>
           </div>
         </ng-container>
+      </div>
+    </div>
+    <div ngbDropdown class="insert-token ml-2">
+      <div class="v-center no-carot c-pointer" ngbDropdownToggle style="width: fit-content;">
+        <img class="emoji-icon" src="../../../assets/img/emoji.png">
+      </div>
+      <div ngbDropdownMenu class="light templates">
+        <emoji-mart class="emoji-mart" [set]="set" [darkMode]="false" (emojiSelect)="insertTextContentValue($event.emoji.native)" title="Pick your emoji…">
+        </emoji-mart>
+      </div>
+    </div>
+    <div ngbDropdown class="insert-token ml-auto">
+      <div class="v-center no-carot c-pointer" ngbDropdownToggle>
+        <span class="f-1 font-weight-bold mr-1">Token</span>
+        <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+        <i class="d-block i-icon i-triangle-up bgc-dark"></i>
+      </div>
+      <div ngbDropdownMenu class="light py-1">
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{contact_first_name}')">Contact Firstname</div>
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{user_name}')">Your name</div>
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{user_email}')">Your email</div>
+          <div class="f-2 py-1 px-2 c-pointer menu-item" (click)="insertTextContentValue('{user_phone}')">Your phone</div>
       </div>
     </div>
   </div>
@@ -43,8 +63,9 @@
           cdkTextareaAutosize
           [(ngModel)]="message"
           cdkAutosizeMinRows="1"
-          cdkAutosizeMaxRows="8"
+          cdkAutosizeMaxRows="3"
           (keydown)="keyTrigger($event)"
+          #messageText
       ></textarea>
     </mat-form-field>
   </div>

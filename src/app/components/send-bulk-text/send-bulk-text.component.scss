@@ -15,7 +15,6 @@
     display: flex;
     flex-wrap: wrap;
     max-height: 100px;
-    overflow: auto;
 
     .contact {
       margin-right: 6px;
@@ -28,9 +27,37 @@
   }
 
   .template-info {
-    .i-triangle-down {
-      width: 10px;
-      min-width: 10px;
+    .emoji-icon {
+      width: 24px;
+    }
+    .insert-token {
+      .dropdown-toggle {
+        .i-triangle-up {
+          display: none !important;
+        }
+        .i-triangle-down, .i-triangle-up {
+          width: 8px;
+          height: 8px;
+          min-width: 8px;
+        }
+      }
+      &.show {
+        .dropdown-toggle {
+          .i-triangle-down {
+            display: none !important;
+          }
+          .i-triangle-up {
+            display: block !important;
+          }
+        }
+      }
+      .menu-item:hover {
+        background-color: gainsboro;
+      }
+      .menu-item:active {
+        background-color: blue;
+        color: white;
+      }
     }
 
     .templates {
@@ -103,5 +130,12 @@
       line-height: 1.5;
       max-height: 300px!important;
     }
+  }
+}
+
+:host ::ng-deep {
+  .contact-info {
+    .custom-mat-field .mat-form-field-appearance-outline .mat-form-field-outline:not(.mat-form-field-outline-thick) {display: none}
+    .custom-mat-field .mat-form-field-appearance-outline .mat-form-field-infix {padding: 0px!important;}
   }
 }
