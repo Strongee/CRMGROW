@@ -1,5 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { Template } from 'src/app/models/template.model';
@@ -19,9 +29,11 @@ export class SendBulkTextComponent implements OnInit {
   contacts: Contact[] = [];
   message: string = '';
   userId: string = '';
+  set = 'twitter';
 
   sending = false;
   sendSubscription: Subscription;
+  @ViewChild('messageText') messageText: ElementRef;
 
   constructor(
     private dialogRef: MatDialogRef<SendBulkTextComponent>,
@@ -195,7 +207,26 @@ export class SendBulkTextComponent implements OnInit {
   }
 
   selectTemplate(template: Template): void {
-    this.message = template.content;
+    this.messageText.nativeElement.focus();
+    const field = this.messageText.nativeElement;
+    if (!this.message.replace(/(\r\n|\n|\r|\s)/gm, '')) {
+      field.select();
+      document.execCommand('insertText', false, template.content);
+      return;
+    }
+    if (field.selectionEnd || field.selectionEnd === 0) {
+      if (this.message[field.selectionEnd - 1] === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    } else {
+      if (this.message.slice(-1) === '\n') {
+        document.execCommand('insertText', false, template.content);
+      } else {
+        document.execCommand('insertText', false, '\n' + template.content);
+      }
+    }
   }
 
   keyTrigger(event): void {
@@ -208,5 +239,23 @@ export class SendBulkTextComponent implements OnInit {
         this.send();
       }
     }
+  }
+
+  insertTextContentValue(value: string): void {
+    const field = this.messageText.nativeElement;
+    field.focus();
+    let cursorStart = this.message.length;
+    let cursorEnd = this.message.length;
+    if (field.selectionStart || field.selectionStart === '0') {
+      cursorStart = field.selectionStart;
+    }
+    if (field.selectionEnd || field.selectionEnd === '0') {
+      cursorEnd = field.selectionEnd;
+    }
+    field.setSelectionRange(cursorStart, cursorEnd);
+    document.execCommand('insertText', false, value);
+    cursorStart += value.length;
+    cursorEnd = cursorStart;
+    field.setSelectionRange(cursorStart, cursorEnd);
   }
 }

@@ -439,6 +439,7 @@ export class DealsDetailComponent implements OnInit {
       );
       return;
     }
+    console.log('###', contacts);
     this.dialog
       .open(SendBulkTextComponent, {
         position: {

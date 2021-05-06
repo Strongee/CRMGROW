@@ -154,6 +154,7 @@ import { MaterialTimelinesComponent } from './material-timelines/material-timeli
 import { EmailTimelinesComponent } from './email-timelines/email-timelines.component';
 import { TextTimelinesComponent } from './text-timelines/text-timelines.component';
 import { PlayTimelinesComponent } from './play-timelines/play-timelines.component';
+import { InputContactDealComponent } from './input-contact-deal/input-contact-deal.component';
 
 @NgModule({
   declarations: [
@@ -306,7 +307,8 @@ import { PlayTimelinesComponent } from './play-timelines/play-timelines.componen
     MaterialTimelinesComponent,
     EmailTimelinesComponent,
     TextTimelinesComponent,
-    PlayTimelinesComponent
+    PlayTimelinesComponent,
+    InputContactDealComponent
   ],
   imports: [
     CommonModule,

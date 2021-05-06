@@ -11,7 +11,7 @@
       <div class="email-box">
         <div class="receiver pl-3 pr-2 py-1 contacts-wrapper address-wrapper">
           <div class="overflow-visible">
-            <div class="d-flex w-100" (click)="setFocus()">
+            <div class="d-flex w-100" (click)="setFocus()" >
               <label class="f-6 op-56 m-0">To:</label>
               <app-input-contact-chip
                 [selectedContacts]="emailContacts"
@@ -22,7 +22,15 @@
                 (onFocus)="setFocus()"
                 [focus]="isFocus()"
                 class="w-100 ml-2"
+                *ngIf="this.type != 'deal'"
               ></app-input-contact-chip>
+              <app-input-contact-deal
+                [selectedContacts]="emailContacts"
+                [onlyFromSearch]="true"
+                [onlySubscriber]="true"
+                class="w-100"
+                *ngIf="this.type == 'deal'"
+              ></app-input-contact-deal>
             </div>
             <div class="v-center justify-content-end" *ngIf="isFocus()">
               <div class="f-3 c-blue p-1 c-pointer" (click)="ccFlag = !ccFlag">{{ccFlag ? "Disable Cc" : "Add Cc"}}</div>

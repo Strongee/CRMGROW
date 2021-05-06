@@ -18,3 +18,9 @@
 .btn {
     height: 40px;
 }
+
+:host ::ng-deep {
+    mat-dialog-content {
+        max-height: 60vh;
+    }
+}
