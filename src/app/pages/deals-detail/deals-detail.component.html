@@ -215,19 +215,15 @@
                 </ng-container>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openNoteDlg()" *ngIf="tab.id === 'notes' || (tab.id !== 'all' && activityType.id === 'notes')">
                   <span class="f-3 font-weight-bold c-blue mr-2">New Note</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendEmail()" *ngIf="tab.id === 'emails' || (tab.id === 'all' && activityType.id === 'emails')">
                   <span class="f-3 font-weight-bold c-blue mr-2">New Email</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'texts' || (tab.id === 'all' && activityType.id === 'texts')">
                   <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openAppointmentDlg()" *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')">
                   <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
                 <!-- <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'team_calls' || (tab.id === 'all' && activityType.id === 'team_calls')">
                   <span class="f-3 font-weight-bold c-blue mr-2">Create group call</span>
@@ -235,7 +231,6 @@
                 </div> -->
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openTaskDlg()" *ngIf="tab.id === 'follow_ups' || (tab.id === 'all' && activityType.id === 'follow_ups')">
                   <span class="f-3 font-weight-bold c-blue mr-2">New Task</span>
-                  <i class="d-block i-icon i-plus bgc-blue"></i>
                 </div>
               </div>
               <ng-container *ngIf="tab.id === 'all'; else detailsTemplate">
