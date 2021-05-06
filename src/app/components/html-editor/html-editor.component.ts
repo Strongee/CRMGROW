@@ -171,7 +171,7 @@ export class HtmlEditorComponent implements OnInit {
           if (!popup || popup.closed) {
             popup = window.open(
               this.recordUrl + '?' + this.authToken,
-              '',
+              'RECORD WINDOW',
               option
             );
           } else {
