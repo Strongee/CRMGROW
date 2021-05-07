@@ -32,6 +32,8 @@ import { validateEmail } from 'src/app/utils/functions';
 import { Contact } from 'src/app/models/contact.model';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { environment } from '../../../environments/environment';
+import { searchReg } from 'src/app/helper';
+import { CursorError } from '@angular/compiler/src/ml_parser/lexer';
 const phone = require('phone');
 
 @Component({
@@ -101,66 +103,56 @@ export class InputContactDealComponent implements OnInit {
           this.keyword = search;
         }),
         map((search) => {
-          return this.selectedContacts;
-          // if (search) {
-          //   return this.contactService.easySearch(search);
-          // } else {
-          //   return this.contactService.latestContacts(this.material['_id']);
-          // }
+          if (search) {
+            const res = _.filter(this.keepContacts, (e) => {
+              if (
+                searchReg(e?.fullName, this.keyword) ||
+                searchReg(e?.email, this.keyword) ||
+                searchReg(e?.cell_phone, this.keyword)
+              ) {
+                return true;
+              }
+            });
+            return res;
+          } else {
+            return this.keepContacts;
+          }
         })
       )
       .subscribe((res: any) => {
         this.searching = false;
         if (res && res.length) {
-          if (res.length == 8) {
+          if (res.length > 8) {
+            this.filteredContacts = res;
+            this.filteredResults.next(res.slice(0, 8));
             this.hasMore = true;
           } else {
-            this.hasMore = false;
-          }
-        }
-        if (this.keyword) {
-          if (res.length) {
             this.filteredResults.next(res);
             this.filteredContacts = res;
-          } else {
-            if (!this.onlyFromSearch) {
-              if (this.display === 'email' && validateEmail(this.keyword)) {
-                const first_name = this.keyword.split('@')[0];
-                const email = this.keyword;
+            this.hasMore = false;
+          }
+        } else {
+          if (!this.onlyFromSearch) {
+            if (this.display === 'email' && validateEmail(this.keyword)) {
+              const first_name = this.keyword.split('@')[0];
+              const email = this.keyword;
+              const newContact = new Contact().deserialize({
+                first_name,
+                email
+              });
+              this.filteredResults.next([newContact]);
+            }
+            if (this.display === 'cell_phone') {
+              const cell_phone = phone(this.keyword)[0];
+              if (cell_phone) {
                 const newContact = new Contact().deserialize({
-                  first_name,
-                  email
+                  first_name: cell_phone,
+                  cell_phone
                 });
                 this.filteredResults.next([newContact]);
               }
-              if (this.display === 'cell_phone') {
-                const cell_phone = phone(this.keyword)[0];
-                if (cell_phone) {
-                  const newContact = new Contact().deserialize({
-                    first_name: cell_phone,
-                    cell_phone
-                  });
-                  this.filteredResults.next([newContact]);
-                }
-              }
             }
           }
-        } else {
-          const searchedContacts = [];
-          const searchedContactIds = [];
-          res.forEach((activity) => {
-            if (!activity || !activity.contacts) {
-              return;
-            }
-            const contact = activity.contacts[0];
-            if (searchedContactIds.indexOf(contact._id) === -1) {
-              searchedContactIds.push(contact._id);
-              searchedContacts.push(contact);
-            }
-          });
-          this.filteredResults.next(
-            searchedContacts.map((data) => new Contact().deserialize(data))
-          );
         }
       });
   }
@@ -193,10 +185,6 @@ export class InputContactDealComponent implements OnInit {
 
   remove(contact: Contact): void {
     if (this.selectedContacts.length == 1) {
-      return;
-    }
-    const pos = _.findIndex(this.keepContacts, contact, '_id');
-    if (pos !== -1) {
       return;
     }
     _.remove(this.selectedContacts, (e) => {
@@ -328,45 +316,24 @@ export class InputContactDealComponent implements OnInit {
     this.optionsFocused = false;
   }
 
-  // loadMore(): void {
-  //   this.getCurrentSubscription = this.filteredResults.subscribe(
-  //     (currentResults) => {
-  //       this.loadingMore = true;
-  //       this.loadMoreSubscription = this.contactService
-  //         .easySearch(this.keyword, currentResults.length)
-  //         .subscribe((contacts) => {
-  //           this.loadingMore = false;
-  //           if (contacts && contacts?.length) {
-  //             if (contacts?.length == 8) {
-  //               this.hasMore = true;
-  //             } else {
-  //               this.hasMore = false;
-  //             }
-  //             let result;
-  //             if (this.display) {
-  //               const data = [];
-  //               contacts.map((e) => {
-  //                 if (e[this.display]) {
-  //                   data.push(e);
-  //                 }
-  //               });
-  //               result = data;
-  //             } else {
-  //               result = contacts;
-  //             }
-  //             if (result.length) {
-  //               result.forEach((e) => {
-  //                 currentResults.push(e);
-  //               });
-  //             }
-  //           } else {
-  //             this.hasMore = false;
-  //           }
-  //         });
-  //     }
-  //   );
-  //   this.getCurrentSubscription.unsubscribe();
-  // }
+  loadMore(): void {
+    this.loadingMore = true;
+    this.getCurrentSubscription = this.filteredResults.subscribe(
+      (currentResults) => {
+        this.loadingMore = false;
+        const remained = _.difference(this.filteredContacts, currentResults);
+        if (remained.length - 8 > 8) {
+          this.hasMore = true;
+        } else {
+          this.hasMore = false;
+        }
+        remained.forEach((e) => {
+          currentResults.push(e);
+        });
+      }
+    );
+    this.getCurrentSubscription.unsubscribe();
+  }
 
   setFocus(): void {
     this.isFocus = true;

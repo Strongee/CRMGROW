@@ -24,7 +24,6 @@ export class SmsLimitsComponent implements OnInit {
       (profile) => {
         if (profile) {
           this.user = profile;
-          console.log('###', this.user);
           if (this.user?.text_info.is_limit) {
             this.leftSms =
               this.user?.text_info?.max_count -
