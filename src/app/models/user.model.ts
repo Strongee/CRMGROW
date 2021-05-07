@@ -72,6 +72,7 @@ export class User implements Deserializable {
     attempt_count: 0;
     period: 'month';
   };
+  package_level: string;
   expired_at: Date;
   created_at: Date;
   updated_at: Date;

@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PageMenuItem } from 'src/app/utils/data.types';
+import {UserService} from "../../services/user.service";
+import {getUserLevel} from "../../utils/functions";
 
 @Component({
   selector: 'app-settings',
@@ -37,12 +39,27 @@ export class SettingsComponent implements OnInit, OnDestroy {
   currentPageItem: PageMenuItem[];
 
   routeChangeSubscription: Subscription;
+  profileSubscription: Subscription;
+  packageLevel = '';
+  disableMenuItems = [
+    { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
+    { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
+    { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
+    { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
+    { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' }
+  ];
 
   constructor(
     private location: Location,
     private route: ActivatedRoute,
+    private userService: UserService,
     private router: Router
-  ) {}
+  ) {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
+      this.packageLevel = res.package_level;
+    });
+  }
 
   ngOnInit(): void {
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
@@ -55,6 +72,20 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeChangeSubscription && this.routeChangeSubscription.unsubscribe();
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
+
+  isDisableItem(menuItem): boolean {
+    if (menuItem && menuItem.id) {
+      const index = this.disableMenuItems.findIndex((item) => item.id === menuItem.id);
+      if (index >= 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   changeMenu(menu: PageMenuItem): void {

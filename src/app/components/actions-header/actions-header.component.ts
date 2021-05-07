@@ -15,6 +15,7 @@ import { ActionItem } from 'src/app/utils/data.types';
   styleUrls: ['./actions-header.component.scss']
 })
 export class ActionsHeaderComponent implements OnInit {
+  @Input('disableActions') disableActions: ActionItem[] = [];
   @Input('actions')
   public set actions(_actions: ActionItem[]) {
     if (!this._actions.length) {
@@ -53,5 +54,17 @@ export class ActionsHeaderComponent implements OnInit {
 
   hasProp(action: ActionItem, property: string): boolean {
     return action.hasOwnProperty(property);
+  }
+
+  isDisableAction(action): boolean {
+    if (action.label) {
+      const index = this.disableActions.findIndex(
+        (item) => item.label === action.label
+      );
+      if (index >= 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }

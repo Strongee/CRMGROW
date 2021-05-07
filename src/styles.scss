@@ -2153,3 +2153,8 @@ body {
 #time_zone_info-panel {
   margin-top: 125px;
 }
+
+.disable {
+  pointer-events: none !important;
+  opacity: 0.4 !important;
+}
