@@ -21,7 +21,10 @@
       </div>
     </div>
     <div class="border-left px-3 py-1 text-center ml-3 mr-1 v-center">
-      <a class="ml-3 f-5 font-weight-bold c-pointer c-dark td-none" (click)="drawer.toggle()">
+      <a class="ml-3 f-5 font-weight-bold c-pointer c-dark td-none"
+         [class.disable]="getUserLevel() == 'lite'"
+         (click)="drawer.toggle()"
+      >
         Filter
         <img src="../../../assets/img/filter.svg" alt="filter-icon" style="width: 23px;"/>
       </a>

@@ -11,6 +11,7 @@ import { TaskCreateComponent } from 'src/app/components/task-create/task-create.
 import {
   CALENDAR_DURATION,
   DialogSettings,
+  PACKAGE_LEVEL,
   ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
@@ -41,7 +42,9 @@ import { SendBulkTextComponent } from 'src/app/components/send-bulk-text/send-bu
 import { ToastrService } from 'ngx-toastr';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 import { AdditionalFieldsComponent } from '../../components/additional-fields/additional-fields.component';
-import { AdditionalEditComponent } from "../../components/additional-edit/additional-edit.component";
+import { AdditionalEditComponent } from '../../components/additional-edit/additional-edit.component';
+import { getUserLevel } from '../../utils/functions';
+
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -126,6 +129,8 @@ export class DealsDetailComponent implements OnInit {
   dealTitle = '';
   saving = false;
   saveSubscription: Subscription;
+  packageLevel = '';
+  disableTabs = [];
 
   constructor(
     private dialog: MatDialog,
@@ -149,6 +154,12 @@ export class DealsDetailComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
+        this.packageLevel = user.package_level;
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+          this.disableTabs = [
+            { icon: '', label: 'Appointments', id: 'appointments' }
+          ];
+        }
       } catch (err) {
         const timezone = getCurrentTimezone();
         this.timezone = { zone: user.time_zone || timezone };
@@ -198,6 +209,10 @@ export class DealsDetailComponent implements OnInit {
     this.stageLoadSubscription && this.stageLoadSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.teamsLoadSubscription && this.teamsLoadSubscription.unsubscribe();
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   changeSelectedStage(): void {
@@ -1292,7 +1307,7 @@ export class DealsDetailComponent implements OnInit {
               }
             });
         } else {
-          this.deal.main.additional_field = {...init_additional_field};
+          this.deal.main.additional_field = { ...init_additional_field };
         }
       });
   }

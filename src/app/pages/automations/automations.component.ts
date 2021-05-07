@@ -20,7 +20,7 @@ import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import {getUserLevel, sortStringArray} from '../../utils/functions';
+import { getUserLevel, sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
 import { searchReg } from 'src/app/helper';

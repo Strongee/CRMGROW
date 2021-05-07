@@ -25,7 +25,10 @@
                       <i class="d-block i-icon more-icon i-triangle-down bgc-white ml-2"></i>
                     </div>
                     <div ngbDropdownMenu class="light action-menu">
-                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openAppointmentDlg()">
+                      <button class="v-center border-0 c-dark dropdown-item my-1"
+                        [class.disable]="getUserLevel() == 'lite'"
+                        (click)="openAppointmentDlg()"
+                      >
                         <i class="i-icon i-appointments bgc-dark"></i>
                         <span class="ml-2 f-3 font-weight-bold">New Appointment</span>
                       </button>
@@ -164,7 +167,14 @@
         </div>
         <div class="deal-action-panel flex-grow-1 position-relative">
           <div class="history-panel pt-3 pl-3 mt-2">
-            <app-slide-tab [tabs]="tabs" [selected]="tab" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
+            <app-slide-tab
+              [tabs]="tabs"
+              [selected]="tab"
+              [disableTabs]="disableTabs"
+              (onChange)="changeTab($event)"
+              type="plain"
+              class="border-bottom pl-0 rounded-0"
+            >
             </app-slide-tab>
             <div class="history-list mt-3 position-relative">
               <div class="history-list-header v-center">
@@ -222,7 +232,11 @@
                 <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'texts' || (tab.id === 'all' && activityType.id === 'texts')">
                   <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
                 </div>
-                <div class="v-center justify-content-end c-pointer ml-auto" (click)="openAppointmentDlg()" *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')">
+                <div class="v-center justify-content-end c-pointer ml-auto"
+                     (click)="openAppointmentDlg()"
+                     *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')"
+                     [class.disable]="getUserLevel() == 'lite'"
+                >
                   <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
                 </div>
                 <!-- <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'team_calls' || (tab.id === 'all' && activityType.id === 'team_calls')">
@@ -701,7 +715,10 @@
                       </ng-template>
                     </div>
 
-                    <div class="history-detail {{activity.type}}-detail p-3 mt-3" *ngSwitchCase="'appointments'">
+                    <div class="history-detail {{activity.type}}-detail p-3 mt-3"
+                         [class.disable]="getUserLevel() == 'lite'"
+                         *ngSwitchCase="'appointments'"
+                    >
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">
                           <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
@@ -959,7 +976,10 @@
 
                       </div>
 
-                      <div class="history-detail appointments-detail p-3 mt-3" *ngSwitchCase="'appointments'">
+                      <div class="history-detail appointments-detail p-3 mt-3"
+                           [class.disable]="getUserLevel() == 'lite'"
+                           *ngSwitchCase="'appointments'"
+                      >
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-appointments"></i></div>
                           <div class="">appointment</div>
