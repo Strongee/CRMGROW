@@ -79,12 +79,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   isDisableItem(menuItem): boolean {
-    if (menuItem && menuItem.id) {
-      const index = this.disableMenuItems.findIndex((item) => item.id === menuItem.id);
-      if (index >= 0) {
-        return true;
-      }
-    }
+    // if (menuItem && menuItem.id) {
+    //   const index = this.disableMenuItems.findIndex((item) => item.id === menuItem.id);
+    //   if (index >= 0) {
+    //     return true;
+    //   }
+    // }
     return false;
   }
 
