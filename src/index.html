@@ -46,10 +46,6 @@
     script.defer = 1;
     script.src = "https://widget.usersnap.com/global/load/d470f663-3eb3-466d-b179-a5afe57ac276?onload=onUsersnapCXLoad";
     document.getElementsByTagName("head")[0].appendChild(script);
-
-    window.addEventListener('message', (e) => {
-      console.log('message from ' + e.origin + 'message: ' + e.message);
-    })
   </script>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>

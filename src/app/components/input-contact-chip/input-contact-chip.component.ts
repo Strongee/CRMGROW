@@ -359,7 +359,7 @@ export class InputContactChipComponent implements OnInit, OnChanges {
               }
               if (result.length) {
                 result.forEach((e) => {
-                  currentResults.push(e);
+                  // currentResults.push(e);
                 });
               }
             } else {

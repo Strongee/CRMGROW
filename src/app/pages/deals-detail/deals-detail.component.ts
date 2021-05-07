@@ -44,6 +44,7 @@ import { DetailErrorComponent } from 'src/app/components/detail-error/detail-err
 import { AdditionalFieldsComponent } from '../../components/additional-fields/additional-fields.component';
 import { AdditionalEditComponent } from '../../components/additional-edit/additional-edit.component';
 import { getUserLevel } from '../../utils/functions';
+
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
@@ -453,7 +454,6 @@ export class DealsDetailComponent implements OnInit {
       );
       return;
     }
-    console.log('###', contacts);
     this.dialog
       .open(SendBulkTextComponent, {
         position: {

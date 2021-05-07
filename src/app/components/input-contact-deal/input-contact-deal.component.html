@@ -33,7 +33,7 @@
             [removable]="true"
             (removed)="remove(contact)">
             <ng-container *ngIf="chipType === 'block'; else inlineTemplate;">
-              <div class="d-flex chip" ngbDropdown>
+              <div class="d-flex chip" ngbDropdown (click)="setFocus()">
                 <div class="info v-center" ngbDropdownToggle>
                   <ng-container *ngIf="!!contact.first_name || !!contact.last_name; else emailChip">
                     <div class="f-2 font-weight-bold">{{contact.fullName}}</div>
