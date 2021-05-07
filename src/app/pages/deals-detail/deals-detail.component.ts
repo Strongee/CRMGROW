@@ -41,7 +41,7 @@ import { SendBulkTextComponent } from 'src/app/components/send-bulk-text/send-bu
 import { ToastrService } from 'ngx-toastr';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 import { AdditionalFieldsComponent } from '../../components/additional-fields/additional-fields.component';
-import {AdditionalEditComponent} from "../../components/additional-edit/additional-edit.component";
+import { AdditionalEditComponent } from "../../components/additional-edit/additional-edit.component";
 @Component({
   selector: 'app-deals-detail',
   templateUrl: './deals-detail.component.html',
