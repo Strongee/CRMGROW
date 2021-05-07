@@ -56,7 +56,10 @@
             <!-- <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">
               <span class="ml-1 f-3 font-weight-bold">Create group call</span>
             </button> -->
-            <button class="v-center border-0 c-dark dropdown-item my-1"(click)="openAppointmentDlg()">
+            <button class="v-center border-0 c-dark dropdown-item my-1"
+              [class.disable]="getUserLevel() == 'lite'"
+              (click)="openAppointmentDlg()"
+            >
               <i class="i-icon i-appointments bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Appointment</span>
             </button>
@@ -245,7 +248,7 @@
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="automation">
+          <div class="automation" [class.disable]="getUserLevel() == 'lite'">
             <div class="v-center">
               <app-input-automation (automationChange)="selectAutomation($event)"></app-input-automation>
               <div class="v-center automation-action ml-2">
@@ -345,7 +348,14 @@
     </div>
     <div class="contact-action-panel flex-grow-1 position-relative">
       <div class="history-panel pt-3 pl-3 mt-2">
-        <app-slide-tab [tabs]="tabs" [selected]="tab" (onChange)="changeTab($event)" type="plain" class="border-bottom pl-0 rounded-0">
+        <app-slide-tab
+          [tabs]="tabs"
+          [selected]="tab"
+          [disableTabs]="getUserLevel() == 'lite' ? disableTabs : []"
+          (onChange)="changeTab($event)"
+          type="plain"
+          class="border-bottom pl-0 rounded-0"
+        >
         </app-slide-tab>
         <div class="history-list mt-3 position-relative">
           <div class="history-list-header v-center">
@@ -403,7 +413,11 @@
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'text' || (tab.id === 'all' && activityType.id === 'text')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
             </div>
-            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openAppointmentDlg()" *ngIf="tab.id === 'appointment' || (tab.id === 'all' && activityType.id === 'appointment')">
+            <div class="v-center justify-content-end c-pointer ml-auto"
+                 [class.disable]="getUserLevel() == 'lite'"
+                 (click)="openAppointmentDlg()"
+                 *ngIf="tab.id === 'appointment' || (tab.id === 'all' && activityType.id === 'appointment')"
+            >
               <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
             </div>
 <!--            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openGroupCallDlg()" *ngIf="tab.id === 'group_call' || (tab.id === 'all' && activityType.id === 'group_call')">-->
@@ -715,7 +729,9 @@
                 </div>
               </div>
 
-              <div *ngIf="(activityType.id == 'all' || activityType.id == 'appointment') && activity.type == 'appointments'">
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'appointment') && activity.type == 'appointments'"
+                   [class.disable]="getUserLevel() == 'lite'"
+              >
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
@@ -1077,7 +1093,10 @@
                     </ng-container>
                   </div>
 
-                  <div class="history-detail appointments-detail p-3 mt-3" *ngSwitchCase="'appointment'">
+                  <div class="history-detail appointments-detail p-3 mt-3"
+                       [class.disable]="getUserLevel() == 'lite'"
+                       *ngSwitchCase="'appointment'"
+                  >
                     <div class="v-center justify-content-between mb-3">
                       <div class="history-icon mr-3"><i class="act-icon act-appointments"></i></div>
                       <div class="">appointment</div>

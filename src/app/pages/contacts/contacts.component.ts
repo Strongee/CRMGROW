@@ -5,7 +5,7 @@ import { UploadContactsComponent } from 'src/app/components/upload-contacts/uplo
 import {
   BulkActions,
   CONTACT_SORT_OPTIONS,
-  DialogSettings,
+  DialogSettings, PACKAGE_LEVEL,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
@@ -92,22 +92,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
   updateSubscription: Subscription;
   profileSubscription: Subscription;
   packageLevel = '';
-  disableActions = [
-    {
-      label: 'Send email',
-      type: 'button',
-      icon: 'i-message',
-      command: 'message',
-      loading: false
-    },
-    {
-      label: 'Add automation',
-      type: 'button',
-      icon: 'i-automation',
-      command: 'automation',
-      loading: false
-    }
-  ];
+  userContactCount = 0;
+  disableActions = [];
 
   constructor(
     public router: Router,
@@ -121,6 +107,25 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.packageLevel = res.package_level;
+      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+        this.disableActions = [
+          {
+            label: 'Send email',
+            type: 'button',
+            icon: 'i-message',
+            command: 'message',
+            loading: false
+          },
+          {
+            label: 'Add automation',
+            type: 'button',
+            icon: 'i-automation',
+            command: 'automation',
+            loading: false
+          }
+        ];
+      }
+      this.userContactCount = res.contact_info['count'];
     });
   }
 

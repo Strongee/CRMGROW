@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import {PACKAGE_LEVEL} from "../constants/variable.constants";
 
 export function validateEmail(email: string): boolean {
   const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/gim;
@@ -106,15 +107,9 @@ export function sortObjectArray(
 }
 
 export function getUserLevel(level): string {
-  // if (level) {
-  //   if (level === 'lite') {
-  //     return 'lite';
-  //   } else if (level === 'pro') {
-  //     return 'pro';
-  //   } else if (level === 'elite') {
-  //     return 'elite';
-  //   }
-  // }
-  // return 'lite';
-  return 'pro';
+  if (level) {
+    return level;
+  }
+  // return PACKAGE_LEVEL.LITE;
+  return PACKAGE_LEVEL.PRO;
 }

@@ -18,6 +18,7 @@ import * as _ from 'lodash';
 })
 export class SlideTabComponent implements OnInit, AfterViewInit {
   @Input('tabs') tabs: TabItem[] = [];
+  @Input('disableTabs') disableTabs: TabItem[] = [];
   @Input('selected') selected: TabItem;
   @Input('type') type: string = '';
   @Input('class') class: string = '';
@@ -61,5 +62,17 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
   changeTabIndex(index: number): void {
     const item = this.tabs[index];
     this.onChange.emit(item);
+  }
+
+  isDisableTab(tab): boolean {
+    if (tab.id) {
+      const index = this.disableTabs.findIndex(
+        (item) => item.id === tab.id
+      );
+      if (index >= 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }

@@ -1589,3 +1589,10 @@ export const AUTOMATION_ICONS = {
   WATCHED_IMAGE: '../../../assets/img/watch_image.png',
   OPENED_EMAIL: '../../../assets/img/automations/opened_email.svg'
 };
+
+export const PACKAGE_LEVEL = {
+  LITE: 'lite',
+  PRO: 'pro',
+  ELITE: 'elite',
+  CUSTOM: 'custom'
+};

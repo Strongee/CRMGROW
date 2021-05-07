@@ -8,7 +8,10 @@ import { UserService } from 'src/app/services/user.service';
 import { TeamService } from '../../services/team.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { environment } from 'src/environments/environment';
-import { BulkActions } from 'src/app/constants/variable.constants';
+import {
+  BulkActions,
+  PACKAGE_LEVEL
+} from 'src/app/constants/variable.constants';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { Subscription } from 'rxjs';
@@ -137,22 +140,7 @@ export class MaterialsComponent implements OnInit {
   };
 
   packageLevel = '';
-  disableActions = [
-    {
-      label: 'Send via email',
-      type: 'button',
-      icon: 'i-message',
-      command: 'email',
-      loading: false
-    },
-    {
-      label: 'Capture',
-      type: 'toggle',
-      status: false,
-      command: 'lead_capture',
-      loading: false
-    }
-  ];
+  disableActions = [];
 
   constructor(
     private dialog: MatDialog,
@@ -170,6 +158,24 @@ export class MaterialsComponent implements OnInit {
       (profile) => {
         this.user_id = profile._id;
         this.packageLevel = profile.package_level;
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+          this.disableActions = [
+            {
+              label: 'Send via email',
+              type: 'button',
+              icon: 'i-message',
+              command: 'email',
+              loading: false
+            },
+            {
+              label: 'Capture',
+              type: 'toggle',
+              status: false,
+              command: 'lead_capture',
+              loading: false
+            }
+          ];
+        }
       }
     );
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {

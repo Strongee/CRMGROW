@@ -2,7 +2,11 @@
   <div class="tab-container {{type}} {{class}}" #container>
     <div class="tab-indicator" #indicator></div>
     <ng-container *ngFor="let tab of tabs;">
-      <div class="tab" [ngClass]="{'active': tab.id === selected.id}" (click)="changeTab($event, tab)">
+      <div class="tab"
+           [ngClass]="{'active': tab.id === selected.id}"
+           [class.disable]="isDisableTab(tab)"
+           (click)="changeTab($event, tab)"
+      >
         <i *ngIf="tab.icon" class="tab-icon {{tab.icon}} mr-2"></i>
         <span class="tab-label">{{tab.label | translate}}</span>
       </div>
@@ -16,11 +20,11 @@
     [(selectedIndex)]="currentIndex"
     (selectedIndexChange)="changeTabIndex($event)"
   >
-    <mat-tab *ngFor="let tab of tabs" label="{{tab.id}}">
+    <mat-tab *ngFor="let tab of tabs" label="{{tab.id}}" [disabled]="isDisableTab(tab)">
       <ng-template mat-tab-label>
-        <i *ngIf="tab.icon" class="tab-icon {{tab.icon}} mr-2"></i>
-        <span class="tab-label">{{tab.label | translate}}</span>
-        <!-- <span class="badge" *ngIf="tab.badge">{{tab.badge}}</span> -->
+          <i *ngIf="tab.icon" class="tab-icon {{tab.icon}} mr-2"></i>
+          <span class="tab-label">{{tab.label | translate}}</span>
+          <!-- <span class="badge" *ngIf="tab.badge">{{tab.badge}}</span> -->
       </ng-template>
     </mat-tab>
   </mat-tab-group>

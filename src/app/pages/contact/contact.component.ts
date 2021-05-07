@@ -23,7 +23,8 @@ import {
   DialogSettings,
   CALENDAR_DURATION,
   STATUS,
-  ROUTE_PAGE
+  ROUTE_PAGE,
+  PACKAGE_LEVEL
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -65,6 +66,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { Note } from 'src/app/models/note.model';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 import { Deal } from 'src/app/models/deal.model';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-contact',
@@ -200,6 +202,8 @@ export class ContactComponent implements OnInit, OnDestroy {
   groups = []; // detail information about group
   dGroups = []; // group ID Array to display detail data
   showingMax = 4; // Max Limit to show the detail data
+  packageLevel = '';
+  disableTabs = [];
 
   constructor(
     private dialog: MatDialog,
@@ -228,6 +232,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
+        this.packageLevel = user.package_level;
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+          this.disableTabs = [
+            { icon: '', label: 'Appointments', id: 'appointment' }
+          ];
+        }
       } catch (err) {
         const timezone = getCurrentTimezone();
         this.timezone = { zone: user.time_zone || timezone };
@@ -415,6 +425,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
 
     this.contactService.contactConversation.next(null);
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   /**
@@ -2088,7 +2102,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.overlayRef.attach(this.templatePortal);
     }
     return;
-  } 
+  }
 
   loadDetailGroupCall(id: string): void {
     this.loadingGroupCall = true;
