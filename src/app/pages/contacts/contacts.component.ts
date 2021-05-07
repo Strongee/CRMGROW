@@ -129,6 +129,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
     });
   }
 
+  
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
   }
