@@ -1,4 +1,4 @@
-<div class="page-content pt-0">
+<div class="page-content pt-0" [class.disable]="getUserLevel() == 'lite'">
     <div class="v-center justify-content-between pb-3 calendar-time">
         <div class="v-center justify-content-center">
             <div class="v-center justify-content-center text-center c-dark date">
@@ -80,7 +80,7 @@
         </div>
         <div class="v-center justify-content-center view-time">
             <app-slide-tab [tabs]="tabs" [selected]="selectedTab" (onChange)="changeTab($event)">
-            </app-slide-tab>    
+            </app-slide-tab>
             <button class="v-center btn btn-blue f-6 font-weight-bold text-white ml-4 mr-3 new-event" (click)="newEvent()">
                 <span>New Meeting</span>
             </button>
@@ -172,7 +172,7 @@
                 <ng-template #weekEventTemplate let-weekEvent="weekEvent" let-locale="locale" let-eventClicked="eventClicked">
                     <div
                         class="cal-event"
-                        #weekEventView 
+                        #weekEventView
                         [ngStyle]="{'background-color': calendars[weekEvent.event.meta.calendar_id]?.color}"
                         (mwlClick)="openDetail(weekEvent.event, weekEventView)">
                         <div class="f-1 font-weight-bold c-white cal-event-title">

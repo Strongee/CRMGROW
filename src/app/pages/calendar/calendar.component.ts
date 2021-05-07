@@ -26,6 +26,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
+import {getUserLevel} from "../../utils/functions";
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -84,6 +85,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   updateCommandSubscription: Subscription;
   calendarLoadSubscription: Subscription;
   profileSubscription: Subscription;
+  packageLevel = '';
 
   constructor(
     private dialog: MatDialog,
@@ -124,6 +126,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     // Set the current Day & mode & events
     // this.appointmentService.currentMethod.next(this.view);
     this.appointmentService.selectedCalendars.next(this.selectedCalendars);
+  }
+
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   initModeAndDate(): void {
@@ -205,6 +212,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user = profile;
+        this.packageLevel = profile.package_level;
       }
     );
 

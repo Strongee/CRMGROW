@@ -1,7 +1,10 @@
 <div class="page-content">
   <div class="v-center justify-content-between mb-3">
     <h1 class="page-title">Templates</h1>
-    <a class="btn btn-primary shadow v-center mb-0 border-0" [routerLink]="['/templates/new']">
+    <a class="btn btn-primary shadow v-center mb-0 border-0"
+       [routerLink]="['/templates/new']"
+       [class.disable]="getUserLevel() == 'lite'"
+    >
       <span class="f-6 font-weight-bold">New Template</span>
     </a>
   </div>
@@ -10,7 +13,11 @@
       <div class="input-group-prepend">
         <i class="i-icon i-search d-block bgc-dark"></i>
       </div>
-      <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon" [(ngModel)]="searchStr" (ngModelChange)="changeSearchStr()" [class.disabled]="(templatesService.loading$ | async) === STATUS.REQUEST">
+      <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-addon"
+             [(ngModel)]="searchStr"
+             (ngModelChange)="changeSearchStr()"
+             [class.disabled]="(templatesService.loading$ | async) === STATUS.REQUEST || getUserLevel() == 'lite'"
+      >
       <ng-container *ngIf="searchStr">
         <div class="cancel-action c-pointer" (click)="clearSearchStr()">
           <i class="i-icon i-close d-block bgc-dark"></i>
@@ -27,6 +34,7 @@
          mat-table
          multiTemplateDataRows
          [dataSource]="filteredResult | paginate: {itemsPerPage: pageSize.id, currentPage: page, id: 'templateTable', total: filteredResult.length}"
+         [class.disable]="getUserLevel() == 'lite'"
       >
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="title">
@@ -123,7 +131,7 @@
         <tr mat-row *matRowDef="let element; columns: DISPLAY_COLUMNS;"></tr>
       </table>
       <ng-container *ngIf="filteredResult.length">
-        <div class="my-2 table-control mode-1">
+        <div class="my-2 table-control mode-1" [class.disable]="getUserLevel() == 'lite'">
           <div class="pagination-wrapper m-auto">
             <pagination-controls
               (pageChange)="page = $event"

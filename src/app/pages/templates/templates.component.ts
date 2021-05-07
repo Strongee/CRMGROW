@@ -8,7 +8,7 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
-import { sortStringArray } from '../../utils/functions';
+import {getUserLevel, sortStringArray} from '../../utils/functions';
 import * as _ from 'lodash';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 import { searchReg } from 'src/app/helper';
@@ -60,6 +60,8 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     type: false
   };
 
+  packageLevel = '';
+
   constructor(
     public templatesService: TemplatesService,
     private userService: UserService,
@@ -82,6 +84,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.userId = profile._id;
+        this.packageLevel = profile.package_level;
       }
     );
     this.loadSubscription && this.loadSubscription.unsubscribe();
@@ -102,6 +105,10 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   setDefault(template: Template): void {

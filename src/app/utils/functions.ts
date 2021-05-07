@@ -104,3 +104,17 @@ export function sortObjectArray(
   }
   return [];
 }
+
+export function getUserLevel(level): string {
+  // if (level) {
+  //   if (level === 'lite') {
+  //     return 'lite';
+  //   } else if (level === 'pro') {
+  //     return 'pro';
+  //   } else if (level === 'elite') {
+  //     return 'elite';
+  //   }
+  // }
+  // return 'lite';
+  return 'pro';
+}

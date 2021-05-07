@@ -26,6 +26,7 @@ import { ContactCreateComponent } from 'src/app/components/contact-create/contac
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
+import {getUserLevel} from "../../utils/functions";
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -89,6 +90,24 @@ export class ContactsComponent implements OnInit, OnDestroy {
   // Variables for Label Update
   isUpdating = false;
   updateSubscription: Subscription;
+  profileSubscription: Subscription;
+  packageLevel = '';
+  disableActions = [
+    {
+      label: 'Send email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'message',
+      loading: false
+    },
+    {
+      label: 'Add automation',
+      type: 'button',
+      icon: 'i-automation',
+      command: 'automation',
+      loading: false
+    }
+  ];
 
   constructor(
     public router: Router,
@@ -98,7 +117,12 @@ export class ContactsComponent implements OnInit, OnDestroy {
     public userService: UserService,
     private handlerService: HandlerService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
+      this.packageLevel = res.package_level;
+    });
+  }
 
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
@@ -162,6 +186,11 @@ export class ContactsComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
+
   /**
    * Load the contacts: Advanced Search, Normal Search, API Call
    */

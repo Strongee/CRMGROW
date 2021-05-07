@@ -26,7 +26,11 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
-import { sortDateArray, sortStringArray } from '../../utils/functions';
+import {
+  getUserLevel,
+  sortDateArray,
+  sortStringArray
+} from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 @Component({
@@ -132,6 +136,24 @@ export class MaterialsComponent implements OnInit {
     views: false
   };
 
+  packageLevel = '';
+  disableActions = [
+    {
+      label: 'Send via email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'email',
+      loading: false
+    },
+    {
+      label: 'Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture',
+      loading: false
+    }
+  ];
+
   constructor(
     private dialog: MatDialog,
     public storeService: StoreService,
@@ -147,6 +169,7 @@ export class MaterialsComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user_id = profile._id;
+        this.packageLevel = profile.package_level;
       }
     );
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
@@ -265,6 +288,10 @@ export class MaterialsComponent implements OnInit {
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
     clearInterval(this.convertLoaderTimer);
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   isAllSelected(): boolean {
