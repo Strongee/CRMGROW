@@ -185,10 +185,10 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
                   // Reload the Current List
                   this.handlerService.reload$();
                 }
-                this.dialogRef.close();
+                this.dialogRef.close({ created: true });
               });
           } else {
-            this.dialogRef.close();
+            this.dialogRef.close({ created: true });
           }
         }
       });
@@ -309,7 +309,7 @@ export class ContactCreateComponent implements OnInit, OnDestroy {
 
   importCSV(): void {
     this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
-    this.dialogRef.close();
+    this.dialogRef.close({created: true});
   }
 
   selectTeam(team): void {

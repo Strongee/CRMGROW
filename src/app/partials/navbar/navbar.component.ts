@@ -4,7 +4,10 @@ import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
-import { DialogSettings } from 'src/app/constants/variable.constants';
+import {
+  DialogSettings,
+  PACKAGE_LEVEL
+} from 'src/app/constants/variable.constants';
 import { UserService } from 'src/app/services/user.service';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { SendEmailComponent } from '../../components/send-email/send-email.component';
@@ -12,6 +15,9 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
+import { Subscription } from 'rxjs';
+import { getUserLevel } from '../../utils/functions';
+import { ContactService } from '../../services/contact.service';
 
 @Component({
   selector: 'app-navbar',
@@ -44,6 +50,9 @@ export class NavbarComponent implements OnInit {
   keyword = '';
 
   @ViewChild('searchInput') searchInput: ElementRef;
+  packageLevel = '';
+  userContactCount = 0;
+  profileSubscription: Subscription;
 
   constructor(
     public userService: UserService,
@@ -51,20 +60,58 @@ export class NavbarComponent implements OnInit {
     public handlerService: HandlerService,
     private connectService: ConnectService,
     private dialog: MatDialog,
+    private contactService: ContactService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.profileSubscription = this.userService.profile$.subscribe(
+      (profile) => {
+        if (profile) {
+          console.log('user profile ===========>', profile);
+          this.packageLevel = profile.package_level;
+          this.userContactCount = profile.contact_info.count;
+        }
+      }
+    );
+
     this.connectService.receiveLogout().subscribe(() => {
       this.logout(null);
     });
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
+
+  isContactCreatable(): boolean {
+    const packageLevel = this.getUserLevel();
+    return (
+      this.userContactCount <=
+      PACKAGE_LEVEL[packageLevel].contact_info.max_count
+    );
+  }
+
+  updateContactCount(): void {
+    const _SELF = this;
+    setTimeout(function () {
+      _SELF.userContactCount = _SELF.contactService.total.getValue();
+    }, 2000);
   }
 
   runAction(action: string): void {
     // Open New modal that corresponds to action
     switch (action) {
       case 'contact':
-        this.dialog.open(ContactCreateComponent, DialogSettings.CONTACT);
+        this.dialog
+          .open(ContactCreateComponent, DialogSettings.CONTACT)
+          .afterClosed()
+          .subscribe((res) => {
+            if (res && res.created) {
+              this.contactService.reloadPage();
+              this.updateContactCount();
+            }
+          });
         break;
       case 'task':
         this.dialog.open(TaskCreateComponent, DialogSettings.TASK);

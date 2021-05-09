@@ -15,7 +15,14 @@ import { AutomationService } from 'src/app/services/automation.service';
 import { ToastrService } from 'ngx-toastr';
 import { SelectContactComponent } from '../select-contact/select-contact.component';
 import { ContactCreateComponent } from '../contact-create/contact-create.component';
-import { DialogSettings } from '../../constants/variable.constants';
+import {
+  DialogSettings,
+  PACKAGE_LEVEL
+} from '../../constants/variable.constants';
+import { ContactService } from '../../services/contact.service';
+import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-automation-assign',
@@ -30,6 +37,9 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
   submitted = false;
   contactOverflow = false;
   loading = false;
+  packageLevel = '';
+  profileSubscription: Subscription;
+  userContactCount = 0;
 
   @ViewChild('contactSelector') contactSelector: SelectContactComponent;
 
@@ -38,6 +48,8 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
     private automationService: AutomationService,
     private toastr: ToastrService,
     private dialog: MatDialog,
+    private contactService: ContactService,
+    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -45,9 +57,26 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
     if (this.data) {
       this.selectedAutomation = this.data.automation;
     }
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
+      this.packageLevel = res.package_level;
+      this.userContactCount = res.contact_info.count;
+    });
   }
 
   ngOnDestroy(): void {}
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
+
+  isContactCreatable(): boolean {
+    const packageLevel = this.getUserLevel();
+    return (
+      this.userContactCount <=
+      PACKAGE_LEVEL[packageLevel].contact_info.max_count
+    );
+  }
 
   assignAutomation(): void {
     this.submitted = true;
@@ -101,7 +130,21 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateContactCount(): void {
+    const _SELF = this;
+    setTimeout(function () {
+      _SELF.userContactCount = _SELF.contactService.total.getValue();
+    }, 2000);
+  }
+
   showAddContact(): void {
-    this.dialog.open(ContactCreateComponent, DialogSettings.CONTACT);
+    this.dialog
+      .open(ContactCreateComponent, DialogSettings.CONTACT)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.created) {
+          this.updateContactCount();
+        }
+      });
   }
 }

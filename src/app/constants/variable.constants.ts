@@ -1591,8 +1591,34 @@ export const AUTOMATION_ICONS = {
 };
 
 export const PACKAGE_LEVEL = {
-  LITE: 'lite',
-  PRO: 'pro',
-  ELITE: 'elite',
-  CUSTOM: 'custom'
+  lite: {
+    package: 'lite',
+    contact_info: {
+      max_count: 200
+    },
+    video_info: {
+      upload_max_count: 3,
+      record_max_length: 10
+    }
+  },
+  pro: {
+    package: 'pro',
+    contact_info: {
+      max_count: 2000
+    },
+    video_info: {
+      upload_max_count: 30,
+      record_max_length: 120
+    }
+  },
+  elite: {
+    package: 'elite',
+    contact_info: {
+      max_count: 20000
+    },
+    video_info: {
+      upload_max_count: 1000000,
+      record_max_length: 1000
+    }
+  }
 };

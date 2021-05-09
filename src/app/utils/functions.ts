@@ -111,5 +111,5 @@ export function getUserLevel(level): string {
     return level;
   }
   // return PACKAGE_LEVEL.LITE;
-  return PACKAGE_LEVEL.PRO;
+  return PACKAGE_LEVEL.pro.package;
 }

@@ -5,7 +5,8 @@ import { UploadContactsComponent } from 'src/app/components/upload-contacts/uplo
 import {
   BulkActions,
   CONTACT_SORT_OPTIONS,
-  DialogSettings, PACKAGE_LEVEL,
+  DialogSettings,
+  PACKAGE_LEVEL,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
@@ -26,7 +27,7 @@ import { ContactCreateComponent } from 'src/app/components/contact-create/contac
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
-import {getUserLevel} from "../../utils/functions";
+import { getUserLevel } from '../../utils/functions';
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -107,7 +108,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.packageLevel = res.package_level;
-      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+      this.userContactCount = res.contact_info.count;
+      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
         this.disableActions = [
           {
             label: 'Send email',
@@ -125,11 +127,9 @@ export class ContactsComponent implements OnInit, OnDestroy {
           }
         ];
       }
-      this.userContactCount = res.contact_info['count'];
     });
   }
 
-  
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
   }
@@ -195,6 +195,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   getUserLevel(): string {
     return getUserLevel(this.packageLevel);
+  }
+
+  isContactCreatable(): boolean {
+    const packageLevel = this.getUserLevel();
+    return (
+      this.userContactCount <=
+      PACKAGE_LEVEL[packageLevel].contact_info.max_count
+    );
   }
 
   /**
@@ -344,12 +352,35 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   openFilter(): void {}
 
+  updateContactCount(): void {
+    const _SELF = this;
+    setTimeout(function () {
+      _SELF.userContactCount = _SELF.contactService.total.getValue();
+      console.log("user contact count =========>", _SELF.userContactCount);
+    }, 2000);
+  }
+
   createContact(): void {
-    this.dialog.open(ContactCreateComponent, DialogSettings.CONTACT);
+    this.dialog
+      .open(ContactCreateComponent, DialogSettings.CONTACT)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.created) {
+          this.handlerService.reload$();
+          this.updateContactCount();
+        }
+      });
   }
 
   importContacts(): void {
-    this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
+    this.dialog
+      .open(UploadContactsComponent, DialogSettings.UPLOAD)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res && res.created) {
+          this.updateContactCount();
+        }
+      });
   }
 
   /**
@@ -567,6 +598,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
         if (res) {
           this.delete();
           this.handlerService.reload$();
+          this.updateContactCount();
         }
       });
   }

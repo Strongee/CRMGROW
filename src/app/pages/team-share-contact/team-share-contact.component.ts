@@ -381,14 +381,6 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
 
   openFilter(): void {}
 
-  createContact(): void {
-    this.dialog.open(ContactCreateComponent, DialogSettings.CONTACT);
-  }
-
-  importContacts(): void {
-    this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
-  }
-
   /**
    * Open the contact detail page
    * @param contact : contact

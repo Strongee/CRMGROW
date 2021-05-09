@@ -141,6 +141,7 @@ export class MaterialsComponent implements OnInit {
 
   packageLevel = '';
   disableActions = [];
+  uploadVideoCount = 0;
 
   constructor(
     private dialog: MatDialog,
@@ -158,7 +159,8 @@ export class MaterialsComponent implements OnInit {
       (profile) => {
         this.user_id = profile._id;
         this.packageLevel = profile.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+        this.uploadVideoCount = profile.video_info.upload_count;
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableActions = [
             {
               label: 'Send via email',
@@ -298,6 +300,14 @@ export class MaterialsComponent implements OnInit {
 
   getUserLevel(): string {
     return getUserLevel(this.packageLevel);
+  }
+
+  isVideoUploadable(): boolean {
+    const packageLevel = this.getUserLevel();
+    return (
+      this.uploadVideoCount <=
+      PACKAGE_LEVEL[packageLevel].video_info.upload_max_count
+    );
   }
 
   isAllSelected(): boolean {

@@ -11,7 +11,10 @@
       <div class="my-3">
         <div class="v-center justify-content-between">
           <label>Contacts</label>
-          <div class="v-center c-pointer" (click)="showAddContact()">
+          <div class="v-center c-pointer"
+             [class.disable]="!isContactCreatable()"
+             (click)="showAddContact()"
+          >
             <i class="i-icon i-plus d-block sm bgc-blue"></i>
             <span class="f-3 font-weight-bold ml-2 c-blue">New Contact</span>
           </div>

@@ -9,7 +9,12 @@
       <i class="i-icon i-plus bg-white d-block m-auto"></i>
     </div>
     <div ngbDropdownMenu aria-labelledby="actionsDropdown" class="bgc-dark py-1">
-      <div ngbDropdownItem *ngFor="let action of actions" (click)="runAction(action.id)" class="d-flex text-white py-2 pl-3 align-items-center">
+      <div ngbDropdownItem
+           *ngFor="let action of actions"
+           (click)="runAction(action.id)"
+           class="d-flex text-white py-2 pl-3 align-items-center"
+           [class.disable]="action.id == 'contact' && !isContactCreatable()"
+      >
         <i class="i-icon {{action.icon}} mr-3"></i>
         <span class="font-weight-bold">{{action.label}}</span>
       </div>
@@ -24,7 +29,7 @@
         </span>
       </div>
       <input type="text" class="form-control fc-control bgc-trans border-0" placeholder="Search" aria-label="search" aria-describedby="search-addon" (ngModelChange)="onFilter($event)" [(ngModel)]="keyword">
-      
+
       <div class="input-group-append px-3 border-left" ngbDropdown>
         <div class="v-center c-pointer" ngbDropdownToggle>
           <span class="mr-2 f-3 font-weight-bold">{{currentSearchType.label}}</span>
@@ -42,7 +47,7 @@
       <app-text-status style="margin-left: -16px;"></app-text-status>
     </div>
   </div> -->
-  
+
   <!-- Navbar Main Wrapper -->
   <div class="navbar-nav v-center ml-sm-3">
     <!-- Notification Wrapper -->

@@ -1,4 +1,5 @@
 import { Deserializable } from './deserialize.model';
+import {PACKAGE_LEVEL} from "../constants/variable.constants";
 
 export class User implements Deserializable {
   _id?: string = '';
@@ -45,7 +46,15 @@ export class User implements Deserializable {
   text_notification = false;
   contact_info = {
     is_limit: true,
-    max_count: 3000
+    max_count: PACKAGE_LEVEL.pro.contact_info.max_count,
+    count: 0
+  };
+  video_info = {
+    is_limit: true,
+    upload_max_count: PACKAGE_LEVEL.pro.video_info.upload_max_count,
+    record_max_count: PACKAGE_LEVEL.pro.video_info.record_max_length,
+    upload_count: 0,
+    record_length: 0
   };
   text_info = {
     additional_credit: {

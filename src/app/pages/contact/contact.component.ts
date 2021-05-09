@@ -233,7 +233,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
         this.packageLevel = user.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableTabs = [
             { icon: '', label: 'Appointments', id: 'appointment' }
           ];
