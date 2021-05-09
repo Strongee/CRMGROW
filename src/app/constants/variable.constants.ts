@@ -1599,6 +1599,9 @@ export const PACKAGE_LEVEL = {
     video_info: {
       upload_max_count: 3,
       record_max_length: 10
+    },
+    automation_info: {
+      max_count: 0
     }
   },
   pro: {
@@ -1609,6 +1612,9 @@ export const PACKAGE_LEVEL = {
     video_info: {
       upload_max_count: 30,
       record_max_length: 120
+    },
+    automation_info: {
+      max_count: 300
     }
   },
   elite: {
@@ -1619,6 +1625,9 @@ export const PACKAGE_LEVEL = {
     video_info: {
       upload_max_count: 1000000,
       record_max_length: 1000
+    },
+    automation_info: {
+      max_count: 3000
     }
   }
 };

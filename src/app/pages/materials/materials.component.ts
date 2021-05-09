@@ -140,8 +140,23 @@ export class MaterialsComponent implements OnInit {
   };
 
   packageLevel = '';
-  disableActions = [];
-  uploadVideoCount = 0;
+  disableActions = [
+    {
+      label: 'Send via email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'email',
+      loading: false
+    },
+    {
+      label: 'Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture',
+      loading: false
+    }
+  ];
+  uploadVideoCount = PACKAGE_LEVEL.elite.video_info.upload_max_count;
 
   constructor(
     private dialog: MatDialog,

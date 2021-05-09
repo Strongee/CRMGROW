@@ -39,7 +39,7 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
   loading = false;
   packageLevel = '';
   profileSubscription: Subscription;
-  userContactCount = 0;
+  userContactCount = PACKAGE_LEVEL.elite.contact_info.max_count;
 
   @ViewChild('contactSelector') contactSelector: SelectContactComponent;
 

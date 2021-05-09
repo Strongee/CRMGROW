@@ -56,6 +56,11 @@ export class User implements Deserializable {
     upload_count: 0,
     record_length: 0
   };
+  automation_info = {
+    is_limit: true,
+    max_count: PACKAGE_LEVEL.pro.automation_info.max_count,
+    assign_count: 0
+  };
   text_info = {
     additional_credit: {
       amount: 0,

@@ -51,7 +51,7 @@ export class NavbarComponent implements OnInit {
 
   @ViewChild('searchInput') searchInput: ElementRef;
   packageLevel = '';
-  userContactCount = 0;
+  userContactCount = PACKAGE_LEVEL.elite.contact_info.max_count;
   profileSubscription: Subscription;
 
   constructor(

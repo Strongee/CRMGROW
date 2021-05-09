@@ -93,7 +93,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   updateSubscription: Subscription;
   profileSubscription: Subscription;
   packageLevel = '';
-  userContactCount = 0;
+  userContactCount = PACKAGE_LEVEL.elite.contact_info.max_count;
   disableActions = [];
 
   constructor(
