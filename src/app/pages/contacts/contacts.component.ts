@@ -93,7 +93,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
   updateSubscription: Subscription;
   profileSubscription: Subscription;
   packageLevel = '';
-  userContactCount = PACKAGE_LEVEL.elite.contact_info.max_count;
   disableActions = [];
 
   constructor(
@@ -108,7 +107,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.packageLevel = res.package_level;
-      this.userContactCount = res.contact_info.count;
       if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
         this.disableActions = [
           {
@@ -195,14 +193,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   getUserLevel(): string {
     return getUserLevel(this.packageLevel);
-  }
-
-  isContactCreatable(): boolean {
-    const packageLevel = this.getUserLevel();
-    return (
-      this.userContactCount <=
-      PACKAGE_LEVEL[packageLevel].contact_info.max_count
-    );
   }
 
   /**
@@ -352,14 +342,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   openFilter(): void {}
 
-  updateContactCount(): void {
-    const _SELF = this;
-    setTimeout(function () {
-      _SELF.userContactCount = _SELF.contactService.total.getValue();
-      console.log("user contact count =========>", _SELF.userContactCount);
-    }, 2000);
-  }
-
   createContact(): void {
     this.dialog
       .open(ContactCreateComponent, DialogSettings.CONTACT)
@@ -367,7 +349,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res && res.created) {
           this.handlerService.reload$();
-          this.updateContactCount();
         }
       });
   }
@@ -378,7 +359,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((res) => {
         if (res && res.created) {
-          this.updateContactCount();
         }
       });
   }
@@ -598,7 +578,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
         if (res) {
           this.delete();
           this.handlerService.reload$();
-          this.updateContactCount();
         }
       });
   }

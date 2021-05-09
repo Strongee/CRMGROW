@@ -51,7 +51,6 @@ export class NavbarComponent implements OnInit {
 
   @ViewChild('searchInput') searchInput: ElementRef;
   packageLevel = '';
-  userContactCount = PACKAGE_LEVEL.elite.contact_info.max_count;
   profileSubscription: Subscription;
 
   constructor(
@@ -70,7 +69,6 @@ export class NavbarComponent implements OnInit {
         if (profile) {
           console.log('user profile ===========>', profile);
           this.packageLevel = profile.package_level;
-          this.userContactCount = profile.contact_info.count;
         }
       }
     );
@@ -84,21 +82,6 @@ export class NavbarComponent implements OnInit {
     return getUserLevel(this.packageLevel);
   }
 
-  isContactCreatable(): boolean {
-    const packageLevel = this.getUserLevel();
-    return (
-      this.userContactCount <=
-      PACKAGE_LEVEL[packageLevel].contact_info.max_count
-    );
-  }
-
-  updateContactCount(): void {
-    const _SELF = this;
-    setTimeout(function () {
-      _SELF.userContactCount = _SELF.contactService.total.getValue();
-    }, 2000);
-  }
-
   runAction(action: string): void {
     // Open New modal that corresponds to action
     switch (action) {
@@ -109,7 +92,6 @@ export class NavbarComponent implements OnInit {
           .subscribe((res) => {
             if (res && res.created) {
               this.contactService.reloadPage();
-              this.updateContactCount();
             }
           });
         break;

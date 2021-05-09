@@ -47,14 +47,11 @@ export class User implements Deserializable {
   contact_info = {
     is_limit: true,
     max_count: PACKAGE_LEVEL.pro.contact_info.max_count,
-    count: 0
   };
   video_info = {
     is_limit: true,
     upload_max_count: PACKAGE_LEVEL.pro.video_info.upload_max_count,
     record_max_count: PACKAGE_LEVEL.pro.video_info.record_max_length,
-    upload_count: 0,
-    record_length: 0
   };
   automation_info = {
     is_limit: true,

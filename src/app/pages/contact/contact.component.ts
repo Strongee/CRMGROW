@@ -204,7 +204,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   showingMax = 4; // Max Limit to show the detail data
   packageLevel = '';
   disableTabs = [];
-  assignAutomationCount = PACKAGE_LEVEL.elite.automation_info.max_count;
 
   constructor(
     private dialog: MatDialog,
@@ -234,7 +233,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
         this.packageLevel = user.package_level;
-        this.assignAutomationCount = user.automation_info.assign_count;
         if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableTabs = [
             { icon: '', label: 'Appointments', id: 'appointment' }
@@ -431,14 +429,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   getUserLevel(): string {
     return getUserLevel(this.packageLevel);
-  }
-
-  isAutomationAssignable(): boolean {
-    const packageLevel = this.getUserLevel();
-    return (
-      this.assignAutomationCount <=
-      PACKAGE_LEVEL[packageLevel].automation_info.max_count
-    );
   }
 
   /**

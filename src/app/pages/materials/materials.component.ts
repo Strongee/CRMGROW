@@ -141,7 +141,6 @@ export class MaterialsComponent implements OnInit {
 
   packageLevel = '';
   disableActions = [];
-  uploadVideoCount = PACKAGE_LEVEL.elite.video_info.upload_max_count;
 
   constructor(
     private dialog: MatDialog,
@@ -159,7 +158,6 @@ export class MaterialsComponent implements OnInit {
       (profile) => {
         this.user_id = profile._id;
         this.packageLevel = profile.package_level;
-        this.uploadVideoCount = profile.video_info.upload_count;
         if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableActions = [
             {
@@ -300,14 +298,6 @@ export class MaterialsComponent implements OnInit {
 
   getUserLevel(): string {
     return getUserLevel(this.packageLevel);
-  }
-
-  isVideoUploadable(): boolean {
-    const packageLevel = this.getUserLevel();
-    return (
-      this.uploadVideoCount <=
-      PACKAGE_LEVEL[packageLevel].video_info.upload_max_count
-    );
   }
 
   isAllSelected(): boolean {

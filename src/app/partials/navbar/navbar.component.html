@@ -13,7 +13,6 @@
            *ngFor="let action of actions"
            (click)="runAction(action.id)"
            class="d-flex text-white py-2 pl-3 align-items-center"
-           [class.disable]="action.id == 'contact' && !isContactCreatable()"
       >
         <i class="i-icon {{action.icon}} mr-3"></i>
         <span class="font-weight-bold">{{action.label}}</span>
