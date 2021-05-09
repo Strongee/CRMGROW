@@ -3,8 +3,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PageMenuItem } from 'src/app/utils/data.types';
-import {UserService} from "../../services/user.service";
-import {getUserLevel} from "../../utils/functions";
+import { UserService } from '../../services/user.service';
+import { getUserLevel } from '../../utils/functions';
+import { PACKAGE_LEVEL } from '../../constants/variable.constants';
 
 @Component({
   selector: 'app-settings',
@@ -41,13 +42,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   routeChangeSubscription: Subscription;
   profileSubscription: Subscription;
   packageLevel = '';
-  disableMenuItems = [
-    { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
-    { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
-    { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
-    { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
-    { id: 'auto-follow-up', icon: 'i-auto-follow', label: 'Auto Follow Up' }
-  ];
+  disableMenuItems = [];
 
   constructor(
     private location: Location,
@@ -58,6 +53,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.packageLevel = res.package_level;
+      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
+        this.disableMenuItems = [
+          { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
+          { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
+          { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
+          { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
+          {
+            id: 'auto-follow-up',
+            icon: 'i-auto-follow',
+            label: 'Auto Follow Up'
+          }
+        ];
+      }
     });
   }
 
@@ -79,12 +87,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   isDisableItem(menuItem): boolean {
-    // if (menuItem && menuItem.id) {
-    //   const index = this.disableMenuItems.findIndex((item) => item.id === menuItem.id);
-    //   if (index >= 0) {
-    //     return true;
-    //   }
-    // }
+    if (menuItem && menuItem.id) {
+      const index = this.disableMenuItems.findIndex((item) => item.id === menuItem.id);
+      if (index >= 0) {
+        return true;
+      }
+    }
     return false;
   }
 
