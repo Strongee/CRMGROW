@@ -112,6 +112,7 @@ export class HtmlEditorComponent implements OnInit {
   authToken = '';
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
   quillEditorRef;
+  popup;
   attachments = [];
   config = {
     toolbar: {
@@ -166,17 +167,21 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          let popup;
           const option = 'width=530, height=305';
-          if (!popup || popup.closed) {
-            popup = window.open(
+          if (!this.popup || this.popup.closed) {
+            this.popup = window.open(
               this.recordUrl + '?' + this.authToken,
               'record',
               option
             );
           } else {
-            popup.focus();
+            this.popup.focus();
           }
+          window.addEventListener('message', (e) => {
+            if (e && e.data) {
+              this.insertImageToEditor(e.data);
+            }
+          });
           this.cdr.detectChanges();
         }
       }
