@@ -46,7 +46,7 @@ import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bu
 import { Automation } from '../../models/automation.model';
 import { OverlayService } from 'src/app/services/overlay.service';
 import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
-import {getUserLevel} from "../../utils/functions";
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-autoflow',

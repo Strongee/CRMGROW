@@ -42,7 +42,11 @@
       (overlayOutsideClick)="closeTemplates($event)"
     >
       <div class="templates-container">
-        <div class="template" *ngIf="hasNewTemplateLink" (click)="createNew()">
+        <div class="template"
+         [class.disable]="getUserLevel() == 'lite'"
+         *ngIf="hasNewTemplateLink"
+         (click)="createNew()"
+        >
           <a class="f-3 font-weight-bold">Create New Template ...</a>
         </div>
         <ng-container *ngFor="let template of (templateService.templates$ | async)">
@@ -120,12 +124,12 @@
       (click)="onFocusEvt()"
       #emailEditor>
     </quill-editor>
-    
+
     <span class="c-red error" *ngIf="editorForm.errors && (editorForm.touched || editorForm.dirty)">
     Required!
     </span>
     <ng-container *ngIf="hasToken">
-      <div ngbDropdown class="insert-token bottom-right">
+      <div ngbDropdown class="insert-token bottom-right" [class.disable]="getUserLevel() == 'lite'">
         <div class="v-center no-carot" ngbDropdownToggle>
           <span class="f-1 font-weight-bold mr-1">Token</span>
           <i class="d-block i-icon i-triangle-down bgc-dark"></i>
