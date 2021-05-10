@@ -158,7 +158,7 @@ export class MaterialsComponent implements OnInit {
       (profile) => {
         this.user_id = profile._id;
         this.packageLevel = profile.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableActions = [
             {
               label: 'Send via email',

@@ -80,7 +80,7 @@
               <th mat-header-cell colspan="8">
                 <div class="v-center">
                   <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
-                  <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
+                  <app-actions-header [actions]="ACTIONS" [disableActions]="disableActions" (doCommand)="doAction($event)"></app-actions-header>
                 </div>
               </th>
             </ng-template>
@@ -261,7 +261,10 @@
                 *ngIf="!selection.length" class="capture-col">capture</th>
           </ng-container>
           <td mat-cell
-              *matCellDef="let element" class="capture-col">
+              *matCellDef="let element"
+              class="capture-col"
+              [class.disable]="getUserLevel() == 'lite'"
+          >
             <div class="v-center custom-control custom-switch p-0" *ngIf="element.material_type !== 'folder'">
               <label class="custom-toggle mb-0" placement="top">
                 <input

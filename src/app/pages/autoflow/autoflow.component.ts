@@ -18,7 +18,7 @@ import {
   ACTION_CAT,
   AUTOMATION_ICONS,
   BulkActions,
-  DialogSettings,
+  DialogSettings, PACKAGE_LEVEL,
   ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { ActionEditComponent } from 'src/app/components/action-edit/action-edit.component';
@@ -46,6 +46,7 @@ import { ContactBulkComponent } from 'src/app/components/contact-bulk/contact-bu
 import { Automation } from '../../models/automation.model';
 import { OverlayService } from 'src/app/services/overlay.service';
 import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-autoflow',
@@ -135,6 +136,9 @@ export class AutoflowComponent
   wrapperHeight = 0;
   offsetX = 0;
   offsetY = 0;
+  profileSubscription: Subscription;
+  packageLevel = '';
+  disableActions = [];
 
   constructor(
     private dialog: MatDialog,
@@ -152,8 +156,28 @@ export class AutoflowComponent
   }
 
   ngOnInit(): void {
-    this.userService.profile$.subscribe((res) => {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.user_id = res._id;
+      this.packageLevel = res.package_level;
+      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
+        this.disableActions = [
+          {
+            label: 'Send email',
+            type: 'button',
+            icon: 'i-message',
+            command: 'message',
+            loading: false
+          },
+          {
+            label: 'Add automation',
+            type: 'button',
+            icon: 'i-automation',
+            command: 'automation',
+            loading: false
+          }
+        ];
+      }
       this.arrangeAutomationData();
     });
 
@@ -197,6 +221,10 @@ export class AutoflowComponent
 
   ngAfterViewInit(): void {
     this.onResize(null);
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   @HostListener('window:resize', ['$event'])

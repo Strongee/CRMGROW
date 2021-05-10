@@ -25,6 +25,7 @@ import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
 import { Template } from 'src/app/models/template.model';
 import { StoreService } from 'src/app/services/store.service';
+import {getUserLevel} from "../../utils/functions";
 
 @Component({
   selector: 'app-action-edit',
@@ -105,6 +106,8 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   filterMaterials = [];
 
   loadSubscription: Subscription;
+  packageLevel = '';
+  profileSubscription: Subscription;
 
   constructor(
     private dialogRef: MatDialogRef<ActionEditComponent>,
@@ -130,8 +133,10 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
       };
     });
 
-    this.userService.profile$.subscribe((res) => {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
+      this.packageLevel = res.package_level;
     });
   }
 
@@ -299,6 +304,11 @@ export class ActionEditComponent implements OnInit, AfterContentChecked {
   ngOnDestroy(): void {
     this.loadSubscription && this.loadSubscription.unsubscribe();
   }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
+
 
   ngAfterContentChecked(): void {}
 

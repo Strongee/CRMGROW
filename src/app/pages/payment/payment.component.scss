@@ -81,3 +81,14 @@ button, a {
         border-radius: 50%;
     }
 }
+
+.plan-select-wrapper {
+  border: 1px solid rgba(16,19,54,0.24);
+  border-radius: 3px;
+  background-color: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 25px;
+}
+

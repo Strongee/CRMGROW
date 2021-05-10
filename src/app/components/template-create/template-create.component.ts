@@ -16,6 +16,8 @@ import { Template } from 'src/app/models/template.model';
 import { FileService } from 'src/app/services/file.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 import * as QuillNamespace from 'quill';
+import {UserService} from "../../services/user.service";
+import {getUserLevel} from "../../utils/functions";
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -68,14 +70,27 @@ export class TemplateCreateComponent implements OnInit {
 
   isShowTokens = false;
 
+  packageLevel = '';
+  profileSubscription: Subscription;
+
   constructor(
     private fileService: FileService,
     public templateService: TemplatesService,
+    private userService: UserService,
     @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
+      this.packageLevel = res.package_level;
+    });
+  }
 
   ngOnInit(): void {}
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
 
   setValue(value: string): void {
     if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
