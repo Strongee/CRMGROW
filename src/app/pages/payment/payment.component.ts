@@ -4,6 +4,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentCardComponent } from 'src/app/components/payment-card/payment-card.component';
+import { PACKAGE_LEVEL } from '../../constants/variable.constants';
+import {getUserLevel} from "../../utils/functions";
 
 @Component({
   selector: 'app-payment',
@@ -29,6 +31,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
   saving = false;
 
   profileSubscription: Subscription;
+  package = PACKAGE_LEVEL.pro;
+  packageLevel = '';
 
   constructor(private userService: UserService, private dialog: MatDialog) {
     this.loading = true;
@@ -36,6 +40,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile.payment) {
+          this.packageLevel = profile.package_level;
+          this.package = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.userService.getPayment(profile.payment).subscribe(
             (res) => {
               this.loading = false;
@@ -60,6 +66,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   getInvoice(): void {

@@ -1,3 +1,31 @@
+<div class="mb-3">
+  <span class="f-3 font-weight-bold">Subscription</span>
+</div>
+<div class="plan-select-wrapper">
+  <div class="plan-description">
+    <p class="f-3 font-weight-bold">CRM Grow Professional</p>
+    <p class="f-1 c-dark op-64 mb-2">${{package.price}} / month</p>
+    <div class="features">
+      <div class="feature-item v-center mb-2">
+        <i class="i-icon i-check bgc-blue sm"></i>
+        <span class="f-3 ml-2">{{package.contact_info.max_count}} contacts</span>
+      </div>
+      <div class="feature-item v-center mb-2">
+        <i class="i-icon i-check bgc-blue sm"></i>
+        <span class="f-3 ml-2">{{package.video_info.upload_max_count}} video uploads</span>
+      </div>
+      <div class="feature-item v-center mb-2">
+        <i class="i-icon i-check bgc-blue sm"></i>
+        <span class="f-3 ml-2">Up to {{package.video_info.record_max_length}} min video recording</span>
+      </div>
+      <div class="feature-item v-center mb-2">
+        <i class="i-icon i-check bgc-blue sm"></i>
+        <span class="f-3 ml-2">{{package.automation_info.max_count}} active automations</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="v-center justify-content-between mb-1">
     <span class="f-3 font-weight-bold">Detail information</span>
     <button type="button" class="btn btn-primary font-weight-bold" (click)="editCard()">Edit payment</button>

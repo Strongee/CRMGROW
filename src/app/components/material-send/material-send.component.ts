@@ -24,7 +24,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ConnectService } from 'src/app/services/connect.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { Subscription } from 'rxjs';
-import {getUserLevel} from "../../utils/functions";
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-material-send',

@@ -1593,6 +1593,7 @@ export const AUTOMATION_ICONS = {
 export const PACKAGE_LEVEL = {
   lite: {
     package: 'lite',
+    price: 29,
     contact_info: {
       max_count: 200
     },
@@ -1606,6 +1607,7 @@ export const PACKAGE_LEVEL = {
   },
   pro: {
     package: 'pro',
+    price: 49,
     contact_info: {
       max_count: 2000
     },
@@ -1619,6 +1621,7 @@ export const PACKAGE_LEVEL = {
   },
   elite: {
     package: 'elite',
+    price: 99,
     contact_info: {
       max_count: 20000
     },
