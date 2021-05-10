@@ -174,14 +174,14 @@ export class HtmlEditorComponent implements OnInit {
               'record',
               option
             );
+            window.addEventListener('message', (e) => {
+              if (e && e.data) {
+                this.insertImageToEditor(e.data);
+              }
+            });
           } else {
             this.popup.focus();
           }
-          window.addEventListener('message', (e) => {
-            if (e && e.data) {
-              this.insertImageToEditor(e.data);
-            }
-          });
           this.cdr.detectChanges();
         }
       }
