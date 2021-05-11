@@ -36,6 +36,7 @@ import {
 } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -101,8 +102,10 @@ export class MaterialsComponent implements OnInit {
   selecting = false;
 
   convertLoaderTimer;
-  convertingVideos = [];
+  convertingVideos = {};
   videoConvertingLoadSubscription: Subscription;
+  convertCallingTimes = {};
+  convertCallSubscription = {};
 
   captureVideos = [];
   editedVideos;
@@ -194,6 +197,15 @@ export class MaterialsComponent implements OnInit {
       this.loadSubscription && this.loadSubscription.unsubscribe();
       this.loadSubscription = this.storeService.materials$.subscribe(
         (materials) => {
+          this.convertingVideos = {};
+          materials.forEach((e) => {
+            if (e.material_type === 'video') {
+              if (e.converted !== 'completed' && e.converted !== 'failed') {
+                this.convertingVideos[e._id] = e.key;
+              }
+            }
+          });
+
           materials.sort((a, b) => (a.folder ? -1 : 1));
           this.materials = materials;
           this.materials = _.uniqBy(this.materials, '_id');
@@ -283,7 +295,7 @@ export class MaterialsComponent implements OnInit {
       this.teamService.loadAll(true);
     }
     this.convertLoaderTimer = setInterval(() => {
-      if (this.convertingVideos.length) {
+      if (Object.keys(this.convertingVideos).length) {
         this.loadConvertingStatus();
       }
     }, 5000);
@@ -1160,40 +1172,114 @@ export class MaterialsComponent implements OnInit {
   }
 
   loadConvertingStatus(): void {
-    this.videoConvertingLoadSubscription &&
-      this.videoConvertingLoadSubscription.unsubscribe();
-    this.videoConvertingLoadSubscription = this.materialService
-      .loadConvertingStatus(this.convertingVideos)
-      .subscribe((res) => {
-        this.materials.forEach((e) => {
-          if (e.material_type !== 'video') {
-            return;
+    const bucketVideos = [];
+    const siteVideos = [];
+    const keyId = {};
+    for (const id in this.convertingVideos) {
+      if (this.convertingVideos[id]) {
+        bucketVideos.push(this.convertingVideos[id]);
+        keyId[this.convertingVideos[id]] = id;
+      } else {
+        siteVideos.push(id);
+      }
+    }
+    bucketVideos.forEach((e) => {
+      this.convertCallSubscription[e] &&
+        this.convertCallSubscription[e].unsubscribe();
+      this.convertCallSubscription[
+        e
+      ] = this.materialService.getS3ConvertingStatus(e).subscribe(
+        (res) => {
+          if (
+            res['converted'] === 100 &&
+            res['streamd'] === 100 &&
+            res['preview']
+          ) {
+            // Remove From Converting Video Status
+            delete this.convertingVideos[keyId[e]];
+            this.materialService
+              .updateConvertStatus(keyId[e], res)
+              .subscribe((_res) => {
+                // Update the Video Convert Status
+                this.materialService.updateConvert$(keyId[e], {
+                  progress: 100,
+                  converted: 'completed',
+                  preview: _res.data && _res.data['preview']
+                });
+              });
+          } else if (res['converted'] === 100 && res['error']) {
+            delete this.convertingVideos[keyId[e]];
+            this.materialService
+              .updateConvertStatus(keyId[e], res)
+              .subscribe((_res) => {
+                // Update the Video Convert Status
+                this.materialService.updateConvert$(keyId[e], {
+                  progress: 100,
+                  converted: 'completed',
+                  preview: _res.data && _res.data['preview']
+                });
+              });
+          } else if (res['error']) {
+            if (this.convertCallingTimes[e]) {
+              this.convertCallingTimes[e] = 1;
+            } else {
+              this.convertCallingTimes[e]++;
+            }
           }
-          if (e.converted !== 'completed' && e.converted !== 'disabled') {
-            const convertingStatus = res[e._id];
-            if (!convertingStatus) {
-              return;
-            }
-            if (convertingStatus.status && convertingStatus.progress == 100) {
-              e['converted'] = 'completed';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
-            if (convertingStatus.status && convertingStatus.progress < 100) {
-              e['progress'] = convertingStatus.progress;
-            }
-            if (!convertingStatus.status) {
-              e['convertingStatus'] = 'error';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
+          this.materialService.updateConvert$(keyId[e], {
+            progress: res['converted'] || 0
+          });
+
+          if (this.convertCallingTimes[e] && this.convertCallingTimes[e] > 10) {
+            delete this.convertingVideos[keyId[e]];
           }
-        });
-      });
+        },
+        () => {
+          if (this.convertCallingTimes[e]) {
+            this.convertCallingTimes[e] = 1;
+          } else {
+            this.convertCallingTimes[e]++;
+          }
+          if (this.convertCallingTimes[e] && this.convertCallingTimes[e] > 10) {
+            delete this.convertingVideos[keyId[e]];
+          }
+        }
+      );
+    });
+    // this.videoConvertingLoadSubscription &&
+    //   this.videoConvertingLoadSubscription.unsubscribe();
+    // this.videoConvertingLoadSubscription = this.materialService
+    //   .loadConvertingStatus(this.convertingVideos)
+    //   .subscribe((res) => {
+    //     this.materials.forEach((e) => {
+    //       if (e.material_type !== 'video') {
+    //         return;
+    //       }
+    //       if (e.converted !== 'completed' && e.converted !== 'disabled') {
+    //         const convertingStatus = res[e._id];
+    //         if (!convertingStatus) {
+    //           return;
+    //         }
+    //         if (convertingStatus.status && convertingStatus.progress == 100) {
+    //           e['converted'] = 'completed';
+    //           const pos = this.convertingVideos.indexOf(e._id);
+    //           if (pos !== -1) {
+    //             this.convertingVideos.splice(pos, 1);
+    //           }
+    //         }
+    //         if (convertingStatus.status && convertingStatus.progress < 100) {
+    //           e['progress'] = convertingStatus.progress;
+    //         }
+    //         if (!convertingStatus.status) {
+    //           e['convertingStatus'] = 'error';
+    //           const pos = this.convertingVideos.indexOf(e._id);
+    //           if (pos !== -1) {
+    //             this.convertingVideos.splice(pos, 1);
+    //           }
+    //         }
+    //       }
+    //     });
+    //   });
   }
 
   showAnalytics(material): void {}
@@ -1472,10 +1558,20 @@ export class MaterialsComponent implements OnInit {
   }
 
   download(video): void {
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = video.url;
-    a.click();
+    if (!video.bucket) {
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = video.url;
+      a.click();
+    } else {
+      this.materialService.downloadVideo(video._id).subscribe((res) => {
+        if (res['status']) {
+          saveAs(res['data'], res['title'] + '.mp4');
+        } else {
+          this.toast.warning(`Downloading is failed.`);
+        }
+      });
+    }
   }
 
   sort(field: string, keep: boolean = false): void {
@@ -1688,6 +1784,9 @@ export class MaterialsComponent implements OnInit {
   }
 
   checkType(url: string): boolean {
+    if (!url) {
+      return true;
+    }
     if (url.indexOf('youtube.com') == -1 && url.indexOf('vimeo.com') == -1) {
       return true;
     } else {

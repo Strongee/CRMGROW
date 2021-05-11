@@ -1,18 +1,7 @@
-import { V } from '@angular/cdk/keycodes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { interval, Observable, BehaviorSubject } from 'rxjs';
-import {
-  catchError,
-  filter,
-  map,
-  takeUntil,
-  scan,
-  withLatestFrom,
-  tap,
-  repeat,
-  combineAll
-} from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { catchError, filter, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { VIDEO, PDF, IMAGE, MATERIAL } from '../constants/api.constant';
 import { Image } from '../models/image.model';
@@ -127,6 +116,13 @@ export class MaterialService extends HttpService {
 
   updateVideo(id: string, video: any): any {
     return this.httpClient.put(this.server + VIDEO.UPDATE + id, video);
+  }
+
+  updateConvertStatus(id: string, status: any): any {
+    return this.httpClient.put(
+      this.server + VIDEO.UPDATE_CONVERTING + id,
+      status
+    );
   }
 
   updateAdminVideo(id: string, video: any): any {
@@ -265,6 +261,13 @@ export class MaterialService extends HttpService {
     });
   }
 
+  getS3ConvertingStatus(video_id: any): any {
+    return this.httpClient.get(
+      'https://f8nhu9b8o4.execute-api.us-east-2.amazonaws.com/default/convert-status?video_id=' +
+        video_id
+    );
+  }
+
   getAnalytics(id: string): Observable<Video[]> {
     return this.httpClient.get(this.server + VIDEO.ANALYTICS + id).pipe(
       map((res) => res['data'] || []),
@@ -315,11 +318,30 @@ export class MaterialService extends HttpService {
         catchError(this.handleError('MOVE MATERIALS', null))
       );
   }
+  downloadVideo(id: string): any {
+    return this.httpClient.get(this.server + VIDEO.DOWNLOAD + id);
+  }
 
   create$(material: any): void {
     const materials = this.storeService.materials.getValue();
     materials.unshift(material);
     this.storeService.materials.next([...materials]);
+  }
+
+  updateConvert$(_id, data): void {
+    const materials = this.storeService.materials.getValue();
+    materials.some((e) => {
+      if (e._id === _id) {
+        e.progress = data['progress'];
+        if (data['converted']) {
+          e.converted = data['converted'];
+        }
+        if (data['preview']) {
+          e.preview = data['preview'];
+        }
+        return true;
+      }
+    });
   }
 
   update$(_id: string, data: any): void {

@@ -38,6 +38,9 @@ export class Material implements Deserializable {
   created_at: Date;
   updated_at: Date;
   views: number;
+  bucket: string;
+  key: string;
+  progress: number;
   _id: string;
 
   deserialize(input: any): this {
