@@ -1318,7 +1318,7 @@ export const BulkActions = {
     {
       label: 'Add notes',
       type: 'button',
-      icon: 'i-template',
+      icon: 'i-note',
       command: 'add_note',
       loading: false
     },
