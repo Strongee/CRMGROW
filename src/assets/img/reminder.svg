@@ -1,15 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25.409" height="22.705" viewBox="0 0 25.409 22.705">
-  <defs>
-    <ellipse id="ellipse-1" cx="12.705" cy="14.705" rx="7" ry="7"/>
-  </defs>
-  <g>
-    <g>
-      <use fill="rgb(0,0,255)" fill-opacity=".1" xlink:href="#ellipse-1"/>
-      <use fill-opacity="0" stroke="rgb(0,0,255)" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" xlink:href="#ellipse-1"/>
-    </g>
-    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M16.7046301 4.7046301c1.4977.67528 2.8666 1.66145 4 2.92989"/>
-    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M8.7046301 4.8310401c-1.49767.67527-2.86662 1.66144-4 2.92988"/>
-    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M12.7046301 16.7050601v-4"/>
-    <path fill="none" stroke="rgb(0,0,255)" stroke-linecap="round" stroke-linejoin="miter" stroke-width="2" d="M14.7046301 14.7050601h-4"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12.5 8H11v6l4.75 2.85.75-1.23-4-2.37zm4.837-6.19l4.607 3.845-1.28 1.535-4.61-3.843zm-10.674 0l1.282 1.536L3.337 7.19l-1.28-1.536zM12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>

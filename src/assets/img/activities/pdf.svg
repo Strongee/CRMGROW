@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>4757E055-82EC-4B9E-A025-3F09D7EBF436</title>
-    <g id="Main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Timeline-Actions-Icons" transform="translate(-237.000000, -159.000000)">
-            <g id="Icons-/-PDF-Sent" transform="translate(237.000000, 159.000000)">
-                <polygon id="Rectangle" fill="#FFE5E3" points="3.15789474 1.1 11.5789474 1.1 14.7368421 3.61667082 16.8421053 6.6 16.8421053 18.7113929 3.15789474 18.7113929"></polygon>
-                <path d="M18,3.3 L14.1059668,0 L13.0093332,2.88766905 C13.0093332,3.49517705 14.0248691,4.46704003 14.6062376,4.46704003 L18,3.3 Z" id="Path" fill="#D92121" fill-rule="nonzero"></path>
-                <path d="M13.1059668,1 L13.1059668,4.17464937 L17,4.27464937 L17,17 C17,17.5522847 16.7761424,18.0522847 16.4142136,18.4142136 C16.0522847,18.7761424 15.5522847,19 15,19 L15,19 L5,19 C4.44771525,19 3.94771525,18.7761424 3.58578644,18.4142136 C3.22385763,18.0522847 3,17.5522847 3,17 L3,17 L3,3 C3,2.44771525 3.22385763,1.94771525 3.58578644,1.58578644 C3.94771525,1.22385763 4.44771525,1 5,1 L5,1 L13.1059668,1 Z" id="Rectangle" stroke="#D92022" stroke-width="2"></path>
-                <rect id="Rectangle" fill="#D92121" fill-rule="nonzero" x="0.740645263" y="7.514792" width="18.5185263" height="9" rx="2"></rect>
-                <text id="PDF" font-family="Nunito-Black, Nunito" font-size="8" font-weight="700" fill="#FFE5E4">
-                    <tspan x="2" y="15">PDF</tspan>
-                </text>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm12 6V9c0-.55-.45-1-1-1h-2v5h2c.55 0 1-.45 1-1zm-2-3h1v3h-1V9zm4 2h1v-1h-1V9h1V8h-2v5h1zm-8 0h1c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1H9v5h1v-2zm0-2h1v1h-1V9z"/></svg>

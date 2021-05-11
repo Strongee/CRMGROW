@@ -7,6 +7,9 @@
 .i-calendar{
   mask-image: url('/assets/img/calendar.svg');
 }
+.i-error{
+  mask-image: url('/assets/img/error.svg');
+}
 .i-calendly{
   mask-image: url('/assets/img/calendly.svg');
 }
@@ -35,7 +38,7 @@
   mask-image: url('/assets/img/list.svg');
 }
 .i-list-circle{
-  mask-image: url('/assets/img/list-circle.png');
+  mask-image: url('/assets/img/list-circle.svg');
 }
 .i-location{
   mask-image: url('/assets/img/location.svg');
@@ -77,7 +80,7 @@
   mask-image: url('/assets/img/sms_limits.svg');
 }
 .i-sms-sent{
-  mask-image: url('/assets/img/sms_sent.svg');
+  mask-image: url('/assets/img/sms_limits.svg');
 }
 .i-task{
   mask-image: url('/assets/img/task.svg');
@@ -254,9 +257,6 @@
 .i-list-text {
   mask-image: url('/assets/img/list-text.svg');
 }
-.i-bulk {
-  mask-image: url('/assets/img/rss-feed.svg');
-}
 .i-activity {
   mask-image: url('/assets/img/activity.svg');
 }
@@ -267,22 +267,17 @@
   mask-image: url('/assets/img/round.svg');
 }
 .i-triangle-more {
-  mask-image: url('/assets/img/triangle_more.svg');
+  mask-image: url('/assets/img/triangle-right.svg');
 }
 .i-remove {
   mask-image: url('/assets/img/remove.svg');
 }
-.i-status {
-  mask-image: url('/assets/img/status.svg');
-}
+
 .i-auto-video {
   mask-image: url('/assets/img/auto_video.svg');
 }
 .i-auto-follow {
   mask-image: url('/assets/img/auto_follow.svg');
-}
-.i-folder-name {
-  mask-image: url('/assets/img/ABC.svg');
 }
 .i-copy-link {
   mask-image: url('/assets/img/copy_link.svg');
@@ -329,21 +324,6 @@
 .i-reminder {
   mask-image: url('/assets/img/reminder.svg')
 }
-.i-schedule {
-  mask-image: url('/assets/img/schedule.svg')
-}
-.i-status-green {
-  mask-image: url('/assets/img/status_green.svg')
-}
-.i-status-red {
-  mask-image: url('/assets/img/status_red.svg')
-}
-.i-status-yellow {
-  mask-image: url('/assets/img/status_yellow.svg')
-}
-.i-status-gray {
-  mask-image: url('/assets/img/status_gray.svg')
-}
 .i-back {
   mask-image: url('/assets/img/back.svg')
 }
@@ -354,7 +334,7 @@
   mask-image: url('/assets/img/delivered_mail.svg')
 }
 .i-texts {
-  mask-image: url('/assets/img/sms_sent.svg')
+  mask-image: url('/assets/img/sms_limits.svg')
 }
 .i-appointments {
   mask-image: url('/assets/img/calendar.svg')
@@ -401,12 +381,6 @@
 .i-opened-mail {
   mask-image: url('/assets/img/opened_mail.svg');
 }
-.i-bounced-mail {
-  mask-image: url('/assets/img/bounced_mail.svg');
-}
-.i-unsubscribed-mail {
-  mask-image: url('/assets/img/unsubscribed_mail.svg');
-}
 .i-clicked-mail {
   mask-image: url('/assets/img/clicked_mail.svg');
 }
@@ -420,7 +394,7 @@
   mask-image: url('/assets/img/group_call_schedule.svg');
 }
 .i-invite-member {
-  mask-image: url('/assets/img/invite_member.svg');
+  mask-image: url('/assets/img/invite.svg');
 }
 .i-send {
   mask-image: url('/assets/img/sent.svg');
@@ -449,12 +423,6 @@
 .i-screen-camera {
   mask-image: url('/assets/img/monitor_camera.svg');
 }
-.i-record-more {
-  mask-image: url('/assets/img/record_more.svg');
-}
-.i-record-cam {
-  mask-image: url('/assets/img/record_cam.svg');
-}
 .i-record-check {
   mask-image: url('/assets/img/record_check.svg');
 }
@@ -469,12 +437,6 @@
 }
 .i-record-play {
   mask-image: url('/assets/img/record_play.svg');
-}
-.i-record-screen {
-  mask-image: url('/assets/img/record_screen.svg');
-}
-.i-record-screen-cam {
-  mask-image: url('/assets/img/record_screen_cam.svg');
 }
 .i-record-close {
   mask-image: url('/assets/img/record_close.svg');
@@ -525,7 +487,7 @@
   mask-image: url('/assets/img/chevron_right.svg');
 }
 .i-text-send {
-  mask-image: url('/assets/img/material_send.svg');
+  mask-image: url('/assets/img/sent.svg');
 }
 .icon-close {
   background-image: url('/assets/img/close.svg');
@@ -543,126 +505,167 @@
 
 ///////////// Activity List Icons //////////////////
 .act-icon{
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
   display: block;
-}
-.act-icon.normal {
-  width: 18px;
-  height: 18px;
+
+  &.s-14 {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+  }
+  &.sm{
+    width: 13px;
+    height: 13px;
+    min-width: 14px;
+  }
+  &.s-8 {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+  }
 }
 .act-bell {
-  background-image: url('/assets/img/notification.svg');
+  mask-image: url('/assets/img/notification.svg');
+  background-color: #0000ff;
 }
 .act-videos {
-  background-image: url('/assets/img/activities/video.svg');
+  mask-image: url('/assets/img/activities/video.svg');
+  background-color: #0000ff;
 }
 .act-pdfs {
-  background-image: url('/assets/img/activities/pdf.svg');
+  mask-image: url('/assets/img/activities/pdf.svg');
+  background-color: #D92121;
 }
 .act-images {
-  background-image: url('/assets/img/activities/image.svg');
+  mask-image: url('/assets/img/activities/image.svg');
+  background-color: #9000FB;
 }
 .act-emails {
-  background-image: url('/assets/img/activities/email.svg');
+  mask-image: url('/assets/img/activities/email.svg');
+  background-color: #F19D50;
 }
 .act-video_trackers {
-  background-image: url('/assets/img/activities/video.svg');
+  mask-image: url('/assets/img/activities/video.svg');
+  background-color: #0000ff;
 }
 // .act-video_trackers.watch {
 //   background-image: url('/assets/img/activities/video_watched.svg');
 // }
 .act-video_trackers.thumbs {
-  background-image: url('/assets/img/activities/video_like.svg');
+  mask-image: url('/assets/img/activities/video_like.svg');
+  background-color: #F7B500;
 }
 .act-video_trackers.unsubscribe {
-  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+  mask-image: url('/assets/img/activities/email_unsubscribed.svg');
+  background-color: #F7B500;
 }
 .act-video_trackers.share {
-  background-image: url('/assets/img/activities/video_like.svg');
+  mask-image: url('/assets/img/activities/video_like.svg');
+  background-color: #F7B500;
 }
 
 .act-image_trackers {
-  background-image: url('/assets/img/activities/image.svg');
+  mask-image: url('/assets/img/activities/image.svg');
+  background-color: #9000FB;
 }
 // .act-image_trackers.watch {
 //   background-image: url('/assets/img/activities/image_watched.svg');
 // }
 .act-image_trackers.thumbs {
-  background-image: url('/assets/img/activities/image_like.svg');
+  mask-image: url('/assets/img/activities/image_like.svg');
+  background-color: #9000FB;
 }
 .act-image_trackers.unsubscribe {
-  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+  mask-image: url('/assets/img/activities/email_unsubscribed.svg');
+  background-color: #9000FB;
 }
 .act-image_trackers.share {
-  background-image: url('/assets/img/activities/image_like.svg');
+  mask-image: url('/assets/img/activities/image_like.svg');
 }
 .act-pdf_trackers {
-  background-image: url('/assets/img/activities/pdf.svg');
+  mask-image: url('/assets/img/activities/pdf.svg');
+  background-color: #D92121;
 }
 // .act-pdf_trackers.watch {
 //   background-image: url('/assets/img/activities/pdf_watched.svg');
 // }
 .act-pdf_trackers.thumbs {
-  background-image: url('/assets/img/activities/pdf_like.svg');
+  mask-image: url('/assets/img/activities/pdf_like.svg');
+  background-color: #D92121;
 }
 .act-pdf_trackers.unsubscribe {
-  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+  mask-image: url('/assets/img/activities/email_unsubscribed.svg');
+  background-color: #F7B500;
 }
 .act-pdf_trackers.share {
-  background-image: url('/assets/img/activities/pdf_like.svg');
+  mask-image: url('/assets/img/activities/pdf_like.svg');
 }
-
 .act-email_trackers {
-  background-image: url('/assets/img/activities/email_opened.svg');
+  mask-image: url('/assets/img/activities/email_opened.svg');
+  background-color: #F7B500;
 }
 .act-email_trackers.open {
-  background-image: url('/assets/img/activities/email_opened.svg');
+  mask-image: url('/assets/img/activities/email_opened.svg');
+  background-color: #F7B500;
 }
 .act-email_trackers.click {
-  background-image: url('/assets/img/activities/link_clicked.svg');
+  mask-image: url('/assets/img/activities/link_clicked.svg');
+  background-color: #F7B500;
 }
 .act-email_trackers.unsubscribe {
-  background-image: url('/assets/img/activities/email_unsubscribed.svg');
+  mask-image: url('/assets/img/activities/email_unsubscribed.svg');
+  background-color: #F7B500;
 }
-
 .act-contacts {
-  background-image: url('/assets/img/activities/contact.svg');
+  mask-image: url('/assets/img/activities/contact.svg');
+  background-color: #0000ff;
 }
-
 .act-follow_ups {
-  background-image: url('/assets/img/activities/task.svg');
+  mask-image: url('/assets/img/activities/task.svg');
+  background-color: #0000ff;
 }
 .act-phone_logs {
-  background-image: url('/assets/img/activities/phone.svg');
+  mask-image: url('/assets/img/activities/phone.svg');
+  background-color: #101336;
 }
 .act-notes {
-  background-image: url('/assets/img/activities/note.svg');
+  mask-image: url('/assets/img/activities/note.svg');
+  background-color: #F7B500;
 }
 .act-appointments {
-  background-image: url('/assets/img/calendar.svg');
+  mask-image: url('/assets/img/calendar.svg');
+  background-color: #51A500;
 }
 .act-sms {
-  background-image: url('/assets/img/activities/note.svg');
+  mask-image: url('/assets/img/activities/note.svg');
+  background-color: #F7B500;
 }
 .act-sms_trackers {
-  background-image: url('/assets/img/activities/note.svg');
+  mask-image: url('/assets/img/activities/note.svg');
+  background-color: #F7B500;
 }
 .act-texts {
-  background-image: url('/assets/img/activities/text.svg');
+  mask-image: url('/assets/img/activities/text.svg');
+  background-color: #00A3FF;
 }
 .act-text_trackers {
-  background-image: url('/assets/img/activities/text.svg');
+  mask-image: url('/assets/img/activities/text.svg');
+  background-color: #00A3FF;
 }
 .act-deals {
-  background-image: url('/assets/img/flame.svg');
+  mask-image: url('/assets/img/flame.svg');
+  background-color: #101336;
 }
 .act-team_calls {
-  background-image: url('/assets/img/group_call.svg');
+  mask-image: url('/assets/img/group_call.svg');
+  background-color: #101336;
 }
 .act-users {
-  background-image: url('/assets/img/activities/shared.svg');
+  mask-image: url('/assets/img/activities/shared.svg');
+  background-color: #101336;
 }

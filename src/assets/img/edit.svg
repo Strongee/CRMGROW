@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Icons / Table / Edit</title>
-    <g id="Icons-/-Table-/-Edit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Edit_final" fill="#101336" fill-rule="nonzero">
-            <polygon id="Path" points="0.0129995285 12.7177252 9.73060639 3 13 6.26937301 3.28236061 15.9870738 0 16"></polygon>
-            <path d="M12.5833694,0.249851057 C12.9165321,-0.0832836857 13.4566322,-0.0832836857 13.7897949,0.249851057 L15.750187,2.21023355 C16.083271,2.54336514 16.083271,3.08348149 15.750187,3.41661308 L14.1667388,5 L11,1.83323404 L12.5833694,0.249851057 Z" id="Path"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg>
