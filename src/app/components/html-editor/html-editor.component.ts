@@ -303,6 +303,7 @@ export class HtmlEditorComponent implements OnInit {
     const link_button = toolbar.container.querySelector('.ql-link');
     const image_button = toolbar.container.querySelector('.ql-image');
     const template_button = toolbar.container.querySelector('.ql-template');
+    const emoji_button = toolbar.container.querySelector('.ql-emoji');
     const calendly_button = toolbar.container.querySelector('.ql-calendly');
     const record_button = toolbar.container.querySelector('.ql-record');
     if (link_button) {
@@ -313,6 +314,9 @@ export class HtmlEditorComponent implements OnInit {
     }
     if (template_button) {
       template_button.setAttribute('title', 'Template');
+    }
+    if (emoji_button) {
+      emoji_button.setAttribute('title', 'Emoji');
     }
     if (calendly_button) {
       calendly_button.setAttribute('title', 'Calendly');
