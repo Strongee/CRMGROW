@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Icons / Broadcasts</title>
-    <g id="Icons-/-Broadcasts" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Broadcast" opacity="0.64" transform="translate(0.000000, 1.000000)"></g>
-        <path d="M10,15 C10,10.0294389 5.97056114,6 1,6" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M15,15 C15,7.26800873 8.73199127,1 1,1" id="Path" stroke="#101336" stroke-width="2" stroke-linecap="round"></path>
-        <circle id="Oval" fill="#101336" fill-rule="nonzero" cx="2.5" cy="13.5" r="2.5"></circle>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
