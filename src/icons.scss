@@ -558,6 +558,7 @@
 // }
 .act-video_trackers.thumbs {
   mask-image: url('/assets/img/activities/video_like.svg');
+  background-color: #F7B500;
 }
 .act-video_trackers.unsubscribe {
   mask-image: url('/assets/img/activities/email_unsubscribed.svg');
@@ -565,6 +566,7 @@
 }
 .act-video_trackers.share {
   mask-image: url('/assets/img/activities/video_like.svg');
+  background-color: #F7B500;
 }
 
 .act-image_trackers {
@@ -576,10 +578,11 @@
 // }
 .act-image_trackers.thumbs {
   mask-image: url('/assets/img/activities/image_like.svg');
+  background-color: #9000FB;
 }
 .act-image_trackers.unsubscribe {
   mask-image: url('/assets/img/activities/email_unsubscribed.svg');
-  background-color: #F7B500;
+  background-color: #9000FB;
 }
 .act-image_trackers.share {
   mask-image: url('/assets/img/activities/image_like.svg');
@@ -593,6 +596,7 @@
 // }
 .act-pdf_trackers.thumbs {
   mask-image: url('/assets/img/activities/pdf_like.svg');
+  background-color: #D92121;
 }
 .act-pdf_trackers.unsubscribe {
   mask-image: url('/assets/img/activities/email_unsubscribed.svg');
@@ -603,12 +607,15 @@
 }
 .act-email_trackers {
   mask-image: url('/assets/img/activities/email_opened.svg');
+  background-color: #F7B500;
 }
 .act-email_trackers.open {
   mask-image: url('/assets/img/activities/email_opened.svg');
+  background-color: #F7B500;
 }
 .act-email_trackers.click {
   mask-image: url('/assets/img/activities/link_clicked.svg');
+  background-color: #F7B500;
 }
 .act-email_trackers.unsubscribe {
   mask-image: url('/assets/img/activities/email_unsubscribed.svg');
@@ -656,7 +663,9 @@
 }
 .act-team_calls {
   mask-image: url('/assets/img/group_call.svg');
+  background-color: #101336;
 }
 .act-users {
   mask-image: url('/assets/img/activities/shared.svg');
+  background-color: #101336;
 }
