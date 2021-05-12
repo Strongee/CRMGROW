@@ -31,7 +31,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   saving = false;
 
   profileSubscription: Subscription;
-  package = PACKAGE_LEVEL.pro;
+  currentPackage = PACKAGE_LEVEL.pro;
   litePackage = PACKAGE_LEVEL.lite;
   proPackage = PACKAGE_LEVEL.pro;
   elitePackage = PACKAGE_LEVEL.elite;
@@ -39,6 +39,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   packageLevel = '';
   step = 1;
+  isShowAll = false;
 
   constructor(private userService: UserService, private dialog: MatDialog) {
     this.loading = true;
@@ -47,7 +48,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       (profile) => {
         if (profile.payment) {
           this.packageLevel = profile.package_level;
-          this.package = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
+          this.currentPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.userService.getPayment(profile.payment).subscribe(
             (res) => {
               this.loading = false;
@@ -105,10 +106,43 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   changePlan(): void {
-    this.step = 1;
+    this.step = 2;
   }
 
   cancelAccount(): void {
 
+  }
+
+  selectPlan(level): void {
+    for (const item in PACKAGE_LEVEL) {
+      if (PACKAGE_LEVEL[item].package === level) {
+        this.currentPackage = PACKAGE_LEVEL[item];
+      }
+    }
+    this.step = 1;
+  }
+
+  planButtonLabel(level): string {
+    if (level === this.currentPackage.package) {
+      return 'Your Plan';
+    } else {
+      if (level === PACKAGE_LEVEL.lite.package) {
+        return 'Downgrade';
+      } else if (level === PACKAGE_LEVEL.pro.package) {
+        if (this.currentPackage.package === PACKAGE_LEVEL.lite.package) {
+          return 'Get Pro';
+        } else {
+          return 'Downgrade';
+        }
+      } else if (level === PACKAGE_LEVEL.elite.package) {
+        return 'Get Elite';
+      } else if (level === PACKAGE_LEVEL.custom.package) {
+        return 'Contact us';
+      }
+    }
+  }
+
+  showAllFeatures(): void {
+    this.isShowAll = !this.isShowAll;
   }
 }
