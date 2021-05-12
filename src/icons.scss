@@ -221,8 +221,8 @@
     content: '';
     position: absolute;
     display: block;
-    width: 6px;
-    height: 6px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background-color: red;
     top: 50%;
@@ -526,9 +526,9 @@
   mask-position: center;
   mask-size: contain;
   mask-repeat: no-repeat;
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
   display: block;
 
   &.s-14 {

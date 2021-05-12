@@ -271,9 +271,7 @@ export class DealsService extends HttpService {
 
   getActivity(data: any): Observable<DetailActivity[]> {
     return this.httpClient.post(this.server + DEAL.GET_ACTIVITY, data).pipe(
-      map((res) =>
-        (res['data'] || []).map((e) => new DetailActivity().deserialize(e))
-      ),
+      map((res) => res['data'] || []),
       catchError(this.handleError('GET DEAL ACTIVITY', []))
     );
   }
