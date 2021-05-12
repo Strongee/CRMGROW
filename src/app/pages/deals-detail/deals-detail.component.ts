@@ -1,4 +1,11 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from 'src/app/services/store.service';
 import { DealsService } from 'src/app/services/deals.service';
@@ -44,6 +51,8 @@ import { DetailErrorComponent } from 'src/app/components/detail-error/detail-err
 import { AdditionalFieldsComponent } from '../../components/additional-fields/additional-fields.component';
 import { AdditionalEditComponent } from '../../components/additional-edit/additional-edit.component';
 import { getUserLevel } from '../../utils/functions';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-deals-detail',
@@ -85,12 +94,12 @@ export class DealsDetailComponent implements OnInit {
   dealPanel = true;
   contactsPanel = true;
 
-  activityCount = {
+  activityCounts = {
     notes: 0,
     emails: 0,
     texts: 0,
     appointments: 0,
-    team_calls: 0,
+    group_calls: 0,
     follow_ups: 0
   };
   notes = [];
@@ -101,9 +110,8 @@ export class DealsDetailComponent implements OnInit {
   tasks = [];
 
   activities: DetailActivity[] = [];
-  timelines = [];
+  mainTimelines = [];
   showingDetails = [];
-  showingTimelines = [];
   groupActions = {};
   details = {};
   detailData = {};
@@ -132,6 +140,38 @@ export class DealsDetailComponent implements OnInit {
   packageLevel = '';
   disableTabs = [];
 
+  data = {
+    materials: [],
+    notes: [],
+    emails: [],
+    texts: [],
+    appointments: [],
+    tasks: []
+  };
+  dataObj = {
+    materials: {},
+    notes: {},
+    emails: {},
+    texts: {},
+    appointments: {},
+    tasks: {}
+  };
+  materialMediaSending = {};
+  materialSendingType = {};
+  groups = [];
+  dGroups = [];
+  showingMax = 4;
+  loadingAppointment = false;
+  loadedAppointments = {};
+  selectedAppointment;
+
+  overlayRef: OverlayRef;
+  templatePortal: TemplatePortal;
+  appointmentLoadSubscription: Subscription;
+  @ViewChild('appointmentPortalContent') appointmentPortalContent: TemplateRef<
+    unknown
+  >;
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
@@ -145,7 +185,9 @@ export class DealsDetailComponent implements OnInit {
     private handlerService: HandlerService,
     private toast: ToastrService,
     private location: Location,
-    private element: ElementRef
+    private element: ElementRef,
+    private overlay: Overlay,
+    private viewContainerRef: ViewContainerRef
   ) {
     this.appointmentService.loadCalendars(false);
     this.teamService.loadAll(true);
@@ -255,114 +297,337 @@ export class DealsDetailComponent implements OnInit {
       .getActivity({ deal: this.dealId })
       .subscribe((res) => {
         if (res) {
-          const activities = [];
-          let last_activity;
-          let contact_activity;
-          res.forEach((e) => {
-            if (e.type === 'deals') {
-              const activity = e;
-              if (
-                last_activity &&
-                last_activity.type === 'deals' &&
-                ((last_activity.content.indexOf('added') !== -1 &&
-                  e.content.indexOf('added') !== -1) ||
-                  (last_activity.content.indexOf('removed') !== -1 &&
-                    e.content.indexOf('removed') !== -1))
-              ) {
-                contact_activity.contact_details.push(
-                  new Contact().deserialize(e.activity_detail)
-                );
-              } else {
-                activity.contact_details = [
-                  new Contact().deserialize(e.activity_detail)
-                ];
-                contact_activity = activity;
-                activities.push(e);
-              }
-            } else {
-              activities.push(e);
+          this.activities = res['activity'].map((e) =>
+            new DetailActivity().deserialize(e)
+          );
+          this.details = res['details'];
+          this.data.materials = [];
+          this.data.notes = [];
+          this.data.emails = [];
+          this.data.texts = [];
+          this.data.appointments = [];
+          this.data.tasks = [];
+          this.dataObj.materials = {};
+          this.dataObj.notes = {};
+          this.dataObj.emails = {};
+          this.dataObj.texts = {};
+          this.dataObj.appointments = {};
+          this.dataObj.tasks = {};
+          this.materialMediaSending = {};
+          this.materialSendingType = {};
+          this.data.materials = this.details['materials'] || [];
+          this.data.notes = this.details['notes'] || [];
+          this.data.emails = this.details['emails'] || [];
+          this.data.texts = this.details['texts'] || [];
+          this.data.appointments = this.details['appointments'] || [];
+          this.data.tasks = this.details['tasks'] || [];
+          for (let i = 0; i < this.activities.length; i++) {
+            const e = this.activities[i];
+            if (e.emails && e.emails.length) {
+              this.materialMediaSending[e._id] = {
+                type: 'emails',
+                id: e.emails
+              };
+              continue;
             }
-            last_activity = { type: e.type, content: e.content };
-          });
-          this.activities = activities.sort((a, b) => {
-            return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
-          });
+            if (e.texts && e.texts.length) {
+              this.materialMediaSending[e._id] = { type: 'texts', id: e.texts };
+              continue;
+            }
+            if (
+              e.type === 'videos' ||
+              e.type === 'images' ||
+              e.type === 'pdfs'
+            ) {
+              if (e.content.indexOf('email') !== -1) {
+                this.materialSendingType[e._id] = 'emails';
+              } else {
+                this.materialSendingType[e._id] = 'texts';
+              }
+              continue;
+            }
+          }
+          this.groupActivities();
           this.arrangeActivity();
+        }
+        for (const key in this.data) {
+          if (key !== 'materials') {
+            this.data[key].forEach((e) => {
+              this.dataObj[key][e._id] = e;
+            });
+          } else {
+            this.data[key].forEach((e) => {
+              e.material_type = 'video';
+              if (e.type) {
+                if (e.type.indexOf('pdf') !== -1) {
+                  e.material_type = 'pdf';
+                } else if (e.type.indexOf('image') !== -1) {
+                  e.material_type = 'image';
+                }
+              }
+              this.dataObj[key][e._id] = e;
+            });
+          }
+        }
+
+        if (this.tab.id !== 'all') {
+          this.changeTab(this.tab);
         }
       });
   }
 
   groupActivities(): void {
     this.groupActions = {};
-    this.timelines = [];
-    this.details = {};
-    this.activities.forEach((e) => {
-      const group = this.generateUniqueId(e);
+    this.mainTimelines = [];
+    this.groups = [];
+    for (let i = this.activities.length - 1; i >= 0; i--) {
+      const e = this.activities[i];
+      if (e.type.indexOf('tracker') !== -1) {
+        e.activity = e[e.type].activity;
+      }
+      const groupData = this.generateUniqueId(e);
+      if (!groupData) {
+        continue;
+      }
+      const { type, group, media, material } = groupData;
       if (this.groupActions[group]) {
         this.groupActions[group].push(e);
       } else {
         e.group_id = group;
         this.groupActions[group] = [e];
-        this.timelines.push(e);
+        this.groups.push({ type, group, media, material });
       }
-    });
+    }
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].type === 'emails' || this.groups[i].type === 'texts') {
+        const latest = this.groupActions[this.groups[i]['group']][0];
+        if (
+          latest.type === 'videos' ||
+          latest.type === 'pdfs' ||
+          latest.type === 'images'
+        ) {
+          const activity = this.groupActions[this.groups[i]['group']].filter(
+            (e) => e.type === 'emails' || e.type === 'texts'
+          )[0];
+          this.mainTimelines.push(activity);
+        } else {
+          this.mainTimelines.push(latest);
+        }
+      } else {
+        this.mainTimelines.push(this.groupActions[this.groups[i]['group']][0]);
+      }
+    }
   }
 
-  generateUniqueId(activity: DetailActivity): string {
-    if (!activity.activity_detail) {
-      if (activity.type === 'follow_ups' && activity.follow_ups) {
-        return activity.follow_ups;
-      }
-      return activity._id;
-    }
-    let material_id;
+  generateUniqueId(activity: DetailActivity): any {
+    const trackerActivityTypes = {
+      video_trackers: 'videos',
+      pdf_trackers: 'pdfs',
+      image_trackers: 'images'
+    };
     switch (activity.type) {
+      case 'emails':
+      case 'texts':
+      case 'notes':
+      case 'appointments':
+      case 'follow_ups':
+      case 'deals':
+        return {
+          type: activity.type,
+          group: activity[activity.type]
+        };
       case 'video_trackers':
       case 'pdf_trackers':
       case 'image_trackers':
+        if (this.materialMediaSending[activity.activity]) {
+          return {
+            type: this.materialMediaSending[activity.activity].type,
+            group: this.materialMediaSending[activity.activity].id
+          };
+        } else {
+          return {
+            type: trackerActivityTypes[activity.type],
+            group: activity.activity,
+            material: activity[trackerActivityTypes[activity.type]],
+            media: this.materialSendingType[activity.activity]
+          };
+        }
       case 'email_trackers':
-        const material_type = activity.type.split('_')[0];
-        material_id = activity.activity_detail[material_type];
-        if (material_id instanceof Array) {
-          material_id = material_id[0];
-        }
-        let activity_id = activity.activity_detail['activity'];
-        if (activity_id instanceof Array) {
-          activity_id = activity_id[0];
-        }
-        return `${material_id}_${activity_id}`;
+        return {
+          type: 'emails',
+          group: activity.emails
+        };
+      case 'text_trackers':
+        return {
+          type: 'texts',
+          group: activity.texts
+        };
       case 'videos':
       case 'pdfs':
       case 'images':
-      case 'emails':
-        material_id = activity.activity_detail['_id'];
-        if (activity.type !== 'emails') {
-          activity.activity_detail['content'] = activity.content;
-          activity.activity_detail['subject'] = activity.subject;
+        if (activity.emails && activity.emails.length) {
+          return {
+            type: 'emails',
+            group: activity.emails
+          };
         }
-        this.details[material_id] = activity.activity_detail;
-        const group_id = `${material_id}_${activity._id}`;
-        this.detailData[group_id] = activity.activity_detail;
-        this.detailData[group_id]['data_type'] = activity.type;
-        this.detailData[group_id]['group_id'] = group_id;
-        this.detailData[group_id]['emails'] = activity.emails;
-        return group_id;
-      case 'texts':
-        return activity._id;
-      default:
-        const detailKey = activity.activity_detail['_id'];
-        if (!this.detailData[detailKey]) {
-          this.detailData[detailKey] = activity.activity_detail;
-        } else {
-          if (
-            new Date(activity.activity_detail.updated_at) >
-            new Date(this.detailData[detailKey].updated_at)
-          ) {
-            this.detailData[detailKey] = activity.activity_detail;
-          }
+        if (activity.texts && activity.texts.length) {
+          return {
+            type: 'texts',
+            group: activity.texts
+          };
         }
-        this.detailData[detailKey]['data_type'] = activity.type;
-        return detailKey;
+        const media = activity.content.indexOf('email') ? 'emails' : 'texts';
+        return {
+          type: activity.type,
+          group: activity._id,
+          media,
+          material: activity[activity.type]
+        };
+    }
+  }
+
+  showMoreDetail(group_id): void {
+    if (this.dGroups.length >= this.showingMax) {
+      this.dGroups.shift();
+    }
+    this.dGroups.push(group_id);
+  }
+  hideMoreDetail(group_id): void {
+    const pos = this.dGroups.indexOf(group_id);
+    if (pos !== -1) {
+      this.dGroups.splice(pos, 1);
+    }
+  }
+
+  loadDetailAppointment(event): void {
+    if (!event.meta.event_id) {
+      const loadedEvent = { ...event };
+      this.selectedAppointment = loadedEvent;
+      return;
+    }
+    const calendars = this.appointmentService.subCalendars.getValue();
+    const currentCalendar = calendars[event.meta.calendar_id];
+    if (!currentCalendar) {
+      return;
+    }
+    const connected_email = currentCalendar.account;
+    this.loadingAppointment = true;
+    this.appointmentLoadSubscription &&
+      this.appointmentLoadSubscription.unsubscribe();
+    this.appointmentLoadSubscription = this.appointmentService
+      .getEvent({
+        connected_email,
+        event_id: event.meta.event_id,
+        calendar_id: event.meta.calendar_id
+      })
+      .subscribe((res) => {
+        this.loadingAppointment = false;
+        const loadedEvent = { ...event };
+        loadedEvent.meta.is_organizer = res.organizer.self;
+        loadedEvent.meta.organizer = res.organizer.email;
+        loadedEvent.meta.guests = res.attendees || [];
+        loadedEvent.meta.guests.forEach((e) => {
+          e.response = e.responseStatus;
+        });
+        this.loadedAppointments[event.meta.event_id] = loadedEvent;
+        this.selectedAppointment = loadedEvent;
+      });
+  }
+
+  openDetailEvent(detail, event): void {
+    const _formattedEvent = {
+      title: detail.title,
+      start: new Date(detail.due_start),
+      end: new Date(detail.due_end),
+      meta: {
+        contacts: detail.contacts,
+        calendar_id: detail.calendar_id,
+        description: detail.description,
+        location: detail.location,
+        type: detail.type,
+        guests: detail.guests,
+        event_id: detail.event_id,
+        recurrence: detail.recurrence,
+        recurrence_id: detail.recurrence_id,
+        is_organizer: detail.is_organizer,
+        organizer: detail.organizer
+      }
+    };
+    const oldAppointmentId = this.selectedAppointment
+      ? this.selectedAppointment['meta']['event_id']
+      : '';
+    this.selectedAppointment = _formattedEvent;
+    const newAppointmentId = this.selectedAppointment
+      ? this.selectedAppointment['meta']['event_id']
+      : '';
+    const originX = event.clientX;
+    const originY = event.clientY;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    const size = {
+      maxWidth: '360px',
+      minWidth: '300px',
+      maxHeight: 410,
+      minHeight: 320
+    };
+    const positionStrategy = this.overlay.position().global();
+    if (screenW - originX > 380) {
+      positionStrategy.left(originX + 'px');
+    } else if (originX > 380) {
+      positionStrategy.left(originX - 380 + 'px');
+    } else if (screenW - originX > 320) {
+      positionStrategy.left(originX + 'px');
+    } else {
+      positionStrategy.centerHorizontally();
+    }
+
+    if (screenH < 440) {
+      positionStrategy.centerVertically();
+    } else if (originY < 220) {
+      positionStrategy.top('10px');
+    } else if (screenH - originY < 220) {
+      positionStrategy.top(screenH - 430 + 'px');
+    } else {
+      positionStrategy.top(originY - 220 + 'px');
+    }
+    size['height'] = 'unset';
+    this.templatePortal = new TemplatePortal(
+      this.appointmentPortalContent,
+      this.viewContainerRef
+    );
+
+    if (
+      !this.loadedAppointments[newAppointmentId] &&
+      newAppointmentId != oldAppointmentId
+    ) {
+      this.loadDetailAppointment(this.selectedAppointment);
+    } else {
+      if (this.loadedAppointments[newAppointmentId]) {
+        this.selectedAppointment = this.loadedAppointments[newAppointmentId];
+      }
+    }
+
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detach();
+      }
+      this.overlayRef.updatePositionStrategy(positionStrategy);
+      this.overlayRef.updateSize(size);
+      this.overlayRef.attach(this.templatePortal);
+    } else {
+      this.overlayRef = this.overlay.create({
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        positionStrategy,
+        ...size
+      });
+      this.overlayRef.outsidePointerEvents().subscribe((evt) => {
+        this.selectedAppointment = null;
+        this.overlayRef.detach();
+        return;
+      });
+      this.overlayRef.attach(this.templatePortal);
     }
   }
 
@@ -631,67 +896,90 @@ export class DealsDetailComponent implements OnInit {
 
     if (this.tab.id !== 'all') {
       this.showingDetails = [];
-      this.sendActions = {};
-      const dataType = tab.id;
-      if (tab.id === 'follow_ups') {
-        this.selectedTimeSort = this.timeSorts[0];
+      if (tab.id === 'notes') {
+        this.showingDetails = [...this.data.notes];
+        return;
       }
-      const details = Object.values(this.detailData);
-      details.forEach((e) => {
-        if (dataType === 'emails') {
-          if (e['data_type'] === 'emails') {
-            this.showingDetails.push(e);
-            if (this.sendActions[e['_id']]) {
-              this.sendActions[e['_id']] = [
-                ...this.sendActions[e['_id']],
-                ...this.groupActions[e['group_id']]
-              ];
-            } else {
-              this.sendActions[e['_id']] = this.groupActions[e['group_id']];
-            }
-          }
+      if (tab.id === 'appointments') {
+        this.showingDetails = [...this.data.appointments];
+        return;
+      }
+      if (tab.id === 'follow_ups') {
+        this.showingDetails = [...this.data.tasks];
+        return;
+      }
+      if (tab.id === 'emails') {
+        this.activities.forEach((e) => {
           if (
-            e['data_type'] === 'videos' ||
-            e['data_type'] === 'pdfs' ||
-            e['data_type'] === 'images'
+            (e.type === 'videos' || e.type === 'pdfs' || e.type === 'images') &&
+            (!e.emails || !e.emails.length) &&
+            (!e.texts || !e.texts.length)
           ) {
-            if (e['emails']) {
-              if (this.sendActions[e['emails']]) {
-                this.sendActions[e['emails']] = [
-                  ...this.sendActions[e['emails']],
-                  ...this.groupActions[e['group_id']]
-                ];
-              } else {
-                this.sendActions[e['emails']] = this.groupActions[
-                  e['group_id']
-                ];
-              }
-            } else {
-              this.showingDetails.push(e);
-              this.sendActions[e['group_id']] = this.groupActions[
-                e['group_id']
-              ];
+            if (e.content.indexOf('email') !== -1) {
+              this.showingDetails.push({
+                ...this.dataObj.materials[e[e.type]],
+                activity_id: e._id,
+                data_type: e.type,
+                send_time: e.updated_at
+              });
             }
           }
-        } else if (e['data_type'] === dataType) {
-          this.showingDetails.push(e);
-        }
-      });
-      this.showingDetails = this.showingDetails.sort(
-        (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-      );
+        });
+        this.data.emails.forEach((e) => {
+          this.showingDetails.push({
+            ...e,
+            data_type: 'emails',
+            send_time: e.updated_at
+          });
+        });
+        this.showingDetails.sort((a, b) =>
+          a.send_time > b.send_time ? -1 : 1
+        );
+        return;
+      }
+      if (tab.id === 'texts') {
+        this.activities.forEach((e) => {
+          if (
+            (e.type === 'videos' || e.type === 'pdfs' || e.type === 'images') &&
+            (!e.emails || !e.emails.length) &&
+            (!e.texts || !e.texts.length)
+          ) {
+            if (
+              e.content.indexOf('sms') !== -1 ||
+              e.content.indexOf('text') !== -1
+            ) {
+              this.showingDetails.push({
+                ...this.dataObj.materials[e[e.type]],
+                activity_id: e._id,
+                data_type: e.type,
+                send_time: e.updated_at
+              });
+            }
+          }
+        });
+        this.data.texts.forEach((e) => {
+          this.showingDetails.push({
+            ...e,
+            data_type: 'texts',
+            send_time: e.updated_at
+          });
+        });
+        this.showingDetails.sort((a, b) =>
+          a.send_time > b.send_time ? -1 : 1
+        );
+        return;
+      }
     }
   }
   changeActivityTypes(tab: TabItem): void {
     this.activityType = tab;
 
-    this.showingTimelines = this.timelines.filter((e) => {
-      if (tab.id === 'all') {
-        return true;
-      }
-      return tab.id === e.type;
-    });
+    // this.showingTimelines = this.timelines.filter((e) => {
+    //   if (tab.id === 'all') {
+    //     return true;
+    //   }
+    //   return tab.id === e.type;
+    // });
   }
   changeSort(timeSort: any): void {
     this.changeTab(this.tab);
@@ -1144,19 +1432,45 @@ export class DealsDetailComponent implements OnInit {
   }
 
   arrangeActivity(): void {
-    this.activityCount = {
+    this.activityCounts = {
       notes: 0,
       emails: 0,
       texts: 0,
       appointments: 0,
-      team_calls: 0,
+      group_calls: 0,
       follow_ups: 0
     };
-    for (const activity of this.activities) {
-      this.activityCount[activity.type]++;
+    if (this.mainTimelines.length > 0) {
+      this.mainTimelines.forEach((activity) => {
+        if (activity.type == 'notes') {
+          this.activityCounts.notes++;
+        }
+        if (
+          activity.type == 'emails' ||
+          activity.type == 'email_trackers' ||
+          activity.type == 'videos' ||
+          activity.type == 'video_trackers' ||
+          activity.type == 'pdfs' ||
+          activity.type == 'pdf_trackers' ||
+          activity.type == 'images' ||
+          activity.type == 'image_trackers'
+        ) {
+          this.activityCounts.emails++;
+        }
+        if (activity.type == 'texts') {
+          this.activityCounts.texts++;
+        }
+        if (activity.type == 'appointments') {
+          this.activityCounts.appointments++;
+        }
+        if (activity.type == 'team_calls') {
+          this.activityCounts.group_calls++;
+        }
+        if (activity.type == 'follow_ups') {
+          this.activityCounts.follow_ups++;
+        }
+      });
     }
-    this.groupActivities();
-    this.changeActivityTypes(this.activityType);
   }
 
   addLatestActivity(count: number): void {
@@ -1311,4 +1625,6 @@ export class DealsDetailComponent implements OnInit {
         }
       });
   }
+
+  removeActivity(activity): void {}
 }
