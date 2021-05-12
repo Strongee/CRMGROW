@@ -14,7 +14,7 @@
     margin-top: -8px;
     word-break: break-all;
   }
-} 
+}
 
 .social-btn {
   height: 40px;
@@ -45,7 +45,7 @@
   grid-template-columns: 60px auto 160px;
   grid-column-gap: 16px;
   grid-row-gap: 12px;
-  
+
   .icon {
     width: 60px;
 
@@ -59,10 +59,9 @@
     height: 42px;
     padding-left: 4px!important;
     padding-right: 4px!important;
-    img {
+    .i-icon {
       display: inline-block;
       vertical-align: bottom;
-      width: 18px;
       margin-right: 8px;
     }
   }
@@ -121,7 +120,7 @@
           }
           &.key-regenerate {
             padding: 0;
-            img {
+            .i-icon {
               &.spinner {
                 animation: rotation 1s infinite linear;
               }
@@ -152,7 +151,7 @@
       grid-template-columns: 60px auto 160px;
       grid-column-gap: 16px;
       grid-row-gap: 12px;
-      
+
       @media screen and (max-width: 900px) {
         grid-template-columns: 60px auto;
       }
@@ -182,7 +181,7 @@
 
     .icon {
       width: 46px;
-  
+
       img {
         width: 100%;
       }

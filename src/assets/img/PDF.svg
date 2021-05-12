@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="19px" height="20px" viewBox="0 0 19 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Icons / PDF</title>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="PDF">
-            <polygon id="Rectangle" fill-opacity="0.1" fill="#101336" points="3 1 11 1 14 3.28788256 16 6 16 19 3 19"></polygon>
-            <path d="M14,18 L5,18 L5,20 L14,20 L14,18 Z M4,17 L4,3 L2,3 L2,17 L4,17 Z M15,6 L15,17 L17,17 L17,6 L15,6 Z M5,2 L11,2 L11,0 L5,0 L5,2 Z M5,18 C4.44771,18 4,17.5523 4,17 L2,17 C2,18.6569 3.34315,20 5,20 L5,18 Z M14,20 C15.6569,20 17,18.6569 17,17 L15,17 C15,17.5523 14.5523,18 14,18 L14,20 Z M4,3 C4,2.44772 4.44772,2 5,2 L5,0 C3.34315,0 2,1.34315 2,3 L4,3 Z" id="Shape" fill="#101336" fill-rule="nonzero"></path>
-            <rect id="Rectangle" fill="#101336" fill-rule="nonzero" x="0.703613" y="7.74072" width="17.5926" height="7.74074" rx="2"></rect>
-            <path d="M17,6 L11,0 L11,5 C11,5.55228 11.4477,6 12,6 L17,6 Z" id="Path" fill="#000000" fill-rule="nonzero"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm12 6V9c0-.55-.45-1-1-1h-2v5h2c.55 0 1-.45 1-1zm-2-3h1v3h-1V9zm4 2h1v-1h-1V9h1V8h-2v5h1zm-8 0h1c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1H9v5h1v-2zm0-2h1v1h-1V9z"/></svg>

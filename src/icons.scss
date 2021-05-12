@@ -56,7 +56,7 @@
   mask-image: url('/assets/img/notification.svg');
 }
 .i-pdf{
-  mask-image: url('/assets/img/PDF.svg');
+  mask-image: url('/assets/img/pdf.svg');
 }
 .i-phone{
   mask-image: url('/assets/img/phone.svg');
@@ -452,6 +452,23 @@
 }
 .i-linkedin {
   mask-image: url('/assets/img/linkedin.svg');
+}
+.i-warning-red {
+  mask-image: url('/assets/img/warning.svg');
+  background-color: #E02020;
+}
+.i-warning-yellow {
+  mask-image: url('/assets/img/warning.svg');
+  background-color: #FFAA2A;
+}
+.i-link {
+  mask-image: url('/assets/img/link.svg');
+  background-color: #0B76B4;
+  transform: rotate(90deg);
+}
+.i-reload {
+  mask-image: url('/assets/img/reload.svg');
+  background-color: #0B76B4;
 }
 .i-deals {
   mask-image: url('/assets/img/flame.svg');
