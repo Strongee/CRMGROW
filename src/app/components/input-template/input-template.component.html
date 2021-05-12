@@ -15,8 +15,8 @@
         </ng-container>
       </mat-select-trigger>
       <mat-option>
-        <ngx-mat-select-search 
-          [formControl]="inputControl" 
+        <ngx-mat-select-search
+          [formControl]="inputControl"
           [searching]="searching"
           [placeholderLabel]="formPlaceholder"
           noEntriesFoundLabel="There is no searched results."
@@ -24,7 +24,13 @@
         </ngx-mat-select-search>
       </mat-option>
       <mat-option style="height: unset; line-height: unset;" [disabled]="true" *ngIf="hasNewLink">
-        <a [routerLink]="['/templates/new']" class="py-3 text-primary font-weight-bold f-3 v-center" style="pointer-events: auto;">Create new template <i class="i-icon i-plus bgc-blue ml-2 sm"></i></a>
+        <a [routerLink]="['/templates/new']"
+           class="py-3 text-primary font-weight-bold f-3 v-center"
+           style="pointer-events: auto;"
+           [class.disable]="getUserLevel() == 'lite'"
+        >
+          Create new template <i class="i-icon i-plus bgc-blue ml-2 sm"></i>
+        </a>
       </mat-option>
       <mat-option *ngFor="let item of filteredResults | async" [value]="item" style="height: unset; line-height: unset;">
         <div class="py-3">

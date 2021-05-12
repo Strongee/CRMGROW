@@ -1318,7 +1318,7 @@ export const BulkActions = {
     {
       label: 'Add notes',
       type: 'button',
-      icon: 'i-template',
+      icon: 'i-note',
       command: 'add_note',
       loading: false
     },
@@ -1591,8 +1591,46 @@ export const AUTOMATION_ICONS = {
 };
 
 export const PACKAGE_LEVEL = {
-  LITE: 'lite',
-  PRO: 'pro',
-  ELITE: 'elite',
-  CUSTOM: 'custom'
+  lite: {
+    package: 'lite',
+    price: 29,
+    contact_info: {
+      max_count: 200
+    },
+    video_info: {
+      upload_max_count: 3,
+      record_max_length: 10
+    },
+    automation_info: {
+      max_count: 0
+    }
+  },
+  pro: {
+    package: 'pro',
+    price: 49,
+    contact_info: {
+      max_count: 2000
+    },
+    video_info: {
+      upload_max_count: 30,
+      record_max_length: 120
+    },
+    automation_info: {
+      max_count: 300
+    }
+  },
+  elite: {
+    package: 'elite',
+    price: 99,
+    contact_info: {
+      max_count: 20000
+    },
+    video_info: {
+      upload_max_count: 1000000,
+      record_max_length: 1000
+    },
+    automation_info: {
+      max_count: 3000
+    }
+  }
 };

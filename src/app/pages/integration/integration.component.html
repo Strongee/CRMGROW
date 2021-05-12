@@ -31,7 +31,7 @@
       <img src="../../../assets/img/365_mail.png">
     </div>
     <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">365 Mail</div>
+      <div class="title f-3 font-weight-bold mb-1">Microsoft 365 Mail</div>
       <div class="desc f-2 op-75">
         Connect to deliver emails through your 365 solution.  This will increase the deliverability rate.
       </div>
@@ -135,17 +135,20 @@
       </div>
       <div class="header-button">
         <ng-container *ngIf="isCopied; else copyButton">
-          <button class="bg-white border-0 my-auto f-3 font-weight-bold key-copy">
-            <img src="../../../assets/img/check.png" class="mr-2">Copied
+          <button class="v-center bg-white border-0 my-auto f-3 font-weight-bold key-copy">
+            <i class="i-icon i-check d-block bgc-blue mr-2"></i>
+            <span>Copied</span>
           </button>
         </ng-container>
         <ng-template #copyButton>
-          <button class="bg-white border-0 my-auto f-3 font-weight-bold key-copy" (click)="copyKey()">
-            <img src="../../../assets/img/pin.png" class="mr-2">Copy Key
+          <button class="v-center bg-white border-0 my-auto f-3 font-weight-bold key-copy" (click)="copyKey()">
+            <i class="i-icon i-link sm d-block"></i>
+            <span class="ml-2">Copy Key</span>
           </button>
         </ng-template>
-        <button class="bg-white border-0 my-auto f-3 font-weight-bold key-regenerate" (click)="getToken()">
-          <img src="../../../assets/img/reload.png" class="mr-2" [class.spinner]="isRegenerated">Regenerate Key
+        <button class="v-center bg-white border-0 my-auto f-3 font-weight-bold key-regenerate" (click)="getToken()">
+          <i class="i-icon i-reload s-14 d-block" [class.spinner]="isRegenerated"></i>
+          <span class="ml-2">Regenerate Key</span>
         </button>
       </div>
     </div>
@@ -174,8 +177,8 @@
       </div>
     </div>
     <ng-container *ngIf="garbage?.calendly && garbage.calendly?.email != '' && garbage.calendly?.token != ''; else connectEvent">
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="selectCalendly()">
-        <img src="../../../assets/img/warning_yellow.png" *ngIf="calendlyLength > 1 && (!garbage.calendly?.link || !garbage.calendly?.id)">
+      <button class="v-center btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="selectCalendly()">
+        <i class="i-icon i-warning-yellow d-block" *ngIf="calendlyLength > 1 && (!garbage.calendly?.link || !garbage.calendly?.id)"></i>
         <span *ngIf="!garbage.calendly?.link || !garbage.calendly?.id">Select Event</span>
         <span *ngIf="garbage.calendly?.link && garbage.calendly?.id">Change Event</span>
       </button>
@@ -212,7 +215,7 @@
       Connect Account
     </button>
     <div class="accounts">
-        
+
     </div>
   </div> -->
 </div>

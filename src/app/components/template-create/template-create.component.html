@@ -34,7 +34,7 @@
                 *ngIf="mailSubject.errors &&
           (mailSubject.touched || mailSubject.dirty)">
         Please input the email template subject.</span>
-          <div ngbDropdown class="insert-token for-subject bottom-right">
+          <div ngbDropdown class="insert-token for-subject bottom-right" [class.disable]="getUserLevel() == 'lite'">
             <div class="v-center no-carot" ngbDropdownToggle>
               <span class="f-1 font-weight-bold mr-1">Token</span>
               <i class="d-block i-icon i-triangle-down bgc-dark"></i>
@@ -64,7 +64,7 @@
               #emailEditor>
             </quill-editor>
 
-            <div ngbDropdown class="insert-token bottom-right">
+            <div ngbDropdown class="insert-token bottom-right" [class.disable]="getUserLevel() == 'lite'">
               <div class="v-center no-carot" ngbDropdownToggle>
                 <span class="f-1 font-weight-bold mr-1">Token</span>
                 <i class="d-block i-icon i-triangle-down bgc-dark"></i>
@@ -84,7 +84,7 @@
         <div class="form-group mt-2">
           <div class="text-template-contents v-center justify-content-between">
             <label>Content</label>
-            <div ngbDropdown class="insert-token bottom-right">
+            <div ngbDropdown class="insert-token bottom-right" [class.disable]="getUserLevel() == 'lite'">
               <div class="v-center no-carot" ngbDropdownToggle>
                 <span class="f-1 font-weight-bold mr-1">Token</span>
                 <i class="d-block i-icon i-triangle-down bgc-dark"></i>

@@ -101,7 +101,12 @@
                             <div ngbDropdownMenu class="light py-1">
                                 <div class="template dropdown-item border-top px-2">
                                   <div class="v-center h-100">
-                                    <div class="f-3 font-weight-bold c-blue flex-grow-1 mr-1 h-100 v-center" (click)="createNew()">Create New Template ...</div>
+                                    <div class="f-3 font-weight-bold c-blue flex-grow-1 mr-1 h-100 v-center"
+                                     [class.disable]="getUserLevel() == 'lite'"
+                                     (click)="createNew()"
+                                    >
+                                      Create New Template ...
+                                    </div>
                                   </div>
                                 </div>
                                 <ng-container *ngFor="let template of (templateService.templates$ | async)">

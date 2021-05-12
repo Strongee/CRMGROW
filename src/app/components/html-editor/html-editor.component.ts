@@ -26,6 +26,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { UserService } from 'src/app/services/user.service';
+import { Subscription } from 'rxjs';
+import { getUserLevel } from '../../utils/functions';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -112,6 +114,7 @@ export class HtmlEditorComponent implements OnInit {
   authToken = '';
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
   quillEditorRef;
+  popup;
   attachments = [];
   config = {
     toolbar: {
@@ -166,16 +169,20 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          let popup;
           const option = 'width=530, height=305';
-          if (!popup || popup.closed) {
-            popup = window.open(
+          if (!this.popup || this.popup.closed) {
+            this.popup = window.open(
               this.recordUrl + '?' + this.authToken,
               'record',
               option
             );
+            window.addEventListener('message', (e) => {
+              if (e && e.data) {
+                this.insertImageToEditor(e.data);
+              }
+            });
           } else {
-            popup.focus();
+            this.popup.focus();
           }
           this.cdr.detectChanges();
         }
@@ -202,6 +209,9 @@ export class HtmlEditorComponent implements OnInit {
   overlayRef: OverlayRef;
   templatePortal: TemplatePortal;
 
+  packageLevel = '';
+  profileSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private fileService: FileService,
@@ -215,11 +225,19 @@ export class HtmlEditorComponent implements OnInit {
     private toast: ToastrService,
     private appRef: ApplicationRef
   ) {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
+      this.packageLevel = res.package_level;
+    });
     this.templateService.loadAll(false);
     this.authToken = this.userService.getToken();
   }
 
   ngOnInit(): void {}
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
 
   insertValue(value: string): void {
     if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
@@ -285,6 +303,7 @@ export class HtmlEditorComponent implements OnInit {
     const link_button = toolbar.container.querySelector('.ql-link');
     const image_button = toolbar.container.querySelector('.ql-image');
     const template_button = toolbar.container.querySelector('.ql-template');
+    const emoji_button = toolbar.container.querySelector('.ql-emoji');
     const calendly_button = toolbar.container.querySelector('.ql-calendly');
     const record_button = toolbar.container.querySelector('.ql-record');
     if (link_button) {
@@ -295,6 +314,9 @@ export class HtmlEditorComponent implements OnInit {
     }
     if (template_button) {
       template_button.setAttribute('title', 'Template');
+    }
+    if (emoji_button) {
+      emoji_button.setAttribute('title', 'Emoji');
     }
     if (calendly_button) {
       calendly_button.setAttribute('title', 'Calendly');

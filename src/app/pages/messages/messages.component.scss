@@ -146,7 +146,7 @@
             .select-template {
                 .dropdown-menu {
                     width: 220px;
-          
+
                     .dropdown-item {
                         height: 48px;
                     }
@@ -376,7 +376,7 @@
 .message-action {
     position: relative;
 
-    &.disable {
+    &.disabled {
         .send-button{
             opacity: 0.6;
             pointer-events: none;

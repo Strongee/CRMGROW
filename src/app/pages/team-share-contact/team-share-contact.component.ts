@@ -12,7 +12,7 @@ import { UploadContactsComponent } from 'src/app/components/upload-contacts/uplo
 import {
   BulkActions,
   CONTACT_SORT_OPTIONS,
-  DialogSettings,
+  DialogSettings, PACKAGE_LEVEL,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
@@ -38,6 +38,7 @@ import { TeamService } from '../../services/team.service';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 import { environment } from '../../../environments/environment';
 import { User } from '../../models/user.model';
+import {getUserLevel} from "../../utils/functions";
 
 @Component({
   selector: 'app-team-share-contact',
@@ -113,6 +114,9 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   teamMembers: User[] = [];
   selectedMembers: User[] = [];
 
+  packageLevel = '';
+  disableActions = [];
+
   constructor(
     public router: Router,
     private route: ActivatedRoute,
@@ -132,6 +136,25 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.userId = res._id;
+      this.packageLevel = res.package_level;
+      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
+        this.disableActions = [
+          {
+            label: 'Send email',
+            type: 'button',
+            icon: 'i-message',
+            command: 'message',
+            loading: false
+          },
+          {
+            label: 'Add automation',
+            type: 'button',
+            icon: 'i-automation',
+            command: 'automation',
+            loading: false
+          }
+        ];
+      }
     });
 
     this.handlerService.pageName.next('contacts');
@@ -146,6 +169,10 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     for (const member of this.team.members) {
       this.teamMembers.push(new User().deserialize(member));
     }
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   loadContact(page: number): void {
@@ -380,14 +407,6 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   }
 
   openFilter(): void {}
-
-  createContact(): void {
-    this.dialog.open(ContactCreateComponent, DialogSettings.CONTACT);
-  }
-
-  importContacts(): void {
-    this.dialog.open(UploadContactsComponent, DialogSettings.UPLOAD);
-  }
 
   /**
    * Open the contact detail page
