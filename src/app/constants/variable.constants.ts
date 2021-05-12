@@ -1603,7 +1603,20 @@ export const PACKAGE_LEVEL = {
     },
     automation_info: {
       max_count: 0
-    }
+    },
+    deal_pipeline_tracking: true,
+    custom_labels: true,
+    activity_tracker: true,
+    lead_capture: false,
+    advanced_filters: false,
+    tag_management: false,
+    assistant_access: false,
+    mail_template: false,
+    merge_tokens: false,
+    email_tracking: false,
+    mass_email: false,
+    automations: false,
+    teams: true
   },
   pro: {
     package: 'pro',
@@ -1617,7 +1630,20 @@ export const PACKAGE_LEVEL = {
     },
     automation_info: {
       max_count: 300
-    }
+    },
+    deal_pipeline_tracking: true,
+    custom_labels: true,
+    activity_tracker: true,
+    lead_capture: false,
+    advanced_filters: false,
+    tag_management: false,
+    assistant_access: false,
+    mail_template: false,
+    merge_tokens: false,
+    email_tracking: false,
+    mass_email: false,
+    automations: false,
+    teams: true
   },
   elite: {
     package: 'elite',
@@ -1631,6 +1657,22 @@ export const PACKAGE_LEVEL = {
     },
     automation_info: {
       max_count: 3000
-    }
+    },
+    deal_pipeline_tracking: true,
+    custom_labels: true,
+    activity_tracker: true,
+    lead_capture: false,
+    advanced_filters: false,
+    tag_management: false,
+    assistant_access: false,
+    mail_template: false,
+    merge_tokens: false,
+    email_tracking: false,
+    mass_email: false,
+    automations: false,
+    teams: true
+  },
+  custom: {
+    package: 'custom',
   }
 };

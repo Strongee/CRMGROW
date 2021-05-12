@@ -1281,6 +1281,13 @@ export class DealsDetailComponent implements OnInit {
       });
   }
 
+  isEmptyObject(obj): boolean {
+    if (obj) {
+      return Object.keys(obj).length === 0;
+    }
+    return true;
+  }
+
   addAdditionalFields(): void {
     this.dialog
       .open(AdditionalFieldsComponent, {
@@ -1293,10 +1300,6 @@ export class DealsDetailComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res) => {
-        const init_additional_field = {
-          ...this.deal.main.additional_field
-        };
-
         if (res) {
           this.deal.main.additional_field = { ...res };
           this.updateSubscription = this.dealsService
@@ -1306,8 +1309,6 @@ export class DealsDetailComponent implements OnInit {
                 console.log('update deal ========>', deal);
               }
             });
-        } else {
-          this.deal.main.additional_field = { ...init_additional_field };
         }
       });
   }

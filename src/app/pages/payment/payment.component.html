@@ -1,133 +1,209 @@
-<div class="mb-3">
-  <span class="f-3 font-weight-bold">Subscription</span>
-</div>
-<div class="plan-select-wrapper">
-  <div class="plan-description">
-    <p class="f-3 font-weight-bold">CRM Grow Professional</p>
-    <p class="f-1 c-dark op-64 mb-2">${{package.price}} / month</p>
-    <div class="features">
-      <div class="feature-item v-center mb-2">
-        <i class="i-icon i-check bgc-blue sm"></i>
-        <span class="f-3 ml-2">{{package.contact_info.max_count}} contacts</span>
+<ng-container *ngIf="step == 0">
+  <div class="mb-3">
+    <span class="f-3 font-weight-bold">Subscription</span>
+  </div>
+  <div class="plan-select-wrapper">
+    <div class="plan-description">
+      <p class="f-3 font-weight-bold">CRM Grow Professional</p>
+      <p class="f-1 c-dark op-64 mb-2">${{package.price}} / month</p>
+      <div class="features">
+        <div class="feature-item v-center mb-2">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">{{package.contact_info.max_count}} contacts</span>
+        </div>
+        <div class="feature-item v-center mb-2">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">{{package.video_info.upload_max_count}} video uploads</span>
+        </div>
+        <div class="feature-item v-center mb-2">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Up to {{package.video_info.record_max_length}} min video recording</span>
+        </div>
+        <div class="feature-item v-center mb-2">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">{{package.automation_info.max_count}} active automations</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.deal_pipeline_tracking">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Deal Pipeline Tracking</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.custom_labels">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Custom Labels</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.activity_tracker">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Activity Tracker</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.lead_capture">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Lead Capture</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.advanced_filters">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Advanced Filters</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.tag_management">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Tag Management</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.assistant_access">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Assistant Access</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.mail_template">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Mail Templates</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.merge_tokens">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Merge Tokens</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.email_tracking">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Email 'Click' Tracking</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.mass_email">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Group/Mass Email</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.automations">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Automations</span>
+        </div>
+        <div class="feature-item v-center mb-2" *ngIf="package.teams">
+          <i class="i-icon i-check bgc-blue sm"></i>
+          <span class="f-3 ml-2">Teams</span>
+        </div>
       </div>
-      <div class="feature-item v-center mb-2">
-        <i class="i-icon i-check bgc-blue sm"></i>
-        <span class="f-3 ml-2">{{package.video_info.upload_max_count}} video uploads</span>
+    </div>
+    <div class="plan-buttons">
+      <button class="btn btn-primary font-weight-bold w-100" (click)="changePlan()">Change plan</button>
+      <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28" (click)="cancelAccount()">Cancel account</button>
+    </div>
+  </div>
+
+  <div class="v-center justify-content-between mb-1">
+    <span class="f-3 font-weight-bold">Detail information</span>
+    <button type="button" class="btn btn-primary font-weight-bold" (click)="editCard()">Edit payment</button>
+  </div>
+  <div class="payment-form">
+    <div class="form-group payment-card-img">
+      <label for="payment-method" class="font-weight-bold mr-auto">payment method</label>
+      <div class="payment-card d-flex flex-column">
+        <div class="v-center justify-content-between p-3">
+          <div class="f-1 font-weight-bold">
+            CREDIT CARD
+          </div>
+          <div class="f-1 font-weight-bold">
+            {{card.card_name}}
+          </div>
+        </div>
+        <div class="card-type px-3 pt-4 mt-auto">
+          <ng-container [ngSwitch]="card.card_brand">
+            <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'Visa'">
+            <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">
+            <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">
+            <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">
+            <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">
+            <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">
+          </ng-container>
+        </div>
+        <div class="v-center justify-content-between px-3 pb-3">
+          <div class="f-3 font-weight-bold">
+            {{card.exp_month}}/{{card.exp_year}}
+          </div>
+          <div class="f-3 font-weight-bold">
+            ****{{card.last4}}
+          </div>
+        </div>
       </div>
-      <div class="feature-item v-center mb-2">
-        <i class="i-icon i-check bgc-blue sm"></i>
-        <span class="f-3 ml-2">Up to {{package.video_info.record_max_length}} min video recording</span>
+      <!-- <div class="f-1 mt-2 mt-sm-4 px-2 px-sm-5 unsubscribe">If you want to unsubscribe your payment method click <a class="c-dark c-pointer">here</a>.</div> -->
+    </div>
+    <div class="ml-lg-2 ml-md-0 pyament-card-form">
+      <div class="form-group">
+        <label for="card_name">name on card</label>
+        <div class="f-3">
+          {{card.card_name}}
+        </div>
       </div>
-      <div class="feature-item v-center mb-2">
-        <i class="i-icon i-check bgc-blue sm"></i>
-        <span class="f-3 ml-2">{{package.automation_info.max_count}} active automations</span>
+      <div class="form-group">
+        <label for="card_number">card number</label>
+        <div class="f-3">
+          ****{{card.last4}}
+        </div>
+      </div>
+      <!-- <div class="form-group">
+          <label for="card_cvc">card cvc</label>
+          <div class="f-3">
+              {{card.cvc}}
+          </div>
+      </div> -->
+      <div class="form-group">
+        <label for="expMonth">Expiry Date</label>
+        <div class="f-3">
+          {{card.exp_month}} / {{card.exp_year}}
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="v-center justify-content-between mb-1">
-    <span class="f-3 font-weight-bold">Detail information</span>
-    <button type="button" class="btn btn-primary font-weight-bold" (click)="editCard()">Edit payment</button>
-</div>
-<div class="payment-form">
-    <div class="form-group payment-card-img">
-        <label for="payment-method" class="font-weight-bold mr-auto">payment method</label>
-        <div class="payment-card d-flex flex-column">
-            <div class="v-center justify-content-between p-3">
-                <div class="f-1 font-weight-bold">
-                    CREDIT CARD
-                </div>
-                <div class="f-1 font-weight-bold">
-                    {{card.card_name}}
-                </div>
-            </div>
-            <div class="card-type px-3 pt-4 mt-auto">
-                <ng-container [ngSwitch]="card.card_brand">
-                    <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'Visa'">
-                    <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">
-                    <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">
-                    <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">
-                    <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">
-                    <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">
-                </ng-container>
-            </div>
-            <div class="v-center justify-content-between px-3 pb-3">
-                <div class="f-3 font-weight-bold">
-                    {{card.exp_month}}/{{card.exp_year}}
-                </div>
-                <div class="f-3 font-weight-bold">
-                    ****{{card.last4}}
-                </div>
-            </div>
-        </div>
-        <!-- <div class="f-1 mt-2 mt-sm-4 px-2 px-sm-5 unsubscribe">If you want to unsubscribe your payment method click <a class="c-dark c-pointer">here</a>.</div> -->
-    </div>
-    <div class="ml-lg-2 ml-md-0 pyament-card-form">
-        <div class="form-group">
-            <label for="card_name">name on card</label>
-            <div class="f-3">
-                {{card.card_name}}
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="card_number">card number</label>
-            <div class="f-3">
-                ****{{card.last4}}
-            </div>
-        </div>
-        <!-- <div class="form-group">
-            <label for="card_cvc">card cvc</label>
-            <div class="f-3">
-                {{card.cvc}}
-            </div>
-        </div> -->
-        <div class="form-group">
-            <label for="expMonth">Expiry Date</label>
-            <div class="f-3">
-                {{card.exp_month}} / {{card.exp_year}}
-            </div>
-        </div>
-    </div>
-</div>
-<div class="mt-4">
+  <div class="mt-4">
     <h6 class="f-3 font-weight-bold mb-1">Your invoices</h6>
     <table class="table mt-2">
-        <thead>
-            <tr>
-                <th class="number-col border-top-0 pl-0">
-                    <span class="f-1 c-dark">number</span>
-                </th>
-                <th class="paymeny-col border-top-0">
-                    <span class="f-1 c-dark">paymeny date</span>
-                </th>
-                <th class="issue-col border-top-0">
-                    <span class="f-1 c-dark">date of issue</span>
-                </th>
-                <th class="gross-col border-top-0 text-right pr-0">
-                    <span class="f-1 c-dark">gross value</span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let invoice of invoices; let index=index;">
-                <td class="number-col f-3 font-weight-bold text-primary pt-3 pb-0 pl-0">
-                    {{invoice.id}}
-                </td>
-                <td class="paymeny-col f-3 font-weight-bold pt-3 pb-0">
-                    {{invoice.date | date: 'dd.MM.yyyy'}}
-                </td>
-                <td class="issue-col f-3 font-weight-bold pt-3 pb-0">
-                    {{invoice.date | date: 'dd.MM.yyyy'}}
-                </td>
-                <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">
-                    $ {{invoice.amount}}
-                </td>
-            </tr>
-        </tbody>
+      <thead>
+      <tr>
+        <th class="number-col border-top-0 pl-0">
+          <span class="f-1 c-dark">number</span>
+        </th>
+        <th class="paymeny-col border-top-0">
+          <span class="f-1 c-dark">paymeny date</span>
+        </th>
+        <th class="issue-col border-top-0">
+          <span class="f-1 c-dark">date of issue</span>
+        </th>
+        <th class="gross-col border-top-0 text-right pr-0">
+          <span class="f-1 c-dark">gross value</span>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let invoice of invoices; let index=index;">
+        <td class="number-col f-3 font-weight-bold text-primary pt-3 pb-0 pl-0">
+          {{invoice.id}}
+        </td>
+        <td class="paymeny-col f-3 font-weight-bold pt-3 pb-0">
+          {{invoice.date | date: 'dd.MM.yyyy'}}
+        </td>
+        <td class="issue-col f-3 font-weight-bold pt-3 pb-0">
+          {{invoice.date | date: 'dd.MM.yyyy'}}
+        </td>
+        <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">
+          $ {{invoice.amount}}
+        </td>
+      </tr>
+      </tbody>
     </table>
-</div>
-<!-- <div class="row">
-    <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4" (click)="cancelBill()">Cancel</a>
-    <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" [class.loading]="saving">Save changes</button>
-</div> -->
+  </div>
+  <!-- <div class="row">
+      <a class="btn c-dark font-weight-bold ml-auto mr-4 mt-4" (click)="cancelBill()">Cancel</a>
+      <button type="submit" class="btn btn-primary font-weight-bold mr-2 mt-4" [class.loading]="saving">Save changes</button>
+  </div> -->
+</ng-container>
+<ng-container *ngIf="step == 1">
+  <h1 class="f-26">Upgrade and get more out of CRM Grow</h1>
+  <div class="notification-area my-4">
+    <span class="f-6 font-weight-bold">Ooops</span>
+    <span class="f-6 ml-2">I’m an alert letting you know that you need to do something in order to downgrade</span>
+  </div>
+  <div class="package-wrapper">
+    <div class="package-item">
+      <div class="package-level">Lite</div>
+      <div class="package-description mt-2">Nam porttitor blandit.</div>
+      <button class="btn btn-package mt-2">Downgrade</button>
+      <div class="package-price">
+        <span class="f-8 font-weight-bold"></span>
+      </div>
+    </div>
+  </div>
+</ng-container>
+

@@ -489,7 +489,8 @@
   mask-image: url('/assets/img/page_first.svg');
 }
 .i-prev {
-  mask-image: url('/assets/img/prev.svg');
+  mask-image: url('/assets/img/next.svg');
+  transform: rotate(180deg);
 }
 .i-next {
   mask-image: url('/assets/img/next.svg');

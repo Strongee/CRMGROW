@@ -92,3 +92,51 @@ button, a {
   padding: 22px 25px;
 }
 
+.notification-area {
+  border: 1.6px solid #0000FF;
+  border-radius: 4.8px;
+  background-color: #F5F5FF;
+  padding: 12px 20px;
+}
+
+.btn-package {
+  border: 1px solid #101336;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 24px;
+  text-align: center;
+  color: #000000;
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+.package-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+
+  .package-item {
+    border: 1.04px solid #DDDDEA;
+    border-radius: 11px;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    padding: 22px;
+
+    .package-level {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 46px;
+      color: #222B45;
+    }
+
+    .package-description {
+      color: #6F7086;
+      font-size: 14px;
+      letter-spacing: 0;
+      line-height: 21px;
+    }
+  }
+}

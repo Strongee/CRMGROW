@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentCardComponent } from 'src/app/components/payment-card/payment-card.component';
 import { PACKAGE_LEVEL } from '../../constants/variable.constants';
-import {getUserLevel} from "../../utils/functions";
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-payment',
@@ -32,7 +32,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
   package = PACKAGE_LEVEL.pro;
+  litePackage = PACKAGE_LEVEL.lite;
+  proPackage = PACKAGE_LEVEL.pro;
+  elitePackage = PACKAGE_LEVEL.elite;
+  customPackage = PACKAGE_LEVEL.custom;
+
   packageLevel = '';
+  step = 1;
 
   constructor(private userService: UserService, private dialog: MatDialog) {
     this.loading = true;
@@ -96,5 +102,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this.card = res;
         }
       });
+  }
+
+  changePlan(): void {
+    this.step = 1;
+  }
+
+  cancelAccount(): void {
+
   }
 }
