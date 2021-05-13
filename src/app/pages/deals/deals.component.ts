@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
   transferArrayItem
 } from '@angular/cdk/drag-drop';
-import { Board } from 'src/app/models/board.model';
 import { Router } from '@angular/router';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,15 +11,16 @@ import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.
 import { DialogSettings, STATUS } from 'src/app/constants/variable.constants';
 import { DealStage } from 'src/app/models/deal-stage.model';
 import { DealStageCreateComponent } from 'src/app/components/deal-stage-create/deal-stage-create.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-deals',
   templateUrl: './deals.component.html',
   styleUrls: ['./deals.component.scss']
 })
-export class DealsComponent implements OnInit {
+export class DealsComponent implements OnInit, OnDestroy {
   STATUS = STATUS;
-  board: Board = new Board('Test Board', []);
+  loadSubscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -28,12 +28,16 @@ export class DealsComponent implements OnInit {
     public dealsService: DealsService
   ) {
     this.dealsService.getStage(true);
-  }
-
-  ngOnInit(): void {
-    this.dealsService.stages$.subscribe((res) => {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.dealsService.stages$.subscribe((res) => {
       console.log('stage', res);
     });
+  }
+
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.loadSubscription && this.loadSubscription.unsubscribe();
   }
 
   drop(event: CdkDragDrop<string[]>, id: string): void {

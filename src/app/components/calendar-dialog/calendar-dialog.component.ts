@@ -167,8 +167,10 @@ export class CalendarDialogComponent implements OnInit {
       const emails = [];
       const guestStatus = {};
       this.data.event.meta.guests.forEach((e) => {
-        emails.push(e.email);
-        guestStatus[e.email] = e.response;
+        if (e.email) {
+          emails.push(e.email);
+          guestStatus[e.email] = e.response;
+        }
       });
       this.contactLoadSubscription = this.contactService
         .loadByEmails(emails)
@@ -232,7 +234,7 @@ export class CalendarDialogComponent implements OnInit {
 
     if (this.contacts.length > 0) {
       const existContacts = [];
-      this.event.contacts.forEach((e) => {
+      (this.event.contacts || []).forEach((e) => {
         if (e && e._id) {
           existContacts.push(e._id);
         }

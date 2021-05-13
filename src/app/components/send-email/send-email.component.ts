@@ -225,7 +225,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
             const material = res.materials[i];
             this.htmlEditor.insertMaterials(material);
           }
-          this.htmlEditor.insertAfterMaterials();
+          // this.htmlEditor.insertAfterMaterials();
         }
       });
   }

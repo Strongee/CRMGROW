@@ -22,7 +22,11 @@ export class DateInputComponent implements OnInit {
   @Input()
   public set value(val: number) {
     if (val) {
-      this.dateObj = { day: val['day'], month: val['month'], year: val['year'] };
+      this.dateObj = {
+        day: parseInt(val['day']),
+        month: parseInt(val['month']),
+        year: parseInt(val['year'])
+      };
       this.dateString =
         this.dateObj.month + '-' + this.dateObj.day + '-' + this.dateObj.year;
     } else {

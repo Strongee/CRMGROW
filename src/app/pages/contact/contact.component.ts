@@ -1671,12 +1671,14 @@ export class ContactComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.loadingAppointment = false;
         const loadedEvent = { ...event };
-        loadedEvent.meta.is_organizer = res.organizer.self;
-        loadedEvent.meta.organizer = res.organizer.email;
-        loadedEvent.meta.guests = res.attendees || [];
-        loadedEvent.meta.guests.forEach((e) => {
-          e.response = e.responseStatus;
-        });
+        loadedEvent.meta.is_organizer = res.is_organizer;
+        loadedEvent.meta.organizer = res.organizer;
+        loadedEvent.meta.guests = res.guests || [];
+        if (res.recurrence) {
+          loadedEvent.meta.recurrence = res.recurrence;
+        } else {
+          delete loadedEvent.meta.recurrence_id;
+        }
         this.loadedAppointments[event.meta.event_id] = loadedEvent;
         this.selectedAppointment = loadedEvent;
       });
