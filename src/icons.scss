@@ -56,7 +56,7 @@
   mask-image: url('/assets/img/notification.svg');
 }
 .i-pdf{
-  mask-image: url('/assets/img/pdf.svg');
+  mask-image: url('/assets/img/pdf_icon.svg');
 }
 .i-phone{
   mask-image: url('/assets/img/phone.svg');
@@ -212,6 +212,12 @@
 }
 .i-team_calls {
   mask-image: url('./assets/img/group_call.svg');
+}
+.i-lock {
+  mask-image: url('./assets/img/lock.svg');
+}
+.i-information {
+  mask-image: url('./assets/img/information.svg');
 }
 
 .i-record{

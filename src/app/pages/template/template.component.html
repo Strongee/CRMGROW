@@ -191,7 +191,6 @@
               [routerLink]="['/templates']">Cancel</a>
             <button class="btn btn-primary font-weight-bold ml-2"
               [class.loading]="isSaving"
-              [class.disable]="getUserLevel() == 'lite'"
             >
               Create
             </button>
@@ -203,7 +202,6 @@
               [routerLink]="['/templates']">Cancel</a>
             <button class="btn btn-primary font-weight-bold ml-2"
               [class.loading]="isSaving"
-              [class.disable]="getUserLevel() == 'lite'"
             >
               Save
             </button>
