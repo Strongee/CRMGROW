@@ -28,6 +28,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
   routeChangeSubscription: Subscription;
+  initStep = 1;
 
   constructor(
     private location: Location,
@@ -93,9 +94,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
       this.currentPage = params['page'] || this.defaultPage;
-      this.currentPageItem = this.menuItems.filter(
-        (item) => item.id == this.currentPage
-      );
+      if (this.currentPage === 'upgrade-billing') {
+        this.initStep = 2;
+        this.currentPageItem = [this.menuItems[3]];
+        this.currentPage = 'billing';
+        console.log("upgrade-billing ========>", this.initStep);
+      } else {
+        this.currentPageItem = this.menuItems.filter(
+          (item) => item.id == this.currentPage
+        );
+      }
     });
   }
 

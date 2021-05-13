@@ -305,6 +305,12 @@ ul {
   height: 18px;
   min-width: 18px;
 
+  &.lg {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
   &.s-14 {
     width: 16px;
     height: 16px;

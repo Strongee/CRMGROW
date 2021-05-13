@@ -171,6 +171,11 @@ export class DetailErrorComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  goToBilling(): void {
+    this.router.navigate([`/profile/upgrade-billing`]);
+    this.dialogRef.close();
+  }
+
   showError(error: any): string {
     if (error) {
       if (typeof error === 'object') {

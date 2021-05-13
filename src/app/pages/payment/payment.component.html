@@ -1,701 +1,1146 @@
-<ng-container *ngIf="step == 1">
-  <div class="mb-3">
-    <span class="f-3 font-weight-bold">Subscription</span>
-  </div>
-  <div class="plan-select-wrapper">
-    <div class="plan-description">
-      <p class="f-3 font-weight-bold">CRM Grow Professional</p>
-      <ng-container *ngIf="currentPackage.price > 0; else customPackageWrapper">
-        <p class="f-1 c-dark op-64 mb-2">${{currentPackage.price}} / month</p>
+<div class="billing-container">
+  <ng-container *ngIf="step == 1">
+    <div class="mb-3">
+      <span class="f-3 font-weight-bold">Subscription</span>
+    </div>
+    <div class="plan-select-wrapper">
+      <div class="plan-description">
+        <p class="f-3 font-weight-bold">CRM Grow Professional</p>
+        <ng-container *ngIf="currentPackage.package == litePackage.package">
+          <p class="f-1 c-dark op-64 mb-2">${{currentPackage.price}} / month</p>
+          <div class="features">
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.contact_info.max_count}} contacts</span>
+            </div>
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.video_info.upload_max_count}} material uploads</span>
+            </div>
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Up to {{currentPackage.video_info.record_max_length}} min video recording</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.automation_info.max_count > 0">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="my-3 f-5 font-weight-bold">
+              Available on all plans:
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.deal_pipeline_tracking">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Deal Pipeline Tracking</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.custom_labels">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Custom Labels</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.activity_tracker">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Activity Tracker</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.lead_capture">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Lead Capture</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.advanced_filters">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Advanced Filters</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.tag_management">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Tag Management</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.mail_template">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Mail Templates</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.merge_tokens">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Merge Tokens</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.email_tracking">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Email 'Click' Tracking</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.mass_email">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Group/Mass Email</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.automations">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Automations</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.teams">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Teams</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.online_support">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Online Support</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.onbording_plus.price">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">${{currentPackage.onbording_plus.price}} onboarding plus</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="currentPackage.package == proPackage.package">
+          <p class="f-1 c-dark op-64 mb-2">${{currentPackage.price}} / month</p>
+          <div class="features">
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.contact_info.max_count}} contacts</span>
+            </div>
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.video_info.upload_max_count}} material uploads</span>
+            </div>
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Up to {{currentPackage.video_info.record_max_length}} min video recording</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.automation_info.max_count > 0">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="my-3 f-5 font-weight-bold">
+              Everything in Lite, plus:
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.lead_capture">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Lead Capture</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.assistant_access">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">1 assistant access</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.email_tracking">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Email 'Click' Tracking</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.mass_email">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Group/Mass Email</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.automations">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Automations</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.email_support">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Email Support</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.onbording_plus.price">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">${{currentPackage.onbording_plus.price}} onboarding plus</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.early_beta_access">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Early Beta Access</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="currentPackage.package == elitePackage.package">
+          <p class="f-1 c-dark op-64 mb-2">${{currentPackage.price}} / month</p>
+          <div class="features">
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.contact_info.max_count}} contacts</span>
+            </div>
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.video_info.upload_max_count}} material uploads</span>
+            </div>
+            <div class="feature-item v-center mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Up to {{currentPackage.video_info.record_max_length}} min video recording</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.automation_info.max_count > 0">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="my-3 f-5 font-weight-bold">
+              Everything in Pro, plus:
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="currentPackage.assistant_access">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Unlimited assistant access</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="elitePackage.priority_support">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Priority & Chat Support</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Onboarding Plus</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="elitePackage.roadmap">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Roadmap & Mastermind</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="currentPackage.package == customPackage.package">
+          <p class="f-1 c-dark op-64 mb-2">Let's chat</p>
+        </ng-container>
+      </div>
+      <div class="plan-buttons">
+        <button class="btn btn-primary font-weight-bold w-100" (click)="changePlan()">Change plan</button>
+        <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28" (click)="cancelAccount()">Cancel account</button>
+      </div>
+    </div>
+    <div class="stripe-wrapper mt-5">
+      <div class="f-3 font-weight-bold">Payment details</div>
+      <div class="f-1 my-3">Credit or debit card</div>
+      <div class="v-center form-group">
+        <div class="stripe-card v-center justify-content-between">
+          <div class="f-3 font-weight-bold">•••• •••• •••• {{card.last4}}</div>
+          <div class="card-img">
+            <ng-container [ngSwitch]="card.card_brand">
+              <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'Visa'">
+              <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">
+              <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">
+              <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">
+              <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">
+              <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">
+            </ng-container>
+          </div>
+        </div>
+        <button class="btn btn-package f-3 ml-2" (click)="editCard()">Change card</button>
+      </div>
+    </div>
+    <div class="mt-5">
+      <div class="f-3 font-weight-bold">Invoices</div>
+      <table class="table mt-2">
+        <thead>
+        <tr>
+          <th class="number-col border-top-0 pl-0">
+            <span class="f-1 c-dark"></span>
+          </th>
+          <th class="gross border-top-0">
+            <span class="f-1 c-dark"></span>
+          </th>
+          <th class="download-col border-top-0 text-right pr-0">
+            <span class="f-1 c-dark"></span>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let invoice of invoices; let index=index;">
+          <td class="number-col f-3 font-weight-bold pt-3 pb-0 pl-0">
+            Invoice for CRM Grow {{invoice.date | date: 'dd/MM/yyyy'}}
+          </td>
+          <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">
+            $ {{invoice.amount}}
+          </td>
+          <td class="download-col f-3 font-weight-bold c-blue text-right pr-0 pt-3 pb-0">
+            <div class="v-center justify-content-end c-pointer">
+              <i class="i-icon i-download bgc-blue d-block"></i>
+              <span class="ml-2">Download invoice</span>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="step == 2">
+    <div class="d-flex justify-content-between">
+      <h1 class="f-26">Upgrade and get more out of CRM Grow</h1>
+      <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="cancelPlan()"></i>
+    </div>
+    <div class="notification-area my-4">
+      <span class="f-6 font-weight-bold">Ooops</span>
+      <span class="f-6 ml-2">I’m an alert letting you know that you need to do something in order to downgrade</span>
+    </div>
+    <div class="package-wrapper">
+      <div class="package-item"
+           [class.active]="litePackage.package == selectedPackage.package"
+           (click)="clickPackage(litePackage)"
+      >
+        <img class="popular-img" src="../../../assets/img/popular.svg">
+        <div class="package-level">Lite</div>
+        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <button class="btn btn-package my-3 w-100"
+                [class.active]="litePackage.package == currentPackage.package"
+                (click)="selectPlan(litePackage.package)"
+        >
+          {{planButtonLabel(litePackage.package)}}
+        </button>
+        <div class="package-price mb-4">
+          <span class="dollar">$</span>
+          <span class="price mx-1">{{litePackage.price}}</span>
+          <span class="month mx-1"> / month</span>
+        </div>
         <div class="features">
-          <div class="feature-item v-center mb-2">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">{{currentPackage.contact_info.max_count}} contacts</span>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{litePackage.contact_info.max_count}} contacts</span>
           </div>
-          <div class="feature-item v-center mb-2">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">{{currentPackage.video_info.upload_max_count}} video uploads</span>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{litePackage.video_info.upload_max_count}} material uploads</span>
           </div>
-          <div class="feature-item v-center mb-2">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Up to {{currentPackage.video_info.record_max_length}} min video recording</span>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Up to {{litePackage.video_info.record_max_length}} min video recording</span>
           </div>
-          <div class="feature-item v-center mb-2">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">{{currentPackage.automation_info.max_count}} active automations</span>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{litePackage.automation_info.max_count}} active automations</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.deal_pipeline_tracking">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Deal Pipeline Tracking</span>
+          <div class="my-3 f-5 font-weight-bold">
+            Available on all plans:
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.custom_labels">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Custom Labels</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.deal_pipeline_tracking">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Deal Pipeline Tracking</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.activity_tracker">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Activity Tracker</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.custom_labels">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Custom Labels</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.lead_capture">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Lead Capture</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.activity_tracker">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Activity Tracker</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.advanced_filters">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Advanced Filters</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.lead_capture">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Lead Capture</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.tag_management">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Tag Management</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.advanced_filters">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Advanced Filters</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.assistant_access">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Assistant Access</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.tag_management">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Tag Management</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.mail_template">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Mail Templates</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.assistant_access.max_count > 0">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Assistant Access</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.merge_tokens">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Merge Tokens</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.mail_template">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Mail Templates</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.email_tracking">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Email 'Click' Tracking</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.merge_tokens">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Merge Tokens</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.mass_email">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Group/Mass Email</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.email_tracking">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Email 'Click' Tracking</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.automations">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Automations</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.mass_email">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Group/Mass Email</span>
           </div>
-          <div class="feature-item v-center mb-2" *ngIf="currentPackage.teams">
-            <i class="i-icon i-check bgc-blue sm"></i>
-            <span class="f-3 ml-2">Teams</span>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.automations">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Automations</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.teams">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Teams</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.online_support">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Online Support</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="litePackage.onbording_plus.price">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">${{litePackage.onbording_plus.price}} onboarding plus</span>
           </div>
         </div>
-      </ng-container>
-      <ng-template #customPackageWrapper>
-        <p class="f-1 c-dark op-64 mb-2">Let's chat</p>
-      </ng-template>
+      </div>
+      <div class="package-item"
+       [class.active]="proPackage.package == selectedPackage.package"
+       (click)="clickPackage(proPackage)"
+      >
+        <img class="popular-img" src="../../../assets/img/popular.svg">
+        <div class="package-level">Pro</div>
+        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <button class="btn btn-package my-3 w-100"
+                [class.active]="proPackage.package == currentPackage.package"
+                (click)="selectPlan(proPackage.package)"
+        >
+          {{planButtonLabel(proPackage.package)}}
+        </button>
+        <div class="package-price mb-4">
+          <span class="dollar">$</span>
+          <span class="price mx-1">{{proPackage.price}}</span>
+          <span class="month mx-1"> / month</span>
+        </div>
+        <div class="features">
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{proPackage.contact_info.max_count}} contacts</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{proPackage.video_info.upload_max_count}} material uploads</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Up to {{proPackage.video_info.record_max_length}} min video recording</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{proPackage.automation_info.max_count}} active automations</span>
+          </div>
+          <div class="my-3 f-5 font-weight-bold">
+            Everything in Lite, plus:
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.lead_capture">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Lead Capture</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.assistant_access">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">1 assistant access</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.email_tracking">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Email 'Click' Tracking</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.mass_email">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Group/Mass Email</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.automations">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Automations</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.email_support">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Email Support</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.onbording_plus.price">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">${{proPackage.onbording_plus.price}} onboarding plus</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.early_beta_access">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Early Beta Access</span>
+          </div>
+        </div>
+      </div>
+      <div class="package-item"
+         [class.active]="elitePackage.package == selectedPackage.package"
+         (click)="clickPackage(elitePackage)"
+      >
+        <img class="popular-img" src="../../../assets/img/popular.svg">
+        <div class="package-level">Elite</div>
+        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <button class="btn btn-package my-3 w-100"
+                [class.active]="elitePackage.package == currentPackage.package"
+                (click)="selectPlan(elitePackage.package)"
+        >
+          {{planButtonLabel(elitePackage.package)}}
+        </button>
+        <div class="package-price mb-4">
+          <span class="dollar">$</span>
+          <span class="price mx-1">{{elitePackage.price}}</span>
+          <span class="month mx-1"> / month</span>
+        </div>
+        <div class="features">
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{elitePackage.contact_info.max_count}} contacts</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Unlimited material uploads</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Up to {{elitePackage.video_info.record_max_length}} min video recording</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{elitePackage.automation_info.max_count}} active automations</span>
+          </div>
+          <div class="my-3 f-5 font-weight-bold">
+            Everything in Pro
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.assistant_access">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Unlimited assistant access</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="elitePackage.priority_support">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Priority & Chat Support</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Onboarding Plus</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="elitePackage.roadmap">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Roadmap & Mastermind</span>
+          </div>
+        </div>
+      </div>
+      <div class="package-item"
+         [class.active]="customPackage.package == selectedPackage.package"
+         (click)="clickPackage(customPackage)"
+      >
+        <img class="popular-img" src="../../../assets/img/popular.svg">
+        <div class="package-level">Custom</div>
+        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <button class="btn btn-package my-3 w-100"
+                [class.active]="customPackage.package == currentPackage.package"
+                (click)="selectPlan(customPackage.package)"
+        >
+          {{planButtonLabel(customPackage.package)}}
+        </button>
+        <div class="package-price mb-4">
+          <span class="price mx-1">Let's chat</span>
+        </div>
+      </div>
     </div>
-    <div class="plan-buttons">
-      <button class="btn btn-primary font-weight-bold w-100" (click)="changePlan()">Change plan</button>
-      <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28" (click)="cancelAccount()">Cancel account</button>
+    <div class="more-feature c-blue my-4 f-4 font-weight-bold" (click)="showAllFeatures()">
+      See all features and benifits
     </div>
-  </div>
+    <div class="all-features" *ngIf="isShowAll">
+      <div class="feature-header">
+        <span>Popular features</span>
+        <span class="text-center">Lite</span>
+        <span class="text-center">Pro</span>
+        <span class="text-center">Elite</span>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title">
+          Contacts
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <p>{{litePackage.contact_info.max_count}} contacts</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>{{proPackage.contact_info.max_count}} contacts</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>{{elitePackage.contact_info.max_count}} contacts</p>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title">
+          Material Uploads
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <p>{{litePackage.video_info.upload_max_count}} material uploads</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>{{proPackage.video_info.upload_max_count}} material uploads</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>Unlimited material uploads</p>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title">
+          Video Recordings
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <p>Up to {{litePackage.video_info.record_max_length}} minutes</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>Up to {{proPackage.video_info.record_max_length}} minutes</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>Up to {{elitePackage.video_info.record_max_length}} minutes</p>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title">
+          Active automations
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <p>{{litePackage.automation_info.max_count}} active automations</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>{{proPackage.automation_info.max_count}} active automations</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>Unlimited active automations</p>
+          </div>
+        </div>
+      </div>
+      <div class="feature-header">
+        Additional features
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Deal Pipeline Tracking
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.deal_pipeline_tracking"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.deal_pipeline_tracking"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.deal_pipeline_tracking"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Custom Labels
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.custom_labels"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.custom_labels"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.custom_labels"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Activity Tracker
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.activity_tracker"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.activity_tracker"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.activity_tracker"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Teams
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.teams"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.teams"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.teams"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Lead Capture
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.lead_capture"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.lead_capture"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.lead_capture"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Advanced Filters
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.advanced_filters"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.advanced_filters"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.advanced_filters"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Tag Management
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.tag_management"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.tag_management"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.tag_management"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Assistant Access
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+          </div>
+          <div class="plan-item text-center">
+            {{proPackage.assistant_access.max_count}}
+          </div>
+          <div class="plan-item text-center">
+            {{elitePackage.assistant_access.max_count}}
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Mail Templates
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.mail_template"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.mail_template"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.mail_template"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Merge Tokens
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.merge_tokens"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.merge_tokens"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.merge_tokens"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Email 'Click' Tracking
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.email_tracking"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.email_tracking"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.email_tracking"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Group/Mass Email
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.mass_email"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.mass_email"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.mass_email"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Automations
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.automations"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.automations"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.automations"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-header">
+        Crmgrow Support
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Online Support
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.online_support"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.online_support"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.online_support"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Email Support
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.email_support"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.email_support"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.email_support"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Priority & Chat Support
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.priority_support"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.priority_support"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.priority_support"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Onboarding Plus
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            ${{litePackage.onbording_plus.price}}
+          </div>
+          <div class="plan-item text-center">
+            ${{proPackage.onbording_plus.price}}
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Early Beta Access
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.early_beta_access"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.early_beta_access"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.early_beta_access"></i>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title additional-feature">
+          Roadmap & Mastermind
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.roadmap"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.roadmap"></i>
+          </div>
+          <div class="plan-item text-center">
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.roadmap"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="step == 3">
+    <div class="v-center justify-content-between">
+      <div class="f-26 font-weight-bold">Confirm your subscription</div>
+      <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="cancelPlan()"></i>
+    </div>
+    <div class="confirm-wrapper">
+      <div class="upgrade-plan-wrapper">
+        <div class="f-4 op-64 my-4">Enter payment details to subscribe</div>
+        <div class="stripe-wrapper">
+          <div class="f-3 font-weight-bold">Payment details</div>
+          <div class="f-1 my-3">Credit or debit card</div>
+          <div class="v-center form-group">
+            <div class="stripe-card v-center justify-content-between">
+              <div class="f-3 font-weight-bold">•••• •••• •••• {{card.last4}}</div>
+              <div class="card-img">
+                <ng-container [ngSwitch]="card.card_brand">
+                  <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'Visa'">
+                  <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">
+                  <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">
+                  <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">
+                  <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">
+                  <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">
+                </ng-container>
+              </div>
+            </div>
+            <button class="btn btn-package f-3 ml-2" (click)="editCard()">Change card</button>
+          </div>
+          <buttn class="btn btn-primary f-16 font-weight-bold my-4 w-100">Upgrade plan</buttn>
+          <div class="v-center justify-content-center mb-4">
+            <i class="i-icon i-lock bgc-black d-block"></i>
+            <span class="mx-2 f-1">Guaranteed safe and secure checkout</span>
+          </div>
+          <div class="h-line"></div>
+          <p class="f-2 op-75 font-italic mt-3 mb-2">
+            “Since I implemented Crmgrow 6 months ago, we've had an exponential return”
+          </p>
+          <div class="v-center">
+            <img class="reivew-avatar" src="../../../assets/img/review_avatar.svg" alt="review">
+            <span class="f-1 c-dark font-weight-bold ml-2">Larry White</span>
+          </div>
+        </div>
+      </div>
+      <div class="selected-package ml-5">
+        <div class="package-item" *ngIf="currentPackage.package == litePackage.package">
+          <div class="package-level">Lite</div>
+          <div class="package-description">Nam porttitor blandit.</div>
+          <div class="package-price my-4">
+            <span class="dollar">$</span>
+            <span class="price mx-1">{{litePackage.price}}</span>
+            <span class="month mx-1"> / month</span>
+          </div>
+          <div class="features">
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{litePackage.contact_info.max_count}} contacts</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{litePackage.video_info.upload_max_count}} material uploads</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Up to {{litePackage.video_info.record_max_length}} min video recording</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{litePackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="my-3 f-5 font-weight-bold">
+              Available on all plans:
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.deal_pipeline_tracking">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Deal Pipeline Tracking</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.custom_labels">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Custom Labels</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.activity_tracker">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Activity Tracker</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.lead_capture">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Lead Capture</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.advanced_filters">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Advanced Filters</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.tag_management">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Tag Management</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.assistant_access.max_count > 0">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Assistant Access</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.mail_template">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Mail Templates</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.merge_tokens">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Merge Tokens</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.email_tracking">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Email 'Click' Tracking</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.mass_email">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Group/Mass Email</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.automations">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Automations</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.teams">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Teams</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.online_support">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Online Support</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="litePackage.onbording_plus.price">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">${{litePackage.onbording_plus.price}} onboarding plus</span>
+            </div>
+          </div>
+        </div>
+        <div class="package-item" *ngIf="proPackage.package == currentPackage.package">
+          <div class="package-level">Pro</div>
+          <div class="package-description">Nam porttitor blandit accumsan.</div>
+          <div class="package-price my-4">
+            <span class="dollar">$</span>
+            <span class="price mx-1">{{proPackage.price}}</span>
+            <span class="month mx-1"> / month</span>
+          </div>
+          <div class="features">
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{proPackage.contact_info.max_count}} contacts</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{proPackage.video_info.upload_max_count}} material uploads</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Up to {{proPackage.video_info.record_max_length}} min video recording</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{proPackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="my-3 f-5 font-weight-bold">
+              Everything in Lite, plus:
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.lead_capture">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Lead Capture</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.assistant_access">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">1 assistant access</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.email_tracking">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Email 'Click' Tracking</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.mass_email">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Group/Mass Email</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.automations">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Automations</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.email_support">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Email Support</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.onbording_plus.price">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">${{proPackage.onbording_plus.price}} onboarding plus</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.early_beta_access">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Early Beta Access</span>
+            </div>
+          </div>
+        </div>
+        <div class="package-item" *ngIf="elitePackage.package == currentPackage.package">
+          <div class="package-level">Elite</div>
+          <div class="package-description">Nam porttitor blandit accumsan.</div>
+          <div class="package-price my-4">
+            <span class="dollar">$</span>
+            <span class="price mx-1">{{elitePackage.price}}</span>
+            <span class="month mx-1"> / month</span>
+          </div>
+          <div class="features">
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{elitePackage.contact_info.max_count}} contacts</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Unlimited material uploads</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Up to {{elitePackage.video_info.record_max_length}} min video recording</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">{{elitePackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="my-3 f-5 font-weight-bold">
+              Everything in Pro
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="proPackage.assistant_access">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Unlimited assistant access</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="elitePackage.priority_support">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Priority & Chat Support</span>
+            </div>
+            <div class="feature-item d-flex mb-2">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Onboarding Plus</span>
+            </div>
+            <div class="feature-item d-flex mb-2" *ngIf="elitePackage.roadmap">
+              <i class="i-icon i-check bgc-blue"></i>
+              <span class="f-4 ml-2">Roadmap & Mastermind</span>
+            </div>
+          </div>
+        </div>
+        <div class="package-item" *ngIf="customPackage.package == currentPackage.package">
+          <div class="package-level">Custom</div>
+          <div class="package-description">Nam porttitor blandit accumsan.</div>
+          <div class="package-price my-4">
+            <span class="price mx-1">Let's chat</span>
+          </div>
+        </div>
+        <div class="text-wrapper f-2 op-75 mt-3">
+          Text explaining any subscription details. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
 
-<!--  <div class="v-center justify-content-between mb-1">-->
-<!--    <span class="f-3 font-weight-bold">Detail information</span>-->
-<!--    <button type="button" class="btn btn-primary font-weight-bold" (click)="editCard()">Edit payment</button>-->
-<!--  </div>-->
-<!--  <div class="payment-form">-->
-<!--    <div class="form-group payment-card-img">-->
-<!--      <label for="payment-method" class="font-weight-bold mr-auto">payment method</label>-->
-<!--      <div class="payment-card d-flex flex-column">-->
-<!--        <div class="v-center justify-content-between p-3">-->
-<!--          <div class="f-1 font-weight-bold">-->
-<!--            CREDIT CARD-->
-<!--          </div>-->
-<!--          <div class="f-1 font-weight-bold">-->
-<!--            {{card.card_name}}-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="card-type px-3 pt-4 mt-auto">-->
-<!--          <ng-container [ngSwitch]="card.card_brand">-->
-<!--            <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'Visa'">-->
-<!--            <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">-->
-<!--            <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">-->
-<!--            <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">-->
-<!--            <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">-->
-<!--            <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">-->
-<!--          </ng-container>-->
-<!--        </div>-->
-<!--        <div class="v-center justify-content-between px-3 pb-3">-->
-<!--          <div class="f-3 font-weight-bold">-->
-<!--            {{card.exp_month}}/{{card.exp_year}}-->
-<!--          </div>-->
-<!--          <div class="f-3 font-weight-bold">-->
-<!--            ****{{card.last4}}-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; <div class="f-1 mt-2 mt-sm-4 px-2 px-sm-5 unsubscribe">If you want to unsubscribe your payment method click <a class="c-dark c-pointer">here</a>.</div> &ndash;&gt;-->
-<!--    </div>-->
-<!--    <div class="ml-lg-2 ml-md-0 pyament-card-form">-->
-<!--      <div class="form-group">-->
-<!--        <label for="card_name">name on card</label>-->
-<!--        <div class="f-3">-->
-<!--          {{card.card_name}}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="card_number">card number</label>-->
-<!--        <div class="f-3">-->
-<!--          ****{{card.last4}}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; <div class="form-group">-->
-<!--          <label for="card_cvc">card cvc</label>-->
-<!--          <div class="f-3">-->
-<!--              {{card.cvc}}-->
-<!--          </div>-->
-<!--      </div> &ndash;&gt;-->
-<!--      <div class="form-group">-->
-<!--        <label for="expMonth">Expiry Date</label>-->
-<!--        <div class="f-3">-->
-<!--          {{card.exp_month}} / {{card.exp_year}}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div class="mt-4">-->
-<!--    <h6 class="f-3 font-weight-bold mb-1">Your invoices</h6>-->
-<!--    <table class="table mt-2">-->
-<!--      <thead>-->
-<!--      <tr>-->
-<!--        <th class="number-col border-top-0 pl-0">-->
-<!--          <span class="f-1 c-dark">number</span>-->
-<!--        </th>-->
-<!--        <th class="paymeny-col border-top-0">-->
-<!--          <span class="f-1 c-dark">paymeny date</span>-->
-<!--        </th>-->
-<!--        <th class="issue-col border-top-0">-->
-<!--          <span class="f-1 c-dark">date of issue</span>-->
-<!--        </th>-->
-<!--        <th class="gross-col border-top-0 text-right pr-0">-->
-<!--          <span class="f-1 c-dark">gross value</span>-->
-<!--        </th>-->
-<!--      </tr>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--      <tr *ngFor="let invoice of invoices; let index=index;">-->
-<!--        <td class="number-col f-3 font-weight-bold text-primary pt-3 pb-0 pl-0">-->
-<!--          {{invoice.id}}-->
-<!--        </td>-->
-<!--        <td class="paymeny-col f-3 font-weight-bold pt-3 pb-0">-->
-<!--          {{invoice.date | date: 'dd.MM.yyyy'}}-->
-<!--        </td>-->
-<!--        <td class="issue-col f-3 font-weight-bold pt-3 pb-0">-->
-<!--          {{invoice.date | date: 'dd.MM.yyyy'}}-->
-<!--        </td>-->
-<!--        <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">-->
-<!--          $ {{invoice.amount}}-->
-<!--        </td>-->
-<!--      </tr>-->
-<!--      </tbody>-->
-<!--    </table>-->
-<!--  </div>-->
-</ng-container>
-<ng-container *ngIf="step == 2">
-  <h1 class="f-26">Upgrade and get more out of CRM Grow</h1>
-  <div class="notification-area my-4">
-    <span class="f-6 font-weight-bold">Ooops</span>
-    <span class="f-6 ml-2">I’m an alert letting you know that you need to do something in order to downgrade</span>
-  </div>
-  <div class="package-wrapper">
-    <div class="package-item">
-      <img class="popular-img" src="../../../assets/img/popular.svg">
-      <div class="package-level">Lite</div>
-      <div class="package-description">Nam porttitor blandit.</div>
-      <button class="btn btn-package my-3 w-100"
-        [class.active]="litePackage.package == currentPackage.package"
-        (click)="selectPlan(litePackage.package)"
-      >
-        {{planButtonLabel(litePackage.package)}}
-      </button>
-      <div class="package-price mb-4">
-        <span class="dollar">$</span>
-        <span class="price mx-1">{{litePackage.price}}</span>
-        <span class="month mx-1"> / month</span>
-      </div>
-      <div class="features">
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{litePackage.contact_info.max_count}} contacts</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{litePackage.video_info.upload_max_count}} video uploads</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Up to {{litePackage.video_info.record_max_length}} min video recording</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{litePackage.automation_info.max_count}} active automations</span>
-        </div>
-        <div class="my-3 f-5 font-weight-bold">
-          Available on all plans:
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.deal_pipeline_tracking">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Deal Pipeline Tracking</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.custom_labels">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Custom Labels</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.activity_tracker">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Activity Tracker</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.lead_capture">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Lead Capture</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.advanced_filters">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Advanced Filters</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.tag_management">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Tag Management</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.assistant_access">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Assistant Access</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.mail_template">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Mail Templates</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.merge_tokens">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Merge Tokens</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.email_tracking">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Email 'Click' Tracking</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.mass_email">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Group/Mass Email</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.automations">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Automations</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="litePackage.teams">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Teams</span>
-        </div>
-      </div>
-    </div>
-    <div class="package-item active">
-      <img class="popular-img" src="../../../assets/img/popular.svg">
-      <div class="package-level">Pro</div>
-      <div class="package-description">Nam porttitor blandit accumsan.</div>
-      <button class="btn btn-package my-3 w-100"
-        [class.active]="proPackage.package == currentPackage.package"
-        (click)="selectPlan(proPackage.package)"
-      >
-        {{planButtonLabel(proPackage.package)}}
-      </button>
-      <div class="package-price mb-4">
-        <span class="dollar">$</span>
-        <span class="price mx-1">{{proPackage.price}}</span>
-        <span class="month mx-1"> / month</span>
-      </div>
-      <div class="features">
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{proPackage.contact_info.max_count}} contacts</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{proPackage.video_info.upload_max_count}} video uploads</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Up to {{proPackage.video_info.record_max_length}} min video recording</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{proPackage.automation_info.max_count}} active automations</span>
-        </div>
-        <div class="my-3 f-5 font-weight-bold">
-          Everything in Lite, plus:
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.lead_capture">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Lead Capture</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.advanced_filters">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Advanced Filters</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.tag_management">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Tag Management</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.assistant_access">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Assistant Access</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.mail_template">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Mail Templates</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.merge_tokens">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Merge Tokens</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.email_tracking">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Email 'Click' Tracking</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.mass_email">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Group/Mass Email</span>
-        </div>
-        <div class="feature-item d-flex mb-2" *ngIf="proPackage.automations">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Automations</span>
-        </div>
-      </div>
-    </div>
-    <div class="package-item">
-      <img class="popular-img" src="../../../assets/img/popular.svg">
-      <div class="package-level">Elite</div>
-      <div class="package-description">Nam porttitor blandit accumsan.</div>
-      <button class="btn btn-package my-3 w-100"
-              [class.active]="elitePackage.package == currentPackage.package"
-              (click)="selectPlan(elitePackage.package)"
-      >
-        {{planButtonLabel(elitePackage.package)}}
-      </button>
-      <div class="package-price mb-4">
-        <span class="dollar">$</span>
-        <span class="price mx-1">{{elitePackage.price}}</span>
-        <span class="month mx-1"> / month</span>
-      </div>
-      <div class="features">
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{elitePackage.contact_info.max_count}} contacts</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Unlimited video uploads</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">Up to {{elitePackage.video_info.record_max_length}} min video recording</span>
-        </div>
-        <div class="feature-item d-flex mb-2">
-          <i class="i-icon i-check bgc-blue"></i>
-          <span class="f-4 ml-2">{{elitePackage.automation_info.max_count}} active automations</span>
-        </div>
-        <div class="my-3 f-5 font-weight-bold">
-          Everything in Pro
-        </div>
-      </div>
-    </div>
-    <div class="package-item">
-      <img class="popular-img" src="../../../assets/img/popular.svg">
-      <div class="package-level">Custom</div>
-      <div class="package-description">Nam porttitor blandit accumsan.</div>
-      <button class="btn btn-package my-3 w-100"
-              [class.active]="customPackage.package == currentPackage.package"
-              (click)="selectPlan(customPackage.package)"
-      >
-        {{planButtonLabel(customPackage.package)}}
-      </button>
-      <div class="package-price mb-4">
-        <span class="price mx-1">Let's chat</span>
-      </div>
-    </div>
-  </div>
-  <div class="more-feature c-blue my-4 f-4 font-weight-bold" (click)="showAllFeatures()">
-    See all features and benifits
-  </div>
-  <div class="all-features" *ngIf="isShowAll">
-    <div class="feature-header">
-      <span>Popular features</span>
-      <span class="text-center">Lite</span>
-      <span class="text-center">Pro</span>
-      <span class="text-center">Elite</span>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title">
-        Contacts
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <p>{{litePackage.contact_info.max_count}} contacts</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>{{proPackage.contact_info.max_count}} contacts</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>{{elitePackage.contact_info.max_count}} contacts</p>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title">
-        Video Uploads
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <p>{{litePackage.video_info.upload_max_count}} video uploads</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>{{proPackage.video_info.upload_max_count}} video uploads</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>Unlimited video uploads</p>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title">
-        Video Recordings
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <p>Up to {{litePackage.video_info.record_max_length}} minutes</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>Up to {{proPackage.video_info.record_max_length}} minutes</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>Up to {{elitePackage.video_info.record_max_length}} minutes</p>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title">
-        Active automations
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <p>{{litePackage.automation_info.max_count}} active automations</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>{{proPackage.automation_info.max_count}} active automations</p>
-        </div>
-        <div class="plan-item text-center">
-          <p>Unlimited active automations</p>
-        </div>
-      </div>
-    </div>
-    <div class="feature-header">
-      Additional features
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Deal Pipeline Tracking
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.deal_pipeline_tracking"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.deal_pipeline_tracking"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.deal_pipeline_tracking"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Custom Labels
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.custom_labels"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.custom_labels"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.custom_labels"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Activity Tracker
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.activity_tracker"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.activity_tracker"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.activity_tracker"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Teams
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.teams"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.teams"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.teams"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Lead Capture
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.lead_capture"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.lead_capture"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.lead_capture"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Advanced Filters
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.advanced_filters"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.advanced_filters"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.advanced_filters"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Tag Management
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.tag_management"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.tag_management"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.tag_management"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Assistant Access
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.assistant_access"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.assistant_access"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.assistant_access"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Mail Templates
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.mail_template"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.mail_template"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.mail_template"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Merge Tokens
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.merge_tokens"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.merge_tokens"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.merge_tokens"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Email 'Click' Tracking
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.email_tracking"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.email_tracking"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.email_tracking"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Group/Mass Email
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.mass_email"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.mass_email"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.mass_email"></i>
-        </div>
-      </div>
-    </div>
-    <div class="feature-wrapper">
-      <div class="feature-title additional-feature">
-        Automations
-      </div>
-      <div class="plan-wrapper">
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.automations"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.automations"></i>
-        </div>
-        <div class="plan-item text-center">
-          <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.automations"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-container>
 

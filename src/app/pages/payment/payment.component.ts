@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
@@ -27,11 +27,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
     plan_id: ''
   };
 
+  @Input('selectedStep') selectedStep = 1;
   invoices = [];
   saving = false;
 
   profileSubscription: Subscription;
   currentPackage = PACKAGE_LEVEL.pro;
+  selectedPackage = PACKAGE_LEVEL.pro;
   litePackage = PACKAGE_LEVEL.lite;
   proPackage = PACKAGE_LEVEL.pro;
   elitePackage = PACKAGE_LEVEL.elite;
@@ -43,12 +45,14 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService, private dialog: MatDialog) {
     this.loading = true;
+    // this.step = this.selectedStep;
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile.payment) {
           this.packageLevel = profile.package_level;
           this.currentPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
+          this.selectedPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.userService.getPayment(profile.payment).subscribe(
             (res) => {
               this.loading = false;
@@ -69,7 +73,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.step = this.selectedStep;
+  }
 
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
@@ -109,9 +115,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.step = 2;
   }
 
-  cancelAccount(): void {
-
+  cancelPlan(): void {
+    this.step -= 1;
   }
+
+  cancelAccount(): void {}
 
   selectPlan(level): void {
     for (const item in PACKAGE_LEVEL) {
@@ -119,7 +127,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.currentPackage = PACKAGE_LEVEL[item];
       }
     }
-    this.step = 1;
+    this.step = 3;
+  }
+
+  clickPackage(level): void {
+    this.selectedPackage = level;
   }
 
   planButtonLabel(level): string {
@@ -127,9 +139,16 @@ export class PaymentComponent implements OnInit, OnDestroy {
       return 'Your Plan';
     } else {
       if (level === PACKAGE_LEVEL.lite.package) {
-        return 'Downgrade';
+        if (this.currentPackage.package === PACKAGE_LEVEL.custom.package) {
+          return 'Get Lite';
+        } else {
+          return 'Downgrade';
+        }
       } else if (level === PACKAGE_LEVEL.pro.package) {
-        if (this.currentPackage.package === PACKAGE_LEVEL.lite.package) {
+        if (
+          this.currentPackage.package === PACKAGE_LEVEL.lite.package ||
+          this.currentPackage.package === PACKAGE_LEVEL.custom.package
+        ) {
           return 'Get Pro';
         } else {
           return 'Downgrade';

@@ -65,6 +65,7 @@ import { TeamShareContactComponent } from '../../pages/team-share-contact/team-s
 import { TeamShareAutomationComponent } from '../../pages/team-share-automation/team-share-automation.component';
 import { TeamShareTemplateComponent } from '../../pages/team-share-template/team-share-template.component';
 import { TestComponent } from '../../pages/test/test.component';
+import { StripeModule } from 'stripe-angular';
 
 @NgModule({
   declarations: [
@@ -140,7 +141,7 @@ import { TestComponent } from '../../pages/test/test.component';
       outerStrokeColor: '#78C000',
       innerStrokeColor: '#C7E596',
       animationDuration: 300
-    })
+    }),
   ],
   schemas: []
 })
