@@ -58,7 +58,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
           { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
           { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
           { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
-          { id: 'tag-manager', icon: 'i-tag-manager', label: 'Tag Manager' },
           {
             id: 'auto-follow-up',
             icon: 'i-auto-follow',

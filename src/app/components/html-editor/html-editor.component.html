@@ -43,7 +43,6 @@
     >
       <div class="templates-container">
         <div class="template"
-         [class.disable]="getUserLevel() == 'lite'"
          *ngIf="hasNewTemplateLink"
          (click)="createNew()"
         >
@@ -129,7 +128,7 @@
     Required!
     </span>
     <ng-container *ngIf="hasToken">
-      <div ngbDropdown class="insert-token bottom-right" [class.disable]="getUserLevel() == 'lite'">
+      <div ngbDropdown class="insert-token bottom-right">
         <div class="v-center no-carot" ngbDropdownToggle>
           <span class="f-1 font-weight-bold mr-1">Token</span>
           <i class="d-block i-icon i-triangle-down bgc-dark"></i>
