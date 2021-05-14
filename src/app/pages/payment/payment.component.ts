@@ -4,7 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentCardComponent } from 'src/app/components/payment-card/payment-card.component';
-import { PACKAGE_LEVEL } from '../../constants/variable.constants';
+import {CANCEL_ACCOUNT_REASON, PACKAGE_LEVEL} from '../../constants/variable.constants';
 import { getUserLevel } from '../../utils/functions';
 
 @Component({
@@ -24,7 +24,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     exp_month: '',
     card_brand: '',
     last4: '',
-    plan_id: ''
+    plan_id: '',
+    card_id: '',
+    token: ''
   };
 
   @Input('selectedStep') selectedStep = 1;
@@ -43,6 +45,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
   step = 1;
   isShowAll = false;
 
+  previewCardNumber = '';
+  reasonButtons = CANCEL_ACCOUNT_REASON;
+  selectedReason = this.reasonButtons[0];
+  reasonFeedback = '';
+
   constructor(private userService: UserService, private dialog: MatDialog) {
     this.loading = true;
     // this.step = this.selectedStep;
@@ -55,19 +62,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this.selectedPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.userService.getPayment(profile.payment).subscribe(
             (res) => {
-              this.loading = false;
               this.card = {
                 ...res,
                 number: res.last4
               };
+              this.previewCardNumber = '•••• •••• •••• ' + this.card.number;
               this.getInvoice();
             },
             () => {
               this.loading = false;
             }
           );
-        } else {
-          this.loading = false;
         }
       }
     );
@@ -86,11 +91,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   getInvoice(): void {
-    this.userService.getInvoice().subscribe((res) => {
-      if (res && res['status']) {
-        this.invoices = res['data'];
+    this.userService.getInvoice().subscribe(
+      (res) => {
+        this.loading = false;
+        if (res && res['status']) {
+          this.invoices = res['data'];
+        }
+      },
+      () => {
+        this.loading = false;
       }
-    });
+    );
   }
 
   editCard(): void {
@@ -98,15 +109,27 @@ export class PaymentComponent implements OnInit, OnDestroy {
       .open(PaymentCardComponent, {
         position: { top: '100px' },
         width: '100vw',
-        maxWidth: '450px',
+        maxWidth: '550px',
         data: {
           card: this.card
         }
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
-          this.card = res;
+        if (res && res.data) {
+          const card = res.data.card;
+          this.card = {
+            ...this.card,
+            card_brand: card.brand,
+            card_id: card.id,
+            exp_month: card.exp_month,
+            exp_year: card.exp_year,
+            last4: card.last4,
+            token: res.data.id,
+            number: card.last4
+          };
+
+          this.previewCardNumber = '•••• •••• •••• ' + this.card.number;
         }
       });
   }
@@ -115,11 +138,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.step = 2;
   }
 
-  cancelPlan(): void {
+  onBack(): void {
     this.step -= 1;
   }
 
-  cancelAccount(): void {}
+  onBackFirst(): void {
+    this.step = 1;
+  }
+
+  cancelAccount(): void {
+    this.step = 4;
+  }
 
   selectPlan(level): void {
     for (const item in PACKAGE_LEVEL) {
@@ -163,5 +192,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   showAllFeatures(): void {
     this.isShowAll = !this.isShowAll;
+  }
+
+  selectReason(reason): void {
+    this.selectedReason = reason;
+    this.step = 5;
   }
 }

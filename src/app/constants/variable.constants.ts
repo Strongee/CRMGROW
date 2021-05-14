@@ -1706,3 +1706,14 @@ export const PACKAGE_LEVEL = {
     package: 'custom'
   }
 };
+
+export const STRIPE_KEY = 'pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2';
+
+export const CANCEL_ACCOUNT_REASON = [
+  'Switching to a competetor',
+  'Dont have the budget',
+  'Couldn’t get it working',
+  'Missing features',
+  'Customer support',
+  'Another reason'
+];

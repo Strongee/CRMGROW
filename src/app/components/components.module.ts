@@ -155,6 +155,8 @@ import { EmailTimelinesComponent } from './email-timelines/email-timelines.compo
 import { TextTimelinesComponent } from './text-timelines/text-timelines.component';
 import { PlayTimelinesComponent } from './play-timelines/play-timelines.component';
 import { InputContactDealComponent } from './input-contact-deal/input-contact-deal.component';
+import { StripeModule } from 'stripe-angular';
+import { STRIPE_KEY } from '../constants/variable.constants';
 
 @NgModule({
   declarations: [
@@ -326,7 +328,8 @@ import { InputContactDealComponent } from './input-contact-deal/input-contact-de
       outerStrokeColor: '#78C000',
       innerStrokeColor: '#C7E596',
       animationDuration: 300
-    })
+    }),
+    StripeModule.forRoot(STRIPE_KEY)
   ],
   exports: [
     TopbarComponent,

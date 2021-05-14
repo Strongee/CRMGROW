@@ -188,68 +188,76 @@
       </div>
       <div class="plan-buttons">
         <button class="btn btn-primary font-weight-bold w-100" (click)="changePlan()">Change plan</button>
-        <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28" (click)="cancelAccount()">Cancel account</button>
+        <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28 w-100" (click)="cancelAccount()">Cancel account</button>
       </div>
     </div>
-    <div class="stripe-wrapper mt-5">
-      <div class="f-3 font-weight-bold">Payment details</div>
-      <div class="f-1 my-3">Credit or debit card</div>
-      <div class="v-center form-group">
-        <div class="stripe-card v-center justify-content-between">
-          <div class="f-3 font-weight-bold">•••• •••• •••• {{card.last4}}</div>
-          <div class="card-img">
-            <ng-container [ngSwitch]="card.card_brand">
-              <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'Visa'">
-              <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">
-              <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">
-              <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">
-              <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">
-              <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">
-            </ng-container>
-          </div>
-        </div>
-        <button class="btn btn-package f-3 ml-2" (click)="editCard()">Change card</button>
+    <ng-container *ngIf="loading; else showPayment">
+      <div class="text-center">
+        <div class="loader mt-5"></div>
+        <div class="f-8 fw-600">Loading payment informations...</div>
       </div>
-    </div>
-    <div class="mt-5">
-      <div class="f-3 font-weight-bold">Invoices</div>
-      <table class="table mt-2">
-        <thead>
-        <tr>
-          <th class="number-col border-top-0 pl-0">
-            <span class="f-1 c-dark"></span>
-          </th>
-          <th class="gross border-top-0">
-            <span class="f-1 c-dark"></span>
-          </th>
-          <th class="download-col border-top-0 text-right pr-0">
-            <span class="f-1 c-dark"></span>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let invoice of invoices; let index=index;">
-          <td class="number-col f-3 font-weight-bold pt-3 pb-0 pl-0">
-            Invoice for CRM Grow {{invoice.date | date: 'dd/MM/yyyy'}}
-          </td>
-          <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">
-            $ {{invoice.amount}}
-          </td>
-          <td class="download-col f-3 font-weight-bold c-blue text-right pr-0 pt-3 pb-0">
-            <div class="v-center justify-content-end c-pointer">
-              <i class="i-icon i-download bgc-blue d-block"></i>
-              <span class="ml-2">Download invoice</span>
+    </ng-container>
+    <ng-template #showPayment>
+      <div class="stripe-wrapper mt-5">
+        <div class="f-3 font-weight-bold">Payment details</div>
+        <div class="f-1 my-3">Credit or debit card</div>
+        <div class="v-center form-group">
+          <div class="stripe-card v-center justify-content-between">
+            <div class="f-3 font-weight-bold">{{previewCardNumber}}</div>
+            <div class="card-img">
+              <ng-container [ngSwitch]="card.card_brand">
+                <img src="../../../assets/img/card_visa.svg" *ngSwitchCase="'Visa'">
+                <img src="../../../assets/img/card_amex.svg" *ngSwitchCase="'amex'">
+                <img src="../../../assets/img/card_master.svg" *ngSwitchCase="'mastercard'">
+                <img src="../../../assets/img/card_jcb.svg" *ngSwitchCase="'jcb'">
+                <img src="../../../assets/img/card_discover.svg" *ngSwitchCase="'discover'">
+                <img src="../../../assets/img/card_diners.svg" *ngSwitchCase="'diners'">
+              </ng-container>
             </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+          </div>
+          <button class="btn btn-package f-3 ml-2" (click)="editCard()">Change card</button>
+        </div>
+      </div>
+      <div class="mt-5">
+        <div class="f-3 font-weight-bold">Invoices</div>
+        <table class="table mt-2">
+          <thead>
+          <tr>
+            <th class="number-col border-top-0 pl-0">
+              <span class="f-1 c-dark"></span>
+            </th>
+            <th class="gross border-top-0">
+              <span class="f-1 c-dark"></span>
+            </th>
+            <th class="download-col border-top-0 pr-0">
+              <span class="f-1 c-dark"></span>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let invoice of invoices; let index=index;">
+            <td class="number-col f-3 font-weight-bold pt-3 pb-0 pl-0">
+              Invoice for CRM Grow {{invoice.date | date: 'dd/MM/yyyy'}}
+            </td>
+            <td class="gross-col f-3 font-weight-bold text-right pr-0  pt-3 pb-0">
+              $ {{invoice.amount}}
+            </td>
+            <td class="download-col f-3 font-weight-bold c-blue pr-0 pt-3 pb-0">
+              <div class="v-center justify-content-end c-pointer">
+                <i class="i-icon i-download bgc-blue d-block"></i>
+                <span class="ml-2">Download invoice</span>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-template>
   </ng-container>
   <ng-container *ngIf="step == 2">
     <div class="d-flex justify-content-between">
       <h1 class="f-26">Upgrade and get more out of CRM Grow</h1>
-      <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="cancelPlan()"></i>
+      <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBack()"></i>
     </div>
     <div class="notification-area my-4">
       <span class="f-6 font-weight-bold">Ooops</span>
@@ -894,7 +902,7 @@
   <ng-container *ngIf="step == 3">
     <div class="v-center justify-content-between">
       <div class="f-26 font-weight-bold">Confirm your subscription</div>
-      <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="cancelPlan()"></i>
+      <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBack()"></i>
     </div>
     <div class="confirm-wrapper">
       <div class="upgrade-plan-wrapper">
@@ -1142,6 +1150,43 @@
         <div class="text-wrapper f-2 op-75 mt-3">
           Text explaining any subscription details. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium pretium tempor. Ut eget imperdiet neque. In volutpat ante semper diam molestie, et aliquam erat laoreet.
         </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="step == 4">
+    <div class="reason-wrapper">
+      <div class="d-flex justify-content-between">
+        <div class="f-6 font-weight-bold reason-title">Why are you looking to cancel your account?</div>
+        <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBackFirst()"></i>
+      </div>
+      <div class="reason-buttons mt-3">
+        <div class="button c-blue font-weight-bold f-3 ml-2 mb-2"
+             *ngFor="let button of reasonButtons"
+             (click)="selectReason(button)"
+        >
+          {{button}}
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="step == 5">
+    <div class="reason-wrapper">
+      <div class="d-flex justify-content-between">
+        <div class="f-6 font-weight-bold reason-title">What is the {{selectedReason}} thing you really wish CRM Grow did better?</div>
+        <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBack()"></i>
+      </div>
+      <div class="form-group mt-3">
+        <textarea
+          class="f-3 p-2 form-control"
+          name="feedback"
+          #feedback="ngModel"
+          [(ngModel)]="reasonFeedback"
+        >
+        </textarea>
+      </div>
+      <div class="v-center justify-content-end">
+        <button class="btn btn-white f-6 font-weight-bold c-blue">Cancel</button>
+        <button class="btn btn-primary f-6 font-weight-bold ml-2">Send feedback</button>
       </div>
     </div>
   </ng-container>

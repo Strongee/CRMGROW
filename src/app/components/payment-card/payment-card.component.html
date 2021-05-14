@@ -1,94 +1,119 @@
 <form #cardForm="ngForm" (ngSubmit)="cardForm.form.valid ? editPayment() : false;">
-    <h1 mat-dialog-title>Edit payment</h1>
-    <mat-dialog-content>
-        <div class="form-group" [ngClass]="{invalid: cardForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || cardForm.submitted)}">
-            <div class="d-flex justify-content-between">
-                <label for="card_name">name on card</label>
-                <span class="error" *ngIf="cardname.errors">
-                    <ng-container *ngIf="cardname.errors.required">Required!</ng-container>
-                </span>
-            </div>
-            <input type="text" class="form-control" [(ngModel)]="card.card_name" id="cardname" name="cardname" #cardname="ngModel" required>
-        </div>
-        <div class="form-group mt-4" [ngClass]="{invalid: cardForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || cardForm.submitted)}">
-            <div class="d-flex justify-content-between">
-                <label for="card_number">card number</label>
-                <span class="error" *ngIf="cardnumber.errors">
-                    <ng-container *ngIf="cardnumber.errors.required">Required!</ng-container>
-                    <ng-container *ngIf="cardnumber.errors.minlength">Invalid!</ng-container>
-                </span>
-            </div>
-            <input
-                type="text"
-                placeholder="eg. 1234 5678 9012 3456"
-                class="form-control"
-                [(ngModel)]="card.number"
-                id="cardnumber"
-                name="cardnumber"
-                #cardnumber="ngModel"
-                required
-                minlength="{{cardNumberLen}}"
-                [cleave]="creditCardInput"
-                (ngModelChange)="changeLast4Code()"
-            >
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group" [ngClass]="{invalid: cardForm.submitted && cardcvc.invalid && (cardcvc.dirty || cardcvc.touched || cardForm.submitted)}">
-                    <div class="v-center justify-content-between">
-                        <div class="v-center">
-                            <label for="card_cvc" class="mt-3 mr-2">card cvc</label>
-                            <div class="v-center justify-content-center f-3 font-weight-bold text-white bgc-blue cvc-icon c-pointer" placement="right"
-                            ngbPopover="This is the 3 digit code found on the back of your card. If you have an American Express credit card, this is the 4 digit code on the front of your card.">i</div>
-                        </div>
-                        <span class="error mt-2" *ngIf="cardcvc.errors">
-                            <ng-container *ngIf="cardcvc.errors.required">Required!</ng-container>
-                            <ng-container *ngIf="cardcvc.errors.minlength || cardcvc.errors.maxlength">Invalid!</ng-container>
-                        </span>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="eg. 512"
-                        class="form-control"
-                        [(ngModel)]="card.cvc"
-                        id="cardcvc"
-                        name="cardcvc"
-                        #cardcvc="ngModel"
-                        required
-                        minlength="3"
-                        maxlength="5"
-                        [cleave]="credCvcInput"
-                    >
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 pr-md-1">
-              <div class="form-group" [class.has-error]="expMonth.errors && (expMonth.touched || expMonth.dirty || cardForm.submitted ) && cardForm.submitted">
-                <label for="expMonth">Exp Month</label>
-                <select class="form-control br-default f-3 text-primary" id="expMonth" [(ngModel)]="card.exp_month" required name="expMonth" #expMonth="ngModel">
-                  <option value="" selected disabled>Select Month</option>
-                  <option *ngFor="let month of MONTHS" [value]="month.id">{{month.text}}</option>
-                </select>
-                <span class="invalid-feedback" *ngIf="expMonth.errors && (expMonth.touched || expMonth.dirty || cardForm.submitted ) && cardForm.submitted">
-                  Expiry month is invalid.
-                </span>
-              </div>
-            </div>
-            <div class="col-sm-6 pl-md-1">
-              <div class="form-group" [class.has-error]="expYear.errors && (expYear.touched || expYear.dirty || cardForm.submitted ) && cardForm.submitted">
-                <label for="expYear">Exp Year</label>
-                <select class="form-control br-default f-3 text-primary" id="expYear" [(ngModel)]="card.exp_year" required name="expYear" #expYear="ngModel">
-                  <option value="" selected disabled>Select Year</option>
-                  <option *ngFor="let year of YEARS" [value]="year.id">{{year.text}}</option>
-                </select>
-                <span class="invalid-feedback" *ngIf="expYear.errors && (expYear.touched || expYear.dirty || cardForm.submitted ) && cardForm.submitted">
-                  Expiry Year is invalid.
-                </span>
-              </div>
-            </div>
-        </div>
-    </mat-dialog-content>
+  <div class="v-center justify-content-between">
+    <h1 mat-dialog-title>Update payment information</h1>
+    <i class="i-icon i-close d-block bgc-black" (click)="close()"></i>
+  </div>
+  <mat-dialog-content>
+    <div class="form-group card-detail mt-3">
+      <label>Credit or Debit Card</label>
+      <stripe-card #stripeCard
+                   [options]="stripeOptions"
+                   (invalidChange)="cardInvalid($event)"
+                   (completeChange)="cardComplete($event)"
+      ></stripe-card>
+    </div>
+    <div class="cards-preview v-center mt-3">
+      <img src="../../../assets/img/card_visa.svg" alt="visa">
+      <img src="../../../assets/img/card_amex.svg" alt="amex">
+      <img src="../../../assets/img/card_master.svg" alt="master">
+      <img src="../../../assets/img/card_jcb.svg" alt="jcb">
+      <img src="../../../assets/img/card_discover.svg" alt="discover">
+      <img src="../../../assets/img/card_diners.svg" alt="diners">
+      <img src="../../../assets/img/card_unionpay.svg" alt="unionpay">
+
+    </div>
+  </mat-dialog-content>
+
+<!--    <h1 mat-dialog-title>Edit payment</h1>-->
+<!--    <mat-dialog-content>-->
+<!--        <div class="form-group" [ngClass]="{invalid: cardForm.submitted && cardname.invalid && (cardname.dirty || cardname.touched || cardForm.submitted)}">-->
+<!--            <div class="d-flex justify-content-between">-->
+<!--                <label for="card_name">name on card</label>-->
+<!--                <span class="error" *ngIf="cardname.errors">-->
+<!--                    <ng-container *ngIf="cardname.errors.required">Required!</ng-container>-->
+<!--                </span>-->
+<!--            </div>-->
+<!--            <input type="text" class="form-control" [(ngModel)]="card.card_name" id="cardname" name="cardname" #cardname="ngModel" required>-->
+<!--        </div>-->
+<!--        <div class="form-group mt-4" [ngClass]="{invalid: cardForm.submitted && cardnumber.invalid && (cardnumber.dirty || cardnumber.touched || cardForm.submitted)}">-->
+<!--            <div class="d-flex justify-content-between">-->
+<!--                <label for="card_number">card number</label>-->
+<!--                <span class="error" *ngIf="cardnumber.errors">-->
+<!--                    <ng-container *ngIf="cardnumber.errors.required">Required!</ng-container>-->
+<!--                    <ng-container *ngIf="cardnumber.errors.minlength">Invalid!</ng-container>-->
+<!--                </span>-->
+<!--            </div>-->
+<!--            <input-->
+<!--                type="text"-->
+<!--                placeholder="eg. 1234 5678 9012 3456"-->
+<!--                class="form-control"-->
+<!--                [(ngModel)]="card.number"-->
+<!--                id="cardnumber"-->
+<!--                name="cardnumber"-->
+<!--                #cardnumber="ngModel"-->
+<!--                required-->
+<!--                minlength="{{cardNumberLen}}"-->
+<!--                [cleave]="creditCardInput"-->
+<!--                (ngModelChange)="changeLast4Code()"-->
+<!--            >-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="form-group" [ngClass]="{invalid: cardForm.submitted && cardcvc.invalid && (cardcvc.dirty || cardcvc.touched || cardForm.submitted)}">-->
+<!--                    <div class="v-center justify-content-between">-->
+<!--                        <div class="v-center">-->
+<!--                            <label for="card_cvc" class="mt-3 mr-2">card cvc</label>-->
+<!--                            <div class="v-center justify-content-center f-3 font-weight-bold text-white bgc-blue cvc-icon c-pointer" placement="right"-->
+<!--                            ngbPopover="This is the 3 digit code found on the back of your card. If you have an American Express credit card, this is the 4 digit code on the front of your card.">i</div>-->
+<!--                        </div>-->
+<!--                        <span class="error mt-2" *ngIf="cardcvc.errors">-->
+<!--                            <ng-container *ngIf="cardcvc.errors.required">Required!</ng-container>-->
+<!--                            <ng-container *ngIf="cardcvc.errors.minlength || cardcvc.errors.maxlength">Invalid!</ng-container>-->
+<!--                        </span>-->
+<!--                    </div>-->
+<!--                    <input-->
+<!--                        type="text"-->
+<!--                        placeholder="eg. 512"-->
+<!--                        class="form-control"-->
+<!--                        [(ngModel)]="card.cvc"-->
+<!--                        id="cardcvc"-->
+<!--                        name="cardcvc"-->
+<!--                        #cardcvc="ngModel"-->
+<!--                        required-->
+<!--                        minlength="3"-->
+<!--                        maxlength="5"-->
+<!--                        [cleave]="credCvcInput"-->
+<!--                    >-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-sm-6 pr-md-1">-->
+<!--              <div class="form-group" [class.has-error]="expMonth.errors && (expMonth.touched || expMonth.dirty || cardForm.submitted ) && cardForm.submitted">-->
+<!--                <label for="expMonth">Exp Month</label>-->
+<!--                <select class="form-control br-default f-3 text-primary" id="expMonth" [(ngModel)]="card.exp_month" required name="expMonth" #expMonth="ngModel">-->
+<!--                  <option value="" selected disabled>Select Month</option>-->
+<!--                  <option *ngFor="let month of MONTHS" [value]="month.id">{{month.text}}</option>-->
+<!--                </select>-->
+<!--                <span class="invalid-feedback" *ngIf="expMonth.errors && (expMonth.touched || expMonth.dirty || cardForm.submitted ) && cardForm.submitted">-->
+<!--                  Expiry month is invalid.-->
+<!--                </span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-sm-6 pl-md-1">-->
+<!--              <div class="form-group" [class.has-error]="expYear.errors && (expYear.touched || expYear.dirty || cardForm.submitted ) && cardForm.submitted">-->
+<!--                <label for="expYear">Exp Year</label>-->
+<!--                <select class="form-control br-default f-3 text-primary" id="expYear" [(ngModel)]="card.exp_year" required name="expYear" #expYear="ngModel">-->
+<!--                  <option value="" selected disabled>Select Year</option>-->
+<!--                  <option *ngFor="let year of YEARS" [value]="year.id">{{year.text}}</option>-->
+<!--                </select>-->
+<!--                <span class="invalid-feedback" *ngIf="expYear.errors && (expYear.touched || expYear.dirty || cardForm.submitted ) && cardForm.submitted">-->
+<!--                  Expiry Year is invalid.-->
+<!--                </span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </mat-dialog-content>-->
     <mat-dialog-actions align="end">
         <button class="btn c-blue" mat-dialog-close>Cancel</button>
         <button class="btn btn-primary" type="submit" [class.loading]="saving">Save</button>
