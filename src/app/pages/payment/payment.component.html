@@ -257,7 +257,7 @@
     </div>
     <div class="package-wrapper">
       <div class="package-item"
-           [class.active]="litePackage.package == selectedPackage.package"
+           [class.highlight]="litePackage.package == selectedPackage.package"
            (click)="clickPackage(litePackage)"
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
@@ -265,6 +265,7 @@
         <div class="package-description">Nam porttitor blandit accumsan.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="litePackage.package == currentPackage.package"
+                [class.highlight]="litePackage.package == selectedPackage.package"
                 (click)="selectPlan(litePackage.package)"
         >
           {{planButtonLabel(litePackage.package)}}
@@ -356,8 +357,8 @@
           </div>
         </div>
       </div>
-      <div class="package-item"
-       [class.active]="proPackage.package == selectedPackage.package"
+      <div class="package-item active"
+       [class.highlight]="proPackage.package == selectedPackage.package"
        (click)="clickPackage(proPackage)"
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
@@ -365,6 +366,7 @@
         <div class="package-description">Nam porttitor blandit accumsan.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="proPackage.package == currentPackage.package"
+                [class.highlight]="proPackage.package == selectedPackage.package"
                 (click)="selectPlan(proPackage.package)"
         >
           {{planButtonLabel(proPackage.package)}}
@@ -429,7 +431,7 @@
         </div>
       </div>
       <div class="package-item"
-         [class.active]="elitePackage.package == selectedPackage.package"
+         [class.highlight]="elitePackage.package == selectedPackage.package"
          (click)="clickPackage(elitePackage)"
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
@@ -437,6 +439,7 @@
         <div class="package-description">Nam porttitor blandit accumsan.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="elitePackage.package == currentPackage.package"
+                [class.highlight]="elitePackage.package == selectedPackage.package"
                 (click)="selectPlan(elitePackage.package)"
         >
           {{planButtonLabel(elitePackage.package)}}
@@ -485,7 +488,7 @@
         </div>
       </div>
       <div class="package-item"
-         [class.active]="customPackage.package == selectedPackage.package"
+         [class.highlight]="customPackage.package == selectedPackage.package"
          (click)="clickPackage(customPackage)"
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
@@ -493,6 +496,7 @@
         <div class="package-description">Nam porttitor blandit accumsan.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="customPackage.package == currentPackage.package"
+                [class.highlight]="litePackage.package == selectedPackage.package"
                 (click)="selectPlan(customPackage.package)"
         >
           {{planButtonLabel(customPackage.package)}}
