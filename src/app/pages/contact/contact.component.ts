@@ -1315,17 +1315,21 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (confirm) {
           this.noteService.delete(detail._id).subscribe((res) => {
             if (res) {
-              this.mainTimelines.some((e) => {
-                if (e.type !== 'notes') {
-                  return;
-                }
-                if (e.activity_detail && e.activity_detail._id === detail._id) {
-                  e.activity_detail = null;
-                  return true;
-                }
-              });
+              // this.mainTimelines.some((e) => {
+              //   if (e.type !== 'notes') {
+              //     return;
+              //   }
+              //   if (e.activity_detail && e.activity_detail._id === detail._id) {
+              //     e.activity_detail = null;
+              //     return true;
+              //   }
+              // });
               // Remove the note from notes array
               this.deleteNoteFromNotesArray(detail._id);
+              this.contactService.deleteContactActivityByDetail(
+                detail._id,
+                'notes'
+              );
               this.changeTab(this.tab);
             }
           });

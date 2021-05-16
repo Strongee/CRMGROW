@@ -175,6 +175,16 @@ export class ContactService extends HttpService {
     });
     this.storeService.selectedContact.next(currentContact);
   }
+  deleteContactActivityByDetail(detail: string, type): void {
+    const currentContact = this.storeService.selectedContact.getValue();
+    _.remove(currentContact.activity, (e) => {
+      if (e[type] && (e[type] === detail || e[type][0] === detail)) {
+        return true;
+      }
+      return false;
+    });
+    this.storeService.selectedContact.next(currentContact);
+  }
 
   /**
    * Create Contact
