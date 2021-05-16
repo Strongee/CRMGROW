@@ -320,6 +320,8 @@ export const MATERIAL = {
   CREATE_FOLDER: 'material/folder',
   UPDATE_FOLDER: 'material/folder/',
   REMOVE_FOLDER: 'material/remove-folder',
+  UPDATE_FOLDERS: 'material/update-folders',
+  REMOVE_FOLDERS: 'material/remove-folders',
   MOVE_FILES: 'material/move-material'
 };
 

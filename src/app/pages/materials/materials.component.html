@@ -88,7 +88,8 @@
     <div class="mat-table-wrapper" [class.empty]="!filteredMaterials.length">
       <table class="w-100 page-table"
         mat-table
-        [dataSource]="filteredMaterials | paginate: {id: 'materialPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: filteredMaterials.length}">
+        [dataSource]="filteredMaterials | paginate: {id: 'materialPages', itemsPerPage: pageSize.id, currentPage: page, totalItems: filteredMaterials.length}"
+        [class.selected-files]="selectedFiles.length">
 
         <ng-container matColumnDef="loader-cell">
           <th mat-header-cell
@@ -105,12 +106,12 @@
             *matHeaderCellDef
             class="pl-0 checkbox-col">
             <div class="custom-control custom-checkbox"
-              [class.indeterminate]="selection.length && !isAllSelected()">
+              [class.indeterminate]="(selectedFiles.length + selectedFolders.length) && !isAllSelected()">
               <input type="checkbox"
                 class="custom-control-input"
                 id="selectAllMaterials"
-                (change)="$event ? masterToggle() : null"
-                [checked]="isAllSelected()" />
+                (change)="$event ? pageMasterToggle() : null"
+                [checked]="isPageSelected()" />
               <label class="custom-control-label"
                 for="selectAllMaterials"></label>
             </div>
@@ -134,7 +135,7 @@
         <ng-container matColumnDef="material_name">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length; else toolHeader" class="name-col">
+            *ngIf="!(selectedFiles.length + selectedFolders.length); else toolHeader" class="name-col">
               <div class="v-center c-pointer head-sort" (click)="sort('title')">
                 <span [class]="selectedSort == 'title' ? 'fw-600 c-dark' : ''">Name</span>
                 <i class="i-icon d-block bgc-black ml-2"
@@ -142,10 +143,20 @@
               </div>
             </th>
               <ng-template #toolHeader>
-                <th mat-header-cell colspan="10">
+                <th mat-header-cell colspan="12">
                   <div class="v-center">
-                    <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
-                    <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)" [disableActions]="disableActions"></app-actions-header>
+                    <ng-container *ngIf="selectedFiles.length; else folderSelectedStatus">
+                      <span class="c-dark f-3 text-lowercase font-weight-bold">
+                        {{selectedFiles.length}} selected
+                      </span>
+                      <app-actions-header [actions]="ACTIONS" (doCommand)="doAction($event)" [disableActions]="disableActions"></app-actions-header>
+                    </ng-container>
+                    <ng-template #folderSelectedStatus>
+                      <span class="c-dark f-3 text-lowercase font-weight-bold">
+                        {{selectedFolders.length}} selected
+                      </span>
+                      <app-actions-header [actions]="FOLDER_ACTIONS" (doCommand)="doFolderAction($event)"></app-actions-header>
+                    </ng-template>
                   </div>
                 </th>
               </ng-template>
@@ -234,7 +245,7 @@
         <ng-container matColumnDef="creator">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="owner-col">
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="owner-col">
               <div class="v-center c-pointer head-sort" (click)="sort('owner')">
                 <span [class]="selectedSort == 'owner' ? 'fw-600 c-dark' : ''">Owner</span>
                 <i class="i-icon d-block bgc-black ml-2"
@@ -252,7 +263,7 @@
         <ng-container matColumnDef="share">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="share-col">shared with</th>
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="share-col">shared with</th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="share-col">
@@ -264,11 +275,11 @@
         <ng-container matColumnDef="theme">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="theme-col">theme</th>
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="theme-col">theme</th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="theme-col">
-            {{element.theme ? element.theme : '---' | shorten: 8: '...'}}
+            {{ element.material_type !== 'folder' ? themeJSON[material_themes[element._id] || global_theme]?.name : '---' | shorten: 8: '...'}}
           </td>
         </ng-container>
 
@@ -276,7 +287,7 @@
         <ng-container matColumnDef="type">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="type-col">
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="type-col">
               <div class="v-center c-pointer head-sort" (click)="sort('material_type')">
                 <span [class]="selectedSort == 'material_type' ? 'fw-600 c-dark' : ''">Type</span>
                 <i class="i-icon d-block bgc-black ml-2"
@@ -294,7 +305,7 @@
         <ng-container matColumnDef="created_at">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell class="time-col"
-            *ngIf="!selection.length">
+            *ngIf="!(selectedFiles.length + selectedFolders.length)">
               <div class="v-center c-pointer head-sort" (click)="sort('created_at')">
                 <span [class]="selectedSort == 'created_at' ? 'fw-600 c-dark' : ''">Added</span>
                 <i class="i-icon d-block bgc-black ml-2"
@@ -312,7 +323,7 @@
         <ng-container matColumnDef="analytics">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="analytics-col">
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="analytics-col">
               <div class="v-center c-pointer head-sort" (click)="sort('views')">
                 <span [class]="selectedSort == 'views' ? 'fw-600 c-dark' : ''">Views</span>
                 <i class="i-icon d-block bgc-black ml-2"
@@ -340,7 +351,7 @@
         <ng-container matColumnDef="sub_actions">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="sub-item-action"></th>
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="sub-item-action"></th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="sub-item-action">
@@ -382,7 +393,7 @@
         <ng-container matColumnDef="lead_capture">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="capture-col">capture</th>
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="capture-col">capture</th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="capture-col" [class.disable]="getUserLevel() == 'lite'">
@@ -404,7 +415,7 @@
         <ng-container matColumnDef="actions">
           <ng-container *matHeaderCellDef>
             <th mat-header-cell
-            *ngIf="!selection.length" class="item-action"></th>
+            *ngIf="!(selectedFiles.length + selectedFolders.length)" class="item-action"></th>
           </ng-container>
           <td mat-cell
             *matCellDef="let element" class="item-action">
@@ -442,7 +453,7 @@
                         <i class="i-icon i-share bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Social share</span>
                       </button>
-                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)" *ngIf="element.user._id == user_id || element.user == user_id">
+                      <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="shareTeam(element)" *ngIf="(element.user._id == user_id || element.user == user_id) && element.role != 'team'">
                         <i class="i-icon i-share-team bgc-dark ml-1" aria-hidden="true"></i>
                         <span class="ml-3 f-3 font-weight-bold">Share team</span>
                       </button>
@@ -506,19 +517,15 @@
         </ng-container>
 
         <ng-container matColumnDef="selection_info">
-          <th mat-header-cell *matHeaderCellDef colspan="10" class="text-center">
-            <span *ngIf="selection.length !== filteredMaterials.length; else deselectTemplate">
-              {{selection.length}} materials are selected.
-              <span  class="c-blue font-weight-bold" *ngIf="selecting">
-                <i class="small-spinner"></i>
-                <span class="ml-1">Selecting all. . .</span>
-              </span>
-              <span class="c-blue font-weight-bold c-pointer" *ngIf="!selecting" (click)="masterToggle()">
-                Select all {{filteredMaterials.length}} materials
+          <th mat-header-cell *matHeaderCellDef colspan="12" class="text-center">
+            <span *ngIf="!isAllSelected(); else deselectTemplate">
+              {{selectedFiles.length}} materials are selected.
+              <span class="c-blue font-weight-bold c-pointer" (click)="masterToggle()">
+                Select all {{filteredFiles.length}} materials
               </span>
             </span>
             <ng-template #deselectTemplate>
-              All {{filteredMaterials.length}} materials are selected. <span class="c-blue c-pointer font-weight-bold" (click)="masterToggle()">Clear selection</span>
+              All {{filteredFiles.length}} materials are selected. <span class="c-blue c-pointer font-weight-bold" (click)="masterToggle()">Clear selection</span>
             </ng-template>
           </th>
         </ng-container>
@@ -526,17 +533,17 @@
         <tr mat-header-row
           *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
         <tr mat-header-row
-          *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selection.length" class="table-header"></tr>
-        <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selection.length" class='selection-info'></tr>
+          *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selectedFiles.length + selectedFolders.length" class="table-header"></tr>
+        <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selectedFiles.length" class='selection-info'></tr>
         <tr mat-row
-          *matRowDef="let row; columns: DISPLAY_COLUMNS;"></tr>
+          *matRowDef="let row; columns: DISPLAY_COLUMNS;" [class.folder-row]="row.material_type === 'folder'"></tr>
       </table>
       <ng-container *ngIf="filteredMaterials.length">
         <div class="my-2 table-control mode-1">
           <div class="pagination-wrapper m-auto">
             <pagination-controls
-              (pageChange)="page = $event"
-              (pageBoundsCorrection)="page = $event"
+              (pageChange)="changePage($event)"
+              (pageBoundsCorrection)="changePage($event)"
               id="materialPages"
               maxSize="5"
               previousLabel=""

@@ -1439,6 +1439,28 @@ export const BulkActions = {
       loading: false
     }
   ],
+  Folders: [
+    {
+      label: 'Edit',
+      type: 'button',
+      icon: 'i-edit',
+      command: 'edit',
+      loading: false
+    },
+    {
+      label: 'Delete',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
+    }
+  ],
   TeamMaterials: [
     {
       label: 'Send via email',

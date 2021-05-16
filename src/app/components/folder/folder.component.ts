@@ -11,6 +11,7 @@ import { MaterialService } from 'src/app/services/material.service';
 })
 export class FolderComponent implements OnInit {
   folder = new Material();
+  folders = [];
   saving = false;
   saveSubscription: Subscription;
 
@@ -21,6 +22,9 @@ export class FolderComponent implements OnInit {
   ) {
     if (this.data && this.data.folder) {
       this.folder = this.data.folder;
+    }
+    if (this.data && this.data.folders) {
+      this.folders = this.data.folders;
     }
   }
 
@@ -44,19 +48,37 @@ export class FolderComponent implements OnInit {
           }
         });
     } else {
-      this.saving = true;
-      this.saveSubscription && this.saveSubscription.unsubscribe();
-      this.saveSubscription = this.materialService
-        .createFolder({ title: this.folder.title })
-        .subscribe((data) => {
-          this.saving = false;
-          if (data) {
-            const _createdFolder = new Material().deserialize(data);
-            _createdFolder.material_type = 'folder';
-            this.materialService.create$(_createdFolder);
-            this.dialogRef.close(_createdFolder);
-          }
-        });
+      if (this.folders && this.folders.length) {
+        this.saving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.materialService
+          .updateFolders(this.folders, {
+            title: this.folder.title
+          })
+          .subscribe((status) => {
+            this.saving = false;
+            if (status) {
+              this.materialService.bulkUpdate$(this.folders, {
+                title: this.folder.title
+              });
+              this.dialogRef.close();
+            }
+          });
+      } else {
+        this.saving = true;
+        this.saveSubscription && this.saveSubscription.unsubscribe();
+        this.saveSubscription = this.materialService
+          .createFolder({ title: this.folder.title })
+          .subscribe((data) => {
+            this.saving = false;
+            if (data) {
+              const _createdFolder = new Material().deserialize(data);
+              _createdFolder.material_type = 'folder';
+              this.materialService.create$(_createdFolder);
+              this.dialogRef.close(_createdFolder);
+            }
+          });
+      }
     }
   }
 }

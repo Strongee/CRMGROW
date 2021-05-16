@@ -1,6 +1,6 @@
 <form #form="ngForm" (ngSubmit)="form.form.valid ? save() : false" [class.was-validated]="form.submitted" class="general">
   <h1 mat-dialog-title class="v-center d-flex">
-    <span>{{folder._id ? 'Edit folder' : 'Create folder'}}</span>
+    <span>{{folder._id || folders.length ? 'Edit folder' : 'Create folder'}}</span>
     <button class="border-0 bgc-trans ml-auto" mat-dialog-close>
       <i class="d-block i-icon i-close bgc-dark"></i>
     </button>
@@ -18,6 +18,6 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button class="btn c-blue" mat-dialog-close>Cancel</button>
-    <button class="btn btn-primary" [class.loading]="saving">{{folder._id ? 'Save' : 'Create'}}</button>
+    <button class="btn btn-primary" [class.loading]="saving">{{folder._id || folders.length ? 'Save' : 'Create'}}</button>
   </mat-dialog-actions>
 </form>
