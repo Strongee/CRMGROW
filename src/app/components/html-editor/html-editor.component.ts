@@ -174,7 +174,7 @@ export class HtmlEditorComponent implements OnInit {
           const option = 'width=530, height=305';
           if (!this.popup || this.popup.closed) {
             this.popup = window.open(
-              this.recordUrl + '?' + this.authToken,
+              this.recordUrl + '?' + this.authToken + '&=website',
               'record',
               option
             );
