@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     { id: 'general', icon: 'i-general', label: 'Info' },
     { id: 'signature', icon: 'i-signature', label: 'Signature' },
     { id: 'security', icon: 'i-security', label: 'Security' },
-    { id: 'billing', icon: 'i-payment', label: 'Billing' }
+    { id: 'billing', icon: 'i-payment', label: 'Subscription' }
   ];
   defaultPage = 'general';
   currentPage: string;

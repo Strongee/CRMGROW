@@ -112,4 +112,7 @@ export function getUserLevel(level): string {
   }
   // return PACKAGE_LEVEL.lite.package;
   return PACKAGE_LEVEL.pro.package;
+  // return PACKAGE_LEVEL.elite.package;
+  // return PACKAGE_LEVEL.custom.package;
 }
+
