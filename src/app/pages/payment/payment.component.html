@@ -5,7 +5,7 @@
     </div>
     <div class="plan-select-wrapper">
       <div class="plan-description">
-        <p class="f-3 font-weight-bold">CRM Grow Professional</p>
+        <p class="f-3 font-weight-bold">CRM Grow {{getPackageLabel()}}</p>
         <ng-container *ngIf="currentPackage.package == litePackage.package">
           <p class="f-1 c-dark op-64 mb-2">${{currentPackage.price}} / month</p>
           <div class="features">
@@ -19,7 +19,7 @@
             </div>
             <div class="feature-item v-center mb-2">
               <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Up to {{currentPackage.video_info.record_max_length}} min video recording</span>
+              <span class="f-3 ml-2">{{currentPackage.video_info.record_max_length}} min video recording</span>
             </div>
             <div class="feature-item v-center mb-2" *ngIf="currentPackage.automation_info.max_count > 0">
               <i class="i-icon i-check bgc-blue sm"></i>
@@ -75,6 +75,7 @@
             <div class="feature-item v-center mb-2" *ngIf="currentPackage.teams">
               <i class="i-icon i-check bgc-blue sm"></i>
               <span class="f-3 ml-2">Teams</span>
+              <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can join any team but can't create your own team." ngbButtonLabel></i>
             </div>
             <div class="feature-item v-center mb-2" *ngIf="currentPackage.online_support">
               <i class="i-icon i-check bgc-blue sm"></i>
@@ -99,11 +100,20 @@
             </div>
             <div class="feature-item v-center mb-2">
               <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Up to {{currentPackage.video_info.record_max_length}} min video recording</span>
+              <span class="f-3 ml-2">{{currentPackage.video_info.record_max_length}} min video recording</span>
             </div>
             <div class="feature-item v-center mb-2" *ngIf="currentPackage.automation_info.max_count > 0">
               <i class="i-icon i-check bgc-blue sm"></i>
               <span class="f-3 ml-2">{{currentPackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.sms_info.max_count > 0">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.sms_info.max_count}} sms</span>
+              <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can purchase more in settings." ngbButtonLabel></i>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.calendar_info.max_count > 0">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.calendar_info.max_count}} calendar connection</span>
             </div>
             <div class="my-3 f-5 font-weight-bold">
               Everything in Lite, plus:
@@ -127,6 +137,10 @@
             <div class="feature-item d-flex mb-2" *ngIf="currentPackage.automations">
               <i class="i-icon i-check bgc-blue sm"></i>
               <span class="f-3 ml-2">Automations</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.teams">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">Teams</span>
             </div>
             <div class="feature-item d-flex mb-2" *ngIf="currentPackage.email_support">
               <i class="i-icon i-check bgc-blue sm"></i>
@@ -155,11 +169,20 @@
             </div>
             <div class="feature-item v-center mb-2">
               <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Up to {{currentPackage.video_info.record_max_length}} min video recording</span>
+              <span class="f-3 ml-2">{{currentPackage.video_info.record_max_length}} min video recording</span>
             </div>
             <div class="feature-item v-center mb-2" *ngIf="currentPackage.automation_info.max_count > 0">
               <i class="i-icon i-check bgc-blue sm"></i>
               <span class="f-3 ml-2">{{currentPackage.automation_info.max_count}} active automations</span>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.sms_info.max_count > 0">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.sms_info.max_count}} sms</span>
+              <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can purchase more in settings." ngbButtonLabel></i>
+            </div>
+            <div class="feature-item v-center mb-2" *ngIf="currentPackage.calendar_info.max_count > 0">
+              <i class="i-icon i-check bgc-blue sm"></i>
+              <span class="f-3 ml-2">{{currentPackage.calendar_info.max_count}} calendar connections</span>
             </div>
             <div class="my-3 f-5 font-weight-bold">
               Everything in Pro, plus:
@@ -191,7 +214,7 @@
         <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28 w-100" (click)="cancelAccount()">Cancel account</button>
       </div>
     </div>
-    <ng-container *ngIf="loading; else showPayment">
+    <ng-container *ngIf="loadingPayment || loadingInvoice; else showPayment">
       <div class="text-center">
         <div class="loader mt-5"></div>
         <div class="f-8 fw-600">Loading payment informations...</div>
@@ -270,7 +293,7 @@
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
         <div class="package-level">Lite</div>
-        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <div class="package-description">Best for business and growth leaders newer to their business.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="litePackage.package == currentPackage.package"
                 [class.highlight]="litePackage.package == selectedPackage.package"
@@ -294,11 +317,7 @@
           </div>
           <div class="feature-item d-flex mb-2">
             <i class="i-icon i-check bgc-blue"></i>
-            <span class="f-4 ml-2">Up to {{litePackage.video_info.record_max_length}} min video recording</span>
-          </div>
-          <div class="feature-item d-flex mb-2">
-            <i class="i-icon i-check bgc-blue"></i>
-            <span class="f-4 ml-2">{{litePackage.automation_info.max_count}} active automations</span>
+            <span class="f-4 ml-2">{{litePackage.video_info.record_max_length}} min video recording</span>
           </div>
           <div class="my-3 f-5 font-weight-bold">
             Available on all plans:
@@ -354,6 +373,7 @@
           <div class="feature-item d-flex mb-2" *ngIf="litePackage.teams">
             <i class="i-icon i-check bgc-blue"></i>
             <span class="f-4 ml-2">Teams</span>
+            <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can join any team but can't create your own team." ngbButtonLabel></i>
           </div>
           <div class="feature-item d-flex mb-2" *ngIf="litePackage.online_support">
             <i class="i-icon i-check bgc-blue"></i>
@@ -371,7 +391,7 @@
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
         <div class="package-level">Pro</div>
-        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <div class="package-description">Best for business leaders and entrepreneurs with one business and focus.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="proPackage.package == currentPackage.package"
                 [class.highlight]="proPackage.package == selectedPackage.package"
@@ -395,11 +415,19 @@
           </div>
           <div class="feature-item d-flex mb-2">
             <i class="i-icon i-check bgc-blue"></i>
-            <span class="f-4 ml-2">Up to {{proPackage.video_info.record_max_length}} min video recording</span>
+            <span class="f-4 ml-2">{{proPackage.video_info.record_max_length}} min video recording</span>
           </div>
           <div class="feature-item d-flex mb-2">
             <i class="i-icon i-check bgc-blue"></i>
             <span class="f-4 ml-2">{{proPackage.automation_info.max_count}} active automations</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{proPackage.sms_info.max_count}} sms</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{proPackage.calendar_info.max_count}} calendar connection</span>
           </div>
           <div class="my-3 f-5 font-weight-bold">
             Everything in Lite, plus:
@@ -415,6 +443,10 @@
           <div class="feature-item d-flex mb-2" *ngIf="proPackage.email_tracking">
             <i class="i-icon i-check bgc-blue"></i>
             <span class="f-4 ml-2">Email 'Click' Tracking</span>
+          </div>
+          <div class="feature-item d-flex mb-2" *ngIf="proPackage.teams">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">Teams</span>
           </div>
           <div class="feature-item d-flex mb-2" *ngIf="proPackage.mass_email">
             <i class="i-icon i-check bgc-blue"></i>
@@ -444,7 +476,7 @@
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
         <div class="package-level">Elite</div>
-        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <div class="package-description">Best for Entrepreneurs, Influencers, and people looking to become Growth Leaders or those aspiring to be.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="elitePackage.package == currentPackage.package"
                 [class.highlight]="elitePackage.package == selectedPackage.package"
@@ -468,18 +500,26 @@
           </div>
           <div class="feature-item d-flex mb-2">
             <i class="i-icon i-check bgc-blue"></i>
-            <span class="f-4 ml-2">Up to {{elitePackage.video_info.record_max_length}} min video recording</span>
+            <span class="f-4 ml-2">{{elitePackage.video_info.record_max_length}} min video recording</span>
           </div>
           <div class="feature-item d-flex mb-2">
             <i class="i-icon i-check bgc-blue"></i>
             <span class="f-4 ml-2">{{elitePackage.automation_info.max_count}} active automations</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{elitePackage.sms_info.max_count}} sms</span>
+          </div>
+          <div class="feature-item d-flex mb-2">
+            <i class="i-icon i-check bgc-blue"></i>
+            <span class="f-4 ml-2">{{elitePackage.calendar_info.max_count}} calendar connection</span>
           </div>
           <div class="my-3 f-5 font-weight-bold">
             Everything in Pro
           </div>
           <div class="feature-item d-flex mb-2" *ngIf="proPackage.assistant_access">
             <i class="i-icon i-check bgc-blue"></i>
-            <span class="f-4 ml-2">Unlimited assistant access</span>
+            <span class="f-4 ml-2">3 assistant access</span>
           </div>
           <div class="feature-item d-flex mb-2" *ngIf="elitePackage.priority_support">
             <i class="i-icon i-check bgc-blue"></i>
@@ -501,7 +541,7 @@
       >
         <img class="popular-img" src="../../../assets/img/popular.svg">
         <div class="package-level">Custom</div>
-        <div class="package-description">Nam porttitor blandit accumsan.</div>
+        <div class="package-description">Don't see a match for your specific need?  No worries, just reach out to see if we have a good solution for your needs.</div>
         <button class="btn btn-package my-3 w-100"
                 [class.active]="customPackage.package == currentPackage.package"
                 [class.highlight]="litePackage.package == selectedPackage.package"
@@ -530,13 +570,13 @@
         </div>
         <div class="plan-wrapper">
           <div class="plan-item text-center">
-            <p>{{litePackage.contact_info.max_count}} contacts</p>
+            <p>{{litePackage.contact_info.max_count}}</p>
           </div>
           <div class="plan-item text-center">
-            <p>{{proPackage.contact_info.max_count}} contacts</p>
+            <p>{{proPackage.contact_info.max_count}}</p>
           </div>
           <div class="plan-item text-center">
-            <p>{{elitePackage.contact_info.max_count}} contacts</p>
+            <p>{{elitePackage.contact_info.max_count}}</p>
           </div>
         </div>
       </div>
@@ -546,13 +586,13 @@
         </div>
         <div class="plan-wrapper">
           <div class="plan-item text-center">
-            <p>{{litePackage.video_info.upload_max_count}} material uploads</p>
+            <p>{{litePackage.video_info.upload_max_count}}</p>
           </div>
           <div class="plan-item text-center">
-            <p>{{proPackage.video_info.upload_max_count}} material uploads</p>
+            <p>{{proPackage.video_info.upload_max_count}}</p>
           </div>
           <div class="plan-item text-center">
-            <p>Unlimited material uploads</p>
+            <p>Unlimited</p>
           </div>
         </div>
       </div>
@@ -562,13 +602,13 @@
         </div>
         <div class="plan-wrapper">
           <div class="plan-item text-center">
-            <p>Up to {{litePackage.video_info.record_max_length}} minutes</p>
+            <p>{{litePackage.video_info.record_max_length}} min</p>
           </div>
           <div class="plan-item text-center">
-            <p>Up to {{proPackage.video_info.record_max_length}} minutes</p>
+            <p>{{proPackage.video_info.record_max_length}} min</p>
           </div>
           <div class="plan-item text-center">
-            <p>Up to {{elitePackage.video_info.record_max_length}} minutes</p>
+            <p>{{elitePackage.video_info.record_max_length}} min</p>
           </div>
         </div>
       </div>
@@ -578,13 +618,43 @@
         </div>
         <div class="plan-wrapper">
           <div class="plan-item text-center">
-            <p>{{litePackage.automation_info.max_count}} active automations</p>
           </div>
           <div class="plan-item text-center">
-            <p>{{proPackage.automation_info.max_count}} active automations</p>
+            <p>{{proPackage.automation_info.max_count}}</p>
           </div>
           <div class="plan-item text-center">
-            <p>Unlimited active automations</p>
+            <p>{{elitePackage.automation_info.max_count}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title">
+          Calendar
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+          </div>
+          <div class="plan-item text-center">
+            <p>{{proPackage.calendar_info.max_count}}</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>{{elitePackage.calendar_info.max_count}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="feature-wrapper">
+        <div class="feature-title">
+          SMS
+          <i class="i-icon tooltip-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can purchase more in settings." ngbButtonLabel></i>
+        </div>
+        <div class="plan-wrapper">
+          <div class="plan-item text-center">
+          </div>
+          <div class="plan-item text-center">
+            <p>{{proPackage.sms_info.max_count}}</p>
+          </div>
+          <div class="plan-item text-center">
+            <p>{{elitePackage.sms_info.max_count}}</p>
           </div>
         </div>
       </div>
@@ -646,6 +716,7 @@
         <div class="plan-wrapper">
           <div class="plan-item text-center">
             <i class="i-icon i-check bgc-blue d-block" *ngIf="litePackage.teams"></i>
+            <i class="i-icon tooltip-icon i-information bgc-dark d-block" placement="right" ngbTooltip="You can join any team but can't create your own team." ngbButtonLabel></i>
           </div>
           <div class="plan-item text-center">
             <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.teams"></i>
@@ -711,10 +782,12 @@
           <div class="plan-item text-center">
           </div>
           <div class="plan-item text-center">
-            {{proPackage.assistant_access.max_count}}
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="proPackage.assistant_access.max_count"></i>
+            <div class="f-3">{{proPackage.assistant_access.max_count}} seat</div>
           </div>
           <div class="plan-item text-center">
-            {{elitePackage.assistant_access.max_count}}
+            <i class="i-icon i-check bgc-blue d-block" *ngIf="elitePackage.assistant_access.max_count"></i>
+            <div class="f-3">{{elitePackage.assistant_access.max_count}} seats</div>
           </div>
         </div>
       </div>
@@ -953,19 +1026,19 @@
           <div class="features">
             <div class="feature-item d-flex mb-2">
               <i class="i-icon i-check bgc-blue"></i>
-              <span class="f-4 ml-2">{{litePackage.contact_info.max_count}} contacts</span>
+              <span class="f-4 ml-2">{{litePackage.contact_info.max_count}}</span>
             </div>
             <div class="feature-item d-flex mb-2">
               <i class="i-icon i-check bgc-blue"></i>
-              <span class="f-4 ml-2">{{litePackage.video_info.upload_max_count}} material uploads</span>
+              <span class="f-4 ml-2">{{litePackage.video_info.upload_max_count}}</span>
             </div>
             <div class="feature-item d-flex mb-2">
               <i class="i-icon i-check bgc-blue"></i>
-              <span class="f-4 ml-2">Up to {{litePackage.video_info.record_max_length}} min video recording</span>
+              <span class="f-4 ml-2">{{litePackage.video_info.record_max_length}}</span>
             </div>
             <div class="feature-item d-flex mb-2">
               <i class="i-icon i-check bgc-blue"></i>
-              <span class="f-4 ml-2">{{litePackage.automation_info.max_count}} active automations</span>
+              <span class="f-4 ml-2"></span>
             </div>
             <div class="my-3 f-5 font-weight-bold">
               Available on all plans:
@@ -1043,7 +1116,7 @@
           <div class="features">
             <div class="feature-item d-flex mb-2">
               <i class="i-icon i-check bgc-blue"></i>
-              <span class="f-4 ml-2">{{proPackage.contact_info.max_count}} contacts</span>
+              <span class="f-4 ml-2">{{proPackage.contact_info.max_count}}</span>
             </div>
             <div class="feature-item d-flex mb-2">
               <i class="i-icon i-check bgc-blue"></i>
@@ -1185,8 +1258,8 @@
         </textarea>
       </div>
       <div class="v-center justify-content-end">
-        <button class="btn btn-white f-6 font-weight-bold c-blue">Cancel</button>
-        <button class="btn btn-primary f-6 font-weight-bold ml-2">Send feedback</button>
+        <button class="btn btn-white f-6 font-weight-bold c-blue" (click)="onBack()">Cancel</button>
+        <button class="btn btn-primary f-6 font-weight-bold ml-2" (click)="sendFeedback()">Send feedback</button>
       </div>
     </div>
   </ng-container>

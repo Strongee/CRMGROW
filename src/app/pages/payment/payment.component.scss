@@ -87,6 +87,11 @@ td {
   &.active {
     background-color: #F5F6FD;
     border: none;
+
+    &.highlight {
+      background-color: white;
+      border: 1px solid #0000ff;
+    }
   }
 }
 
@@ -166,6 +171,7 @@ td {
     font-size: 14px;
     letter-spacing: 0;
     line-height: 21px;
+    height: 100px;
   }
 
   .package-price {
@@ -319,6 +325,14 @@ td {
         color: #222B45;
         height: auto;
         padding: 8px 10px;
+        position: relative;
+
+        //.tooltip-icon {
+        //  position: absolute;
+        //  top: 50%;
+        //  left: 55%;
+        //  transform: translateY(-50%);
+        //}
 
         @media screen and (max-width: 1024px) {
           line-height: 24px;

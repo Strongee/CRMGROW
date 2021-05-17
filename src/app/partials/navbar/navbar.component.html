@@ -4,7 +4,10 @@
     <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">
   </a>
   <!-- Add Buttons Dropdown wrapper -->
-  <div class="new-actions-wrapper" ngbDropdown>
+  <div class="new-actions-wrapper"
+     [class.disable]="isSuspended"
+     ngbDropdown
+  >
     <div class="btn bgc-blue d-flex align-items-center shadow-1 rounded-circle no-carot" ngbDropdownToggle>
       <i class="i-icon i-plus bg-white d-block m-auto"></i>
     </div>
@@ -145,7 +148,7 @@
             <span class="f-4 fw-600">My profile</span>
           </a>
           <a [routerLink]="['/profile/billing']" class="dropdown-item">
-            <span class="f-4 fw-600">Billing</span>
+            <span class="f-4 fw-600">Subscription</span>
           </a>
           <a [routerLink]="['/profile/signature']" class="dropdown-item">
             <span class="f-4 fw-600">Email signature</span>

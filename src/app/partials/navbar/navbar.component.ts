@@ -51,6 +51,7 @@ export class NavbarComponent implements OnInit {
 
   @ViewChild('searchInput') searchInput: ElementRef;
   packageLevel = '';
+  isSuspended = false;
   profileSubscription: Subscription;
 
   constructor(
@@ -67,8 +68,8 @@ export class NavbarComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile) {
-          console.log('user profile ===========>', profile);
           this.packageLevel = profile.package_level;
+          this.isSuspended = profile.subscription?.is_suspended;
         }
       }
     );

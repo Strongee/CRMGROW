@@ -1669,6 +1669,12 @@ export const PACKAGE_LEVEL = {
     onbording_plus: {
       price: 49
     },
+    sms_info: {
+      max_count: 250
+    },
+    calendar_info: {
+      max_count: 1
+    },
     early_beta_access: true,
     roadmap: false,
     deal_pipeline_tracking: true,
@@ -1701,10 +1707,16 @@ export const PACKAGE_LEVEL = {
       max_count: 3000
     },
     assistant_access: {
-      max_count: 'Unlimited'
+      max_count: 3
     },
     onbording_plus: {
       price: 0
+    },
+    sms_info: {
+      max_count: 750
+    },
+    calendar_info: {
+      max_count: 3
     },
     early_beta_access: true,
     roadmap: true,

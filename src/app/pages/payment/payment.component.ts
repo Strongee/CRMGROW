@@ -4,8 +4,12 @@ import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentCardComponent } from 'src/app/components/payment-card/payment-card.component';
-import {CANCEL_ACCOUNT_REASON, PACKAGE_LEVEL} from '../../constants/variable.constants';
+import {
+  CANCEL_ACCOUNT_REASON,
+  PACKAGE_LEVEL
+} from '../../constants/variable.constants';
 import { getUserLevel } from '../../utils/functions';
+import { Payment } from '../../models/payment.model';
 
 @Component({
   selector: 'app-payment',
@@ -14,7 +18,8 @@ import { getUserLevel } from '../../utils/functions';
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   // UI Variables;
-  loading = false;
+  loadingPayment = true;
+  loadingInvoice = true;
   // New Card Information
   card = {
     card_name: '',
@@ -50,8 +55,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
   selectedReason = this.reasonButtons[0];
   reasonFeedback = '';
 
+  cancelAccountSubscription: Subscription;
+  loadingCancelAccount = false;
+
   constructor(private userService: UserService, private dialog: MatDialog) {
-    this.loading = true;
     // this.step = this.selectedStep;
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
@@ -60,22 +67,27 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this.packageLevel = profile.package_level;
           this.currentPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.selectedPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
-          this.userService.getPayment(profile.payment).subscribe(
+          this.loadingPayment = true;
+          this.userService.loadPayment(profile.payment);
+          this.userService.payment$.subscribe(
             (res) => {
-              this.card = {
-                ...res,
-                number: res.last4
-              };
-              this.previewCardNumber = '•••• •••• •••• ' + this.card.number;
-              this.getInvoice();
+              this.loadingPayment = false;
+              if (res) {
+                this.card = {
+                  ...res,
+                  number: res.last4
+                };
+                this.previewCardNumber = '•••• •••• •••• ' + this.card.number;
+              }
             },
             () => {
-              this.loading = false;
+              this.loadingPayment = false;
             }
           );
         }
       }
     );
+    this.getInvoice();
   }
 
   ngOnInit(): void {
@@ -91,15 +103,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   getInvoice(): void {
-    this.userService.getInvoice().subscribe(
+    this.loadingInvoice = true;
+    this.userService.loadInvoice();
+    this.userService.invoice$.subscribe(
       (res) => {
-        this.loading = false;
+        this.loadingInvoice = false;
         if (res && res['status']) {
           this.invoices = res['data'];
         }
       },
       () => {
-        this.loading = false;
+        this.loadingInvoice = false;
       }
     );
   }
@@ -197,5 +211,38 @@ export class PaymentComponent implements OnInit, OnDestroy {
   selectReason(reason): void {
     this.selectedReason = reason;
     this.step = 5;
+  }
+
+  getPackageLabel(): string {
+    if (this.currentPackage.package === 'lite') {
+      return 'Lite';
+    } else if (this.currentPackage.package === 'pro') {
+      return 'Professional';
+    } else if (this.currentPackage.package === 'elite') {
+      return 'Elite';
+    }
+    return 'Custom';
+  }
+
+  sendFeedback(): void {
+    this.loadingCancelAccount = true;
+    const data = {
+      close_reason: this.selectedReason,
+      close_feedback: this.reasonFeedback
+    };
+    this.cancelAccountSubscription &&
+      this.cancelAccountSubscription.unsubscribe();
+    this.cancelAccountSubscription = this.userService
+      .cancelAccount(data)
+      .subscribe(
+        (res) => {
+          this.loadingCancelAccount = false;
+          if (res) {
+          }
+        },
+        (err) => {
+          this.loadingCancelAccount = false;
+        }
+      );
   }
 }

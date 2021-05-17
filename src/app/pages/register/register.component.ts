@@ -230,7 +230,7 @@ export class RegisterComponent implements OnInit {
   }
 
   cardInvalid(evt: any): void {
-    if (evt && evt?.type == 'validation_error') {
+    if (evt && evt?.type === 'validation_error') {
       this.invalidError = 'invalid';
     } else {
       this.invalidError = '';
