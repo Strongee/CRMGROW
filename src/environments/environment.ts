@@ -5,11 +5,11 @@
 export const environment = {
   production: false,
   // api: 'https://app.crmgrow.com/api/',
-  api: 'https://ecsbe.crmgrow.com/api/',
+  api: 'http://3.139.190.87:3000/api/',
   // api: 'http://localhost:3000/api/',
   // api: 'http://192.168.0.63:3000/api/',
-  server: 'https://ecsbe.crmgrow.com',
-  website: 'https://ecsbe.crmgrow.com',
+  server: 'https://app.crmgrow.com',
+  website: 'https://app.crmgrow.com',
   ClientId: {
     Google:
       '630484366982-m6e66b06vlo0g6ebg9h2q5t7nrk2rimr.apps.googleusercontent.com',

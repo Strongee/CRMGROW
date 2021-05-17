@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  api: 'https://ecsbe.crmgrow.com/api/',
-  server: 'https://ecsbe.crmgrow.com',
-  website: 'https://ecsbe.crmgrow.com',
+  api: 'http://3.139.190.87:3000/api/',
+  server: 'http://3.139.190.87:3000',
+  website: 'http://3.139.190.87:3000',
   ClientId: {
     Google:
       '630484366982-m6e66b06vlo0g6ebg9h2q5t7nrk2rimr.apps.googleusercontent.com',
