@@ -307,3 +307,15 @@ td.type-col {
         opacity: 0.4;
     }
 }
+
+.selected-files .folder-row .custom-checkbox {
+    opacity: 0.4;
+    pointer-events: none;
+
+    .custom-control-input:checked ~ label{
+        &::before {
+            background-color: #0000ff44;
+            border-color: #0000ff44;
+        }
+    }
+}

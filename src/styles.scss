@@ -93,6 +93,21 @@ ul {
 .bgc-pale {
   background-color: #f6f5ff;
 }
+.bgc-image {
+  background-color: #9000FB;
+}
+.bgc-email {
+  background-color: #F19D50;
+}
+.bgc-note {
+  background-color: #F7B500;
+}
+.bgc-text {
+  background-color: #00A3FF;
+}
+.bgc-appointment {
+  background-color: #51A500;
+}
 .bgc-dark-trans08 {
   background-color: $color-trans08;
 }
@@ -290,20 +305,26 @@ ul {
   height: 18px;
   min-width: 18px;
 
+  &.lg {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
   &.s-14 {
-    width: 14px;
-    height: 14px;
-    min-width: 14px;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
   }
   &.sm{
-    width: 13px;
-    height: 13px;
-    min-width: 14px;
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
   }
   &.s-8 {
-    width: 8px;
-    height: 8px;
-    min-width: 8px;
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
   }
 }
 

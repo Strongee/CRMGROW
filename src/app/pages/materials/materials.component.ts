@@ -36,6 +36,7 @@ import {
 } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -85,8 +86,10 @@ export class MaterialsComponent implements OnInit {
       id: 'theme4'
     }
   ];
+  themeJSON = {};
   sortType = this.SORT_TYPES[0];
   ACTIONS = BulkActions.Materials;
+  FOLDER_ACTIONS = BulkActions.Folders;
   STATUS = STATUS;
   siteUrl = environment.website;
   user_id = '';
@@ -95,14 +98,19 @@ export class MaterialsComponent implements OnInit {
   page = 1;
 
   garbage: Garbage = new Garbage();
+  global_theme = '';
+  material_themes = {};
   materials: any[] = [];
   filteredMaterials: any[] = [];
-  selection: any[] = [];
-  selecting = false;
+  filteredFiles: any[] = [];
+  selectedFolders: any[] = [];
+  selectedFiles: any[] = [];
 
   convertLoaderTimer;
-  convertingVideos = [];
+  convertingVideos = {};
   videoConvertingLoadSubscription: Subscription;
+  convertCallingTimes = {};
+  convertCallSubscription = {};
 
   captureVideos = [];
   editedVideos;
@@ -158,7 +166,7 @@ export class MaterialsComponent implements OnInit {
       (profile) => {
         this.user_id = profile._id;
         this.packageLevel = profile.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableActions = [
             {
               label: 'Send via email',
@@ -186,14 +194,25 @@ export class MaterialsComponent implements OnInit {
       this.editedPdfs = this.garbage['edited_pdf'] || [];
       this.captureImages = this.garbage['capture_images'] || [];
       this.editedImages = this.garbage['edited_image'] || [];
-    });
 
+      this.global_theme = this.garbage.material_theme;
+      this.material_themes = this.garbage.material_themes;
+    });
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
       const folder_id = params['folder'];
 
       this.loadSubscription && this.loadSubscription.unsubscribe();
       this.loadSubscription = this.storeService.materials$.subscribe(
         (materials) => {
+          this.convertingVideos = {};
+          materials.forEach((e) => {
+            if (e.material_type === 'video') {
+              if (e.converted !== 'completed' && e.converted !== 'failed') {
+                this.convertingVideos[e._id] = e.key;
+              }
+            }
+          });
+
           materials.sort((a, b) => (a.folder ? -1 : 1));
           this.materials = materials;
           this.materials = _.uniqBy(this.materials, '_id');
@@ -224,6 +243,22 @@ export class MaterialsComponent implements OnInit {
               e.folder = materialFolderMatch[e._id];
             }
           });
+
+          const pageOption = this.materialService.pageOption.getValue();
+          this.page = pageOption['page'];
+          this.pageSize = {
+            id: pageOption['pageSize'],
+            label: pageOption['pageSize'] + ''
+          };
+          this.selectedSort = pageOption['sort'];
+          this.selectedFolder = pageOption['selectedFolder'];
+          this.searchStr = pageOption['searchStr'];
+          this.matType = pageOption['matType'];
+          this.teamOptions = pageOption['teamOptions'];
+          this.userOptions = pageOption['userOptions'];
+          this.folderOptions = pageOption['folderOptions'];
+          this.isAdmin = pageOption['isAdmin'];
+
           if (folder_id && folder_id !== 'root') {
             this.openFolder(this.foldersKeyValue[folder_id]);
           } else {
@@ -249,26 +284,15 @@ export class MaterialsComponent implements OnInit {
               } else {
                 material.owner = 'Admin';
               }
-
-              if (material.material_type != 'folder') {
-                if (
-                  this.garbage.material_themes &&
-                  this.garbage.material_themes[material._id]
-                ) {
-                  material.theme = this.themes.filter(
-                    (e) => e.id == this.garbage.material_themes[material._id]
-                  )[0].name;
-                } else {
-                  material.theme = this.themes.filter(
-                    (e) => e.id == this.garbage.material_theme
-                  )[0].name;
-                }
-              }
             }
             this.sort('owner', true);
           }
         }
       );
+    });
+
+    this.themes.forEach((e) => {
+      this.themeJSON[e.id] = e;
     });
   }
 
@@ -283,7 +307,7 @@ export class MaterialsComponent implements OnInit {
       this.teamService.loadAll(true);
     }
     this.convertLoaderTimer = setInterval(() => {
-      if (this.convertingVideos.length) {
+      if (Object.keys(this.convertingVideos).length) {
         this.loadConvertingStatus();
       }
     }, 5000);
@@ -300,15 +324,10 @@ export class MaterialsComponent implements OnInit {
     return getUserLevel(this.packageLevel);
   }
 
-  isAllSelected(): boolean {
-    return (
-      this.filteredMaterials.length &&
-      this.selection.length === this.filteredMaterials.length
-    );
-  }
-
   isSelected(element: Material): boolean {
-    const pos = this.selection.indexOf(element._id);
+    const pos = [...this.selectedFolders, ...this.selectedFiles].indexOf(
+      element._id
+    );
     if (pos !== -1) {
       return true;
     } else {
@@ -316,26 +335,76 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-  masterToggle(): void {
-    this.selecting = true;
-    if (this.isAllSelected()) {
-      this.selection = [];
-    } else {
-      this.selection = [];
-      this.filteredMaterials.forEach((e) => {
-        this.selection.push(e._id);
+  pageMasterToggle(): void {
+    const start = (this.page - 1) * this.pageSize.id;
+    const end = start + this.pageSize.id;
+    const pageMaterials = this.filteredMaterials
+      .slice(start, end)
+      .filter((e) => {
+        return e.material_type !== 'folder';
       });
+    const selectedPageMaterials = _.intersectionWith(
+      this.selectedFiles,
+      pageMaterials,
+      (a, b) => a === b._id
+    );
+    if (selectedPageMaterials.length === pageMaterials.length) {
+      this.selectedFiles = [];
+      this.selectedFolders = [];
+    } else {
+      const pageMaterialIds = pageMaterials.map((e) => e._id);
+      this.selectedFiles = _.union(this.selectedFiles, pageMaterialIds);
     }
-    this.selecting = false;
+    this.changeCaptureAction();
+  }
+
+  isPageSelected(): boolean {
+    const start = (this.page - 1) * this.pageSize.id;
+    const end = start + this.pageSize.id;
+    const pageMaterials = this.filteredMaterials
+      .slice(start, end)
+      .filter((e) => {
+        return e.material_type !== 'folder';
+      });
+    const selectedPageMaterials = _.intersectionWith(
+      this.selectedFiles,
+      pageMaterials,
+      (a, b) => a === b._id
+    );
+    return selectedPageMaterials.length === pageMaterials.length;
+  }
+
+  isAllSelected(): boolean {
+    // const selectionLength =
+    //   this.selectedFolders.length + this.selectedFiles.length;
+    // return (
+    //   this.filteredMaterials.length &&
+    //   selectionLength === this.filteredMaterials.length
+    // );
+    return this.filteredFiles.length === this.selectedFiles.length;
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected()) {
+      this.selectedFiles = [];
+    } else {
+      this.selectedFiles = this.filteredFiles.map((e) => e._id);
+    }
     this.changeCaptureAction();
   }
 
   toggleElement(element: Material): void {
-    const pos = this.selection.indexOf(element._id);
-    if (pos !== -1) {
-      this.selection.splice(pos, 1);
+    let selectionTemp;
+    if (element.material_type === 'folder') {
+      selectionTemp = this.selectedFolders;
     } else {
-      this.selection.push(element._id);
+      selectionTemp = this.selectedFiles;
+    }
+    const pos = selectionTemp.indexOf(element._id);
+    if (pos !== -1) {
+      selectionTemp.splice(pos, 1);
+    } else {
+      selectionTemp.push(element._id);
     }
     this.changeCaptureAction();
   }
@@ -346,7 +415,7 @@ export class MaterialsComponent implements OnInit {
       .filter((e) => {
         if (
           e.material_type !== 'folder' &&
-          this.selection.indexOf(e._id) !== -1
+          this.selectedFiles.indexOf(e._id) !== -1
         ) {
           return true;
         }
@@ -378,15 +447,6 @@ export class MaterialsComponent implements OnInit {
   clearSearchStr(): void {
     this.searchStr = '';
     this.filter();
-    // if (!this.selectedFolder) {
-    //   this.filteredMaterials = this.materials.filter((e) => {
-    //     return !e.folder || e.type === 'folder';
-    //   });
-    // } else {
-    //   this.filteredMaterials = this.materials.filter((e) => {
-    //     return e.folder === this.selectedFolder._id;
-    //   });
-    // }
   }
 
   createMaterial(type): void {
@@ -438,16 +498,6 @@ export class MaterialsComponent implements OnInit {
     }
     this.clipboard.copy(url);
     this.toast.success('Copied the link to clipboard');
-  }
-
-  editMaterial(material: Material): void {
-    if (material.material_type === 'video') {
-      this.editVideo(material);
-    } else if (material.material_type === 'pdf') {
-      this.editPdf(material);
-    } else if (material.material_type === 'image') {
-      this.editImage(material);
-    }
   }
 
   setCapture(material: Material): void {
@@ -509,6 +559,16 @@ export class MaterialsComponent implements OnInit {
         return true;
       }
       return false;
+    }
+  }
+
+  editMaterial(material: Material): void {
+    if (material.material_type === 'video') {
+      this.editVideo(material);
+    } else if (material.material_type === 'pdf') {
+      this.editPdf(material);
+    } else if (material.material_type === 'image') {
+      this.editImage(material);
     }
   }
 
@@ -760,10 +820,10 @@ export class MaterialsComponent implements OnInit {
                   }
                   this.materialService.delete$([material._id]);
                   if (material.shared_video) {
-                    // this.materialService.update$(material.shared_video, {
-                    //   has_shared: false,
-                    //   shared_video: ''
-                    // });
+                    this.materialService.update$(material.shared_video, {
+                      has_shared: false,
+                      shared_video: ''
+                    });
                   }
                   this.toast.success('Video has been deleted successfully.');
                 });
@@ -794,10 +854,10 @@ export class MaterialsComponent implements OnInit {
                   }
                   this.materialService.delete$([material._id]);
                   if (material.shared_image) {
-                    // this.materialService.update$(material.shared_image, {
-                    //   has_shared: false,
-                    //   shared_image: ''
-                    // });
+                    this.materialService.update$(material.shared_image, {
+                      has_shared: false,
+                      shared_image: ''
+                    });
                   }
                   this.toast.success('Image has been deleted successfully.');
                 });
@@ -828,10 +888,10 @@ export class MaterialsComponent implements OnInit {
                   }
                   this.materialService.delete$([material._id]);
                   if (material.shared_pdf) {
-                    // this.materialService.update$(material.shared_pdf, {
-                    //   has_shared: false,
-                    //   shared_pdf: ''
-                    // });
+                    this.materialService.update$(material.shared_pdf, {
+                      has_shared: false,
+                      shared_pdf: ''
+                    });
                   }
                   this.toast.success('Pdf has been deleted successfully.');
                 });
@@ -843,23 +903,15 @@ export class MaterialsComponent implements OnInit {
   }
 
   editTemplate(material: any): void {
-    this.dialog
-      .open(MaterialEditTemplateComponent, {
-        position: { top: '10vh' },
-        width: '100vw',
-        maxWidth: '600px',
-        disableClose: true,
-        data: {
-          id: material._id,
-          type: material.material_type
-        }
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          material.theme = res;
-        }
-      });
+    this.dialog.open(MaterialEditTemplateComponent, {
+      position: { top: '10vh' },
+      width: '100vw',
+      maxWidth: '600px',
+      disableClose: true,
+      data: {
+        id: material._id
+      }
+    });
   }
 
   recordSetting(): void {
@@ -882,20 +934,60 @@ export class MaterialsComponent implements OnInit {
       });
   }
 
-  doAction(evt: any): void {
-    const selectedMaterials = this.filteredMaterials.filter((e) => {
+  doFolderAction(evt: any): void {
+    const selectedFolders = this.filteredMaterials.filter((e) => {
       if (
-        e.material_type !== 'folder' &&
-        this.selection.indexOf(e._id) !== -1
+        e.material_type === 'folder' &&
+        this.selectedFolders.indexOf(e._id) !== -1
       ) {
         return true;
       }
       return false;
     });
-    const folderMaterials = this.materials.filter((e) => {
+    if (selectedFolders.length === 1) {
+      switch (evt.command) {
+        case 'edit':
+          this.editFolder(selectedFolders[0]);
+          break;
+        case 'delete':
+          this.removeFolder(selectedFolders[0]);
+          break;
+        case 'deselect':
+          this.selectedFolders = [];
+          break;
+      }
+      return;
+    }
+    switch (evt.command) {
+      case 'edit':
+        this.dialog.open(FolderComponent, {
+          width: '96vw',
+          maxWidth: '400px',
+          data: {
+            folders: [...this.selectedFolders]
+          }
+        });
+        break;
+      case 'delete':
+        this.dialog.open(DeleteFolderComponent, {
+          width: '96vw',
+          maxWidth: '500px',
+          data: {
+            folders: [...selectedFolders]
+          }
+        });
+        break;
+      case 'deselect':
+        this.selectedFolders = [];
+        break;
+    }
+  }
+
+  doAction(evt: any): void {
+    const selectedMaterials = this.filteredMaterials.filter((e) => {
       if (
         e.material_type !== 'folder' &&
-        this.selection.indexOf(e.folder) !== -1
+        this.selectedFiles.indexOf(e._id) !== -1
       ) {
         return true;
       }
@@ -909,7 +1001,7 @@ export class MaterialsComponent implements OnInit {
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: [...folderMaterials, ...selectedMaterials],
+            material: [...selectedMaterials],
             type: 'email'
           }
         });
@@ -921,23 +1013,20 @@ export class MaterialsComponent implements OnInit {
           maxWidth: '600px',
           disableClose: true,
           data: {
-            material: [...folderMaterials, ...selectedMaterials],
+            material: [...selectedMaterials],
             type: 'text'
           }
         });
         break;
       case 'deselect':
-        this.selection = [];
+        this.selectedFiles = [];
         break;
       case 'lead_capture':
         const bulkSetCapture = this.ACTIONS.filter(
           (action) => action.label == 'Capture'
         );
         if (bulkSetCapture[0].status) {
-          const selectedMaterialIds = [
-            ...folderMaterials,
-            ...selectedMaterials
-          ].map((e) => e._id);
+          const selectedMaterialIds = [...this.selectedFiles];
           _.pullAll(this.captureVideos, selectedMaterialIds);
           _.pullAll(this.capturePdfs, selectedMaterialIds);
           _.pullAll(this.captureImages, selectedMaterialIds);
@@ -945,7 +1034,7 @@ export class MaterialsComponent implements OnInit {
           const selectedVideos = [];
           const selectedPdfs = [];
           const selectedImages = [];
-          [...folderMaterials, ...selectedMaterials].forEach((e) => {
+          [...selectedMaterials].forEach((e) => {
             if (e.material_type === 'video') {
               selectedVideos.push(e._id);
             } else if (e.material_type === 'pdf') {
@@ -1115,88 +1204,130 @@ export class MaterialsComponent implements OnInit {
         }
         break;
       case 'template':
-        if (this.isAllSelected()) {
-          this.dialog
-            .open(MaterialEditTemplateComponent, {
-              position: { top: '10vh' },
-              width: '100vw',
-              maxWidth: '600px',
-              disableClose: true,
-              data: {
-                type: 'all'
-              }
-            })
-            .afterClosed()
-            .subscribe((res) => {
-              if (res) {
-                selectedMaterials.forEach((material) => {
-                  material.theme = res;
-                });
-              }
-            });
-        } else {
-          this.dialog
-            .open(MaterialEditTemplateComponent, {
-              position: { top: '10vh' },
-              width: '100vw',
-              maxWidth: '600px',
-              disableClose: true,
-              data: {
-                type: 'all',
-                materials: selectedMaterials
-              }
-            })
-            .afterClosed()
-            .subscribe((res) => {
-              if (res) {
-                selectedMaterials.forEach((material) => {
-                  material.theme = res;
-                });
-              }
-            });
-        }
+        this.dialog.open(MaterialEditTemplateComponent, {
+          position: { top: '10vh' },
+          width: '100vw',
+          maxWidth: '600px',
+          disableClose: true,
+          data: {
+            type: 'all',
+            materials: selectedMaterials
+          }
+        });
         break;
     }
   }
 
   loadConvertingStatus(): void {
-    this.videoConvertingLoadSubscription &&
-      this.videoConvertingLoadSubscription.unsubscribe();
-    this.videoConvertingLoadSubscription = this.materialService
-      .loadConvertingStatus(this.convertingVideos)
-      .subscribe((res) => {
-        this.materials.forEach((e) => {
-          if (e.material_type !== 'video') {
-            return;
+    const bucketVideos = [];
+    const siteVideos = [];
+    const keyId = {};
+    for (const id in this.convertingVideos) {
+      if (this.convertingVideos[id]) {
+        bucketVideos.push(this.convertingVideos[id]);
+        keyId[this.convertingVideos[id]] = id;
+      } else {
+        siteVideos.push(id);
+      }
+    }
+    bucketVideos.forEach((e) => {
+      this.convertCallSubscription[e] &&
+        this.convertCallSubscription[e].unsubscribe();
+      this.convertCallSubscription[
+        e
+      ] = this.materialService.getS3ConvertingStatus(e).subscribe(
+        (res) => {
+          if (
+            res['converted'] === 100 &&
+            res['streamd'] === 100 &&
+            res['preview']
+          ) {
+            // Remove From Converting Video Status
+            delete this.convertingVideos[keyId[e]];
+            this.materialService
+              .updateConvertStatus(keyId[e], res)
+              .subscribe((_res) => {
+                // Update the Video Convert Status
+                this.materialService.updateConvert$(keyId[e], {
+                  progress: 100,
+                  converted: 'completed',
+                  preview: _res.data && _res.data['preview']
+                });
+              });
+          } else if (res['converted'] === 100 && res['error']) {
+            delete this.convertingVideos[keyId[e]];
+            this.materialService
+              .updateConvertStatus(keyId[e], res)
+              .subscribe((_res) => {
+                // Update the Video Convert Status
+                this.materialService.updateConvert$(keyId[e], {
+                  progress: 100,
+                  converted: 'completed',
+                  preview: _res.data && _res.data['preview']
+                });
+              });
+          } else if (res['error']) {
+            if (this.convertCallingTimes[e]) {
+              this.convertCallingTimes[e] = 1;
+            } else {
+              this.convertCallingTimes[e]++;
+            }
           }
-          if (e.converted !== 'completed' && e.converted !== 'disabled') {
-            const convertingStatus = res[e._id];
-            if (!convertingStatus) {
-              return;
-            }
-            if (convertingStatus.status && convertingStatus.progress == 100) {
-              e['converted'] = 'completed';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
-            if (convertingStatus.status && convertingStatus.progress < 100) {
-              e['progress'] = convertingStatus.progress;
-            }
-            if (!convertingStatus.status) {
-              e['convertingStatus'] = 'error';
-              const pos = this.convertingVideos.indexOf(e._id);
-              if (pos !== -1) {
-                this.convertingVideos.splice(pos, 1);
-              }
-            }
-          }
-        });
-      });
-  }
+          this.materialService.updateConvert$(keyId[e], {
+            progress: res['converted'] || 0
+          });
 
-  showAnalytics(material): void {}
+          if (this.convertCallingTimes[e] && this.convertCallingTimes[e] > 10) {
+            delete this.convertingVideos[keyId[e]];
+          }
+        },
+        () => {
+          if (this.convertCallingTimes[e]) {
+            this.convertCallingTimes[e] = 1;
+          } else {
+            this.convertCallingTimes[e]++;
+          }
+          if (this.convertCallingTimes[e] && this.convertCallingTimes[e] > 10) {
+            delete this.convertingVideos[keyId[e]];
+          }
+        }
+      );
+    });
+    // this.videoConvertingLoadSubscription &&
+    //   this.videoConvertingLoadSubscription.unsubscribe();
+    // this.videoConvertingLoadSubscription = this.materialService
+    //   .loadConvertingStatus(this.convertingVideos)
+    //   .subscribe((res) => {
+    //     this.materials.forEach((e) => {
+    //       if (e.material_type !== 'video') {
+    //         return;
+    //       }
+    //       if (e.converted !== 'completed' && e.converted !== 'disabled') {
+    //         const convertingStatus = res[e._id];
+    //         if (!convertingStatus) {
+    //           return;
+    //         }
+    //         if (convertingStatus.status && convertingStatus.progress == 100) {
+    //           e['converted'] = 'completed';
+    //           const pos = this.convertingVideos.indexOf(e._id);
+    //           if (pos !== -1) {
+    //             this.convertingVideos.splice(pos, 1);
+    //           }
+    //         }
+    //         if (convertingStatus.status && convertingStatus.progress < 100) {
+    //           e['progress'] = convertingStatus.progress;
+    //         }
+    //         if (!convertingStatus.status) {
+    //           e['convertingStatus'] = 'error';
+    //           const pos = this.convertingVideos.indexOf(e._id);
+    //           if (pos !== -1) {
+    //             this.convertingVideos.splice(pos, 1);
+    //           }
+    //         }
+    //       }
+    //     });
+    //   });
+  }
 
   showAllCommonVideos(): void {
     this.userService.updateGarbage({ edited_video: [] }).subscribe(() => {
@@ -1231,12 +1362,6 @@ export class MaterialsComponent implements OnInit {
     this.teamOptions = [];
     this.folderOptions = [];
     this.filter();
-    // this.filteredMaterials = this.materials.filter((e) => {
-    //   if (e.folder === this.selectedFolder._id) {
-    //     console.log(e.folder, e.title, e._id);
-    //     return true;
-    //   }
-    // });
   }
   toRoot(): void {
     this.selectedFolder = null;
@@ -1247,9 +1372,6 @@ export class MaterialsComponent implements OnInit {
     this.teamOptions = [];
     this.folderOptions = [];
     this.filter();
-    // this.filteredMaterials = this.materials.filter((e) => {
-    //   return !e.folder || e.type === 'folder';
-    // });
   }
 
   createFolder(): void {
@@ -1320,7 +1442,7 @@ export class MaterialsComponent implements OnInit {
       selectedMaterials = this.filteredMaterials.filter((e) => {
         if (
           e.material_type !== 'folder' &&
-          this.selection.indexOf(e._id) !== -1
+          this.selectedFiles.indexOf(e._id) !== -1
         ) {
           return true;
         }
@@ -1350,7 +1472,7 @@ export class MaterialsComponent implements OnInit {
         .afterClosed()
         .subscribe((status) => {
           if (status) {
-            this.selection = [];
+            this.selectedFiles = [];
           }
         });
     }
@@ -1399,7 +1521,8 @@ export class MaterialsComponent implements OnInit {
   }
 
   filter(): void {
-    this.selection = [];
+    this.selectedFolders = [];
+    this.selectedFiles = [];
     const words = _.uniqBy(
       this.searchStr.split(' ').sort((a, b) => (a.length > b.length ? -1 : 1)),
       (e) => e.toLowerCase()
@@ -1463,19 +1586,42 @@ export class MaterialsComponent implements OnInit {
       }
       return true;
     });
-    this.page = 1;
+    this.filteredFiles = this.filteredMaterials.filter((e) => {
+      return e.material_type !== 'folder';
+    });
+    // this.page = 1;
+    this.materialService.updatePageOption({
+      selectedFolder: this.selectedFolder,
+      searchStr: this.searchStr,
+      matType: this.matType,
+      teamOptions: this.teamOptions,
+      userOptions: this.userOptions,
+      folderOptions: this.folderOptions,
+      isAdmin: this.isAdmin
+      // page: 1
+    });
   }
 
   changePageSize(type: any): void {
     this.pageSize = type;
-    this.page = 1;
+    this.materialService.updatePageOption({ pageSize: this.pageSize.id });
   }
 
   download(video): void {
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = video.url;
-    a.click();
+    if (!video.bucket) {
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = video.url;
+      a.click();
+    } else {
+      this.materialService.downloadVideo(video._id).subscribe((res) => {
+        if (res['status']) {
+          saveAs(res['data'], res['title'] + '.mp4');
+        } else {
+          this.toast.warning(`Downloading is failed.`);
+        }
+      });
+    }
   }
 
   sort(field: string, keep: boolean = false): void {
@@ -1680,14 +1826,25 @@ export class MaterialsComponent implements OnInit {
           ];
         }
       }
-      this.page = 1;
+      // this.page = 1;
       if (!keep) {
         this.searchCondition[field] = !this.searchCondition[field];
       }
     }
+    this.materialService.updatePageOption({
+      sort: field
+    });
+  }
+
+  changePage(event) {
+    this.page = event;
+    this.materialService.updatePageOption({ page: this.page });
   }
 
   checkType(url: string): boolean {
+    if (!url) {
+      return true;
+    }
     if (url.indexOf('youtube.com') == -1 && url.indexOf('vimeo.com') == -1) {
       return true;
     } else {

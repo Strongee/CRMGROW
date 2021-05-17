@@ -1140,8 +1140,8 @@ export class UploadContactsComponent implements OnInit {
                 this.confirmDuplicates();
               } else {
                 this.toastr.success('Contacts successfully imported.');
-                this.dialogRef.close({});
                 this.handlerService.bulkContactAdd$();
+                this.dialogRef.close({created: true});
               }
             },
             (error) => {
@@ -1151,8 +1151,8 @@ export class UploadContactsComponent implements OnInit {
           );
         } else {
           this.toastr.success('Contacts successfully imported.');
-          this.dialogRef.close({});
           this.handlerService.bulkContactAdd$();
+          this.dialogRef.close({created: true});
         }
       }
     }
@@ -1253,8 +1253,8 @@ export class UploadContactsComponent implements OnInit {
       }
     } else {
       this.toastr.success('Contacts successfully imported.');
-      this.dialogRef.close({});
       this.handlerService.bulkContactAdd$();
+      this.dialogRef.close({created: true});
     }
   }
 
@@ -1368,9 +1368,11 @@ export class UploadContactsComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close();
     if (!this.firstImport) {
       this.handlerService.bulkContactAdd$();
+      this.dialogRef.close({created: true});
+    } else {
+      this.dialogRef.close();
     }
   }
 

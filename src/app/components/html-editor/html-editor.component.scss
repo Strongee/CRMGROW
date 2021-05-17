@@ -95,7 +95,7 @@
   button.ql-template{
     position: relative;
     width: 24px;
-    mask-image: url(../../../assets/img/sms_sent.svg);
+    mask-image: url(../../../assets/img/sms_limits.svg);
     mask-position: center;
     mask-size: 15px;
     mask-repeat: no-repeat;
@@ -127,10 +127,22 @@
     width: 24px;
     mask-image: url(../../../assets/img/record.svg);
     mask-position: center;
-    mask-size: 15px;
+    mask-size: 18px;
     mask-repeat: no-repeat;
     margin-left: 4px;
     background-color: black;
+    &::after {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: red;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
   // button.ql-template::before {

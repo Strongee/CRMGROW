@@ -13,14 +13,14 @@
         </div>
       </button>
       <button type="button" class="v-center btn bgc-white border-primary c-blue mx-auto fw-600 connect-button" (click)="connectMail('outlook')">
-        <img src="../../../assets/img/365_mail.png">
+        <img src="../../../assets/img/microsoft.svg">
         <div class="social-text">
           Connect with Microsoft 365
         </div>
       </button>
     </ng-container>
-  
-  
+
+
     <ng-container *ngSwitchCase="403">
       <mat-dialog-content>
         There are some technical issues in connecting your email to CRMGrow. Please read this link and follow step by step. <a class="c-pointer" href="https://crmgrow.com/articles/mail-connect-error.html" target="_blank">Click Here</a>
@@ -31,8 +31,8 @@
         </button>
       </mat-dialog-actions>
     </ng-container>
-  
-  
+
+
     <ng-container *ngSwitchCase="405">
       <div mat-dialog-title class="text-center">
         <span class="operation">{{(data.operation || '') | lowercase}}</span> status!
@@ -57,7 +57,7 @@
               </div>
             </div>
             <div class="reason">
-              <label class="mb-0">Reason: </label> 
+              <label class="mb-0">Reason: </label>
               <span>
                 {{showError(error.error)}}
               </span>
@@ -71,8 +71,8 @@
         </button>
       </mat-dialog-actions>
     </ng-container>
-  
-  
+
+
     <ng-container *ngSwitchCase="406">
       <h5 class="text-center">Connect your email account</h5>
       <p class="summary text-center f-4">To ensure you’re doing your best to avoid the spam filter when emailing contacts within your account, please connect your desired email.</p>
@@ -83,7 +83,7 @@
         </div>
       </button>
       <button type="button" class="v-center btn bgc-white border-primary c-blue mx-auto fw-600 connect-button" (click)="connectMail('outlook')">
-        <img src="../../../assets/img/365_mail.png">
+        <img src="../../../assets/img/microsoft.svg">
         <div class="social-text">
           Connect with Microsoft 365
         </div>
@@ -196,6 +196,17 @@
       </mat-dialog-content>
       <mat-dialog-actions align="end">
         <button class="btn btn-primary f-6 font-weight-bold px-3 mx-auto mt-4" [class.loading]="saving" (click)="purchase()">Complete purchase</button>
+      </mat-dialog-actions>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="410">
+      <div class="upgrade-package-wrapper">
+        <i class="i-icon i-information d-block bgc-blue mx-auto"></i>
+        <p class="my-4">Upgrade to unlock</p>
+        <div class="f-4 text-center">This feature is not available in your plan. Upgrade your account for access.</div>
+      </div>
+      <mat-dialog-actions align="center">
+        <button class="btn btn-primary f-6 font-weight-bold px-3 mx-auto" (click)="goToBilling()">Upgrade</button>
       </mat-dialog-actions>
     </ng-container>
   </ng-container>

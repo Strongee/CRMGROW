@@ -70,7 +70,7 @@ export class VideoCreateComponent implements OnInit {
   @ViewChild('pdfFile') pdfFileInput;
   @ViewChild('imageFile') imageFileInput;
   videoUploader: FileUploader = new FileUploader({
-    url: environment.api + 'video',
+    url: environment.api + 'video/upload',
     authToken: this.userService.getToken(),
     itemAlias: 'video'
   });
@@ -386,7 +386,6 @@ export class VideoCreateComponent implements OnInit {
   }
 
   updateImage(image): void {
-    console.log('update pdf', image);
     const imageId = image._id;
     const newImage = { ...image };
     delete newImage.created_at;

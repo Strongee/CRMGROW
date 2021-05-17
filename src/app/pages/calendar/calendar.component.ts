@@ -897,6 +897,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   openOverlay(day: any, trigger: any): void {
+    console.log('open overlay');
     const triggerEl = <HTMLElement>trigger;
     const originBounding = triggerEl.getBoundingClientRect();
     const originX = originBounding.x;
@@ -958,12 +959,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
       if (this.overlayRef.hasAttached()) {
         this.overlayRef.detach();
         this.eventId = '';
-        return;
       } else {
         this.overlayRef.updatePositionStrategy(positionStrategy);
         this.overlayRef.updateSize(size);
         this.overlayRef.attach(this.templatePortal);
-        return;
       }
     } else {
       this.overlayRef = this.overlay.create({
@@ -973,7 +972,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
       });
       this.overlayRef.attach(this.templatePortal);
     }
-
     if (this.overlayRef) {
       this.overlayCloseSubscription &&
         this.overlayCloseSubscription.unsubscribe();
@@ -1078,32 +1076,37 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.overlayRef.updatePositionStrategy(positionStrategy);
       this.overlayRef.updateSize(size);
       this.overlayRef.attach(this.templatePortal);
-      return;
     } else {
       this.overlayRef = this.overlay.create({
         scrollStrategy: this.overlay.scrollStrategies.block(),
         positionStrategy,
         ...size
       });
-      this.overlayRef.outsidePointerEvents().subscribe((event) => {
-        const targetEl = <HTMLElement>event.target;
-        if (targetEl.closest('.cal-event')) {
-          return;
-        }
-        if (targetEl.closest('.cal-month-cell')) {
-          return;
-        }
-        if (targetEl.closest('.event-backdrop')) {
-          return;
-        }
-        if (targetEl.closest('.event-panel')) {
-          return;
-        }
-        this.overlayRef.detach();
-        this.eventId = '';
-        return;
-      });
       this.overlayRef.attach(this.templatePortal);
+    }
+    if (this.overlayRef) {
+      this.overlayCloseSubscription &&
+        this.overlayCloseSubscription.unsubscribe();
+      this.overlayCloseSubscription = this.overlayRef
+        .outsidePointerEvents()
+        .subscribe((event) => {
+          const targetEl = <HTMLElement>event.target;
+          if (targetEl.closest('.cal-event')) {
+            return;
+          }
+          if (targetEl.closest('.cal-month-cell')) {
+            return;
+          }
+          if (targetEl.closest('.event-backdrop')) {
+            return;
+          }
+          if (targetEl.closest('.event-panel')) {
+            return;
+          }
+          this.overlayRef.detach();
+          this.eventId = '';
+          return;
+        });
     }
   }
 

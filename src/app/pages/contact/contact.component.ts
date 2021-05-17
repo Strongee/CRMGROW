@@ -233,7 +233,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
         this.packageLevel = user.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.LITE) {
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableTabs = [
             { icon: '', label: 'Appointments', id: 'appointment' }
           ];
@@ -1315,17 +1315,21 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (confirm) {
           this.noteService.delete(detail._id).subscribe((res) => {
             if (res) {
-              this.mainTimelines.some((e) => {
-                if (e.type !== 'notes') {
-                  return;
-                }
-                if (e.activity_detail && e.activity_detail._id === detail._id) {
-                  e.activity_detail = null;
-                  return true;
-                }
-              });
+              // this.mainTimelines.some((e) => {
+              //   if (e.type !== 'notes') {
+              //     return;
+              //   }
+              //   if (e.activity_detail && e.activity_detail._id === detail._id) {
+              //     e.activity_detail = null;
+              //     return true;
+              //   }
+              // });
               // Remove the note from notes array
               this.deleteNoteFromNotesArray(detail._id);
+              this.contactService.deleteContactActivityByDetail(
+                detail._id,
+                'notes'
+              );
               this.changeTab(this.tab);
             }
           });
@@ -1671,12 +1675,14 @@ export class ContactComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.loadingAppointment = false;
         const loadedEvent = { ...event };
-        loadedEvent.meta.is_organizer = res.organizer.self;
-        loadedEvent.meta.organizer = res.organizer.email;
-        loadedEvent.meta.guests = res.attendees || [];
-        loadedEvent.meta.guests.forEach((e) => {
-          e.response = e.responseStatus;
-        });
+        loadedEvent.meta.is_organizer = res.is_organizer;
+        loadedEvent.meta.organizer = res.organizer;
+        loadedEvent.meta.guests = res.guests || [];
+        if (res.recurrence) {
+          loadedEvent.meta.recurrence = res.recurrence;
+        } else {
+          delete loadedEvent.meta.recurrence_id;
+        }
         this.loadedAppointments[event.meta.event_id] = loadedEvent;
         this.selectedAppointment = loadedEvent;
       });

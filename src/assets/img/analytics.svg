@@ -1,5 +1,1 @@
-<svg id="Icons_Table_Analytics" data-name="Icons / Table / Analytics" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <path id="Line" d="M1,.556V9.444" transform="translate(2 5.5)" fill="none" stroke="blue" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-  <path id="Line_Copy_2" data-name="Line Copy 2" d="M1,.5v4" transform="translate(12 10.5)" fill="none" stroke="blue" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-  <path id="Line_Copy" data-name="Line Copy" d="M.5.538V13.462" transform="translate(7.5 1.5)" fill="none" stroke="blue" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>

@@ -253,7 +253,9 @@
               <app-input-automation (automationChange)="selectAutomation($event)"></app-input-automation>
               <div class="v-center automation-action ml-2">
                 <ng-container *ngIf="!assigning; else assigningTemplate">
-                  <i class="d-block i-icon i-automation-start bgc-green-weak c-pointer" (click)="assignAutomation()"></i>
+                  <i class="d-block i-icon i-automation-start bgc-green-weak c-pointer"
+                     (click)="assignAutomation()"
+                  ></i>
                 </ng-container>
                 <ng-template #assigningTemplate>
                   <i class="d-block assigning loader"></i>

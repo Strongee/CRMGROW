@@ -28,7 +28,7 @@
                 >
 
               </div>
-              <div class="btn-wrapper ml-2">
+              <div class="btn-wrapper ml-2" [class.disable]="getUserLevel() == 'lite'">
                 <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
                   {{this.editMode ? 'Save' : 'Create'}}
                 </button>
@@ -74,7 +74,11 @@
                     <span class="font-weight-bold f-3 c-blue">More</span>
                   </button>
                   <div ngbDropdownMenu class="light">
-                    <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
+                    <button type="button"
+                      class="v-center border-0 py-2 c-dark dropdown-item"
+                      [class.disable]="getUserLevel() == 'lite'"
+                      (click)="duplicate($event, automation)"
+                    >
                       <span class="f-3 font-weight-bold">Clone</span>
                     </button>
                     <button type="button" class="v-center border-0 py-2 c-dark dropdown-item"
@@ -84,7 +88,11 @@
                       <span class="f-3 font-weight-bold">Share team</span>
                     </button>
                     <hr class="my-1">
-                    <button type="button" class="v-center border-0 py-2 c-dark dropdown-item" (click)="delete()">
+                    <button type="button"
+                      class="v-center border-0 py-2 c-dark dropdown-item"
+                      [class.disable]="getUserLevel() == 'lite'"
+                      (click)="delete()"
+                    >
                       <span class="c-red f-3 font-weight-bold">Delete automation</span>
                     </button>
                   </div>
@@ -336,7 +344,7 @@
                     <th mat-header-cell colspan="7">
                       <div class="v-center">
                         <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
-                        <app-actions-header [actions]="CONTACT_ACTIONS" (doCommand)="doAction($event)"></app-actions-header>
+                        <app-actions-header [actions]="CONTACT_ACTIONS" [disableActions]="disableActions" (doCommand)="doAction($event)"></app-actions-header>
                       </div>
                     </th>
                   </ng-template>

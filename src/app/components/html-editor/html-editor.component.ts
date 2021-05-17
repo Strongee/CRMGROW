@@ -26,17 +26,21 @@ import { ToastrService } from 'ngx-toastr';
 import { HandlerService } from 'src/app/services/handler.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { UserService } from 'src/app/services/user.service';
+import { Subscription } from 'rxjs';
+import { getUserLevel } from '../../utils/functions';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
 const ImageBlot = Quill.import('formats/image');
+import { StripTagsPipe } from 'ngx-pipes';
 // import ImageResize from 'quill-image-resize-module';
 // Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-html-editor',
   templateUrl: './html-editor.component.html',
-  styleUrls: ['./html-editor.component.scss']
+  styleUrls: ['./html-editor.component.scss'],
+  providers: [StripTagsPipe]
 })
 export class HtmlEditorComponent implements OnInit {
   @Input() placeholder: string = '';
@@ -112,6 +116,7 @@ export class HtmlEditorComponent implements OnInit {
   authToken = '';
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
   quillEditorRef;
+  popup;
   attachments = [];
   config = {
     toolbar: {
@@ -166,16 +171,20 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          let popup;
           const option = 'width=530, height=305';
-          if (!popup || popup.closed) {
-            popup = window.open(
-              this.recordUrl + '?' + this.authToken,
+          if (!this.popup || this.popup.closed) {
+            this.popup = window.open(
+              this.recordUrl + '?' + this.authToken + '&=website',
               'record',
               option
             );
+            window.addEventListener('message', (e) => {
+              if (e && e.data) {
+                this.insertImageToEditor(e.data);
+              }
+            });
           } else {
-            popup.focus();
+            this.popup.focus();
           }
           this.cdr.detectChanges();
         }
@@ -202,6 +211,9 @@ export class HtmlEditorComponent implements OnInit {
   overlayRef: OverlayRef;
   templatePortal: TemplatePortal;
 
+  packageLevel = '';
+  profileSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private fileService: FileService,
@@ -213,13 +225,22 @@ export class HtmlEditorComponent implements OnInit {
     private overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
     private toast: ToastrService,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private stripTags: StripTagsPipe
   ) {
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((res) => {
+      this.packageLevel = res.package_level;
+    });
     this.templateService.loadAll(false);
     this.authToken = this.userService.getToken();
   }
 
   ngOnInit(): void {}
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
 
   insertValue(value: string): void {
     if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {
@@ -285,6 +306,7 @@ export class HtmlEditorComponent implements OnInit {
     const link_button = toolbar.container.querySelector('.ql-link');
     const image_button = toolbar.container.querySelector('.ql-image');
     const template_button = toolbar.container.querySelector('.ql-template');
+    const emoji_button = toolbar.container.querySelector('.ql-emoji');
     const calendly_button = toolbar.container.querySelector('.ql-calendly');
     const record_button = toolbar.container.querySelector('.ql-record');
     if (link_button) {
@@ -295,6 +317,9 @@ export class HtmlEditorComponent implements OnInit {
     }
     if (template_button) {
       template_button.setAttribute('title', 'Template');
+    }
+    if (emoji_button) {
+      emoji_button.setAttribute('title', 'Emoji');
     }
     if (calendly_button) {
       calendly_button.setAttribute('title', 'Calendly');
@@ -365,10 +390,11 @@ export class HtmlEditorComponent implements OnInit {
     } else {
       const nextDelta = this.emailEditor.quillEditor.getContents(length - 1, 1);
       const prevDelta = this.emailEditor.quillEditor.getContents(length - 2, 1);
-      next = nextDelta.ops[0].insert;
-      prev = prevDelta.ops[0].insert;
+      next = (nextDelta.ops[0] && nextDelta.ops[0].insert) || '\n';
+      prev = (prevDelta.ops[0] && prevDelta.ops[0].insert) || '\n';
       selection = length;
     }
+
     if (next === '\n' && prev === '\n') {
       return;
     } else if (next === '\n') {
@@ -403,10 +429,10 @@ export class HtmlEditorComponent implements OnInit {
     const range = this.quillEditorRef.getSelection();
     const length = this.emailEditor.quillEditor.getLength();
 
-    if (range && range.index) {
-      let selection = range.index;
-      this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
-      selection += 1;
+    let selection;
+    if (!(this.stripTags.transform(this.value || '') || '').trim()) {
+      console.log('add after empty');
+      selection = range.index;
       this.emailEditor.quillEditor.insertText(
         selection,
         material.title + '\n',
@@ -422,25 +448,58 @@ export class HtmlEditorComponent implements OnInit {
       );
       selection += 1;
       this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
+
+      this.emailEditor.quillEditor.insertText(selection, '\n\n\n', {}, 'user');
+      this.emailEditor.quillEditor.setSelection(selection + 3, 0, 'user');
     } else {
-      let selection = length;
-      this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
-      selection += 1;
-      this.emailEditor.quillEditor.insertText(
-        length,
-        material.title,
-        'bold',
-        'user'
-      );
-      selection += material.title.length + 1;
-      this.emailEditor.quillEditor.insertEmbed(
-        selection,
-        `materialLink`,
-        { _id: material._id, preview: material.preview || material.thumbnail },
-        'user'
-      );
-      selection += 1;
-      this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
+      if (range && range.index) {
+        selection = range.index;
+        this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
+        selection += 1;
+        this.emailEditor.quillEditor.insertText(
+          selection,
+          material.title + '\n',
+          'bold',
+          'user'
+        );
+        selection += material.title.length + 1;
+        this.emailEditor.quillEditor.insertEmbed(
+          selection,
+          `materialLink`,
+          {
+            _id: material._id,
+            preview: material.preview || material.thumbnail
+          },
+          'user'
+        );
+        selection += 1;
+        this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
+      } else {
+        selection = length;
+        this.emailEditor.quillEditor.insertText(selection, '\n', {}, 'user');
+        selection += 1;
+        this.emailEditor.quillEditor.insertText(
+          length,
+          material.title,
+          'bold',
+          'user'
+        );
+        selection += material.title.length + 1;
+        this.emailEditor.quillEditor.insertEmbed(
+          selection,
+          `materialLink`,
+          {
+            _id: material._id,
+            preview: material.preview || material.thumbnail
+          },
+          'user'
+        );
+        selection += 1;
+        this.emailEditor.quillEditor.setSelection(selection, 0, 'user');
+      }
+
+      this.emailEditor.quillEditor.insertText(selection, '\n\n', {}, 'user');
+      this.emailEditor.quillEditor.setSelection(selection + 2, 0, 'user');
     }
   }
   removeAttachment(index: number): void {

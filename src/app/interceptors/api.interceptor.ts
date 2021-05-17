@@ -25,7 +25,10 @@ export class ApiInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     if (
       req.url.indexOf('https://api.vimeo.com/videos') !== -1 ||
-      req.url.indexOf('https://www.googleapis.com/youtube') !== -1
+      req.url.indexOf('https://www.googleapis.com/youtube') !== -1 ||
+      req.url.indexOf(
+        'https://f8nhu9b8o4.execute-api.us-east-2.amazonaws.com'
+      ) !== -1
     ) {
       return next.handle(req);
     } else {

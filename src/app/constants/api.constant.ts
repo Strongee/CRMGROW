@@ -111,7 +111,9 @@ export const VIDEO = {
   CREATE: 'video/create',
   READ: 'video/',
   UPDATE: 'video/',
+  DOWNLOAD: 'video/download/',
   UPDATE_VIDEO_DETAIL: 'video/detail/',
+  UPDATE_CONVERTING: 'video/converting/',
   UPDATE_ADMIN: 'video/update-admin',
   DELETE: 'video/',
   LOAD: 'video',
@@ -318,6 +320,8 @@ export const MATERIAL = {
   CREATE_FOLDER: 'material/folder',
   UPDATE_FOLDER: 'material/folder/',
   REMOVE_FOLDER: 'material/remove-folder',
+  UPDATE_FOLDERS: 'material/update-folders',
+  REMOVE_FOLDERS: 'material/remove-folders',
   MOVE_FILES: 'material/move-material'
 };
 

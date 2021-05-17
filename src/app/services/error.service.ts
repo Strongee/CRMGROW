@@ -168,6 +168,18 @@ export class ErrorService {
           }
         });
         break;
+      case 410:
+        this.dialog.closeAll();
+        this.dialog.open(DetailErrorComponent, {
+          position: { top: '100px' },
+          width: '100vw',
+          maxWidth: '450px',
+          disableClose: true,
+          data: {
+            errorCode: 410
+          }
+        });
+        break;
       default:
         this.toast.error(errorObj.message, errorObj.operation, {
           closeButton: true

@@ -175,7 +175,7 @@
                 content.errors &&
                 (content.touched || content.dirty)
               ">Please input the template content.</span>
-            </div> 
+            </div>
           </div>
         </ng-template>
 
@@ -190,7 +190,10 @@
             <a class="btn c-blue font-weight-bold"
               [routerLink]="['/templates']">Cancel</a>
             <button class="btn btn-primary font-weight-bold ml-2"
-              [class.loading]="isSaving">Create</button>
+              [class.loading]="isSaving"
+            >
+              Create
+            </button>
           </div>
         </ng-container>
         <ng-container *ngIf="template.role != 'admin' && mode == 'edit'">
@@ -198,7 +201,10 @@
             <a class="btn c-blue font-weight-bold"
               [routerLink]="['/templates']">Cancel</a>
             <button class="btn btn-primary font-weight-bold ml-2"
-              [class.loading]="isSaving">Save</button>
+              [class.loading]="isSaving"
+            >
+              Save
+            </button>
           </div>
         </ng-container>
       </form>

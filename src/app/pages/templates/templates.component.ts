@@ -8,7 +8,7 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Template } from 'src/app/models/template.model';
 import { STATUS } from 'src/app/constants/variable.constants';
 import { ToastrService } from 'ngx-toastr';
-import {getUserLevel, sortStringArray} from '../../utils/functions';
+import { getUserLevel, sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 import { searchReg } from 'src/app/helper';

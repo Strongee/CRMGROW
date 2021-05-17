@@ -42,7 +42,10 @@
       (overlayOutsideClick)="closeTemplates($event)"
     >
       <div class="templates-container">
-        <div class="template" *ngIf="hasNewTemplateLink" (click)="createNew()">
+        <div class="template"
+         *ngIf="hasNewTemplateLink"
+         (click)="createNew()"
+        >
           <a class="f-3 font-weight-bold">Create New Template ...</a>
         </div>
         <ng-container *ngFor="let template of (templateService.templates$ | async)">
@@ -120,7 +123,7 @@
       (click)="onFocusEvt()"
       #emailEditor>
     </quill-editor>
-    
+
     <span class="c-red error" *ngIf="editorForm.errors && (editorForm.touched || editorForm.dirty)">
     Required!
     </span>

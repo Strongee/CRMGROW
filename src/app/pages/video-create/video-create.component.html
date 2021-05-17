@@ -39,7 +39,7 @@
             <div class="step-body-1 ml-sm-5" [class.active]="isStep == 1">
                 <span class="f-3 font-weight-bold text-c-dark">Copy and paste web link to the video below</span>
                 <div class="web-video my-3">
-                    <img src="./assets/img/youtube.png">
+                    <img src="./assets/img/youtube.svg">
                     <span class="f-3 font-weight-bold text-c-dark mx-2">or</span>
                     <img src="./assets/img/vimeo.svg">
                 </div>
@@ -68,14 +68,14 @@
                     <div class="f-3 font-weight-bold text-c-dark my-4">
                         Upload your video
                     </div>
-                    <img src="./assets/img/upload.png">
+                    <i class="i-icon i-upload d-block bgc-black upload-icon"></i>
                     <p class="f-1 text-c-dark description mx-auto my-4">Drag and drop your video in the area or click to select it from your local device</p>
                 </div>
                 <span class="d-flex f-1 text-c-dark mt-3">You can upload only MP4 and MOV file types!</span>
             </div>
             <div class="step-body-2 ml-sm-5" [class.active]="isStep == 2">
-                <form 
-                    #detailForm="ngForm" 
+                <form
+                    #detailForm="ngForm"
                     (ngSubmit)="submitted = true; detailForm.form.valid ? saveDetail() : false"
                     [class.was-validated]="submitted"
                 >
@@ -123,8 +123,8 @@
                 </form>
             </div>
             <div class="step-body-3 ml-sm-5" [class.active]="isStep == 3">
-                <form 
-                    #selectThemeForm="ngForm" 
+                <form
+                    #selectThemeForm="ngForm"
                     (ngSubmit)="submitted = true; selectThemeForm.form.valid ? selectTheme() : false"
                     [class.was-validated]="submitted"
                 >
@@ -147,7 +147,7 @@
             </div>
             <div class="step-body-4 ml-sm-5 position-relative" [class.active]="isStep == 4">
                 <form
-                    #finishUploadForm="ngForm" 
+                    #finishUploadForm="ngForm"
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('video') : false"
                     [class.was-validated]="submitted"
                 >
@@ -256,14 +256,14 @@
                     <div class="f-3 font-weight-bold text-c-dark my-4">
                         Upload your pdf
                     </div>
-                    <img src="./assets/img/upload.png">
+                    <i class="i-icon i-upload d-block bgc-black upload-icon"></i>
                     <p class="f-1 text-c-dark description mx-auto my-4">Drag and drop your pdf in the area or click to select it from your local device</p>
                 </div>
                 <span class="d-flex f-1 text-c-dark mt-3">You can upload only PDF file types!</span>
             </div>
             <div class="step-body-2 ml-sm-5" [class.active]="isStep == 2">
-                <form 
-                    #detailForm="ngForm" 
+                <form
+                    #detailForm="ngForm"
                     (ngSubmit)="submitted = true; detailForm.form.valid ? saveDetail() : false"
                     [class.was-validated]="submitted"
                 >
@@ -313,8 +313,8 @@
                 </form>
             </div>
             <div class="step-body-3 ml-sm-5" [class.active]="isStep == 3">
-                <form 
-                    #selectThemeForm="ngForm" 
+                <form
+                    #selectThemeForm="ngForm"
                     (ngSubmit)="submitted = true; selectThemeForm.form.valid ? selectTheme() : false"
                     [class.was-validated]="submitted"
                 >
@@ -337,7 +337,7 @@
             </div>
             <div class="step-body-4 ml-sm-5 position-relative" [class.active]="isStep == 4">
                 <form
-                    #finishUploadForm="ngForm" 
+                    #finishUploadForm="ngForm"
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('pdf') : false"
                     [class.was-validated]="submitted"
                 >
@@ -442,14 +442,14 @@
                     <div class="f-3 font-weight-bold text-c-dark my-4">
                         Upload your image
                     </div>
-                    <img src="./assets/img/upload.png">
+                    <i class="i-icon i-upload d-block bgc-black upload-icon"></i>
                     <p class="f-1 text-c-dark description mx-auto my-4">Drag and drop your images in the area or click to select it from your local device</p>
                 </div>
                 <span class="d-flex f-1 text-c-dark mt-3">You can upload only IMAGE files types!</span>
             </div>
             <div class="step-body-2 ml-sm-5" [class.active]="isStep == 2">
-                <form 
-                    #detailForm="ngForm" 
+                <form
+                    #detailForm="ngForm"
                     (ngSubmit)="submitted = true; detailForm.form.valid ? saveDetail() : false"
                     [class.was-validated]="submitted"
                 >
@@ -489,8 +489,8 @@
                 </form>
             </div>
             <div class="step-body-3 ml-sm-5" [class.active]="isStep == 3">
-                <form 
-                    #selectThemeForm="ngForm" 
+                <form
+                    #selectThemeForm="ngForm"
                     (ngSubmit)="submitted = true; selectThemeForm.form.valid ? selectTheme() : false"
                     [class.was-validated]="submitted"
                 >
@@ -513,7 +513,7 @@
             </div>
             <div class="step-body-4 ml-sm-5 position-relative" [class.active]="isStep == 4">
                 <form
-                    #finishUploadForm="ngForm" 
+                    #finishUploadForm="ngForm"
                     (ngSubmit)="submitted = true; finishUploadForm.form.valid ? finishUpload('image') : false"
                     [class.was-validated]="submitted"
                 >

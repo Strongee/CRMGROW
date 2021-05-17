@@ -57,15 +57,14 @@ export class ActionsHeaderComponent implements OnInit {
   }
 
   isDisableAction(action): boolean {
-    // if (action.label) {
-    //   const index = this.disableActions.findIndex(
-    //     (item) => item.label === action.label
-    //   );
-    //   if (index >= 0) {
-    //     return true;
-    //   }
-    // }
-    // return false;
+    if (action.label) {
+      const index = this.disableActions.findIndex(
+        (item) => item.label === action.label
+      );
+      if (index >= 0) {
+        return true;
+      }
+    }
     return false;
   }
 }

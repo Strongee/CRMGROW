@@ -14,15 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class VideoEditComponent implements OnInit, OnDestroy {
   submitted = false;
-  video = {
-    _id: '',
-    url: '',
-    duration: '',
-    thumbnail: '',
-    title: '',
-    description: '',
-    role: ''
-  };
+  video: Material = new Material();
   saving = false;
   thumbnailLoading = false;
 
@@ -45,6 +37,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         this.editedVideos = _garbage.edited_video || [];
       }
     );
+    console.log('video', this.video);
   }
 
   ngOnDestroy(): void {
@@ -121,16 +114,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
           }
         });
     } else {
-      video = {
-        url: this.video.url,
-        title: this.video.title,
-        duration: this.video.duration,
-        thumbnail: this.video.thumbnail,
-        description: this.video.description,
-        shared_video: this.video._id
-      };
+      const newVideo = { ...this.video };
+      newVideo['shared_video'] = this.video._id;
+      delete newVideo['_id'];
       this.saving = true;
-      this.materialService.createVideo(video).subscribe((res) => {
+      this.materialService.createVideo(newVideo).subscribe((res) => {
         this.saving = false;
         if (res['data']) {
           this.toast.success('Video material successfully duplicated.');
