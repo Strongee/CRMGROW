@@ -53,10 +53,11 @@ export class AffiliateComponent implements OnInit {
         (res) => {
           this.loadingUsers = false;
           this.userPage = page;
-          const pagination = res['pagination'];
-          this.userCount = pagination['total_count'];
+          // const pagination = res['pagination'];
+          // this.userCount = pagination['total_count'];
+          this.userCount = res.data.length;
           this.users = [];
-          res['data'].forEach((e) => {
+          res.data.forEach((e) => {
             if (e.customer && e.customer.email) {
               this.users.push(e);
             }
@@ -75,11 +76,11 @@ export class AffiliateComponent implements OnInit {
       (res) => {
         this.loadingMain = false;
         // Load the Main Info
-        if (res['data']) {
-          this.affiliate = res['data'];
+        if (res.data) {
+          this.affiliate = res.data;
         }
         if (this.affiliate.id) {
-          this.affiliate['share_link'] = this.affiliate['links'][0]['url'];
+          this.affiliate.share_link = this.affiliate.links[0].url;
           // Load Refered Users
           this.loadUsers(1);
         } else {
@@ -91,11 +92,9 @@ export class AffiliateComponent implements OnInit {
             .createAffiliate()
             .subscribe(
               (res) => {
-                if (res['data']) {
-                  this.affiliate = res['data'];
-                  this.affiliate['share_link'] = this.affiliate['links'][0][
-                    'url'
-                  ];
+                if (res.data) {
+                  this.affiliate = res.data;
+                  this.affiliate.share_link = this.affiliate.links[0].url;
                 }
                 this.creating = false;
                 // Load Refered Users
