@@ -68,11 +68,11 @@ import { DetailErrorComponent } from 'src/app/components/detail-error/detail-err
 import { Deal } from 'src/app/models/deal.model';
 import { getUserLevel } from '../../utils/functions';
 import * as jwt from 'jsonwebtoken';
-import { init } from '@wavv/core';
 import {
   startCampaign,
   addCallStartedListener,
-  addCallEndedListener
+  addCallEndedListener,
+  init
 } from '@wavv/dialer';
 
 @Component({
@@ -420,11 +420,10 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
     );
 
-    console.log('###', init);
     const signature =
       'q6Oggy7to8EEgSyJTwvinjslHitdRjuC76UEtw8kxyGRDAlF1ogg3hc4WzW2vnzc';
     const payload = {
-      userId: '704e070acb0761ed0382211136fdd457'
+      userId: '123456'
     };
     const issuer = 'k8d8BvqFWV9rSTwZyGed64Dc0SbjSQ6D';
     const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
@@ -756,7 +755,20 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
-  openCall(): void {}
+  openCall(): void {
+    const contacts = [
+      {
+        contactId: '704e070acb0761ed0382211136fdd457',
+        numbers: ['5485620802'],
+        name: 'sapphire',
+        address: '2880 Broadway',
+        city: 'New York'
+      }
+    ];
+    startCampaign({ contacts }).catch((err) =>
+      console.log('Failed to start campaign', err)
+    );
+  }
 
   /**
    * Open dialog to merge
