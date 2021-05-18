@@ -44,11 +44,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (profile) => {
         this.user = profile;
         this.isSuspended = profile.subscription?.is_suspended;
-        this.disableMenuItems = [
-          { id: 'general', icon: 'i-general', label: 'Info' },
-          { id: 'signature', icon: 'i-signature', label: 'Signature' },
-          { id: 'security', icon: 'i-security', label: 'Security' },
-        ];
+        if (this.isSuspended) {
+          this.disableMenuItems = [
+            { id: 'general', icon: 'i-general', label: 'Info' },
+            { id: 'signature', icon: 'i-signature', label: 'Signature' },
+            { id: 'security', icon: 'i-security', label: 'Security' },
+          ];
+        }
       }
     );
   }
