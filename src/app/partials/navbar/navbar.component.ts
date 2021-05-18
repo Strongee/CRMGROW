@@ -62,9 +62,7 @@ export class NavbarComponent implements OnInit {
     private dialog: MatDialog,
     private contactService: ContactService,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile) {
@@ -73,7 +71,9 @@ export class NavbarComponent implements OnInit {
         }
       }
     );
+  }
 
+  ngOnInit(): void {
     this.connectService.receiveLogout().subscribe(() => {
       this.logout(null);
     });
