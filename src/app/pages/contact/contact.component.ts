@@ -67,6 +67,12 @@ import { Note } from 'src/app/models/note.model';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 import { Deal } from 'src/app/models/deal.model';
 import { getUserLevel } from '../../utils/functions';
+import {
+  startCampaign,
+  addCallStartedListener,
+  addCallEndedListener,
+  init
+} from '@wavv/dialer';
 
 @Component({
   selector: 'app-contact',
@@ -412,7 +418,31 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.lead_fields = _garbage.additional_fields.map((e) => e.name);
       }
     );
+
+    const signature =
+      'q6Oggy7to8EEgSyJTwvinjslHitdRjuC76UEtw8kxyGRDAlF1ogg3hc4WzW2vnzc';
+    const payload = {
+      userId: '123456'
+    };
+    const issuer = 'k8d8BvqFWV9rSTwZyGed64Dc0SbjSQ6D';
+    // const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE2MjEzMjA5NjksImV4cCI6MTYyMTMyNDU2OSwiaXNzIjoiazhkOEJ2cUZXVjlyU1R3WnlHZWQ2NERjMFNialNRNkQifQ.MUWXR1cL6G5BaHYfF5PK2H73G-FDEul_ISdvuDK_4Q4';
+
+    init({ token });
   }
+
+  // ngAfterViewInit(): void {
+  //   const signature =
+  //     'q6Oggy7to8EEgSyJTwvinjslHitdRjuC76UEtw8kxyGRDAlF1ogg3hc4WzW2vnzc';
+  //   const payload = {
+  //     userId: '704e070acb0761ed0382211136fdd457'
+  //   };
+  //   const issuer = 'k8d8BvqFWV9rSTwZyGed64Dc0SbjSQ6D';
+  //   const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
+
+  //   init(token);
+  // }
 
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
@@ -724,6 +754,21 @@ export class ContactComponent implements OnInit, OnDestroy {
             });
         }
       });
+  }
+
+  openCall(): void {
+    const contacts = [
+      {
+        contactId: '704e070acb0761ed0382211136fdd457',
+        numbers: ['5485620802'],
+        name: 'sapphire',
+        address: '2880 Broadway',
+        city: 'New York'
+      }
+    ];
+    startCampaign({ contacts }).catch((err) =>
+      console.log('Failed to start campaign', err)
+    );
   }
 
   /**

@@ -196,7 +196,7 @@ export class MaterialsComponent implements OnInit {
       this.editedImages = this.garbage['edited_image'] || [];
 
       this.global_theme = this.garbage.material_theme;
-      this.material_themes = this.garbage.material_themes;
+      this.material_themes = this.garbage.material_themes || {};
     });
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
       const folder_id = params['folder'];
