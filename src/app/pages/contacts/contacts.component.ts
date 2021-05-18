@@ -28,6 +28,13 @@ import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { getUserLevel } from '../../utils/functions';
+import {
+  startCampaign,
+  addCallStartedListener,
+  addCallEndedListener
+} from '@wavv/dialer';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -102,7 +109,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
     public contactService: ContactService,
     public userService: UserService,
     private handlerService: HandlerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toast: ToastrService
   ) {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
@@ -429,6 +437,13 @@ export class ContactsComponent implements OnInit, OnDestroy {
       case 'automation':
         this.openAutomationDlg();
         break;
+      case 'call':
+        if (this.selection.length == 1) {
+          this.call();
+        } else {
+          this.toast.error('Please select only one contact');
+        }
+        break;
     }
   }
 
@@ -452,6 +467,23 @@ export class ContactsComponent implements OnInit, OnDestroy {
         e.spliter = status;
       }
     });
+  }
+
+  /**
+   * Download CSV
+   */
+  call(): void {
+    const contact = new ContactActivity().deserialize(this.selection[0]);
+    const contacts = [
+      {
+        contactId: '704e070acb0761ed0382211136fdd457',
+        numbers: [contact.cell_phone],
+        name: contact.fullName
+      }
+    ];
+    startCampaign({ contacts }).catch((err) =>
+      console.log('Failed to start campaign', err)
+    );
   }
 
   /**

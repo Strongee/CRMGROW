@@ -1289,6 +1289,13 @@ export const BulkActions = {
       loading: false
     },
     {
+      label: 'Call',
+      type: 'button',
+      icon: 'i-phone',
+      command: 'call',
+      loading: false
+    },
+    {
       spliter: true,
       label: 'Select all',
       type: 'button',
@@ -1318,7 +1325,7 @@ export const BulkActions = {
     {
       label: 'Add notes',
       type: 'button',
-      icon: 'i-note',
+      icon: 'i-notes',
       command: 'add_note',
       loading: false
     },
