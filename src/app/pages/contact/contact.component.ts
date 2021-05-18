@@ -756,8 +756,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     );
     const sideBar = document.querySelector('.sidebar') as HTMLElement;
     const mainPage = document.querySelector('.page') as HTMLElement;
-    console.log('###', sideBar);
-    console.log('###', mainPage);
     sideBar.style.paddingTop = '105px';
     mainPage.style.paddingTop = '118px';
   }
