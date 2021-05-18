@@ -70,7 +70,8 @@ import { getUserLevel } from '../../utils/functions';
 import {
   startCampaign,
   addCallStartedListener,
-  addCallEndedListener
+  addCallEndedListener,
+  addClosedListener
 } from '@wavv/dialer';
 
 @Component({
@@ -751,13 +752,22 @@ export class ContactComponent implements OnInit, OnDestroy {
         name: this.contact.fullName
       }
     ];
-    startCampaign({ contacts }).catch((err) =>
-      console.log('Failed to start campaign', err)
-    );
-    const sideBar = document.querySelector('.sidebar') as HTMLElement;
-    const mainPage = document.querySelector('.page') as HTMLElement;
-    sideBar.style.paddingTop = '105px';
-    mainPage.style.paddingTop = '118px';
+    startCampaign({ contacts })
+      .then(() => {
+        const sideBar = document.querySelector('.sidebar') as HTMLElement;
+        const mainPage = document.querySelector('.page') as HTMLElement;
+        sideBar.style.paddingTop = '105px';
+        mainPage.style.paddingTop = '118px';
+      })
+      .catch((err) => {
+        console.log('Failed to start campaign', err)
+      });
+    addClosedListener(() => {
+      const sideBar = document.querySelector('.sidebar') as HTMLElement;
+      const mainPage = document.querySelector('.page') as HTMLElement;
+      sideBar.style.paddingTop = '50px';
+      mainPage.style.paddingTop = '63px';
+    });
   }
 
   /**
