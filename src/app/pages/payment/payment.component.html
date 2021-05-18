@@ -266,7 +266,7 @@
               $ {{invoice.amount}}
             </td>
             <td class="download-col f-3 font-weight-bold c-blue pr-0 pt-3 pb-0">
-              <div class="v-center justify-content-end c-pointer">
+              <div class="v-center justify-content-end c-pointer" *ngIf="invoice.invoice_pdf">
                 <i class="i-icon i-download bgc-blue d-block"></i>
                 <span class="ml-2">Download invoice</span>
               </div>

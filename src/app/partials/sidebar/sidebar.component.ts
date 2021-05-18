@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { Subscription } from 'rxjs';
 
 declare interface RouteInfo {
   path: string;
@@ -124,8 +126,16 @@ export class SidebarComponent implements OnInit {
   menuItems: RouteInfo[] = ROUTES;
   isCollapsed = false;
   profile: any = {};
+  isSuspended = false;
+  profileSubscription: Subscription;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public userService: UserService) {
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
+      if (user) {
+        this.isSuspended = user.subscription?.is_suspended;
+      }
+    });
+  }
 
   ngOnInit(): void {
     // this.router.events.subscribe(() => {

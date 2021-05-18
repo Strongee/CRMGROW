@@ -157,6 +157,7 @@ import { PlayTimelinesComponent } from './play-timelines/play-timelines.componen
 import { InputContactDealComponent } from './input-contact-deal/input-contact-deal.component';
 import { StripeModule } from 'stripe-angular';
 import { STRIPE_KEY } from '../constants/variable.constants';
+import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-error.component';
 
 @NgModule({
   declarations: [
@@ -310,7 +311,8 @@ import { STRIPE_KEY } from '../constants/variable.constants';
     EmailTimelinesComponent,
     TextTimelinesComponent,
     PlayTimelinesComponent,
-    InputContactDealComponent
+    InputContactDealComponent,
+    UpgradePlanErrorComponent
   ],
   imports: [
     CommonModule,

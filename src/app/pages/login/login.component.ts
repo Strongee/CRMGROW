@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserAgentApplication } from 'msal';
 import { ContactService } from 'src/app/services/contact.service';
+import { UpgradePlanErrorComponent } from '../../components/upgrade-plan-error/upgrade-plan-error.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +43,8 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private googleAuth: GoogleAuth,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -132,6 +135,20 @@ export class LoginComponent implements OnInit {
   }
 
   goHome(data: any): void {
+    if (
+      data.user &&
+      data.user.subscription &&
+      data.user.subscription.is_suspended
+    ) {
+      this.returnUrl = '/profile/upgrade-billing';
+      this.router.navigate([this.returnUrl]);
+      this.dialog.open(UpgradePlanErrorComponent, {
+        position: { top: '100px' },
+        width: '100vw',
+        maxWidth: '450px',
+        disableClose: true
+      });
+    }
     this.userService.setToken(data['token']);
     this.userService.setProfile(data['user']);
     this.router.navigate([this.returnUrl]);
