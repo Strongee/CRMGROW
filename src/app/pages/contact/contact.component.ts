@@ -760,7 +760,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         mainPage.style.paddingTop = '118px';
       })
       .catch((err) => {
-        console.log('Failed to start campaign', err)
+        console.log('Failed to start campaign', err);
       });
     addClosedListener(() => {
       const sideBar = document.querySelector('.sidebar') as HTMLElement;
