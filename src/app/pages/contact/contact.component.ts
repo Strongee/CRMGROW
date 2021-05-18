@@ -67,7 +67,6 @@ import { Note } from 'src/app/models/note.model';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 import { Deal } from 'src/app/models/deal.model';
 import { getUserLevel } from '../../utils/functions';
-import * as jwt from 'jsonwebtoken';
 import {
   startCampaign,
   addCallStartedListener,
@@ -426,7 +425,9 @@ export class ContactComponent implements OnInit, OnDestroy {
       userId: '123456'
     };
     const issuer = 'k8d8BvqFWV9rSTwZyGed64Dc0SbjSQ6D';
-    const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
+    // const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE2MjEzMjA5NjksImV4cCI6MTYyMTMyNDU2OSwiaXNzIjoiazhkOEJ2cUZXVjlyU1R3WnlHZWQ2NERjMFNialNRNkQifQ.MUWXR1cL6G5BaHYfF5PK2H73G-FDEul_ISdvuDK_4Q4';
 
     init({ token });
   }
