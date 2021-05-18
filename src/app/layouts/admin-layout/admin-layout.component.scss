@@ -8,3 +8,8 @@
   z-index: 995;
   overflow: auto;
 }
+
+#storm-dialer-bar {
+  z-index: 999 !important;
+  position: absolute;
+}
