@@ -327,13 +327,6 @@ td {
         padding: 8px 10px;
         position: relative;
 
-        //.tooltip-icon {
-        //  position: absolute;
-        //  top: 50%;
-        //  left: 55%;
-        //  transform: translateY(-50%);
-        //}
-
         @media screen and (max-width: 1024px) {
           line-height: 24px;
         }
@@ -380,6 +373,14 @@ td {
 
   .text-wrapper {
     max-width: 280px;
+  }
+}
+
+.download-invoice {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
   }
 }
 
