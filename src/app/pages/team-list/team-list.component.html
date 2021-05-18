@@ -1,5 +1,9 @@
 <div class="v-center justify-content-end mt-xl-0 mt-0 team-list-actions">
-  <button type="button" class="btn btn-primary shadow f-6" *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS" (click)="openForm()">
+  <button type="button" class="btn btn-primary shadow f-6"
+    [class.disable]="getUserLevel() == 'lite'"
+    *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS"
+    (click)="openForm()"
+  >
     <span class="font-weight-bold f-6">Create new Team</span>
   </button>
   <button type="button" class="btn btn-white-blue ml-2 c-blue f-6 font-weight-bold" (click)="joinForm()">Join team</button>

@@ -29,11 +29,11 @@ export class NavbarComponent implements OnInit {
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
     { icon: 'i-task bg-white', label: 'New Task', id: 'task' },
     { icon: 'i-deals bg-white', label: 'New Deal', id: 'deal' },
-    {
-      icon: 'i-calendar bg-white',
-      label: 'New Meeting',
-      id: 'appointment'
-    },
+    // {
+    //   icon: 'i-calendar bg-white',
+    //   label: 'New Meeting',
+    //   id: 'appointment'
+    // },
     { icon: 'i-template bg-white', label: 'New Note', id: 'note' },
     { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
     { icon: 'i-record bg-white', label: 'Record Video', id: 'record' },

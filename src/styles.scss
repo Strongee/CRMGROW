@@ -2177,5 +2177,6 @@ body {
 
 .disable {
   pointer-events: none !important;
-  opacity: 0.4 !important;
+  display: none !important;
+  //opacity: 0.4 !important;
 }

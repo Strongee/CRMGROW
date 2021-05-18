@@ -31,6 +31,7 @@ import { MaterialBrowserComponent } from '../../components/material-browser/mate
 import { TemplateBrowserComponent } from '../../components/template-browser/template-browser.component';
 import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
 import { TeamMemberProfileComponent } from '../../components/team-member-profile/team-member-profile.component';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-team',
@@ -78,6 +79,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   viewers = [];
   editors = [];
 
+  packageLevel = '';
   profileSubscription: Subscription;
 
   @ViewChild(TeamShareMaterialComponent)
@@ -123,6 +125,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
+      this.packageLevel = res.package_level;
       this.arrangeTeamData();
     });
 
@@ -144,6 +147,10 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     }
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   goToBack(): void {

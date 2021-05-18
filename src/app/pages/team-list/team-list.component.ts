@@ -16,6 +16,7 @@ import { Team } from 'src/app/models/team.model';
 import { User } from 'src/app/models/user.model';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { ToastrService } from 'ngx-toastr';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-team-list',
@@ -36,6 +37,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
   declineTeamId = '';
 
   teams = [];
+  packageLevel = '';
 
   profileSubscription: Subscription;
   constructor(
@@ -51,6 +53,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       const profile = this.userService.profile.getValue();
       this.userId = profile._id;
+      this.packageLevel = profile.package_level;
       this.currentUser = res;
     });
     this.load();
@@ -58,6 +61,10 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   load(): void {
@@ -112,7 +119,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
       this.teams = [...ownerTeams, ...editorTeams, ...viewerTeams];
 
-      console.log("teams =========>", this.teams);
+      console.log('teams =========>', this.teams);
     });
   }
 
