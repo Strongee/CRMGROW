@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
+import { getUserLevel } from '../../utils/functions';
+import { PACKAGE_LEVEL } from '../../constants/variable.constants';
 
 declare interface RouteInfo {
   path: string;
@@ -124,15 +126,42 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   menuItems: RouteInfo[] = ROUTES;
+  disableMenuItems: RouteInfo[] = [];
   isCollapsed = false;
   profile: any = {};
   isSuspended = false;
   profileSubscription: Subscription;
+  packageLevel = '';
 
   constructor(private router: Router, public userService: UserService) {
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       if (user) {
         this.isSuspended = user.subscription?.is_suspended;
+        this.packageLevel = user.package_level;
+        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
+          this.disableMenuItems = [
+            {
+              path: 'automations',
+              title: 'Automations',
+              icon: 'i-automation bgc-dark',
+              class: '',
+              beta: false,
+              betaClass: '',
+              betaLabel: '',
+              protectedRole: null
+            },
+            {
+              path: 'calendar',
+              title: 'Calendar',
+              icon: 'i-calendar bgc-dark',
+              class: '',
+              beta: false,
+              betaClass: '',
+              betaLabel: '',
+              protectedRole: null
+            }
+          ];
+        }
       }
     });
   }
@@ -141,5 +170,19 @@ export class SidebarComponent implements OnInit {
     // this.router.events.subscribe(() => {
     //   this.isCollapsed = true;
     // });
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
+  }
+
+  isDisableItem(menuItem): boolean {
+    const index = this.disableMenuItems.findIndex(
+      (item) => item.title === menuItem.title
+    );
+    if (index >= 0) {
+      return true;
+    }
+    return false;
   }
 }

@@ -35,7 +35,7 @@
               <hr class="my-1">
               <a class="dropdown-item f-3" (click)="shareMaterial()">Share Material</a>
               <a class="dropdown-item f-3" (click)="shareEmailTemplate()">Share Template</a>
-              <a class="dropdown-item f-3" (click)="shareAutomation()">Share Automation</a>
+              <a class="dropdown-item f-3" (click)="shareAutomation()" [class.disable]="getUserLevel() == 'lite'">Share Automation</a>
               <a class="dropdown-item f-3" (click)="shareContact()">Share Contact</a>
             </div>
           </div>

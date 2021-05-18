@@ -1628,4 +1628,9 @@ export class DealsDetailComponent implements OnInit {
   }
 
   removeActivity(activity): void {}
+
+  isDisableTab(tabItem): boolean {
+    const index = this.disableTabs.findIndex((item) => item.id === tabItem.id);
+    return index >= 0;
+  }
 }

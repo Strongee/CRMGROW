@@ -30,7 +30,8 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
   currentIndex = 0;
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngAfterViewInit(): void {
     const tabIndex = _.findIndex(this.tabs, { id: this.selected.id });

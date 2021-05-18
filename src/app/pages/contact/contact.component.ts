@@ -1789,6 +1789,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.overlayRef.detach();
   }
 
+  isDisableTab(tabItem): boolean {
+    const index = this.disableTabs.findIndex((item) => item.id === tabItem.id);
+    return index >= 0;
+  }
+
   isUrl(str): boolean {
     let url = '';
     if (str && str.startsWith('http')) {
