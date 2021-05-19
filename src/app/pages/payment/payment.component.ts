@@ -259,9 +259,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.updatePackageSubscription = this.userService
       .updatePackage(data)
       .subscribe((res) => {
-        console.log('update package =========>', res);
+        this.loadingUpdatePackage = false;
         if (res) {
-          // window.location.reload();
+          window.location.reload();
         }
       });
   }

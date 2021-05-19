@@ -1003,6 +1003,7 @@
           </div>
           <buttn class="btn btn-primary f-16 font-weight-bold my-4 w-100"
                  [class.disabled]="selectedPackage.package == currentPackage.package"
+                 [class.loading]="loadingUpdatePackage"
                  (click)="updatePackage()"
           >
             Upgrade plan
