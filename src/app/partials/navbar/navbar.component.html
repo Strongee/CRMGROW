@@ -5,7 +5,7 @@
   </a>
   <!-- Add Buttons Dropdown wrapper -->
   <div class="new-actions-wrapper"
-     [class.disable]="isSuspended"
+     [class.suspended]="isSuspended"
      ngbDropdown
   >
     <div class="btn bgc-blue d-flex align-items-center shadow-1 rounded-circle no-carot" ngbDropdownToggle>
@@ -55,7 +55,7 @@
     <!-- Notification Wrapper -->
     <div class="search-box input-group bgc-dark-trans08 rounded mr-2"
          [class.opened]="handlerService.openSearch$ | async"
-         [class.disable]="isSuspended"
+         [class.suspended]="isSuspended"
     >
       <div class="input-group-prepend" (click)="toggleSearchBar()">
         <span class="input-group-text border-0 py-2 px-2 c-pointer" id="search-addon">
@@ -70,7 +70,7 @@
       <div class="support-wrapper"
            ngbDropdown
            display="dynamic"
-           [class.disable]="isSuspended"
+           [class.suspended]="isSuspended"
       >
         <div class="no-carot c-pointer" ngbDropdownToggle>
           <i class="i-icon i-support bgc-blue d-block"></i>
@@ -89,14 +89,14 @@
       </div>
     </div>
     <!-- Incoming Chat Message Wrapper -->
-    <div class="nav-item" [class.disable]="isSuspended">
+    <div class="nav-item" [class.suspended]="isSuspended" [class.disable]="getUserLevel() == 'lite'">
       <div class="chat-messages-wrapper detail-wrapper" ngbDropdown display="dynamic" placement="bottom-right">
         <a [routerLink]="['/messages']" class="no-carot">
           <i class="i-icon i-sms-sent bgc-blue d-block"></i>
         </a>
       </div>
     </div>
-    <div class="nav-item" [class.disable]="isSuspended">
+    <div class="nav-item" [class.suspended]="isSuspended">
       <div class="notifications-wrapper detail-wrapper" ngbDropdown display="dynamic">
         <div class="no-carot" ngbDropdownToggle [class.has-notifications]="(notificationService.notifications$ | async).length">
           <i class="i-icon i-notification bgc-blue d-block"></i>
@@ -157,13 +157,13 @@
           <a [routerLink]="['/profile/billing']" class="dropdown-item">
             <span class="f-4 fw-600">Subscription</span>
           </a>
-          <a [routerLink]="['/profile/signature']" class="dropdown-item" [class.disable]="isSuspended">
+          <a [routerLink]="['/profile/signature']" class="dropdown-item" [class.suspended]="isSuspended">
             <span class="f-4 fw-600">Email signature</span>
           </a>
-          <a [routerLink]="['/profile/security']" class="dropdown-item" [class.disable]="isSuspended">
+          <a [routerLink]="['/profile/security']" class="dropdown-item" [class.suspended]="isSuspended">
             <span class="f-4 fw-600">Security</span>
           </a>
-          <a [routerLink]="['/settings']" class="dropdown-item" [class.disable]="isSuspended">
+          <a [routerLink]="['/settings']" class="dropdown-item" [class.suspended]="isSuspended">
             <span class="f-4 fw-600">Settings</span>
           </a>
           <div class="dropdown-divider"></div>

@@ -9,7 +9,7 @@
         <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">
       </a>
     </div>
-    <ul class="sidebar-nav" [class.disable]="isSuspended">
+    <ul class="sidebar-nav" [class.suspended]="isSuspended">
       <ng-container *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
         <li *ngIf="!menuItem.role || menuItem.protectedRole.indexOf(profile.role) === -1"
           [class.disable]="isDisableItem(menuItem)"
