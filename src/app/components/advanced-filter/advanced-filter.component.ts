@@ -119,10 +119,10 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
         _id: 3,
         title: 'Task added'
       },
-      {
-        _id: 4,
-        title: 'Log phone call'
-      },
+      // {
+      //   _id: 4,
+      //   title: 'Log phone call'
+      // },
       {
         _id: 5,
         title: 'Opened email'
@@ -751,7 +751,7 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
     'Just added': 'contacts',
     'Added note': 'notes',
     'Task added': 'follow_ups',
-    'Log phone call': 'phone_logs',
+    // 'Log phone call': 'phone_logs',
     'Opened email': 'email_trackers',
     'Sent video': 'videos',
     'Link clicked': '',

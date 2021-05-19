@@ -201,6 +201,12 @@ export class DealsDetailComponent implements OnInit {
           this.disableTabs = [
             { icon: '', label: 'Appointments', id: 'appointments' }
           ];
+          const index = this.tabs.findIndex(
+            (item) => item.id === 'appointments'
+          );
+          if (index >= 0) {
+            this.tabs.splice(index, 1);
+          }
         }
       } catch (err) {
         const timezone = getCurrentTimezone();

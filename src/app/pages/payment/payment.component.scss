@@ -172,6 +172,10 @@ td {
     letter-spacing: 0;
     line-height: 21px;
     height: 100px;
+
+    &.confirm {
+      height: auto;
+    }
   }
 
   .package-price {
@@ -288,8 +292,8 @@ td {
       }
 
       &.additional-feature {
-        display: block;
-        padding: 9px 0px 16px 18px;
+        display: flex;
+        padding: 0px 0px 16px 18px;
 
         p {
           color: #6F7086;

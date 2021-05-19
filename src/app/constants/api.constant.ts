@@ -38,7 +38,8 @@ export const USER = {
   UPDATE_GARBAGE: 'garbage',
   CONNECT_SMTP: 'integration/sync-smtp',
   DISCONNECT_CALENDAR: 'user/discon-calendar',
-  CANCEL_ACCOUNT: 'user/cancel-account'
+  CANCEL_ACCOUNT: 'user/cancel-account',
+  UPDATE_PACKAGE: 'user/update-package'
 };
 export const GUEST = {
   LOAD: 'guest/load',

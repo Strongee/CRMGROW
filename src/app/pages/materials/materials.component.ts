@@ -169,10 +169,10 @@ export class MaterialsComponent implements OnInit {
         if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
           this.disableActions = [
             {
-              label: 'Send via email',
+              label: 'Send via Text',
               type: 'button',
-              icon: 'i-message',
-              command: 'email',
+              icon: 'i-sms-sent',
+              command: 'text',
               loading: false
             },
             {

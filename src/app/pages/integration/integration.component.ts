@@ -10,6 +10,7 @@ import { CalendlyDialogComponent } from 'src/app/components/calendly-dialog/cale
 import { Garbage } from 'src/app/models/garbage.model';
 import { CalendlyListComponent } from 'src/app/components/calendly-list/calendly-list.component';
 import * as _ from 'lodash';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-integration',
@@ -31,6 +32,7 @@ export class IntegrationComponent implements OnInit {
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
+  packageLevel = '';
 
   constructor(
     private userService: UserService,
@@ -42,6 +44,7 @@ export class IntegrationComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user = profile;
+        this.packageLevel = profile.package_level;
         if (this.user.calendar_list) {
           this.googleCalendars = this.user.calendar_list.filter((e) => {
             if (e.connected_calendar_type === 'google') {
@@ -78,6 +81,10 @@ export class IntegrationComponent implements OnInit {
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
+  }
+
+  getUserLevel(): string {
+    return getUserLevel(this.packageLevel);
   }
 
   connectMail(type: string): void {

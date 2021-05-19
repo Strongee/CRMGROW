@@ -410,6 +410,7 @@ export class UserService extends HttpService {
         catchError(this.handleError('CONNECT SMTP'))
       );
   }
+
   public cancelAccount(data): Observable<any> {
     return this.httpClient
       .post(this.server + USER.CANCEL_ACCOUNT, { ...data })
@@ -418,6 +419,16 @@ export class UserService extends HttpService {
         catchError(this.handleError('CANCEL ACCOUNT'))
       );
   }
+
+  public updatePackage(data): Observable<any> {
+    return this.httpClient
+      .post(this.server + USER.UPDATE_PACKAGE, { ...data })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('UPDATE PACKAGE'))
+      );
+  }
+
   public getUserInfoItem(type: string): any {
     const user = this.getUser();
     return user[type];
