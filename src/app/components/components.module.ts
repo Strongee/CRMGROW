@@ -158,6 +158,7 @@ import { InputContactDealComponent } from './input-contact-deal/input-contact-de
 import { StripeModule } from 'stripe-angular';
 import { STRIPE_KEY } from '../constants/variable.constants';
 import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-error.component';
+import { DialPlanComponent } from './dial-plan/dial-plan.component';
 
 @NgModule({
   declarations: [
@@ -312,7 +313,8 @@ import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-err
     TextTimelinesComponent,
     PlayTimelinesComponent,
     InputContactDealComponent,
-    UpgradePlanErrorComponent
+    UpgradePlanErrorComponent,
+    DialPlanComponent
   ],
   imports: [
     CommonModule,
@@ -419,7 +421,8 @@ import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-err
     MaterialTimelinesComponent,
     EmailTimelinesComponent,
     TextTimelinesComponent,
-    PlayTimelinesComponent
+    PlayTimelinesComponent,
+    DialPlanComponent
   ],
   bootstrap: [
     ContactCreateComponent,

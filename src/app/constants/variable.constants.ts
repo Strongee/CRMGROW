@@ -1748,6 +1748,21 @@ export const PACKAGE_LEVEL = {
   }
 };
 
+export const DIAL_LEVEL = {
+  lite: {
+    package: 'lite',
+    price: 40
+  },
+  pro: {
+    package: 'pro',
+    price: 60
+  },
+  elite: {
+    package: 'elite',
+    price: 100
+  }
+};
+
 export const STRIPE_KEY = 'pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2';
 
 export const CANCEL_ACCOUNT_REASON = [

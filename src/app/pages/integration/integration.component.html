@@ -127,6 +127,21 @@
   </div>
 
   <h6 class="font-weight-bold">Other apps</h6>
+  <div class="integration-account">
+    <div class="icon">
+      <img src="../../../assets/img/dialer.png">
+    </div>
+    <div class="content">
+      <div class="title f-3 font-weight-bold mb-1">Calendly</div>
+      <div class="desc f-2 op-75">
+        Connect calandly to seamlessly create and schedule meetings.
+      </div>
+    </div>
+    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="buyDial()">
+      Buy
+    </button>
+  </div>
+
   <div class="integration-account zapier">
     <div class="integration-header">
       <div class="v-center key-container">
@@ -179,8 +194,8 @@
     <ng-container *ngIf="garbage?.calendly && garbage.calendly?.email != '' && garbage.calendly?.token != ''; else connectEvent">
       <button class="v-center btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="selectCalendly()">
         <i class="i-icon i-warning-yellow d-block" *ngIf="calendlyLength > 1 && (!garbage.calendly?.link || !garbage.calendly?.id)"></i>
-        <span *ngIf="!garbage.calendly?.link || !garbage.calendly?.id">Select Event</span>
-        <span *ngIf="garbage.calendly?.link && garbage.calendly?.id">Change Event</span>
+        <span class="w-100" *ngIf="!garbage.calendly?.link || !garbage.calendly?.id">Select Event</span>
+        <span class="w-100" *ngIf="garbage.calendly?.link && garbage.calendly?.id">Change Event</span>
       </button>
     </ng-container>
     <ng-template #connectEvent>
