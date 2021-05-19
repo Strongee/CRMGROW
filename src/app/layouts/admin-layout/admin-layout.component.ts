@@ -14,6 +14,8 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { init } from '@wavv/dialer';
+
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
@@ -106,7 +108,19 @@ export class AdminLayoutComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const signature =
+      'q6Oggy7to8EEgSyJTwvinjslHitdRjuC76UEtw8kxyGRDAlF1ogg3hc4WzW2vnzc';
+    const payload = {
+      userId: '123456'
+    };
+    const issuer = 'k8d8BvqFWV9rSTwZyGed64Dc0SbjSQ6D';
+    // const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE2MjEzMjA5NjksImV4cCI6MTYyMTMyNDU2OSwiaXNzIjoiazhkOEJ2cUZXVjlyU1R3WnlHZWQ2NERjMFNialNRNkQifQ.MUWXR1cL6G5BaHYfF5PK2H73G-FDEul_ISdvuDK_4Q4';
+
+    init({ token });
+  }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async subscribeToPushNotification(option) {

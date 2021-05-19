@@ -71,7 +71,7 @@ import {
   startCampaign,
   addCallStartedListener,
   addCallEndedListener,
-  init
+  addClosedListener
 } from '@wavv/dialer';
 
 @Component({
@@ -424,18 +424,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.lead_fields = _garbage.additional_fields.map((e) => e.name);
       }
     );
-
-    const signature =
-      'q6Oggy7to8EEgSyJTwvinjslHitdRjuC76UEtw8kxyGRDAlF1ogg3hc4WzW2vnzc';
-    const payload = {
-      userId: '123456'
-    };
-    const issuer = 'k8d8BvqFWV9rSTwZyGed64Dc0SbjSQ6D';
-    // const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
-    const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE2MjEzMjA5NjksImV4cCI6MTYyMTMyNDU2OSwiaXNzIjoiazhkOEJ2cUZXVjlyU1R3WnlHZWQ2NERjMFNialNRNkQifQ.MUWXR1cL6G5BaHYfF5PK2H73G-FDEul_ISdvuDK_4Q4';
-
-    init({ token });
   }
 
   // ngAfterViewInit(): void {
@@ -766,15 +754,26 @@ export class ContactComponent implements OnInit, OnDestroy {
     const contacts = [
       {
         contactId: '704e070acb0761ed0382211136fdd457',
-        numbers: ['5485620802'],
-        name: 'sapphire',
-        address: '2880 Broadway',
-        city: 'New York'
+        numbers: [this.contact.cell_phone],
+        name: this.contact.fullName
       }
     ];
-    startCampaign({ contacts }).catch((err) =>
-      console.log('Failed to start campaign', err)
-    );
+    startCampaign({ contacts })
+      .then(() => {
+        const sideBar = document.querySelector('.sidebar') as HTMLElement;
+        const mainPage = document.querySelector('.page') as HTMLElement;
+        sideBar.style.paddingTop = '105px';
+        mainPage.style.paddingTop = '118px';
+      })
+      .catch((err) => {
+        console.log('Failed to start campaign', err);
+      });
+    addClosedListener(() => {
+      const sideBar = document.querySelector('.sidebar') as HTMLElement;
+      const mainPage = document.querySelector('.page') as HTMLElement;
+      sideBar.style.paddingTop = '50px';
+      mainPage.style.paddingTop = '63px';
+    });
   }
 
   /**
