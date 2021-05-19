@@ -56,7 +56,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   reasonFeedback = '';
 
   cancelAccountSubscription: Subscription;
+  updatePackageSubscription: Subscription;
   loadingCancelAccount = false;
+  loadingUpdatePackage = false;
 
   constructor(private userService: UserService, private dialog: MatDialog) {
     // this.step = this.selectedStep;
@@ -167,7 +169,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   selectPlan(level): void {
     for (const item in PACKAGE_LEVEL) {
       if (PACKAGE_LEVEL[item].package === level) {
-        this.currentPackage = PACKAGE_LEVEL[item];
+        this.selectedPackage = PACKAGE_LEVEL[item];
       }
     }
     this.step = 3;
@@ -244,5 +246,23 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this.loadingCancelAccount = false;
         }
       );
+  }
+
+  updatePackage(): void {
+    const data = {
+      level: this.selectedPackage.package.toUpperCase()
+    };
+
+    this.loadingUpdatePackage = true;
+    this.updatePackageSubscription &&
+      this.updatePackageSubscription.unsubscribe();
+    this.updatePackageSubscription = this.userService
+      .updatePackage(data)
+      .subscribe((res) => {
+        this.loadingUpdatePackage = false;
+        if (res) {
+          window.location.reload();
+        }
+      });
   }
 }

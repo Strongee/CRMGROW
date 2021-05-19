@@ -243,6 +243,12 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.disableTabs = [
             { icon: '', label: 'Appointments', id: 'appointment' }
           ];
+          const index = this.tabs.findIndex(
+            (item) => item.id === 'appointment'
+          );
+          if (index >= 0) {
+            this.tabs.splice(index, 1);
+          }
         }
       } catch (err) {
         const timezone = getCurrentTimezone();

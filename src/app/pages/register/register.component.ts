@@ -36,14 +36,21 @@ export class RegisterComponent implements OnInit {
   CountryISO = CountryISO;
 
   step = 1;
+
+  package_level = 'PRO';
+  is_trial = true;
+
   user = {
     user_name: '',
     email: '',
     password: '',
     cell_phone: '',
     phone: {},
-    time_zone_info: ''
+    time_zone_info: '',
+    level: '',
+    is_trial: true
   };
+
   password_type = false;
   termsChecked = false;
 
@@ -112,7 +119,11 @@ export class RegisterComponent implements OnInit {
           this.user.email = params.email;
           this.step = 2;
         }
-        if (params.membership) {
+        if (params.level) {
+          this.package_level = params.level;
+        }
+        if (params.is_trial === 'false') {
+          this.is_trial = false;
         }
       }
     });
@@ -246,6 +257,11 @@ export class RegisterComponent implements OnInit {
   }
 
   signUp(): void {
+    this.user = {
+      ...this.user,
+      level: this.package_level,
+      is_trial: this.is_trial
+    };
     if (this.isSocialUser) {
     } else {
       this.userService.signup(this.user).subscribe((res) => {

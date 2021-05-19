@@ -53,78 +53,80 @@
     </div>
   </div>
 
-  <h6 class="font-weight-bold">Calendar apps</h6>
-  <div class="integration-account">
-    <div class="icon">
-      <img src="../../../assets/img/google_calendar.png">
-    </div>
-    <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">Google Calendar</div>
-      <div class="desc f-2 op-75">
-        Connect one or more calendars to your account, so you can schedule and manage your meetings
+  <ng-container *ngIf="getUserLevel() != 'lite'">
+    <h6 class="font-weight-bold">Calendar apps</h6>
+    <div class="integration-account">
+      <div class="icon">
+        <img src="../../../assets/img/google_calendar.png">
+      </div>
+      <div class="content">
+        <div class="title f-3 font-weight-bold mb-1">Google Calendar</div>
+        <div class="desc f-2 op-75">
+          Connect one or more calendars to your account, so you can schedule and manage your meetings
+        </div>
+      </div>
+      <ng-container *ngIf="googleCalendars.length; else connectGoogleCalendar">
+        <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('gmail')">
+          Add Calendar
+        </button>
+      </ng-container>
+      <ng-template #connectGoogleCalendar>
+        <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('gmail')">
+          Connect Calendar
+        </button>
+      </ng-template>
+      <div class="accounts">
+        <ng-container *ngIf="googleCalendars.length">
+          <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+          <ng-container *ngFor="let calendar of googleCalendars">
+            <div class="v-center mb-1">
+              <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
+              <span class="f-1">connected</span>
+              <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email, 'gmail')">
+                <div class="f-2">Disconnect</div>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
-    <ng-container *ngIf="googleCalendars.length; else connectGoogleCalendar">
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('gmail')">
-        Add Calendar
-      </button>
-    </ng-container>
-    <ng-template #connectGoogleCalendar>
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('gmail')">
-        Connect Calendar
-      </button>
-    </ng-template>
-    <div class="accounts">
-      <ng-container *ngIf="googleCalendars.length">
-        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
-        <ng-container *ngFor="let calendar of googleCalendars">
-          <div class="v-center mb-1">
-            <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
-            <span class="f-1">connected</span>
-            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email, 'gmail')">
-              <div class="f-2">Disconnect</div>
-            </button>
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
 
-  <div class="integration-account">
-    <div class="icon">
-      <img src="../../../assets/img/outlook_calendar.png">
-    </div>
-    <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">Outlook Calendar</div>
-      <div class="desc f-2 op-75">
-        Connect one or more calendars to your account, so you can schedule and manage your meetings
+    <div class="integration-account">
+      <div class="icon">
+        <img src="../../../assets/img/outlook_calendar.png">
+      </div>
+      <div class="content">
+        <div class="title f-3 font-weight-bold mb-1">Outlook Calendar</div>
+        <div class="desc f-2 op-75">
+          Connect one or more calendars to your account, so you can schedule and manage your meetings
+        </div>
+      </div>
+      <ng-container *ngIf="outlookCalendars.length; else connectOutlookCalendar">
+        <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">
+          Add Calendar
+        </button>
+      </ng-container>
+      <ng-template #connectOutlookCalendar>
+        <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">
+          Connect Calendar
+        </button>
+      </ng-template>
+      <div class="accounts">
+        <ng-container *ngIf="outlookCalendars.length">
+          <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
+          <ng-container *ngFor="let calendar of outlookCalendars">
+            <div class="v-center mb-1">
+              <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
+              <span class="f-1">connected</span>
+              <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email, 'outlook')">
+                <div class="f-2">Disconnect</div>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
-    <ng-container *ngIf="outlookCalendars.length; else connectOutlookCalendar">
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">
-        Add Calendar
-      </button>
-    </ng-container>
-    <ng-template #connectOutlookCalendar>
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectCalendar('outlook')">
-        Connect Calendar
-      </button>
-    </ng-template>
-    <div class="accounts">
-      <ng-container *ngIf="outlookCalendars.length">
-        <div class="f-2 font-weight-bold mt-3 mb-2">Authorized account</div>
-        <ng-container *ngFor="let calendar of outlookCalendars">
-          <div class="v-center mb-1">
-            <div class="f-1 font-weight-bold mr-1">{{calendar.connected_email}}</div>
-            <span class="f-1">connected</span>
-            <button type="button" class="cal-disconnect btn border-dark w-100 font-weight-bold sm px-1 py-1 ml-auto" (click)="disconnectCalendar(calendar.connected_email, 'outlook')">
-              <div class="f-2">Disconnect</div>
-            </button>
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
+  </ng-container>
 
   <h6 class="font-weight-bold">Other apps</h6>
   <div class="integration-account">
