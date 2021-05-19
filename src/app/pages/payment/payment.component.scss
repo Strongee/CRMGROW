@@ -172,6 +172,10 @@ td {
     letter-spacing: 0;
     line-height: 21px;
     height: 100px;
+
+    &.confirm {
+      height: auto;
+    }
   }
 
   .package-price {
