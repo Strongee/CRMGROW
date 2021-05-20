@@ -10,6 +10,8 @@ import { CalendlyDialogComponent } from 'src/app/components/calendly-dialog/cale
 import { Garbage } from 'src/app/models/garbage.model';
 import { CalendlyListComponent } from 'src/app/components/calendly-list/calendly-list.component';
 import * as _ from 'lodash';
+import { DialPlanComponent } from 'src/app/components/dial-plan/dial-plan.component';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-integration',
@@ -231,6 +233,13 @@ export class IntegrationComponent implements OnInit {
       if (res && res['status']) {
         location.href = res['data'];
       }
+    });
+  }
+
+  buyDial(): void {
+    this.dialog.open(DialPlanComponent, {
+      width: '100vw',
+      maxWidth: '800px'
     });
   }
 
