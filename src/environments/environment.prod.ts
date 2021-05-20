@@ -6,7 +6,7 @@ export const environment = {
   ClientId: {
     Google:
       '411466708563-qovcq88r0ptbsb1o2jjlnms5qu57rdec.apps.googleusercontent.com',
-    Outlook: '495c34a1-c12c-4932-b134-7f3c3ec491d6'
+    Outlook: 'cf34076b-4bb2-4eef-8fdb-a7d7f2376095'
   },
   RedirectUri: {
     Outlook: 'https://app.crmgrow.com/login'
