@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PageMenuItem } from 'src/app/utils/data.types';
 import { UserService } from '../../services/user.service';
-import { getUserLevel } from '../../utils/functions';
-import { PACKAGE_LEVEL } from '../../constants/variable.constants';
 
 @Component({
   selector: 'app-settings',
@@ -41,8 +39,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   routeChangeSubscription: Subscription;
   profileSubscription: Subscription;
-  packageLevel = '';
   disableMenuItems = [];
+  isPackageAssistant = true;
+  isPackageCapture = true;
+  isPackageText = true;
 
   constructor(
     private location: Location,
@@ -52,13 +52,30 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ) {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-        this.disableMenuItems = [
-          { id: 'assistant', icon: 'i-assistant', label: 'Assistant' },
-          { id: 'sms-limits', icon: 'i-sms-limits', label: 'SMS' },
-          { id: 'lead-capture', icon: 'i-lead-capture', label: 'Lead Capture' },
-        ];
+      this.isPackageAssistant = res.assistant_info?.is_enabled;
+      this.isPackageCapture = res.capture_enabled;
+      this.isPackageText = res.text_info?.is_enabled;
+      this.disableMenuItems = [];
+      if (!this.isPackageAssistant) {
+        this.disableMenuItems.push({
+          id: 'assistant',
+          icon: 'i-assistant',
+          label: 'Assistant'
+        });
+      }
+      if (!this.isPackageCapture) {
+        this.disableMenuItems.push({
+          id: 'lead-capture',
+          icon: 'i-lead-capture',
+          label: 'Lead Capture'
+        });
+      }
+      if (!this.isPackageText) {
+        this.disableMenuItems.push({
+          id: 'sms-limits',
+          icon: 'i-sms-limits',
+          label: 'SMS'
+        });
       }
     });
   }
@@ -76,13 +93,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.routeChangeSubscription && this.routeChangeSubscription.unsubscribe();
   }
 
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
-  }
-
   isDisableItem(menuItem): boolean {
     if (menuItem && menuItem.id) {
-      const index = this.disableMenuItems.findIndex((item) => item.id === menuItem.id);
+      const index = this.disableMenuItems.findIndex(
+        (item) => item.id === menuItem.id
+      );
       if (index >= 0) {
         return true;
       }

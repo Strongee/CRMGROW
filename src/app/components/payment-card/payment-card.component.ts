@@ -56,7 +56,6 @@ export class PaymentCardComponent implements OnInit {
   editPayment(): void {
     this.saving = true;
     this.stripeCard.createToken({}).then((res) => {
-      console.log("stripe card change ==========>", res);
       if (res) {
         const data = {
           token: {

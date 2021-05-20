@@ -6,6 +6,7 @@ import {
   ElementRef
 } from '@angular/core';
 import {
+  PACKAGE_LEVEL,
   PHONE_COUNTRIES,
   TIMEZONE
 } from 'src/app/constants/variable.constants';
@@ -37,7 +38,7 @@ export class RegisterComponent implements OnInit {
 
   step = 1;
 
-  package_level = 'PRO';
+  package_level = PACKAGE_LEVEL.PRO.package;
   is_trial = true;
 
   user = {

@@ -6,7 +6,6 @@ import { NoteCreateComponent } from 'src/app/components/note-create/note-create.
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
 import {
   DialogSettings,
-  PACKAGE_LEVEL
 } from 'src/app/constants/variable.constants';
 import { UserService } from 'src/app/services/user.service';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
@@ -16,7 +15,6 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { Subscription } from 'rxjs';
-import { getUserLevel } from '../../utils/functions';
 import { ContactService } from '../../services/contact.service';
 
 @Component({
@@ -50,8 +48,8 @@ export class NavbarComponent implements OnInit {
   keyword = '';
 
   @ViewChild('searchInput') searchInput: ElementRef;
-  packageLevel = '';
   isSuspended = false;
+  isPackageText = true;
   profileSubscription: Subscription;
 
   constructor(
@@ -66,7 +64,7 @@ export class NavbarComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile) {
-          this.packageLevel = profile.package_level;
+          this.isPackageText = profile.text_info?.is_enabled;
           this.isSuspended = profile.subscription?.is_suspended;
         }
       }
@@ -77,10 +75,6 @@ export class NavbarComponent implements OnInit {
     this.connectService.receiveLogout().subscribe(() => {
       this.logout(null);
     });
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   runAction(action: string): void {

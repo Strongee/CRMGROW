@@ -1,6 +1,6 @@
 <div class="v-center justify-content-end mt-xl-0 mt-0 team-list-actions">
   <button type="button" class="btn btn-primary shadow f-6"
-    [class.disable]="getUserLevel() == 'lite'"
+    [class.disable]="!isPackageTeam"
     *ngIf="!hasOwnTeam && (teamService.loading$ | async) == STATUS.SUCCESS"
     (click)="openForm()"
   >

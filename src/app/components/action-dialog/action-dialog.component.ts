@@ -25,7 +25,6 @@ import * as moment from 'moment';
 import { Template } from 'src/app/models/template.model';
 import { searchReg } from 'src/app/helper';
 import { StoreService } from 'src/app/services/store.service';
-import {getUserLevel} from "../../utils/functions";
 
 @Component({
   selector: 'app-action-dialog',
@@ -116,8 +115,6 @@ export class ActionDialogComponent implements OnInit {
   filterImages = [];
 
   loadSubscription: Subscription;
-
-  packageLevel = '';
   profileSubscription: Subscription;
 
   constructor(
@@ -145,7 +142,6 @@ export class ActionDialogComponent implements OnInit {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
-      this.packageLevel = res.package_level;
     });
   }
 
@@ -186,10 +182,6 @@ export class ActionDialogComponent implements OnInit {
         _SELF.searchField.nativeElement.blur();
       }
     }, 300);
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   removeError(): void {

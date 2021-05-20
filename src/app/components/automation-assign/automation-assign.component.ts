@@ -15,14 +15,10 @@ import { AutomationService } from 'src/app/services/automation.service';
 import { ToastrService } from 'ngx-toastr';
 import { SelectContactComponent } from '../select-contact/select-contact.component';
 import { ContactCreateComponent } from '../contact-create/contact-create.component';
-import {
-  DialogSettings,
-  PACKAGE_LEVEL
-} from '../../constants/variable.constants';
+import { DialogSettings } from '../../constants/variable.constants';
 import { ContactService } from '../../services/contact.service';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
-import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-automation-assign',
@@ -37,7 +33,6 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
   submitted = false;
   contactOverflow = false;
   loading = false;
-  packageLevel = '';
   profileSubscription: Subscription;
 
   @ViewChild('contactSelector') contactSelector: SelectContactComponent;
@@ -56,17 +51,9 @@ export class AutomationAssignComponent implements OnInit, OnDestroy {
     if (this.data) {
       this.selectedAutomation = this.data.automation;
     }
-    this.profileSubscription && this.profileSubscription.unsubscribe();
-    this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-    });
   }
 
   ngOnDestroy(): void {}
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
-  }
 
   assignAutomation(): void {
     this.submitted = true;

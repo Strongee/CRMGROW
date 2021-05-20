@@ -4,7 +4,6 @@
     <div class="f-6 font-weight-bold">Automations</div>
     <button type="button" class="btn btn-white-blue v-center"
       (click)="shareAutomation()" *ngIf="role=='editor' || role == 'owner'"
-      [class.disable]="getUserLevel() == 'lite'"
     >
       <i class="i-icon i-plus d-block bgc-blue sm mr-2"></i>
       <span class="f-3 font-weight-bold c-blue">Share Automation</span>

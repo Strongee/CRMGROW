@@ -57,7 +57,7 @@
               <span class="ml-1 f-3 font-weight-bold">Create group call</span>
             </button> -->
             <button class="v-center border-0 c-dark dropdown-item my-1"
-              [class.disable]="getUserLevel() == 'lite'"
+              [class.disable]="!isPackageAutomation"
               (click)="openAppointmentDlg()"
             >
               <i class="i-icon i-appointments bgc-dark"></i>
@@ -68,7 +68,10 @@
               <i class="i-icon i-message bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Email</span>
             </button>
-            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendText()">
+            <button class="v-center border-0 c-dark dropdown-item my-1"
+              [class.disable]="!isPackageText"
+              (click)="openSendText()"
+            >
               <i class="i-icon i-sms-sent bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Text</span>
             </button>
@@ -80,10 +83,10 @@
               <i class="i-icon i-notes bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Note</span>
             </button>
-            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">
-              <i class="i-icon i-phone bgc-dark"></i>
-              <span class="ml-2 f-3 font-weight-bold">New Call</span>
-            </button>            
+<!--            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">-->
+<!--              <i class="i-icon i-phone bgc-dark"></i>-->
+<!--              <span class="ml-2 f-3 font-weight-bold">New Call</span>-->
+<!--            </button>-->
             <hr class="my-1">
             <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openMergeContactDlg()">
               <i class="i-icon i-contact-merge bgc-dark"></i>
@@ -240,7 +243,7 @@
         <!-- Begin Contact Automation Information -->
         <mat-expansion-panel
           class="mat-elevation-z"
-          [class.disable]="getUserLevel() == 'lite'"
+          [class.disable]="!isPackageAutomation"
           hideToggle expanded="true"
         >
           <mat-expansion-panel-header>
@@ -423,11 +426,15 @@
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendEmail()" *ngIf="tab.id === 'email' || (tab.id === 'all' && activityType.id === 'email')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Email</span>
             </div>
-            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendText()" *ngIf="tab.id === 'text' || (tab.id === 'all' && activityType.id === 'text')">
+            <div class="v-center justify-content-end c-pointer ml-auto"
+                 [class.disable]="!isPackageText"
+                 (click)="openSendText()"
+                 *ngIf="tab.id === 'text' || (tab.id === 'all' && activityType.id === 'text')"
+            >
               <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto"
-                 [class.disable]="getUserLevel() == 'lite'"
+                 [class.disable]="!isPackageAutomation"
                  (click)="openAppointmentDlg()"
                  *ngIf="tab.id === 'appointment' || (tab.id === 'all' && activityType.id === 'appointment')"
             >
@@ -703,7 +710,9 @@
 
               </div>
 
-              <div *ngIf="(activityType.id == 'all' || activityType.id == 'text') && (groups[i].type == 'texts' || groups[i].media == 'texts')">
+              <div *ngIf="(activityType.id == 'all' || activityType.id == 'text') && (groups[i].type == 'texts' || groups[i].media == 'texts')"
+                [class.disable]="!isPackageText"
+              >
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
@@ -743,7 +752,7 @@
               </div>
 
               <div *ngIf="(activityType.id == 'all' || activityType.id == 'appointment') && activity.type == 'appointments'"
-                   [class.disable]="getUserLevel() == 'lite'"
+                   [class.disable]="!isPackageAutomation"
               >
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
@@ -1107,7 +1116,7 @@
                   </div>
 
                   <div class="history-detail appointments-detail p-3 mt-3"
-                       [class.disable]="getUserLevel() == 'lite'"
+                       [class.disable]="!isPackageAutomation"
                        *ngSwitchCase="'appointment'"
                   >
                     <div class="v-center justify-content-between mb-3">
