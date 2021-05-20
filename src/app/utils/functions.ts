@@ -108,7 +108,7 @@ export function sortObjectArray(
 
 export function getUserLevel(level): string {
   if (level) {
-    return level;
+    return level.toUpperCase();
   }
   // return PACKAGE_LEVEL.LITE.package;
   return PACKAGE_LEVEL.PRO.package;

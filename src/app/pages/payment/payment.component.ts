@@ -216,11 +216,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   getPackageLabel(): string {
-    if (this.currentPackage.package === 'lite') {
+    if (this.currentPackage.package === 'LITE') {
       return 'Lite';
-    } else if (this.currentPackage.package === 'pro') {
+    } else if (this.currentPackage.package === 'PRO') {
       return 'Professional';
-    } else if (this.currentPackage.package === 'elite') {
+    } else if (this.currentPackage.package === 'ELITE') {
       return 'Elite';
     }
     return 'Custom';
