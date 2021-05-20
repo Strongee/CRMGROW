@@ -572,7 +572,8 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
       for (const key in teamOptions) {
         if (isShareBy) {
           if (
-            !teamOptions[key].members.length || teamOptions[key].members.length === this.teamMembers[key].length
+            !teamOptions[key].members.length ||
+            teamOptions[key].members.length === this.teamMembers[key].length
           ) {
             teamOptions[key]['share_by'] = {
               flag: 1
@@ -591,7 +592,8 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
         }
         if (isShareWith) {
           if (
-            !teamOptions[key].members.length || teamOptions[key].members.length === this.teamMembers[key].length
+            !teamOptions[key].members.length ||
+            teamOptions[key].members.length === this.teamMembers[key].length
           ) {
             teamOptions[key]['share_with'] = {
               flag: 1

@@ -29,11 +29,7 @@ import { AutomationStatusComponent } from 'src/app/components/automation-status/
 import { MatDrawer } from '@angular/material/sidenav';
 import { TeamService } from '../../services/team.service';
 import { Team } from '../../models/team.model';
-import {
-  getUserLevel,
-  sortDateArray,
-  sortStringArray
-} from '../../utils/functions';
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { AutomationBrowserComponent } from '../../components/automation-browser/automation-browser.component';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
@@ -98,7 +94,6 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   };
 
   selectedSort = 'role';
-  packageLevel = '';
 
   constructor(
     public automationService: AutomationService,
@@ -116,7 +111,6 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.userId = res._id;
-      this.packageLevel = res.package_level;
     });
 
     this.loading = true;
@@ -145,10 +139,6 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   changeSearchStr(): void {

@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentCardComponent } from 'src/app/components/payment-card/payment-card.component';
 import {
-  CANCEL_ACCOUNT_REASON,
-  PACKAGE_LEVEL
+  PACKAGE_LEVEL,
+  CANCEL_ACCOUNT_REASON
 } from '../../constants/variable.constants';
 import { getUserLevel } from '../../utils/functions';
 import { Payment } from '../../models/payment.model';
@@ -39,12 +39,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
   saving = false;
 
   profileSubscription: Subscription;
-  currentPackage = PACKAGE_LEVEL.pro;
-  selectedPackage = PACKAGE_LEVEL.pro;
-  litePackage = PACKAGE_LEVEL.lite;
-  proPackage = PACKAGE_LEVEL.pro;
-  elitePackage = PACKAGE_LEVEL.elite;
-  customPackage = PACKAGE_LEVEL.custom;
+  currentPackage = PACKAGE_LEVEL.PRO;
+  selectedPackage = PACKAGE_LEVEL.PRO;
+  litePackage = PACKAGE_LEVEL.LITE;
+  proPackage = PACKAGE_LEVEL.PRO;
+  elitePackage = PACKAGE_LEVEL.ELITE;
+  customPackage = PACKAGE_LEVEL.CUSTOM;
 
   packageLevel = '';
   step = 1;
@@ -183,24 +183,24 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (level === this.currentPackage.package) {
       return 'Your Plan';
     } else {
-      if (level === PACKAGE_LEVEL.lite.package) {
-        if (this.currentPackage.package === PACKAGE_LEVEL.custom.package) {
+      if (level === PACKAGE_LEVEL.LITE.package) {
+        if (this.currentPackage.package === PACKAGE_LEVEL.CUSTOM.package) {
           return 'Get Lite';
         } else {
           return 'Downgrade';
         }
-      } else if (level === PACKAGE_LEVEL.pro.package) {
+      } else if (level === PACKAGE_LEVEL.PRO.package) {
         if (
-          this.currentPackage.package === PACKAGE_LEVEL.lite.package ||
-          this.currentPackage.package === PACKAGE_LEVEL.custom.package
+          this.currentPackage.package === PACKAGE_LEVEL.LITE.package ||
+          this.currentPackage.package === PACKAGE_LEVEL.CUSTOM.package
         ) {
           return 'Get Pro';
         } else {
           return 'Downgrade';
         }
-      } else if (level === PACKAGE_LEVEL.elite.package) {
+      } else if (level === PACKAGE_LEVEL.ELITE.package) {
         return 'Get Elite';
-      } else if (level === PACKAGE_LEVEL.custom.package) {
+      } else if (level === PACKAGE_LEVEL.CUSTOM.package) {
         return 'Contact us';
       }
     }
@@ -249,8 +249,14 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   updatePackage(): void {
+    let level = '';
+    if (this.selectedPackage.package === 'lite') {
+      level = 'BASIC';
+    } else {
+      level = this.selectedPackage.package.toUpperCase();
+    }
     const data = {
-      level: this.selectedPackage.package.toUpperCase()
+      level
     };
 
     this.loadingUpdatePackage = true;

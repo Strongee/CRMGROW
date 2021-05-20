@@ -6,7 +6,6 @@ import {
   BulkActions,
   CONTACT_SORT_OPTIONS,
   DialogSettings,
-  PACKAGE_LEVEL,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
@@ -27,7 +26,6 @@ import { ContactCreateComponent } from 'src/app/components/contact-create/contac
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
-import { getUserLevel } from '../../utils/functions';
 import {
   startCampaign,
   addCallStartedListener,
@@ -100,8 +98,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
   isUpdating = false;
   updateSubscription: Subscription;
   profileSubscription: Subscription;
-  packageLevel = '';
   disableActions = [];
+  isPackageGroupEmail = true;
+  isPackageText = true;
+  isPackageAutomation = true;
 
   constructor(
     public router: Router,
@@ -115,24 +115,28 @@ export class ContactsComponent implements OnInit, OnDestroy {
   ) {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-        this.disableActions = [
-          {
-            label: 'Send email',
-            type: 'button',
-            icon: 'i-message',
-            command: 'message',
-            loading: false
-          },
-          {
-            label: 'Add automation',
-            type: 'button',
-            icon: 'i-automation',
-            command: 'automation',
-            loading: false
-          }
-        ];
+      this.isPackageAutomation = res.automation_info?.is_enabled;
+      this.isPackageGroupEmail = res.email_info?.mass_enable;
+      this.isPackageText = res.text_info?.is_enabled;
+
+      this.disableActions = [];
+      if (!this.isPackageAutomation) {
+        this.disableActions.push({
+          label: 'Add automation',
+          type: 'button',
+          icon: 'i-automation',
+          command: 'automation',
+          loading: false
+        });
+      }
+      if (!this.isPackageGroupEmail) {
+        this.disableActions.push({
+          label: 'Send email',
+          type: 'button',
+          icon: 'i-message',
+          command: 'message',
+          loading: false
+        });
       }
     });
   }
@@ -198,10 +202,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
         return true;
       }
     });
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   /**

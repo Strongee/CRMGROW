@@ -24,7 +24,6 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ConnectService } from 'src/app/services/connect.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { Subscription } from 'rxjs';
-import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-material-send',
@@ -56,9 +55,6 @@ export class MaterialSendComponent implements OnInit {
   templateValue = '';
   set = 'twitter';
 
-  packageLevel = '';
-  profileSubscription: Subscription;
-
   constructor(
     private userService: UserService,
     private contactService: ContactService,
@@ -73,11 +69,6 @@ export class MaterialSendComponent implements OnInit {
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-
-    this.profileSubscription && this.profileSubscription.unsubscribe();
-    this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-    });
 
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
@@ -140,10 +131,6 @@ export class MaterialSendComponent implements OnInit {
     if (defaultSms) {
       this.textContent = defaultSms.content;
     }
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   selectNewContacts(event): void {

@@ -1620,131 +1620,17 @@ export const AUTOMATION_ICONS = {
 };
 
 export const PACKAGE_LEVEL = {
-  lite: {
-    package: 'lite',
-    price: 29,
-    contact_info: {
-      max_count: 200
-    },
-    video_info: {
-      upload_max_count: 10,
-      record_max_length: 10
-    },
-    automation_info: {
-      max_count: 0
-    },
-    assistant_access: {
-      max_count: 0
-    },
-    onbording_plus: {
-      price: 79
-    },
-    early_beta_access: false,
-    roadmap: false,
-    deal_pipeline_tracking: true,
-    custom_labels: true,
-    activity_tracker: true,
-    lead_capture: false,
-    advanced_filters: true,
-    tag_management: true,
-    mail_template: true,
-    merge_tokens: true,
-    email_tracking: false,
-    mass_email: false,
-    automations: false,
-    teams: true,
-    online_support: true,
-    email_support: false,
-    priority_support: false
+  LITE: {
+    package: 'LITE'
   },
-  pro: {
-    package: 'pro',
-    price: 49,
-    contact_info: {
-      max_count: 2000
-    },
-    video_info: {
-      upload_max_count: 100,
-      record_max_length: 120
-    },
-    automation_info: {
-      max_count: 300
-    },
-    assistant_access: {
-      max_count: 1
-    },
-    onbording_plus: {
-      price: 49
-    },
-    sms_info: {
-      max_count: 250
-    },
-    calendar_info: {
-      max_count: 1
-    },
-    early_beta_access: true,
-    roadmap: false,
-    deal_pipeline_tracking: true,
-    custom_labels: true,
-    activity_tracker: true,
-    lead_capture: true,
-    advanced_filters: true,
-    tag_management: true,
-    mail_template: true,
-    merge_tokens: true,
-    email_tracking: true,
-    mass_email: true,
-    automations: true,
-    teams: true,
-    online_support: true,
-    email_support: true,
-    priority_support: false
+  PRO: {
+    package: 'PRO'
   },
-  elite: {
-    package: 'elite',
-    price: 99,
-    contact_info: {
-      max_count: 20000
-    },
-    video_info: {
-      upload_max_count: 'Unlimited',
-      record_max_length: 1000
-    },
-    automation_info: {
-      max_count: 3000
-    },
-    assistant_access: {
-      max_count: 3
-    },
-    onbording_plus: {
-      price: 0
-    },
-    sms_info: {
-      max_count: 750
-    },
-    calendar_info: {
-      max_count: 3
-    },
-    early_beta_access: true,
-    roadmap: true,
-    deal_pipeline_tracking: true,
-    custom_labels: true,
-    activity_tracker: true,
-    lead_capture: true,
-    advanced_filters: true,
-    tag_management: true,
-    mail_template: true,
-    merge_tokens: true,
-    email_tracking: true,
-    mass_email: true,
-    automations: true,
-    teams: true,
-    online_support: true,
-    email_support: true,
-    priority_support: true
+  ELITE: {
+    package: 'ELITE'
   },
-  custom: {
-    package: 'custom'
+  CUSTOM: {
+    package: 'CUSTOM'
   }
 };
 

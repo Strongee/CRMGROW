@@ -27,7 +27,6 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
-import { getUserLevel } from '../../utils/functions';
 const Quill: any = QuillNamespace;
 const Delta = Quill.import('delta');
 const Parchment = Quill.import('parchment');
@@ -211,7 +210,6 @@ export class HtmlEditorComponent implements OnInit {
   overlayRef: OverlayRef;
   templatePortal: TemplatePortal;
 
-  packageLevel = '';
   profileSubscription: Subscription;
 
   constructor(
@@ -228,19 +226,11 @@ export class HtmlEditorComponent implements OnInit {
     private appRef: ApplicationRef,
     private stripTags: StripTagsPipe
   ) {
-    this.profileSubscription && this.profileSubscription.unsubscribe();
-    this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-    });
     this.templateService.loadAll(false);
     this.authToken = this.userService.getToken();
   }
 
   ngOnInit(): void {}
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
-  }
 
   insertValue(value: string): void {
     if (value && this.quillEditorRef && this.quillEditorRef.clipboard) {

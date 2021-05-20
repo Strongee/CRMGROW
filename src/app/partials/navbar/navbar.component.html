@@ -88,7 +88,7 @@
         </div>
       </div>
       <!-- Incoming Chat Message Wrapper -->
-      <div class="nav-item" [class.suspended]="isSuspended" [class.disable]="getUserLevel() == 'lite'">
+      <div class="nav-item" [class.suspended]="isSuspended" [class.disable]="!isPackageText">
         <div class="chat-messages-wrapper detail-wrapper" ngbDropdown display="dynamic" placement="bottom-right">
           <a [routerLink]="['/messages']" class="no-carot">
             <i class="i-icon i-sms-sent bgc-blue d-block"></i>
