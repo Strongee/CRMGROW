@@ -25,7 +25,6 @@ import { TaskBulkComponent } from '../../components/task-bulk/task-bulk.componen
 import { ActivityService } from '../../services/activity.service';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { ToastrService } from 'ngx-toastr';
-import { getUserLevel } from '../../utils/functions';
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
@@ -88,7 +87,6 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
   loadSubscription: Subscription;
-  packageLevel = '';
 
   constructor(
     private handlerService: HandlerService,
@@ -104,7 +102,6 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
-        this.packageLevel = user.package_level;
       } catch (err) {
         const timezone = getCurrentTimezone();
         this.timezone = { zone: user.time_zone || timezone };
@@ -129,10 +126,6 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.taskService.resetOption();
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.profileSubscription && this.profileSubscription.unsubscribe();
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   loadTasks(): void {

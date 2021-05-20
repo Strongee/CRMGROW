@@ -8,10 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { TeamService } from '../../services/team.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { environment } from 'src/environments/environment';
-import {
-  BulkActions,
-  PACKAGE_LEVEL
-} from 'src/app/constants/variable.constants';
+import { BulkActions } from 'src/app/constants/variable.constants';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { Subscription } from 'rxjs';
@@ -29,11 +26,7 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
-import {
-  getUserLevel,
-  sortDateArray,
-  sortStringArray
-} from '../../utils/functions';
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 import { saveAs } from 'file-saver';
@@ -147,8 +140,10 @@ export class MaterialsComponent implements OnInit {
     views: false
   };
 
-  packageLevel = '';
   disableActions = [];
+  isPackageGroupEmail = true;
+  isPackageText = true;
+  isPackageCapture = true;
 
   constructor(
     private dialog: MatDialog,
@@ -165,24 +160,27 @@ export class MaterialsComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user_id = profile._id;
-        this.packageLevel = profile.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-          this.disableActions = [
-            {
-              label: 'Send via Text',
-              type: 'button',
-              icon: 'i-sms-sent',
-              command: 'text',
-              loading: false
-            },
-            {
-              label: 'Capture',
-              type: 'toggle',
-              status: false,
-              command: 'lead_capture',
-              loading: false
-            }
-          ];
+        this.isPackageCapture = profile.capture_enabled;
+        this.isPackageGroupEmail = profile.email_info?.mass_enable;
+        this.isPackageText = profile.text_info?.is_enabled;
+        this.disableActions = [];
+        if (!this.isPackageCapture) {
+          this.disableActions.push({
+            label: 'Capture',
+            type: 'toggle',
+            status: false,
+            command: 'lead_capture',
+            loading: false
+          });
+        }
+        if (!this.isPackageText) {
+          this.disableActions.push({
+            label: 'Send via Text',
+            type: 'button',
+            icon: 'i-sms-sent',
+            command: 'text',
+            loading: false
+          });
         }
       }
     );
@@ -318,10 +316,6 @@ export class MaterialsComponent implements OnInit {
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
     clearInterval(this.convertLoaderTimer);
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   isSelected(element: Material): boolean {

@@ -243,7 +243,12 @@
                 <button class="v-center btn p-1 px-3 c-dark" (click)="sendMaterial(element, 'email')" placement="bottom" ngbTooltip="Send via Email">
                   <i class="i-icon i-message bgc-dark" aria-hidden="true"></i>
                 </button>
-                <button class="v-center btn p-1 px-3 c-dark " (click)="sendMaterial(element, 'text')" placement="bottom" ngbTooltip="Send via Text">
+                <button class="v-center btn p-1 px-3 c-dark"
+                  (click)="sendMaterial(element, 'text')"
+                  placement="bottom"
+                  ngbTooltip="Send via Text"
+                  [class.disable]="!isPackageText"
+                >
                   <i class="i-icon i-sms-sent bgc-dark" aria-hidden="true"></i>
                 </button>
                 <button class="v-center btn p-1 px-3 c-dark" (click)="copyLink(element)" placement="bottom" ngbTooltip="Copy link">
@@ -263,7 +268,7 @@
           <td mat-cell
               *matCellDef="let element"
               class="capture-col"
-              [class.disable]="getUserLevel() == 'lite'"
+              [class.disable]="!isPackageCapture"
           >
             <div class="v-center custom-control custom-switch p-0" *ngIf="element.material_type !== 'folder'">
               <label class="custom-toggle mb-0" placement="top">

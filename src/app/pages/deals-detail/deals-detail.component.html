@@ -26,7 +26,7 @@
                     </div>
                     <div ngbDropdownMenu class="light action-menu">
                       <button class="v-center border-0 c-dark dropdown-item my-1"
-                        [class.disable]="getUserLevel() == 'lite'"
+                        [class.disable]="!isPackageAutomation"
                         (click)="openAppointmentDlg()"
                       >
                         <i class="i-icon i-appointments bgc-dark"></i>
@@ -39,7 +39,10 @@
                         <i class="i-icon i-message bgc-dark"></i>
                         <span class="ml-2 f-3 font-weight-bold">New Email</span>
                       </button>
-                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendText()">
+                      <button class="v-center border-0 c-dark dropdown-item my-1"
+                        (click)="openSendText()"
+                        [class.disable]="!isPackageText"
+                      >
                         <i class="i-icon i-sms-sent bgc-dark"></i>
                         <span class="ml-2 f-3 font-weight-bold">New Text</span>
                       </button>
@@ -238,7 +241,7 @@
                 <div class="v-center justify-content-end c-pointer ml-auto"
                      (click)="openAppointmentDlg()"
                      *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')"
-                     [class.disable]="getUserLevel() == 'lite'"
+                     [class.disable]="!isPackageAutomation"
                 >
                   <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
                 </div>
@@ -499,7 +502,9 @@
 
                   </div>
 
-                  <div *ngIf="(activityType.id == 'all' || activityType.id == 'texts') && (groups[i].type == 'texts' || groups[i].media == 'texts')">
+                  <div *ngIf="(activityType.id == 'all' || activityType.id == 'texts') && (groups[i].type == 'texts' || groups[i].media == 'texts')"
+                    [class.disable]="!isPackageText"
+                  >
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">
@@ -539,7 +544,7 @@
                   </div>
 
                   <div *ngIf="(activityType.id == 'all' || activityType.id == 'appointments') && activity.type == 'appointments'"
-                       [class.disable]="getUserLevel() == 'lite'"
+                       [class.disable]="!isPackageAutomation"
                   >
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
@@ -786,7 +791,10 @@
                         </ng-container>
                       </div>
 
-                      <div class="history-detail texts-detail p-3 mt-3" *ngSwitchCase="'texts'">
+                      <div class="history-detail texts-detail p-3 mt-3"
+                           *ngSwitchCase="'texts'"
+                           [class.disable]="!isPackageText"
+                      >
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-{{detail.data_type}}"></i></div>
                           <div class="">
@@ -837,7 +845,7 @@
                       </div>
 
                       <div class="history-detail appointments-detail p-3 mt-3"
-                           [class.disable]="getUserLevel() == 'lite'"
+                           [class.disable]="!isPackageAutomation"
                            *ngSwitchCase="'appointments'"
                       >
                         <div class="v-center justify-content-between mb-3">

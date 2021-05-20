@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
-import { getUserLevel } from '../../utils/functions';
-import { PACKAGE_LEVEL } from '../../constants/variable.constants';
 
 declare interface RouteInfo {
   path: string;
@@ -131,36 +129,39 @@ export class SidebarComponent implements OnInit {
   profile: any = {};
   isSuspended = false;
   profileSubscription: Subscription;
-  packageLevel = '';
+  isPackageAutomation = true;
+  isPackageCalendar = true;
 
   constructor(private router: Router, public userService: UserService) {
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       if (user) {
         this.isSuspended = user.subscription?.is_suspended;
-        this.packageLevel = user.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-          this.disableMenuItems = [
-            {
-              path: 'automations',
-              title: 'Automations',
-              icon: 'i-automation bgc-dark',
-              class: '',
-              beta: false,
-              betaClass: '',
-              betaLabel: '',
-              protectedRole: null
-            },
-            {
-              path: 'calendar',
-              title: 'Calendar',
-              icon: 'i-calendar bgc-dark',
-              class: '',
-              beta: false,
-              betaClass: '',
-              betaLabel: '',
-              protectedRole: null
-            }
-          ];
+        this.isPackageAutomation = user.automation_info?.is_enabled;
+        this.isPackageCalendar = user.calendar_info?.is_enabled;
+        this.disableMenuItems = [];
+        if (!this.isPackageAutomation) {
+          this.disableMenuItems.push({
+            path: 'automations',
+            title: 'Automations',
+            icon: 'i-automation bgc-dark',
+            class: '',
+            beta: false,
+            betaClass: '',
+            betaLabel: '',
+            protectedRole: null
+          });
+        }
+        if (!this.isPackageCalendar) {
+          this.disableMenuItems.push({
+            path: 'calendar',
+            title: 'Calendar',
+            icon: 'i-calendar bgc-dark',
+            class: '',
+            beta: false,
+            betaClass: '',
+            betaLabel: '',
+            protectedRole: null
+          });
         }
       }
     });
@@ -170,10 +171,6 @@ export class SidebarComponent implements OnInit {
     // this.router.events.subscribe(() => {
     //   this.isCollapsed = true;
     // });
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   isDisableItem(menuItem): boolean {

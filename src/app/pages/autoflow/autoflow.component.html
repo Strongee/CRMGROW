@@ -28,7 +28,7 @@
                 >
 
               </div>
-              <div class="btn-wrapper ml-2" [class.disable]="getUserLevel() == 'lite'">
+              <div class="btn-wrapper ml-2" [class.disable]="!isPackageAutomation">
                 <button class="btn btn-primary br-default" [class.loading]="isSaving" type="submit">
                   {{this.editMode ? 'Save' : 'Create'}}
                 </button>
@@ -76,7 +76,7 @@
                   <div ngbDropdownMenu class="light">
                     <button type="button"
                       class="v-center border-0 py-2 c-dark dropdown-item"
-                      [class.disable]="getUserLevel() == 'lite'"
+                      [class.disable]="!isPackageAutomation"
                       (click)="duplicate($event, automation)"
                     >
                       <span class="f-3 font-weight-bold">Clone</span>
@@ -90,7 +90,7 @@
                     <hr class="my-1">
                     <button type="button"
                       class="v-center border-0 py-2 c-dark dropdown-item"
-                      [class.disable]="getUserLevel() == 'lite'"
+                      [class.disable]="!isPackageAutomation"
                       (click)="delete()"
                     >
                       <span class="c-red f-3 font-weight-bold">Delete automation</span>

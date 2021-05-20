@@ -18,7 +18,6 @@ import { TaskCreateComponent } from 'src/app/components/task-create/task-create.
 import {
   CALENDAR_DURATION,
   DialogSettings,
-  PACKAGE_LEVEL,
   ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
@@ -50,7 +49,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 import { AdditionalFieldsComponent } from '../../components/additional-fields/additional-fields.component';
 import { AdditionalEditComponent } from '../../components/additional-edit/additional-edit.component';
-import { getUserLevel } from '../../utils/functions';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 
@@ -137,8 +135,9 @@ export class DealsDetailComponent implements OnInit {
   dealTitle = '';
   saving = false;
   saveSubscription: Subscription;
-  packageLevel = '';
   disableTabs = [];
+  isPackageAutomation = true;
+  isPackageText = true;
 
   data = {
     materials: [],
@@ -196,14 +195,25 @@ export class DealsDetailComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
-        this.packageLevel = user.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-          this.disableTabs = [
-            { icon: '', label: 'Appointments', id: 'appointments' }
-          ];
+        this.isPackageAutomation = user.automation_info?.is_enabled;
+        this.isPackageText = user.text_info?.is_enabled;
+        this.disableTabs = [];
+        if (!this.isPackageAutomation) {
+          this.disableTabs.push({
+            icon: '',
+            label: 'Appointments',
+            id: 'appointments'
+          });
           const index = this.tabs.findIndex(
             (item) => item.id === 'appointments'
           );
+          if (index >= 0) {
+            this.tabs.splice(index, 1);
+          }
+        }
+        if (!this.isPackageText) {
+          this.disableTabs.push({ icon: '', label: 'Texts', id: 'texts' });
+          const index = this.tabs.findIndex((item) => item.id === 'texts');
           if (index >= 0) {
             this.tabs.splice(index, 1);
           }
@@ -257,10 +267,6 @@ export class DealsDetailComponent implements OnInit {
     this.stageLoadSubscription && this.stageLoadSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.teamsLoadSubscription && this.teamsLoadSubscription.unsubscribe();
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   changeSelectedStage(): void {
@@ -1626,7 +1632,6 @@ export class DealsDetailComponent implements OnInit {
             .editDeal(this.deal.main._id, this.deal.main)
             .subscribe((deal) => {
               if (deal) {
-                console.log('update deal ========>', deal);
               }
             });
         }

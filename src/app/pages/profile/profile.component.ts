@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.disableMenuItems = [
             { id: 'general', icon: 'i-general', label: 'Info' },
             { id: 'signature', icon: 'i-signature', label: 'Signature' },
-            { id: 'security', icon: 'i-security', label: 'Security' },
+            { id: 'security', icon: 'i-security', label: 'Security' }
           ];
         }
       }
@@ -108,7 +108,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.initStep = 2;
         this.currentPageItem = [this.menuItems[3]];
         this.currentPage = 'billing';
-        console.log("upgrade-billing ========>", this.initStep);
       } else {
         this.currentPageItem = this.menuItems.filter(
           (item) => item.id == this.currentPage
@@ -136,7 +135,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   isDisableMenuItem(menuItem): boolean {
-    const index = this.disableMenuItems.findIndex((item) => item.id === menuItem.id);
+    const index = this.disableMenuItems.findIndex(
+      (item) => item.id === menuItem.id
+    );
     if (index >= 0) {
       return true;
     }
