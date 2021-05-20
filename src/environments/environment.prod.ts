@@ -5,7 +5,7 @@ export const environment = {
   website: 'https://ecsbe.crmgrow.com',
   ClientId: {
     Google:
-      '630484366982-m6e66b06vlo0g6ebg9h2q5t7nrk2rimr.apps.googleusercontent.com',
+      '411466708563-qovcq88r0ptbsb1o2jjlnms5qu57rdec.apps.googleusercontent.com',
     Outlook: '495c34a1-c12c-4932-b134-7f3c3ec491d6'
   },
   RedirectUri: {
