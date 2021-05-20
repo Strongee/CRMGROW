@@ -1,7 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/models/user.model';
 import { PageMenuItem } from 'src/app/utils/data.types';
 import { UserService } from '../../services/user.service';
 
@@ -37,8 +39,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
   currentPage: string;
   currentPageItem: PageMenuItem[];
 
+  queryParamSubscription: Subscription;
   routeChangeSubscription: Subscription;
   profileSubscription: Subscription;
+  user: User = new User();
   disableMenuItems = [];
   isPackageAssistant = true;
   isPackageCapture = true;
@@ -48,6 +52,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private location: Location,
     private route: ActivatedRoute,
     private userService: UserService,
+    private toast: ToastrService,
     private router: Router
   ) {
     this.profileSubscription && this.profileSubscription.unsubscribe();
@@ -81,8 +86,67 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.queryParamSubscription && this.queryParamSubscription.unsubscribe();
+    this.queryParamSubscription = this.route.queryParams.subscribe((params) => {
+      if (params['code']) {
+        const page = this.route.snapshot.routeConfig.path;
+        let action = '';
+        if (page.indexOf('profile/outlook') !== -1) {
+          action = 'outlook';
+        } else if (page.indexOf('profile/gmail') !== -1) {
+          action = 'gmail';
+        }
+        if (action == 'outlook') {
+          this.currentPage = 'integration';
+          this.userService.authorizeOutlook(params['code']).subscribe(
+            (res) => {
+              this.user.connected_email_type = 'outlook';
+              this.user.primary_connected = true;
+              this.user.connected_email = res['data'];
+              this.userService.updateProfile(this.user).subscribe((data) => {
+                this.userService.updateProfileImpl(data);
+              });
+              this.toast.success(
+                'Your Outlook mail is connected successfully.'
+              );
+              this.location.replaceState('/settings/integration');
+            },
+            (err) => {
+              this.location.replaceState('/settings/integration');
+            }
+          );
+        }
+        if (action == 'gmail') {
+          this.currentPage = 'integration';
+          this.userService.authorizeGoogle(params['code']).subscribe(
+            (res) => {
+              this.user.connected_email_type = 'gmail';
+              this.user.primary_connected = true;
+              this.user.connected_email = res['data'];
+              this.userService.updateProfile(this.user).subscribe((data) => {
+                this.userService.updateProfileImpl(data);
+              });
+              this.toast.success('Your Gmail is connected successfully.');
+              this.location.replaceState('/settings/integration');
+            },
+            (err) => {
+              this.location.replaceState('/settings/integration');
+            }
+          );
+        }
+      }
+    });
+
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
-      this.currentPage = params['page'] || this.defaultPage;
+      console.log('current Page', params, this.route.snapshot, this.router);
+      if (
+        !params['page'] &&
+        this.route.snapshot.routeConfig.path.indexOf('profile') !== -1
+      ) {
+        this.currentPage = 'integration';
+      } else {
+        this.currentPage = params['page'] || this.defaultPage;
+      }
       this.currentPageItem = this.menuItems.filter(
         (item) => item.id == this.currentPage
       );

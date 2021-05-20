@@ -216,14 +216,21 @@ export const AdminLayoutRoutes: Routes = [
     }
   },
   {
-    path: 'profile/:page',
-    component: ProfileComponent,
+    path: 'profile/outlook',
+    component: SettingsComponent,
     data: {
-      title: 'Profile'
+      title: 'Settings'
     }
   },
   {
-    path: 'profile/:action',
+    path: 'profile/gmail',
+    component: SettingsComponent,
+    data: {
+      title: 'Settings'
+    }
+  },
+  {
+    path: 'profile/:page',
     component: ProfileComponent,
     data: {
       title: 'Profile'
