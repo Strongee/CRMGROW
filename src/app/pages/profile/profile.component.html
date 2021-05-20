@@ -3,8 +3,8 @@
   <div class="sub-sidebar-mobile mb-2">
     <div ngbDropdown class="sidebar-menu p-2">
       <div ngbDropdownToggle class="v-center">
-        <i class="i-icon bgc-blue {{currentPageItem[0].icon}} mr-2"></i>
-        <span class="f-3 menu-label font-weight-bold c-blue">{{currentPageItem[0].label | translate}}</span>
+        <i class="i-icon bgc-blue {{currentPageItem[0]?.icon}} mr-2"></i>
+        <span class="f-3 menu-label font-weight-bold c-blue">{{currentPageItem[0]?.label | translate}}</span>
       </div>
       <div ngbDropdownMenu class="light">
         <div *ngFor="let menuItem of menuItems" class="dropdown-item">

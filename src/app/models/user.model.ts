@@ -130,7 +130,6 @@ export class User implements Deserializable {
     outlook_refresh_token?: string;
   }[];
 
-
   deserialize(input: any): this {
     return Object.assign(this, input);
   }
