@@ -159,6 +159,7 @@ import { StripeModule } from 'stripe-angular';
 import { STRIPE_KEY } from '../constants/variable.constants';
 import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-error.component';
 import { DialPlanComponent } from './dial-plan/dial-plan.component';
+import { StopShareContactComponent } from './stop-share-contact/stop-share-contact.component';
 
 @NgModule({
   declarations: [
@@ -314,7 +315,8 @@ import { DialPlanComponent } from './dial-plan/dial-plan.component';
     PlayTimelinesComponent,
     InputContactDealComponent,
     UpgradePlanErrorComponent,
-    DialPlanComponent
+    DialPlanComponent,
+    StopShareContactComponent
   ],
   imports: [
     CommonModule,

@@ -609,7 +609,19 @@ export class ContactService extends HttpService {
       })
       .pipe(
         map((res) => res),
-        catchError(this.handleError('BULK CREATE CONTACTS', []))
+        catchError(this.handleError('SHARE CONTACTS TO TEAM', []))
+      );
+  }
+
+  stopShareContacts(contacts, user): Observable<any> {
+    return this.httpClient
+      .post(this.server + CONTACT.STOP_SHARE, {
+        contacts,
+        user
+      })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('STOP SHARE CONTACTS', []))
       );
   }
 

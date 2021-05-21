@@ -57,7 +57,7 @@
 
         <ng-container matColumnDef="loader-cell">
           <th mat-header-cell
-              *matHeaderCellDef colspan="12" class="loader-cell">
+              *matHeaderCellDef colspan="10" class="loader-cell">
             <div class="updating-status"
                  *ngIf="paginationLoading">
               LOADING
@@ -101,7 +101,7 @@
             <th mat-header-cell
                 *ngIf="!selection.length; else toolHeader"> contact name </th>
             <ng-template #toolHeader>
-              <th mat-header-cell colspan="8">
+              <th mat-header-cell colspan="10">
                 <div class="v-center">
                   <span class="c-dark f-3 text-lowercase font-weight-bold">{{selection.length}} selected</span>
                   <app-actions-header [actions]="ACTIONS" [disableActions]="disableActions" (doCommand)="doAction($event)"></app-actions-header>
@@ -259,8 +259,21 @@
           </td>
         </ng-container>
 
+        <!-- Action Column -->
+        <ng-container matColumnDef="share-action">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell class="address-col" *ngIf="!selection.length"></th>
+          </ng-container>
+          <td mat-cell
+              *matCellDef="let element" class="share-action">
+            <button class="v-center btn py-1 ml-auto px-0 c-dark" (click)="stopShare($event, element)" placement="bottom" ngbTooltip="Stop Share">
+              <i class="i-icon i-block d-block bgc-dark" aria-hidden="true"></i>
+            </button>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="selection_info">
-          <th mat-header-cell *matHeaderCellDef colspan="9" class="text-center">
+          <th mat-header-cell *matHeaderCellDef colspan="10" class="text-center">
             <span *ngIf="selection.length !== contactCount; else deselectTemplate">
               {{selection.length}} contacts are selected.
               <span  class="c-blue font-weight-bold" *ngIf="selecting">
