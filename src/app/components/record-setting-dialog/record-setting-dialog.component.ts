@@ -34,8 +34,6 @@ import { Video } from 'src/app/models/video.model';
   styleUrls: ['./record-setting-dialog.component.scss']
 })
 export class RecordSettingDialogComponent implements OnInit {
-  SERVER =
-    'http://teamgrow-staticsite-green.s3-website-us-west-1.amazonaws.com';
   hasCamera = false;
   hasMic = false;
   isCamAlreadyCaptured = false;
@@ -66,8 +64,7 @@ export class RecordSettingDialogComponent implements OnInit {
   recordStep = 1;
   popup;
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
-  redirectUrl =
-    'http://teamgrow-staticsite-green.s3-website-us-west-1.amazonaws.com/materials?video=';
+  redirectUrl = environment.website;
   authToken = '';
   userId = '';
   serverVideoId = '';
@@ -277,7 +274,10 @@ export class RecordSettingDialogComponent implements OnInit {
       this.dialogRef.close();
       let popup;
       if (!popup || popup.closed) {
-        popup = window.open(this.redirectUrl + videoId, videoId);
+        popup = window.open(
+          `${this.redirectUrl}/materials?video=${videoId}`,
+          videoId
+        );
       } else {
         popup.focus();
       }
@@ -426,7 +426,10 @@ export class RecordSettingDialogComponent implements OnInit {
             const videoId = e.data;
             let popup;
             if (!popup || popup.closed) {
-              popup = window.open(this.redirectUrl + videoId, videoId);
+              popup = window.open(
+                `${this.redirectUrl}/materials?video=${videoId}`,
+                videoId
+              );
             } else {
               popup.focus();
             }
