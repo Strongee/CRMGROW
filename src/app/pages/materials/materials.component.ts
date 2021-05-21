@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialService } from 'src/app/services/material.service';
@@ -37,12 +37,14 @@ import {
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 import { saveAs } from 'file-saver';
+import { VideoPopupComponent } from 'src/app/components/video-popup/video-popup.component';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
   styleUrls: ['./materials.component.scss']
 })
-export class MaterialsComponent implements OnInit {
+export class MaterialsComponent implements OnInit, AfterViewInit {
   DISPLAY_COLUMNS = [
     'select',
     'material_name',
@@ -160,7 +162,8 @@ export class MaterialsComponent implements OnInit {
     private toast: ToastrService,
     private router: Router,
     private clipboard: Clipboard,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -310,6 +313,33 @@ export class MaterialsComponent implements OnInit {
       if (Object.keys(this.convertingVideos).length) {
         this.loadConvertingStatus();
       }
+    }, 5000);
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.route.queryParams.subscribe((params) => {
+        if (params['video']) {
+          const _id = params['video'];
+          const material = this.filteredMaterials.filter((e) => e._id == _id);
+          this.dialog
+            .open(VideoPopupComponent, {
+              position: { top: '5vh' },
+              width: '100vw',
+              maxWidth: '500px',
+              disableClose: true,
+              data: {
+                material: material[0]
+              }
+            })
+            .afterClosed()
+            .subscribe((res) => {
+              if (res) {
+                this.location.replaceState(`/materials`);
+              }
+            });
+        }
+      });
     }, 5000);
   }
 
@@ -924,7 +954,10 @@ export class MaterialsComponent implements OnInit {
         width: '100%',
         height: '100%',
         panelClass: 'trans-modal',
-        backdropClass: 'trans'
+        backdropClass: 'trans',
+        data: {
+          id: this.user_id
+        }
       })
       .afterClosed()
       .subscribe((res) => {
