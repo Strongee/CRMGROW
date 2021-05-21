@@ -9,7 +9,7 @@ export const environment = {
     Outlook: 'cf34076b-4bb2-4eef-8fdb-a7d7f2376095'
   },
   RedirectUri: {
-    Outlook: 'https://app.crmgrow.com/login'
+    Outlook: 'https://app-v2.crmgrow.com/login'
   },
   API_KEY: {
     Youtube: 'AIzaSyDnuZGQ1pP5Wr-z1yIk8DQKmN1MJfjK5wc',

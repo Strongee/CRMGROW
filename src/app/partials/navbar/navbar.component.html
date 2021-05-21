@@ -95,6 +95,49 @@
           </a>
         </div>
       </div>
+      <!-- Emailing Task Progressing Status -->
+      <div class="nav-item" *ngIf="emailTasks && emailTasks.length">
+        <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showEmails=true" (mouseleave)="showEmails=false">
+          <a [routerLink]="['/messages']" class="no-carot d-block position-relative">
+            <i class="i-icon i-sent-mail bgc-blue d-block email-sending-icon"></i>
+            <span class="badge email-badge">{{emailTasks.length}}</span>
+          </a>
+          <div class="detail-panel">
+            <ng-container *ngFor="let task of emailTasks">
+              <div class="process-item">
+                <div class="email-subject font-weight-bold">
+                  {{task.details?.subject}}
+                </div>
+                <ng-container *ngIf="!task.failed && !task.succeed; else pendingProcess">
+                  <!-- Awaiting Process -->
+                  <div class="sending-status f-3">
+                    <span class="title op-56">Contacts:</span> <span class="value">{{task.details?.contacts.length}}</span>
+                  </div>
+                  <div class="time">
+                    <div class="end-time f-3">
+                      <span class="title op-56">Planned at: </span>
+                      <span class="value">{{task.exp_start | date: 'hh:mm M/dd'}} - {{task.exp_end | date: 'hh:mm M/dd'}}</span>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #pendingProcess>
+                  <div class="sending-status f-3">
+                    <span class="title op-56">Contacts:</span> <span class="value">{{task.details?.contacts.length}}</span>
+                    <span class="title op-56 ml-2">Sent:</span> <span class="value">{{task.succeed || 0}}</span>
+                    <span class="title op-56 ml-2">Failed:</span> <span class="value">{{task.failed || 0}}</span>
+                  </div>
+                  <div class="end-time f-3">
+                    <span class="title op-56">End at: </span>
+                    <span class="value">{{task.exp_end | date: 'hh:mm M/dd'}}</span>
+                  </div>
+                </ng-template>
+                
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- Notification -->
       <div class="nav-item" [class.suspended]="isSuspended">
         <div class="notifications-wrapper detail-wrapper" ngbDropdown display="dynamic">
           <div class="no-carot" ngbDropdownToggle [class.has-notifications]="(notificationService.notifications$ | async).length">
