@@ -64,7 +64,7 @@ export class RecordSettingDialogComponent implements OnInit {
   recordStep = 1;
   popup;
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
-  redirectUrl = environment.website;
+  redirectUrl = environment.front;
   authToken = '';
   userId = '';
   serverVideoId = '';
