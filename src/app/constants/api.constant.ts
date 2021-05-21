@@ -106,6 +106,7 @@ export const CONTACT = {
   CHECK_EMAIL: 'contact/check-email',
   CHECK_PHONE: 'contact/check-phone',
   SHARE_CONTACT: 'contact/share-contact',
+  STOP_SHARE: 'contact/stop-share',
   TEAM_SHARED: 'contact/team-shared/',
   LOAD_NOTES: 'contact/load-notes/'
 };

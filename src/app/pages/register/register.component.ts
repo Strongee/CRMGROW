@@ -274,6 +274,7 @@ export class RegisterComponent implements OnInit {
           this.userService.setToken(this.token);
           this.userService.setUser(this.currentUser);
           this.router.navigate(['/home']);
+          window.location.reload();
         } else {
           this.saving = false;
         }

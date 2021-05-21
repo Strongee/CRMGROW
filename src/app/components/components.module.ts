@@ -159,6 +159,7 @@ import { StripeModule } from 'stripe-angular';
 import { STRIPE_KEY } from '../constants/variable.constants';
 import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-error.component';
 import { DialPlanComponent } from './dial-plan/dial-plan.component';
+import { StopShareContactComponent } from './stop-share-contact/stop-share-contact.component';
 import { VideoPopupComponent } from './video-popup/video-popup.component';
 
 @NgModule({
@@ -316,6 +317,7 @@ import { VideoPopupComponent } from './video-popup/video-popup.component';
     InputContactDealComponent,
     UpgradePlanErrorComponent,
     DialPlanComponent,
+    StopShareContactComponent,
     VideoPopupComponent
   ],
   imports: [

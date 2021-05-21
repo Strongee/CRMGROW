@@ -10,6 +10,8 @@ import {
 } from '../../constants/variable.constants';
 import { getUserLevel } from '../../utils/functions';
 import { Payment } from '../../models/payment.model';
+import { HandlerService } from '../../services/handler.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
@@ -59,14 +61,21 @@ export class PaymentComponent implements OnInit, OnDestroy {
   updatePackageSubscription: Subscription;
   loadingCancelAccount = false;
   loadingUpdatePackage = false;
+  isSuspended = false;
 
-  constructor(private userService: UserService, private dialog: MatDialog) {
+  constructor(
+    private userService: UserService,
+    private dialog: MatDialog,
+    private router: Router,
+    public handlerService: HandlerService
+  ) {
     // this.step = this.selectedStep;
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile.payment) {
           this.packageLevel = profile.package_level;
+          this.isSuspended = profile.subscription?.is_suspended;
           this.currentPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.selectedPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.loadingPayment = true;
@@ -240,6 +249,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
         (res) => {
           this.loadingCancelAccount = false;
           if (res) {
+            this.handlerService.clearData();
+            this.router.navigate(['/']);
           }
         },
         (err) => {
