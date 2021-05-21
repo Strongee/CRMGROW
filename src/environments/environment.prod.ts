@@ -3,6 +3,7 @@ export const environment = {
   api: 'https://ecsbe.crmgrow.com/api/',
   server: 'https://ecsbe.crmgrow.com',
   website: 'https://ecsbe.crmgrow.com',
+  front: 'https://app-v2.crmgrow.com',
   ClientId: {
     Google:
       '411466708563-qovcq88r0ptbsb1o2jjlnms5qu57rdec.apps.googleusercontent.com',

@@ -106,7 +106,7 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   loadingContact = false;
   loadContactSubscription: Subscription;
   detailContacts = [];
-  siteUrl = environment.website;
+  siteUrl = environment.front;
 
   isShareWith = false;
   isShareBy = false;

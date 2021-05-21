@@ -78,7 +78,7 @@ import {
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit, OnDestroy {
-  SITE = environment.website;
+  SITE = environment.front;
   STATUS = STATUS;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
