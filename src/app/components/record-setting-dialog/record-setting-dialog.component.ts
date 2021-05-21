@@ -413,7 +413,7 @@ export class RecordSettingDialogComponent implements OnInit {
       this.captureScreen();
     }
     if (this.mode === 'camera') {
-      // this.captureCamera();
+      this.dialogRef.close();
       const option = 'width=530, height=305';
       if (!this.popup || this.popup.closed) {
         this.popup = window.open(
