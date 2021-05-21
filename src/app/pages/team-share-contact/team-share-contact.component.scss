@@ -21,6 +21,22 @@
   .shared-member-contact .dropdown-toggle::after {
     display: none;
   }
+
+  .share-action {
+    min-width: 60px;
+    max-width: 60px;
+
+    button {
+      opacity: 0;
+      margin-left: auto;
+    }
+  }
+
+  tr:hover {
+    .share-action button {
+      opacity: 1;
+    }
+  }
 }
 
 .status-header .create-actions .mobile {

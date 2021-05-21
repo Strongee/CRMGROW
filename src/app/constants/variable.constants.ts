@@ -1394,6 +1394,14 @@ export const BulkActions = {
       command: 'download',
       loading: false,
       loadingLabel: 'Downloading'
+    },
+    {
+      label: 'Stop share',
+      type: 'button',
+      icon: 'i-block',
+      command: 'stopshare',
+      loading: false,
+      loadingLabel: 'Stop sharing'
     }
   ],
   Materials: [
