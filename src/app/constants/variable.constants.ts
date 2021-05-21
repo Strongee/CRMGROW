@@ -1275,14 +1275,14 @@ export const BulkActions = {
   ],
   Contacts: [
     {
-      label: 'Add tasks',
+      label: 'New Task',
       type: 'button',
       icon: 'i-task',
       command: 'add_task',
       loading: false
     },
     {
-      label: 'Send email',
+      label: 'New Email',
       type: 'button',
       icon: 'i-message',
       command: 'message',
@@ -1293,6 +1293,20 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-phone',
       command: 'call',
+      loading: false
+    },
+    {
+      label: 'New Note',
+      type: 'button',
+      icon: 'i-notes',
+      command: 'add_note',
+      loading: false
+    },
+    {
+      label: 'Add automation',
+      type: 'button',
+      icon: 'i-automation',
+      command: 'automation',
       loading: false
     },
     {
@@ -1316,33 +1330,19 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Delete',
-      type: 'button',
-      icon: 'i-trash',
-      command: 'delete',
-      loading: false
-    },
-    {
-      label: 'Add notes',
-      type: 'button',
-      icon: 'i-notes',
-      command: 'add_note',
-      loading: false
-    },
-    {
-      label: 'Add automation',
-      type: 'button',
-      icon: 'i-automation',
-      command: 'automation',
-      loading: false
-    },
-    {
       label: 'Download',
       type: 'button',
       icon: 'i-download',
       command: 'download',
       loading: false,
       loadingLabel: 'Downloading'
+    },
+    {
+      label: 'Delete',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete',
+      loading: false
     }
   ],
   TeamContacts: [
