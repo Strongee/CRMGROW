@@ -14,6 +14,8 @@ import { ConnectService } from 'src/app/services/connect.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
 import { interval, Subscription } from 'rxjs';
 import { ContactService } from '../../services/contact.service';
+import { TabItem } from 'src/app/utils/data.types';
+import { Contact } from 'src/app/models/contact.model';
 
 @Component({
   selector: 'app-navbar',
@@ -54,7 +56,7 @@ export class NavbarComponent implements OnInit {
   notificationUpdater$;
   notificationLoadSubscription: Subscription;
   emailTasks = [];
-  smsTasks = [];
+  textTasks = [];
   unreadMessages = [];
   unreadMessageCount = 0;
   notifications = [];
@@ -62,6 +64,11 @@ export class NavbarComponent implements OnInit {
 
   showEmails = false;
   showTexts = false;
+  textTabs: TabItem[] = [
+    { label: 'SENDING', id: 'sending', icon: '' },
+    { label: 'RECEIVED', id: 'received', icon: '' }
+  ];
+  selectedTextTab = this.textTabs[0];
 
   constructor(
     public userService: UserService,
@@ -210,6 +217,10 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  changeTab(tab: TabItem): void {
+    this.selectedTextTab = tab;
+  }
+
   loadNotifications(): void {
     this.notificationLoadSubscription &&
       this.notificationLoadSubscription.unsubscribe();
@@ -236,6 +247,35 @@ export class NavbarComponent implements OnInit {
               e.succeed = succeed;
             });
           }
+
+          this.textTasks = res['texts'] || [];
+          if (this.textTasks && this.textTasks.length) {
+            this.textTasks.forEach((e) => {
+              let failed = 0;
+              let succeed = 0;
+              let awaiting = 0;
+              e.tasks.forEach((_task) => {
+                if (_task.status === 'active') {
+                  awaiting++;
+                } else if (_task.status === 'delivered') {
+                  succeed++;
+                } else {
+                  failed++;
+                }
+              });
+              e.failed = failed;
+              e.succeed = succeed;
+              e.awaiting = awaiting;
+            });
+          }
+
+          this.unreadMessageCount = res['unread'];
+          this.unreadMessages = res['unreadMessages'];
+          this.unreadMessages.forEach((e) => {
+            if (e.contacts && e.contacts.length) {
+              e.contact = new Contact().deserialize(e.contacts[0]);
+            }
+          });
         }
       });
   }

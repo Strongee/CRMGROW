@@ -106,6 +106,14 @@
 // Notifications Wrapper
 // Integrations Wrapper
 // Send Status Wrapper
+.chat-messages-wrapper::after {
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  bottom: 0px;
+  transform: translateY(100%);
+  content: '';
+}
 .email-badge {
   position: absolute;
   top: -6px;
@@ -113,9 +121,9 @@
   font-size: 10px;
   border-radius: 50%;
   right: -6px;
-  min-width: 16px;
-  height: 16px;
-  line-height: 16px;
+  min-width: 14px;
+  height: 14px;
+  line-height: 14px;
   text-align: center;
   background-color: blue;
   color: white;
@@ -138,6 +146,47 @@
   .value {
     margin-left: 6px;
   }
+
+  .process-item:nth-child(n + 2) {
+    border-top: 1px solid gainsboro;
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .email-subject {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+.texting-badge {
+  position: absolute;
+  top: -6px;
+  padding: 0rem 0rem;
+  font-size: 10px;
+  border-radius: 50%;
+  right: -6px;
+  min-width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  background-color: blue;
+  color: white;
+}
+.receive-badge {
+  position: absolute;
+  top: 10px;
+  padding: 0rem 0rem;
+  font-size: 10px;
+  border-radius: 50%;
+  right: -6px;
+  min-width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  background-color: red;
+  color: white;
+  font-weight: 400;
 }
 // Profile Wrapper Style
 .profile-wrapper {
@@ -325,4 +374,54 @@
 #storm-dialer-bar {
   z-index: 999 !important;
   position: relative;
+}
+
+.detail-panel-content.two-tab {
+  .panel {
+    display: none;
+
+    &.selected {
+      display: block;
+    }
+  }
+}
+
+.message-item {
+  .message-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 210px;
+  }
+  .avatar {
+    min-width: 32px;
+  }
+}
+
+:host ::ng-deep {
+  .text-status-tab {
+    .tab-container {
+      height: 24px;
+      border-radius: 24px!important;
+      width: fit-content;
+      margin: auto;
+      padding-left: 4px!important;
+
+      .tab-indicator {
+        height: 20px!important;
+      }
+
+      .tab {
+        height: 20px!important;
+        padding-left: 10px!important;
+        padding-right: 10px!important;
+      }
+
+      .tab-label {
+        font-size: 12px;
+        letter-spacing: 0px;
+        line-height: 20px;
+      }
+    }
+  }
 }
