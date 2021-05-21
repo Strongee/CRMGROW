@@ -26,7 +26,6 @@ export class VideoPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.video = { ...this.data.material };
-    console.log('3###', this.video);
   }
 
   save(): void {

@@ -10,7 +10,7 @@ export const environment = {
   // api: 'http://192.168.0.64:3000/api/',
   server: 'https://app.crmgrow.com',
   // server: 'https://app.crmgrow.com',
-  website: 'https://app.crmgrow.com',
+  website: 'https://app-v2.crmgrow.com',
   ClientId: {
     Google:
       '630484366982-m6e66b06vlo0g6ebg9h2q5t7nrk2rimr.apps.googleusercontent.com',
