@@ -21,6 +21,9 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { environment } from '../environments/environment';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -47,7 +50,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     NgbModule,
     MatSidenavModule,
     ComponentsModule,
-    ToastrModule.forRoot({})
+    ToastrModule.forRoot({}),
+    SocketIoModule.forRoot(config)
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
