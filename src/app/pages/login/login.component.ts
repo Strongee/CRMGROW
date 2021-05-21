@@ -94,7 +94,8 @@ export class LoginComponent implements OnInit {
 
   signInOutlook(): void {
     const loginRequest = {
-      scopes: ['user.read']
+      scopes: ['user.read'],
+      prompt: 'select_account'
     };
 
     this.socialLoading = true;

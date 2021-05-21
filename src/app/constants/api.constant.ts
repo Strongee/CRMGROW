@@ -334,7 +334,8 @@ export const NOTIFICATION = {
   READ_MARK: 'notification/bulk-read',
   UNREAD_MARK: 'notification/bulk-unread',
   DELETE: 'notification/bulk-remove',
-  TEXT_DELIVERY: 'notification/get-delivery'
+  TEXT_DELIVERY: 'notification/get-delivery',
+  STATUS: 'notification/status'
 };
 
 export const FILTER = {

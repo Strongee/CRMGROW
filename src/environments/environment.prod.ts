@@ -5,11 +5,11 @@ export const environment = {
   website: 'https://ecsbe.crmgrow.com',
   ClientId: {
     Google:
-      '630484366982-m6e66b06vlo0g6ebg9h2q5t7nrk2rimr.apps.googleusercontent.com',
-    Outlook: '495c34a1-c12c-4932-b134-7f3c3ec491d6'
+      '411466708563-qovcq88r0ptbsb1o2jjlnms5qu57rdec.apps.googleusercontent.com',
+    Outlook: 'cf34076b-4bb2-4eef-8fdb-a7d7f2376095'
   },
   RedirectUri: {
-    Outlook: 'https://app.crmgrow.com/login'
+    Outlook: 'https://app-v2.crmgrow.com/login'
   },
   API_KEY: {
     Youtube: 'AIzaSyDnuZGQ1pP5Wr-z1yIk8DQKmN1MJfjK5wc',

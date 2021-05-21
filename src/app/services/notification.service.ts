@@ -82,4 +82,11 @@ export class NotificationService extends HttpService {
   }
 
   getEmailDeliverStatus(): void {}
+
+  getNotificationStatus(): Observable<any> {
+    return this.httpClient.get(this.server + NOTIFICATION.STATUS).pipe(
+      map((res) => res),
+      catchError(this.handleError('GET NOTIFICATION DELIVERY STATUS', null))
+    );
+  }
 }

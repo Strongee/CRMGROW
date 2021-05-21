@@ -160,6 +160,7 @@ import { STRIPE_KEY } from '../constants/variable.constants';
 import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-error.component';
 import { DialPlanComponent } from './dial-plan/dial-plan.component';
 import { StopShareContactComponent } from './stop-share-contact/stop-share-contact.component';
+import { VideoPopupComponent } from './video-popup/video-popup.component';
 
 @NgModule({
   declarations: [
@@ -316,7 +317,8 @@ import { StopShareContactComponent } from './stop-share-contact/stop-share-conta
     InputContactDealComponent,
     UpgradePlanErrorComponent,
     DialPlanComponent,
-    StopShareContactComponent
+    StopShareContactComponent,
+    VideoPopupComponent
   ],
   imports: [
     CommonModule,
@@ -424,7 +426,8 @@ import { StopShareContactComponent } from './stop-share-contact/stop-share-conta
     EmailTimelinesComponent,
     TextTimelinesComponent,
     PlayTimelinesComponent,
-    DialPlanComponent
+    DialPlanComponent,
+    VideoPopupComponent
   ],
   bootstrap: [
     ContactCreateComponent,

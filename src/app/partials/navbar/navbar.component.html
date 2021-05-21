@@ -89,12 +89,104 @@
       </div>
       <!-- Incoming Chat Message Wrapper -->
       <div class="nav-item" [class.suspended]="isSuspended" [class.disable]="!isPackageText">
-        <div class="chat-messages-wrapper detail-wrapper" ngbDropdown display="dynamic" placement="bottom-right">
-          <a [routerLink]="['/messages']" class="no-carot">
+        <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showTexts=true" (mouseleave)="showTexts=false">
+          <a [routerLink]="['/messages']" class="no-carot d-block position-relative">
             <i class="i-icon i-sms-sent bgc-blue d-block"></i>
+            <span class="badge texting-badge" *ngIf="textTasks.length">{{textTasks.length}}</span>
+            <span class="badge receive-badge" *ngIf="unreadMessageCount">{{unreadMessageCount}}</span>
           </a>
+
+          <div class="detail-panel" *ngIf="(textTasks.length || unreadMessageCount) && showTexts">
+            <div class="text-status-tab mb-3" *ngIf="unreadMessageCount && textTasks.length">
+              <app-slide-tab [tabs]="textTabs" [selected]="selectedTextTab" (onChange)="changeTab($event)" class="border-bottom pl-0 rounded-0">
+              </app-slide-tab>
+            </div>
+            <div class="detail-panel-content" [class.two-tab]="unreadMessageCount && textTasks.length">
+              <div class="panel" [class.selected]="selectedTextTab.id === 'received'">
+                <div class="message-item d-flex mb-2" *ngFor="let message of unreadMessages">
+                  <div class="avatar contact-avatar mr-2">
+                    {{message.contact?.avatarName || 'UN'}}
+                  </div>
+                  <div class="content flex-grow-1">
+                    <div class="message-info d-flex">
+                      <div class="contact font-weight-bold f-4">
+                        {{(message.contact?.fullName || 'Unknown Contact') | shorten: 18: '...'}}
+                      </div>
+                      <div class="message-time ml-auto f-2 op-75">
+                        {{message.created_at | timeago}}
+                      </div>
+                    </div>
+                    <div class="message-text f-3 mt-1">
+                      {{message.content}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel" [class.selected]="selectedTextTab.id === 'sending'">
+                <div class="process-item" *ngFor="let task of textTasks">
+                  <div class="email-subject fw-600 f-4 mb-2">
+                    {{task.details?.content | shorten: 60: '...'}}
+                  </div>
+                  <div class="sending-status f-3">
+                    <span class="title op-56">Contacts:</span> <span class="value">{{task.details?.contacts.length}}</span>
+                    <span class="title op-56 ml-3">Checking at: </span>
+                    <span class="value">{{task.exp_time | date: 'hh:mm M/dd'}}</span>
+                  </div>
+                  <div class="f-3">
+                    <ng-container *ngIf="task.succeed">
+                      <span class="title op-56">Delivered:</span> <span class="value mr-2">{{task.succeed || 0}}</span>
+                    </ng-container>
+                    <span class="title op-56">Delivered:</span> <span class="value mr-2">{{task.succeed || 0}}</span>
+                    <span class="title op-56">Checking:</span> <span class="value mr-2">{{task.awaiting || 0}}</span>
+                    <span class="title op-56">Failed:</span> <span class="value mr-2">{{task.failed || 0}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- Emailing Task Progressing Status -->
+      <div class="nav-item" *ngIf="emailTasks && emailTasks.length">
+        <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showEmails=true" (mouseleave)="showEmails=false">
+          <a [routerLink]="['/messages']" class="no-carot d-block position-relative">
+            <i class="i-icon i-sent-mail bgc-blue d-block email-sending-icon"></i>
+            <span class="badge email-badge">{{emailTasks.length}}</span>
+          </a>
+          <div class="detail-panel" *ngIf="showEmails">
+            <ng-container *ngFor="let task of emailTasks">
+              <div class="process-item">
+                <div class="email-subject fw-600 f-4 mb-2">
+                  {{task.details?.subject}}
+                </div>
+                <ng-container *ngIf="!task.failed && !task.succeed; else pendingProcess">
+                  <!-- Awaiting Process -->
+                  <div class="sending-status f-3">
+                    <span class="title op-56">Contacts:</span> <span class="value">{{task.details?.contacts.length}}</span>
+                  </div>
+                  <div class="end-time f-3">
+                    <span class="title op-56">Planned at: </span>
+                    <span class="value">{{task.exp_start | date: 'hh:mm M/dd'}} - {{task.exp_end | date: 'hh:mm M/dd'}}</span>
+                  </div>
+                </ng-container>
+                <ng-template #pendingProcess>
+                  <div class="sending-status f-3">
+                    <span class="title op-56">Contacts:</span> <span class="value">{{task.details?.contacts.length}}</span>
+                    <span class="title op-56 ml-2">Sent:</span> <span class="value">{{task.succeed || 0}}</span>
+                    <span class="title op-56 ml-2">Failed:</span> <span class="value">{{task.failed || 0}}</span>
+                  </div>
+                  <div class="end-time f-3">
+                    <span class="title op-56">End at: </span>
+                    <span class="value">{{task.exp_end | date: 'hh:mm M/dd'}}</span>
+                  </div>
+                </ng-template>
+                
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- Notification -->
       <div class="nav-item" [class.suspended]="isSuspended">
         <div class="notifications-wrapper detail-wrapper" ngbDropdown display="dynamic">
           <div class="no-carot" ngbDropdownToggle [class.has-notifications]="(notificationService.notifications$ | async).length">

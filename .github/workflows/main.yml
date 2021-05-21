@@ -32,6 +32,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
 
+      - name: Upload to AWS
+        run: |
+          aws s3 rm s3://teamgrow-staticsite-green/ --recursive
+          aws s3 cp dist/crmgrow s3://teamgrow-staticsite-green/ --recursive --acl public-read
+
       - name: Deploy
         uses: lbertenasco/s3-deploy@v1
         with:

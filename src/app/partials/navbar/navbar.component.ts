@@ -4,9 +4,7 @@ import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
-import {
-  DialogSettings,
-} from 'src/app/constants/variable.constants';
+import { DialogSettings } from 'src/app/constants/variable.constants';
 import { UserService } from 'src/app/services/user.service';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { SendEmailComponent } from '../../components/send-email/send-email.component';
@@ -14,8 +12,10 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { DealCreateComponent } from 'src/app/components/deal-create/deal-create.component';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { ContactService } from '../../services/contact.service';
+import { TabItem } from 'src/app/utils/data.types';
+import { Contact } from 'src/app/models/contact.model';
 
 @Component({
   selector: 'app-navbar',
@@ -52,6 +52,24 @@ export class NavbarComponent implements OnInit {
   isPackageText = true;
   profileSubscription: Subscription;
 
+  // Notifications
+  notificationUpdater$;
+  notificationLoadSubscription: Subscription;
+  emailTasks = [];
+  textTasks = [];
+  unreadMessages = [];
+  unreadMessageCount = 0;
+  notifications = [];
+  unreadNotifications = 0;
+
+  showEmails = false;
+  showTexts = false;
+  textTabs: TabItem[] = [
+    { label: 'SENDING', id: 'sending', icon: '' },
+    { label: 'RECEIVED', id: 'received', icon: '' }
+  ];
+  selectedTextTab = this.textTabs[0];
+
   constructor(
     public userService: UserService,
     public notificationService: NotificationService,
@@ -69,6 +87,12 @@ export class NavbarComponent implements OnInit {
         }
       }
     );
+
+    this.loadNotifications();
+    this.notificationUpdater$ = interval(60 * 1000);
+    this.notificationUpdater$.subscribe(() => {
+      this.loadNotifications();
+    });
   }
 
   ngOnInit(): void {
@@ -191,5 +215,68 @@ export class NavbarComponent implements OnInit {
     } else {
       this.closeSearchBar();
     }
+  }
+
+  changeTab(tab: TabItem): void {
+    this.selectedTextTab = tab;
+  }
+
+  loadNotifications(): void {
+    this.notificationLoadSubscription &&
+      this.notificationLoadSubscription.unsubscribe();
+    this.notificationLoadSubscription = this.notificationService
+      .getNotificationStatus()
+      .subscribe((res) => {
+        if (res) {
+          this.emailTasks = res['emails'] || [];
+          if (this.emailTasks && this.emailTasks.length) {
+            this.emailTasks.forEach((e) => {
+              let failed = 0;
+              let succeed = 0;
+              e.tasks.forEach((_task) => {
+                if (_task.exec_result) {
+                  failed += _task.exec_result.failed.length;
+                  if (_task.exec_result.succeed) {
+                    succeed += _task.exec_result.succeed.length;
+                  }
+                  succeed +=
+                    _task.contacts.length - _task.exec_result.failed.length;
+                }
+              });
+              e.failed = failed;
+              e.succeed = succeed;
+            });
+          }
+
+          this.textTasks = res['texts'] || [];
+          if (this.textTasks && this.textTasks.length) {
+            this.textTasks.forEach((e) => {
+              let failed = 0;
+              let succeed = 0;
+              let awaiting = 0;
+              e.tasks.forEach((_task) => {
+                if (_task.status === 'active') {
+                  awaiting++;
+                } else if (_task.status === 'delivered') {
+                  succeed++;
+                } else {
+                  failed++;
+                }
+              });
+              e.failed = failed;
+              e.succeed = succeed;
+              e.awaiting = awaiting;
+            });
+          }
+
+          this.unreadMessageCount = res['unread'];
+          this.unreadMessages = res['unreadMessages'];
+          this.unreadMessages.forEach((e) => {
+            if (e.contacts && e.contacts.length) {
+              e.contact = new Contact().deserialize(e.contacts[0]);
+            }
+          });
+        }
+      });
   }
 }

@@ -23,7 +23,7 @@ export class TextTimelinesComponent implements OnInit {
   @Input('text') text: any = {};
   @Input('timelines')
   public set timelines(val: DetailActivity[]) {
-    this._timelines = val;
+    this._timelines = val || [];
     this._timelines.sort((a, b) =>
       a.type === 'texts' ? 1 : a.created_at > b.created_at ? -1 : 1
     );
