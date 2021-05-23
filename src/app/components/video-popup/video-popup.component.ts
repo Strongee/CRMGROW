@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { Video } from 'src/app/models/video.model';
+import { Material } from 'src/app/models/material.model';
 import { HelperService } from 'src/app/services/helper.service';
 import { MaterialService } from 'src/app/services/material.service';
 
@@ -14,7 +14,7 @@ export class VideoPopupComponent implements OnInit {
   submitted = false;
   saving = false;
   thumbnailLoading = false;
-  video: Video = new Video();
+  video: Material = new Material();
 
   constructor(
     private dialogRef: MatDialogRef<VideoPopupComponent>,
@@ -32,7 +32,7 @@ export class VideoPopupComponent implements OnInit {
     const videoId = this.video._id;
     const newVideo = { ...this.video };
     delete newVideo.created_at;
-    delete newVideo._v;
+    delete newVideo['_v'];
     delete newVideo.user;
     delete newVideo._id;
     newVideo.title = this.video.title;

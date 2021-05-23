@@ -320,11 +320,10 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
         if (params['video']) {
           const _id = params['video'];
           const loadTimer = setInterval(() => {
-            if (this.filteredMaterials.length > 0) {
+            if (this.materials.length > 0) {
               clearInterval(loadTimer);
-              const material = this.filteredMaterials.filter(
-                (e) => e._id == _id
-              );
+              const material = this.materials.filter((e) => e._id == _id);
+              console.log('###', material);
               this.dialog
                 .open(VideoPopupComponent, {
                   position: { top: '5vh' },
