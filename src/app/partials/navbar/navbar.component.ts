@@ -27,11 +27,11 @@ export class NavbarComponent implements OnInit {
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
     { icon: 'i-task bg-white', label: 'New Task', id: 'task' },
     { icon: 'i-deals bg-white', label: 'New Deal', id: 'deal' },
-    // {
-    //   icon: 'i-calendar bg-white',
-    //   label: 'New Meeting',
-    //   id: 'appointment'
-    // },
+    {
+      icon: 'i-calendar bg-white',
+      label: 'New Meeting',
+      id: 'appointment'
+    },
     { icon: 'i-template bg-white', label: 'New Note', id: 'note' },
     { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
     { icon: 'i-record bg-white', label: 'Record Video', id: 'record' },
@@ -50,6 +50,7 @@ export class NavbarComponent implements OnInit {
   @ViewChild('searchInput') searchInput: ElementRef;
   isSuspended = false;
   isPackageText = true;
+  isPackageAutomation = true;
   profileSubscription: Subscription;
 
   // Notifications
@@ -61,7 +62,7 @@ export class NavbarComponent implements OnInit {
   unreadMessageCount = 0;
   notifications = [];
   unreadNotifications = 0;
-
+  disableActions = [];
   showEmails = false;
   showTexts = false;
   textTabs: TabItem[] = [
@@ -83,7 +84,16 @@ export class NavbarComponent implements OnInit {
       (profile) => {
         if (profile) {
           this.isPackageText = profile.text_info?.is_enabled;
+          this.isPackageAutomation = profile.automation_info?.is_enabled;
           this.isSuspended = profile.subscription?.is_suspended;
+          this.disableActions = [];
+          if (!this.isPackageAutomation) {
+            this.disableActions.push({
+              icon: 'i-calendar bg-white',
+              label: 'New Meeting',
+              id: 'appointment'
+            });
+          }
         }
       }
     );
