@@ -1412,13 +1412,6 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Capture',
-      type: 'toggle',
-      status: false,
-      command: 'lead_capture',
-      loading: false
-    },
-    {
       label: 'Edit Template',
       type: 'button',
       icon: 'i-template',
@@ -1426,9 +1419,10 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Deselect',
-      type: 'button',
-      command: 'deselect',
+      label: 'Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture',
       loading: false
     },
     {
@@ -1436,6 +1430,12 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-folder',
       command: 'folder',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
       loading: false
     },
     {

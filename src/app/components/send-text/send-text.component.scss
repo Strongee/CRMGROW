@@ -47,39 +47,6 @@
   }
 
   .template-info {
-    .emoji-icon {
-      width: 24px;
-    }
-    .insert-token {
-      .dropdown-toggle {
-        .i-triangle-up {
-          display: none !important;
-        }
-        .i-triangle-down, .i-triangle-up {
-          width: 8px;
-          height: 8px;
-          min-width: 8px;
-        }
-      }
-      &.show {
-        .dropdown-toggle {
-          .i-triangle-down {
-            display: none !important;
-          }
-          .i-triangle-up {
-            display: block !important;
-          }
-        }
-      }
-      .menu-item:hover {
-        background-color: gainsboro;
-      }
-      .menu-item:active {
-        background-color: blue;
-        color: white;
-      }
-    }
-
     .templates {
       width: 260px;
       padding: 4px 0px!important;
@@ -124,6 +91,38 @@
           height: 12px;
           min-width: 12px;
       }
+  }
+  .emoji-icon {
+    width: 24px;
+  }
+  .insert-token {
+    .dropdown-toggle {
+      .i-triangle-up {
+        display: none !important;
+      }
+      .i-triangle-down, .i-triangle-up {
+        width: 8px;
+        height: 8px;
+        min-width: 8px;
+      }
+    }
+    &.show {
+      .dropdown-toggle {
+        .i-triangle-down {
+          display: none !important;
+        }
+        .i-triangle-up {
+          display: block !important;
+        }
+      }
+    }
+    .menu-item:hover {
+      background-color: gainsboro;
+    }
+    .menu-item:active {
+      background-color: blue;
+      color: white;
+    }
   }
 }
 
