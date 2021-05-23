@@ -62,6 +62,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   loadingCancelAccount = false;
   loadingUpdatePackage = false;
   isSuspended = false;
+  isV1User = false;
 
   constructor(
     private userService: UserService,
@@ -76,6 +77,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if (profile.payment) {
           this.packageLevel = profile.package_level;
           this.isSuspended = profile.subscription?.is_suspended;
+          this.isV1User = profile.user_version === 'v1';
           this.currentPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.selectedPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.loadingPayment = true;

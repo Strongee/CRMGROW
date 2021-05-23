@@ -101,6 +101,7 @@ export class User implements Deserializable {
     period: 'month';
   };
   package_level: string;
+  user_version: string;
   expired_at: Date;
   created_at: Date;
   updated_at: Date;

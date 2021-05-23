@@ -265,11 +265,11 @@
       <h1 class="f-26">Upgrade and get more out of CRM Grow</h1>
       <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBack()"></i>
     </div>
-    <div class="notification-area my-4">
+    <div class="notification-area mt-4" *ngIf="isV1User">
       <span class="f-6 font-weight-bold">Ooops</span>
       <span class="f-6 ml-2">I’m an alert letting you know that you need to do something in order to downgrade</span>
     </div>
-    <div class="package-wrapper">
+    <div class="package-wrapper mt-4">
       <div class="package-item"
            [class.highlight]="litePackage.package == selectedPackage.package"
            (click)="clickPackage(litePackage)"
