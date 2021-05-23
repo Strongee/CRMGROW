@@ -292,4 +292,8 @@ export class NavbarComponent implements OnInit {
         }
       });
   }
+
+  isDisableAction(action): boolean {
+    return false;
+  }
 }
