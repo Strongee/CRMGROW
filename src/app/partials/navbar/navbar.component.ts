@@ -294,6 +294,6 @@ export class NavbarComponent implements OnInit {
   }
 
   isDisableAction(action): boolean {
-    return false;
+    return this.disableActions.findIndex((item) => item.id === action.id) >= 0;
   }
 }
