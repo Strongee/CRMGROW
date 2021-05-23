@@ -50,8 +50,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     'action-count',
     'contacts',
     'created',
-    'assign',
-    'actions'
+    'assign'
   ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },

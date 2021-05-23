@@ -106,7 +106,15 @@ export class IntegrationComponent implements OnInit {
     }
   }
 
-  disconnectMail(type: string): void {}
+  disconnectMail(): void {
+    this.userService.disconnectMail().subscribe((res) => {
+      if (res.status) {
+        this.user.primary_connected = false;
+        this.user.connected_email_type = '';
+        this.user.connected_email = '';
+      }
+    });
+  }
 
   connectCalendar(type: string): void {
     if (type == 'gmail' || type == 'outlook') {

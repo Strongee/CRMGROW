@@ -11,7 +11,7 @@
       </div>
     </div>
     <ng-container *ngIf="(user.connected_email_type=='gmail' || user.connected_email_type=='gsuit') && user.primary_connected; else disconnectGoogle">
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="disconnectMail('gmail')">Disconnect</button>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="disconnectMail()">Disconnect</button>
     </ng-container>
     <ng-template #disconnectGoogle>
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('gmail')">Connect Account</button>
@@ -37,7 +37,7 @@
       </div>
     </div>
     <ng-container *ngIf="(user.connected_email_type=='outlook' || user.connected_email_type=='microsoft') && user.primary_connected; else disconnectOutlook">
-      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="disconnectMail('outlook')">Disconnect</button>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="disconnectMail()">Disconnect</button>
     </ng-container>
     <ng-template #disconnectOutlook>
       <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="connectMail('outlook')">Connect Account</button>
