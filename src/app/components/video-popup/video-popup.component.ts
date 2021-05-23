@@ -38,6 +38,7 @@ export class VideoPopupComponent implements OnInit {
     newVideo.title = this.video.title;
     newVideo.thumbnail = this.video.thumbnail;
     newVideo.site_image = this.video['site_image'];
+    newVideo.description = this.video.description;
     newVideo.recording = true;
     this.saving = true;
     this.materialService

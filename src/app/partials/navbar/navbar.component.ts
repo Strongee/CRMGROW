@@ -286,6 +286,9 @@ export class NavbarComponent implements OnInit {
               e.contact = new Contact().deserialize(e.contacts[0]);
             }
           });
+
+          this.unreadNotifications = res['unreadNotifications'];
+          this.notifications = res['notifications'];
         }
       });
   }
