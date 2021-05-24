@@ -429,6 +429,15 @@ export class UserService extends HttpService {
       );
   }
 
+  public checkDowngrade(selectedPackage): Observable<any> {
+    return this.httpClient
+      .post(this.server + USER.CHECK_DOWNGRADE, { selectedPackage })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('CHECK DOWNGRADE PACKAGE'))
+      );
+  }
+
   public getUserInfoItem(type: string): any {
     const user = this.getUser();
     return user[type];

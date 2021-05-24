@@ -59,10 +59,14 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   cancelAccountSubscription: Subscription;
   updatePackageSubscription: Subscription;
+  downgradeSubscription: Subscription;
   loadingCancelAccount = false;
   loadingUpdatePackage = false;
   isSuspended = false;
   isV1User = false;
+  isOverflow = false;
+  overflowMessage = '';
+  loadingCheckDowngrade = false;
 
   constructor(
     private userService: UserService,
@@ -178,16 +182,56 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   selectPlan(level): void {
+    let checkOverflow = true;
     for (const item in PACKAGE_LEVEL) {
       if (PACKAGE_LEVEL[item].package === level) {
+        if (this.selectedPackage.package === PACKAGE_LEVEL[item].package) {
+          checkOverflow = false;
+        }
         this.selectedPackage = PACKAGE_LEVEL[item];
       }
     }
     this.step = 3;
+    if (checkOverflow) {
+      this.downgradeSubscription && this.downgradeSubscription.unsubscribe();
+      this.loadingCheckDowngrade = true;
+      this.downgradeSubscription = this.userService
+        .checkDowngrade(this.selectedPackage.package)
+        .subscribe((res) => {
+          this.loadingCheckDowngrade = false;
+          if (res && res.status === false) {
+            this.isOverflow = true;
+            this.overflowMessage = res.error;
+          } else {
+            this.isOverflow = false;
+            this.overflowMessage = '';
+          }
+        });
+    }
   }
 
   clickPackage(level): void {
     this.selectedPackage = level;
+    this.downgradeSubscription && this.downgradeSubscription.unsubscribe();
+    if (this.selectedPackage.package !== this.currentPackage.package) {
+      this.loadingCheckDowngrade = true;
+      this.downgradeSubscription = this.userService
+        .checkDowngrade(this.selectedPackage.package)
+        .subscribe((res) => {
+          this.loadingCheckDowngrade = false;
+          if (res && res.status === false) {
+            this.isOverflow = true;
+            this.overflowMessage = res.error;
+          } else {
+            this.isOverflow = false;
+            this.overflowMessage = '';
+          }
+        });
+    } else {
+      this.loadingCheckDowngrade = false;
+      this.isOverflow = false;
+      this.overflowMessage = '';
+    }
   }
 
   planButtonLabel(level): string {
