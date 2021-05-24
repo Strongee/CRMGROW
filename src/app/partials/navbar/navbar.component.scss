@@ -125,12 +125,20 @@
   height: 14px;
   line-height: 14px;
   text-align: center;
-  background-color: blue;
+  background-color: red;
   color: white;
 }
 .email-sending-icon {
   width: 20px;
   height: 20px;
+}
+.texting-icon {
+  width: 22px;
+  height: 22px;
+
+  & ~ .texting-badge {
+    top: -4px;
+  }
 }
 .detail-panel {
   position: absolute;
@@ -170,7 +178,7 @@
   height: 14px;
   line-height: 14px;
   text-align: center;
-  background-color: blue;
+  background-color: red;
   color: white;
 }
 .receive-badge {

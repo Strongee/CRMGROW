@@ -678,7 +678,7 @@ export class RecordSettingDialogComponent implements OnInit {
             dom.click();
           } else {
             dom.href =
-              'https://teamgrow.s3.us-east-2.amazonaws.com/recorder/CRMRecord-0.0.1.dmg';
+              'https://teamgrow.s3.us-east-2.amazonaws.com/recorder/CRMRecord.dmg';
             dom.click();
           }
         }

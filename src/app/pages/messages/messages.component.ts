@@ -97,7 +97,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
         const messages = _messages;
         this.contacts = [];
         for (let index = 0; index < messages.length; index++) {
-          if (messages[index].contacts.length > 0) {
+          if (messages[index].contacts && messages[index].contacts.length > 0) {
             let contact_item;
             if (messages[index].type == 1 && messages[index].status == 0) {
               contact_item = {
