@@ -54,7 +54,7 @@
     <div class="navbar-nav v-center ml-sm-3">
       <!-- Notification Wrapper -->
       <div class="search-box input-group bgc-dark-trans08 rounded mr-2"
-           [class.opened]="handlerService.openSearch$ | async"
+           [class.opened]="(handlerService.openSearch$ | async)"
            [class.suspended]="isSuspended"
       >
         <div class="input-group-prepend" (click)="toggleSearchBar()">
