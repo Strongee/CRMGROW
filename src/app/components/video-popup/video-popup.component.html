@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-    Update your video
+    Edit your video
 </h1>
 <form #materialForm="ngForm" (ngSubmit)="submitted = true; materialForm.form.valid ? save() : false;" [class.was-validateed]="submitted">
     <mat-dialog-content>
@@ -48,6 +48,6 @@
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button class="btn btn-white f-6 font-weight-bold mr-2" mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving" [disabled]="thumbnailLoading">Save</button>
+        <button class="btn btn-primary f-6 font-weight-bold" type="submit" [class.loading]="saving" [disabled]="thumbnailLoading">Update</button>
     </mat-dialog-actions>
 </form>
