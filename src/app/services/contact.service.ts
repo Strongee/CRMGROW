@@ -338,7 +338,6 @@ export class ContactService extends HttpService {
       })
       .pipe(
         map((res) => {
-          console.log(res['data']['contacts']);
           const contacts = [];
           (res['data']['contacts'] || []).forEach((e) => {
             contacts.push(new ContactActivity().deserialize(e));
