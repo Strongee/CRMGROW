@@ -225,6 +225,9 @@ td.type-col {
 .item-action {
   padding-right: 0px!important;
   width: 30px;
+  .material-actions {
+    opacity: 0;
+  }
 }
 
 .sub-item-action {
@@ -303,10 +306,29 @@ td.type-col {
     border-bottom: none;
   }
   tbody {
-    tr:hover {
+    tr {
+      &:hover {
+        .sub-item-action {
+          .items {
+            opacity: 1;
+          }
+        }
+        .item-action {
+          .material-actions {
+            opacity: 1;
+          }
+        }
+        &.active {
+          .material-actions {
+            opacity: 0;
+          }
+        }
+      }
       .sub-item-action {
-        .items {
-          opacity: 1;
+        &.active {
+            .items {
+              opacity: 1;
+            }
         }
       }
     }
