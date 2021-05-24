@@ -1,200 +1,202 @@
 <link rel="stylesheet" href="payment.component.scss">
 <div class="billing-container">
   <ng-container *ngIf="step == 1">
-    <div class="mb-3">
-      <span class="f-3 font-weight-bold">Subscription</span>
-    </div>
-    <div class="plan-select-wrapper">
-      <div class="plan-description">
-        <p class="f-3 font-weight-bold">CRM Grow {{getPackageLabel()}}</p>
-        <ng-container *ngIf="currentPackage.package == litePackage.package">
-          <p class="f-1 c-dark op-64 mb-2">$29 / month</p>
-          <div class="features">
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">200 contacts</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">10 material uploads</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">10 min video recording</span>
-            </div>
-            <div class="my-3 f-5 font-weight-bold">
-              Available on all plans:
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Deal Pipeline Tracking</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Custom Labels</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Activity Tracker</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Advanced Filters</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Tag Management</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Mail Templates</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Merge Tokens</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Teams</span>
-              <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="Lite plan you can be part of a team but not a team leader." ngbButtonLabel></i>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Online Support</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">$79 onboarding plus</span>
-            </div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="currentPackage.package == proPackage.package">
-          <p class="f-1 c-dark op-64 mb-2">$49 / month</p>
-          <div class="features">
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">2,000 contacts</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">100 material uploads</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">120 min video recording</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">300 active automations</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">1 calendar connection</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">250 sms</span>
-              <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can purchase more in settings." ngbButtonLabel></i>
-            </div>
-            <div class="my-3 f-5 font-weight-bold">
-              Everything in Lite, plus:
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Lead Capture</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">1 assistant access</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Email 'Click' Tracking</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Group/Mass Email</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Automations</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Teams</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Email Support</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">$49 onboarding plus</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Early Beta Access</span>
-            </div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="currentPackage.package == elitePackage.package">
-          <p class="f-1 c-dark op-64 mb-2">$99 / month</p>
-          <div class="features">
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">20,000 contacts</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Unlimited material uploads</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">1,000 min video recording</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">3,000 active automations</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">3 calendar connections</span>
-            </div>
-            <div class="feature-item v-center mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">750 sms</span>
-              <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can purchase more in settings." ngbButtonLabel></i>
-            </div>
-            <div class="my-3 f-5 font-weight-bold">
-              Everything in Pro, plus:
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">3 assistant access</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Priority & Chat Support</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Onboarding Plus</span>
-            </div>
-            <div class="feature-item d-flex mb-2">
-              <i class="i-icon i-check bgc-blue sm"></i>
-              <span class="f-3 ml-2">Roadmap & Mastermind</span>
-            </div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="currentPackage.package == customPackage.package">
-          <p class="f-1 c-dark op-64 mb-2">Let's chat</p>
-        </ng-container>
+    <ng-container *ngIf="!isSuspended">
+      <div class="mb-3">
+        <span class="f-3 font-weight-bold">Subscription</span>
       </div>
-      <div class="plan-buttons">
-        <button class="btn btn-primary font-weight-bold w-100" (click)="changePlan()">Change plan</button>
-        <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28 w-100" (click)="cancelAccount()">Cancel account</button>
+      <div class="plan-select-wrapper">
+        <div class="plan-description">
+          <p class="f-3 font-weight-bold">CRM Grow {{getPackageLabel()}}</p>
+          <ng-container *ngIf="currentPackage.package == litePackage.package">
+            <p class="f-1 c-dark op-64 mb-2">$29 / month</p>
+            <div class="features">
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">200 contacts</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">10 material uploads</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">10 min video recording</span>
+              </div>
+              <div class="my-3 f-5 font-weight-bold">
+                Available on all plans:
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Deal Pipeline Tracking</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Custom Labels</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Activity Tracker</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Advanced Filters</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Tag Management</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Mail Templates</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Merge Tokens</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Teams</span>
+                <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="Lite plan you can be part of a team but not a team leader." ngbButtonLabel></i>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Online Support</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">$79 onboarding plus</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="currentPackage.package == proPackage.package">
+            <p class="f-1 c-dark op-64 mb-2">$49 / month</p>
+            <div class="features">
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">2,000 contacts</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">100 material uploads</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">120 min video recording</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">300 active automations</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">1 calendar connection</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">250 sms</span>
+                <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can purchase more in settings." ngbButtonLabel></i>
+              </div>
+              <div class="my-3 f-5 font-weight-bold">
+                Everything in Lite, plus:
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Lead Capture</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">1 assistant access</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Email 'Click' Tracking</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Group/Mass Email</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Automations</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Teams</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Email Support</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">$49 onboarding plus</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Early Beta Access</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="currentPackage.package == elitePackage.package">
+            <p class="f-1 c-dark op-64 mb-2">$99 / month</p>
+            <div class="features">
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">20,000 contacts</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Unlimited material uploads</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">1,000 min video recording</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">3,000 active automations</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">3 calendar connections</span>
+              </div>
+              <div class="feature-item v-center mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">750 sms</span>
+                <i class="i-icon i-information bgc-dark d-block ml-1" placement="right" ngbTooltip="You can purchase more in settings." ngbButtonLabel></i>
+              </div>
+              <div class="my-3 f-5 font-weight-bold">
+                Everything in Pro, plus:
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">3 assistant access</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Priority & Chat Support</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Onboarding Plus</span>
+              </div>
+              <div class="feature-item d-flex mb-2">
+                <i class="i-icon i-check bgc-blue sm"></i>
+                <span class="f-3 ml-2">Roadmap & Mastermind</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="currentPackage.package == customPackage.package">
+            <p class="f-1 c-dark op-64 mb-2">Let's chat</p>
+          </ng-container>
+        </div>
+        <div class="plan-buttons">
+          <button class="btn btn-primary font-weight-bold w-100" (click)="changePlan()">Change plan</button>
+          <button class="btn btn-white-gray d-block mt-2 border-0 c-dark op-28 w-100" (click)="cancelAccount()">Cancel account</button>
+        </div>
       </div>
-    </div>
+    </ng-container>
     <ng-container *ngIf="loadingPayment || loadingInvoice; else showPayment">
       <div class="text-center">
         <div class="loader mt-5"></div>
@@ -263,11 +265,11 @@
       <h1 class="f-26">Upgrade and get more out of CRM Grow</h1>
       <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBack()"></i>
     </div>
-    <div class="notification-area my-4">
+    <div class="notification-area mt-4" *ngIf="isV1User">
       <span class="f-6 font-weight-bold">Ooops</span>
       <span class="f-6 ml-2">I’m an alert letting you know that you need to do something in order to downgrade</span>
     </div>
-    <div class="package-wrapper">
+    <div class="package-wrapper mt-4">
       <div class="package-item"
            [class.highlight]="litePackage.package == selectedPackage.package"
            (click)="clickPackage(litePackage)"
@@ -951,13 +953,13 @@
             </div>
             <button class="btn btn-package f-3 ml-2" (click)="editCard()">Change card</button>
           </div>
-          <buttn class="btn btn-primary f-16 font-weight-bold my-4 w-100"
+          <button class="btn btn-primary f-16 font-weight-bold my-4 w-100"
                  [class.disabled]="selectedPackage.package == currentPackage.package"
                  [class.loading]="loadingUpdatePackage"
                  (click)="updatePackage()"
           >
             Upgrade plan
-          </buttn>
+          </button>
           <div class="v-center justify-content-center mb-4">
             <i class="i-icon i-lock bgc-black d-block"></i>
             <span class="mx-2 f-1">Guaranteed safe and secure checkout</span>
@@ -1207,7 +1209,12 @@
       </div>
       <div class="v-center justify-content-end">
         <button class="btn btn-white f-6 font-weight-bold c-blue" (click)="onBack()">Cancel</button>
-        <button class="btn btn-primary f-6 font-weight-bold ml-2" (click)="sendFeedback()">Send feedback</button>
+        <button class="btn btn-primary f-6 font-weight-bold ml-2"
+            [class.loading]="loadingCancelAccount"
+            (click)="sendFeedback()"
+        >
+          Send feedback
+        </button>
       </div>
     </div>
   </ng-container>

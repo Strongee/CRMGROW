@@ -64,7 +64,7 @@ export class RecordSettingDialogComponent implements OnInit {
   recordStep = 1;
   popup;
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
-  redirectUrl = environment.website;
+  redirectUrl = environment.front;
   authToken = '';
   userId = '';
   serverVideoId = '';
@@ -276,7 +276,7 @@ export class RecordSettingDialogComponent implements OnInit {
       if (!popup || popup.closed) {
         popup = window.open(
           `${this.redirectUrl}/materials?video=${videoId}`,
-          videoId
+          `screen${videoId}`
         );
       } else {
         popup.focus();
@@ -413,11 +413,15 @@ export class RecordSettingDialogComponent implements OnInit {
       this.captureScreen();
     }
     if (this.mode === 'camera') {
-      this.dialogRef.close();
       const option = 'width=530, height=305';
       if (!this.popup || this.popup.closed) {
         this.popup = window.open(
-          this.recordUrl + '?' + this.authToken + '&=material',
+          this.recordUrl +
+            '?' +
+            this.authToken +
+            '&=material' +
+            '&=' +
+            this.userId,
           'record',
           option
         );
@@ -428,7 +432,7 @@ export class RecordSettingDialogComponent implements OnInit {
             if (!popup || popup.closed) {
               popup = window.open(
                 `${this.redirectUrl}/materials?video=${videoId}`,
-                videoId
+                `camera${videoId}`
               );
             } else {
               popup.focus();
@@ -438,6 +442,7 @@ export class RecordSettingDialogComponent implements OnInit {
       } else {
         this.popup.focus();
       }
+      this.dialogRef.close();
     }
   }
 

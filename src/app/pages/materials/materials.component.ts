@@ -319,23 +319,29 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
       this.route.queryParams.subscribe((params) => {
         if (params['video']) {
           const _id = params['video'];
-          const material = this.filteredMaterials.filter((e) => e._id == _id);
-          this.dialog
-            .open(VideoPopupComponent, {
-              position: { top: '5vh' },
-              width: '100vw',
-              maxWidth: '500px',
-              disableClose: true,
-              data: {
-                material: material[0]
-              }
-            })
-            .afterClosed()
-            .subscribe((res) => {
-              if (res) {
-                this.location.replaceState(`/materials`);
-              }
-            });
+          const loadTimer = setInterval(() => {
+            if (this.materials.length > 0) {
+              clearInterval(loadTimer);
+              const material = this.materials.filter((e) => e._id == _id);
+              console.log('###', material);
+              this.dialog
+                .open(VideoPopupComponent, {
+                  position: { top: '5vh' },
+                  width: '100vw',
+                  maxWidth: '500px',
+                  disableClose: true,
+                  data: {
+                    material: material[0]
+                  }
+                })
+                .afterClosed()
+                .subscribe((res) => {
+                  if (res) {
+                    this.location.replaceState(`/materials`);
+                  }
+                });
+            }
+          }, 1000);
         }
       });
     }, 5000);

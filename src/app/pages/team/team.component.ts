@@ -587,7 +587,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
         this.acceptJoinRequest = false;
         this.acceptUserId = '';
         this.team.members.push(user);
-        this.team.viewers.push(user);
+        this.viewers.push(user);
         this.team.requests.some((e, index) => {
           if (e._id === user._id) {
             this.team.requests.splice(index, 1);

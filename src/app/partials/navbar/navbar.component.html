@@ -17,6 +17,7 @@
              *ngFor="let action of actions"
              (click)="runAction(action.id)"
              class="d-flex text-white py-2 pl-3 align-items-center"
+             [class.disable]="isDisableAction(action)"
         >
           <i class="i-icon {{action.icon}} mr-3"></i>
           <span class="font-weight-bold">{{action.label}}</span>
@@ -189,17 +190,17 @@
       <!-- Notification -->
       <div class="nav-item" [class.suspended]="isSuspended">
         <div class="notifications-wrapper detail-wrapper" ngbDropdown display="dynamic">
-          <div class="no-carot" ngbDropdownToggle [class.has-notifications]="(notificationService.notifications$ | async).length">
+          <div class="no-carot" ngbDropdownToggle [class.has-notifications]="unreadNotifications">
             <i class="i-icon i-notification bgc-blue d-block"></i>
           </div>
           <div ngbDropdownMenu class="p-0">
-            <ng-container *ngIf="!(notificationService.notifications$ | async).length; else notificationListTemplate">
+            <ng-container *ngIf="!notifications.length; else notificationListTemplate">
               <p class="text-center mt-3">
                 There are no notifications in your account.
               </p>
             </ng-container>
             <ng-template #notificationListTemplate>
-              <li *ngFor="let item of (notificationService.notifications$ | async); let i = index;" class="notification-item">
+              <li *ngFor="let item of notifications; let i = index;" class="notification-item">
                 <p [innerHTML]="item.content"></p>
               </li>
             </ng-template>

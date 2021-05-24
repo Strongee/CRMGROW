@@ -68,7 +68,7 @@ import { TestComponent } from '../../pages/test/test.component';
 import { StripeModule } from 'stripe-angular';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
-const config: SocketIoConfig = { url: 'http://3.139.190.87:3000', options: {} };
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [

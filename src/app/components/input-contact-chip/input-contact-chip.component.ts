@@ -69,7 +69,7 @@ export class InputContactChipComponent implements OnInit, OnChanges {
 
   filteredResults: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
   filteredContacts: Contact[] = [];
-  siteUrl = environment.website;
+  siteUrl = environment.front;
 
   loadingMore = false;
   loadMoreSubscription: Subscription;

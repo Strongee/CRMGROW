@@ -30,6 +30,21 @@
                 </div>
             </div>
         </div>
+        <div class="row mx-0">
+            <div class="col-12 px-0">
+                <div class="form-group">
+                    <label>Description</label>
+                    <app-html-editor
+                        [(value)]="video.description"
+                        placeholder="Video Description"
+                        required="true"
+                        [style]="{height: '150px'}"
+                        #emailEditor
+                    >
+                    </app-html-editor>
+                </div>
+            </div>
+        </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button class="btn btn-white f-6 font-weight-bold mr-2" mat-dialog-close>Cancel</button>
