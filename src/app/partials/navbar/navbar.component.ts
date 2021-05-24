@@ -118,16 +118,19 @@ export class NavbarComponent implements OnInit {
           });
         break;
       case 'text':
-        // this.dialog.open(SendTextComponent, {
-        //   position: {
-        //     bottom: '0px',
-        //     right: '0px'
-        //   },
-        //   width: '100vw',
-        //   panelClass: 'send-email',
-        //   backdropClass: 'cdk-send-email',
-        //   disableClose: false
-        // });
+        this.dialog.open(SendTextComponent, {
+          position: {
+            bottom: '0px',
+            right: '0px'
+          },
+          width: '100vw',
+          panelClass: 'send-email',
+          backdropClass: 'cdk-send-email',
+          disableClose: false,
+          data: {
+            type: 'multi'
+          }
+        });
         break;
       case 'call':
         break;

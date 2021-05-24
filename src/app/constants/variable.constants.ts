@@ -1289,7 +1289,14 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Call',
+      label: 'New Text',
+      type: 'button',
+      icon: 'i-sms-sent',
+      command: 'text',
+      loading: false
+    },
+    {
+      label: 'New Call',
       type: 'button',
       icon: 'i-phone',
       command: 'call',
@@ -1310,19 +1317,6 @@ export const BulkActions = {
       loading: false
     },
     {
-      spliter: true,
-      label: 'Select all',
-      type: 'button',
-      command: 'select',
-      loading: false
-    },
-    {
-      label: 'Deselect',
-      type: 'button',
-      command: 'deselect',
-      loading: false
-    },
-    {
       label: 'Edit',
       type: 'button',
       icon: 'i-edit',
@@ -1338,29 +1332,6 @@ export const BulkActions = {
       loadingLabel: 'Downloading'
     },
     {
-      label: 'Delete',
-      type: 'button',
-      icon: 'i-trash',
-      command: 'delete',
-      loading: false
-    }
-  ],
-  TeamContacts: [
-    {
-      label: 'Add tasks',
-      type: 'button',
-      icon: 'i-task',
-      command: 'add_task',
-      loading: false
-    },
-    {
-      label: 'Send email',
-      type: 'button',
-      icon: 'i-message',
-      command: 'message',
-      loading: false
-    },
-    {
       spliter: true,
       label: 'Select all',
       type: 'button',
@@ -1374,7 +1345,30 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Add notes',
+      label: 'Delete',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete',
+      loading: false
+    }
+  ],
+  TeamContacts: [
+    {
+      label: 'New Task',
+      type: 'button',
+      icon: 'i-task',
+      command: 'add_task',
+      loading: false
+    },
+    {
+      label: 'New Email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'message',
+      loading: false
+    },
+    {
+      label: 'New Note',
       type: 'button',
       icon: 'i-template',
       command: 'add_note',
@@ -1394,11 +1388,24 @@ export const BulkActions = {
       command: 'download',
       loading: false,
       loadingLabel: 'Downloading'
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
     }
   ],
   Materials: [
     {
-      label: 'Send via email',
+      label: 'Send via Email',
       type: 'button',
       icon: 'i-message',
       command: 'email',

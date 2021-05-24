@@ -6,8 +6,7 @@
 
   .action-count,
   .contacts,
-  .created,
-  .actions {
+  .created {
     text-align: right;
   }
 
@@ -84,6 +83,10 @@ tr.mat-row {
 
 tr td {
   background-color: white;
+  &.auth {
+    padding-right: 0px;
+    padding-left: 10px;
+  }
 }
 
 .contact-chip {
@@ -106,30 +109,23 @@ input.disabled {
   }
 
   .assign-action {
-    min-width: 60px;
-    max-width: 60px;
-
-    @media screen and (max-width: 576px) {
-      min-width: 40px;
-      max-width: 40px;
-    }
-
-    button {
+    width: 120px;
+    .actions {
       opacity: 0;
-      margin-left: auto;
-
-      @media screen and (max-width: 768px) {
-        opacity: 1;
-      }
     }
-  }
 
-  .actions {
-    max-width: 30px;
+    // button {
+    //   opacity: 0;
+    //   margin-left: auto;
+
+    //   @media screen and (max-width: 768px) {
+    //     opacity: 1;
+    //   }
+    // }
   }
 
   tr:hover {
-    .assign-action button {
+    .assign-action .actions {
       opacity: 1;
     }
   }

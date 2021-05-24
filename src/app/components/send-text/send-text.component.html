@@ -7,14 +7,29 @@
   </button>
 </div>
 <div class="text-panel">
-  <div class="contact-info py-2 px-3 border-bottom">
-    <div class="contact v-center">
+  <div class="contact-info border-bottom">
+    <div class="contact v-center py-2 px-3" *ngIf="type == 'single'">
       <div class="avatar bgc-dark text-white text-center mr-2">
         {{contact.avatarName}}
       </div>
       <div class="info">
         <span class="f-3 font-weight-bold">{{contact.fullName}}</span>
         <div class="c-blue font-weight-bold f-3">{{contact.cell_phone}}</div>
+      </div>
+    </div>
+    <div class="address-wrapper pl-3 pr-2 py-1" *ngIf="type == 'multi'">
+      <div class="overflow-visible">
+        <div class="d-flex w-100" (click)="setFocus()" >
+          <label class="f-6 op-56 m-0">To:</label>
+          <app-input-contact-chip
+            [selectedContacts]="textContacts"
+            [onlyFromSearch]="true"
+            [onlySubscriber]="true"
+            (onFocus)="setFocus()"
+            [focus]="isFocus()"
+            class="w-100 ml-2"
+          ></app-input-contact-chip>
+        </div>
       </div>
     </div>
   </div>

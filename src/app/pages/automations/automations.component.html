@@ -91,7 +91,7 @@
         <ng-container matColumnDef="assign">
           <th mat-header-cell *matHeaderCellDef class="assign-action"></th>
           <td mat-cell *matCellDef="let automation" class="assign-action">
-            <div class="v-center justify-content-between">
+            <div class="v-center justify-content-around">
               <button class="v-center btn p-1 c-dark" (click)="assignAutomation($event, automation)"
                 placement="bottom" ngbTooltip="Assign contact"
               >
@@ -128,49 +128,6 @@
             </div>
           </td>
         </ng-container>
-        <!-- <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef class="actions"></th>
-          <td mat-cell *matCellDef="let automation" class="actions px-0">
-            <div ngbDropdown class="d-flex justify-content-end button-more px-1 rounded bottom-right" placement="bottom-right" >
-              <a class="v-center justify-content-end c-pointer" ngbDropdownToggle>
-                <i class="i-icon i-menu-more bg-dark" aria-hidden="true"></i>
-              </a>
-              <div ngbDropdownMenu class="light">
-                <ng-container *ngIf="automation.role !== 'admin' && automation.user == userId; else otherRoleTemplate">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item"
-                          (click)="openAutomation($event, automation)"
-                  >
-                    <i class="i-icon i-edit d-block bgc-dark" aria-hidden="true"></i>
-                    <span class="f-3 font-weight-bold ml-3">Edit</span>
-                  </button>
-                </ng-container>
-                <ng-template #otherRoleTemplate>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="duplicate($event, automation)">
-                    <i class="i-icon i-duplicate d-block bgc-dark" aria-hidden="true"></i>
-                    <span class="f-3 font-weight-bold ml-3">Clone</span>
-                  </button>
-                </ng-template>
-                <ng-container *ngIf="automation.user == userId">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item"
-                          (click)="shareAutomation($event, automation)"
-                  >
-                    <i class="i-icon i-share-team d-block bgc-dark" aria-hidden="true"></i>
-                    <span class="f-3 font-weight-bold ml-3">Share team</span>
-                  </button>
-                </ng-container>
-                <ng-container *ngIf="automation.role !== 'admin' && automation.user == userId">
-                  <hr class="my-0">
-                  <button class="v-center border-0 py-2 c-dark dropdown-item"
-                          (click)="deleteAutomation($event, automation)"
-                  >
-                    <i class="i-icon i-trash bgc-red" aria-hidden="true"></i>
-                    <span class="f-3 c-red font-weight-bold ml-3">Delete</span>
-                  </button>
-                </ng-container>
-              </div>
-            </div>
-          </td>
-        </ng-container> -->
 
         <ng-container matColumnDef="expandedDetail">
           <td mat-cell *matCellDef="let element" [attr.colspan]="DISPLAY_COLUMNS.length">

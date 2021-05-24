@@ -33,6 +33,7 @@ import {
   addClosedListener
 } from '@wavv/dialer';
 import { ToastrService } from 'ngx-toastr';
+import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 
 @Component({
   selector: 'app-contacts',
@@ -301,6 +302,24 @@ export class ContactsComponent implements OnInit, OnDestroy {
         '_id'
       );
       this.pageSelection = [];
+      if (this.selection.length > 1) {
+        this.disableActions.push({
+          label: 'New Text',
+          type: 'button',
+          icon: 'i-sms-sent',
+          command: 'text',
+          loading: false
+        });
+        this.disableActions.push({
+          label: 'New Call',
+          type: 'button',
+          icon: 'i-phone',
+          command: 'call',
+          loading: false
+        });
+      } else {
+        this.disableActions = [];
+      }
       return;
     }
     this.pageContacts.forEach((e) => {
@@ -309,6 +328,24 @@ export class ContactsComponent implements OnInit, OnDestroy {
         this.selection.push(e.mainInfo);
       }
     });
+    if (this.selection.length > 1) {
+      this.disableActions.push({
+        label: 'New Text',
+        type: 'button',
+        icon: 'i-sms-sent',
+        command: 'text',
+        loading: false
+      });
+      this.disableActions.push({
+        label: 'New Call',
+        type: 'button',
+        icon: 'i-phone',
+        command: 'call',
+        loading: false
+      });
+    } else {
+      this.disableActions = [];
+    }
   }
   /**
    * Toggle Element
@@ -329,6 +366,24 @@ export class ContactsComponent implements OnInit, OnDestroy {
       '_id'
     );
     this.selection = toggledAllSelection;
+    if (this.selection.length > 1) {
+      this.disableActions.push({
+        label: 'New Text',
+        type: 'button',
+        icon: 'i-sms-sent',
+        command: 'text',
+        loading: false
+      });
+      this.disableActions.push({
+        label: 'New Call',
+        type: 'button',
+        icon: 'i-phone',
+        command: 'call',
+        loading: false
+      });
+    } else {
+      this.disableActions = [];
+    }
   }
   /**
    * Check contact is selected.
@@ -439,11 +494,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
         this.openAutomationDlg();
         break;
       case 'call':
-        if (this.selection.length == 1) {
-          this.call();
-        } else {
-          this.toast.error('Please select only one contact');
-        }
+        this.call();
+        break;
+      case 'text':
+        this.openTextDlg();
         break;
     }
   }
@@ -685,6 +739,26 @@ export class ContactsComponent implements OnInit, OnDestroy {
       disableClose: false,
       data: {
         contacts: this.selection
+      }
+    });
+  }
+
+  openTextDlg(): void {
+    const contact = this.pageContacts.filter(
+      (e) => e._id == this.selection[0]._id
+    )[0];
+    this.dialog.open(SendTextComponent, {
+      position: {
+        bottom: '0px',
+        right: '0px'
+      },
+      width: '100vw',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
+      disableClose: false,
+      data: {
+        type: 'single',
+        contact: contact
       }
     });
   }
