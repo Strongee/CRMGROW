@@ -193,6 +193,24 @@
       </div>
       <app-input-tag [selectedTags]="searchOption.tagsCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-tag>
     </div>
+    <!-- search stage -->
+    <div class="my-3" [class.disable-form]="enableTeamSearchOption()" [class.d-none]="selectedTab.id === 'team'">
+      <div class="d-flex align-items-end justify-content-between">
+        <div class="form-group mb-0">
+          <label for="stage_check">Stage</label>
+        </div>
+        <div class="v-center mb-2">
+          <div class="f-3 fw-600 c-dark">Include</div>
+          <label class="custom-toggle mb-0 mx-2" placement="top">
+            <input type="checkbox" id="stage_check" name="stage_check" [checked]="!searchOption.includeStage" (change)="toggleInclude('stage')">
+            <span class="custom-toggle-slider rounded-circle"></span>
+          </label>
+          <div class="f-3 fw-600 c-dark">Exclude</div>
+        </div>
+      </div>
+      <app-input-stage [selectedTags]="searchOption.stagesCondition" [onlyFromSearch]="true" (onSelect)="updateFilter()"></app-input-stage>
+    </div>
+    
     <div class="my-3">
       <div class="form-group mb-0">
         <label>Last Activity</label>

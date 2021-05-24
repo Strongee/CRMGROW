@@ -112,6 +112,7 @@ export class ContactActivity implements Deserializable {
   source: string;
   brokerage: string;
   tags: string[];
+  stages: string[];
   recruiting_stage: string;
   website: string;
 
@@ -158,6 +159,13 @@ export class ContactActivity implements Deserializable {
   get moreTag(): string {
     if (this.tags.length > 1) {
       return '+' + (this.tags.length - 1) + ' more';
+    }
+    return '';
+  }
+
+  get moreStage(): string {
+    if (this.stages.length > 1) {
+      return '+' + (this.stages.length - 1) + ' more';
     }
     return '';
   }
