@@ -63,7 +63,7 @@ export class RecordSettingDialogComponent implements OnInit {
   collapse = false;
   recordStep = 1;
   popup;
-  recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
+  recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com';
   redirectUrl = environment.front;
   authToken = '';
   userId = '';
@@ -437,7 +437,7 @@ export class RecordSettingDialogComponent implements OnInit {
       if (!this.popup || this.popup.closed) {
         this.popup = window.open(
           this.recordUrl +
-            '?' +
+            '/index.html?' +
             this.authToken +
             '&=material' +
             '&=' +
@@ -446,7 +446,7 @@ export class RecordSettingDialogComponent implements OnInit {
           option
         );
         window.addEventListener('message', (e) => {
-          if (e && e.data) {
+          if (e && e.data && e.origin == this.recordUrl) {
             const videoId = e.data;
             let popup;
             if (!popup || popup.closed) {
