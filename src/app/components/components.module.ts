@@ -161,6 +161,7 @@ import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-err
 import { DialPlanComponent } from './dial-plan/dial-plan.component';
 import { StopShareContactComponent } from './stop-share-contact/stop-share-contact.component';
 import { VideoPopupComponent } from './video-popup/video-popup.component';
+import { InputStageComponent } from './input-stage/input-stage.component';
 
 @NgModule({
   declarations: [
@@ -318,7 +319,9 @@ import { VideoPopupComponent } from './video-popup/video-popup.component';
     UpgradePlanErrorComponent,
     DialPlanComponent,
     StopShareContactComponent,
-    VideoPopupComponent
+    VideoPopupComponent,
+    InputContactDealComponent,
+    InputStageComponent,
   ],
   imports: [
     CommonModule,
