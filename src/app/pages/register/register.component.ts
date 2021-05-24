@@ -263,6 +263,10 @@ export class RegisterComponent implements OnInit {
       level: this.package_level,
       is_trial: this.is_trial
     };
+
+    if (window['Rewardful'] && window['Rewardful'].affiliate) {
+      this.user['parent_affiliate'] = window['Rewardful'].affiliate;
+    }
     if (this.isSocialUser) {
     } else {
       this.userService.signup(this.user).subscribe((res) => {

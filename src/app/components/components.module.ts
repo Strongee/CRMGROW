@@ -318,7 +318,8 @@ import { VideoPopupComponent } from './video-popup/video-popup.component';
     UpgradePlanErrorComponent,
     DialPlanComponent,
     StopShareContactComponent,
-    VideoPopupComponent
+    VideoPopupComponent,
+    InputContactDealComponent
   ],
   imports: [
     CommonModule,

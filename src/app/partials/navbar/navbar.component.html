@@ -54,7 +54,7 @@
     <div class="navbar-nav v-center ml-sm-3">
       <!-- Notification Wrapper -->
       <div class="search-box input-group bgc-dark-trans08 rounded mr-2"
-           [class.opened]="handlerService.openSearch$ | async"
+           [class.opened]="(handlerService.openSearch$ | async)"
            [class.suspended]="isSuspended"
       >
         <div class="input-group-prepend" (click)="toggleSearchBar()">
@@ -90,40 +90,54 @@
       </div>
       <!-- Incoming Chat Message Wrapper -->
       <div class="nav-item" [class.suspended]="isSuspended" [class.disable]="!isPackageText">
-        <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showTexts=true" (mouseleave)="showTexts=false">
-          <a [routerLink]="['/messages']" class="no-carot d-block position-relative">
+        <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right">
+          <a [routerLink]="['/messages']" class="no-carot d-block position-relative c-pointer" *ngIf="!unreadMessageCount; else hasUnreadMessage">
             <i class="i-icon i-sms-sent bgc-blue d-block"></i>
-            <span class="badge texting-badge" *ngIf="textTasks.length">{{textTasks.length}}</span>
-            <span class="badge receive-badge" *ngIf="unreadMessageCount">{{unreadMessageCount}}</span>
           </a>
+          <ng-template #hasUnreadMessage>
+            <a class="no-carot d-block position-relative c-pointer" ngbDropdownToggle>
+              <i class="i-icon i-sms-sent bgc-blue d-block"></i>
+              <span class="badge texting-badge">{{unreadMessageCount}}</span>
+            </a>
 
-          <div class="detail-panel" *ngIf="(textTasks.length || unreadMessageCount) && showTexts">
-            <div class="text-status-tab mb-3" *ngIf="unreadMessageCount && textTasks.length">
-              <app-slide-tab [tabs]="textTabs" [selected]="selectedTextTab" (onChange)="changeTab($event)" class="border-bottom pl-0 rounded-0">
-              </app-slide-tab>
-            </div>
-            <div class="detail-panel-content" [class.two-tab]="unreadMessageCount && textTasks.length">
-              <div class="panel" [class.selected]="selectedTextTab.id === 'received'">
-                <div class="message-item d-flex mb-2" *ngFor="let message of unreadMessages">
-                  <div class="avatar contact-avatar mr-2">
-                    {{message.contact?.avatarName || 'UN'}}
+            <div ngbDropdownMenu class="px-0 pb-0" style="height: fit-content;">
+              <div class="message-item d-flex mt-2 px-3" *ngFor="let message of unreadMessages">
+                <div class="avatar contact-avatar mr-2">
+                  {{message.contact?.avatarName || 'UN'}}
+                </div>
+                <div class="content flex-grow-1">
+                  <div class="message-info d-flex">
+                    <div class="contact font-weight-bold f-4">
+                      {{(message.contact?.fullName || 'Unknown Contact') | shorten: 18: '...'}}
+                    </div>
+                    <div class="message-time ml-auto f-2 op-75">
+                      {{message.created_at | timeago}}
+                    </div>
                   </div>
-                  <div class="content flex-grow-1">
-                    <div class="message-info d-flex">
-                      <div class="contact font-weight-bold f-4">
-                        {{(message.contact?.fullName || 'Unknown Contact') | shorten: 18: '...'}}
-                      </div>
-                      <div class="message-time ml-auto f-2 op-75">
-                        {{message.created_at | timeago}}
-                      </div>
-                    </div>
-                    <div class="message-text f-3 mt-1">
-                      {{message.content}}
-                    </div>
+                  <div class="message-text f-3 mt-1">
+                    {{message.content}}
                   </div>
                 </div>
               </div>
-              <div class="panel" [class.selected]="selectedTextTab.id === 'sending'">
+              <li class="notification-expand rounded-bottom border-top overflow-hidden mt-3">
+                <a [routerLink]="['/messages']" class="dropdown-item f-4 text-center text-primary font-weight-bold">See all</a>
+              </li>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Text Progressing Status -->
+      <div class="nav-item" *ngIf="textTasks.length">
+        <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showTexts=true" (mouseleave)="showTexts=false">
+          <a class="no-carot d-block position-relative c-pointer">
+            <i class="i-icon i-text-schedule bgc-blue d-block texting-icon"></i>
+            <span class="badge texting-badge">{{textTasks.length}}</span>
+          </a>
+
+          <div class="detail-panel" *ngIf="showTexts">
+            <div class="detail-panel-content">
+              <div class="panel">
                 <div class="process-item" *ngFor="let task of textTasks">
                   <div class="email-subject fw-600 f-4 mb-2">
                     {{task.details?.content | shorten: 60: '...'}}
@@ -137,7 +151,6 @@
                     <ng-container *ngIf="task.succeed">
                       <span class="title op-56">Delivered:</span> <span class="value mr-2">{{task.succeed || 0}}</span>
                     </ng-container>
-                    <span class="title op-56">Delivered:</span> <span class="value mr-2">{{task.succeed || 0}}</span>
                     <span class="title op-56">Checking:</span> <span class="value mr-2">{{task.awaiting || 0}}</span>
                     <span class="title op-56">Failed:</span> <span class="value mr-2">{{task.failed || 0}}</span>
                   </div>
@@ -147,6 +160,7 @@
           </div>
         </div>
       </div>
+
       <!-- Emailing Task Progressing Status -->
       <div class="nav-item" *ngIf="emailTasks && emailTasks.length">
         <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showEmails=true" (mouseleave)="showEmails=false">
@@ -189,7 +203,7 @@
       </div>
       <!-- Notification -->
       <div class="nav-item" [class.suspended]="isSuspended">
-        <div class="notifications-wrapper detail-wrapper" ngbDropdown display="dynamic">
+        <div class="notifications-wrapper detail-wrapper c-pointer" ngbDropdown display="dynamic">
           <div class="no-carot" ngbDropdownToggle [class.has-notifications]="unreadNotifications">
             <i class="i-icon i-notification bgc-blue d-block"></i>
           </div>
