@@ -23,7 +23,7 @@ import { environment } from '../environments/environment';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+const config: SocketIoConfig = { url: environment.server, options: {} };
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);

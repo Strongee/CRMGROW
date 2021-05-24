@@ -112,6 +112,7 @@ export class IntegrationComponent implements OnInit {
         this.user.primary_connected = false;
         this.user.connected_email_type = '';
         this.user.connected_email = '';
+        this.toast.success('Email is disconnected successfully.');
       }
     });
   }
