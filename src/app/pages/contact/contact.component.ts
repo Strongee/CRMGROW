@@ -23,8 +23,7 @@ import {
   DialogSettings,
   CALENDAR_DURATION,
   STATUS,
-  ROUTE_PAGE,
-  PACKAGE_LEVEL
+  ROUTE_PAGE
 } from 'src/app/constants/variable.constants';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -66,7 +65,12 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { Note } from 'src/app/models/note.model';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
 import { Deal } from 'src/app/models/deal.model';
-import { getUserLevel } from '../../utils/functions';
+import {
+  startCampaign,
+  addCallStartedListener,
+  addCallEndedListener,
+  addClosedListener
+} from '@wavv/dialer';
 
 @Component({
   selector: 'app-contact',
@@ -74,7 +78,7 @@ import { getUserLevel } from '../../utils/functions';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit, OnDestroy {
-  SITE = environment.website;
+  SITE = environment.front;
   STATUS = STATUS;
   tabs: TabItem[] = [
     { icon: '', label: 'Activity', id: 'all' },
@@ -202,7 +206,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   groups = []; // detail information about group
   dGroups = []; // group ID Array to display detail data
   showingMax = 4; // Max Limit to show the detail data
-  packageLevel = '';
+  isPackageAutomation = true;
+  isPackageGroupEmail = true;
+  isPackageText = true;
   disableTabs = [];
 
   constructor(
@@ -232,11 +238,29 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe((user) => {
       try {
         this.timezone = JSON.parse(user.time_zone_info);
-        this.packageLevel = user.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-          this.disableTabs = [
-            { icon: '', label: 'Appointments', id: 'appointment' }
-          ];
+        this.isPackageAutomation = user.automation_info?.is_enabled;
+        this.isPackageGroupEmail = user.email_info?.mass_enable;
+        this.isPackageText = user.text_info?.is_enabled;
+        this.disableTabs = [];
+        if (!this.isPackageAutomation) {
+          this.disableTabs.push({
+            icon: '',
+            label: 'Appointments',
+            id: 'appointment'
+          });
+          const index = this.tabs.findIndex(
+            (item) => item.id === 'appointment'
+          );
+          if (index >= 0) {
+            this.tabs.splice(index, 1);
+          }
+        }
+        if (!this.isPackageText) {
+          this.disableTabs.push({ icon: '', label: 'Texts', id: 'text' });
+          const index = this.tabs.findIndex((item) => item.id === 'text');
+          if (index >= 0) {
+            this.tabs.splice(index, 1);
+          }
         }
       } catch (err) {
         const timezone = getCurrentTimezone();
@@ -414,6 +438,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     );
   }
 
+  // ngAfterViewInit(): void {
+  //   const signature =
+  //     'q6Oggy7to8EEgSyJTwvinjslHitdRjuC76UEtw8kxyGRDAlF1ogg3hc4WzW2vnzc';
+  //   const payload = {
+  //     userId: '704e070acb0761ed0382211136fdd457'
+  //   };
+  //   const issuer = 'k8d8BvqFWV9rSTwZyGed64Dc0SbjSQ6D';
+  //   const token = jwt.sign(payload, signature, { issuer, expiresIn: 3600 });
+
+  //   init(token);
+  // }
+
   ngOnDestroy(): void {
     this.handlerService.pageName.next('');
     this.storeService.selectedContact.next(new ContactDetail());
@@ -425,10 +461,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
 
     this.contactService.contactConversation.next(null);
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   /**
@@ -726,6 +758,32 @@ export class ContactComponent implements OnInit, OnDestroy {
       });
   }
 
+  openCall(): void {
+    const contacts = [
+      {
+        contactId: '704e070acb0761ed0382211136fdd457',
+        numbers: [this.contact.cell_phone],
+        name: this.contact.fullName
+      }
+    ];
+    startCampaign({ contacts })
+      .then(() => {
+        const sideBar = document.querySelector('.sidebar') as HTMLElement;
+        const mainPage = document.querySelector('.page') as HTMLElement;
+        sideBar.style.paddingTop = '105px';
+        mainPage.style.paddingTop = '118px';
+      })
+      .catch((err) => {
+        console.log('Failed to start campaign', err);
+      });
+    addClosedListener(() => {
+      const sideBar = document.querySelector('.sidebar') as HTMLElement;
+      const mainPage = document.querySelector('.page') as HTMLElement;
+      sideBar.style.paddingTop = '50px';
+      mainPage.style.paddingTop = '63px';
+    });
+  }
+
   /**
    * Open dialog to merge
    */
@@ -933,6 +991,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       backdropClass: 'cdk-send-email',
       disableClose: false,
       data: {
+        type: 'single',
         contact: this.contact
       }
     });
@@ -1787,6 +1846,11 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   closeOverlay(event): void {
     this.overlayRef.detach();
+  }
+
+  isDisableTab(tabItem): boolean {
+    const index = this.disableTabs.findIndex((item) => item.id === tabItem.id);
+    return index >= 0;
   }
 
   isUrl(str): boolean {

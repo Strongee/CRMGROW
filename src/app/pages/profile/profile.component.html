@@ -3,8 +3,8 @@
   <div class="sub-sidebar-mobile mb-2">
     <div ngbDropdown class="sidebar-menu p-2">
       <div ngbDropdownToggle class="v-center">
-        <i class="i-icon bgc-blue {{currentPageItem[0].icon}} mr-2"></i>
-        <span class="f-3 menu-label font-weight-bold c-blue">{{currentPageItem[0].label | translate}}</span>
+        <i class="i-icon bgc-blue {{currentPageItem[0]?.icon}} mr-2"></i>
+        <span class="f-3 menu-label font-weight-bold c-blue">{{currentPageItem[0]?.label | translate}}</span>
       </div>
       <div ngbDropdownMenu class="light">
         <div *ngFor="let menuItem of menuItems" class="dropdown-item">
@@ -20,7 +20,7 @@
     <div class="sub-sidebar">
       <ul class="m-0 p-0">
         <ng-container *ngFor="let menuItem of menuItems" class="nav-item">
-          <li>
+          <li [class.disable]="isDisableMenuItem(menuItem)">
             <a class="d-flex nav-link c-dark c-pointer px-0" [class.active]="currentPage === menuItem.id" (click)="changeMenu(menuItem)">
               <i class="i-icon bgc-dark {{menuItem.icon}} mr-2"></i>
               <span class="f-3 menu-label font-weight-bold">{{menuItem.label | translate}}</span>
@@ -34,7 +34,7 @@
         <app-general-profile *ngSwitchCase="'general'"></app-general-profile>
         <app-signature *ngSwitchCase="'signature'"></app-signature>
         <app-security *ngSwitchCase="'security'"></app-security>
-        <app-payment *ngSwitchCase="'billing'" [selectedStep]="initStep"></app-payment>
+        <app-payment *ngSwitchCase="'billing'"></app-payment>
       </ng-container>
     </div>
   </div>

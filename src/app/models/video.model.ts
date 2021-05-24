@@ -25,6 +25,7 @@ export class Video implements Deserializable {
   created_at: Date;
   updated_at: Date;
   views: number;
+  _v: number;
   _id: string;
 
   deserialize(input: any): this {

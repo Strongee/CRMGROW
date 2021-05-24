@@ -20,7 +20,7 @@ import { Automation } from 'src/app/models/automation.model';
 import { Contact } from 'src/app/models/contact.model';
 import { AutomationStatusComponent } from 'src/app/components/automation-status/automation-status.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { getUserLevel, sortStringArray } from '../../utils/functions';
+import { sortStringArray } from '../../utils/functions';
 import * as _ from 'lodash';
 import { TeamMaterialShareComponent } from '../../components/team-material-share/team-material-share.component';
 import { searchReg } from 'src/app/helper';
@@ -50,8 +50,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     'action-count',
     'contacts',
     'created',
-    'assign',
-    'actions'
+    'assign'
   ];
   PAGE_COUNTS = [
     { id: 8, label: '8' },
@@ -89,7 +88,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   };
 
   selectedSort = 'role';
-  packageLevel = '';
+  isPackageAutomation = true;
 
   constructor(
     public automationService: AutomationService,
@@ -105,7 +104,7 @@ export class AutomationsComponent implements OnInit, OnDestroy {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.userId = res._id;
-      this.packageLevel = res.package_level;
+      this.isPackageAutomation = res.automation_info?.is_enabled;
     });
     this.loadSubscription && this.loadSubscription.unsubscribe();
     this.loadSubscription = this.automationService.automations$.subscribe(
@@ -122,10 +121,6 @@ export class AutomationsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   changeSearchStr(): void {

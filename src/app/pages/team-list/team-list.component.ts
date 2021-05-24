@@ -36,6 +36,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
   declineTeamId = '';
 
   teams = [];
+  isPackageTeam = true;
 
   profileSubscription: Subscription;
   constructor(
@@ -51,6 +52,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       const profile = this.userService.profile.getValue();
       this.userId = profile._id;
+      this.isPackageTeam = profile.team_info?.owner_enabled;
       this.currentUser = res;
     });
     this.load();
@@ -111,8 +113,6 @@ export class TeamListComponent implements OnInit, OnDestroy {
       }
 
       this.teams = [...ownerTeams, ...editorTeams, ...viewerTeams];
-
-      console.log("teams =========>", this.teams);
     });
   }
 

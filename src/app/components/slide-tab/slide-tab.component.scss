@@ -70,6 +70,8 @@
 
 .tab-container.plain {
   background-color: transparent;
+  border-radius: 0;
+  border-bottom: 1px solid $color-trans08;
 
   .tab-indicator {
     height: 4px;

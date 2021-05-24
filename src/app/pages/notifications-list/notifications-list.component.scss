@@ -24,3 +24,17 @@
     background-color: aliceblue;
   }
 }
+
+:host ::ng-deep {
+  .notification-item {
+    .content {
+      a {
+        color: blue;
+        font-weight: 600;
+      }
+      .creator {
+        color: blue;
+      }
+    }
+  }
+}

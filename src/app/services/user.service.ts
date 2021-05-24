@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, filter, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AUTH, GARBAGE, USER } from '../constants/api.constant';
@@ -9,6 +9,9 @@ import { Template } from '../models/template.model';
 import { User } from '../models/user.model';
 import { ErrorService } from './error.service';
 import { HttpService } from './http.service';
+import { Payment } from '../models/payment.model';
+import { Invoice } from '../models/invoice.model';
+import { Material } from '../models/material.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +22,14 @@ export class UserService extends HttpService {
 
   garbage: BehaviorSubject<Garbage> = new BehaviorSubject(new Garbage());
   garbage$: Observable<Garbage> = this.garbage.asObservable();
+
+  invoice: BehaviorSubject<any> = new BehaviorSubject(null);
+  invoice$ = this.invoice.asObservable();
+  loadInvoiceSubscription: Subscription;
+
+  payment: BehaviorSubject<any> = new BehaviorSubject(null);
+  payment$ = this.payment.asObservable();
+  loadPaymentSubscription: Subscription;
 
   sms: BehaviorSubject<Template> = new BehaviorSubject(new Template());
   email: BehaviorSubject<Template> = new BehaviorSubject(new Template());
@@ -259,16 +270,37 @@ export class UserService extends HttpService {
    * Load the User Payment Information
    * @param id : Payment Information Id
    */
-  public getPayment(id: string): Observable<any> {
+
+  public loadPayment(id: string): void {
+    this.loadPaymentSubscription && this.loadPaymentSubscription.unsubscribe();
+    this.loadPaymentSubscription = this.loadPaymentImpl(id).subscribe((res) => {
+      if (res) {
+        this.payment.next(res);
+      }
+    });
+  }
+
+  public loadPaymentImpl(id: string): Observable<any> {
     return this.httpClient.get(this.server + USER.PAYMENT + id).pipe(
       map((res) => res['data']),
       catchError(this.handleError('LOAD PAYMENT'))
     );
   }
+
   public updatePayment(payment: any): any {
     return this.httpClient.post(this.server + USER.UPDATE_PAYMENT, payment);
   }
-  public getInvoice(): any {
+
+  public loadInvoice(): void {
+    this.loadInvoiceSubscription && this.loadInvoiceSubscription.unsubscribe();
+    this.loadInvoiceSubscription = this.loadInvoiceImpl().subscribe((res) => {
+      if (res) {
+        this.invoice.next(res);
+      }
+    });
+  }
+
+  public loadInvoiceImpl(): any {
     return this.httpClient.get(this.server + USER.GET_INVOICE);
   }
 
@@ -337,6 +369,9 @@ export class UserService extends HttpService {
         return this.httpClient.get(this.server + USER.CALENDAR_SYNC_OUTLOOK);
     }
   }
+  public disconnectMail(): any {
+    return this.httpClient.get(this.server + USER.DISCONNECT_MAIL);
+  }
   public disconnectCalendar(email: string): any {
     const data = {
       connected_email: email
@@ -378,6 +413,34 @@ export class UserService extends HttpService {
         catchError(this.handleError('CONNECT SMTP'))
       );
   }
+
+  public cancelAccount(data): Observable<any> {
+    return this.httpClient
+      .post(this.server + USER.CANCEL_ACCOUNT, { ...data })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('CANCEL ACCOUNT'))
+      );
+  }
+
+  public updatePackage(data): Observable<any> {
+    return this.httpClient
+      .post(this.server + USER.UPDATE_PACKAGE, { ...data })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('UPDATE PACKAGE'))
+      );
+  }
+
+  public checkDowngrade(selectedPackage): Observable<any> {
+    return this.httpClient
+      .post(this.server + USER.CHECK_DOWNGRADE, { selectedPackage })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('CHECK DOWNGRADE PACKAGE'))
+      );
+  }
+
   public getUserInfoItem(type: string): any {
     const user = this.getUser();
     return user[type];

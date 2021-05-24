@@ -157,7 +157,11 @@ import { PlayTimelinesComponent } from './play-timelines/play-timelines.componen
 import { InputContactDealComponent } from './input-contact-deal/input-contact-deal.component';
 import { StripeModule } from 'stripe-angular';
 import { STRIPE_KEY } from '../constants/variable.constants';
-//
+import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-error.component';
+import { DialPlanComponent } from './dial-plan/dial-plan.component';
+import { StopShareContactComponent } from './stop-share-contact/stop-share-contact.component';
+import { VideoPopupComponent } from './video-popup/video-popup.component';
+
 @NgModule({
   declarations: [
     TopbarComponent,
@@ -310,6 +314,11 @@ import { STRIPE_KEY } from '../constants/variable.constants';
     EmailTimelinesComponent,
     TextTimelinesComponent,
     PlayTimelinesComponent,
+    InputContactDealComponent,
+    UpgradePlanErrorComponent,
+    DialPlanComponent,
+    StopShareContactComponent,
+    VideoPopupComponent,
     InputContactDealComponent
   ],
   imports: [
@@ -417,7 +426,9 @@ import { STRIPE_KEY } from '../constants/variable.constants';
     MaterialTimelinesComponent,
     EmailTimelinesComponent,
     TextTimelinesComponent,
-    PlayTimelinesComponent
+    PlayTimelinesComponent,
+    DialPlanComponent,
+    VideoPopupComponent
   ],
   bootstrap: [
     ContactCreateComponent,

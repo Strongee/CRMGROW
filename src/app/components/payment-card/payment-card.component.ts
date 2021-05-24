@@ -109,5 +109,4 @@ export class PaymentCardComponent implements OnInit {
       this.invalidError = 'invalid';
     }
   }
-
 }

@@ -60,8 +60,7 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     'action-count',
     'contacts',
     'created',
-    'assign-action',
-    'actions'
+    'assign-action'
   ];
   STATUS = STATUS;
 
@@ -118,6 +117,7 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
     this.teamService.loadSharedAutomations(this.team._id);
     this.storeService.sharedAutomations$.subscribe(
       (res) => {
+        console.log('###', res);
         this.loading = false;
         this.automations = res;
         this.filteredResult = this.automations;
@@ -200,7 +200,7 @@ export class TeamShareAutomationComponent implements OnInit, OnChanges {
   }
 
   isStopSharable(automation): any {
-    if (automation.user && automation.user === this.userId) {
+    if (automation.user && automation.user._id === this.userId) {
       return true;
     }
     return false;

@@ -1,0 +1,123 @@
+.package-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin: 0 auto;
+  
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  
+    @media screen and (max-width: 576px) {
+      grid-template-columns: repeat(1, 1fr);
+      max-width: 300px;
+    }
+}
+
+.package-item {
+    border: 1.04px solid #DDDDEA;
+    border-radius: 11px;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    padding: 22px;
+    position: relative;
+    max-width: 280px;
+  
+    img {
+      display: none;
+    }
+  
+    .package-level {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 46px;
+      color: #222B45;
+    }
+  
+    .package-description {
+      color: #6F7086;
+      font-size: 14px;
+      letter-spacing: 0;
+      line-height: 21px;
+      height: 100px;
+    }
+  
+    .package-price {
+      display: flex;
+      align-items: flex-end;
+  
+      .dollar {
+        color: #222B45;
+        font-size: 19px;
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 26px;
+      }
+  
+      .price {
+        color: #222B45;
+        font-size: 29px;
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 30px;
+      }
+  
+      .month {
+        color: #222B45;
+        font-size: 19px;
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 26px;
+      }
+    }
+  
+    &.active {
+      border: 4px solid #DF7900;
+  
+      img {
+        display: block;
+        position: absolute;
+        width: 30%;
+        height: auto;
+        right: -1px;
+        top: 0;
+        left: initial;
+      }
+    }
+  
+    &.highlight {
+      background-color: #F5F5FF;
+      border: 4px solid #0000ff;
+    }
+}
+
+.btn-package {
+    border: 1px solid #101336;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: center;
+    color: #000000;
+    font-size: 16px;
+    padding: 10px;
+  
+    &.highlight {
+      background-color: #F5F5FF;
+      border: 1px solid #0000ff;
+    }
+  
+    &.active {
+      background-color: #F5F6FD;
+      border: none;
+  
+      &.highlight {
+        background-color: white;
+        border: 1px solid #0000ff;
+      }
+    }
+}

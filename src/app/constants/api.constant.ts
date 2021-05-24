@@ -37,7 +37,11 @@ export const USER = {
   LOAD_REFERRALS: 'affiliate/referrals/',
   UPDATE_GARBAGE: 'garbage',
   CONNECT_SMTP: 'integration/sync-smtp',
-  DISCONNECT_CALENDAR: 'user/discon-calendar'
+  DISCONNECT_MAIL: 'user/discon-email',
+  DISCONNECT_CALENDAR: 'user/discon-calendar',
+  CANCEL_ACCOUNT: 'user/cancel-account',
+  UPDATE_PACKAGE: 'user/update-package',
+  CHECK_DOWNGRADE: 'user/check-downgrade'
 };
 export const GUEST = {
   LOAD: 'guest/load',
@@ -104,6 +108,7 @@ export const CONTACT = {
   CHECK_EMAIL: 'contact/check-email',
   CHECK_PHONE: 'contact/check-phone',
   SHARE_CONTACT: 'contact/share-contact',
+  STOP_SHARE: 'contact/stop-share',
   TEAM_SHARED: 'contact/team-shared/',
   LOAD_NOTES: 'contact/load-notes/'
 };
@@ -331,7 +336,8 @@ export const NOTIFICATION = {
   READ_MARK: 'notification/bulk-read',
   UNREAD_MARK: 'notification/bulk-unread',
   DELETE: 'notification/bulk-remove',
-  TEXT_DELIVERY: 'notification/get-delivery'
+  TEXT_DELIVERY: 'notification/get-delivery',
+  STATUS: 'notification/status'
 };
 
 export const FILTER = {

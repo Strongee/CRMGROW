@@ -26,7 +26,7 @@
                     </div>
                     <div ngbDropdownMenu class="light action-menu">
                       <button class="v-center border-0 c-dark dropdown-item my-1"
-                        [class.disable]="getUserLevel() == 'lite'"
+                        [class.disable]="!isPackageAutomation"
                         (click)="openAppointmentDlg()"
                       >
                         <i class="i-icon i-appointments bgc-dark"></i>
@@ -39,7 +39,10 @@
                         <i class="i-icon i-message bgc-dark"></i>
                         <span class="ml-2 f-3 font-weight-bold">New Email</span>
                       </button>
-                      <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendText()">
+                      <button class="v-center border-0 c-dark dropdown-item my-1"
+                        (click)="openSendText()"
+                        [class.disable]="!isPackageText"
+                      >
                         <i class="i-icon i-sms-sent bgc-dark"></i>
                         <span class="ml-2 f-3 font-weight-bold">New Text</span>
                       </button>
@@ -187,7 +190,10 @@
                       <i class="d-block i-icon i-triangle-down bgc-dark"></i>
                     </div>
                     <div ngbDropdownMenu class="light">
-                      <div class="v-center justify-content-between dropdown-item" *ngFor="let tabItem of tabs" (click)="changeActivityTypes(tabItem)">
+                      <div class="v-center justify-content-between dropdown-item"
+                           *ngFor="let tabItem of tabs" (click)="changeActivityTypes(tabItem)"
+                           [class.disable]="isDisableTab(tabItem)"
+                      >
                         <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tabItem.id == activityType.id}" *ngIf="tabItem.id == 'all'; else others">
                           All activity
                         </div>
@@ -235,7 +241,7 @@
                 <div class="v-center justify-content-end c-pointer ml-auto"
                      (click)="openAppointmentDlg()"
                      *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')"
-                     [class.disable]="getUserLevel() == 'lite'"
+                     [class.disable]="!isPackageAutomation"
                 >
                   <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
                 </div>
@@ -249,7 +255,7 @@
               </div>
               <ng-container *ngIf="tab.id === 'all'; else detailsTemplate">
                 <ng-container *ngFor="let activity of mainTimelines; let i = index;">
-    
+
                   <div *ngIf="activityType.id == 'all' && activity.type == 'contacts'">
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between">
@@ -265,7 +271,7 @@
                       </div>
                     </div>
                   </div>
-    
+
                   <div *ngIf="(activityType.id == 'all' || activityType.id == 'follow_ups') && activity.type == 'follow_ups'">
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
@@ -397,7 +403,7 @@
                       </div>
                     </div>
                   </div>
-    
+
                   <div *ngIf="(activityType.id == 'all' || activityType.id == 'notes') && activity.type == 'notes'">
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
@@ -455,7 +461,7 @@
                       </ng-template>
                     </div>
                   </div>
-    
+
                   <div *ngIf="(activityType.id == 'all' || activityType.id == 'emails') && (groups[i].type == 'emails' || groups[i].media == 'emails')">
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
@@ -469,7 +475,7 @@
                           <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                         </div>
                       </div>
-    
+
                       <ng-container *ngIf="groups[i].media === 'emails'">
                         <app-material-timelines
                           [type]="groups[i].type"
@@ -493,10 +499,12 @@
                         </app-email-timelines>
                       </ng-container>
                     </div>
-    
+
                   </div>
-    
-                  <div *ngIf="(activityType.id == 'all' || activityType.id == 'texts') && (groups[i].type == 'texts' || groups[i].media == 'texts')">
+
+                  <div *ngIf="(activityType.id == 'all' || activityType.id == 'texts') && (groups[i].type == 'texts' || groups[i].media == 'texts')"
+                    [class.disable]="!isPackageText"
+                  >
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">
@@ -509,7 +517,7 @@
                           <span class="f-3 op-56">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                         </div>
                       </div>
-    
+
                       <ng-container *ngIf="groups[i].media === 'texts'">
                         <app-material-timelines
                           [type]="groups[i].type"
@@ -534,9 +542,9 @@
                       </ng-container>
                     </div>
                   </div>
-    
+
                   <div *ngIf="(activityType.id == 'all' || activityType.id == 'appointments') && activity.type == 'appointments'"
-                       [class.disable]="getUserLevel() == 'lite'"
+                       [class.disable]="!isPackageAutomation"
                   >
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
@@ -626,7 +634,7 @@
                       </ng-template>
                     </div>
                   </div>
-    
+
                   <div *ngIf="(activityType.id == 'all') && activity.type == 'users'">
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
@@ -653,7 +661,7 @@
                         </div>
                       </ng-container>
                       <ng-template #canceledUserTemplate>
-    
+
                       </ng-template>
                     </div>
                   </div>
@@ -687,7 +695,7 @@
                   </div>
                 </div>
               </ng-container>
-              
+
               <ng-template #detailsTemplate>
                 <ng-container *ngIf="showingDetails.length; else emptyDetails">
                   <ng-container *ngFor="let detail of showingDetails">
@@ -758,7 +766,7 @@
                             {{detail.updated_at | date :'MMM d, hh:mm a'}}
                           </div>
                         </div>
-    
+
                         <ng-container *ngIf="detail.data_type ==='emails'">
                           <app-email-timelines
                             [email]="detail"
@@ -782,8 +790,11 @@
                           </app-material-timelines>
                         </ng-container>
                       </div>
-    
-                      <div class="history-detail texts-detail p-3 mt-3" *ngSwitchCase="'texts'">
+
+                      <div class="history-detail texts-detail p-3 mt-3"
+                           *ngSwitchCase="'texts'"
+                           [class.disable]="!isPackageText"
+                      >
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-{{detail.data_type}}"></i></div>
                           <div class="">
@@ -798,7 +809,7 @@
                             {{detail.updated_at | date :'MMM d, hh:mm a'}}
                           </div>
                         </div>
-    
+
                         <ng-container *ngIf="detail.data_type ==='texts'">
                           <div class="text-direction mb-3">
                             <ng-container *ngIf="detail['sent']; else receivedDir">
@@ -832,9 +843,9 @@
                           </app-material-timelines>
                         </ng-container>
                       </div>
-    
+
                       <div class="history-detail appointments-detail p-3 mt-3"
-                           [class.disable]="getUserLevel() == 'lite'"
+                           [class.disable]="!isPackageAutomation"
                            *ngSwitchCase="'appointments'"
                       >
                         <div class="v-center justify-content-between mb-3">
@@ -907,7 +918,7 @@
                           </div>
                         </div>
                       </div>
-    
+
                       <div class="history-detail follow_ups-detail p-3 mt-3" *ngSwitchCase="'follow_ups'">
                         <div class="v-center justify-content-between mb-3">
                           <div class="history-icon mr-3"><i class="act-icon act-follow_ups"></i></div>
@@ -1017,7 +1028,7 @@
                     </ng-container>
                   </ng-container>
                 </ng-container>
-    
+
                 <ng-template #emptyDetails>
                   <div class="empty-list">
                     <div class="object-icon v-center">

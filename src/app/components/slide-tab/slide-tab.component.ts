@@ -66,9 +66,7 @@ export class SlideTabComponent implements OnInit, AfterViewInit {
 
   isDisableTab(tab): boolean {
     if (tab.id) {
-      const index = this.disableTabs.findIndex(
-        (item) => item.id === tab.id
-      );
+      const index = this.disableTabs.findIndex((item) => item.id === tab.id);
       if (index >= 0) {
         return true;
       }

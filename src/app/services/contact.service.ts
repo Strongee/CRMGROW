@@ -338,6 +338,7 @@ export class ContactService extends HttpService {
       })
       .pipe(
         map((res) => {
+          console.log(res['data']['contacts']);
           const contacts = [];
           (res['data']['contacts'] || []).forEach((e) => {
             contacts.push(new ContactActivity().deserialize(e));
@@ -609,7 +610,20 @@ export class ContactService extends HttpService {
       })
       .pipe(
         map((res) => res),
-        catchError(this.handleError('BULK CREATE CONTACTS', []))
+        catchError(this.handleError('SHARE CONTACTS TO TEAM', []))
+      );
+  }
+
+  stopShareContacts(contacts, user, team): Observable<any> {
+    return this.httpClient
+      .post(this.server + CONTACT.STOP_SHARE, {
+        contacts,
+        user,
+        team
+      })
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('STOP SHARE CONTACTS', []))
       );
   }
 

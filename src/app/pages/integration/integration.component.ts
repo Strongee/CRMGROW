@@ -10,6 +10,8 @@ import { CalendlyDialogComponent } from 'src/app/components/calendly-dialog/cale
 import { Garbage } from 'src/app/models/garbage.model';
 import { CalendlyListComponent } from 'src/app/components/calendly-list/calendly-list.component';
 import * as _ from 'lodash';
+import { DialPlanComponent } from 'src/app/components/dial-plan/dial-plan.component';
+import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-integration',
@@ -31,6 +33,7 @@ export class IntegrationComponent implements OnInit {
 
   profileSubscription: Subscription;
   garbageSubscription: Subscription;
+  isPackageCalendar = true;
 
   constructor(
     private userService: UserService,
@@ -42,6 +45,7 @@ export class IntegrationComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user = profile;
+        this.isPackageCalendar = profile.calendar_info?.is_enabled;
         if (this.user.calendar_list) {
           this.googleCalendars = this.user.calendar_list.filter((e) => {
             if (e.connected_calendar_type === 'google') {
@@ -102,7 +106,15 @@ export class IntegrationComponent implements OnInit {
     }
   }
 
-  disconnectMail(type: string): void {}
+  disconnectMail(): void {
+    this.userService.disconnectMail().subscribe((res) => {
+      if (res.status) {
+        this.user.primary_connected = false;
+        this.user.connected_email_type = '';
+        this.user.connected_email = '';
+      }
+    });
+  }
 
   connectCalendar(type: string): void {
     if (type == 'gmail' || type == 'outlook') {
@@ -229,6 +241,13 @@ export class IntegrationComponent implements OnInit {
       if (res && res['status']) {
         location.href = res['data'];
       }
+    });
+  }
+
+  buyDial(): void {
+    this.dialog.open(DialPlanComponent, {
+      width: '100vw',
+      maxWidth: '800px'
     });
   }
 

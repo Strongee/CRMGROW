@@ -8,13 +8,13 @@
   </div>
   <div class="notifications-list pt-3">
     <div *ngIf="notifications.length; else emptyTemplate">
-      <ng-container *ngFor="let item of notifications | paginate: {id: 'notifications', itemsPerPage: 10, currentPage: page, totalItems: total}; let i = index;">
+      <ng-container *ngFor="let item of notifications | paginate: {id: 'notifications', itemsPerPage: 15, currentPage: page, totalItems: total}; let i = index;">
         <div class="notification-item d-flex py-2 pl-3 pr-2 rounded mb-1" [class.readed]="item.is_read">
           <div class="icon mr-2">
             <i class="i-icon lg i-information d-block bgc-red"></i>
           </div>
           <div class="content">
-            <div [innerHTML]="item.content"></div>
+            <div [innerHTML]="getNotificationDetail(item)"></div>
             <div *ngIf="item.description" [innerHTML]="item.description" class="description"></div>
             <div class="time">{{item.created_at | timeago}}</div>
           </div>

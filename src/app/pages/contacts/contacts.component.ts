@@ -6,7 +6,6 @@ import {
   BulkActions,
   CONTACT_SORT_OPTIONS,
   DialogSettings,
-  PACKAGE_LEVEL,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
@@ -27,7 +26,15 @@ import { ContactCreateComponent } from 'src/app/components/contact-create/contac
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { SendEmailComponent } from 'src/app/components/send-email/send-email.component';
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
-import { getUserLevel } from '../../utils/functions';
+import {
+  startCampaign,
+  addCallStartedListener,
+  addCallEndedListener,
+  addClosedListener
+} from '@wavv/dialer';
+import { ToastrService } from 'ngx-toastr';
+import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
+
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
@@ -40,6 +47,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
     'select',
     'contact_name',
     'contact_label',
+    'contact_stage',
     'activity',
     'contact_tags',
     'contact_email',
@@ -50,6 +58,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
     'select',
     'contact_name',
     'contact_label',
+    'contact_stage',
     'activity',
     'activity_added',
     'contact_tags',
@@ -92,8 +101,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
   isUpdating = false;
   updateSubscription: Subscription;
   profileSubscription: Subscription;
-  packageLevel = '';
   disableActions = [];
+  isPackageGroupEmail = true;
+  isPackageText = true;
+  isPackageAutomation = true;
 
   constructor(
     public router: Router,
@@ -102,28 +113,33 @@ export class ContactsComponent implements OnInit, OnDestroy {
     public contactService: ContactService,
     public userService: UserService,
     private handlerService: HandlerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toast: ToastrService
   ) {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-        this.disableActions = [
-          {
-            label: 'Send email',
-            type: 'button',
-            icon: 'i-message',
-            command: 'message',
-            loading: false
-          },
-          {
-            label: 'Add automation',
-            type: 'button',
-            icon: 'i-automation',
-            command: 'automation',
-            loading: false
-          }
-        ];
+      this.isPackageAutomation = res.automation_info?.is_enabled;
+      this.isPackageGroupEmail = res.email_info?.mass_enable;
+      this.isPackageText = res.text_info?.is_enabled;
+
+      this.disableActions = [];
+      if (!this.isPackageAutomation) {
+        this.disableActions.push({
+          label: 'Add automation',
+          type: 'button',
+          icon: 'i-automation',
+          command: 'automation',
+          loading: false
+        });
+      }
+      if (!this.isPackageGroupEmail) {
+        this.disableActions.push({
+          label: 'Send email',
+          type: 'button',
+          icon: 'i-message',
+          command: 'message',
+          loading: false
+        });
       }
     });
   }
@@ -189,10 +205,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
         return true;
       }
     });
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   /**
@@ -292,6 +304,24 @@ export class ContactsComponent implements OnInit, OnDestroy {
         '_id'
       );
       this.pageSelection = [];
+      if (this.selection.length > 1) {
+        this.disableActions.push({
+          label: 'New Text',
+          type: 'button',
+          icon: 'i-sms-sent',
+          command: 'text',
+          loading: false
+        });
+        this.disableActions.push({
+          label: 'New Call',
+          type: 'button',
+          icon: 'i-phone',
+          command: 'call',
+          loading: false
+        });
+      } else {
+        this.disableActions = [];
+      }
       return;
     }
     this.pageContacts.forEach((e) => {
@@ -300,6 +330,24 @@ export class ContactsComponent implements OnInit, OnDestroy {
         this.selection.push(e.mainInfo);
       }
     });
+    if (this.selection.length > 1) {
+      this.disableActions.push({
+        label: 'New Text',
+        type: 'button',
+        icon: 'i-sms-sent',
+        command: 'text',
+        loading: false
+      });
+      this.disableActions.push({
+        label: 'New Call',
+        type: 'button',
+        icon: 'i-phone',
+        command: 'call',
+        loading: false
+      });
+    } else {
+      this.disableActions = [];
+    }
   }
   /**
    * Toggle Element
@@ -320,6 +368,24 @@ export class ContactsComponent implements OnInit, OnDestroy {
       '_id'
     );
     this.selection = toggledAllSelection;
+    if (this.selection.length > 1) {
+      this.disableActions.push({
+        label: 'New Text',
+        type: 'button',
+        icon: 'i-sms-sent',
+        command: 'text',
+        loading: false
+      });
+      this.disableActions.push({
+        label: 'New Call',
+        type: 'button',
+        icon: 'i-phone',
+        command: 'call',
+        loading: false
+      });
+    } else {
+      this.disableActions = [];
+    }
   }
   /**
    * Check contact is selected.
@@ -429,6 +495,12 @@ export class ContactsComponent implements OnInit, OnDestroy {
       case 'automation':
         this.openAutomationDlg();
         break;
+      case 'call':
+        this.call();
+        break;
+      case 'text':
+        this.openTextDlg();
+        break;
     }
   }
 
@@ -451,6 +523,36 @@ export class ContactsComponent implements OnInit, OnDestroy {
       if (e.command === 'select') {
         e.spliter = status;
       }
+    });
+  }
+
+  /**
+   * Download CSV
+   */
+  call(): void {
+    const contact = new ContactActivity().deserialize(this.selection[0]);
+    const contacts = [
+      {
+        contactId: '704e070acb0761ed0382211136fdd457',
+        numbers: [contact.cell_phone],
+        name: contact.fullName
+      }
+    ];
+    startCampaign({ contacts })
+      .then(() => {
+        const sideBar = document.querySelector('.sidebar') as HTMLElement;
+        const mainPage = document.querySelector('.page') as HTMLElement;
+        sideBar.style.paddingTop = '105px';
+        mainPage.style.paddingTop = '118px';
+      })
+      .catch((err) => {
+        console.log('Failed to start campaign', err);
+      });
+    addClosedListener(() => {
+      const sideBar = document.querySelector('.sidebar') as HTMLElement;
+      const mainPage = document.querySelector('.page') as HTMLElement;
+      sideBar.style.paddingTop = '50px';
+      mainPage.style.paddingTop = '63px';
     });
   }
 
@@ -639,6 +741,26 @@ export class ContactsComponent implements OnInit, OnDestroy {
       disableClose: false,
       data: {
         contacts: this.selection
+      }
+    });
+  }
+
+  openTextDlg(): void {
+    const contact = this.pageContacts.filter(
+      (e) => e._id == this.selection[0]._id
+    )[0];
+    this.dialog.open(SendTextComponent, {
+      position: {
+        bottom: '0px',
+        right: '0px'
+      },
+      width: '100vw',
+      panelClass: 'send-email',
+      backdropClass: 'cdk-send-email',
+      disableClose: false,
+      data: {
+        type: 'single',
+        contact: contact
       }
     });
   }

@@ -9,9 +9,11 @@
         <img src="../../../assets/img/crmgrow-logo.svg" class="navbar-brand-img" alt="CRMGROW">
       </a>
     </div>
-    <ul class="sidebar-nav">
+    <ul class="sidebar-nav" [class.suspended]="isSuspended">
       <ng-container *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
-        <li *ngIf="!menuItem.role || menuItem.protectedRole.indexOf(profile.role) === -1">
+        <li *ngIf="!menuItem.role || menuItem.protectedRole.indexOf(profile.role) === -1"
+          [class.disable]="isDisableItem(menuItem)"
+        >
           <a routerLinkActive="active" [routerLink]="[menuItem.path]" class="nav-link c-dark v-center">
               <i class="i-icon {{menuItem.icon}} d-lg-none d-block mr-2"></i>
               <span class="menu-label">{{menuItem.title | translate}}</span>

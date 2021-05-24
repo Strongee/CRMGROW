@@ -112,6 +112,7 @@ export class SearchOption implements Deserializable {
   cityCondition: string[] = [];
   zipcodeCondition: string = '';
   tagsCondition: string[] = [];
+  stagesCondition: string[] = [];
   sourceCondition: string[] = [];
   brokerageCondition: string[] = [];
   activityCondition: string[] = [];

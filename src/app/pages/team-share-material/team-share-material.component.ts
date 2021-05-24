@@ -8,7 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { TeamService } from '../../services/team.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { environment } from 'src/environments/environment';
-import {BulkActions, PACKAGE_LEVEL} from 'src/app/constants/variable.constants';
+import { BulkActions } from 'src/app/constants/variable.constants';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 import { Subscription } from 'rxjs';
 import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
@@ -24,7 +24,7 @@ import { FolderComponent } from 'src/app/components/folder/folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
 import { Team } from '../../models/team.model';
 import { MaterialBrowserComponent } from '../../components/material-browser/material-browser.component';
-import {getUserLevel, sortDateArray, sortStringArray} from '../../utils/functions';
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { searchReg } from 'src/app/helper';
 @Component({
   selector: 'app-team-share-material',
@@ -84,8 +84,8 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     created_at: false,
     views: false
   };
-
-  packageLevel = '';
+  isPackageText = true;
+  isPackageCapture = true;
   disableActions = [];
 
   constructor(
@@ -109,24 +109,26 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user_id = profile._id;
-        this.packageLevel = profile.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-          this.disableActions = [
-            {
-              label: 'Send via email',
-              type: 'button',
-              icon: 'i-message',
-              command: 'email',
-              loading: false
-            },
-            {
-              label: 'Capture',
-              type: 'toggle',
-              status: false,
-              command: 'lead_capture',
-              loading: false
-            }
-          ];
+        this.isPackageCapture = profile.capture_enabled;
+        this.isPackageText = profile.text_info?.is_enabled;
+        this.disableActions = [];
+        if (!this.isPackageText) {
+          this.disableActions.push({
+            label: 'Send via SMS',
+            type: 'button',
+            icon: 'i-sms-sent',
+            command: 'text',
+            loading: false
+          });
+        }
+        if (!this.isPackageCapture) {
+          this.disableActions.push({
+            label: 'Capture',
+            type: 'toggle',
+            status: false,
+            command: 'lead_capture',
+            loading: false
+          });
         }
       }
     );
@@ -158,10 +160,6 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   isAllSelected(): boolean {

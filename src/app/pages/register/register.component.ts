@@ -6,6 +6,7 @@ import {
   ElementRef
 } from '@angular/core';
 import {
+  PACKAGE_LEVEL,
   PHONE_COUNTRIES,
   TIMEZONE
 } from 'src/app/constants/variable.constants';
@@ -36,14 +37,21 @@ export class RegisterComponent implements OnInit {
   CountryISO = CountryISO;
 
   step = 1;
+
+  package_level = PACKAGE_LEVEL.PRO.package;
+  is_trial = true;
+
   user = {
     user_name: '',
     email: '',
     password: '',
     cell_phone: '',
     phone: {},
-    time_zone_info: ''
+    time_zone_info: '',
+    level: '',
+    is_trial: true
   };
+
   password_type = false;
   termsChecked = false;
 
@@ -112,7 +120,11 @@ export class RegisterComponent implements OnInit {
           this.user.email = params.email;
           this.step = 2;
         }
-        if (params.membership) {
+        if (params.level) {
+          this.package_level = params.level;
+        }
+        if (params.is_trial === 'false') {
+          this.is_trial = false;
         }
       }
     });
@@ -230,7 +242,7 @@ export class RegisterComponent implements OnInit {
   }
 
   cardInvalid(evt: any): void {
-    if (evt && evt?.type == 'validation_error') {
+    if (evt && evt?.type === 'validation_error') {
       this.invalidError = 'invalid';
     } else {
       this.invalidError = '';
@@ -246,6 +258,15 @@ export class RegisterComponent implements OnInit {
   }
 
   signUp(): void {
+    this.user = {
+      ...this.user,
+      level: this.package_level,
+      is_trial: this.is_trial
+    };
+
+    if (window['Rewardful'] && window['Rewardful'].affiliate) {
+      this.user['parent_affiliate'] = window['Rewardful'].affiliate;
+    }
     if (this.isSocialUser) {
     } else {
       this.userService.signup(this.user).subscribe((res) => {
@@ -257,6 +278,7 @@ export class RegisterComponent implements OnInit {
           this.userService.setToken(this.token);
           this.userService.setUser(this.currentUser);
           this.router.navigate(['/home']);
+          window.location.reload();
         } else {
           this.saving = false;
         }

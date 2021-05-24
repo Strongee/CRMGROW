@@ -193,7 +193,7 @@ export class FilterAddComponent implements OnInit {
     contacts: 'Justadded',
     notes: 'Added note',
     follow_ups: 'Task added',
-    phone_logs: 'Log phone call',
+    // phone_logs: 'Log phone call',
     email_trackers: 'Opened email',
     videos: 'Sent video',
     pdfs: 'Sent PDF',

@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     { id: 'general', icon: 'i-general', label: 'Info' },
     { id: 'signature', icon: 'i-signature', label: 'Signature' },
     { id: 'security', icon: 'i-security', label: 'Security' },
-    { id: 'billing', icon: 'i-payment', label: 'Billing' }
+    { id: 'billing', icon: 'i-payment', label: 'Subscription' }
   ];
   defaultPage = 'general';
   currentPage: string;
@@ -29,6 +29,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   profileSubscription: Subscription;
   routeChangeSubscription: Subscription;
   initStep = 1;
+  isSuspended = false;
+  disableMenuItems = [];
 
   constructor(
     private location: Location,
@@ -41,6 +43,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user = profile;
+        this.isSuspended = profile.subscription?.is_suspended;
+        if (this.isSuspended) {
+          this.disableMenuItems = [
+            { id: 'general', icon: 'i-general', label: 'Info' },
+            { id: 'signature', icon: 'i-signature', label: 'Signature' },
+            { id: 'security', icon: 'i-security', label: 'Security' }
+          ];
+        }
       }
     );
   }
@@ -98,7 +108,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.initStep = 2;
         this.currentPageItem = [this.menuItems[3]];
         this.currentPage = 'billing';
-        console.log("upgrade-billing ========>", this.initStep);
       } else {
         this.currentPageItem = this.menuItems.filter(
           (item) => item.id == this.currentPage
@@ -123,5 +132,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (item) => item.id == this.currentPage
     );
     this.location.replaceState(`profile/${menu.id}`);
+  }
+
+  isDisableMenuItem(menuItem): boolean {
+    const index = this.disableMenuItems.findIndex(
+      (item) => item.id === menuItem.id
+    );
+    if (index >= 0) {
+      return true;
+    }
+    return false;
   }
 }

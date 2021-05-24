@@ -105,20 +105,20 @@
           <th mat-header-cell *matHeaderCellDef class="template-sub-action">
           </th>
           <td mat-cell *matCellDef="let template" class="template-sub-action">
-            <div class="v-center sub-item-action ml-4">
+            <div class="v-center justify-content-around sub-item-action mr-1">
               <ng-container *ngIf="template.role != 'admin' && template.user == userId">
-                <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)">
+                <div class="icon-button v-center justify-content-center" (click)="openTemplate(template)" placement="bottom" ngbTooltip="Edit">
                   <i class="i-icon bgc-dark i-edit"></i>
                 </div>
-                <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)">
+                <div class="icon-button v-center justify-content-center" (click)="deleteTemplate(template)" placement="bottom" ngbTooltip="Delete">
                   <i class="i-icon bgc-dark i-trash ml-2"></i>
                 </div>
-                <div class="icon-button v-center justify-content-center" (click)="shareTemplate(template)">
+                <div class="icon-button v-center justify-content-center" (click)="shareTemplate(template)" placement="bottom" ngbTooltip="Share Team">
                   <i class="i-icon bgc-dark i-share-team ml-2"></i>
                 </div>
               </ng-container>
               <ng-container *ngIf="template.role == 'team' && template.user != userId">
-                <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)">
+                <div class="icon-button v-center justify-content-center" (click)="duplicateTemplate(template)" placement="bottom" ngbTooltip="Duplicate">
                   <i class="i-icon bgc-dark i-duplicate"></i>
                 </div>
               </ng-container>

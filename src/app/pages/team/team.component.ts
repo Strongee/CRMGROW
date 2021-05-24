@@ -79,6 +79,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
   editors = [];
 
   profileSubscription: Subscription;
+  isPackageAutomation = true;
 
   @ViewChild(TeamShareMaterialComponent)
   shareMaterialComponent: TeamShareMaterialComponent;
@@ -123,6 +124,20 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.currentUser = res;
       this.userId = res._id;
+      this.isPackageAutomation = res.automation_info?.is_enabled;
+      this.tabs = [
+        { icon: '', label: 'Members', id: 'members' },
+        { icon: '', label: 'Materials', id: 'materials' },
+        { icon: '', label: 'Contacts', id: 'contacts' },
+        { icon: '', label: 'Automations', id: 'automations' },
+        { icon: '', label: 'Templates', id: 'templates' }
+      ];
+      if (!this.isPackageAutomation) {
+        const index = this.tabs.findIndex((item) => item.id === 'automations');
+        if (index >= 0) {
+          this.tabs.splice(index, 1);
+        }
+      }
       this.arrangeTeamData();
     });
 
@@ -579,7 +594,7 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
         this.acceptJoinRequest = false;
         this.acceptUserId = '';
         this.team.members.push(user);
-        this.team.viewers.push(user);
+        this.viewers.push(user);
         this.team.requests.some((e, index) => {
           if (e._id === user._id) {
             this.team.requests.splice(index, 1);

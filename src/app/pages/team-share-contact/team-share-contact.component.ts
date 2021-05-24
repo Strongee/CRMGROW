@@ -12,7 +12,7 @@ import { UploadContactsComponent } from 'src/app/components/upload-contacts/uplo
 import {
   BulkActions,
   CONTACT_SORT_OPTIONS,
-  DialogSettings, PACKAGE_LEVEL,
+  DialogSettings,
   STATUS
 } from 'src/app/constants/variable.constants';
 import { Contact, ContactActivity } from 'src/app/models/contact.model';
@@ -38,7 +38,7 @@ import { TeamService } from '../../services/team.service';
 import { TeamContactShareComponent } from '../../components/team-contact-share/team-contact-share.component';
 import { environment } from '../../../environments/environment';
 import { User } from '../../models/user.model';
-import {getUserLevel} from "../../utils/functions";
+import { StopShareContactComponent } from '../../components/stop-share-contact/stop-share-contact.component';
 
 @Component({
   selector: 'app-team-share-contact',
@@ -57,7 +57,8 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     'contact_email',
     'contact_phone',
     'contact_address',
-    'shared_with'
+    'shared_with',
+    'share-action'
   ];
   SORT_TYPES = [
     { id: 'alpha_up', label: 'Alphabetical Z-A' },
@@ -107,15 +108,16 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
   loadingContact = false;
   loadContactSubscription: Subscription;
   detailContacts = [];
-  siteUrl = environment.website;
+  siteUrl = environment.front;
 
   isShareWith = false;
   isShareBy = false;
   teamMembers: User[] = [];
   selectedMembers: User[] = [];
 
-  packageLevel = '';
   disableActions = [];
+  isPackageGroupEmail = true;
+  isPackageAutomation = true;
 
   constructor(
     public router: Router,
@@ -136,24 +138,26 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe((res) => {
       this.userId = res._id;
-      this.packageLevel = res.package_level;
-      if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-        this.disableActions = [
-          {
-            label: 'Send email',
-            type: 'button',
-            icon: 'i-message',
-            command: 'message',
-            loading: false
-          },
-          {
-            label: 'Add automation',
-            type: 'button',
-            icon: 'i-automation',
-            command: 'automation',
-            loading: false
-          }
-        ];
+      this.isPackageAutomation = res.automation_info?.is_enabled;
+      this.isPackageGroupEmail = res.email_info?.mass_enable;
+      this.disableActions = [];
+      if (!this.isPackageGroupEmail) {
+        this.disableActions.push({
+          label: 'Send email',
+          type: 'button',
+          icon: 'i-message',
+          command: 'message',
+          loading: false
+        });
+      }
+      if (!this.isPackageAutomation) {
+        this.disableActions.push({
+          label: 'Add automation',
+          type: 'button',
+          icon: 'i-automation',
+          command: 'automation',
+          loading: false
+        });
       }
     });
 
@@ -169,10 +173,6 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
     for (const member of this.team.members) {
       this.teamMembers.push(new User().deserialize(member));
     }
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   loadContact(page: number): void {
@@ -474,6 +474,8 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
       case 'automation':
         this.openAutomationDlg();
         break;
+      case 'stopshare':
+        this.bulkStopShare();
     }
   }
 
@@ -886,5 +888,57 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
         }
       });
     this.page = 1;
+  }
+
+  bulkStopShare(): void {
+    if (this.selection && this.selection.length > 0) {
+      const members = [];
+      for (const contact of this.selection) {
+        const contactMembers = this.getSharedMembers(contact);
+        if (contactMembers.length > 0) {
+          for (const member of contactMembers) {
+            const index = members.findIndex((item) => item._id === member._id);
+            if (index < 0) {
+              members.push(member);
+            }
+          }
+        }
+      }
+      const dialog = this.dialog.open(StopShareContactComponent, {
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          contacts: this.selection,
+          members
+        }
+      });
+
+      dialog.afterClosed().subscribe((res) => {
+        if (res && res.status) {
+          this.loadContact(this.page);
+        }
+      });
+    }
+  }
+
+  stopShare($event, contact): void {
+    if (contact) {
+      const members = this.getSharedMembers(contact);
+      const dialog = this.dialog.open(StopShareContactComponent, {
+        width: '100vw',
+        maxWidth: '400px',
+        data: {
+          contacts: [contact],
+          members,
+          team: this.team._id
+        }
+      });
+
+      dialog.afterClosed().subscribe((res) => {
+        if (res && res.status) {
+          this.loadContact(this.page);
+        }
+      });
+    }
   }
 }

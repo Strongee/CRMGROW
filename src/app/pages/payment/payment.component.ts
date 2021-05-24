@@ -4,8 +4,14 @@ import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentCardComponent } from 'src/app/components/payment-card/payment-card.component';
-import {CANCEL_ACCOUNT_REASON, PACKAGE_LEVEL} from '../../constants/variable.constants';
+import {
+  PACKAGE_LEVEL,
+  CANCEL_ACCOUNT_REASON
+} from '../../constants/variable.constants';
 import { getUserLevel } from '../../utils/functions';
+import { Payment } from '../../models/payment.model';
+import { HandlerService } from '../../services/handler.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
@@ -14,7 +20,8 @@ import { getUserLevel } from '../../utils/functions';
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   // UI Variables;
-  loading = false;
+  loadingPayment = true;
+  loadingInvoice = true;
   // New Card Information
   card = {
     card_name: '',
@@ -34,12 +41,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
   saving = false;
 
   profileSubscription: Subscription;
-  currentPackage = PACKAGE_LEVEL.pro;
-  selectedPackage = PACKAGE_LEVEL.pro;
-  litePackage = PACKAGE_LEVEL.lite;
-  proPackage = PACKAGE_LEVEL.pro;
-  elitePackage = PACKAGE_LEVEL.elite;
-  customPackage = PACKAGE_LEVEL.custom;
+  currentPackage = PACKAGE_LEVEL.PRO;
+  selectedPackage = PACKAGE_LEVEL.PRO;
+  litePackage = PACKAGE_LEVEL.LITE;
+  proPackage = PACKAGE_LEVEL.PRO;
+  elitePackage = PACKAGE_LEVEL.ELITE;
+  customPackage = PACKAGE_LEVEL.CUSTOM;
 
   packageLevel = '';
   step = 1;
@@ -50,32 +57,54 @@ export class PaymentComponent implements OnInit, OnDestroy {
   selectedReason = this.reasonButtons[0];
   reasonFeedback = '';
 
-  constructor(private userService: UserService, private dialog: MatDialog) {
-    this.loading = true;
+  cancelAccountSubscription: Subscription;
+  updatePackageSubscription: Subscription;
+  downgradeSubscription: Subscription;
+  loadingCancelAccount = false;
+  loadingUpdatePackage = false;
+  isSuspended = false;
+  isV1User = false;
+  isOverflow = false;
+  overflowMessage = '';
+  loadingCheckDowngrade = false;
+
+  constructor(
+    private userService: UserService,
+    private dialog: MatDialog,
+    private router: Router,
+    public handlerService: HandlerService
+  ) {
     // this.step = this.selectedStep;
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile.payment) {
           this.packageLevel = profile.package_level;
+          this.isSuspended = profile.subscription?.is_suspended;
+          this.isV1User = profile.user_version === 'v1';
           this.currentPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
           this.selectedPackage = PACKAGE_LEVEL[getUserLevel(this.packageLevel)];
-          this.userService.getPayment(profile.payment).subscribe(
+          this.loadingPayment = true;
+          this.userService.loadPayment(profile.payment);
+          this.userService.payment$.subscribe(
             (res) => {
-              this.card = {
-                ...res,
-                number: res.last4
-              };
-              this.previewCardNumber = '•••• •••• •••• ' + this.card.number;
-              this.getInvoice();
+              this.loadingPayment = false;
+              if (res) {
+                this.card = {
+                  ...res,
+                  number: res.last4
+                };
+                this.previewCardNumber = '•••• •••• •••• ' + this.card.number;
+              }
             },
             () => {
-              this.loading = false;
+              this.loadingPayment = false;
             }
           );
         }
       }
     );
+    this.getInvoice();
   }
 
   ngOnInit(): void {
@@ -91,15 +120,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   getInvoice(): void {
-    this.userService.getInvoice().subscribe(
+    this.loadingInvoice = true;
+    this.userService.loadInvoice();
+    this.userService.invoice$.subscribe(
       (res) => {
-        this.loading = false;
+        this.loadingInvoice = false;
         if (res && res['status']) {
           this.invoices = res['data'];
         }
       },
       () => {
-        this.loading = false;
+        this.loadingInvoice = false;
       }
     );
   }
@@ -151,40 +182,80 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   selectPlan(level): void {
+    let checkOverflow = true;
     for (const item in PACKAGE_LEVEL) {
       if (PACKAGE_LEVEL[item].package === level) {
-        this.currentPackage = PACKAGE_LEVEL[item];
+        if (this.selectedPackage.package === PACKAGE_LEVEL[item].package) {
+          checkOverflow = false;
+        }
+        this.selectedPackage = PACKAGE_LEVEL[item];
       }
     }
     this.step = 3;
+    if (checkOverflow) {
+      this.downgradeSubscription && this.downgradeSubscription.unsubscribe();
+      this.loadingCheckDowngrade = true;
+      this.downgradeSubscription = this.userService
+        .checkDowngrade(this.selectedPackage.package)
+        .subscribe((res) => {
+          this.loadingCheckDowngrade = false;
+          if (res && res.status === false) {
+            this.isOverflow = true;
+            this.overflowMessage = res.error;
+          } else {
+            this.isOverflow = false;
+            this.overflowMessage = '';
+          }
+        });
+    }
   }
 
   clickPackage(level): void {
     this.selectedPackage = level;
+    this.downgradeSubscription && this.downgradeSubscription.unsubscribe();
+    if (this.selectedPackage.package !== this.currentPackage.package) {
+      this.loadingCheckDowngrade = true;
+      this.downgradeSubscription = this.userService
+        .checkDowngrade(this.selectedPackage.package)
+        .subscribe((res) => {
+          this.loadingCheckDowngrade = false;
+          if (res && res.status === false) {
+            this.isOverflow = true;
+            this.overflowMessage = res.error;
+          } else {
+            this.isOverflow = false;
+            this.overflowMessage = '';
+          }
+        });
+    } else {
+      this.loadingCheckDowngrade = false;
+      this.isOverflow = false;
+      this.overflowMessage = '';
+    }
   }
 
   planButtonLabel(level): string {
     if (level === this.currentPackage.package) {
       return 'Your Plan';
     } else {
-      if (level === PACKAGE_LEVEL.lite.package) {
-        if (this.currentPackage.package === PACKAGE_LEVEL.custom.package) {
+      if (level === PACKAGE_LEVEL.LITE.package) {
+        if (this.currentPackage.package === PACKAGE_LEVEL.CUSTOM.package) {
           return 'Get Lite';
         } else {
           return 'Downgrade';
         }
-      } else if (level === PACKAGE_LEVEL.pro.package) {
+      } else if (level === PACKAGE_LEVEL.PRO.package) {
         if (
-          this.currentPackage.package === PACKAGE_LEVEL.lite.package ||
-          this.currentPackage.package === PACKAGE_LEVEL.custom.package
+          this.currentPackage.package === PACKAGE_LEVEL.LITE.package ||
+          this.currentPackage.package === PACKAGE_LEVEL.CUSTOM.package
         ) {
           return 'Get Pro';
         } else {
           return 'Downgrade';
         }
-      } else if (level === PACKAGE_LEVEL.elite.package) {
+      } else if (level === PACKAGE_LEVEL.ELITE.package) {
         return 'Get Elite';
-      } else if (level === PACKAGE_LEVEL.custom.package) {
+      } else if (level === PACKAGE_LEVEL.CUSTOM.package) {
         return 'Contact us';
       }
     }
@@ -197,5 +268,64 @@ export class PaymentComponent implements OnInit, OnDestroy {
   selectReason(reason): void {
     this.selectedReason = reason;
     this.step = 5;
+  }
+
+  getPackageLabel(): string {
+    if (this.currentPackage.package === 'LITE') {
+      return 'Lite';
+    } else if (this.currentPackage.package === 'PRO') {
+      return 'Professional';
+    } else if (this.currentPackage.package === 'ELITE') {
+      return 'Elite';
+    }
+    return 'Custom';
+  }
+
+  sendFeedback(): void {
+    this.loadingCancelAccount = true;
+    const data = {
+      close_reason: this.selectedReason,
+      close_feedback: this.reasonFeedback
+    };
+    this.cancelAccountSubscription &&
+      this.cancelAccountSubscription.unsubscribe();
+    this.cancelAccountSubscription = this.userService
+      .cancelAccount(data)
+      .subscribe(
+        (res) => {
+          this.loadingCancelAccount = false;
+          if (res) {
+            this.handlerService.clearData();
+            this.router.navigate(['/']);
+          }
+        },
+        (err) => {
+          this.loadingCancelAccount = false;
+        }
+      );
+  }
+
+  updatePackage(): void {
+    let level = '';
+    if (this.selectedPackage.package === 'lite') {
+      level = 'BASIC';
+    } else {
+      level = this.selectedPackage.package.toUpperCase();
+    }
+    const data = {
+      level
+    };
+
+    this.loadingUpdatePackage = true;
+    this.updatePackageSubscription &&
+      this.updatePackageSubscription.unsubscribe();
+    this.updatePackageSubscription = this.userService
+      .updatePackage(data)
+      .subscribe((res) => {
+        this.loadingUpdatePackage = false;
+        if (res) {
+          window.location.reload();
+        }
+      });
   }
 }

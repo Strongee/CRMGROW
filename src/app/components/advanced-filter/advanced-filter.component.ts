@@ -119,10 +119,10 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
         _id: 3,
         title: 'Task added'
       },
-      {
-        _id: 4,
-        title: 'Log phone call'
-      },
+      // {
+      //   _id: 4,
+      //   title: 'Log phone call'
+      // },
       {
         _id: 5,
         title: 'Opened email'
@@ -572,7 +572,8 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
       for (const key in teamOptions) {
         if (isShareBy) {
           if (
-            !teamOptions[key].members.length || teamOptions[key].members.length === this.teamMembers[key].length
+            !teamOptions[key].members.length ||
+            teamOptions[key].members.length === this.teamMembers[key].length
           ) {
             teamOptions[key]['share_by'] = {
               flag: 1
@@ -591,7 +592,8 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
         }
         if (isShareWith) {
           if (
-            !teamOptions[key].members.length || teamOptions[key].members.length === this.teamMembers[key].length
+            !teamOptions[key].members.length ||
+            teamOptions[key].members.length === this.teamMembers[key].length
           ) {
             teamOptions[key]['share_with'] = {
               flag: 1
@@ -751,7 +753,7 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
     'Just added': 'contacts',
     'Added note': 'notes',
     'Task added': 'follow_ups',
-    'Log phone call': 'phone_logs',
+    // 'Log phone call': 'phone_logs',
     'Opened email': 'email_trackers',
     'Sent video': 'videos',
     'Link clicked': '',

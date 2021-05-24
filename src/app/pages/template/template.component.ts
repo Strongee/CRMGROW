@@ -23,7 +23,6 @@ import { UserService } from 'src/app/services/user.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { getUserLevel } from '../../utils/functions';
 
 @Component({
   selector: 'app-template',
@@ -62,9 +61,6 @@ export class TemplateComponent
 
   set = 'twitter';
 
-  packageLevel = '';
-  profileSubscription: Subscription;
-
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   @ViewChild('subjectField') subjectEl: ElementRef;
   @ViewChild('smsContentField') textAreaEl: ElementRef;
@@ -82,10 +78,6 @@ export class TemplateComponent
     private appRef: ApplicationRef
   ) {
     super();
-    this.profileSubscription && this.profileSubscription.unsubscribe();
-    this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-    });
 
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
@@ -112,10 +104,6 @@ export class TemplateComponent
 
   ngOnDestroy(): void {
     window['confirmReload'] = false;
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   changeType(type: string): void {

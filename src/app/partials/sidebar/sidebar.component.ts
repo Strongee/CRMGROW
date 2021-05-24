@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { Subscription } from 'rxjs';
 
 declare interface RouteInfo {
   path: string;
@@ -122,14 +124,62 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   menuItems: RouteInfo[] = ROUTES;
+  disableMenuItems: RouteInfo[] = [];
   isCollapsed = false;
   profile: any = {};
+  isSuspended = false;
+  profileSubscription: Subscription;
+  isPackageAutomation = true;
+  isPackageCalendar = true;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public userService: UserService) {
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
+      if (user) {
+        this.isSuspended = user.subscription?.is_suspended;
+        this.isPackageAutomation = user.automation_info?.is_enabled;
+        this.isPackageCalendar = user.calendar_info?.is_enabled;
+        this.disableMenuItems = [];
+        if (!this.isPackageAutomation) {
+          this.disableMenuItems.push({
+            path: 'automations',
+            title: 'Automations',
+            icon: 'i-automation bgc-dark',
+            class: '',
+            beta: false,
+            betaClass: '',
+            betaLabel: '',
+            protectedRole: null
+          });
+        }
+        if (!this.isPackageCalendar) {
+          this.disableMenuItems.push({
+            path: 'calendar',
+            title: 'Calendar',
+            icon: 'i-calendar bgc-dark',
+            class: '',
+            beta: false,
+            betaClass: '',
+            betaLabel: '',
+            protectedRole: null
+          });
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
     // this.router.events.subscribe(() => {
     //   this.isCollapsed = true;
     // });
+  }
+
+  isDisableItem(menuItem): boolean {
+    const index = this.disableMenuItems.findIndex(
+      (item) => item.title === menuItem.title
+    );
+    if (index >= 0) {
+      return true;
+    }
+    return false;
   }
 }

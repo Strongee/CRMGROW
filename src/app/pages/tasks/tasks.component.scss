@@ -56,3 +56,21 @@ tr.completed .label-cell {
   color: #6b6b6b;
   text-decoration: line-through;
 }
+
+tr {
+  .actions {
+    width: 42px;
+    opacity: 0;
+  }
+  &:hover {
+    .actions {
+      opacity: 1;
+    }
+  }
+}
+
+:host ::ng-deep {
+  tr {
+
+  }
+}

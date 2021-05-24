@@ -1275,50 +1275,37 @@ export const BulkActions = {
   ],
   Contacts: [
     {
-      label: 'Add tasks',
+      label: 'New Task',
       type: 'button',
       icon: 'i-task',
       command: 'add_task',
       loading: false
     },
     {
-      label: 'Send email',
+      label: 'New Email',
       type: 'button',
       icon: 'i-message',
       command: 'message',
       loading: false
     },
     {
-      spliter: true,
-      label: 'Select all',
+      label: 'New Text',
       type: 'button',
-      command: 'select',
+      icon: 'i-sms-sent',
+      command: 'text',
       loading: false
     },
     {
-      label: 'Deselect',
+      label: 'New Call',
       type: 'button',
-      command: 'deselect',
+      icon: 'i-phone',
+      command: 'call',
       loading: false
     },
     {
-      label: 'Edit',
+      label: 'New Note',
       type: 'button',
-      icon: 'i-edit',
-      command: 'edit',
-      loading: false
-    },
-    {
-      label: 'Delete',
-      type: 'button',
-      icon: 'i-trash',
-      command: 'delete',
-      loading: false
-    },
-    {
-      label: 'Add notes',
-      type: 'button',
-      icon: 'i-note',
+      icon: 'i-notes',
       command: 'add_note',
       loading: false
     },
@@ -1330,28 +1317,19 @@ export const BulkActions = {
       loading: false
     },
     {
+      label: 'Edit',
+      type: 'button',
+      icon: 'i-edit',
+      command: 'edit',
+      loading: false
+    },
+    {
       label: 'Download',
       type: 'button',
       icon: 'i-download',
       command: 'download',
       loading: false,
       loadingLabel: 'Downloading'
-    }
-  ],
-  TeamContacts: [
-    {
-      label: 'Add tasks',
-      type: 'button',
-      icon: 'i-task',
-      command: 'add_task',
-      loading: false
-    },
-    {
-      label: 'Send email',
-      type: 'button',
-      icon: 'i-message',
-      command: 'message',
-      loading: false
     },
     {
       spliter: true,
@@ -1367,7 +1345,30 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Add notes',
+      label: 'Delete',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete',
+      loading: false
+    }
+  ],
+  TeamContacts: [
+    {
+      label: 'New Task',
+      type: 'button',
+      icon: 'i-task',
+      command: 'add_task',
+      loading: false
+    },
+    {
+      label: 'New Email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'message',
+      loading: false
+    },
+    {
+      label: 'New Note',
       type: 'button',
       icon: 'i-template',
       command: 'add_note',
@@ -1387,11 +1388,24 @@ export const BulkActions = {
       command: 'download',
       loading: false,
       loadingLabel: 'Downloading'
+    },
+    {
+      spliter: true,
+      label: 'Select all',
+      type: 'button',
+      command: 'select',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
     }
   ],
   Materials: [
     {
-      label: 'Send via email',
+      label: 'Send via Email',
       type: 'button',
       icon: 'i-message',
       command: 'email',
@@ -1405,13 +1419,6 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Capture',
-      type: 'toggle',
-      status: false,
-      command: 'lead_capture',
-      loading: false
-    },
-    {
       label: 'Edit Template',
       type: 'button',
       icon: 'i-template',
@@ -1419,9 +1426,10 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Deselect',
-      type: 'button',
-      command: 'deselect',
+      label: 'Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture',
       loading: false
     },
     {
@@ -1429,6 +1437,12 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-folder',
       command: 'folder',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
       loading: false
     },
     {
@@ -1613,119 +1627,32 @@ export const AUTOMATION_ICONS = {
 };
 
 export const PACKAGE_LEVEL = {
+  LITE: {
+    package: 'LITE'
+  },
+  PRO: {
+    package: 'PRO'
+  },
+  ELITE: {
+    package: 'ELITE'
+  },
+  CUSTOM: {
+    package: 'CUSTOM'
+  }
+};
+
+export const DIAL_LEVEL = {
   lite: {
     package: 'lite',
-    price: 29,
-    contact_info: {
-      max_count: 200
-    },
-    video_info: {
-      upload_max_count: 10,
-      record_max_length: 10
-    },
-    automation_info: {
-      max_count: 0
-    },
-    assistant_access: {
-      max_count: 0
-    },
-    onbording_plus: {
-      price: 79
-    },
-    early_beta_access: false,
-    roadmap: false,
-    deal_pipeline_tracking: true,
-    custom_labels: true,
-    activity_tracker: true,
-    lead_capture: false,
-    advanced_filters: true,
-    tag_management: true,
-    mail_template: true,
-    merge_tokens: true,
-    email_tracking: false,
-    mass_email: false,
-    automations: false,
-    teams: true,
-    online_support: true,
-    email_support: false,
-    priority_support: false
+    price: 40
   },
   pro: {
     package: 'pro',
-    price: 49,
-    contact_info: {
-      max_count: 2000
-    },
-    video_info: {
-      upload_max_count: 100,
-      record_max_length: 120
-    },
-    automation_info: {
-      max_count: 300
-    },
-    assistant_access: {
-      max_count: 1
-    },
-    onbording_plus: {
-      price: 49
-    },
-    early_beta_access: true,
-    roadmap: false,
-    deal_pipeline_tracking: true,
-    custom_labels: true,
-    activity_tracker: true,
-    lead_capture: true,
-    advanced_filters: true,
-    tag_management: true,
-    mail_template: true,
-    merge_tokens: true,
-    email_tracking: true,
-    mass_email: true,
-    automations: true,
-    teams: true,
-    online_support: true,
-    email_support: true,
-    priority_support: false
+    price: 60
   },
   elite: {
     package: 'elite',
-    price: 99,
-    contact_info: {
-      max_count: 20000
-    },
-    video_info: {
-      upload_max_count: 'Unlimited',
-      record_max_length: 1000
-    },
-    automation_info: {
-      max_count: 3000
-    },
-    assistant_access: {
-      max_count: 'Unlimited'
-    },
-    onbording_plus: {
-      price: 0
-    },
-    early_beta_access: true,
-    roadmap: true,
-    deal_pipeline_tracking: true,
-    custom_labels: true,
-    activity_tracker: true,
-    lead_capture: true,
-    advanced_filters: true,
-    tag_management: true,
-    mail_template: true,
-    merge_tokens: true,
-    email_tracking: true,
-    mass_email: true,
-    automations: true,
-    teams: true,
-    online_support: true,
-    email_support: true,
-    priority_support: true
-  },
-  custom: {
-    package: 'custom'
+    price: 100
   }
 };
 

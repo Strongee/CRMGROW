@@ -1,5 +1,4 @@
 import { Deserializable } from './deserialize.model';
-import {PACKAGE_LEVEL} from "../constants/variable.constants";
 
 export class User implements Deserializable {
   _id?: string = '';
@@ -44,34 +43,52 @@ export class User implements Deserializable {
   desktop_notification = false;
   desktop_notification_subscription: string;
   text_notification = false;
-  contact_info = {
-    is_limit: true,
-    max_count: PACKAGE_LEVEL.pro.contact_info.max_count,
+  assistant_info?: {
+    is_enabled: boolean;
+    is_limit: boolean;
+    max_count: number;
   };
-  video_info = {
-    is_limit: true,
-    upload_max_count: PACKAGE_LEVEL.pro.video_info.upload_max_count,
-    record_max_count: PACKAGE_LEVEL.pro.video_info.record_max_length,
+  contact_info?: {
+    is_limit: boolean;
+    max_count: number;
   };
-  automation_info = {
-    is_limit: true,
-    max_count: PACKAGE_LEVEL.pro.automation_info.max_count,
-    assign_count: 0
+  text_info?: {
+    is_enabled: boolean;
+    is_limit: boolean;
+    max_count: number;
+    count: number;
+    additional_credit?: {
+      amount: number;
+      updated_at: Date;
+    };
   };
-  text_info = {
-    additional_credit: {
-      amount: 0,
-      updated_at: Date
-    },
-    is_limit: true,
-    max_count: 3000,
-    count: 0
+  email_info?: {
+    mass_enable: boolean;
+    is_limit: boolean;
+    max_count: number;
+    count: number;
   };
-  email_info = {
-    is_limit: true,
-    max_count: 3000,
-    count: 0
+  automation_info?: {
+    is_enabled: boolean;
+    is_limit: boolean;
+    max_count: number;
   };
+  material_info?: {
+    is_enabled: boolean;
+    is_limit: boolean;
+    upload_max_count: number;
+    record_max_duration: number;
+  };
+  team_info?: {
+    owner_enabled: boolean;
+  };
+  calendar_info?: {
+    is_enabled: boolean;
+    is_limit: boolean;
+    max_count: number;
+  };
+  capture_enabled: boolean;
+  email_verified: boolean;
   welcome_email = false;
   is_trial = false;
   is_free = false;
@@ -84,10 +101,12 @@ export class User implements Deserializable {
     period: 'month';
   };
   package_level: string;
+  user_version: string;
   expired_at: Date;
   created_at: Date;
   updated_at: Date;
   last_logged: Date;
+  del: boolean;
   sub_domain: string;
   social_link?: {
     facebook: string;
@@ -111,10 +130,6 @@ export class User implements Deserializable {
     google_refresh_token?: string;
     outlook_refresh_token?: string;
   }[];
-  assistant_info?: {
-    is_limit: boolean;
-    max_count: 1;
-  };
 
   deserialize(input: any): this {
     return Object.assign(this, input);

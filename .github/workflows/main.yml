@@ -36,3 +36,12 @@ jobs:
         run: |
           aws s3 rm s3://teamgrow-staticsite-green/ --recursive
           aws s3 cp dist/crmgrow s3://teamgrow-staticsite-green/ --recursive --acl public-read
+
+      - name: Deploy
+        uses: lbertenasco/s3-deploy@v1
+        with:
+          folder: dist
+          bucket: teamgrow-staticsite-green
+          dist-id: EFW5LJQM4RH8B
+          invalidation: / *
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialService } from 'src/app/services/material.service';
@@ -8,10 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { TeamService } from '../../services/team.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { environment } from 'src/environments/environment';
-import {
-  BulkActions,
-  PACKAGE_LEVEL
-} from 'src/app/constants/variable.constants';
+import { BulkActions } from 'src/app/constants/variable.constants';
 import { MaterialEditTemplateComponent } from 'src/app/components/material-edit-template/material-edit-template.component';
 import { RecordSettingDialogComponent } from '../../components/record-setting-dialog/record-setting-dialog.component';
 import { Subscription } from 'rxjs';
@@ -29,20 +26,18 @@ import { MoveFolderComponent } from 'src/app/components/move-folder/move-folder.
 import { NotifyComponent } from 'src/app/components/notify/notify.component';
 import { DeleteFolderComponent } from '../../components/delete-folder/delete-folder.component';
 import { HandlerService } from 'src/app/services/handler.service';
-import {
-  getUserLevel,
-  sortDateArray,
-  sortStringArray
-} from '../../utils/functions';
+import { sortDateArray, sortStringArray } from '../../utils/functions';
 import { SocialShareComponent } from 'src/app/components/social-share/social-share.component';
 import { TeamMaterialShareComponent } from 'src/app/components/team-material-share/team-material-share.component';
 import { saveAs } from 'file-saver';
+import { VideoPopupComponent } from 'src/app/components/video-popup/video-popup.component';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
   styleUrls: ['./materials.component.scss']
 })
-export class MaterialsComponent implements OnInit {
+export class MaterialsComponent implements OnInit, AfterViewInit {
   DISPLAY_COLUMNS = [
     'select',
     'material_name',
@@ -147,8 +142,10 @@ export class MaterialsComponent implements OnInit {
     views: false
   };
 
-  packageLevel = '';
   disableActions = [];
+  isPackageGroupEmail = true;
+  isPackageText = true;
+  isPackageCapture = true;
 
   constructor(
     private dialog: MatDialog,
@@ -160,29 +157,33 @@ export class MaterialsComponent implements OnInit {
     private toast: ToastrService,
     private router: Router,
     private clipboard: Clipboard,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         this.user_id = profile._id;
-        this.packageLevel = profile.package_level;
-        if (getUserLevel(this.packageLevel) === PACKAGE_LEVEL.lite.package) {
-          this.disableActions = [
-            {
-              label: 'Send via email',
-              type: 'button',
-              icon: 'i-message',
-              command: 'email',
-              loading: false
-            },
-            {
-              label: 'Capture',
-              type: 'toggle',
-              status: false,
-              command: 'lead_capture',
-              loading: false
-            }
-          ];
+        this.isPackageCapture = profile.capture_enabled;
+        this.isPackageGroupEmail = profile.email_info?.mass_enable;
+        this.isPackageText = profile.text_info?.is_enabled;
+        this.disableActions = [];
+        if (!this.isPackageCapture) {
+          this.disableActions.push({
+            label: 'Capture',
+            type: 'toggle',
+            status: false,
+            command: 'lead_capture',
+            loading: false
+          });
+        }
+        if (!this.isPackageText) {
+          this.disableActions.push({
+            label: 'Send via Text',
+            type: 'button',
+            icon: 'i-sms-sent',
+            command: 'text',
+            loading: false
+          });
         }
       }
     );
@@ -196,7 +197,7 @@ export class MaterialsComponent implements OnInit {
       this.editedImages = this.garbage['edited_image'] || [];
 
       this.global_theme = this.garbage.material_theme;
-      this.material_themes = this.garbage.material_themes;
+      this.material_themes = this.garbage.material_themes || {};
     });
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
       const folder_id = params['folder'];
@@ -313,15 +314,41 @@ export class MaterialsComponent implements OnInit {
     }, 5000);
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.route.queryParams.subscribe((params) => {
+        if (params['video']) {
+          const _id = params['video'];
+          const loadTimer = setInterval(() => {
+            if (this.materials.length > 0) {
+              clearInterval(loadTimer);
+              const material = this.materials.filter((e) => e._id == _id);
+              this.dialog
+                .open(VideoPopupComponent, {
+                  position: { top: '5vh' },
+                  width: '100vw',
+                  maxWidth: '500px',
+                  disableClose: true,
+                  data: {
+                    material: material[0]
+                  }
+                })
+                .afterClosed()
+                .subscribe((res) => {
+                  this.location.replaceState(`/materials`);
+                });
+            }
+          }, 1000);
+        }
+      });
+    }, 5000);
+  }
+
   ngOnDestroy(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.loadSubscription && this.loadSubscription.unsubscribe();
     clearInterval(this.convertLoaderTimer);
-  }
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
   }
 
   isSelected(element: Material): boolean {
@@ -924,7 +951,10 @@ export class MaterialsComponent implements OnInit {
         width: '100%',
         height: '100%',
         panelClass: 'trans-modal',
-        backdropClass: 'trans'
+        backdropClass: 'trans',
+        data: {
+          id: this.user_id
+        }
       })
       .afterClosed()
       .subscribe((res) => {

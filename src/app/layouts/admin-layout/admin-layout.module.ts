@@ -66,6 +66,10 @@ import { TeamShareAutomationComponent } from '../../pages/team-share-automation/
 import { TeamShareTemplateComponent } from '../../pages/team-share-template/team-share-template.component';
 import { TestComponent } from '../../pages/test/test.component';
 import { StripeModule } from 'stripe-angular';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
+
+const config: SocketIoConfig = { url: environment.server, options: {} };
 
 @NgModule({
   declarations: [
@@ -142,6 +146,7 @@ import { StripeModule } from 'stripe-angular';
       innerStrokeColor: '#C7E596',
       animationDuration: 300
     }),
+    SocketIoModule.forRoot(config)
   ],
   schemas: []
 })

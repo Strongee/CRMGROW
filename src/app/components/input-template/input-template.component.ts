@@ -25,7 +25,6 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { Template } from 'src/app/models/template.model';
 import * as _ from 'lodash';
 import { searchReg } from 'src/app/helper';
-import { getUserLevel } from '../../utils/functions';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -57,18 +56,11 @@ export class InputTemplateComponent
   search = '';
   filteredResults: ReplaySubject<Template[]> = new ReplaySubject<Template[]>(1);
 
-  packageLevel = '';
-  profileSubscription: Subscription;
-
   constructor(
     private templateService: TemplatesService,
     private userService: UserService
   ) {
     this.templateService.loadAll();
-    this.profileSubscription && this.profileSubscription.unsubscribe();
-    this.profileSubscription = this.userService.profile$.subscribe((res) => {
-      this.packageLevel = res.package_level;
-    });
   }
 
   ngOnInit(): void {
@@ -162,9 +154,4 @@ export class InputTemplateComponent
   }
 
   ngOnDestroy(): void {}
-
-
-  getUserLevel(): string {
-    return getUserLevel(this.packageLevel);
-  }
 }
