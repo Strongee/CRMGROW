@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
@@ -25,7 +25,7 @@ import { SendTextComponent } from 'src/app/components/send-text/send-text.compon
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   actions: any[] = [
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
     { icon: 'i-sms-sent bg-white', label: 'New Text', id: 'text' },
@@ -118,6 +118,11 @@ export class NavbarComponent implements OnInit {
     this.connectService.receiveLogout().subscribe(() => {
       this.logout(null);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.notificationUpdater$ && this.notificationUpdater$.unsubscribe();
+    this.latestAt = null;
   }
 
   runAction(action: string): void {
