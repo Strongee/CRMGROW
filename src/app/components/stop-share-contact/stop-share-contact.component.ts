@@ -16,6 +16,7 @@ export class StopShareContactComponent implements OnInit {
   members = [];
   member;
   loading = false;
+  team = '';
 
   constructor(
     public contactService: ContactService,
@@ -28,6 +29,9 @@ export class StopShareContactComponent implements OnInit {
       }
       if (this.data.members) {
         this.members = this.data.members;
+      }
+      if (this.data.team) {
+        this.team = this.data.team;
       }
     }
   }
@@ -54,7 +58,7 @@ export class StopShareContactComponent implements OnInit {
     this.stopShareContactSubscription &&
       this.stopShareContactSubscription.unsubscribe();
     this.stopShareContactSubscription = this.contactService
-      .stopShareContacts(contacts, this.member._id)
+      .stopShareContacts(contacts, this.member._id, this.team)
       .subscribe((res) => {
         this.loading = false;
         this.dialogRef.close({ status: true });

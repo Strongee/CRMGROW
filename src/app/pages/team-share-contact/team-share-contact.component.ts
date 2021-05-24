@@ -929,7 +929,8 @@ export class TeamShareContactComponent implements OnInit, OnChanges {
         maxWidth: '400px',
         data: {
           contacts: [contact],
-          members
+          members,
+          team: this.team._id
         }
       });
 

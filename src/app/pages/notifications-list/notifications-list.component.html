@@ -14,7 +14,7 @@
             <i class="i-icon lg i-information d-block bgc-red"></i>
           </div>
           <div class="content">
-            <div [innerHTML]="item.content"></div>
+            <div [innerHTML]="getNotificationDetail(item)"></div>
             <div *ngIf="item.description" [innerHTML]="item.description" class="description"></div>
             <div class="time">{{item.created_at | timeago}}</div>
           </div>

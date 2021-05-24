@@ -613,11 +613,12 @@ export class ContactService extends HttpService {
       );
   }
 
-  stopShareContacts(contacts, user): Observable<any> {
+  stopShareContacts(contacts, user, team): Observable<any> {
     return this.httpClient
       .post(this.server + CONTACT.STOP_SHARE, {
         contacts,
-        user
+        user,
+        team
       })
       .pipe(
         map((res) => res),

@@ -16,7 +16,9 @@ import { interval, Subscription } from 'rxjs';
 import { ContactService } from '../../services/contact.service';
 import { TabItem } from 'src/app/utils/data.types';
 import { Contact } from 'src/app/models/contact.model';
-
+import { getNotificationDetail } from 'src/app/utils/functions';
+import * as _ from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -70,6 +72,9 @@ export class NavbarComponent implements OnInit {
     { label: 'RECEIVED', id: 'received', icon: '' }
   ];
   selectedTextTab = this.textTabs[0];
+  incomingNotifications = [];
+  latestAt;
+  materialTrackingShower;
 
   constructor(
     public userService: UserService,
@@ -78,6 +83,7 @@ export class NavbarComponent implements OnInit {
     private connectService: ConnectService,
     private dialog: MatDialog,
     private contactService: ContactService,
+    private toast: ToastrService,
     private router: Router
   ) {
     this.profileSubscription = this.userService.profile$.subscribe(
@@ -289,6 +295,55 @@ export class NavbarComponent implements OnInit {
 
           this.unreadNotifications = res['unreadNotifications'];
           this.notifications = res['notifications'];
+          this.notifications.forEach((e) => {
+            e.content = getNotificationDetail(e);
+          });
+
+          const latest = _.maxBy(this.notifications, (e) =>
+            new Date(e.updated_at).getTime()
+          );
+          if (
+            this.latestAt &&
+            this.latestAt.getTime() < new Date(latest.updated_at).getTime()
+          ) {
+            // Check the new incoming notifications and trackers
+            this.incomingNotifications = this.notifications.filter((e) => {
+              return new Date(e.updated_at).getTime() > this.latestAt.getTime();
+            });
+            const trackerNotifications = this.incomingNotifications.filter(
+              (e) => {
+                return e.criteria === 'material_track';
+              }
+            );
+            if (trackerNotifications && trackerNotifications.length) {
+              let counter = 0;
+              this.materialTrackingShower = setInterval(() => {
+                if (counter < trackerNotifications.length) {
+                  this.toast.success(
+                    trackerNotifications[counter].content,
+                    'Material is tracked',
+                    { enableHtml: true }
+                  );
+                } else {
+                  clearInterval(this.materialTrackingShower);
+                }
+                counter++;
+              }, 5000);
+            }
+            if (
+              this.incomingNotifications.length - trackerNotifications.length
+            ) {
+              this.toast.success(
+                `${
+                  this.incomingNotifications.length -
+                  trackerNotifications.length
+                } event is happend newly.`,
+                'Notification',
+                { timeOut: 3500 }
+              );
+            }
+          }
+          this.latestAt = new Date(latest.updated_at);
         }
       });
   }

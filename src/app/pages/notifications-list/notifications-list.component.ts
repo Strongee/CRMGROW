@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/services/notification.service';
+import { getNotificationDetail } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-notifications-list',
@@ -13,6 +14,7 @@ export class NotificationsListComponent implements OnInit {
   loadSubscription: Subscription;
   page = 1;
   total = 0;
+  getNotificationDetail = getNotificationDetail;
 
   constructor(private notificationService: NotificationService) {
     this.loadPage(1);
