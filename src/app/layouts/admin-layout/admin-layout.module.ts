@@ -67,8 +67,9 @@ import { TeamShareTemplateComponent } from '../../pages/team-share-template/team
 import { TestComponent } from '../../pages/test/test.component';
 import { StripeModule } from 'stripe-angular';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+const config: SocketIoConfig = { url: environment.server, options: {} };
 
 @NgModule({
   declarations: [

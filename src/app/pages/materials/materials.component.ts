@@ -323,7 +323,6 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
             if (this.materials.length > 0) {
               clearInterval(loadTimer);
               const material = this.materials.filter((e) => e._id == _id);
-              console.log('###', material);
               this.dialog
                 .open(VideoPopupComponent, {
                   position: { top: '5vh' },
@@ -336,9 +335,7 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
                 })
                 .afterClosed()
                 .subscribe((res) => {
-                  if (res) {
-                    this.location.replaceState(`/materials`);
-                  }
+                  this.location.replaceState(`/materials`);
                 });
             }
           }, 1000);
