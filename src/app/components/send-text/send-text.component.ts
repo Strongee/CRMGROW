@@ -29,12 +29,15 @@ import { MaterialBrowserComponent } from '../material-browser/material-browser.c
   styleUrls: ['./send-text.component.scss']
 })
 export class SendTextComponent implements OnInit, OnDestroy {
+  type = '';
   contact: Contact;
+  textContacts: any[] = [];
   message: string = '';
   conversation: any;
   userId: string = '';
   messages: any[] = [];
   set = 'twitter';
+  toFocus = false;
 
   loading = false;
   loadSubscription: Subscription;
@@ -54,21 +57,26 @@ export class SendTextComponent implements OnInit, OnDestroy {
     public smsService: SmsService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    if (this.data && this.data.contact) {
-      this.contact = new Contact().deserialize(this.data.contact);
-      this.conversationLoadSubscription = this.contactService.contactConversation$.subscribe(
-        (conversation) => {
-          if (conversation && conversation.contact === this.contact._id) {
-            this.messages = conversation.messages;
-            if (this.messages.length) {
-              this.loading = false;
+    if (this.data && this.data.type) {
+      this.type = this.data.type;
+      if (this.type == 'single') {
+        this.contact = new Contact().deserialize(this.data.contact);
+        this.conversationLoadSubscription = this.contactService.contactConversation$.subscribe(
+          (conversation) => {
+            if (conversation && conversation.contact === this.contact._id) {
+              this.messages = conversation.messages;
+              if (this.messages.length) {
+                this.loading = false;
+              }
+            }
+            if (!this.messages || !this.messages.length) {
+              this.load();
             }
           }
-          if (!this.messages || !this.messages.length) {
-            this.load();
-          }
-        }
-      );
+        );
+      } else {
+        this.messages = [];
+      }
     }
     this.userId = this.userService.profile.getValue()._id;
     this.templateService.loadAll(false);
@@ -89,10 +97,12 @@ export class SendTextComponent implements OnInit, OnDestroy {
     this.updateTimer && this.updateTimer.unsubscribe();
     this.conversationLoadSubscription &&
       this.conversationLoadSubscription.unsubscribe();
-    this.contactService.contactConversation.next({
-      contact: this.contact._id,
-      messages: this.messages || []
-    });
+    if (this.type == 'single') {
+      this.contactService.contactConversation.next({
+        contact: this.contact._id,
+        messages: this.messages || []
+      });
+    }
   }
 
   load(): void {
@@ -107,12 +117,24 @@ export class SendTextComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
-    this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.smsService
-      .getMessage(this.contact)
-      .subscribe((messages) => {
-        this.messages = messages;
-      });
+    if (this.type == 'single') {
+      this.loadSubscription && this.loadSubscription.unsubscribe();
+      this.loadSubscription = this.smsService
+        .getMessage(this.contact)
+        .subscribe((messages) => {
+          this.messages = messages;
+        });
+    } else {
+      this.messages = [];
+    }
+  }
+
+  setFocus(): void {
+    this.toFocus = true;
+  }
+
+  isFocus(): any {
+    return this.toFocus;
   }
 
   openMaterialsDlg(): void {
@@ -239,6 +261,12 @@ export class SendTextComponent implements OnInit, OnDestroy {
     });
 
     this.sending = true;
+    let contacts;
+    if (this.type == 'single') {
+      contacts = [this.contact._id];
+    } else {
+      contacts = this.textContacts;
+    }
     this.sendSubscription && this.sendSubscription.unsubscribe();
     this.sendSubscription = this.materialService
       .sendMessage({
@@ -246,7 +274,7 @@ export class SendTextComponent implements OnInit, OnDestroy {
         pdf_ids: pdfIds,
         image_ids: imageIds,
         content: contentToSend,
-        contacts: [this.contact._id]
+        contacts: contacts
       })
       .subscribe((res) => {
         this.sending = false;

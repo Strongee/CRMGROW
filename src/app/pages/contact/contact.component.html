@@ -75,6 +75,10 @@
               <i class="i-icon i-sms-sent bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Text</span>
             </button>
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">
+              <i class="i-icon i-phone bgc-dark"></i>
+              <span class="ml-2 f-3 font-weight-bold">New Call</span>
+            </button> 
             <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openTaskDlg()">
               <i class="i-icon i-task bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Task</span>
@@ -83,10 +87,6 @@
               <i class="i-icon i-notes bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Note</span>
             </button>
-<!--            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">-->
-<!--              <i class="i-icon i-phone bgc-dark"></i>-->
-<!--              <span class="ml-2 f-3 font-weight-bold">New Call</span>-->
-<!--            </button>-->
             <hr class="my-1">
             <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openMergeContactDlg()">
               <i class="i-icon i-contact-merge bgc-dark"></i>
@@ -371,12 +371,12 @@
         >
         </app-slide-tab>
         <div class="history-list mt-3 position-relative">
-          <div class="history-list-header v-center">
+          <div class="history-list-header v-center justify-content-end">
             <ng-container *ngIf="tab.id === 'all'">
               <div ngbDropdown class="v-center">
                 <div class="v-center" ngbDropdownToggle>
                   <span class="f-3 font-weight-bold c-dark c-pointer mr-2">
-                    {{activityType.id == 'all' ? 'All activity' : activityType.label}}
+                    {{activityType.id == 'all' ? 'Sort by' : activityType.label}}
                   </span>
                   <i class="d-block i-icon i-triangle-down bgc-dark"></i>
                 </div>

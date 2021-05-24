@@ -37,6 +37,7 @@ export const USER = {
   LOAD_REFERRALS: 'affiliate/referrals/',
   UPDATE_GARBAGE: 'garbage',
   CONNECT_SMTP: 'integration/sync-smtp',
+  DISCONNECT_MAIL: 'user/discon-email',
   DISCONNECT_CALENDAR: 'user/discon-calendar',
   CANCEL_ACCOUNT: 'user/cancel-account',
   UPDATE_PACKAGE: 'user/update-package'

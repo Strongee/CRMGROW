@@ -1275,55 +1275,35 @@ export const BulkActions = {
   ],
   Contacts: [
     {
-      label: 'Add tasks',
+      label: 'New Task',
       type: 'button',
       icon: 'i-task',
       command: 'add_task',
       loading: false
     },
     {
-      label: 'Send email',
+      label: 'New Email',
       type: 'button',
       icon: 'i-message',
       command: 'message',
       loading: false
     },
     {
-      label: 'Call',
+      label: 'New Text',
+      type: 'button',
+      icon: 'i-sms-sent',
+      command: 'text',
+      loading: false
+    },
+    {
+      label: 'New Call',
       type: 'button',
       icon: 'i-phone',
       command: 'call',
       loading: false
     },
     {
-      spliter: true,
-      label: 'Select all',
-      type: 'button',
-      command: 'select',
-      loading: false
-    },
-    {
-      label: 'Deselect',
-      type: 'button',
-      command: 'deselect',
-      loading: false
-    },
-    {
-      label: 'Edit',
-      type: 'button',
-      icon: 'i-edit',
-      command: 'edit',
-      loading: false
-    },
-    {
-      label: 'Delete',
-      type: 'button',
-      icon: 'i-trash',
-      command: 'delete',
-      loading: false
-    },
-    {
-      label: 'Add notes',
+      label: 'New Note',
       type: 'button',
       icon: 'i-notes',
       command: 'add_note',
@@ -1337,28 +1317,19 @@ export const BulkActions = {
       loading: false
     },
     {
+      label: 'Edit',
+      type: 'button',
+      icon: 'i-edit',
+      command: 'edit',
+      loading: false
+    },
+    {
       label: 'Download',
       type: 'button',
       icon: 'i-download',
       command: 'download',
       loading: false,
       loadingLabel: 'Downloading'
-    }
-  ],
-  TeamContacts: [
-    {
-      label: 'Add tasks',
-      type: 'button',
-      icon: 'i-task',
-      command: 'add_task',
-      loading: false
-    },
-    {
-      label: 'Send email',
-      type: 'button',
-      icon: 'i-message',
-      command: 'message',
-      loading: false
     },
     {
       spliter: true,
@@ -1374,7 +1345,30 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Add notes',
+      label: 'Delete',
+      type: 'button',
+      icon: 'i-trash',
+      command: 'delete',
+      loading: false
+    }
+  ],
+  TeamContacts: [
+    {
+      label: 'New Task',
+      type: 'button',
+      icon: 'i-task',
+      command: 'add_task',
+      loading: false
+    },
+    {
+      label: 'New Email',
+      type: 'button',
+      icon: 'i-message',
+      command: 'message',
+      loading: false
+    },
+    {
+      label: 'New Note',
       type: 'button',
       icon: 'i-template',
       command: 'add_note',
@@ -1396,17 +1390,22 @@ export const BulkActions = {
       loadingLabel: 'Downloading'
     },
     {
-      label: 'Stop share',
+      spliter: true,
+      label: 'Select all',
       type: 'button',
-      icon: 'i-block',
-      command: 'stopshare',
-      loading: false,
-      loadingLabel: 'Stop sharing'
+      command: 'select',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
     }
   ],
   Materials: [
     {
-      label: 'Send via email',
+      label: 'Send via Email',
       type: 'button',
       icon: 'i-message',
       command: 'email',
@@ -1420,13 +1419,6 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Capture',
-      type: 'toggle',
-      status: false,
-      command: 'lead_capture',
-      loading: false
-    },
-    {
       label: 'Edit Template',
       type: 'button',
       icon: 'i-template',
@@ -1434,9 +1426,10 @@ export const BulkActions = {
       loading: false
     },
     {
-      label: 'Deselect',
-      type: 'button',
-      command: 'deselect',
+      label: 'Capture',
+      type: 'toggle',
+      status: false,
+      command: 'lead_capture',
       loading: false
     },
     {
@@ -1444,6 +1437,12 @@ export const BulkActions = {
       type: 'button',
       icon: 'i-folder',
       command: 'folder',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
       loading: false
     },
     {

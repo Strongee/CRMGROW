@@ -19,6 +19,7 @@ import { Contact } from 'src/app/models/contact.model';
 import { getNotificationDetail } from 'src/app/utils/functions';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
+import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -27,6 +28,9 @@ import { ToastrService } from 'ngx-toastr';
 export class NavbarComponent implements OnInit {
   actions: any[] = [
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
+    { icon: 'i-sms-sent bg-white', label: 'New Text', id: 'text' },
+    { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
+    { icon: 'i-phone bg-white', label: 'New Call', id: 'call' },
     { icon: 'i-task bg-white', label: 'New Task', id: 'task' },
     { icon: 'i-deals bg-white', label: 'New Deal', id: 'deal' },
     {
@@ -35,7 +39,6 @@ export class NavbarComponent implements OnInit {
       id: 'appointment'
     },
     { icon: 'i-template bg-white', label: 'New Note', id: 'note' },
-    { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
     { icon: 'i-record bg-white', label: 'Record Video', id: 'record' },
     { icon: 'i-upload bg-white', label: 'Upload Material', id: 'video' }
   ];
@@ -129,6 +132,23 @@ export class NavbarComponent implements OnInit {
               this.contactService.reloadPage();
             }
           });
+        break;
+      case 'text':
+        this.dialog.open(SendTextComponent, {
+          position: {
+            bottom: '0px',
+            right: '0px'
+          },
+          width: '100vw',
+          panelClass: 'send-email',
+          backdropClass: 'cdk-send-email',
+          disableClose: false,
+          data: {
+            type: 'multi'
+          }
+        });
+        break;
+      case 'call':
         break;
       case 'task':
         this.dialog.open(TaskCreateComponent, DialogSettings.TASK);

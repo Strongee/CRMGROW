@@ -237,8 +237,8 @@
                 *ngIf="!selection.length" class="sub-item-action"></th>
           </ng-container>
           <td mat-cell
-              *matCellDef="let element" class="sub-item-action">
-            <div class="v-center items pl-5 pl-3">
+              *matCellDef="let element" class="sub-item-action" [class.active]="isSelected(element)">
+            <div class="v-center justify-content-between items">
               <ng-container *ngIf="element.material_type !== 'folder'">
                 <button class="v-center btn p-1 px-3 c-dark" (click)="sendMaterial(element, 'email')" placement="bottom" ngbTooltip="Send via Email">
                   <i class="i-icon i-message bgc-dark" aria-hidden="true"></i>
@@ -291,8 +291,8 @@
                 *ngIf="!selection.length" class="item-action"></th>
           </ng-container>
           <td mat-cell
-              *matCellDef="let element" class="item-action">
-            <div ngbDropdown placement="bottom-right">
+              *matCellDef="let element" class="item-action" [class.active]="isSelected(element)">
+            <div class="material-actions" ngbDropdown placement="bottom-right">
               <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 no-carot px-0">
                 <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
               </a>
@@ -314,10 +314,6 @@
                   <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="sendMaterial(element)">
                     <i class="i-icon i-sent bgc-dark ml-1" aria-hidden="true"></i>
                     <span class="ml-3 f-3 font-weight-bold">Send</span>
-                  </button>
-                  <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="copyLink(element)">
-                    <i class="i-icon i-copy bgc-dark ml-1" aria-hidden="true"></i>
-                    <span class="ml-3 f-3 font-weight-bold">Copy link</span>
                   </button>
                   <button class="v-center border-0 py-2 c-dark dropdown-item" (click)="editTemplate(element)">
                     <i class="i-icon i-template bgc-dark ml-1" aria-hidden="true"></i>

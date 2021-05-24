@@ -5,8 +5,7 @@
 
   .action-count,
   .contacts,
-  .created,
-  .actions {
+  .created {
     text-align: right;
   }
 
@@ -101,12 +100,11 @@ input.disabled {
 
 :host ::ng-deep {
   .assign-action {
-    min-width: 60px;
-    max-width: 60px;
+    min-width: 80px;
+    max-width: 80px;
 
     button {
       opacity: 0;
-      margin-left: auto;
     }
   }
 
@@ -114,10 +112,5 @@ input.disabled {
     .assign-action button {
       opacity: 1;
     }
-  }
-
-  .actions {
-    min-width: 40px;
-    max-width: 40px;
   }
 }

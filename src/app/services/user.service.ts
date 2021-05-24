@@ -369,6 +369,9 @@ export class UserService extends HttpService {
         return this.httpClient.get(this.server + USER.CALENDAR_SYNC_OUTLOOK);
     }
   }
+  public disconnectMail(): any {
+    return this.httpClient.get(this.server + USER.DISCONNECT_MAIL);
+  }
   public disconnectCalendar(email: string): any {
     const data = {
       connected_email: email
