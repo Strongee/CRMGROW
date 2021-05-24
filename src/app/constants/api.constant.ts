@@ -40,7 +40,8 @@ export const USER = {
   DISCONNECT_MAIL: 'user/discon-email',
   DISCONNECT_CALENDAR: 'user/discon-calendar',
   CANCEL_ACCOUNT: 'user/cancel-account',
-  UPDATE_PACKAGE: 'user/update-package'
+  UPDATE_PACKAGE: 'user/update-package',
+  CHECK_DOWNGRADE: 'user/check-downgrade'
 };
 export const GUEST = {
   LOAD: 'guest/load',

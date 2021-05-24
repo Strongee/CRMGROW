@@ -125,6 +125,13 @@ export class TeamComponent implements OnInit, OnDestroy, AfterViewInit {
       this.currentUser = res;
       this.userId = res._id;
       this.isPackageAutomation = res.automation_info?.is_enabled;
+      this.tabs = [
+        { icon: '', label: 'Members', id: 'members' },
+        { icon: '', label: 'Materials', id: 'materials' },
+        { icon: '', label: 'Contacts', id: 'contacts' },
+        { icon: '', label: 'Automations', id: 'automations' },
+        { icon: '', label: 'Templates', id: 'templates' }
+      ];
       if (!this.isPackageAutomation) {
         const index = this.tabs.findIndex((item) => item.id === 'automations');
         if (index >= 0) {
