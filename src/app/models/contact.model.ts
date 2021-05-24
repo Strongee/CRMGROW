@@ -164,8 +164,8 @@ export class ContactActivity implements Deserializable {
   }
 
   get moreStage(): string {
-    if (this.stages.length > 1) {
-      return '+' + (this.stages.length - 1) + ' more';
+    if (this.stages?.length > 1) {
+      return '+' + (this.stages?.length - 1) + ' more';
     }
     return '';
   }

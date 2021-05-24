@@ -172,7 +172,7 @@
             *matCellDef="let element"
             (click)="openContact(element)">
             <span class="tag rounded mr-2"
-              *ngIf="element.stages.length">{{element.stages[0]}}</span>
+              *ngIf="element.stages?.length">{{element.stages[0]}}</span>
             <span class="f-2 op-56">{{element.moreStage}}</span>
           </td>
         </ng-container>
