@@ -394,26 +394,46 @@ export class RecordSettingDialogComponent implements OnInit {
   }
 
   record(): void {
-    this.socket.connect();
-    if (!this.serverVideoId) {
-      this.socket.emit('initVideo', this.userId);
-    }
-    this.socket.on('counterDirection', (data) => {
-      this.counterDirection = data.counterDirection;
-      this.limitTime = data.limitTime;
-      if (this.counterDirection == -1) {
-        this.videoDuration = this.limitTime;
-      }
-    });
-    this.socket.on('createdVideo', (data) => {
-      this.serverVideoId = data.video;
-    });
-
     if (this.mode === 'screen') {
+      this.socket.connect();
+      if (!this.serverVideoId) {
+        this.socket.emit('initVideo', this.userId);
+      }
+      this.socket.on('counterDirection', (data) => {
+        this.counterDirection = data.counterDirection;
+        this.limitTime = data.limitTime;
+        if (this.counterDirection == -1) {
+          this.videoDuration = this.limitTime;
+        }
+      });
+      this.socket.on('createdVideo', (data) => {
+        this.serverVideoId = data.video;
+      });
       this.captureScreen();
     }
     if (this.mode === 'camera') {
-      const option = 'width=530, height=305';
+      const w = 750;
+      const h = 600;
+      const dualScreenLeft =
+        window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+      const dualScreenTop =
+        window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+      const width = window.innerWidth
+        ? window.innerWidth
+        : document.documentElement.clientWidth
+        ? document.documentElement.clientWidth
+        : screen.width;
+      const height = window.innerHeight
+        ? window.innerHeight
+        : document.documentElement.clientHeight
+        ? document.documentElement.clientHeight
+        : screen.height;
+
+      const systemZoom = width / window.screen.availWidth;
+      const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+      const top = (height - h) / 2 / systemZoom + dualScreenTop;
+      const option = `width=${w}, height=${h}, top=${top}, left=${left}`;
       if (!this.popup || this.popup.closed) {
         this.popup = window.open(
           this.recordUrl +
