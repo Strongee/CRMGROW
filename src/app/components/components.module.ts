@@ -157,7 +157,7 @@ import { PlayTimelinesComponent } from './play-timelines/play-timelines.componen
 import { InputContactDealComponent } from './input-contact-deal/input-contact-deal.component';
 import { StripeModule } from 'stripe-angular';
 import { STRIPE_KEY } from '../constants/variable.constants';
-
+//
 @NgModule({
   declarations: [
     TopbarComponent,
