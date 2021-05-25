@@ -288,7 +288,12 @@ export class UserService extends HttpService {
   }
 
   public updatePayment(payment: any): any {
-    return this.httpClient.post(this.server + USER.UPDATE_PAYMENT, payment);
+    return this.httpClient
+      .post(this.server + USER.UPDATE_PAYMENT, payment)
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('UPDATE PAYMENT', false))
+      );
   }
 
   public loadInvoice(): void {
