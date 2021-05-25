@@ -153,6 +153,7 @@ export class DealsDetailComponent implements OnInit {
   dealSubscription: Subscription;
   teamsLoadSubscription: Subscription;
   updateSubscription: Subscription;
+  reloadSubscription: Subscription;
 
   titleEditable = false;
   dealTitle = '';
@@ -162,6 +163,7 @@ export class DealsDetailComponent implements OnInit {
   isPackageAutomation = true;
   isPackageText = true;
 
+  loading = false;
   data = {
     materials: [],
     notes: [],
@@ -303,33 +305,13 @@ export class DealsDetailComponent implements OnInit {
     this.handlerService.goBack('/deals');
   }
 
-  loadNotes(): void {
-    this.noteSubscription && this.noteSubscription.unsubscribe();
-    this.noteSubscription = this.dealsService
-      .getNotes({ deal: this.dealId })
-      .subscribe((res) => {
-        if (res) {
-          this.notes = res;
-        }
-      });
-  }
-
-  loadEmails(): void {
-    this.emailSubscription && this.emailSubscription.unsubscribe();
-    this.emailSubscription = this.dealsService
-      .getEmails({ deal: this.dealId })
-      .subscribe((res) => {
-        if (res) {
-          this.emails = res;
-        }
-      });
-  }
-
   loadActivity(): void {
     this.activitySubscription && this.activitySubscription.unsubscribe();
+    this.loading = true;
     this.activitySubscription = this.dealsService
       .getActivity({ deal: this.dealId })
       .subscribe((res) => {
+        this.loading = false;
         if (res) {
           this.activities = res['activity'].map((e) =>
             new DetailActivity().deserialize(e)
@@ -341,6 +323,7 @@ export class DealsDetailComponent implements OnInit {
           this.dataObj.texts = {};
           this.dataObj.appointments = {};
           this.dataObj.tasks = {};
+          this.groups = [];
           this.data.materials = this.details['materials'] || [];
           this.data.notes = this.details['notes'] || [];
           this.data.emails = this.details['emails'] || [];
@@ -659,7 +642,7 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.addLatestActivity(2);
+          this.reloadLatest(2);
         }
       });
   }
@@ -678,7 +661,7 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.addLatestActivity(2);
+          this.reloadLatest(2);
         }
       });
   }
@@ -701,7 +684,7 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.addLatestActivity(2);
+          this.reloadLatest(3);
         }
       });
   }
@@ -739,7 +722,7 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.addLatestActivity(2);
+          this.reloadLatest(2);
         }
       });
   }
@@ -756,7 +739,7 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.addLatestActivity(2);
+          this.reloadLatest(2);
         }
       });
   }
@@ -773,7 +756,7 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.addLatestActivity(2);
+          this.reloadLatest(2);
         }
       });
   }
@@ -838,7 +821,7 @@ export class DealsDetailComponent implements OnInit {
             res.data,
             _.isEqual
           );
-          this.addLatestActivity(res.data.length + 1);
+          this.reloadLatest(res.data.length + 1);
         }
       });
   }
@@ -862,7 +845,7 @@ export class DealsDetailComponent implements OnInit {
             .subscribe((status) => {
               if (status) {
                 _.pullAllBy(this.deal.contacts, [{ _id: contact._id }], '_id');
-                this.addLatestActivity(2);
+                this.reloadLatest(2);
               }
             });
         }
@@ -974,13 +957,6 @@ export class DealsDetailComponent implements OnInit {
   }
   changeActivityTypes(tab: TabItem): void {
     this.activityType = tab;
-
-    // this.showingTimelines = this.timelines.filter((e) => {
-    //   if (tab.id === 'all') {
-    //     return true;
-    //   }
-    //   return tab.id === e.type;
-    // });
   }
   changeSort(timeSort: any): void {
     this.changeTab(this.tab);
@@ -1192,20 +1168,8 @@ export class DealsDetailComponent implements OnInit {
       });
   }
 
-  editTask(activity: any, isReal: boolean = false): void {
-    let data;
-    if (isReal) {
-      data = {
-        ...activity
-      };
-    } else {
-      if (!activity || !activity.activity_detail) {
-        return;
-      }
-      data = {
-        ...activity.activity_detail
-      };
-    }
+  editTask(task: any): void {
+    const data = { ...task };
 
     this.dialog
       .open(TaskEditComponent, {
@@ -1220,26 +1184,16 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res['status']) {
-          this.addLatestActivity(3);
+          this.reloadLatest(3);
         }
         // Update Activity
       });
   }
 
-  completeTask(activity: any, isReal: boolean = false): void {
-    let data;
-    if (isReal) {
-      data = {
-        ...activity
-      };
-    } else {
-      if (!activity || !activity.activity_detail) {
-        return;
-      }
-      data = {
-        ...activity.activity_detail
-      };
-    }
+  completeTask(task: any): void {
+    const data = {
+      ...task
+    };
 
     this.dialog
       .open(ConfirmComponent, {
@@ -1262,7 +1216,7 @@ export class DealsDetailComponent implements OnInit {
             })
             .subscribe((status) => {
               if (status) {
-                this.addLatestActivity(2);
+                this.reloadLatest(2);
               }
             });
         }
@@ -1359,7 +1313,7 @@ export class DealsDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.addLatestActivity(3);
+          this.reloadLatest(3);
         }
       });
   }
@@ -1472,25 +1426,6 @@ export class DealsDetailComponent implements OnInit {
         }
       });
     }
-  }
-
-  addLatestActivity(count: number): void {
-    this.activitySubscription = this.dealsService
-      .getActivity({ deal: this.dealId, count: count })
-      .subscribe((res) => {
-        if (res) {
-          const activities = [...this.activities, ...res]
-            .filter((e) => {
-              return e.type !== 'deals';
-            })
-            .sort((a, b) => {
-              return new Date(a.created_at) > new Date(b.created_at) ? -1 : 1;
-            });
-          this.activities = _.uniqBy(activities, '_id');
-          this.arrangeActivity();
-          this.changeTab(this.tab);
-        }
-      });
   }
 
   /**
@@ -1628,6 +1563,80 @@ export class DealsDetailComponent implements OnInit {
   }
 
   removeActivity(activity): void {}
+
+  reloadLatest(count = 20): void {
+    this.reloadSubscription && this.reloadSubscription.unsubscribe();
+    this.reloadSubscription = this.dealsService
+      .getActivity({
+        deal: this.dealId,
+        count: count || 20
+      })
+      .subscribe((res) => {
+        let activities = res['activity'].map((e) =>
+          new DetailActivity().deserialize(e)
+        );
+        const details = res['details'];
+        let materials = details['materials'] || [];
+        let notes = details['notes'] || [];
+        let emails = details['emails'] || [];
+        let texts = details['texts'] || [];
+        let appointments = details['appointments'] || [];
+        let tasks = details['tasks'] || [];
+        const trackers = details['trackers'] || {};
+        activities = [...activities, ...this.activities];
+        materials = [...materials, ...this.data.materials];
+        notes = [...notes, ...this.data.notes];
+        emails = [...emails, ...this.data.emails];
+        texts = [...texts, ...this.data.texts];
+        appointments = [...appointments, ...this.data.appointments];
+        tasks = [...tasks, ...this.data.tasks];
+        this.activities = _.uniqBy(activities, '_id');
+        this.data.materials = _.uniqBy(materials, '_id');
+        this.data.notes = _.uniqBy(notes, '_id');
+        this.data.emails = _.uniqBy(emails, '_id');
+        this.data.texts = _.uniqBy(texts, '_id');
+        this.data.appointments = _.uniqBy(appointments, '_id');
+        this.data.tasks = _.uniqBy(tasks, '_id');
+        for (const key in trackers) {
+          if (this.trackers[key]) {
+            for (const field in trackers[key]) {
+              let originalTrackers = this.trackers[key][field];
+              const incomingTrackers = trackers[key][field];
+              originalTrackers = [...incomingTrackers, ...originalTrackers];
+              originalTrackers = _.uniqBy(originalTrackers, '_id');
+              this.trackers[key][field] = originalTrackers;
+            }
+          } else {
+            this.trackers[key] = trackers[key];
+          }
+        }
+        this.groups = [];
+        this.groupActivities();
+        this.arrangeActivity();
+        for (const key in this.data) {
+          if (key !== 'materials') {
+            this.data[key].forEach((e) => {
+              this.dataObj[key][e._id] = e;
+            });
+          } else {
+            this.data[key].forEach((e) => {
+              e.material_type = 'video';
+              if (e.type) {
+                if (e.type.indexOf('pdf') !== -1) {
+                  e.material_type = 'pdf';
+                } else if (e.type.indexOf('image') !== -1) {
+                  e.material_type = 'image';
+                }
+              }
+              this.dataObj[key][e._id] = e;
+            });
+          }
+        }
+        if (this.tab.id !== 'all') {
+          this.changeTab(this.tab);
+        }
+      });
+  }
 
   isDisableTab(tabItem): boolean {
     const index = this.disableTabs.findIndex((item) => item.id === tabItem.id);

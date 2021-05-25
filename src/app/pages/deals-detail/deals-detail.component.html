@@ -236,9 +236,9 @@
                   <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto"
-                     (click)="openAppointmentDlg()"
-                     *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')"
-                     [class.disable]="!isPackageAutomation"
+                  (click)="openAppointmentDlg()"
+                  *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')"
+                  [class.disable]="!isPackageAutomation"
                 >
                   <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
                 </div>
@@ -1017,4 +1017,9 @@
           </div>
         </div>
     </div>
+</div>
+
+
+<div class="reload c-pointer" (click)="reloadLatest()">
+  <i class="i-icon i-refresh d-block bgc-white" [class.progressing]="loading"></i>
 </div>
