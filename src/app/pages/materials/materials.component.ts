@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialService } from 'src/app/services/material.service';
@@ -32,6 +39,8 @@ import { TeamMaterialShareComponent } from 'src/app/components/team-material-sha
 import { saveAs } from 'file-saver';
 import { VideoPopupComponent } from 'src/app/components/video-popup/video-popup.component';
 import { Location } from '@angular/common';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -146,6 +155,9 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
   isPackageGroupEmail = true;
   isPackageText = true;
   isPackageCapture = true;
+
+  @ViewChildren('mainDrop') dropdowns: QueryList<NgbDropdown>;
+  dropdown: NgbDropdown;
 
   constructor(
     private dialog: MatDialog,
@@ -1879,6 +1891,13 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
       return true;
     } else {
       return false;
+    }
+  }
+
+  rowHover(index: any): void {
+    this.dropdown = this.dropdowns['_results'][index];
+    if (this.dropdown.isOpen()) {
+      this.dropdown.close();
     }
   }
 }
