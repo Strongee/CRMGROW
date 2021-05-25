@@ -1,0 +1,33 @@
+<div class="file rounded mb-3" *ngFor="let action of timeline">
+  <ng-container *ngIf="materials[action.material]">
+    <div class="thumbnail">
+      <img [src]="materials[action.material]?.thumbnail">
+    </div>
+    <div class="p-2">
+      <ng-container *ngIf="action.sent_times > 1; else oneSent">
+        <div class="f-1 font-weight-bold">
+          {{materials[action.material]?.title}}
+        </div>
+      </ng-container>  
+      <ng-template #oneSent>
+        <div class="f-1 font-weight-bold">
+          {{materials[action.material]?.title}}
+        </div>
+      </ng-template>
+      <ng-container *ngIf="trackers[action.material] && trackers[action.material].length">
+        <ng-container *ngIf="trackers[action.material].length > 1; else oneTracked">
+
+        </ng-container>
+        <ng-template #oneTracked>
+          <app-play-timelines [data]="trackers[action.material][0]" [duration]="trackers[action.material][0]?.duration"></app-play-timelines>
+        </ng-template>
+      </ng-container>
+        <!-- <div class="f-1 font-weight-bold op-40 mt-2">
+            {{tracker.updated_at | date : 'yyyy MMM dd HH:MM a'}}
+        </div>
+        <div class="d-inline-block f-1 font-weight-bold bgc-blue c-white rounded px-1 mt-3">
+            WATCHED {{(tracker.duration || 0) | timeDuration}}
+        </div> -->
+    </div>
+  </ng-container>
+</div>

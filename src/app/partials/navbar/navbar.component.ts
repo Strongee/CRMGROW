@@ -60,6 +60,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   // Notifications
   notificationUpdater$;
+  notificationUpdater: Subscription;
   notificationLoadSubscription: Subscription;
   emailTasks = [];
   textTasks = [];
@@ -109,7 +110,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     this.loadNotifications();
     this.notificationUpdater$ = interval(60 * 1000);
-    this.notificationUpdater$.subscribe(() => {
+    this.notificationUpdater && this.notificationUpdater.unsubscribe();
+    this.notificationUpdater = this.notificationUpdater$.subscribe(() => {
       this.loadNotifications();
     });
   }
@@ -121,7 +123,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notificationUpdater$ && this.notificationUpdater$.unsubscribe();
+    this.notificationUpdater && this.notificationUpdater.unsubscribe();
     this.latestAt = null;
   }
 
