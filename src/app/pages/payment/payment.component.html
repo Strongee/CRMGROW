@@ -265,9 +265,9 @@
       <h1 class="f-26">Upgrade and get more out of CRM Grow</h1>
       <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBack()"></i>
     </div>
-    <ng-container *ngIf="isV1User">
+    <ng-container *ngIf="isV1User && !isOverflow">
       <div class="notification-area mt-4">
-        <span class="f-6 ml-2">Users that have been with crmgrow since version 1 will be charged at the lite plan but get the PRO plan.</span>
+        <span class="f-6 ml-2">Users that have been with crmgrow since version 1 will be charged at the Lite plan but get the Pro plan.</span>
       </div>
     </ng-container>
     <ng-container *ngIf="loadingCheckDowngrade; else checkedDowngrade">
@@ -295,7 +295,7 @@
         <button class="btn btn-package my-3 w-100"
                 [class.active]="litePackage.package == currentPackage.package"
                 [class.highlight]="litePackage.package == selectedPackage.package"
-                [class.suspended]="loadingCheckDowngrade"
+                [class.suspended]="selectedPackage.package == litePackage.package && isOverflow"
                 (click)="selectPlan(litePackage.package)"
         >
           {{planButtonLabel(litePackage.package)}}
@@ -374,7 +374,7 @@
         <button class="btn btn-package my-3 w-100"
                 [class.active]="proPackage.package == currentPackage.package"
                 [class.highlight]="proPackage.package == selectedPackage.package"
-                [class.suspended]="loadingCheckDowngrade"
+                [class.suspended]="selectedPackage.package == proPackage.package && isOverflow"
                 (click)="selectPlan(proPackage.package)"
         >
           {{planButtonLabel(proPackage.package)}}
@@ -460,7 +460,7 @@
         <button class="btn btn-package my-3 w-100"
                 [class.active]="elitePackage.package == currentPackage.package"
                 [class.highlight]="elitePackage.package == selectedPackage.package"
-                [class.suspended]="loadingCheckDowngrade"
+                [class.suspended]="selectedPackage.package == elitePackage.package && isOverflow"
                 (click)="selectPlan(elitePackage.package)"
         >
           {{planButtonLabel(elitePackage.package)}}
@@ -516,21 +516,13 @@
           </div>
         </div>
       </div>
-      <div class="package-item"
-         [class.highlight]="customPackage.package == selectedPackage.package"
-         (click)="clickPackage(customPackage)"
-      >
+      <div class="package-item" [class.highlight]="customPackage.package == selectedPackage.package">
         <img class="popular-img" src="../../../assets/img/popular.svg">
         <div class="package-level">Custom</div>
         <div class="package-description">Don't see a match for your specific need?  No worries, just reach out to see if we have a good solution for your needs.</div>
-        <button class="btn btn-package my-3 w-100"
-                [class.active]="customPackage.package == currentPackage.package"
-                [class.highlight]="litePackage.package == selectedPackage.package"
-                [class.suspended]="loadingCheckDowngrade"
-                (click)="selectPlan(customPackage.package)"
-        >
+        <a href="mailto:support@crmgrow.com"><div class="btn btn-package my-3 w-100">
           {{planButtonLabel(customPackage.package)}}
-        </button>
+        </div></a>
         <div class="package-price mb-4">
           <span class="price mx-1">Let's chat</span>
         </div>
@@ -950,19 +942,6 @@
       <div class="f-26 font-weight-bold">Confirm your subscription</div>
       <i class="i-icon i-close d-block bgc-dark op-75 c-pointer" (click)="onBack()"></i>
     </div>
-    <ng-container *ngIf="loadingCheckDowngrade; else checkedDowngrade">
-      <div class="text-center">
-        <div class="loader mt-2"></div>
-        <div class="f-8 fw-600">Checking downgradable...</div>
-      </div>
-    </ng-container>
-    <ng-template #checkedDowngrade>
-      <div class="notification-area mt-4" *ngIf="isOverflow">
-        <span class="f-6 font-weight-bold">Ooops</span>
-        <span class="f-6 ml-2">I’m an alert letting you know that you need to do something in order to downgrade.</span>
-        <div class="f-6 c-red">{{overflowMessage}}</div>
-      </div>
-    </ng-template>
     <div class="confirm-wrapper mt-3">
       <div class="upgrade-plan-wrapper">
         <div class="f-4 op-64 my-4">Enter payment details to subscribe</div>

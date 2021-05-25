@@ -203,7 +203,8 @@
       <div class="upgrade-package-wrapper">
         <i class="i-icon i-information d-block bgc-blue mx-auto"></i>
         <p class="my-4">Upgrade to unlock</p>
-        <div class="f-4 text-center">This feature is not available in your plan. Upgrade your account for access.</div>
+        <div class="f-4 text-center">{{errorMessage}}</div>
+        <div class="f-4 text-center">Upgrade your account for access.</div>
       </div>
       <mat-dialog-actions align="center">
         <button class="btn btn-primary f-6 font-weight-bold px-3 mx-auto" (click)="goToBilling()">Upgrade</button>
