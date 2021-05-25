@@ -346,7 +346,7 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
             });
         }
       });
-    }, 2000);
+    }, 1000);
   }
 
   ngOnDestroy(): void {
