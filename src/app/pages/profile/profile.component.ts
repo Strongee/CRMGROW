@@ -104,8 +104,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.routeChangeSubscription = this.route.params.subscribe((params) => {
       this.currentPage = params['page'] || this.defaultPage;
-      if (this.currentPage === 'upgrade-billing') {
+      if (this.currentPage === 'upgrade-plan') {
         this.initStep = 2;
+        this.currentPageItem = [this.menuItems[3]];
+        this.currentPage = 'billing';
+      } else if (this.currentPage === 'cancel-account') {
+        this.initStep = 4;
         this.currentPageItem = [this.menuItems[3]];
         this.currentPage = 'billing';
       } else {

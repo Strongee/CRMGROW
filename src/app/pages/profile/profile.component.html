@@ -34,7 +34,7 @@
         <app-general-profile *ngSwitchCase="'general'"></app-general-profile>
         <app-signature *ngSwitchCase="'signature'"></app-signature>
         <app-security *ngSwitchCase="'security'"></app-security>
-        <app-payment *ngSwitchCase="'billing'"></app-payment>
+        <app-payment *ngSwitchCase="'billing'" [selectedStep]="initStep"></app-payment>
       </ng-container>
     </div>
   </div>

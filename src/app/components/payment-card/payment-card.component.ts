@@ -66,25 +66,17 @@ export class PaymentCardComponent implements OnInit {
             plan_id: this.planId
           };
           this.ngZone.run(() => {
-            this.userService.updatePayment(data).subscribe(
-              (result) => {
-                this.saving = false;
-                if (result && result.status) {
-                  this.toast.success(
-                    'Your Billing Information is updated successfully.'
-                  );
-                  this.dialogRef.close({ data: res['data'] });
-                } else {
-                  this.toast.error(res['error']);
-                  this.dialogRef.close();
-                }
-              },
-              (error) => {
-                this.toast.success(error);
-                this.saving = false;
+            this.userService.updatePayment(data).subscribe((result) => {
+              this.saving = false;
+              if (result && result.status) {
+                this.toast.success(
+                  'Your Billing Information is updated successfully.'
+                );
+                this.dialogRef.close({ data: res['data'] });
+              } else {
                 this.dialogRef.close();
               }
-            );
+            });
           });
         } else {
           this.ngZone.run(() => {
