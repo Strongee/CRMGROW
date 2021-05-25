@@ -22,7 +22,7 @@ import { StripeModule } from 'stripe-angular';
   imports: [
     CommonModule,
     SharedModule,
-    StripeModule.forRoot('pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2'),
+    StripeModule.forRoot('pk_live_p0mahSVHjPHiknXx0iEEta8400Gn8n3onx'),
     RouterModule.forChild(AuthLayoutRoutes)
   ],
   providers: [
