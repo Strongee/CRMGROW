@@ -413,7 +413,7 @@ export class RecordSettingDialogComponent implements OnInit {
     }
     if (this.mode === 'camera') {
       const w = 750;
-      const h = 600;
+      const h = 450;
       const dualScreenLeft =
         window.screenLeft !== undefined ? window.screenLeft : window.screenX;
       const dualScreenTop =
@@ -442,7 +442,7 @@ export class RecordSettingDialogComponent implements OnInit {
             '&=material' +
             '&=' +
             this.userId,
-          'record',
+          'material',
           option
         );
         window.addEventListener('message', (e) => {
