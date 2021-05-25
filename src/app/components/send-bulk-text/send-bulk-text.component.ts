@@ -195,7 +195,8 @@ export class SendBulkTextComponent implements OnInit {
         pdf_ids: pdfIds,
         image_ids: imageIds,
         content: contentToSend,
-        contacts: contacts
+        contacts: contacts,
+        deal: this.dealId
       })
       .subscribe((res) => {
         this.sending = false;

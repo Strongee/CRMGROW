@@ -117,6 +117,26 @@ export function getUserLevel(level): string {
   // return PACKAGE_LEVEL.CUSTOM.package;
 }
 
+export function getContactHTML(contact: Contact): string {
+  if (contact) {
+    const html = `
+      <div class="contact-member">
+      <div class="main-info">
+          <div class="picture">
+            ${contact.avatarName}
+          </div>
+          <div class="full-name">
+            ${contact.fullName}
+          </div>
+      </div>
+    </div>
+    `;
+    return html;
+  } else {
+    return '';
+  }
+}
+
 const NOTIFICATIONS = {
   team_invited: `{who} has invited you to the team {team}`,
   team_accept: `{who} has accepted your invitation to the team {team}`,

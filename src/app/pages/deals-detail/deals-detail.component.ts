@@ -7,7 +7,6 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StoreService } from 'src/app/services/store.service';
 import { DealsService } from 'src/app/services/deals.service';
 import { Deal } from 'src/app/models/deal.model';
 import { Contact } from 'src/app/models/contact.model';
@@ -58,6 +57,30 @@ import { TemplatePortal } from '@angular/cdk/portal';
   styleUrls: ['./deals-detail.component.scss']
 })
 export class DealsDetailComponent implements OnInit {
+  ACTIVITY_GEN = {
+    video_trackers: {
+      watch: 'watched video',
+      'thumbs up': 'thumbs up the video'
+    },
+    image_trackers: {
+      review: 'reviewed image',
+      'thumbs up': 'thumbs up the image'
+    },
+    pdf_trackers: {
+      review: 'reviewed pdf',
+      'thumbs up': 'thumbs up the pdf'
+    },
+    email_trackers: {
+      open: 'Opened Email',
+      click: 'Clicked the link on email'
+    }
+  };
+  TRACKER_FIELD = {
+    video_trackers: 'video',
+    image_trackers: 'image',
+    pdf_trackers: 'pdf',
+    email_trackers: 'email'
+  };
   timezone;
   dealId;
   deal = {
@@ -155,8 +178,7 @@ export class DealsDetailComponent implements OnInit {
     appointments: {},
     tasks: {}
   };
-  materialMediaSending = {};
-  materialSendingType = {};
+  trackers = {};
   groups = [];
   dGroups = [];
   showingMax = 4;
@@ -313,52 +335,19 @@ export class DealsDetailComponent implements OnInit {
             new DetailActivity().deserialize(e)
           );
           this.details = res['details'];
-          this.data.materials = [];
-          this.data.notes = [];
-          this.data.emails = [];
-          this.data.texts = [];
-          this.data.appointments = [];
-          this.data.tasks = [];
           this.dataObj.materials = {};
           this.dataObj.notes = {};
           this.dataObj.emails = {};
           this.dataObj.texts = {};
           this.dataObj.appointments = {};
           this.dataObj.tasks = {};
-          this.materialMediaSending = {};
-          this.materialSendingType = {};
           this.data.materials = this.details['materials'] || [];
           this.data.notes = this.details['notes'] || [];
           this.data.emails = this.details['emails'] || [];
           this.data.texts = this.details['texts'] || [];
           this.data.appointments = this.details['appointments'] || [];
           this.data.tasks = this.details['tasks'] || [];
-          for (let i = 0; i < this.activities.length; i++) {
-            const e = this.activities[i];
-            if (e.emails && e.emails.length) {
-              this.materialMediaSending[e._id] = {
-                type: 'emails',
-                id: e.emails
-              };
-              continue;
-            }
-            if (e.texts && e.texts.length) {
-              this.materialMediaSending[e._id] = { type: 'texts', id: e.texts };
-              continue;
-            }
-            if (
-              e.type === 'videos' ||
-              e.type === 'images' ||
-              e.type === 'pdfs'
-            ) {
-              if (e.content.indexOf('email') !== -1) {
-                this.materialSendingType[e._id] = 'emails';
-              } else {
-                this.materialSendingType[e._id] = 'texts';
-              }
-              continue;
-            }
-          }
+          this.trackers = this.details['trackers'] || {};
           this.groupActivities();
           this.arrangeActivity();
         }
@@ -391,52 +380,100 @@ export class DealsDetailComponent implements OnInit {
   groupActivities(): void {
     this.groupActions = {};
     this.mainTimelines = [];
-    this.groups = [];
+    const groupTypeIndex = {};
     for (let i = this.activities.length - 1; i >= 0; i--) {
       const e = this.activities[i];
-      if (e.type.indexOf('tracker') !== -1) {
-        e.activity = e[e.type].activity;
-      }
       const groupData = this.generateUniqueId(e);
       if (!groupData) {
         continue;
       }
-      const { type, group, media, material } = groupData;
+      const { type, group } = groupData;
       if (this.groupActions[group]) {
         this.groupActions[group].push(e);
       } else {
         e.group_id = group;
         this.groupActions[group] = [e];
-        this.groups.push({ type, group, media, material });
+        groupTypeIndex[group] = type;
       }
     }
-    for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].type === 'emails' || this.groups[i].type === 'texts') {
-        const latest = this.groupActions[this.groups[i]['group']][0];
-        if (
-          latest.type === 'videos' ||
-          latest.type === 'pdfs' ||
-          latest.type === 'images'
-        ) {
-          const activity = this.groupActions[this.groups[i]['group']].filter(
-            (e) => e.type === 'emails' || e.type === 'texts'
-          )[0];
-          this.mainTimelines.push(activity);
-        } else {
-          this.mainTimelines.push(latest);
+    for (const group in this.groupActions) {
+      if (this.trackers[group]) {
+        for (const type in this.trackers[group]) {
+          this.trackers[group][type].forEach((e) => {
+            const activity = {};
+            activity['type'] = type;
+            activity['content'] = this.ACTIVITY_GEN[type][e.type];
+            activity['created_at'] = e.created_at;
+            activity['updated_at'] = e.updated_at;
+            activity['videos'] = [];
+            activity['pdfs'] = [];
+            activity['images'] = [];
+            // user,contacts,emails,texts,
+            if (e.user && e.user instanceof Array) {
+              activity['user'] = e.user[0];
+            } else {
+              activity['user'] = e.user;
+            }
+            if (e.contact && e.contact instanceof Array) {
+              activity['contacts'] = e.contact[0];
+            } else {
+              activity['contacts'] = e.contact;
+            }
+            if (type === 'video_trackers') {
+              if (e.video && e.video instanceof Array) {
+                activity['videos'] = e.video;
+              } else {
+                activity['videos'] = [e.video];
+              }
+            }
+            if (type === 'pdf_trackers') {
+              if (e.pdf && e.pdf instanceof Array) {
+                activity['pdfs'] = e.pdf;
+              } else {
+                activity['pdfs'] = [e.pdf];
+              }
+            }
+            if (type === 'image_trackers') {
+              if (e.image && e.image instanceof Array) {
+                activity['images'] = e.image;
+              } else {
+                activity['images'] = [e.image];
+              }
+            }
+            if (type === 'email_trackers') {
+              if (e.email && e.email instanceof Array) {
+                activity['emails'] = e.email[0];
+              } else {
+                activity['images'] = e.email;
+              }
+            }
+            activity[type] = e;
+            this.groupActions[group].push(
+              new DetailActivity().deserialize(activity)
+            );
+          });
+
+          this.groupActions[group].sort((a, b) =>
+            a.created_at < b.created_at ? 1 : -1
+          );
         }
-      } else {
-        this.mainTimelines.push(this.groupActions[this.groups[i]['group']][0]);
       }
+      this.mainTimelines.push(this.groupActions[group][0]);
+      this.groups.push({
+        type: groupTypeIndex[group],
+        group,
+        latest_time: this.groupActions[group][0].created_at
+      });
     }
+    this.mainTimelines.sort((a, b) => {
+      return a.created_at < b.created_at ? 1 : -1;
+    });
+    this.groups.sort((a, b) => {
+      return a.latest_time < b.latest_time ? 1 : -1;
+    });
   }
 
   generateUniqueId(activity: DetailActivity): any {
-    const trackerActivityTypes = {
-      video_trackers: 'videos',
-      pdf_trackers: 'pdfs',
-      image_trackers: 'images'
-    };
     switch (activity.type) {
       case 'emails':
       case 'texts':
@@ -447,54 +484,6 @@ export class DealsDetailComponent implements OnInit {
         return {
           type: activity.type,
           group: activity[activity.type]
-        };
-      case 'video_trackers':
-      case 'pdf_trackers':
-      case 'image_trackers':
-        if (this.materialMediaSending[activity.activity]) {
-          return {
-            type: this.materialMediaSending[activity.activity].type,
-            group: this.materialMediaSending[activity.activity].id
-          };
-        } else {
-          return {
-            type: trackerActivityTypes[activity.type],
-            group: activity.activity,
-            material: activity[trackerActivityTypes[activity.type]],
-            media: this.materialSendingType[activity.activity]
-          };
-        }
-      case 'email_trackers':
-        return {
-          type: 'emails',
-          group: activity.emails
-        };
-      case 'text_trackers':
-        return {
-          type: 'texts',
-          group: activity.texts
-        };
-      case 'videos':
-      case 'pdfs':
-      case 'images':
-        if (activity.emails && activity.emails.length) {
-          return {
-            type: 'emails',
-            group: activity.emails
-          };
-        }
-        if (activity.texts && activity.texts.length) {
-          return {
-            type: 'texts',
-            group: activity.texts
-          };
-        }
-        const media = activity.content.indexOf('email') ? 'emails' : 'texts';
-        return {
-          type: activity.type,
-          group: activity._id,
-          media,
-          material: activity[activity.type]
         };
     }
   }
