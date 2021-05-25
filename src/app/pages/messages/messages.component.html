@@ -274,7 +274,12 @@
                     </button>
                 </div>
                 <div class="p-3 files">
-                    <app-message-files [info]="fileDetails[selectedContact._id]"></app-message-files>
+                    <ng-container *ngIf="loadingFiles && !fileDetails[selectedContact._id]; else filesList">
+                        <div class="loader"></div>
+                    </ng-container>
+                    <ng-template #filesList>
+                        <app-message-files [info]="fileDetails[selectedContact._id]"></app-message-files>
+                    </ng-template>
                 </div>
             </div>
         </div>

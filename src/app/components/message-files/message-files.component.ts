@@ -29,8 +29,23 @@ export class MessageFilesComponent implements OnInit {
   materials = {};
   timeline = [];
   trackers = {};
+  dGroups = []; // group ID Array to display detail data
+  showingMax = 4; // Max Limit to show the detail data
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  showMoreDetail(group_id): void {
+    if (this.dGroups.length >= this.showingMax) {
+      this.dGroups.shift();
+    }
+    this.dGroups.push(group_id);
+  }
+  hideMoreDetail(group_id): void {
+    const pos = this.dGroups.indexOf(group_id);
+    if (pos !== -1) {
+      this.dGroups.splice(pos, 1);
+    }
+  }
 }
