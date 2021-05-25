@@ -55,39 +55,53 @@ export class PaymentCardComponent implements OnInit {
 
   editPayment(): void {
     this.saving = true;
-    this.stripeCard.createToken({}).then((res) => {
-      if (res) {
-        const data = {
-          token: {
-            ...res
-          },
-          plan_id: this.planId
-        };
-        this.ngZone.run(() => {
-          this.userService.updatePayment(data).subscribe(
-            () => {
-              this.saving = false;
-              this.toast.success(
-                'Your Billing Information is updated successfully.'
-              );
-              this.dialogRef.close({ data: res });
+    this.stripeCard
+      .createToken({})
+      .then((res) => {
+        if (res) {
+          const data = {
+            token: {
+              ...res
             },
-            () => {
-              this.saving = false;
-              this.dialogRef.close();
-            }
-          );
-        });
-      } else {
-        this.ngZone.run(() => {
-          this.saving = false;
-          this.toast.error(
-            'Your card information is not correct. Please try again.'
-          );
-          this.dialogRef.close();
-        });
-      }
-    });
+            plan_id: this.planId
+          };
+          this.ngZone.run(() => {
+            this.userService.updatePayment(data).subscribe(
+              (result) => {
+                this.saving = false;
+                if (result && result.status) {
+                  this.toast.success(
+                    'Your Billing Information is updated successfully.'
+                  );
+                  this.dialogRef.close({ data: res['data'] });
+                } else {
+                  this.toast.error(res['error']);
+                  this.dialogRef.close();
+                }
+              },
+              (error) => {
+                this.toast.success(error);
+                this.saving = false;
+                this.dialogRef.close();
+              }
+            );
+          });
+        } else {
+          this.ngZone.run(() => {
+            this.saving = false;
+            this.toast.error(
+              'Your card information is not correct. Please try again.'
+            );
+            this.dialogRef.close();
+          });
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          this.toast.error(err.message);
+        }
+        this.dialogRef.close();
+      });
   }
 
   close(): void {

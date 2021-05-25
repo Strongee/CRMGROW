@@ -112,6 +112,7 @@ export class HtmlEditorComponent implements OnInit {
   displayText = '';
   displayLink = '';
   set = 'twitter';
+  userId = '';
   authToken = '';
   recordUrl = 'https://crmgrow-record.s3-us-west-1.amazonaws.com/index.html';
   quillEditorRef;
@@ -170,10 +171,38 @@ export class HtmlEditorComponent implements OnInit {
           this.cdr.detectChanges();
         },
         record: () => {
-          const option = 'width=530, height=305';
+          const w = 750;
+          const h = 450;
+          const dualScreenLeft =
+            window.screenLeft !== undefined
+              ? window.screenLeft
+              : window.screenX;
+          const dualScreenTop =
+            window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+          const width = window.innerWidth
+            ? window.innerWidth
+            : document.documentElement.clientWidth
+            ? document.documentElement.clientWidth
+            : screen.width;
+          const height = window.innerHeight
+            ? window.innerHeight
+            : document.documentElement.clientHeight
+            ? document.documentElement.clientHeight
+            : screen.height;
+
+          const systemZoom = width / window.screen.availWidth;
+          const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+          const top = (height - h) / 2 / systemZoom + dualScreenTop;
+          const option = `width=${w}, height=${h}, top=${top}, left=${left}`;
           if (!this.popup || this.popup.closed) {
             this.popup = window.open(
-              this.recordUrl + '?' + this.authToken + '&=website',
+              this.recordUrl +
+                '?' +
+                this.authToken +
+                '&=website' +
+                '&=' +
+                this.userId,
               'record',
               option
             );
@@ -218,7 +247,7 @@ export class HtmlEditorComponent implements OnInit {
     public templateService: TemplatesService,
     private handlerService: HandlerService,
     public connectService: ConnectService,
-    @Inject(DOCUMENT) private document: Document,
+    @Inject(DOCUMENT) private Document: Document,
     private cdr: ChangeDetectorRef,
     private overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
@@ -228,6 +257,10 @@ export class HtmlEditorComponent implements OnInit {
   ) {
     this.templateService.loadAll(false);
     this.authToken = this.userService.getToken();
+    this.profileSubscription && this.profileSubscription.unsubscribe();
+    this.profileSubscription = this.userService.profile$.subscribe((user) => {
+      this.userId = user._id;
+    });
   }
 
   ngOnInit(): void {}
@@ -321,7 +354,7 @@ export class HtmlEditorComponent implements OnInit {
   }
 
   initImageHandler = (): void => {
-    const imageInput: HTMLInputElement = this.document.createElement('input');
+    const imageInput: HTMLInputElement = this.Document.createElement('input');
     imageInput.type = 'file';
     imageInput.accept = 'image/*';
 

@@ -8,6 +8,7 @@ import {
 import {
   PACKAGE_LEVEL,
   PHONE_COUNTRIES,
+  STRIPE_KEY,
   TIMEZONE
 } from 'src/app/constants/variable.constants';
 import { CountryISO } from 'ngx-intl-tel-input';
@@ -107,7 +108,7 @@ export class RegisterComponent implements OnInit {
   ) {
     if (!this.stripeScriptTag.StripeInstance) {
       this.stripeScriptTag.setPublishableKey(
-        'pk_live_p0mahSVHjPHiknXx0iEEta8400Gn8n3onx'
+        STRIPE_KEY
       );
     }
   }
