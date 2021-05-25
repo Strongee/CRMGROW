@@ -287,6 +287,10 @@ export const DEALSTAGE = {
   EASY_LOAD: 'deal-stage/easy-load'
 };
 
+export const STAGE = {
+  GET: 'stage'
+};
+
 export const DEAL = {
   GET: 'deal/',
   MOVE: 'deal/move-deal',
