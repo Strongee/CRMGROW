@@ -433,9 +433,9 @@
             *ngIf="!(selectedFiles.length + selectedFolders.length)" class="item-action"></th>
           </ng-container>
           <td mat-cell
-            *matCellDef="let element" class="item-action" [class.active]="isSelected(element)">
+            *matCellDef="let element; let index=index;" class="item-action" [class.active]="isSelected(element)">
             <div class="v-center material-actions">
-              <div ngbDropdown placement="bottom-right" class="ml-auto">
+              <div ngbDropdown #mainDrop="ngbDropdown" placement="bottom-right" class="ml-auto">
                 <a ngbDropdownToggle class="v-center btn bgc-white c-dark f-3 no-carot px-0" [class.disable]="element.material_type === 'folder' && element.user?._id !== user_id && element.user !== user_id">
                   <i class="d-block i-icon i-menu-more bgc-dark mr-2"></i>
                 </a>
@@ -551,7 +551,7 @@
           *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selectedFiles.length + selectedFolders.length" class="table-header"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selectedFiles.length" class='selection-info'></tr>
         <tr mat-row
-          *matRowDef="let row; columns: DISPLAY_COLUMNS;" [class.folder-row]="row.material_type === 'folder'"></tr>
+          *matRowDef="let row; let index=index; columns: DISPLAY_COLUMNS;" [class.folder-row]="row.material_type === 'folder'" (mouseleave)="rowHover(index)"></tr>
       </table>
       <ng-container *ngIf="filteredMaterials.length">
         <div class="my-2 table-control mode-1">
