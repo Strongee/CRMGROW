@@ -107,7 +107,7 @@ export class RegisterComponent implements OnInit {
   ) {
     if (!this.stripeScriptTag.StripeInstance) {
       this.stripeScriptTag.setPublishableKey(
-        'pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2'
+        'pk_live_p0mahSVHjPHiknXx0iEEta8400Gn8n3onx'
       );
     }
   }
