@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Note } from 'src/app/models/note.model';
 import { DealsService } from 'src/app/services/deals.service';
 import { NoteService } from 'src/app/services/note.service';
+import { isEmptyHtml } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-note-edit',
@@ -39,6 +40,9 @@ export class NoteEditComponent implements OnInit {
   ngOnInit(): void {}
 
   update(): void {
+    if (!this.note.content || isEmptyHtml(this.note.content)) {
+      return;
+    }
     if (this.formType === 'deal') {
       this.saving = true;
       this.dealService

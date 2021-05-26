@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
@@ -51,6 +57,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ];
   currentSearchType: any = this.searchDataTypes[0];
   keyword = '';
+  user_id = '';
 
   @ViewChild('searchInput') searchInput: ElementRef;
   isSuspended = false;
@@ -62,6 +69,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   notificationUpdater$;
   notificationUpdater: Subscription;
   notificationLoadSubscription: Subscription;
+  systemNotifications = [];
   emailTasks = [];
   textTasks = [];
   unreadMessages = [];
@@ -93,6 +101,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile) {
+          this.user_id = profile._id;
           this.isPackageText = profile.text_info?.is_enabled;
           this.isPackageAutomation = profile.automation_info?.is_enabled;
           this.isSuspended = profile.subscription?.is_suspended;
@@ -189,7 +198,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
           width: '100%',
           height: '100%',
           panelClass: 'trans-modal',
-          backdropClass: 'trans'
+          backdropClass: 'trans',
+          data: {
+            id: this.user_id
+          }
         });
         break;
       case 'video':
@@ -271,6 +283,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .getNotificationStatus()
       .subscribe((res) => {
         if (res) {
+          this.systemNotifications = res['system_notifications'] || [];
+
+          if (this.systemNotifications.length) {
+            document.body.classList.add('has-topbar');
+          } else {
+            document.body.classList.remove('has-topbar');
+          }
+
           this.emailTasks = res['emails'] || [];
           if (this.emailTasks && this.emailTasks.length) {
             this.emailTasks.forEach((e) => {

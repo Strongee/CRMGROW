@@ -42,6 +42,7 @@ import { StripTagsPipe } from 'ngx-pipes';
   providers: [StripTagsPipe]
 })
 export class HtmlEditorComponent implements OnInit {
+  @Input() submitted: boolean = false;
   @Input() placeholder: string = '';
   @Input() style: any = { height: '180px' };
   @Input() class = '';
@@ -633,6 +634,10 @@ export class HtmlEditorComponent implements OnInit {
       }, 1);
     }
     this.cdr.detectChanges();
+  }
+
+  isEmpty(): boolean {
+    return !(this.stripTags.transform(this.value || '') || '').trim();
   }
 }
 // [{ font: [] }],

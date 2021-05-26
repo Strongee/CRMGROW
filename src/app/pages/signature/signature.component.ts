@@ -49,6 +49,9 @@ export class SignatureComponent implements OnInit, OnDestroy {
       (profile) => {
         if (profile && profile._id) {
           this.user = profile;
+          if (!this.user.email_signature) {
+            this.user.email_signature = '';
+          }
 
           if (this.quillEditorRef) {
             const delta = this.quillEditorRef.clipboard.convert({

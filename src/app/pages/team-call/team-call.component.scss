@@ -170,16 +170,16 @@ tr:hover {
     bottom: 8px;
   }
 
-  :host ::ng-deep {
-    .pagination-wrapper {
-      pagination-controls {
-        background: #f8f8f8;
-        padding: 3px 5px;
-        border: 1px solid gainsboro;
-        border-radius: 5px;
-      }
-    }
-  }
+  // :host ::ng-deep {
+  //   .pagination-wrapper {
+  //     pagination-controls {
+  //       background: #f8f8f8;
+  //       padding: 3px 5px;
+  //       border: 1px solid gainsboro;
+  //       border-radius: 5px;
+  //     }
+  //   }
+  // }
 }
 
 :host ::ng-deep {

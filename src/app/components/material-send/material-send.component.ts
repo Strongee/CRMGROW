@@ -24,6 +24,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ConnectService } from 'src/app/services/connect.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { Subscription } from 'rxjs';
+import { isEmptyHtml } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-material-send',
@@ -69,7 +70,6 @@ export class MaterialSendComponent implements OnInit {
     private dialogRef: MatDialogRef<MaterialSendComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
       this.garbage = res;
@@ -308,6 +308,10 @@ export class MaterialSendComponent implements OnInit {
   }
 
   sendEmail(newContacts: string[]): void {
+    if (!this.emailContent || isEmptyHtml(this.emailContent)) {
+      return;
+    }
+
     let email = this.emailContent;
     const contacts = [...newContacts];
     const video_ids = [];
