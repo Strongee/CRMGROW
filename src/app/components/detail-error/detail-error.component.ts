@@ -11,6 +11,7 @@ import { ConnectService } from 'src/app/services/connect.service';
 })
 export class DetailErrorComponent implements OnInit {
   errorCode: string = ''; // 402: Connect Error, 405: Connect Error, 403: Oauth Setting Error, 405: Contacts Detail Error, 406: Connect Error
+  errorMessage: string = '';
   loading = false;
   saving = false;
   searchCode = '';
@@ -36,9 +37,13 @@ export class DetailErrorComponent implements OnInit {
         this.searchPhone();
       }
     }
+    if (this.data && this.data.errorMessage) {
+      this.errorMessage = this.data.errorMessage;
+    }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   connectMail(type: string): void {
     if (type === 'gmail' || type === 'outlook') {
@@ -172,7 +177,7 @@ export class DetailErrorComponent implements OnInit {
   }
 
   goToBilling(): void {
-    this.router.navigate([`/profile/upgrade-billing`]);
+    this.router.navigate([`/profile/upgrade-plan`]);
     this.dialogRef.close();
   }
 

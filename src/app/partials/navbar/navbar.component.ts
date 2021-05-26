@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
@@ -25,12 +31,12 @@ import { SendTextComponent } from 'src/app/components/send-text/send-text.compon
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   actions: any[] = [
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
     { icon: 'i-sms-sent bg-white', label: 'New Text', id: 'text' },
     { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
-    { icon: 'i-phone bg-white', label: 'New Call', id: 'call' },
+    // { icon: 'i-phone bg-white', label: 'New Call', id: 'call' },
     { icon: 'i-task bg-white', label: 'New Task', id: 'task' },
     { icon: 'i-deals bg-white', label: 'New Deal', id: 'deal' },
     {
@@ -51,6 +57,7 @@ export class NavbarComponent implements OnInit {
   ];
   currentSearchType: any = this.searchDataTypes[0];
   keyword = '';
+  user_id = '';
 
   @ViewChild('searchInput') searchInput: ElementRef;
   isSuspended = false;
@@ -60,7 +67,9 @@ export class NavbarComponent implements OnInit {
 
   // Notifications
   notificationUpdater$;
+  notificationUpdater: Subscription;
   notificationLoadSubscription: Subscription;
+  systemNotifications = [];
   emailTasks = [];
   textTasks = [];
   unreadMessages = [];
@@ -92,6 +101,7 @@ export class NavbarComponent implements OnInit {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile) {
+          this.user_id = profile._id;
           this.isPackageText = profile.text_info?.is_enabled;
           this.isPackageAutomation = profile.automation_info?.is_enabled;
           this.isSuspended = profile.subscription?.is_suspended;
@@ -109,7 +119,8 @@ export class NavbarComponent implements OnInit {
 
     this.loadNotifications();
     this.notificationUpdater$ = interval(60 * 1000);
-    this.notificationUpdater$.subscribe(() => {
+    this.notificationUpdater && this.notificationUpdater.unsubscribe();
+    this.notificationUpdater = this.notificationUpdater$.subscribe(() => {
       this.loadNotifications();
     });
   }
@@ -118,6 +129,11 @@ export class NavbarComponent implements OnInit {
     this.connectService.receiveLogout().subscribe(() => {
       this.logout(null);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.notificationUpdater && this.notificationUpdater.unsubscribe();
+    this.latestAt = null;
   }
 
   runAction(action: string): void {
@@ -182,7 +198,10 @@ export class NavbarComponent implements OnInit {
           width: '100%',
           height: '100%',
           panelClass: 'trans-modal',
-          backdropClass: 'trans'
+          backdropClass: 'trans',
+          data: {
+            id: this.user_id
+          }
         });
         break;
       case 'video':
@@ -264,6 +283,14 @@ export class NavbarComponent implements OnInit {
       .getNotificationStatus()
       .subscribe((res) => {
         if (res) {
+          this.systemNotifications = res['system_notifications'] || [];
+
+          if (this.systemNotifications.length) {
+            document.body.classList.add('has-topbar');
+          } else {
+            document.body.classList.remove('has-topbar');
+          }
+
           this.emailTasks = res['emails'] || [];
           if (this.emailTasks && this.emailTasks.length) {
             this.emailTasks.forEach((e) => {

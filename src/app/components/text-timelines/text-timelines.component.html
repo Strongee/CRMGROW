@@ -86,6 +86,9 @@
 
     <ng-container *ngIf="main.type === 'video_trackers' && main[main.type]?.type === 'watch'">
       <app-play-timelines [data]="main[main.type]" [duration]="_materials[main.video_trackers?.video]?.duration || _materials[main.video_trackers?.video[0]]?.duration"></app-play-timelines>
+      <ng-container *ngIf="showContact && main.contacts && _contactObj[main.contacts]">
+        <div class="contact-member-wrapper" [innerHTML]="getContactHTML(_contactObj[main.contacts])"></div>
+      </ng-container>
     </ng-container>
 
     <a class="more f-3 mt-3 c-pointer fw-600 d-block w-fit" (click)="expand()">Expand</a>
@@ -130,6 +133,9 @@
           <div class="content ml-4">
             <ng-container *ngIf="activity.type === 'video_trackers' && activity[activity.type]?.type === 'watch'">
               <app-play-timelines [data]="activity[activity.type]" [duration]="_materials[activity.video_trackers?.video]?.duration || _materials[activity.video_trackers?.video[0]]?.duration"></app-play-timelines>
+            </ng-container>
+            <ng-container *ngIf="showContact && activity.contacts && _contactObj[activity.contacts]">
+              <div class="contact-member-wrapper" [innerHTML]="getContactHTML(_contactObj[activity.contacts])"></div>
             </ng-container>
           </div>
         </div>

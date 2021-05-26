@@ -13,6 +13,8 @@ import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { Contact } from 'src/app/models/contact.model';
+import { getContactHTML } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-text-timelines',
@@ -20,7 +22,15 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./text-timelines.component.scss']
 })
 export class TextTimelinesComponent implements OnInit {
+  getContactHTML = getContactHTML;
   @Input('text') text: any = {};
+  @Input('showContact') showContact = false;
+  @Input('contacts')
+  public set contacts(val: Contact[]) {
+    val.forEach((e) => {
+      this._contactObj[e._id] = e;
+    });
+  }
   @Input('timelines')
   public set timelines(val: DetailActivity[]) {
     this._timelines = val || [];
@@ -69,6 +79,7 @@ export class TextTimelinesComponent implements OnInit {
   _materials = {};
   _includedMaterials = [];
   _firstM: string;
+  _contactObj = {};
   more = false;
 
   @ViewChild('materialDetailPortal') materialDetailPortal: TemplateRef<unknown>;

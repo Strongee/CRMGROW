@@ -63,6 +63,18 @@ export class UserService extends HttpService {
       .pipe(catchError(this.handleError('SOCIAL SIGNIN REQUEST')));
   }
 
+  public socialSignUp(user): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(this.server + AUTH.SOCIAL_SIGNUP, JSON.stringify(user), {
+        headers: reqHeader
+      })
+      .pipe(catchError(this.handleError('SOCIAL SIGNUP REQUEST')));
+  }
+
   public signup(user: any): any {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -288,7 +300,12 @@ export class UserService extends HttpService {
   }
 
   public updatePayment(payment: any): any {
-    return this.httpClient.post(this.server + USER.UPDATE_PAYMENT, payment);
+    return this.httpClient
+      .post(this.server + USER.UPDATE_PAYMENT, payment)
+      .pipe(
+        map((res) => res),
+        catchError(this.handleError('UPDATE PAYMENT', false))
+      );
   }
 
   public loadInvoice(): void {
@@ -364,9 +381,17 @@ export class UserService extends HttpService {
   public requestCalendarSyncUrl(type: string): Observable<any> {
     switch (type) {
       case 'gmail':
-        return this.httpClient.get(this.server + USER.CALENDAR_SYNC_GMAIL);
+        return this.httpClient.get(this.server + USER.CALENDAR_SYNC_GMAIL).pipe(
+          map((res) => res),
+          catchError(this.handleError('REQUEST GOOGLE CALENDAR SYNC'))
+        );
       case 'outlook':
-        return this.httpClient.get(this.server + USER.CALENDAR_SYNC_OUTLOOK);
+        return this.httpClient
+          .get(this.server + USER.CALENDAR_SYNC_OUTLOOK)
+          .pipe(
+            map((res) => res),
+            catchError(this.handleError('REQUEST OUTLOOK CALENDAR SYNC'))
+          );
     }
   }
   public disconnectMail(): any {

@@ -274,22 +274,12 @@
                     </button>
                 </div>
                 <div class="p-3 files">
-                    <div class="file rounded mb-3" *ngFor="let tracker of fileDetails[selectedContact._id]">
-                        <div class="thumbnail">
-                            <img [src]="tracker.material?.thumbnail">
-                        </div>
-                        <div class="p-2">
-                            <div class="f-1 font-weight-bold">
-                                {{tracker.material?.title}}
-                            </div>
-                            <div class="f-1 font-weight-bold op-40 mt-2">
-                                {{tracker.updated_at | date : 'yyyy MMM dd HH:MM a'}}
-                            </div>
-                            <div class="d-inline-block f-1 font-weight-bold bgc-blue c-white rounded px-1 mt-3">
-                                WATCHED {{(tracker.duration || 0) | timeDuration}}
-                            </div>
-                        </div>
-                    </div>
+                    <ng-container *ngIf="loadingFiles && !fileDetails[selectedContact._id]; else filesList">
+                        <div class="loader"></div>
+                    </ng-container>
+                    <ng-template #filesList>
+                        <app-message-files [info]="fileDetails[selectedContact._id]"></app-message-files>
+                    </ng-template>
                 </div>
             </div>
         </div>

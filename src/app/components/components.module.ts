@@ -161,6 +161,8 @@ import { UpgradePlanErrorComponent } from './upgrade-plan-error/upgrade-plan-err
 import { DialPlanComponent } from './dial-plan/dial-plan.component';
 import { StopShareContactComponent } from './stop-share-contact/stop-share-contact.component';
 import { VideoPopupComponent } from './video-popup/video-popup.component';
+import { MessageFilesComponent } from './message-files/message-files.component';
+import { ConnectNewCalendarComponent } from './connect-new-calendar/connect-new-calendar.component';
 import { InputStageComponent } from './input-stage/input-stage.component';
 @NgModule({
   declarations: [
@@ -320,6 +322,8 @@ import { InputStageComponent } from './input-stage/input-stage.component';
     StopShareContactComponent,
     VideoPopupComponent,
     InputContactDealComponent,
+    MessageFilesComponent,
+    ConnectNewCalendarComponent,
     InputStageComponent
   ],
   imports: [
@@ -429,7 +433,8 @@ import { InputStageComponent } from './input-stage/input-stage.component';
     TextTimelinesComponent,
     PlayTimelinesComponent,
     DialPlanComponent,
-    VideoPopupComponent
+    VideoPopupComponent,
+    MessageFilesComponent
   ],
   bootstrap: [
     ContactCreateComponent,

@@ -80,7 +80,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.smsService.loadAll(true);
     this.initSubscription();
     this.messageLoadTimer = setInterval(() => {
-      this.smsService.updateConversations();
+      if (!this.smsService.updating.getValue()) {
+        this.smsService.updateConversations();
+      }
     }, 2000);
   }
 
@@ -270,12 +272,109 @@ export class MessagesComponent implements OnInit, OnDestroy {
     const sentActivities = this.getActivities() || [];
     this.smsService
       .loadFiles(this.selectedContact._id, sentActivities)
-      .subscribe((files) => {
+      .subscribe((res) => {
         this.loadingFiles = false;
-        files.forEach((e) => {
-          e.material = e.video || e.pdf || e.image;
-        });
-        this.fileDetails[this.selectedContact._id] = files;
+        let materials = [];
+        const trackers = {};
+        const sendAtIndex = res['sendAtIndex'];
+        const latestSentAt = {};
+        const firstSentAt = {};
+        const sentTimes = {};
+        for (const materialId in sendAtIndex) {
+          const latest = _.max(sendAtIndex[materialId], (e) =>
+            new Date(e).getTime()
+          );
+          const first = _.min(sendAtIndex[materialId], (e) =>
+            new Date(e).getTime()
+          );
+          latestSentAt[materialId] = latest;
+          firstSentAt[materialId] = first;
+          sentTimes[materialId] = sendAtIndex[materialId].length;
+        }
+        if (res.videos && res.videos.length) {
+          materials = [...materials, ...res.videos];
+        }
+        if (res.pdfs && res.pdfs.length) {
+          materials = [...materials, ...res.pdfs];
+        }
+        if (res.images && res.images.length) {
+          materials = [...materials, ...res.images];
+        }
+        if (res.videoTrackers && res.videoTrackers.length) {
+          res.videoTrackers.forEach((e) => {
+            let materialId = '';
+            if (e.video instanceof Array) {
+              materialId = e.video[0];
+            } else {
+              materialId = e.video;
+            }
+            if (trackers[materialId]) {
+              trackers[materialId].push(e);
+            } else {
+              trackers[materialId] = [e];
+            }
+            sendAtIndex[materialId] &&
+              sendAtIndex[materialId].push(e.updated_at);
+          });
+        }
+        if (res.pdfTrackers && res.pdfTrackers.length) {
+          res.pdfTrackers.forEach((e) => {
+            let materialId = '';
+            if (e.pdf instanceof Array) {
+              materialId = e.pdf[0];
+            } else {
+              materialId = e.pdf;
+            }
+            if (trackers[materialId]) {
+              trackers[materialId].push(e);
+            } else {
+              trackers[materialId] = [e];
+            }
+            sendAtIndex[materialId].push(e.updated_at);
+            sendAtIndex[materialId] &&
+              sendAtIndex[materialId].push(e.updated_at);
+          });
+        }
+        if (res.imageTrackers && res.imageTrackers.length) {
+          res.imageTrackers.forEach((e) => {
+            let materialId = '';
+            if (e.image instanceof Array) {
+              materialId = e.image[0];
+            } else {
+              materialId = e.image;
+            }
+            if (trackers[materialId]) {
+              trackers[materialId].push(e);
+            } else {
+              trackers[materialId] = [e];
+            }
+            sendAtIndex[materialId].push(e.updated_at);
+            sendAtIndex[materialId] &&
+              sendAtIndex[materialId].push(e.updated_at);
+          });
+        }
+        const sentIndex = [];
+        for (const materialId in sendAtIndex) {
+          const latest = _.max(sendAtIndex[materialId], (e) =>
+            new Date(e).getTime()
+          );
+          sentIndex.push({
+            material: materialId,
+            sent_at: sendAtIndex[materialId],
+            last_sent: latestSentAt[materialId],
+            first_sent: firstSentAt[materialId],
+            sent_times: sentTimes[materialId],
+            latest
+          });
+        }
+        sentIndex.sort((a, b) =>
+          new Date(a.latest) < new Date(b.latest) ? 1 : -1
+        );
+        this.fileDetails[this.selectedContact._id] = {
+          timeInfo: sentIndex,
+          materials,
+          trackers
+        };
       });
   }
 

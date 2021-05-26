@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { STATUS } from '../constants/variable.constants';
 import { SMS, TASK } from '../constants/api.constant';
@@ -23,6 +23,8 @@ export class SmsService extends HttpService {
   loading$ = this.loadStatus.asObservable();
   conversations: BehaviorSubject<any[]> = new BehaviorSubject([]);
   conversations$ = this.conversations.asObservable();
+  updating: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  updating$ = this.updating.asObservable();
 
   loadAll(force = false): void {
     if (!force) {
@@ -32,7 +34,9 @@ export class SmsService extends HttpService {
       }
     }
     this.loadStatus.next(STATUS.REQUEST);
+    this.updating.next(true);
     this.loadAllImpl().subscribe((messages) => {
+      this.updating.next(false);
       messages
         ? this.loadStatus.next(STATUS.SUCCESS)
         : this.loadStatus.next(STATUS.FAILURE);
@@ -41,7 +45,9 @@ export class SmsService extends HttpService {
   }
 
   updateConversations(): void {
+    this.updating.next(true);
     this.loadAllImpl().subscribe((messages) => {
+      this.updating.next(false);
       this.messages.next(messages || []);
     });
   }

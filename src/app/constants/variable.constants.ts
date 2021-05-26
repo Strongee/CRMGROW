@@ -1295,13 +1295,13 @@ export const BulkActions = {
       command: 'text',
       loading: false
     },
-    {
-      label: 'New Call',
-      type: 'button',
-      icon: 'i-phone',
-      command: 'call',
-      loading: false
-    },
+    // {
+    //   label: 'New Call',
+    //   type: 'button',
+    //   icon: 'i-phone',
+    //   command: 'call',
+    //   loading: false
+    // },
     {
       label: 'New Note',
       type: 'button',
@@ -1656,7 +1656,8 @@ export const DIAL_LEVEL = {
   }
 };
 
-export const STRIPE_KEY = 'pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2';
+export const STRIPE_KEY = 'pk_live_p0mahSVHjPHiknXx0iEEta8400Gn8n3onx';
+// export const STRIPE_KEY = 'pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2';
 
 export const CANCEL_ACCOUNT_REASON = [
   'Switching to a competetor',

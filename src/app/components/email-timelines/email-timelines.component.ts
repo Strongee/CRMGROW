@@ -13,13 +13,23 @@ import { DetailActivity } from 'src/app/models/activityDetail.model';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { Contact } from 'src/app/models/contact.model';
+import { getContactHTML } from 'src/app/utils/functions';
 @Component({
   selector: 'app-email-timelines',
   templateUrl: './email-timelines.component.html',
   styleUrls: ['./email-timelines.component.scss']
 })
 export class EmailTimelinesComponent implements OnInit {
+  getContactHTML = getContactHTML;
   @Input('email') email: any = {};
+  @Input('showContact') showContact = false;
+  @Input('contacts')
+  public set contacts(val: Contact[]) {
+    val.forEach((e) => {
+      this._contactObj[e._id] = e;
+    });
+  }
   @Input('timelines')
   public set timelines(val: DetailActivity[]) {
     this._timelines = val || [];
@@ -65,6 +75,7 @@ export class EmailTimelinesComponent implements OnInit {
   SITE = environment.website;
   main: DetailActivity;
   basic: DetailActivity;
+  _contactObj = {};
   _timelines: DetailActivity[] = [];
   _materials = {};
   _includedMaterials = [];

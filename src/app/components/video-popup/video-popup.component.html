@@ -6,6 +6,7 @@
         <div class="row mx-0 mt-2">
             <div class="col-12 mb-2 rounded bgc-pale px-0">
                 <div class="thumbnail-wrapper">
+                    <div class="loader lg" *ngIf="loading"></div>   
                     <img class="thumbnail" src="{{video.thumbnail}}" />
                     <div class="v-center justify-content-center bgc-blue c-pointer edit-thumbnail" (click)="openPreviewDialog()">
                         <i class="d-block i-icon sm i-edit bgc-white"></i>
@@ -37,7 +38,6 @@
                     <app-html-editor
                         [(value)]="video.description"
                         placeholder="Video Description"
-                        required="true"
                         [style]="{height: '150px'}"
                         #emailEditor
                     >

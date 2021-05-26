@@ -8,6 +8,7 @@ import {
 import {
   PACKAGE_LEVEL,
   PHONE_COUNTRIES,
+  STRIPE_KEY,
   TIMEZONE
 } from 'src/app/constants/variable.constants';
 import { CountryISO } from 'ngx-intl-tel-input';
@@ -106,9 +107,7 @@ export class RegisterComponent implements OnInit {
     private stripeScriptTag: StripeScriptTag
   ) {
     if (!this.stripeScriptTag.StripeInstance) {
-      this.stripeScriptTag.setPublishableKey(
-        'pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2'
-      );
+      this.stripeScriptTag.setPublishableKey(STRIPE_KEY);
     }
   }
 
@@ -174,6 +173,11 @@ export class RegisterComponent implements OnInit {
                   ...this.user,
                   ...res['data']
                 };
+                console.log(
+                  'gmail auth ==========>',
+                  this.isSocialUser,
+                  this.user
+                );
                 this.isSocialUser = true;
                 if (!this.user.user_name) {
                   this.fullNameRequire = true;
@@ -263,11 +267,58 @@ export class RegisterComponent implements OnInit {
       level: this.package_level,
       is_trial: this.is_trial
     };
-
+    if (this.user['picture_profile']) {
+      this.user['email_signature'] =
+        '<div>' +
+        this.user.user_name +
+        '<br></div><div>' +
+        'eXp Realty, LLC' +
+        '<br></div><div>' +
+        this.user.email +
+        '<br></div><div>' +
+        this.user.cell_phone +
+        '<br></div>' +
+        "<div><img src='" +
+        this.user['picture_profile'] +
+        '-resize' +
+        "' alt='' " +
+        "style='width: 100px; height: 100px; border-radius: 50%; object-fit: cover;' /></div>";
+    } else {
+      this.user['email_signature'] =
+        '<div>' +
+        this.user.user_name +
+        '<br></div><div>' +
+        'eXp Realty, LLC' +
+        '<br></div><div>' +
+        this.user.email +
+        '<br></div><div>' +
+        this.user.cell_phone +
+        '<br></div>' +
+        '<div></div>';
+    }
     if (window['Rewardful'] && window['Rewardful'].affiliate) {
       this.user['parent_affiliate'] = window['Rewardful'].affiliate;
     }
     if (this.isSocialUser) {
+      this.userService.socialSignUp(this.user).subscribe((res) => {
+        if (res && res.status) {
+          this.token = res['data']['token'];
+          this.currentUser = res['data']['user'];
+          if (this.token) {
+            this.saving = false;
+            this.toast.success('Social Sign Up has been successfully!');
+            this.userService.setToken(this.token);
+            this.userService.setUser(this.currentUser);
+            this.router.navigate(['/home']);
+            window.location.reload();
+          } else {
+            this.saving = false;
+          }
+        } else {
+          this.toast.error(res.error);
+          this.saving = false;
+        }
+      });
     } else {
       this.userService.signup(this.user).subscribe((res) => {
         this.token = res['data']['token'];

@@ -158,10 +158,9 @@ export class InputContactDealComponent implements OnInit {
   }
 
   ngOnChanges(changes): void {
-    const _SELF = this;
     setTimeout(function () {
-      if (changes.isFocus.currentValue && _SELF.inputField) {
-        _SELF.inputField.nativeElement.focus();
+      if (changes.isFocus && changes.isFocus.currentValue && this.inputField) {
+        this.inputField.nativeElement.focus();
       }
     }, 300);
   }

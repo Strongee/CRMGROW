@@ -23,6 +23,8 @@ import { UserService } from 'src/app/services/user.service';
 import { ConnectService } from 'src/app/services/connect.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { HelperService } from 'src/app/services/helper.service';
+import { isEmptyHtml } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-template',
@@ -72,6 +74,7 @@ export class TemplateComponent
     private toastr: ToastrService,
     private userService: UserService,
     private handlerService: HandlerService,
+    private helperSerivce: HelperService,
     private _viewContainerRef: ViewContainerRef,
     private overlay: Overlay,
     private cdr: ChangeDetectorRef,
@@ -112,6 +115,10 @@ export class TemplateComponent
   }
 
   saveTemplate(): void {
+    if (isEmptyHtml(this.template.content)) {
+      return;
+    }
+
     if (!this.id) {
       this.isSaving = true;
       this.saveSubscription && this.saveSubscription.unsubscribe();

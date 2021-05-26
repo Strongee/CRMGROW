@@ -11,6 +11,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { StripeModule } from 'stripe-angular';
+import { STRIPE_KEY } from '../../constants/variable.constants';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { StripeModule } from 'stripe-angular';
   imports: [
     CommonModule,
     SharedModule,
-    StripeModule.forRoot('pk_test_Fiq3VFU3LvZBSJpKGtD0paMK0005Q6E2Q2'),
+    StripeModule.forRoot(STRIPE_KEY),
     RouterModule.forChild(AuthLayoutRoutes)
   ],
   providers: [

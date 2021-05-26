@@ -103,9 +103,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
               this.user.connected_email_type = 'outlook';
               this.user.primary_connected = true;
               this.user.connected_email = res['data'];
-              this.userService.updateProfile(this.user).subscribe((data) => {
-                this.userService.updateProfileImpl(data);
-              });
+              this.userService.updateProfileImpl(this.user);
               this.toast.success(
                 'Your Outlook mail is connected successfully.'
               );
@@ -123,9 +121,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
               this.user.connected_email_type = 'gmail';
               this.user.primary_connected = true;
               this.user.connected_email = res['data'];
-              this.userService.updateProfile(this.user).subscribe((data) => {
-                this.userService.updateProfileImpl(data);
-              });
+              this.userService.updateProfileImpl(this.user);
               this.toast.success('Your Gmail is connected successfully.');
               this.location.replaceState('/settings/integration');
             },

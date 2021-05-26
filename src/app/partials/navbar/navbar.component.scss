@@ -51,6 +51,14 @@
         background-color: $color-dark!important;
       }
     }
+
+    @media screen and (max-width: 992px) {
+      .dropdown-item {
+        &.record {
+          display: none !important;
+        }
+      }
+    }
   }
 }
 /* Search Form Wrapper Style */
@@ -443,4 +451,28 @@
       }
     }
   }
+
+  .dropdown-item {
+    a {
+      color: #212529;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+#notification-bar {
+  background: #fff6dc;
+  border-top: 2px solid #f7b500;
+  border-bottom: 2px solid #f7b500;
+  padding: 12px;
+  text-align: center;
+  height: 52px;
+}
+
+.see-all.dropdown-item:focus {
+  color: white!important;
 }

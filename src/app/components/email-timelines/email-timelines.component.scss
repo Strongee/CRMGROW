@@ -98,3 +98,30 @@ label.session {
     }
   }
 }
+
+:host ::ng-deep {
+  .contact-member-wrapper {
+    .contact-member {
+      .main-info {
+        display: flex;
+        .picture {
+          width: 24px;
+          height: 24px;
+          text-align: center;
+          background: black;
+          color: white;
+          font-weight: 600;
+          border-radius: 50%;
+          line-height: 24px;
+          font-size: 12px;
+        }
+        .full-name {
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}
+.contact-member-wrapper {
+  margin-top: -4px;
+}

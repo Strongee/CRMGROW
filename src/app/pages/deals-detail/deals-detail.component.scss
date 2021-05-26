@@ -515,3 +515,35 @@
     }
   }
 }
+
+@keyframes rotateEffect {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.reload {
+  position: fixed;
+  top: 30%;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+  background: blue;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+
+  .i-icon {
+    width: 24px;
+    height: 24px;
+    margin: 3px;
+
+    &.progressing {
+      animation-name: rotateEffect;
+      animation-duration: 0.6s;
+      animation-iteration-count: infinite;
+      animation-delay: 0s;;
+    }
+  }
+}

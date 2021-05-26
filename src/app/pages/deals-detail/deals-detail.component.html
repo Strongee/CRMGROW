@@ -32,9 +32,7 @@
                         <i class="i-icon i-appointments bgc-dark"></i>
                         <span class="ml-2 f-3 font-weight-bold">New Appointment</span>
                       </button>
-<!--                      <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">-->
-<!--                        <span class="ml-1 f-3 font-weight-bold">Create group call</span>-->
-<!--                      </button>-->
+                      <hr class="my-1">
                       <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openSendEmail()">
                         <i class="i-icon i-message bgc-dark"></i>
                         <span class="ml-2 f-3 font-weight-bold">New Email</span>
@@ -239,9 +237,9 @@
                   <span class="f-3 font-weight-bold c-blue mr-2">New Text</span>
                 </div>
                 <div class="v-center justify-content-end c-pointer ml-auto"
-                     (click)="openAppointmentDlg()"
-                     *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')"
-                     [class.disable]="!isPackageAutomation"
+                  (click)="openAppointmentDlg()"
+                  *ngIf="tab.id === 'appointments' || (tab.id === 'all' && activityType.id === 'appointments')"
+                  [class.disable]="!isPackageAutomation"
                 >
                   <span class="f-3 font-weight-bold c-blue mr-2">New Appointment</span>
                 </div>
@@ -462,7 +460,7 @@
                     </div>
                   </div>
 
-                  <div *ngIf="(activityType.id == 'all' || activityType.id == 'emails') && (groups[i].type == 'emails' || groups[i].media == 'emails')">
+                  <div *ngIf="(activityType.id == 'all' || activityType.id == 'emails') && (groups[i].type == 'emails')">
                     <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                       <div class="v-center justify-content-between mb-3">
                         <div class="v-center">
@@ -476,17 +474,6 @@
                         </div>
                       </div>
 
-                      <ng-container *ngIf="groups[i].media === 'emails'">
-                        <app-material-timelines
-                          [type]="groups[i].type"
-                          [material]="dataObj.materials[groups[i].material]"
-                          [timelines]="groupActions[groups[i].group]"
-                          [expanded]="dGroups.indexOf(groups[i].group) !== -1"
-                          (onExpand)="showMoreDetail(groups[i].group)"
-                          (onCollapse)="hideMoreDetail(groups[i].group)"
-                        >
-                        </app-material-timelines>
-                      </ng-container>
                       <ng-container *ngIf="groups[i].type === 'emails'">
                         <app-email-timelines
                           [email]="dataObj.emails[groups[i].group]"
@@ -495,6 +482,8 @@
                           [materials]="dataObj.materials"
                           (onExpand)="showMoreDetail(groups[i].group)"
                           (onCollapse)="hideMoreDetail(groups[i].group)"
+                          [showContact]="true"
+                          [contacts]="deal?.contacts || []"
                         >
                         </app-email-timelines>
                       </ng-container>
@@ -518,17 +507,6 @@
                         </div>
                       </div>
 
-                      <ng-container *ngIf="groups[i].media === 'texts'">
-                        <app-material-timelines
-                          [type]="groups[i].type"
-                          [material]="dataObj.materials[groups[i].material]"
-                          [timelines]="groupActions[groups[i].group]"
-                          [expanded]="dGroups.indexOf(groups[i].group) !== -1"
-                          (onExpand)="showMoreDetail(groups[i].group)"
-                          (onCollapse)="hideMoreDetail(groups[i].group)"
-                        >
-                        </app-material-timelines>
-                      </ng-container>
                       <ng-container *ngIf="groups[i].type === 'texts'">
                         <app-text-timelines
                           [text]="dataObj.texts[groups[i].group]"
@@ -537,6 +515,8 @@
                           [materials]="dataObj.materials"
                           (onExpand)="showMoreDetail(groups[i].group)"
                           (onCollapse)="hideMoreDetail(groups[i].group)"
+                          [showContact]="true"
+                          [contacts]="deal?.contacts || []"
                         >
                         </app-text-timelines>
                       </ng-container>
@@ -775,19 +755,10 @@
                             [materials]="dataObj.materials"
                             (onExpand)="showMoreDetail(detail._id)"
                             (onCollapse)="hideMoreDetail(detail._id)"
+                            [showContact]="true"
+                            [contacts]="deal?.contacts || []"
                           >
                           </app-email-timelines>
-                        </ng-container>
-                        <ng-container *ngIf="detail.data_type !== 'emails'">
-                          <app-material-timelines
-                            [type]="detail.data_type"
-                            [material]="dataObj.materials[detail._id]"
-                            [timelines]="groupActions[detail.activity_id]"
-                            [expanded]="dGroups.indexOf(detail.activity_id) !== -1"
-                            (onExpand)="showMoreDetail(detail.activity_id)"
-                            (onCollapse)="hideMoreDetail(detail.activity_id)"
-                          >
-                          </app-material-timelines>
                         </ng-container>
                       </div>
 
@@ -828,19 +799,10 @@
                             [materials]="dataObj.materials"
                             (onExpand)="showMoreDetail(detail._id)"
                             (onCollapse)="hideMoreDetail(detail._id)"
+                            [showContact]="true"
+                            [contacts]="deal?.contacts || []"
                           >
                           </app-text-timelines>
-                        </ng-container>
-                        <ng-container *ngIf="detail.data_type !== 'texts'">
-                          <app-material-timelines
-                            [type]="detail.data_type"
-                            [material]="dataObj.materials[detail._id]"
-                            [timelines]="groupActions[detail.activity_id]"
-                            [expanded]="dGroups.indexOf(detail.activity_id) !== -1"
-                            (onExpand)="showMoreDetail(detail.activity_id)"
-                            (onCollapse)="hideMoreDetail(detail.activity_id)"
-                          >
-                          </app-material-timelines>
                         </ng-container>
                       </div>
 
@@ -1056,4 +1018,9 @@
           </div>
         </div>
     </div>
+</div>
+
+
+<div class="reload c-pointer" (click)="reloadLatest()">
+  <i class="i-icon i-refresh d-block bgc-white" [class.progressing]="loading"></i>
 </div>

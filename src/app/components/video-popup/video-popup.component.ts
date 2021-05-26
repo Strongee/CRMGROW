@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { Material } from 'src/app/models/material.model';
+import { Video } from 'src/app/models/video.model';
 import { HelperService } from 'src/app/services/helper.service';
 import { MaterialService } from 'src/app/services/material.service';
 
@@ -11,10 +13,13 @@ import { MaterialService } from 'src/app/services/material.service';
   styleUrls: ['./video-popup.component.scss']
 })
 export class VideoPopupComponent implements OnInit {
+  _id = '';
+  loading = false;
   submitted = false;
   saving = false;
   thumbnailLoading = false;
-  video: Material = new Material();
+  video: Video = new Video();
+  loadSubscription: Subscription;
 
   constructor(
     private dialogRef: MatDialogRef<VideoPopupComponent>,
@@ -22,10 +27,24 @@ export class VideoPopupComponent implements OnInit {
     private toast: ToastrService,
     private materialService: MaterialService,
     private helperService: HelperService
-  ) {}
+  ) {
+    if (this.data && this.data.id) {
+      this._id = this.data.id;
+      this.load();
+    }
+  }
 
-  ngOnInit(): void {
-    this.video = { ...this.data.material };
+  ngOnInit(): void {}
+
+  load(): void {
+    this.loading = true;
+    this.loadSubscription && this.loadSubscription.unsubscribe();
+    this.loadSubscription = this.materialService
+      .getVideoById(this._id)
+      .subscribe((res) => {
+        this.loading = false;
+        this.video = new Video().deserialize(res);
+      });
   }
 
   save(): void {

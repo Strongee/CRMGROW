@@ -124,7 +124,7 @@
       #emailEditor>
     </quill-editor>
 
-    <span class="c-red error" *ngIf="editorForm.errors && (editorForm.touched || editorForm.dirty)">
+    <span class="c-red error" *ngIf="(editorForm.errors || isEmpty()) && (editorForm.touched || editorForm.dirty) && required">
     Required!
     </span>
     <ng-container *ngIf="hasToken">

@@ -16,7 +16,7 @@
         <div ngbDropdownItem
              *ngFor="let action of actions"
              (click)="runAction(action.id)"
-             class="d-flex text-white py-2 pl-3 align-items-center"
+             class="d-flex text-white py-2 pl-3 align-items-center {{action.id}}"
              [class.disable]="isDisableAction(action)"
         >
           <i class="i-icon {{action.icon}} mr-3"></i>
@@ -52,6 +52,7 @@
 
     <!-- Navbar Main Wrapper -->
     <div class="navbar-nav v-center ml-sm-3">
+
       <!-- Notification Wrapper -->
       <div class="search-box input-group bgc-dark-trans08 rounded mr-2"
            [class.opened]="(handlerService.openSearch$ | async)"
@@ -83,7 +84,7 @@
               <span class="f-3 fw-600">Training & Help</span>
             </a>
             <a class="dropdown-item">
-              <span class="f-3 fw-600">Live Training</span>
+              <a href="https://crmgrow.com/demo" target="_blank"><span class="f-3 fw-600">Live Training</span></a>
             </a>
           </div>
         </div>
@@ -120,7 +121,7 @@
                 </div>
               </div>
               <li class="notification-expand rounded-bottom border-top overflow-hidden mt-3">
-                <a [routerLink]="['/messages']" class="dropdown-item f-4 text-center text-primary font-weight-bold">See all</a>
+                <a [routerLink]="['/messages']" class="dropdown-item f-4 text-center text-primary font-weight-bold see-all">See all</a>
               </li>
             </div>
           </ng-template>
@@ -195,7 +196,7 @@
                     <span class="value">{{task.exp_end | date: 'hh:mm M/dd'}}</span>
                   </div>
                 </ng-template>
-                
+
               </div>
             </ng-container>
           </div>
@@ -219,7 +220,7 @@
               </li>
             </ng-template>
             <li class="notification-expand rounded-bottom border-top overflow-hidden">
-              <a [routerLink]="['/notifications']" class="dropdown-item f-4 text-center text-primary font-weight-bold">See all</a>
+              <a [routerLink]="['/notifications']" class="dropdown-item f-4 text-center text-primary font-weight-bold see-all">See all</a>
             </li>
           </div>
         </div>
@@ -279,6 +280,12 @@
       </div>
     </div>
   </div>
+
+  <div id="notification-bar" *ngIf="systemNotifications.length">
+    <div class="global-notification-item" [innerHTML]="systemNotifications[0].content">
+    </div>
+  </div>
+
   <div id="storm-dialer-bar">
   </div>
 </div>
