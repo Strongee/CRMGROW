@@ -57,7 +57,10 @@
           <input type="email" placeholder="Enter your email" class="form-control" [(ngModel)]="user.email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" (ngModelChange)="confirmEmail()"/>
           <img class="check-spinner" src="../../../assets/img/spinner.gif" alt="" *ngIf="checkingUser">
         </div>
-        <div class="position-relative form-group" [ngClass]="{invalid: basicForm.submitted && password.invalid && (password.dirty || password.touched || basicForm.submitted)}">
+        <div class="position-relative form-group"
+             [ngClass]="{invalid: basicForm.submitted && password.invalid && (password.dirty || password.touched || basicForm.submitted)}"
+             *ngIf="!isSocialUser"
+        >
           <div class="d-flex">
             <label for="password" class="mr-auto">Password</label>
             <span class="error" *ngIf="password.errors">

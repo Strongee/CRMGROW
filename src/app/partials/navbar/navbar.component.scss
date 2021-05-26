@@ -57,7 +57,7 @@
         &.record {
           display: none !important;
         }
-      } 
+      }
     }
   }
 }
@@ -448,6 +448,17 @@
       }
       .creator {
         color: blue;
+      }
+    }
+  }
+
+  .dropdown-item {
+    a {
+      color: #212529;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: none;
       }
     }
   }
