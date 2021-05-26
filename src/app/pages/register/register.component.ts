@@ -269,6 +269,7 @@ export class RegisterComponent implements OnInit {
       this.user['parent_affiliate'] = window['Rewardful'].affiliate;
     }
     if (this.isSocialUser) {
+      
     } else {
       this.userService.signup(this.user).subscribe((res) => {
         this.token = res['data']['token'];

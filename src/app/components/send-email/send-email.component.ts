@@ -26,11 +26,12 @@ import { MaterialBrowserComponent } from '../material-browser/material-browser.c
 import { Subscription } from 'rxjs';
 import { Garbage } from 'src/app/models/garbage.model';
 import { ConnectService } from 'src/app/services/connect.service';
-
+import { StripTagsPipe } from 'ngx-pipes';
 @Component({
   selector: 'app-send-email',
   templateUrl: './send-email.component.html',
-  styleUrls: ['./send-email.component.scss']
+  styleUrls: ['./send-email.component.scss'],
+  providers: [StripTagsPipe]
 })
 export class SendEmailComponent implements OnInit, AfterViewInit {
   emailSubmitted = false;
@@ -75,6 +76,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     private handlerService: HandlerService,
     private dealService: DealsService,
     private connectService: ConnectService,
+    private stripTags: StripTagsPipe,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     if (this.data && this.data.deal) {
@@ -114,6 +116,9 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
 
   sendEmail(): void {
+    if (!(this.stripTags.transform(this.emailContent || '') || '').trim()) {
+      return;
+    }
     if (this.emailContacts.length) {
       // email api call
       const contacts = [];

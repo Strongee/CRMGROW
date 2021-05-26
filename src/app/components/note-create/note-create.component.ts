@@ -8,6 +8,7 @@ import { HandlerService } from 'src/app/services/handler.service';
 import { NoteService } from 'src/app/services/note.service';
 import { DealsService } from '../../services/deals.service';
 import { ToastrService } from 'ngx-toastr';
+import { isEmptyHtml } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-note-create',
@@ -60,6 +61,9 @@ export class NoteCreateComponent implements OnInit {
 
   submit(): void {
     if (!this.contacts.length) {
+      return;
+    }
+    if (!this.note.content || isEmptyHtml(this.note.content)) {
       return;
     }
     const ids = [];

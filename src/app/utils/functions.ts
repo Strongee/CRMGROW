@@ -430,3 +430,9 @@ export function getNotificationDetail(notification): string {
   }
   return content;
 }
+
+export function isEmptyHtml(html): boolean {
+  const a = document.createElement('div');
+  a.innerHTML = html;
+  return !(a.innerText || '').trim();
+}
