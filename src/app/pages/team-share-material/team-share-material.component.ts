@@ -967,6 +967,16 @@ export class TeamShareMaterialComponent implements OnInit, OnChanges {
                   'Selected materials has been shared successfully'
                 );
                 this.materials = [...this.materials, ..._materials];
+                for (const material of _materials) {
+                  const type = this.getMaterialType(material);
+                  if (type === 'video') {
+                    this.team.videos.push(material._id);
+                  } else if (type === 'pdf') {
+                    this.team.pdfs.push(material._id);
+                  } else if (type === 'image') {
+                    this.team.images.push(material._id);
+                  }
+                }
                 this.filter();
               }
             });
