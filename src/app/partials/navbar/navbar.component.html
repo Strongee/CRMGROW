@@ -16,7 +16,7 @@
         <div ngbDropdownItem
              *ngFor="let action of actions"
              (click)="runAction(action.id)"
-             class="d-flex text-white py-2 pl-3 align-items-center"
+             class="d-flex text-white py-2 pl-3 align-items-center {{action.id}}"
              [class.disable]="isDisableAction(action)"
         >
           <i class="i-icon {{action.icon}} mr-3"></i>
