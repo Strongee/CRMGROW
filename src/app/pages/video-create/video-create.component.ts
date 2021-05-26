@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FileUploader, FileItem, FileUploaderOptions } from 'ng2-file-upload';
 import { UserService } from '../../services/user.service';
 import { FileService } from '../../services/file.service';
@@ -11,13 +11,17 @@ import { TabItem } from 'src/app/utils/data.types';
 import { Subscription, timer } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Material } from 'src/app/models/material.model';
+import { PageCanDeactivate } from 'src/app/variables/abstractors';
 
 @Component({
   selector: 'app-video-create',
   templateUrl: './video-create.component.html',
   styleUrls: ['./video-create.component.scss']
 })
-export class VideoCreateComponent implements OnInit {
+export class VideoCreateComponent
+  extends PageCanDeactivate
+  implements OnInit, OnDestroy {
+  saved = true;
   submitted = false;
   isStep = 1;
   selectedTheme = {
@@ -95,6 +99,8 @@ export class VideoCreateComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    super();
+
     this.userService.garbage$.subscribe((_garbage) => {
       this.selectedTheme = this.themes.filter(
         (theme) => theme.id == _garbage.material_theme
@@ -304,7 +310,6 @@ export class VideoCreateComponent implements OnInit {
   }
 
   updateVideo(video): void {
-    console.log('update video', video);
     const videoId = video._id;
     const newVideo = { ...video };
     delete newVideo.created_at;
@@ -347,7 +352,6 @@ export class VideoCreateComponent implements OnInit {
   }
 
   updatePdf(pdf): void {
-    console.log('update pdf', pdf);
     const pdfId = pdf._id;
     const newPdf = { ...pdf };
     delete newPdf.created_at;
