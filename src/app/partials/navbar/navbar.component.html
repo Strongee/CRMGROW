@@ -52,6 +52,7 @@
 
     <!-- Navbar Main Wrapper -->
     <div class="navbar-nav v-center ml-sm-3">
+
       <!-- Notification Wrapper -->
       <div class="search-box input-group bgc-dark-trans08 rounded mr-2"
            [class.opened]="(handlerService.openSearch$ | async)"
@@ -279,6 +280,12 @@
       </div>
     </div>
   </div>
+
+  <div id="notification-bar" *ngIf="systemNotifications.length">
+    <div class="global-notification-item" [innerHTML]="systemNotifications[0].content">
+    </div>
+  </div>
+
   <div id="storm-dialer-bar">
   </div>
 </div>

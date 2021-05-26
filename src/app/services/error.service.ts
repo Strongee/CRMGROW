@@ -38,6 +38,10 @@ export class ErrorService {
       status: error.status
     };
 
+    if (!operation) {
+      return;
+    }
+
     const diffTime = new Date().getTime() - this.lastTime;
     if (
       errorObj.status === 402 ||

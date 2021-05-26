@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
@@ -62,6 +68,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   notificationUpdater$;
   notificationUpdater: Subscription;
   notificationLoadSubscription: Subscription;
+  systemNotifications = [];
   emailTasks = [];
   textTasks = [];
   unreadMessages = [];
@@ -271,6 +278,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .getNotificationStatus()
       .subscribe((res) => {
         if (res) {
+          this.systemNotifications = res['system_notifications'] || [];
+
+          if (this.systemNotifications.length) {
+            document.body.classList.add('has-topbar');
+          } else {
+            document.body.classList.remove('has-topbar');
+          }
+
           this.emailTasks = res['emails'] || [];
           if (this.emailTasks && this.emailTasks.length) {
             this.emailTasks.forEach((e) => {

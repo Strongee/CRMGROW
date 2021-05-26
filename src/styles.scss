@@ -957,10 +957,10 @@ body{
 
   &.has-topbar {
     .navbar {
-      top: 50px;
+      top: 0px;
     }
     .sidebar{
-      padding-top: 113px;
+      padding-top: 100px;
     }
     .page {
       padding-top: 113px;
@@ -1193,6 +1193,37 @@ table {
         font-size: 14px;
         animation: loadAppear 0.4s;
       }
+    }
+  }
+}
+
+.has-topbar {
+  .page-table {
+    thead tr:first-child th {
+      top: 114px;
+    }
+    thead tr.table-header th {
+      top: 114px;
+    }
+    thead tr.loader-row {
+      th.loader-cell {
+        top: 114px;
+      }
+    }
+  }
+  .has-sticky-header {
+    thead tr:first-child th {
+      top: 114px;
+    }
+  }
+
+  .calendar-time {
+    top: 114px!important;
+  }
+
+  mwl-calendar-week-view-header{
+    .cal-day-headers {
+      top: 209px!important;
     }
   }
 }
