@@ -209,6 +209,7 @@ export class HtmlEditorComponent implements OnInit {
             window.addEventListener('message', (e) => {
               if (e && e.data) {
                 this.insertImageToEditor(e.data);
+                return;
               }
             });
           } else {
