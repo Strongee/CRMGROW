@@ -180,7 +180,8 @@ export class ErrorService {
           maxWidth: '450px',
           disableClose: true,
           data: {
-            errorCode: 410
+            errorCode: 410,
+            errorMessage: errorObj.message
           }
         });
         break;

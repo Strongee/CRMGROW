@@ -141,7 +141,7 @@ export class LoginComponent implements OnInit {
       data.user.subscription &&
       data.user.subscription.is_suspended
     ) {
-      this.returnUrl = '/profile/upgrade-billing';
+      this.returnUrl = '/profile/billing';
       this.router.navigate([this.returnUrl]);
       this.dialog.open(UpgradePlanErrorComponent, {
         position: { top: '100px' },

@@ -41,12 +41,13 @@ export class UpgradePlanErrorComponent implements OnInit {
   ngOnInit(): void {}
 
   goToBilling(): void {
-    this.router.navigate([`/profile/upgrade-billing`]);
+    // this.router.navigate([`/profile/billing`]);
     this.dialog
       .open(PaymentCardComponent, {
         position: { top: '100px' },
         width: '100vw',
         maxWidth: '550px',
+        disableClose: true,
         data: {
           card: this.card
         }
@@ -54,7 +55,9 @@ export class UpgradePlanErrorComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         this.dialogRef.close();
-        window.location.reload();
+        if (res.data) {
+          window.location.reload();
+        }
       });
   }
 }

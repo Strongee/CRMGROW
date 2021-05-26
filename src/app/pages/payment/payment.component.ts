@@ -74,7 +74,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private router: Router,
     public handlerService: HandlerService
   ) {
-    // this.step = this.selectedStep;
+    this.step = this.selectedStep;
     this.profileSubscription && this.profileSubscription.unsubscribe();
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -191,7 +191,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.selectedPackage = PACKAGE_LEVEL[item];
       }
     }
-    this.step = 3;
     if (checkOverflow) {
       this.downgradeSubscription && this.downgradeSubscription.unsubscribe();
       this.loadingCheckDowngrade = true;
@@ -205,6 +204,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
           } else {
             this.isOverflow = false;
             this.overflowMessage = '';
+            this.step = 3;
           }
         });
     }
@@ -296,7 +296,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this.loadingCancelAccount = false;
           if (res) {
             this.handlerService.clearData();
-            this.router.navigate(['/']);
+            location.href = 'https://crmgrow.com/pricing.html';
           }
         },
         (err) => {
