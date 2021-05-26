@@ -336,6 +336,9 @@
             margin-top: 0.5rem!important;
         }
     }
+    .btn i {
+        display: none;
+    }
     @media screen and (max-width: 576px) {
         .btn {
             width: 38px;
@@ -346,6 +349,9 @@
             span {
                 display: none;
             }
+            i {
+                display: block;
+            }
         }
         .dropdown-menu {
             right: 0;
@@ -355,6 +361,7 @@
             width: 140px;
             font-size: 16px;
             font-weight: bold;
+            white-space: nowrap;
         }
     }
 }
