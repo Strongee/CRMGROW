@@ -26,6 +26,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DetailErrorComponent } from 'src/app/components/detail-error/detail-error.component';
+import {ConnectNewCalendarComponent} from "../../components/connect-new-calendar/connect-new-calendar.component";
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -881,12 +882,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   addCalendar(): void {
-    this.dialog.open(DetailErrorComponent, {
+    this.dialog.open(ConnectNewCalendarComponent, {
       width: '98vw',
       maxWidth: '420px',
-      data: {
-        errorCode: 407
-      }
     });
   }
 

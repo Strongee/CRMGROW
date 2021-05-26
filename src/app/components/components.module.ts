@@ -162,6 +162,7 @@ import { DialPlanComponent } from './dial-plan/dial-plan.component';
 import { StopShareContactComponent } from './stop-share-contact/stop-share-contact.component';
 import { VideoPopupComponent } from './video-popup/video-popup.component';
 import { MessageFilesComponent } from './message-files/message-files.component';
+import { ConnectNewCalendarComponent } from './connect-new-calendar/connect-new-calendar.component';
 
 @NgModule({
   declarations: [
@@ -321,7 +322,8 @@ import { MessageFilesComponent } from './message-files/message-files.component';
     StopShareContactComponent,
     VideoPopupComponent,
     InputContactDealComponent,
-    MessageFilesComponent
+    MessageFilesComponent,
+    ConnectNewCalendarComponent
   ],
   imports: [
     CommonModule,

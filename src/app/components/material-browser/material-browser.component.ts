@@ -255,15 +255,13 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
   }
 
   select(): void {
-    const selectedMaterials = this.filteredMaterials.filter((e) => {
-      if (
-        e.material_type !== 'folder' &&
-        this.selection.indexOf(e._id) !== -1
-      ) {
-        return true;
+    const selectedMaterials = [];
+    for (const selectedMaterial of this.selection) {
+      if (this.getMaterialById(selectedMaterial)) {
+        selectedMaterials.push(this.getMaterialById(selectedMaterial));
       }
-      return false;
-    });
+    }
+
     const filteredFolders = this.folders.filter((e) => {
       if (this.selection.indexOf(e._id) !== -1) {
         return true;
@@ -275,13 +273,6 @@ export class MaterialBrowserComponent implements OnInit, OnDestroy {
         return true;
       }
     });
-
-    console.log(
-      'filteredFolders',
-      this.folders,
-      filteredFolders,
-      folderMaterials
-    );
 
     if (this.resultMatType === 'material') {
       this.dialogRef.close({

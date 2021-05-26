@@ -63,6 +63,18 @@ export class UserService extends HttpService {
       .pipe(catchError(this.handleError('SOCIAL SIGNIN REQUEST')));
   }
 
+  public socialSignUp(user): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'No-Auth': 'True'
+    });
+    return this.httpClient
+      .post(this.server + AUTH.SOCIAL_SIGNUP, JSON.stringify(user), {
+        headers: reqHeader
+      })
+      .pipe(catchError(this.handleError('SOCIAL SIGNUP REQUEST')));
+  }
+
   public signup(user: any): any {
     const reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',

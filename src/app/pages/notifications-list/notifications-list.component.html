@@ -20,7 +20,7 @@
           </div>
           <div ngbDropdown placement="bottom-right" class="ml-auto actions-groups" *ngIf="item.type === 'personal'">
             <a class="notification-action no-carot c-pointer" ngbDropdownToggle>
-              <mat-icon>more_vert</mat-icon>
+              <i class="i-icon i-menu-more bgc-blue d-block"></i>
             </a>
             <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
               <ng-container *ngIf="!item.is_read ;else unreadMark">
