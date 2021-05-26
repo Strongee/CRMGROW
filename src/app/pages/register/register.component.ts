@@ -173,6 +173,11 @@ export class RegisterComponent implements OnInit {
                   ...this.user,
                   ...res['data']
                 };
+                console.log(
+                  'gmail auth ==========>',
+                  this.isSocialUser,
+                  this.user
+                );
                 this.isSocialUser = true;
                 if (!this.user.user_name) {
                   this.fullNameRequire = true;
@@ -295,6 +300,20 @@ export class RegisterComponent implements OnInit {
       this.user['parent_affiliate'] = window['Rewardful'].affiliate;
     }
     if (this.isSocialUser) {
+      this.userService.socialSignUp(this.user).subscribe((res) => {
+        this.token = res['data']['token'];
+        this.currentUser = res['data']['user'];
+        if (this.token) {
+          this.saving = false;
+          this.toast.success('Social Sign Up has been successfully!');
+          this.userService.setToken(this.token);
+          this.userService.setUser(this.currentUser);
+          this.router.navigate(['/home']);
+          window.location.reload();
+        } else {
+          this.saving = false;
+        }
+      });
     } else {
       this.userService.signup(this.user).subscribe((res) => {
         this.token = res['data']['token'];
