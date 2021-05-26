@@ -1296,6 +1296,10 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.taskService.archive([taskId]).subscribe((status) => {
             if (status) {
               this.deleteTaskFromTasksArray(taskId);
+              this.contactService.deleteContactActivityByDetail(
+                taskId,
+                'follow_ups'
+              );
               this.changeTab(this.tab);
             }
           });
@@ -1305,7 +1309,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   deleteTaskFromTasksArray(_id: string): void {
     _.remove(this.data.tasks, (e) => e._id === _id);
     delete this.dataObj.tasks[_id];
-    this.handlerService.updateContactRelated$('tasks', this.data.notes);
+    this.handlerService.updateContactRelated$('tasks', this.data.tasks);
   }
 
   /**
