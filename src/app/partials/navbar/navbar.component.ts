@@ -57,6 +57,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ];
   currentSearchType: any = this.searchDataTypes[0];
   keyword = '';
+  user_id = '';
 
   @ViewChild('searchInput') searchInput: ElementRef;
   isSuspended = false;
@@ -100,6 +101,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
         if (profile) {
+          this.user_id = profile._id;
           this.isPackageText = profile.text_info?.is_enabled;
           this.isPackageAutomation = profile.automation_info?.is_enabled;
           this.isSuspended = profile.subscription?.is_suspended;
@@ -196,7 +198,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
           width: '100%',
           height: '100%',
           panelClass: 'trans-modal',
-          backdropClass: 'trans'
+          backdropClass: 'trans',
+          data: {
+            id: this.user_id
+          }
         });
         break;
       case 'video':
