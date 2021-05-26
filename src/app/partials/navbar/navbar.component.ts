@@ -390,7 +390,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
               );
             }
           }
-          this.latestAt = new Date(latest.updated_at);
+          if (latest) {
+            this.latestAt = new Date(latest.updated_at);
+          }
         }
       });
   }

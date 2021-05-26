@@ -1,4 +1,4 @@
-name: TeamGrow Build to s3
+name: CRMGrow Development Build to s3
 on:
   push:
     branches: [development]
