@@ -1,15 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { StripTagsPipe } from 'ngx-pipes';
-
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private stripTags: StripTagsPipe
-  ) {}
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   public generateThumbnail(videoFile: Blob): Promise<any> {
     const video: HTMLVideoElement = this.document.createElement('video');

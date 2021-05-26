@@ -67,7 +67,7 @@ export class NotificationService extends HttpService {
 
   delete(ids: string[]): Observable<boolean> {
     return this.httpClient
-      .post(this.server + NOTIFICATION.UNREAD_MARK, { ids })
+      .post(this.server + NOTIFICATION.DELETE, { ids })
       .pipe(
         map((res) => res['status']),
         catchError(this.handleError('DELETE NOTIFICATIONS', false))
