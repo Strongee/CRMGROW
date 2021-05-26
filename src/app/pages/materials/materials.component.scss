@@ -165,6 +165,13 @@ td.type-col {
         }
     }
 }
+
+@media screen and (max-width: 768px) {
+    .button-record {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 720px) {
     .type-col {
         display: none;

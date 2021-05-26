@@ -113,6 +113,7 @@ export class VideoCreateComponent
     this.tabs.forEach((tab) => {
       if (tab.id == mode) {
         this.changeTab(tab);
+        this.saved = false;
       }
     });
     this.currentFolder = this.route.snapshot.params['folder'];
@@ -196,6 +197,7 @@ export class VideoCreateComponent
         this.toast.error("Image is uploaded. But the Image could't saved.");
       }
     };
+    window['confirmReload'] = true;
   }
 
   ngOnDestroy(): void {
@@ -203,6 +205,8 @@ export class VideoCreateComponent
       this.vimeoVideoMetaSubscription.unsubscribe();
     this.youtubeVideoMetaSubscription &&
       this.youtubeVideoMetaSubscription.unsubscribe();
+
+    window['confirmReload'] = false;
   }
 
   changeTab(tab: TabItem): void {
@@ -214,6 +218,7 @@ export class VideoCreateComponent
     this.pdfUploader.clearQueue();
     this.imageUploader.cancelAll();
     this.imageUploader.clearQueue();
+    this.saved = false;
   }
 
   uploadVideo(): void {
@@ -274,6 +279,7 @@ export class VideoCreateComponent
         .subscribe((res) => {
           if (res) {
             this.uploading = false;
+            this.saved = true;
             this.toast.success('Video is uploaded successfully.');
             if (this.currentFolder) {
               this.router.navigate([`/materials/${this.currentFolder}`]);
@@ -330,6 +336,7 @@ export class VideoCreateComponent
     this.materialService.uploadVideoDetail(videoId, newVideo).subscribe(
       (res) => {
         this.uploading = false;
+        this.saved = true;
         this.toast.success('Video is uploaded successfully.');
         if (this.currentFolder) {
           this.router.navigate([`/materials/${this.currentFolder}`]);
@@ -368,6 +375,7 @@ export class VideoCreateComponent
     this.materialService.updatePdf(pdfId, newPdf).subscribe(
       (res) => {
         this.uploading = false;
+        this.saved = true;
         this.toast.success('Pdf is uploaded successfully.');
         if (this.currentFolder) {
           this.router.navigate([`/materials/${this.currentFolder}`]);
@@ -406,6 +414,7 @@ export class VideoCreateComponent
     this.materialService.updateImage(imageId, newImage).subscribe(
       (res) => {
         this.uploading = false;
+        this.saved = true;
         this.toast.success('Image is uploaded successfully.');
         if (this.currentFolder) {
           this.router.navigate([`/materials/${this.currentFolder}`]);
@@ -474,6 +483,7 @@ export class VideoCreateComponent
                 .catch((err) => {});
               this.video.type = 'video/';
               this.uploadVideo();
+              this.saved = false;
             })
             .catch((err) => {
               this.toast.warning(
@@ -501,6 +511,7 @@ export class VideoCreateComponent
           this.thumbnail_loading = true;
           fileReader.readAsArrayBuffer(file);
           this.uploadVideo();
+          this.saved = false;
         }
         break;
       case 'image':
@@ -527,6 +538,7 @@ export class VideoCreateComponent
                 .then((thumbnail) => {
                   this.image.preview = thumbnail;
                   this.uploadVideo();
+                  this.saved = false;
                 })
                 .catch(() => {
                   this.toast.warning('Cannot load the image file.');
@@ -570,6 +582,7 @@ export class VideoCreateComponent
               });
             this.video.type = 'video/';
             this.uploadVideo();
+            this.saved = false;
           })
           .catch((err) => {
             console.log('error', err);
@@ -589,6 +602,7 @@ export class VideoCreateComponent
             this.thumbnail_loading = true;
             fileReader.readAsArrayBuffer(file);
             this.uploadVideo();
+            this.saved = false;
           }
         } catch (e) {
           this.toast.error('Loading the PDF file is failed. Please try agian');
@@ -603,6 +617,7 @@ export class VideoCreateComponent
             .then((thumbnail) => {
               this.image.preview = thumbnail;
               this.uploadVideo();
+              this.saved = false;
             })
             .catch(() => {
               this.toast.warning('Cannot load the image file.');
@@ -700,6 +715,7 @@ export class VideoCreateComponent
   }
 
   checkVideoUrl(): void {
+    this.saved = false;
     if (this.video.url.toLowerCase().indexOf('youtube.com') > -1) {
       this.getYoutubeId();
     }
