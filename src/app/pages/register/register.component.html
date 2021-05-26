@@ -58,7 +58,7 @@
           <img class="check-spinner" src="../../../assets/img/spinner.gif" alt="" *ngIf="checkingUser">
         </div>
         <div class="position-relative form-group" [ngClass]="{invalid: basicForm.submitted && password.invalid && (password.dirty || password.touched || basicForm.submitted)}">
-          <div class="d-flex">
+          <div class="d-flex" *ngIf="!isSocialUser">
             <label for="password" class="mr-auto">Password</label>
             <span class="error" *ngIf="password.errors">
               <ng-container *ngIf="password.errors.required">Required!</ng-container>

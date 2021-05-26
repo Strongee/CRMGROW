@@ -273,16 +273,21 @@ export class RegisterComponent implements OnInit {
     }
     if (this.isSocialUser) {
       this.userService.socialSignUp(this.user).subscribe((res) => {
-        this.token = res['data']['token'];
-        this.currentUser = res['data']['user'];
-        if (this.token) {
-          this.saving = false;
-          this.toast.success('Social Sign Up has been successfully!');
-          this.userService.setToken(this.token);
-          this.userService.setUser(this.currentUser);
-          this.router.navigate(['/home']);
-          window.location.reload();
+        if (res && res.status) {
+          this.token = res['data']['token'];
+          this.currentUser = res['data']['user'];
+          if (this.token) {
+            this.saving = false;
+            this.toast.success('Social Sign Up has been successfully!');
+            this.userService.setToken(this.token);
+            this.userService.setUser(this.currentUser);
+            this.router.navigate(['/home']);
+            window.location.reload();
+          } else {
+            this.saving = false;
+          }
         } else {
+          this.toast.error(res.error);
           this.saving = false;
         }
       });
